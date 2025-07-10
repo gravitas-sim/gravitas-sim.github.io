@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravitas - Web Black Hole Sandbox</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap');
+
+		/* ===== Splash screen ===== */
+		#splash{
+			position:fixed;
+			inset:0;                    /* top:0; right:0; bottom:0; left:0 */
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			background:var(--bg-color);
+			z-index:3000;               /* above every UI element */
+			opacity:0;
+			animation:
+				splashFadeIn   1.6s   ease-out   0s   forwards,
+				splashFadeOut  1.2s   ease-in    2.3s forwards;
+		}
+		#splash h1{
+			margin:0;
+			font-family:'Poppins',sans-serif;
+			font-weight:600;
+			font-size: clamp(4rem, 8vw, 8rem);
+			letter-spacing:0.12em;
+			color:var(--primary-color);
+			text-shadow:0 0 25px var(--primary-color);
+		}
+
+		/*  hidden until JS adds .showCanvas  */
+		#simulationCanvas, #starfieldCanvas {
+			opacity:0;              /* fully transparent       */
+			visibility:hidden;      /* not rendered at all     */
+			transition:opacity 1.2s ease-in;  /* fade-in only */
+		}
+
+		/*  added by JS after splash is gone  */
+		#simulationCanvas.showCanvas, #starfieldCanvas.showCanvas {
+			visibility:visible;     /* render now              */
+			opacity:1;              /* and fade up to opaque   */
+		}
+
+
+		/* --- keyframes --- */
+		@keyframes splashFadeIn  { from{opacity:0;} to{opacity:1;} }
+		@keyframes splashFadeOut { from{opacity:1;} to{opacity:0;} }
+
+
+        :root {
+            --bg-color: #0d0d1a;
+            --text-color: #e0e0e0;
+            --primary-color: #00aaff;
+            --secondary-color: #ffaa00;
+            --panel-bg: rgba(20, 20, 40, 0.95);
+            --button-bg: #333;
+            --button-hover-bg: #555;
+            --button-apply-bg: #28a745;
+            --button-apply-hover-bg: #218838;
+            --separator-color: #00aaff80;
+        }
+
+		/* === layered canvases === */
+		.sim-canvas{
+			position:fixed; inset:0;
+			width:100%; height:100%;
+			display:block;
+		}
+		#starfieldCanvas{ z-index:1; }   /* back-most */
+		#simulationCanvas{ z-index:2; }  /* front */
+
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        #simulationCanvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        #overlay {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            color: #ccc;
+            text-shadow: 1px 1px 2px black;
+            pointer-events: none;
+            line-height: 1.5;
+            z-index: 10;
+        }
+
+        #scenarioInfoDisplay {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            padding: 10px 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--separator-color);
+            border-radius: 8px;
+            text-align: center;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #scenarioInfoDisplay.visible {
+            opacity: 1;
+        }
+        #scenarioInfoDisplay h4 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        #scenarioInfoDisplay p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-color);
+            line-height: 1.4;
+        }
+
+
+        .ui-container {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .ui-button {
+            padding: 8px 16px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            text-align: center;
+        }
+
+        .ui-button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        .ui-button:active {
+            transform: scale(0.98);
+        }
+
+        #settingsPanel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            height: 90vh;
+            max-height: 850px;
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        #settingsPanel.hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
+            pointer-events: none;
+        }
+
+        .settings-header {
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--separator-color);
+        }
+
+        .settings-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px 30px;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 30px;
+            align-items: center;
+        }
+        
+        .setting-item, .setting-special-button {
+            display: contents;
+        }
+        
+        .setting-label {
+            justify-self: end;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-control input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 5px;
+            background: #444;
+            border-radius: 5px;
+            outline: none;
+        }
+        .setting-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .setting-control .value-display {
+            min-width: 60px;
+            text-align: left;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .setting-control select, .setting-control .toggle-button {
+            width: 100%;
+            padding: 8px;
+            background-color: #222;
+            border: 1px solid #555;
+            color: var(--text-color);
+            border-radius: 5px;
+        }
+
+        .setting-control input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 50px;
+            height: 30px;
+            background-color: transparent;
+            border: 1px solid #555;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .setting-control input[type="color"]::-webkit-color-swatch {
+            border-radius: 4px;
+            border: none;
+        }
+
+
+        .setting-separator {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .setting-separator h3 {
+            margin: 0;
+            color: var(--secondary-color);
+            font-size: 18px;
+            white-space: nowrap;
+        }
+        .setting-separator .line {
+            width: 100%;
+            height: 1px;
+            background-color: var(--separator-color);
+        }
+
+        .settings-footer {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-top: 1px solid var(--separator-color);
+        }
+        
+        .footer-button {
+            padding: 10px 25px;
+            font-size: 16px;
+        }
+        #settingsApply { background-color: var(--button-apply-bg); }
+        #settingsApply:hover { background-color: var(--button-apply-hover-bg); }
+
+        #bhMassesModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 450px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #bhMassesModal.hidden { display: none; }
+        .bh-masses-header { text-align: center; padding: 15px; font-size: 20px; color: var(--primary-color); }
+        .bh-masses-content { 
+            padding: 20px 30px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            max-height: 50vh; 
+            overflow-y: auto; 
+        }
+        .bh-mass-item { 
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            align-items: center;
+            gap: 15px;
+        }
+        .bh-mass-item label {
+            justify-self: end;
+            text-align: right;
+        }
+        .bh-mass-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bh-mass-control input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 5px;
+            background: #444;
+            border-radius: 5px;
+            outline: none;
+        }
+        .bh-mass-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .bh-mass-control .value-display {
+            min-width: 60px;
+            text-align: left;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .bh-masses-footer { padding: 15px; text-align: center; }
+
+		/* --- Preset title / summary box --- */
+		.preset-info{
+			margin:18px 0 10px;
+			padding:12px 16px;
+			background:rgba(0,0,0,.25);
+			border:1px solid var(--separator-color);
+			border-radius:6px;
+			font-size:14px;
+			line-height:1.4;
+		}
+		.preset-info h4{
+			margin:0 0 4px;
+			font-size:17px;
+			color:var(--primary-color);
+		}
+
+    </style>
+</head>
+<body>
+    <canvas id="starfieldCanvas" class="sim-canvas"></canvas>
+	<canvas id="simulationCanvas" class="sim-canvas"></canvas>
+
+    <!-- ✨ Splash screen -->
+	<div id="splash">
+	  <h1>GRAVITAS</h1>
+	</div>
+
+    <div id="overlay"></div>
+    <div id="scenarioInfoDisplay"></div>
+
+    <div class="ui-container">
+        <button id="settingsBtn" class="ui-button">Settings</button>
+        <button id="refreshScenarioBtn" class="ui-button">Refresh Scenario</button>
+        <button id="resetAllBtn" class="ui-button">Reset to Default</button>
+        <button id="saveBtn" class="ui-button">Save State</button>
+        <button id="loadBtn" class="ui-button">Load State</button>
+    </div>
+
+    <div id="settingsPanel" class="hidden">
+        <div class="settings-header">Simulation Settings</div>
+        <div class="settings-content">
+        <div id="presetInfo" class="preset-info"></div>
+
+            <div id="settingsGrid" class="settings-grid"></div>
+        </div>
+        <div class="settings-footer">
+            <button id="settingsApply" class="ui-button footer-button">Apply & Restart</button>
+            <button id="settingsReset" class="ui-button footer-button">Reset to Defaults</button>
+            <button id="settingsCancel" class="ui-button footer-button">Cancel</button>
+        </div>
+    </div>
+
+    <div id="bhMassesModal" class="hidden">
+        <div class="bh-masses-header">Set Individual Black Hole Masses (M<sub>sun</sub>)</div>
+        <div id="bhMassesContent" class="bh-masses-content"></div>
+        <div class="bh-masses-footer">
+            <button id="bhMassesDone" class="ui-button">Done</button>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const canvas = document.getElementById('simulationCanvas');
+	// ---------- star-field layer ----------
+	const starfieldCanvas = document.getElementById('starfieldCanvas');
+	const starCtx         = starfieldCanvas.getContext('2d');
+	const star_field = [];
+
+	const splash = document.getElementById('splash');
+
+	/*  nothing to show at first ↓  */
+	canvas.classList.remove('showCanvas');
+    starfieldCanvas.classList.remove('showCanvas');
+
+	splash.addEventListener('animationend', (e) => {
+		if (e.animationName === 'splashFadeOut') {
+			splash.remove();                 // splash done
+			canvas.classList.add('showCanvas');  // NOW fade the sim in
+            starfieldCanvas.classList.add('showCanvas');
+		}
+	});
+
+    const createAmbientGradient = () => {
+        const grad = starCtx.createLinearGradient(0, 0, 0, starfieldCanvas.height);
+        grad.addColorStop(0, '#1a1a3a');
+        grad.addColorStop(1, '#0a0a1a');
+        return grad;
+    }
+
+	function generateStarfield(){
+		star_field.length = 0;
+		const num = SETTINGS.star_density;
+		const W = starfieldCanvas.width  * 2;
+		const H = starfieldCanvas.height * 2;
+		for(let i=0;i<num;i++){
+			star_field.push({
+				x: Math.random()*W - W/2,
+				y: Math.random()*H - H/2,
+				b: Math.random()*0.7 + 0.3,
+				s: Math.random()*1.5 + 0.5
+			});
+		}
+		drawStarfield();
+	}
+
+	function drawStarfield(){
+        starCtx.fillStyle = SETTINGS.show_ambient_lighting ? createAmbientGradient() : '#0d0d1a';
+        starCtx.fillRect(0,0,starfieldCanvas.width,starfieldCanvas.height);
+
+		star_field.forEach(st=>{
+			starCtx.globalAlpha = st.b;
+			starCtx.fillStyle   = '#fff';
+			starCtx.fillRect(
+				st.x + starfieldCanvas.width/2,
+				st.y + starfieldCanvas.height/2,
+				st.s, st.s
+			);
+		});
+		starCtx.globalAlpha = 1;
+	}
+
+
+    const ctx = canvas.getContext('2d');
+    const overlayDiv = document.getElementById('overlay');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const settingsGrid = document.getElementById('settingsGrid');
+    const bhMassesModal = document.getElementById('bhMassesModal');
+
+    const DT = 0.1;
+    const SOLAR_MASS_UNIT = 1000;
+    const ABSORB_BUFFER = 6;
+    const MIN_INTERACTION_DISTANCE = 5.0;
+    const SAVE_KEY = "gravitas_simulation_save";
+    const BH_RADIUS_BASE = 15;
+    const PLANET_RADIUS = 5;
+    const GAS_GIANT_RADIUS = 15;
+    const ASTEROID_RADIUS = 2;
+    const STAR_OBJ_RADIUS = 10;
+    const DEBRIS_RADIUS = 2;
+
+    const DEFAULT_SETTINGS = {
+        preset_scenario: "Binary BH", 
+        gravitational_constant: 2.0,  
+        follow_mode: "BlackHole",       
+        num_planets: 15, num_gas_giants: 2, init_velocity: 20, velocity_stddev: 5,
+        bh_mass: 10, num_black_holes: 1, bh_behavior: "Static", use_individual_bh_masses: false,
+        bh_masses: [], orbit_decay_rate: 0.005, placement: "Random", 
+        mutual_gravity: false,
+        show_trails: true,
+        sim_speed: 1.0,
+        show_velocity_vectors: false, interactive_add: true, trail_length: 40,
+        sim_size: "Large", 
+        star_density: 5000,
+        input_object_type: "Star", show_bh_glow: true,
+        show_accretion_disk: false, show_bh_jets: false, improved_lensing: true, lensing_strength: 100,
+        show_dynamic_overlays: true, enable_asteroids: true, num_asteroids: 10,
+        dynamic_object_properties: true, record_simulation: false, 
+        show_ambient_lighting: true,
+        planet_base_color: "#6495ed", 
+        star_base_color: "#ffff00",  
+    };
+    let SETTINGS = { ...DEFAULT_SETTINGS };
+    let localSettings = {};
+
+    let state = {
+        zoom: 1.0, pan: { x: 0.0, y: 0.0 }, paused: false, frame_count: 0,
+        mouse: { x: 0, y: 0, down: false }, adding_mass: false,
+        add_start_screen: { x: 0, y: 0 }, add_start_world: { x: 0, y: 0 },
+        last_time: 0,
+    };
+
+    let bh_list = [], planets = [], stars = [], gas_giants = [], asteroids = [],
+        debris = [], particles = [], gwaves = [];
+    
+    let PhysicsObject_id_counter = 0;
+
+    const world_to_screen = (pos) => ({ x: pos.x, y: pos.y });
+
+    const screen_to_world = (spos) => ({
+        x: (spos.x - canvas.width / 2 - state.pan.x) / state.zoom,
+        y: -(spos.y - canvas.height / 2 - state.pan.y) / state.zoom
+    });
+
+    const is_offscreen = (pos, buffer_factor = 1.5) => {
+        const half_width_world = (canvas.width / (2 * state.zoom)) * buffer_factor;
+        const half_height_world = (canvas.height / (2 * state.zoom)) * buffer_factor;
+        const world_center_x = -state.pan.x / state.zoom;
+        const world_center_y = state.pan.y / state.zoom;
+        return (pos.x < world_center_x - half_width_world ||
+                pos.x > world_center_x + half_width_world ||
+                pos.y < world_center_y - half_height_world ||
+                pos.y > world_center_y + half_height_world);
+    }
+    
+    const hexToRgb = (hex) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null;
+    }
+
+    const compute_dynamic_color = (base_color_hex, pos, bh_list, threshold = 300.0, target_color = {r:255, g:0, b:0}) => {
+        if (!bh_list || bh_list.length === 0 || !SETTINGS.dynamic_object_properties) return base_color_hex;
+        let min_dist_sq = Infinity;
+        for (const bh of bh_list) {
+            const dx = pos.x - bh.pos.x;
+            const dy = pos.y - bh.pos.y;
+            min_dist_sq = Math.min(min_dist_sq, dx*dx + dy*dy);
+        }
+        const f = Math.max(0.0, Math.min(1.0, (threshold - Math.sqrt(min_dist_sq)) / threshold));
+        const base_color = hexToRgb(base_color_hex);
+        if (!base_color) return base_color_hex;
+        const r = Math.round(base_color.r * (1 - f) + target_color.r * f);
+        const g = Math.round(base_color.g * (1 - f) + target_color.g * f);
+        const b = Math.round(base_color.b * (1 - f) + target_color.b * f);
+        return `rgb(${r},${g},${b})`;
+    }
+
+    const gravitational_acceleration = (target_pos, sources) => {
+        let ax = 0.0, ay = 0.0;
+        const G_val = SETTINGS.gravitational_constant;
+        for (const s of sources) {
+            const dx = s.pos.x - target_pos.x;
+            const dy = s.pos.y - target_pos.y;
+            let r_sq = dx*dx + dy*dy;
+            if (r_sq < MIN_INTERACTION_DISTANCE**2) r_sq = MIN_INTERACTION_DISTANCE**2;
+            const r = Math.sqrt(r_sq);
+            if (r === 0) continue;
+            const a_mag = G_val * s.mass / r_sq;
+            ax += a_mag * (dx / r);
+            ay += a_mag * (dy / r);
+        }
+        return { ax, ay };
+    };
+
+    class PhysicsObject {
+        constructor(pos, vel, mass, radius, obj_type = "object") {
+            this.id = PhysicsObject_id_counter++;
+            this.pos = { ...pos };
+            this.vel = { ...vel };
+            this.mass = parseFloat(mass);
+            this.radius = parseFloat(radius);
+            this.obj_type = obj_type;
+            this.trail = [];
+            this.alive = true;
+        }
+
+        update_physics(dt, gravity_sources) {
+            if (!this.alive) return;
+            const { ax, ay } = gravitational_acceleration(this.pos, gravity_sources);
+            this.vel.x += ax * dt;
+            this.vel.y += ay * dt;
+            this.pos.x += this.vel.x * dt;
+            this.pos.y += this.vel.y * dt;
+        }
+
+        update_trail() {
+            if (!this.alive) return;
+            this.trail.push({ ...this.pos });
+            if (this.trail.length > SETTINGS.trail_length) this.trail.shift();
+        }
+
+        check_absorption(bh_list) {
+            if (!this.alive) return false;
+            for (const bh of bh_list) {
+                const dx = this.pos.x - bh.pos.x;
+                const dy = this.pos.y - bh.pos.y;
+                if (dx*dx + dy*dy < (bh.radius + ABSORB_BUFFER)**2) {
+                    this.alive = false;
+                    bh.mass += this.mass || 0;
+                    bh.updateRadius();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        get_state() { return { id: this.id, type: this.obj_type, pos: this.pos, vel: this.vel, mass: this.mass, radius: this.radius, alive: this.alive }; }
+        set_state(s) { Object.assign(this, s); this.trail = []; }
+        draw(ctx) {}
+    }
+
+    class Planet extends PhysicsObject {
+        constructor(pos, vel) { super(pos, vel, 1.0, PLANET_RADIUS, "Planet"); }
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = compute_dynamic_color(SETTINGS.planet_base_color, this.pos, bh_list);
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+    
+    class GasGiant extends PhysicsObject {
+        constructor(pos, vel) { super(pos, vel, 50.0, GAS_GIANT_RADIUS, "GasGiant"); }
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = '#D2B48C';
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+            if (this.radius * state.zoom > 4) {
+                ctx.fillStyle = '#A0522D';
+                const band_height = Math.max(1 / state.zoom, this.radius * 0.3);
+                ctx.fillRect(world_pos.x - this.radius, world_pos.y - this.radius / 3 - band_height / 2, this.radius * 2, band_height);
+                ctx.fillRect(world_pos.x - this.radius, world_pos.y + this.radius / 3 - band_height / 2, this.radius * 2, band_height);
+            }
+        }
+    }
+    
+    class Asteroid extends PhysicsObject {
+        constructor(pos, vel) { super(pos, vel, 0.1, ASTEROID_RADIUS, "Asteroid"); }
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+
+    const getStarColor = (massInSuns) => {
+        const lowMassColor = { r: 255, g: 180, b: 100 }; // Reddish-Orange for ~0.2 Msun
+        const sunColor = { r: 255, g: 255, b: 240 };     // Creamy White for 1.0 Msun
+        const highMassColor = { r: 170, g: 200, b: 255 };// Bluish-White for ~3.0+ Msun
+
+        const lerp = (a, b, t) => a + (b - a) * Math.max(0, Math.min(1, t));
+
+        let r, g, b;
+        if (massInSuns <= 1.0) {
+            const t = (massInSuns - 0.2) / (1.0 - 0.2);
+            r = lerp(lowMassColor.r, sunColor.r, t);
+            g = lerp(lowMassColor.g, sunColor.g, t);
+            b = lerp(lowMassColor.b, sunColor.b, t);
+        } else {
+            const t = (massInSuns - 1.0) / (3.0 - 1.0);
+            r = lerp(sunColor.r, highMassColor.r, t);
+            g = lerp(sunColor.g, highMassColor.g, t);
+            b = lerp(sunColor.b, highMassColor.b, t);
+        }
+        return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+    };
+
+    class StarObject extends PhysicsObject {
+        constructor(pos, vel, massInSuns = null) {
+            let finalMassInSuns;
+            if (massInSuns !== null) {
+                finalMassInSuns = massInSuns;
+            } else {
+                // Skewed distribution to favor smaller, more common stars. Range ~0.2 to 3.2 Msun.
+                finalMassInSuns = Math.pow(10, (Math.random() * 1.5) - 0.7); 
+            }
+            
+            const radius = STAR_OBJ_RADIUS * Math.pow(finalMassInSuns, 0.75); // Mass-radius relation R ~ M^0.75
+            
+            super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, "StarObject");
+            this.massInSuns = finalMassInSuns;
+            this.baseColor = getStarColor(this.massInSuns);
+            this.intact = true;
+        }
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = compute_dynamic_color(this.baseColor, this.pos, bh_list, 400.0, {r:255, g:50, b:0});
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Draw mass label, adapted from BlackHole.draw
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            const true_screen_pos = {
+                x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+                y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y
+            };
+            const screen_radius = this.radius * state.zoom;
+            
+            if (screen_radius > 5) { // Only draw label if star is big enough on screen
+                const label_y_offset = screen_radius + 12;
+                ctx.font = '12px Roboto Mono';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 4;
+                ctx.fillText(`${this.massInSuns.toFixed(2)} Msun`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+            }
+            ctx.restore();
+        }
+        tidal_mass_loss(bh_list, dt) {
+            if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
+            let min_dist_sq = Infinity, closest_bh = null;
+            for (const bh of bh_list) {
+                const dx = this.pos.x - bh.pos.x;
+                const dy = this.pos.y - bh.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                if (dist_sq < min_dist_sq) {
+                    min_dist_sq = dist_sq;
+                    closest_bh = bh;
+                }
+            }
+            if (!closest_bh) return { debris_count: 0, fraction: 0 };
+            const tidal_threshold_sq = (closest_bh.radius * 5)**2;
+            if (min_dist_sq < tidal_threshold_sq) {
+                const min_dist = Math.sqrt(min_dist_sq);
+                const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+                const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
+                this.mass -= this.mass * fraction * 0.1 * dt;
+                let debris_count = Math.floor(fraction * 50 * dt);
+                if (this.mass <= 1.0) {
+                    this.intact = false;
+                    this.alive = false;
+                    debris_count += 30;
+                }
+                return { debris_count, fraction };
+            }
+            return { debris_count: 0, fraction: 0 };
+        }
+        get_state() { 
+            const baseState = super.get_state();
+            return { ...baseState, massInSuns: this.massInSuns, baseColor: this.baseColor };
+        }
+        set_state(s) {
+            super.set_state(s);
+            this.massInSuns = s.massInSuns;
+            this.baseColor = s.baseColor;
+        }
+    }
+    
+    class Debris extends PhysicsObject {
+        constructor(pos, vel) { super(pos, vel, 0.01, DEBRIS_RADIUS, "Debris"); }
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = compute_dynamic_color('#c8c8c8', this.pos, bh_list, 200.0, {r:255, g:100, b:0});
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+
+    class BlackHole {
+        constructor(pos, mass, vel = {x: 0, y: 0}) {
+            this.pos = { ...pos };
+            this.mass = parseFloat(mass);
+            this.vel = { ...vel };
+            this.obj_type = "BlackHole";
+            this.updateRadius();
+        }
+
+        updateRadius() {
+            const mass_scale = Math.max(1.0, this.mass / (DEFAULT_SETTINGS.bh_mass * SOLAR_MASS_UNIT));
+            this.radius = BH_RADIUS_BASE * Math.pow(mass_scale, 0.5);
+        }
+        
+        update_orbit(dt, other_bhs) {
+            if (SETTINGS.bh_behavior !== "Orbiting" || other_bhs.length <= 1) return;
+            const { ax, ay } = gravitational_acceleration(this.pos, other_bhs.filter(bh => bh !== this));
+            this.vel.x += ax * dt; this.vel.y += ay * dt;
+            const decay_factor = 1.0 - (SETTINGS.orbit_decay_rate * dt);
+            this.vel.x *= decay_factor; this.vel.y *= decay_factor;
+            this.pos.x += this.vel.x * dt; this.pos.y += this.vel.y * dt;
+        }
+
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            const world_radius = this.radius;
+
+            if (SETTINGS.show_accretion_disk) {
+                const disk_radius = world_radius * 2.5;
+                if (disk_radius > world_radius) {
+                    const grad = ctx.createRadialGradient(world_pos.x, world_pos.y, world_radius * 1.1, world_pos.x, world_pos.y, disk_radius);
+                    grad.addColorStop(0, 'rgba(255, 190, 0, 0)');
+                    grad.addColorStop(0.5, 'rgba(255, 165, 0, 0.7)');
+                    grad.addColorStop(1, 'rgba(255, 100, 0, 0)');
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(world_pos.x, world_pos.y, disk_radius, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+            
+            if (SETTINGS.show_bh_glow) {
+                const glow_radius = world_radius * 1.8;
+                const grad = ctx.createRadialGradient(world_pos.x, world_pos.y, world_radius, world_pos.x, world_pos.y, glow_radius);
+                grad.addColorStop(0, 'rgba(200, 200, 255, 0.4)');
+                grad.addColorStop(1, 'rgba(200, 200, 255, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            if (SETTINGS.show_bh_jets) {
+                const jet_length = world_radius * 5;
+                const jet_width = Math.max(1 / state.zoom, world_radius * 0.2);
+                ctx.fillStyle = 'rgba(255, 140, 0, 0.8)';
+                ctx.fillRect(world_pos.x - jet_width / 2, world_pos.y + world_radius, jet_width, jet_length);
+                ctx.fillRect(world_pos.x - jet_width / 2, world_pos.y - world_radius, jet_width, -jet_length);
+            }
+            
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+            const true_screen_pos = {
+                x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+                y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y
+            };
+
+            const screen_radius = world_radius * state.zoom;
+            let label_y_offset = screen_radius + 15;
+            if (SETTINGS.show_bh_jets) label_y_offset = (screen_radius * 5) + screen_radius + 10;
+            else if (SETTINGS.show_accretion_disk) label_y_offset = (screen_radius * 2.5) + 10;
+            else if (SETTINGS.show_bh_glow) label_y_offset = (screen_radius * 1.8) + 10;
+
+            ctx.font = '14px Roboto Mono';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'black';
+            ctx.shadowBlur = 4;
+            ctx.fillText(`${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+            
+            ctx.restore();
+        }
+        
+        get_state() { return { type: this.obj_type, pos: this.pos, vel: this.vel, mass: this.mass }; }
+        set_state(s) { this.pos = s.pos; this.vel = s.vel; this.mass = s.mass; this.updateRadius(); }
+    }
+    
+    class Particle {
+        constructor(pos, vel, lifetime = 0.8, start_size = 5, end_size = 1, color = 'rgb(255,255,100)') {
+            this.pos = { ...pos }; this.vel = { ...vel }; this.lifetime = Math.max(0.1, lifetime);
+            this.age = 0; this.start_size = start_size; this.end_size = end_size;
+            this.color = color;
+        }
+        update(dt) {
+            this.pos.x += this.vel.x * dt; this.pos.y += this.vel.y * dt; this.age += dt;
+        }
+        is_alive() { return this.age < this.lifetime; }
+        draw(ctx) {
+            const life_fraction = this.age / this.lifetime;
+            const current_size = this.start_size * (1 - life_fraction) + this.end_size * life_fraction;
+            const alpha = 1 - life_fraction;
+            if (current_size < 1 || alpha < 0.05) return;
+            const world_pos = world_to_screen(this.pos);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = alpha;
+            ctx.beginPath();
+            ctx.arc(world_pos.x, world_pos.y, current_size / state.zoom, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+    
+    const handle_collisions = (objects_list) => {
+        for (let i = 0; i < objects_list.length; i++) {
+            const obj1 = objects_list[i]; if (!obj1.alive) continue;
+            for (let j = i + 1; j < objects_list.length; j++) {
+                const obj2 = objects_list[j]; if (!obj2.alive) continue;
+                const dx = obj2.pos.x - obj1.pos.x; const dy = obj2.pos.y - obj1.pos.y;
+                const dist_sq = dx*dx + dy*dy; const min_dist = obj1.radius + obj2.radius;
+                if (dist_sq < min_dist**2 && dist_sq > 1e-6) {
+                    const dist = Math.sqrt(dist_sq); const overlap = min_dist - dist;
+                    const nx = dx / dist; const ny = dy / dist;
+                    const total_mass = obj1.mass + obj2.mass;
+                    const move1 = -overlap * (obj2.mass / total_mass); const move2 = overlap * (obj1.mass / total_mass);
+                    obj1.pos.x += move1 * nx; obj1.pos.y += move1 * ny;
+                    obj2.pos.x += move2 * nx; obj2.pos.y += move2 * ny;
+                    const rvx = obj2.vel.x - obj1.vel.x; const rvy = obj2.vel.y - obj1.vel.y;
+                    const vel_normal = rvx * nx + rvy * ny;
+                    if (vel_normal < 0) {
+                        const e = 0.8;
+                        const j = -(1 + e) * vel_normal / (1/obj1.mass + 1/obj2.mass);
+                        const impx = j * nx; const impy = j * ny;
+                        obj1.vel.x -= impx / obj1.mass; obj1.vel.y -= impy / obj1.mass;
+                        obj2.vel.x += impx / obj2.mass; obj2.vel.y += impy / obj2.mass;
+                    }
+                }
+            }
+        }
+    }
+
+    const apply_preset = (settings_dict) => {
+        const ps = settings_dict.preset_scenario;
+        if (ps === "None") return;
+        const fresh_defaults = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+        Object.assign(settings_dict, fresh_defaults, { preset_scenario: ps });
+
+        if (ps === "Binary BH") { Object.assign(settings_dict, { num_black_holes: 2, bh_behavior: "Orbiting", use_individual_bh_masses: true, bh_masses: [15, 10], num_planets: 10, num_asteroids: 30, placement: "Circular", init_velocity: 15 }); }
+        else if (ps === "Triple BH System") { Object.assign(settings_dict, { num_black_holes: 3, bh_behavior: "Orbiting", use_individual_bh_masses: true, bh_masses: [20, 15, 10], num_planets: 20, num_asteroids: 40, placement: "Circular", init_velocity: 10, orbit_decay_rate: 0.001 }); }
+        else if (ps === "Supermassive BH") { Object.assign(settings_dict, { num_black_holes: 1, bh_mass: 80, num_planets: 50, num_gas_giants: 5, num_asteroids: 100, init_velocity: 25, show_accretion_disk: true }); }
+        else if (ps === "Star Cluster") { Object.assign(settings_dict, { num_black_holes: 0, num_planets: 100, num_gas_giants: 10, num_asteroids: 200, placement: "Grid", init_velocity: 5, gravitational_constant: 1.0 }); }
+        else if (ps === "Kuiper Belt") { Object.assign(settings_dict, { placement: "Empty", mutual_gravity: true, num_black_holes: 0, num_planets: 8, num_gas_giants: 4, enable_asteroids: true, num_asteroids: 300 }); }
+        else if (ps === "Sagittarius A*") { Object.assign(settings_dict, { num_black_holes: 1, bh_mass: 1000, bh_behavior: "Static", show_accretion_disk: true, show_bh_glow: true, num_planets: 200, num_gas_giants: 10, num_asteroids: 50, placement: "Random", init_velocity: 60, velocity_stddev: 20 }); }
+        else if (ps === "Binary Star System") { Object.assign(settings_dict, { num_black_holes: 0, mutual_gravity: true, placement: "Empty", num_planets: 5 }); }
+        else if (ps === "Slingshot") { Object.assign(settings_dict, { placement: "Empty", num_black_holes: 2, use_individual_bh_masses: true, bh_masses: [50, 2], bh_behavior: "Orbiting", num_planets: 15 }); }
+        else if (ps === "Rogue Encounter") { Object.assign(settings_dict, { placement: "Empty", num_black_holes: 1, bh_mass: 25, mutual_gravity: true, num_planets: 8, num_gas_giants: 2 }); }
+		else if (ps === "Galactic Collision"){
+			Object.assign(settings_dict,{
+				num_black_holes:2, bh_masses:[1500,1500], use_individual_bh_masses:true,
+				bh_behavior:"Orbiting", num_planets:800, num_gas_giants:80,
+				placement:"Random", init_velocity:80, velocity_stddev:40,
+				enable_asteroids:false
+			});
+		}
+		else if (ps === "Micro BH Swarm"){
+			Object.assign(settings_dict,{
+				num_black_holes:20, bh_mass:2, bh_behavior:"Orbiting",
+				num_planets:0, num_gas_giants:0, enable_asteroids:false,
+				placement:"Random", init_velocity:0, velocity_stddev:0,
+				gravitational_constant:4.0
+			});
+		}
+		else if (ps === "Exoplanet Lab"){
+			Object.assign(settings_dict,{
+				num_black_holes:0, num_planets:100, num_gas_giants:15,
+				placement:"Multi-Ring", init_velocity:25, velocity_stddev:5,
+				mutual_gravity:true, enable_asteroids:false
+			});
+		}
+
+        settings_dict.preset_scenario = "None";
+    }
+
+    const initialize_simulation = () => {
+        const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+        const starting_preset = SETTINGS.preset_scenario;
+        apply_preset(SETTINGS);
+
+        if (starting_preset !== 'None' && SCENARIO_INFO[starting_preset]) {
+            const info = SCENARIO_INFO[starting_preset];
+            scenarioInfoDiv.innerHTML = `<h4>${info.title}</h4><p>${info.summary}</p>`;
+            scenarioInfoDiv.classList.add('visible');
+            setTimeout(() => scenarioInfoDiv.classList.remove('visible'), 6000);
+        } else {
+            scenarioInfoDiv.classList.remove('visible');
+        }
+
+        state.zoom = 1.0; state.pan = { x: 0.0, y: 0.0 };
+        bh_list = []; planets = []; stars = []; gas_giants = []; asteroids = [];
+        debris = []; particles = []; PhysicsObject_id_counter = 0;
+
+        // --- Add central stars for specific presets that need them BEFORE general placement ---
+        if (["Kuiper Belt", "Rogue Encounter", "Exoplanet Lab"].includes(starting_preset)) {
+            stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0)); // Add a 1 Msun star
+        }
+
+        // --- Handle special setup presets that have their own placement logic ---
+        if (starting_preset === "Binary Star System") {
+            stars.push(new StarObject({x: -50, y: 0}, {x: 0, y: 10})); // These get random mass/size/color
+            stars.push(new StarObject({x: 50, y: 0}, {x: 0, y: -10}));
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 250 + Math.random() * 50;
+                const theta = Math.random() * 2 * Math.PI;
+                planets.push(new Planet({x: r * Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+        } else if (starting_preset === "Kuiper Belt") {
+            const central_mass = stars[0].mass;
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 50 + i * 25;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                planets.push(new Planet({x: r, y:0}, {x:0, y:v}));
+            }
+            for(let i=0; i < SETTINGS.num_gas_giants; i++) {
+                const r = 250 + i * 50;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                gas_giants.push(new GasGiant({x: r, y:0}, {x:0, y:v * 0.8}));
+            }
+            if (SETTINGS.enable_asteroids) {
+                for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+                    const r = 400 + Math.random() * 150;
+                    const theta = Math.random() * 2 * Math.PI;
+                    const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                    const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                    asteroids.push(new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
+                }
+            }
+        } else if (starting_preset === "Rogue Encounter") {
+            const central_mass = stars[0].mass;
+            for(let i=0; i<SETTINGS.num_planets; i++) {
+                const r = 50 + i * 20;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                planets.push(new Planet({x: r, y:0}, {x:0, y:v}));
+            }
+            bh_list.push(new BlackHole({x: -1000, y: 300}, 25 * SOLAR_MASS_UNIT, {x: 15, y: -5}));
+        } else if (starting_preset === "Triple BH System") {
+            const m = SETTINGS.bh_masses;
+            bh_list.push(new BlackHole({x: 0, y: 150}, m[0] * SOLAR_MASS_UNIT, {x: -12, y: 0}));
+            bh_list.push(new BlackHole({x: -130, y: -75}, m[1] * SOLAR_MASS_UNIT, {x: 6, y: -10}));
+            bh_list.push(new BlackHole({x: 130, y: -75}, m[2] * SOLAR_MASS_UNIT, {x: 6, y: 10}));
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 450 + Math.random() * 100;
+                const theta = Math.random() * 2 * Math.PI;
+                planets.push(new Planet({x: r * Math.cos(theta), y: r*Math.sin(theta) }, {x:0, y:0}));
+            }
+        } else if (starting_preset === "Slingshot") {
+            bh_list.push(new BlackHole({x: 0, y: 0}, 50 * SOLAR_MASS_UNIT, {x: 0, y: -0.5}));
+            bh_list.push(new BlackHole({x: -800, y: 150}, 2 * SOLAR_MASS_UNIT, {x: 35, y: 0}));
+            for(let i=0; i<SETTINGS.num_planets; i++) {
+                const r = Math.random()*200 + 100;
+                const theta = Math.random() * Math.PI * 2;
+                planets.push(new Planet({x: r*Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+        } else {
+             // --- Standard placement logic for all other presets ---
+            const num_bh = SETTINGS.num_black_holes;
+            if (num_bh === 1 && bh_list.length === 0) { bh_list.push(new BlackHole({x:0, y:0}, SETTINGS.bh_mass * SOLAR_MASS_UNIT)); } 
+            else if (num_bh > 1) {
+                const masses = (SETTINGS.use_individual_bh_masses && SETTINGS.bh_masses.length === num_bh) ? SETTINGS.bh_masses : Array(num_bh).fill(SETTINGS.bh_mass);
+                const bh_initial_radius = 150;
+                for (let i = 0; i < num_bh; i++) {
+                    const angle = 2 * Math.PI * i / num_bh;
+                    const pos = {x: bh_initial_radius * Math.cos(angle), y: bh_initial_radius * Math.sin(angle)};
+                    let vel = {x: 0, y: 0};
+                    if (SETTINGS.bh_behavior === "Orbiting") {
+                        const orbit_speed = 8;
+                        vel = {x: -orbit_speed * Math.sin(angle), y: orbit_speed * Math.cos(angle)};
+                    }
+                    bh_list.push(new BlackHole(pos, masses[i] * SOLAR_MASS_UNIT, vel));
+                }
+            }
+            
+            const central_body = (stars.length === 1 && bh_list.length === 0) ? stars[0] : 
+                                 (bh_list.length === 1 && stars.length === 0) ? bh_list[0] : null;
+
+            const get_orbital_velocity = (pos, center_obj) => {
+                const r_vec = { x: pos.x - (center_obj?.pos.x || 0), y: pos.y - (center_obj?.pos.y || 0) };
+                const r = Math.hypot(r_vec.x, r_vec.y);
+                if (r < 1) return {x:0, y:0};
+
+                let vel_mag;
+                if (center_obj) { // Calculate proper orbital velocity
+                    vel_mag = Math.sqrt(SETTINGS.gravitational_constant * center_obj.mass / r);
+                } else { // Fallback to user setting for chaotic systems
+                    vel_mag = SETTINGS.init_velocity + (Math.random() - 0.5) * 2 * SETTINGS.velocity_stddev;
+                }
+                return { x: -vel_mag * (r_vec.y / r), y: vel_mag * (r_vec.x / r) };
+            };
+            
+            const min_radius = (num_bh > 0 || stars.length > 0) ? 100 : 50;
+            const max_radius = { "Small": 200, "Medium": 300, "Large": 400, "Huge": 500 }[SETTINGS.sim_size] || 400;
+
+            const placementFunc = (index, count) => {
+                let pos;
+                switch(SETTINGS.placement) {
+                    case "Random": {
+                        const r = min_radius + Math.random() * (max_radius - min_radius);
+                        const theta = Math.random() * 2 * Math.PI;
+                        pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                        break;
+                    }
+                    case "Grid": {
+                        const num_per_side = Math.ceil(Math.sqrt(count));
+                        const spacing = (max_radius * 1.5) / num_per_side;
+                        const grid_x = (index % num_per_side) - (num_per_side / 2) + 0.5;
+                        const grid_y = Math.floor(index / num_per_side) - (num_per_side / 2) + 0.5;
+                        pos = { x: grid_x * spacing, y: grid_y * spacing };
+                        break;
+                    }
+                    case "Multi-Ring": {
+                        const num_rings = 4;
+                        const ring_index = index % num_rings;
+                        const r = min_radius + (ring_index / (num_rings - 1)) * (max_radius - min_radius);
+                        const objects_in_prev_rings = Math.floor(count/num_rings) * ring_index + Math.min(count % num_rings, ring_index);
+                        const index_in_this_ring = index - objects_in_prev_rings;
+                        const count_in_this_ring = Math.floor(count/num_rings) + (ring_index < (count % num_rings) ? 1 : 0);
+                        const theta = 2 * Math.PI * (index_in_this_ring / (count_in_this_ring || 1));
+                        pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                        break;
+                    }
+                    case "Circular":
+                    default: {
+                        const theta = 2 * Math.PI * index / count; 
+                        const r = min_radius + (max_radius - min_radius) / 2;
+                        pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                        break;
+                    }
+                }
+                return { pos, vel: get_orbital_velocity(pos, central_body) };
+            };
+
+            if (SETTINGS.placement !== 'Empty') {
+                for (let i = 0; i < SETTINGS.num_planets; i++) { const {pos, vel} = placementFunc(i, SETTINGS.num_planets); planets.push(new Planet(pos, vel)); }
+                for (let i = 0; i < SETTINGS.num_gas_giants; i++) { const {pos, vel} = placementFunc(i, SETTINGS.num_gas_giants); gas_giants.push(new GasGiant(pos, vel)); }
+                if (SETTINGS.enable_asteroids) {
+                    for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+                        const {pos, vel} = placementFunc(i, SETTINGS.num_asteroids);
+                        asteroids.push(new Asteroid(pos, vel));
+                    }
+                }
+            }
+        }
+
+        generateStarfield();
+
+        let max_object_dist = 0;
+        [...bh_list, ...planets, ...gas_giants, ...asteroids, ...stars].forEach(obj => {
+            max_object_dist = Math.max(max_object_dist, Math.hypot(obj.pos.x, obj.pos.y));
+        });
+
+        if (max_object_dist > 0) {
+            const margin = 1.2;
+            const required_zoom_x = (canvas.width * 0.8) / (max_object_dist * 2 * margin);
+            const required_zoom_y = (canvas.height * 0.8) / (max_object_dist * 2 * margin);
+            state.zoom = Math.min(required_zoom_x, required_zoom_y, 1.0);
+        }
+    };
+
+    const updatePhysics = (dt) => {
+        if(dt <= 0) return;
+        state.frame_count++;
+        
+        let major_sources = [...bh_list, ...stars, ...gas_giants];
+        if (SETTINGS.mutual_gravity) {
+            major_sources = [...bh_list, ...stars, ...gas_giants, ...planets, ...asteroids];
+        }
+        
+        const all_physics_objects = [...planets, ...asteroids, ...gas_giants, ...debris, ...stars];
+        all_physics_objects.forEach(obj => {
+            let effective_sources = major_sources;
+            if (SETTINGS.mutual_gravity) {
+                effective_sources = major_sources.filter(s => s.id !== obj.id);
+            }
+            obj.update_physics(dt, effective_sources);
+            if (SETTINGS.show_trails) obj.update_trail();
+        });
+
+        if (SETTINGS.bh_behavior === "Orbiting") bh_list.forEach(bh => bh.update_orbit(dt, bh_list));
+
+        const new_debris = [];
+        stars.forEach(star => {
+            if (star.alive && star.intact) {
+                const { debris_count, fraction } = star.tidal_mass_loss(bh_list, dt);
+                if (debris_count > 0) {
+                    for (let i = 0; i < debris_count; i++) {
+                        const eject_speed = (Math.random() * 9 + 1) * (1 + fraction);
+                        const angle = Math.random() * 2 * Math.PI;
+                        const dv = { x: eject_speed * Math.cos(angle), y: eject_speed * Math.sin(angle) };
+                        const spawn_pos = { x: star.pos.x + Math.random()*4-2, y: star.pos.y + Math.random()*4-2 };
+                        new_debris.push(new Debris(spawn_pos, {x: star.vel.x*0.1+dv.x, y: star.vel.y*0.1+dv.y}));
+                    }
+                }
+            }
+        });
+        debris.push(...new_debris);
+
+        handle_collisions([...planets, ...asteroids, ...stars]);
+        
+        const check_and_absorb = (obj_list) => {
+            return obj_list.filter(obj => {
+                if(obj.alive && obj.check_absorption(bh_list)) {
+                    for (let i = 0; i < 15; i++) {
+                        const angle = Math.random() * 2 * Math.PI, speed = Math.random() * 50 + 30;
+                        const p_vel = { x: speed * Math.cos(angle), y: speed * Math.sin(angle) };
+                        const color_key = `${obj.obj_type.toLowerCase()}_base_color`;
+                        const baseColor = obj.baseColor || SETTINGS[color_key] || '#c8c8c8';
+                        const rgb = hexToRgb(baseColor);
+                        particles.push(new Particle(obj.pos, p_vel, Math.random()*0.6+0.4, 5, 1, `rgb(${rgb.r},${rgb.g},${rgb.b})`));
+                    }
+                    return false;
+                }
+                return obj.alive;
+            });
+        };
+
+        planets = check_and_absorb(planets); stars = check_and_absorb(stars);
+        gas_giants = check_and_absorb(gas_giants); asteroids = check_and_absorb(asteroids);
+        debris = check_and_absorb(debris);
+        
+        particles = particles.filter(p => p.is_alive());
+        particles.forEach(p => p.update(dt));
+
+        let merged_this_step = true;
+        while (merged_this_step && bh_list.length > 1) {
+            merged_this_step = false;
+            for (let i = 0; i < bh_list.length; i++) {
+                for (let j = i + 1; j < bh_list.length; j++) {
+                    const bh1 = bh_list[i], bh2 = bh_list[j]; const dx = bh1.pos.x - bh2.pos.x, dy = bh1.pos.y - bh2.pos.y;
+                    if (dx*dx + dy*dy < (bh1.radius + bh2.radius)**2) {
+                        const m1 = bh1.mass, m2 = bh2.mass, new_mass = m1 + m2;
+                        const new_pos = { x: (bh1.pos.x * m1 + bh2.pos.x * m2) / new_mass, y: (bh1.pos.y * m1 + bh2.pos.y * m2) / new_mass };
+                        const new_vel = { x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass, y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass };
+                        bh_list.splice(j, 1); bh_list.splice(i, 1);
+                        bh_list.push(new BlackHole(new_pos, new_mass, new_vel));
+                        merged_this_step = true;
+                        break;
+                    }
+                }
+                if (merged_this_step) break;
+            }
+        }
+        
+        planets = planets.filter(p => !is_offscreen(p.pos)); stars = stars.filter(s => !is_offscreen(s.pos));
+        gas_giants = gas_giants.filter(g => !is_offscreen(g.pos)); asteroids = asteroids.filter(a => !is_offscreen(a.pos));
+        debris = debris.filter(d => !is_offscreen(d.pos));
+
+        let target = null;
+        if (SETTINGS.follow_mode !== "None") {
+            const follow_map = { "BlackHole": bh_list, "Planet": planets, "GasGiant": gas_giants, "Star": stars };
+            const target_list = follow_map[SETTINGS.follow_mode];
+            if (target_list && target_list.length > 0) {
+                if (target_list.length > 1) {
+                    let totalMass = 0, com = {x:0, y:0};
+                    target_list.forEach(obj => { com.x += obj.pos.x * obj.mass; com.y += obj.pos.y * obj.mass; totalMass += obj.mass; });
+                    if (totalMass > 0) target = { pos: { x: com.x/totalMass, y: com.y/totalMass }};
+                } else { target = target_list[0]; }
+            }
+        }
+        if (target) { state.pan.x = -target.pos.x * state.zoom; state.pan.y = target.pos.y * state.zoom; }
+    }
+
+    const drawScene = () => {
+        ctx.setTransform(1, 0, 0, 1, 0, 0); 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.save();
+        ctx.translate(canvas.width / 2 + state.pan.x, canvas.height / 2 + state.pan.y);
+        ctx.scale(state.zoom, -state.zoom);
+
+
+        if (SETTINGS.show_trails) {
+            [...planets, ...gas_giants, ...asteroids, ...stars].forEach(obj => {
+                if (obj.alive && obj.trail.length > 1) {
+                    ctx.strokeStyle = obj.baseColor || SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] || '#6495ed';
+                    ctx.lineWidth = 1.5 / state.zoom;
+                    ctx.beginPath();
+                    const first_point = world_to_screen(obj.trail[0]);
+                    ctx.moveTo(first_point.x, first_point.y);
+                    for (let i = 1; i < obj.trail.length; i++) {
+                        ctx.globalAlpha = i / obj.trail.length * 0.8;
+                        const point = world_to_screen(obj.trail[i]);
+                        ctx.lineTo(point.x, point.y);
+                    }
+                    ctx.stroke();
+                }
+            });
+            ctx.globalAlpha = 1; 
+        }
+
+        [...debris, ...asteroids, ...planets, ...gas_giants, ...stars].forEach(obj => { if (obj.alive) obj.draw(ctx); });
+        
+        particles.forEach(p => p.draw(ctx));
+        ctx.globalAlpha = 1;
+        
+        bh_list.forEach(bh => bh.draw(ctx));
+
+        ctx.restore();
+        
+        if (state.adding_mass) {
+            ctx.strokeStyle = 'lime'; ctx.lineWidth = 2; ctx.beginPath();
+            ctx.moveTo(state.add_start_screen.x, state.add_start_screen.y);
+            ctx.lineTo(state.mouse.x, state.mouse.y); ctx.stroke();
+        }
+
+        if (SETTINGS.show_dynamic_overlays) {
+            const lines = [ `Planets: ${planets.length} | Gas Giants: ${gas_giants.length} | Asteroids: ${asteroids.length}`, `Stars: ${stars.length} | Black Holes: ${bh_list.length}`, `Particles: ${particles.length} | Debris: ${debris.length}`, `---`, `Zoom: ${state.zoom.toFixed(2)}x | Sim Speed: ${SETTINGS.sim_speed.toFixed(1)}x`, `Status: ${state.paused ? 'Paused (Space)' : 'Running'}` ];
+            overlayDiv.innerHTML = lines.join('<br>');
+        } else {
+            overlayDiv.innerHTML = '';
+        }
+    };
+    
+    const gameLoop = (timestamp) => {
+        if (!state.last_time) state.last_time = timestamp; 
+        const dt_seconds = (timestamp - state.last_time) / 1000.0;
+        state.last_time = timestamp;
+        const dt_sim = Math.min(dt_seconds, 0.05) * SETTINGS.sim_speed * 50 * DT;
+        if (!state.paused) updatePhysics(dt_sim);
+        drawScene();
+        requestAnimationFrame(gameLoop);
+    };
+
+	function resizeCanvas(){
+		const W = window.innerWidth;
+		const H = window.innerHeight;
+		canvas.width  = W;  canvas.height  = H;        // sim layer
+		starfieldCanvas.width  = W; starfieldCanvas.height = H; // star layer
+		generateStarfield();                           // redraw background
+	}
+	window.addEventListener('resize', resizeCanvas);
+
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        const uiContainer = document.querySelector('.ui-container');
+        if (e.clientX > uiContainer.getBoundingClientRect().left) return;
+        state.mouse.down = true;
+        if (SETTINGS.interactive_add) {
+            state.adding_mass = true;
+            state.add_start_screen = { x: e.clientX, y: e.clientY };
+            state.add_start_world = screen_to_world(state.add_start_screen);
+        }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        state.mouse.x = e.clientX; state.mouse.y = e.clientY;
+        if (state.mouse.down && !state.adding_mass) { state.pan.x += e.movementX; state.pan.y += e.movementY; }
+    });
+    
+    window.addEventListener('mouseup', (e) => {
+        if (e.button !== 0) return;
+        state.mouse.down = false;
+        if (state.adding_mass) {
+            state.adding_mass = false;
+            const add_end_world = screen_to_world({ x: e.clientX, y: e.clientY });
+            const vel = { x: (add_end_world.x - state.add_start_world.x) * 3, y: (add_end_world.y - state.add_start_world.y) * 3 };
+            const type = SETTINGS.input_object_type; let new_obj;
+            if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
+            else if (type === 'Star') new_obj = new StarObject(state.add_start_world, vel);
+            else if (type === 'Asteroid') new_obj = new Asteroid(state.add_start_world, vel);
+            else if (type === 'GasGiant') new_obj = new GasGiant(state.add_start_world, vel);
+            if(new_obj instanceof Planet) planets.push(new_obj);
+            if(new_obj instanceof StarObject) stars.push(new_obj);
+            if(new_obj instanceof Asteroid) asteroids.push(new_obj);
+            if(new_obj instanceof GasGiant) gas_giants.push(new_obj);
+        }
+    });
+
+	window.addEventListener('wheel', (e) => {
+		if (e.target !== canvas) return;
+		e.preventDefault(); 
+        const zoomFactor = 1.1; const oldZoom = state.zoom;
+        let newZoom = (e.deltaY < 0) ? oldZoom * zoomFactor : oldZoom / zoomFactor;
+        newZoom = Math.max(0.01, Math.min(newZoom, 100));
+        const worldPos = screen_to_world({x: e.clientX, y: e.clientY});
+        state.zoom = newZoom;
+        const newScreenPos = { x: worldPos.x * state.zoom + canvas.width / 2, y: -worldPos.y * state.zoom + canvas.height / 2 };
+        state.pan.x -= (newScreenPos.x - e.clientX);
+        state.pan.y -= (newScreenPos.y - e.clientY);
+	}, { passive: false });
+
+    window.addEventListener('keydown', (e) => {
+        const panSpeed = 40 / state.zoom;
+        if (e.key === ' ') { state.paused = !state.paused; e.preventDefault(); } 
+        else if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') state.pan.x += panSpeed;
+        else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') state.pan.x -= panSpeed;
+        else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') state.pan.y += panSpeed;
+        else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') state.pan.y -= panSpeed;
+        else if (e.key.toLowerCase() === 'home') { state.zoom = 1.0; state.pan = {x: 0, y: 0}; }
+    });
+    
+    // --- Save/Load Logic ---
+    const save_simulation_state = () => {
+        try {
+            const savedState = { settings: SETTINGS, view: { zoom: state.zoom, pan: state.pan }, objects: [ ...bh_list.map(o => o.get_state()), ...planets.map(o => o.get_state()), ...stars.map(o => o.get_state()), ...gas_giants.map(o => o.get_state()), ...asteroids.map(o => o.get_state()), ...debris.map(o => o.get_state()) ] };
+            localStorage.setItem(SAVE_KEY, JSON.stringify(savedState));
+            alert("Simulation state saved!");
+        } catch (e) { console.error("Error saving state:", e); alert("Failed to save simulation state."); }
+    };
+    
+    const load_simulation_state = () => {
+        const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+        scenarioInfoDiv.classList.remove('visible');
+
+        const savedJSON = localStorage.getItem(SAVE_KEY);
+        if (!savedJSON) { alert("No saved state found."); return; }
+        try {
+            const loadedState = JSON.parse(savedJSON);
+            SETTINGS = loadedState.settings || { ...DEFAULT_SETTINGS };
+            const view = loadedState.view || { zoom: 1.0, pan: {x:0, y:0} };
+            state.zoom = view.zoom; state.pan = view.pan;
+            bh_list = []; planets = []; stars = []; gas_giants = []; asteroids = []; debris = []; particles = [];
+            PhysicsObject_id_counter = 0; let max_id = 0;
+            loadedState.objects.forEach(obj_state => {
+                const { type, pos, vel, mass } = obj_state; let new_obj = null;
+                if (type === 'Planet') new_obj = new Planet(pos, vel);
+                else if (type === 'GasGiant') new_obj = new GasGiant(pos, vel);
+                else if (type === 'Asteroid') new_obj = new Asteroid(pos, vel);
+                else if (type === 'StarObject') new_obj = new StarObject(pos, vel);
+                else if (type === 'Debris') new_obj = new Debris(pos, vel);
+                else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, vel);
+                if (new_obj) {
+                    new_obj.set_state(obj_state);
+                    if (new_obj instanceof Planet) planets.push(new_obj);
+                    else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
+                    else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
+                    else if (new_obj instanceof StarObject) stars.push(new_obj);
+                    else if (new_obj instanceof Debris) debris.push(new_obj);
+                    else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+                    max_id = Math.max(max_id, new_obj.id || 0);
+                }
+            });
+            PhysicsObject_id_counter = max_id + 1;
+            alert("Simulation state loaded!"); state.paused = false;
+        } catch (e) { console.error("Error loading state:", e); alert("Failed to load state."); }
+    }
+    
+	/* ----------  human-friendly titles & summaries  ---------- */
+	const SCENARIO_INFO = {
+	  "Binary BH":           {title:"Binary Black Hole", summary:"Two stellar-mass black holes locked in mutual orbit."},
+	  "Triple BH System":    {title:"Triple Black Hole",  summary:"A chaotic three-body dance of massive BHs."},
+	  "Supermassive BH":     {title:"Supermassive Core",  summary:"One huge BH dominating a dense stellar swarm."},
+	  "Star Cluster":        {title:"Dense Star Cluster", summary:"Hundreds of stars with gentle mutual gravity."},
+	  "Kuiper Belt":         {title:"Kuiper Belt",        summary:"A sun-like star with outer-system dust, ice and dwarf worlds."},
+	  "Sagittarius A*":      {title:"Sagittarius A*",     summary:"The Milky Way’s central BH and its surrounding stars."},
+	  "Binary Star System":  {title:"Binary Stars",       summary:"A pair of suns with orbiting planets."},
+	  "Slingshot":           {title:"Gravity Slingshot",  summary:"Use a heavy BH to fling lighter bodies across the system."},
+	  "Rogue Encounter":     {title:"Rogue Encounter",    summary:"A wandering black hole grazes a planetary system."},
+	  "Galactic Collision":  {title:"Galactic Collision", summary:"Two super-massive BHs & thousands of stars on a crash course."},
+	  "Micro BH Swarm":      {title:"Micro BH Swarm",     summary:"Dozens of tiny black holes interacting chaotically."},
+	  "Exoplanet Lab":       {title:"Exoplanet Lab",      summary:"A sun-like star with 100+ varied planets for observation."}
+	};
+
+	
+    // --- Settings Menu ---
+    const setting_items = [
+        {"label": "Preset Scenario", "key": "preset_scenario", "type": "option", "options": ["None", "Binary BH", "Triple BH System", "Supermassive BH", "Star Cluster", "Kuiper Belt", "Sagittarius A*", "Binary Star System", "Slingshot","Rogue Encounter","Galactic Collision","Micro BH Swarm","Exoplanet Lab"]},
+        {"label": "--- Simulation ---", "type": "separator"},
+        {"label": "Gravitational Constant", "key": "gravitational_constant", "type": "float", "min": 0.1, "max": 20.0, "step": 0.1},
+        {"label": "Mutual Gravity (All)", "key": "mutual_gravity", "type": "bool"},
+        {"label": "Simulation Speed", "key": "sim_speed", "type": "float", "min": 0.0, "max": 5.0, "step": 0.1},
+        {"label": "Simulation Size", "key": "sim_size", "type": "option", "options": ["Small", "Medium", "Large", "Huge"]},
+        {"label": "Placement", "key": "placement", "type": "option", "options": ["Circular", "Multi-Ring", "Random", "Grid", "Empty"]},
+        {"label": "--- Black Holes ---", "type": "separator"},
+        {"label": "Number of Black Holes", "key": "num_black_holes", "type": "int", "min": 0, "max": 10, "step": 1},
+        {"label": "Default BH Mass (Msun)", "key": "bh_mass", "type": "float", "min": 0.1, "max": 1000, "step": 0.5},
+        {"label": "Use Individual BH Masses", "key": "use_individual_bh_masses", "type": "bool"},
+        {"label": "BH Behavior", "key": "bh_behavior", "type": "option", "options": ["Static", "Orbiting"]},
+        {"label": "Orbit Decay Rate", "key": "orbit_decay_rate", "type": "float", "min": 0.0, "max": 0.1, "step": 0.001, "precision": 3},
+        {"label": "--- Objects ---", "type": "separator"},
+        {"label": "Number of Planets", "key": "num_planets", "type": "int", "min": 0, "max": 200, "step": 1},
+        {"label": "Number of Gas Giants", "key": "num_gas_giants", "type": "int", "min": 0, "max": 50, "step": 1},
+        {"label": "Enable Asteroids", "key": "enable_asteroids", "type": "bool"},
+        {"label": "Number of Asteroids", "key": "num_asteroids", "type": "int", "min": 0, "max": 500, "step": 5},
+        {"label": "Initial Velocity", "key": "init_velocity", "type": "float", "min": 0, "max": 100, "step": 1},
+        {"label": "Velocity StdDev", "key": "velocity_stddev", "type": "float", "min": 0, "max": 50, "step": 1},
+        {"label": "Input Object Type", "key": "input_object_type", "type": "option", "options": ["Planet", "Star", "Asteroid", "GasGiant"]},
+        {"label": "--- Visuals ---", "type": "separator"},
+        {"label": "Show Trails", "key": "show_trails", "type": "bool"},
+        {"label": "Trail Length", "key": "trail_length", "type": "int", "min": 5, "max": 300, "step": 5},
+        {"label": "Show BH Glow", "key": "show_bh_glow", "type": "bool"},
+        {"label": "Show Accretion Disk", "key": "show_accretion_disk", "type": "bool"},
+        {"label": "Show BH Jets", "key": "show_bh_jets", "type": "bool"},
+        {"label": "Improved Lensing", "key": "improved_lensing", "type": "bool"},
+        {"label": "Lensing Strength", "key": "lensing_strength", "type": "float", "min": 1, "max": 1000, "step": 10},
+        {"label": "Star Field Density", "key": "star_density", "type": "int", "min": 0, "max": 10000, "step": 100},
+        {"label": "Ambient Lighting", "key": "show_ambient_lighting", "type": "bool"},
+        {"label": "Dynamic Object Colors", "key": "dynamic_object_properties", "type": "bool"},
+        {"label": "Planet Base Color", "key": "planet_base_color", "type": "color"},
+        {"label": "--- UI & Control ---", "type": "separator"},
+        {"label": "Interactive Add", "key": "interactive_add", "type": "bool"},
+        {"label": "Follow Mode", "key": "follow_mode", "type": "option", "options": ["None", "BlackHole", "Planet", "GasGiant", "Star"]},
+        {"label": "Show Overlays", "key": "show_dynamic_overlays", "type": "bool"},
+    ];
+
+    const buildSettingsMenu = () => {
+        settingsGrid.innerHTML = '';
+        localSettings = JSON.parse(JSON.stringify(SETTINGS)); 
+		/* ------ utility to show the chosen preset’s description ------ */
+		function updatePresetInfo(presetName){
+			const box = document.getElementById("presetInfo");
+			const info = SCENARIO_INFO[presetName];
+			if(!info || presetName === "None"){ box.innerHTML=""; box.style.display = 'none'; return; }
+            box.style.display = 'block';
+			box.innerHTML = `<h4>${info.title}</h4>${info.summary}`;
+		}
+
+        setting_items.forEach(item => {
+            if (item.type === 'separator') {
+                const sepDiv = document.createElement('div');
+                sepDiv.className = 'setting-separator';
+                if (item.label.includes("Visuals")) { // A bit of a hack to remove the now-redundant star color setting
+                    const starColorSettingIndex = setting_items.findIndex(s => s.key === 'star_base_color');
+                    if (starColorSettingIndex > -1) setting_items.splice(starColorSettingIndex, 1);
+                }
+                sepDiv.innerHTML = `<h3>${item.label}</h3><div class="line"></div>`;
+                settingsGrid.appendChild(sepDiv);
+                return;
+            }
+
+            const label = document.createElement('div'); label.className = 'setting-label'; label.textContent = item.label;
+            const controlContainer = document.createElement('div'); controlContainer.className = 'setting-control';
+            const value = localSettings[item.key];
+
+            if (item.type === 'int' || item.type === 'float') {
+                const slider = document.createElement('input'); slider.type = 'range'; slider.min = item.min; slider.max = item.max; slider.step = item.step; slider.value = value;
+                const valueDisplay = document.createElement('span'); valueDisplay.className = 'value-display'; valueDisplay.textContent = Number(value).toFixed(item.precision || (item.type === 'float' ? 1 : 0));
+                slider.oninput = () => {
+                    const val = item.type === 'int' ? parseInt(slider.value) : parseFloat(slider.value);
+                    localSettings[item.key] = val; valueDisplay.textContent = val.toFixed(item.precision || (item.type === 'float' ? 1 : 0));
+                    if (item.key === 'num_black_holes' || item.key === 'use_individual_bh_masses') updateIndivBHMassButtonVisibility();
+                };
+                controlContainer.append(slider, valueDisplay);
+            } else if (item.type === 'bool') {
+                const button = document.createElement('button'); button.className = 'toggle-button'; button.textContent = value ? 'On' : 'Off';
+                button.onclick = () => { localSettings[item.key] = !localSettings[item.key]; button.textContent = localSettings[item.key] ? 'On' : 'Off'; if (item.key === 'use_individual_bh_masses') updateIndivBHMassButtonVisibility(); };
+                controlContainer.appendChild(button);
+            } else if (item.type === 'option') {
+                const select = document.createElement('select');
+                item.options.forEach(opt => { const option = document.createElement('option'); option.value = option.textContent = opt; if (opt === value) option.selected = true; select.appendChild(option); });
+                select.onchange = (e) => {
+                    localSettings[item.key] = e.target.value;
+                    if (item.key === 'preset_scenario') {
+                        updatePresetInfo(e.target.value);
+                    }
+                };
+				controlContainer.appendChild(select);
+            } else if (item.type === 'color') {
+                const colorInput = document.createElement('input'); colorInput.type = 'color'; colorInput.value = value;
+                colorInput.oninput = () => { localSettings[item.key] = colorInput.value; };
+                controlContainer.appendChild(colorInput);
+            }
+
+            settingsGrid.append(label, controlContainer);
+
+            if (item.key === 'orbit_decay_rate') {
+                const bhMassBtnContainer = document.createElement('div');
+                bhMassBtnContainer.style.gridColumn = '1 / -1';
+                bhMassBtnContainer.style.textAlign = 'center';
+                bhMassBtnContainer.innerHTML = `<button id="indivBHMassBtn" class="ui-button" style="margin-top: 10px;">Set Individual BH Masses</button>`;
+                settingsGrid.appendChild(bhMassBtnContainer);
+                bhMassBtnContainer.firstElementChild.onclick = showIndivBHMassMenu;
+            }
+        });
+        updateIndivBHMassButtonVisibility();
+		updatePresetInfo(localSettings.preset_scenario);
+    };
+    
+    const updateIndivBHMassButtonVisibility = () => {
+        const btn = document.getElementById('indivBHMassBtn');
+        if (btn) btn.style.display = localSettings.use_individual_bh_masses && localSettings.num_black_holes > 1 ? 'inline-block' : 'none';
+    }
+    
+    const showIndivBHMassMenu = () => {
+        const content = document.getElementById('bhMassesContent');
+        content.innerHTML = '';
+        const num_bh = localSettings.num_black_holes;
+        if (!localSettings.bh_masses || localSettings.bh_masses.length !== num_bh) {
+            localSettings.bh_masses = Array(num_bh).fill(localSettings.bh_mass);
+        }
+
+        for (let i = 0; i < num_bh; i++) {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'bh-mass-item';
+
+            const label = document.createElement('label');
+            label.textContent = `Black Hole #${i + 1}:`;
+
+            const controlDiv = document.createElement('div');
+            controlDiv.className = 'bh-mass-control';
+
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = 0.1;
+            slider.max = 1000;
+            slider.step = 0.1;
+            slider.value = localSettings.bh_masses[i];
+            slider.dataset.index = i;
+
+            const valueDisplay = document.createElement('span');
+            valueDisplay.className = 'value-display';
+            valueDisplay.textContent = `${Number(slider.value).toFixed(1)} Msun`;
+
+            slider.oninput = (e) => {
+                const index = parseInt(e.target.dataset.index, 10);
+                const val = parseFloat(e.target.value);
+                localSettings.bh_masses[index] = val;
+                valueDisplay.textContent = `${val.toFixed(1)} Msun`;
+            };
+            
+            controlDiv.append(slider, valueDisplay);
+            itemDiv.append(label, controlDiv);
+            content.appendChild(itemDiv);
+        }
+        bhMassesModal.classList.remove('hidden');
+    }
+    
+    document.getElementById('bhMassesDone').onclick = () => bhMassesModal.classList.add('hidden');
+    document.getElementById('settingsBtn').onclick = () => { buildSettingsMenu(); settingsPanel.classList.remove('hidden'); state.paused = true; };
+    document.getElementById('refreshScenarioBtn').onclick = () => { initialize_simulation(); state.paused = false; };
+    document.getElementById('resetAllBtn').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); initialize_simulation(); state.paused = false; };
+    document.getElementById('saveBtn').onclick = save_simulation_state;
+    document.getElementById('loadBtn').onclick = load_simulation_state;
+    document.getElementById('settingsApply').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(localSettings)); settingsPanel.classList.add('hidden'); initialize_simulation(); state.paused = false; };
+    document.getElementById('settingsReset').onclick = () => { localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); buildSettingsMenu(); };
+    document.getElementById('settingsCancel').onclick = () => { settingsPanel.classList.add('hidden'); state.paused = false; };
+
+    resizeCanvas();
+    initialize_simulation();
+    requestAnimationFrame(gameLoop);
+
+    });
+    </script>
+</body>
+</html>
