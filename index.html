@@ -21,6 +21,17 @@
 				splashFadeIn   1.6s   ease-out   0s   forwards,
 				splashFadeOut  1.2s   ease-in    2.3s forwards;
 		}
+		
+		/* Hide UI elements during splash screen */
+		.ui-container, #overlay, #scenarioInfoDisplay {
+			opacity: 0;
+			transition: opacity 1.0s ease-in;
+		}
+		
+		/* Show UI elements after splash */
+		.ui-container.showUI, #overlay.showUI, #scenarioInfoDisplay.showUI {
+			opacity: 1;
+		}
 		#splash h1{
 			margin:0;
 			font-family:'Poppins',sans-serif;
@@ -29,6 +40,13 @@
 			letter-spacing:0.12em;
 			color:var(--primary-color);
 			text-shadow:0 0 25px var(--primary-color);
+			opacity: 0;
+			animation: logoFadeIn 1.0s ease-out 0.3s forwards;
+		}
+		
+		@keyframes logoFadeIn {
+			from { opacity: 0; transform: scale(0.9); }
+			to { opacity: 1; transform: scale(1.0); }
 		}
 
 		/*  hidden until JS adds .showCanvas  */
@@ -46,8 +64,14 @@
 
 
 		/* --- keyframes --- */
-		@keyframes splashFadeIn  { from{opacity:0;} to{opacity:1;} }
-		@keyframes splashFadeOut { from{opacity:1;} to{opacity:0;} }
+		@keyframes splashFadeIn  { 
+			from { opacity: 0; } 
+			to { opacity: 1; } 
+		}
+		@keyframes splashFadeOut { 
+			from { opacity: 1; } 
+			to { opacity: 0; } 
+		}
 
 
         :root {
@@ -80,6 +104,11 @@
             color: var(--text-color);
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+        }
+        
+        /* Ensure clean splash screen start */
+        html, body {
+            background-color: var(--bg-color);
         }
 
         #simulationCanvas {
@@ -146,6 +175,75 @@
             z-index: 10;
         }
 
+        /* Mobile-friendly UI adjustments */
+        @media (max-width: 768px) {
+            .ui-container {
+                top: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+            
+            .ui-button {
+                padding: 12px 16px;
+                font-size: 16px;
+                min-height: 44px; /* iOS minimum touch target */
+            }
+            
+            .speed-controls {
+                padding: 10px 14px;
+            }
+            
+            .speed-btn {
+                padding: 8px 14px;
+                font-size: 14px;
+                min-width: 70px;
+            }
+            
+            #settingsPanel {
+                width: 95%;
+                max-width: none;
+                height: 95vh;
+                max-height: none;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+                gap: 15px 20px;
+            }
+            
+                    .setting-label {
+            justify-self: start;
+            text-align: left;
+        }
+        
+        #mobileInstructions {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(13, 13, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 170, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 2000;
+            max-width: 300px;
+            text-align: center;
+        }
+        
+        .mobile-instructions-content h3 {
+            margin: 0 0 15px 0;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+        
+        .mobile-instructions-content p {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        }
+
         .ui-button {
             padding: 8px 16px;
             background-color: var(--button-bg);
@@ -166,6 +264,32 @@
             transform: scale(0.98);
         }
 
+        .speed-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(20, 20, 40, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 170, 255, 0.3);
+        }
+
+        .speed-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            min-width: 60px;
+        }
+
+        .speed-display {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+            min-width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
         #settingsPanel {
             position: fixed;
             top: 50%;
@@ -175,41 +299,51 @@
             max-width: 800px;
             height: 90vh;
             max-height: 850px;
-            background-color: var(--panel-bg);
-            backdrop-filter: blur(5px);
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            background: rgba(13, 13, 26, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(0, 170, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         #settingsPanel.hidden {
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.95);
+            transform: translate(-50%, -50%) scale(0.9);
             pointer-events: none;
+            filter: blur(10px);
         }
 
         .settings-header {
-            padding: 20px;
+            padding: 25px 30px;
             text-align: center;
             font-size: 28px;
             font-weight: 600;
             color: var(--primary-color);
-            border-bottom: 1px solid var(--separator-color);
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(0, 170, 255, 0.05));
+            border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+            border-radius: 20px 20px 0 0;
+            text-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
         }
 
         .settings-content {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 20px 30px;
+            padding: 25px 35px;
+            background: rgba(0, 0, 0, 0.1);
         }
         
         .settings-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px 30px;
+            gap: 25px 35px;
             align-items: center;
         }
         
@@ -221,45 +355,80 @@
             justify-self: end;
             text-align: right;
             font-size: 15px;
+            color: rgba(224, 224, 224, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .setting-control {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .setting-control input[type="range"] {
             flex-grow: 1;
             -webkit-appearance: none;
             appearance: none;
-            height: 5px;
-            background: #444;
-            border-radius: 5px;
+            height: 6px;
+            background: linear-gradient(90deg, rgba(0, 170, 255, 0.3), rgba(0, 170, 255, 0.1));
+            border-radius: 10px;
             outline: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         .setting-control input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
-            background: var(--primary-color);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--primary-color), #0088cc);
             border-radius: 50%;
             cursor: pointer;
+            box-shadow: 
+                0 2px 8px rgba(0, 170, 255, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+        .setting-control input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 4px 12px rgba(0, 170, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
         .setting-control .value-display {
             min-width: 60px;
             text-align: left;
             font-family: 'Roboto Mono', monospace;
+            color: rgba(224, 224, 224, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .setting-control select, .setting-control .toggle-button {
             width: 100%;
-            padding: 8px;
-            background-color: #222;
-            border: 1px solid #555;
+            padding: 10px 12px;
+            background: rgba(34, 34, 34, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 170, 255, 0.3);
             color: var(--text-color);
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        .setting-control select:hover, .setting-control .toggle-button:hover {
+            background: rgba(44, 44, 44, 0.9);
+            border-color: rgba(0, 170, 255, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        .setting-control select:focus, .setting-control .toggle-button:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 
+                0 0 0 3px rgba(0, 170, 255, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .setting-control input[type="color"] {
@@ -269,49 +438,81 @@
             width: 50px;
             height: 30px;
             background-color: transparent;
-            border: 1px solid #555;
+            border: 2px solid rgba(0, 170, 255, 0.3);
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .setting-control input[type="color"]:hover {
+            border-color: rgba(0, 170, 255, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         .setting-control input[type="color"]::-webkit-color-swatch {
-            border-radius: 4px;
+            border-radius: 6px;
             border: none;
         }
-
 
         .setting-separator {
             grid-column: 1 / -1;
             display: flex;
             align-items: center;
             gap: 15px;
-            margin: 15px 0;
+            margin: 20px 0;
         }
         .setting-separator h3 {
             margin: 0;
             color: var(--secondary-color);
             font-size: 18px;
             white-space: nowrap;
+            text-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
         }
         .setting-separator .line {
             width: 100%;
             height: 1px;
-            background-color: var(--separator-color);
+            background: linear-gradient(90deg, transparent, var(--separator-color), transparent);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
         }
 
         .settings-footer {
-            padding: 20px;
+            padding: 25px 30px;
             display: flex;
             justify-content: center;
             gap: 15px;
-            border-top: 1px solid var(--separator-color);
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.05), rgba(0, 170, 255, 0.1));
+            border-top: 1px solid rgba(0, 170, 255, 0.2);
+            border-radius: 0 0 20px 20px;
         }
         
         .footer-button {
-            padding: 10px 25px;
+            padding: 12px 28px;
             font-size: 16px;
+            background: rgba(40, 40, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 170, 255, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
-        #settingsApply { background-color: var(--button-apply-bg); }
-        #settingsApply:hover { background-color: var(--button-apply-hover-bg); }
+        .footer-button:hover {
+            background: rgba(50, 50, 50, 0.9);
+            border-color: rgba(0, 170, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+        #settingsApply { 
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.8), rgba(40, 167, 69, 0.6));
+            border-color: rgba(40, 167, 69, 0.4);
+        }
+        #settingsApply:hover { 
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.9), rgba(40, 167, 69, 0.7));
+            border-color: rgba(40, 167, 69, 0.6);
+        }
 
         #bhMassesModal {
             position: fixed;
@@ -408,6 +609,15 @@
 
     <div id="overlay"></div>
     <div id="scenarioInfoDisplay"></div>
+    <div id="mobileInstructions" style="display: none;">
+        <div class="mobile-instructions-content">
+            <h3>Mobile Controls</h3>
+            <p>• <strong>Single tap & drag:</strong> Add object with velocity</p>
+            <p>• <strong>Drag without adding:</strong> Pan the view</p>
+            <p>• <strong>Pinch:</strong> Zoom in/out</p>
+            <p>• <strong>Double tap:</strong> Reset view</p>
+        </div>
+    </div>
 
     <div class="ui-container">
         <button id="settingsBtn" class="ui-button">Settings</button>
@@ -415,6 +625,14 @@
         <button id="resetAllBtn" class="ui-button">Reset to Default</button>
         <button id="saveBtn" class="ui-button">Save State</button>
         <button id="loadBtn" class="ui-button">Load State</button>
+        
+        <div class="speed-controls">
+            <button id="slowDownBtn" class="ui-button speed-btn">⏪ Slow</button>
+            <span id="speedDisplay" class="speed-display">1.0x</span>
+            <button id="speedUpBtn" class="ui-button speed-btn">Fast ⏩</button>
+        </div>
+        
+        <button id="resetViewBtn" class="ui-button">Reset View</button>
     </div>
 
     <div id="settingsPanel" class="hidden">
@@ -460,6 +678,18 @@
 			splash.remove();                 // splash done
 			canvas.classList.add('showCanvas');  // NOW fade the sim in
             starfieldCanvas.classList.add('showCanvas');
+            
+            // Show UI elements after a short delay
+            setTimeout(() => {
+                document.querySelector('.ui-container').classList.add('showUI');
+                document.getElementById('overlay').classList.add('showUI');
+                document.getElementById('scenarioInfoDisplay').classList.add('showUI');
+                
+                // Show scenario info after UI elements are visible
+                setTimeout(() => {
+                    show_scenario_info();
+                }, 500);
+            }, 200);
 		}
 	});
 
@@ -520,6 +750,7 @@
     const ASTEROID_RADIUS = 2;
     const STAR_OBJ_RADIUS = 10;
     const DEBRIS_RADIUS = 2;
+    const MAX_STAR_MASS_BEFORE_BH = 20.0; // Stars above this mass (in solar masses) become black holes
 
     const DEFAULT_SETTINGS = {
         preset_scenario: "Binary BH", 
@@ -532,15 +763,18 @@
         show_trails: true,
         sim_speed: 1.0,
         show_velocity_vectors: false, interactive_add: true, trail_length: 40,
+        trail_style: "Glow",
         sim_size: "Large", 
-        star_density: 5000,
+        star_density: 10000,
         input_object_type: "Star", show_bh_glow: true,
         show_accretion_disk: false, show_bh_jets: false, improved_lensing: true, lensing_strength: 100,
         show_dynamic_overlays: true, enable_asteroids: true, num_asteroids: 10,
         dynamic_object_properties: true, record_simulation: false, 
         show_ambient_lighting: true,
         planet_base_color: "#6495ed", 
-        star_base_color: "#ffff00",  
+        star_base_color: "#ffff00",
+        enable_star_merging: true,
+        max_star_mass_before_bh: 20.0,  
     };
     let SETTINGS = { ...DEFAULT_SETTINGS };
     let localSettings = {};
@@ -549,13 +783,16 @@
         zoom: 1.0, pan: { x: 0.0, y: 0.0 }, paused: false, frame_count: 0,
         mouse: { x: 0, y: 0, down: false }, adding_mass: false,
         add_start_screen: { x: 0, y: 0 }, add_start_world: { x: 0, y: 0 },
+        touch_active: false, touch_id: null,
         last_time: 0,
     };
 
     let bh_list = [], planets = [], stars = [], gas_giants = [], asteroids = [],
-        debris = [], particles = [], gwaves = [];
+        debris = [], particles = [], gwaves = [], gravity_ripples = [];
     
     let PhysicsObject_id_counter = 0;
+
+
 
     const world_to_screen = (pos) => ({ x: pos.x, y: pos.y });
 
@@ -637,8 +874,17 @@
 
         update_trail() {
             if (!this.alive) return;
-            this.trail.push({ ...this.pos });
+            // Add position with timestamp and velocity for better trail effects
+            this.trail.push({ 
+                ...this.pos, 
+                timestamp: Date.now(),
+                velocity: Math.hypot(this.vel.x, this.vel.y),
+                age: 0
+            });
             if (this.trail.length > SETTINGS.trail_length) this.trail.shift();
+            
+            // Update age of all trail points
+            this.trail.forEach(point => point.age += 1);
         }
 
         check_absorption(bh_list) {
@@ -828,7 +1074,7 @@
         }
 
         updateRadius() {
-            const mass_scale = Math.max(1.0, this.mass / (DEFAULT_SETTINGS.bh_mass * SOLAR_MASS_UNIT));
+            const mass_scale = Math.max(0.1, this.mass / (DEFAULT_SETTINGS.bh_mass * SOLAR_MASS_UNIT));
             this.radius = BH_RADIUS_BASE * Math.pow(mass_scale, 0.5);
         }
         
@@ -936,6 +1182,179 @@
         }
     }
     
+    class GravityRipple {
+        constructor(pos, mass_factor = 1.0) {
+            this.pos = { ...pos };
+            this.age = 0;
+            this.lifetime = 3.0; // 3 seconds as requested
+            this.max_radius = 200 * mass_factor; // Scale with mass
+            this.start_radius = 10;
+            this.pulse_count = 0;
+            this.max_pulses = 5;
+            this.pulse_interval = this.lifetime / this.max_pulses;
+        }
+        
+        update(dt) {
+            this.age += dt;
+            this.pulse_count = Math.floor(this.age / this.pulse_interval);
+        }
+        
+        is_alive() { 
+            return this.age < this.lifetime; 
+        }
+        
+        draw(ctx) {
+            if (this.age >= this.lifetime) return;
+            
+            const world_pos = world_to_screen(this.pos);
+            const life_fraction = this.age / this.lifetime;
+            const base_alpha = 1 - life_fraction;
+            
+            // Draw multiple expanding rings
+            for (let i = 0; i <= this.pulse_count && i < this.max_pulses; i++) {
+                const pulse_age = this.age - (i * this.pulse_interval);
+                const pulse_fraction = pulse_age / this.pulse_interval;
+                
+                if (pulse_fraction >= 0 && pulse_fraction <= 1) {
+                    const current_radius = this.start_radius + (this.max_radius - this.start_radius) * pulse_fraction;
+                    const pulse_alpha = base_alpha * (1 - pulse_fraction) * 0.6;
+                    
+                    if (pulse_alpha > 0.01) {
+                        // Create radial gradient for the ripple
+                        const gradient = ctx.createRadialGradient(
+                            world_pos.x, world_pos.y, 0,
+                            world_pos.x, world_pos.y, current_radius / state.zoom
+                        );
+                        
+                        // Use gravitational wave colors (cyan/blue)
+                        gradient.addColorStop(0, `rgba(0, 255, 255, ${pulse_alpha * 0.8})`);
+                        gradient.addColorStop(0.3, `rgba(0, 200, 255, ${pulse_alpha * 0.6})`);
+                        gradient.addColorStop(0.7, `rgba(0, 150, 255, ${pulse_alpha * 0.3})`);
+                        gradient.addColorStop(1, `rgba(0, 100, 255, 0)`);
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.globalAlpha = 1;
+                        ctx.beginPath();
+                        ctx.arc(world_pos.x, world_pos.y, current_radius / state.zoom, 0, 2 * Math.PI);
+                        ctx.fill();
+                        
+                        // Add a subtle ring outline
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${pulse_alpha * 0.4})`;
+                        ctx.lineWidth = 2 / state.zoom;
+                        ctx.beginPath();
+                        ctx.arc(world_pos.x, world_pos.y, current_radius / state.zoom, 0, 2 * Math.PI);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+    }
+    
+    const handle_star_merging = (stars_list) => {
+        let merged_this_step = true;
+        let merge_count = 0;
+        const max_merges_per_step = 3; // Prevent infinite loops
+        
+        while (merged_this_step && stars_list.length > 1 && merge_count < max_merges_per_step) {
+            merged_this_step = false;
+            for (let i = 0; i < stars_list.length; i++) {
+                for (let j = i + 1; j < stars_list.length; j++) {
+                    const star1 = stars_list[i], star2 = stars_list[j];
+                    if (!star1.alive || !star2.alive) continue;
+                    
+                    const dx = star2.pos.x - star1.pos.x;
+                    const dy = star2.pos.y - star1.pos.y;
+                    const dist_sq = dx*dx + dy*dy;
+                    const min_dist = star1.radius + star2.radius;
+                    
+                    if (dist_sq < min_dist**2 && dist_sq > 1e-6) {
+                        // Calculate merged star properties
+                        const m1 = star1.mass, m2 = star2.mass;
+                        const total_mass = m1 + m2;
+                        const new_mass_in_suns = total_mass / SOLAR_MASS_UNIT;
+                        
+                        // Center of mass position and velocity
+                        const new_pos = { 
+                            x: (star1.pos.x * m1 + star2.pos.x * m2) / total_mass, 
+                            y: (star1.pos.y * m1 + star2.pos.y * m2) / total_mass 
+                        };
+                        const new_vel = { 
+                            x: (star1.vel.x * m1 + star2.vel.x * m2) / total_mass, 
+                            y: (star1.vel.y * m1 + star2.vel.y * m2) / total_mass 
+                        };
+                        
+                        // Create explosion particles for the merger
+                        for (let k = 0; k < 25; k++) {
+                            const angle = Math.random() * 2 * Math.PI;
+                            const speed = Math.random() * 80 + 40;
+                            const p_vel = { 
+                                x: speed * Math.cos(angle), 
+                                y: speed * Math.sin(angle) 
+                            };
+                            const rgb = hexToRgb(star1.baseColor);
+                            if (rgb) {
+                                particles.push(new Particle(new_pos, p_vel, Math.random()*0.8+0.6, 8, 2, `rgb(${rgb.r},${rgb.g},${rgb.b})`));
+                            } else {
+                                particles.push(new Particle(new_pos, p_vel, Math.random()*0.8+0.6, 8, 2, 'rgb(255, 255, 100)'));
+                            }
+                        }
+                        
+                        // Create some debris from the merger
+                        for (let k = 0; k < 8; k++) {
+                            const angle = Math.random() * 2 * Math.PI;
+                            const speed = Math.random() * 30 + 10;
+                            const debris_vel = { 
+                                x: speed * Math.cos(angle), 
+                                y: speed * Math.sin(angle) 
+                            };
+                            const debris_pos = { 
+                                x: new_pos.x + (Math.random() - 0.5) * 10, 
+                                y: new_pos.y + (Math.random() - 0.5) * 10 
+                            };
+                            debris.push(new Debris(debris_pos, {x: new_vel.x + debris_vel.x, y: new_vel.y + debris_vel.y}));
+                        }
+                        
+                        // Remove the original stars
+                        star1.alive = false;
+                        star2.alive = false;
+                        stars_list.splice(j, 1);
+                        stars_list.splice(i, 1);
+                        
+                        // Check if the merged star should become a black hole
+                        if (new_mass_in_suns >= SETTINGS.max_star_mass_before_bh) {
+                            // Create a black hole from the merged star
+                            bh_list.push(new BlackHole(new_pos, total_mass, new_vel));
+                            
+                            // Add more dramatic particles for black hole formation
+                            for (let k = 0; k < 40; k++) {
+                                const angle = Math.random() * 2 * Math.PI;
+                                const speed = Math.random() * 120 + 60;
+                                const p_vel = { 
+                                    x: speed * Math.cos(angle), 
+                                    y: speed * Math.sin(angle) 
+                                };
+                                particles.push(new Particle(new_pos, p_vel, Math.random()*1.0+0.8, 12, 3, 'rgb(255, 100, 0)'));
+                            }
+                            
+
+                        } else {
+                            // Create a new merged star
+                            const merged_star = new StarObject(new_pos, new_vel, new_mass_in_suns);
+                            stars_list.push(merged_star);
+                            
+
+                        }
+                        
+                        merged_this_step = true;
+                        merge_count++;
+                        break;
+                    }
+                }
+                if (merged_this_step) break;
+            }
+        }
+    };
+
     const handle_collisions = (objects_list) => {
         for (let i = 0; i < objects_list.length; i++) {
             const obj1 = objects_list[i]; if (!obj1.alive) continue;
@@ -1002,30 +1421,90 @@
 				mutual_gravity:true, enable_asteroids:false
 			});
 		}
+		else if (ps === "Solar System Lite") {
+			Object.assign(settings_dict, {
+				num_black_holes: 0, num_planets: 8, num_gas_giants: 0, enable_asteroids: true, num_asteroids: 200, bh_behavior: "Static", placement: "Circular", init_velocity: 15, sim_speed: 0.5
+			});
+		}
+		else if (ps === "Double Pulsar") {
+			Object.assign(settings_dict, {
+				num_black_holes: 0, num_planets: 5, num_gas_giants: 0, enable_asteroids: false, bh_behavior: "Static", placement: "Empty", init_velocity: 35, sim_speed: 1.0
+			});
+		}
+		else if (ps === "Sag A* Neighborhood") {
+			Object.assign(settings_dict, {
+				num_black_holes: 1, bh_mass: 4e6, num_planets: 0, num_gas_giants: 0, enable_asteroids: false, placement: "Random", init_velocity: 500, sim_speed: 0.2, show_accretion_disk: true, show_bh_glow: true
+			});
+		}
+		else if (ps === "Galactic Bar") {
+			Object.assign(settings_dict, {
+				num_black_holes: 5, bh_behavior: "Orbiting", use_individual_bh_masses: true, bh_masses: [10, 8, 12, 9, 11], num_planets: 40, num_gas_giants: 6, placement: "Empty", init_velocity: 30, orbit_decay_rate: 0.0, sim_speed: 0.7
+			});
+		}
+		else if (ps === "Quasar Feast") {
+			Object.assign(settings_dict, {
+				num_black_holes: 1, bh_mass: 100, num_planets: 0, num_gas_giants: 0, enable_asteroids: true, num_asteroids: 800, show_accretion_disk: true, show_bh_glow: true, placement: "Random", init_velocity: 5, sim_speed: 0.4
+			});
+		}
+		else if (ps === "Trappist-1x") {
+			Object.assign(settings_dict, {
+				num_black_holes: 0, num_planets: 7, num_gas_giants: 0, placement: "Circular", init_velocity: 8, velocity_stddev: 1, sim_speed: 0.6
+			});
+		}
+		else if (ps === "Rogue Planet Cloud") {
+			Object.assign(settings_dict, {
+				num_black_holes: 0, num_planets: 200, num_gas_giants: 0, enable_asteroids: false, placement: "Random", init_velocity: 3, velocity_stddev: 2, sim_speed: 1.0
+			});
+		}
+		else if (ps === "Dyson Swarm") {
+			Object.assign(settings_dict, {
+				num_black_holes: 0, num_planets: 0, num_gas_giants: 0, enable_asteroids: true, num_asteroids: 100, placement: "Empty", init_velocity: 10, sim_speed: 0.5
+			});
+		}
+		else if (ps === "Wormhole Chase") {
+			Object.assign(settings_dict, {
+				num_black_holes: 2, bh_behavior: "Static", use_individual_bh_masses: true, bh_masses: [15, 15], num_planets: 30, enable_asteroids: true, num_asteroids: 150, placement: "Circular", init_velocity: 20, sim_speed: 0.8
+			});
+		}
+		else if (ps === "Ringworld Mayhem") {
+			Object.assign(settings_dict, {
+				num_black_holes: 1, bh_mass: 0, num_planets: 0, num_gas_giants: 0, enable_asteroids: true, num_asteroids: 1200, placement: "Empty", init_velocity: 9, velocity_stddev: 0.5, sim_speed: 0.9
+			});
+		}
 
         settings_dict.preset_scenario = "None";
     }
 
-    const initialize_simulation = () => {
-        const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
-        const starting_preset = SETTINGS.preset_scenario;
-        apply_preset(SETTINGS);
+    let current_scenario_name = null; // Store the current scenario name
 
-        if (starting_preset !== 'None' && SCENARIO_INFO[starting_preset]) {
-            const info = SCENARIO_INFO[starting_preset];
+    const show_scenario_info = () => {
+        const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+        
+        if (current_scenario_name && current_scenario_name !== 'None' && SCENARIO_INFO[current_scenario_name]) {
+            const info = SCENARIO_INFO[current_scenario_name];
             scenarioInfoDiv.innerHTML = `<h4>${info.title}</h4><p>${info.summary}</p>`;
             scenarioInfoDiv.classList.add('visible');
             setTimeout(() => scenarioInfoDiv.classList.remove('visible'), 6000);
         } else {
             scenarioInfoDiv.classList.remove('visible');
         }
+    };
+
+    const initialize_simulation = () => {
+        const starting_preset = SETTINGS.preset_scenario;
+        current_scenario_name = starting_preset; // Store the scenario name before it gets reset
+        apply_preset(SETTINGS);
+        // Restore the scenario name since apply_preset resets it to "None"
+        if (starting_preset !== "None") {
+            current_scenario_name = starting_preset;
+        }
 
         state.zoom = 1.0; state.pan = { x: 0.0, y: 0.0 };
         bh_list = []; planets = []; stars = []; gas_giants = []; asteroids = [];
-        debris = []; particles = []; PhysicsObject_id_counter = 0;
+        debris = []; particles = []; gravity_ripples = []; PhysicsObject_id_counter = 0;
 
         // --- Add central stars for specific presets that need them BEFORE general placement ---
-        if (["Kuiper Belt", "Rogue Encounter", "Exoplanet Lab"].includes(starting_preset)) {
+        if (["Kuiper Belt", "Rogue Encounter", "Exoplanet Lab", "Solar System Lite", "Trappist-1x"].includes(starting_preset)) {
             stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0)); // Add a 1 Msun star
         }
 
@@ -1084,6 +1563,83 @@
                 const r = Math.random()*200 + 100;
                 const theta = Math.random() * Math.PI * 2;
                 planets.push(new Planet({x: r*Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+        } else if (starting_preset === "Solar System Lite") {
+            const central_mass = stars[0].mass;
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 50 + i * 30;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                planets.push(new Planet({x: r, y:0}, {x:0, y:v}));
+            }
+            if (SETTINGS.enable_asteroids) {
+                for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+                    const r = 300 + Math.random() * 200;
+                    const theta = Math.random() * 2 * Math.PI;
+                    const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                    const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                    asteroids.push(new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
+                }
+            }
+        } else if (starting_preset === "Double Pulsar") {
+            // Add two neutron stars (represented as compact stars) in tight orbit
+            stars.push(new StarObject({x: -15, y: 0}, {x: 0, y: 25}, 1.4));
+            stars.push(new StarObject({x: 15, y: 0}, {x: 0, y: -25}, 1.4));
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 200 + Math.random() * 100;
+                const theta = Math.random() * 2 * Math.PI;
+                planets.push(new Planet({x: r * Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+        } else if (starting_preset === "Trappist-1x") {
+            const central_mass = stars[0].mass * 0.09; // Red dwarf mass
+            stars[0].mass = central_mass; // Update the star's mass
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 20 + i * 8; // Tight orbits like Trappist-1
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                planets.push(new Planet({x: r, y:0}, {x:0, y:v}));
+            }
+        } else if (starting_preset === "Dyson Swarm") {
+            // Create 100 small satellites in orbit around the center
+            for(let i=0; i < SETTINGS.num_asteroids; i++) {
+                const r = 50 + Math.random() * 100;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * 1000) / r); // Use a central mass
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                const asteroid = new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) });
+                asteroid.radius = 1; // Make them smaller like satellites
+                asteroids.push(asteroid);
+            }
+        } else if (starting_preset === "Sag A* Neighborhood") {
+            // Add high-speed S-stars around the supermassive black hole
+            for(let i=0; i < 20; i++) {
+                const r = 50 + Math.random() * 200;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * SETTINGS.bh_mass * SOLAR_MASS_UNIT) / r);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                const star = new StarObject(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }, 0.5 + Math.random() * 2.0);
+                stars.push(star);
+            }
+        } else if (starting_preset === "Galactic Bar") {
+            // Create a bar formation of 5 black holes
+            const bar_length = 200;
+            const bar_width = 40;
+            const masses = SETTINGS.bh_masses;
+            for(let i=0; i < 5; i++) {
+                const x = (i - 2) * bar_length / 4; // Spread across the bar
+                const y = (Math.random() - 0.5) * bar_width;
+                const orbit_speed = 8;
+                const angle = Math.atan2(y, x);
+                const vel = {x: -orbit_speed * Math.sin(angle), y: orbit_speed * Math.cos(angle)};
+                bh_list.push(new BlackHole({x: x, y: y}, masses[i] * SOLAR_MASS_UNIT, vel));
+            }
+        } else if (starting_preset === "Ringworld Mayhem") {
+            // Create a massive ring of asteroids with a central "hole" (0 mass BH)
+            bh_list.push(new BlackHole({x: 0, y: 0}, 0 * SOLAR_MASS_UNIT)); // 0 mass black hole
+            for(let i=0; i < SETTINGS.num_asteroids; i++) {
+                const r = 150 + Math.random() * 50; // Ring formation
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * 1000) / r); // Use some central mass for orbital velocity
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                asteroids.push(new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
             }
         } else {
              // --- Standard placement logic for all other presets ---
@@ -1228,7 +1784,12 @@
         });
         debris.push(...new_debris);
 
-        handle_collisions([...planets, ...asteroids, ...stars]);
+        // Handle star merging separately from other collisions
+        if (SETTINGS.enable_star_merging) {
+            handle_star_merging(stars);
+        }
+        // Handle collisions for non-star objects
+        handle_collisions([...planets, ...asteroids]);
         
         const check_and_absorb = (obj_list) => {
             return obj_list.filter(obj => {
@@ -1253,6 +1814,10 @@
         
         particles = particles.filter(p => p.is_alive());
         particles.forEach(p => p.update(dt));
+        
+        // Update gravity ripples
+        gravity_ripples = gravity_ripples.filter(r => r.is_alive());
+        gravity_ripples.forEach(r => r.update(dt));
 
         let merged_this_step = true;
         while (merged_this_step && bh_list.length > 1) {
@@ -1264,6 +1829,11 @@
                         const m1 = bh1.mass, m2 = bh2.mass, new_mass = m1 + m2;
                         const new_pos = { x: (bh1.pos.x * m1 + bh2.pos.x * m2) / new_mass, y: (bh1.pos.y * m1 + bh2.pos.y * m2) / new_mass };
                         const new_vel = { x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass, y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass };
+                        
+                        // Create gravity ripple effect
+                        const mass_factor = Math.sqrt(new_mass / (DEFAULT_SETTINGS.bh_mass * SOLAR_MASS_UNIT));
+                        gravity_ripples.push(new GravityRipple(new_pos, mass_factor));
+                        
                         bh_list.splice(j, 1); bh_list.splice(i, 1);
                         bh_list.push(new BlackHole(new_pos, new_mass, new_vel));
                         merged_this_step = true;
@@ -1305,17 +1875,109 @@
         if (SETTINGS.show_trails) {
             [...planets, ...gas_giants, ...asteroids, ...stars].forEach(obj => {
                 if (obj.alive && obj.trail.length > 1) {
-                    ctx.strokeStyle = obj.baseColor || SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] || '#6495ed';
-                    ctx.lineWidth = 1.5 / state.zoom;
-                    ctx.beginPath();
-                    const first_point = world_to_screen(obj.trail[0]);
-                    ctx.moveTo(first_point.x, first_point.y);
-                    for (let i = 1; i < obj.trail.length; i++) {
-                        ctx.globalAlpha = i / obj.trail.length * 0.8;
-                        const point = world_to_screen(obj.trail[i]);
-                        ctx.lineTo(point.x, point.y);
+                    const baseColor = obj.baseColor || SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] || '#6495ed';
+                    const rgb = hexToRgb(baseColor);
+                    
+                    if (SETTINGS.trail_style === "Cloud") {
+                        // Draw cloud-like trail with multiple passes
+                        for (let pass = 0; pass < 3; pass++) {
+                            const trailWidth = (2.5 - pass * 0.5) / state.zoom;
+                            const maxAlpha = 0.6 - pass * 0.15;
+                            
+                            ctx.lineWidth = trailWidth;
+                            ctx.lineCap = 'round';
+                            ctx.lineJoin = 'round';
+                            
+                            // Create gradient for the trail
+                            const gradient = ctx.createLinearGradient(0, 0, 0, 0);
+                            gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${maxAlpha})`);
+                            gradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
+                            
+                            ctx.strokeStyle = gradient;
+                            ctx.beginPath();
+                            
+                            // Draw trail with smooth curves and fade-out
+                            const first_point = world_to_screen(obj.trail[0]);
+                            ctx.moveTo(first_point.x, first_point.y);
+                            
+                            for (let i = 1; i < obj.trail.length; i++) {
+                                const point = world_to_screen(obj.trail[i]);
+                                const age_factor = 1 - (obj.trail[i].age / SETTINGS.trail_length);
+                                const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
+                                const alpha = age_factor * velocity_factor * maxAlpha;
+                                
+                                ctx.globalAlpha = alpha;
+                                
+                                // Use quadratic curves for smoother trails
+                                if (i < obj.trail.length - 1) {
+                                    const next_point = world_to_screen(obj.trail[i + 1]);
+                                    const cp_x = (point.x + next_point.x) / 2;
+                                    const cp_y = (point.y + next_point.y) / 2;
+                                    ctx.quadraticCurveTo(point.x, point.y, cp_x, cp_y);
+                                } else {
+                                    ctx.lineTo(point.x, point.y);
+                                }
+                            }
+                            ctx.stroke();
+                        }
+                        
+                        // Draw bright core trail
+                        ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.9)`;
+                        ctx.lineWidth = 1.0 / state.zoom;
+                        ctx.lineCap = 'round';
+                        ctx.beginPath();
+                        
+                        const first_point = world_to_screen(obj.trail[0]);
+                        ctx.moveTo(first_point.x, first_point.y);
+                        
+                        for (let i = 1; i < obj.trail.length; i++) {
+                            const point = world_to_screen(obj.trail[i]);
+                            const age_factor = 1 - (obj.trail[i].age / SETTINGS.trail_length);
+                            ctx.globalAlpha = age_factor * 0.9;
+                            ctx.lineTo(point.x, point.y);
+                        }
+                        ctx.stroke();
+                        
+                    } else if (SETTINGS.trail_style === "Glow") {
+                        // Draw glowing trail with radial gradients
+                        for (let i = 0; i < obj.trail.length; i++) {
+                            const point = world_to_screen(obj.trail[i]);
+                            const age_factor = 1 - (obj.trail[i].age / SETTINGS.trail_length);
+                            const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
+                            const intensity = age_factor * velocity_factor;
+                            
+                            if (intensity > 0.05) {
+                                const radius = (3 + intensity * 5) / state.zoom;
+                                const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+                                gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.8})`);
+                                gradient.addColorStop(0.5, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.3})`);
+                                gradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
+                                
+                                ctx.fillStyle = gradient;
+                                ctx.beginPath();
+                                ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI);
+                                ctx.fill();
+                            }
+                        }
+                        
+                    } else { // Simple style
+                        // Draw simple trail with fade-out
+                        ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.8)`;
+                        ctx.lineWidth = 1.5 / state.zoom;
+                        ctx.lineCap = 'round';
+                        ctx.beginPath();
+                        
+                        const first_point = world_to_screen(obj.trail[0]);
+                        ctx.moveTo(first_point.x, first_point.y);
+                        
+                        for (let i = 1; i < obj.trail.length; i++) {
+                            const point = world_to_screen(obj.trail[i]);
+                            const age_factor = 1 - (obj.trail[i].age / SETTINGS.trail_length);
+                            ctx.globalAlpha = age_factor * 0.8;
+                            ctx.lineTo(point.x, point.y);
+                        }
+                        ctx.stroke();
                     }
-                    ctx.stroke();
                 }
             });
             ctx.globalAlpha = 1; 
@@ -1324,6 +1986,10 @@
         [...debris, ...asteroids, ...planets, ...gas_giants, ...stars].forEach(obj => { if (obj.alive) obj.draw(ctx); });
         
         particles.forEach(p => p.draw(ctx));
+        
+        // Draw gravity ripples (behind black holes)
+        gravity_ripples.forEach(r => r.draw(ctx));
+        
         ctx.globalAlpha = 1;
         
         bh_list.forEach(bh => bh.draw(ctx));
@@ -1331,9 +1997,53 @@
         ctx.restore();
         
         if (state.adding_mass) {
-            ctx.strokeStyle = 'lime'; ctx.lineWidth = 2; ctx.beginPath();
+            // Draw drag line
+            ctx.strokeStyle = 'lime'; 
+            ctx.lineWidth = 3; 
+            ctx.lineCap = 'round';
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
             ctx.moveTo(state.add_start_screen.x, state.add_start_screen.y);
-            ctx.lineTo(state.mouse.x, state.mouse.y); ctx.stroke();
+            ctx.lineTo(state.mouse.x, state.mouse.y); 
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw start point
+            ctx.fillStyle = 'rgba(0, 255, 0, 0.8)';
+            ctx.beginPath();
+            ctx.arc(state.add_start_screen.x, state.add_start_screen.y, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw end point
+            ctx.fillStyle = 'rgba(255, 255, 0, 0.8)';
+            ctx.beginPath();
+            ctx.arc(state.mouse.x, state.mouse.y, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw velocity arrow
+            const dx = state.mouse.x - state.add_start_screen.x;
+            const dy = state.mouse.y - state.add_start_screen.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance > 20) {
+                const angle = Math.atan2(dy, dx);
+                const arrowLength = 20;
+                const arrowAngle = Math.PI / 6;
+                
+                ctx.strokeStyle = 'rgba(255, 255, 0, 0.9)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(state.mouse.x, state.mouse.y);
+                ctx.lineTo(
+                    state.mouse.x - arrowLength * Math.cos(angle - arrowAngle),
+                    state.mouse.y - arrowLength * Math.sin(angle - arrowAngle)
+                );
+                ctx.moveTo(state.mouse.x, state.mouse.y);
+                ctx.lineTo(
+                    state.mouse.x - arrowLength * Math.cos(angle + arrowAngle),
+                    state.mouse.y - arrowLength * Math.sin(angle + arrowAngle)
+                );
+                ctx.stroke();
+            }
         }
 
         if (SETTINGS.show_dynamic_overlays) {
@@ -1400,6 +2110,79 @@
         }
     });
 
+    // Touch event handlers for mobile
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            const uiContainer = document.querySelector('.ui-container');
+            if (touch.clientX > uiContainer.getBoundingClientRect().left) return;
+            
+            state.touch_active = true;
+            state.touch_id = touch.identifier;
+            state.mouse.x = touch.clientX;
+            state.mouse.y = touch.clientY;
+            
+            if (SETTINGS.interactive_add) {
+                state.adding_mass = true;
+                state.add_start_screen = { x: touch.clientX, y: touch.clientY };
+                state.add_start_world = screen_to_world(state.add_start_screen);
+            }
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (state.touch_active && e.touches.length === 1) {
+            const touch = e.touches[0];
+            if (touch.identifier === state.touch_id) {
+                state.mouse.x = touch.clientX;
+                state.mouse.y = touch.clientY;
+                
+                // Pan the view if not adding mass
+                if (!state.adding_mass) {
+                    const deltaX = touch.clientX - (state.mouse.x - e.movementX || touch.clientX);
+                    const deltaY = touch.clientY - (state.mouse.y - e.movementY || touch.clientY);
+                    state.pan.x += deltaX;
+                    state.pan.y += deltaY;
+                }
+            }
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        if (state.touch_active && e.changedTouches.length === 1) {
+            const touch = e.changedTouches[0];
+            if (touch.identifier === state.touch_id) {
+                state.touch_active = false;
+                state.touch_id = null;
+                
+                if (state.adding_mass) {
+                    state.adding_mass = false;
+                    const add_end_world = screen_to_world({ x: touch.clientX, y: touch.clientY });
+                    const vel = { x: (add_end_world.x - state.add_start_world.x) * 3, y: (add_end_world.y - state.add_start_world.y) * 3 };
+                    const type = SETTINGS.input_object_type; let new_obj;
+                    if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
+                    else if (type === 'Star') new_obj = new StarObject(state.add_start_world, vel);
+                    else if (type === 'Asteroid') new_obj = new Asteroid(state.add_start_world, vel);
+                    else if (type === 'GasGiant') new_obj = new GasGiant(state.add_start_world, vel);
+                    if(new_obj instanceof Planet) planets.push(new_obj);
+                    if(new_obj instanceof StarObject) stars.push(new_obj);
+                    if(new_obj instanceof Asteroid) asteroids.push(new_obj);
+                    if(new_obj instanceof GasGiant) gas_giants.push(new_obj);
+                }
+            }
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchcancel', (e) => {
+        e.preventDefault();
+        state.touch_active = false;
+        state.touch_id = null;
+        state.adding_mass = false;
+    }, { passive: false });
+
 	window.addEventListener('wheel', (e) => {
 		if (e.target !== canvas) return;
 		e.preventDefault(); 
@@ -1413,6 +2196,49 @@
         state.pan.y -= (newScreenPos.y - e.clientY);
 	}, { passive: false });
 
+    // Pinch-to-zoom for mobile
+    let initialDistance = 0;
+    let initialZoom = 1.0;
+    let initialPan = { x: 0, y: 0 };
+
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            initialDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+            initialZoom = state.zoom;
+            initialPan = { ...state.pan };
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentDistance = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+            
+            if (initialDistance > 0) {
+                const scale = currentDistance / initialDistance;
+                const newZoom = Math.max(0.01, Math.min(100, initialZoom * scale));
+                
+                // Calculate center point for zoom
+                const centerX = (touch1.clientX + touch2.clientX) / 2;
+                const centerY = (touch1.clientY + touch2.clientY) / 2;
+                const worldPos = screen_to_world({ x: centerX, y: centerY });
+                
+                state.zoom = newZoom;
+                const newScreenPos = { 
+                    x: worldPos.x * state.zoom + canvas.width / 2, 
+                    y: -worldPos.y * state.zoom + canvas.height / 2 
+                };
+                state.pan.x = initialPan.x - (newScreenPos.x - centerX);
+                state.pan.y = initialPan.y - (newScreenPos.y - centerY);
+            }
+        }
+    }, { passive: false });
+
     window.addEventListener('keydown', (e) => {
         const panSpeed = 40 / state.zoom;
         if (e.key === ' ') { state.paused = !state.paused; e.preventDefault(); } 
@@ -1421,6 +2247,14 @@
         else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') state.pan.y += panSpeed;
         else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') state.pan.y -= panSpeed;
         else if (e.key.toLowerCase() === 'home') { state.zoom = 1.0; state.pan = {x: 0, y: 0}; }
+        else if (e.key === '-' || e.key === '_') { 
+            SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+            updateSpeedDisplay();
+        }
+        else if (e.key === '=' || e.key === '+') { 
+            SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+            updateSpeedDisplay();
+        }
     });
     
     // --- Save/Load Logic ---
@@ -1466,6 +2300,7 @@
             });
             PhysicsObject_id_counter = max_id + 1;
             alert("Simulation state loaded!"); state.paused = false;
+            updateSpeedDisplay();
         } catch (e) { console.error("Error loading state:", e); alert("Failed to load state."); }
     }
     
@@ -1482,13 +2317,23 @@
 	  "Rogue Encounter":     {title:"Rogue Encounter",    summary:"A wandering black hole grazes a planetary system."},
 	  "Galactic Collision":  {title:"Galactic Collision", summary:"Two super-massive BHs & thousands of stars on a crash course."},
 	  "Micro BH Swarm":      {title:"Micro BH Swarm",     summary:"Dozens of tiny black holes interacting chaotically."},
-	  "Exoplanet Lab":       {title:"Exoplanet Lab",      summary:"A sun-like star with 100+ varied planets for observation."}
+	  "Exoplanet Lab":       {title:"Exoplanet Lab",      summary:"A sun-like star with 100+ varied planets for observation."},
+	  "Solar System Lite":   {title:"Solar System Lite", summary:"A single sun, eight worlds & a sprinkle of asteroids — a playground for Kepler's laws."},
+	  "Double Pulsar":       {title:"Double Pulsar", summary:"Two 1.4 M☉ neutron stars orbit each other every few seconds — can you keep planets stable?"},
+	  "Sag A* Neighborhood": {title:"Sag A* Neighborhood", summary:"Super-massive BH (4 × 10⁶ M☉) with high-speed S-stars whizzing around every few hours."},
+	  "Galactic Bar":        {title:"Galactic Bar", summary:"Five medium BHs stuck in a rotating bar — test bar-driven orbital chaos."},
+	  "Quasar Feast":        {title:"Quasar Feast", summary:"A feeding 100 M☉ BH with a dense debris disk — watch the accretion light show."},
+	  "Trappist-1x":         {title:"Trappist-1x", summary:"Seven Earth-size planets in tight resonant orbits around a red dwarf."},
+	  "Rogue Planet Cloud":  {title:"Rogue Planet Cloud", summary:"A dark, BH-free sector filled with 200 wanderers. Can gravity self-organise?"},
+	  "Dyson Swarm":         {title:"Dyson Swarm", summary:"100 tiny solar-collectors in Keplerian orbit; tinker with stability of megastructures."},
+	  "Wormhole Chase":      {title:"Wormhole Chase", summary:"Two BHs linked by a fictional wormhole (teleport script hook) — sling planets through!"},
+	  "Ringworld Mayhem":    {title:"Ringworld Mayhem", summary:"Ultra-massive ring of asteroids plus a central 0 M☉ hole — test self-collapsing rings."}
 	};
 
 	
     // --- Settings Menu ---
     const setting_items = [
-        {"label": "Preset Scenario", "key": "preset_scenario", "type": "option", "options": ["None", "Binary BH", "Triple BH System", "Supermassive BH", "Star Cluster", "Kuiper Belt", "Sagittarius A*", "Binary Star System", "Slingshot","Rogue Encounter","Galactic Collision","Micro BH Swarm","Exoplanet Lab"]},
+        {"label": "Preset Scenario", "key": "preset_scenario", "type": "option", "options": ["None", "Binary BH", "Triple BH System", "Supermassive BH", "Star Cluster", "Kuiper Belt", "Sagittarius A*", "Binary Star System", "Slingshot","Rogue Encounter","Galactic Collision","Micro BH Swarm","Exoplanet Lab", "Solar System Lite", "Double Pulsar", "Sag A* Neighborhood", "Galactic Bar", "Quasar Feast", "Trappist-1x", "Rogue Planet Cloud", "Dyson Swarm", "Wormhole Chase", "Ringworld Mayhem"]},
         {"label": "--- Simulation ---", "type": "separator"},
         {"label": "Gravitational Constant", "key": "gravitational_constant", "type": "float", "min": 0.1, "max": 20.0, "step": 0.1},
         {"label": "Mutual Gravity (All)", "key": "mutual_gravity", "type": "bool"},
@@ -1509,15 +2354,18 @@
         {"label": "Initial Velocity", "key": "init_velocity", "type": "float", "min": 0, "max": 100, "step": 1},
         {"label": "Velocity StdDev", "key": "velocity_stddev", "type": "float", "min": 0, "max": 50, "step": 1},
         {"label": "Input Object Type", "key": "input_object_type", "type": "option", "options": ["Planet", "Star", "Asteroid", "GasGiant"]},
+        {"label": "Enable Star Merging", "key": "enable_star_merging", "type": "bool"},
+        {"label": "Max Star Mass Before BH (Msun)", "key": "max_star_mass_before_bh", "type": "float", "min": 5.0, "max": 50.0, "step": 0.5},
         {"label": "--- Visuals ---", "type": "separator"},
         {"label": "Show Trails", "key": "show_trails", "type": "bool"},
+        {"label": "Trail Style", "key": "trail_style", "type": "option", "options": ["Cloud", "Simple", "Glow"]},
         {"label": "Trail Length", "key": "trail_length", "type": "int", "min": 5, "max": 300, "step": 5},
         {"label": "Show BH Glow", "key": "show_bh_glow", "type": "bool"},
         {"label": "Show Accretion Disk", "key": "show_accretion_disk", "type": "bool"},
         {"label": "Show BH Jets", "key": "show_bh_jets", "type": "bool"},
         {"label": "Improved Lensing", "key": "improved_lensing", "type": "bool"},
         {"label": "Lensing Strength", "key": "lensing_strength", "type": "float", "min": 1, "max": 1000, "step": 10},
-        {"label": "Star Field Density", "key": "star_density", "type": "int", "min": 0, "max": 10000, "step": 100},
+        {"label": "Star Field Density", "key": "star_density", "type": "int", "min": 0, "max": 30000, "step": 100},
         {"label": "Ambient Lighting", "key": "show_ambient_lighting", "type": "bool"},
         {"label": "Dynamic Object Colors", "key": "dynamic_object_properties", "type": "bool"},
         {"label": "Planet Base Color", "key": "planet_base_color", "type": "color"},
@@ -1576,6 +2424,9 @@
                     localSettings[item.key] = e.target.value;
                     if (item.key === 'preset_scenario') {
                         updatePresetInfo(e.target.value);
+                        // Also update the main scenario info display
+                        current_scenario_name = e.target.value;
+                        show_scenario_info();
                     }
                 };
 				controlContainer.appendChild(select);
@@ -1651,13 +2502,60 @@
     
     document.getElementById('bhMassesDone').onclick = () => bhMassesModal.classList.add('hidden');
     document.getElementById('settingsBtn').onclick = () => { buildSettingsMenu(); settingsPanel.classList.remove('hidden'); state.paused = true; };
-    document.getElementById('refreshScenarioBtn').onclick = () => { initialize_simulation(); state.paused = false; };
-    document.getElementById('resetAllBtn').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); initialize_simulation(); state.paused = false; };
+    document.getElementById('refreshScenarioBtn').onclick = () => { initialize_simulation(); state.paused = false; show_scenario_info(); updateSpeedDisplay(); };
+    document.getElementById('resetAllBtn').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); initialize_simulation(); state.paused = false; show_scenario_info(); updateSpeedDisplay(); };
     document.getElementById('saveBtn').onclick = save_simulation_state;
     document.getElementById('loadBtn').onclick = load_simulation_state;
-    document.getElementById('settingsApply').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(localSettings)); settingsPanel.classList.add('hidden'); initialize_simulation(); state.paused = false; };
+    document.getElementById('settingsApply').onclick = () => { SETTINGS = JSON.parse(JSON.stringify(localSettings)); settingsPanel.classList.add('hidden'); initialize_simulation(); state.paused = false; show_scenario_info(); updateSpeedDisplay(); };
     document.getElementById('settingsReset').onclick = () => { localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); buildSettingsMenu(); };
     document.getElementById('settingsCancel').onclick = () => { settingsPanel.classList.add('hidden'); state.paused = false; };
+
+    // Speed control functionality
+    const updateSpeedDisplay = () => {
+        const speedDisplay = document.getElementById('speedDisplay');
+        speedDisplay.textContent = `${SETTINGS.sim_speed.toFixed(1)}x`;
+    };
+
+    document.getElementById('slowDownBtn').onclick = () => {
+        SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+        updateSpeedDisplay();
+    };
+
+    document.getElementById('speedUpBtn').onclick = () => {
+        SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+        updateSpeedDisplay();
+    };
+
+    // Reset view functionality
+    document.getElementById('resetViewBtn').onclick = () => {
+        state.zoom = 1.0;
+        state.pan = { x: 0.0, y: 0.0 };
+    };
+
+    // Initialize speed display
+    updateSpeedDisplay();
+
+    // Show mobile instructions on first visit
+    let lastTap = 0;
+    canvas.addEventListener('touchend', (e) => {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        if (tapLength < 500 && tapLength > 0) {
+            // Double tap detected - reset view
+            state.zoom = 1.0;
+            state.pan = { x: 0.0, y: 0.0 };
+        }
+        lastTap = currentTime;
+    });
+
+    // Show mobile instructions for first-time mobile users
+    if ('ontouchstart' in window && window.innerWidth <= 768) {
+        const mobileInstructions = document.getElementById('mobileInstructions');
+        mobileInstructions.style.display = 'block';
+        setTimeout(() => {
+            mobileInstructions.style.display = 'none';
+        }, 5000);
+    }
 
     resizeCanvas();
     initialize_simulation();
