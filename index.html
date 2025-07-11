@@ -733,6 +733,7 @@
         </div>
         
         <button id="resetViewBtn" class="ui-button">Reset View</button>
+        <button id="objectTypeBtn" class="ui-button primary" title="Click to change what type of object you insert">⭐ Add Stars</button>
     </div>
 
     <div id="settingsPanel" class="hidden">
@@ -973,24 +974,31 @@
 
     // Object inspection functions
     const findObjectAtPosition = (worldPos) => {
-        const clickRadius = 20 / state.zoom; // Click detection radius
-        
         // Check black holes first (they're usually the most important)
         for (const bh of bh_list) {
             const dx = worldPos.x - bh.pos.x;
             const dy = worldPos.y - bh.pos.y;
+            const clickRadius = Math.max(bh.radius, 10 / state.zoom); // Use actual radius or minimum clickable size
             if (dx*dx + dy*dy < clickRadius*clickRadius) {
                 return { object: bh, type: 'BlackHole' };
             }
         }
         
-        // Check stars
+        // Check stars (including neutron stars and white dwarfs)
         for (const star of stars) {
             if (!star.alive) continue;
             const dx = worldPos.x - star.pos.x;
             const dy = worldPos.y - star.pos.y;
+            const clickRadius = Math.max(star.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
             if (dx*dx + dy*dy < clickRadius*clickRadius) {
-                return { object: star, type: 'Star' };
+                // Determine the specific type based on the object's class
+                if (star instanceof NeutronStar) {
+                    return { object: star, type: 'NeutronStar' };
+                } else if (star instanceof WhiteDwarf) {
+                    return { object: star, type: 'WhiteDwarf' };
+                } else {
+                    return { object: star, type: 'Star' };
+                }
             }
         }
         
@@ -999,6 +1007,7 @@
             if (!gasGiant.alive) continue;
             const dx = worldPos.x - gasGiant.pos.x;
             const dy = worldPos.y - gasGiant.pos.y;
+            const clickRadius = Math.max(gasGiant.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
             if (dx*dx + dy*dy < clickRadius*clickRadius) {
                 return { object: gasGiant, type: 'GasGiant' };
             }
@@ -1009,18 +1018,25 @@
             if (!planet.alive) continue;
             const dx = worldPos.x - planet.pos.x;
             const dy = worldPos.y - planet.pos.y;
+            const clickRadius = Math.max(planet.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
             if (dx*dx + dy*dy < clickRadius*clickRadius) {
                 return { object: planet, type: 'Planet' };
             }
         }
         
-        // Check asteroids
+        // Check asteroids (including comets)
         for (const asteroid of asteroids) {
             if (!asteroid.alive) continue;
             const dx = worldPos.x - asteroid.pos.x;
             const dy = worldPos.y - asteroid.pos.y;
+            const clickRadius = Math.max(asteroid.radius, 4 / state.zoom); // Use actual radius or minimum clickable size
             if (dx*dx + dy*dy < clickRadius*clickRadius) {
-                return { object: asteroid, type: 'Asteroid' };
+                // Determine if it's a comet or regular asteroid
+                if (asteroid instanceof Comet) {
+                    return { object: asteroid, type: 'Comet' };
+                } else {
+                    return { object: asteroid, type: 'Asteroid' };
+                }
             }
         }
         
@@ -1088,8 +1104,28 @@
     const getStarInfo = (star) => {
         const massInSuns = star.massInSuns || (star.mass / SOLAR_MASS_UNIT);
         const radiusInSuns = star.radius / STAR_OBJ_RADIUS;
-        const temperature = 3000 + (massInSuns - 0.2) * 4000; // Rough temperature estimate
-        const luminosity = Math.pow(massInSuns, 3.5); // Mass-luminosity relation
+        const radiusInKm = radiusInSuns * 696340; // Solar radius in km
+        const massInKg = massInSuns * 1.989e30; // Solar mass in kg
+        
+        // Real temperature estimate based on mass
+        const temperature = 3000 + (massInSuns - 0.2) * 4000; // K
+        
+        // Real luminosity (W)
+        const luminosity = Math.pow(massInSuns, 3.5) * 3.828e26; // Solar luminosity in W
+        
+        // Real surface gravity (m/s²)
+        const G = 6.67430e-11;
+        const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+        
+        // Real escape velocity (m/s)
+        const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+        
+        // Real orbital period at 1 AU (if applicable)
+        const distanceFromCenter = Math.hypot(star.pos.x, star.pos.y);
+        const centralMass = 1000; // Assume central mass in simulation units
+        const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
+        const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+        
         const age = Math.random() * 10; // Simulated age
         
         let spectralType = 'M';
@@ -1104,12 +1140,15 @@
             icon: '⭐',
             title: 'Star',
             stats: [
-                { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
-                { label: 'Radius', value: `${radiusInSuns.toFixed(2)} R☉` },
+                { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)` },
+                { label: 'Radius', value: `${radiusInSuns.toFixed(2)} R☉ (${radiusInKm.toFixed(0)} km)` },
                 { label: 'Temperature', value: `${temperature.toFixed(0)} K` },
-                { label: 'Luminosity', value: `${luminosity.toFixed(2)} L☉` },
+                { label: 'Luminosity', value: `${(luminosity/1e26).toFixed(2)} × 10²⁶ W` },
+                { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(0)} m/s²` },
+                { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
                 { label: 'Spectral Type', value: spectralType },
                 { label: 'Age', value: `${age.toFixed(1)} billion years` },
+                { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
                 { label: 'Position', value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})` },
                 { label: 'Velocity', value: `${Math.hypot(star.vel.x, star.vel.y).toFixed(1)} units/s` }
             ],
@@ -1120,9 +1159,25 @@
     const getPlanetInfo = (planet) => {
         const massInEarths = planet.massInEarths || (planet.mass / 1.0);
         const radiusInEarths = planet.radius / PLANET_RADIUS;
-        const density = planet.mass / (Math.PI * planet.radius * planet.radius);
-        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * planet.mass / planet.radius);
-        const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(Math.hypot(planet.pos.x, planet.pos.y), 3) / (SETTINGS.gravitational_constant * 1000)); // Simplified
+        const radiusInKm = radiusInEarths * 6371; // Earth radius in km
+        const massInKg = massInEarths * 5.972e24; // Earth mass in kg
+        
+        // Real density calculation (kg/m³)
+        const volume = (4/3) * Math.PI * Math.pow(radiusInKm * 1000, 3); // Convert km to m
+        const density = massInKg / volume;
+        
+        // Real escape velocity (m/s)
+        const G = 6.67430e-11; // Gravitational constant
+        const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+        
+        // Real orbital period (if orbiting a central mass)
+        const distanceFromCenter = Math.hypot(planet.pos.x, planet.pos.y);
+        const centralMass = 1000; // Assume central mass in simulation units
+        const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
+        const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+        
+        // Real surface gravity (m/s²)
+        const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
         
         let planetType = 'Terrestrial';
         if (massInEarths > 10) planetType = 'Ice Giant';
@@ -1150,11 +1205,12 @@
             icon: '🪐',
             title: 'Planet',
             stats: [
-                { label: 'Mass', value: `${massInEarths.toFixed(2)} M⊕` },
-                { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕` },
-                { label: 'Density Type', value: densityType.charAt(0).toUpperCase() + densityType.slice(1) },
-                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
-                { label: 'Orbital Period', value: `${orbitalPeriod.toFixed(1)} time units` },
+                { label: 'Mass', value: `${massInEarths.toFixed(2)} M⊕ (${massInKg.toExponential(2)} kg)` },
+                { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕ (${radiusInKm.toFixed(0)} km)` },
+                { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+                { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
+                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(0)} m/s` },
+                { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
                 { label: 'Type', value: planetType },
                 { label: 'Position', value: `(${planet.pos.x.toFixed(1)}, ${planet.pos.y.toFixed(1)})` },
                 { label: 'Velocity', value: `${Math.hypot(planet.vel.x, planet.vel.y).toFixed(1)} units/s` }
@@ -1166,8 +1222,25 @@
     const getGasGiantInfo = (gasGiant) => {
         const massInJupiters = gasGiant.massInJupiters || (gasGiant.mass / 50.0);
         const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
-        const density = gasGiant.mass / (Math.PI * gasGiant.radius * gasGiant.radius);
-        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * gasGiant.mass / gasGiant.radius);
+        const radiusInKm = radiusInJupiters * 69911; // Jupiter radius in km
+        const massInKg = massInJupiters * 1.898e27; // Jupiter mass in kg
+        
+        // Real density calculation (kg/m³)
+        const volume = (4/3) * Math.PI * Math.pow(radiusInKm * 1000, 3);
+        const density = massInKg / volume;
+        
+        // Real escape velocity (m/s)
+        const G = 6.67430e-11;
+        const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+        
+        // Real surface gravity (m/s²)
+        const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+        
+        // Real orbital period
+        const distanceFromCenter = Math.hypot(gasGiant.pos.x, gasGiant.pos.y);
+        const centralMass = 1000; // Assume central mass in simulation units
+        const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
+        const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
         
         // Use the actual giant type from the object, or determine from mass
         let giantType = gasGiant.giantType || 'Gas Giant';
@@ -1186,10 +1259,12 @@
             icon: '🪐',
             title: 'Gas Giant',
             stats: [
-                { label: 'Mass', value: `${massInJupiters.toFixed(2)} M♃` },
-                { label: 'Radius', value: `${radiusInJupiters.toFixed(2)} R♃` },
-                { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
-                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
+                { label: 'Mass', value: `${massInJupiters.toFixed(2)} M♃ (${massInKg.toExponential(2)} kg)` },
+                { label: 'Radius', value: `${radiusInJupiters.toFixed(2)} R♃ (${radiusInKm.toFixed(0)} km)` },
+                { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+                { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
+                { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
+                { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
                 { label: 'Type', value: displayType },
                 { label: 'Position', value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})` },
                 { label: 'Velocity', value: `${Math.hypot(gasGiant.vel.x, gasGiant.vel.y).toFixed(1)} units/s` }
@@ -1200,9 +1275,26 @@
 
     const getAsteroidInfo = (asteroid) => {
         const massInEarths = asteroid.mass / 1.0;
+        const massInKg = massInEarths * 5.972e24;
         const radiusInKm = asteroid.radius * 1000; // Rough conversion
-        const density = asteroid.mass / (Math.PI * asteroid.radius * asteroid.radius);
-        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * asteroid.mass / asteroid.radius);
+        const radiusInM = radiusInKm * 1000;
+        
+        // Real density calculation (kg/m³)
+        const volume = (4/3) * Math.PI * Math.pow(radiusInM, 3);
+        const density = massInKg / volume;
+        
+        // Real escape velocity (m/s)
+        const G = 6.67430e-11;
+        const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
+        
+        // Real surface gravity (m/s²)
+        const surfaceGravity = (G * massInKg) / Math.pow(radiusInM, 2);
+        
+        // Real orbital period
+        const distanceFromCenter = Math.hypot(asteroid.pos.x, asteroid.pos.y);
+        const centralMass = 1000; // Assume central mass in simulation units
+        const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
+        const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
         
         let asteroidType = 'Asteroid';
         if (asteroid.radius > 5) asteroidType = 'Dwarf Planet';
@@ -1213,10 +1305,12 @@
             icon: '☄️',
             title: 'Asteroid',
             stats: [
-                { label: 'Mass', value: `${massInEarths.toFixed(4)} M⊕` },
+                { label: 'Mass', value: `${massInEarths.toFixed(4)} M⊕ (${massInKg.toExponential(2)} kg)` },
                 { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-                { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
-                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
+                { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+                { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(3)} m/s²` },
+                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} m/s` },
+                { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
                 { label: 'Type', value: asteroidType },
                 { label: 'Position', value: `(${asteroid.pos.x.toFixed(1)}, ${asteroid.pos.y.toFixed(1)})` },
                 { label: 'Velocity', value: `${Math.hypot(asteroid.vel.x, asteroid.vel.y).toFixed(1)} units/s` }
@@ -1225,42 +1319,148 @@
         };
     };
 
+    const getNeutronStarInfo = (neutronStar) => {
+        const massInSuns = neutronStar.massInSuns || (neutronStar.mass / SOLAR_MASS_UNIT);
+        const radiusInKm = neutronStar.radius * 1000; // Rough conversion to km
+        const density = neutronStar.mass / (Math.PI * neutronStar.radius * neutronStar.radius);
+        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * neutronStar.mass / neutronStar.radius);
+        const schwarzschildRadius = 2 * SETTINGS.gravitational_constant * neutronStar.mass / (3e8 * 3e8); // Simplified
+        
+        const starType = neutronStar.starType || 'Neutron Star';
+        const isPulsar = neutronStar.pulsar || false;
+        
+        return {
+            icon: isPulsar ? '⚡' : '⭐',
+            title: starType,
+            stats: [
+                { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
+                { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
+                { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
+                { label: 'Schwarzschild Radius', value: `${schwarzschildRadius.toFixed(6)} units` },
+                { label: 'Type', value: starType },
+                { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
+                { label: 'Position', value: `(${neutronStar.pos.x.toFixed(1)}, ${neutronStar.pos.y.toFixed(1)})` },
+                { label: 'Velocity', value: `${Math.hypot(neutronStar.vel.x, neutronStar.vel.y).toFixed(1)} units/s` }
+            ],
+            description: `A ${starType.toLowerCase()} with ${massInSuns > 2.0 ? 'extreme' : 'high'} density. ${isPulsar ? 'This pulsar emits regular beams of radiation as it rotates.' : 'This neutron star is the collapsed core of a massive star.'} ${starType === 'Magnetar' ? 'This magnetar has an extremely strong magnetic field, making it one of the most powerful objects in the universe.' : starType === 'Pulsar' ? 'This pulsar rotates rapidly, emitting beams of radiation that sweep across space.' : 'This neutron star is composed almost entirely of neutrons, making it incredibly dense.'}`
+        };
+    };
+
+    const getWhiteDwarfInfo = (whiteDwarf) => {
+        const massInSuns = whiteDwarf.massInSuns || (whiteDwarf.mass / SOLAR_MASS_UNIT);
+        const radiusInEarths = whiteDwarf.radius / PLANET_RADIUS; // Compare to Earth radius
+        const density = whiteDwarf.mass / (Math.PI * whiteDwarf.radius * whiteDwarf.radius);
+        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * whiteDwarf.mass / whiteDwarf.radius);
+        const chandrasekharLimit = 1.4; // Solar masses
+        
+        const dwarfType = whiteDwarf.dwarfType || 'Carbon-Oxygen';
+        
+        return {
+            icon: '⭐',
+            title: 'White Dwarf',
+            stats: [
+                { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
+                { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕` },
+                { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
+                { label: 'Chandrasekhar Limit', value: `${chandrasekharLimit} M☉` },
+                { label: 'Type', value: dwarfType },
+                { label: 'Position', value: `(${whiteDwarf.pos.x.toFixed(1)}, ${whiteDwarf.pos.y.toFixed(1)})` },
+                { label: 'Velocity', value: `${Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y).toFixed(1)} units/s` }
+            ],
+            description: `A ${dwarfType.toLowerCase()} white dwarf with ${massInSuns > 1.2 ? 'high' : massInSuns > 0.6 ? 'moderate' : 'low'} mass. ${dwarfType === 'Oxygen-Neon' ? 'This massive white dwarf is near the Chandrasekhar limit and may become a neutron star.' : dwarfType === 'Carbon-Oxygen' ? 'This is the most common type of white dwarf, composed of carbon and oxygen.' : 'This low-mass white dwarf is composed primarily of helium.'} ${massInSuns > chandrasekharLimit ? 'This white dwarf exceeds the Chandrasekhar limit and may collapse into a neutron star.' : 'This white dwarf is stable and will slowly cool over billions of years.'}`
+        };
+    };
+
+    const getCometInfo = (comet) => {
+        const massInComets = comet.massInComets || (comet.mass / 0.1);
+        const radiusInKm = comet.radius * 1000; // Rough conversion to km
+        const density = comet.mass / (Math.PI * comet.radius * comet.radius);
+        const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * comet.mass / comet.radius);
+        const tailLength = comet.tailLength || 35;
+        
+        const cometType = comet.cometType || 'short_period';
+        const displayType = cometType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        return {
+            icon: '☄️',
+            title: 'Comet',
+            stats: [
+                { label: 'Mass', value: `${massInComets.toFixed(3)} C` },
+                { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
+                { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+                { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
+                { label: 'Tail Length', value: `${tailLength.toFixed(0)} units` },
+                { label: 'Type', value: displayType },
+                { label: 'Position', value: `(${comet.pos.x.toFixed(1)}, ${comet.pos.y.toFixed(1)})` },
+                { label: 'Velocity', value: `${Math.hypot(comet.vel.x, comet.vel.y).toFixed(1)} units/s` }
+            ],
+            description: `A ${displayType.toLowerCase()} comet with ${massInComets > 0.1 ? 'substantial' : massInComets > 0.01 ? 'moderate' : 'small'} mass. ${cometType === 'periodic' ? 'This periodic comet returns to the inner solar system regularly, like Halley\'s Comet.' : cometType === 'long_period' ? 'This long-period comet has an orbital period of more than 200 years.' : 'This short-period comet completes its orbit in less than 200 years.'} The comet\'s tail is ${tailLength > 50 ? 'very long' : tailLength > 30 ? 'moderate' : 'short'} and points away from the sun due to solar radiation pressure.`
+        };
+    };
+
     const showObjectInspector = (object, type) => {
-        let info;
-        switch (type) {
-            case 'BlackHole':
-                info = getBlackHoleInfo(object);
-                break;
-            case 'Star':
-                info = getStarInfo(object);
-                break;
-            case 'Planet':
-                info = getPlanetInfo(object);
-                break;
-            case 'GasGiant':
-                info = getGasGiantInfo(object);
-                break;
-            case 'Asteroid':
-                info = getAsteroidInfo(object);
-                break;
-            default:
-                return;
+        // Store the current object for auto-updating
+        state.selectedObject = { object, type };
+        
+        const updateInspector = () => {
+            if (!state.inspector_open || !state.selectedObject) return;
+            
+            let info;
+            switch (state.selectedObject.type) {
+                case 'BlackHole':
+                    info = getBlackHoleInfo(state.selectedObject.object);
+                    break;
+                case 'Star':
+                    info = getStarInfo(state.selectedObject.object);
+                    break;
+                case 'NeutronStar':
+                    info = getNeutronStarInfo(state.selectedObject.object);
+                    break;
+                case 'WhiteDwarf':
+                    info = getWhiteDwarfInfo(state.selectedObject.object);
+                    break;
+                case 'Planet':
+                    info = getPlanetInfo(state.selectedObject.object);
+                    break;
+                case 'GasGiant':
+                    info = getGasGiantInfo(state.selectedObject.object);
+                    break;
+                case 'Comet':
+                    info = getCometInfo(state.selectedObject.object);
+                    break;
+                case 'Asteroid':
+                    info = getAsteroidInfo(state.selectedObject.object);
+                    break;
+                default:
+                    return;
+            }
+            
+            inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
+            
+            let content = '';
+            info.stats.forEach(stat => {
+                content += `
+                    <div class="stat-row">
+                        <span class="stat-label">${stat.label}:</span>
+                        <span class="stat-value">${stat.value}</span>
+                    </div>
+                `;
+            });
+            
+            content += `<div class="object-description">${info.description}</div>`;
+            inspectorContent.innerHTML = content;
+        };
+        
+        // Initial update
+        updateInspector();
+        
+        // Set up auto-update interval
+        if (state.inspectorUpdateInterval) {
+            clearInterval(state.inspectorUpdateInterval);
         }
-        
-        inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
-        
-        let content = '';
-        info.stats.forEach(stat => {
-            content += `
-                <div class="stat-row">
-                    <span class="stat-label">${stat.label}:</span>
-                    <span class="stat-value">${stat.value}</span>
-                </div>
-            `;
-        });
-        
-        content += `<div class="object-description">${info.description}</div>`;
-        inspectorContent.innerHTML = content;
+        state.inspectorUpdateInterval = setInterval(updateInspector, 100); // Update 10 times per second
         
         objectInspector.classList.add('visible');
         state.inspector_open = true;
@@ -1269,6 +1469,13 @@
     const hideObjectInspector = () => {
         objectInspector.classList.remove('visible');
         state.inspector_open = false;
+        
+        // Clear auto-update interval
+        if (state.inspectorUpdateInterval) {
+            clearInterval(state.inspectorUpdateInterval);
+            state.inspectorUpdateInterval = null;
+        }
+        state.selectedObject = null;
     };
 
     class PhysicsObject {
@@ -1662,6 +1869,404 @@
             ctx.beginPath();
             ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
             ctx.fill();
+        }
+    }
+
+    class NeutronStar extends PhysicsObject {
+        constructor(pos, vel, massInSuns = null) {
+            let finalMassInSuns;
+            if (massInSuns !== null) {
+                finalMassInSuns = massInSuns;
+            } else {
+                // Neutron stars have a narrow mass range. Range ~1.1 to 2.5 solar masses
+                finalMassInSuns = 1.1 + Math.random() * 1.4; 
+            }
+            
+            // Neutron stars are extremely dense - radius is nearly constant
+            const radius = STAR_OBJ_RADIUS * 0.05; // Very small, nearly constant size
+            const mass = finalMassInSuns * SOLAR_MASS_UNIT;
+            
+            super(pos, vel, mass, radius, "NeutronStar");
+            this.massInSuns = finalMassInSuns;
+            this.starType = this.calculateStarType();
+            this.pulsar = Math.random() > 0.7; // 30% chance to be a pulsar
+            this.intact = true;
+        }
+        
+        // Override updateRadius to prevent errors - neutron stars have nearly constant radius
+        updateRadius() {
+            // Neutron stars maintain nearly constant radius regardless of mass
+            this.radius = STAR_OBJ_RADIUS * 0.05;
+        }
+        
+        calculateStarType() {
+            // Determine neutron star type based on mass and random factors
+            if (this.massInSuns > 2.0) {
+                return 'Magnetar'; // Very massive neutron stars with strong magnetic fields
+            } else if (this.pulsar) {
+                return 'Pulsar'; // Rotating neutron star with beams
+            } else {
+                return 'Neutron Star'; // Standard neutron star
+            }
+        }
+        
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            const true_screen_pos = world_to_screen(this.pos);
+            const screen_radius = this.radius * state.zoom;
+            
+            ctx.save();
+            
+            // Draw neutron star core (very small, bright)
+            const gradient = ctx.createRadialGradient(true_screen_pos.x, true_screen_pos.y, 0, true_screen_pos.x, true_screen_pos.y, screen_radius * 3);
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.3, '#00ffff');
+            gradient.addColorStop(0.7, '#0080ff');
+            gradient.addColorStop(1, 'transparent');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius * 3, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw central core
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Add pulsar beams if applicable
+            if (this.pulsar && screen_radius > 2) {
+                ctx.strokeStyle = '#00ffff';
+                ctx.lineWidth = 2 / state.zoom;
+                ctx.setLineDash([3, 3]);
+                
+                // Draw rotating beams
+                const time = Date.now() * 0.001;
+                const beamAngle = time * 2; // Rotating beams
+                
+                for (let i = 0; i < 2; i++) {
+                    const angle = beamAngle + (i * Math.PI);
+                    const beamLength = screen_radius * 8;
+                    const endX = true_screen_pos.x + Math.cos(angle) * beamLength;
+                    const endY = true_screen_pos.y + Math.sin(angle) * beamLength;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(true_screen_pos.x, true_screen_pos.y);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                }
+                ctx.setLineDash([]);
+            }
+            
+            // Draw label if large enough
+            if (screen_radius > 4) {
+                const label_y_offset = screen_radius + 12;
+                ctx.font = '11px Roboto Mono';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 2;
+                const label = this.pulsar ? `${this.massInSuns.toFixed(2)} M☉ ⚡` : `${this.massInSuns.toFixed(2)} M☉`;
+                ctx.fillText(label, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+            }
+            ctx.restore();
+        }
+        
+        tidal_mass_loss(bh_list, dt) {
+            if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
+            let min_dist_sq = Infinity, closest_bh = null;
+            for (const bh of bh_list) {
+                const dx = this.pos.x - bh.pos.x;
+                const dy = this.pos.y - bh.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                if (dist_sq < min_dist_sq) {
+                    min_dist_sq = dist_sq;
+                    closest_bh = bh;
+                }
+            }
+            if (!closest_bh) return { debris_count: 0, fraction: 0 };
+            
+            // Neutron stars are extremely dense and very hard to disrupt
+            const tidal_threshold_sq = (closest_bh.radius * 8)**2;
+            if (min_dist_sq < tidal_threshold_sq) {
+                const min_dist = Math.sqrt(min_dist_sq);
+                const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+                const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
+                
+                this.mass -= this.mass * fraction * 0.01 * dt; // Extremely slow mass loss
+                let debris_count = Math.floor(fraction * 5 * dt);
+                
+                if (this.mass <= 0.1) {
+                    this.intact = false;
+                    this.alive = false;
+                    debris_count += 50;
+                }
+                return { debris_count, fraction };
+            }
+            return { debris_count: 0, fraction: 0 };
+        }
+        
+        get_state() { 
+            const baseState = super.get_state();
+            return { ...baseState, massInSuns: this.massInSuns, starType: this.starType, pulsar: this.pulsar };
+        }
+        set_state(s) {
+            super.set_state(s);
+            this.massInSuns = s.massInSuns;
+            this.starType = s.starType;
+            this.pulsar = s.pulsar;
+        }
+    }
+
+    class WhiteDwarf extends PhysicsObject {
+        constructor(pos, vel, massInSuns = null) {
+            let finalMassInSuns;
+            if (massInSuns !== null) {
+                finalMassInSuns = massInSuns;
+            } else {
+                // White dwarfs have a mass range. Range ~0.1 to 1.4 solar masses (Chandrasekhar limit)
+                finalMassInSuns = 0.1 + Math.random() * 1.3; 
+            }
+            
+            // White dwarfs are very dense but larger than neutron stars
+            const radius = STAR_OBJ_RADIUS * 0.1; // Small but larger than neutron stars
+            const mass = finalMassInSuns * SOLAR_MASS_UNIT;
+            
+            super(pos, vel, mass, radius, "WhiteDwarf");
+            this.massInSuns = finalMassInSuns;
+            this.dwarfType = this.calculateDwarfType();
+            this.intact = true;
+        }
+        
+        // Override updateRadius to prevent errors - white dwarfs have nearly constant radius
+        updateRadius() {
+            // White dwarfs maintain nearly constant radius regardless of mass
+            this.radius = STAR_OBJ_RADIUS * 0.1;
+        }
+        
+        calculateDwarfType() {
+            // Determine white dwarf type based on mass
+            if (this.massInSuns > 1.2) {
+                return 'Oxygen-Neon'; // Very massive white dwarfs
+            } else if (this.massInSuns > 0.6) {
+                return 'Carbon-Oxygen'; // Most common type
+            } else {
+                return 'Helium'; // Low mass white dwarfs
+            }
+        }
+        
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            const true_screen_pos = world_to_screen(this.pos);
+            const screen_radius = this.radius * state.zoom;
+            
+            ctx.save();
+            
+            // Draw white dwarf (small, bright, bluish-white)
+            const gradient = ctx.createRadialGradient(true_screen_pos.x, true_screen_pos.y, 0, true_screen_pos.x, true_screen_pos.y, screen_radius * 2);
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.4, '#e6f3ff');
+            gradient.addColorStop(0.8, '#b3d9ff');
+            gradient.addColorStop(1, 'transparent');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius * 2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw central core
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw label if large enough
+            if (screen_radius > 6) {
+                const label_y_offset = screen_radius + 12;
+                ctx.font = '11px Roboto Mono';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 3;
+                ctx.fillText(`${this.massInSuns.toFixed(2)} M☉`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+            }
+            ctx.restore();
+        }
+        
+        tidal_mass_loss(bh_list, dt) {
+            if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
+            let min_dist_sq = Infinity, closest_bh = null;
+            for (const bh of bh_list) {
+                const dx = this.pos.x - bh.pos.x;
+                const dy = this.pos.y - bh.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                if (dist_sq < min_dist_sq) {
+                    min_dist_sq = dist_sq;
+                    closest_bh = bh;
+                }
+            }
+            if (!closest_bh) return { debris_count: 0, fraction: 0 };
+            
+            // White dwarfs are very dense and hard to disrupt
+            const tidal_threshold_sq = (closest_bh.radius * 5)**2;
+            if (min_dist_sq < tidal_threshold_sq) {
+                const min_dist = Math.sqrt(min_dist_sq);
+                const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+                const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
+                
+                this.mass -= this.mass * fraction * 0.02 * dt; // Very slow mass loss
+                let debris_count = Math.floor(fraction * 10 * dt);
+                
+                if (this.mass <= 0.1) {
+                    this.intact = false;
+                    this.alive = false;
+                    debris_count += 30;
+                }
+                return { debris_count, fraction };
+            }
+            return { debris_count: 0, fraction: 0 };
+        }
+        
+        get_state() { 
+            const baseState = super.get_state();
+            return { ...baseState, massInSuns: this.massInSuns, dwarfType: this.dwarfType };
+        }
+        set_state(s) {
+            super.set_state(s);
+            this.massInSuns = s.massInSuns;
+            this.dwarfType = s.dwarfType;
+        }
+    }
+
+    class Comet extends PhysicsObject {
+        constructor(pos, vel, massInComets = null) {
+            let finalMassInComets;
+            if (massInComets !== null) {
+                finalMassInComets = massInComets;
+            } else {
+                // Comets are typically very small. Range ~0.001 to 0.1 comet masses (Halley's Comet = 1.0)
+                finalMassInComets = Math.pow(10, (Math.random() * 2) - 3); 
+            }
+            
+            const radius = ASTEROID_RADIUS * Math.pow(finalMassInComets, 0.4) * 0.8; // Comets are smaller than asteroids
+            const mass = finalMassInComets * 0.1; // 0.1 = typical comet mass
+            
+            super(pos, vel, mass, radius, "Comet");
+            this.massInComets = finalMassInComets;
+            this.cometType = this.calculateCometType();
+            this.tailLength = Math.random() * 50 + 20; // Random tail length
+            this.intact = true;
+        }
+        
+        calculateCometType() {
+            // Determine comet type based on mass and random factors
+            if (this.massInComets > 0.1) {
+                return 'periodic'; // Large periodic comets like Halley's
+            } else if (this.massInComets > 0.01) {
+                return 'long_period'; // Long-period comets
+            } else {
+                return 'short_period'; // Short-period comets
+            }
+        }
+        
+        draw(ctx) {
+            const world_pos = world_to_screen(this.pos);
+            const true_screen_pos = world_to_screen(this.pos);
+            const screen_radius = this.radius * state.zoom;
+            
+            ctx.save();
+            
+            // Draw comet tail (opposite to velocity direction)
+            if (screen_radius > 1) {
+                const speed = Math.hypot(this.vel.x, this.vel.y);
+                if (speed > 0.1) {
+                    const tailDirection = { x: -this.vel.x / speed, y: -this.vel.y / speed };
+                    const tailLength = Math.min(this.tailLength * state.zoom, 100);
+                    
+                    // Draw tail gradient
+                    const gradient = ctx.createLinearGradient(
+                        true_screen_pos.x, true_screen_pos.y,
+                        true_screen_pos.x + tailDirection.x * tailLength,
+                        true_screen_pos.y + tailDirection.y * tailLength
+                    );
+                    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+                    gradient.addColorStop(0.3, 'rgba(200, 255, 255, 0.6)');
+                    gradient.addColorStop(0.7, 'rgba(150, 200, 255, 0.3)');
+                    gradient.addColorStop(1, 'transparent');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius * 2, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+            
+            // Draw comet nucleus
+            ctx.fillStyle = '#f0f0f0';
+            ctx.beginPath();
+            ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw label if large enough
+            if (screen_radius > 3) {
+                const label_y_offset = screen_radius + 12;
+                ctx.font = '10px Roboto Mono';
+                ctx.fillStyle = '#fff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 2;
+                ctx.fillText(`${this.massInComets.toFixed(3)} C`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+            }
+            ctx.restore();
+        }
+        
+        tidal_mass_loss(bh_list, dt) {
+            if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
+            let min_dist_sq = Infinity, closest_bh = null;
+            for (const bh of bh_list) {
+                const dx = this.pos.x - bh.pos.x;
+                const dy = this.pos.y - bh.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                if (dist_sq < min_dist_sq) {
+                    min_dist_sq = dist_sq;
+                    closest_bh = bh;
+                }
+            }
+            if (!closest_bh) return { debris_count: 0, fraction: 0 };
+            
+            // Comets are easily disrupted
+            const tidal_threshold_sq = (closest_bh.radius * 2)**2;
+            if (min_dist_sq < tidal_threshold_sq) {
+                const min_dist = Math.sqrt(min_dist_sq);
+                const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+                const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
+                
+                this.mass -= this.mass * fraction * 0.1 * dt;
+                let debris_count = Math.floor(fraction * 25 * dt);
+                
+                if (this.mass <= 0.01) {
+                    this.intact = false;
+                    this.alive = false;
+                    debris_count += 20;
+                }
+                return { debris_count, fraction };
+            }
+            return { debris_count: 0, fraction: 0 };
+        }
+        
+        get_state() { 
+            const baseState = super.get_state();
+            return { ...baseState, massInComets: this.massInComets, cometType: this.cometType, tailLength: this.tailLength };
+        }
+        set_state(s) {
+            super.set_state(s);
+            this.massInComets = s.massInComets;
+            this.cometType = s.cometType;
+            this.tailLength = s.tailLength;
         }
     }
 
@@ -2099,9 +2704,13 @@
         
         while (merged_this_step && stars_list.length > 1 && merge_count < max_merges_per_step) {
             merged_this_step = false;
-            for (let i = 0; i < stars_list.length; i++) {
-                for (let j = i + 1; j < stars_list.length; j++) {
-                    const star1 = stars_list[i], star2 = stars_list[j];
+            
+            // Create a copy of the stars list to avoid modifying during iteration
+            const starsCopy = [...stars_list];
+            
+            for (let i = 0; i < starsCopy.length; i++) {
+                for (let j = i + 1; j < starsCopy.length; j++) {
+                    const star1 = starsCopy[i], star2 = starsCopy[j];
                     if (!star1.alive || !star2.alive) continue;
                     
                     const dx = star2.pos.x - star1.pos.x;
@@ -2156,35 +2765,66 @@
                             debris.push(new Debris(debris_pos, {x: new_vel.x + debris_vel.x, y: new_vel.y + debris_vel.y}));
                         }
                         
-                        // Remove the original stars
+                        // Mark the original stars as dead (don't splice during iteration)
                         star1.alive = false;
                         star2.alive = false;
-                        stars_list.splice(j, 1);
-                        stars_list.splice(i, 1);
                         
-                        // Check if the merged star should become a black hole
-                        if (new_mass_in_suns >= SETTINGS.max_star_mass_before_bh) {
-                            // Create a black hole from the merged star
-                            bh_list.push(new BlackHole(new_pos, total_mass, new_vel));
+                        // Determine the type of merger and create appropriate result
+                        const star1Type = star1.obj_type || 'StarObject';
+                        const star2Type = star2.obj_type || 'StarObject';
+                        
+                        // Handle white dwarf and neutron star mergers
+                        if ((star1Type === 'WhiteDwarf' && star2Type === 'WhiteDwarf') ||
+                            (star1Type === 'WhiteDwarf' && star2Type === 'NeutronStar') ||
+                            (star1Type === 'NeutronStar' && star2Type === 'WhiteDwarf') ||
+                            (star1Type === 'NeutronStar' && star2Type === 'NeutronStar')) {
                             
-                            // Add more dramatic particles for black hole formation
-                            for (let k = 0; k < 40; k++) {
-                                const angle = Math.random() * 2 * Math.PI;
-                                const speed = Math.random() * 120 + 60;
-                                const p_vel = { 
-                                    x: speed * Math.cos(angle), 
-                                    y: speed * Math.sin(angle) 
-                                };
-                                particles.push(new Particle(new_pos, p_vel, Math.random()*1.0+0.8, 12, 3, 'rgb(255, 100, 0)'));
+                            // White dwarf + white dwarf = neutron star (if mass allows) or black hole
+                            // White dwarf + neutron star = neutron star or black hole
+                            // Neutron star + neutron star = black hole
+                            
+                            if (new_mass_in_suns >= SETTINGS.max_star_mass_before_bh) {
+                                // Create a black hole
+                                bh_list.push(new BlackHole(new_pos, total_mass, new_vel));
+                                
+                                // Add dramatic particles for black hole formation
+                                for (let k = 0; k < 40; k++) {
+                                    const angle = Math.random() * 2 * Math.PI;
+                                    const speed = Math.random() * 120 + 60;
+                                    const p_vel = { 
+                                        x: speed * Math.cos(angle), 
+                                        y: speed * Math.sin(angle) 
+                                    };
+                                    particles.push(new Particle(new_pos, p_vel, Math.random()*1.0+0.8, 12, 3, 'rgb(255, 100, 0)'));
+                                }
+                            } else {
+                                // Create a neutron star
+                                const merged_neutron_star = new NeutronStar(new_pos, new_vel);
+                                merged_neutron_star.mass = total_mass;
+                                merged_neutron_star.massInSuns = total_mass / SOLAR_MASS_UNIT;
+                                stars_list.push(merged_neutron_star);
                             }
-                            
-
                         } else {
-                            // Create a new merged star
-                            const merged_star = new StarObject(new_pos, new_vel, new_mass_in_suns);
-                            stars_list.push(merged_star);
-                            
-
+                            // Regular star mergers
+                            if (new_mass_in_suns >= SETTINGS.max_star_mass_before_bh) {
+                                // Create a black hole from the merged star
+                                bh_list.push(new BlackHole(new_pos, total_mass, new_vel));
+                                
+                                // Add more dramatic particles for black hole formation
+                                for (let k = 0; k < 40; k++) {
+                                    const angle = Math.random() * 2 * Math.PI;
+                                    const speed = Math.random() * 120 + 60;
+                                    const p_vel = { 
+                                        x: speed * Math.cos(angle), 
+                                        y: speed * Math.sin(angle) 
+                                    };
+                                    particles.push(new Particle(new_pos, p_vel, Math.random()*1.0+0.8, 12, 3, 'rgb(255, 100, 0)'));
+                                }
+                            } else {
+                                // Create a new merged star
+                                const merged_star = new StarObject(new_pos, new_vel, new_mass_in_suns);
+                                stars_list.push(merged_star);
+                            }
                         }
                         
                         merged_this_step = true;
@@ -2194,6 +2834,9 @@
                 }
                 if (merged_this_step) break;
             }
+            
+            // Filter out dead stars after processing all collisions
+            stars_list = stars_list.filter(star => star.alive);
         }
     };
 
@@ -2224,6 +2867,145 @@
             }
         }
     }
+
+    // Handle collisions between stars and smaller objects (planets, gas giants, asteroids, comets)
+    const handle_star_object_collisions = () => {
+        // Use filter to safely remove objects without modifying arrays during iteration
+        const originalPlanets = [...planets];
+        const originalGasGiants = [...gas_giants];
+        const originalAsteroids = [...asteroids];
+        
+        // Check collisions between stars and planets
+        for (let i = 0; i < stars.length; i++) {
+            const star = stars[i];
+            if (!star.alive) continue;
+            
+            // Check with planets
+            for (let j = 0; j < originalPlanets.length; j++) {
+                const planet = originalPlanets[j];
+                if (!planet.alive) continue;
+                
+                const dx = planet.pos.x - star.pos.x;
+                const dy = planet.pos.y - star.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                const min_dist = star.radius + planet.radius;
+                
+                if (dist_sq < min_dist**2 && dist_sq > 1e-6) {
+                    // Star absorbs the planet
+                    star.mass += planet.mass;
+                    if (star.obj_type === 'NeutronStar') {
+                        // Neutron stars have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'WhiteDwarf') {
+                        // White dwarfs have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'StarObject') {
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                        // Update radius for regular stars
+                        star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+                    }
+                    
+                    // Create some debris and particles
+                    for (let k = 0; k < 5; k++) {
+                        const angle = Math.random() * 2 * Math.PI;
+                        const speed = Math.random() * 20 + 10;
+                        const p_vel = { 
+                            x: speed * Math.cos(angle), 
+                            y: speed * Math.sin(angle) 
+                        };
+                        particles.push(new Particle(planet.pos, p_vel, Math.random()*0.5+0.3, 4, 1, 'rgb(255, 200, 100)'));
+                    }
+                    
+                    planet.alive = false;
+                }
+            }
+            
+            // Check with gas giants
+            for (let j = 0; j < originalGasGiants.length; j++) {
+                const gasGiant = originalGasGiants[j];
+                if (!gasGiant.alive) continue;
+                
+                const dx = gasGiant.pos.x - star.pos.x;
+                const dy = gasGiant.pos.y - star.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                const min_dist = star.radius + gasGiant.radius;
+                
+                if (dist_sq < min_dist**2 && dist_sq > 1e-6) {
+                    // Star absorbs the gas giant
+                    star.mass += gasGiant.mass;
+                    if (star.obj_type === 'NeutronStar') {
+                        // Neutron stars have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'WhiteDwarf') {
+                        // White dwarfs have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'StarObject') {
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                        // Update radius for regular stars
+                        star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+                    }
+                    
+                    // Create more dramatic debris and particles for gas giant
+                    for (let k = 0; k < 8; k++) {
+                        const angle = Math.random() * 2 * Math.PI;
+                        const speed = Math.random() * 30 + 15;
+                        const p_vel = { 
+                            x: speed * Math.cos(angle), 
+                            y: speed * Math.sin(angle) 
+                        };
+                        particles.push(new Particle(gasGiant.pos, p_vel, Math.random()*0.6+0.4, 6, 2, 'rgb(135, 206, 235)'));
+                    }
+                    
+                    gasGiant.alive = false;
+                }
+            }
+            
+            // Check with asteroids and comets
+            for (let j = 0; j < originalAsteroids.length; j++) {
+                const asteroid = originalAsteroids[j];
+                if (!asteroid.alive) continue;
+                
+                const dx = asteroid.pos.x - star.pos.x;
+                const dy = asteroid.pos.y - star.pos.y;
+                const dist_sq = dx*dx + dy*dy;
+                const min_dist = star.radius + asteroid.radius;
+                
+                if (dist_sq < min_dist**2 && dist_sq > 1e-6) {
+                    // Star absorbs the asteroid/comet
+                    star.mass += asteroid.mass;
+                    if (star.obj_type === 'NeutronStar') {
+                        // Neutron stars have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'WhiteDwarf') {
+                        // White dwarfs have nearly constant radius, but update mass
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                    } else if (star.obj_type === 'StarObject') {
+                        star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+                        // Update radius for regular stars
+                        star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+                    }
+                    
+                    // Create small debris
+                    for (let k = 0; k < 3; k++) {
+                        const angle = Math.random() * 2 * Math.PI;
+                        const speed = Math.random() * 15 + 5;
+                        const p_vel = { 
+                            x: speed * Math.cos(angle), 
+                            y: speed * Math.sin(angle) 
+                        };
+                        particles.push(new Particle(asteroid.pos, p_vel, Math.random()*0.4+0.2, 3, 1, 'rgb(139, 69, 19)'));
+                    }
+                    
+                    asteroid.alive = false;
+                }
+            }
+        }
+        
+        // Filter out dead objects (this is safe and already done elsewhere in the code)
+        planets = planets.filter(planet => planet.alive);
+        gas_giants = gas_giants.filter(gasGiant => gasGiant.alive);
+        asteroids = asteroids.filter(asteroid => asteroid.alive);
+    };
 
     const apply_preset = (settings_dict) => {
         const ps = settings_dict.preset_scenario;
@@ -2406,6 +3188,22 @@
       "Ringworld Mayhem":    {
         title:"Ringworld Mayhem", 
         summary:"Ultra-massive ring of 1200 asteroids with a central massless black hole. The ring structure is inherently unstable and will collapse under its own gravity. Watch as the ring fragments and reorganizes, demonstrating the instability of large-scale ring structures in space. Inspired by Larry Niven's Ringworld concept."
+      },
+      "Neutron Star Binary": {
+        title:"Neutron Star Binary", 
+        summary:"Two neutron stars (1.4 & 1.3 M☉) in a tight binary orbit with planets in distant orbits. These incredibly dense stellar remnants create extreme gravitational fields and may eventually merge to form a black hole. Based on real binary neutron star systems like PSR B1913+16, which provided the first indirect evidence of gravitational waves."
+      },
+      "White Dwarf Cluster": {
+        title:"White Dwarf Cluster", 
+        summary:"A cluster of eight white dwarfs with varying masses (0.6-1.4 M☉) orbiting a common center. These stellar remnants are the final evolutionary state of stars like our Sun. Watch as they interact gravitationally, potentially forming binary systems or experiencing close encounters. Represents the dense core of an old globular cluster."
+      },
+      "Comet Storm":         {
+        title:"Comet Storm", 
+        summary:"A central star surrounded by 50 comets with spectacular tails, plus several planets. The comets follow highly elliptical orbits and create beautiful visual effects as they approach the star. Watch as comets interact with planets and each other, creating a dynamic and chaotic environment similar to the early Solar System."
+      },
+      "Compact Object Dance": {
+        title:"Compact Object Dance", 
+        summary:"A central black hole (20 M☉) with three neutron stars and four white dwarfs in orbital ballet, plus 20 comets for visual flair. This extreme environment showcases the different types of stellar remnants and their interactions. The intense gravitational fields create complex orbital dynamics and potential merger events."
       }
     };
 
@@ -2512,9 +3310,9 @@
                 }
             }
         } else if (starting_preset === "Double Pulsar") {
-            // Add two neutron stars (represented as compact stars) in tight orbit
-            stars.push(new StarObject({x: -15, y: 0}, {x: 0, y: 25}, 1.4));
-            stars.push(new StarObject({x: 15, y: 0}, {x: 0, y: -25}, 1.4));
+            // Add two neutron stars in tight orbit
+            stars.push(new NeutronStar({x: -15, y: 0}, {x: 0, y: 25}, 1.4));
+            stars.push(new NeutronStar({x: 15, y: 0}, {x: 0, y: -25}, 1.4));
             for(let i=0; i < SETTINGS.num_planets; i++) {
                 const r = 200 + Math.random() * 100;
                 const theta = Math.random() * 2 * Math.PI;
@@ -2573,6 +3371,91 @@
                 const v = Math.sqrt((SETTINGS.gravitational_constant * 1000) / r); // Use some central mass for orbital velocity
                 const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
                 asteroids.push(new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
+            }
+        } else if (starting_preset === "Neutron Star Binary") {
+            // Create a binary system of two neutron stars
+            stars.push(new NeutronStar({x: -20, y: 0}, {x: 0, y: 15}, 1.4));
+            stars.push(new NeutronStar({x: 20, y: 0}, {x: 0, y: -15}, 1.3));
+            // Add some planets in distant orbits
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 300 + Math.random() * 200;
+                const theta = Math.random() * 2 * Math.PI;
+                planets.push(new Planet({x: r * Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+        } else if (starting_preset === "White Dwarf Cluster") {
+            // Create a cluster of white dwarfs
+            for(let i=0; i < 8; i++) {
+                const r = 100 + Math.random() * 150;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * 1000) / r);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                const mass = 0.6 + Math.random() * 0.8; // White dwarf mass range
+                stars.push(new WhiteDwarf(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }, mass));
+            }
+            // Add some planets and asteroids
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 400 + Math.random() * 200;
+                const theta = Math.random() * 2 * Math.PI;
+                planets.push(new Planet({x: r * Math.cos(theta), y: r*Math.sin(theta)}, {x:0, y:0}));
+            }
+            if (SETTINGS.enable_asteroids) {
+                for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+                    const r = 600 + Math.random() * 300;
+                    const theta = Math.random() * 2 * Math.PI;
+                    const v = Math.sqrt((SETTINGS.gravitational_constant * 1000) / r);
+                    const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                    asteroids.push(new Asteroid(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
+                }
+            }
+        } else if (starting_preset === "Comet Storm") {
+            // Create a storm of comets with a central star
+            stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0));
+            const central_mass = stars[0].mass;
+            for(let i=0; i < 50; i++) {
+                const r = 200 + Math.random() * 400;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r) * (0.8 + Math.random() * 0.4);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                asteroids.push(new Comet(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
+            }
+            // Add some planets
+            for(let i=0; i < SETTINGS.num_planets; i++) {
+                const r = 50 + i * 20;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                planets.push(new Planet({x: r, y:0}, {x:0, y:v}));
+            }
+        } else if (starting_preset === "Compact Object Dance") {
+            // Create a mix of compact objects (neutron stars, white dwarfs) with a central black hole
+            bh_list.push(new BlackHole({x: 0, y: 0}, 20 * SOLAR_MASS_UNIT));
+            const central_mass = bh_list[0].mass;
+            
+            // Add neutron stars
+            for(let i=0; i < 3; i++) {
+                const r = 80 + i * 40;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                const mass = 1.2 + Math.random() * 1.0;
+                stars.push(new NeutronStar(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }, mass));
+            }
+            
+            // Add white dwarfs
+            for(let i=0; i < 4; i++) {
+                const r = 150 + i * 30;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                const mass = 0.5 + Math.random() * 0.9;
+                stars.push(new WhiteDwarf(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }, mass));
+            }
+            
+            // Add some comets for visual interest
+            for(let i=0; i < 20; i++) {
+                const r = 300 + Math.random() * 200;
+                const theta = Math.random() * 2 * Math.PI;
+                const v = Math.sqrt((SETTINGS.gravitational_constant * central_mass) / r);
+                const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+                asteroids.push(new Comet(pos, { x: -v * Math.sin(theta), y: v * Math.cos(theta) }));
             }
         } else {
              // --- Standard placement logic for all other presets ---
@@ -2700,10 +3583,7 @@
 
         // ...
 
-        // Show scenario info for at least 6 seconds after loading
-        setTimeout(() => {
-            show_scenario_info();
-        }, 200);
+        // Scenario info will be shown after splash screen completes
     };
 
     const updatePhysics = (dt) => {
@@ -2816,6 +3696,9 @@
         if (SETTINGS.enable_star_merging) {
             handle_star_merging(stars);
         }
+        
+        // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
+        handle_star_object_collisions();
         
         // Handle collisions for non-star objects
         handle_collisions([...planets, ...gas_giants, ...asteroids]);
@@ -3327,12 +4210,18 @@
             const type = SETTINGS.input_object_type; let new_obj;
             if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
             else if (type === 'Star') new_obj = new StarObject(state.add_start_world, vel);
+            else if (type === 'NeutronStar') new_obj = new NeutronStar(state.add_start_world, vel);
+            else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(state.add_start_world, vel);
             else if (type === 'Asteroid') new_obj = new Asteroid(state.add_start_world, vel);
             else if (type === 'GasGiant') new_obj = new GasGiant(state.add_start_world, vel);
+            else if (type === 'Comet') new_obj = new Comet(state.add_start_world, vel);
             if(new_obj instanceof Planet) planets.push(new_obj);
             if(new_obj instanceof StarObject) stars.push(new_obj);
+            if(new_obj instanceof NeutronStar) stars.push(new_obj);
+            if(new_obj instanceof WhiteDwarf) stars.push(new_obj);
             if(new_obj instanceof Asteroid) asteroids.push(new_obj);
             if(new_obj instanceof GasGiant) gas_giants.push(new_obj);
+            if(new_obj instanceof Comet) asteroids.push(new_obj);
         }
     });
 
@@ -3409,12 +4298,18 @@
                     const type = SETTINGS.input_object_type; let new_obj;
                     if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
                     else if (type === 'Star') new_obj = new StarObject(state.add_start_world, vel);
+                    else if (type === 'NeutronStar') new_obj = new NeutronStar(state.add_start_world, vel);
+                    else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(state.add_start_world, vel);
                     else if (type === 'Asteroid') new_obj = new Asteroid(state.add_start_world, vel);
                     else if (type === 'GasGiant') new_obj = new GasGiant(state.add_start_world, vel);
+                    else if (type === 'Comet') new_obj = new Comet(state.add_start_world, vel);
                     if(new_obj instanceof Planet) planets.push(new_obj);
                     if(new_obj instanceof StarObject) stars.push(new_obj);
+                    if(new_obj instanceof NeutronStar) stars.push(new_obj);
+                    if(new_obj instanceof WhiteDwarf) stars.push(new_obj);
                     if(new_obj instanceof Asteroid) asteroids.push(new_obj);
                     if(new_obj instanceof GasGiant) gas_giants.push(new_obj);
+                    if(new_obj instanceof Comet) asteroids.push(new_obj);
                 }
             }
         }
@@ -3559,7 +4454,7 @@
 
     // --- Settings Menu ---
     const setting_items = [
-        {"label": "Preset Scenario", "key": "preset_scenario", "type": "option", "options": ["None", "Binary BH", "Triple BH System", "Supermassive BH", "Star Cluster", "Kuiper Belt", "Sagittarius A*", "Binary Star System", "Slingshot","Rogue Encounter","Galactic Collision","Micro BH Swarm","Exoplanet Lab", "Solar System Lite", "Double Pulsar", "Sag A* Neighborhood", "Galactic Bar", "Quasar Feast", "Trappist-1x", "Rogue Planet Cloud", "Dyson Swarm", "Wormhole Chase", "Ringworld Mayhem"]},
+        {"label": "Preset Scenario", "key": "preset_scenario", "type": "option", "options": ["None", "Binary BH", "Triple BH System", "Supermassive BH", "Star Cluster", "Kuiper Belt", "Sagittarius A*", "Binary Star System", "Slingshot","Rogue Encounter","Galactic Collision","Micro BH Swarm","Exoplanet Lab", "Solar System Lite", "Double Pulsar", "Sag A* Neighborhood", "Galactic Bar", "Quasar Feast", "Trappist-1x", "Rogue Planet Cloud", "Dyson Swarm", "Wormhole Chase", "Ringworld Mayhem", "Neutron Star Binary", "White Dwarf Cluster", "Comet Storm", "Compact Object Dance"]},
         {"label": "--- Simulation ---", "type": "separator"},
         {"label": "Gravitational Constant", "key": "gravitational_constant", "type": "float", "min": 0.1, "max": 20.0, "step": 0.1},
         {"label": "Mutual Gravity (All)", "key": "mutual_gravity", "type": "bool"},
@@ -3579,7 +4474,7 @@
         {"label": "Number of Asteroids", "key": "num_asteroids", "type": "int", "min": 0, "max": 500, "step": 5},
         {"label": "Initial Velocity", "key": "init_velocity", "type": "float", "min": 0, "max": 100, "step": 1},
         {"label": "Velocity StdDev", "key": "velocity_stddev", "type": "float", "min": 0, "max": 50, "step": 1},
-        {"label": "Input Object Type", "key": "input_object_type", "type": "option", "options": ["Planet", "Star", "Asteroid", "GasGiant"]},
+        {"label": "Input Object Type", "key": "input_object_type", "type": "option", "options": ["Planet", "Star", "NeutronStar", "WhiteDwarf", "Asteroid", "GasGiant", "Comet"]},
         {"label": "Enable Star Merging", "key": "enable_star_merging", "type": "bool"},
         {"label": "Max Star Mass Before BH (Msun)", "key": "max_star_mass_before_bh", "type": "float", "min": 5.0, "max": 50.0, "step": 0.5},
         {"label": "--- Visuals ---", "type": "separator"},
@@ -3784,6 +4679,35 @@
     };
     
     document.getElementById('screenshotBtn').onclick = takeScreenshot;
+    
+    // Object type cycling functionality
+    const objectTypes = [
+        { type: "Star", emoji: "⭐", label: "Add Stars" },
+        { type: "Planet", emoji: "🪐", label: "Add Planets" },
+        { type: "GasGiant", emoji: "🪐", label: "Add Gas Giants" },
+        { type: "Asteroid", emoji: "☄️", label: "Add Asteroids" },
+        { type: "Comet", emoji: "☄️", label: "Add Comets" },
+        { type: "NeutronStar", emoji: "⚡", label: "Add Neutron Stars" },
+        { type: "WhiteDwarf", emoji: "💎", label: "Add White Dwarfs" }
+    ];
+    
+    let currentTypeIndex = 0;
+    
+    const updateObjectTypeButton = () => {
+        const btn = document.getElementById('objectTypeBtn');
+        const currentType = objectTypes[currentTypeIndex];
+        btn.innerHTML = `${currentType.emoji} ${currentType.label}`;
+        btn.title = `Click to change what type of object you insert (currently: ${currentType.type})`;
+        SETTINGS.input_object_type = currentType.type;
+    };
+    
+    document.getElementById('objectTypeBtn').onclick = () => {
+        currentTypeIndex = (currentTypeIndex + 1) % objectTypes.length;
+        updateObjectTypeButton();
+    };
+    
+    // Initialize the button
+    updateObjectTypeButton();
     
     // Color randomizer easter egg (triple-click settings button)
     let settingsClickCount = 0;
