@@ -1470,9 +1470,7 @@ canvas.addEventListener('touchend', (e) => {
     }
 }, { passive: false });
 
-// Initialize
-updateObjectTypeButton();
-updateSpeedDisplay();
+// Initialization will be handled by main.js
 
 // Export functions and variables
 export {
@@ -1481,5 +1479,6 @@ export {
     getNeutronStarInfo, getWhiteDwarfInfo, showBHMassesModal, hideBHMassesModal,
     show_scenario_info, apply_preset, initialize_simulation, buildSettingsMenu,
     save_simulation_state, load_simulation_state, updateSpeedDisplay, takeScreenshot,
+    updateObjectTypeButton,
     SETTINGS, state, current_scenario_name, DEFAULT_SETTINGS, localSettings
 }; 
