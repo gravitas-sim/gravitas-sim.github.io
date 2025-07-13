@@ -328,7 +328,17 @@ const drawScene = () => {
     }
 
     if (SETTINGS.show_dynamic_overlays) {
-        const lines = [ `Planets: ${planets.length} | Gas Giants: ${gas_giants.length} | Asteroids: ${asteroids.length}`, `Stars: ${stars.length} | Neutron Stars: ${neutron_stars.length} | White Dwarfs: ${white_dwarfs.length}`, `Black Holes: ${bh_list.length} | Particles: ${particles.length} | Debris: ${debris.length}`, `---`, `Zoom: ${state.zoom.toFixed(2)}x | Sim Speed: ${SETTINGS.sim_speed.toFixed(1)}x`, `Status: ${state.paused ? 'Paused (Space)' : 'Running'}`, `Click objects to inspect | ESC to close` ];
+        const lines = [ 
+            `Planets: ${planets.length} | Gas Giants: ${gas_giants.length} | Asteroids: ${asteroids.length}`, 
+            `Stars: ${stars.length} | Neutron Stars: ${neutron_stars.length} | White Dwarfs: ${white_dwarfs.length}`, 
+            `Black Holes: ${bh_list.length} | Particles: ${particles.length} | Debris: ${debris.length}`, 
+            `---`, 
+            `Zoom: ${state.zoom.toFixed(2)}x | Sim Speed: ${SETTINGS.sim_speed.toFixed(1)}x`, 
+            `Status: ${state.paused ? 'Paused (Space)' : 'Running'}`,
+            `---`,
+            `🖱️ Controls: Arrow Keys = Pan | Mouse Wheel = Zoom`,
+            `Click objects to inspect | ESC to close inspector`
+        ];
         overlayDiv.innerHTML = lines.join('<br>');
     } else {
         overlayDiv.innerHTML = '';

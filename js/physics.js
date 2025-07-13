@@ -348,7 +348,7 @@ const updatePhysics = dt => {
   // Clean up dead accretion disk particles
   accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
 
-  // Black hole merging logic - matching original
+  // Black hole merging logic - enhanced with accretion disk transfer
   let merged_this_step = true;
   while (merged_this_step && bh_list.length > 1) {
     merged_this_step = false;
@@ -370,9 +370,51 @@ const updatePhysics = dt => {
             x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass,
             y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass,
           };
+          
+          // Create new merged black hole
+          const new_black_hole = new BlackHole(new_pos, new_mass, new_vel);
+          
+          // Transfer accretion disk particles from both black holes to the new one
+          const combined_disk_particles = [...bh1.disk_particles, ...bh2.disk_particles];
+          
+          // Clear the old black holes' disk particle arrays
+          bh1.disk_particles = [];
+          bh2.disk_particles = [];
+          
+          // Update each particle to orbit the new black hole
+          for (const particle of combined_disk_particles) {
+            if (particle.alive) {
+              // Update particle's parent black hole reference
+              particle.parentBlackHole = new_black_hole;
+              
+              // Recalculate orbital parameters for the new black hole
+              const dx_p = particle.pos.x - new_black_hole.pos.x;
+              const dy_p = particle.pos.y - new_black_hole.pos.y;
+              const distance = Math.sqrt(dx_p * dx_p + dy_p * dy_p);
+              
+              // Set new orbital velocity around the merged black hole
+              const new_orbital_speed = Math.sqrt(new_black_hole.mass / distance) * 0.4;
+              const current_angle = Math.atan2(dy_p, dx_p);
+              const tangent_angle = current_angle + Math.PI / 2;
+              
+              // Update velocity to orbit the new black hole
+              particle.vel.x = new_orbital_speed * Math.cos(tangent_angle);
+              particle.vel.y = new_orbital_speed * Math.sin(tangent_angle);
+              
+              // Add to new black hole's disk particles
+              new_black_hole.disk_particles.push(particle);
+            }
+          }
+          
+          // Enhanced merger effects for dramatic accretion disk
+          new_black_hole.accretion_intensity = Math.min(1.0, 0.8 + (m1 + m2) / (10 * SOLAR_MASS_UNIT));
+          new_black_hole.disk_growth = Math.min(1.2, 0.9 + (m1 + m2) / (15 * SOLAR_MASS_UNIT));
+          new_black_hole.merger_boost_timer = 45.0; // Extended merger effects
+          new_black_hole.merger_particle_boost = 1.5 + (m1 + m2) / (20 * SOLAR_MASS_UNIT);
+          
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
-          bh_list.push(new BlackHole(new_pos, new_mass, new_vel));
+          bh_list.push(new_black_hole);
           merged_this_step = true;
           break;
         }

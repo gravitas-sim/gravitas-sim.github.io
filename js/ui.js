@@ -405,7 +405,11 @@ const getStarInfo = (star) => {
     const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
     const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
     
-    const age = Math.random() * 10; // Simulated age
+    // Calculate stellar age based on mass and main sequence lifetime
+    // More massive stars have shorter lifetimes
+    // Use a deterministic calculation based on mass for consistent age
+    const mainSequenceLifetime = Math.pow(massInSuns, -2.5) * 10; // Billion years, rough approximation
+    const age = mainSequenceLifetime * 0.3; // Assume star is 30% through its main sequence lifetime
     
     let spectralType = 'M';
     if (massInSuns > 2.1) spectralType = 'O';
@@ -2108,10 +2112,38 @@ const objectTypes = [
   { type: "Asteroid", emoji: "☄️", label: "Add Asteroids" },
   { type: "Comet", emoji: "☄️", label: "Add Comets" },
   { type: "NeutronStar", emoji: "⚡", label: "Add Neutron Stars" },
-  { type: "WhiteDwarf", emoji: "💎", label: "Add White Dwarfs" }
+  { type: "WhiteDwarf", emoji: "💎", label: "Add White Dwarfs" },
+  { type: "BlackHole", emoji: "⚫", label: "Add Black Holes" }
 ];
 
 let currentTypeIndex = 0;
+
+// Function to generate random black hole mass based on existing black holes
+const generateRandomBlackHoleMass = () => {
+  // Find the largest black hole mass in the simulation
+  let largestMass = SETTINGS.bh_mass * SOLAR_MASS_UNIT; // Default fallback
+  
+  if (bh_list.length > 0) {
+    largestMass = Math.max(...bh_list.map(bh => bh.mass));
+  }
+  
+  // Convert to solar masses for easier calculation
+  const largestMassInSuns = largestMass / SOLAR_MASS_UNIT;
+  
+  // Generate random mass with normal distribution centered around largest mass
+  // Use a wider spread for more variety (±50% of the largest mass)
+  const spread = largestMassInSuns * 0.5;
+  const minMass = Math.max(1.0, largestMassInSuns - spread); // At least 1 solar mass
+  const maxMass = largestMassInSuns + spread;
+  
+  // Generate random value with bias toward center (using two random numbers for normal-ish distribution)
+  const random1 = Math.random();
+  const random2 = Math.random();
+  const normalRandom = (random1 + random2) / 2; // Rough approximation of normal distribution
+  
+  const randomMassInSuns = minMass + (maxMass - minMass) * normalRandom;
+  return randomMassInSuns * SOLAR_MASS_UNIT;
+};
 
 const updateObjectTypeButton = () => {
   const btn = document.getElementById('objectTypeBtn');
@@ -2194,6 +2226,10 @@ window.addEventListener('mouseup', e => {
       new_obj = new WhiteDwarf(state.add_start_world, vel);
     else if (type === 'Comet')
       new_obj = new Comet(state.add_start_world, vel);
+    else if (type === 'BlackHole') {
+      const randomMass = generateRandomBlackHoleMass();
+      new_obj = new BlackHole(state.add_start_world, randomMass, vel);
+    }
 
     if (new_obj instanceof Planet) planets.push(new_obj);
     if (new_obj instanceof StarObject) stars.push(new_obj);
@@ -2202,6 +2238,7 @@ window.addEventListener('mouseup', e => {
     if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
     if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
     if (new_obj instanceof Comet) asteroids.push(new_obj);
+    if (new_obj instanceof BlackHole) bh_list.push(new_obj);
   }
 });
 
@@ -2543,6 +2580,10 @@ canvas.addEventListener(
           new_obj = new WhiteDwarf(state.add_start_world, vel);
         else if (type === 'Comet')
           new_obj = new Comet(state.add_start_world, vel);
+        else if (type === 'BlackHole') {
+          const randomMass = generateRandomBlackHoleMass();
+          new_obj = new BlackHole(state.add_start_world, randomMass, vel);
+        }
 
         if (new_obj instanceof Planet) planets.push(new_obj);
         if (new_obj instanceof StarObject) stars.push(new_obj);
@@ -2551,6 +2592,7 @@ canvas.addEventListener(
         if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
         if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
         if (new_obj instanceof Comet) asteroids.push(new_obj);
+        if (new_obj instanceof BlackHole) bh_list.push(new_obj);
 
         state.adding_mass = false;
       }
