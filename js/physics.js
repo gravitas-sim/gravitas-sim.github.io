@@ -1,0 +1,3054 @@
+// Import utility functions
+import {
+  hexToRgb,
+  computeDynamicColor,
+  getStarColor,
+  worldToScreen,
+  screenToWorld,
+  isOnScreen,
+  isOffscreen,
+} from './utils.js';
+
+// Import the getRandomName function from ui.js
+import { getRandomName } from './ui.js';
+
+// Physics constants and utilities
+const DT = 0.1;
+const SOLAR_MASS_UNIT = 1000;
+const ABSORB_BUFFER = 6;
+const MIN_INTERACTION_DISTANCE = 5.0;
+const BH_RADIUS_BASE = 8; // Reduced from 15 to make black holes smaller
+const PLANET_RADIUS = 5;
+const GAS_GIANT_RADIUS = 8; // Reduced from 15 to make gas giants smaller than stars
+const ASTEROID_RADIUS = 2;
+const STAR_OBJ_RADIUS = 10;
+const NEUTRON_STAR_RADIUS = 3;
+const WHITE_DWARF_RADIUS = 8;
+const DEBRIS_RADIUS = 2;
+const MAX_STAR_MASS_BEFORE_BH = 20.0;
+const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a star
+
+const canvas = document.getElementById('simulationCanvas');
+
+// Global state variables
+let bh_list = [],
+  planets = [],
+  stars = [],
+  gas_giants = [],
+  asteroids = [],
+  debris = [],
+  particles = [],
+  gwaves = [],
+  gravity_ripples = [],
+  neutron_stars = [],
+  white_dwarfs = [],
+  accretion_disk_particles = [];
+let PhysicsObject_id_counter = 0;
+
+// Import state from ui.js to ensure single source of truth
+let state = null;
+
+// Function to set state reference from ui.js
+const setStateReference = stateRef => {
+  state = stateRef;
+};
+
+// Physics settings that can be updated from UI
+let physicsSettings = {
+  gravitational_constant: 1.0,
+  mutual_gravity: false,
+  show_bh_glow: true,
+  show_accretion_disk: true,
+  show_bh_jets: false,
+  trail_length: 100,
+  dynamic_object_properties: true,
+  star_base_color: '#ffff00',
+  planet_base_color: '#6495ed',
+  bh_behavior: 'Static',
+  orbit_decay_rate: 0.005,
+};
+
+// Function to update physics settings
+const updatePhysicsSettings = settings => {
+  physicsSettings = { ...physicsSettings, ...settings };
+};
+
+// Utility functions
+/**
+ * Reset the physics object ID counter to 0
+ */
+const resetPhysicsObjectCounter = () => {
+  PhysicsObject_id_counter = 0;
+};
+
+/**
+ * Set the physics object ID counter to a specific value
+ * @param {number} value - The new counter value
+ */
+const setPhysicsObjectCounter = value => {
+  PhysicsObject_id_counter = value;
+};
+
+// Coordinate transformation functions (using utils)
+/**
+ * Convert world coordinates to screen coordinates
+ * @param {Object} pos - World position with x, y properties
+ * @returns {Object} Screen position with x, y properties
+ */
+const world_to_screen = pos => {
+  if (!state) return { x: 0, y: 0 }; // Fallback if state not set
+  return worldToScreen(pos, state, canvas);
+};
+/**
+ * Convert screen coordinates to world coordinates
+ * @param {Object} spos - Screen position with x, y properties
+ * @returns {Object} World position with x, y properties
+ */
+const screen_to_world = spos => {
+  if (!state) return { x: 0, y: 0 }; // Fallback if state not set
+  return screenToWorld(spos, state, canvas);
+};
+/**
+ * Check if a position is offscreen
+ * @param {Object} pos - World position with x, y properties
+ * @param {number} buffer_factor - Buffer factor for offscreen detection
+ * @returns {boolean} True if position is offscreen
+ */
+const is_offscreen = (pos, buffer_factor = 1.5) => {
+  if (!state) return false; // Fallback if state not set
+  if (!canvas) return false; // Fallback if canvas not available
+  return isOffscreen(pos, state, canvas, buffer_factor);
+};
+
+// Color utilities (using utils)
+/**
+ * Compute dynamic color based on proximity to black holes
+ * @param {string} base_color_hex - Base color in hex format
+ * @param {Object} pos - Position object with x, y properties
+ * @param {Array} bh_list - Array of black hole objects
+ * @param {number} threshold - Distance threshold for color change
+ * @param {Object} target_color - Target RGB color to blend towards
+ * @param {Object} settings - Settings object (optional)
+ * @returns {string} RGB color string
+ */
+const compute_dynamic_color = computeDynamicColor;
+
+// Core physics function
+/**
+ * Calculate gravitational acceleration at a target position from multiple sources
+ * @param {Object} target_pos - Target position with x, y properties
+ * @param {Array} sources - Array of gravitational source objects with pos and mass properties
+ * @returns {Object} Acceleration vector with ax, ay properties
+ */
+// Optimized gravitational acceleration with distance caching
+const gravitational_acceleration = (target_pos, sources) => {
+  let ax = 0.0,
+    ay = 0.0;
+  const G_val = physicsSettings.gravitational_constant;
+  const min_dist_sq = MIN_INTERACTION_DISTANCE ** 2;
+  
+  for (let i = 0; i < sources.length; i++) {
+    const s = sources[i];
+    const dx = s.pos.x - target_pos.x;
+    const dy = s.pos.y - target_pos.y;
+    let r_sq = dx * dx + dy * dy;
+    
+    if (r_sq < min_dist_sq) r_sq = min_dist_sq;
+    if (r_sq === 0) continue;
+    
+    // Avoid sqrt when possible - use r_sq directly
+    const a_mag = (G_val * s.mass) / r_sq;
+    const r_inv = 1 / Math.sqrt(r_sq);
+    
+    ax += a_mag * dx * r_inv;
+    ay += a_mag * dy * r_inv;
+  }
+  return { ax, ay };
+};
+
+// Physics optimization: Cache arrays to avoid repeated spread operations
+let cachedMajorSources = [];
+let cachedAllPhysicsObjects = [];
+let lastMutualGravityState = null;
+let lastObjectCounts = { bh: 0, stars: 0, gas_giants: 0, planets: 0, asteroids: 0, debris: 0 };
+
+/**
+ * Update cached arrays only when object counts change
+ */
+const updateCachedArrays = () => {
+  const currentCounts = {
+    bh: bh_list.length,
+    stars: stars.length,
+    gas_giants: gas_giants.length,
+    planets: planets.length,
+    asteroids: asteroids.length,
+    debris: debris.length,
+    neutron_stars: neutron_stars.length,
+    white_dwarfs: white_dwarfs.length
+  };
+  
+  const countsChanged = Object.keys(currentCounts).some(key => 
+    currentCounts[key] !== lastObjectCounts[key]
+  );
+  
+  // Debug logging for tests
+  // if (countsChanged) {
+  //   console.log('Array counts changed:', lastObjectCounts, '->', currentCounts);
+  // }
+  
+  if (countsChanged || lastMutualGravityState !== physicsSettings.mutual_gravity) {
+    // Update major sources
+    cachedMajorSources.length = 0;
+    cachedMajorSources.push(...bh_list, ...stars, ...gas_giants, ...neutron_stars, ...white_dwarfs);
+    if (physicsSettings.mutual_gravity) {
+      cachedMajorSources.push(...planets, ...asteroids);
+    }
+    
+    // Update all physics objects - include neutron stars and white dwarfs
+    cachedAllPhysicsObjects.length = 0;
+    cachedAllPhysicsObjects.push(...planets, ...asteroids, ...gas_giants, ...debris, ...stars, ...neutron_stars, ...white_dwarfs);
+    
+    lastObjectCounts = currentCounts;
+    lastMutualGravityState = physicsSettings.mutual_gravity;
+  }
+};
+
+// Physics update function - optimized
+/**
+ * Update physics simulation for one time step
+ * @param {number} dt - Delta time for physics update
+ */
+const updatePhysics = dt => {
+  if (dt <= 0) return;
+
+  // Track frame count (matching original)
+  if (state) state.frame_count++;
+
+  // Update cached arrays only when needed
+  updateCachedArrays();
+
+  // Update physics for all objects - use cached arrays and for loop for better performance
+  for (let i = 0; i < cachedAllPhysicsObjects.length; i++) {
+    const obj = cachedAllPhysicsObjects[i];
+    if (obj.alive) {
+      let effective_sources = cachedMajorSources;
+      if (physicsSettings.mutual_gravity) {
+        // Only filter if needed - this is still O(n) but unavoidable
+        effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
+      }
+      obj.update_physics(dt, effective_sources);
+      obj.update_trail();
+    }
+  }
+
+  // Update black hole orbits and effects
+  bh_list.forEach(bh => {
+    bh.update_orbit(dt, bh_list);
+    bh.update_dynamic_effects(dt);
+  });
+
+  // Handle tidal disruption and mass loss - improved debris generation matching original
+  const new_debris = [];
+  stars.forEach(star => {
+    if (star.alive && star.intact && star.tidal_mass_loss) {
+      const { debris_count, fraction } = star.tidal_mass_loss(bh_list, dt);
+      if (debris_count > 0) {
+        for (let i = 0; i < debris_count; i++) {
+          const eject_speed = (Math.random() * 9 + 1) * (1 + fraction);
+          const angle = Math.random() * 2 * Math.PI;
+          const dv = {
+            x: eject_speed * Math.cos(angle),
+            y: eject_speed * Math.sin(angle),
+          };
+          const spawn_pos = {
+            x: star.pos.x + Math.random() * 4 - 2,
+            y: star.pos.y + Math.random() * 4 - 2,
+          };
+          new_debris.push(
+            new Debris(spawn_pos, {
+              x: star.vel.x * 0.1 + dv.x,
+              y: star.vel.y * 0.1 + dv.y,
+            })
+          );
+        }
+      }
+    }
+  });
+  debris.push(...new_debris);
+
+  // Handle star merging separately from other collisions
+  if (physicsSettings.enable_star_merging) {
+    handle_star_merging([...stars, ...neutron_stars, ...white_dwarfs]);
+  }
+  
+  // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
+  handle_star_object_collisions();
+  
+  // Handle enhanced rocky planet collisions
+  handle_rocky_collisions([...planets, ...asteroids]);
+  
+  // Handle gas giant merging and collisions
+  handle_gas_giant_merging();
+  
+  // Handle basic collisions for remaining objects (gas giants with each other, etc.)
+  handle_collisions([...gas_giants]);
+  
+  // Check for stellar collapse into black holes
+  check_stellar_collapse();
+
+  // Check for absorption by black holes - improved version matching original
+  const check_and_absorb = obj_list => {
+    return obj_list.filter(obj => {
+      if (obj.alive && obj.check_absorption(bh_list)) {
+        // Create absorption particles matching original
+        for (let i = 0; i < 15; i++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 50 + 30;
+          const p_vel = {
+            x: speed * Math.cos(angle),
+            y: speed * Math.sin(angle),
+          };
+          const baseColor =
+            obj.baseColor ||
+            physicsSettings[`${obj.obj_type.toLowerCase()}_base_color`] ||
+            '#c8c8c8';
+          const rgb = hexToRgb(baseColor);
+          if (rgb) {
+            particlePool.getParticle(
+              obj.pos,
+              p_vel,
+              Math.random() * 0.6 + 0.4,
+              5,
+              1,
+              `rgb(${rgb.r},${rgb.g},${rgb.b})`
+            );
+          }
+        }
+        return false;
+      }
+      return obj.alive;
+    });
+  };
+
+  // Apply absorption check to all object types
+  planets = check_and_absorb(planets);
+  stars = check_and_absorb(stars);
+  gas_giants = check_and_absorb(gas_giants);
+  asteroids = check_and_absorb(asteroids);
+  debris = check_and_absorb(debris);
+  neutron_stars = check_and_absorb(neutron_stars);
+  white_dwarfs = check_and_absorb(white_dwarfs);
+
+  // Update particles using object pool
+  particlePool.updateAndCleanup(dt);
+  
+  // Update legacy particles array for compatibility
+  particles = particlePool.getActiveParticles();
+  
+  // Clean up dead accretion disk particles
+  accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
+
+  // Black hole merging logic - matching original
+  let merged_this_step = true;
+  while (merged_this_step && bh_list.length > 1) {
+    merged_this_step = false;
+    for (let i = 0; i < bh_list.length; i++) {
+      for (let j = i + 1; j < bh_list.length; j++) {
+        const bh1 = bh_list[i],
+          bh2 = bh_list[j];
+        const dx = bh1.pos.x - bh2.pos.x,
+          dy = bh1.pos.y - bh2.pos.y;
+        if (dx * dx + dy * dy < (bh1.radius + bh2.radius) ** 2) {
+          const m1 = bh1.mass,
+            m2 = bh2.mass,
+            new_mass = m1 + m2;
+          const new_pos = {
+            x: (bh1.pos.x * m1 + bh2.pos.x * m2) / new_mass,
+            y: (bh1.pos.y * m1 + bh2.pos.y * m2) / new_mass,
+          };
+          const new_vel = {
+            x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass,
+            y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass,
+          };
+          bh_list.splice(j, 1);
+          bh_list.splice(i, 1);
+          bh_list.push(new BlackHole(new_pos, new_mass, new_vel));
+          merged_this_step = true;
+          break;
+        }
+      }
+      if (merged_this_step) break;
+    }
+  }
+
+  // Clean up offscreen objects - matching original
+  planets = planets.filter(p => p.alive && !is_offscreen(p.pos));
+  stars = stars.filter(s => s.alive && !is_offscreen(s.pos));
+  gas_giants = gas_giants.filter(g => g.alive && !is_offscreen(g.pos));
+  asteroids = asteroids.filter(a => a.alive && !is_offscreen(a.pos));
+  debris = debris.filter(d => d.alive && !is_offscreen(d.pos));
+  neutron_stars = neutron_stars.filter(ns => ns.alive && !is_offscreen(ns.pos));
+  white_dwarfs = white_dwarfs.filter(wd => wd.alive && !is_offscreen(wd.pos));
+  accretion_disk_particles = accretion_disk_particles.filter(ap => ap.alive && !is_offscreen(ap.pos));
+
+  // Follow mode logic - matching original exactly
+  let target = null;
+  if (physicsSettings.follow_mode !== 'None') {
+    const follow_map = {
+      BlackHole: bh_list,
+      Planet: planets,
+      GasGiant: gas_giants,
+      Star: stars,
+    };
+    const target_list = follow_map[physicsSettings.follow_mode];
+    if (target_list && target_list.length > 0) {
+      if (target_list.length > 1) {
+        let totalMass = 0,
+          com = { x: 0, y: 0 };
+        target_list.forEach(obj => {
+          com.x += obj.pos.x * obj.mass;
+          com.y += obj.pos.y * obj.mass;
+          totalMass += obj.mass;
+        });
+        if (totalMass > 0)
+          target = { pos: { x: com.x / totalMass, y: com.y / totalMass } };
+      } else {
+        target = target_list[0];
+      }
+    }
+  }
+  if (target && state) {
+    state.pan.x = -target.pos.x * state.zoom;
+    state.pan.y = target.pos.y * state.zoom;
+  }
+};
+
+// Base PhysicsObject class
+/**
+ * Base class for all physics objects in the simulation
+ */
+class PhysicsObject {
+  /**
+   * Create a physics object
+   * @param {Object} pos - Initial position with x, y properties
+   * @param {Object} vel - Initial velocity with x, y properties
+   * @param {number} mass - Object mass
+   * @param {number} radius - Object radius
+   * @param {string} obj_type - Type identifier for the object
+   */
+  constructor(pos, vel, mass, radius, obj_type = 'object') {
+    this.id = PhysicsObject_id_counter++;
+    this.pos = { ...pos };
+    this.vel = { ...vel };
+    this.mass = parseFloat(mass);
+    this.radius = parseFloat(radius);
+    this.obj_type = obj_type;
+    this.trail = [];
+    this.alive = true;
+  }
+
+  update_physics(dt, gravity_sources) {
+    if (!this.alive) return;
+    const { ax, ay } = gravitational_acceleration(this.pos, gravity_sources);
+    this.vel.x += ax * dt;
+    this.vel.y += ay * dt;
+    this.pos.x += this.vel.x * dt;
+    this.pos.y += this.vel.y * dt;
+  }
+
+  update_trail() {
+    if (!this.alive) return;
+    this.trail.push({
+      ...this.pos,
+      timestamp: Date.now(),
+      velocity: Math.hypot(this.vel.x, this.vel.y),
+      age: 0,
+    });
+    if (this.trail.length > physicsSettings.trail_length) this.trail.shift(); // Changed from SETTINGS.trail_length
+
+    this.trail.forEach(point => (point.age += 1));
+  }
+
+  check_absorption(bh_list) {
+    if (!this.alive) return false;
+    for (const bh of bh_list) {
+      const dx = this.pos.x - bh.pos.x;
+      const dy = this.pos.y - bh.pos.y;
+      if (dx * dx + dy * dy < (bh.radius + ABSORB_BUFFER) ** 2) {
+        this.alive = false;
+        bh.mass += this.mass || 0;
+        bh.updateRadius();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  get_state() {
+    return {
+      id: this.id,
+      type: this.obj_type,
+      pos: this.pos,
+      vel: this.vel,
+      mass: this.mass,
+      radius: this.radius,
+      alive: this.alive,
+    };
+  }
+
+  set_state(s) {
+    Object.assign(this, s);
+    this.trail = [];
+  }
+
+  draw(_ctx) {}
+}
+
+// Planet class
+/**
+ * Planet physics object with Earth-like properties
+ * @extends PhysicsObject
+ */
+class Planet extends PhysicsObject {
+  /**
+   * Create a planet object
+   * @param {Object} pos - Initial position with x, y properties
+   * @param {Object} vel - Initial velocity with x, y properties
+   * @param {number|null} massInEarths - Mass in Earth masses (auto-generated if null)
+   */
+  constructor(pos, vel, massInEarths = null) {
+    let finalMassInEarths;
+    if (massInEarths !== null) {
+      finalMassInEarths = massInEarths;
+    } else {
+      finalMassInEarths = Math.pow(10, Math.random() * 1.2 - 1.0);
+    }
+
+    const radius = PLANET_RADIUS * Math.pow(finalMassInEarths, 0.3);
+    const mass = finalMassInEarths;
+
+    super(pos, vel, mass, radius, 'Planet');
+    this.massInEarths = finalMassInEarths;
+    this.density = this.calculateDensity();
+    this.intact = true;
+    this.name = getRandomName('planets');
+  }
+
+  calculateDensity() {
+    if (this.massInEarths > 3.0) {
+      return Math.random() > 0.5 ? 'gaseous' : 'icy';
+    } else if (this.massInEarths > 0.5) {
+      return 'rocky';
+    } else {
+      return 'rocky';
+    }
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+
+    let baseColor;
+    switch (this.density) {
+      case 'gaseous':
+        baseColor = '#87CEEB';
+        break;
+      case 'icy':
+        baseColor = '#E6E6FA';
+        break;
+      case 'rocky':
+      default:
+        baseColor = '#87CEEB'; // Changed from SETTINGS.planet_base_color
+        break;
+    }
+
+    ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    if (this.density === 'gaseous' && this.radius * state.zoom > 3) {
+      ctx.fillStyle = 'rgba(135, 206, 235, 0.6)';
+      const band_height = Math.max(1 / state.zoom, this.radius * 0.2);
+      ctx.fillRect(
+        world_pos.x - this.radius,
+        world_pos.y - this.radius / 2 - band_height / 2,
+        this.radius * 2,
+        band_height
+      );
+      ctx.fillRect(
+        world_pos.x - this.radius,
+        world_pos.y + this.radius / 2 - band_height / 2,
+        this.radius * 2,
+        band_height
+      );
+    }
+
+    if (this.density === 'icy' && this.radius * state.zoom > 3) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      const cap_height = Math.max(1 / state.zoom, this.radius * 0.15);
+      ctx.fillRect(
+        world_pos.x - this.radius,
+        world_pos.y - this.radius - cap_height,
+        this.radius * 2,
+        cap_height
+      );
+      ctx.fillRect(
+        world_pos.x - this.radius,
+        world_pos.y + this.radius,
+        this.radius * 2,
+        cap_height
+      );
+    }
+
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+    const screen_radius = this.radius * state.zoom;
+
+    if (screen_radius > 4) {
+      const label_y_offset = screen_radius + 10;
+      ctx.font = '10px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 3;
+      ctx.fillText(
+        `${this.massInEarths.toFixed(2)} M⊕`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
+    }
+    ctx.restore();
+  }
+
+  tidal_mass_loss(bh_list, dt) {
+    if (!this.intact || !bh_list || bh_list.length === 0)
+      return { debris_count: 0, fraction: 0 };
+    let min_dist_sq = Infinity,
+      closest_bh = null;
+    for (const bh of bh_list) {
+      const dx = this.pos.x - bh.pos.x;
+      const dy = this.pos.y - bh.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      if (dist_sq < min_dist_sq) {
+        min_dist_sq = dist_sq;
+        closest_bh = bh;
+      }
+    }
+    if (!closest_bh) return { debris_count: 0, fraction: 0 };
+
+    const tidal_threshold_sq = (closest_bh.radius * 3) ** 2;
+    if (min_dist_sq < tidal_threshold_sq) {
+      const min_dist = Math.sqrt(min_dist_sq);
+      const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+      const fraction = Math.max(
+        0.0,
+        (tidal_threshold - min_dist) / tidal_threshold
+      );
+
+      this.mass -= this.mass * fraction * 0.05 * dt;
+      let debris_count = Math.floor(fraction * 20 * dt);
+
+      if (this.mass <= 0.1) {
+        this.intact = false;
+        this.alive = false;
+        debris_count += 15;
+      }
+      return { debris_count, fraction };
+    }
+    return { debris_count: 0, fraction: 0 };
+  }
+
+  get_state() {
+    const baseState = super.get_state();
+    return {
+      ...baseState,
+      massInEarths: this.massInEarths,
+      density: this.density,
+    };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    this.massInEarths = s.massInEarths;
+    this.density = s.density;
+  }
+}
+
+// GasGiant class
+class GasGiant extends PhysicsObject {
+  constructor(pos, vel, massInJupiters = null) {
+    let finalMassInJupiters;
+    if (massInJupiters !== null) {
+      finalMassInJupiters = massInJupiters;
+    } else {
+      finalMassInJupiters = Math.pow(10, Math.random() * 1.8 - 0.5);
+    }
+
+    const radius = GAS_GIANT_RADIUS * Math.pow(finalMassInJupiters, 0.3);
+    const mass = finalMassInJupiters * 50.0;
+
+    super(pos, vel, mass, radius, 'GasGiant');
+    this.massInJupiters = finalMassInJupiters;
+    this.giantType = this.calculateGiantType();
+    this.intact = true;
+    this.name = getRandomName('gasGiants');
+  }
+
+  calculateGiantType() {
+    if (this.massInJupiters > 13) {
+      return 'brown_dwarf';
+    } else if (this.massInJupiters > 5) {
+      return 'super_jupiter';
+    } else if (this.massInJupiters > 1) {
+      return 'jupiter_like';
+    } else if (this.massInJupiters > 0.5) {
+      return 'neptune_like';
+    } else {
+      return 'mini_neptune';
+    }
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+
+    let baseColor;
+    switch (this.giantType) {
+      case 'brown_dwarf':
+        baseColor = '#8B4513';
+        break;
+      case 'super_jupiter':
+        baseColor = '#DAA520';
+        break;
+      case 'jupiter_like':
+        baseColor = '#D2B48C';
+        break;
+      case 'neptune_like':
+        baseColor = '#4169E1';
+        break;
+      case 'mini_neptune':
+      default:
+        baseColor = '#87CEEB';
+        break;
+    }
+
+    ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    if (this.radius * state.zoom > 4) {
+      let bandColor, highlightColor;
+      switch (this.giantType) {
+        case 'brown_dwarf':
+          bandColor = 'rgba(139, 69, 19, 0.6)';
+          highlightColor = 'rgba(160, 82, 45, 0.4)';
+          break;
+        case 'super_jupiter':
+          bandColor = 'rgba(218, 165, 32, 0.5)';
+          highlightColor = 'rgba(255, 215, 0, 0.3)';
+          break;
+        case 'jupiter_like':
+          bandColor = 'rgba(160, 82, 45, 0.5)';
+          highlightColor = 'rgba(210, 180, 140, 0.3)';
+          break;
+        case 'neptune_like':
+          bandColor = 'rgba(65, 105, 225, 0.5)';
+          highlightColor = 'rgba(100, 149, 237, 0.3)';
+          break;
+        case 'mini_neptune':
+        default:
+          bandColor = 'rgba(135, 206, 235, 0.5)';
+          highlightColor = 'rgba(173, 216, 230, 0.3)';
+          break;
+      }
+
+      const numBands = this.massInJupiters > 3 ? 4 : 2;
+      for (let i = 0; i < numBands; i++) {
+        const bandOffset = (i - (numBands - 1) / 2) * (this.radius * 0.4);
+        const bandWidth = this.radius * 0.15;
+
+        ctx.fillStyle = bandColor;
+        ctx.beginPath();
+        ctx.ellipse(
+          world_pos.x,
+          world_pos.y + bandOffset,
+          this.radius * 0.9,
+          bandWidth,
+          0,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        ctx.fillStyle = highlightColor;
+        ctx.beginPath();
+        ctx.ellipse(
+          world_pos.x,
+          world_pos.y + bandOffset - bandWidth * 0.3,
+          this.radius * 0.85,
+          bandWidth * 0.4,
+          0,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+      }
+
+      if (this.massInJupiters > 2) {
+        ctx.fillStyle = bandColor;
+        ctx.beginPath();
+        ctx.ellipse(
+          world_pos.x,
+          world_pos.y - this.radius * 0.7,
+          this.radius * 0.3,
+          this.radius * 0.2,
+          0,
+          0,
+          2 * Math.PI
+        );
+        ctx.ellipse(
+          world_pos.x,
+          world_pos.y + this.radius * 0.7,
+          this.radius * 0.3,
+          this.radius * 0.2,
+          0,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+      }
+    }
+
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+    const screen_radius = this.radius * state.zoom;
+
+    if (screen_radius > 6) {
+      const label_y_offset = screen_radius + 12;
+      ctx.font = '11px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 3;
+      ctx.fillText(
+        `${this.massInJupiters.toFixed(2)} M♃`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
+    }
+    ctx.restore();
+  }
+
+  tidal_mass_loss(bh_list, dt) {
+    if (!this.intact || !bh_list || bh_list.length === 0)
+      return { debris_count: 0, fraction: 0 };
+    let min_dist_sq = Infinity,
+      closest_bh = null;
+    for (const bh of bh_list) {
+      const dx = this.pos.x - bh.pos.x;
+      const dy = this.pos.y - bh.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      if (dist_sq < min_dist_sq) {
+        min_dist_sq = dist_sq;
+        closest_bh = bh;
+      }
+    }
+    if (!closest_bh) return { debris_count: 0, fraction: 0 };
+
+    const tidal_threshold_sq = (closest_bh.radius * 4) ** 2;
+    if (min_dist_sq < tidal_threshold_sq) {
+      const min_dist = Math.sqrt(min_dist_sq);
+      const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+      const fraction = Math.max(
+        0.0,
+        (tidal_threshold - min_dist) / tidal_threshold
+      );
+
+      this.mass -= this.mass * fraction * 0.08 * dt;
+      let debris_count = Math.floor(fraction * 35 * dt);
+
+      if (this.mass <= 0.5) {
+        this.intact = false;
+        this.alive = false;
+        debris_count += 20;
+      }
+      return { debris_count, fraction };
+    }
+    return { debris_count: 0, fraction: 0 };
+  }
+
+  get_state() {
+    const baseState = super.get_state();
+    return {
+      ...baseState,
+      massInJupiters: this.massInJupiters,
+      giantType: this.giantType,
+    };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    this.massInJupiters = s.massInJupiters;
+    this.giantType = s.giantType;
+  }
+}
+
+// Asteroid class
+class Asteroid extends PhysicsObject {
+  constructor(pos, vel) {
+    super(pos, vel, 0.1, ASTEROID_RADIUS, 'Asteroid');
+    this.name = getRandomName('asteroids');
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    ctx.fillStyle = '#8B4513';
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+
+// Debris class
+class Debris extends PhysicsObject {
+  constructor(pos, vel) {
+    super(pos, vel, 0.01, DEBRIS_RADIUS, 'Debris');
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    ctx.fillStyle = compute_dynamic_color('#c8c8c8', this.pos, bh_list, 200.0, {
+      r: 255,
+      g: 100,
+      b: 0,
+    });
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+
+// AccretionDiskParticle class
+/**
+ * Represents individual particles in black hole accretion disks
+ */
+class AccretionDiskParticle extends PhysicsObject {
+  constructor(pos, vel, parentBlackHole) {
+    const mass = 0.0005; // Even smaller mass for disk particles
+    const radius = 0.4; // Much smaller visual radius for more numerous, smaller particles
+    super(pos, vel, mass, radius, 'AccretionDiskParticle');
+    
+    this.parentBlackHole = parentBlackHole;
+    this.initial_temperature = 1000 + Math.random() * 4000; // Initial temperature
+    this.temperature = this.initial_temperature;
+    this.max_temperature = 50000; // Much higher max temperature for dramatic effects
+    this.angular_momentum = 0;
+    this.disk_radius = Math.hypot(pos.x - parentBlackHole.pos.x, pos.y - parentBlackHole.pos.y);
+    this.orbital_velocity = Math.sqrt(parentBlackHole.mass / this.disk_radius) * 0.15; // Faster orbital velocity
+    this.lifetime = 60 + Math.random() * 120; // 60-180 seconds - much longer lasting
+    this.age = 0;
+    this.spiral_factor = 0;
+    this.absorbed = false;
+    this.heating_intensity = 0; // How much the particle is heating up
+    this.brightness_multiplier = 1.0; // Dynamic brightness as it heats up
+    this.pulse_phase = Math.random() * Math.PI * 2; // Random phase for pulsing effect
+  }
+
+  update_physics(dt, gravity_sources) {
+    if (!this.alive || this.absorbed) return;
+    
+    this.age += dt;
+    
+    // Age-based decay (much slower now)
+    if (this.age > this.lifetime) {
+      this.alive = false;
+      return;
+    }
+    
+    // Calculate distance to parent black hole
+    const dx = this.pos.x - this.parentBlackHole.pos.x;
+    const dy = this.pos.y - this.parentBlackHole.pos.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Check if particle has crossed the event horizon
+    if (distance <= this.parentBlackHole.radius + 2) {
+      this.absorbed = true;
+      this.alive = false;
+      
+      // Add mass to black hole and trigger accretion effects
+      this.parentBlackHole.mass += this.mass;
+      this.parentBlackHole.updateRadius();
+      
+      // Trigger more dramatic accretion intensity increase
+      this.parentBlackHole.accretion_intensity = Math.min(1.0, this.parentBlackHole.accretion_intensity + 0.15);
+      this.parentBlackHole.jet_intensity = Math.min(1.0, this.parentBlackHole.jet_intensity + 0.08);
+      
+      // Create spectacular absorption effect with enhanced temperature-based colors
+      for (let i = 0; i < 12; i++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 60 + 40;
+        const p_vel = {
+          x: speed * Math.cos(angle),
+          y: speed * Math.sin(angle),
+        };
+        particlePool.getParticle(
+          this.pos,
+          p_vel,
+          Math.random() * 1.2 + 0.8,
+          8,
+          2,
+          this.getTemperatureColor()
+        );
+      }
+      return;
+    }
+    
+    // FIXED: Proper disk formation - particles stay in orbital plane around black hole
+    // Calculate current angle from black hole center
+    const current_angle = Math.atan2(dy, dx);
+    
+    // Calculate orbital velocity at current distance (Keplerian orbit) - much faster
+    const orbital_v = Math.sqrt(this.parentBlackHole.mass / distance) * 0.4; // Increased from 0.2 to 0.4 for much faster swirling
+    
+    // Much slower spiral inward over time (simulating friction/energy loss) - particles stick closer
+    this.spiral_factor += dt * 0.015; // Reduced from 0.03 to 0.015 for much slower spiral
+    const spiral_velocity = this.spiral_factor * 0.3; // Reduced from 0.5 to 0.3 for closer sticking
+    
+    // Calculate tangent direction (perpendicular to radial direction)
+    const tangent_angle = current_angle + Math.PI / 2;
+    
+    // Set velocity components:
+    // 1. Orbital motion (tangential) - much faster
+    // 2. Gradual spiral inward (radial) - much slower
+    this.vel.x = orbital_v * Math.cos(tangent_angle) - spiral_velocity * Math.cos(current_angle);
+    this.vel.y = orbital_v * Math.sin(tangent_angle) - spiral_velocity * Math.sin(current_angle);
+    
+    // Update position
+    this.pos.x += this.vel.x * dt;
+    this.pos.y += this.vel.y * dt;
+    
+    // Enhanced temperature calculations - dramatic heating as particle spirals inward
+    const initial_distance = this.disk_radius;
+    const distance_ratio = distance / initial_distance;
+    const heating_factor = Math.max(0, 1 - distance_ratio); // More heating as it gets closer
+    
+    // Exponential heating as particle approaches black hole
+    const proximity_factor = Math.max(0, 1 - (distance / (this.parentBlackHole.radius * 15)));
+    const exponential_heating = Math.pow(proximity_factor, 2);
+    
+    // Enhanced temperature with dramatic effects
+    this.temperature = this.initial_temperature + 
+                      (this.max_temperature - this.initial_temperature) * exponential_heating;
+    
+    // Dynamic brightness based on heating
+    this.heating_intensity = exponential_heating;
+    this.brightness_multiplier = 1.0 + this.heating_intensity * 3.0; // Up to 4x brighter
+    
+    // Add pulsing effect based on orbital motion and heating
+    this.pulse_phase += dt * (2 + this.heating_intensity * 8); // Faster pulsing when hotter
+  }
+
+  getTemperatureColor() {
+    // Enhanced temperature-based color with dramatic effects
+    const temp = this.temperature;
+    const brightness = this.brightness_multiplier;
+    
+    // Pulsing effect
+    const pulse_factor = 0.8 + 0.4 * Math.sin(this.pulse_phase);
+    const final_brightness = brightness * pulse_factor;
+    
+    if (temp < 3000) {
+      // Deep red-orange
+      const intensity = Math.floor(final_brightness * 150);
+      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.3)}, 0)`;
+    } else if (temp < 8000) {
+      // Orange to yellow
+      const intensity = Math.floor(final_brightness * 200);
+      return `rgb(${Math.min(255, intensity)}, ${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.2)})`;
+    } else if (temp < 15000) {
+      // Yellow-white
+      const intensity = Math.floor(final_brightness * 220);
+      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.floor(intensity * 0.6)})`;
+    } else if (temp < 30000) {
+      // White-hot
+      const intensity = Math.floor(final_brightness * 240);
+      return `rgb(${Math.min(255, intensity)}, ${Math.min(255, intensity)}, ${Math.min(255, intensity)})`;
+    } else {
+      // Blue-white plasma
+      const intensity = Math.floor(final_brightness * 250);
+      return `rgb(${Math.floor(intensity * 0.8)}, ${Math.floor(intensity * 0.9)}, ${Math.min(255, intensity)})`;
+    }
+  }
+
+  draw(ctx) {
+    if (!this.alive || this.absorbed) return;
+    
+    const world_pos = this.pos;
+    const color = this.getTemperatureColor();
+    
+    // Enhanced drawing with glow effect for hot particles
+    const glow_radius = this.radius * (1 + this.heating_intensity * 2);
+    const core_radius = this.radius * 0.6;
+    
+    // Draw glow effect for hot particles
+    if (this.heating_intensity > 0.1) {
+      const glow_alpha = Math.min(0.8, this.heating_intensity * 0.6);
+      ctx.globalAlpha = glow_alpha;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    // Draw core particle
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, core_radius, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw bright center for very hot particles
+    if (this.heating_intensity > 0.5) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, core_radius * 0.4, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    ctx.globalAlpha = 1.0;
+  }
+}
+
+// BlackHole class
+/**
+ * Black hole physics object with gravitational effects
+ */
+class BlackHole {
+  /**
+   * Create a black hole object
+   * @param {Object} pos - Initial position with x, y properties
+   * @param {number} mass - Black hole mass
+   * @param {Object} vel - Initial velocity with x, y properties
+   */
+  constructor(pos, mass, vel = { x: 0, y: 0 }) {
+    this.pos = { ...pos };
+    this.mass = parseFloat(mass);
+    this.vel = { ...vel };
+    this.obj_type = 'BlackHole';
+    this.updateRadius();
+    this.name = getRandomName('blackHoles');
+
+    this.accretion_intensity = 0.0;
+    this.jet_intensity = 0.0;
+    this.disk_growth = 0.0;
+    this.last_mass = this.mass;
+    this.time_since_last_accretion = 0.0;
+    this.accretion_decay_rate = 0.08; // Much slower decay for longer-lasting effects
+    this.jet_decay_rate = 0.06; // Slower jet decay
+    this.disk_growth_decay_rate = 0.04; // Very slow disk growth decay
+    this.max_disk_growth = 1.2; // Larger maximum disk size
+    this.disk_particles = []; // Array to hold accretion disk particles
+    this.max_disk_particles = 150; // Much more particles for more dramatic effects
+    this.particle_generation_rate = 1.2; // Much higher particle generation rate
+    this.time_since_last_particle = 0;
+    this.merger_boost_timer = 0; // Timer for enhanced effects after mergers
+    this.merger_particle_boost = 1.0; // Multiplier for particle generation after mergers
+    
+    // Generate initial accretion disk particles for all black holes
+    this.generateInitialDiskParticles();
+  }
+
+  /**
+   * Generate initial accretion disk particles for new black holes
+   */
+  generateInitialDiskParticles() {
+    // Only generate if accretion disk is enabled
+    if (!physicsSettings || !physicsSettings.show_accretion_disk) return;
+    
+    // Generate 30-60 initial particles based on black hole mass
+    const massInSuns = this.mass / SOLAR_MASS_UNIT;
+    const baseParticles = 30;
+    const massBonus = Math.floor(massInSuns * 2); // More particles for more massive black holes
+    const totalParticles = Math.min(baseParticles + massBonus, 60);
+    
+    for (let i = 0; i < totalParticles; i++) {
+      this.generateInitialDiskParticle();
+    }
+    
+    // Set initial accretion intensity to show the disk is active
+    this.accretion_intensity = 0.3;
+    this.disk_growth = 0.5;
+  }
+
+  /**
+   * Generate a single initial disk particle with slightly different properties
+   */
+  generateInitialDiskParticle() {
+    const disk_radius = this.radius * (1.5 + Math.random() * 3.0); // 1.5-4.5 times radius
+    const angle = Math.random() * 2 * Math.PI;
+    
+    const pos = {
+      x: this.pos.x + disk_radius * Math.cos(angle),
+      y: this.pos.y + disk_radius * Math.sin(angle)
+    };
+    
+    // Orbital velocity for stable disk formation
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.35; // Slightly slower for more stable initial disk
+    const tangent_angle = angle + Math.PI / 2;
+    const vel = {
+      x: orbital_speed * Math.cos(tangent_angle),
+      y: orbital_speed * Math.sin(tangent_angle)
+    };
+    
+    const particle = new AccretionDiskParticle(pos, vel, this);
+    
+    // Give initial particles longer lifetimes and varied temperatures
+    particle.initial_temperature = 2000 + Math.random() * 6000; // 2000-8000K
+    particle.temperature = particle.initial_temperature;
+    particle.lifetime = 90 + Math.random() * 120; // 90-210 seconds
+    particle.brightness_multiplier = 0.8 + Math.random() * 0.4; // 0.8-1.2x brightness
+    
+    this.disk_particles.push(particle);
+    accretion_disk_particles.push(particle);
+  }
+
+  updateRadius() {
+    const mass_scale = Math.max(0.1, this.mass / (1.0 * SOLAR_MASS_UNIT)); // Changed from DEFAULT_SETTINGS.bh_mass
+    this.radius = BH_RADIUS_BASE * Math.pow(mass_scale, 0.3); // Changed from 0.5 to 0.3 for more conservative scaling
+  }
+
+  update_orbit(dt, other_bhs) {
+    if (physicsSettings.bh_behavior === 'Orbiting') {
+      const { ax, ay } = gravitational_acceleration(
+        this.pos,
+        other_bhs.filter(bh => bh !== this)
+      );
+      this.vel.x += ax * dt;
+      this.vel.y += ay * dt;
+      const decay_factor = 1.0 - physicsSettings.orbit_decay_rate * dt;
+      this.vel.x *= decay_factor;
+      this.vel.y *= decay_factor;
+      this.pos.x += this.vel.x * dt;
+      this.pos.y += this.vel.y * dt;
+    }
+  }
+
+  update_dynamic_effects(dt) {
+    if (this.mass > this.last_mass) {
+      const mass_gain = this.mass - this.last_mass;
+      const mass_ratio = mass_gain / this.mass;
+
+      // Much more dramatic accretion effects during mergers
+      this.accretion_intensity = Math.min(
+        1.0,
+        this.accretion_intensity + mass_ratio * 25 // Increased from 15
+      );
+      this.jet_intensity = Math.min(1.0, this.jet_intensity + mass_ratio * 15); // Increased from 8
+      this.disk_growth = Math.min(
+        this.max_disk_growth,
+        this.disk_growth + mass_ratio * 20 // Increased from 12
+      );
+      this.time_since_last_accretion = 0.0;
+      
+      // Trigger merger boost for enhanced particle generation
+      this.merger_boost_timer = 30.0; // 30 seconds of enhanced effects
+      this.merger_particle_boost = 1.0 + mass_ratio * 10; // Up to 10x more particles
+      
+      // Create immediate spectacular merger particles - much more numerous
+      const merger_particles = Math.floor(mass_ratio * 400) + 40; // Increased from 200+20 to 400+40 particles
+      for (let i = 0; i < merger_particles; i++) {
+        this.generateEnhancedMergerParticle();
+      }
+    }
+
+    this.time_since_last_accretion += dt;
+    this.merger_boost_timer = Math.max(0, this.merger_boost_timer - dt);
+    
+    // Decay merger boost over time
+    if (this.merger_boost_timer <= 0) {
+      this.merger_particle_boost = Math.max(1.0, this.merger_particle_boost - dt * 0.1);
+    }
+
+    this.accretion_intensity = Math.max(
+      0.0,
+      this.accretion_intensity - this.accretion_decay_rate * dt
+    );
+    this.jet_intensity = Math.max(
+      0.0,
+      this.jet_intensity - this.jet_decay_rate * dt
+    );
+    this.disk_growth = Math.max(
+      0.0,
+      this.disk_growth - this.disk_growth_decay_rate * dt
+    );
+
+    // Update disk particles
+    this.updateDiskParticles(dt);
+
+    this.last_mass = this.mass;
+  }
+
+  /**
+   * Create accretion disk particles around the black hole
+   * @param {number} dt - Delta time
+   */
+  updateDiskParticles(dt) {
+    if (!physicsSettings.show_accretion_disk || !physicsSettings.realistic_disk_physics) return;
+    
+    // Generate new particles with merger boost
+    this.time_since_last_particle += dt;
+    const effective_generation_rate = this.particle_generation_rate * this.merger_particle_boost;
+    
+    if (this.time_since_last_particle >= 1.0 / effective_generation_rate && 
+        this.disk_particles.length < this.max_disk_particles) {
+      
+      this.generateDiskParticle();
+      this.time_since_last_particle = 0;
+    }
+    
+    // During intense accretion, generate extra particles
+    if (this.accretion_intensity > 0.7 && this.disk_particles.length < this.max_disk_particles) {
+      if (Math.random() < this.accretion_intensity * dt * 2) {
+        this.generateDiskParticle();
+      }
+    }
+    
+    // Update existing particles
+    for (let i = this.disk_particles.length - 1; i >= 0; i--) {
+      const particle = this.disk_particles[i];
+      particle.update_physics(dt, []);
+      
+      // Remove dead particles
+      if (!particle.alive) {
+        this.disk_particles.splice(i, 1);
+      }
+    }
+  }
+
+  /**
+   * Generate a new accretion disk particle
+   */
+  generateDiskParticle() {
+    const disk_radius = this.radius * (1.2 + Math.random() * 2.5); // Much closer to black hole: 1.2-3.7 times radius
+    const angle = Math.random() * 2 * Math.PI;
+    
+    const pos = {
+      x: this.pos.x + disk_radius * Math.cos(angle),
+      y: this.pos.y + disk_radius * Math.sin(angle)
+    };
+    
+    // Much faster initial orbital velocity
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.4; // Increased from 0.2 to 0.4 for much faster swirling
+    const tangent_angle = angle + Math.PI / 2;
+    const vel = {
+      x: orbital_speed * Math.cos(tangent_angle),
+      y: orbital_speed * Math.sin(tangent_angle)
+    };
+    
+    const particle = new AccretionDiskParticle(pos, vel, this);
+    this.disk_particles.push(particle);
+    accretion_disk_particles.push(particle);
+  }
+
+  /**
+   * Generate enhanced merger particles with more dramatic effects
+   */
+  generateEnhancedMergerParticle() {
+    const disk_radius = this.radius * (0.8 + Math.random() * 2.5); // Even closer to black hole for more dramatic effects
+    const angle = Math.random() * 2 * Math.PI;
+    
+    const pos = {
+      x: this.pos.x + disk_radius * Math.cos(angle),
+      y: this.pos.y + disk_radius * Math.sin(angle)
+    };
+    
+    // Much higher orbital velocity for more energetic particles
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.5; // Increased from 0.25 to 0.5 for much faster swirling
+    const tangent_angle = angle + Math.PI / 2;
+    const vel = {
+      x: orbital_speed * Math.cos(tangent_angle),
+      y: orbital_speed * Math.sin(tangent_angle)
+    };
+    
+    const particle = new AccretionDiskParticle(pos, vel, this);
+    
+    // Enhanced properties for merger particles
+    particle.initial_temperature = 3000 + Math.random() * 7000; // Start hotter
+    particle.temperature = particle.initial_temperature;
+    particle.lifetime = 90 + Math.random() * 180; // Even longer lifetime
+    particle.brightness_multiplier = 1.5 + Math.random() * 0.5; // Start brighter
+    
+    this.disk_particles.push(particle);
+    accretion_disk_particles.push(particle);
+  }
+
+  /**
+   * Draw accretion disk particles instead of gradient effect
+   */
+  drawDiskParticles(ctx) {
+    if (!physicsSettings.show_accretion_disk || !physicsSettings.realistic_disk_physics) return;
+    
+    for (const particle of this.disk_particles) {
+      particle.draw(ctx);
+    }
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    const world_radius = this.radius;
+
+    if (physicsSettings.show_accretion_disk) {
+      // Draw disk particles for more realistic disk behavior
+      this.drawDiskParticles(ctx);
+      
+      // Enhanced gradient backdrop with more dramatic effects
+      const base_disk_radius = world_radius * 3.0; // Increased from 2.5
+      const growth_factor = 1.0 + this.disk_growth * 0.8; // Increased from 0.6
+      const disk_radius = base_disk_radius * growth_factor;
+
+      if (disk_radius > world_radius) {
+        const base_intensity = physicsSettings.realistic_disk_physics ? 
+          (0.15 + this.accretion_intensity * 0.4) : // Increased backdrop intensity
+          (0.4 + this.accretion_intensity * 0.8);   // Increased full intensity
+
+        const inner_radius = world_radius * (1.3 + this.disk_growth * 0.4); // Increased from 1.2 and 0.3
+        const inner_grad = ctx.createRadialGradient(
+          world_pos.x,
+          world_pos.y,
+          world_radius * 1.1,
+          world_pos.x,
+          world_pos.y,
+          inner_radius
+        );
+        const inner_intensity =
+          base_intensity * (0.9 + this.accretion_intensity * 0.4); // Increased from 0.8 and 0.3
+        const opacity_multiplier = physicsSettings.realistic_disk_physics ? 0.6 : 1.0; // Increased from 0.4 and 0.9
+        
+        // Enhanced color progression with more dramatic heating effects
+        inner_grad.addColorStop(
+          0,
+          `rgba(255, 255, 255, ${inner_intensity * opacity_multiplier * 0.8})` // Brighter white center
+        );
+        inner_grad.addColorStop(
+          0.2,
+          `rgba(255, 255, 200, ${inner_intensity * opacity_multiplier})`
+        );
+        inner_grad.addColorStop(
+          0.4,
+          `rgba(255, 220, 100, ${inner_intensity * opacity_multiplier * 0.9})`
+        );
+        inner_grad.addColorStop(
+          0.7,
+          `rgba(255, 180, 50, ${inner_intensity * opacity_multiplier * 0.7})`
+        );
+        inner_grad.addColorStop(
+          1,
+          `rgba(255, 140, 0, ${inner_intensity * opacity_multiplier * 0.4})`
+        );
+        ctx.fillStyle = inner_grad;
+        ctx.beginPath();
+        ctx.arc(world_pos.x, world_pos.y, inner_radius, 0, 2 * Math.PI);
+        ctx.fill();
+
+        const outer_grad = ctx.createRadialGradient(
+          world_pos.x,
+          world_pos.y,
+          inner_radius,
+          world_pos.x,
+          world_pos.y,
+          disk_radius
+        );
+        
+        // Enhanced outer gradient with more dramatic colors
+        outer_grad.addColorStop(
+          0,
+          `rgba(255, 200, 80, ${base_intensity * opacity_multiplier * 0.7})` // Brighter transition
+        );
+        outer_grad.addColorStop(
+          0.3,
+          `rgba(255, 160, 40, ${base_intensity * opacity_multiplier * 0.6})`
+        );
+        outer_grad.addColorStop(
+          0.6,
+          `rgba(255, 120, 20, ${base_intensity * opacity_multiplier * 0.4})`
+        );
+        outer_grad.addColorStop(
+          0.9,
+          `rgba(255, 80, 0, ${base_intensity * opacity_multiplier * 0.2})`
+        );
+        outer_grad.addColorStop(1, `rgba(255, 50, 0, 0)`);
+        ctx.fillStyle = outer_grad;
+        ctx.beginPath();
+        ctx.arc(world_pos.x, world_pos.y, disk_radius, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    if (physicsSettings.show_bh_glow) {
+      const glow_radius = world_radius * (2.2 + this.disk_growth * 0.5); // Increased from 1.8 and 0.4
+      const glow_intensity = 0.5 + this.accretion_intensity * 0.4; // Increased from 0.4 and 0.3
+      const grad = ctx.createRadialGradient(
+        world_pos.x,
+        world_pos.y,
+        world_radius,
+        world_pos.x,
+        world_pos.y,
+        glow_radius
+      );
+      
+      // Enhanced glow colors
+      grad.addColorStop(0, `rgba(220, 220, 255, ${glow_intensity * 0.8})`);
+      grad.addColorStop(0.5, `rgba(200, 200, 255, ${glow_intensity * 0.4})`);
+      grad.addColorStop(1, `rgba(180, 180, 255, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = '#000000';
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    if (physicsSettings.show_bh_jets) {
+      const jet_length = world_radius * (6 + this.jet_intensity * 2);
+      const jet_width = Math.max(
+        1 / state.zoom,
+        world_radius * (0.15 + this.jet_intensity * 0.1)
+      );
+      const jet_intensity = 0.6 + this.jet_intensity * 0.4;
+
+      const jet_layers = [
+        {
+          width: jet_width * 0.3,
+          color: `rgba(255, 255, 255, ${jet_intensity * 0.9})`,
+        },
+        {
+          width: jet_width * 0.6,
+          color: `rgba(255, 200, 100, ${jet_intensity * 0.7})`,
+        },
+        {
+          width: jet_width,
+          color: `rgba(255, 140, 0, ${jet_intensity * 0.5})`,
+        },
+      ];
+
+      for (const direction of [-1, 1]) {
+        for (const layer of jet_layers) {
+          ctx.fillStyle = layer.color;
+          ctx.fillRect(
+            world_pos.x - layer.width / 2,
+            world_pos.y + direction * world_radius,
+            layer.width,
+            direction * jet_length
+          );
+        }
+
+        const shock_radius = jet_width * (1.5 + this.jet_intensity * 0.5);
+        const shock_pos = {
+          x: world_pos.x,
+          y: world_pos.y + direction * (world_radius + jet_length),
+        };
+
+        const shock_grad = ctx.createRadialGradient(
+          shock_pos.x,
+          shock_pos.y,
+          0,
+          shock_pos.x,
+          shock_pos.y,
+          shock_radius
+        );
+        shock_grad.addColorStop(
+          0,
+          `rgba(255, 255, 255, ${jet_intensity * 0.6})`
+        );
+        shock_grad.addColorStop(
+          0.5,
+          `rgba(255, 200, 100, ${jet_intensity * 0.4})`
+        );
+        shock_grad.addColorStop(1, `rgba(255, 140, 0, 0)`);
+
+        ctx.fillStyle = shock_grad;
+        ctx.beginPath();
+        ctx.arc(shock_pos.x, shock_pos.y, shock_radius, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+
+    const screen_radius = world_radius * state.zoom;
+    let label_y_offset = screen_radius + 15;
+    if (physicsSettings.show_bh_jets) {
+      label_y_offset = screen_radius * 6 + screen_radius + 10;
+    } else if (physicsSettings.show_accretion_disk) {
+      label_y_offset = screen_radius * 2.5 + 10;
+    } else if (physicsSettings.show_bh_glow) {
+      label_y_offset = screen_radius * 1.8 + 10;
+    }
+
+    ctx.font = '14px Roboto Mono';
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'black';
+    ctx.shadowBlur = 4;
+    ctx.fillText(
+      `${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`,
+      true_screen_pos.x,
+      true_screen_pos.y + label_y_offset
+    );
+
+    ctx.restore();
+  }
+
+  get_state() {
+    return {
+      type: this.obj_type,
+      pos: this.pos,
+      vel: this.vel,
+      mass: this.mass,
+      accretion_intensity: this.accretion_intensity,
+      jet_intensity: this.jet_intensity,
+      disk_growth: this.disk_growth,
+      time_since_last_accretion: this.time_since_last_accretion,
+    };
+  }
+
+  set_state(s) {
+    this.pos = s.pos;
+    this.vel = s.vel;
+    this.mass = s.mass;
+    this.accretion_intensity = s.accretion_intensity || 0.0;
+    this.jet_intensity = s.jet_intensity || 0.0;
+    this.disk_growth = s.disk_growth || 0.0;
+    this.time_since_last_accretion = s.time_since_last_accretion || 0.0;
+    this.updateRadius();
+  }
+}
+
+// Star color function is now imported from utils.js
+
+// StarObject class
+class StarObject extends PhysicsObject {
+  constructor(pos, vel, massInSuns = null) {
+    let finalMassInSuns;
+    if (massInSuns !== null) {
+      finalMassInSuns = massInSuns;
+    } else {
+      finalMassInSuns = Math.pow(10, Math.random() * 1.5 - 0.7);
+    }
+
+    const radius = STAR_OBJ_RADIUS * Math.pow(finalMassInSuns, 0.85);
+
+    super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, 'StarObject');
+    this.massInSuns = finalMassInSuns;
+    this.baseColor = getStarColor(this.massInSuns);
+    this.intact = true;
+    this.name = getRandomName('stars');
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    const starColor = this.baseColor || '#ffff00'; // Changed from SETTINGS.star_base_color
+    ctx.fillStyle = compute_dynamic_color(starColor, this.pos, bh_list, 400.0, {
+      r: 255,
+      g: 50,
+      b: 0,
+    });
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+    const screen_radius = this.radius * state.zoom;
+
+    if (screen_radius > 5) {
+      const label_y_offset = screen_radius + 12;
+      ctx.font = '12px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 4;
+      ctx.fillText(
+        `${this.massInSuns.toFixed(2)} Msun`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
+    }
+    ctx.restore();
+  }
+
+  tidal_mass_loss(bh_list, dt) {
+    if (!this.intact || !bh_list || bh_list.length === 0)
+      return { debris_count: 0, fraction: 0 };
+    let min_dist_sq = Infinity,
+      closest_bh = null;
+    for (const bh of bh_list) {
+      const dx = this.pos.x - bh.pos.x;
+      const dy = this.pos.y - bh.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      if (dist_sq < min_dist_sq) {
+        min_dist_sq = dist_sq;
+        closest_bh = bh;
+      }
+    }
+    if (!closest_bh) return { debris_count: 0, fraction: 0 };
+    const tidal_threshold_sq = (closest_bh.radius * 5) ** 2;
+    if (min_dist_sq < tidal_threshold_sq) {
+      const min_dist = Math.sqrt(min_dist_sq);
+      const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+      const fraction = Math.max(
+        0.0,
+        (tidal_threshold - min_dist) / tidal_threshold
+      );
+      this.mass -= this.mass * fraction * 0.1 * dt;
+      let debris_count = Math.floor(fraction * 50 * dt);
+      if (this.mass <= 1.0) {
+        this.intact = false;
+        this.alive = false;
+        debris_count += 30;
+      }
+      return { debris_count, fraction };
+    }
+    return { debris_count: 0, fraction: 0 };
+  }
+
+  get_state() {
+    const baseState = super.get_state();
+    return {
+      ...baseState,
+      massInSuns: this.massInSuns,
+      baseColor: this.baseColor,
+    };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    this.massInSuns = s.massInSuns;
+    this.baseColor = s.baseColor;
+  }
+}
+
+// NeutronStar class
+class NeutronStar extends PhysicsObject {
+  constructor(pos, vel, massInSuns = null) {
+    let finalMassInSuns;
+    if (massInSuns !== null) {
+      finalMassInSuns = massInSuns;
+    } else {
+      finalMassInSuns = 1.4 + Math.random() * 0.6; // 1.4 to 2.0 solar masses
+    }
+
+    const radius = NEUTRON_STAR_RADIUS;
+
+    super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, 'NeutronStar');
+    this.massInSuns = finalMassInSuns;
+    this.pulsar_period = 0.1 + Math.random() * 2.0; // 0.1 to 2.1 seconds
+    this.pulsar_phase = Math.random() * 2 * Math.PI;
+    this.magnetic_field_strength = Math.random() * 0.8 + 0.2; // 0.2 to 1.0
+    this.intact = true;
+    this.name = getRandomName('neutronStars');
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+
+    // Pulsar effect
+    this.pulsar_phase += 0.1;
+    const pulse_intensity =
+      0.5 + 0.5 * Math.sin(this.pulsar_phase / this.pulsar_period);
+
+    // Core
+    ctx.fillStyle = compute_dynamic_color('#E6E6FA', this.pos, bh_list, 300.0, {
+      r: 255,
+      g: 255,
+      b: 255,
+    });
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Magnetic field visualization
+    if (this.radius * state.zoom > 2) {
+      const field_radius = this.radius * (2 + this.magnetic_field_strength);
+      const field_intensity = pulse_intensity * 0.3;
+
+      ctx.strokeStyle = `rgba(0, 255, 255, ${field_intensity})`;
+      ctx.lineWidth = 1 / state.zoom;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, field_radius, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
+
+    // Pulsar beams
+    if (this.radius * state.zoom > 1) {
+      const beam_length = this.radius * 8;
+      const beam_width = Math.max(0.5 / state.zoom, this.radius * 0.3);
+
+      ctx.strokeStyle = `rgba(255, 255, 255, ${pulse_intensity * 0.8})`;
+      ctx.lineWidth = beam_width;
+      ctx.lineCap = 'round';
+
+      // Two beams at opposing angles
+      for (let i = 0; i < 2; i++) {
+        const angle = this.pulsar_phase + i * Math.PI;
+        const beam_start_x = world_pos.x + Math.cos(angle) * this.radius;
+        const beam_start_y = world_pos.y + Math.sin(angle) * this.radius;
+        const beam_end_x = world_pos.x + Math.cos(angle) * beam_length;
+        const beam_end_y = world_pos.y + Math.sin(angle) * beam_length;
+
+        ctx.beginPath();
+        ctx.moveTo(beam_start_x, beam_start_y);
+        ctx.lineTo(beam_end_x, beam_end_y);
+        ctx.stroke();
+      }
+    }
+
+    // Label
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+    const screen_radius = this.radius * state.zoom;
+
+    if (screen_radius > 2) {
+      const label_y_offset = screen_radius * 8 + 12;
+      ctx.font = '12px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 4;
+      ctx.fillText(
+        `${this.massInSuns.toFixed(2)} M☉ NS`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
+    }
+    ctx.restore();
+  }
+
+  get_state() {
+    const baseState = super.get_state();
+    return {
+      ...baseState,
+      massInSuns: this.massInSuns,
+      pulsar_period: this.pulsar_period,
+      pulsar_phase: this.pulsar_phase,
+      magnetic_field_strength: this.magnetic_field_strength,
+    };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    this.massInSuns = s.massInSuns;
+    this.pulsar_period = s.pulsar_period || 1.0;
+    this.pulsar_phase = s.pulsar_phase || 0;
+    this.magnetic_field_strength = s.magnetic_field_strength || 0.5;
+  }
+}
+
+// WhiteDwarf class
+class WhiteDwarf extends PhysicsObject {
+  constructor(pos, vel, massInSuns = null) {
+    let finalMassInSuns;
+    if (massInSuns !== null) {
+      finalMassInSuns = massInSuns;
+    } else {
+      finalMassInSuns = 0.5 + Math.random() * 0.6; // 0.5 to 1.1 solar masses
+    }
+
+    const radius = WHITE_DWARF_RADIUS;
+
+    super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, 'WhiteDwarf');
+    this.massInSuns = finalMassInSuns;
+    this.temperature = 5000 + Math.random() * 15000; // 5000K to 20000K
+    this.cooling_age = Math.random() * 10; // Billion years
+    this.intact = true;
+    this.name = getRandomName('whiteDwarfs');
+  }
+
+  getTemperatureColor() {
+    // Color based on temperature
+    if (this.temperature > 15000)
+      return '#9BB0FF'; // Blue-white
+    else if (this.temperature > 10000)
+      return '#CAD7FF'; // White
+    else if (this.temperature > 7500)
+      return '#F8F7FF'; // Yellow-white
+    else return '#FFE4B5'; // Orange-white
+  }
+
+  draw(ctx) {
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+
+    // Core with temperature-based color
+    const temp_color = this.getTemperatureColor();
+    ctx.fillStyle = compute_dynamic_color(
+      temp_color,
+      this.pos,
+      bh_list,
+      200.0,
+      { r: 255, g: 255, b: 255 }
+    );
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Glow effect based on temperature
+    if (this.radius * state.zoom > 3) {
+      const glow_radius = this.radius * (1.5 + this.temperature / 20000);
+      const glow_intensity = (this.temperature / 20000) * 0.4;
+
+      const grad = ctx.createRadialGradient(
+        world_pos.x,
+        world_pos.y,
+        this.radius,
+        world_pos.x,
+        world_pos.y,
+        glow_radius
+      );
+      grad.addColorStop(0, `rgba(255, 255, 255, ${glow_intensity})`);
+      grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+
+    // Label
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const true_screen_pos = {
+      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
+      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
+    };
+    const screen_radius = this.radius * state.zoom;
+
+    if (screen_radius > 3) {
+      const label_y_offset = screen_radius * 2 + 12;
+      ctx.font = '12px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 4;
+      ctx.fillText(
+        `${this.massInSuns.toFixed(2)} M☉ WD`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
+    }
+    ctx.restore();
+  }
+
+  get_state() {
+    const baseState = super.get_state();
+    return {
+      ...baseState,
+      massInSuns: this.massInSuns,
+      temperature: this.temperature,
+      cooling_age: this.cooling_age,
+    };
+  }
+
+  set_state(s) {
+    super.set_state(s);
+    this.massInSuns = s.massInSuns;
+    this.temperature = s.temperature || 10000;
+    this.cooling_age = s.cooling_age || 1;
+  }
+}
+
+// Particle object pool for memory optimization
+class ParticlePool {
+  constructor(initialSize = 100) {
+    this.pool = [];
+    this.activeParticles = [];
+    this.maxPoolSize = initialSize;
+    
+    // Don't pre-allocate particles to avoid initialization issues
+    // They will be created as needed and pooled when they die
+  }
+  
+  getParticle(pos, vel, lifetime = 0.8, start_size = 5, end_size = 1, color = 'rgb(255,255,100)') {
+    let particle;
+    if (this.pool.length > 0) {
+      particle = this.pool.pop();
+      if (particle.reset) {
+        particle.reset(pos, vel, lifetime, start_size, end_size, color);
+      } else {
+        // Fallback for particles created before reset method was added
+        if (!particle.pos) particle.pos = { x: 0, y: 0 };
+        if (!particle.vel) particle.vel = { x: 0, y: 0 };
+        particle.pos.x = pos.x;
+        particle.pos.y = pos.y;
+        particle.vel.x = vel.x;
+        particle.vel.y = vel.y;
+        particle.lifetime = Math.max(0.1, lifetime);
+        particle.age = 0;
+        particle.start_size = start_size;
+        particle.end_size = end_size;
+        particle.color = color;
+      }
+    } else {
+      particle = new Particle(pos, vel, lifetime, start_size, end_size, color);
+    }
+    this.activeParticles.push(particle);
+    return particle;
+  }
+  
+  updateAndCleanup(dt) {
+    for (let i = this.activeParticles.length - 1; i >= 0; i--) {
+      const particle = this.activeParticles[i];
+      particle.update(dt);
+      
+      if (!particle.is_alive()) {
+        // Return to pool if not at max capacity
+        this.activeParticles.splice(i, 1);
+        if (this.pool.length < this.maxPoolSize) {
+          this.pool.push(particle);
+        }
+        // Otherwise let it be garbage collected
+      }
+    }
+  }
+  
+  getActiveParticles() {
+    return this.activeParticles;
+  }
+  
+  clear() {
+    this.pool.push(...this.activeParticles);
+    this.activeParticles.length = 0;
+  }
+}
+
+// Global particle pool - initialize after Particle class is defined
+let particlePool;
+
+// Particle class for visual effects - optimized with reset method
+class Particle {
+  constructor(
+    pos,
+    vel,
+    lifetime = 0.8,
+    start_size = 5,
+    end_size = 1,
+    color = 'rgb(255,255,100)'
+  ) {
+    this.pos = { x: 0, y: 0 };
+    this.vel = { x: 0, y: 0 };
+    this.reset(pos, vel, lifetime, start_size, end_size, color);
+  }
+  
+  reset(pos, vel, lifetime, start_size, end_size, color) {
+    this.pos.x = pos.x;
+    this.pos.y = pos.y;
+    this.vel.x = vel.x;
+    this.vel.y = vel.y;
+    this.lifetime = Math.max(0.1, lifetime);
+    this.age = 0;
+    this.start_size = start_size;
+    this.end_size = end_size;
+    this.color = color;
+  }
+
+  update(dt) {
+    this.pos.x += this.vel.x * dt;
+    this.pos.y += this.vel.y * dt;
+    this.age += dt;
+  }
+
+  is_alive() {
+    return this.age < this.lifetime;
+  }
+
+  draw(ctx) {
+    const life_fraction = this.age / this.lifetime;
+    const current_size =
+      this.start_size * (1 - life_fraction) + this.end_size * life_fraction;
+    const alpha = 1 - life_fraction;
+
+    if (current_size < 1 || alpha < 0.05) return;
+
+    const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.arc(
+      world_pos.x,
+      world_pos.y,
+      current_size / state.zoom,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+    ctx.globalAlpha = 1; // Reset alpha
+  }
+}
+
+// Initialize particle pool after Particle class is defined
+particlePool = new ParticlePool(200);
+
+// Add missing utility functions from original
+const findObjectAtPosition = (worldPos) => {
+  // Check black holes first (they're usually the most important)
+  for (const bh of bh_list) {
+    const dx = worldPos.x - bh.pos.x;
+    const dy = worldPos.y - bh.pos.y;
+    const clickRadius = Math.max(bh.radius, 10 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: bh, type: 'BlackHole' };
+    }
+  }
+  
+  // Check stars
+  for (const star of stars) {
+    if (!star.alive) continue;
+    const dx = worldPos.x - star.pos.x;
+    const dy = worldPos.y - star.pos.y;
+    const clickRadius = Math.max(star.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: star, type: 'Star' };
+    }
+  }
+  
+  // Check neutron stars
+  for (const ns of neutron_stars) {
+    if (!ns.alive) continue;
+    const dx = worldPos.x - ns.pos.x;
+    const dy = worldPos.y - ns.pos.y;
+    const clickRadius = Math.max(ns.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: ns, type: 'NeutronStar' };
+    }
+  }
+  
+  // Check white dwarfs
+  for (const wd of white_dwarfs) {
+    if (!wd.alive) continue;
+    const dx = worldPos.x - wd.pos.x;
+    const dy = worldPos.y - wd.pos.y;
+    const clickRadius = Math.max(wd.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: wd, type: 'WhiteDwarf' };
+    }
+  }
+  
+  // Check gas giants
+  for (const gasGiant of gas_giants) {
+    if (!gasGiant.alive) continue;
+    const dx = worldPos.x - gasGiant.pos.x;
+    const dy = worldPos.y - gasGiant.pos.y;
+    const clickRadius = Math.max(gasGiant.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: gasGiant, type: 'GasGiant' };
+    }
+  }
+  
+  // Check planets
+  for (const planet of planets) {
+    if (!planet.alive) continue;
+    const dx = worldPos.x - planet.pos.x;
+    const dy = worldPos.y - planet.pos.y;
+    const clickRadius = Math.max(planet.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      return { object: planet, type: 'Planet' };
+    }
+  }
+  
+  // Check asteroids (including comets)
+  for (const asteroid of asteroids) {
+    if (!asteroid.alive) continue;
+    const dx = worldPos.x - asteroid.pos.x;
+    const dy = worldPos.y - asteroid.pos.y;
+    const clickRadius = Math.max(asteroid.radius, 4 / state.zoom); // Use actual radius or minimum clickable size
+    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+      // Determine if it's a comet or regular asteroid
+      if (asteroid instanceof Comet) {
+        return { object: asteroid, type: 'Comet' };
+      } else {
+        return { object: asteroid, type: 'Asteroid' };
+      }
+    }
+  }
+  
+  return null;
+};
+
+// Comet class from original
+class Comet extends PhysicsObject {
+  constructor(pos, vel, massInComets = null) {
+    let finalMassInComets;
+    if (massInComets !== null) {
+      finalMassInComets = massInComets;
+    } else {
+      // Comets are typically very small. Range ~0.001 to 0.1 comet masses (Halley's Comet = 1.0)
+      finalMassInComets = Math.pow(10, (Math.random() * 2) - 3); 
+    }
+    
+    const radius = ASTEROID_RADIUS * Math.pow(finalMassInComets, 0.4) * 0.8; // Comets are smaller than asteroids
+    const mass = finalMassInComets * 0.1; // 0.1 = typical comet mass
+    
+    super(pos, vel, mass, radius, "Comet");
+    this.massInComets = finalMassInComets;
+    this.cometType = this.calculateCometType();
+    this.tailLength = Math.random() * 50 + 20; // Random tail length
+    this.intact = true;
+    this.name = getRandomName('comets');
+  }
+  
+  calculateCometType() {
+    // Determine comet type based on mass and random factors
+    if (this.massInComets > 0.1) {
+      return 'periodic'; // Large periodic comets like Halley's
+    } else if (this.massInComets > 0.01) {
+      return 'long_period'; // Long-period comets
+    } else {
+      return 'short_period'; // Short-period comets
+    }
+  }
+  
+  draw(ctx) {
+    const world_pos = world_to_screen(this.pos);
+    const true_screen_pos = world_to_screen(this.pos);
+    const screen_radius = this.radius * state.zoom;
+    
+    ctx.save();
+    
+    // Draw comet tail (opposite to velocity direction)
+    if (screen_radius > 1) {
+      const speed = Math.hypot(this.vel.x, this.vel.y);
+      if (speed > 0.1) {
+        const tailDirection = { x: -this.vel.x / speed, y: -this.vel.y / speed };
+        const tailLength = Math.min(this.tailLength * state.zoom, 100);
+        
+        // Draw tail gradient
+        const gradient = ctx.createLinearGradient(
+          true_screen_pos.x, true_screen_pos.y,
+          true_screen_pos.x + tailDirection.x * tailLength,
+          true_screen_pos.y + tailDirection.y * tailLength
+        );
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+        gradient.addColorStop(0.3, 'rgba(200, 255, 255, 0.6)');
+        gradient.addColorStop(0.7, 'rgba(150, 200, 255, 0.3)');
+        gradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius * 2, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+    
+    // Draw comet nucleus
+    ctx.fillStyle = '#f0f0f0';
+    ctx.beginPath();
+    ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw label if large enough
+    if (screen_radius > 3) {
+      const label_y_offset = screen_radius + 12;
+      ctx.font = '10px Roboto Mono';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'black';
+      ctx.shadowBlur = 2;
+      ctx.fillText(`${this.massInComets.toFixed(3)} C`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+    }
+    ctx.restore();
+  }
+  
+  tidal_mass_loss(bh_list, dt) {
+    if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
+    let min_dist_sq = Infinity, closest_bh = null;
+    for (const bh of bh_list) {
+      const dx = this.pos.x - bh.pos.x;
+      const dy = this.pos.y - bh.pos.y;
+      const dist_sq = dx*dx + dy*dy;
+      if (dist_sq < min_dist_sq) {
+        min_dist_sq = dist_sq;
+        closest_bh = bh;
+      }
+    }
+    if (!closest_bh) return { debris_count: 0, fraction: 0 };
+    
+    // Comets are easily disrupted
+    const tidal_threshold_sq = (closest_bh.radius * 2)**2;
+    if (min_dist_sq < tidal_threshold_sq) {
+      const min_dist = Math.sqrt(min_dist_sq);
+      const tidal_threshold = Math.sqrt(tidal_threshold_sq);
+      const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
+      
+      this.mass -= this.mass * fraction * 0.1 * dt;
+      let debris_count = Math.floor(fraction * 25 * dt);
+      
+      if (this.mass <= 0.01) {
+        this.intact = false;
+        this.alive = false;
+        debris_count += 20;
+      }
+      return { debris_count, fraction };
+    }
+    return { debris_count: 0, fraction: 0 };
+  }
+  
+  get_state() { 
+    const baseState = super.get_state();
+    return { ...baseState, massInComets: this.massInComets, cometType: this.cometType, tailLength: this.tailLength };
+  }
+  set_state(s) {
+    super.set_state(s);
+    this.massInComets = s.massInComets;
+    this.cometType = s.cometType;
+    this.tailLength = s.tailLength;
+  }
+}
+
+// Handle collisions between objects
+/**
+ * Handle collisions between objects in the simulation
+ * @param {Array} objects_list - Array of physics objects to check for collisions
+ */
+const handle_collisions = objects_list => {
+  for (let i = 0; i < objects_list.length; i++) {
+    const obj1 = objects_list[i];
+    if (!obj1.alive) continue;
+
+    for (let j = i + 1; j < objects_list.length; j++) {
+      const obj2 = objects_list[j];
+      if (!obj2.alive) continue;
+
+      const dx = obj2.pos.x - obj1.pos.x;
+      const dy = obj2.pos.y - obj1.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      const min_dist = obj1.radius + obj2.radius;
+
+      if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+        const dist = Math.sqrt(dist_sq);
+        const overlap = min_dist - dist;
+        const nx = dx / dist;
+        const ny = dy / dist;
+
+        // Separate objects
+        const total_mass = obj1.mass + obj2.mass;
+        const move1 = -overlap * (obj2.mass / total_mass);
+        const move2 = overlap * (obj1.mass / total_mass);
+
+        obj1.pos.x += move1 * nx;
+        obj1.pos.y += move1 * ny;
+        obj2.pos.x += move2 * nx;
+        obj2.pos.y += move2 * ny;
+
+        // Handle collision response
+        const rvx = obj2.vel.x - obj1.vel.x;
+        const rvy = obj2.vel.y - obj1.vel.y;
+        const vel_normal = rvx * nx + rvy * ny;
+
+        if (vel_normal < 0) {
+          const e = 0.8; // Coefficient of restitution
+          const j = (-(1 + e) * vel_normal) / (1 / obj1.mass + 1 / obj2.mass);
+          const impx = j * nx;
+          const impy = j * ny;
+
+          obj1.vel.x -= impx / obj1.mass;
+          obj1.vel.y -= impy / obj1.mass;
+          obj2.vel.x += impx / obj2.mass;
+          obj2.vel.y += impy / obj2.mass;
+        }
+      }
+    }
+  }
+};
+
+// Handle star merging - stars combining into more massive objects
+/**
+ * Handle merging between stars, neutron stars, and white dwarfs
+ * @param {Array} stars_list - Array of star objects to check for merging
+ */
+const handle_star_merging = (stars_list) => {
+  if (!physicsSettings.enable_star_merging) return;
+  
+  let merged_this_step = true;
+  while (merged_this_step && stars_list.length > 1) {
+    merged_this_step = false;
+    
+    for (let i = 0; i < stars_list.length; i++) {
+      const star1 = stars_list[i];
+      if (!star1.alive) continue;
+      
+      for (let j = i + 1; j < stars_list.length; j++) {
+        const star2 = stars_list[j];
+        if (!star2.alive) continue;
+        
+        const dx = star1.pos.x - star2.pos.x;
+        const dy = star1.pos.y - star2.pos.y;
+        const dist_sq = dx * dx + dy * dy;
+        const min_dist = star1.radius + star2.radius;
+        
+        if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+          const m1 = star1.mass;
+          const m2 = star2.mass;
+          const new_mass = m1 + m2;
+          const new_mass_in_suns = new_mass / SOLAR_MASS_UNIT;
+          
+          // Calculate center of mass position and velocity
+          const new_pos = {
+            x: (star1.pos.x * m1 + star2.pos.x * m2) / new_mass,
+            y: (star1.pos.y * m1 + star2.pos.y * m2) / new_mass,
+          };
+          const new_vel = {
+            x: (star1.vel.x * m1 + star2.vel.x * m2) / new_mass,
+            y: (star1.vel.y * m1 + star2.vel.y * m2) / new_mass,
+          };
+          
+          // Create merger particles
+          for (let k = 0; k < 20; k++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const speed = Math.random() * 40 + 20;
+            const p_vel = {
+              x: speed * Math.cos(angle),
+              y: speed * Math.sin(angle),
+            };
+            particlePool.getParticle(
+              new_pos,
+              p_vel,
+              Math.random() * 0.8 + 0.6,
+              8,
+              2,
+              'rgb(255, 220, 100)'
+            );
+          }
+          
+          // Remove the two original stars
+          star1.alive = false;
+          star2.alive = false;
+          
+          // Determine what type of object to create based on mass and original types
+          let new_object = null;
+          
+          // Determine new stellar type based on the original types and mass
+          const star1_type = star1.constructor.name;
+          const star2_type = star2.constructor.name;
+          
+          // Check if either object is a neutron star or white dwarf
+          const has_neutron_star = star1_type === 'NeutronStar' || star2_type === 'NeutronStar';
+          const has_white_dwarf = star1_type === 'WhiteDwarf' || star2_type === 'WhiteDwarf';
+          const has_regular_star = star1_type === 'StarObject' || star2_type === 'StarObject';
+          
+          if (has_neutron_star) {
+            // Neutron star involved in merger
+            if (new_mass_in_suns > 3.0) {
+              // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
+              new_object = new BlackHole(new_pos, new_mass, new_vel);
+              bh_list.push(new_object);
+            } else {
+              // Stays as neutron star
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              neutron_stars.push(new_object);
+            }
+          } else if (has_white_dwarf) {
+            // White dwarf involved in merger
+            if (new_mass_in_suns > 1.4) {
+              // Exceeds Chandrasekhar limit -> neutron star
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              neutron_stars.push(new_object);
+            } else {
+              // Stays as white dwarf
+              new_object = new WhiteDwarf(new_pos, new_vel, new_mass_in_suns);
+              white_dwarfs.push(new_object);
+            }
+          } else if (has_regular_star) {
+            // Regular star merging
+            if (new_mass_in_suns > MAX_STAR_MASS_BEFORE_BH) {
+              // Exceeds maximum star mass -> black hole
+              new_object = new BlackHole(new_pos, new_mass, new_vel);
+              bh_list.push(new_object);
+            } else if (new_mass_in_suns > 8.0) {
+              // Massive star -> neutron star
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              neutron_stars.push(new_object);
+            } else {
+              // Regular star
+              new_object = new StarObject(new_pos, new_vel, new_mass_in_suns);
+              stars.push(new_object);
+            }
+          }
+          
+          merged_this_step = true;
+          break;
+        }
+      }
+      if (merged_this_step) break;
+    }
+    
+    // Filter out dead stars after processing all collisions
+    stars_list = stars_list.filter(star => star.alive);
+  }
+};
+
+// Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
+/**
+ * Handle stars absorbing planets, gas giants, and asteroids
+ */
+const handle_star_object_collisions = () => {
+  // Collect all stellar objects (stars, neutron stars, white dwarfs)
+  const stellar_objects = [
+    ...stars.filter(s => s.alive),
+    ...neutron_stars.filter(s => s.alive),
+    ...white_dwarfs.filter(s => s.alive)
+  ];
+  
+  // Check collisions between stellar objects and smaller objects
+  for (const star of stellar_objects) {
+    // Check with planets
+    for (let j = 0; j < planets.length; j++) {
+      const planet = planets[j];
+      if (!planet.alive) continue;
+      
+      const dx = planet.pos.x - star.pos.x;
+      const dy = planet.pos.y - star.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      const min_dist = star.radius + planet.radius;
+      
+      if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+        // Star absorbs the planet
+        star.mass += planet.mass;
+        
+        // Update star properties based on type
+        if (star.constructor.name === 'NeutronStar') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'WhiteDwarf') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'StarObject') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+          // Update radius for regular stars
+          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+        }
+        
+        // Create absorption particles
+        for (let k = 0; k < 5; k++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 20 + 10;
+          const p_vel = {
+            x: speed * Math.cos(angle),
+            y: speed * Math.sin(angle),
+          };
+          particlePool.getParticle(
+            planet.pos,
+            p_vel,
+            Math.random() * 0.5 + 0.3,
+            4,
+            1,
+            'rgb(255, 200, 100)'
+          );
+        }
+        
+        planet.alive = false;
+      }
+    }
+    
+    // Check with gas giants
+    for (let j = 0; j < gas_giants.length; j++) {
+      const gasGiant = gas_giants[j];
+      if (!gasGiant.alive) continue;
+      
+      const dx = gasGiant.pos.x - star.pos.x;
+      const dy = gasGiant.pos.y - star.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      const min_dist = star.radius + gasGiant.radius;
+      
+      if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+        // Star absorbs the gas giant
+        star.mass += gasGiant.mass;
+        
+        // Update star properties based on type
+        if (star.constructor.name === 'NeutronStar') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'WhiteDwarf') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'StarObject') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+          // Update radius for regular stars
+          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+        }
+        
+        // Create more dramatic absorption particles for gas giant
+        for (let k = 0; k < 8; k++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 30 + 15;
+          const p_vel = {
+            x: speed * Math.cos(angle),
+            y: speed * Math.sin(angle),
+          };
+          particlePool.getParticle(
+            gasGiant.pos,
+            p_vel,
+            Math.random() * 0.6 + 0.4,
+            6,
+            2,
+            'rgb(135, 206, 235)'
+          );
+        }
+        
+        gasGiant.alive = false;
+      }
+    }
+    
+    // Check with asteroids and comets
+    for (let j = 0; j < asteroids.length; j++) {
+      const asteroid = asteroids[j];
+      if (!asteroid.alive) continue;
+      
+      const dx = asteroid.pos.x - star.pos.x;
+      const dy = asteroid.pos.y - star.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      const min_dist = star.radius + asteroid.radius;
+      
+      if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+        // Star absorbs the asteroid/comet
+        star.mass += asteroid.mass;
+        
+        // Update star properties based on type  
+        if (star.constructor.name === 'NeutronStar') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'WhiteDwarf') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+        } else if (star.constructor.name === 'StarObject') {
+          star.massInSuns = star.mass / SOLAR_MASS_UNIT;
+          // Update radius for regular stars
+          star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
+        }
+        
+        // Create small absorption particles
+        for (let k = 0; k < 3; k++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const speed = Math.random() * 15 + 8;
+          const p_vel = {
+            x: speed * Math.cos(angle),
+            y: speed * Math.sin(angle),
+          };
+          particlePool.getParticle(
+            asteroid.pos,
+            p_vel,
+            Math.random() * 0.4 + 0.2,
+            3,
+            1,
+            'rgb(200, 150, 100)'
+          );
+        }
+        
+        asteroid.alive = false;
+      }
+    }
+  }
+};
+
+// Enhanced rocky planet collision handling
+/**
+ * Handle collisions between rocky planets with realistic physics
+ * @param {Array} objects_list - Array of physics objects to check for collisions
+ */
+const handle_rocky_collisions = (objects_list) => {
+  // Only handle planets and asteroids for rocky collisions
+  const rocky_objects = objects_list.filter(obj => 
+    obj.constructor.name === 'Planet' || obj.constructor.name === 'Asteroid'
+  );
+  
+  for (let i = 0; i < rocky_objects.length; i++) {
+    const obj1 = rocky_objects[i];
+    if (!obj1.alive) continue;
+
+    for (let j = i + 1; j < rocky_objects.length; j++) {
+      const obj2 = rocky_objects[j];
+      if (!obj2.alive) continue;
+
+      const dx = obj2.pos.x - obj1.pos.x;
+      const dy = obj2.pos.y - obj1.pos.y;
+      const dist_sq = dx * dx + dy * dy;
+      const min_dist = obj1.radius + obj2.radius;
+
+      if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+        const dist = Math.sqrt(dist_sq);
+        const overlap = min_dist - dist;
+        const nx = dx / dist;
+        const ny = dy / dist;
+
+        // Calculate relative velocity
+        const rvx = obj2.vel.x - obj1.vel.x;
+        const rvy = obj2.vel.y - obj1.vel.y;
+        const rel_speed = Math.sqrt(rvx * rvx + rvy * rvy);
+        
+        // High-speed collisions create debris
+        if (rel_speed > 15) {
+          // Create debris from collision
+          const debris_count = Math.floor(rel_speed / 8) + 2;
+          for (let k = 0; k < debris_count; k++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const speed = Math.random() * rel_speed * 0.5 + 5;
+            const debris_vel = {
+              x: speed * Math.cos(angle) + (obj1.vel.x + obj2.vel.x) * 0.5,
+              y: speed * Math.sin(angle) + (obj1.vel.y + obj2.vel.y) * 0.5,
+            };
+            const debris_pos = {
+              x: (obj1.pos.x + obj2.pos.x) * 0.5 + (Math.random() - 0.5) * 10,
+              y: (obj1.pos.y + obj2.pos.y) * 0.5 + (Math.random() - 0.5) * 10,
+            };
+            debris.push(new Debris(debris_pos, debris_vel));
+          }
+          
+          // Both objects lose mass from collision
+          obj1.mass *= 0.9;
+          obj2.mass *= 0.9;
+          
+          // Create collision particles
+          for (let k = 0; k < 10; k++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const speed = Math.random() * 30 + 20;
+            const p_vel = {
+              x: speed * Math.cos(angle),
+              y: speed * Math.sin(angle),
+            };
+            particlePool.getParticle(
+              { x: (obj1.pos.x + obj2.pos.x) * 0.5, y: (obj1.pos.y + obj2.pos.y) * 0.5 },
+              p_vel,
+              Math.random() * 0.6 + 0.4,
+              5,
+              1,
+              'rgb(255, 100, 50)'
+            );
+          }
+        }
+        
+        // Separate objects
+        const total_mass = obj1.mass + obj2.mass;
+        const move1 = -overlap * (obj2.mass / total_mass);
+        const move2 = overlap * (obj1.mass / total_mass);
+
+        obj1.pos.x += move1 * nx;
+        obj1.pos.y += move1 * ny;
+        obj2.pos.x += move2 * nx;
+        obj2.pos.y += move2 * ny;
+
+        // Handle collision response with more realistic coefficient
+        const vel_normal = rvx * nx + rvy * ny;
+        if (vel_normal < 0) {
+          const e = 0.3; // Lower restitution for rocky objects
+          const j = (-(1 + e) * vel_normal) / (1 / obj1.mass + 1 / obj2.mass);
+          const impx = j * nx;
+          const impy = j * ny;
+
+          obj1.vel.x -= impx / obj1.mass;
+          obj1.vel.y -= impy / obj1.mass;
+          obj2.vel.x += impx / obj2.mass;
+          obj2.vel.y += impy / obj2.mass;
+        }
+      }
+    }
+  }
+};
+
+// Check for stellar collapse into black holes
+/**
+ * Check if any stars have exceeded the maximum mass and convert them to black holes
+ */
+const check_stellar_collapse = () => {
+  // Check regular stars
+  for (let i = stars.length - 1; i >= 0; i--) {
+    const star = stars[i];
+    if (!star.alive) continue;
+    
+    const massInSuns = star.mass / SOLAR_MASS_UNIT;
+    if (massInSuns > MAX_STAR_MASS_BEFORE_BH) {
+      // Convert star to black hole
+      const new_bh = new BlackHole(star.pos, star.mass, star.vel);
+      bh_list.push(new_bh);
+      
+      // Create collapse particles
+      for (let k = 0; k < 30; k++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 60 + 40;
+        const p_vel = {
+          x: speed * Math.cos(angle),
+          y: speed * Math.sin(angle),
+        };
+        particlePool.getParticle(
+          star.pos,
+          p_vel,
+          Math.random() * 1.2 + 0.8,
+          12,
+          3,
+          'rgb(255, 255, 255)'
+        );
+      }
+      
+      // Remove the star
+      star.alive = false;
+      stars.splice(i, 1);
+    }
+  }
+  
+  // Check neutron stars for collapse to black holes
+  for (let i = neutron_stars.length - 1; i >= 0; i--) {
+    const ns = neutron_stars[i];
+    if (!ns.alive) continue;
+    
+    const massInSuns = ns.mass / SOLAR_MASS_UNIT;
+    if (massInSuns > 3.0) { // Tolman-Oppenheimer-Volkoff limit
+      // Convert neutron star to black hole
+      const new_bh = new BlackHole(ns.pos, ns.mass, ns.vel);
+      bh_list.push(new_bh);
+      
+      // Create collapse particles
+      for (let k = 0; k < 25; k++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 80 + 60;
+        const p_vel = {
+          x: speed * Math.cos(angle),
+          y: speed * Math.sin(angle),
+        };
+        particlePool.getParticle(
+          ns.pos,
+          p_vel,
+          Math.random() * 1.0 + 0.6,
+          10,
+          2,
+          'rgb(200, 200, 255)'
+        );
+      }
+      
+      // Remove the neutron star
+      ns.alive = false;
+      neutron_stars.splice(i, 1);
+    }
+  }
+  
+  // Check white dwarfs for collapse to neutron stars
+  for (let i = white_dwarfs.length - 1; i >= 0; i--) {
+    const wd = white_dwarfs[i];
+    if (!wd.alive) continue;
+    
+    const massInSuns = wd.mass / SOLAR_MASS_UNIT;
+    if (massInSuns > 1.4) { // Chandrasekhar limit
+      // Convert white dwarf to neutron star
+      const new_ns = new NeutronStar(wd.pos, wd.vel, massInSuns);
+      neutron_stars.push(new_ns);
+      
+      // Create collapse particles
+      for (let k = 0; k < 20; k++) {
+        const angle = Math.random() * 2 * Math.PI;
+        const speed = Math.random() * 70 + 50;
+        const p_vel = {
+          x: speed * Math.cos(angle),
+          y: speed * Math.sin(angle),
+        };
+        particlePool.getParticle(
+          wd.pos,
+          p_vel,
+          Math.random() * 0.8 + 0.5,
+          8,
+          2,
+          'rgb(255, 200, 200)'
+        );
+      }
+      
+      // Remove the white dwarf
+      wd.alive = false;
+      white_dwarfs.splice(i, 1);
+    }
+  }
+};
+
+// Handle gas giant merging and collisions
+const handle_gas_giant_merging = () => {
+  // Check for merging between gas giants
+  let merged_this_step = true;
+  while (merged_this_step && gas_giants.length > 1) {
+    merged_this_step = false;
+    
+    for (let i = 0; i < gas_giants.length; i++) {
+      const gasGiant1 = gas_giants[i];
+      if (!gasGiant1.alive) continue;
+      
+      for (let j = i + 1; j < gas_giants.length; j++) {
+        const gasGiant2 = gas_giants[j];
+        if (!gasGiant2.alive) continue;
+        
+        const dx = gasGiant1.pos.x - gasGiant2.pos.x;
+        const dy = gasGiant1.pos.y - gasGiant2.pos.y;
+        const dist_sq = dx * dx + dy * dy;
+        const min_dist = gasGiant1.radius + gasGiant2.radius;
+        
+        if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+          const m1 = gasGiant1.mass;
+          const m2 = gasGiant2.mass;
+          const new_mass = m1 + m2;
+          const new_mass_in_jupiters = new_mass / 50.0; // Convert to Jupiter masses (50 units = 1 Jupiter mass)
+          
+          // Calculate center of mass position and velocity
+          const new_pos = {
+            x: (gasGiant1.pos.x * m1 + gasGiant2.pos.x * m2) / new_mass,
+            y: (gasGiant1.pos.y * m1 + gasGiant2.pos.y * m2) / new_mass,
+          };
+          const new_vel = {
+            x: (gasGiant1.vel.x * m1 + gasGiant2.vel.x * m2) / new_mass,
+            y: (gasGiant1.vel.y * m1 + gasGiant2.vel.y * m2) / new_mass,
+          };
+          
+          // Create merger particles
+          for (let k = 0; k < 15; k++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const speed = Math.random() * 35 + 15;
+            const p_vel = {
+              x: speed * Math.cos(angle),
+              y: speed * Math.sin(angle),
+            };
+            particlePool.getParticle(
+              new_pos,
+              p_vel,
+              Math.random() * 0.7 + 0.5,
+              6,
+              2,
+              'rgb(135, 206, 235)'
+            );
+          }
+          
+          // Remove the two original gas giants
+          gasGiant1.alive = false;
+          gasGiant2.alive = false;
+          
+          // Determine what type of object to create based on mass
+          let new_object = null;
+          
+          if (new_mass_in_jupiters >= GAS_GIANT_TO_STAR_THRESHOLD) {
+            // Very massive gas giant becomes a low-mass star
+            const star_mass_in_suns = new_mass_in_jupiters / 1047.0; // Convert Jupiter masses to solar masses
+            new_object = new StarObject(new_pos, new_vel, star_mass_in_suns);
+            stars.push(new_object);
+            
+            // Create extra particles for star formation
+            for (let k = 0; k < 10; k++) {
+              const angle = Math.random() * 2 * Math.PI;
+              const speed = Math.random() * 50 + 25;
+              const p_vel = {
+                x: speed * Math.cos(angle),
+                y: speed * Math.sin(angle),
+              };
+              particlePool.getParticle(
+                new_pos,
+                p_vel,
+                Math.random() * 1.0 + 0.8,
+                10,
+                3,
+                'rgb(255, 255, 0)'
+              );
+            }
+          } else {
+            // Create a larger gas giant
+            new_object = new GasGiant(new_pos, new_vel, new_mass_in_jupiters);
+            gas_giants.push(new_object);
+          }
+          
+          merged_this_step = true;
+          break;
+        }
+      }
+      if (merged_this_step) break;
+    }
+    
+    // Filter out dead gas giants after processing all collisions
+    gas_giants = gas_giants.filter(gasGiant => gasGiant.alive);
+  }
+};
+
+// Export classes and functions for use in other modules
+export {
+  PhysicsObject,
+  Planet,
+  GasGiant,
+  Asteroid,
+  Comet,
+  Debris,
+  BlackHole,
+  StarObject,
+  NeutronStar,
+  WhiteDwarf,
+  Particle,
+  ParticlePool,
+  AccretionDiskParticle,
+  particlePool,
+  gravitational_acceleration,
+  world_to_screen,
+  screen_to_world,
+  is_offscreen,
+  compute_dynamic_color,
+  updatePhysics,
+  handle_collisions,
+  handle_star_merging,
+  handle_star_object_collisions,
+  handle_rocky_collisions,
+  check_stellar_collapse,
+  findObjectAtPosition,
+  DT,
+  SOLAR_MASS_UNIT,
+  ABSORB_BUFFER,
+  MIN_INTERACTION_DISTANCE,
+  BH_RADIUS_BASE,
+  PLANET_RADIUS,
+  GAS_GIANT_RADIUS,
+  ASTEROID_RADIUS,
+  STAR_OBJ_RADIUS,
+  NEUTRON_STAR_RADIUS,
+  WHITE_DWARF_RADIUS,
+  DEBRIS_RADIUS,
+  MAX_STAR_MASS_BEFORE_BH,
+  GAS_GIANT_TO_STAR_THRESHOLD,
+  bh_list,
+  planets,
+  stars,
+  gas_giants,
+  asteroids,
+  debris,
+  particles,
+  gwaves,
+  gravity_ripples,
+  neutron_stars,
+  white_dwarfs,
+  accretion_disk_particles,
+  PhysicsObject_id_counter,
+  state,
+  resetPhysicsObjectCounter,
+  setPhysicsObjectCounter,
+  updatePhysicsSettings,
+  setStateReference,
+};
