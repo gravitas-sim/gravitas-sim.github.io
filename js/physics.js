@@ -15,6 +15,7 @@ import { getRandomName } from './ui.js';
 // Physics constants and utilities
 const DT = 0.1;
 const SOLAR_MASS_UNIT = 1000;
+const EARTH_MASS_UNIT = 3; // Earth mass unit (1 Earth = 3 units, 1 Sun = 1000 units)
 const ABSORB_BUFFER = 6;
 const MIN_INTERACTION_DISTANCE = 5.0;
 const BH_RADIUS_BASE = 8; // Reduced from 15 to make black holes smaller
@@ -36,6 +37,7 @@ let bh_list = [],
   stars = [],
   gas_giants = [],
   asteroids = [],
+  comets = [],
   debris = [],
   particles = [],
   gwaves = [],
@@ -59,6 +61,7 @@ let physicsSettings = {
   mutual_gravity: false,
   show_bh_glow: true,
   show_accretion_disk: true,
+  realistic_disk_physics: true, // ADDED: This was missing!
   show_bh_jets: false,
   trail_length: 100,
   dynamic_object_properties: true,
@@ -182,6 +185,7 @@ const updateCachedArrays = () => {
     gas_giants: gas_giants.length,
     planets: planets.length,
     asteroids: asteroids.length,
+    comets: comets.length,
     debris: debris.length,
     neutron_stars: neutron_stars.length,
     white_dwarfs: white_dwarfs.length
@@ -206,7 +210,7 @@ const updateCachedArrays = () => {
     
     // Update all physics objects - include neutron stars and white dwarfs
     cachedAllPhysicsObjects.length = 0;
-    cachedAllPhysicsObjects.push(...planets, ...asteroids, ...gas_giants, ...debris, ...stars, ...neutron_stars, ...white_dwarfs);
+    cachedAllPhysicsObjects.push(...planets, ...asteroids, ...comets, ...gas_giants, ...debris, ...stars, ...neutron_stars, ...white_dwarfs);
     
     lastObjectCounts = currentCounts;
     lastMutualGravityState = physicsSettings.mutual_gravity;
@@ -345,6 +349,13 @@ const updatePhysics = dt => {
   // Update legacy particles array for compatibility
   particles = particlePool.getActiveParticles();
   
+  // Update accretion disk particles - this was missing!
+  for (const particle of accretion_disk_particles) {
+    if (particle.alive) {
+      particle.update_physics(dt, []);
+    }
+  }
+  
   // Clean up dead accretion disk particles
   accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
 
@@ -400,17 +411,23 @@ const updatePhysics = dt => {
               // Update velocity to orbit the new black hole
               particle.vel.x = new_orbital_speed * Math.cos(tangent_angle);
               particle.vel.y = new_orbital_speed * Math.sin(tangent_angle);
+
+              // Give a small spiral kick after merger
+              particle.spiral_factor = 0.3 + Math.random() * 0.3; // Standard spiral
+              const spiral_kick = 0.05 + Math.random() * 0.05;
+              particle.vel.x += spiral_kick * Math.cos(current_angle);
+              particle.vel.y += spiral_kick * Math.sin(current_angle);
               
               // Add to new black hole's disk particles
               new_black_hole.disk_particles.push(particle);
             }
           }
           
-          // Enhanced merger effects for dramatic accretion disk
-          new_black_hole.accretion_intensity = Math.min(1.0, 0.8 + (m1 + m2) / (10 * SOLAR_MASS_UNIT));
-          new_black_hole.disk_growth = Math.min(1.2, 0.9 + (m1 + m2) / (15 * SOLAR_MASS_UNIT));
-          new_black_hole.merger_boost_timer = 45.0; // Extended merger effects
-          new_black_hole.merger_particle_boost = 1.5 + (m1 + m2) / (20 * SOLAR_MASS_UNIT);
+          // Standard merger effects for accretion disk
+          new_black_hole.accretion_intensity = Math.min(1.0, 0.5 + (m1 + m2) / (20 * SOLAR_MASS_UNIT));
+          new_black_hole.disk_growth = Math.min(1.2, 0.6 + (m1 + m2) / (25 * SOLAR_MASS_UNIT));
+          new_black_hole.merger_boost_timer = 25.0; // Standard merger effects
+          new_black_hole.merger_particle_boost = 1.2 + (m1 + m2) / (30 * SOLAR_MASS_UNIT);
           
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
@@ -589,6 +606,17 @@ class Planet extends PhysicsObject {
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
 
+    // Custom rendering for Earth and Moon
+    if (this.isEarth) {
+      this.drawEarth(ctx, world_pos);
+      return;
+    }
+    
+    if (this.isMoon) {
+      this.drawMoon(ctx, world_pos);
+      return;
+    }
+
     let baseColor;
     switch (this.density) {
       case 'gaseous':
@@ -658,13 +686,131 @@ class Planet extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 3;
+      
+      // Show name for Solar System planets, mass for others
+      const displayText = this.isSolarSystemPlanet ? this.name : `${this.massInEarths.toFixed(2)} M⊕`;
       ctx.fillText(
-        `${this.massInEarths.toFixed(2)} M⊕`,
+        displayText,
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset
       );
     }
     ctx.restore();
+  }
+
+  drawEarth(ctx, world_pos) {
+    // Draw Earth with realistic appearance - blue oceans with green continents
+    const gradient = ctx.createRadialGradient(
+      world_pos.x, world_pos.y, 0,
+      world_pos.x, world_pos.y, this.radius
+    );
+    
+    // Base ocean color
+    gradient.addColorStop(0, '#4B7BE5'); // Deep blue center
+    gradient.addColorStop(0.7, '#5B8BF5'); // Lighter blue
+    gradient.addColorStop(1, '#6B9BF5'); // Light blue edge
+    
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Add continent-like features (simplified)
+    if (this.radius * state.zoom > 8) {
+      // Draw some green "continents" as simple shapes
+      ctx.fillStyle = '#2D5A2D'; // Dark green for continents
+      
+      // North America-like shape
+      ctx.beginPath();
+      ctx.arc(world_pos.x - this.radius * 0.3, world_pos.y - this.radius * 0.4, this.radius * 0.25, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Europe/Asia-like shape
+      ctx.beginPath();
+      ctx.arc(world_pos.x + this.radius * 0.2, world_pos.y - this.radius * 0.3, this.radius * 0.3, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Africa-like shape
+      ctx.beginPath();
+      ctx.arc(world_pos.x + this.radius * 0.1, world_pos.y + this.radius * 0.2, this.radius * 0.2, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // South America-like shape
+      ctx.beginPath();
+      ctx.arc(world_pos.x - this.radius * 0.4, world_pos.y + this.radius * 0.3, this.radius * 0.15, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    // Add atmospheric glow
+    ctx.strokeStyle = 'rgba(135, 206, 235, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius + 1, 0, 2 * Math.PI);
+    ctx.stroke();
+  }
+
+  drawMoon(ctx, world_pos) {
+    // Draw Moon with realistic gray appearance and mock craters
+    const gradient = ctx.createRadialGradient(
+      world_pos.x, world_pos.y, 0,
+      world_pos.x, world_pos.y, this.radius
+    );
+    
+    // Moon surface gradient
+    gradient.addColorStop(0, '#6B6B6B'); // Dark gray center
+    gradient.addColorStop(0.5, '#8B8B8B'); // Medium gray
+    gradient.addColorStop(1, '#A0A0A0'); // Light gray edge
+    
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Add mock craters if zoomed in enough
+    if (this.radius * state.zoom > 6) {
+      ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
+      
+      // Draw several craters of different sizes
+      const craters = [
+        { x: -0.3, y: -0.2, r: 0.15 },
+        { x: 0.2, y: 0.3, r: 0.12 },
+        { x: 0.4, y: -0.1, r: 0.08 },
+        { x: -0.1, y: 0.4, r: 0.1 },
+        { x: 0.1, y: -0.4, r: 0.06 },
+        { x: -0.4, y: 0.1, r: 0.09 }
+      ];
+      
+      craters.forEach(crater => {
+        ctx.beginPath();
+        ctx.arc(
+          world_pos.x + crater.x * this.radius,
+          world_pos.y + crater.y * this.radius,
+          crater.r * this.radius,
+          0, 2 * Math.PI
+        );
+        ctx.fill();
+      });
+    }
+    
+    // Add subtle surface texture
+    if (this.radius * state.zoom > 4) {
+      ctx.strokeStyle = 'rgba(100, 100, 100, 0.2)';
+      ctx.lineWidth = 0.5;
+      
+      // Draw some subtle lines to simulate lunar surface features
+      for (let i = 0; i < 3; i++) {
+        const angle = (i * Math.PI) / 3;
+        const x1 = world_pos.x + Math.cos(angle) * this.radius * 0.8;
+        const y1 = world_pos.y + Math.sin(angle) * this.radius * 0.8;
+        const x2 = world_pos.x + Math.cos(angle) * this.radius;
+        const y2 = world_pos.y + Math.sin(angle) * this.radius;
+        
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+    }
   }
 
   tidal_mass_loss(bh_list, dt) {
@@ -882,8 +1028,11 @@ class GasGiant extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 3;
+      
+      // Show name for Solar System gas giants, mass for others
+      const displayText = this.isSolarSystemPlanet ? this.name : `${this.massInJupiters.toFixed(2)} M♃`;
       ctx.fillText(
-        `${this.massInJupiters.toFixed(2)} M♃`,
+        displayText,
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset
       );
@@ -996,7 +1145,7 @@ class AccretionDiskParticle extends PhysicsObject {
     this.max_temperature = 50000; // Much higher max temperature for dramatic effects
     this.angular_momentum = 0;
     this.disk_radius = Math.hypot(pos.x - parentBlackHole.pos.x, pos.y - parentBlackHole.pos.y);
-    this.orbital_velocity = Math.sqrt(parentBlackHole.mass / this.disk_radius) * 0.15; // Faster orbital velocity
+    this.orbital_velocity = Math.sqrt(parentBlackHole.mass / this.disk_radius) * 0.1; // Standard orbital velocity
     this.lifetime = 60 + Math.random() * 120; // 60-180 seconds - much longer lasting
     this.age = 0;
     this.spiral_factor = 0;
@@ -1031,12 +1180,23 @@ class AccretionDiskParticle extends PhysicsObject {
       this.parentBlackHole.mass += this.mass;
       this.parentBlackHole.updateRadius();
       
-      // Trigger more dramatic accretion intensity increase
-      this.parentBlackHole.accretion_intensity = Math.min(1.0, this.parentBlackHole.accretion_intensity + 0.15);
-      this.parentBlackHole.jet_intensity = Math.min(1.0, this.parentBlackHole.jet_intensity + 0.08);
+      // Trigger standard accretion intensity increase
+      this.parentBlackHole.accretion_intensity = Math.min(1.0, this.parentBlackHole.accretion_intensity + 0.08);
+      this.parentBlackHole.jet_intensity = Math.min(1.0, this.parentBlackHole.jet_intensity + 0.04);
       
-      // Create spectacular absorption effect with enhanced temperature-based colors
-      for (let i = 0; i < 12; i++) {
+      // When a particle is absorbed, slightly boost the remaining particles' orbital motion
+      // This ensures the accretion disk maintains net rotation and spiral motion
+      for (const particle of this.parentBlackHole.disk_particles) {
+        if (particle !== this && particle.alive && !particle.absorbed) {
+          // Slightly boost spiral factor to maintain motion
+          particle.spiral_factor = Math.max(particle.spiral_factor, 0.2);
+          // Slightly increase orbital velocity to maintain rotation
+          particle.orbital_velocity *= 1.05;
+        }
+      }
+      
+      // Create absorption effect with temperature-based colors
+      for (let i = 0; i < 6; i++) {
         const angle = Math.random() * 2 * Math.PI;
         const speed = Math.random() * 60 + 40;
         const p_vel = {
@@ -1055,29 +1215,40 @@ class AccretionDiskParticle extends PhysicsObject {
       return;
     }
     
-    // FIXED: Proper disk formation - particles stay in orbital plane around black hole
+    // ENHANCED: Always maintain orbital motion regardless of black hole movement
     // Calculate current angle from black hole center
     const current_angle = Math.atan2(dy, dx);
     
-    // Calculate orbital velocity at current distance (Keplerian orbit) - much faster
-    const orbital_v = Math.sqrt(this.parentBlackHole.mass / distance) * 0.4; // Increased from 0.2 to 0.4 for much faster swirling
+    // Standard orbital velocity for rotation
+    // Use the stored orbital velocity or calculate new one with standard speeds
+    const base_orbital_v = Math.sqrt(this.parentBlackHole.mass / distance) * 0.3; // Standard rotation speed
+    const orbital_v = Math.max(this.orbital_velocity || base_orbital_v, base_orbital_v);
     
-    // Much slower spiral inward over time (simulating friction/energy loss) - particles stick closer
-    this.spiral_factor += dt * 0.015; // Reduced from 0.03 to 0.015 for much slower spiral
-    const spiral_velocity = this.spiral_factor * 0.3; // Reduced from 0.5 to 0.3 for closer sticking
+    // Standard spiral motion - particles gradually spiral inward
+    this.spiral_factor += dt * 0.01; // Standard spiral rate
+    const spiral_velocity = this.spiral_factor * 0.2; // Standard spiral velocity
     
     // Calculate tangent direction (perpendicular to radial direction)
     const tangent_angle = current_angle + Math.PI / 2;
     
+    // Add some orbital variation for more dynamic motion
+    const orbital_variation = Math.sin(this.age * 2) * 0.2; // Small variation in orbital speed
+    const final_orbital_v = orbital_v * (1 + orbital_variation);
+    
     // Set velocity components:
-    // 1. Orbital motion (tangential) - much faster
-    // 2. Gradual spiral inward (radial) - much slower
-    this.vel.x = orbital_v * Math.cos(tangent_angle) - spiral_velocity * Math.cos(current_angle);
-    this.vel.y = orbital_v * Math.sin(tangent_angle) - spiral_velocity * Math.sin(current_angle);
+    // 1. Orbital motion (tangential) - always present for rotation with dramatic speed
+    // 2. Gradual spiral inward (radial) - always present for spiral
+    this.vel.x = final_orbital_v * Math.cos(tangent_angle) - spiral_velocity * Math.cos(current_angle);
+    this.vel.y = final_orbital_v * Math.sin(tangent_angle) - spiral_velocity * Math.sin(current_angle);
     
     // Update position
     this.pos.x += this.vel.x * dt;
     this.pos.y += this.vel.y * dt;
+    
+    // Add small random motion for dynamic appearance
+    const random_motion = 0.2; // Small random motion factor
+    this.pos.x += (Math.random() - 0.5) * random_motion * dt;
+    this.pos.y += (Math.random() - 0.5) * random_motion * dt;
     
     // Enhanced temperature calculations - dramatic heating as particle spirals inward
     const initial_distance = this.disk_radius;
@@ -1094,10 +1265,10 @@ class AccretionDiskParticle extends PhysicsObject {
     
     // Dynamic brightness based on heating
     this.heating_intensity = exponential_heating;
-    this.brightness_multiplier = 1.0 + this.heating_intensity * 3.0; // Up to 4x brighter
+    this.brightness_multiplier = 1.0 + this.heating_intensity * 1.5; // Up to 2.5x brighter
     
     // Add pulsing effect based on orbital motion and heating
-    this.pulse_phase += dt * (2 + this.heating_intensity * 8); // Faster pulsing when hotter
+    this.pulse_phase += dt * (1 + this.heating_intensity * 3); // Standard pulsing when hotter
   }
 
   getTemperatureColor() {
@@ -1182,13 +1353,18 @@ class BlackHole {
    * @param {number} mass - Black hole mass
    * @param {Object} vel - Initial velocity with x, y properties
    */
-  constructor(pos, mass, vel = { x: 0, y: 0 }) {
+  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false) {
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
     this.obj_type = 'BlackHole';
     this.updateRadius();
     this.name = getRandomName('blackHoles');
+
+    // Track if this black hole is newly created (spawned by user or from merger)
+    this.isNewlyCreated = isNewlyCreated;
+    this.creationTime = Date.now();
+    this.movementGracePeriod = 10.0; // 10 seconds of movement even in static mode
 
     this.accretion_intensity = 0.0;
     this.jet_intensity = 0.0;
@@ -1228,8 +1404,8 @@ class BlackHole {
     }
     
     // Set initial accretion intensity to show the disk is active
-    this.accretion_intensity = 0.3;
-    this.disk_growth = 0.5;
+    this.accretion_intensity = 0.2;
+    this.disk_growth = 0.3;
   }
 
   /**
@@ -1244,8 +1420,8 @@ class BlackHole {
       y: this.pos.y + disk_radius * Math.sin(angle)
     };
     
-    // Orbital velocity for stable disk formation
-    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.35; // Slightly slower for more stable initial disk
+    // Standard orbital velocity for stable disk formation
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.4; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
@@ -1253,6 +1429,10 @@ class BlackHole {
     };
     
     const particle = new AccretionDiskParticle(pos, vel, this);
+    
+    // ENHANCED: Set initial orbital properties to ensure consistent rotation
+    particle.orbital_velocity = orbital_speed;
+    particle.spiral_factor = Math.random() * 0.2; // Small initial spiral factor
     
     // Give initial particles longer lifetimes and varied temperatures
     particle.initial_temperature = 2000 + Math.random() * 6000; // 2000-8000K
@@ -1270,7 +1450,12 @@ class BlackHole {
   }
 
   update_orbit(dt, other_bhs) {
-    if (physicsSettings.bh_behavior === 'Orbiting') {
+    // Allow movement for newly created black holes even in static mode
+    const timeSinceCreation = (Date.now() - this.creationTime) / 1000;
+    const canMove = physicsSettings.bh_behavior === 'Orbiting' || 
+                   (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod);
+    
+    if (canMove) {
       const { ax, ay } = gravitational_acceleration(
         this.pos,
         other_bhs.filter(bh => bh !== this)
@@ -1290,24 +1475,24 @@ class BlackHole {
       const mass_gain = this.mass - this.last_mass;
       const mass_ratio = mass_gain / this.mass;
 
-      // Much more dramatic accretion effects during mergers
+      // Standard accretion effects during mergers
       this.accretion_intensity = Math.min(
         1.0,
-        this.accretion_intensity + mass_ratio * 25 // Increased from 15
+        this.accretion_intensity + mass_ratio * 15
       );
-      this.jet_intensity = Math.min(1.0, this.jet_intensity + mass_ratio * 15); // Increased from 8
+      this.jet_intensity = Math.min(1.0, this.jet_intensity + mass_ratio * 8);
       this.disk_growth = Math.min(
         this.max_disk_growth,
-        this.disk_growth + mass_ratio * 20 // Increased from 12
+        this.disk_growth + mass_ratio * 12
       );
       this.time_since_last_accretion = 0.0;
       
       // Trigger merger boost for enhanced particle generation
-      this.merger_boost_timer = 30.0; // 30 seconds of enhanced effects
-      this.merger_particle_boost = 1.0 + mass_ratio * 10; // Up to 10x more particles
+      this.merger_boost_timer = 20.0; // 20 seconds of enhanced effects
+      this.merger_particle_boost = 1.0 + mass_ratio * 5; // Up to 5x more particles
       
-      // Create immediate spectacular merger particles - much more numerous
-      const merger_particles = Math.floor(mass_ratio * 400) + 40; // Increased from 200+20 to 400+40 particles
+      // Create merger particles - reasonable amount
+      const merger_particles = Math.floor(mass_ratio * 200) + 20;
       for (let i = 0; i < merger_particles; i++) {
         this.generateEnhancedMergerParticle();
       }
@@ -1389,8 +1574,8 @@ class BlackHole {
       y: this.pos.y + disk_radius * Math.sin(angle)
     };
     
-    // Much faster initial orbital velocity
-    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.4; // Increased from 0.2 to 0.4 for much faster swirling
+    // Standard orbital motion for disk particles
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.5; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
@@ -1398,6 +1583,11 @@ class BlackHole {
     };
     
     const particle = new AccretionDiskParticle(pos, vel, this);
+    
+    // ENHANCED: Set initial orbital velocity to ensure consistent rotation
+    particle.orbital_velocity = orbital_speed;
+    particle.spiral_factor = Math.random() * 0.3; // Random initial spiral factor for variety
+    
     this.disk_particles.push(particle);
     accretion_disk_particles.push(particle);
   }
@@ -1414,8 +1604,8 @@ class BlackHole {
       y: this.pos.y + disk_radius * Math.sin(angle)
     };
     
-    // Much higher orbital velocity for more energetic particles
-    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.5; // Increased from 0.25 to 0.5 for much faster swirling
+    // Standard orbital velocity for merger particles
+    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.6; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
@@ -1423,6 +1613,10 @@ class BlackHole {
     };
     
     const particle = new AccretionDiskParticle(pos, vel, this);
+    
+    // ENHANCED: Set strong initial orbital properties for merger particles
+    particle.orbital_velocity = orbital_speed;
+    particle.spiral_factor = 0.5 + Math.random() * 0.5; // Higher initial spiral factor for merger particles
     
     // Enhanced properties for merger particles
     particle.initial_temperature = 3000 + Math.random() * 7000; // Start hotter
@@ -1705,11 +1899,15 @@ class StarObject extends PhysicsObject {
     this.baseColor = getStarColor(this.massInSuns);
     this.intact = true;
     this.name = getRandomName('stars');
+    this.temperature = null; // Will be set for specific stars
+    this.spectralType = null; // Will be set for specific stars
+    this.age = null; // Will be set for specific stars
   }
 
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const starColor = this.baseColor || '#ffff00'; // Changed from SETTINGS.star_base_color
+    // Use custom baseColor if set, otherwise use computed color
+    const starColor = this.baseColor || getStarColor(this.massInSuns);
     ctx.fillStyle = compute_dynamic_color(starColor, this.pos, bh_list, 400.0, {
       r: 255,
       g: 50,
@@ -1735,8 +1933,11 @@ class StarObject extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 4;
+      
+      // Show name for Solar System sun, mass for others
+      const displayText = this.isSolarSystemSun ? this.name : `${this.massInSuns.toFixed(2)} Msun`;
       ctx.fillText(
-        `${this.massInSuns.toFixed(2)} Msun`,
+        displayText,
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset
       );
@@ -1797,7 +1998,7 @@ class StarObject extends PhysicsObject {
 
 // NeutronStar class
 class NeutronStar extends PhysicsObject {
-  constructor(pos, vel, massInSuns = null) {
+  constructor(pos, vel, massInSuns = null, isPulsar = null) {
     let finalMassInSuns;
     if (massInSuns !== null) {
       finalMassInSuns = massInSuns;
@@ -1814,6 +2015,9 @@ class NeutronStar extends PhysicsObject {
     this.magnetic_field_strength = Math.random() * 0.8 + 0.2; // 0.2 to 1.0
     this.intact = true;
     this.name = getRandomName('neutronStars');
+    // Randomly assign pulsar status if not specified
+    this.isPulsar = (isPulsar !== null) ? isPulsar : (Math.random() < 0.5);
+    this.pulsar = this.isPulsar; // For inspector compatibility
   }
 
   draw(ctx) {
@@ -1846,8 +2050,8 @@ class NeutronStar extends PhysicsObject {
       ctx.stroke();
     }
 
-    // Pulsar beams
-    if (this.radius * state.zoom > 1) {
+    // Pulsar beams (only if isPulsar)
+    if (this.isPulsar && this.radius * state.zoom > 1) {
       const beam_length = this.radius * 8;
       const beam_width = Math.max(0.5 / state.zoom, this.radius * 0.3);
 
@@ -1904,6 +2108,8 @@ class NeutronStar extends PhysicsObject {
       pulsar_period: this.pulsar_period,
       pulsar_phase: this.pulsar_phase,
       magnetic_field_strength: this.magnetic_field_strength,
+      isPulsar: this.isPulsar,
+      pulsar: this.isPulsar,
     };
   }
 
@@ -1913,6 +2119,8 @@ class NeutronStar extends PhysicsObject {
     this.pulsar_period = s.pulsar_period || 1.0;
     this.pulsar_phase = s.pulsar_phase || 0;
     this.magnetic_field_strength = s.magnetic_field_strength || 0.5;
+    this.isPulsar = s.isPulsar !== undefined ? s.isPulsar : true;
+    this.pulsar = this.isPulsar;
   }
 }
 
@@ -2512,18 +2720,18 @@ const handle_star_merging = (stars_list) => {
             // Neutron star involved in merger
             if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
-              new_object = new BlackHole(new_pos, new_mass, new_vel);
+              new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
             } else {
               // Stays as neutron star
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
             }
           } else if (has_white_dwarf) {
             // White dwarf involved in merger
             if (new_mass_in_suns > 1.4) {
               // Exceeds Chandrasekhar limit -> neutron star
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
             } else {
               // Stays as white dwarf
@@ -2534,11 +2742,11 @@ const handle_star_merging = (stars_list) => {
             // Regular star merging
             if (new_mass_in_suns > MAX_STAR_MASS_BEFORE_BH) {
               // Exceeds maximum star mass -> black hole
-              new_object = new BlackHole(new_pos, new_mass, new_vel);
+              new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns);
+              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
             } else {
               // Regular star
@@ -2832,8 +3040,8 @@ const check_stellar_collapse = () => {
     
     const massInSuns = star.mass / SOLAR_MASS_UNIT;
     if (massInSuns > MAX_STAR_MASS_BEFORE_BH) {
-      // Convert star to black hole
-      const new_bh = new BlackHole(star.pos, star.mass, star.vel);
+      // Convert star to black hole - mark as newly created for proper accretion disk initialization
+      const new_bh = new BlackHole(star.pos, star.mass, star.vel, true);
       bh_list.push(new_bh);
       
       // Create collapse particles
@@ -2867,8 +3075,8 @@ const check_stellar_collapse = () => {
     
     const massInSuns = ns.mass / SOLAR_MASS_UNIT;
     if (massInSuns > 3.0) { // Tolman-Oppenheimer-Volkoff limit
-      // Convert neutron star to black hole
-      const new_bh = new BlackHole(ns.pos, ns.mass, ns.vel);
+      // Convert neutron star to black hole - mark as newly created for proper accretion disk initialization
+      const new_bh = new BlackHole(ns.pos, ns.mass, ns.vel, true);
       bh_list.push(new_bh);
       
       // Create collapse particles
@@ -2903,7 +3111,7 @@ const check_stellar_collapse = () => {
     const massInSuns = wd.mass / SOLAR_MASS_UNIT;
     if (massInSuns > 1.4) { // Chandrasekhar limit
       // Convert white dwarf to neutron star
-      const new_ns = new NeutronStar(wd.pos, wd.vel, massInSuns);
+      const new_ns = new NeutronStar(wd.pos, wd.vel, massInSuns, null);
       neutron_stars.push(new_ns);
       
       // Create collapse particles
@@ -3063,6 +3271,7 @@ export {
   findObjectAtPosition,
   DT,
   SOLAR_MASS_UNIT,
+  EARTH_MASS_UNIT,
   ABSORB_BUFFER,
   MIN_INTERACTION_DISTANCE,
   BH_RADIUS_BASE,
@@ -3080,6 +3289,7 @@ export {
   stars,
   gas_giants,
   asteroids,
+  comets,
   debris,
   particles,
   gwaves,

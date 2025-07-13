@@ -7,6 +7,7 @@ import {
   stars,
   gas_giants,
   asteroids,
+  comets,
   debris,
   particles,
   gravity_ripples,
@@ -16,6 +17,7 @@ import {
   resetPhysicsObjectCounter,
   setPhysicsObjectCounter,
   SOLAR_MASS_UNIT,
+  EARTH_MASS_UNIT,
   Planet,
   GasGiant,
   Asteroid,
@@ -64,6 +66,7 @@ const DEFAULT_SETTINGS = {
   num_gas_giants: 2,
   num_neutron_stars: 0,
   num_white_dwarfs: 0,
+  num_stars: 0,
   init_velocity: 20,
   velocity_stddev: 5,
   bh_mass: 10,
@@ -92,6 +95,7 @@ const DEFAULT_SETTINGS = {
   show_dynamic_overlays: true,
   enable_asteroids: true,
   num_asteroids: 10,
+  num_comets: 0,
   dynamic_object_properties: true,
   record_simulation: false,
   show_ambient_lighting: true,
@@ -228,7 +232,7 @@ const SCENARIO_INFO = {
   'Kuiper Belt': {
     title: 'Kuiper Belt',
     summary:
-      "A sun-like star with outer-system objects including 8 planets, 4 gas giants, and 300 asteroids in distant orbits. The system mimics our Solar System's Kuiper Belt region, with icy bodies and dwarf planets orbiting far from the central star.",
+      "An accurate simulation of our Solar System's Kuiper Belt featuring real dwarf planets (Pluto, Eris, Haumea, Makemake), large KBOs (Quaoar, Sedna, Orcus, Varuna), and smaller objects (Ixion, Huya, 2002 AW197) with realistic masses and orbital properties.",
   },
   'Sagittarius A*': {
     title: 'Sagittarius A*',
@@ -314,6 +318,16 @@ const SCENARIO_INFO = {
     title: 'Exoplanet Lab',
     summary:
       'A diverse collection of 120+ exoplanets, gas giants, and even pulsar planets around various stellar hosts. Explore the incredible diversity of planetary systems with interactive orbital mechanics and planetary interactions.',
+  },
+  'Solar System': {
+    title: 'Solar System',
+    summary:
+      'A highly accurate simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
+  },
+  'Earth-Moon System': {
+    title: 'Earth-Moon System',
+    summary:
+      'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
   },
 };
 
@@ -1160,6 +1174,7 @@ const apply_preset = settings_dict => {
       placement: 'Empty',
       mutual_gravity: true,
       num_black_holes: 0,
+      num_stars: 1, // Central star for Kuiper Belt objects
       num_planets: 8,
       num_gas_giants: 4,
       enable_asteroids: true,
@@ -1197,6 +1212,7 @@ const apply_preset = settings_dict => {
   } else if (ps === 'Binary Star System') {
     Object.assign(settings_dict, {
       num_black_holes: 0,
+      num_stars: 2, // Add 2 stars for binary system
       mutual_gravity: true,
       placement: 'Empty',
       num_planets: 5,
@@ -1209,6 +1225,24 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 30,
+    });
+  } else if (ps === 'Solar System') {
+    Object.assign(settings_dict, {
+      num_black_holes: 0,
+      num_stars: 1, // One sun-like star
+      mutual_gravity: true,
+      placement: 'Empty',
+      num_planets: 8, // 8 planets like our solar system
+      num_gas_giants: 0, // Gas giants are included in planets
+      num_asteroids: 50, // Asteroid belt
+      num_comets: 10, // Comets
+      init_velocity: 15,
+      velocity_stddev: 3,
+      gravitational_constant: 1.0,
+      sim_speed: 0.5, // Slower for better observation
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 20,
     });
   } else if (ps === 'Slingshot') {
     Object.assign(settings_dict, {
@@ -1233,6 +1267,7 @@ const apply_preset = settings_dict => {
     Object.assign(settings_dict, {
       placement: 'Empty',
       num_black_holes: 1,
+      num_stars: 1, // Central star system
       bh_mass: 30,
       bh_behavior: 'Orbiting',
       mutual_gravity: true,
@@ -1281,6 +1316,7 @@ const apply_placement = () => {
     ...planets,
     ...gas_giants,
     ...asteroids,
+    ...comets,
     ...neutron_stars,
     ...white_dwarfs,
   ];
@@ -1500,6 +1536,7 @@ const initialize_simulation = () => {
   stars.length = 0;
   gas_giants.length = 0;
   asteroids.length = 0;
+  comets.length = 0;
   neutron_stars.length = 0;
   white_dwarfs.length = 0;
   debris.length = 0;
@@ -1510,8 +1547,15 @@ const initialize_simulation = () => {
   resetPhysicsObjectCounter();
 
   // Add central stars for specific presets
-  if (['Kuiper Belt', 'Rogue Encounter'].includes(starting_preset)) {
+  if (['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)) {
     stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0));
+  }
+
+  // Add stars based on num_stars setting
+  if (SETTINGS.num_stars) {
+    for (let i = 0; i < SETTINGS.num_stars; i++) {
+      stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
+    }
   }
 
   // Add black holes
@@ -1530,7 +1574,7 @@ const initialize_simulation = () => {
 
   // Add neutron stars
   for (let i = 0; i < (SETTINGS.num_neutron_stars || 0); i++) {
-    neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }));
+    neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, null, null));
   }
 
   // Add white dwarfs
@@ -1555,8 +1599,598 @@ const initialize_simulation = () => {
     }
   }
 
+  // Add comets
+  if (SETTINGS.num_comets) {
+    for (let i = 0; i < SETTINGS.num_comets; i++) {
+      comets.push(new Comet({ x: 0, y: 0 }, { x: 0, y: 0 }));
+    }
+  }
+
   // Apply placement patterns to position objects
   apply_placement();
+
+  // Special scenario setups
+  if (starting_preset === 'Binary Star System') {
+    // Clear any existing stars and create binary system
+    stars.length = 0;
+    
+    // Create two stars in binary orbit
+    const star1 = new StarObject({ x: -60, y: 0 }, { x: 0, y: 12 }, 1.2);
+    const star2 = new StarObject({ x: 60, y: 0 }, { x: 0, y: -12 }, 0.8);
+    stars.push(star1, star2);
+    
+    // Add planets orbiting the binary system
+    const centralMass = star1.mass + star2.mass;
+    for (let i = 0; i < SETTINGS.num_planets; i++) {
+      const r = 150 + i * 30; // Orbital radius around binary center
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      planets[i].pos = pos;
+      planets[i].vel = vel;
+    }
+    
+    // Add gas giants
+    for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
+      const r = 300 + i * 50;
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      gas_giants[i].pos = pos;
+      gas_giants[i].vel = vel;
+    }
+    
+    // Add asteroids
+    if (SETTINGS.enable_asteroids) {
+      for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+        const r = 400 + Math.random() * 100;
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        asteroids[i].pos = pos;
+        asteroids[i].vel = vel;
+      }
+    }
+  } else if (starting_preset === 'Solar System') {
+    // Clear any existing objects
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    
+    // Create the Sun as a proper G-type main sequence star with accurate properties
+    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
+    sun.name = 'Sol'; // Real name of our sun
+    sun.mass = SOLAR_MASS_UNIT; // 1 solar mass = 1000 units
+    sun.massInSuns = 1.0; // Exactly 1 solar mass
+    sun.baseColor = '#FFFF00'; // G-type star color (yellow, like our Sun)
+    sun.radius = 15; // Make sun larger for visibility
+    sun.temperature = 5778; // Kelvin (real solar effective temperature)
+    sun.spectralType = 'G2V'; // Real spectral classification
+    sun.age = 4.6; // Billion years (middle-aged G-type star)
+    sun.luminosity = 1.0; // Solar luminosity (3.828×10²⁶ W)
+    sun.solarRadius = 1.0; // 1.0 solar radii (696,340 km)
+    sun.metallicity = 0.02; // Solar metallicity (Z = 0.02)
+    sun.rotationPeriod = 25.4; // Days (solar rotation period at equator)
+    sun.surfaceGravity = 274; // m/s² (solar surface gravity)
+    sun.density = 1408; // kg/m³ (solar density)
+    sun.isSolarSystemSun = true; // Flag for Solar System sun
+    stars.push(sun);
+    
+    // Real Solar System data with accurate properties
+    // Distances in AU (scaled down for simulation), masses in Earth masses, diameters in km
+    const solarSystemData = [
+      { 
+        name: 'Mercury', 
+        mass: 0.055, // 0.055 Earth masses
+        distance: 80, // ~0.39 AU (scaled) - increased for stability
+        diameter: 4879, // km
+        orbital_period: 88, // days
+        type: 'terrestrial',
+        color: '#A0522D', // Mercury's actual color (brownish-gray)
+        density: 'rocky',
+        temperature: 440, // Kelvin (daytime surface temperature)
+        gravity: 3.7, // m/s²
+        rotation_period: 58.6, // days (slow rotation)
+        atmosphere: 'none',
+        density_kg_m3: 5427, // kg/m³
+        escape_velocity: 4.25, // km/s
+        surface_pressure: 0 // Pa (no atmosphere)
+      },
+      { 
+        name: 'Venus', 
+        mass: 0.815, // 0.815 Earth masses
+        distance: 120, // ~0.72 AU (scaled) - increased for stability
+        diameter: 12104, // km
+        orbital_period: 225, // days
+        type: 'terrestrial',
+        color: '#E6BE8A', // Venus's actual color (creamy yellow-brown)
+        density: 'rocky',
+        temperature: 737, // Kelvin (surface temperature)
+        gravity: 8.87, // m/s²
+        rotation_period: -243, // days (retrograde rotation)
+        atmosphere: 'CO2',
+        density_kg_m3: 5243, // kg/m³
+        escape_velocity: 10.36, // km/s
+        surface_pressure: 9200000 // Pa (92 bar)
+      },
+      { 
+        name: 'Earth', 
+        mass: 1.0, // 1 Earth mass
+        distance: 160, // ~1 AU (scaled) - increased for stability
+        diameter: 12742, // km
+        orbital_period: 365, // days
+        type: 'terrestrial',
+        color: '#4B7BE5', // Earth's actual color (blue oceans)
+        density: 'rocky',
+        temperature: 288, // Kelvin (average surface temperature)
+        gravity: 9.81, // m/s²
+        rotation_period: 1.0, // days
+        atmosphere: 'N2/O2',
+        density_kg_m3: 5514, // kg/m³
+        escape_velocity: 11.19, // km/s
+        surface_pressure: 101325 // Pa (1 bar)
+      },
+      { 
+        name: 'Mars', 
+        mass: 0.107, // 0.107 Earth masses
+        distance: 200, // ~1.52 AU (scaled) - increased for stability
+        diameter: 6779, // km
+        orbital_period: 687, // days
+        type: 'terrestrial',
+        color: '#C1440E', // Mars's actual color (reddish-orange)
+        density: 'rocky',
+        temperature: 210, // Kelvin (average surface temperature)
+        gravity: 3.71, // m/s²
+        rotation_period: 1.03, // days
+        atmosphere: 'CO2',
+        density_kg_m3: 3933, // kg/m³
+        escape_velocity: 5.03, // km/s
+        surface_pressure: 636 // Pa (0.006 bar)
+      },
+      { 
+        name: 'Jupiter', 
+        mass: 317.8, // 317.8 Earth masses
+        distance: 350, // ~5.2 AU (scaled) - increased for stability
+        diameter: 139822, // km
+        orbital_period: 4333, // days
+        type: 'gas_giant',
+        color: '#D8CA9D', // Jupiter's actual color (beige with bands)
+        giantType: 'jupiter_like',
+        temperature: 165, // Kelvin (cloud top temperature)
+        gravity: 24.79, // m/s²
+        rotation_period: 0.41, // days (fast rotation)
+        atmosphere: 'H2/He',
+        density_kg_m3: 1326, // kg/m³
+        escape_velocity: 59.5, // km/s
+        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+      },
+      { 
+        name: 'Saturn', 
+        mass: 95.2, // 95.2 Earth masses
+        distance: 500, // ~9.5 AU (scaled) - increased for stability
+        diameter: 116464, // km
+        orbital_period: 10759, // days
+        type: 'gas_giant',
+        color: '#F4D03F', // Saturn's actual color (golden yellow)
+        giantType: 'jupiter_like',
+        temperature: 134, // Kelvin (cloud top temperature)
+        gravity: 10.44, // m/s²
+        rotation_period: 0.45, // days (fast rotation)
+        atmosphere: 'H2/He',
+        density_kg_m3: 687, // kg/m³
+        escape_velocity: 35.5, // km/s
+        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+      },
+      { 
+        name: 'Uranus', 
+        mass: 14.5, // 14.5 Earth masses
+        distance: 650, // ~19.2 AU (scaled) - increased for stability
+        diameter: 50724, // km
+        orbital_period: 30687, // days
+        type: 'ice_giant',
+        color: '#85C1E9', // Uranus's actual color (light blue-green)
+        giantType: 'neptune_like',
+        temperature: 76, // Kelvin (cloud top temperature)
+        gravity: 8.69, // m/s²
+        rotation_period: -0.72, // days (retrograde rotation)
+        atmosphere: 'H2/He/CH4',
+        density_kg_m3: 1271, // kg/m³
+        escape_velocity: 21.3, // km/s
+        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+      },
+      { 
+        name: 'Neptune', 
+        mass: 17.1, // 17.1 Earth masses
+        distance: 800, // ~30.1 AU (scaled) - increased for stability
+        diameter: 49244, // km
+        orbital_period: 60190, // days
+        type: 'ice_giant',
+        color: '#5B5DDF', // Neptune's actual color (deep blue)
+        giantType: 'neptune_like',
+        temperature: 72, // Kelvin (cloud top temperature)
+        gravity: 11.15, // m/s²
+        rotation_period: 0.67, // days
+        atmosphere: 'H2/He/CH4',
+        density_kg_m3: 1638, // kg/m³
+        escape_velocity: 23.5, // km/s
+        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+      }
+    ];
+    
+    // Create planets with realistic properties
+    for (let i = 0; i < solarSystemData.length; i++) {
+      const planetData = solarSystemData[i];
+      const r = planetData.distance;
+      const theta = Math.random() * 2 * Math.PI;
+      // Calculate orbital velocity based on real orbital periods
+      const orbitalVelocity = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -orbitalVelocity * Math.sin(theta), y: orbitalVelocity * Math.cos(theta) };
+      
+      if (planetData.type === 'gas_giant' || planetData.type === 'ice_giant') {
+        // Create new gas giant objects
+        const gasGiant = new GasGiant(pos, vel, planetData.mass / 50.0); // Convert to Jupiter masses
+        gasGiant.name = planetData.name;
+        gasGiant.mass = planetData.mass * EARTH_MASS_UNIT;
+        gasGiant.diameter = planetData.diameter;
+        gasGiant.orbital_period = planetData.orbital_period;
+        gasGiant.baseColor = planetData.color;
+        gasGiant.giantType = planetData.giantType;
+        // Add accurate physical properties
+        gasGiant.temperature = planetData.temperature;
+        gasGiant.gravity = planetData.gravity;
+        gasGiant.rotation_period = planetData.rotation_period;
+        gasGiant.atmosphere = planetData.atmosphere;
+        gasGiant.density_kg_m3 = planetData.density_kg_m3;
+        gasGiant.escape_velocity = planetData.escape_velocity;
+        gasGiant.surface_pressure = planetData.surface_pressure;
+        gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
+        gas_giants.push(gasGiant);
+      } else {
+        // Create new terrestrial planet objects
+        const planet = new Planet(pos, vel, planetData.mass);
+        planet.name = planetData.name;
+        planet.mass = planetData.mass * EARTH_MASS_UNIT;
+        planet.diameter = planetData.diameter;
+        planet.orbital_period = planetData.orbital_period;
+        planet.baseColor = planetData.color;
+        planet.density = planetData.density;
+        // Add accurate physical properties
+        planet.temperature = planetData.temperature;
+        planet.gravity = planetData.gravity;
+        planet.rotation_period = planetData.rotation_period;
+        planet.atmosphere = planetData.atmosphere;
+        planet.density_kg_m3 = planetData.density_kg_m3;
+        planet.escape_velocity = planetData.escape_velocity;
+        planet.surface_pressure = planetData.surface_pressure;
+        planet.isSolarSystemPlanet = true; // Flag for Solar System planets
+        planets.push(planet);
+      }
+    }
+    
+    // Add asteroid belt between Mars and Jupiter with real asteroids
+    if (SETTINGS.enable_asteroids) {
+      const realAsteroids = [
+        { name: 'Ceres', diameter: 939, distance: 280, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
+        { name: 'Vesta', diameter: 525, distance: 285, mass: 0.00004 },
+        { name: 'Pallas', diameter: 512, distance: 290, mass: 0.00003 },
+        { name: 'Hygiea', diameter: 434, distance: 295, mass: 0.00002 },
+        { name: 'Interamnia', diameter: 350, distance: 300, mass: 0.00001 },
+        { name: 'Europa', diameter: 315, distance: 305, mass: 0.000008 },
+        { name: 'Davida', diameter: 289, distance: 310, mass: 0.000006 },
+        { name: 'Sylvia', diameter: 286, distance: 315, mass: 0.000006 },
+        { name: 'Hektor', diameter: 225, distance: 320, mass: 0.000003 },
+        { name: 'Juno', diameter: 257, distance: 325, mass: 0.000004 },
+        { name: 'Iris', diameter: 200, distance: 330, mass: 0.000002 },
+        { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
+        { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
+        { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
+        { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
+        { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 }
+      ];
+      
+      for (let i = 0; i < Math.min(SETTINGS.num_asteroids, realAsteroids.length); i++) {
+        const asteroidData = realAsteroids[i];
+        const r = asteroidData.distance + (Math.random() - 0.5) * 20; // Add some variation for wider spacing
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        
+        // Create new asteroid object
+        const asteroid = new Asteroid(pos, vel);
+        asteroid.name = asteroidData.name;
+        asteroid.diameter = asteroidData.diameter;
+        asteroid.mass = asteroidData.mass * EARTH_MASS_UNIT;
+        asteroids.push(asteroid);
+      }
+    }
+    
+    // Add famous comets in distant orbits with real properties
+    if (SETTINGS.num_comets) {
+      const famousComets = [
+        { name: 'Halley', period: 76, perihelion: 0.586, aphelion: 35.1, diameter: 11 },
+        { name: 'Hale-Bopp', period: 2533, perihelion: 0.914, aphelion: 370.8, diameter: 60 },
+        { name: 'Hyakutake', period: 113783, perihelion: 0.230, aphelion: 4698.77, diameter: 4.2 },
+        { name: 'Shoemaker-Levy 9', period: 11.3, perihelion: 5.4, aphelion: 7.8, diameter: 1.8 },
+        { name: 'Comet ISON', period: 400000, perihelion: 0.012, aphelion: 73000, diameter: 2 },
+        { name: 'Lovejoy', period: 314, perihelion: 0.005, aphelion: 157, diameter: 0.5 },
+        { name: 'McNaught', period: 92, perihelion: 0.17, aphelion: 67, diameter: 19 },
+        { name: 'Pan-STARRS', period: 110000, perihelion: 0.3, aphelion: 16000, diameter: 1 },
+        { name: 'Swift-Tuttle', period: 133, perihelion: 0.96, aphelion: 51.2, diameter: 26 },
+        { name: 'Tempel-Tuttle', period: 33, perihelion: 0.98, aphelion: 19.7, diameter: 3.6 },
+        { name: 'Wild 2', period: 6.4, perihelion: 1.59, aphelion: 5.3, diameter: 5.5 },
+        { name: 'Hartley 2', period: 6.46, perihelion: 1.05, aphelion: 5.87, diameter: 1.2 }
+      ];
+      
+      for (let i = 0; i < Math.min(SETTINGS.num_comets, famousComets.length); i++) {
+        const cometData = famousComets[i];
+        // Use semi-major axis for distance (average of perihelion and aphelion)
+        const semiMajorAxis = (cometData.perihelion + cometData.aphelion) / 2;
+        const r = semiMajorAxis * 15; // Scale for simulation
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        
+        // Create new comet object with real properties
+        const comet = new Comet(pos, vel);
+        comet.name = cometData.name;
+        comet.period = cometData.period;
+        comet.perihelion = cometData.perihelion;
+        comet.aphelion = cometData.aphelion;
+        comet.diameter = cometData.diameter;
+        comets.push(comet);
+      }
+    }
+  } else if (starting_preset === 'Rogue Encounter') {
+    // Set up central star system first
+    const centralStar = stars[0];
+    const centralMass = centralStar.mass;
+    
+    // Position planets around the central star
+    for (let i = 0; i < SETTINGS.num_planets; i++) {
+      const r = 50 + i * 25;
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      planets[i].pos = pos;
+      planets[i].vel = vel;
+    }
+    
+    // Position gas giants
+    for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
+      const r = 200 + i * 50;
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      gas_giants[i].pos = pos;
+      gas_giants[i].vel = vel;
+    }
+    
+    // Position asteroids
+    if (SETTINGS.enable_asteroids) {
+      for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+        const r = 350 + Math.random() * 100;
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        asteroids[i].pos = pos;
+        asteroids[i].vel = vel;
+      }
+    }
+    
+    // Position rogue black hole to approach the system
+    if (bh_list.length > 0) {
+      bh_list[0].pos = { x: -800, y: 200 }; // Start far away
+      bh_list[0].vel = { x: 20, y: -5 }; // Approach velocity
+    }
+  } else if (starting_preset === 'Kuiper Belt') {
+    // Set up central star system (our Sun)
+    const centralStar = stars[0];
+    centralStar.name = 'Sol';
+    const centralMass = centralStar.mass;
+    
+    // Real Kuiper Belt objects with accurate names and properties
+    const kuiperBeltObjects = [
+      { name: 'Pluto', mass: 0.0022, distance: 200, type: 'dwarf_planet' },
+      { name: 'Eris', mass: 0.0028, distance: 220, type: 'dwarf_planet' },
+      { name: 'Haumea', mass: 0.0007, distance: 240, type: 'dwarf_planet' },
+      { name: 'Makemake', mass: 0.0005, distance: 260, type: 'dwarf_planet' },
+      { name: 'Quaoar', mass: 0.0002, distance: 280, type: 'large_kbo' },
+      { name: 'Sedna', mass: 0.0001, distance: 300, type: 'large_kbo' },
+      { name: 'Orcus', mass: 0.0001, distance: 320, type: 'large_kbo' },
+      { name: 'Varuna', mass: 0.0001, distance: 340, type: 'large_kbo' }
+    ];
+    
+    // Create Kuiper Belt objects
+    for (let i = 0; i < Math.min(kuiperBeltObjects.length, SETTINGS.num_planets); i++) {
+      const kboData = kuiperBeltObjects[i];
+      const r = kboData.distance;
+      const theta = Math.random() * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      
+      if (kboData.type === 'dwarf_planet') {
+        // Use planets array for dwarf planets
+        if (planets.length > 0) {
+          planets[0].pos = pos;
+          planets[0].vel = vel;
+          planets[0].mass = kboData.mass * EARTH_MASS_UNIT;
+          planets[0].name = kboData.name;
+          planets.splice(0, 1);
+        }
+      } else {
+        // Use gas giants array for large KBOs
+        if (gas_giants.length > 0) {
+          gas_giants[0].pos = pos;
+          gas_giants[0].vel = vel;
+          gas_giants[0].mass = kboData.mass * EARTH_MASS_UNIT;
+          gas_giants[0].name = kboData.name;
+          gas_giants.splice(0, 1);
+        }
+      }
+    }
+    
+    // Add smaller Kuiper Belt objects as asteroids
+    if (SETTINGS.enable_asteroids) {
+      const smallKBOs = [
+        'Ixion', 'Huya', '2002 AW197', '2002 UX25', '2002 TX300', '2003 AZ84',
+        '2003 VS2', '2004 GV9', '2005 RN43', '2005 UQ513', '2006 QH181', '2007 OR10'
+      ];
+      
+      for (let i = 0; i < Math.min(SETTINGS.num_asteroids, smallKBOs.length); i++) {
+        const r = 500 + Math.random() * 200; // Kuiper Belt region
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        asteroids[i].pos = pos;
+        asteroids[i].vel = vel;
+        asteroids[i].name = smallKBOs[i];
+      }
+    }
+  } else if (starting_preset === 'Sagittarius A*') {
+    // Set up Sagittarius A* with correct name
+    if (bh_list.length > 0) {
+      bh_list[0].name = 'Sagittarius A*';
+    }
+    
+    // Add some real S-stars that orbit Sgr A* (the most famous ones)
+    const sStars = [
+      'S2', 'S12', 'S14', 'S1', 'S8', 'S13', 'S9', 'S6', 'S4', 'S7',
+      'S31', 'S21', 'S24', 'S54', 'S55', 'S60', 'S66', 'S67', 'S83', 'S87'
+    ];
+    
+    // Name some of the stars with real S-star names
+    for (let i = 0; i < Math.min(stars.length, sStars.length); i++) {
+      stars[i].name = sStars[i];
+    }
+    
+    // Name some neutron stars with real names from the galactic center
+    const galacticNeutronStars = [
+      'SGR J1745-2900', 'PSR J1745-2900', 'PSR J1746-2850', 'PSR J1745-2912',
+      'PSR J1746-2849', 'PSR J1745-2910', 'PSR J1746-2856', 'PSR J1745-2909'
+    ];
+    
+    for (let i = 0; i < Math.min(neutron_stars.length, galacticNeutronStars.length); i++) {
+      neutron_stars[i].name = galacticNeutronStars[i];
+    }
+  } else if (starting_preset === 'Binary Star System') {
+    // Set up binary star system with real binary star names
+    const realBinaryStars = [
+      'Alpha Centauri A', 'Alpha Centauri B', 'Sirius A', 'Sirius B', 'Procyon A', 'Procyon B',
+      'Castor A', 'Castor B', 'Algol A', 'Algol B', 'Beta Lyrae A', 'Beta Lyrae B',
+      'W Ursae Majoris A', 'W Ursae Majoris B', 'RS Canum Venaticorum A', 'RS Canum Venaticorum B'
+    ];
+    
+    // Name the binary stars
+    for (let i = 0; i < Math.min(stars.length, 2); i++) {
+      stars[i].name = realBinaryStars[i];
+    }
+    
+    // Name planets with real exoplanet names from binary systems
+    const binaryExoplanets = [
+      'Kepler-16b', 'Kepler-34b', 'Kepler-35b', 'Kepler-38b', 'Kepler-47b', 'Kepler-47c',
+      'Kepler-64b', 'Kepler-413b', 'Kepler-453b', 'Kepler-1647b'
+    ];
+    
+    for (let i = 0; i < Math.min(planets.length, binaryExoplanets.length); i++) {
+      planets[i].name = binaryExoplanets[i];
+    }
+  } else if (starting_preset === 'Pulsar System') {
+    // Set up pulsar system with real pulsar and planet names
+    if (neutron_stars.length > 0) {
+      neutron_stars[0].name = 'PSR B1257+12'; // The real pulsar with the first confirmed exoplanets
+    }
+    
+    // Name planets with the real planets discovered around PSR B1257+12
+    const pulsarPlanets = ['PSR B1257+12 b', 'PSR B1257+12 c', 'PSR B1257+12 d'];
+    
+    for (let i = 0; i < Math.min(planets.length, pulsarPlanets.length); i++) {
+      planets[i].name = pulsarPlanets[i];
+    }
+  } else if (starting_preset === 'Neutron Star Collision') {
+    // Set up neutron star collision based on GW170817
+    if (neutron_stars.length >= 2) {
+      neutron_stars[0].name = 'GW170817-A';
+      neutron_stars[1].name = 'GW170817-B';
+    }
+  } else if (starting_preset === 'Earth-Moon System') {
+    // Clear any existing objects and create Earth-Moon system
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0; // Clear any black holes
+    neutron_stars.length = 0; // Clear any neutron stars
+    white_dwarfs.length = 0; // Clear any white dwarfs
+    debris.length = 0; // Clear any debris
+    
+    // Create Earth at the center (we'll treat it as the primary body)
+    const earth = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
+    earth.name = 'Earth';
+    earth.mass = 1.0 * EARTH_MASS_UNIT; // 1 Earth mass
+    earth.diameter = 12742; // km
+    earth.orbital_period = 365; // days (Earth's orbital period around Sun)
+    earth.baseColor = '#4B7BE5'; // More accurate Earth blue color
+    earth.radius = 12; // Make Earth larger for visibility
+    earth.density = 'rocky';
+    earth.isEarth = true; // Flag for custom Earth rendering
+    // Accurate Earth properties
+    earth.temperature = 288; // Kelvin (average surface temperature)
+    earth.gravity = 9.81; // m/s²
+    earth.rotation_period = 1.0; // days
+    earth.atmosphere = 'N2/O2';
+    earth.density_kg_m3 = 5514; // kg/m³
+    earth.escape_velocity = 11.19; // km/s
+    earth.surface_pressure = 101325; // Pa (1 bar)
+    earth.magnetic_field = 25; // μT (microtesla)
+    earth.albedo = 0.306; // Bond albedo
+    planets.push(earth);
+    
+    // Create Moon orbiting Earth
+    const moonDistance = 35; // Distance from Earth (scaled for better visibility)
+    const moonOrbitalVelocity = Math.sqrt((SETTINGS.gravitational_constant * earth.mass) / moonDistance);
+    const moonTheta = Math.random() * 2 * Math.PI;
+    const moonPos = { x: moonDistance * Math.cos(moonTheta), y: moonDistance * Math.sin(moonTheta) };
+    const moonVel = { x: -moonOrbitalVelocity * Math.sin(moonTheta), y: moonOrbitalVelocity * Math.cos(moonTheta) };
+    
+    const moon = new Planet(moonPos, moonVel, 0.0123); // Moon is 0.0123 Earth masses
+    moon.name = 'Luna';
+    moon.mass = 0.0123 * EARTH_MASS_UNIT; // Moon mass
+    moon.diameter = 3474; // km
+    moon.orbital_period = 27.3; // days (Moon's orbital period around Earth)
+    moon.baseColor = '#8B8B8B'; // More accurate Moon gray color
+    moon.radius = 3; // Moon is smaller than Earth but visible
+    moon.density = 'rocky';
+    moon.isMoon = true; // Flag for custom Moon rendering
+    // Accurate Moon properties
+    moon.temperature = 250; // Kelvin (average surface temperature)
+    moon.gravity = 1.62; // m/s²
+    moon.rotation_period = 27.3; // days (tidally locked)
+    moon.atmosphere = 'none';
+    moon.density_kg_m3 = 3344; // kg/m³
+    moon.escape_velocity = 2.38; // km/s
+    moon.surface_pressure = 0; // Pa (no atmosphere)
+    moon.magnetic_field = 0; // μT (no significant magnetic field)
+    moon.albedo = 0.136; // Bond albedo
+    planets.push(moon);
+    
+    // Set up zoom and pan to focus on the Earth-Moon system
+    // This will be handled by the camera system to show both objects clearly
+    SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
+  }
 };
 
 // Settings functions
@@ -1589,6 +2223,8 @@ const setting_items = [
       'Galactic Collision',
       'Micro BH Swarm',
       'Exoplanet Lab',
+      'Solar System',
+      'Earth-Moon System',
     ],
   },
   { label: '--- Simulation ---', type: 'separator' },
@@ -1675,6 +2311,14 @@ const setting_items = [
     max: 30,
     step: 1,
   },
+  {
+    label: 'Number of Stars',
+    key: 'num_stars',
+    type: 'int',
+    min: 0,
+    max: 20,
+    step: 1,
+  },
   { label: '--- Objects ---', type: 'separator' },
   {
     label: 'Number of Planets',
@@ -1702,6 +2346,14 @@ const setting_items = [
     step: 5,
   },
   {
+    label: 'Number of Comets',
+    key: 'num_comets',
+    type: 'int',
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
     label: 'Initial Velocity',
     key: 'init_velocity',
     type: 'float',
@@ -1725,6 +2377,7 @@ const setting_items = [
       'Planet',
       'Star',
       'Asteroid',
+      'Comet',
       'GasGiant',
       'NeutronStar',
       'WhiteDwarf',
@@ -1792,6 +2445,8 @@ const setting_items = [
       'Planet',
       'GasGiant',
       'Star',
+      'Asteroid',
+      'Comet',
       'NeutronStar',
       'WhiteDwarf',
     ],
@@ -2044,10 +2699,10 @@ const load_simulation_state = () => {
       else if (type === 'GasGiant') new_obj = new GasGiant(pos, vel);
       else if (type === 'Asteroid') new_obj = new Asteroid(pos, vel);
       else if (type === 'StarObject') new_obj = new StarObject(pos, vel);
-      else if (type === 'NeutronStar') new_obj = new NeutronStar(pos, vel);
+      else if (type === 'NeutronStar') new_obj = new NeutronStar(pos, vel, null, null);
       else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(pos, vel);
       else if (type === 'Debris') new_obj = new Debris(pos, vel);
-      else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, vel);
+              else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, vel, true);
       if (new_obj) {
         new_obj.set_state(obj_state);
         if (new_obj instanceof Planet) planets.push(new_obj);
@@ -2221,14 +2876,14 @@ window.addEventListener('mouseup', e => {
     else if (type === 'GasGiant')
       new_obj = new GasGiant(state.add_start_world, vel);
     else if (type === 'NeutronStar')
-      new_obj = new NeutronStar(state.add_start_world, vel);
+      new_obj = new NeutronStar(state.add_start_world, vel, null, null);
     else if (type === 'WhiteDwarf')
       new_obj = new WhiteDwarf(state.add_start_world, vel);
     else if (type === 'Comet')
       new_obj = new Comet(state.add_start_world, vel);
     else if (type === 'BlackHole') {
       const randomMass = generateRandomBlackHoleMass();
-      new_obj = new BlackHole(state.add_start_world, randomMass, vel);
+              new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
     }
 
     if (new_obj instanceof Planet) planets.push(new_obj);
@@ -2575,14 +3230,14 @@ canvas.addEventListener(
         else if (type === 'GasGiant')
           new_obj = new GasGiant(state.add_start_world, vel);
         else if (type === 'NeutronStar')
-          new_obj = new NeutronStar(state.add_start_world, vel);
+          new_obj = new NeutronStar(state.add_start_world, vel, null, null);
         else if (type === 'WhiteDwarf')
           new_obj = new WhiteDwarf(state.add_start_world, vel);
         else if (type === 'Comet')
           new_obj = new Comet(state.add_start_world, vel);
         else if (type === 'BlackHole') {
           const randomMass = generateRandomBlackHoleMass();
-          new_obj = new BlackHole(state.add_start_world, randomMass, vel);
+          new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
         }
 
         if (new_obj instanceof Planet) planets.push(new_obj);
