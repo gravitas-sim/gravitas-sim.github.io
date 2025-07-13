@@ -32,11 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
       canvas.classList.add('showCanvas'); // NOW fade the sim in
       starfieldCanvas.classList.add('showCanvas');
 
+      // Generate starfield after canvases are visible
+      generateStarfield();
+
       // Show UI elements after a short delay
       setTimeout(() => {
         document.querySelector('.ui-container').classList.add('showUI');
         document.getElementById('overlay').classList.add('showUI');
-        // Removed automatic scenario info display - users can access it through the UI
+        
+        // Show scenario info box after splash ends
+        const scenarioInfoBox = document.getElementById('scenarioInfoBox');
+        if (scenarioInfoBox) {
+          scenarioInfoBox.classList.add('showUI');
+        }
       }, 200);
     }
   });
@@ -111,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with error handling
   try {
     resizeCanvas();
-    generateStarfield(); // Generate the starfield background
     
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');

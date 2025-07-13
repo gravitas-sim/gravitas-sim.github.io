@@ -10,7 +10,103 @@ import {
 } from './utils.js';
 
 // Import the getRandomName function from ui.js
-import { getRandomName } from './ui.js';
+// import { getRandomName } from './ui.js';
+
+// Local getRandomName function since it's not exported from ui.js
+const getRandomName = (type) => {
+  const names = {
+    planets: [
+      'Terra Nova', 'Gaia Minor', 'Eden Prime', 'Cosmic Garden', 'World Alpha', 
+      'Planet Hope', 'New Earth', 'Stellar Oasis', 'Cosmic Refuge', 'World Beta',
+      'Terra Vista', 'Gaia Prime', 'Eden Alpha', 'Cosmic Haven', 'World Gamma',
+      'Planet Serenity', 'New Horizon', 'Stellar Paradise', 'Cosmic Sanctuary', 'World Delta',
+      'Terra Magna', 'Gaia Supreme', 'Eden Eternal', 'Cosmic Harmony', 'World Epsilon',
+      'Planet Destiny', 'New Genesis', 'Stellar Utopia', 'Cosmic Peace', 'World Zeta',
+      'Terra Mystica', 'Gaia Crystal', 'Eden Infinite', 'Cosmic Tranquil', 'World Eta',
+      'Planet Elysium', 'New Arcadia', 'Stellar Nirvana', 'Cosmic Bliss', 'World Theta',
+      'Terra Wonderland', 'Gaia Magnificent', 'Eden Glorious', 'Cosmic Splendor', 'World Iota'
+    ],
+    gasGiants: [
+      'Storm King', 'Gas Titan', 'Cyclone Prime', 'Atmospheric Giant', 'Wind Walker',
+      'Storm Lord', 'Gas Majesty', 'Cyclone Master', 'Atmospheric Titan', 'Wind Ruler',
+      'Storm Emperor', 'Gas Sovereign', 'Cyclone Champion', 'Atmospheric King', 'Wind Commander',
+      'Storm Deity', 'Gas Noble', 'Cyclone Warrior', 'Atmospheric Lord', 'Wind Guardian',
+      'Storm Monarch', 'Gas Regent', 'Cyclone Sovereign', 'Atmospheric Emperor', 'Wind Protector',
+      'Storm Supreme', 'Gas Commander', 'Cyclone Overlord', 'Atmospheric Chief', 'Wind Sentinel',
+      'Storm Dominator', 'Gas Overlord', 'Cyclone Ruler', 'Atmospheric Supreme', 'Wind Majesty',
+      'Storm Colossus', 'Gas Behemoth', 'Cyclone Leviathan', 'Atmospheric Mammoth', 'Wind Goliath',
+      'Storm Juggernaut', 'Gas Monster', 'Cyclone Beast', 'Atmospheric Crusher', 'Wind Destroyer'
+    ],
+    asteroids: [
+      'Rock Hopper', 'Space Pebble', 'Cosmic Stone', 'Stellar Fragment', 'Orbit Drifter',
+      'Rock Wanderer', 'Space Boulder', 'Cosmic Chunk', 'Stellar Piece', 'Orbit Traveler',
+      'Rock Explorer', 'Space Nugget', 'Cosmic Shard', 'Stellar Bit', 'Orbit Voyager',
+      'Rock Adventurer', 'Space Cobble', 'Cosmic Sliver', 'Stellar Chip', 'Orbit Nomad',
+      'Rock Pioneer', 'Space Gravel', 'Cosmic Splinter', 'Stellar Flake', 'Orbit Roamer',
+      'Rock Scout', 'Space Rubble', 'Cosmic Particle', 'Stellar Grain', 'Orbit Wanderer',
+      'Rock Ranger', 'Space Debris', 'Cosmic Dust', 'Stellar Speck', 'Orbit Drifter',
+      'Rock Hunter', 'Space Cluster', 'Cosmic Meteor', 'Stellar Remnant', 'Orbit Slider',
+      'Rock Seeker', 'Space Swarm', 'Cosmic Shower', 'Stellar Storm', 'Orbit Dancer'
+    ],
+    blackHoles: [
+      'Abyss Prime', 'Void Phantom', 'Dark Nexus', 'Shadow Vortex', 'Stellar Grave',
+      'Event Horizon', 'Cosmic Drain', 'Infinity Well', 'Quantum Void', 'Gravity Beast',
+      'Singularity Alpha', 'The Devourer', 'Omega Point', 'Dark Matter Core', 'Space Ripper',
+      'Neutron Crusher', 'Photon Trap', 'Stellar Vacuum', 'Cosmic Whirlpool', 'The Absorber',
+      'Graviton Sink', 'Spacetime Tear', 'Quantum Collapse', 'Stellar Tomb', 'Dark Energy Core',
+      'Infinity Gate', 'Cosmic Maelstrom', 'The Singularity', 'Void Walker', 'Shadow Realm',
+      'Gravity Storm', 'Stellar Phantom', 'Dark Horizon', 'Cosmic Vacuum', 'The Anomaly',
+      'Warp Core', 'Stellar Devourer', 'Quantum Abyss', 'Gravity Well X', 'Dark Nexus Prime'
+    ],
+    stars: [
+      'Proxima Flare', 'Stellar Beacon', 'Nova Prime', 'Helios Alpha', 'Fusion Core',
+      'Plasma Heart', 'Solar Titan', 'Stellar Phoenix', 'Radiant Crown', 'Cosmic Forge',
+      'Stellar Dynamo', 'Fusion Giant', 'Plasma Sphere', 'Solar Majesty', 'Stellar Furnace',
+      'Radiant Jewel', 'Cosmic Ember', 'Stellar Warrior', 'Solar Guardian', 'Plasma King',
+      'Stellar Empress', 'Fusion Master', 'Solar Deity', 'Stellar Champion', 'Radiant Star',
+      'Cosmic Luminary', 'Stellar Sovereign', 'Solar Monarch', 'Plasma Crown', 'Stellar Glory',
+      'Radiant Sentinel', 'Cosmic Beacon', 'Solar Majesty', 'Stellar Protector', 'Fusion Lord',
+      'Plasma Noble', 'Solar Regent', 'Stellar Ruler', 'Cosmic Sovereign', 'Radiant Emperor',
+      'Stellar Dominator', 'Solar Supreme', 'Plasma Overlord', 'Cosmic Commander', 'Stellar Chief'
+    ],
+    neutronStars: [
+      'Pulsar Prime', 'Neutron Beacon', 'Stellar Compass', 'Cosmic Lighthouse', 'Gravity Pulse',
+      'Neutron King', 'Pulsar Master', 'Stellar Rhythm', 'Cosmic Metronome', 'Gravity Beat',
+      'Neutron Lord', 'Pulsar Champion', 'Stellar Drummer', 'Cosmic Timekeeper', 'Gravity Clock',
+      'Neutron Sovereign', 'Pulsar Overlord', 'Stellar Conductor', 'Cosmic Coordinator', 'Gravity Timer',
+      'Neutron Emperor', 'Pulsar Supreme', 'Stellar Orchestrator', 'Cosmic Synchronizer', 'Gravity Rhythm',
+      'Neutron Deity', 'Pulsar Commander', 'Stellar Maestro', 'Cosmic Harmonizer', 'Gravity Pulse',
+      'Neutron Noble', 'Pulsar Regent', 'Stellar Director', 'Cosmic Organizer', 'Gravity Signal',
+      'Neutron Majesty', 'Pulsar Guardian', 'Stellar Manager', 'Cosmic Controller', 'Gravity Beacon',
+      'Neutron Protector', 'Pulsar Sentinel', 'Stellar Supervisor', 'Cosmic Coordinator', 'Gravity Guide'
+    ],
+    whiteDwarfs: [
+      'Crystal Core', 'Diamond Heart', 'Stellar Gem', 'Cosmic Jewel', 'White Giant',
+      'Crystal Star', 'Diamond Sphere', 'Stellar Crystal', 'Cosmic Diamond', 'White Titan',
+      'Crystal Crown', 'Diamond King', 'Stellar Treasure', 'Cosmic Brilliant', 'White Sovereign',
+      'Crystal Majesty', 'Diamond Lord', 'Stellar Precious', 'Cosmic Radiant', 'White Emperor',
+      'Crystal Noble', 'Diamond Regent', 'Stellar Magnificent', 'Cosmic Splendid', 'White Supreme',
+      'Crystal Commander', 'Diamond Guardian', 'Stellar Glorious', 'Cosmic Luminous', 'White Overlord',
+      'Crystal Protector', 'Diamond Sentinel', 'Stellar Brilliant', 'Cosmic Gleaming', 'White Ruler',
+      'Crystal Warrior', 'Diamond Champion', 'Stellar Shining', 'Cosmic Sparkling', 'White Dominator',
+      'Crystal Deity', 'Diamond Deity', 'Stellar Dazzling', 'Cosmic Glittering', 'White Colossus'
+    ],
+    comets: [
+      'Tail Blazer', 'Ice Wanderer', 'Cosmic Snowball', 'Stellar Comet', 'Orbit Streaker',
+      'Tail Runner', 'Ice Traveler', 'Cosmic Iceball', 'Stellar Visitor', 'Orbit Flasher',
+      'Tail Chaser', 'Ice Explorer', 'Cosmic Frozen', 'Stellar Nomad', 'Orbit Glider',
+      'Tail Dancer', 'Ice Adventurer', 'Cosmic Glacier', 'Stellar Wanderer', 'Orbit Swooper',
+      'Tail Glider', 'Ice Pioneer', 'Cosmic Frost', 'Stellar Drifter', 'Orbit Streamer',
+      'Tail Swooper', 'Ice Scout', 'Cosmic Chill', 'Stellar Roamer', 'Orbit Blazer',
+      'Tail Streamer', 'Ice Ranger', 'Cosmic Freeze', 'Stellar Voyager', 'Orbit Comet',
+      'Tail Hunter', 'Ice Seeker', 'Cosmic Winter', 'Stellar Traveler', 'Orbit Shooter',
+      'Tail Finder', 'Ice Discoverer', 'Cosmic Blizzard', 'Stellar Explorer', 'Orbit Rocket'
+    ]
+  };
+  
+  const typeNames = names[type] || names.planets;
+  return typeNames[Math.floor(Math.random() * typeNames.length)];
+};
 
 // Physics constants and utilities
 const DT = 0.1;

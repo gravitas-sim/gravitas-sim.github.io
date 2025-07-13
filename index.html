@@ -4,12 +4,241 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gravitas - Web Black Hole Sandbox</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      html, body {
+        font-family: 'Inter', sans-serif !important;
+        background: #0d0d1a;
+      }
+      .ui-container, #settingsPanel, #bhMassesModal, #objectInspector, .settings-content, .settings-header, .settings-footer, .bh-masses-header, .bh-masses-footer, .inspector-header, .inspector-content, .mobile-instructions-content, .preset-info {
+        border-radius: 8px !important;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.08);
+      }
+      .ui-button, button, select, input, .toggle-button {
+        font-family: 'Inter', sans-serif !important;
+        border-radius: 8px !important;
+        transition: box-shadow 0.2s, background 0.2s, transform 0.18s cubic-bezier(.4,1.4,.6,1), color 0.2s;
+      }
+      .ui-button, button, .toggle-button {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        background: #23233a;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .ui-button:hover, button:hover, .toggle-button:hover {
+        background: #2e2e4d;
+        color: #fff;
+        transform: scale(1.045);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.13);
+      }
+      .ui-button:active, button:active, .toggle-button:active {
+        background: #23233a;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+        transform: scale(0.98);
+      }
+      
+      /* Enhanced toggle button styling */
+      .toggle-button {
+        position: relative;
+        overflow: hidden;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        min-width: 60px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      }
+      
+      .toggle-button[data-state="on"] {
+        background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3), 0 2px 8px rgba(0,0,0,0.15) !important;
+        border: 1px solid rgba(34, 197, 94, 0.4) !important;
+      }
+      
+      .toggle-button[data-state="off"] {
+        background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3), 0 2px 8px rgba(0,0,0,0.15) !important;
+        border: 1px solid rgba(239, 68, 68, 0.4) !important;
+      }
+      
+      .toggle-button[data-state="on"]:hover {
+        background: linear-gradient(135deg, #16a34a, #15803d) !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4), 0 4px 12px rgba(0,0,0,0.2) !important;
+      }
+      
+      .toggle-button[data-state="off"]:hover {
+        background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4), 0 4px 12px rgba(0,0,0,0.2) !important;
+      }
+      
+      .toggle-button[data-state="on"]:active {
+        background: linear-gradient(135deg, #15803d, #166534) !important;
+        transform: scale(0.98) !important;
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3), 0 1px 4px rgba(0,0,0,0.15) !important;
+      }
+      
+      .toggle-button[data-state="off"]:active {
+        background: linear-gradient(135deg, #b91c1c, #991b1b) !important;
+        transform: scale(0.98) !important;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3), 0 1px 4px rgba(0,0,0,0.15) !important;
+      }
+      
+      /* Collapsible sections styling */
+      .settings-section {
+        margin-bottom: 20px;
+        border: 1px solid rgba(0, 170, 255, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .settings-section-header {
+        padding: 16px 20px;
+        background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(0, 170, 255, 0.05));
+        border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+        user-select: none;
+      }
+      
+      .settings-section-header:hover {
+        background: linear-gradient(135deg, rgba(0, 170, 255, 0.15), rgba(0, 170, 255, 0.08));
+      }
+      
+      .settings-section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
+        margin: 0;
+      }
+      
+      .settings-section-toggle {
+        width: 20px;
+        height: 20px;
+        position: relative;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--primary-color);
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .settings-section.collapsed .settings-section-toggle {
+        transform: rotate(-90deg);
+      }
+      
+      .settings-section-content {
+        padding: 20px;
+        max-height: 1000px;
+        opacity: 1;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+      }
+      
+      .settings-section.collapsed .settings-section-content {
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        opacity: 0;
+      }
+      
+      /* Responsive collapsible sections */
+      @media (max-width: 768px) {
+        .settings-section-header {
+          padding: 14px 16px;
+        }
+        
+        .settings-section-title {
+          font-size: 16px;
+        }
+        
+        .settings-section-content {
+          padding: 16px;
+        }
+        
+        .settings-section-toggle {
+          width: 18px;
+          height: 18px;
+          font-size: 16px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .settings-section-header {
+          padding: 12px 14px;
+        }
+        
+        .settings-section-title {
+          font-size: 15px;
+        }
+        
+        .settings-section-content {
+          padding: 14px;
+        }
+        
+        .settings-section-toggle {
+          width: 16px;
+          height: 16px;
+          font-size: 14px;
+        }
+      }
+      .settings-header, .settings-footer, .settings-content, .settings-grid, .preset-info {
+        font-family: 'Inter', sans-serif !important;
+      }
+      /* Global button gradient styling */
+      button, .ui-button {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+        color: white !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 500 !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+        padding: 8px 16px !important;
+        transition: all 0.3s ease !important;
+        border: none !important;
+        cursor: pointer !important;
+      }
+      
+      button:hover, .ui-button:hover {
+        background: linear-gradient(315deg, #3a8be8 0%, #00d0e0 100%) !important;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3), 0 0 10px rgba(0,255,255,0.5) !important;
+        transform: translateY(-1px) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      button:active, .ui-button:active {
+        background: linear-gradient(135deg, #2a8bfe 0%, #00d0e0 100%) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 0 5px rgba(0,255,255,0.3) !important;
+        transform: translateY(0) !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      /* Remove default outlines for a cleaner look, but keep focus visible for accessibility */
+      button:focus, .ui-button:focus, .toggle-button:focus, select:focus, input:focus {
+        outline: 2px solid #00aaff;
+        outline-offset: 2px;
+      }
+    </style>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <canvas id="starfieldCanvas" class="sim-canvas"></canvas>
-    <canvas id="simulationCanvas" class="sim-canvas"></canvas>
+    <div class="simulation-container">
+        <canvas id="starfieldCanvas" class="sim-canvas"></canvas>
+        <canvas id="simulationCanvas" class="sim-canvas"></canvas>
+    </div>
 
     <!-- ✨ Splash screen -->
     <div id="splash">
@@ -18,6 +247,22 @@
 
     <div id="overlay"></div>
     <div id="scenarioInfoDisplay"></div>
+    
+    <!-- Enhanced Scenario Info Box -->
+    <div id="scenarioInfoBox" class="scenario-info-box">
+      <div class="scenario-info-content">
+        <div class="scenario-info-header">
+          <h3 id="scenarioInfoTitle">Scenario Loaded</h3>
+          <button id="closeScenarioInfo" class="scenario-info-close">&times;</button>
+        </div>
+        <div class="scenario-info-body">
+          <p id="scenarioInfoSummary">Loading scenario information...</p>
+          <div class="scenario-info-details">
+            <ul id="scenarioInfoFeatures"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="mobileInstructions">
         <div class="mobile-instructions-content">
             <h3>Mobile Controls</h3>
@@ -30,6 +275,7 @@
     </div>
 
     <div class="ui-container">
+        <button id="loadScenarioBtn" class="ui-button">Load Scenario</button>
         <button id="settingsBtn" class="ui-button">Settings</button>
         <button id="refreshScenarioBtn" class="ui-button">Refresh Scenario</button>
         <button id="resetAllBtn" class="ui-button">Reset to Default</button>
@@ -45,6 +291,17 @@
         
         <button id="resetViewBtn" class="ui-button">Reset View</button>
         <button id="objectTypeBtn" class="ui-button primary" title="Click to change what type of object you insert">⭐ Add Stars</button>
+    </div>
+
+    <!-- Scenario List Modal -->
+    <div id="scenarioListModal" class="hidden">
+      <div id="scenarioListContent">
+        <div class="scenario-list-header">
+          <h3>Select a Scenario</h3>
+          <button id="closeScenarioList" class="ui-button">&times;</button>
+        </div>
+        <div id="scenarioListItems"></div>
+      </div>
     </div>
 
     <div id="settingsPanel" class="hidden">

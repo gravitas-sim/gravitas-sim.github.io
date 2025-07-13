@@ -26,7 +26,20 @@ const overlayDiv = document.getElementById('overlay');
 // Starfield and rendering functions
 const starfieldCanvas = document.getElementById('starfieldCanvas');
 const starCtx = starfieldCanvas.getContext('2d');
-const star_field = [];
+const starfieldStars = [];
+
+// Ensure canvas is properly sized on initialization
+if (starfieldCanvas) {
+  starfieldCanvas.width = window.innerWidth;
+  starfieldCanvas.height = window.innerHeight;
+  
+  // Generate initial starfield
+  setTimeout(() => {
+    generateStarfield();
+  }, 100);
+} else {
+  console.error('Starfield canvas not found!');
+}
 
 /**
  * Create ambient gradient for starfield background
@@ -40,47 +53,61 @@ const createAmbientGradient = () => {
 };
 
 /**
- * Generate random starfield for background
+ * Generate random starfield
  * Creates stars with random positions, brightness, and size
  */
 function generateStarfield() {
-  star_field.length = 0;
-  const num = SETTINGS.star_density;
-  const W = starfieldCanvas.width * 2;
-  const H = starfieldCanvas.height * 2;
-  for (let i = 0; i < num; i++) {
-    star_field.push({
-      x: Math.random() * W - W / 2,
-      y: Math.random() * H - H / 2,
-      b: Math.random() * 0.7 + 0.3,
-      s: Math.random() * 1.5 + 0.5,
+  starfieldStars.length = 0;
+  
+  const totalStars = SETTINGS.star_density || 300; // Lower default density
+  const W = starfieldCanvas.width;
+  const H = starfieldCanvas.height;
+  
+  // Generate stars with smaller size in screen coordinates
+  for (let i = 0; i < totalStars; i++) {
+    starfieldStars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      b: Math.random() * 0.8 + 0.2, // Brightness: 0.2 to 1.0
+      s: Math.random() * 1.0 + 0.5, // Size: 0.5 to 1.5 (smaller)
+      twinkle: Math.random() * Math.PI * 2 // Random twinkle phase
     });
   }
+  
   drawStarfield();
 }
 
-/**
- * Draw the starfield background
- * Renders all stars with their brightness and ambient lighting if enabled
- */
 function drawStarfield() {
+  const W = starfieldCanvas.width;
+  const H = starfieldCanvas.height;
+
+  // Clear the starfield canvas
+  starCtx.setTransform(1, 0, 0, 1, 0, 0);
+  starCtx.clearRect(0, 0, W, H);
+
+  // Draw background gradient
   starCtx.fillStyle = SETTINGS.show_ambient_lighting
     ? createAmbientGradient()
     : '#0d0d1a';
-  starCtx.fillRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
+  starCtx.fillRect(0, 0, W, H);
 
-  star_field.forEach(st => {
-    starCtx.globalAlpha = st.b;
+  // Draw stars as static background (no zoom or pan transformations)
+  const time = Date.now() * 0.001; // Current time for twinkling
+
+  starfieldStars.forEach(st => {
+    // Add subtle twinkling effect
+    const twinkle = Math.sin(time * 2 + st.twinkle) * 0.1 + 0.9;
+    const brightness = st.b * twinkle;
+    starCtx.globalAlpha = brightness;
     starCtx.fillStyle = '#fff';
-    starCtx.fillRect(
-      st.x + starfieldCanvas.width / 2,
-      st.y + starfieldCanvas.height / 2,
-      st.s,
-      st.s
-    );
+    starCtx.fillRect(st.x, st.y, st.s, st.s);
   });
+
   starCtx.globalAlpha = 1;
 }
+
+// Remove all lensing-related functions and variables below this point.
+// Only keep starfield rendering, generation, and unrelated rendering logic.
 
 // Original drawScene function from index.html
 const drawScene = () => {
@@ -329,14 +356,14 @@ const drawScene = () => {
 
     if (SETTINGS.show_dynamic_overlays) {
         const lines = [ 
-            `Planets: ${planets.length} | Gas Giants: ${gas_giants.length} | Asteroids: ${asteroids.length}`, 
-            `Stars: ${stars.length} | Neutron Stars: ${neutron_stars.length} | White Dwarfs: ${white_dwarfs.length}`, 
-            `Black Holes: ${bh_list.length} | Particles: ${particles.length} | Debris: ${debris.length}`, 
-            `---`, 
-            `Zoom: ${state.zoom.toFixed(2)}x | Sim Speed: ${SETTINGS.sim_speed.toFixed(1)}x`, 
-            `Status: ${state.paused ? 'Paused (Space)' : 'Running'}`,
-            `---`,
-            `🖱️ Controls: Arrow Keys = Pan | Mouse Wheel = Zoom`,
+            `<span class="category-label">Planets:</span> ${planets.length} | <span class="category-label">Gas Giants:</span> ${gas_giants.length} | <span class="category-label">Asteroids:</span> ${asteroids.length}`, 
+            `<span class="category-label">Stars:</span> ${stars.length} | <span class="category-label">Neutron Stars:</span> ${neutron_stars.length} | <span class="category-label">White Dwarfs:</span> ${white_dwarfs.length}`, 
+            `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`, 
+            `<div class="separator-line"></div>`, 
+            `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}x | <span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}x</span>`, 
+            `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused (Space)' : 'Running'}</span>`,
+            `<div class="separator-line"></div>`,
+            `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan | Mouse Wheel = Zoom`,
             `Click objects to inspect | ESC to close inspector`
         ];
         overlayDiv.innerHTML = lines.join('<br>');
@@ -345,14 +372,43 @@ const drawScene = () => {
     }
 };
 
+// Performance monitoring
+let frameCount = 0;
+let lastPerformanceLog = 0;
+let frameTimeSum = 0;
+
 // Original gameLoop function from index.html
 const gameLoop = (timestamp) => {
+    const frameStart = performance.now();
+    
     if (!state.last_time) state.last_time = timestamp; 
     const dt_seconds = (timestamp - state.last_time) / 1000.0;
     state.last_time = timestamp;
     const dt_sim = Math.min(dt_seconds, 0.05) * SETTINGS.sim_speed * 50 * DT;
     if (!state.paused) updatePhysics(dt_sim);
+    
+    // Draw star field first (background layer)
+    drawStarfield();
+    
+    // Draw simulation objects (foreground layer)
     drawScene();
+    
+    // Performance monitoring
+    const frameTime = performance.now() - frameStart;
+    frameTimeSum += frameTime;
+    frameCount++;
+    
+    // Log performance every 5 seconds
+    if (timestamp - lastPerformanceLog > 5000) {
+      const avgFrameTime = frameTimeSum / frameCount;
+      if (avgFrameTime > 16.67) { // Only log if performance is poor
+        console.log(`Performance warning: Average frame time ${avgFrameTime.toFixed(1)}ms (target: 16.67ms for 60fps)`);
+      }
+      frameTimeSum = 0;
+      frameCount = 0;
+      lastPerformanceLog = timestamp;
+    }
+    
     requestAnimationFrame(gameLoop);
 };
 
@@ -365,6 +421,8 @@ function resizeCanvas(){
     generateStarfield();                           // redraw background
 }
 window.addEventListener('resize', resizeCanvas);
+
+
 
 // Export functions
 export {

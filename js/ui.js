@@ -34,6 +34,7 @@ import {
 } from './physics.js';
 
 import { worldToScreen } from './utils.js';
+import { generateStarfield } from './render.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -90,8 +91,6 @@ const DEFAULT_SETTINGS = {
   show_accretion_disk: true,
   realistic_disk_physics: true,
   show_bh_jets: false,
-  improved_lensing: true,
-  lensing_strength: 100,
   show_dynamic_overlays: true,
   enable_asteroids: true,
   num_asteroids: 10,
@@ -201,14 +200,18 @@ const SPACE_OBJECT_NAMES = {
   ]
 };
 
-// Function to get random name from a category
-const getRandomName = (category) => {
-  const names = SPACE_OBJECT_NAMES[category];
-  return names[Math.floor(Math.random() * names.length)];
-};
-
 // Expanded scenario information
 const SCENARIO_INFO = {
+  'Solar System': {
+    title: 'Solar System',
+    summary:
+      'A highly accurate simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
+  },
+  'Earth-Moon System': {
+    title: 'Earth-Moon System',
+    summary:
+      'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
+  },
   'Binary BH': {
     title: 'Binary Black Hole',
     summary:
@@ -237,7 +240,7 @@ const SCENARIO_INFO = {
   'Sagittarius A*': {
     title: 'Sagittarius A*',
     summary:
-      "The Milky Way's central supermassive black hole (4 million M☉) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
+      "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
   },
   'Binary Star System': {
     title: 'Binary Stars',
@@ -319,15 +322,45 @@ const SCENARIO_INFO = {
     summary:
       'A diverse collection of 120+ exoplanets, gas giants, and even pulsar planets around various stellar hosts. Explore the incredible diversity of planetary systems with interactive orbital mechanics and planetary interactions.',
   },
-  'Solar System': {
-    title: 'Solar System',
-    summary:
-      'A highly accurate simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
+  'Quasar Cannon': {
+    title: 'Quasar Cannon',
+    summary: 'A supermassive black hole is actively feeding on a dense star cluster. Watch a beam of light form as stars spiral inward.'
   },
-  'Earth-Moon System': {
-    title: 'Earth-Moon System',
-    summary:
-      'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
+  'The Pinwheel Galaxy Core': {
+    title: 'The Pinwheel Galaxy Core',
+    summary: 'Two intermediate black holes in the center of a stellar disk. The disk forms a rotating pinwheel pattern as stars are slung around.'
+  },
+  'Star Frisbee': {
+    title: 'Star Frisbee',
+    summary: 'A dense stellar disk thrown past a rogue black hole. Will it be shredded or survive the flyby?'
+  },
+  'Kessler Cascade': {
+    title: 'Kessler Cascade',
+    summary: 'Hundreds of micro‑stars orbiting chaotically, colliding and ejecting like a debris cloud.'
+  },
+  'Alien Dyson Swarm Collapse': {
+    title: 'Alien Dyson Swarm Collapse',
+    summary: 'A hypothetical Dyson swarm of artificial satellites falls into a black hole after a catastrophic orbital failure.'
+  },
+  'Tidal Arm Tango': {
+    title: 'Tidal Arm Tango',
+    summary: 'Two black holes dance past each other, flinging stars into massive tidal arms like colliding galaxies.'
+  },
+  'Hungry Hungry Holes': {
+    title: 'Hungry Hungry Holes',
+    summary: 'Four black holes at the corners of a square, pulling stars from a shared central cluster.'
+  },
+  'Slingshot Gauntlet': {
+    title: 'Slingshot Gauntlet',
+    summary: 'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.'
+  },
+  'Black Hole Billiards': {
+    title: 'Black Hole Billiards',
+    summary: 'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.'
+  },
+  'Stellar Nursery': {
+    title: 'Stellar Nursery',
+    summary: 'A dense cluster of young stars around a proto-black hole. Watch interactions and ejections as the cluster evolves.'
   },
 };
 
@@ -400,11 +433,11 @@ const getStarInfo = (star) => {
     const radiusInKm = radiusInSuns * 696340; // Solar radius in km
     const massInKg = massInSuns * 1.989e30; // Solar mass in kg
     
-    // Real temperature estimate based on mass
-    const temperature = 3000 + (massInSuns - 0.2) * 4000; // K
+    // Real surface temperature estimate based on mass
+    const surfaceTemperature = 3000 + (massInSuns - 0.2) * 4000; // K
     
-    // Real luminosity (W)
-    const luminosity = Math.pow(massInSuns, 3.5) * 3.828e26; // Solar luminosity in W
+    // Real luminosity in solar units
+    const luminosity = Math.pow(massInSuns, 3.5); // Solar luminosity units
     
     // Real surface gravity (m/s²)
     const G = 6.67430e-11;
@@ -439,12 +472,12 @@ const getStarInfo = (star) => {
         stats: [
             { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)` },
             { label: 'Radius', value: `${radiusInSuns.toFixed(2)} R☉ (${radiusInKm.toFixed(0)} km)` },
-            { label: 'Temperature', value: `${temperature.toFixed(0)} K` },
-            { label: 'Luminosity', value: `${(luminosity/1e26).toFixed(2)} × 10²⁶ W` },
+            { label: 'Surface Temperature', value: `${surfaceTemperature.toFixed(0)} K` },
+            { label: 'Luminosity', value: `${luminosity.toFixed(2)} L☉` },
             { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(0)} m/s²` },
             { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
             { label: 'Spectral Type', value: spectralType },
-            { label: 'Age', value: `${age.toFixed(1)} billion years` },
+            { label: 'Lifespan', value: `${age.toFixed(1)} billion years` },
             { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
             { label: 'Position', value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})` },
             { label: 'Velocity', value: `${Math.hypot(star.vel.x, star.vel.y).toFixed(1)} units/s` }
@@ -518,9 +551,11 @@ const getPlanetInfo = (planet) => {
 
 const getGasGiantInfo = (gasGiant) => {
     const massInJupiters = gasGiant.massInJupiters || (gasGiant.mass / 50.0);
+    const massInEarths = massInJupiters * 317.8; // Convert Jupiter mass to Earth mass (1 Jupiter = 317.8 Earth masses)
     const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
-    const radiusInKm = radiusInJupiters * 69911; // Jupiter radius in km
-    const massInKg = massInJupiters * 1.898e27; // Jupiter mass in kg
+    const radiusInEarths = radiusInJupiters * 11.2; // Convert Jupiter radius to Earth radius (1 Jupiter = 11.2 Earth radii)
+    const radiusInKm = radiusInEarths * 6371; // Earth radius in km
+    const massInKg = massInEarths * 5.972e24; // Earth mass in kg
     
     // Real density calculation (kg/m³)
     const volume = (4/3) * Math.PI * Math.pow(radiusInKm * 1000, 3);
@@ -556,8 +591,8 @@ const getGasGiantInfo = (gasGiant) => {
         icon: '🪐',
         title: gasGiant.name || 'Gas Giant',
         stats: [
-            { label: 'Mass', value: `${massInJupiters.toFixed(2)} M♃ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Radius', value: `${radiusInJupiters.toFixed(2)} R♃ (${radiusInKm.toFixed(0)} km)` },
+            { label: 'Mass', value: `${massInEarths.toFixed(1)} M⊕ (${massInKg.toExponential(2)} kg)` },
+            { label: 'Radius', value: `${radiusInEarths.toFixed(1)} R⊕ (${radiusInKm.toFixed(0)} km)` },
             { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
             { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
             { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
@@ -566,7 +601,7 @@ const getGasGiantInfo = (gasGiant) => {
             { label: 'Position', value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})` },
             { label: 'Velocity', value: `${Math.hypot(gasGiant.vel.x, gasGiant.vel.y).toFixed(1)} units/s` }
         ],
-        description: `A ${displayType.toLowerCase()} with ${massInJupiters > 10 ? 'enormous' : massInJupiters > 1 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`
+        description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`
     };
 };
 
@@ -828,6 +863,56 @@ const show_scenario_info = () => {
   }
 };
 
+// Enhanced scenario info box function
+const show_enhanced_scenario_info = (scenarioName) => {
+  if (!scenarioName || !SCENARIO_INFO[scenarioName]) {
+    return;
+  }
+  
+  const info = SCENARIO_INFO[scenarioName];
+  const infoBox = document.getElementById('scenarioInfoBox');
+  const title = document.getElementById('scenarioInfoTitle');
+  const summary = document.getElementById('scenarioInfoSummary');
+  const features = document.getElementById('scenarioInfoFeatures');
+  
+  // Set the title and summary
+  title.textContent = info.title;
+  summary.textContent = info.summary;
+  
+  // Clear the features list since we're removing the key highlights section
+  features.innerHTML = '';
+  
+  // Check if splash screen is still active
+  const splash = document.getElementById('splash');
+  const isSplashActive = splash && !splash.classList.contains('hidden') && splash.style.display !== 'none';
+  
+  if (isSplashActive) {
+    // If splash is still active, wait for it to end before showing info box
+    const checkSplashEnd = () => {
+      const currentSplash = document.getElementById('splash');
+      if (!currentSplash || currentSplash.classList.contains('hidden') || currentSplash.style.display === 'none') {
+        // Splash has ended, show the info box
+        infoBox.classList.add('showUI');
+        // Auto-hide after 18 seconds
+        setTimeout(() => {
+          infoBox.classList.remove('showUI');
+        }, 18000);
+      } else {
+        // Splash still active, check again in 100ms
+        setTimeout(checkSplashEnd, 100);
+      }
+    };
+    checkSplashEnd();
+  } else {
+    // Splash has ended, show the info box immediately
+    infoBox.classList.add('showUI');
+    // Auto-hide after 18 seconds
+    setTimeout(() => {
+      infoBox.classList.remove('showUI');
+    }, 18000);
+  }
+};
+
 /**
  * Apply preset scenario settings to the simulation
  * @param {Object} settings_dict - Settings object to modify with preset values
@@ -863,8 +948,6 @@ const apply_preset = settings_dict => {
       show_bh_glow: true,
       show_accretion_disk: true,
       show_bh_jets: false,
-      improved_lensing: true,
-      lensing_strength: 100,
       show_dynamic_overlays: true,
       enable_asteroids: true,
       num_asteroids: 30,
@@ -880,6 +963,8 @@ const apply_preset = settings_dict => {
     Object.assign(settings_dict, {
       num_black_holes: 0,
       num_neutron_stars: 2,
+      use_individual_ns_masses: true,
+      ns_masses: [1.4, 1.4], // Both neutron stars are 1.4 M☉ as per GW170817
       bh_behavior: 'Orbiting',
       num_planets: 5,
       num_gas_giants: 1,
@@ -914,7 +999,7 @@ const apply_preset = settings_dict => {
       num_white_dwarfs: 2,
       num_planets: 0,
       num_gas_giants: 0,
-      num_asteroids: 30,
+      num_asteroids: 80, // Increased for debris disk effect
       placement: 'Circular',
       init_velocity: 25,
       mutual_gravity: true,
@@ -923,6 +1008,7 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 40,
+      show_accretion_disk: true, // Show accretion between white dwarfs
     });
   } else if (ps === 'Stellar Graveyard') {
     Object.assign(settings_dict, {
@@ -959,8 +1045,6 @@ const apply_preset = settings_dict => {
       show_accretion_disk: true,
       show_bh_glow: true,
       show_bh_jets: true,
-      improved_lensing: true,
-      lensing_strength: 200,
       gravitational_constant: 1.8,
       sim_speed: 0.6,
       enable_star_merging: true,
@@ -1031,8 +1115,6 @@ const apply_preset = settings_dict => {
       show_accretion_disk: true,
       show_bh_glow: true,
       show_bh_jets: true,
-      improved_lensing: true,
-      lensing_strength: 300,
       sim_speed: 0.7,
       gravitational_constant: 2.0,
     });
@@ -1074,8 +1156,6 @@ const apply_preset = settings_dict => {
       show_bh_jets: true,
       orbit_decay_rate: 0.005,
       sim_speed: 0.4, // Slower to see the collision develop
-      improved_lensing: true,
-      lensing_strength: 400,
       gravitational_constant: 1.9,
       enable_star_merging: true,
     });
@@ -1148,8 +1228,6 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.7,
       sim_speed: 0.7,
       mutual_gravity: true,
-      improved_lensing: true,
-      lensing_strength: 150,
     });
   } else if (ps === 'Star Cluster') {
     Object.assign(settings_dict, {
@@ -1203,8 +1281,6 @@ const apply_preset = settings_dict => {
       init_velocity: 70, // Reduced from 300 for better visibility
       velocity_stddev: 25, // Reduced from 100
       mutual_gravity: true,
-      improved_lensing: true,
-      lensing_strength: 500,
       sim_speed: 0.5, // Slower to see the extreme dynamics
       gravitational_constant: 2.0,
       enable_star_merging: true,
@@ -1240,13 +1316,32 @@ const apply_preset = settings_dict => {
       velocity_stddev: 3,
       gravitational_constant: 1.0,
       sim_speed: 0.5, // Slower for better observation
-      enable_star_merging: false,
+      enable_star_merging: true,
       show_trails: true,
       trail_length: 20,
+      sim_size: 'Small', // Focused view
+    });
+  } else if (ps === 'Earth-Moon System') {
+    Object.assign(settings_dict, {
+      num_black_holes: 0,
+      num_stars: 0, // No central star, just Earth-Moon
+      num_planets: 1, // Earth
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      placement: 'Empty', // Special placement handled in initialization
+      init_velocity: 10,
+      velocity_stddev: 2,
+      gravitational_constant: 1.0,
+      sim_speed: 0.3, // Very slow for detailed observation
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 30,
+      sim_size: 'Small', // Focused view
     });
   } else if (ps === 'Slingshot') {
     Object.assign(settings_dict, {
-      placement: 'Empty',
+      placement: 'Random',
       num_black_holes: 2,
       use_individual_bh_masses: true,
       bh_masses: [60, 3], // Larger mass ratio for dramatic effect
@@ -1261,7 +1356,7 @@ const apply_preset = settings_dict => {
       show_bh_glow: true,
       sim_speed: 0.8,
       gravitational_constant: 1.6,
-      enable_star_merging: true,
+      enable_star_merging: false, // Disable merging to prevent immediate black hole merger
     });
   } else if (ps === 'Rogue Encounter') {
     Object.assign(settings_dict, {
@@ -1281,6 +1376,190 @@ const apply_preset = settings_dict => {
       sim_speed: 0.7,
       gravitational_constant: 1.5,
       enable_star_merging: true,
+    });
+  } else if (ps === 'Quasar Cannon') {
+    Object.assign(settings_dict, {
+      num_black_holes: 1,
+      bh_mass: 1e9,
+      num_stars: 50,
+      placement: 'Random',
+      sim_size: 'Huge',
+      init_velocity: 120,
+      velocity_stddev: 40,
+      show_accretion_disk: true,
+      show_bh_glow: true,
+      show_bh_jets: true,
+      star_density: 10000,
+      sim_speed: 0.7,
+      show_trails: true,
+      trail_length: 60,
+      enable_star_merging: true,
+      // Visual: high accretion rate (handled in rendering)
+    });
+  } else if (ps === 'The Pinwheel Galaxy Core') {
+    Object.assign(settings_dict, {
+      num_black_holes: 2,
+      use_individual_bh_masses: true,
+      bh_masses: [1e5, 1e5],
+      num_stars: 200,
+      placement: 'Circular',
+      sim_size: 'Huge',
+      init_velocity: 90,
+      velocity_stddev: 10,
+      show_accretion_disk: true,
+      show_bh_glow: true,
+      sim_speed: 0.8,
+      show_trails: true,
+      trail_length: 80,
+      enable_star_merging: true,
+      // Visual: all stars co-rotating (handled in initialization)
+    });
+  } else if (ps === 'Star Frisbee') {
+    Object.assign(settings_dict, {
+      num_black_holes: 1,
+      bh_mass: 10,
+      num_stars: 30,
+      placement: 'Circular',
+      sim_size: 'Large',
+      init_velocity: 8,
+      velocity_stddev: 2,
+      show_accretion_disk: false,
+      show_bh_glow: true,
+      sim_speed: 1.0,
+      show_trails: true,
+      trail_length: 30,
+      enable_star_merging: true,
+      // Special: BH moves at 500 km/s (handled in initialization)
+    });
+  } else if (ps === 'Kessler Cascade') {
+    Object.assign(settings_dict, {
+      num_black_holes: 1,
+      bh_mass: 5,
+      num_stars: 0,
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      sim_size: 'Large',
+      placement: 'Random',
+      sim_speed: 1.2,
+      show_trails: true,
+      trail_length: 20,
+      enable_star_merging: true,
+      // 300 micro-stars as 0.1 Msun stars (handled in initialization)
+    });
+    settings_dict.num_micro_stars = 300;
+    settings_dict.micro_star_mass = 0.1;
+    settings_dict.micro_star_high_velocity = true;
+  } else if (ps === 'Alien Dyson Swarm Collapse') {
+    Object.assign(settings_dict, {
+      num_black_holes: 1,
+      bh_mass: 1,
+      num_stars: 100,
+      placement: 'Circular',
+      sim_size: 'Medium',
+      init_velocity: 30,
+      velocity_stddev: 2,
+      show_accretion_disk: false,
+      show_bh_glow: true,
+      sim_speed: 0.9,
+      show_trails: true,
+      trail_length: 18,
+      enable_star_merging: false,
+      // Visual: satellites, slight orbital decay (handled in initialization)
+    });
+    settings_dict.satellites_are_dyson = true;
+  } else if (ps === 'Tidal Arm Tango') {
+    Object.assign(settings_dict, {
+      num_black_holes: 2,
+      use_individual_bh_masses: true,
+      bh_masses: [1e6, 1e6],
+      num_stars: 300,
+      placement: 'Multi-Ring',
+      sim_size: 'Huge',
+      init_velocity: 100,
+      velocity_stddev: 30,
+      show_accretion_disk: true,
+      show_bh_glow: true,
+      sim_speed: 0.7,
+      show_trails: true,
+      trail_length: 100,
+      enable_star_merging: true,
+      // Special: BHs on near-parabolic trajectories (handled in initialization)
+    });
+  } else if (ps === 'Hungry Hungry Holes') {
+    Object.assign(settings_dict, {
+      num_black_holes: 4,
+      use_individual_bh_masses: true,
+      bh_masses: [50, 50, 50, 50],
+      num_stars: 50,
+      placement: 'Random',
+      sim_size: 'Large',
+      init_velocity: 20,
+      velocity_stddev: 10,
+      show_accretion_disk: false,
+      show_bh_glow: true,
+      sim_speed: 0.8,
+      show_trails: true,
+      trail_length: 40,
+      enable_star_merging: true,
+      // Special: BHs at square corners, stars in center (handled in initialization)
+    });
+  } else if (ps === 'Slingshot Gauntlet') {
+    Object.assign(settings_dict, {
+      num_black_holes: 5,
+      use_individual_bh_masses: true,
+      bh_masses: [30, 30, 30, 30, 30],
+      num_stars: 1,
+      placement: 'Grid',
+      sim_size: 'Large',
+      init_velocity: 0,
+      velocity_stddev: 0,
+      show_accretion_disk: false,
+      show_bh_glow: true,
+      sim_speed: 1.1,
+      show_trails: true,
+      trail_length: 25,
+      enable_star_merging: false,
+      // Special: test star shot at 1000 km/s (handled in initialization)
+    });
+    settings_dict.test_star_slingshot = true;
+  } else if (ps === 'Black Hole Billiards') {
+    Object.assign(settings_dict, {
+      num_black_holes: 4,
+      use_individual_bh_masses: true,
+      bh_masses: [1e6, 10, 10, 10],
+      num_stars: 20,
+      placement: 'Random',
+      sim_size: 'Large',
+      init_velocity: 30,
+      velocity_stddev: 10,
+      show_accretion_disk: true,
+      show_bh_glow: true,
+      sim_speed: 0.9,
+      show_trails: true,
+      trail_length: 35,
+      enable_star_merging: true,
+      // Special: 3 small BHs orbiting a supermassive one (handled in initialization)
+    });
+  } else if (ps === 'Stellar Nursery') {
+    Object.assign(settings_dict, {
+      num_black_holes: 1,
+      bh_mass: 1,
+      num_stars: 100,
+      placement: 'Random',
+      sim_size: 'Medium',
+      init_velocity: 10,
+      velocity_stddev: 5,
+      show_accretion_disk: false,
+      show_bh_glow: true,
+      sim_speed: 0.8,
+      show_trails: true,
+      trail_length: 20,
+      enable_star_merging: true,
+      // Special: BH grows in mass over time (handled in simulation loop)
     });
   }
 
@@ -1440,6 +1719,41 @@ const apply_placement = () => {
   // Special positioning for black holes in specific scenarios
   if (bh_list.length > 1) {
     switch (current_scenario_name) {
+      case 'Slingshot':
+        if (bh_list.length >= 2) {
+          // Create a binary black hole system with proper orbital parameters
+          const separation = 100; // Initial separation distance
+          const m1 = bh_list[0].mass; // Mass of first black hole (60 M☉)
+          const m2 = bh_list[1].mass; // Mass of second black hole (3 M☉)
+          const totalMass = m1 + m2;
+          
+          // Calculate center of mass positions
+          const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
+          const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
+          
+          // Position black holes around center of mass
+          bh_list[0].pos.x = -r1;
+          bh_list[0].pos.y = 0;
+          bh_list[1].pos.x = r2;
+          bh_list[1].pos.y = 0;
+          
+          // Calculate orbital velocity for circular orbit
+          const G = SETTINGS.gravitational_constant;
+          const orbitalSpeed = Math.sqrt(G * totalMass / separation);
+          
+          // Apply velocities for circular orbit (perpendicular to separation)
+          bh_list[0].vel.x = 0;
+          bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
+          bh_list[1].vel.x = 0;
+          bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
+          
+          // Add slight perturbation to make it more interesting
+          const perturbation = 0.9; // Reduce velocity slightly to create more dynamic orbits
+          bh_list[0].vel.y *= perturbation;
+          bh_list[1].vel.y *= perturbation;
+        }
+        break;
+
       case 'Binary BH':
         if (bh_list.length >= 2) {
           // Calculate proper orbital parameters for binary black holes
@@ -1522,12 +1836,16 @@ const initialize_simulation = () => {
   apply_preset(SETTINGS);
   current_scenario_name = starting_preset;
 
+  // Reset insertion object type to scenario default (or 'Star') and update button
+  SETTINGS.input_object_type = SETTINGS.input_object_type || 'Star';
+  updateObjectTypeButton();
+
   // Ensure inspector is hidden during initialization
   hideObjectInspector();
 
   // Update physics settings
   updatePhysicsSettings(SETTINGS);
-
+  
   state.zoom = 1.5; // Increased from 1.0 for better initial framing
   state.pan = { x: 0.0, y: 0.0 };
   // Clear all arrays instead of reassigning them
@@ -1553,7 +1871,7 @@ const initialize_simulation = () => {
 
   // Add stars based on num_stars setting
   if (SETTINGS.num_stars) {
-    for (let i = 0; i < SETTINGS.num_stars; i++) {
+      for (let i = 0; i < SETTINGS.num_stars; i++) {
       stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
@@ -1568,13 +1886,20 @@ const initialize_simulation = () => {
     for (let i = 0; i < SETTINGS.num_black_holes; i++) {
       bh_list.push(
         new BlackHole({ x: 0, y: 0 }, SETTINGS.bh_mass * SOLAR_MASS_UNIT)
-      );
+    );
     }
   }
 
   // Add neutron stars
-  for (let i = 0; i < (SETTINGS.num_neutron_stars || 0); i++) {
-    neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, null, null));
+  if (SETTINGS.use_individual_ns_masses && SETTINGS.ns_masses && SETTINGS.ns_masses.length > 0) {
+    for (let i = 0; i < SETTINGS.num_neutron_stars; i++) {
+      const mass = SETTINGS.ns_masses[i] || 1.4; // Default to 1.4 M☉ if not specified
+      neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, mass * SOLAR_MASS_UNIT, null));
+    }
+  } else {
+    for (let i = 0; i < (SETTINGS.num_neutron_stars || 0); i++) {
+      neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, null, null));
+    }
   }
 
   // Add white dwarfs
@@ -1608,6 +1933,9 @@ const initialize_simulation = () => {
 
   // Apply placement patterns to position objects
   apply_placement();
+  
+  // Show enhanced scenario info box
+  show_enhanced_scenario_info(starting_preset);
 
   // Special scenario setups
   if (starting_preset === 'Binary Star System') {
@@ -2191,6 +2519,9 @@ const initialize_simulation = () => {
     // This will be handled by the camera system to show both objects clearly
     SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
   }
+
+  // In initialize_simulation(), at the end, add:
+  generateStarfield();
 };
 
 // Settings functions
@@ -2201,6 +2532,8 @@ const setting_items = [
     type: 'option',
     options: [
       'None',
+      'Solar System',
+      'Earth-Moon System',
       'Binary BH',
       'Triple BH System',
       'Supermassive BH',
@@ -2223,8 +2556,16 @@ const setting_items = [
       'Galactic Collision',
       'Micro BH Swarm',
       'Exoplanet Lab',
-      'Solar System',
-      'Earth-Moon System',
+      'Quasar Cannon',
+      'The Pinwheel Galaxy Core',
+      'Star Frisbee',
+      'Kessler Cascade',
+      'Alien Dyson Swarm Collapse',
+      'Tidal Arm Tango',
+      'Hungry Hungry Holes',
+      'Slingshot Gauntlet',
+      'Black Hole Billiards',
+      'Stellar Nursery',
     ],
   },
   { label: '--- Simulation ---', type: 'separator' },
@@ -2408,15 +2749,6 @@ const setting_items = [
   { label: 'Show Accretion Disk', key: 'show_accretion_disk', type: 'bool' },
   { label: 'Realistic Disk Physics', key: 'realistic_disk_physics', type: 'bool' },
   { label: 'Show BH Jets', key: 'show_bh_jets', type: 'bool' },
-  { label: 'Improved Lensing', key: 'improved_lensing', type: 'bool' },
-  {
-    label: 'Lensing Strength',
-    key: 'lensing_strength',
-    type: 'float',
-    min: 1,
-    max: 1000,
-    step: 10,
-  },
   {
     label: 'Star Field Density',
     key: 'star_density',
@@ -2455,6 +2787,351 @@ const setting_items = [
   { label: 'Record Simulation', key: 'record_simulation', type: 'bool' },
 ];
 
+// ===== Reusable Tooltip System =====
+class TooltipManager {
+  constructor() {
+    this.activeTooltip = null;
+    this.tooltipElement = null;
+    this.init();
+  }
+
+  init() {
+    // Create tooltip element
+    this.tooltipElement = document.createElement('div');
+    this.tooltipElement.className = 'tooltip-system';
+    this.tooltipElement.style.cssText = `
+      position: fixed;
+      background: rgba(34, 34, 34, 0.9);
+      color: #e0e0e0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      max-width: 280px;
+      word-wrap: break-word;
+      white-space: normal;
+      font-family: 'Inter', sans-serif;
+    `;
+    
+    // Add close button
+    const closeButton = document.createElement('button');
+    closeButton.className = 'tooltip-close';
+    closeButton.innerHTML = '×';
+    closeButton.style.cssText = `
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      line-height: 1;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `;
+    
+    closeButton.addEventListener('mouseenter', () => {
+      closeButton.style.color = '#e0e0e0';
+      closeButton.style.background = 'rgba(255, 255, 255, 0.1)';
+    });
+    
+    closeButton.addEventListener('mouseleave', () => {
+      closeButton.style.color = '#888';
+      closeButton.style.background = 'none';
+    });
+    
+    closeButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.hide();
+    });
+    
+    // Add arrow
+    const arrow = document.createElement('div');
+    arrow.className = 'tooltip-arrow';
+    arrow.style.cssText = `
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+    `;
+    
+    this.tooltipElement.appendChild(closeButton);
+    this.tooltipElement.appendChild(arrow);
+    
+    document.body.appendChild(this.tooltipElement);
+    
+    // Add event listeners
+    document.addEventListener('click', this.handleOutsideClick.bind(this));
+    document.addEventListener('keydown', this.handleKeydown.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('scroll', this.handleScroll.bind(this));
+  }
+
+  show(tooltipText, triggerElement, options = {}) {
+    // Hide any existing tooltip
+    this.hide();
+    
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.style.cssText = `
+      padding-right: 30px;
+      margin-top: 8px;
+    `;
+    contentContainer.textContent = tooltipText;
+    
+    // Clear existing content and add new content
+    this.tooltipElement.innerHTML = '';
+    
+    // Re-add close button
+    const closeButton = document.createElement('button');
+    closeButton.className = 'tooltip-close';
+    closeButton.innerHTML = '×';
+    closeButton.style.cssText = `
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      line-height: 1;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `;
+    
+    closeButton.addEventListener('mouseenter', () => {
+      closeButton.style.color = '#e0e0e0';
+      closeButton.style.background = 'rgba(255, 255, 255, 0.1)';
+    });
+    
+    closeButton.addEventListener('mouseleave', () => {
+      closeButton.style.color = '#888';
+      closeButton.style.background = 'none';
+    });
+    
+    closeButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.hide();
+    });
+    
+    // Add arrow
+    const arrow = document.createElement('div');
+    arrow.className = 'tooltip-arrow';
+    arrow.style.cssText = `
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+    `;
+    
+    this.tooltipElement.appendChild(closeButton);
+    this.tooltipElement.appendChild(contentContainer);
+    this.tooltipElement.appendChild(arrow);
+    
+    // Position tooltip
+    this.positionTooltip(triggerElement, options);
+    
+    // Show tooltip
+    this.tooltipElement.style.visibility = 'visible';
+    this.tooltipElement.style.opacity = '1';
+    this.tooltipElement.style.pointerEvents = 'auto';
+    
+    // Store reference
+    this.activeTooltip = {
+      element: triggerElement,
+      options
+    };
+  }
+
+  hide() {
+    if (this.tooltipElement) {
+      this.tooltipElement.style.visibility = 'hidden';
+      this.tooltipElement.style.opacity = '0';
+      this.tooltipElement.style.pointerEvents = 'none';
+    }
+    this.activeTooltip = null;
+  }
+
+  positionTooltip(triggerElement, options = {}) {
+    const tooltip = this.tooltipElement;
+    const triggerRect = triggerElement.getBoundingClientRect();
+    const arrow = tooltip.querySelector('.tooltip-arrow');
+    
+    // Default position (below the trigger)
+    let position = options.position || 'bottom';
+    let x = triggerRect.left + triggerRect.width / 2;
+    let y = triggerRect.bottom + 8;
+    
+    // Calculate available space
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const tooltipWidth = tooltip.offsetWidth || 280;
+    const tooltipHeight = tooltip.offsetHeight || 100;
+    
+    // Auto-position if not enough space
+    if (position === 'bottom' && y + tooltipHeight > viewportHeight - 20) {
+      position = 'top';
+    }
+    if (position === 'top' && y - tooltipHeight < 20) {
+      position = 'bottom';
+    }
+    if (position === 'right' && x + tooltipWidth > viewportWidth - 20) {
+      position = 'left';
+    }
+    if (position === 'left' && x - tooltipWidth < 20) {
+      position = 'right';
+    }
+    
+    // Adjust position based on final position
+    switch (position) {
+      case 'top':
+        y = triggerRect.top - tooltipHeight - 8;
+        x = triggerRect.left + triggerRect.width / 2;
+        arrow.style.bottom = '-12px';
+        arrow.style.left = '50%';
+        arrow.style.transform = 'translateX(-50%)';
+        arrow.style.borderTopColor = 'rgba(34, 34, 34, 0.9)';
+        arrow.style.borderBottomColor = 'transparent';
+        break;
+      case 'bottom':
+        y = triggerRect.bottom + 8;
+        x = triggerRect.left + triggerRect.width / 2;
+        arrow.style.top = '-12px';
+        arrow.style.left = '50%';
+        arrow.style.transform = 'translateX(-50%)';
+        arrow.style.borderBottomColor = 'rgba(34, 34, 34, 0.9)';
+        arrow.style.borderTopColor = 'transparent';
+        break;
+      case 'left':
+        x = triggerRect.left - tooltipWidth - 8;
+        y = triggerRect.top + triggerRect.height / 2;
+        arrow.style.right = '-12px';
+        arrow.style.top = '50%';
+        arrow.style.transform = 'translateY(-50%)';
+        arrow.style.borderLeftColor = 'rgba(34, 34, 34, 0.9)';
+        arrow.style.borderRightColor = 'transparent';
+        break;
+      case 'right':
+        x = triggerRect.right + 8;
+        y = triggerRect.top + triggerRect.height / 2;
+        arrow.style.left = '-12px';
+        arrow.style.top = '50%';
+        arrow.style.transform = 'translateY(-50%)';
+        arrow.style.borderRightColor = 'rgba(34, 34, 34, 0.9)';
+        arrow.style.borderLeftColor = 'transparent';
+        break;
+    }
+    
+    // Ensure tooltip stays within viewport bounds
+    x = Math.max(10, Math.min(x, viewportWidth - tooltipWidth - 10));
+    y = Math.max(10, Math.min(y, viewportHeight - tooltipHeight - 10));
+    
+    // Apply position
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+  }
+
+  handleOutsideClick(event) {
+    if (this.activeTooltip && !this.activeTooltip.element.contains(event.target) && !this.tooltipElement.contains(event.target)) {
+      this.hide();
+    }
+  }
+
+  handleKeydown(event) {
+    if (event.key === 'Escape' && this.activeTooltip) {
+      this.hide();
+    }
+  }
+
+  handleResize() {
+    if (this.activeTooltip) {
+      this.positionTooltip(this.activeTooltip.element, this.activeTooltip.options);
+    }
+  }
+
+  handleScroll() {
+    if (this.activeTooltip) {
+      this.positionTooltip(this.activeTooltip.element, this.activeTooltip.options);
+    }
+  }
+}
+
+// Create global tooltip manager instance
+const tooltipManager = new TooltipManager();
+
+// Function to get tooltip text for settings
+const getSettingTooltip = (key, label) => {
+  const tooltips = {
+    // Simulation settings
+    'gravitational_constant': 'Determines the strength of gravity in the simulation. Higher values exaggerate gravitational effects for visualization.',
+    'sim_speed': 'Controls how fast the simulation runs. Higher values make time pass faster.',
+    'mutual_gravity': 'When enabled, all objects attract each other. When disabled, only black holes create gravity.',
+    'enable_star_merging': 'When enabled, stars and other objects can merge when they get too close to each other.',
+    
+    // Object counts
+    'num_black_holes': 'Number of black holes in the simulation. Each black hole creates a strong gravitational field.',
+    'bh_mass': 'Mass of black holes in solar masses (M☉). Higher mass creates stronger gravity.',
+    'num_stars': 'Number of stars in the simulation. Stars are lighter than black holes but still create gravity.',
+    'num_planets': 'Number of planets in the simulation. Planets are small objects that orbit around larger bodies.',
+    'num_gas_giants': 'Number of gas giant planets. These are larger than regular planets.',
+    'num_asteroids': 'Number of asteroids in the simulation. These are small rocky objects.',
+    'num_comets': 'Number of comets. These objects have highly elliptical orbits.',
+    'num_neutron_stars': 'Number of neutron stars. These are dense stellar remnants.',
+    'num_white_dwarfs': 'Number of white dwarfs. These are small, dense stellar remnants.',
+    
+    // Behavior settings
+    'bh_behavior': 'How black holes behave: Static (stationary), Orbiting (move in orbits), or Rogue (random movement).',
+    'use_individual_bh_masses': 'Toggle to assign unique masses to each black hole instead of a shared mass.',
+    
+    // Visual settings
+    'show_trails': 'When enabled, objects leave trails showing their recent path.',
+    'trail_length': 'How long object trails persist on screen before fading.',
+    'trail_style': 'Style of the trails: Simple lines or glowing effects.',
+    'show_accretion_disk': 'When enabled, black holes display accretion disk effects.',
+    'show_bh_glow': 'When enabled, black holes have a glowing effect.',
+    'star_density': 'Number of background stars in the starfield.',
+    
+    // Initial conditions
+    'placement': 'How objects are initially positioned: Random, Circular, or Empty.',
+    'init_velocity': 'Initial velocity given to objects when they are created.',
+    'velocity_stddev': 'Standard deviation of initial velocities, creating variation.',
+    'orbit_decay_rate': 'How quickly orbits decay due to gravitational radiation.',
+    
+    // Scenario settings
+    'preset_scenario': 'Choose from predefined scenarios with specific object configurations.',
+    'sim_size': 'Overall scale of the simulation: Small, Medium, or Large.',
+    
+    // Additional settings
+    'softening_length': 'Reduces numerical instabilities by softening gravity at very small distances.',
+    'time_step': 'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.'
+  };
+  
+  return tooltips[key] || `This setting controls ${label.toLowerCase()}.`;
+};
+
 const buildSettingsMenu = () => {
   const settingsGrid = document.getElementById('settingsGrid');
   settingsGrid.innerHTML = '';
@@ -2472,99 +3149,222 @@ const buildSettingsMenu = () => {
     box.innerHTML = `<h4>${info.title}</h4>${info.summary}`;
   }
 
+  // Group settings into sections
+  const sections = [];
+  let currentSection = null;
+  let currentSectionItems = [];
+
   setting_items.forEach(item => {
     if (item.type === 'separator') {
-      const sepDiv = document.createElement('div');
-      sepDiv.className = 'setting-separator';
-      sepDiv.innerHTML = `<h3>${item.label}</h3><div class="line"></div>`;
-      settingsGrid.appendChild(sepDiv);
-      return;
-    }
-
-    const label = document.createElement('div');
-    label.className = 'setting-label';
-    label.textContent = item.label;
-    const controlContainer = document.createElement('div');
-    controlContainer.className = 'setting-control';
-    const value = localSettings[item.key];
-
-    if (item.type === 'int' || item.type === 'float') {
-      const slider = document.createElement('input');
-      slider.type = 'range';
-      slider.min = item.min;
-      slider.max = item.max;
-      slider.step = item.step;
-      slider.value = value;
-      const valueDisplay = document.createElement('span');
-      valueDisplay.className = 'value-display';
-      valueDisplay.textContent = Number(value).toFixed(
-        item.precision || (item.type === 'float' ? 1 : 0)
-      );
-      slider.oninput = () => {
-        const val =
-          item.type === 'int'
-            ? parseInt(slider.value)
-            : parseFloat(slider.value);
-        localSettings[item.key] = val;
-        valueDisplay.textContent = val.toFixed(
-          item.precision || (item.type === 'float' ? 1 : 0)
-        );
-        if (
-          item.key === 'num_black_holes' ||
-          item.key === 'use_individual_bh_masses'
-        )
-          updateIndivBHMassButtonVisibility();
-      };
-      controlContainer.append(slider, valueDisplay);
-    } else if (item.type === 'bool') {
-      const button = document.createElement('button');
-      button.className = 'toggle-button';
-      button.textContent = value ? 'On' : 'Off';
-      button.onclick = () => {
-        localSettings[item.key] = !localSettings[item.key];
-        button.textContent = localSettings[item.key] ? 'On' : 'Off';
-        if (item.key === 'use_individual_bh_masses')
-          updateIndivBHMassButtonVisibility();
-      };
-      controlContainer.appendChild(button);
-    } else if (item.type === 'option') {
-      const select = document.createElement('select');
-      item.options.forEach(opt => {
-        const option = document.createElement('option');
-        option.value = option.textContent = opt;
-        if (opt === value) option.selected = true;
-        select.appendChild(option);
-      });
-      select.onchange = e => {
-        localSettings[item.key] = e.target.value;
-        if (item.key === 'preset_scenario') {
-          updatePresetInfo(e.target.value);
-          current_scenario_name = e.target.value;
-          // Removed automatic show_scenario_info() call - only show when user clicks buttons
-        }
-      };
-      controlContainer.appendChild(select);
-    } else if (item.type === 'color') {
-      const colorInput = document.createElement('input');
-      colorInput.type = 'color';
-      colorInput.value = value;
-      colorInput.oninput = () => {
-        localSettings[item.key] = colorInput.value;
-      };
-      controlContainer.appendChild(colorInput);
-    }
-
-    settingsGrid.append(label, controlContainer);
-
-    if (item.key === 'orbit_decay_rate') {
-      const bhMassBtnContainer = document.createElement('div');
-      bhMassBtnContainer.style.gridColumn = '1 / -1';
-      bhMassBtnContainer.style.textAlign = 'center';
-      bhMassBtnContainer.innerHTML = `<button id="indivBHMassBtn" class="ui-button" style="margin-top: 10px;">Set Individual BH Masses</button>`;
-      settingsGrid.appendChild(bhMassBtnContainer);
-      bhMassBtnContainer.firstElementChild.onclick = showIndivBHMassMenu;
+      // Save previous section if it exists
+      if (currentSection && currentSectionItems.length > 0) {
+        sections.push({
+          title: currentSection,
+          items: currentSectionItems
+        });
+      }
+      // Start new section
+      currentSection = item.label.replace(/^---\s*|\s*---$/g, '').trim();
+      currentSectionItems = [];
+    } else {
+      currentSectionItems.push(item);
     }
   });
+
+  // Add the last section
+  if (currentSection && currentSectionItems.length > 0) {
+    sections.push({
+      title: currentSection,
+      items: currentSectionItems
+    });
+  }
+
+  // Create collapsible sections
+  sections.forEach(section => {
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'settings-section';
+    
+    // Create section header
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'settings-section-header';
+    
+    const titleDiv = document.createElement('h3');
+    titleDiv.className = 'settings-section-title';
+    titleDiv.textContent = section.title;
+    
+    const toggleDiv = document.createElement('div');
+    toggleDiv.className = 'settings-section-toggle';
+    toggleDiv.textContent = '▼';
+    
+    headerDiv.appendChild(titleDiv);
+    headerDiv.appendChild(toggleDiv);
+    
+    // Create section content
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'settings-section-content';
+    
+    // Create grid for this section
+    const sectionGrid = document.createElement('div');
+    sectionGrid.className = 'settings-grid';
+    sectionGrid.style.display = 'grid';
+    sectionGrid.style.gridTemplateColumns = '1fr 1fr';
+    sectionGrid.style.gap = '25px 35px';
+    sectionGrid.style.alignItems = 'center';
+
+    // Add items to this section
+    section.items.forEach(item => {
+      // Create label container with info icon
+      const labelContainer = document.createElement('div');
+      labelContainer.className = 'setting-label-container';
+      
+      const label = document.createElement('div');
+      label.className = 'setting-label';
+      label.textContent = item.label;
+      
+      // Create info icon
+      const infoIcon = document.createElement('button');
+      infoIcon.className = 'setting-info-icon';
+      infoIcon.textContent = 'ⓘ';
+      infoIcon.setAttribute('aria-label', `Information about ${item.label}`);
+      
+      // Add click handler for tooltip using the new tooltip system
+      infoIcon.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const tooltipText = getSettingTooltip(item.key, item.label);
+        tooltipManager.show(tooltipText, infoIcon, { position: 'bottom' });
+      });
+      
+      // Add label and icon to container
+      labelContainer.appendChild(label);
+      labelContainer.appendChild(infoIcon);
+      
+      const controlContainer = document.createElement('div');
+      controlContainer.className = 'setting-control';
+      const value = localSettings[item.key];
+
+      if (item.type === 'int' || item.type === 'float') {
+        // Create a container for label + slider + value
+        const sliderContainer = document.createElement('div');
+        sliderContainer.style.display = 'flex';
+        sliderContainer.style.flexDirection = 'column';
+        sliderContainer.style.width = '100%';
+        sliderContainer.style.gap = '4px';
+
+        // Label above slider
+        const sliderLabel = document.createElement('label');
+        sliderLabel.textContent = item.label;
+        sliderLabel.style.fontWeight = '500';
+        sliderLabel.style.marginBottom = '2px';
+        sliderLabel.style.fontSize = '15px';
+        sliderLabel.style.letterSpacing = '0.01em';
+        sliderLabel.style.color = 'rgba(224,224,224,0.95)';
+        sliderLabel.style.textShadow = '0 1px 2px rgba(0,0,0,0.18)';
+        sliderLabel.htmlFor = `${item.key}-slider`;
+
+        // Slider and value display
+        const sliderRow = document.createElement('div');
+        sliderRow.style.display = 'flex';
+        sliderRow.style.alignItems = 'center';
+        sliderRow.style.gap = '12px';
+        sliderRow.style.width = '100%';
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.id = `${item.key}-slider`;
+        slider.min = item.min;
+        slider.max = item.max;
+        slider.step = item.step;
+        slider.value = value;
+        slider.style.flex = '1 1 auto';
+        const valueDisplay = document.createElement('span');
+        valueDisplay.className = 'value-display';
+        valueDisplay.textContent = Number(value).toFixed(
+          item.precision || (item.type === 'float' ? 1 : 0)
+        );
+        slider.oninput = () => {
+          const val =
+            item.type === 'int'
+              ? parseInt(slider.value)
+              : parseFloat(slider.value);
+          localSettings[item.key] = val;
+          valueDisplay.textContent = val.toFixed(
+            item.precision || (item.type === 'float' ? 1 : 0)
+          );
+          if (
+            item.key === 'num_black_holes' ||
+            item.key === 'use_individual_bh_masses'
+          )
+            updateIndivBHMassButtonVisibility();
+        };
+        sliderRow.append(slider, valueDisplay);
+        sliderContainer.append(sliderLabel, sliderRow);
+        controlContainer.append(sliderContainer);
+      } else if (item.type === 'bool') {
+        const button = document.createElement('button');
+        button.className = 'toggle-button';
+        button.textContent = value ? 'On' : 'Off';
+        button.setAttribute('data-state', value ? 'on' : 'off');
+        button.onclick = () => {
+          localSettings[item.key] = !localSettings[item.key];
+          const newState = localSettings[item.key];
+          button.textContent = newState ? 'On' : 'Off';
+          button.setAttribute('data-state', newState ? 'on' : 'off');
+          if (item.key === 'use_individual_bh_masses')
+            updateIndivBHMassButtonVisibility();
+        };
+        controlContainer.appendChild(button);
+      } else if (item.type === 'option') {
+        const select = document.createElement('select');
+        item.options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = option.textContent = opt;
+          if (opt === value) option.selected = true;
+          select.appendChild(option);
+        });
+        select.onchange = e => {
+          localSettings[item.key] = e.target.value;
+        if (item.key === 'preset_scenario') {
+            updatePresetInfo(e.target.value);
+            current_scenario_name = e.target.value;
+          }
+        };
+        controlContainer.appendChild(select);
+      } else if (item.type === 'color') {
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        colorInput.value = value;
+        colorInput.oninput = () => {
+          localSettings[item.key] = colorInput.value;
+        };
+        controlContainer.appendChild(colorInput);
+      }
+
+      sectionGrid.append(labelContainer, controlContainer);
+
+      // Special handling for orbit decay rate button
+      if (item.key === 'orbit_decay_rate') {
+        const bhMassBtnContainer = document.createElement('div');
+        bhMassBtnContainer.style.gridColumn = '1 / -1';
+        bhMassBtnContainer.style.textAlign = 'center';
+        bhMassBtnContainer.innerHTML = `<button id="indivBHMassBtn" class="ui-button" style="margin-top: 10px;">Set Individual BH Masses</button>`;
+        sectionGrid.appendChild(bhMassBtnContainer);
+        bhMassBtnContainer.firstElementChild.onclick = showIndivBHMassMenu;
+      }
+    });
+
+    contentDiv.appendChild(sectionGrid);
+    sectionDiv.appendChild(headerDiv);
+    sectionDiv.appendChild(contentDiv);
+    settingsGrid.appendChild(sectionDiv);
+
+    // Add click handler for collapsible functionality
+    headerDiv.addEventListener('click', () => {
+      sectionDiv.classList.toggle('collapsed');
+    });
+  });
+  
   updateIndivBHMassButtonVisibility();
   updatePresetInfo(localSettings.preset_scenario);
 };
@@ -2816,10 +3616,14 @@ canvas.addEventListener('mousedown', e => {
   // Mark that user has interacted with the page
   state.user_has_interacted = true;
   
-  // Check if click is in UI area
+  // Check if click is in UI area - improved detection with buffer zone
   const uiContainer = document.querySelector('.ui-container');
   const uiRect = uiContainer.getBoundingClientRect();
-  if (e.clientX > uiRect.left) {
+  const bufferZone = 5; // 5px buffer around UI elements
+  
+  // Check if click is within the UI container bounds (including buffer zone)
+  if (e.clientX >= uiRect.left - bufferZone && e.clientX <= uiRect.right + bufferZone && 
+      e.clientY >= uiRect.top - bufferZone && e.clientY <= uiRect.bottom + bufferZone) {
     return;
   }
 
@@ -2841,9 +3645,16 @@ canvas.addEventListener('mousedown', e => {
   // Regular click handling for adding objects
   state.mouse.down = true;
   if (SETTINGS.interactive_add) {
+    // Validate world coordinates before proceeding
+    if (isNaN(worldPos.x) || isNaN(worldPos.y) || 
+        !isFinite(worldPos.x) || !isFinite(worldPos.y)) {
+      console.warn('Invalid world coordinates:', worldPos);
+      return;
+    }
+    
     state.adding_mass = true;
     state.add_start_screen = { x: e.clientX, y: e.clientY };
-    state.add_start_world = screen_to_world(state.add_start_screen);
+    state.add_start_world = worldPos;
   }
 });
 
@@ -2862,6 +3673,19 @@ window.addEventListener('mouseup', e => {
   if (state.adding_mass) {
     state.adding_mass = false;
     const add_end_world = screen_to_world({ x: e.clientX, y: e.clientY });
+    
+    // Validate both start and end world coordinates
+    if (isNaN(add_end_world.x) || isNaN(add_end_world.y) || 
+        !isFinite(add_end_world.x) || !isFinite(add_end_world.y) ||
+        isNaN(state.add_start_world.x) || isNaN(state.add_start_world.y) || 
+        !isFinite(state.add_start_world.x) || !isFinite(state.add_start_world.y)) {
+      console.warn('Invalid world coordinates during object placement:', {
+        start: state.add_start_world,
+        end: add_end_world
+      });
+      return;
+    }
+    
     const vel = {
       x: (add_end_world.x - state.add_start_world.x) * 3,
       y: (add_end_world.y - state.add_start_world.y) * 3,
@@ -3094,6 +3918,156 @@ document.getElementById('closeMobileInstructions').onclick = () => {
   document.getElementById('mobileInstructions').style.display = 'none';
 };
 
+// Scenario info box close button
+const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');
+if (closeScenarioInfoBtn) {
+  // Add multiple event listeners to ensure it works
+  closeScenarioInfoBtn.addEventListener('click', (e) => {
+    console.log('Close scenario info button clicked');
+    e.preventDefault();
+    e.stopPropagation();
+    const infoBox = document.getElementById('scenarioInfoBox');
+    if (infoBox) {
+      console.log('Removing showUI class from scenario info box');
+      console.log('Before removal - classes:', infoBox.className);
+      infoBox.classList.remove('showUI');
+      infoBox.classList.remove('show'); // Also remove show class for compatibility
+      console.log('After removal - classes:', infoBox.className);
+    } else {
+      console.error('Scenario info box element not found');
+    }
+  });
+  
+  // Also add mousedown event as backup
+  closeScenarioInfoBtn.addEventListener('mousedown', (e) => {
+    console.log('Close scenario info button mousedown');
+    e.preventDefault();
+    e.stopPropagation();
+    const infoBox = document.getElementById('scenarioInfoBox');
+    if (infoBox) {
+      console.log('Removing showUI class from scenario info box (mousedown)');
+      infoBox.classList.remove('showUI');
+      infoBox.classList.remove('show'); // Also remove show class for compatibility
+    }
+  });
+} else {
+  console.error('Close scenario info button not found');
+}
+
+// Scenario list modal handlers
+document.getElementById('loadScenarioBtn').onclick = () => {
+  const modal = document.getElementById('scenarioListModal');
+  const itemsDiv = document.getElementById('scenarioListItems');
+  itemsDiv.innerHTML = '';
+  
+  // Build scenario list with validation
+  Object.entries(SCENARIO_INFO).forEach(([key, info], index) => {
+    // Validate scenario data
+    if (!info || typeof info !== 'object') {
+      console.warn(`Invalid scenario data for key: ${key}`);
+      return;
+    }
+    
+    // Ensure required properties exist with fallbacks
+    const title = info.title || 'Untitled Scenario';
+    const summary = info.summary || 'No description available.';
+    const scenarioKey = key || 'unknown';
+    
+    const item = document.createElement('div');
+    item.className = 'scenario-list-item';
+    
+    // Add staggered animation delay
+    const delay = index * 50; // 50ms delay between each card
+    item.style.animationDelay = `${delay}ms`;
+    
+    item.onclick = () => {
+      SETTINGS.preset_scenario = key;
+      initialize_simulation();
+      modal.classList.add('hidden');
+      show_scenario_info();
+      updateSpeedDisplay();
+    };
+    
+    // Sanitize HTML content to prevent XSS
+    const sanitizeHTML = (str) => {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    };
+    
+    item.innerHTML = `
+      <div class="scenario-title">
+        <strong>${sanitizeHTML(title)}</strong>
+        <span>${sanitizeHTML(scenarioKey)}</span>
+      </div>
+      <hr class="scenario-separator">
+      <div class="scenario-description">
+        <span>${sanitizeHTML(summary)}</span>
+      </div>
+    `;
+    
+    itemsDiv.appendChild(item);
+  });
+  
+  // Log generation results for debugging
+  const generatedItems = itemsDiv.children.length;
+  const totalScenarios = Object.keys(SCENARIO_INFO).length;
+  console.log(`Generated ${generatedItems} scenario cards from ${totalScenarios} scenarios`);
+  
+  modal.classList.remove('hidden');
+};
+
+// Validation function for scenario data
+const validateScenarioData = () => {
+  const issues = [];
+  
+  Object.entries(SCENARIO_INFO).forEach(([key, info]) => {
+    if (!info || typeof info !== 'object') {
+      issues.push(`Invalid scenario object for key: ${key}`);
+      return;
+    }
+    
+    if (!info.title || typeof info.title !== 'string') {
+      issues.push(`Missing or invalid title for scenario: ${key}`);
+    }
+    
+    if (!info.summary || typeof info.summary !== 'string') {
+      issues.push(`Missing or invalid summary for scenario: ${key}`);
+    }
+    
+    if (info.title && info.title.length > 100) {
+      issues.push(`Title too long for scenario: ${key} (${info.title.length} chars)`);
+    }
+    
+    if (info.summary && info.summary.length > 500) {
+      issues.push(`Summary too long for scenario: ${key} (${info.summary.length} chars)`);
+    }
+  });
+  
+  if (issues.length > 0) {
+    console.warn('Scenario data validation issues:', issues);
+  } else {
+    console.log('All scenario data validated successfully');
+  }
+  
+  return issues.length === 0;
+};
+
+// Run validation on page load
+document.addEventListener('DOMContentLoaded', () => {
+  validateScenarioData();
+});
+
+document.getElementById('closeScenarioList').onclick = () => {
+  document.getElementById('scenarioListModal').classList.add('hidden');
+};
+
+document.getElementById('scenarioListModal').onclick = (e) => {
+  if (e.target === document.getElementById('scenarioListModal')) {
+    document.getElementById('scenarioListModal').classList.add('hidden');
+  }
+};
+
 // Touch event handlers for mobile
 canvas.addEventListener(
   'touchstart',
@@ -3108,6 +4082,18 @@ canvas.addEventListener(
     if (touchCount === 1) {
       const touch = e.touches[0];
       const touchStartPos = { x: touch.clientX, y: touch.clientY };
+      
+      // Check if touch is in UI area - improved detection with buffer zone
+      const uiContainer = document.querySelector('.ui-container');
+      const uiRect = uiContainer.getBoundingClientRect();
+      const bufferZone = 5; // 5px buffer around UI elements
+      
+      // Check if touch is within the UI container bounds (including buffer zone)
+      if (touchStartPos.x >= uiRect.left - bufferZone && touchStartPos.x <= uiRect.right + bufferZone && 
+          touchStartPos.y >= uiRect.top - bufferZone && touchStartPos.y <= uiRect.bottom + bufferZone) {
+        return;
+      }
+      
       state.touch_active = true;
       state.touch_id = touch.identifier;
 
@@ -3128,6 +4114,13 @@ canvas.addEventListener(
       }
 
       if (SETTINGS.interactive_add) {
+        // Validate world coordinates before proceeding
+        if (isNaN(worldPos.x) || isNaN(worldPos.y) || 
+            !isFinite(worldPos.x) || !isFinite(worldPos.y)) {
+          console.warn('Invalid world coordinates:', worldPos);
+          return;
+        }
+        
         state.adding_mass = true;
         state.add_start_screen = touchStartPos;
         state.add_start_world = worldPos;
@@ -3216,6 +4209,19 @@ canvas.addEventListener(
           x: touch.clientX,
           y: touch.clientY,
         });
+        
+        // Validate both start and end world coordinates
+        if (isNaN(add_end_world.x) || isNaN(add_end_world.y) || 
+            !isFinite(add_end_world.x) || !isFinite(add_end_world.y) ||
+            isNaN(state.add_start_world.x) || isNaN(state.add_start_world.y) || 
+            !isFinite(state.add_start_world.x) || !isFinite(state.add_start_world.y)) {
+          console.warn('Invalid world coordinates during touch object placement:', {
+            start: state.add_start_world,
+            end: add_end_world
+          });
+          return;
+        }
+        
         const vel = {
           x: (add_end_world.x - state.add_start_world.x) * 3,
           y: (add_end_world.y - state.add_start_world.y) * 3,
@@ -3275,6 +4281,7 @@ export {
   showBHMassesModal,
   hideBHMassesModal,
   show_scenario_info,
+  show_enhanced_scenario_info,
   apply_preset,
   initialize_simulation,
   buildSettingsMenu,
@@ -3283,7 +4290,6 @@ export {
   updateSpeedDisplay,
   takeScreenshot,
   updateObjectTypeButton,
-  getRandomName,
   SETTINGS,
   state,
   current_scenario_name,
