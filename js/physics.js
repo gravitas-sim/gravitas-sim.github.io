@@ -981,6 +981,18 @@ class GasGiant extends PhysicsObject {
     this.giantType = this.calculateGiantType();
     this.intact = true;
     this.name = getRandomName('gasGiants');
+
+    // --- Saturn-like rings: 1 in 3 chance ---
+    this.hasRings = Math.random() < 1/3;
+    if (this.hasRings) {
+      // Ring size: inner radius 1.2-1.5x planet, outer 1.7-2.5x planet
+      this.ringInnerRadius = this.radius * (1.2 + Math.random() * 0.3);
+      this.ringOuterRadius = this.radius * (1.7 + Math.random() * 0.8);
+      // Ring orientation: random tilt (0 to PI)
+      this.ringAngle = Math.random() * Math.PI;
+      // Ring opacity: varies from planet to planet (0.15 to 0.45)
+      this.ringOpacity = 0.15 + Math.random() * 0.3;
+    }
   }
 
   calculateGiantType() {
@@ -1134,6 +1146,21 @@ class GasGiant extends PhysicsObject {
       );
     }
     ctx.restore();
+
+    // Draw rings if present
+    if (this.hasRings) {
+      ctx.save();
+      ctx.translate(world_pos.x, world_pos.y);
+      ctx.rotate(this.ringAngle);
+      ctx.globalAlpha = this.ringOpacity;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, 0, 2 * Math.PI);
+      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, 0, 2 * Math.PI);
+      ctx.fillStyle = 'rgba(220,220,180,1.0)';
+      ctx.fill('evenodd');
+      ctx.globalAlpha = 1.0;
+      ctx.restore();
+    }
   }
 
   tidal_mass_loss(bh_list, dt) {
@@ -1448,8 +1475,10 @@ class BlackHole {
    * @param {Object} pos - Initial position with x, y properties
    * @param {number} mass - Black hole mass
    * @param {Object} vel - Initial velocity with x, y properties
+   * @param {boolean} isNewlyCreated - Whether this is a new black hole
+   * @param {number} jet_orientation - Angle in radians for jet direction (optional)
    */
-  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false, jet_orientation = Math.PI / 2) {
+  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false, jet_orientation = null) {
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
@@ -1477,8 +1506,8 @@ class BlackHole {
     this.time_since_last_particle = 0;
     this.merger_boost_timer = 0; // Timer for enhanced effects after mergers
     this.merger_particle_boost = 1.0; // Multiplier for particle generation after mergers
-    this.jet_orientation = jet_orientation;
-    
+    // Assign a random jet orientation if not provided
+    this.jet_orientation = jet_orientation !== null ? jet_orientation : Math.random() * 2 * Math.PI;
     // Generate initial accretion disk particles for all black holes
     this.generateInitialDiskParticles();
   }

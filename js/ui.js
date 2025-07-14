@@ -220,7 +220,7 @@ const SCENARIO_INFO = {
   'Binary BH': {
     title: 'Binary Black Hole',
     summary:
-      'Two stellar-mass black holes (15 & 10 M☉) locked in mutual orbit. Watch as they spiral together, creating gravitational waves and eventually merging into a single, more massive black hole. Perfect for studying orbital dynamics and merger events.',
+      'Two stellar-mass black holes (15 & 10 M☉) locked in mutual orbit with spectacular relativistic jets. Watch as they spiral together, creating gravitational waves and eventually merging into a single, more massive black hole. The jets point in random directions for each black hole, creating a dynamic cosmic display.',
   },
   'Triple BH System': {
     title: 'Triple Black Hole',
@@ -952,7 +952,7 @@ const apply_preset = () => {
       input_object_type: 'Star',
       show_bh_glow: true,
       show_accretion_disk: true,
-      show_bh_jets: false,
+      show_bh_jets: true,
       show_dynamic_overlays: true,
       enable_asteroids: true,
       num_asteroids: 30,
@@ -4370,7 +4370,7 @@ canvas.addEventListener(
       state.lastTouchDistance = currentDistance;
     }
   },
-  { passive: false }
+  { passive: true }
 );
 
 canvas.addEventListener(
@@ -4484,7 +4484,7 @@ export {
   const tutorialBody = document.getElementById('tutorialPopupBody');
   const tutorialPrev = document.getElementById('tutorialPrevBtn');
   const tutorialNext = document.getElementById('tutorialNextBtn');
-  const tutorialClose = document.getElementById('tutorialCloseBtn');
+  // Removed tutorialCloseBtn reference since we removed the X button
 
   if (!tutorialBtn || !tutorialPopup) return;
 
@@ -4605,14 +4605,16 @@ export {
   const header = popup.querySelector('.tutorial-popup-header');
 
   // Desktop drag
-  header.addEventListener('mousedown', (e) => {
-    if (window.innerWidth < 700) return; // Only desktop
-    isDragging = true;
-    dragStart = { x: e.clientX, y: e.clientY };
-    const rect = popup.getBoundingClientRect();
-    popupStart = { left: rect.left, top: rect.top };
-    document.body.style.userSelect = 'none';
-  });
+  if (header) {
+    header.addEventListener('mousedown', (e) => {
+      if (window.innerWidth < 700) return; // Only desktop
+      isDragging = true;
+      dragStart = { x: e.clientX, y: e.clientY };
+      const rect = popup.getBoundingClientRect();
+      popupStart = { left: rect.left, top: rect.top };
+      document.body.style.userSelect = 'none';
+    });
+  }
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     let dx = e.clientX - dragStart.x;
@@ -4652,7 +4654,7 @@ export {
     if (touchMoved) {
       popup.style.transform = `translateY(${dy}px)`;
     }
-  });
+  }, { passive: true });
   popup.addEventListener('touchend', (e) => {
     if (window.innerWidth >= 700) return;
     if (!touchMoved) {
@@ -4673,7 +4675,7 @@ export {
 
   // Event listeners
   tutorialBtn.addEventListener('click', openTutorial);
-  tutorialClose.addEventListener('click', closeTutorial);
+  // Removed tutorialClose event listener since we removed the X button
   tutorialPrev.addEventListener('click', () => {
     if (step > 0) {
       step--;
@@ -4703,39 +4705,8 @@ export {
     }
   });
 
-  // --- Add Restart Tutorial to settings menu ---
-  function addRestartTutorialToSettings() {
-    const settingsPanel = document.getElementById('settingsPanel');
-    if (!settingsPanel) return;
-    let restartBtn = document.getElementById('restartTutorialBtn');
-    if (restartBtn) return; // Already added
-    // Add to settings footer
-    const footer = settingsPanel.querySelector('.settings-footer');
-    if (footer) {
-      restartBtn = document.createElement('button');
-      restartBtn.id = 'restartTutorialBtn';
-      restartBtn.className = 'ui-button footer-button';
-      restartBtn.textContent = 'Restart Tutorial';
-      restartBtn.style.marginRight = 'auto';
-      footer.insertBefore(restartBtn, footer.firstChild);
-      restartBtn.addEventListener('click', () => {
-        // Close settings panel if it's open
-        const settingsPanel = document.getElementById('settingsPanel');
-        if (settingsPanel && !settingsPanel.classList.contains('hidden')) {
-          settingsPanel.classList.add('hidden');
-        }
-        setTimeout(() => {
-          openTutorial();
-        }, 200);
-      });
-    }
-  }
-
   // --- Tutorial is now manual only - no auto-show ---
-  // Users can access tutorial via the Tutorial button or Restart Tutorial in settings
-
-  // Add restart tutorial button to settings when DOM is ready
-  document.addEventListener('DOMContentLoaded', addRestartTutorialToSettings);
+  // Users can access tutorial via the Tutorial button only
 })();
 
 // Remove the duplicate functions that were outside the IIFE
