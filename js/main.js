@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scenarioInfoBox) {
           scenarioInfoBox.classList.add('showUI');
         }
+        // Fade in the tutorial button with the rest of the UI
+        const tutorialBtn = document.getElementById('tutorialBtn');
+        if (tutorialBtn) {
+          tutorialBtn.classList.add('showUI');
+        }
       }, 200);
     }
   });

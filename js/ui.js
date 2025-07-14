@@ -212,6 +212,11 @@ const SCENARIO_INFO = {
     summary:
       'A detailed simulation of the Earth-Moon system with accurate masses, orbital mechanics, and realistic appearances. Features Earth with its blue oceans and green continents, and the Moon with its characteristic gray surface and craters. Perfect for studying orbital dynamics and tidal effects.',
   },
+  'TRAPPIST-1 System': {
+    title: 'TRAPPIST-1 System',
+    summary:
+      'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
+  },
   'Binary BH': {
     title: 'Binary Black Hole',
     summary:
@@ -1611,6 +1616,26 @@ const apply_preset = () => {
       // Special: BH grows in mass over time (handled in simulation loop)
       preset_zoom: 1.5,
     });
+  } else if (ps === 'TRAPPIST-1 System') {
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      mutual_gravity: true,
+      placement: 'Empty',
+      num_planets: 7,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      init_velocity: 7,
+      velocity_stddev: 0.5,
+      gravitational_constant: 1.0,
+      sim_speed: 0.7,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 25,
+      sim_size: 'Small',
+      preset_zoom: 8.0,
+    });
   }
 
   SETTINGS.preset_scenario = 'None';
@@ -2569,6 +2594,108 @@ const initialize_simulation = () => {
     // This will be handled by the camera system to show both objects clearly
     SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
   }
+  // --- Fix for Binary BH scenario: two black holes in mutual orbit, planets orbiting center of mass ---
+  else if (starting_preset === 'Binary BH') {
+    if (bh_list.length >= 2) {
+      const separation = 120;
+      const m1 = bh_list[0].mass;
+      const m2 = bh_list[1].mass;
+      const totalMass = m1 + m2;
+      // Center of mass positions
+      const r1 = separation * (m2 / totalMass);
+      const r2 = separation * (m1 / totalMass);
+      bh_list[0].pos.x = -r1;
+      bh_list[0].pos.y = 0;
+      bh_list[1].pos.x = r2;
+      bh_list[1].pos.y = 0;
+      // Orbital velocities
+      const G = SETTINGS.gravitational_constant;
+      const orbitalSpeed = Math.sqrt(G * totalMass / separation);
+      bh_list[0].vel.x = 0;
+      bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
+      bh_list[1].vel.x = 0;
+      bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass);
+      // Add slight perturbation to start inspiral
+      const perturbation = 0.95;
+      bh_list[0].vel.y *= perturbation;
+      bh_list[1].vel.y *= perturbation;
+      // Place planets in orbits around the binary's center of mass
+      for (let i = 0; i < planets.length; i++) {
+        const r = 180 + i * 30;
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((G * totalMass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        planets[i].pos = pos;
+        planets[i].vel = vel;
+      }
+      // Place gas giants
+      for (let i = 0; i < gas_giants.length; i++) {
+        const r = 350 + i * 50;
+        const theta = Math.random() * 2 * Math.PI;
+        const v = Math.sqrt((G * totalMass) / r);
+        const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        gas_giants[i].pos = pos;
+        gas_giants[i].vel = vel;
+      }
+      // Place asteroids
+      if (SETTINGS.enable_asteroids) {
+        for (let i = 0; i < asteroids.length; i++) {
+          const r = 500 + Math.random() * 100;
+          const theta = Math.random() * 2 * Math.PI;
+          const v = Math.sqrt((G * totalMass) / r);
+          const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+          const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+          asteroids[i].pos = pos;
+          asteroids[i].vel = vel;
+        }
+      }
+    }
+  } else if (starting_preset === 'TRAPPIST-1 System') {
+    // Clear planets array
+    planets.length = 0;
+    // TRAPPIST-1 star properties
+    if (stars.length > 0) {
+      const star = stars[0];
+      star.name = 'TRAPPIST-1';
+      star.mass = 0.089 * SOLAR_MASS_UNIT; // 0.089 solar masses
+      star.baseColor = '#a83232'; // Cool red dwarf
+      star.radius = 7; // Small star
+      star.temperature = 2550; // K
+      star.spectralType = 'M8V';
+    }
+    // TRAPPIST-1 planets (b-h), semi-major axes in AU, masses in Earth masses, radii in Earth radii
+    const planetsData = [
+      { name: 'b', a: 0.0115, mass: 1.017, radius: 1.121 },
+      { name: 'c', a: 0.0158, mass: 1.156, radius: 1.095 },
+      { name: 'd', a: 0.0223, mass: 0.297, radius: 0.784 },
+      { name: 'e', a: 0.0292, mass: 0.772, radius: 0.910 },
+      { name: 'f', a: 0.0385, mass: 0.934, radius: 1.046 },
+      { name: 'g', a: 0.0469, mass: 1.148, radius: 1.148 },
+      { name: 'h', a: 0.0619, mass: 0.326, radius: 0.773 },
+    ];
+    const AU = 400; // Increased scale factor for more spacing
+    const starMass = 0.089 * SOLAR_MASS_UNIT;
+    for (let i = 0; i < planetsData.length; i++) {
+      const p = planetsData[i];
+      const r = p.a * AU;
+      // Place each planet at a unique angle, evenly spaced
+      const theta = (i / planetsData.length) * 2 * Math.PI;
+      const v = Math.sqrt((SETTINGS.gravitational_constant * starMass) / r);
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      // Scale planet radius: 1 Earth radius = 1.2 sim units
+      const simRadius = p.radius * 1.2;
+      const planet = new Planet(pos, vel, p.mass);
+      planet.name = `TRAPPIST-1${p.name}`;
+      planet.mass = p.mass * EARTH_MASS_UNIT;
+      planet.baseColor = '#6ec6ff';
+      planet.radius = simRadius;
+      planet.isTrappist = true;
+      planets.push(planet);
+    }
+  }
 
   // In initialize_simulation(), at the end, add:
   generateStarfield();
@@ -2584,6 +2711,7 @@ const setting_items = [
       'None',
       'Solar System',
       'Earth-Moon System',
+      'TRAPPIST-1 System',
       'Binary BH',
       'Triple BH System',
       'Supermassive BH',
@@ -3612,7 +3740,7 @@ const takeScreenshot = () => {
 // Object type cycling functionality
 const objectTypes = [
   { type: "Star", emoji: "⭐", label: "Add Stars" },
-  { type: "Planet", emoji: "🪐", label: "Add Planets" },
+  { type: "Planet", emoji: "🌍", label: "Add Rocky Planets" },
   { type: "GasGiant", emoji: "🪐", label: "Add Gas Giants" },
   { type: "Asteroid", emoji: "☄️", label: "Add Asteroids" },
   { type: "Comet", emoji: "☄️", label: "Add Comets" },
@@ -4346,3 +4474,295 @@ export {
   DEFAULT_SETTINGS,
   localSettings,
 };
+
+
+
+// === Tutorial Popup Logic ===
+(function() {
+  const tutorialBtn = document.getElementById('tutorialBtn');
+  const tutorialPopup = document.getElementById('tutorialPopup');
+  const tutorialBody = document.getElementById('tutorialPopupBody');
+  const tutorialPrev = document.getElementById('tutorialPrevBtn');
+  const tutorialNext = document.getElementById('tutorialNextBtn');
+  const tutorialClose = document.getElementById('tutorialCloseBtn');
+
+  if (!tutorialBtn || !tutorialPopup) return;
+
+  // Tutorial steps: array of strings (more useful and practical)
+  const steps = [
+    "Welcome to Gravitas! This is your cosmic playground. You can create black holes, stars, planets, and watch them interact through gravity.",
+    "Try clicking and dragging in empty space to add objects. The longer you drag, the faster they'll move. Use the object type button to switch between stars, planets, and black holes.",
+    "Click any object to inspect it! The Object Inspector shows mass, velocity, and other properties. You can even edit some values to see how they affect the simulation.",
+    "Load different scenarios from the menu to see pre-built cosmic systems. Each one demonstrates different physics - from binary stars to galactic centers.",
+    "Use the speed controls to slow down or speed up time. The settings panel lets you adjust gravity, add more objects, and customize the simulation to your liking.",
+    "That's it! Have fun exploring the universe! 🚀"
+  ];
+  let step = 0;
+
+  // Map each step to a selector for the relevant UI element (null for no highlight)
+  const stepHighlights = [
+    null, // Welcome: no highlight
+    '#simulationCanvas', // Navigation: canvas
+    '#settingsBtn', // Settings: settings button
+    '#loadScenarioBtn', // Preset scenarios: load scenario button
+    '.ui-container' // Restart & Explore: main UI bar
+  ];
+
+  // Create overlay for dimming
+  let tutorialOverlay = null;
+  let highlightBox = null;
+
+  function showHighlight(stepIdx) {
+    removeHighlight();
+    const selector = stepHighlights[stepIdx];
+    if (!selector) return;
+    const el = document.querySelector(selector);
+    if (!el) return;
+    // Create overlay
+    tutorialOverlay = document.createElement('div');
+    tutorialOverlay.style.position = 'fixed';
+    tutorialOverlay.style.left = '0';
+    tutorialOverlay.style.top = '0';
+    tutorialOverlay.style.width = '100vw';
+    tutorialOverlay.style.height = '100vh';
+    tutorialOverlay.style.background = 'rgba(10,16,32,0.3)'; // Reduced opacity from 0.55 to 0.3
+    tutorialOverlay.style.zIndex = '1003';
+    tutorialOverlay.style.pointerEvents = 'none';
+    document.body.appendChild(tutorialOverlay);
+    // Create highlight box
+    const rect = el.getBoundingClientRect();
+    highlightBox = document.createElement('div');
+    highlightBox.style.position = 'fixed';
+    highlightBox.style.left = rect.left + 'px';
+    highlightBox.style.top = rect.top + 'px';
+    highlightBox.style.width = rect.width + 'px';
+    highlightBox.style.height = rect.height + 'px';
+    highlightBox.style.boxShadow = '0 0 0 4px #00e0ff, 0 0 24px 8px #00e0ff99';
+    highlightBox.style.borderRadius = getComputedStyle(el).borderRadius || '10px';
+    highlightBox.style.zIndex = '1004';
+    highlightBox.style.pointerEvents = 'none';
+    highlightBox.style.transition = 'all 0.2s';
+    document.body.appendChild(highlightBox);
+  }
+
+  function removeHighlight() {
+    if (tutorialOverlay) {
+      tutorialOverlay.remove();
+      tutorialOverlay = null;
+    }
+    if (highlightBox) {
+      highlightBox.remove();
+      highlightBox = null;
+    }
+  }
+
+  function updateTutorial() {
+    tutorialBody.textContent = steps[step];
+    tutorialPrev.disabled = (step === 0);
+    // Change Next button text to 'Finish' on last step
+    tutorialNext.textContent = (step === steps.length - 1) ? 'Finish' : 'Next';
+    showHighlight(step);
+    setTimeout(() => tutorialPopup.focus(), 0);
+  }
+
+  function openTutorial() {
+    tutorialPopup.style.display = 'block';
+    step = 0;
+    updateTutorial();
+    tutorialPopup.setAttribute('tabindex', '-1');
+    tutorialPopup.focus();
+    document.body.style.overflow = 'hidden';
+    // Responsive position
+    if (window.innerWidth < 600) {
+      tutorialPopup.style.left = '50%';
+      tutorialPopup.style.bottom = '10vw';
+      tutorialPopup.style.top = '';
+      tutorialPopup.style.right = '';
+      tutorialPopup.style.transform = 'translateX(-50%)';
+    } else {
+      tutorialPopup.style.left = '2vw';
+      tutorialPopup.style.bottom = '8vw';
+      tutorialPopup.style.top = '';
+      tutorialPopup.style.right = '';
+      tutorialPopup.style.transform = '';
+    }
+  }
+
+  function closeTutorial() {
+    tutorialPopup.style.display = 'none';
+    document.body.style.overflow = '';
+    tutorialBtn.focus();
+    removeHighlight();
+    // No longer setting localStorage since tutorial is manual only
+  }
+
+  // --- Draggable and swipe-to-dismiss tutorial popup ---
+  let dragOffset = null;
+  let isDragging = false;
+  let dragStart = { x: 0, y: 0 };
+  let popupStart = { left: 0, top: 0 };
+  const popup = tutorialPopup;
+  const header = popup.querySelector('.tutorial-popup-header');
+
+  // Desktop drag
+  header.addEventListener('mousedown', (e) => {
+    if (window.innerWidth < 700) return; // Only desktop
+    isDragging = true;
+    dragStart = { x: e.clientX, y: e.clientY };
+    const rect = popup.getBoundingClientRect();
+    popupStart = { left: rect.left, top: rect.top };
+    document.body.style.userSelect = 'none';
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    let dx = e.clientX - dragStart.x;
+    let dy = e.clientY - dragStart.y;
+    let newLeft = popupStart.left + dx;
+    let newTop = popupStart.top + dy;
+    // Clamp to viewport
+    newLeft = Math.max(8, Math.min(window.innerWidth - popup.offsetWidth - 8, newLeft));
+    newTop = Math.max(8, Math.min(window.innerHeight - popup.offsetHeight - 8, newTop));
+    popup.style.left = newLeft + 'px';
+    popup.style.top = newTop + 'px';
+    popup.style.right = '';
+    popup.style.bottom = '';
+    popup.style.transform = '';
+  });
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      document.body.style.userSelect = '';
+    }
+  });
+
+  // Mobile swipe-to-dismiss
+  let touchStartY = null;
+  let touchMoved = false;
+  popup.addEventListener('touchstart', (e) => {
+    if (window.innerWidth >= 700) return;
+    if (e.touches.length !== 1) return;
+    touchStartY = e.touches[0].clientY;
+    touchMoved = false;
+  });
+  popup.addEventListener('touchmove', (e) => {
+    if (window.innerWidth >= 700) return;
+    if (touchStartY === null) return;
+    const dy = e.touches[0].clientY - touchStartY;
+    if (Math.abs(dy) > 10) touchMoved = true;
+    if (touchMoved) {
+      popup.style.transform = `translateY(${dy}px)`;
+    }
+  });
+  popup.addEventListener('touchend', (e) => {
+    if (window.innerWidth >= 700) return;
+    if (!touchMoved) {
+      popup.style.transform = '';
+      touchStartY = null;
+      return;
+    }
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dy) > 80) {
+      closeTutorial();
+      popup.style.transform = '';
+    } else {
+      popup.style.transform = '';
+    }
+    touchStartY = null;
+    touchMoved = false;
+  });
+
+  // Event listeners
+  tutorialBtn.addEventListener('click', openTutorial);
+  tutorialClose.addEventListener('click', closeTutorial);
+  tutorialPrev.addEventListener('click', () => {
+    if (step > 0) {
+      step--;
+      updateTutorial();
+    }
+  });
+  tutorialNext.addEventListener('click', () => {
+    if (step < steps.length - 1) {
+      step++;
+      updateTutorial();
+    } else {
+      closeTutorial();
+    }
+  });
+  tutorialPopup.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeTutorial();
+    } else if (e.key === 'ArrowLeft') {
+      if (step > 0) { step--; updateTutorial(); }
+    } else if (e.key === 'ArrowRight') {
+      if (step < steps.length - 1) { step++; updateTutorial(); }
+    }
+  });
+  document.addEventListener('mousedown', (e) => {
+    if (tutorialPopup.style.display === 'block' && !tutorialPopup.contains(e.target) && e.target !== tutorialBtn) {
+      closeTutorial();
+    }
+  });
+
+  // --- Add Restart Tutorial to settings menu ---
+  function addRestartTutorialToSettings() {
+    const settingsPanel = document.getElementById('settingsPanel');
+    if (!settingsPanel) return;
+    let restartBtn = document.getElementById('restartTutorialBtn');
+    if (restartBtn) return; // Already added
+    // Add to settings footer
+    const footer = settingsPanel.querySelector('.settings-footer');
+    if (footer) {
+      restartBtn = document.createElement('button');
+      restartBtn.id = 'restartTutorialBtn';
+      restartBtn.className = 'ui-button footer-button';
+      restartBtn.textContent = 'Restart Tutorial';
+      restartBtn.style.marginRight = 'auto';
+      footer.insertBefore(restartBtn, footer.firstChild);
+      restartBtn.addEventListener('click', () => {
+        // Close settings panel if it's open
+        const settingsPanel = document.getElementById('settingsPanel');
+        if (settingsPanel && !settingsPanel.classList.contains('hidden')) {
+          settingsPanel.classList.add('hidden');
+        }
+        setTimeout(() => {
+          openTutorial();
+        }, 200);
+      });
+    }
+  }
+
+  // --- Tutorial is now manual only - no auto-show ---
+  // Users can access tutorial via the Tutorial button or Restart Tutorial in settings
+
+  // Add restart tutorial button to settings when DOM is ready
+  document.addEventListener('DOMContentLoaded', addRestartTutorialToSettings);
+})();
+
+// Remove the duplicate functions that were outside the IIFE
+// ... existing code ...
+
+// Helper: Ensure no two objects are initialized within a minimum separation distance
+function ensureMinSeparation(objects, candidate, minDist) {
+  // objects: array of {x, y, radius}
+  // candidate: {x, y, radius}
+  // minDist: minimum allowed center-to-center distance
+  for (let obj of objects) {
+    const dx = obj.x - candidate.x;
+    const dy = obj.y - candidate.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < minDist) return false;
+  }
+  return true;
+}
+
+// Helper: Place an object with minimum separation, retrying up to maxTries
+function placeWithSeparation(objects, createCandidate, minDist, maxTries = 30) {
+  for (let i = 0; i < maxTries; i++) {
+    const candidate = createCandidate();
+    if (ensureMinSeparation(objects, candidate, minDist)) {
+      return candidate;
+    }
+  }
+  // If no valid position found, return null
+  return null;
+}
