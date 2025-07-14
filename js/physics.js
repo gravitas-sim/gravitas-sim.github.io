@@ -982,16 +982,16 @@ class GasGiant extends PhysicsObject {
     this.intact = true;
     this.name = getRandomName('gasGiants');
 
-    // --- Saturn-like rings: 1 in 3 chance ---
-    this.hasRings = Math.random() < 1/3;
+    // --- Saturn-like rings: 1 in 2 chance ---
+    this.hasRings = Math.random() < 0.5;
     if (this.hasRings) {
       // Ring size: inner radius 1.2-1.5x planet, outer 1.7-2.5x planet
       this.ringInnerRadius = this.radius * (1.2 + Math.random() * 0.3);
       this.ringOuterRadius = this.radius * (1.7 + Math.random() * 0.8);
-      // Ring orientation: random tilt (0 to PI)
-      this.ringAngle = Math.random() * Math.PI;
-      // Ring opacity: varies from planet to planet (0.15 to 0.45)
-      this.ringOpacity = 0.15 + Math.random() * 0.3;
+      // Ring orientation: random tilt (within ±30 degrees of equator)
+      this.ringAngle = (Math.random() - 0.5) * (Math.PI / 3); // -π/6 to +π/6
+      // Ring opacity: varies from planet to planet (0.4 to 0.8) - increased for better visibility
+      this.ringOpacity = 0.4 + Math.random() * 0.4;
     }
   }
 
@@ -1012,6 +1012,32 @@ class GasGiant extends PhysicsObject {
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
 
+    // Draw rings if present - BACK ARC ONLY FIRST
+    if (this.hasRings) {
+      ctx.save();
+      ctx.translate(world_pos.x, world_pos.y);
+      ctx.rotate(this.ringAngle);
+      ctx.globalAlpha = this.ringOpacity;
+
+      // The dividing line between front and back is where the Y coordinate in the ring's local frame is zero
+      // For an ellipse, this is at angles theta1 = 0 and theta2 = PI
+      // But after rotation, these become theta1 = -this.ringAngle and theta2 = PI - this.ringAngle
+      // We'll use these as the split points
+      const theta1 = -this.ringAngle;
+      const theta2 = Math.PI - this.ringAngle;
+
+      // Draw back arc (behind planet): from theta1 to theta2
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta1, theta2, false);
+      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta2, theta1, true);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(180,180,140,${this.ringOpacity})`;
+      ctx.fill('evenodd');
+      ctx.globalAlpha = 1.0;
+      ctx.restore();
+    }
+
+    // Draw the gas giant sphere (this will occlude the back portion of the ring)
     let baseColor;
     switch (this.giantType) {
       case 'brown_dwarf':
@@ -1147,16 +1173,21 @@ class GasGiant extends PhysicsObject {
     }
     ctx.restore();
 
-    // Draw rings if present
+    // Draw the front arc of the ring AFTER the planet (so it appears in front)
     if (this.hasRings) {
       ctx.save();
       ctx.translate(world_pos.x, world_pos.y);
       ctx.rotate(this.ringAngle);
       ctx.globalAlpha = this.ringOpacity;
+
+      const theta1 = -this.ringAngle;
+      const theta2 = Math.PI - this.ringAngle;
+      // Draw front arc (in front of planet): from theta2 to theta1
       ctx.beginPath();
-      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, 0, 2 * Math.PI);
-      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, 0, 2 * Math.PI);
-      ctx.fillStyle = 'rgba(220,220,180,1.0)';
+      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta2, theta1, false);
+      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta1, theta2, true);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(180,180,140,${this.ringOpacity})`;
       ctx.fill('evenodd');
       ctx.globalAlpha = 1.0;
       ctx.restore();
@@ -1894,9 +1925,10 @@ class BlackHole {
       const flicker = 0.85 + 0.35 * Math.sin(time * 10 + this.pos.y * 0.3);
       const jet_colors = [
         { stop: 0, color: [255, 255, 200] },
-        { stop: 0.25, color: [255, 220, 100] },
-        { stop: 0.6, color: [180, 200, 255] },
-        { stop: 1, color: [120, 180, 255] },
+        { stop: 0.2, color: [255, 220, 100] },
+        { stop: 0.5, color: [200, 200, 255] },
+        { stop: 0.8, color: [150, 170, 255] },
+        { stop: 1, color: [100, 140, 255] },
       ];
       for (let i = 0; i < 2; i++) {
         const base_angle = this.jet_orientation + i * Math.PI;
@@ -1916,7 +1948,7 @@ class BlackHole {
         ctx.closePath();
         const grad = ctx.createLinearGradient(base_x, base_y, tip_x, tip_y);
         for (const stop of jet_colors) {
-          const alpha = Math.max(0, Math.min(1, jet_intensity * (1 - stop.stop * 0.7) * flicker * (1 - 0.7 * stop.stop)));
+          const alpha = Math.max(0, Math.min(1, jet_intensity * (1 - stop.stop * 0.5) * flicker * (1 - 0.5 * stop.stop)));
           grad.addColorStop(stop.stop, `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`);
         }
         ctx.globalAlpha = 0.85;
@@ -1948,7 +1980,7 @@ class BlackHole {
           if (t > 0.6) color = [180, 200, 255];
           else if (t > 0.25) color = [255, 220, 100];
           // Opacity fades with distance
-          const alpha = Math.max(0.05, Math.min(0.22, jet_intensity * (1 - t * 0.7) * flicker));
+          const alpha = Math.max(0.03, Math.min(0.18, jet_intensity * (1 - t * 0.4) * flicker));
           ctx.save();
           ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
           ctx.lineWidth = Math.max(0.5, width * 0.09); // much thinner lines
@@ -1958,14 +1990,15 @@ class BlackHole {
           ctx.stroke();
           ctx.restore();
         }
-        // Jet tip shock (pulsing, blue-white)
-        const tip_shock_radius = jet_tip_width * (1.5 + 0.5 * Math.sin(time * 3 + i));
+        // Jet tip shock (subtle, fading away gradually)
+        const tip_shock_radius = jet_tip_width * (1.2 + 0.3 * Math.sin(time * 2 + i));
         const tip_grad = ctx.createRadialGradient(tip_x, tip_y, 0, tip_x, tip_y, tip_shock_radius);
-        tip_grad.addColorStop(0, `rgba(200,220,255,${0.7 * flicker})`);
-        tip_grad.addColorStop(0.5, `rgba(120,180,255,${0.3 * flicker})`);
-        tip_grad.addColorStop(1, `rgba(120,180,255,0)`);
+        tip_grad.addColorStop(0, `rgba(180,200,255,${0.3 * flicker})`);
+        tip_grad.addColorStop(0.3, `rgba(120,160,255,${0.15 * flicker})`);
+        tip_grad.addColorStop(0.7, `rgba(100,140,255,${0.05 * flicker})`);
+        tip_grad.addColorStop(1, `rgba(100,140,255,0)`);
         ctx.save();
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.4;
         ctx.beginPath();
         ctx.arc(tip_x, tip_y, tip_shock_radius, 0, 2 * Math.PI);
         ctx.fillStyle = tip_grad;
