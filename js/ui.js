@@ -205,7 +205,7 @@ const SCENARIO_INFO = {
   'Solar System': {
     title: 'Solar System',
     summary:
-      'A highly accurate simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
+      'A simulation of our Solar System featuring real planets with correct masses, orbital distances, diameters, and colors. Includes Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune with their actual properties, plus real asteroids (Ceres, Vesta, Pallas) and famous comets (Halley, Hale-Bopp, Hyakutake) with authentic orbital periods and characteristics.',
   },
   'Earth-Moon System': {
     title: 'Earth-Moon System',
@@ -917,14 +917,14 @@ const show_enhanced_scenario_info = (scenarioName) => {
  * Apply preset scenario settings to the simulation
  * @param {Object} settings_dict - Settings object to modify with preset values
  */
-const apply_preset = settings_dict => {
-  const ps = settings_dict.preset_scenario;
+const apply_preset = () => {
+  const ps = SETTINGS.preset_scenario;
   if (ps === 'None') return;
   const fresh_defaults = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-  Object.assign(settings_dict, fresh_defaults, { preset_scenario: ps });
+  Object.assign(SETTINGS, fresh_defaults, { preset_scenario: ps });
 
   if (ps === 'Binary BH') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 2,
       bh_behavior: 'Orbiting',
       use_individual_bh_masses: true,
@@ -958,9 +958,10 @@ const apply_preset = settings_dict => {
       star_base_color: '#ffff00',
       enable_star_merging: true,
       max_star_mass_before_bh: 20.0,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Neutron Star Collision') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_neutron_stars: 2,
       use_individual_ns_masses: true,
@@ -977,9 +978,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.5,
       sim_speed: 0.8,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Pulsar System') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_neutron_stars: 1,
       num_planets: 3,
@@ -992,9 +994,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.7,
       show_trails: true,
       trail_length: 30,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'White Dwarf Binary') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_white_dwarfs: 2,
       num_planets: 0,
@@ -1009,9 +1012,10 @@ const apply_preset = settings_dict => {
       show_trails: true,
       trail_length: 40,
       show_accretion_disk: true, // Show accretion between white dwarfs
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Stellar Graveyard') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 3,
       num_neutron_stars: 5,
       num_white_dwarfs: 8,
@@ -1027,9 +1031,10 @@ const apply_preset = settings_dict => {
       show_bh_glow: true,
       sim_speed: 0.8,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Galactic Center') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 4000,
       bh_behavior: 'Static',
@@ -1048,9 +1053,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.8,
       sim_speed: 0.6,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Supernova Remnant') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_neutron_stars: 1,
       num_white_dwarfs: 0,
@@ -1065,9 +1071,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.8,
       show_trails: true,
       trail_length: 60,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Compact Object Zoo') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 3,
       num_neutron_stars: 4,
       num_white_dwarfs: 6,
@@ -1082,9 +1089,10 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_accretion_disk: true,
       show_bh_glow: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Millisecond Pulsar') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_neutron_stars: 1,
       num_white_dwarfs: 1,
@@ -1099,9 +1107,10 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 35,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Tidal Disruption Event') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 2000,
       num_neutron_stars: 0,
@@ -1117,9 +1126,10 @@ const apply_preset = settings_dict => {
       show_bh_jets: true,
       sim_speed: 0.7,
       gravitational_constant: 2.0,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Intermediate Mass BH') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 400,
       num_neutron_stars: 2,
@@ -1134,9 +1144,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.7,
       sim_speed: 0.6,
       mutual_gravity: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Galactic Collision') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 2,
       bh_mass: 900,
       bh_behavior: 'Orbiting',
@@ -1158,9 +1169,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.4, // Slower to see the collision develop
       gravitational_constant: 1.9,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Micro BH Swarm') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 12,
       bh_mass: 1.2,
       bh_behavior: 'Orbiting', // Make them dynamic!
@@ -1178,9 +1190,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.5,
       sim_speed: 0.7,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Exoplanet Lab') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_planets: 120, // Diverse exoplanet collection
       num_gas_giants: 25, // Including hot Jupiters, mini-Neptunes
@@ -1196,9 +1209,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.3,
       sim_speed: 0.6,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Triple BH System') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 3,
       bh_behavior: 'Orbiting',
       use_individual_bh_masses: true,
@@ -1214,9 +1228,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.6,
       sim_speed: 0.8,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Supermassive BH') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 80,
       num_planets: 50,
@@ -1228,9 +1243,10 @@ const apply_preset = settings_dict => {
       gravitational_constant: 1.7,
       sim_speed: 0.7,
       mutual_gravity: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Star Cluster') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_planets: 80, // These represent main-sequence stars
       num_gas_giants: 15, // These represent evolved stars
@@ -1246,9 +1262,10 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 25,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Kuiper Belt') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       placement: 'Empty',
       mutual_gravity: true,
       num_black_holes: 0,
@@ -1263,9 +1280,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.9,
       show_trails: true,
       trail_length: 20,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Sagittarius A*') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 4000, // Reduced from 4 million to 4000 for better gameplay
       bh_behavior: 'Static',
@@ -1284,9 +1302,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.5, // Slower to see the extreme dynamics
       gravitational_constant: 2.0,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Binary Star System') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 2, // Add 2 stars for binary system
       mutual_gravity: true,
@@ -1301,9 +1320,10 @@ const apply_preset = settings_dict => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 30,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Solar System') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 1, // One sun-like star
       mutual_gravity: true,
@@ -1320,9 +1340,10 @@ const apply_preset = settings_dict => {
       show_trails: true,
       trail_length: 20,
       sim_size: 'Small', // Focused view
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Earth-Moon System') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 0, // No central star, just Earth-Moon
       num_planets: 1, // Earth
@@ -1338,9 +1359,10 @@ const apply_preset = settings_dict => {
       show_trails: true,
       trail_length: 30,
       sim_size: 'Small', // Focused view
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Slingshot') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       placement: 'Random',
       num_black_holes: 2,
       use_individual_bh_masses: true,
@@ -1357,9 +1379,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.8,
       gravitational_constant: 1.6,
       enable_star_merging: false, // Disable merging to prevent immediate black hole merger
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Rogue Encounter') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       placement: 'Empty',
       num_black_holes: 1,
       num_stars: 1, // Central star system
@@ -1376,9 +1399,10 @@ const apply_preset = settings_dict => {
       sim_speed: 0.7,
       gravitational_constant: 1.5,
       enable_star_merging: true,
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Quasar Cannon') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 1e9,
       num_stars: 50,
@@ -1395,9 +1419,10 @@ const apply_preset = settings_dict => {
       trail_length: 60,
       enable_star_merging: true,
       // Visual: high accretion rate (handled in rendering)
+      preset_zoom: 0.05,
     });
   } else if (ps === 'The Pinwheel Galaxy Core') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 2,
       use_individual_bh_masses: true,
       bh_masses: [1e5, 1e5],
@@ -1413,9 +1438,10 @@ const apply_preset = settings_dict => {
       trail_length: 80,
       enable_star_merging: true,
       // Visual: all stars co-rotating (handled in initialization)
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Star Frisbee') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 10,
       num_stars: 30,
@@ -1430,9 +1456,10 @@ const apply_preset = settings_dict => {
       trail_length: 30,
       enable_star_merging: true,
       // Special: BH moves at 500 km/s (handled in initialization)
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Kessler Cascade') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 5,
       num_stars: 0,
@@ -1449,12 +1476,13 @@ const apply_preset = settings_dict => {
       trail_length: 20,
       enable_star_merging: true,
       // 300 micro-stars as 0.1 Msun stars (handled in initialization)
+      preset_zoom: 1.5,
     });
-    settings_dict.num_micro_stars = 300;
-    settings_dict.micro_star_mass = 0.1;
-    settings_dict.micro_star_high_velocity = true;
+    SETTINGS.num_micro_stars = 300;
+    SETTINGS.micro_star_mass = 0.1;
+    SETTINGS.micro_star_high_velocity = true;
   } else if (ps === 'Alien Dyson Swarm Collapse') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 1,
       num_stars: 100,
@@ -1469,10 +1497,11 @@ const apply_preset = settings_dict => {
       trail_length: 18,
       enable_star_merging: false,
       // Visual: satellites, slight orbital decay (handled in initialization)
+      preset_zoom: 1.5,
     });
-    settings_dict.satellites_are_dyson = true;
+    SETTINGS.satellites_are_dyson = true;
   } else if (ps === 'Tidal Arm Tango') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 2,
       use_individual_bh_masses: true,
       bh_masses: [1e6, 1e6],
@@ -1487,10 +1516,27 @@ const apply_preset = settings_dict => {
       show_trails: true,
       trail_length: 100,
       enable_star_merging: true,
-      // Special: BHs on near-parabolic trajectories (handled in initialization)
+      preset_zoom: 0.3,
     });
+    // Place two supermassive black holes on a near-parabolic flyby
+    if (bh_list.length >= 2) {
+      const sep = 700;
+      bh_list[0].pos.x = -sep;
+      bh_list[0].pos.y = 0;
+      bh_list[1].pos.x = sep;
+      bh_list[1].pos.y = 0;
+      const v = 120;
+      bh_list[0].vel.x = 0;
+      bh_list[0].vel.y = v;
+      bh_list[1].vel.x = 0;
+      bh_list[1].vel.y = -v;
+      // Set jet orientations: up and down
+      bh_list[0].jet_orientation = Math.PI / 2; // up
+      bh_list[1].jet_orientation = -Math.PI / 2; // down
+    }
+    state.zoom = 0.3;
   } else if (ps === 'Hungry Hungry Holes') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 4,
       use_individual_bh_masses: true,
       bh_masses: [50, 50, 50, 50],
@@ -1506,9 +1552,10 @@ const apply_preset = settings_dict => {
       trail_length: 40,
       enable_star_merging: true,
       // Special: BHs at square corners, stars in center (handled in initialization)
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Slingshot Gauntlet') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 5,
       use_individual_bh_masses: true,
       bh_masses: [30, 30, 30, 30, 30],
@@ -1524,10 +1571,11 @@ const apply_preset = settings_dict => {
       trail_length: 25,
       enable_star_merging: false,
       // Special: test star shot at 1000 km/s (handled in initialization)
+      preset_zoom: 1.5,
     });
-    settings_dict.test_star_slingshot = true;
+    SETTINGS.test_star_slingshot = true;
   } else if (ps === 'Black Hole Billiards') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 4,
       use_individual_bh_masses: true,
       bh_masses: [1e6, 10, 10, 10],
@@ -1543,9 +1591,10 @@ const apply_preset = settings_dict => {
       trail_length: 35,
       enable_star_merging: true,
       // Special: 3 small BHs orbiting a supermassive one (handled in initialization)
+      preset_zoom: 1.5,
     });
   } else if (ps === 'Stellar Nursery') {
-    Object.assign(settings_dict, {
+    Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 1,
       num_stars: 100,
@@ -1560,10 +1609,11 @@ const apply_preset = settings_dict => {
       trail_length: 20,
       enable_star_merging: true,
       // Special: BH grows in mass over time (handled in simulation loop)
+      preset_zoom: 1.5,
     });
   }
 
-  settings_dict.preset_scenario = 'None';
+  SETTINGS.preset_scenario = 'None';
 };
 
 const apply_placement = () => {
@@ -1833,7 +1883,7 @@ const initialize_simulation = () => {
   setStateReference(state);
   
   const starting_preset = SETTINGS.preset_scenario;
-  apply_preset(SETTINGS);
+  apply_preset();
   current_scenario_name = starting_preset;
 
   // Reset insertion object type to scenario default (or 'Star') and update button
@@ -1846,7 +1896,7 @@ const initialize_simulation = () => {
   // Update physics settings
   updatePhysicsSettings(SETTINGS);
   
-  state.zoom = 1.5; // Increased from 1.0 for better initial framing
+  state.zoom = SETTINGS.preset_zoom || 1.5; // Use preset zoom or default to 1.5
   state.pan = { x: 0.0, y: 0.0 };
   // Clear all arrays instead of reassigning them
   bh_list.length = 0;

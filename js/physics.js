@@ -1449,7 +1449,7 @@ class BlackHole {
    * @param {number} mass - Black hole mass
    * @param {Object} vel - Initial velocity with x, y properties
    */
-  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false) {
+  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false, jet_orientation = Math.PI / 2) {
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
@@ -1477,6 +1477,7 @@ class BlackHole {
     this.time_since_last_particle = 0;
     this.merger_boost_timer = 0; // Timer for enhanced effects after mergers
     this.merger_particle_boost = 1.0; // Multiplier for particle generation after mergers
+    this.jet_orientation = jet_orientation;
     
     // Generate initial accretion disk particles for all black holes
     this.generateInitialDiskParticles();
@@ -1854,78 +1855,105 @@ class BlackHole {
     ctx.fill();
 
     if (physicsSettings.show_bh_jets) {
-      const jet_length = world_radius * (6 + this.jet_intensity * 2);
-      const jet_width = Math.max(
-        1 / state.zoom,
-        world_radius * (0.15 + this.jet_intensity * 0.1)
-      );
-      const jet_intensity = 0.6 + this.jet_intensity * 0.4;
-
-      const jet_layers = [
-        {
-          width: jet_width * 0.3,
-          color: `rgba(255, 255, 255, ${jet_intensity * 0.9})`,
-        },
-        {
-          width: jet_width * 0.6,
-          color: `rgba(255, 200, 100, ${jet_intensity * 0.7})`,
-        },
-        {
-          width: jet_width,
-          color: `rgba(255, 140, 0, ${jet_intensity * 0.5})`,
-        },
+      // --- Realistic, dynamic jet rendering (many thin lines, volumetric) ---
+      const jet_length = world_radius * (7 + this.jet_intensity * 2.5);
+      const jet_base_width = Math.max(1.5 / state.zoom, world_radius * (0.18 + this.jet_intensity * 0.12));
+      const jet_tip_width = jet_base_width * 2.2;
+      const jet_intensity = 0.7 + this.jet_intensity * 0.5;
+      const time = Date.now() * 0.001;
+      const precession_angle = Math.sin(time * 0.25 + this.pos.x * 0.13) * 0.09;
+      const flicker = 0.85 + 0.35 * Math.sin(time * 10 + this.pos.y * 0.3);
+      const jet_colors = [
+        { stop: 0, color: [255, 255, 200] },
+        { stop: 0.25, color: [255, 220, 100] },
+        { stop: 0.6, color: [180, 200, 255] },
+        { stop: 1, color: [120, 180, 255] },
       ];
-
-      for (const direction of [-1, 1]) {
-        for (const layer of jet_layers) {
-          ctx.fillStyle = layer.color;
-          ctx.fillRect(
-            world_pos.x - layer.width / 2,
-            world_pos.y + direction * world_radius,
-            layer.width,
-            direction * jet_length
-          );
-        }
-
-        const shock_radius = jet_width * (1.5 + this.jet_intensity * 0.5);
-        const shock_pos = {
-          x: world_pos.x,
-          y: world_pos.y + direction * (world_radius + jet_length),
-        };
-
-        const shock_grad = ctx.createRadialGradient(
-          shock_pos.x,
-          shock_pos.y,
-          0,
-          shock_pos.x,
-          shock_pos.y,
-          shock_radius
-        );
-        shock_grad.addColorStop(
-          0,
-          `rgba(255, 255, 255, ${jet_intensity * 0.6})`
-        );
-        shock_grad.addColorStop(
-          0.5,
-          `rgba(255, 200, 100, ${jet_intensity * 0.4})`
-        );
-        shock_grad.addColorStop(1, `rgba(255, 140, 0, 0)`);
-
-        ctx.fillStyle = shock_grad;
+      for (let i = 0; i < 2; i++) {
+        const base_angle = this.jet_orientation + i * Math.PI;
+        const angle = base_angle + precession_angle;
+        // Draw the main jet beam as a polygon with gradient
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(shock_pos.x, shock_pos.y, shock_radius, 0, 2 * Math.PI);
+        const base_x = world_pos.x + Math.sin(angle) * world_radius;
+        const base_y = world_pos.y + Math.cos(angle) * world_radius;
+        const tip_x = world_pos.x + Math.sin(angle) * (world_radius + jet_length);
+        const tip_y = world_pos.y + Math.cos(angle) * (world_radius + jet_length);
+        const perp = { x: Math.cos(angle), y: -Math.sin(angle) };
+        ctx.moveTo(base_x - perp.x * jet_base_width, base_y - perp.y * jet_base_width);
+        ctx.lineTo(tip_x - perp.x * jet_tip_width, tip_y - perp.y * jet_tip_width);
+        ctx.lineTo(tip_x + perp.x * jet_tip_width, tip_y + perp.y * jet_tip_width);
+        ctx.lineTo(base_x + perp.x * jet_base_width, base_y + perp.y * jet_base_width);
+        ctx.closePath();
+        const grad = ctx.createLinearGradient(base_x, base_y, tip_x, tip_y);
+        for (const stop of jet_colors) {
+          const alpha = Math.max(0, Math.min(1, jet_intensity * (1 - stop.stop * 0.7) * flicker * (1 - 0.7 * stop.stop)));
+          grad.addColorStop(stop.stop, `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`);
+        }
+        ctx.globalAlpha = 0.85;
+        ctx.fillStyle = grad;
+        ctx.filter = 'blur(0.5px)';
         ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.filter = 'none';
+        ctx.restore();
+        // --- Jet lines: many, very thin, volumetric, flickering ---
+        const numLines = 90;
+        for (let i = 0; i < numLines; i++) {
+          // t: 0 (base) to 1 (tip), randomize for volumetric fill
+          const t = Math.random();
+          // Random offset from center axis for volumetric effect
+          const width = jet_base_width * (1 - t) + jet_tip_width * t;
+          const offset = (Math.random() - 0.5) * width * 1.1;
+          // Flicker: only draw if random threshold is met (rapid flutter)
+          if (Math.random() > 0.38 + 0.55 * Math.sin(time * 16 + t * 10 + i)) continue;
+          // Position along jet, offset from axis
+          const px = world_pos.x + Math.sin(angle) * (world_radius + t * jet_length) + perp.x * offset;
+          const py = world_pos.y + Math.cos(angle) * (world_radius + t * jet_length) + perp.y * offset;
+          // Line direction: mostly along jet, but with small random angular spread
+          const angleSpread = angle + (Math.random() - 0.5) * 0.18;
+          // Line length tapers and flutters
+          const lineLen = width * (1.2 + 0.7 * Math.sin(time * 12 + t * 8 + i));
+          // Color: interpolate between stops
+          let color = [255, 255, 200];
+          if (t > 0.6) color = [180, 200, 255];
+          else if (t > 0.25) color = [255, 220, 100];
+          // Opacity fades with distance
+          const alpha = Math.max(0.05, Math.min(0.22, jet_intensity * (1 - t * 0.7) * flicker));
+          ctx.save();
+          ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
+          ctx.lineWidth = Math.max(0.5, width * 0.09); // much thinner lines
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(px + Math.sin(angleSpread) * lineLen, py + Math.cos(angleSpread) * lineLen);
+          ctx.stroke();
+          ctx.restore();
+        }
+        // Jet tip shock (pulsing, blue-white)
+        const tip_shock_radius = jet_tip_width * (1.5 + 0.5 * Math.sin(time * 3 + i));
+        const tip_grad = ctx.createRadialGradient(tip_x, tip_y, 0, tip_x, tip_y, tip_shock_radius);
+        tip_grad.addColorStop(0, `rgba(200,220,255,${0.7 * flicker})`);
+        tip_grad.addColorStop(0.5, `rgba(120,180,255,${0.3 * flicker})`);
+        tip_grad.addColorStop(1, `rgba(120,180,255,0)`);
+        ctx.save();
+        ctx.globalAlpha = 0.7;
+        ctx.beginPath();
+        ctx.arc(tip_x, tip_y, tip_shock_radius, 0, 2 * Math.PI);
+        ctx.fillStyle = tip_grad;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.restore();
       }
     }
 
+    // ... label code ...
+
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-
     const true_screen_pos = {
       x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
       y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
     };
-
     const screen_radius = world_radius * state.zoom;
     let label_y_offset = screen_radius + 15;
     if (physicsSettings.show_bh_jets) {
@@ -1935,7 +1963,6 @@ class BlackHole {
     } else if (physicsSettings.show_bh_glow) {
       label_y_offset = screen_radius * 1.8 + 10;
     }
-
     ctx.font = '14px Roboto Mono';
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
@@ -1947,7 +1974,6 @@ class BlackHole {
       true_screen_pos.x,
       true_screen_pos.y + label_y_offset
     );
-
     ctx.restore();
   }
 
