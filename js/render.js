@@ -93,6 +93,7 @@ function drawStarfield() {
 
   const c = 0.18; // Speed of light in world units per ms (tweak for simulation scale)
   // --- Gravitational wave ripples (placeholder effect) ---
+  // (Removed: drawing of visible colored ripple arcs. Only lensing effect remains.)
   if (SETTINGS.show_gravitational_waves) {
     const now = performance.now();
     for (let i = gravity_ripples.length - 1; i >= 0; i--) {
@@ -102,32 +103,7 @@ function drawStarfield() {
         gravity_ripples.splice(i, 1);
         continue;
       }
-      // Convert world coordinates to screen
-      const screen = world_to_screen({ x: ripple.x, y: ripple.y });
-      // Amplitude and wavelength scale with merger mass
-      const mass = ripple.mass || 1.0;
-      const amplitude = 8 + 10 * Math.log10(mass + 1); // px, more for higher mass
-      const wavelength = 80 + 40 * Math.log10(mass + 1); // px, more for higher mass
-      const radius = c * age * state.zoom;
-      const progress = age / ripple.duration;
-      // Fade out as ripple expands
-      const alpha = 0.18 * (1 - progress) * (1 - progress);
-      for (let j = 0; j < 3; j++) {
-        const r = radius + j * wavelength;
-        // Color shift: blue at leading edge, red at trailing edge
-        const phase = (progress + j * 0.18) % 1.0;
-        const color = `hsl(${220 - 120 * phase}, 90%, 70%)`; // 220=blue, 100=red
-        starCtx.save();
-        starCtx.globalAlpha = alpha * (1 - j * 0.25);
-        starCtx.beginPath();
-        starCtx.arc(screen.x, screen.y, r + Math.sin(progress * Math.PI * 2 + j) * amplitude, 0, 2 * Math.PI);
-        starCtx.lineWidth = 4 + 2 * (1 - progress);
-        starCtx.strokeStyle = color;
-        starCtx.shadowColor = color;
-        starCtx.shadowBlur = 8;
-        starCtx.stroke();
-        starCtx.restore();
-      }
+      // No visible arc drawing here; only lensing below
     }
   }
 
