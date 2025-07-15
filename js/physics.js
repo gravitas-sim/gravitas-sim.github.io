@@ -378,7 +378,14 @@ const updatePhysics = dt => {
 
   // Handle star merging separately from other collisions
   if (physicsSettings.enable_star_merging) {
-    handle_star_merging([...stars, ...neutron_stars, ...white_dwarfs]);
+    // Use PhysicsObject-like wrappers for black holes
+    const merge_candidates = [
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...bh_list.map(asPhysicsObject)
+    ];
+    handle_star_merging(merge_candidates);
   }
   
   // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
@@ -532,7 +539,8 @@ const updatePhysics = dt => {
             time: Date.now(),
             created: performance.now(),
             duration: 3000, // ms
-            mass: new_mass / SOLAR_MASS_UNIT // Merger mass in solar masses
+            mass: new_mass / SOLAR_MASS_UNIT, // Merger mass in solar masses
+            gw_strength: 1.0 // Full strength for BH-BH mergers
           });
           
           bh_list.splice(j, 1);
@@ -2915,10 +2923,40 @@ const handle_star_merging = (stars_list) => {
           
           if (has_neutron_star) {
             // Neutron star involved in merger
-            if (new_mass_in_suns > 3.0) {
+            const is_bh_merger = star1_type === 'BlackHole' || star2_type === 'BlackHole';
+            if (is_bh_merger) {
+              // NS-BH merger: always trigger a visible GW ripple
+              new_object = new BlackHole(new_pos, new_mass, new_vel, true);
+              bh_list.push(new_object);
+              // Remove merged neutron star and black hole from global lists
+              neutron_stars = neutron_stars.filter(ns => ns !== star1 && ns !== star2);
+              // Remove real BlackHole from bh_list if present
+              if (star1_type === 'BlackHole' && star1._bh_ref) { star1._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star1._bh_ref); }
+              if (star2_type === 'BlackHole' && star2._bh_ref) { star2._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star2._bh_ref); }
+              gravity_ripples.push({
+                x: new_pos.x,
+                y: new_pos.y,
+                time: Date.now(),
+                created: performance.now(),
+                duration: 2200, // ms, like NS-NS merger
+                mass: new_mass / SOLAR_MASS_UNIT,
+                gw_strength: 0.2 // Like NS-NS merger
+              });
+            } else if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
+              // Remove merged neutron star from global list
+              neutron_stars = neutron_stars.filter(ns => ns !== star1 && ns !== star2);
+              gravity_ripples.push({
+                x: new_pos.x,
+                y: new_pos.y,
+                time: Date.now(),
+                created: performance.now(),
+                duration: 3000, // ms, longer and more visible for NS-BH mergers
+                mass: new_mass / SOLAR_MASS_UNIT,
+                gw_strength: 0.5 // More apparent for NS-BH merger
+              });
             } else {
               // Stays as neutron star
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
@@ -2930,6 +2968,15 @@ const handle_star_merging = (stars_list) => {
               // Exceeds Chandrasekhar limit -> neutron star
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
+              gravity_ripples.push({
+                x: new_pos.x,
+                y: new_pos.y,
+                time: Date.now(),
+                created: performance.now(),
+                duration: 1800, // ms, even shorter
+                mass: new_mass / SOLAR_MASS_UNIT,
+                gw_strength: 0.1 // WD-NS or WD-BH merger
+              });
             } else {
               // Stays as white dwarf
               new_object = new WhiteDwarf(new_pos, new_vel, new_mass_in_suns);
@@ -2941,10 +2988,28 @@ const handle_star_merging = (stars_list) => {
               // Exceeds maximum star mass -> black hole
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
+              gravity_ripples.push({
+                x: new_pos.x,
+                y: new_pos.y,
+                time: Date.now(),
+                created: performance.now(),
+                duration: 3000, // ms
+                mass: new_mass / SOLAR_MASS_UNIT,
+                gw_strength: 1.0 // Full strength for BH-BH mergers
+              });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
+              gravity_ripples.push({
+                x: new_pos.x,
+                y: new_pos.y,
+                time: Date.now(),
+                created: performance.now(),
+                duration: 2200, // ms, shorter for smaller mergers
+                mass: new_mass / SOLAR_MASS_UNIT,
+                gw_strength: 0.2 // NS-NS or NS-BH merger
+              });
             } else {
               // Regular star
               new_object = new StarObject(new_pos, new_vel, new_mass_in_suns);
@@ -2961,6 +3026,8 @@ const handle_star_merging = (stars_list) => {
     
     // Filter out dead stars after processing all collisions
     stars_list = stars_list.filter(star => star.alive);
+    // After each round, rebuild stars_list from global lists to reflect new state
+    stars_list = [...stars, ...neutron_stars, ...white_dwarfs, ...bh_list].filter(obj => obj.alive);
   }
 };
 
@@ -3501,3 +3568,16 @@ export {
   updatePhysicsSettings,
   setStateReference,
 };
+
+// Helper: Wrap BlackHole as PhysicsObject-like for merging
+function asPhysicsObject(bh) {
+  return {
+    pos: bh.pos,
+    vel: bh.vel,
+    mass: bh.mass,
+    radius: bh.radius,
+    alive: true,
+    constructor: { name: 'BlackHole' },
+    _bh_ref: bh // Keep reference to real BlackHole
+  };
+}

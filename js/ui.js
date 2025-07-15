@@ -218,6 +218,10 @@ const SCENARIO_INFO = {
     summary:
       'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
   },
+  'GW150914': {
+    title: 'GW150914: First Gravitational Wave Merger',
+    summary: 'Simulates the historic merger of two massive black holes (36 & 29 M☉) detected by LIGO in 2015. Watch as they spiral together, emit gravitational waves, and merge into a single, more massive black hole.'
+  },
   'Binary BH': {
     title: 'Binary Black Hole',
     summary:
@@ -1637,6 +1641,45 @@ const apply_preset = () => {
       sim_size: 'Small',
       preset_zoom: 8.0,
     });
+  } else if (ps === 'GW150914') {
+    Object.assign(SETTINGS, {
+      num_black_holes: 2,
+      bh_behavior: 'Orbiting',
+      use_individual_bh_masses: true,
+      bh_masses: [36, 29],
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_stars: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      placement: 'Circular',
+      mutual_gravity: false,
+      orbit_decay_rate: 0.0025, // Strong inspiral for dramatic GW effect
+      show_trails: true,
+      sim_speed: 1.0,
+      show_velocity_vectors: false,
+      interactive_add: true,
+      trail_length: 20,
+      trail_style: 'Glow',
+      sim_size: 'Large',
+      star_density: 10000,
+      input_object_type: 'BlackHole',
+      show_bh_glow: true,
+      show_accretion_disk: false,
+      show_bh_jets: false,
+      show_dynamic_overlays: true,
+      enable_asteroids: false,
+      dynamic_object_properties: true,
+      record_simulation: false,
+      show_ambient_lighting: true,
+      planet_base_color: '#6495ed',
+      star_base_color: '#ffff00',
+      enable_star_merging: false,
+      max_star_mass_before_bh: 20.0,
+      preset_zoom: 1.7,
+    });
   }
 
   SETTINGS.preset_scenario = 'None';
@@ -2009,6 +2052,32 @@ const initialize_simulation = () => {
 
   // Apply placement patterns to position objects
   apply_placement();
+  
+  // --- Fix for GW150914 scenario: two black holes in close inspiral ---
+  if (starting_preset === 'GW150914' && bh_list.length >= 2) {
+    const separation = 90; // Slightly closer for faster merger
+    const m1 = bh_list[0].mass;
+    const m2 = bh_list[1].mass;
+    const totalMass = m1 + m2;
+    // Center of mass positions
+    const r1 = separation * (m2 / totalMass);
+    const r2 = separation * (m1 / totalMass);
+    bh_list[0].pos.x = -r1;
+    bh_list[0].pos.y = 0;
+    bh_list[1].pos.x = r2;
+    bh_list[1].pos.y = 0;
+    // Orbital velocities
+    const G = SETTINGS.gravitational_constant;
+    const orbitalSpeed = Math.sqrt(G * totalMass / separation);
+    bh_list[0].vel.x = 0;
+    bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
+    bh_list[1].vel.x = 0;
+    bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass);
+    // Add stronger perturbation to ensure inspiral
+    const perturbation = 0.92;
+    bh_list[0].vel.y *= perturbation;
+    bh_list[1].vel.y *= perturbation;
+  }
   
   // Show enhanced scenario info box
   show_enhanced_scenario_info(starting_preset);
@@ -2713,6 +2782,7 @@ const setting_items = [
       'Solar System',
       'Earth-Moon System',
       'TRAPPIST-1 System',
+      'GW150914',
       'Binary BH',
       'Triple BH System',
       'Supermassive BH',
@@ -3746,8 +3816,8 @@ const objectTypes = [
   { type: "GasGiant", emoji: "🪐", label: "Add Gas Giants" },
   { type: "Asteroid", emoji: "☄️", label: "Add Asteroids" },
   { type: "Comet", emoji: "☄️", label: "Add Comets" },
-  { type: "NeutronStar", emoji: "⚡", label: "Add Neutron Stars" },
   { type: "WhiteDwarf", emoji: "💎", label: "Add White Dwarfs" },
+  { type: "NeutronStar", emoji: "⚡", label: "Add Neutron Stars" },
   { type: "BlackHole", emoji: "⚫", label: "Add Black Holes" }
 ];
 
@@ -4739,3 +4809,44 @@ function placeWithSeparation(objects, createCandidate, minDist, maxTries = 30) {
   // If no valid position found, return null
   return null;
 }
+
+document.getElementById('cleanSimBtn').onclick = () => {
+  // Clear all simulation objects and arrays
+  bh_list.length = 0;
+  planets.length = 0;
+  stars.length = 0;
+  gas_giants.length = 0;
+  asteroids.length = 0;
+  comets.length = 0;
+  neutron_stars.length = 0;
+  white_dwarfs.length = 0;
+  debris.length = 0;
+  particles.length = 0;
+  gravity_ripples.length = 0;
+  accretion_disk_particles.length = 0;
+  particlePool.clear && particlePool.clear();
+  resetPhysicsObjectCounter && resetPhysicsObjectCounter();
+
+  // Reset view to default
+  state.zoom = 1.0;
+  state.pan = { x: 0.0, y: 0.0 };
+
+  // Hide inspector and scenario info
+  hideObjectInspector && hideObjectInspector();
+  const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+  if (scenarioInfoDiv) scenarioInfoDiv.classList.remove('visible');
+
+  // Set scenario to 'None' and update settings
+  SETTINGS.preset_scenario = 'None';
+  current_scenario_name = 'None';
+
+  // Unpause simulation and set normal speed
+  state.paused = false;
+  SETTINGS.sim_speed = 1.0;
+
+  // Redraw background/starfield if needed
+  if (typeof generateStarfield === 'function') generateStarfield();
+
+  // Optionally update UI overlays
+  if (typeof show_scenario_info === 'function') show_scenario_info();
+};
