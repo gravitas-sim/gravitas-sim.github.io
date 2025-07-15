@@ -50,6 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tutorialBtn) {
           tutorialBtn.classList.add('showUI');
         }
+        // Fade in the attribution text with the rest of the UI
+        const attribution = document.getElementById('attribution');
+        if (attribution) {
+          attribution.classList.add('showUI');
+        }
       }, 200);
     }
   });

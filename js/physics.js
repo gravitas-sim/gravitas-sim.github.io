@@ -1164,7 +1164,8 @@ class GasGiant extends PhysicsObject {
       ctx.shadowBlur = 3;
       
       // Show name for Solar System gas giants, mass for others
-      const displayText = this.isSolarSystemPlanet ? this.name : `${this.massInJupiters.toFixed(2)} M♃`;
+      const massInEarths = this.massInJupiters * 317.8;
+      const displayText = this.isSolarSystemPlanet ? this.name : `${Math.round(massInEarths)} M⊕`;
       ctx.fillText(
         displayText,
         true_screen_pos.x,
