@@ -1031,7 +1031,7 @@ class GasGiant extends PhysicsObject {
       ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta1, theta2, false);
       ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta2, theta1, true);
       ctx.closePath();
-      ctx.fillStyle = `rgba(180,180,140,${this.ringOpacity})`;
+      ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
       ctx.fill('evenodd');
       ctx.globalAlpha = 1.0;
       ctx.restore();
@@ -1188,7 +1188,7 @@ class GasGiant extends PhysicsObject {
       ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta2, theta1, false);
       ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta1, theta2, true);
       ctx.closePath();
-      ctx.fillStyle = `rgba(180,180,140,${this.ringOpacity})`;
+      ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
       ctx.fill('evenodd');
       ctx.globalAlpha = 1.0;
       ctx.restore();
@@ -2032,11 +2032,11 @@ class BlackHole {
     ctx.textBaseline = 'middle';
     ctx.shadowColor = 'black';
     ctx.shadowBlur = 4;
-    ctx.fillText(
-      `${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`,
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset
-    );
+    // BlackHole label (replace ctx.fillText(`${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`, ...))
+    const massStr = (this.mass / SOLAR_MASS_UNIT).toFixed(1);
+    const label = massStr + ' M\u2609'; // M☉
+    ctx.fillText(label, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+    // (Removed: subscript 'sun' text)
     ctx.restore();
   }
 
@@ -2120,12 +2120,14 @@ class StarObject extends PhysicsObject {
       ctx.shadowBlur = 4;
       
       // Show name for Solar System sun, mass for others
-      const displayText = this.isSolarSystemSun ? this.name : `${this.massInSuns.toFixed(2)} Msun`;
-      ctx.fillText(
-        displayText,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
+      if (this.isSolarSystemSun) {
+        ctx.fillText(this.name, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+      } else {
+        const starMassStr = this.massInSuns.toFixed(2);
+        const starLabel = starMassStr + ' M\u2609'; // M☉
+        ctx.fillText(starLabel, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+        // Remove subscript 'sun' drawing
+      }
     }
     ctx.restore();
   }
