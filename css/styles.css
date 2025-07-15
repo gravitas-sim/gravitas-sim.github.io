@@ -2044,10 +2044,10 @@ html, body {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   padding: 10px 20px;
-  width: 90%;
-  max-width: 600px;
+  width: 95%;
+  max-width: 900px;
   position: relative;
-    text-align: center;
+  text-align: left;
 }
 
 
@@ -2121,6 +2121,7 @@ html, body {
 .scenario-info-body {
     color: var(--text-color);
   line-height: 1.4;
+  text-align: left;
 }
 
 .scenario-info-body p {
@@ -2133,6 +2134,7 @@ html, body {
   max-width: 100%;
   line-height: 1.5;
   overflow: hidden;
+  text-align: left;
 }
 
 .scenario-info-details {
