@@ -4645,7 +4645,7 @@ export {
     if (e.touches.length !== 1) return;
     touchStartY = e.touches[0].clientY;
     touchMoved = false;
-  });
+  }, { passive: true });
   popup.addEventListener('touchmove', (e) => {
     if (window.innerWidth >= 700) return;
     if (touchStartY === null) return;
