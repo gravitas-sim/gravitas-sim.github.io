@@ -96,14 +96,23 @@ function drawStarfield() {
   // (Removed: drawing of visible colored ripple arcs. Only lensing effect remains.)
   if (SETTINGS.show_gravitational_waves) {
     const now = performance.now();
+    const FADE_OUT_MS = 1000; // 1 second fade-out
     for (let i = gravity_ripples.length - 1; i >= 0; i--) {
       const ripple = gravity_ripples[i];
       const age = now - ripple.created;
-      if (age > ripple.duration) {
+      const fadeStart = ripple.duration;
+      const fadeEnd = ripple.duration + FADE_OUT_MS;
+      if (age > fadeEnd) {
         gravity_ripples.splice(i, 1);
         continue;
       }
-      // No visible arc drawing here; only lensing below
+      // Compute fade factor for lensing
+      let fade = 1.0;
+      if (age > fadeStart) {
+        fade = 1.0 - (age - fadeStart) / FADE_OUT_MS;
+      }
+      // The fade factor can be used in the lensing code below
+      ripple._fade = fade; // Store for use in starfieldStars.forEach
     }
   }
 
@@ -119,10 +128,10 @@ function drawStarfield() {
         const ripple = gravity_ripples[i];
         const now = performance.now();
         const age = now - ripple.created;
-        if (age > ripple.duration) continue;
+        if (age > ripple.duration + 1000) continue; // Only skip after fade-out
         // Amplitude and wavelength scale with merger mass
         const mass = ripple.mass || 1.0;
-        const amplitude = 8 + 10 * Math.log10(mass + 1);
+        const amplitude = (8 + 10 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0);
         const wavelength = 80 + 40 * Math.log10(mass + 1);
         // Convert ripple center to screen
         const screen = world_to_screen({ x: ripple.x, y: ripple.y });
