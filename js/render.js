@@ -91,16 +91,86 @@ function drawStarfield() {
     : '#0d0d1a';
   starCtx.fillRect(0, 0, W, H);
 
+  const c = 0.18; // Speed of light in world units per ms (tweak for simulation scale)
+  // --- Gravitational wave ripples (placeholder effect) ---
+  if (SETTINGS.show_gravitational_waves) {
+    const now = performance.now();
+    for (let i = gravity_ripples.length - 1; i >= 0; i--) {
+      const ripple = gravity_ripples[i];
+      const age = now - ripple.created;
+      if (age > ripple.duration) {
+        gravity_ripples.splice(i, 1);
+        continue;
+      }
+      // Convert world coordinates to screen
+      const screen = world_to_screen({ x: ripple.x, y: ripple.y });
+      // Amplitude and wavelength scale with merger mass
+      const mass = ripple.mass || 1.0;
+      const amplitude = 8 + 10 * Math.log10(mass + 1); // px, more for higher mass
+      const wavelength = 80 + 40 * Math.log10(mass + 1); // px, more for higher mass
+      const radius = c * age * state.zoom;
+      const progress = age / ripple.duration;
+      // Fade out as ripple expands
+      const alpha = 0.18 * (1 - progress) * (1 - progress);
+      for (let j = 0; j < 3; j++) {
+        const r = radius + j * wavelength;
+        // Color shift: blue at leading edge, red at trailing edge
+        const phase = (progress + j * 0.18) % 1.0;
+        const color = `hsl(${220 - 120 * phase}, 90%, 70%)`; // 220=blue, 100=red
+        starCtx.save();
+        starCtx.globalAlpha = alpha * (1 - j * 0.25);
+        starCtx.beginPath();
+        starCtx.arc(screen.x, screen.y, r + Math.sin(progress * Math.PI * 2 + j) * amplitude, 0, 2 * Math.PI);
+        starCtx.lineWidth = 4 + 2 * (1 - progress);
+        starCtx.strokeStyle = color;
+        starCtx.shadowColor = color;
+        starCtx.shadowBlur = 8;
+        starCtx.stroke();
+        starCtx.restore();
+      }
+    }
+  }
+
   // Draw stars as static background (no zoom or pan transformations)
   const time = Date.now() * 0.001; // Current time for twinkling
 
   starfieldStars.forEach(st => {
+    let sx = st.x;
+    let sy = st.y;
+    // Apply lensing distortion if within any active ripple
+    if (SETTINGS.show_gravitational_waves) {
+      for (let i = 0; i < gravity_ripples.length; i++) {
+        const ripple = gravity_ripples[i];
+        const now = performance.now();
+        const age = now - ripple.created;
+        if (age > ripple.duration) continue;
+        // Amplitude and wavelength scale with merger mass
+        const mass = ripple.mass || 1.0;
+        const amplitude = 8 + 10 * Math.log10(mass + 1);
+        const wavelength = 80 + 40 * Math.log10(mass + 1);
+        // Convert ripple center to screen
+        const screen = world_to_screen({ x: ripple.x, y: ripple.y });
+        const radius = c * age * state.zoom;
+        const progress = age / ripple.duration;
+        const dx = sx - screen.x;
+        const dy = sy - screen.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < radius + 1.5 * wavelength && dist > 8) {
+          // Sine-based lensing: offset outward, modulated by ripple
+          const phase = (dist - radius) / wavelength;
+          const local_amp = amplitude * Math.exp(-Math.abs(phase));
+          const factor = local_amp * Math.sin(phase * Math.PI * 2 - progress * Math.PI * 2);
+          sx += (dx / dist) * factor;
+          sy += (dy / dist) * factor;
+        }
+      }
+    }
     // Add subtle twinkling effect
     const twinkle = Math.sin(time * 2 + st.twinkle) * 0.1 + 0.9;
     const brightness = st.b * twinkle;
     starCtx.globalAlpha = brightness;
     starCtx.fillStyle = '#fff';
-    starCtx.fillRect(st.x, st.y, st.s, st.s);
+    starCtx.fillRect(sx, sy, st.s, st.s);
   });
 
   starCtx.globalAlpha = 1;
@@ -225,7 +295,6 @@ const drawScene = () => {
     accretion_disk_particles.forEach(ap => { if (ap.alive) ap.draw(ctx); });
     
     // Draw gravity ripples (behind black holes)
-    gravity_ripples.forEach(r => r.draw(ctx));
     
     ctx.globalAlpha = 1;
     

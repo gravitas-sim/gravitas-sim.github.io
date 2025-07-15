@@ -102,6 +102,7 @@ const DEFAULT_SETTINGS = {
   star_base_color: '#ffff00',
   enable_star_merging: true,
   max_star_mass_before_bh: 20.0,
+  show_gravitational_waves: true, // Enable GW visualization by default
 };
 
 let SETTINGS = { ...DEFAULT_SETTINGS };
@@ -2963,6 +2964,7 @@ const setting_items = [
   },
   { label: 'Show Overlays', key: 'show_dynamic_overlays', type: 'bool' },
   { label: 'Record Simulation', key: 'record_simulation', type: 'bool' },
+  { label: 'Show Gravitational Waves', key: 'show_gravitational_waves', type: 'bool' },
 ];
 
 // ===== Reusable Tooltip System =====

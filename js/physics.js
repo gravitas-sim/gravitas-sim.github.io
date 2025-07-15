@@ -525,6 +525,16 @@ const updatePhysics = dt => {
           new_black_hole.merger_boost_timer = 25.0; // Standard merger effects
           new_black_hole.merger_particle_boost = 1.2 + (m1 + m2) / (30 * SOLAR_MASS_UNIT);
           
+          // Trigger gravitational wave ripple effect at merger location
+          gravity_ripples.push({
+            x: new_pos.x,
+            y: new_pos.y,
+            time: Date.now(),
+            created: performance.now(),
+            duration: 3000, // ms
+            mass: new_mass / SOLAR_MASS_UNIT // Merger mass in solar masses
+          });
+          
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
           bh_list.push(new_black_hole);
