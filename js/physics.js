@@ -2911,8 +2911,8 @@ const handle_star_merging = (stars_list) => {
           const star1_type = star1.constructor.name;
           const star2_type = star2.constructor.name;
           // Special handling for black hole merging with regular star or white dwarf
-          if ((star1_type === 'BlackHole' && (star2_type === 'StarObject' || star2_type === 'WhiteDwarf')) ||
-              (star2_type === 'BlackHole' && (star1_type === 'StarObject' || star1_type === 'WhiteDwarf'))) {
+          if ((star1_type === 'BlackHole' && (star2_type === 'StarObject' || star2_type === 'WhiteDwarf' || star2_type === 'NeutronStar')) ||
+              (star2_type === 'BlackHole' && (star1_type === 'StarObject' || star1_type === 'WhiteDwarf' || star1_type === 'NeutronStar'))) {
             // Find the real black hole object
             const bh = star1_type === 'BlackHole' ? (star1._bh_ref || star1) : (star2._bh_ref || star2);
             const other = star1_type === 'BlackHole' ? star2 : star1;
@@ -2922,11 +2922,22 @@ const handle_star_merging = (stars_list) => {
             bh.vel.y = (bh.vel.y * bh.mass + other.vel.y * other.mass) / total_mass;
             bh.mass = total_mass;
             bh.updateRadius();
+            // Subtle gravitational wave effect for all such mergers
+            gravity_ripples.push({
+              x: bh.pos.x,
+              y: bh.pos.y,
+              time: Date.now(),
+              created: performance.now(),
+              duration: 1800,
+              mass: Math.max(0.2, (total_mass / SOLAR_MASS_UNIT) * 0.25),
+              gw_strength: 0.13
+            });
             // Mark only the non-BH as dead
             other.alive = false;
             // Remove the non-BH from its global list
             if (other.constructor.name === 'StarObject') stars = stars.filter(s => s !== other);
             if (other.constructor.name === 'WhiteDwarf') white_dwarfs = white_dwarfs.filter(wd => wd !== other);
+            if (other.constructor.name === 'NeutronStar') neutron_stars = neutron_stars.filter(ns => ns !== other);
             // No new black hole is created, and the existing one remains in bh_list
             merged_this_step = true;
             break;
