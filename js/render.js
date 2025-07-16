@@ -151,12 +151,64 @@ function drawStarfield() {
         }
       }
     }
+    // Gravitational lensing by compact objects (BH, NS, WD)
+    let max_lens_strength = 0;
+    let lens_dx = 0, lens_dy = 0;
+    let lens_blur = 0;
+    let lens_color = '#fff';
+    // Helper to check and apply lensing for a given object
+    function checkLensing(obj, strength, radius, blur, color) {
+      const screen = world_to_screen(obj.pos);
+      const dx = sx - screen.x;
+      const dy = sy - screen.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < radius) {
+        const falloff = 1 - dist / radius;
+        const lens = strength * (falloff * falloff) * radius;
+        if (strength > max_lens_strength) {
+          max_lens_strength = strength;
+          lens_dx = (dx / (dist + 1e-6)) * lens;
+          lens_dy = (dy / (dist + 1e-6)) * lens;
+          lens_blur = blur * falloff;
+          lens_color = color;
+        }
+      }
+    }
+    // Black holes
+    for (const bh of bh_list) {
+      // Lensing starts at a visually meaningful radius, scaling with event horizon
+      const lens_radius = Math.max(20, bh.radius * state.zoom * 2.5);
+      checkLensing(bh, 2.5, lens_radius, 2.5, '#fff');
+    }
+    // Neutron stars (stronger, blue tint)
+    for (const ns of neutron_stars) {
+      // Lensing starts close to the surface, but is more visible
+      const ns_lens_radius = Math.max(18, 1.5 * ns.radius * state.zoom);
+      checkLensing(ns, 1.3, ns_lens_radius, 2.8, '#6cf');
+    }
+    // White dwarfs (stronger, pale blue-white tint)
+    for (const wd of white_dwarfs) {
+      // Lensing starts close to the surface, but is visible
+      const wd_lens_radius = Math.max(16, 1.3 * wd.radius * state.zoom);
+      checkLensing(wd, 0.9, wd_lens_radius, 2.0, '#e0f7ff');
+    }
+    if (max_lens_strength > 0) {
+      sx += lens_dx;
+      sy += lens_dy;
+      // Add a blur/glow to the lensed star for extra visibility
+      starCtx.save();
+      starCtx.shadowColor = lens_color;
+      starCtx.shadowBlur = 6 * lens_blur;
+    }
     // Add subtle twinkling effect
     const twinkle = Math.sin(time * 2 + st.twinkle) * 0.1 + 0.9;
     const brightness = st.b * twinkle;
     starCtx.globalAlpha = brightness;
     starCtx.fillStyle = '#fff';
     starCtx.fillRect(sx, sy, st.s, st.s);
+    if (max_lens_strength > 0) {
+      starCtx.restore();
+    }
   });
 
   starCtx.globalAlpha = 1;
