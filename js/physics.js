@@ -2907,16 +2907,36 @@ const handle_star_merging = (stars_list) => {
             );
           }
           
+          // Determine types once per pair
+          const star1_type = star1.constructor.name;
+          const star2_type = star2.constructor.name;
+          // Special handling for black hole merging with regular star or white dwarf
+          if ((star1_type === 'BlackHole' && (star2_type === 'StarObject' || star2_type === 'WhiteDwarf')) ||
+              (star2_type === 'BlackHole' && (star1_type === 'StarObject' || star1_type === 'WhiteDwarf'))) {
+            // Find the real black hole object
+            const bh = star1_type === 'BlackHole' ? (star1._bh_ref || star1) : (star2._bh_ref || star2);
+            const other = star1_type === 'BlackHole' ? star2 : star1;
+            // Add the mass of the other object to the black hole
+            const total_mass = bh.mass + other.mass;
+            bh.vel.x = (bh.vel.x * bh.mass + other.vel.x * other.mass) / total_mass;
+            bh.vel.y = (bh.vel.y * bh.mass + other.vel.y * other.mass) / total_mass;
+            bh.mass = total_mass;
+            bh.updateRadius();
+            // Mark only the non-BH as dead
+            other.alive = false;
+            // Remove the non-BH from its global list
+            if (other.constructor.name === 'StarObject') stars = stars.filter(s => s !== other);
+            if (other.constructor.name === 'WhiteDwarf') white_dwarfs = white_dwarfs.filter(wd => wd !== other);
+            // No new black hole is created, and the existing one remains in bh_list
+            merged_this_step = true;
+            break;
+          }
           // Remove the two original stars
           star1.alive = false;
           star2.alive = false;
           
           // Determine what type of object to create based on mass and original types
           let new_object = null;
-          
-          // Determine new stellar type based on the original types and mass
-          const star1_type = star1.constructor.name;
-          const star2_type = star2.constructor.name;
           
           // Check if either object is a neutron star or white dwarf
           const has_neutron_star = star1_type === 'NeutronStar' || star2_type === 'NeutronStar';
@@ -2940,9 +2960,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 1200, // ms, shorter and less visible
-                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18), // much smaller effect
-                gw_strength: 0.08 // much less visible
+                duration: 1200, // ms, very short and subtle
+                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.10), // even smaller effect
+                gw_strength: 0.04 // extremely subtle
               });
             } else if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
@@ -2995,9 +3015,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 1200, // ms, shorter and less visible
-                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.10), // even smaller effect
-                gw_strength: 0.02 // even more subtle
+                duration: 2200, // ms, more visible
+                mass: (new_mass / SOLAR_MASS_UNIT) * 0.25, // stronger effect
+                gw_strength: 0.18 // more visible
               });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
