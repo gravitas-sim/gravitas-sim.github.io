@@ -2947,12 +2947,10 @@ const handle_star_merging = (stars_list) => {
             // Neutron star involved in merger
             const is_bh_merger = star1_type === 'BlackHole' || star2_type === 'BlackHole';
             if (is_bh_merger) {
-              // NS-BH merger: always trigger a visible GW ripple
+              // NS-BH merger: subtle GW ripple (same as NS-NS)
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
-              // Remove merged neutron star and black hole from global lists
               neutron_stars = neutron_stars.filter(ns => ns !== star1 && ns !== star2);
-              // Remove real BlackHole from bh_list if present
               if (star1_type === 'BlackHole' && star1._bh_ref) { star1._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star1._bh_ref); }
               if (star2_type === 'BlackHole' && star2._bh_ref) { star2._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star2._bh_ref); }
               gravity_ripples.push({
@@ -2960,9 +2958,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 1200, // ms, very short and subtle
-                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.10), // even smaller effect
-                gw_strength: 0.04 // extremely subtle
+                duration: 1200, // ms, subtle
+                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18),
+                gw_strength: 0.08 // subtle
               });
             } else if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
@@ -3015,9 +3013,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 2200, // ms, more visible
-                mass: (new_mass / SOLAR_MASS_UNIT) * 0.25, // stronger effect
-                gw_strength: 0.18 // more visible
+                duration: 1200, // ms, subtle
+                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18),
+                gw_strength: 0.08 // subtle
               });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
