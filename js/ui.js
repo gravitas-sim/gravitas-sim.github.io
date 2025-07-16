@@ -4850,3 +4850,49 @@ document.getElementById('cleanSimBtn').onclick = () => {
   // Optionally update UI overlays
   if (typeof show_scenario_info === 'function') show_scenario_info();
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cleanSimBtn = document.getElementById('cleanSimBtn');
+  if (cleanSimBtn) {
+    cleanSimBtn.onclick = () => {
+      // Clear all simulation objects and arrays
+      bh_list.length = 0;
+      planets.length = 0;
+      stars.length = 0;
+      gas_giants.length = 0;
+      asteroids.length = 0;
+      comets.length = 0;
+      neutron_stars.length = 0;
+      white_dwarfs.length = 0;
+      debris.length = 0;
+      particles.length = 0;
+      gravity_ripples.length = 0;
+      accretion_disk_particles.length = 0;
+      particlePool.clear && particlePool.clear();
+      resetPhysicsObjectCounter && resetPhysicsObjectCounter();
+
+      // Reset view to default
+      state.zoom = 1.0;
+      state.pan = { x: 0.0, y: 0.0 };
+
+      // Hide inspector and scenario info
+      hideObjectInspector && hideObjectInspector();
+      const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+      if (scenarioInfoDiv) scenarioInfoDiv.classList.remove('visible');
+
+      // Set scenario to 'None' and update settings
+      SETTINGS.preset_scenario = 'None';
+      current_scenario_name = 'None';
+
+      // Unpause simulation and set normal speed
+      state.paused = false;
+      SETTINGS.sim_speed = 1.0;
+
+      // Redraw background/starfield if needed
+      if (typeof generateStarfield === 'function') generateStarfield();
+
+      // Optionally update UI overlays
+      if (typeof show_scenario_info === 'function') show_scenario_info();
+    };
+  }
+});
