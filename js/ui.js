@@ -4163,6 +4163,12 @@ document.getElementById('objectTypeBtn').onclick = () => {
   updateObjectTypeButton();
 };
 
+document.getElementById('objectTypeBtn').addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  currentTypeIndex = (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
+  updateObjectTypeButton();
+});
+
 // Mobile instructions close button
 document.getElementById('closeMobileInstructions').onclick = () => {
   document.getElementById('mobileInstructions').style.display = 'none';
