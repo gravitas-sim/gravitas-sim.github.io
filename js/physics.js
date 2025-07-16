@@ -2997,7 +2997,7 @@ const handle_star_merging = (stars_list) => {
                 created: performance.now(),
                 duration: 1200, // ms, shorter and less visible
                 mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.10), // even smaller effect
-                gw_strength: 0.04 // extremely subtle
+                gw_strength: 0.02 // even more subtle
               });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
