@@ -1935,7 +1935,7 @@ class BlackHole {
 
     if (physicsSettings.show_bh_jets) {
       // --- Realistic, dynamic jet rendering (many thin lines, volumetric) ---
-      const jet_length = world_radius * (7 + this.jet_intensity * 2.5);
+      const jet_length = world_radius * (11 + this.jet_intensity * 3.5); // Moderately longer jet
       const jet_base_width = Math.max(1.5 / state.zoom, world_radius * (0.18 + this.jet_intensity * 0.12));
       const jet_tip_width = jet_base_width * 2.2;
       const jet_intensity = 0.7 + this.jet_intensity * 0.5;
@@ -1943,11 +1943,12 @@ class BlackHole {
       const precession_angle = Math.sin(time * 0.25 + this.pos.x * 0.13) * 0.09;
       const flicker = 0.85 + 0.35 * Math.sin(time * 10 + this.pos.y * 0.3);
       const jet_colors = [
-        { stop: 0, color: [255, 255, 200] },
-        { stop: 0.2, color: [255, 220, 100] },
-        { stop: 0.5, color: [200, 200, 255] },
-        { stop: 0.8, color: [150, 170, 255] },
-        { stop: 1, color: [100, 140, 255] },
+        { stop: 0, color: [255, 255, 200], alpha: 1.0 },
+        { stop: 0.15, color: [255, 240, 160], alpha: 0.85 },
+        { stop: 0.35, color: [255, 220, 100], alpha: 0.65 },
+        { stop: 0.6, color: [200, 200, 255], alpha: 0.35 },
+        { stop: 0.85, color: [150, 170, 255], alpha: 0.13 },
+        { stop: 1, color: [100, 140, 255], alpha: 0.0 },
       ];
       for (let i = 0; i < 2; i++) {
         const base_angle = this.jet_orientation + i * Math.PI;
@@ -1967,7 +1968,8 @@ class BlackHole {
         ctx.closePath();
         const grad = ctx.createLinearGradient(base_x, base_y, tip_x, tip_y);
         for (const stop of jet_colors) {
-          const alpha = Math.max(0, Math.min(1, jet_intensity * (1 - stop.stop * 0.5) * flicker * (1 - 0.5 * stop.stop)));
+          // Use the provided alpha for a more gradual fade
+          const alpha = stop.alpha * jet_intensity * flicker;
           grad.addColorStop(stop.stop, `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`);
         }
         ctx.globalAlpha = 0.85;
@@ -2938,9 +2940,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 2200, // ms, like NS-NS merger
-                mass: new_mass / SOLAR_MASS_UNIT,
-                gw_strength: 0.2 // Like NS-NS merger
+                duration: 1200, // ms, shorter and less visible
+                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18), // much smaller effect
+                gw_strength: 0.08 // much less visible
               });
             } else if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
@@ -2993,9 +2995,9 @@ const handle_star_merging = (stars_list) => {
                 y: new_pos.y,
                 time: Date.now(),
                 created: performance.now(),
-                duration: 3000, // ms
-                mass: new_mass / SOLAR_MASS_UNIT,
-                gw_strength: 1.0 // Full strength for BH-BH mergers
+                duration: 1200, // ms, shorter and less visible
+                mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.10), // even smaller effect
+                gw_strength: 0.04 // extremely subtle
               });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star

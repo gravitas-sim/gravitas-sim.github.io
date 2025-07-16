@@ -131,7 +131,8 @@ function drawStarfield() {
         if (age > ripple.duration + 1000) continue; // Only skip after fade-out
         // Amplitude and wavelength scale with merger mass
         const mass = ripple.mass || 1.0;
-        const amplitude = (8 + 10 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0);
+        const gw_strength = ripple.gw_strength !== undefined ? ripple.gw_strength : 1.0;
+        const amplitude = (8 + 10 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength;
         const wavelength = 80 + 40 * Math.log10(mass + 1);
         // Convert ripple center to screen
         const screen = world_to_screen({ x: ripple.x, y: ripple.y });
