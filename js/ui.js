@@ -883,8 +883,27 @@ const showObjectInspector = (object, type) => {
     objectInspector.classList.add('visible');
     state.inspector_open = true;
     
+    // Ensure inspector starts in centered position
+    objectInspector.style.left = '';
+    objectInspector.style.top = '';
+    objectInspector.style.transform = 'translate(-50%, -50%)';
+    
     // Set up mobile-friendly backdrop click to close
     setupInspectorBackdropClick();
+    
+    // Set up dragging functionality with a small delay to ensure proper positioning
+    setTimeout(() => {
+        setupInspectorDragging();
+    }, 50);
+    
+    // Set up minimize/maximize functionality
+    setupInspectorMinimize();
+    
+    // Update cursor state
+    updateInspectorCursor();
+    
+    // Set up overlay minimize functionality
+    setupOverlayMinimize();
 };
 
 const hideObjectInspector = () => {
@@ -897,7 +916,21 @@ const hideObjectInspector = () => {
     
     console.log('Removing visible class and closing inspector');
     objectInspector.classList.remove('visible');
+    objectInspector.classList.remove('dragging');
+    objectInspector.classList.remove('minimized');
     state.inspector_open = false;
+    
+    // Reset position to center when hidden
+    objectInspector.style.left = '';
+    objectInspector.style.top = '';
+    objectInspector.style.transform = 'translate(-50%, -50%)';
+    
+    // Reset minimize button
+    const minimizeBtn = document.getElementById('inspectorMinimize');
+    if (minimizeBtn) {
+        minimizeBtn.textContent = '−';
+        minimizeBtn.title = 'Minimize';
+    }
     
     // Clear auto-update interval
     if (state.inspectorUpdateInterval) {
@@ -924,6 +957,254 @@ const handleInspectorBackdropClick = (e) => {
     // Only close if clicking on the inspector backdrop (not on content)
     if (e.target.id === 'objectInspector') {
         hideObjectInspector();
+    }
+};
+
+// Dragging functionality for object inspector
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let initialLeft = 0;
+let initialTop = 0;
+
+const setupInspectorDragging = () => {
+    const objectInspector = document.getElementById('objectInspector');
+    const inspectorHeader = objectInspector?.querySelector('.inspector-header');
+    
+    if (!objectInspector || !inspectorHeader) return;
+    
+    // Remove existing listeners to prevent duplicates
+    inspectorHeader.removeEventListener('mousedown', startDrag);
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', endDrag);
+    
+    // Add drag listeners
+    inspectorHeader.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+    
+    // Touch support for mobile
+    inspectorHeader.removeEventListener('touchstart', startDragTouch);
+    document.removeEventListener('touchmove', dragTouch);
+    document.removeEventListener('touchend', endDrag);
+    
+    inspectorHeader.addEventListener('touchstart', startDragTouch);
+    document.addEventListener('touchmove', dragTouch);
+    document.addEventListener('touchend', endDrag);
+};
+
+// Update cursor based on minimized state
+const updateInspectorCursor = () => {
+    const objectInspector = document.getElementById('objectInspector');
+    const inspectorHeader = objectInspector?.querySelector('.inspector-header');
+    
+    if (!objectInspector || !inspectorHeader) return;
+    
+    if (objectInspector.classList.contains('minimized')) {
+        inspectorHeader.style.cursor = 'default';
+    } else {
+        inspectorHeader.style.cursor = 'grab';
+    }
+};
+
+const startDrag = (e) => {
+    e.preventDefault();
+    
+    const objectInspector = document.getElementById('objectInspector');
+    // Don't allow dragging when minimized
+    if (objectInspector.classList.contains('minimized')) {
+        return;
+    }
+    
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    
+    // Get the current visual position (after any transforms)
+    const rect = objectInspector.getBoundingClientRect();
+    
+    // The inspector starts centered with transform: translate(-50%, -50%)
+    // When we start dragging, we need to set the absolute position to match the current visual position
+    // The rect.left and rect.top give us the actual visual position on screen
+    initialLeft = rect.left;
+    initialTop = rect.top;
+    
+    objectInspector.classList.add('dragging');
+    
+    // Set the position immediately to prevent jumping
+    // We need to set the position BEFORE removing the transform
+    objectInspector.style.left = initialLeft + 'px';
+    objectInspector.style.top = initialTop + 'px';
+    objectInspector.style.transform = 'none';
+};
+
+const startDragTouch = (e) => {
+    e.preventDefault();
+    isDragging = true;
+    const touch = e.touches[0];
+    dragStartX = touch.clientX;
+    dragStartY = touch.clientY;
+    
+    const objectInspector = document.getElementById('objectInspector');
+    // Get the current visual position (after any transforms)
+    const rect = objectInspector.getBoundingClientRect();
+    
+    // The inspector starts centered with transform: translate(-50%, -50%)
+    // When we start dragging, we need to set the absolute position to match the current visual position
+    // The rect.left and rect.top give us the actual visual position on screen
+    initialLeft = rect.left;
+    initialTop = rect.top;
+    
+    objectInspector.classList.add('dragging');
+    
+    // Set the position immediately to prevent jumping
+    // We need to set the position BEFORE removing the transform
+    objectInspector.style.left = initialLeft + 'px';
+    objectInspector.style.top = initialTop + 'px';
+    objectInspector.style.transform = 'none';
+};
+
+const drag = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    const objectInspector = document.getElementById('objectInspector');
+    const deltaX = e.clientX - dragStartX;
+    const deltaY = e.clientY - dragStartY;
+    
+    // Small threshold to prevent accidental drags
+    if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
+    
+    const newLeft = initialLeft + deltaX;
+    const newTop = initialTop + deltaY;
+    
+    // Keep inspector within viewport bounds
+    const rect = objectInspector.getBoundingClientRect();
+    const maxLeft = window.innerWidth - rect.width;
+    const maxTop = window.innerHeight - rect.height;
+    
+    const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+    const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+    
+    // Set position and remove transform immediately to prevent jumping
+    objectInspector.style.left = clampedLeft + 'px';
+    objectInspector.style.top = clampedTop + 'px';
+    objectInspector.style.transform = 'none';
+};
+
+const dragTouch = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    const touch = e.touches[0];
+    const objectInspector = document.getElementById('objectInspector');
+    const deltaX = touch.clientX - dragStartX;
+    const deltaY = touch.clientY - dragStartY;
+    
+    // Small threshold to prevent accidental drags
+    if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
+    
+    const newLeft = initialLeft + deltaX;
+    const newTop = initialTop + deltaY;
+    
+    // Keep inspector within viewport bounds
+    const rect = objectInspector.getBoundingClientRect();
+    const maxLeft = window.innerWidth - rect.width;
+    const maxTop = window.innerHeight - rect.height;
+    
+    const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+    const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+    
+    // Set position and remove transform immediately to prevent jumping
+    objectInspector.style.left = clampedLeft + 'px';
+    objectInspector.style.top = clampedTop + 'px';
+    objectInspector.style.transform = 'none';
+};
+
+const endDrag = () => {
+    isDragging = false;
+    const objectInspector = document.getElementById('objectInspector');
+    if (objectInspector) {
+        objectInspector.classList.remove('dragging');
+    }
+};
+
+// Minimize/Maximize functionality for object inspector
+const setupInspectorMinimize = () => {
+    const objectInspector = document.getElementById('objectInspector');
+    const minimizeBtn = document.getElementById('inspectorMinimize');
+    
+    if (!objectInspector || !minimizeBtn) return;
+    
+    // Remove existing listeners to prevent duplicates
+    minimizeBtn.removeEventListener('click', toggleInspectorMinimize);
+    
+    // Add minimize/maximize handler
+    minimizeBtn.addEventListener('click', toggleInspectorMinimize);
+};
+
+const toggleInspectorMinimize = (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent dragging when clicking the button
+    
+    const objectInspector = document.getElementById('objectInspector');
+    const minimizeBtn = document.getElementById('inspectorMinimize');
+    
+    if (!objectInspector || !minimizeBtn) return;
+    
+    const isMinimized = objectInspector.classList.contains('minimized');
+    
+    if (isMinimized) {
+        // Maximize
+        objectInspector.classList.remove('minimized');
+        minimizeBtn.textContent = '−';
+        minimizeBtn.title = 'Minimize';
+    } else {
+        // Minimize
+        objectInspector.classList.add('minimized');
+        minimizeBtn.textContent = '+';
+        minimizeBtn.title = 'Maximize';
+    }
+    
+    // Update cursor based on new state
+    updateInspectorCursor();
+};
+
+// Overlay minimize/maximize functionality
+const setupOverlayMinimize = () => {
+    const overlay = document.getElementById('overlay');
+    const minimizeBtn = document.getElementById('overlayMinimize');
+    
+    if (!overlay || !minimizeBtn) return;
+    
+    // Remove existing listeners to prevent duplicates
+    minimizeBtn.removeEventListener('click', toggleOverlayMinimize);
+    
+    // Add minimize/maximize handler
+    minimizeBtn.addEventListener('click', toggleOverlayMinimize);
+};
+
+const toggleOverlayMinimize = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const overlay = document.getElementById('overlay');
+    const minimizeBtn = document.getElementById('overlayMinimize');
+    
+    if (!overlay || !minimizeBtn) return;
+    
+    const isMinimized = overlay.classList.contains('minimized');
+    
+    if (isMinimized) {
+        // Maximize
+        overlay.classList.remove('minimized');
+        minimizeBtn.textContent = '−';
+        minimizeBtn.title = 'Minimize';
+    } else {
+        // Minimize
+        overlay.classList.add('minimized');
+        minimizeBtn.textContent = '+';
+        minimizeBtn.title = 'Maximize';
     }
 };
 
@@ -4760,6 +5041,12 @@ window.addEventListener('keydown', e => {
 
 // Button event handlers
 document.getElementById('inspectorClose').onclick = hideObjectInspector;
+
+// Initialize inspector minimize button
+const inspectorMinimizeBtn = document.getElementById('inspectorMinimize');
+if (inspectorMinimizeBtn) {
+    inspectorMinimizeBtn.onclick = toggleInspectorMinimize;
+}
 document.getElementById('settingsBtn').onclick = () => {
   buildSettingsMenu();
   document.getElementById('settingsPanel').classList.remove('hidden');
@@ -5528,6 +5815,7 @@ export {
   updateSpeedDisplay,
   takeScreenshot,
   updateObjectTypeButton,
+  setupOverlayMinimize,
   SETTINGS,
   state,
   current_scenario_name,

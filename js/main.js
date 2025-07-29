@@ -36,9 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
       generateStarfield();
 
       // Show UI elements after a short delay
-      setTimeout(() => {
+      setTimeout(async () => {
         document.querySelector('.ui-container').classList.add('showUI');
         document.getElementById('overlay').classList.add('showUI');
+        
+        // Set up overlay minimize functionality
+        const { setupOverlayMinimize } = await import('./ui.js');
+        setupOverlayMinimize();
         
         // Show scenario info box after splash ends
         const scenarioInfoBox = document.getElementById('scenarioInfoBox');

@@ -199,6 +199,75 @@ html, body {
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+/* Enable pointer events for the minimize button */
+#overlay .overlay-minimize-btn {
+    pointer-events: auto;
+}
+
+/* When minimized, enable pointer events for the entire overlay */
+#overlay.minimized {
+    pointer-events: auto !important;
+}
+
+/* Overlay minimize button */
+.overlay-minimize-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    z-index: 11;
+    pointer-events: auto;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    /* Ensure button is always visible when overlay is visible */
+    opacity: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.overlay-minimize-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #FFFFFF;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-minimize-btn:active {
+    transform: scale(0.95);
+}
+
+/* Minimized overlay state */
+#overlay.minimized {
+    width: auto !important;
+    max-width: 200px !important;
+    height: auto !important;
+    padding: 8px 12px !important;
+    pointer-events: auto !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+#overlay.minimized .overlay-minimize-btn {
+    transform: rotate(180deg);
+}
+
+#overlay.minimized .category-label,
+#overlay.minimized .important-stat,
+#overlay.minimized .separator-line {
+    display: none !important;
 }
 
 /* Data panel styling improvements */
@@ -438,12 +507,56 @@ html, body {
     font-family: 'Poppins', sans-serif;
     overflow: hidden;
     flex-direction: column;
+    /* No transitions by default to prevent jumping */
+    transition: none;
+    /* Ensure it can be positioned anywhere */
+    transform-origin: center;
 }
 
 #objectInspector.visible {
     display: flex !important;
     opacity: 1 !important;
-    transform: translate(-50%, -50%) scale(1) !important;
+    transform: translate(-50%, -50%) scale(1);
+    transition: none !important;
+}
+
+#objectInspector.minimized {
+    width: auto !important;
+    max-width: 300px !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+#objectInspector.minimized .inspector-content {
+    display: none !important;
+}
+
+#objectInspector.minimized .inspector-header {
+    padding: 15px 20px !important;
+    border-bottom: none !important;
+}
+
+#objectInspector.minimized .inspector-minimize {
+    transform: rotate(180deg);
+}
+
+/* When dragging, disable transitions */
+#objectInspector.dragging {
+    transition: none !important;
+    user-select: none;
+    box-shadow: 0 0 50px rgba(0, 170, 255, 0.5), 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-color: #00ccff !important;
+}
+
+/* Ensure inspector never inherits unwanted transitions */
+#objectInspector {
+    transition: none !important;
+}
+
+/* Allow transitions only for specific elements when not dragging */
+#objectInspector:not(.dragging) .inspector-minimize,
+#objectInspector:not(.dragging) .inspector-close {
+    transition: all 0.2s ease !important;
 }
 
 @keyframes inspectorFadeIn {
@@ -459,6 +572,21 @@ html, body {
     border-bottom: 1px solid var(--separator-color);
     background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(0, 170, 255, 0.05));
     flex-shrink: 0;
+    /* Make header draggable */
+    cursor: grab;
+    user-select: none;
+}
+
+.inspector-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Prevent dragging when clicking on controls */
+    cursor: default;
+}
+
+.inspector-header:active {
+    cursor: grabbing;
 }
 
 .inspector-title {
@@ -469,6 +597,33 @@ html, body {
     display: flex;
     align-items: center;
     text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+    /* Prevent text selection during drag */
+    pointer-events: none;
+}
+
+.inspector-minimize {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+.inspector-minimize:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
+    transform: scale(1.1);
 }
 
 .inspector-close {
@@ -715,6 +870,14 @@ html, body {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 8px;
     }
+    
+    .inspector-minimize {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -741,6 +904,14 @@ html, body {
     
     .inspector-content {
         padding: 12px 16px;
+    }
+    
+    .inspector-minimize {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 6px;
     }
     
     .stats-grid {

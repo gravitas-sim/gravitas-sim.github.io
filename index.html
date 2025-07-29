@@ -247,7 +247,9 @@
       <h1>GRAVITAS</h1>
     </div>
 
-    <div id="overlay"></div>
+    <div id="overlay">
+        <button id="overlayMinimize" class="overlay-minimize-btn" title="Minimize">−</button>
+    </div>
     <div id="scenarioInfoDisplay"></div>
     
     <!-- Enhanced Scenario Info Box -->
@@ -365,7 +367,10 @@
     <div id="objectInspector">
         <div class="inspector-header">
             <h3 class="inspector-title" id="inspectorTitle">Object Details</h3>
-            <button class="inspector-close" id="inspectorClose">&times;</button>
+            <div class="inspector-controls">
+                <button class="inspector-minimize" id="inspectorMinimize" title="Minimize">−</button>
+                <button class="inspector-close" id="inspectorClose" title="Close">&times;</button>
+            </div>
         </div>
         <div class="inspector-content" id="inspectorContent">
             <!-- Content will be populated by JavaScript -->
