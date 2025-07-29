@@ -204,7 +204,7 @@ html, body {
 
 /* Enable pointer events for the minimize button */
 #overlay .overlay-minimize-btn {
-    pointer-events: auto;
+    pointer-events: auto !important;
 }
 
 /* When minimized, enable pointer events for the entire overlay */
@@ -227,16 +227,18 @@ html, body {
     border-radius: 4px;
     transition: all 0.2s ease;
     z-index: 11;
-    pointer-events: auto;
+    pointer-events: auto !important;
     width: 28px;
     height: 28px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     /* Ensure button is always visible when overlay is visible */
-    opacity: 1;
+    opacity: 1 !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Force visibility */
+    visibility: visible !important;
 }
 
 .overlay-minimize-btn:hover {
@@ -299,7 +301,14 @@ html, body {
     }
 }
 
-/* Hide data panel on mobile */
+/* Ensure overlay is visible on all screen sizes */
+#overlay {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Hide data panel on mobile devices */
 @media (max-width: 1024px) {
     #overlay {
         display: none !important;
