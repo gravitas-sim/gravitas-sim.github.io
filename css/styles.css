@@ -24,11 +24,19 @@
 }
 
 /* Show UI elements after splash */
-.ui-container.showUI, #overlay.showUI, #scenarioInfoDisplay.showUI, #scenarioInfoBox.showUI, .mobile-menu-toggle.showUI {
+.ui-container.showUI, #scenarioInfoDisplay.showUI, #scenarioInfoBox.showUI, .mobile-menu-toggle.showUI {
     opacity: 1;
     visibility: visible;
     transition: opacity 1.0s ease-in, visibility 0s linear 0s;
     pointer-events: auto;
+}
+
+/* Special handling for overlay to include its fade-in animation */
+#overlay.showUI {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: fadeInOverlay 1.5s ease-out forwards;
 }
 
 /* Mobile menu dropdown should remain hidden until explicitly shown */
@@ -193,8 +201,6 @@ html, body {
     z-index: 10;
     max-width: calc(100vw - 20px);
     word-wrap: break-word;
-    opacity: 0;
-    animation: fadeInOverlay 1.5s ease-out forwards;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 10px;
@@ -301,12 +307,7 @@ html, body {
     }
 }
 
-/* Ensure overlay is visible on all screen sizes */
-#overlay {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
+
 
 /* Hide data panel on mobile devices */
 @media (max-width: 1024px) {

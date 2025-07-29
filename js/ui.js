@@ -56,6 +56,19 @@ const state = {
   user_has_interacted: false, // Track if user has actually interacted with the page
 };
 
+// Immediately hide object inspector when module loads
+if (typeof document !== 'undefined') {
+  const objectInspector = document.getElementById('objectInspector');
+  if (objectInspector) {
+    objectInspector.classList.remove('visible');
+    objectInspector.classList.remove('showUI');
+    objectInspector.style.display = 'none';
+    objectInspector.style.opacity = '0';
+    objectInspector.style.visibility = 'hidden';
+    objectInspector.style.pointerEvents = 'none';
+  }
+}
+
 // Global variables
 const SAVE_KEY = 'gravitas_simulation_save';
 
@@ -225,7 +238,7 @@ const SCENARIO_INFO = {
   'Binary BH': {
     title: 'Binary Black Hole',
     summary:
-      'Two stellar-mass black holes (15 & 10 M☉) locked in mutual orbit with spectacular relativistic jets. Watch as they spiral together, creating gravitational waves and eventually merging into a single, more massive black hole. The jets point in random directions for each black hole, creating a dynamic cosmic display.',
+      'Two stellar-mass black holes (15 & 10 M☉) locked in mutual orbit with spectacular relativistic jets. Watch as they spiral together, create gravitational waves, and eventually merge into a single, more massive black hole. The jets point in random directions for each black hole, creating a dynamic cosmic display.',
   },
   'Triple BH System': {
     title: 'Triple Black Hole',
@@ -752,6 +765,13 @@ const getCometInfo = (comet) => {
  */
 const showObjectInspector = (object, type) => {
     console.log('showObjectInspector called with:', type, object);
+    
+    // Check if splash screen is still active using both the global flag and our state variable
+    if (!window.splashScreenEnded || window.isSplashActive) {
+        console.log('Splash screen still active, completely ignoring showObjectInspector call');
+        return;
+    }
+    
     // Check if inspector element exists
     const objectInspector = document.getElementById('objectInspector');
     if (!objectInspector) {
@@ -881,6 +901,12 @@ const showObjectInspector = (object, type) => {
     
     // Show the inspector
     objectInspector.classList.add('visible');
+    
+    // Ensure the showUI class is also present (added after splash screen ends)
+    if (!objectInspector.classList.contains('showUI')) {
+        objectInspector.classList.add('showUI');
+    }
+    
     state.inspector_open = true;
     
     // Ensure inspector starts in centered position
@@ -1334,7 +1360,7 @@ const setupMassSliderListeners = () => {
             // For gas giant to star transformation, set slider to the star's actual mass
             if (type === 'GasGiant' && newType === 'Star') {
                 const massInJupiters = object.massInJupiters || (object.mass / 50.0);
-                const massInSolarMasses = massInJupiters * 0.00095;
+                const massInSolarMasses = massInJupiters * 0.05;
                 // Temporarily set the slider value to the correct star mass
                 setTimeout(() => {
                     const newSlider = document.getElementById('massSlider');
@@ -1737,9 +1763,9 @@ const transformGasGiantToStar = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     
     // Convert Jupiter masses to solar masses
-    // 1 Jupiter mass = 0.00095 solar masses
+    // 1 Jupiter mass = 0.05 solar masses
     const massInJupiters = object.massInJupiters || (object.mass / 50.0);
-    const massInSolarMasses = massInJupiters * 0.00095;
+    const massInSolarMasses = massInJupiters * 0.05;
     
     // Create star with the converted mass in simulation units
     const star = new StarObject(pos, vel, massInSolarMasses);

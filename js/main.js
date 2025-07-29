@@ -8,6 +8,10 @@ import {
   updateObjectTypeButton,
 } from './ui.js';
 
+// Add state variable to track splash screen status
+let isSplashActive = true;
+window.isSplashActive = true;
+
 document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('simulationCanvas');
   const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -29,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
   splash.addEventListener('animationend', e => {
     if (e.animationName === 'splashFadeOut') {
       splash.remove(); // splash done
+      
+      // Set global flag to indicate splash screen has ended
+      window.splashScreenEnded = true;
+      
+      // Update our state variable
+      isSplashActive = false;
+      window.isSplashActive = false;
+      
       canvas.classList.add('showCanvas'); // NOW fade the sim in
       starfieldCanvas.classList.add('showCanvas');
 
@@ -69,6 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const attribution = document.getElementById('attribution');
         if (attribution) {
           attribution.classList.add('showUI');
+        }
+        
+        // Show object inspector after splash ends (it will be hidden by default)
+        const objectInspector = document.getElementById('objectInspector');
+        if (objectInspector) {
+          objectInspector.classList.add('showUI');
         }
       }, 200);
     }

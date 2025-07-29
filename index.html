@@ -4,6 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gravitas - Web Black Hole Sandbox</title>
+    <!-- Immediately hide object inspector before anything else loads -->
+    <script>
+      (function() {
+        // Set up a mutation observer to hide object inspector as soon as it's created
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1 && node.id === 'objectInspector') {
+                  // Immediately hide the object inspector
+                  node.style.display = 'none';
+                  node.style.opacity = '0';
+                  node.style.visibility = 'hidden';
+                  node.style.pointerEvents = 'none';
+                  node.style.position = 'absolute';
+                  node.style.left = '-9999px';
+                  node.style.top = '-9999px';
+                  node.style.zIndex = '-9999';
+                  node.classList.remove('visible');
+                  node.classList.remove('showUI');
+                  console.log('Object inspector hidden immediately upon creation');
+                }
+              });
+            }
+          });
+        });
+        
+        // Start observing as soon as possible
+        if (document.body) {
+          observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+          document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.body, { childList: true, subtree: true });
+          });
+        }
+        
+        // Also hide any existing object inspector
+        document.addEventListener('DOMContentLoaded', function() {
+          const objectInspector = document.getElementById('objectInspector');
+          if (objectInspector) {
+            objectInspector.style.display = 'none';
+            objectInspector.style.opacity = '0';
+            objectInspector.style.visibility = 'hidden';
+            objectInspector.style.pointerEvents = 'none';
+            objectInspector.style.position = 'absolute';
+            objectInspector.style.left = '-9999px';
+            objectInspector.style.top = '-9999px';
+            objectInspector.style.zIndex = '-9999';
+            objectInspector.classList.remove('visible');
+            objectInspector.classList.remove('showUI');
+            console.log('Object inspector hidden on DOMContentLoaded');
+          }
+        });
+      })();
+    </script>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -473,6 +528,25 @@
         }
       }
     </style>
+    <!-- Immediately hide object inspector before any other scripts load -->
+    <script>
+      (function() {
+        // Hide object inspector immediately when page loads
+        const objectInspector = document.getElementById('objectInspector');
+        if (objectInspector) {
+          objectInspector.style.display = 'none';
+          objectInspector.style.opacity = '0';
+          objectInspector.style.visibility = 'hidden';
+          objectInspector.style.pointerEvents = 'none';
+          objectInspector.style.position = 'absolute';
+          objectInspector.style.left = '-9999px';
+          objectInspector.style.top = '-9999px';
+          objectInspector.style.zIndex = '-9999';
+          objectInspector.classList.remove('visible');
+          objectInspector.classList.remove('showUI');
+        }
+      })();
+    </script>
     <!-- JavaScript modules in dependency order -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
@@ -480,7 +554,7 @@
     <script type="module" src="js/ui.js"></script>
     <script type="module" src="js/main.js"></script>
     <div id="attribution" class="attribution-fade" style="position:fixed; right:1vw; bottom:1vw; z-index:10; font-size:0.85rem; color:#fff; pointer-events:none; font-family:'Inter',sans-serif; text-align:right; user-select:none; opacity:0; transition:opacity 0.5s cubic-bezier(.4,1.4,.6,1);">
-        © 2025 <a href="https://carlziegler.space/" style="color:#fff; text-decoration:underline; opacity:0.7; pointer-events:auto;" target="_blank" rel="noopener">Carl Ziegler</a> · Open source (MIT) · <a href="https://github.com/gravitas-sim/gravitas-sim.github.io" style="color:#fff; text-decoration:underline; opacity:0.7; pointer-events:auto;" target="_blank" rel="noopener">Github</a>
+        © 2025 <a href="https://carlziegler.space/" style="color:#fff; text-decoration:underline; opacity:0.7; pointer-events:auto;" target="_blank" rel="noopener">Carl Ziegler</a> · Open source (MIT) · <a href="https://github.com/gravitas-sim/gravitas-sim.github.io" style="color:#fff; text-decoration:underline; opacity:0.7; pointer-events:auto;" target="_blank" rel="noopener">Github</a> · <a href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf" style="color:#fff; text-decoration:underline; opacity:0.7; pointer-events:auto;" target="_blank" rel="noopener">User Manual</a>
     </div>
     <style>
       #attribution.attribution-fade.showUI {
