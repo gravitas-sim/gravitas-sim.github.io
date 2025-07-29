@@ -378,6 +378,9 @@ const SCENARIO_INFO = {
 const PLANET_RADIUS = 5; // From physics.js
 const GAS_GIANT_RADIUS = 8; // From physics.js
 const STAR_OBJ_RADIUS = 20; // From physics.js
+const NEUTRON_STAR_RADIUS = 3; // From physics.js
+const WHITE_DWARF_RADIUS = 8; // From physics.js
+const ASTEROID_RADIUS = 2; // From physics.js
 
 const getBlackHoleInfo = (bh) => {
     const massInSuns = bh.mass / SOLAR_MASS_UNIT;
@@ -748,6 +751,7 @@ const getCometInfo = (comet) => {
  * @param {string} type - Type of object (BlackHole, Star, Planet, etc.)
  */
 const showObjectInspector = (object, type) => {
+    console.log('showObjectInspector called with:', type, object);
     // Check if inspector element exists
     const objectInspector = document.getElementById('objectInspector');
     if (!objectInspector) {
@@ -760,6 +764,11 @@ const showObjectInspector = (object, type) => {
     
     const updateInspector = () => {
         if (!state.inspector_open || !state.selectedObject) return;
+        
+        // Skip updates if slider is being dragged
+        if (state.sliderDragging) {
+            return;
+        }
         
         let info;
         switch (state.selectedObject.type) {
@@ -802,7 +811,23 @@ const showObjectInspector = (object, type) => {
         
         inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
         
+            // Check if this is a new object selection or just a real-time update
+    const existingMassSlider = document.getElementById('massSlider');
+    const isNewObject = !existingMassSlider || 
+                       (state.selectedObject && state.selectedObject.object && 
+                        existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
+    
+    if (isNewObject) {
+        // New object selected - recreate the entire inspector
         let content = '';
+        
+        // Add mass adjustment slider
+        const massSlider = createMassSlider(state.selectedObject.object, state.selectedObject.type);
+        content += massSlider;
+        
+        // Add separator
+        content += '<div class="stat-separator"></div>';
+        
         info.stats.forEach(stat => {
             content += `
                 <div class="stat-row">
@@ -814,6 +839,35 @@ const showObjectInspector = (object, type) => {
         
         content += `<div class="object-description">${info.description}</div>`;
         inspectorContent.innerHTML = content;
+        
+        // Set up mass slider event listeners
+        setupMassSliderListeners();
+        
+        // Store object ID for future reference
+        const newMassSlider = document.getElementById('massSlider');
+        if (newMassSlider && state.selectedObject.object) {
+            newMassSlider.dataset.objectId = state.selectedObject.object.id || 'unknown';
+        }
+    } else {
+        // Real-time update - only update stats and description, preserve the slider
+        const statRows = inspectorContent.querySelectorAll('.stat-row');
+        const description = inspectorContent.querySelector('.object-description');
+        
+        // Update stats
+        info.stats.forEach((stat, index) => {
+            if (statRows[index]) {
+                statRows[index].innerHTML = `
+                    <span class="stat-label">${stat.label}:</span>
+                    <span class="stat-value">${stat.value}</span>
+                `;
+            }
+        });
+        
+        // Update description
+        if (description) {
+            description.innerHTML = info.description;
+        }
+    }
     };
     
     // Initial update
@@ -849,6 +903,643 @@ const hideObjectInspector = () => {
     }
     state.selectedObject = null;
     console.log('Inspector should now be hidden');
+};
+
+/**
+ * Create a mass adjustment slider for the object inspector
+ * @param {Object} object - The physics object
+ * @param {string} type - The type of object
+ * @returns {string} HTML string for the mass slider
+ */
+const createMassSlider = (object, type) => {
+    console.log('Creating mass slider for:', type, object);
+    let currentMass, minMass, maxMass, massUnit, massLabel;
+    
+    switch (type) {
+        case 'BlackHole':
+            currentMass = object.mass / SOLAR_MASS_UNIT;
+            minMass = 0.1;
+            maxMass = 1000;
+            massUnit = 'M☉';
+            massLabel = 'Object Mass';
+            break;
+        case 'Star':
+            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
+            minMass = 0.1;
+            maxMass = 100;
+            massUnit = 'M☉';
+            massLabel = 'Object Mass';
+            break;
+        case 'NeutronStar':
+            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
+            minMass = 1.0;
+            maxMass = 3.0;
+            massUnit = 'M☉';
+            massLabel = 'Object Mass';
+            break;
+        case 'WhiteDwarf':
+            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
+            minMass = 0.1;
+            maxMass = 1.4;
+            massUnit = 'M☉';
+            massLabel = 'Object Mass';
+            break;
+        case 'Planet':
+            currentMass = object.massInEarths || (object.mass / EARTH_MASS_UNIT);
+            minMass = 0.01;
+            maxMass = 10;
+            massUnit = 'M⊕';
+            massLabel = 'Object Mass';
+            break;
+        case 'GasGiant':
+            currentMass = object.massInJupiters || (object.mass / 50.0);
+            minMass = 0.1;
+            maxMass = 100; // Extended to allow transformation to star (threshold is 80 M♃)
+            massUnit = 'M♃';
+            massLabel = 'Object Mass';
+            break;
+        case 'Asteroid':
+            currentMass = object.mass / EARTH_MASS_UNIT;
+            minMass = 0.0001;
+            maxMass = 0.1;
+            massUnit = 'M⊕';
+            massLabel = 'Object Mass';
+            break;
+        case 'Comet':
+            currentMass = object.massInComets || (object.mass / 0.1);
+            minMass = 0.001;
+            maxMass = 1.0;
+            massUnit = 'C';
+            massLabel = 'Object Mass';
+            break;
+        default:
+            return '';
+    }
+    
+    return `
+        <div class="mass-adjustment-section">
+            <div class="mass-slider-container">
+                <label class="mass-slider-label">${massLabel}</label>
+                <div class="mass-slider-control">
+                    <input type="range" 
+                           id="massSlider" 
+                           data-object-id="${object.id || 'unknown'}"
+                           min="${minMass}" 
+                           max="${maxMass}" 
+                           step="${(maxMass - minMass) / 100}" 
+                           value="${currentMass}"
+                           class="mass-slider">
+                    <span class="mass-value-display" id="massValueDisplay">${currentMass.toFixed(3)} ${massUnit}</span>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+/**
+ * Set up event listeners for the mass slider
+ */
+const setupMassSliderListeners = () => {
+    console.log('Setting up mass slider listeners');
+    const massSlider = document.getElementById('massSlider');
+    const massValueDisplay = document.getElementById('massValueDisplay');
+    
+    if (!massSlider || !massValueDisplay) {
+        console.log('Mass slider elements not found:', { massSlider: !!massSlider, massValueDisplay: !!massValueDisplay });
+        return;
+    }
+    
+    // Flag to track if slider is being dragged
+    let isDragging = false;
+    
+    const updateMass = () => {
+        const newMass = parseFloat(massSlider.value);
+        const object = state.selectedObject.object;
+        const type = state.selectedObject.type;
+        
+        // Update the object's mass and check for transformation
+        const newType = updateObjectMass(object, type, newMass);
+        
+        // If object type changed, refresh the entire inspector and stop processing
+        if (newType && newType !== type) {
+            console.log(`Object transformed from ${type} to ${newType}!`);
+            
+            // Update the selected object type
+            state.selectedObject.type = newType;
+            
+            // Reset the slider value to prevent immediate further transformation
+            // For gas giant to star transformation, set slider to the star's actual mass
+            if (type === 'GasGiant' && newType === 'Star') {
+                const massInJupiters = object.massInJupiters || (object.mass / 50.0);
+                const massInSolarMasses = massInJupiters * 0.00095;
+                // Temporarily set the slider value to the correct star mass
+                setTimeout(() => {
+                    const newSlider = document.getElementById('massSlider');
+                    if (newSlider) {
+                        newSlider.value = massInSolarMasses;
+                        const massValueDisplay = document.getElementById('massValueDisplay');
+                        if (massValueDisplay) {
+                            massValueDisplay.textContent = `${massInSolarMasses.toFixed(3)} M☉`;
+                        }
+                    }
+                }, 100);
+            }
+            
+            // Refresh the inspector with new object type
+            const inspectorContent = document.getElementById('inspectorContent');
+            if (inspectorContent) {
+                // Create new mass slider for the new object type
+                const massSlider = createMassSlider(state.selectedObject.object, newType);
+                let content = massSlider + '<div class="stat-separator"></div>';
+                
+                // Get info for the new object type
+                let info;
+                switch (newType) {
+                    case 'BlackHole':
+                        info = getBlackHoleInfo(state.selectedObject.object);
+                        break;
+                    case 'Star':
+                        info = getStarInfo(state.selectedObject.object);
+                        break;
+                    case 'NeutronStar':
+                        info = getNeutronStarInfo(state.selectedObject.object);
+                        break;
+                    case 'WhiteDwarf':
+                        info = getWhiteDwarfInfo(state.selectedObject.object);
+                        break;
+                    case 'Planet':
+                        info = getPlanetInfo(state.selectedObject.object);
+                        break;
+                    case 'GasGiant':
+                        info = getGasGiantInfo(state.selectedObject.object);
+                        break;
+                    case 'Comet':
+                        info = getCometInfo(state.selectedObject.object);
+                        break;
+                    case 'Asteroid':
+                        info = getAsteroidInfo(state.selectedObject.object);
+                        break;
+                    default:
+                        return;
+                }
+                
+                // Add stats and description
+                info.stats.forEach(stat => {
+                    content += `
+                        <div class="stat-row">
+                            <span class="stat-label">${stat.label}:</span>
+                            <span class="stat-value">${stat.value}</span>
+                        </div>
+                    `;
+                });
+                
+                content += `<div class="object-description">${info.description}</div>`;
+                inspectorContent.innerHTML = content;
+                
+                // Set up new mass slider listeners
+                setupMassSliderListeners();
+                
+                // Show transformation notification
+                showTransformationNotification(type, newType);
+            }
+            return; // Stop processing after transformation
+        } else {
+            // No transformation, just update the display
+            let massUnit;
+            switch (type) {
+                case 'BlackHole':
+                case 'Star':
+                case 'NeutronStar':
+                case 'WhiteDwarf':
+                    massUnit = 'M☉';
+                    break;
+                case 'Planet':
+                case 'Asteroid':
+                    massUnit = 'M⊕';
+                    break;
+                case 'GasGiant':
+                    massUnit = 'M♃';
+                    break;
+                case 'Comet':
+                    massUnit = 'C';
+                    break;
+            }
+            
+            massValueDisplay.textContent = `${newMass.toFixed(3)} ${massUnit}`;
+            
+            // Update the stats display to reflect the new mass
+            const inspectorContent = document.getElementById('inspectorContent');
+            if (inspectorContent && state.selectedObject) {
+                let info;
+                switch (state.selectedObject.type) {
+                    case 'BlackHole':
+                        info = getBlackHoleInfo(state.selectedObject.object);
+                        break;
+                    case 'Star':
+                        info = getStarInfo(state.selectedObject.object);
+                        break;
+                    case 'NeutronStar':
+                        info = getNeutronStarInfo(state.selectedObject.object);
+                        break;
+                    case 'WhiteDwarf':
+                        info = getWhiteDwarfInfo(state.selectedObject.object);
+                        break;
+                    case 'Planet':
+                        info = getPlanetInfo(state.selectedObject.object);
+                        break;
+                    case 'GasGiant':
+                        info = getGasGiantInfo(state.selectedObject.object);
+                        break;
+                    case 'Comet':
+                        info = getCometInfo(state.selectedObject.object);
+                        break;
+                    case 'Asteroid':
+                        info = getAsteroidInfo(state.selectedObject.object);
+                        break;
+                    default:
+                        return;
+                }
+                
+                // Update only the stats rows, preserve the mass slider
+                const statRows = inspectorContent.querySelectorAll('.stat-row');
+                const description = inspectorContent.querySelector('.object-description');
+                
+                // Update stats
+                info.stats.forEach((stat, index) => {
+                    if (statRows[index]) {
+                        statRows[index].innerHTML = `
+                            <span class="stat-label">${stat.label}:</span>
+                            <span class="stat-value">${stat.value}</span>
+                        `;
+                    }
+                });
+                
+                // Update description
+                if (description) {
+                    description.innerHTML = info.description;
+                }
+            }
+        }
+    };
+    
+    // Update on slider change
+    massSlider.addEventListener('input', updateMass);
+    massSlider.addEventListener('change', updateMass);
+    
+    // Prevent inspector updates while dragging
+    massSlider.addEventListener('mousedown', () => {
+        isDragging = true;
+        state.sliderDragging = true; // Global flag for inspector updates
+    });
+    
+    massSlider.addEventListener('mouseup', () => {
+        isDragging = false;
+        state.sliderDragging = false;
+    });
+    
+    massSlider.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            isDragging = false;
+            state.sliderDragging = false;
+        }
+    });
+};
+
+/**
+ * Update an object's mass and recalculate related properties
+ * @param {Object} object - The physics object to update
+ * @param {string} type - The type of object
+ * @param {number} newMass - The new mass value
+ * @returns {string|null} The new object type if transformation occurred, null otherwise
+ */
+const updateObjectMass = (object, type, newMass) => {
+    let newType = null;
+    
+    switch (type) {
+        case 'BlackHole':
+            object.mass = newMass * SOLAR_MASS_UNIT;
+            object.updateRadius(); // Update Schwarzschild radius
+            break;
+        case 'Star':
+            object.mass = newMass * SOLAR_MASS_UNIT;
+            object.massInSuns = newMass;
+            // Recalculate star properties based on mass
+            object.radius = Math.pow(newMass, 0.8) * STAR_OBJ_RADIUS;
+            object.temperature = 3000 + (newMass - 0.2) * 4000;
+            object.luminosity = Math.pow(newMass, 3.5);
+            
+            // Check if star should become a black hole (mass > 20 M☉)
+            if (newMass > 20.0) {
+                newType = 'BlackHole';
+                // Transform star to black hole
+                transformStarToBlackHole(object);
+            }
+            break;
+        case 'NeutronStar':
+            object.mass = newMass * SOLAR_MASS_UNIT;
+            object.massInSuns = newMass;
+            // Neutron stars have relatively constant radius
+            object.radius = NEUTRON_STAR_RADIUS;
+            
+            // Check if neutron star should become a black hole (mass > 3 M☉)
+            if (newMass > 3.0) {
+                newType = 'BlackHole';
+                // Transform neutron star to black hole
+                transformNeutronStarToBlackHole(object);
+            }
+            break;
+        case 'WhiteDwarf':
+            object.mass = newMass * SOLAR_MASS_UNIT;
+            object.massInSuns = newMass;
+            // White dwarf radius decreases with mass (inverse relationship)
+            object.radius = Math.max(WHITE_DWARF_RADIUS * Math.pow(newMass, -0.33), 2);
+            
+            // Check if white dwarf should become a neutron star (mass > 1.4 M☉ - Chandrasekhar limit)
+            if (newMass > 1.4) {
+                newType = 'NeutronStar';
+                // Transform white dwarf to neutron star
+                transformWhiteDwarfToNeutronStar(object);
+            }
+            break;
+        case 'Planet':
+            object.mass = newMass * EARTH_MASS_UNIT;
+            object.massInEarths = newMass;
+            // Recalculate planet radius based on mass
+            object.radius = Math.pow(newMass, 0.3) * PLANET_RADIUS;
+            object.calculateDensity();
+            
+            // Check if planet should become a gas giant (mass > 10 M⊕)
+            if (newMass > 10.0) {
+                newType = 'GasGiant';
+                // Transform planet to gas giant
+                transformPlanetToGasGiant(object);
+            }
+            break;
+        case 'GasGiant':
+            object.mass = newMass * 50.0; // Convert Jupiter masses to simulation units
+            object.massInJupiters = newMass;
+            object.massInEarths = newMass * 317.8;
+            // Recalculate gas giant radius and type
+            object.radius = Math.pow(newMass, 0.2) * GAS_GIANT_RADIUS;
+            object.calculateGiantType();
+            
+            // Check if gas giant should become a star (mass > 80 M♃)
+            if (newMass > 80.0) {
+                newType = 'Star';
+                // Transform gas giant to star
+                transformGasGiantToStar(object);
+            }
+            break;
+        case 'Asteroid':
+            object.mass = newMass * EARTH_MASS_UNIT;
+            // Asteroid radius scales with mass
+            object.radius = Math.pow(newMass * 1000, 0.33) * ASTEROID_RADIUS;
+            
+            // Check if asteroid should become a planet (mass > 0.1 M⊕)
+            if (newMass > 0.1) {
+                newType = 'Planet';
+                // Transform asteroid to planet
+                transformAsteroidToPlanet(object);
+            }
+            break;
+        case 'Comet':
+            object.mass = newMass * 0.1; // Convert comet units to simulation units
+            object.massInComets = newMass;
+            // Comet radius scales with mass
+            object.radius = Math.pow(newMass * 10, 0.33) * 2;
+            
+            // Check if comet should become an asteroid (mass > 1.0 C)
+            if (newMass > 1.0) {
+                newType = 'Asteroid';
+                // Transform comet to asteroid
+                transformCometToAsteroid(object);
+            }
+            break;
+    }
+    
+    return newType;
+};
+
+/**
+ * Transform a star into a black hole
+ * @param {Object} object - The star object to transform
+ */
+const transformStarToBlackHole = (object) => {
+    console.log('Star transforming into black hole!');
+    // Preserve position and velocity
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    const mass = object.mass;
+    
+    // Create new black hole
+    const blackHole = new BlackHole(pos, mass, vel);
+    blackHole.name = object.name || 'Transformed Black Hole';
+    
+    // Replace the star in the stars array
+    const starIndex = stars.indexOf(object);
+    if (starIndex !== -1) {
+        stars.splice(starIndex, 1);
+        bh_list.push(blackHole);
+        
+        // Update the selected object reference
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = blackHole;
+            state.selectedObject.type = 'BlackHole';
+        }
+    }
+};
+
+/**
+ * Transform a neutron star into a black hole
+ * @param {Object} object - The neutron star object to transform
+ */
+const transformNeutronStarToBlackHole = (object) => {
+    console.log('Neutron star transforming into black hole!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    const mass = object.mass;
+    
+    const blackHole = new BlackHole(pos, mass, vel);
+    blackHole.name = object.name || 'Transformed Black Hole';
+    
+    const nsIndex = neutron_stars.indexOf(object);
+    if (nsIndex !== -1) {
+        neutron_stars.splice(nsIndex, 1);
+        bh_list.push(blackHole);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = blackHole;
+            state.selectedObject.type = 'BlackHole';
+        }
+    }
+};
+
+/**
+ * Transform a white dwarf into a neutron star
+ * @param {Object} object - The white dwarf object to transform
+ */
+const transformWhiteDwarfToNeutronStar = (object) => {
+    console.log('White dwarf transforming into neutron star!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    const mass = object.mass;
+    
+    const neutronStar = new NeutronStar(pos, vel, mass / SOLAR_MASS_UNIT);
+    neutronStar.name = object.name || 'Transformed Neutron Star';
+    
+    const wdIndex = white_dwarfs.indexOf(object);
+    if (wdIndex !== -1) {
+        white_dwarfs.splice(wdIndex, 1);
+        neutron_stars.push(neutronStar);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = neutronStar;
+            state.selectedObject.type = 'NeutronStar';
+        }
+    }
+};
+
+/**
+ * Transform a planet into a gas giant
+ * @param {Object} object - The planet object to transform
+ */
+const transformPlanetToGasGiant = (object) => {
+    console.log('Planet transforming into gas giant!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    const mass = object.mass / 50.0; // Convert to Jupiter masses
+    
+    const gasGiant = new GasGiant(pos, vel, mass);
+    gasGiant.name = object.name || 'Transformed Gas Giant';
+    
+    const planetIndex = planets.indexOf(object);
+    if (planetIndex !== -1) {
+        planets.splice(planetIndex, 1);
+        gas_giants.push(gasGiant);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = gasGiant;
+            state.selectedObject.type = 'GasGiant';
+        }
+    }
+};
+
+/**
+ * Transform a gas giant into a star
+ * @param {Object} object - The gas giant object to transform
+ */
+const transformGasGiantToStar = (object) => {
+    console.log('Gas giant transforming into star!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    
+    // Convert Jupiter masses to solar masses
+    // 1 Jupiter mass = 0.00095 solar masses
+    const massInJupiters = object.massInJupiters || (object.mass / 50.0);
+    const massInSolarMasses = massInJupiters * 0.00095;
+    
+    // Create star with the converted mass in simulation units
+    const star = new StarObject(pos, vel, massInSolarMasses);
+    star.name = object.name || 'Transformed Star';
+    
+    // Ensure the star has the correct mass properties
+    star.massInSuns = massInSolarMasses;
+    
+    const ggIndex = gas_giants.indexOf(object);
+    if (ggIndex !== -1) {
+        gas_giants.splice(ggIndex, 1);
+        stars.push(star);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = star;
+            state.selectedObject.type = 'Star';
+        }
+    }
+};
+
+/**
+ * Transform an asteroid into a planet
+ * @param {Object} object - The asteroid object to transform
+ */
+const transformAsteroidToPlanet = (object) => {
+    console.log('Asteroid transforming into planet!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    const mass = object.mass / EARTH_MASS_UNIT;
+    
+    const planet = new Planet(pos, vel, mass);
+    planet.name = object.name || 'Transformed Planet';
+    
+    const asteroidIndex = asteroids.indexOf(object);
+    if (asteroidIndex !== -1) {
+        asteroids.splice(asteroidIndex, 1);
+        planets.push(planet);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = planet;
+            state.selectedObject.type = 'Planet';
+        }
+    }
+};
+
+/**
+ * Transform a comet into an asteroid
+ * @param {Object} object - The comet object to transform
+ */
+const transformCometToAsteroid = (object) => {
+    console.log('Comet transforming into asteroid!');
+    const pos = { x: object.pos.x, y: object.pos.y };
+    const vel = { x: object.vel.x, y: object.vel.y };
+    
+    const asteroid = new Asteroid(pos, vel);
+    asteroid.name = object.name || 'Transformed Asteroid';
+    asteroid.mass = object.mass;
+    
+    const cometIndex = comets.indexOf(object);
+    if (cometIndex !== -1) {
+        comets.splice(cometIndex, 1);
+        asteroids.push(asteroid);
+        
+        if (state.selectedObject && state.selectedObject.object === object) {
+            state.selectedObject.object = asteroid;
+            state.selectedObject.type = 'Asteroid';
+        }
+    }
+};
+
+/**
+ * Show a notification when an object transforms
+ * @param {string} oldType - The previous object type
+ * @param {string} newType - The new object type
+ */
+const showTransformationNotification = (oldType, newType) => {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'transformation-notification';
+    notification.innerHTML = `
+        <div class="transformation-content">
+            <span class="transformation-icon">✨</span>
+            <span class="transformation-text">${oldType} → ${newType}</span>
+        </div>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.classList.add('visible');
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('visible');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 500);
+    }, 3000);
 };
 
 /**

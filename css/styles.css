@@ -2317,3 +2317,201 @@ html, body {
     margin-left: 4px;
   }
 }
+
+/* ===== Mass Adjustment Slider Styles ===== */
+.stat-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--separator-color), transparent);
+    margin: 15px 0;
+}
+
+.mass-adjustment-section {
+    background: linear-gradient(135deg, rgba(0, 170, 255, 0.1), rgba(0, 170, 255, 0.05));
+    border: 1px solid rgba(0, 170, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.mass-slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mass-slider-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin: 0;
+    text-shadow: 0 0 8px rgba(0, 170, 255, 0.3);
+}
+
+.mass-slider-control {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.mass-slider {
+    flex: 1;
+    min-width: 150px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mass-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, var(--primary-color), #00aaff);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.mass-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+}
+
+.mass-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, var(--primary-color), #00aaff);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.mass-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+}
+
+.mass-value-display {
+    background: rgba(0, 170, 255, 0.1);
+    border: 1px solid rgba(0, 170, 255, 0.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-color);
+    min-width: 80px;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 0 8px rgba(0, 170, 255, 0.2);
+}
+
+/* Responsive design for mass slider */
+@media (max-width: 768px) {
+    .mass-slider-control {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .mass-slider {
+        min-width: auto;
+    }
+    
+    .mass-value-display {
+        align-self: center;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mass-adjustment-section {
+        padding: 12px;
+    }
+    
+    .mass-slider-label {
+        font-size: 14px;
+    }
+    
+    .mass-value-display {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+/* ===== Transformation Notification Styles ===== */
+.transformation-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(0, 170, 255, 0.95), rgba(0, 255, 170, 0.95));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    z-index: 10000;
+    box-shadow: 0 8px 32px rgba(0, 170, 255, 0.4);
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+.transformation-notification.visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.transformation-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.transformation-icon {
+    font-size: 20px;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.transformation-text {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(180deg); }
+}
+
+/* Responsive design for transformation notification */
+@media (max-width: 768px) {
+    .transformation-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .transformation-notification {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+    
+    .transformation-icon {
+        font-size: 18px;
+    }
+}
