@@ -296,6 +296,38 @@
         <button id="objectTypeBtn" class="ui-button primary" title="Click to change what type of object you insert">⭐ Add Stars</button>
     </div>
 
+    <!-- Mobile Menu Toggle -->
+    <button id="mobileMenuToggle" class="mobile-menu-toggle">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+    </button>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobileMenuDropdown" class="mobile-menu-dropdown">
+        <button id="mobileLoadScenarioBtn" class="ui-button">Load Scenario</button>
+        <button id="mobileSettingsBtn" class="ui-button">Settings</button>
+        <button id="mobileRefreshScenarioBtn" class="ui-button">Refresh Scenario</button>
+        <button id="mobileResetAllBtn" class="ui-button">Reset to Default</button>
+        <button id="mobileCleanSimBtn" class="ui-button">Blank Simulation</button>
+        <button id="mobileSaveBtn" class="ui-button">Save State</button>
+        <button id="mobileLoadBtn" class="ui-button">Load State</button>
+        <button id="mobileScreenshotBtn" class="ui-button">📸 Screenshot</button>
+        
+        <div class="speed-controls">
+            <button id="mobileSlowDownBtn" class="ui-button speed-btn">⏪ Slow</button>
+            <span id="mobileSpeedDisplay" class="speed-display">1.0x</span>
+            <button id="mobileSpeedUpBtn" class="ui-button speed-btn">Fast ⏩</button>
+        </div>
+        
+        <button id="mobileResetViewBtn" class="ui-button">Reset View</button>
+        <div class="mobile-object-type-controls">
+            <button id="mobileObjectTypePrevBtn" class="ui-button object-type-nav">◀</button>
+            <button id="mobileObjectTypeBtn" class="ui-button primary">⭐ Add Stars</button>
+            <button id="mobileObjectTypeNextBtn" class="ui-button object-type-nav">▶</button>
+        </div>
+    </div>
+
     <!-- Scenario List Modal -->
     <div id="scenarioListModal" class="hidden">
       <div id="scenarioListContent">
@@ -405,16 +437,16 @@
       }
       @media (max-width: 600px) {
         .tutorial-btn {
-          left: 50%;
-          transform: translateX(-50%);
+          left: 2vw;
+          transform: none;
           bottom: 2vw;
           width: 44px;
           height: 44px;
         }
         .tutorial-popup {
-          left: 50%;
+          left: 2vw;
           bottom: 10vw;
-          transform: translateX(-50%);
+          transform: none;
           width: 90vw;
           min-width: 0;
           max-width: 90vw;
@@ -423,7 +455,13 @@
         }
       }
       @media (max-width: 400px) {
+        .tutorial-btn {
+          left: 1vw;
+          bottom: 1vw;
+        }
         .tutorial-popup {
+          left: 1vw;
+          bottom: 8vw;
           width: 98vw;
           max-width: 100vw;
           border-radius: 8px;

@@ -882,6 +882,9 @@ const showObjectInspector = (object, type) => {
     // Show the inspector
     objectInspector.classList.add('visible');
     state.inspector_open = true;
+    
+    // Set up mobile-friendly backdrop click to close
+    setupInspectorBackdropClick();
 };
 
 const hideObjectInspector = () => {
@@ -903,6 +906,25 @@ const hideObjectInspector = () => {
     }
     state.selectedObject = null;
     console.log('Inspector should now be hidden');
+};
+
+// Add mobile-friendly backdrop click to close functionality
+const setupInspectorBackdropClick = () => {
+    const objectInspector = document.getElementById('objectInspector');
+    if (!objectInspector) return;
+    
+    // Remove existing event listeners to prevent duplicates
+    objectInspector.removeEventListener('click', handleInspectorBackdropClick);
+    
+    // Add backdrop click handler
+    objectInspector.addEventListener('click', handleInspectorBackdropClick);
+};
+
+const handleInspectorBackdropClick = (e) => {
+    // Only close if clicking on the inspector backdrop (not on content)
+    if (e.target.id === 'objectInspector') {
+        hideObjectInspector();
+    }
 };
 
 /**
@@ -4473,7 +4495,13 @@ const load_simulation_state = () => {
  */
 const updateSpeedDisplay = () => {
   const speedDisplay = document.getElementById('speedDisplay');
-  speedDisplay.textContent = `${SETTINGS.sim_speed.toFixed(1)}x`;
+  const mobileSpeedDisplay = document.getElementById('mobileSpeedDisplay');
+  if (speedDisplay) {
+    speedDisplay.textContent = `${SETTINGS.sim_speed.toFixed(1)}x`;
+  }
+  if (mobileSpeedDisplay) {
+    mobileSpeedDisplay.textContent = `${SETTINGS.sim_speed.toFixed(1)}x`;
+  }
 };
 
 /**
@@ -4543,10 +4571,15 @@ const generateRandomBlackHoleMass = () => {
 
 const updateObjectTypeButton = () => {
   const btn = document.getElementById('objectTypeBtn');
+  const mobileBtn = document.getElementById('mobileObjectTypeBtn');
   if (!btn) return; // Guard against missing button
   const currentType = objectTypes[currentTypeIndex];
   btn.innerHTML = `${currentType.emoji} ${currentType.label}`;
   btn.title = `Click to change what type of object you insert (currently: ${currentType.type})`;
+  if (mobileBtn) {
+    mobileBtn.innerHTML = `${currentType.emoji} ${currentType.label}`;
+    mobileBtn.title = `Click to change what type of object you insert (currently: ${currentType.type})`;
+  }
   SETTINGS.input_object_type = currentType.type;
 };
 
@@ -4864,6 +4897,264 @@ document.getElementById('objectTypeBtn').addEventListener('contextmenu', (e) => 
 document.getElementById('closeMobileInstructions').onclick = () => {
   document.getElementById('mobileInstructions').style.display = 'none';
 };
+
+// Mobile menu functionality
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+
+// Mobile menu toggle functionality
+if (mobileMenuToggle && mobileMenuDropdown) {
+  mobileMenuToggle.addEventListener('click', () => {
+    mobileMenuToggle.classList.toggle('active');
+    mobileMenuDropdown.classList.toggle('show');
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!mobileMenuToggle.contains(e.target) && !mobileMenuDropdown.contains(e.target)) {
+      mobileMenuToggle.classList.remove('active');
+      mobileMenuDropdown.classList.remove('show');
+    }
+  });
+
+  // Mobile button event listeners (mirror desktop functionality)
+  document.getElementById('mobileSettingsBtn').onclick = () => {
+    buildSettingsMenu();
+    document.getElementById('settingsPanel').classList.remove('hidden');
+    state.paused = true;
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileRefreshScenarioBtn').onclick = () => {
+    const currentScenario = current_scenario_name || 'Binary BH';
+    SETTINGS.preset_scenario = currentScenario;
+    initialize_simulation();
+    state.paused = false;
+    show_scenario_info();
+    updateSpeedDisplay();
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileResetAllBtn').onclick = () => {
+    SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    SETTINGS.preset_scenario = 'Binary BH';
+    initialize_simulation();
+    state.paused = false;
+    show_scenario_info();
+    updateSpeedDisplay();
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileSaveBtn').onclick = () => {
+    save_simulation_state();
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileLoadBtn').onclick = () => {
+    load_simulation_state();
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileScreenshotBtn').onclick = () => {
+    takeScreenshot();
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileCleanSimBtn').onclick = () => {
+    // Clear all simulation objects and arrays
+    bh_list.length = 0;
+    planets.length = 0;
+    stars.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+    particles.length = 0;
+    gravity_ripples.length = 0;
+    accretion_disk_particles.length = 0;
+    particlePool.clear && particlePool.clear();
+    resetPhysicsObjectCounter && resetPhysicsObjectCounter();
+
+    // Reset view to default
+    state.zoom = 1.0;
+    state.pan = { x: 0.0, y: 0.0 };
+
+    // Hide inspector and scenario info
+    hideObjectInspector && hideObjectInspector();
+    const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
+    if (scenarioInfoDiv) scenarioInfoDiv.classList.remove('visible');
+
+    // Set scenario to 'None' and update settings
+    SETTINGS.preset_scenario = 'None';
+    current_scenario_name = 'None';
+
+    // Unpause simulation and set normal speed
+    state.paused = false;
+    SETTINGS.sim_speed = 1.0;
+
+    // Redraw background/starfield if needed
+    if (typeof generateStarfield === 'function') generateStarfield();
+
+    // Optionally update UI overlays
+    if (typeof show_scenario_info === 'function') show_scenario_info();
+    
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  document.getElementById('mobileResetViewBtn').onclick = () => {
+    // Use the same reset view logic as desktop
+    const allObjects = [
+      ...bh_list,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...gas_giants,
+      ...planets,
+      ...asteroids
+    ].filter(obj => obj.alive);
+    
+    if (allObjects.length > 0) {
+      let totalMass = 0;
+      let centerX = 0;
+      let centerY = 0;
+      
+      for (const obj of allObjects) {
+        totalMass += obj.mass;
+        centerX += obj.pos.x * obj.mass;
+        centerY += obj.pos.y * obj.mass;
+      }
+      
+      if (totalMass > 0) {
+        centerX /= totalMass;
+        centerY /= totalMass;
+      }
+      
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      
+      for (const obj of allObjects) {
+        minX = Math.min(minX, obj.pos.x);
+        maxX = Math.max(maxX, obj.pos.x);
+        minY = Math.min(minY, obj.pos.y);
+        maxY = Math.max(maxY, obj.pos.y);
+      }
+      
+      const padding = 50;
+      const width = maxX - minX + padding * 2;
+      const height = maxY - minY + padding * 2;
+      
+      const zoomX = canvas.width / width;
+      const zoomY = canvas.height / height;
+      const newZoom = Math.min(zoomX, zoomY, 2.0);
+      
+      state.zoom = Math.max(0.1, newZoom);
+      state.pan.x = -centerX * state.zoom;
+      state.pan.y = centerY * state.zoom;
+    } else {
+      state.zoom = 1.0;
+      state.pan = { x: 0.0, y: 0.0 };
+    }
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  // Mobile object type navigation
+  document.getElementById('mobileObjectTypePrevBtn').onclick = () => {
+    currentTypeIndex = (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
+    updateObjectTypeButton();
+    // Keep mobile menu open for object type changes
+  };
+
+  document.getElementById('mobileObjectTypeBtn').onclick = () => {
+    currentTypeIndex = (currentTypeIndex + 1) % objectTypes.length;
+    updateObjectTypeButton();
+    // Keep mobile menu open for object type changes
+  };
+
+  document.getElementById('mobileObjectTypeNextBtn').onclick = () => {
+    currentTypeIndex = (currentTypeIndex + 1) % objectTypes.length;
+    updateObjectTypeButton();
+    // Keep mobile menu open for object type changes
+  };
+
+  document.getElementById('mobileLoadScenarioBtn').onclick = () => {
+    // Use the same scenario loading logic as desktop
+    const modal = document.getElementById('scenarioListModal');
+    const itemsDiv = document.getElementById('scenarioListItems');
+    itemsDiv.innerHTML = '';
+    
+    Object.entries(SCENARIO_INFO).forEach(([key, info], index) => {
+      if (!info || typeof info !== 'object') {
+        console.warn(`Invalid scenario data for key: ${key}`);
+        return;
+      }
+      
+      const title = info.title || 'Untitled Scenario';
+      const summary = info.summary || 'No description available.';
+      const category = info.category || 'General';
+      
+      const item = document.createElement('div');
+      item.className = 'scenario-list-item';
+      item.style.animationDelay = `${index * 0.1}s`;
+      
+      item.innerHTML = `
+        <div class="scenario-title">
+          <strong>${title}</strong>
+          <span>${category}</span>
+        </div>
+        <hr class="scenario-separator">
+        <div class="scenario-description">
+          <span>${summary}</span>
+        </div>
+      `;
+      
+      item.onclick = () => {
+        SETTINGS.preset_scenario = key;
+        current_scenario_name = key;
+        initialize_simulation();
+        state.paused = false;
+        modal.classList.add('hidden');
+        show_enhanced_scenario_info(key);
+        updateSpeedDisplay();
+      };
+      
+      itemsDiv.appendChild(item);
+    });
+    
+    modal.classList.remove('hidden');
+    // Close mobile menu after clicking
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuDropdown.classList.remove('show');
+  };
+
+  // Mobile speed controls
+  document.getElementById('mobileSlowDownBtn').onclick = () => {
+    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+    updateSpeedDisplay();
+  };
+
+  document.getElementById('mobileSpeedUpBtn').onclick = () => {
+    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+    updateSpeedDisplay();
+  };
+}
 
 // Scenario info box close button
 const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');

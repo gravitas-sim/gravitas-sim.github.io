@@ -45,6 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scenarioInfoBox) {
           scenarioInfoBox.classList.add('showUI');
         }
+        
+        // Show mobile menu elements after splash ends
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+        if (mobileMenuToggle) {
+          mobileMenuToggle.classList.add('showUI');
+        }
+        if (mobileMenuDropdown) {
+          mobileMenuDropdown.classList.add('showUI');
+        }
+        
         // Fade in the tutorial button with the rest of the UI
         const tutorialBtn = document.getElementById('tutorialBtn');
         if (tutorialBtn) {
