@@ -630,7 +630,6 @@ const getGasGiantInfo = (gasGiant) => {
         description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`
     };
 };
-
 const getAsteroidInfo = (asteroid) => {
     const massInEarths = asteroid.mass / 1.0;
     const massInKg = massInEarths * 5.972e24;
@@ -779,6 +778,16 @@ const showObjectInspector = (object, type) => {
         return;
     }
     
+    // Check if we're already showing the same object
+    if (state.inspector_open && 
+        state.selectedObject && 
+        state.selectedObject.object && 
+        state.selectedObject.object.id === object.id &&
+        state.selectedObject.type === type) {
+        console.log('Inspector already open for this object, skipping');
+        return;
+    }
+    
     // Store the current object for auto-updating
     state.selectedObject = { object, type };
     
@@ -831,73 +840,82 @@ const showObjectInspector = (object, type) => {
         
         inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
         
-            // Check if this is a new object selection or just a real-time update
-    const existingMassSlider = document.getElementById('massSlider');
-    const isNewObject = !existingMassSlider || 
-                       (state.selectedObject && state.selectedObject.object && 
-                        existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
-    
-    if (isNewObject) {
-        // New object selected - recreate the entire inspector
-        let content = '';
+        // Check if this is a new object selection or just a real-time update
+        const existingMassSlider = document.getElementById('massSlider');
+        const isNewObject = !existingMassSlider || 
+                           (state.selectedObject && state.selectedObject.object && 
+                            existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
         
-        // Add mass adjustment slider
-        const massSlider = createMassSlider(state.selectedObject.object, state.selectedObject.type);
-        content += massSlider;
-        
-        // Add separator
-        content += '<div class="stat-separator"></div>';
-        
-        info.stats.forEach(stat => {
-            content += `
-                <div class="stat-row">
-                    <span class="stat-label">${stat.label}:</span>
-                    <span class="stat-value">${stat.value}</span>
-                </div>
-            `;
-        });
-        
-        content += `<div class="object-description">${info.description}</div>`;
-        inspectorContent.innerHTML = content;
-        
-        // Set up mass slider event listeners
-        setupMassSliderListeners();
-        
-        // Store object ID for future reference
-        const newMassSlider = document.getElementById('massSlider');
-        if (newMassSlider && state.selectedObject.object) {
-            newMassSlider.dataset.objectId = state.selectedObject.object.id || 'unknown';
-        }
-    } else {
-        // Real-time update - only update stats and description, preserve the slider
-        const statRows = inspectorContent.querySelectorAll('.stat-row');
-        const description = inspectorContent.querySelector('.object-description');
-        
-        // Update stats
-        info.stats.forEach((stat, index) => {
-            if (statRows[index]) {
-                statRows[index].innerHTML = `
-                    <span class="stat-label">${stat.label}:</span>
-                    <span class="stat-value">${stat.value}</span>
+        if (isNewObject) {
+            console.log('Creating new inspector content for object:', object.id);
+            // New object selected - recreate the entire inspector
+            let content = '';
+            
+            // Add mass adjustment slider
+            const massSlider = createMassSlider(state.selectedObject.object, state.selectedObject.type);
+            content += massSlider;
+            
+            // Add separator
+            content += '<div class="stat-separator"></div>';
+            
+            info.stats.forEach(stat => {
+                content += `
+                    <div class="stat-row">
+                        <span class="stat-label">${stat.label}:</span>
+                        <span class="stat-value">${stat.value}</span>
+                    </div>
                 `;
+            });
+            
+            content += `<div class="object-description">${info.description}</div>`;
+            inspectorContent.innerHTML = content;
+            
+            // Set up mass slider event listeners
+            setupMassSliderListeners();
+            
+            // Store object ID for future reference
+            const newMassSlider = document.getElementById('massSlider');
+            if (newMassSlider && state.selectedObject.object) {
+                newMassSlider.dataset.objectId = state.selectedObject.object.id || 'unknown';
             }
-        });
-        
-        // Update description
-        if (description) {
-            description.innerHTML = info.description;
+        } else {
+            // Real-time update - only update stats and description, preserve the slider
+            const statRows = inspectorContent.querySelectorAll('.stat-row');
+            const description = inspectorContent.querySelector('.object-description');
+            
+            // Update stats
+            info.stats.forEach((stat, index) => {
+                if (statRows[index]) {
+                    statRows[index].innerHTML = `
+                        <span class="stat-label">${stat.label}:</span>
+                        <span class="stat-value">${stat.value}</span>
+                    `;
+                }
+            });
+            
+            // Update description
+            if (description) {
+                description.innerHTML = info.description;
+            }
         }
-    }
     };
+    
+    // Clear any existing update interval
+    if (state.inspectorUpdateInterval) {
+        clearInterval(state.inspectorUpdateInterval);
+        state.inspectorUpdateInterval = null;
+    }
     
     // Initial update
     updateInspector();
     
     // Set up auto-update interval
-    if (state.inspectorUpdateInterval) {
-        clearInterval(state.inspectorUpdateInterval);
-    }
     state.inspectorUpdateInterval = setInterval(updateInspector, 100); // Update 10 times per second
+    
+    // Remove inline hide styles so CSS takes over
+    ['display', 'opacity', 'visibility', 'pointerEvents', 'position', 'left', 'top', 'zIndex'].forEach(prop => {
+        objectInspector.style[prop] = '';
+    });
     
     // Show the inspector
     objectInspector.classList.add('visible');
@@ -946,10 +964,15 @@ const hideObjectInspector = () => {
     objectInspector.classList.remove('minimized');
     state.inspector_open = false;
     
-    // Reset position to center when hidden
-    objectInspector.style.left = '';
-    objectInspector.style.top = '';
-    objectInspector.style.transform = 'translate(-50%, -50%)';
+    // Re-apply hide styles to ensure inspector stays hidden
+    objectInspector.style.display = 'none';
+    objectInspector.style.opacity = '0';
+    objectInspector.style.visibility = 'hidden';
+    objectInspector.style.pointerEvents = 'none';
+    objectInspector.style.position = 'absolute';
+    objectInspector.style.left = '-9999px';
+    objectInspector.style.top = '-9999px';
+    objectInspector.style.zIndex = '-9999';
     
     // Reset minimize button
     const minimizeBtn = document.getElementById('inspectorMinimize');
@@ -1014,7 +1037,7 @@ const setupInspectorDragging = () => {
     document.removeEventListener('touchmove', dragTouch);
     document.removeEventListener('touchend', endDrag);
     
-    inspectorHeader.addEventListener('touchstart', startDragTouch);
+    inspectorHeader.addEventListener('touchstart', startDragTouch, { passive: false }); // passive: false is required because startDragTouch calls preventDefault
     document.addEventListener('touchmove', dragTouch);
     document.addEventListener('touchend', endDrag);
 };
@@ -1233,7 +1256,6 @@ const toggleOverlayMinimize = (e) => {
         minimizeBtn.title = 'Maximize';
     }
 };
-
 /**
  * Create a mass adjustment slider for the object inspector
  * @param {Object} object - The physics object
@@ -1870,7 +1892,6 @@ const showTransformationNotification = (oldType, newType) => {
         }, 500);
     }, 3000);
 };
-
 /**
  * Show scenario information banner with title and description
  * Displays information about the current simulation scenario for 6 seconds
@@ -2962,7 +2983,6 @@ const apply_placement = () => {
     }
   }
 };
-
 /**
  * Initialize the physics simulation with current settings
  * Creates all physics objects and applies initial conditions
@@ -4056,7 +4076,6 @@ const setting_items = [
   { label: 'Record Simulation', key: 'record_simulation', type: 'bool' },
   { label: 'Show Gravitational Waves', key: 'show_gravitational_waves', type: 'bool' },
 ];
-
 // ===== Reusable Tooltip System =====
 class TooltipManager {
   constructor() {
@@ -4702,7 +4721,6 @@ const showBHMassesModal = () => {
 const hideBHMassesModal = () => {
   document.getElementById('bhMassesModal').classList.add('hidden');
 };
-
 // Save/Load functions
 /**
  * Save the current simulation state to localStorage
@@ -5210,11 +5228,9 @@ document.getElementById('objectTypeBtn').addEventListener('contextmenu', (e) => 
 document.getElementById('closeMobileInstructions').onclick = () => {
   document.getElementById('mobileInstructions').style.display = 'none';
 };
-
 // Mobile menu functionality
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
-
 // Mobile menu toggle functionality
 if (mobileMenuToggle && mobileMenuDropdown) {
   mobileMenuToggle.addEventListener('click', () => {
@@ -5623,7 +5639,10 @@ document.getElementById('scenarioListModal').onclick = (e) => {
 canvas.addEventListener(
   'touchstart',
   e => {
-    e.preventDefault();
+    // Only call preventDefault if necessary (e.g., for custom drag/zoom)
+    if (e.touches.length === 1) {
+      e.preventDefault(); // Required to prevent scrolling during drag/zoom
+    }
     const touchCount = e.touches.length;
     const touchStartTime = Date.now();
 
@@ -5678,7 +5697,7 @@ canvas.addEventListener(
       }
     }
   },
-  { passive: false }
+  { passive: false } // passive: false is required because we call preventDefault for custom drag/zoom
 );
 
 canvas.addEventListener(
@@ -5848,9 +5867,6 @@ export {
   DEFAULT_SETTINGS,
   localSettings,
 };
-
-
-
 // === Tutorial Popup Logic ===
 (function() {
   const tutorialBtn = document.getElementById('tutorialBtn');
