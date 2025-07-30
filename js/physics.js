@@ -2972,6 +2972,7 @@ const createKilonovaExplosion = (pos, mass) => {
  * @param {number} mass - Combined mass of the merging objects
  */
 const createNSWDExplosion = (pos, mass) => {
+  console.log('createNSWDExplosion called!');
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
   
@@ -3297,6 +3298,16 @@ const handle_star_merging = (stars_list) => {
               }
             } else {
               // Stays as neutron star
+              // Check if this is a neutron star-white dwarf merger
+              const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
+                                     (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
+              
+              if (is_ns_wd_merger) {
+                // Create neutron star-white dwarf merger explosion
+                console.log('NS-WD merger detected in neutron star section! Mass:', new_mass_in_suns, 'solar masses');
+                createNSWDExplosion(new_pos, new_mass);
+              }
+              
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
             }
@@ -3308,16 +3319,23 @@ const handle_star_merging = (stars_list) => {
               const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
                                      (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
               
+              // Check if this is a white dwarf-white dwarf merger
+              const is_wd_wd_merger = star1_type === 'WhiteDwarf' && star2_type === 'WhiteDwarf';
+              
               if (is_ns_wd_merger) {
                 // Create neutron star-white dwarf merger explosion
+                console.log('NS-WD merger detected! Mass:', new_mass_in_suns, 'solar masses');
                 createNSWDExplosion(new_pos, new_mass);
+              } else if (is_wd_wd_merger) {
+                // Create white dwarf-white dwarf merger explosion (results in neutron star)
+                createWDWDExplosion(new_pos, new_mass);
               }
               
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
               neutron_stars.push(new_object);
               
-              // Only add regular GW ripple if not a NS-WD merger (explosion creates its own)
-              if (!is_ns_wd_merger) {
+              // Only add regular GW ripple if not a special merger (explosion creates its own)
+              if (!is_ns_wd_merger && !is_wd_wd_merger) {
                 gravity_ripples.push({
                   x: new_pos.x,
                   y: new_pos.y,
@@ -3329,15 +3347,7 @@ const handle_star_merging = (stars_list) => {
                 });
               }
             } else {
-              // Stays as white dwarf
-              // Check if this is a white dwarf-white dwarf merger
-              const is_wd_wd_merger = star1_type === 'WhiteDwarf' && star2_type === 'WhiteDwarf';
-              
-              if (is_wd_wd_merger) {
-                // Create white dwarf-white dwarf merger explosion
-                createWDWDExplosion(new_pos, new_mass);
-              }
-              
+              // Stays as white dwarf (rare case when combined mass <= 1.4 solar masses)
               new_object = new WhiteDwarf(new_pos, new_vel, new_mass_in_suns);
               white_dwarfs.push(new_object);
             }
