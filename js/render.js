@@ -132,8 +132,26 @@ function drawStarfield() {
         // Amplitude and wavelength scale with merger mass
         const mass = ripple.mass || 1.0;
         const gw_strength = ripple.gw_strength !== undefined ? ripple.gw_strength : 1.0;
-        const amplitude = (8 + 10 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength;
-        const wavelength = 80 + 40 * Math.log10(mass + 1);
+        
+        // Enhanced effects for different merger types
+        let amplitude, wavelength;
+        if (ripple.kilonova) {
+          // Kilonova creates moderate gravitational wave effects (reduced)
+          amplitude = (10 + 12 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength * 1.2;
+          wavelength = 80 + 40 * Math.log10(mass + 1);
+        } else if (ripple.nswd_merger) {
+          // Neutron star-white dwarf merger effects
+          amplitude = (12 + 15 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength * 1.5;
+          wavelength = 100 + 50 * Math.log10(mass + 1);
+        } else if (ripple.wdwd_merger) {
+          // White dwarf-white dwarf merger effects
+          amplitude = (6 + 8 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength * 1.2;
+          wavelength = 60 + 30 * Math.log10(mass + 1);
+        } else {
+          // Regular gravitational wave effects
+          amplitude = (8 + 10 * Math.log10(mass + 1)) * (ripple._fade !== undefined ? ripple._fade : 1.0) * gw_strength;
+          wavelength = 80 + 40 * Math.log10(mass + 1);
+        }
         // Convert ripple center to screen
         const screen = world_to_screen({ x: ripple.x, y: ripple.y });
         const radius = c * age * state.zoom;
@@ -146,8 +164,30 @@ function drawStarfield() {
           const phase = (dist - radius) / wavelength;
           const local_amp = amplitude * Math.exp(-Math.abs(phase));
           const factor = local_amp * Math.sin(phase * Math.PI * 2 - progress * Math.PI * 2);
-          sx += (dx / dist) * factor;
-          sy += (dy / dist) * factor;
+          
+          // Enhanced distortion for different merger types
+          if (ripple.kilonova) {
+            // Add moderate chaotic distortion for kilonova (reduced)
+            const chaos_factor = Math.sin(progress * Math.PI * 3) * 0.15;
+            const enhanced_factor = factor * (1 + chaos_factor);
+            sx += (dx / dist) * enhanced_factor;
+            sy += (dy / dist) * enhanced_factor;
+          } else if (ripple.nswd_merger) {
+            // Add moderate chaotic distortion for NS-WD merger
+            const chaos_factor = Math.sin(progress * Math.PI * 3) * 0.2;
+            const enhanced_factor = factor * (1 + chaos_factor);
+            sx += (dx / dist) * enhanced_factor;
+            sy += (dy / dist) * enhanced_factor;
+          } else if (ripple.wdwd_merger) {
+            // Add subtle chaotic distortion for WD-WD merger
+            const chaos_factor = Math.sin(progress * Math.PI * 2) * 0.1;
+            const enhanced_factor = factor * (1 + chaos_factor);
+            sx += (dx / dist) * enhanced_factor;
+            sy += (dy / dist) * enhanced_factor;
+          } else {
+            sx += (dx / dist) * factor;
+            sy += (dy / dist) * factor;
+          }
         }
       }
     }
