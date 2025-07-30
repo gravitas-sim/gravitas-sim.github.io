@@ -562,6 +562,7 @@ const updatePhysics = dt => {
   debris = debris.filter(d => d.alive && !is_offscreen(d.pos));
   neutron_stars = neutron_stars.filter(ns => ns.alive && !is_offscreen(ns.pos));
   white_dwarfs = white_dwarfs.filter(wd => wd.alive && !is_offscreen(wd.pos));
+  bh_list = bh_list.filter(bh => (bh.alive !== false) && !is_offscreen(bh.pos));
   accretion_disk_particles = accretion_disk_particles.filter(ap => ap.alive && !is_offscreen(ap.pos));
 
   // Follow mode logic - matching original exactly
@@ -1533,6 +1534,7 @@ class BlackHole {
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
     this.obj_type = 'BlackHole';
+    this.alive = true; // Add alive property for deletion support
     this.updateRadius();
     this.name = getRandomName('blackHoles');
 
