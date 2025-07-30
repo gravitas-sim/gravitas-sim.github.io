@@ -2606,7 +2606,7 @@ html, body {
 
 @media (max-width: 1024px) {
   .scenario-info-box {
-    top: 10px;
+    top: 15px;
     left: 10px;
     right: 10px;
     transform: none;
@@ -2620,7 +2620,15 @@ html, body {
     
   .scenario-info-header h3 {
     font-size: 16px;
+    max-width: calc(100% - 40px);
     }
+    
+  .scenario-info-close {
+    font-size: 20px !important;
+    padding: 6px 10px !important;
+    top: -2px !important;
+    right: -2px !important;
+  }
     
   .scenario-info-body p {
         font-size: 13px;
@@ -2635,18 +2643,33 @@ html, body {
 
 @media (max-width: 480px) {
   .scenario-info-box {
-    top: 5px;
-    left: 5px;
-    right: 5px;
+    top: 10px;
+    left: 8px;
+    right: 8px;
     }
     
   .scenario-info-content {
     width: 98%;
-    padding: 6px 12px;
+    padding: 8px 14px;
   }
   
   .scenario-info-header h3 {
     font-size: 15px;
+    max-width: calc(100% - 45px);
+  }
+  
+  .scenario-info-close {
+    font-size: 22px !important;
+    padding: 8px 12px !important;
+    top: -4px !important;
+    right: -4px !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
   
   .scenario-info-body p {
@@ -2668,6 +2691,33 @@ html, body {
     line-height: 1.4;
     overflow: hidden;
     }
+}
+
+@media (max-width: 360px) {
+  .scenario-info-box {
+    top: 8px;
+    left: 6px;
+    right: 6px;
+  }
+  
+  .scenario-info-content {
+    width: 99%;
+    padding: 6px 12px;
+  }
+  
+  .scenario-info-header h3 {
+    font-size: 14px;
+    max-width: calc(100% - 50px);
+  }
+  
+  .scenario-info-close {
+    font-size: 20px !important;
+    padding: 6px 10px !important;
+    top: -2px !important;
+    right: -2px !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
 } 
 
 /* ===== Settings Info Icons ===== */
