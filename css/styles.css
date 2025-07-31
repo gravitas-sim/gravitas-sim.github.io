@@ -660,6 +660,36 @@ html, body {
     transform: scale(1.1);
 }
 
+.inspector-delete {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    margin-right: 8px;
+}
+
+.inspector-delete:hover {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff4757;
+    transform: scale(1.1);
+}
+
+.inspector-delete:active {
+    background: rgba(255, 107, 107, 0.3);
+    transform: scale(0.95);
+}
+
 .inspector-content {
     flex: 1;
     overflow-y: auto;
@@ -881,6 +911,15 @@ html, body {
         border-radius: 8px;
     }
     
+    .inspector-delete {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+        background: rgba(255, 107, 107, 0.15);
+        border-radius: 8px;
+        margin-right: 8px;
+    }
+    
     .inspector-minimize {
         width: 44px;
         height: 44px;
@@ -938,6 +977,15 @@ html, body {
         font-size: 32px;
         background: rgba(255, 255, 255, 0.15);
         border-radius: 10px;
+    }
+    
+    .inspector-delete {
+        width: 48px;
+        height: 48px;
+        font-size: 28px;
+        background: rgba(255, 107, 107, 0.2);
+        border-radius: 10px;
+        margin-right: 8px;
     }
 }
 

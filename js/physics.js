@@ -3837,6 +3837,7 @@ const handle_gas_giant_merging = () => {
             // Very massive gas giant becomes a low-mass star
             const star_mass_in_suns = new_mass_in_jupiters / 1047.0; // Convert Jupiter masses to solar masses
             new_object = new StarObject(new_pos, new_vel, star_mass_in_suns);
+            new_object.mass = star_mass_in_suns * SOLAR_MASS_UNIT;
             stars.push(new_object);
             
             // Create extra particles for star formation

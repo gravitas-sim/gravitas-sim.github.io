@@ -940,9 +940,6 @@ const showObjectInspector = (object, type) => {
         setupInspectorDragging();
     }, 50);
     
-    // Set up minimize/maximize functionality
-    setupInspectorMinimize();
-    
     // Update cursor state
     updateInspectorCursor();
     
@@ -961,7 +958,6 @@ const hideObjectInspector = () => {
     console.log('Removing visible class and closing inspector');
     objectInspector.classList.remove('visible');
     objectInspector.classList.remove('dragging');
-    objectInspector.classList.remove('minimized');
     state.inspector_open = false;
     
     // Re-apply hide styles to ensure inspector stays hidden
@@ -973,13 +969,6 @@ const hideObjectInspector = () => {
     objectInspector.style.left = '-9999px';
     objectInspector.style.top = '-9999px';
     objectInspector.style.zIndex = '-9999';
-    
-    // Reset minimize button
-    const minimizeBtn = document.getElementById('inspectorMinimize');
-    if (minimizeBtn) {
-        minimizeBtn.textContent = '−';
-        minimizeBtn.title = 'Minimize';
-    }
     
     // Clear auto-update interval
     if (state.inspectorUpdateInterval) {
@@ -1178,46 +1167,7 @@ const endDrag = () => {
     }
 };
 
-// Minimize/Maximize functionality for object inspector
-const setupInspectorMinimize = () => {
-    const objectInspector = document.getElementById('objectInspector');
-    const minimizeBtn = document.getElementById('inspectorMinimize');
-    
-    if (!objectInspector || !minimizeBtn) return;
-    
-    // Remove existing listeners to prevent duplicates
-    minimizeBtn.removeEventListener('click', toggleInspectorMinimize);
-    
-    // Add minimize/maximize handler
-    minimizeBtn.addEventListener('click', toggleInspectorMinimize);
-};
 
-const toggleInspectorMinimize = (e) => {
-    e.preventDefault();
-    e.stopPropagation(); // Prevent dragging when clicking the button
-    
-    const objectInspector = document.getElementById('objectInspector');
-    const minimizeBtn = document.getElementById('inspectorMinimize');
-    
-    if (!objectInspector || !minimizeBtn) return;
-    
-    const isMinimized = objectInspector.classList.contains('minimized');
-    
-    if (isMinimized) {
-        // Maximize
-        objectInspector.classList.remove('minimized');
-        minimizeBtn.textContent = '−';
-        minimizeBtn.title = 'Minimize';
-    } else {
-        // Minimize
-        objectInspector.classList.add('minimized');
-        minimizeBtn.textContent = '+';
-        minimizeBtn.title = 'Maximize';
-    }
-    
-    // Update cursor based on new state
-    updateInspectorCursor();
-};
 
 // Overlay minimize/maximize functionality
 const setupOverlayMinimize = () => {
@@ -1276,7 +1226,7 @@ const createMassSlider = (object, type) => {
             break;
         case 'Star':
             currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
-            minMass = 0.1;
+            minMass = 0.08; // Lower minimum to allow very low mass stars
             maxMass = 100;
             massUnit = 'M☉';
             massLabel = 'Object Mass';
@@ -1351,12 +1301,10 @@ const createMassSlider = (object, type) => {
  * Set up event listeners for the mass slider
  */
 const setupMassSliderListeners = () => {
-    console.log('Setting up mass slider listeners');
     const massSlider = document.getElementById('massSlider');
     const massValueDisplay = document.getElementById('massValueDisplay');
     
     if (!massSlider || !massValueDisplay) {
-        console.log('Mass slider elements not found:', { massSlider: !!massSlider, massValueDisplay: !!massValueDisplay });
         return;
     }
     
@@ -1368,6 +1316,11 @@ const setupMassSliderListeners = () => {
         const object = state.selectedObject.object;
         const type = state.selectedObject.type;
         
+        // Skip mass update if we're in the middle of a transformation
+        if (state.isTransforming) {
+            return;
+        }
+        
         // Update the object's mass and check for transformation
         const newType = updateObjectMass(object, type, newMass);
         
@@ -1375,14 +1328,18 @@ const setupMassSliderListeners = () => {
         if (newType && newType !== type) {
             console.log(`Object transformed from ${type} to ${newType}!`);
             
+            // Set transformation flag to prevent mass updates during the process
+            state.isTransforming = true;
+            
             // Update the selected object type
             state.selectedObject.type = newType;
             
             // Reset the slider value to prevent immediate further transformation
             // For gas giant to star transformation, set slider to the star's actual mass
             if (type === 'GasGiant' && newType === 'Star') {
-                const massInJupiters = object.massInJupiters || (object.mass / 50.0);
-                const massInSolarMasses = massInJupiters * 0.05;
+                // Use the new star object, not the old gas giant object
+                const starObject = state.selectedObject.object;
+                const massInSolarMasses = starObject.massInSuns || (starObject.mass / SOLAR_MASS_UNIT);
                 // Temporarily set the slider value to the correct star mass
                 setTimeout(() => {
                     const newSlider = document.getElementById('massSlider');
@@ -1452,6 +1409,11 @@ const setupMassSliderListeners = () => {
                 
                 // Show transformation notification
                 showTransformationNotification(type, newType);
+                
+                // Clear transformation flag after everything is set up
+                setTimeout(() => {
+                    state.isTransforming = false;
+                }, 200);
             }
             return; // Stop processing after transformation
         } else {
@@ -1572,8 +1534,10 @@ const updateObjectMass = (object, type, newMass) => {
             object.updateRadius(); // Update Schwarzschild radius
             break;
         case 'Star':
+            console.log(`DEBUG: Star mass update: newMass = ${newMass} solar masses`);
             object.mass = newMass * SOLAR_MASS_UNIT;
             object.massInSuns = newMass;
+            console.log(`DEBUG: Star mass updated: mass = ${object.mass} units, massInSuns = ${object.massInSuns}`);
             // Recalculate star properties based on mass
             object.radius = Math.pow(newMass, 0.8) * STAR_OBJ_RADIUS;
             object.temperature = 3000 + (newMass - 0.2) * 4000;
@@ -1581,6 +1545,7 @@ const updateObjectMass = (object, type, newMass) => {
             
             // Check if star should become a black hole (mass > 20 M☉)
             if (newMass > 20.0) {
+                console.log(`DEBUG: Star mass ${newMass} exceeds black hole threshold 20.0 - transforming to black hole`);
                 newType = 'BlackHole';
                 // Transform star to black hole
                 transformStarToBlackHole(object);
@@ -1785,9 +1750,10 @@ const transformGasGiantToStar = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     
     // Convert Jupiter masses to solar masses
-    // 1 Jupiter mass = 0.05 solar masses
+    // The simulation uses 50 units = 1 Jupiter mass, but we need to convert to real solar masses
+    // 1 Jupiter mass = 1/1047 solar masses (correct conversion)
     const massInJupiters = object.massInJupiters || (object.mass / 50.0);
-    const massInSolarMasses = massInJupiters * 0.05;
+    const massInSolarMasses = massInJupiters / 1047.0;
     
     // Create star with the converted mass in simulation units
     const star = new StarObject(pos, vel, massInSolarMasses);
@@ -1795,6 +1761,7 @@ const transformGasGiantToStar = (object) => {
     
     // Ensure the star has the correct mass properties
     star.massInSuns = massInSolarMasses;
+    star.mass = massInSolarMasses * SOLAR_MASS_UNIT;
     
     const ggIndex = gas_giants.indexOf(object);
     if (ggIndex !== -1) {
@@ -1857,7 +1824,6 @@ const transformCometToAsteroid = (object) => {
         }
     }
 };
-
 /**
  * Show a notification when an object transforms
  * @param {string} oldType - The previous object type
@@ -5086,11 +5052,26 @@ window.addEventListener('keydown', e => {
 // Button event handlers
 document.getElementById('inspectorClose').onclick = hideObjectInspector;
 
-// Initialize inspector minimize button
-const inspectorMinimizeBtn = document.getElementById('inspectorMinimize');
-if (inspectorMinimizeBtn) {
-    inspectorMinimizeBtn.onclick = toggleInspectorMinimize;
-}
+// Delete object functionality
+const deleteSelectedObject = () => {
+    if (state.selectedObject && state.selectedObject.object) {
+        const object = state.selectedObject.object;
+        const type = state.selectedObject.type;
+        
+        // Mark the object as dead so it gets removed in the next physics update
+        object.alive = false;
+        
+        // Close the inspector
+        hideObjectInspector();
+        
+        // Show a brief notification
+        console.log(`Deleted ${type}: ${object.id}`);
+    }
+};
+
+document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
+
+
 document.getElementById('settingsBtn').onclick = () => {
   buildSettingsMenu();
   document.getElementById('settingsPanel').classList.remove('hidden');
