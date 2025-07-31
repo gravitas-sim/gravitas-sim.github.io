@@ -2965,6 +2965,100 @@ const createKilonovaExplosion = (pos, mass) => {
   }
 };
 
+// Create smaller kilonova explosion for neutron star mergers that don't form black holes
+/**
+ * Create a smaller kilonova explosion when neutron stars merge but don't form a black hole
+ * @param {Object} pos - Position of the explosion
+ * @param {number} mass - Combined mass of the merging neutron stars
+ */
+const createSmallKilonovaExplosion = (pos, mass) => {
+  // Kilonova parameters based on mass (reduced intensity)
+  const massInSuns = mass / SOLAR_MASS_UNIT;
+  const explosionIntensity = Math.min(1.0, massInSuns / 3.0); // Reduced intensity for smaller explosions
+  
+  // Create smaller particle explosion
+  const particleCount = Math.floor(100 + massInSuns * 25); // 100-200 particles (half of full kilonova)
+  
+  for (let i = 0; i < particleCount; i++) {
+    // Random angle and speed for explosion
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units (reduced)
+    
+    const vel = {
+      x: speed * Math.cos(angle),
+      y: speed * Math.sin(angle)
+    };
+    
+    // Random position within explosion radius (smaller)
+    const radius = Math.random() * 30;
+    const spawnAngle = Math.random() * 2 * Math.PI;
+    const spawnPos = {
+      x: pos.x + radius * Math.cos(spawnAngle),
+      y: pos.y + radius * Math.sin(spawnAngle)
+    };
+    
+    // Kilonova colors: bright blue-white to orange-red (same as full kilonova)
+    const colors = [
+      'rgb(255, 255, 255)', // Pure white
+      'rgb(255, 255, 200)', // Bright yellow
+      'rgb(255, 200, 100)', // Orange
+      'rgb(255, 150, 50)',  // Bright orange
+      'rgb(255, 100, 0)',   // Red-orange
+      'rgb(200, 100, 255)', // Purple (r-process elements)
+      'rgb(100, 200, 255)'  // Blue (gamma rays)
+    ];
+    
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Create particle with kilonova properties (smaller sizes)
+    const particle = particlePool.getParticle(
+      spawnPos,
+      vel,
+      Math.random() * 2.0 + 1.5, // 1.5-3.5 second lifetime (shorter)
+      Math.random() * 10 + 6,    // 6-16 start size (smaller)
+      Math.random() * 2 + 1,     // 1-3 end size (smaller)
+      color
+    );
+    
+    // Add special kilonova glow effect (reduced intensity)
+    if (particle) {
+      particle.kilonova_glow = true;
+      particle.glow_intensity = Math.random() * 0.3 + 0.3; // Reduced glow
+    }
+  }
+  
+  // Create gravitational wave ripple effect (smaller)
+  gravity_ripples.push({
+    x: pos.x,
+    y: pos.y,
+    time: Date.now(),
+    created: performance.now(),
+    duration: 2000, // 2 seconds (shorter than full kilonova)
+    mass: massInSuns,
+    gw_strength: 0.2, // Reduced strength
+    kilonova: true // Special flag for kilonova GW
+  });
+  
+  // Create smaller shockwave effect
+  for (let i = 0; i < 25; i++) { // Half the shockwave particles
+    const angle = (i / 25) * 2 * Math.PI;
+    const speed = 100 + Math.random() * 75; // Reduced speed
+    const vel = {
+      x: speed * Math.cos(angle),
+      y: speed * Math.sin(angle)
+    };
+    
+    particlePool.getParticle(
+      pos,
+      vel,
+      Math.random() * 1.5 + 0.8, // 0.8-2.3 second lifetime (shorter)
+      Math.random() * 6 + 3,     // 3-9 start size (smaller)
+      Math.random() * 1.5 + 0.5, // 0.5-2 end size (smaller)
+      'rgb(255, 255, 255)'       // White shockwave
+    );
+  }
+};
+
 // Create neutron star-white dwarf merger explosion
 /**
  * Create a moderate explosion when neutron star and white dwarf merge
@@ -3275,7 +3369,7 @@ const handle_star_merging = (stars_list) => {
               const is_ns_ns_merger = star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
               
               if (is_ns_ns_merger) {
-                // Create spectacular kilonova explosion
+                // Create spectacular kilonova explosion for black hole formation
                 createKilonovaExplosion(new_pos, new_mass);
               }
               
@@ -3298,14 +3392,22 @@ const handle_star_merging = (stars_list) => {
               }
             } else {
               // Stays as neutron star
-              // Check if this is a neutron star-white dwarf merger
-              const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
-                                     (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
+              // Check if this is a neutron star-neutron star merger (smaller kilonova)
+              const is_ns_ns_merger = star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
               
-              if (is_ns_wd_merger) {
-                // Create neutron star-white dwarf merger explosion
-                console.log('NS-WD merger detected in neutron star section! Mass:', new_mass_in_suns, 'solar masses');
-                createNSWDExplosion(new_pos, new_mass);
+              if (is_ns_ns_merger) {
+                // Create smaller kilonova explosion for neutron star formation
+                createSmallKilonovaExplosion(new_pos, new_mass);
+              } else {
+                // Check if this is a neutron star-white dwarf merger
+                const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
+                                       (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
+                
+                if (is_ns_wd_merger) {
+                  // Create neutron star-white dwarf merger explosion
+                  console.log('NS-WD merger detected in neutron star section! Mass:', new_mass_in_suns, 'solar masses');
+                  createNSWDExplosion(new_pos, new_mass);
+                }
               }
               
               new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
