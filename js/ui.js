@@ -31,10 +31,22 @@ import {
   setStateReference,
   particlePool,
   findObjectAtPosition,
+  // Energy calculation functions
+  getObjectEnergyData,
+  calculateObjectEnergy,
+  getAllPhysicsObjects,
 } from './physics.js';
 
 import { worldToScreen } from './utils.js';
 import { generateStarfield } from './render.js';
+import { 
+  initializeEnergyChart, 
+  updateEnergyChart as updateEnergyChartData, 
+  clearEnergyChart, 
+  destroyEnergyChart, 
+  exportEnergyChartAsImage,
+  getEnergyChart
+} from './energyChart.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -763,7 +775,6 @@ const getCometInfo = (comet) => {
  * @param {string} type - Type of object (BlackHole, Star, Planet, etc.)
  */
 const showObjectInspector = (object, type) => {
-    console.log('showObjectInspector called with:', type, object);
     
     // Check if splash screen is still active using both the global flag and our state variable
     if (!window.splashScreenEnded || window.isSplashActive) {
@@ -831,10 +842,10 @@ const showObjectInspector = (object, type) => {
         }
         
         const inspectorTitle = document.getElementById('inspectorTitle');
-        const inspectorContent = document.getElementById('inspectorContent');
+        const detailsTabContent = document.getElementById('detailsTab');
         
-        if (!inspectorTitle || !inspectorContent) {
-            console.error('Inspector title or content elements not found!');
+        if (!inspectorTitle || !detailsTabContent) {
+            console.error('Inspector title or details tab content elements not found!');
             return;
         }
         
@@ -846,8 +857,16 @@ const showObjectInspector = (object, type) => {
                            (state.selectedObject && state.selectedObject.object && 
                             existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
         
-        if (isNewObject) {
-            console.log('Creating new inspector content for object:', object.id);
+        // Don't recreate inspector if it's just a mass update (to preserve energy chart)
+        const isMassUpdate = existingMassSlider && 
+                            state.selectedObject && 
+                            state.selectedObject.object && 
+                            existingMassSlider.dataset.objectId === state.selectedObject.object.id &&
+                            Math.abs(parseFloat(existingMassSlider.value) - state.selectedObject.object.mass) < 0.1;
+        
+        if (isNewObject && !isMassUpdate) {
+            // Reset energy log when switching to a new object
+            state.energyLog = [];
             // New object selected - recreate the entire inspector
             let content = '';
             
@@ -868,7 +887,17 @@ const showObjectInspector = (object, type) => {
             });
             
             content += `<div class="object-description">${info.description}</div>`;
-            inspectorContent.innerHTML = content;
+            
+                    // Preserve the energy tab content when recreating inspector
+        const energyTabContent = document.getElementById('energyTab');
+        const energyTabHTML = energyTabContent ? energyTabContent.innerHTML : '';
+        
+        detailsTabContent.innerHTML = content;
+        
+        // Restore energy tab content if it exists
+        if (energyTabContent && energyTabHTML) {
+            energyTabContent.innerHTML = energyTabHTML;
+        }
             
             // Set up mass slider event listeners
             setupMassSliderListeners();
@@ -878,10 +907,16 @@ const showObjectInspector = (object, type) => {
             if (newMassSlider && state.selectedObject.object) {
                 newMassSlider.dataset.objectId = state.selectedObject.object.id || 'unknown';
             }
+        } else if (isNewObject && isMassUpdate) {
+            // Just update the mass slider value without recreating the inspector
+            const existingMassSlider = document.getElementById('massSlider');
+            if (existingMassSlider) {
+                existingMassSlider.value = state.selectedObject.object.mass;
+            }
         } else {
             // Real-time update - only update stats and description, preserve the slider
-            const statRows = inspectorContent.querySelectorAll('.stat-row');
-            const description = inspectorContent.querySelector('.object-description');
+            const statRows = detailsTabContent.querySelectorAll('.stat-row');
+            const description = detailsTabContent.querySelector('.object-description');
             
             // Update stats
             info.stats.forEach((stat, index) => {
@@ -897,6 +932,12 @@ const showObjectInspector = (object, type) => {
             if (description) {
                 description.innerHTML = info.description;
             }
+        }
+        
+        // Update energy chart if energy tab is active
+        const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+        if (energyTab && energyTab.classList.contains('active')) {
+            updateEnergyChart();
         }
     };
     
@@ -940,6 +981,9 @@ const showObjectInspector = (object, type) => {
         setupInspectorDragging();
     }, 50);
     
+    // Set up energy tab functionality
+    setupEnergyTab();
+    
     // Update cursor state
     updateInspectorCursor();
     
@@ -948,14 +992,11 @@ const showObjectInspector = (object, type) => {
 };
 
 const hideObjectInspector = () => {
-    console.log('hideObjectInspector called');
     const objectInspector = document.getElementById('objectInspector');
     if (!objectInspector) {
         console.error('objectInspector element not found when trying to hide!');
         return;
     }
-    
-    console.log('Removing visible class and closing inspector');
     objectInspector.classList.remove('visible');
     objectInspector.classList.remove('dragging');
     state.inspector_open = false;
@@ -976,7 +1017,6 @@ const hideObjectInspector = () => {
         state.inspectorUpdateInterval = null;
     }
     state.selectedObject = null;
-    console.log('Inspector should now be hidden');
 };
 
 // Add mobile-friendly backdrop click to close functionality
@@ -1029,6 +1069,192 @@ const setupInspectorDragging = () => {
     inspectorHeader.addEventListener('touchstart', startDragTouch, { passive: false }); // passive: false is required because startDragTouch calls preventDefault
     document.addEventListener('touchmove', dragTouch);
     document.addEventListener('touchend', endDrag);
+};
+
+// Energy chart functionality
+const setupEnergyTab = () => {
+    const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+    const detailsTab = document.querySelector('.inspector-tab[data-tab="details"]');
+    const energyTabContent = document.getElementById('energyTab');
+    const detailsTabContent = document.getElementById('detailsTab');
+    const exportButton = document.getElementById('exportEnergyChart');
+    
+
+    
+    if (!energyTab || !detailsTab || !energyTabContent || !detailsTabContent) return;
+    
+    // Initialize Chart.js energy chart only if not already initialized
+    const canvas = document.getElementById('energyChart');
+    if (canvas) {
+        const existingChart = getEnergyChart();
+        if (!existingChart) {
+            console.log('Initializing energy chart in setupEnergyTab');
+            // Add a small delay to ensure container is properly sized
+            setTimeout(() => {
+                initializeEnergyChart(canvas);
+            }, 100);
+        }
+    }
+    
+    // Tab switching
+    energyTab.addEventListener('click', () => {
+        energyTab.classList.add('active');
+        detailsTab.classList.remove('active');
+        energyTabContent.classList.add('active');
+        detailsTabContent.classList.remove('active');
+        
+        // Ensure chart is initialized when energy tab is clicked
+        const canvas = document.getElementById('energyChart');
+        if (canvas) {
+            const existingChart = getEnergyChart();
+            if (!existingChart) {
+                initializeEnergyChart(canvas);
+            }
+        }
+        
+        updateEnergyChart();
+    });
+    
+    detailsTab.addEventListener('click', () => {
+        detailsTab.classList.add('active');
+        energyTab.classList.remove('active');
+        detailsTabContent.classList.add('active');
+        energyTabContent.classList.remove('active');
+    });
+    
+    // Export functionality
+    if (exportButton) {
+        exportButton.addEventListener('click', exportEnergyChart);
+    }
+};
+
+
+
+const updateEnergyChart = () => {
+    if (!state.selectedObject) return;
+    
+    const energyData = getObjectEnergyData(state.selectedObject.object.id);
+    
+    console.log('Energy data for object:', state.selectedObject.object.id, energyData);
+    
+    // Update energy statistics display
+    updateEnergyStats();
+    
+    // Convert data format to match Chart.js expectations
+    const chartData = energyData.map(point => ({
+        timestamp: point.timestamp,
+        kinetic: point.kinetic,
+        potential: point.potential,
+        total: point.total
+    }));
+    
+    console.log('Chart data:', chartData);
+    
+    // Update Chart.js with new data (handles empty data gracefully)
+    const startTime = chartData.length > 0 ? chartData[0].timestamp : 0;
+    updateEnergyChartData(chartData, startTime);
+};
+
+const updateEnergyStats = () => {
+    if (!state.selectedObject) return;
+    
+    const energyData = getObjectEnergyData(state.selectedObject.object.id);
+    const energyTabContent = document.getElementById('energyTab');
+    
+    if (!energyTabContent) return;
+    
+    // Find or create energy stats container
+    let energyStats = energyTabContent.querySelector('.energy-stats');
+    if (!energyStats) {
+        energyStats = document.createElement('div');
+        energyStats.className = 'energy-stats';
+        energyTabContent.insertBefore(energyStats, energyTabContent.querySelector('.energy-chart-container'));
+    }
+    
+    if (energyData.length === 0) {
+        energyStats.innerHTML = `
+            <div class="energy-stat">
+                <div class="energy-stat-label">No Data</div>
+                <div class="energy-stat-value">Collecting...</div>
+            </div>
+        `;
+        return;
+    }
+    
+    // Get latest energy values
+    const latest = energyData[energyData.length - 1];
+    
+    // Format energy values for astrophysical scales
+    const formatEnergy = (value) => {
+        if (Math.abs(value) >= 1e42) {
+            return (value / 1e42).toFixed(2) + ' × 10⁴² J';
+        } else if (Math.abs(value) >= 1e39) {
+            return (value / 1e39).toFixed(2) + ' × 10³⁹ J';
+        } else if (Math.abs(value) >= 1e36) {
+            return (value / 1e36).toFixed(2) + ' × 10³⁶ J';
+        } else if (Math.abs(value) >= 1e33) {
+            return (value / 1e33).toFixed(2) + ' × 10³³ J';
+        } else if (Math.abs(value) >= 1e30) {
+            return (value / 1e30).toFixed(2) + ' × 10³⁰ J';
+        } else if (Math.abs(value) >= 1e27) {
+            return (value / 1e27).toFixed(2) + ' × 10²⁷ J';
+        } else if (Math.abs(value) >= 1e24) {
+            return (value / 1e24).toFixed(2) + ' × 10²⁴ J';
+        } else if (Math.abs(value) >= 1e21) {
+            return (value / 1e21).toFixed(2) + ' × 10²¹ J';
+        } else if (Math.abs(value) >= 1e18) {
+            return (value / 1e18).toFixed(2) + ' × 10¹⁸ J';
+        } else if (Math.abs(value) >= 1e15) {
+            return (value / 1e15).toFixed(2) + ' × 10¹⁵ J';
+        } else if (Math.abs(value) >= 1e12) {
+            return (value / 1e12).toFixed(2) + ' × 10¹² J';
+        } else if (Math.abs(value) >= 1e9) {
+            return (value / 1e9).toFixed(2) + ' × 10⁹ J';
+        } else if (Math.abs(value) >= 1e6) {
+            return (value / 1e6).toFixed(2) + ' × 10⁶ J';
+        } else if (Math.abs(value) >= 1e3) {
+            return (value / 1e3).toFixed(2) + ' × 10³ J';
+        } else {
+            return value.toFixed(2) + ' J';
+        }
+    };
+    
+    energyStats.innerHTML = `
+        <div class="energy-stat">
+            <div class="energy-stat-label">Kinetic Energy</div>
+            <div class="energy-stat-value">${formatEnergy(latest.kinetic)} J</div>
+        </div>
+        <div class="energy-stat">
+            <div class="energy-stat-label">Potential Energy</div>
+            <div class="energy-stat-value">${formatEnergy(latest.potential)} J</div>
+        </div>
+        <div class="energy-stat">
+            <div class="energy-stat-label">Total Energy</div>
+            <div class="energy-stat-value">${formatEnergy(latest.total)} J</div>
+        </div>
+        <div class="energy-stat">
+            <div class="energy-stat-label">Data Points</div>
+            <div class="energy-stat-value">${energyData.length}</div>
+        </div>
+    `;
+};
+
+const exportEnergyChart = () => {
+    const dataUrl = exportEnergyChartAsImage();
+    if (!dataUrl) {
+        alert('Energy chart is not ready yet.');
+        return;
+    }
+    
+    try {
+        const link = document.createElement('a');
+        link.download = `energy-chart-${state.selectedObject.object.id}-${Date.now()}.png`;
+        link.href = dataUrl;
+        link.click();
+    } catch (error) {
+        console.error('Failed to export energy chart:', error);
+        alert('Failed to export chart. Please try again.');
+    }
 };
 
 // Update cursor based on minimized state

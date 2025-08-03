@@ -595,6 +595,11 @@ const updatePhysics = dt => {
     state.pan.x = -target.pos.x * state.zoom;
     state.pan.y = target.pos.y * state.zoom;
   }
+  
+  // Update energy data for all objects (sample every 10 frames for performance)
+  if (state && state.frame_count % ENERGY_SAMPLE_RATE === 0) {
+    updateEnergyData();
+  }
 };
 
 // Base PhysicsObject class
@@ -652,6 +657,8 @@ class PhysicsObject {
         this.alive = false;
         bh.mass += this.mass || 0;
         bh.updateRadius();
+        // Clear energy data for absorbed object
+        clearObjectEnergyData(this.id);
         return true;
       }
     }
@@ -4039,6 +4046,16 @@ export {
   setPhysicsObjectCounter,
   updatePhysicsSettings,
   setStateReference,
+  // Energy calculation functions
+  calculateKineticEnergy,
+  calculateGravitationalPotentialEnergy,
+  calculateTotalPotentialEnergy,
+  calculateObjectEnergy,
+  getAllPhysicsObjects,
+  updateEnergyData,
+  getObjectEnergyData,
+  clearObjectEnergyData,
+  clearAllEnergyData,
 };
 
 // Helper: Wrap BlackHole as PhysicsObject-like for merging
@@ -4053,3 +4070,170 @@ function asPhysicsObject(bh) {
     _bh_ref: bh // Keep reference to real BlackHole
   };
 }
+
+// Energy calculation constants
+const G = 6.67430e-11; // Gravitational constant in SI units (m³/kg/s²)
+const ENERGY_SAMPLE_RATE = 10; // Sample energy every 10 frames (100ms at 60fps)
+
+// Astrophysical constants for realistic energy calculations
+const SOLAR_MASS_KG = 1.989e30; // Solar mass in kg
+const EARTH_MASS_KG = 5.972e24; // Earth mass in kg
+const AU_METERS = 1.496e11; // Astronomical Unit in meters
+const KM_TO_M = 1000; // Kilometers to meters
+
+// Conversion factors for simulation units to SI units
+const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // Convert simulation mass units to kg
+const VELOCITY_UNIT_TO_MS = 1000; // Convert simulation velocity units to m/s (estimated)
+const DISTANCE_UNIT_TO_M = AU_METERS / 100; // Convert simulation distance units to meters (estimated)
+
+// Energy tracking for objects
+const energyData = new Map(); // Map of object ID to energy history
+
+/**
+ * Calculate kinetic energy of an object
+ * @param {Object} object - Physics object with mass, velocity
+ * @returns {number} Kinetic energy in joules
+ */
+const calculateKineticEnergy = (object) => {
+  const velocity = Math.sqrt(object.vel.x * object.vel.x + object.vel.y * object.vel.y);
+  // Convert simulation units to SI units for realistic energy calculation
+  const massKg = object.mass * MASS_UNIT_TO_KG;
+  const velocityMs = velocity * VELOCITY_UNIT_TO_MS;
+  return 0.5 * massKg * velocityMs * velocityMs;
+};
+
+/**
+ * Calculate gravitational potential energy between two objects
+ * @param {Object} obj1 - First physics object
+ * @param {Object} obj2 - Second physics object
+ * @param {number} distance - Distance between objects
+ * @returns {number} Gravitational potential energy in joules
+ */
+const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
+  if (distance === 0) return 0; // Avoid division by zero
+  // Convert simulation units to SI units for realistic energy calculation
+  const mass1Kg = obj1.mass * MASS_UNIT_TO_KG;
+  const mass2Kg = obj2.mass * MASS_UNIT_TO_KG;
+  const distanceM = distance * DISTANCE_UNIT_TO_M;
+  return -G * mass1Kg * mass2Kg / distanceM;
+};
+
+/**
+ * Calculate total gravitational potential energy for an object relative to all other objects
+ * @param {Object} object - Physics object to calculate potential energy for
+ * @param {Array} allObjects - Array of all physics objects
+ * @returns {number} Total gravitational potential energy in joules
+ */
+const calculateTotalPotentialEnergy = (object, allObjects) => {
+  let totalPotentialEnergy = 0;
+  
+  for (const otherObject of allObjects) {
+    if (otherObject.id === object.id) continue; // Skip self
+    
+    const dx = object.pos.x - otherObject.pos.x;
+    const dy = object.pos.y - otherObject.pos.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distance > 0) {
+      totalPotentialEnergy += calculateGravitationalPotentialEnergy(object, otherObject, distance);
+    }
+  }
+  
+  return totalPotentialEnergy;
+};
+
+/**
+ * Calculate total energy (kinetic + potential) for an object
+ * @param {Object} object - Physics object
+ * @param {Array} allObjects - Array of all physics objects
+ * @returns {Object} Object containing kinetic, potential, and total energy
+ */
+const calculateObjectEnergy = (object, allObjects) => {
+  const kineticEnergy = calculateKineticEnergy(object);
+  const potentialEnergy = calculateTotalPotentialEnergy(object, allObjects);
+  const totalEnergy = kineticEnergy + potentialEnergy;
+  
+  return {
+    kinetic: kineticEnergy,
+    potential: potentialEnergy,
+    total: totalEnergy,
+    timestamp: performance.now()
+  };
+};
+
+/**
+ * Get all physics objects as a flat array
+ * @returns {Array} Array of all physics objects
+ */
+const getAllPhysicsObjects = () => {
+  return [
+    ...bh_list,
+    ...planets,
+    ...stars,
+    ...gas_giants,
+    ...asteroids,
+    ...comets,
+    ...debris,
+    ...neutron_stars,
+    ...white_dwarfs
+  ];
+};
+
+/**
+ * Update energy data for all objects
+ * Called during the physics update loop
+ */
+const updateEnergyData = () => {
+  const allObjects = getAllPhysicsObjects();
+  
+  for (const object of allObjects) {
+    if (!energyData.has(object.id)) {
+      energyData.set(object.id, []);
+    }
+    
+    const energyHistory = energyData.get(object.id);
+    const energy = calculateObjectEnergy(object, allObjects);
+    
+    // Add new energy data point
+    energyHistory.push(energy);
+    
+    // Keep only last 1000 data points to prevent memory issues
+    if (energyHistory.length > 1000) {
+      energyHistory.shift();
+    }
+  }
+  
+  // Debug: Log energy data for first few objects (only every 100 frames to avoid spam)
+  if (allObjects.length > 0 && state && state.frame_count % 100 === 0) {
+    const firstObject = allObjects[0];
+    const firstObjectEnergy = energyData.get(firstObject.id);
+    if (firstObjectEnergy && firstObjectEnergy.length > 0) {
+      console.log('Energy data sample for object', firstObject.id, ':', firstObjectEnergy[firstObjectEnergy.length - 1]);
+      console.log('Total energy data points for object', firstObject.id, ':', firstObjectEnergy.length);
+    }
+  }
+};
+
+/**
+ * Get energy data for a specific object
+ * @param {string} objectId - ID of the object
+ * @returns {Array} Array of energy data points
+ */
+const getObjectEnergyData = (objectId) => {
+  return energyData.get(objectId) || [];
+};
+
+/**
+ * Clear energy data for a specific object
+ * @param {string} objectId - ID of the object
+ */
+const clearObjectEnergyData = (objectId) => {
+  energyData.delete(objectId);
+};
+
+/**
+ * Clear all energy data
+ */
+const clearAllEnergyData = () => {
+  energyData.clear();
+};

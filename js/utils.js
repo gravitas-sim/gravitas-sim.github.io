@@ -709,6 +709,79 @@ export const deepClone = obj => {
 };
 
 // =============================================================================
+// ENERGY CALCULATIONS
+// =============================================================================
+
+/**
+ * Calculate kinetic energy of a body
+ * @param {Object} body - The body with mass and velocity properties
+ * @returns {number} Kinetic energy
+ */
+export const kineticEnergy = (body) => {
+  const velocity = Math.sqrt(body.vel.x * body.vel.x + body.vel.y * body.vel.y);
+  return 0.5 * body.mass * velocity * velocity;
+};
+
+/**
+ * Calculate gravitational potential energy between two bodies
+ * @param {Object} body1 - First body
+ * @param {Object} body2 - Second body
+ * @returns {number} Gravitational potential energy
+ */
+export const potentialEnergyPair = (body1, body2) => {
+  const dx = body1.pos.x - body2.pos.x;
+  const dy = body1.pos.y - body2.pos.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  if (distance === 0) return 0; // Avoid division by zero
+  return -CONSTANTS.GRAVITATIONAL_CONSTANT * body1.mass * body2.mass / distance;
+};
+
+/**
+ * Calculate total system energy (kinetic + potential)
+ * @param {Array} bodies - Array of all bodies in the simulation
+ * @returns {number} Total system energy
+ */
+export const totalSystemEnergy = (bodies) => {
+  let totalEnergy = 0;
+  
+  // Add kinetic energy of all bodies
+  for (let i = 0; i < bodies.length; i++) {
+    totalEnergy += kineticEnergy(bodies[i]);
+  }
+  
+  // Add potential energy between all pairs (each pair counted once)
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = i + 1; j < bodies.length; j++) {
+      totalEnergy += potentialEnergyPair(bodies[i], bodies[j]);
+    }
+  }
+  
+  return totalEnergy;
+};
+
+/**
+ * Calculate the total energy for a single body relative to all other bodies.
+ * This returns an object with ke, pe and total properties.
+ * Potential energy is assigned half of each pair's potential to avoid double-counting.
+ * @param {Object} body - The body whose energy to compute
+ * @param {Array} bodies - All bodies in the simulation
+ * @returns {{ke: number, pe: number, total: number}}
+ */
+export const totalEnergyForBody = (body, bodies) => {
+  // Kinetic energy of the selected body
+  const ke = kineticEnergy(body);
+  let pe = 0;
+  // Sum the potential energy contributions from all other bodies
+  for (let i = 0; i < bodies.length; i++) {
+    const other = bodies[i];
+    if (other === body) continue;
+    // Divide by 2 so that summing energies of all bodies yields the system's potential energy
+    pe += potentialEnergyPair(body, other) / 2;
+  }
+  return { ke, pe, total: ke + pe };
+};
+
+// =============================================================================
 // CONSTANTS
 // =============================================================================
 

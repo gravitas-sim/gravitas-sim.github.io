@@ -17,7 +17,7 @@ import {
   world_to_screen,
   findObjectAtPosition,
 } from './physics.js';
-import { hexToRgb } from './utils.js';
+import { hexToRgb, totalSystemEnergy, totalEnergyForBody } from './utils.js';
 import { SETTINGS, state, showObjectInspector, hideObjectInspector } from './ui.js';
 
 const canvas = document.getElementById('simulationCanvas');
