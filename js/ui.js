@@ -37,6 +37,7 @@ import {
   clearAllEnergyHistory,
   calculateObjectEnergy,
   getAllPhysicsObjects,
+  getObjectEnergyStats,
 } from './physics.js';
 
 import { worldToScreen } from './utils.js';
@@ -926,6 +927,7 @@ const showObjectInspector = (object, type) => {
         const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
         if (energyTab && energyTab.classList.contains('active')) {
             updateEnergyChart();
+            updateCurrentEnergyValues();
         }
     };
     
@@ -937,6 +939,9 @@ const showObjectInspector = (object, type) => {
     
     // Initial update
     updateInspector();
+    
+    // Update current energy values immediately (even if energy tab isn't active)
+    updateCurrentEnergyValues();
     
     // Set up auto-update interval
     state.inspectorUpdateInterval = setInterval(updateInspector, 100); // Update 10 times per second
@@ -977,6 +982,7 @@ const showObjectInspector = (object, type) => {
     setTimeout(() => {
         ensureChartReady();
         updateEnergyChart();
+        updateCurrentEnergyValues();
     }, 100); // Small delay to ensure DOM elements are ready
     
     // Update cursor state
@@ -1117,6 +1123,28 @@ const setupEnergyTab = () => {
     
     // Build energy tab HTML structure
     energyTabContent.innerHTML = `
+        <!-- Current Energy Values Display -->
+        <div class="energy-values-container">
+            <div class="energy-values-grid">
+                <div class="energy-value-box">
+                    <div class="energy-value-label">KINETIC ENERGY</div>
+                    <div class="energy-value-display" id="currentKineticEnergy">0 J</div>
+                </div>
+                <div class="energy-value-box">
+                    <div class="energy-value-label">POTENTIAL ENERGY</div>
+                    <div class="energy-value-display" id="currentPotentialEnergy">0 J</div>
+                </div>
+                <div class="energy-value-box">
+                    <div class="energy-value-label">TOTAL ENERGY</div>
+                    <div class="energy-value-display" id="currentTotalEnergy">0 J</div>
+                </div>
+                <div class="energy-value-box">
+                    <div class="energy-value-label">DATA POINTS</div>
+                    <div class="energy-value-display" id="currentDataPoints">0</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="energy-chart-container">
             <canvas id="energyChart" width="500" height="300"></canvas>
         </div>
@@ -1137,6 +1165,9 @@ const setupEnergyTab = () => {
         // Initialize chart if needed
         ensureChartReady();
         
+        // Update current energy values immediately
+        updateCurrentEnergyValues();
+        
         // Update chart with current object data
         updateEnergyChart();
         
@@ -1148,6 +1179,7 @@ const setupEnergyTab = () => {
             if (state.selectedObject) {
                 console.log('Forcing chart update after tab activation');
                 updateEnergyChart();
+                updateCurrentEnergyValues();
             }
         }, 50);
     });
@@ -1205,6 +1237,66 @@ const ensureChartReady = () => {
         } else {
             console.error('Failed to initialize energy chart');
         }
+    }
+};
+
+/**
+ * Update the current energy values display
+ */
+const updateCurrentEnergyValues = () => {
+    if (!state.selectedObject) {
+        // Clear all energy value displays
+        const elements = ['currentKineticEnergy', 'currentPotentialEnergy', 'currentTotalEnergy', 'currentDataPoints'];
+        elements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = id === 'currentDataPoints' ? '0' : '0 J';
+            }
+        });
+        return;
+    }
+    
+    const objectId = state.selectedObject.object.id;
+    const energyStats = getObjectEnergyStats(objectId);
+    
+    // Format energy values for display
+    const formatEnergyValue = (value) => {
+        if (value === 0) return '0 J';
+        
+        const absValue = Math.abs(value);
+        if (absValue >= 1e6 || absValue < 1e-3) {
+            return `${value.toExponential(2)} J`;
+        } else if (absValue >= 1000) {
+            return `${value.toFixed(0)} J`;
+        } else if (absValue >= 1) {
+            return `${value.toFixed(1)} J`;
+        } else {
+            return `${value.toFixed(3)} J`;
+        }
+    };
+    
+    // Update kinetic energy
+    const kineticElement = document.getElementById('currentKineticEnergy');
+    if (kineticElement && energyStats.latest) {
+        kineticElement.textContent = formatEnergyValue(energyStats.latest.ke);
+    }
+    
+    // Update potential energy
+    const potentialElement = document.getElementById('currentPotentialEnergy');
+    if (potentialElement && energyStats.latest) {
+        potentialElement.textContent = formatEnergyValue(energyStats.latest.pe);
+    }
+    
+    // Update total energy
+    const totalElement = document.getElementById('currentTotalEnergy');
+    if (totalElement && energyStats.latest) {
+        totalElement.textContent = formatEnergyValue(energyStats.latest.total);
+    }
+    
+    // Update data points count
+    const dataPointsElement = document.getElementById('currentDataPoints');
+    if (dataPointsElement) {
+        dataPointsElement.textContent = energyStats.dataPoints.toString();
     }
 };
 
@@ -1314,6 +1406,7 @@ const startAutoRefresh = () => {
             const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
             if (energyTab && energyTab.classList.contains('active')) {
                 updateEnergyChart();
+                updateCurrentEnergyValues();
             }
         }
     }, AUTO_REFRESH_INTERVAL);
@@ -1358,6 +1451,9 @@ const handleRefreshChart = () => {
     
     // Update the chart
     updateEnergyChart();
+    
+    // Update current energy values
+    updateCurrentEnergyValues();
     
     // Provide visual feedback
     const refreshButton = document.getElementById('refreshEnergyChart');
