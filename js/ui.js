@@ -872,12 +872,16 @@ const showObjectInspector = (object, type) => {
             const massSlider = createMassSlider(state.selectedObject.object, state.selectedObject.type);
             content += massSlider;
             
+            // Add tooltip for mass slider
+            content += '<div class="mass-slider-tooltip" title="Drag to change the object\'s mass. Higher mass = stronger gravity and more influence on other objects. Some objects may transform when mass changes significantly.">💡 Hover for mass adjustment tips</div>';
+            
             // Add separator
             content += '<div class="stat-separator"></div>';
             
             info.stats.forEach(stat => {
+                const tooltip = getStatTooltip(stat.label, state.selectedObject.type);
                 content += `
-                    <div class="stat-row">
+                    <div class="stat-row" ${tooltip ? `title="${tooltip}"` : ''}>
                         <span class="stat-label">${stat.label}:</span>
                         <span class="stat-value">${stat.value}</span>
                     </div>
@@ -1126,19 +1130,19 @@ const setupEnergyTab = () => {
         <!-- Current Energy Values Display -->
         <div class="energy-values-container">
             <div class="energy-values-grid">
-                <div class="energy-value-box">
+                <div class="energy-value-box" title="Energy of motion. Depends on the object's mass and velocity. Higher velocity = more kinetic energy.">
                     <div class="energy-value-label">KINETIC ENERGY</div>
                     <div class="energy-value-display" id="currentKineticEnergy">0 J</div>
                 </div>
-                <div class="energy-value-box">
+                <div class="energy-value-box" title="Energy due to gravitational position. More negative = deeper in gravitational well. Closer to massive objects = lower (more negative) potential energy.">
                     <div class="energy-value-label">POTENTIAL ENERGY</div>
                     <div class="energy-value-display" id="currentPotentialEnergy">0 J</div>
                 </div>
-                <div class="energy-value-box">
+                <div class="energy-value-box" title="Sum of kinetic and potential energy. In a closed system, this should remain constant (conservation of energy).">
                     <div class="energy-value-label">TOTAL ENERGY</div>
                     <div class="energy-value-display" id="currentTotalEnergy">0 J</div>
                 </div>
-                <div class="energy-value-box">
+                <div class="energy-value-box" title="Number of energy measurements recorded for this object. More data points = smoother chart and better trend analysis.">
                     <div class="energy-value-label">DATA POINTS</div>
                     <div class="energy-value-display" id="currentDataPoints">0</div>
                 </div>
@@ -6651,6 +6655,51 @@ function placeWithSeparation(objects, createCandidate, minDist, maxTries = 30) {
   }
   // If no valid position found, return null
   return null;
+}
+
+// Helper: Get tooltip text for object properties
+function getStatTooltip(statLabel, objectType) {
+  const tooltips = {
+    'Mass': 'Total mass. Determines gravitational strength and orbital dynamics.',
+    'Radius': 'Physical size. Affects collision detection and visual appearance.',
+    'Position': 'Current location in simulation space (x, y coordinates).',
+    'Velocity': 'Speed and direction of movement. Determines kinetic energy and trajectory.',
+    'Speed': 'Magnitude of velocity (how fast the object is moving).',
+    'Distance': 'Distance from center of simulation or reference point.',
+    'Orbital Period': 'Time for one complete orbit around primary object.',
+    'Escape Velocity': 'Minimum speed needed to escape gravitational influence.',
+    'Surface Gravity': 'Gravitational acceleration at object\'s surface.',
+    'Density': 'Mass per unit volume. Determines how compact the object is.',
+    'Temperature': 'Surface temperature (for stars and some planets).',
+    'Surface Temperature': 'Temperature at star\'s surface. Determines color and spectral type.',
+    'Luminosity': 'Total energy output per second (for stars).',
+    'Age': 'How long the object has existed in simulation.',
+    'Life Expectancy': 'Estimated remaining lifetime (for stars).',
+    'Lifespan': 'Total expected lifetime of the star. More massive stars live shorter lives.',
+    'Spectral Type': 'Star classification (O, B, A, F, G, K, M). Based on temperature and color.',
+    'Event Horizon': 'Boundary around black hole from which nothing can escape.',
+    'Schwarzschild Radius': 'Event horizon radius. Point of no return where escape velocity equals light speed.',
+    'Escape Velocity at Rs': 'Escape speed at Schwarzschild radius. Always equals light speed (100%).',
+    'Average Density': 'Mass per volume within event horizon. Extremely high density.',
+    'Hawking Temperature': 'Temperature of Hawking radiation. Smaller black holes are hotter.',
+    'Hawking Lifetime': 'Time until complete evaporation via Hawking radiation. Larger holes live longer.',
+    'ISCO Period': 'Orbital period at Innermost Stable Circular Orbit (3x Schwarzschild radius).',
+    'Type': 'Classification: Primordial, Stellar-Mass, Intermediate, or Supermassive.',
+    'Accretion Rate': 'Rate at which matter falls into a black hole.',
+    'Spin': 'Rotational angular momentum of the object.',
+    'Magnetic Field': 'Strength of the object\'s magnetic field.',
+    'Atmosphere': 'Presence and composition of gaseous envelope.',
+    'Composition': 'Chemical makeup of the object\'s material.',
+    'Trail Length': 'Number of positions recorded in the object\'s motion trail.',
+    'Collision Count': 'Number of times this object has collided with others.',
+    'Energy': 'Total mechanical energy (kinetic + potential).',
+    'Angular Momentum': 'Rotational momentum around the object\'s axis.',
+    'Tidal Force': 'Gravitational force gradient across the object.',
+    'Roche Limit': 'Distance at which tidal forces would break apart the object.',
+    'Hill Sphere': 'Region where the object\'s gravity dominates over other bodies.'
+  };
+  
+  return tooltips[statLabel] || null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

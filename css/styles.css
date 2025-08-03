@@ -3519,3 +3519,92 @@ html, body {
         font-size: 13px;
     }
 }
+
+/* Enhanced tooltip styling */
+.stat-row[title]:hover,
+.energy-value-box[title]:hover,
+.mass-slider-tooltip[title]:hover {
+    cursor: help;
+    position: relative;
+}
+
+.stat-row[title]:hover::after,
+.energy-value-box[title]:hover::after,
+.mass-slider-tooltip[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
+    background: rgba(15, 15, 35, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: normal;
+    max-width: 250px;
+    min-width: 150px;
+    text-align: center;
+    line-height: 1.4;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 170, 255, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.stat-row[title]:hover::after,
+.energy-value-box[title]:hover::after,
+.mass-slider-tooltip[title]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Ensure tooltips don't go off-screen */
+.stat-row[title]:hover::after {
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Adjust positioning for energy value boxes to prevent overflow */
+.energy-value-box[title]:hover::after {
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    max-width: 200px;
+    bottom: auto;
+    top: 120%; /* Position tooltip below the energy value box instead of above */
+    z-index: 1001; /* Ensure tooltip appears above tab buttons */
+}
+
+/* Adjust positioning for mass slider tooltip */
+.mass-slider-tooltip[title]:hover::after {
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    max-width: 220px;
+    bottom: 120%; /* Position above like other tooltips */
+    top: auto; /* Override any top positioning */
+}
+
+.mass-slider-tooltip {
+    text-align: center;
+    color: #00aaff;
+    font-size: 12px;
+    margin-top: 8px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+/* Remove the hover effect that was causing flashing */
+.mass-slider-tooltip:hover {
+    opacity: 0.8; /* Keep consistent opacity to prevent flashing */
+}
+
+/* Prevent flashing by ensuring tooltip positioning is stable */
+.mass-slider-tooltip[title]:hover::after {
+    z-index: 1001; /* Ensure tooltip appears above other elements */
+    pointer-events: none; /* Prevent tooltip from interfering with hover state */
+    transform: translateX(-50%) translateY(0) !important; /* Force stable positioning */
+    opacity: 1 !important; /* Force stable opacity */
+}

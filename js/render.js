@@ -378,20 +378,68 @@ const drawScene = () => {
     
     bh_list.forEach(bh => bh.draw(ctx));
     
-    // Draw hover effect for clickable objects - draw in world coordinates since canvas is already transformed
+    // Draw enhanced hover effect for clickable objects - draw in world coordinates since canvas is already transformed
     if (!state.inspector_open && state.user_has_interacted) {
         const worldPos = screen_to_world(state.mouse);
         const hoveredObject = findObjectAtPosition(worldPos);
         if (hoveredObject) {
-            // Draw circle in world coordinates (canvas is already transformed)
+            // Draw enhanced circle in world coordinates (canvas is already transformed)
             const obj_pos = hoveredObject.object.pos;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.lineWidth = 2 / state.zoom;
-            ctx.setLineDash([5, 5]);
+            const baseRadius = hoveredObject.object.radius;
+            const hoverRadius = baseRadius + 12 / state.zoom;
+            
+            // Create pulsing animation
+            const pulse = Math.sin(Date.now() * 0.008) * 0.3 + 0.7;
+            const pulseRadius = hoverRadius + (pulse * 8 / state.zoom);
+            
+            // Outer glow ring with pulsing effect
+            ctx.shadowColor = '#00aaff';
+            ctx.shadowBlur = 20 / state.zoom;
+            ctx.strokeStyle = `rgba(0, 170, 255, ${0.6 + pulse * 0.2})`;
+            ctx.lineWidth = 4 / state.zoom;
+            ctx.setLineDash([]);
             ctx.beginPath();
-            ctx.arc(obj_pos.x, obj_pos.y, hoveredObject.object.radius + 5 / state.zoom, 0, 2 * Math.PI);
+            ctx.arc(obj_pos.x, obj_pos.y, pulseRadius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Inner solid ring
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.lineWidth = 3 / state.zoom;
+            ctx.beginPath();
+            ctx.arc(obj_pos.x, obj_pos.y, hoverRadius, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Dashed inner ring for extra definition
+            ctx.strokeStyle = 'rgba(0, 170, 255, 0.8)';
+            ctx.lineWidth = 2 / state.zoom;
+            ctx.setLineDash([8, 4]);
+            ctx.beginPath();
+            ctx.arc(obj_pos.x, obj_pos.y, hoverRadius - 3 / state.zoom, 0, 2 * Math.PI);
             ctx.stroke();
             ctx.setLineDash([]);
+            
+            // Add sparkle effect for very bright objects
+            if (hoveredObject.type === 'Star' || hoveredObject.type === 'NeutronStar' || hoveredObject.type === 'WhiteDwarf') {
+                const sparkleTime = Date.now() * 0.01;
+                const sparkleCount = 4;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.lineWidth = 1 / state.zoom;
+                
+                for (let i = 0; i < sparkleCount; i++) {
+                    const angle = (sparkleTime + i * Math.PI * 2 / sparkleCount) % (Math.PI * 2);
+                    const sparkleRadius = hoverRadius + 15 / state.zoom;
+                    const sparkleX = obj_pos.x + Math.cos(angle) * sparkleRadius;
+                    const sparkleY = obj_pos.y + Math.sin(angle) * sparkleRadius;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(sparkleX - 3 / state.zoom, sparkleY);
+                    ctx.lineTo(sparkleX + 3 / state.zoom, sparkleY);
+                    ctx.moveTo(sparkleX, sparkleY - 3 / state.zoom);
+                    ctx.lineTo(sparkleX, sparkleY + 3 / state.zoom);
+                    ctx.stroke();
+                }
+            }
         }
     }
 
@@ -438,14 +486,35 @@ const drawScene = () => {
                     break;
             }
             
-            // Draw tooltip background
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.fillRect(tooltipX - 5, tooltipY - 20, ctx.measureText(tooltipText).width + 10, 25);
+            // Draw enhanced tooltip background with gradient
+            const textWidth = ctx.measureText(tooltipText).width;
+            const tooltipWidth = textWidth + 20;
+            const tooltipHeight = 30;
+            
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(tooltipX, tooltipY - tooltipHeight, tooltipX, tooltipY);
+            gradient.addColorStop(0, 'rgba(15, 15, 35, 0.95)');
+            gradient.addColorStop(1, 'rgba(25, 25, 45, 0.95)');
+            
+            // Draw tooltip background with shadow
+            ctx.fillStyle = gradient;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
+            ctx.fillRect(tooltipX - 10, tooltipY - tooltipHeight, tooltipWidth, tooltipHeight);
+            
+            // Draw border
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(0, 170, 255, 0.6)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(tooltipX - 10, tooltipY - tooltipHeight, tooltipWidth, tooltipHeight);
             
             // Draw tooltip text
             ctx.fillStyle = 'white';
-            ctx.font = '12px Poppins';
-            ctx.fillText(tooltipText, tooltipX, tooltipY);
+            ctx.font = '13px Inter';
+            ctx.fontWeight = '500';
+            ctx.textAlign = 'center';
+            ctx.fillText(tooltipText, tooltipX + tooltipWidth/2 - 10, tooltipY - 8);
+            ctx.textAlign = 'left';
         }
     }
 
