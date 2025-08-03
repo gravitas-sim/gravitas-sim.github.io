@@ -82,36 +82,24 @@ const chartConfig = {
         callbacks: {
           label: function(context) {
             const value = context.parsed.y;
-            if (Math.abs(value) >= 1e42) {
-              return `${context.dataset.label}: ${(value / 1e42).toFixed(2)} × 10⁴² J`;
-            } else if (Math.abs(value) >= 1e39) {
-              return `${context.dataset.label}: ${(value / 1e39).toFixed(2)} × 10³⁹ J`;
-            } else if (Math.abs(value) >= 1e36) {
-              return `${context.dataset.label}: ${(value / 1e36).toFixed(2)} × 10³⁶ J`;
-            } else if (Math.abs(value) >= 1e33) {
-              return `${context.dataset.label}: ${(value / 1e33).toFixed(2)} × 10³³ J`;
-            } else if (Math.abs(value) >= 1e30) {
-              return `${context.dataset.label}: ${(value / 1e30).toFixed(2)} × 10³⁰ J`;
-            } else if (Math.abs(value) >= 1e27) {
-              return `${context.dataset.label}: ${(value / 1e27).toFixed(2)} × 10²⁷ J`;
-            } else if (Math.abs(value) >= 1e24) {
-              return `${context.dataset.label}: ${(value / 1e24).toFixed(2)} × 10²⁴ J`;
-            } else if (Math.abs(value) >= 1e21) {
-              return `${context.dataset.label}: ${(value / 1e21).toFixed(2)} × 10²¹ J`;
-            } else if (Math.abs(value) >= 1e18) {
-              return `${context.dataset.label}: ${(value / 1e18).toFixed(2)} × 10¹⁸ J`;
-            } else if (Math.abs(value) >= 1e15) {
-              return `${context.dataset.label}: ${(value / 1e15).toFixed(2)} × 10¹⁵ J`;
-            } else if (Math.abs(value) >= 1e12) {
-              return `${context.dataset.label}: ${(value / 1e12).toFixed(2)} × 10¹² J`;
-            } else if (Math.abs(value) >= 1e9) {
-              return `${context.dataset.label}: ${(value / 1e9).toFixed(2)} × 10⁹ J`;
-            } else if (Math.abs(value) >= 1e6) {
-              return `${context.dataset.label}: ${(value / 1e6).toFixed(2)} × 10⁶ J`;
-            } else if (Math.abs(value) >= 1e3) {
-              return `${context.dataset.label}: ${(value / 1e3).toFixed(2)} × 10³ J`;
+            const absValue = Math.abs(value);
+            
+            if (absValue === 0) {
+              return `${context.dataset.label}: 0 J`;
+            }
+            
+            // Use scientific notation for very large or very small numbers
+            if (absValue >= 1e6 || absValue < 1e-3) {
+              return `${context.dataset.label}: ${value.toExponential(2)} J`;
+            }
+            
+            // For medium-sized numbers, use fixed decimal places
+            if (absValue >= 1000) {
+              return `${context.dataset.label}: ${value.toFixed(0)} J`;
+            } else if (absValue >= 1) {
+              return `${context.dataset.label}: ${value.toFixed(1)} J`;
             } else {
-              return `${context.dataset.label}: ${value.toFixed(2)} J`;
+              return `${context.dataset.label}: ${value.toFixed(3)} J`;
             }
           }
         }
@@ -162,36 +150,25 @@ const chartConfig = {
             size: 12
           },
           callback: function(value) {
-            if (Math.abs(value) >= 1e42) {
-              return (value / 1e42).toFixed(1) + '×10⁴²';
-            } else if (Math.abs(value) >= 1e39) {
-              return (value / 1e39).toFixed(1) + '×10³⁹';
-            } else if (Math.abs(value) >= 1e36) {
-              return (value / 1e36).toFixed(1) + '×10³⁶';
-            } else if (Math.abs(value) >= 1e33) {
-              return (value / 1e33).toFixed(1) + '×10³³';
-            } else if (Math.abs(value) >= 1e30) {
-              return (value / 1e30).toFixed(1) + '×10³⁰';
-            } else if (Math.abs(value) >= 1e27) {
-              return (value / 1e27).toFixed(1) + '×10²⁷';
-            } else if (Math.abs(value) >= 1e24) {
-              return (value / 1e24).toFixed(1) + '×10²⁴';
-            } else if (Math.abs(value) >= 1e21) {
-              return (value / 1e21).toFixed(1) + '×10²¹';
-            } else if (Math.abs(value) >= 1e18) {
-              return (value / 1e18).toFixed(1) + '×10¹⁸';
-            } else if (Math.abs(value) >= 1e15) {
-              return (value / 1e15).toFixed(1) + '×10¹⁵';
-            } else if (Math.abs(value) >= 1e12) {
-              return (value / 1e12).toFixed(1) + '×10¹²';
-            } else if (Math.abs(value) >= 1e9) {
-              return (value / 1e9).toFixed(1) + '×10⁹';
-            } else if (Math.abs(value) >= 1e6) {
-              return (value / 1e6).toFixed(1) + '×10⁶';
-            } else if (Math.abs(value) >= 1e3) {
-              return (value / 1e3).toFixed(1) + '×10³';
-            } else {
+            // Handle extremely large numbers with better formatting
+            const absValue = Math.abs(value);
+            
+            if (absValue === 0) {
+              return '0';
+            }
+            
+            // Use scientific notation for very large or very small numbers
+            if (absValue >= 1e6 || absValue < 1e-3) {
+              return value.toExponential(1);
+            }
+            
+            // For medium-sized numbers, use fixed decimal places
+            if (absValue >= 1000) {
+              return value.toFixed(0);
+            } else if (absValue >= 1) {
               return value.toFixed(1);
+            } else {
+              return value.toFixed(3);
             }
           }
         }

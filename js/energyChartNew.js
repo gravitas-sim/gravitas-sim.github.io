@@ -90,21 +90,21 @@ const chartConfig = {
             const absValue = Math.abs(value);
             
             if (absValue === 0) {
-              return `${context.dataset.label}: 0 ×10²⁴ J`;
+              return `${context.dataset.label}: 0 J`;
             }
             
             // Use scientific notation for very large or very small numbers
             if (absValue >= 1e6 || absValue < 1e-3) {
-              return `${context.dataset.label}: ${value.toExponential(2)} ×10²⁴ J`;
+              return `${context.dataset.label}: ${value.toExponential(2)} J`;
             }
             
             // For medium-sized numbers, use fixed decimal places
             if (absValue >= 1000) {
-              return `${context.dataset.label}: ${value.toFixed(0)} ×10²⁴ J`;
+              return `${context.dataset.label}: ${value.toFixed(0)} J`;
             } else if (absValue >= 1) {
-              return `${context.dataset.label}: ${value.toFixed(2)} ×10²⁴ J`;
+              return `${context.dataset.label}: ${value.toFixed(1)} J`;
             } else {
-              return `${context.dataset.label}: ${value.toFixed(4)} ×10²⁴ J`;
+              return `${context.dataset.label}: ${value.toFixed(3)} J`;
             }
           }
         }
@@ -138,7 +138,7 @@ const chartConfig = {
         display: true,
         title: {
           display: true,
-          text: 'Energy (×10²⁴ J)',
+          text: 'Energy (J)',
           color: '#e0e0e0',
           font: {
             size: 14,
@@ -164,16 +164,16 @@ const chartConfig = {
             
             // Use scientific notation for very large or very small numbers
             if (absValue >= 1e6 || absValue < 1e-3) {
-              return value.toExponential(1) + '×10²⁴';
+              return value.toExponential(1);
             }
             
             // For medium-sized numbers, use fixed decimal places
             if (absValue >= 1000) {
-              return value.toFixed(0) + '×10²⁴';
+              return value.toFixed(0);
             } else if (absValue >= 1) {
-              return value.toFixed(1) + '×10²⁴';
+              return value.toFixed(1);
             } else {
-              return value.toFixed(3) + '×10²⁴';
+              return value.toFixed(3);
             }
           }
         }
