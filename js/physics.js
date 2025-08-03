@@ -4341,6 +4341,12 @@ const getObjectEnergyHistory = (objectId) => {
 
 /**
  * Clear energy history for a specific object
+ * This function should be called when:
+ * - An object's mass changes (energy calculations depend on mass)
+ * - An object is removed from the simulation
+ * - The simulation is reset
+ * - Object transformation occurs (e.g., star to black hole)
+ * 
  * @param {string|number} objectId - ID of the object
  */
 const clearObjectEnergyHistory = (objectId) => {

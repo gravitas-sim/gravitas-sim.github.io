@@ -840,7 +840,7 @@ const showObjectInspector = (object, type) => {
         const detailsTabContent = document.getElementById('detailsTab');
         
         if (!inspectorTitle || !detailsTabContent) {
-            console.error('Inspector title or details tab content elements not found!');
+            // Silently return instead of logging error - elements may not exist during initialization
             return;
         }
         
@@ -1109,7 +1109,7 @@ const setupEnergyTab = () => {
     const detailsTabContent = document.getElementById('detailsTab');
     
     if (!energyTab || !detailsTab || !energyTabContent || !detailsTabContent) {
-        console.error('Required energy tab elements not found');
+        // Silently return instead of logging error - elements may not exist during initialization
         return;
     }
     
@@ -1686,6 +1686,14 @@ const setupMassSliderListeners = () => {
         // Update the object's mass and check for transformation
         const newType = updateObjectMass(object, type, newMass);
         
+        // Clear the energy chart since mass change invalidates energy history
+        // This ensures the chart shows fresh data with the new mass
+        if (chartInitialized) {
+            console.log('Clearing energy chart due to mass change');
+            clearChart();
+            showCollectingMessage();
+        }
+        
         // If object type changed, refresh the entire inspector and stop processing
         if (newType && newType !== type) {
             console.log(`Object transformed from ${type} to ${newType}!`);
@@ -1764,10 +1772,23 @@ const setupMassSliderListeners = () => {
                 });
                 
                 content += `<div class="object-description">${info.description}</div>`;
-                inspectorContent.innerHTML = content;
+                
+                // Only update the details tab content, not the entire inspector content
+                const detailsTabContent = document.getElementById('detailsTab');
+                if (detailsTabContent) {
+                    detailsTabContent.innerHTML = content;
+                }
                 
                 // Set up new mass slider listeners
                 setupMassSliderListeners();
+                
+                // Energy tab should still be intact since we only updated details tab
+                // Just ensure chart is ready for the new object
+                if (chartInitialized) {
+                    console.log('Ensuring chart is ready for transformed object');
+                    ensureChartReady();
+                    updateEnergyChart();
+                }
                 
                 // Show transformation notification
                 showTransformationNotification(type, newType);
@@ -1890,6 +1911,13 @@ const setupMassSliderListeners = () => {
 const updateObjectMass = (object, type, newMass) => {
     let newType = null;
     
+    // Clear energy history when mass changes to prevent invalid data
+    // Energy calculations depend on mass, so old energy data becomes invalid
+    if (object && object.id) {
+        console.log(`Clearing energy history for object ${object.id} due to mass change`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     switch (type) {
         case 'BlackHole':
             object.mass = newMass * SOLAR_MASS_UNIT;
@@ -2009,6 +2037,12 @@ const transformStarToBlackHole = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     const mass = object.mass;
     
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming star ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     // Create new black hole
     const blackHole = new BlackHole(pos, mass, vel);
     blackHole.name = object.name || 'Transformed Black Hole';
@@ -2037,6 +2071,12 @@ const transformNeutronStarToBlackHole = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     const mass = object.mass;
     
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming neutron star ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     const blackHole = new BlackHole(pos, mass, vel);
     blackHole.name = object.name || 'Transformed Black Hole';
     
@@ -2061,6 +2101,12 @@ const transformWhiteDwarfToNeutronStar = (object) => {
     const pos = { x: object.pos.x, y: object.pos.y };
     const vel = { x: object.vel.x, y: object.vel.y };
     const mass = object.mass;
+    
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming white dwarf ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
     
     const neutronStar = new NeutronStar(pos, vel, mass / SOLAR_MASS_UNIT);
     neutronStar.name = object.name || 'Transformed Neutron Star';
@@ -2087,6 +2133,12 @@ const transformPlanetToGasGiant = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     const mass = object.mass / 50.0; // Convert to Jupiter masses
     
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming planet ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     const gasGiant = new GasGiant(pos, vel, mass);
     gasGiant.name = object.name || 'Transformed Gas Giant';
     
@@ -2110,6 +2162,12 @@ const transformGasGiantToStar = (object) => {
     console.log('Gas giant transforming into star!');
     const pos = { x: object.pos.x, y: object.pos.y };
     const vel = { x: object.vel.x, y: object.vel.y };
+    
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming gas giant ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
     
     // Convert Jupiter masses to solar masses
     // The simulation uses 50 units = 1 Jupiter mass, but we need to convert to real solar masses
@@ -2147,6 +2205,12 @@ const transformAsteroidToPlanet = (object) => {
     const vel = { x: object.vel.x, y: object.vel.y };
     const mass = object.mass / EARTH_MASS_UNIT;
     
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming asteroid ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     const planet = new Planet(pos, vel, mass);
     planet.name = object.name || 'Transformed Planet';
     
@@ -2171,6 +2235,12 @@ const transformCometToAsteroid = (object) => {
     const pos = { x: object.pos.x, y: object.pos.y };
     const vel = { x: object.vel.x, y: object.vel.y };
     
+    // Clear energy history for the old object before transformation
+    if (object && object.id) {
+        console.log(`Clearing energy history for transforming comet ${object.id}`);
+        clearObjectEnergyHistory(object.id);
+    }
+    
     const asteroid = new Asteroid(pos, vel);
     asteroid.name = object.name || 'Transformed Asteroid';
     asteroid.mass = object.mass;
@@ -2192,6 +2262,13 @@ const transformCometToAsteroid = (object) => {
  * @param {string} newType - The new object type
  */
 const showTransformationNotification = (oldType, newType) => {
+    // Clear energy chart when object transforms
+    if (chartInitialized) {
+        console.log('Clearing energy chart due to object transformation');
+        clearChart();
+        showCollectingMessage();
+    }
+    
     // Create notification element
     const notification = document.createElement('div');
     notification.className = 'transformation-notification';
