@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Hole Energy Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .test-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0052a3;
+        }
+        .test-results {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #2d5a2d;
+            color: #90ee90;
+        }
+        .status.error {
+            background: #5a2d2d;
+            color: #ff6b6b;
+        }
+        .status.info {
+            background: #2d2d5a;
+            color: #90caf9;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        .instructions {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕳️ Black Hole Energy System Test</h1>
+    
+    <div class="instructions">
+        <h3>Test Instructions:</h3>
+        <ol>
+            <li>Open the main simulation in another tab/window</li>
+            <li>Create a black hole or select an existing one</li>
+            <li>Open the energy tab for the black hole</li>
+            <li>Run these tests to verify black hole energy tracking</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Black Hole ID Assignment</h2>
+        <p>Tests that black holes now have proper IDs for energy tracking.</p>
+        <button class="test-button" onclick="testBlackHoleIDs()">Test Black Hole IDs</button>
+        <div id="blackHoleIDResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Black Hole Energy Data</h2>
+        <p>Tests that black holes generate energy data points.</p>
+        <button class="test-button" onclick="testBlackHoleEnergy()">Test Energy Data</button>
+        <div id="blackHoleEnergyResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Energy System Integration</h2>
+        <p>Tests that black holes are properly integrated into the energy system.</p>
+        <button class="test-button" onclick="testEnergySystemIntegration()">Test Integration</button>
+        <div id="energySystemResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Real-time Energy Tracking</h2>
+        <p>Tests that black hole energy updates in real-time.</p>
+        <button class="test-button" onclick="testRealTimeTracking()">Test Real-time Tracking</button>
+        <div id="realTimeResults" class="test-results"></div>
+    </div>
+
+    <script>
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        
+        const logResult = (elementId, message) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent += message + '\n';
+                element.scrollTop = element.scrollHeight;
+            }
+            console.log(message);
+        };
+
+        const clearResults = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = '';
+            }
+        };
+
+        const showStatus = (message, type = 'info') => {
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            document.body.insertBefore(status, document.body.firstChild);
+            setTimeout(() => status.remove(), 5000);
+        };
+
+        // Test 1: Black Hole ID Assignment
+        async function testBlackHoleIDs() {
+            clearResults('blackHoleIDResults');
+            logResult('blackHoleIDResults', '🕳️ Testing Black Hole ID Assignment...');
+            
+            try {
+                // Check if simulation is available
+                if (!window.state) {
+                    throw new Error('Simulation not available. Please open the main simulation first.');
+                }
+
+                // Check if black hole list exists
+                if (!window.bh_list) {
+                    throw new Error('Black hole list not available.');
+                }
+
+                logResult('blackHoleIDResults', `Found ${window.bh_list.length} black holes`);
+
+                // Check each black hole for ID
+                for (let i = 0; i < window.bh_list.length; i++) {
+                    const bh = window.bh_list[i];
+                    if (!bh) continue;
+
+                    logResult('blackHoleIDResults', `\nBlack Hole ${i + 1}:`);
+                    logResult('blackHoleIDResults', `  ID: ${bh.id !== undefined ? bh.id : 'MISSING'}`);
+                    logResult('blackHoleIDResults', `  Type: ${bh.obj_type}`);
+                    logResult('blackHoleIDResults', `  Mass: ${bh.mass.toExponential(2)}`);
+                    logResult('blackHoleIDResults', `  Position: (${bh.pos.x.toFixed(2)}, ${bh.pos.y.toFixed(2)})`);
+                    logResult('blackHoleIDResults', `  Velocity: (${bh.vel.x.toFixed(2)}, ${bh.vel.y.toFixed(2)})`);
+                    logResult('blackHoleIDResults', `  Alive: ${bh.alive}`);
+
+                    if (bh.id === undefined) {
+                        throw new Error(`Black hole ${i + 1} is missing ID!`);
+                    }
+                }
+
+                logResult('blackHoleIDResults', '\n✅ All black holes have proper IDs');
+                showStatus('Black Hole ID Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('blackHoleIDResults', `❌ Error: ${error.message}`);
+                showStatus(`Black Hole ID Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 2: Black Hole Energy Data
+        async function testBlackHoleEnergy() {
+            clearResults('blackHoleEnergyResults');
+            logResult('blackHoleEnergyResults', '⚡ Testing Black Hole Energy Data...');
+            
+            try {
+                // Check if energy functions exist
+                if (typeof window.getObjectEnergyHistory !== 'function') {
+                    throw new Error('getObjectEnergyHistory function not available');
+                }
+
+                if (typeof window.calculateObjectEnergy !== 'function') {
+                    throw new Error('calculateObjectEnergy function not available');
+                }
+
+                logResult('blackHoleEnergyResults', '✅ Energy functions found');
+
+                // Check each black hole for energy data
+                for (let i = 0; i < window.bh_list.length; i++) {
+                    const bh = window.bh_list[i];
+                    if (!bh || !bh.id) continue;
+
+                    logResult('blackHoleEnergyResults', `\nBlack Hole ${i + 1} (ID: ${bh.id}):`);
+                    
+                    // Get energy history
+                    const energyHistory = window.getObjectEnergyHistory(bh.id);
+                    logResult('blackHoleEnergyResults', `  Energy history points: ${energyHistory.length}`);
+
+                    if (energyHistory.length > 0) {
+                        const latest = energyHistory[energyHistory.length - 1];
+                        logResult('blackHoleEnergyResults', `  Latest KE: ${latest.ke.toExponential(2)} J`);
+                        logResult('blackHoleEnergyResults', `  Latest PE: ${latest.pe.toExponential(2)} J`);
+                        logResult('blackHoleEnergyResults', `  Latest Total: ${latest.total.toExponential(2)} J`);
+                    } else {
+                        logResult('blackHoleEnergyResults', '  ⚠️ No energy data yet (this is normal for new objects)');
+                    }
+
+                    // Test direct energy calculation
+                    const currentEnergy = window.calculateObjectEnergy(bh, performance.now());
+                    logResult('blackHoleEnergyResults', `  Current KE: ${currentEnergy.ke.toExponential(2)} J`);
+                    logResult('blackHoleEnergyResults', `  Current PE: ${currentEnergy.pe.toExponential(2)} J`);
+                    logResult('blackHoleEnergyResults', `  Current Total: ${currentEnergy.total.toExponential(2)} J`);
+                }
+
+                logResult('blackHoleEnergyResults', '\n✅ Black hole energy calculation working');
+                showStatus('Black Hole Energy Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('blackHoleEnergyResults', `❌ Error: ${error.message}`);
+                showStatus(`Black Hole Energy Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 3: Energy System Integration
+        async function testEnergySystemIntegration() {
+            clearResults('energySystemResults');
+            logResult('energySystemResults', '🔗 Testing Energy System Integration...');
+            
+            try {
+                // Check if getAllPhysicsObjects includes black holes
+                if (typeof window.getAllPhysicsObjects !== 'function') {
+                    throw new Error('getAllPhysicsObjects function not available');
+                }
+
+                const allObjects = window.getAllPhysicsObjects();
+                logResult('energySystemResults', `Total physics objects: ${allObjects.length}`);
+
+                // Count black holes in the list
+                const blackHoles = allObjects.filter(obj => obj && obj.obj_type === 'BlackHole');
+                logResult('energySystemResults', `Black holes in physics objects: ${blackHoles.length}`);
+                logResult('energySystemResults', `Black holes in bh_list: ${window.bh_list.length}`);
+
+                if (blackHoles.length !== window.bh_list.length) {
+                    throw new Error(`Mismatch: ${blackHoles.length} black holes in physics objects vs ${window.bh_list.length} in bh_list`);
+                }
+
+                // Check if black holes have IDs
+                const blackHolesWithIDs = blackHoles.filter(bh => bh.id !== undefined);
+                logResult('energySystemResults', `Black holes with IDs: ${blackHolesWithIDs.length}`);
+
+                if (blackHolesWithIDs.length !== blackHoles.length) {
+                    throw new Error('Some black holes are missing IDs');
+                }
+
+                // Check energy history for black holes
+                let totalEnergyPoints = 0;
+                for (const bh of blackHoles) {
+                    const history = window.getObjectEnergyHistory(bh.id);
+                    totalEnergyPoints += history.length;
+                }
+
+                logResult('energySystemResults', `Total energy data points for black holes: ${totalEnergyPoints}`);
+
+                logResult('energySystemResults', '\n✅ Energy system properly integrated with black holes');
+                showStatus('Energy System Integration Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('energySystemResults', `❌ Error: ${error.message}`);
+                showStatus(`Energy System Integration Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 4: Real-time Energy Tracking
+        async function testRealTimeTracking() {
+            clearResults('realTimeResults');
+            logResult('realTimeResults', '⏱️ Testing Real-time Energy Tracking...');
+            
+            try {
+                if (window.bh_list.length === 0) {
+                    throw new Error('No black holes available for testing');
+                }
+
+                const bh = window.bh_list[0];
+                logResult('realTimeResults', `Testing real-time tracking for black hole ID: ${bh.id}`);
+
+                // Get initial energy history
+                const initialHistory = window.getObjectEnergyHistory(bh.id);
+                logResult('realTimeResults', `Initial energy history points: ${initialHistory.length}`);
+
+                // Wait a bit for new data
+                logResult('realTimeResults', 'Waiting 3 seconds for new energy data...');
+                await sleep(3000);
+
+                // Get updated energy history
+                const updatedHistory = window.getObjectEnergyHistory(bh.id);
+                logResult('realTimeResults', `Updated energy history points: ${updatedHistory.length}`);
+
+                if (updatedHistory.length > initialHistory.length) {
+                    logResult('realTimeResults', '✅ New energy data points added');
+                    
+                    const newPoints = updatedHistory.slice(initialHistory.length);
+                    logResult('realTimeResults', `New data points: ${newPoints.length}`);
+                    
+                    for (let i = 0; i < Math.min(3, newPoints.length); i++) {
+                        const point = newPoints[i];
+                        logResult('realTimeResults', `  Point ${i + 1}: KE=${point.ke.toExponential(2)}J, PE=${point.pe.toExponential(2)}J, Total=${point.total.toExponential(2)}J`);
+                    }
+                } else {
+                    logResult('realTimeResults', '⚠️ No new energy data points added (this might be normal if simulation is paused)');
+                }
+
+                // Check if updateEnergyHistory is being called
+                if (typeof window.updateEnergyHistory === 'function') {
+                    logResult('realTimeResults', '✅ updateEnergyHistory function available');
+                } else {
+                    logResult('realTimeResults', '⚠️ updateEnergyHistory function not available');
+                }
+
+                logResult('realTimeResults', '\n✅ Real-time energy tracking test completed');
+                showStatus('Real-time Energy Tracking Test Completed!', 'success');
+
+            } catch (error) {
+                logResult('realTimeResults', `❌ Error: ${error.message}`);
+                showStatus(`Real-time Energy Tracking Test Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

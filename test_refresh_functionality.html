@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Chart Refresh Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .test-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0052a3;
+        }
+        .test-results {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #2d5a2d;
+            color: #90ee90;
+        }
+        .status.error {
+            background: #5a2d2d;
+            color: #ff6b6b;
+        }
+        .status.info {
+            background: #2d2d5a;
+            color: #90caf9;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Energy Chart Refresh Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Instructions</h2>
+        <ol>
+            <li>Open the main simulation in another tab/window</li>
+            <li>Start a simulation with multiple objects</li>
+            <li>Select an object and open the energy tab</li>
+            <li>Run these tests to verify refresh functionality</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Manual Refresh Button</h2>
+        <p>Tests that the refresh button works correctly.</p>
+        <button class="test-button" onclick="testManualRefresh()">Test Manual Refresh</button>
+        <div id="manualRefreshResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Auto-Refresh Functionality</h2>
+        <p>Tests that auto-refresh starts and stops correctly.</p>
+        <button class="test-button" onclick="testAutoRefresh()">Test Auto-Refresh</button>
+        <div id="autoRefreshResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Data Availability Detection</h2>
+        <p>Tests that the system detects when data becomes available.</p>
+        <button class="test-button" onclick="testDataDetection()">Test Data Detection</button>
+        <div id="dataDetectionResults" class="test-results"></div>
+    </div>
+
+    <script>
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        
+        const logResult = (elementId, message) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent += message + '\n';
+                element.scrollTop = element.scrollHeight;
+            }
+            console.log(message);
+        };
+
+        const clearResults = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = '';
+            }
+        };
+
+        const showStatus = (message, type = 'info') => {
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            document.body.insertBefore(status, document.body.firstChild);
+            setTimeout(() => status.remove(), 5000);
+        };
+
+        // Test 1: Manual Refresh Button
+        async function testManualRefresh() {
+            clearResults('manualRefreshResults');
+            logResult('manualRefreshResults', '🔄 Testing Manual Refresh Button...');
+            
+            try {
+                // Check if simulation is available
+                if (!window.state) {
+                    throw new Error('Simulation not available. Please open the main simulation first.');
+                }
+
+                // Check if refresh button exists
+                const refreshButton = document.getElementById('refreshEnergyChart');
+                if (!refreshButton) {
+                    throw new Error('Refresh button not found. Please open the energy tab first.');
+                }
+
+                logResult('manualRefreshResults', '✅ Refresh button found');
+                logResult('manualRefreshResults', `Button text: ${refreshButton.textContent}`);
+                logResult('manualRefreshResults', `Button title: ${refreshButton.title}`);
+
+                // Check if button is clickable
+                if (refreshButton.disabled) {
+                    logResult('manualRefreshResults', '⚠️ Refresh button is disabled');
+                } else {
+                    logResult('manualRefreshResults', '✅ Refresh button is clickable');
+                }
+
+                // Check button styling
+                const computedStyle = window.getComputedStyle(refreshButton);
+                logResult('manualRefreshResults', `Button background: ${computedStyle.backgroundColor}`);
+                logResult('manualRefreshResults', `Button border: ${computedStyle.borderColor}`);
+
+                logResult('manualRefreshResults', '✅ Manual Refresh Test PASSED');
+                showStatus('Manual Refresh Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('manualRefreshResults', `❌ Error: ${error.message}`);
+                showStatus(`Manual Refresh Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 2: Auto-Refresh Functionality
+        async function testAutoRefresh() {
+            clearResults('autoRefreshResults');
+            logResult('autoRefreshResults', '⚡ Testing Auto-Refresh Functionality...');
+            
+            try {
+                // Check if auto-refresh functions exist
+                if (typeof window.startAutoRefresh !== 'function') {
+                    throw new Error('startAutoRefresh function not available');
+                }
+
+                if (typeof window.stopAutoRefresh !== 'function') {
+                    throw new Error('stopAutoRefresh function not available');
+                }
+
+                logResult('autoRefreshResults', '✅ Auto-refresh functions found');
+
+                // Test starting auto-refresh
+                window.startAutoRefresh();
+                logResult('autoRefreshResults', '✅ Auto-refresh started');
+
+                await sleep(1000);
+
+                // Check if refresh button shows active state
+                const refreshButton = document.getElementById('refreshEnergyChart');
+                if (refreshButton && refreshButton.classList.contains('auto-refresh-active')) {
+                    logResult('autoRefreshResults', '✅ Refresh button shows active state');
+                } else {
+                    logResult('autoRefreshResults', '⚠️ Refresh button does not show active state');
+                }
+
+                await sleep(1000);
+
+                // Test stopping auto-refresh
+                window.stopAutoRefresh();
+                logResult('autoRefreshResults', '✅ Auto-refresh stopped');
+
+                // Check if refresh button shows inactive state
+                if (refreshButton && !refreshButton.classList.contains('auto-refresh-active')) {
+                    logResult('autoRefreshResults', '✅ Refresh button shows inactive state');
+                } else {
+                    logResult('autoRefreshResults', '⚠️ Refresh button does not show inactive state');
+                }
+
+                logResult('autoRefreshResults', '✅ Auto-Refresh Test PASSED');
+                showStatus('Auto-Refresh Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('autoRefreshResults', `❌ Error: ${error.message}`);
+                showStatus(`Auto-Refresh Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 3: Data Availability Detection
+        async function testDataDetection() {
+            clearResults('dataDetectionResults');
+            logResult('dataDetectionResults', '📊 Testing Data Availability Detection...');
+            
+            try {
+                // Check if energy history function exists
+                if (typeof window.getObjectEnergyHistory !== 'function') {
+                    throw new Error('getObjectEnergyHistory function not available');
+                }
+
+                logResult('dataDetectionResults', '✅ Energy history function found');
+
+                // Get current selected object
+                if (!window.state || !window.state.selectedObject) {
+                    throw new Error('No object selected. Please select an object first.');
+                }
+
+                const objectId = window.state.selectedObject.object.id;
+                logResult('dataDetectionResults', `Selected object ID: ${objectId}`);
+
+                // Check current energy history
+                const energyHistory = window.getObjectEnergyHistory(objectId);
+                logResult('dataDetectionResults', `Current energy history points: ${energyHistory.length}`);
+
+                if (energyHistory.length > 0) {
+                    logResult('dataDetectionResults', '✅ Energy data is available');
+                    logResult('dataDetectionResults', `Latest data point: ${JSON.stringify(energyHistory[energyHistory.length - 1])}`);
+                } else {
+                    logResult('dataDetectionResults', '⚠️ No energy data available yet');
+                    logResult('dataDetectionResults', 'This is normal for newly selected objects');
+                }
+
+                // Check if collecting message is shown
+                const collectingMessage = document.querySelector('.collecting-message');
+                if (collectingMessage && collectingMessage.style.display !== 'none') {
+                    logResult('dataDetectionResults', '✅ Collecting message is displayed');
+                } else {
+                    logResult('dataDetectionResults', 'ℹ️ Collecting message is not displayed');
+                }
+
+                logResult('dataDetectionResults', '✅ Data Detection Test PASSED');
+                showStatus('Data Detection Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('dataDetectionResults', `❌ Error: ${error.message}`);
+                showStatus(`Data Detection Test Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

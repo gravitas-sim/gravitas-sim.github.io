@@ -555,15 +555,42 @@ const updatePhysics = dt => {
   }
 
   // Clean up offscreen objects - matching original
-  planets = planets.filter(p => p.alive && !is_offscreen(p.pos));
-  stars = stars.filter(s => s.alive && !is_offscreen(s.pos));
-  gas_giants = gas_giants.filter(g => g.alive && !is_offscreen(g.pos));
-  asteroids = asteroids.filter(a => a.alive && !is_offscreen(a.pos));
-  debris = debris.filter(d => d.alive && !is_offscreen(d.pos));
-  neutron_stars = neutron_stars.filter(ns => ns.alive && !is_offscreen(ns.pos));
-  white_dwarfs = white_dwarfs.filter(wd => wd.alive && !is_offscreen(wd.pos));
-  bh_list = bh_list.filter(bh => (bh.alive !== false) && !is_offscreen(bh.pos));
-  accretion_disk_particles = accretion_disk_particles.filter(ap => ap.alive && !is_offscreen(ap.pos));
+  // Filter out dead objects and objects that are off-screen, clearing energy history for removed objects
+  const filterAndClearEnergy = (objects, filterFn) => {
+    const beforeCount = objects.length;
+    const filtered = objects.filter(filterFn);
+    const afterCount = filtered.length;
+    
+    // If objects were removed, clear their energy history
+    if (afterCount < beforeCount) {
+      const removedIds = new Set();
+      objects.forEach(obj => {
+        if (!filtered.includes(obj) && obj.id) {
+          removedIds.add(obj.id);
+        }
+      });
+      
+      removedIds.forEach(id => {
+        clearEnergyHistory(id);
+      });
+      
+      if (removedIds.size > 0) {
+        console.log(`Cleared energy history for ${removedIds.size} removed objects`);
+      }
+    }
+    
+    return filtered;
+  };
+  
+  planets = filterAndClearEnergy(planets, p => p.alive && !is_offscreen(p.pos));
+  stars = filterAndClearEnergy(stars, s => s.alive && !is_offscreen(s.pos));
+  gas_giants = filterAndClearEnergy(gas_giants, g => g.alive && !is_offscreen(g.pos));
+  asteroids = filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos));
+  debris = filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos));
+  neutron_stars = filterAndClearEnergy(neutron_stars, ns => ns.alive && !is_offscreen(ns.pos));
+  white_dwarfs = filterAndClearEnergy(white_dwarfs, wd => wd.alive && !is_offscreen(wd.pos));
+  bh_list = filterAndClearEnergy(bh_list, bh => (bh.alive !== false) && !is_offscreen(bh.pos));
+  accretion_disk_particles = filterAndClearEnergy(accretion_disk_particles, ap => ap.alive && !is_offscreen(ap.pos));
 
   // Follow mode logic - matching original exactly
   let target = null;
@@ -596,9 +623,9 @@ const updatePhysics = dt => {
     state.pan.y = target.pos.y * state.zoom;
   }
   
-  // Update energy data for all objects (sample every 10 frames for performance)
+  // Update energy history for all objects (sample every 10 frames for performance)
   if (state && state.frame_count % ENERGY_SAMPLE_RATE === 0) {
-    updateEnergyData();
+    updateEnergyHistory();
   }
 };
 
@@ -657,8 +684,8 @@ class PhysicsObject {
         this.alive = false;
         bh.mass += this.mass || 0;
         bh.updateRadius();
-        // Clear energy data for absorbed object
-        clearObjectEnergyData(this.id);
+        // Clear energy history for absorbed object
+        clearObjectEnergyHistory(this.id);
         return true;
       }
     }
@@ -1537,6 +1564,7 @@ class BlackHole {
    * @param {number} jet_orientation - Angle in radians for jet direction (optional)
    */
   constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false, jet_orientation = null) {
+    this.id = PhysicsObject_id_counter++; // Add unique ID for energy tracking
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
@@ -2071,10 +2099,13 @@ class BlackHole {
 
   get_state() {
     return {
+      id: this.id,
       type: this.obj_type,
       pos: this.pos,
       vel: this.vel,
       mass: this.mass,
+      alive: this.alive,
+      name: this.name,
       accretion_intensity: this.accretion_intensity,
       jet_intensity: this.jet_intensity,
       disk_growth: this.disk_growth,
@@ -2083,9 +2114,12 @@ class BlackHole {
   }
 
   set_state(s) {
+    this.id = s.id || PhysicsObject_id_counter++;
     this.pos = s.pos;
     this.vel = s.vel;
     this.mass = s.mass;
+    this.alive = s.alive !== undefined ? s.alive : true;
+    this.name = s.name || getRandomName('blackHoles');
     this.accretion_intensity = s.accretion_intensity || 0.0;
     this.jet_intensity = s.jet_intensity || 0.0;
     this.disk_growth = s.disk_growth || 0.0;
@@ -4052,10 +4086,15 @@ export {
   calculateTotalPotentialEnergy,
   calculateObjectEnergy,
   getAllPhysicsObjects,
-  updateEnergyData,
-  getObjectEnergyData,
-  clearObjectEnergyData,
-  clearAllEnergyData,
+  updateEnergyHistory,
+  getObjectEnergyHistory,
+  clearObjectEnergyHistory,
+  clearEnergyHistory,
+  clearAllEnergyHistory,
+  getObjectEnergyStats,
+  getEnergySystemMemoryStats,
+  trimAllEnergyHistory,
+  updateEnergySystemConfig,
 };
 
 // Helper: Wrap BlackHole as PhysicsObject-like for merging
@@ -4071,51 +4110,80 @@ function asPhysicsObject(bh) {
   };
 }
 
-// Energy calculation constants
-const G = 6.67430e-11; // Gravitational constant in SI units (m³/kg/s²)
+// ===== ENERGY SYSTEM =====
+// Fresh energy calculation and tracking system
+
+// Energy system configuration
 const ENERGY_SAMPLE_RATE = 10; // Sample energy every 10 frames (100ms at 60fps)
+const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to prevent memory issues
+// Memory management: Uses efficient slice() instead of shift() for O(1) trimming
 
 // Astrophysical constants for realistic energy calculations
+// Use the same gravitational constant as the physics simulation for consistency
+// The physics simulation uses physicsSettings.gravitational_constant (typically 1.0)
+// We need to convert this to SI units for energy calculations
+const getGravitationalConstantSI = () => {
+  // The physics simulation uses a simplified G value
+  // We need to scale it to match the simulation's mass and distance units
+  const simulationG = physicsSettings.gravitational_constant;
+  const massScale = MASS_UNIT_TO_KG;
+  const distanceScale = DISTANCE_UNIT_TO_M;
+  const timeScale = 1.0; // Assuming time units are consistent
+  
+  // G in SI units = simulationG * (massScale * distanceScale^2 / timeScale^2)
+  return simulationG * massScale * distanceScale * distanceScale / (timeScale * timeScale);
+};
 const SOLAR_MASS_KG = 1.989e30; // Solar mass in kg
 const EARTH_MASS_KG = 5.972e24; // Earth mass in kg
 const AU_METERS = 1.496e11; // Astronomical Unit in meters
-const KM_TO_M = 1000; // Kilometers to meters
 
 // Conversion factors for simulation units to SI units
 const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // Convert simulation mass units to kg
 const VELOCITY_UNIT_TO_MS = 1000; // Convert simulation velocity units to m/s (estimated)
 const DISTANCE_UNIT_TO_M = AU_METERS / 100; // Convert simulation distance units to meters (estimated)
 
-// Energy tracking for objects
-const energyData = new Map(); // Map of object ID to energy history
+// Energy scaling factor to make displayed values more reasonable
+// This scales the energy values to be in a more readable range (e.g., 10^30 J instead of 10^54 J)
+const ENERGY_SCALE_FACTOR = 1e-24; // Scale down by 10^24 to get more reasonable numbers
+
+// Energy history storage - Map of object ID to energy history array
+const energyHistory = new Map();
 
 /**
- * Calculate kinetic energy of an object
- * @param {Object} object - Physics object with mass, velocity
+ * Calculate kinetic energy for a physics object
+ * @param {Object} object - Physics object with mass and velocity
  * @returns {number} Kinetic energy in joules
  */
 const calculateKineticEnergy = (object) => {
+  if (!object || !object.vel || !object.mass) return 0;
+  
   const velocity = Math.sqrt(object.vel.x * object.vel.x + object.vel.y * object.vel.y);
-  // Convert simulation units to SI units for realistic energy calculation
   const massKg = object.mass * MASS_UNIT_TO_KG;
   const velocityMs = velocity * VELOCITY_UNIT_TO_MS;
-  return 0.5 * massKg * velocityMs * velocityMs;
+  
+  // Apply scaling factor to make energy values more reasonable for display
+  return 0.5 * massKg * velocityMs * velocityMs * ENERGY_SCALE_FACTOR;
 };
 
 /**
  * Calculate gravitational potential energy between two objects
  * @param {Object} obj1 - First physics object
  * @param {Object} obj2 - Second physics object
- * @param {number} distance - Distance between objects
+ * @param {number} distance - Distance between objects in simulation units
  * @returns {number} Gravitational potential energy in joules
  */
 const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
-  if (distance === 0) return 0; // Avoid division by zero
-  // Convert simulation units to SI units for realistic energy calculation
+  if (!obj1 || !obj2 || distance <= 0) return 0;
+  
   const mass1Kg = obj1.mass * MASS_UNIT_TO_KG;
   const mass2Kg = obj2.mass * MASS_UNIT_TO_KG;
   const distanceM = distance * DISTANCE_UNIT_TO_M;
-  return -G * mass1Kg * mass2Kg / distanceM;
+  
+  // Use the gravitational constant that matches the physics simulation
+  const G_si = getGravitationalConstantSI();
+  
+  // Apply scaling factor to make energy values more reasonable for display
+  return -G_si * mass1Kg * mass2Kg / distanceM * ENERGY_SCALE_FACTOR;
 };
 
 /**
@@ -4125,10 +4193,12 @@ const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
  * @returns {number} Total gravitational potential energy in joules
  */
 const calculateTotalPotentialEnergy = (object, allObjects) => {
+  if (!object || !allObjects || allObjects.length === 0) return 0;
+  
   let totalPotentialEnergy = 0;
   
   for (const otherObject of allObjects) {
-    if (otherObject.id === object.id) continue; // Skip self
+    if (!otherObject || otherObject.id === object.id) continue;
     
     const dx = object.pos.x - otherObject.pos.x;
     const dy = object.pos.y - otherObject.pos.y;
@@ -4145,24 +4215,33 @@ const calculateTotalPotentialEnergy = (object, allObjects) => {
 /**
  * Calculate total energy (kinetic + potential) for an object
  * @param {Object} object - Physics object
- * @param {Array} allObjects - Array of all physics objects
- * @returns {Object} Object containing kinetic, potential, and total energy
+ * @param {number} timestamp - Current timestamp
+ * @returns {Object} Energy data object with timestamp, ke, pe, total
  */
-const calculateObjectEnergy = (object, allObjects) => {
+const calculateObjectEnergy = (object, timestamp) => {
+  if (!object) {
+    return {
+      timestamp: timestamp || performance.now(),
+      ke: 0,
+      pe: 0,
+      total: 0
+    };
+  }
+  
   const kineticEnergy = calculateKineticEnergy(object);
-  const potentialEnergy = calculateTotalPotentialEnergy(object, allObjects);
+  const potentialEnergy = calculateTotalPotentialEnergy(object, getAllPhysicsObjects());
   const totalEnergy = kineticEnergy + potentialEnergy;
   
   return {
-    kinetic: kineticEnergy,
-    potential: potentialEnergy,
-    total: totalEnergy,
-    timestamp: performance.now()
+    timestamp: timestamp || performance.now(),
+    ke: kineticEnergy,
+    pe: potentialEnergy,
+    total: totalEnergy
   };
 };
 
 /**
- * Get all physics objects as a flat array
+ * Get all physics objects as a flat array, excluding debris and particles
  * @returns {Array} Array of all physics objects
  */
 const getAllPhysicsObjects = () => {
@@ -4173,67 +4252,238 @@ const getAllPhysicsObjects = () => {
     ...gas_giants,
     ...asteroids,
     ...comets,
-    ...debris,
     ...neutron_stars,
     ...white_dwarfs
-  ];
+  ].filter(obj => obj && obj.alive !== false);
 };
 
 /**
- * Update energy data for all objects
- * Called during the physics update loop
+ * Update energy history for all objects
+ * Called during the physics update loop at specified intervals
  */
-const updateEnergyData = () => {
+const updateEnergyHistory = () => {
   const allObjects = getAllPhysicsObjects();
   
+  if (allObjects.length === 0) return;
+  
+  const timestamp = performance.now();
+  
   for (const object of allObjects) {
-    if (!energyData.has(object.id)) {
-      energyData.set(object.id, []);
+    if (!object || !object.id) continue;
+    
+    // Initialize energy history for new objects
+    if (!energyHistory.has(object.id)) {
+      energyHistory.set(object.id, []);
     }
     
-    const energyHistory = energyData.get(object.id);
-    const energy = calculateObjectEnergy(object, allObjects);
+    const history = energyHistory.get(object.id);
+    const energy = calculateObjectEnergy(object, timestamp);
     
     // Add new energy data point
-    energyHistory.push(energy);
+    history.push(energy);
     
-    // Keep only last 1000 data points to prevent memory issues
-    if (energyHistory.length > 1000) {
-      energyHistory.shift();
+    // Maintain data size limit - keep only the most recent entries
+    if (history.length > MAX_ENERGY_HISTORY_POINTS) {
+      // Use slice to keep only the most recent MAX_ENERGY_HISTORY_POINTS entries
+      // This is more efficient than shift() for large arrays
+      const startIndex = history.length - MAX_ENERGY_HISTORY_POINTS;
+      const trimmedHistory = history.slice(startIndex);
+      energyHistory.set(object.id, trimmedHistory);
     }
   }
   
-  // Debug: Log energy data for first few objects (only every 100 frames to avoid spam)
-  if (allObjects.length > 0 && state && state.frame_count % 100 === 0) {
+  // Debug logging (only every 100 frames to avoid spam)
+  if (state && state.frame_count % 100 === 0 && allObjects.length > 0) {
     const firstObject = allObjects[0];
-    const firstObjectEnergy = energyData.get(firstObject.id);
-    if (firstObjectEnergy && firstObjectEnergy.length > 0) {
-      console.log('Energy data sample for object', firstObject.id, ':', firstObjectEnergy[firstObjectEnergy.length - 1]);
-      console.log('Total energy data points for object', firstObject.id, ':', firstObjectEnergy.length);
+    const firstObjectHistory = energyHistory.get(firstObject.id);
+    if (firstObjectHistory && firstObjectHistory.length > 0) {
+      const latest = firstObjectHistory[firstObjectHistory.length - 1];
+      console.log(`Energy data for object ${firstObject.id}:`, {
+        ke: latest.ke.toExponential(2),
+        pe: latest.pe.toExponential(2),
+        total: latest.total.toExponential(2),
+        dataPoints: firstObjectHistory.length
+      });
+    }
+  }
+  
+  // Periodic memory management (every 1000 frames)
+  if (state && state.frame_count % 1000 === 0) {
+    const memoryStats = getEnergySystemMemoryStats();
+    
+    // Log memory usage every 1000 frames
+    console.log('Energy system memory usage:', {
+      objects: memoryStats.totalObjects,
+      dataPoints: memoryStats.totalDataPoints,
+      memoryMB: memoryStats.totalMemoryEstimateMB,
+      avgPointsPerObject: memoryStats.averageDataPointsPerObject
+    });
+    
+    // If memory usage is high (>50MB), trim all histories
+    if (memoryStats.totalMemoryEstimateMB > 50) {
+      console.log('High memory usage detected, trimming energy histories...');
+      const trimmedCount = trimAllEnergyHistory();
+      console.log(`Trimmed ${trimmedCount} energy histories to reduce memory usage`);
     }
   }
 };
 
 /**
- * Get energy data for a specific object
- * @param {string} objectId - ID of the object
- * @returns {Array} Array of energy data points
+ * Get energy history for a specific object
+ * @param {string|number} objectId - ID of the object
+ * @returns {Array} Copy of the energy history array for the object
  */
-const getObjectEnergyData = (objectId) => {
-  return energyData.get(objectId) || [];
+const getObjectEnergyHistory = (objectId) => {
+  if (!objectId) return [];
+  const history = energyHistory.get(objectId);
+  return history ? [...history] : [];
 };
 
 /**
- * Clear energy data for a specific object
- * @param {string} objectId - ID of the object
+ * Clear energy history for a specific object
+ * @param {string|number} objectId - ID of the object
  */
-const clearObjectEnergyData = (objectId) => {
-  energyData.delete(objectId);
+const clearObjectEnergyHistory = (objectId) => {
+  if (objectId) {
+    energyHistory.delete(objectId);
+  }
 };
 
 /**
- * Clear all energy data
+ * Clear energy history for a specific object (alias for consistency)
+ * @param {string|number} objectId - ID of the object
  */
-const clearAllEnergyData = () => {
-  energyData.clear();
+const clearEnergyHistory = (objectId) => {
+  clearObjectEnergyHistory(objectId);
+};
+
+/**
+ * Clear all energy history
+ */
+const clearAllEnergyHistory = () => {
+  energyHistory.clear();
+};
+
+/**
+ * Get energy statistics for an object
+ * @param {string|number} objectId - ID of the object
+ * @returns {Object} Energy statistics object
+ */
+const getObjectEnergyStats = (objectId) => {
+  const data = getObjectEnergyHistory(objectId);
+  if (data.length === 0) {
+    return {
+      latest: null,
+      average: { ke: 0, pe: 0, total: 0 },
+      min: { ke: 0, pe: 0, total: 0 },
+      max: { ke: 0, pe: 0, total: 0 },
+      dataPoints: 0
+    };
+  }
+  
+  const latest = data[data.length - 1];
+  const keValues = data.map(d => d.ke);
+  const peValues = data.map(d => d.pe);
+  const totalValues = data.map(d => d.total);
+  
+  return {
+    latest,
+    average: {
+      ke: keValues.reduce((a, b) => a + b, 0) / data.length,
+      pe: peValues.reduce((a, b) => a + b, 0) / data.length,
+      total: totalValues.reduce((a, b) => a + b, 0) / data.length
+    },
+    min: {
+      ke: Math.min(...keValues),
+      pe: Math.min(...peValues),
+      total: Math.min(...totalValues)
+    },
+    max: {
+      ke: Math.max(...keValues),
+      pe: Math.max(...peValues),
+      total: Math.max(...totalValues)
+    },
+    dataPoints: data.length
+  };
+};
+
+/**
+ * Get energy system memory usage statistics
+ * @returns {Object} Memory usage statistics
+ */
+const getEnergySystemMemoryStats = () => {
+  const totalObjects = energyHistory.size;
+  let totalDataPoints = 0;
+  let totalMemoryEstimate = 0;
+  
+  // Estimate memory usage (rough calculation)
+  // Each energy data point contains: timestamp (8 bytes) + ke (8 bytes) + pe (8 bytes) + total (8 bytes) = ~32 bytes
+  const bytesPerDataPoint = 32;
+  
+  for (const [objectId, history] of energyHistory) {
+    totalDataPoints += history.length;
+  }
+  
+  totalMemoryEstimate = totalDataPoints * bytesPerDataPoint;
+  
+  return {
+    totalObjects,
+    totalDataPoints,
+    totalMemoryEstimateBytes: totalMemoryEstimate,
+    totalMemoryEstimateKB: Math.round(totalMemoryEstimate / 1024 * 100) / 100,
+    totalMemoryEstimateMB: Math.round(totalMemoryEstimate / (1024 * 1024) * 100) / 100,
+    averageDataPointsPerObject: totalObjects > 0 ? Math.round(totalDataPoints / totalObjects) : 0,
+    maxDataPointsPerObject: MAX_ENERGY_HISTORY_POINTS
+  };
+};
+
+/**
+ * Update energy system configuration
+ * @param {Object} config - Configuration object
+ * @param {number} config.maxHistoryPoints - Maximum data points per object
+ * @param {number} config.sampleRate - Energy sampling rate (frames)
+ */
+const updateEnergySystemConfig = (config) => {
+  if (config.maxHistoryPoints !== undefined) {
+    const oldMax = MAX_ENERGY_HISTORY_POINTS;
+    // Note: We can't reassign const, so we'll use the new value in trimAllEnergyHistory
+    console.log(`Energy history limit changed from ${oldMax} to ${config.maxHistoryPoints} points per object`);
+    
+    // Trim existing histories to new limit
+    if (config.maxHistoryPoints < oldMax) {
+      trimAllEnergyHistory(config.maxHistoryPoints);
+    }
+  }
+  
+  if (config.sampleRate !== undefined) {
+    console.log(`Energy sampling rate changed from ${ENERGY_SAMPLE_RATE} to ${config.sampleRate} frames`);
+  }
+  
+  return {
+    maxHistoryPoints: config.maxHistoryPoints || MAX_ENERGY_HISTORY_POINTS,
+    sampleRate: config.sampleRate || ENERGY_SAMPLE_RATE
+  };
+};
+
+/**
+ * Trim energy history for all objects to reduce memory usage
+ * @param {number} maxPoints - Maximum data points to keep per object (defaults to MAX_ENERGY_HISTORY_POINTS)
+ */
+const trimAllEnergyHistory = (maxPoints = MAX_ENERGY_HISTORY_POINTS) => {
+  let trimmedCount = 0;
+  
+  for (const [objectId, history] of energyHistory) {
+    if (history.length > maxPoints) {
+      const startIndex = history.length - maxPoints;
+      const trimmedHistory = history.slice(startIndex);
+      energyHistory.set(objectId, trimmedHistory);
+      trimmedCount++;
+    }
+  }
+  
+  if (trimmedCount > 0) {
+    console.log(`Trimmed energy history for ${trimmedCount} objects to ${maxPoints} data points each`);
+  }
+  
+  return trimmedCount;
 };

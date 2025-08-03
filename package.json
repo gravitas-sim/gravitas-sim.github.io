@@ -11,7 +11,9 @@
     "lint": "eslint js/*.js",
     "lint:fix": "eslint js/*.js --fix",
     "format": "prettier --write js/*.js",
-    "format:check": "prettier --check js/*.js"
+    "format:check": "prettier --check js/*.js",
+    "dev": "npx http-server . -p 8003 -o",
+    "serve": "npx http-server . -p 8003"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Calculations Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .test-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0052a3;
+        }
+        .test-results {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #2d5a2d;
+            color: #90ee90;
+        }
+        .status.error {
+            background: #5a2d2d;
+            color: #ff6b6b;
+        }
+        .status.info {
+            background: #2d2d5a;
+            color: #90caf9;
+        }
+        .status.warning {
+            background: #5a5a2d;
+            color: #ffff90;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        .instructions {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #0066cc;
+        }
+        .formula {
+            background: #3a3a3a;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #00cc66;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ Energy Calculations Verification Test</h1>
+    
+    <div class="instructions">
+        <h3>Test Instructions:</h3>
+        <ol>
+            <li>Open the main simulation in another tab/window</li>
+            <li>Create a scenario with a planet in a near-circular orbit around a star</li>
+            <li>Run these tests to verify energy calculations are correct</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Energy Formula Verification</h2>
+        <p>Tests that the energy formulas are implemented correctly.</p>
+        <div class="formula">
+            Kinetic Energy: KE = ½ × m × v²<br>
+            Potential Energy: PE = -G × m × M / r<br>
+            For circular orbits: |PE| ≈ 2 × KE
+        </div>
+        <button class="test-button" onclick="testEnergyFormulas()">Test Energy Formulas</button>
+        <div id="formulaResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Gravitational Constant Consistency</h2>
+        <p>Tests that the gravitational constant used in energy calculations matches the physics simulation.</p>
+        <button class="test-button" onclick="testGravitationalConstant()">Test Gravitational Constant</button>
+        <div id="gravitationalResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Circular Orbit Energy Ratio</h2>
+        <p>Tests that for a circular orbit, the magnitude of potential energy is roughly twice the kinetic energy.</p>
+        <button class="test-button" onclick="testCircularOrbitRatio()">Test Circular Orbit Ratio</button>
+        <div id="orbitRatioResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Energy Conservation</h2>
+        <p>Tests that total energy (KE + PE) remains approximately constant over time.</p>
+        <button class="test-button" onclick="testEnergyConservation()">Test Energy Conservation</button>
+        <div id="conservationResults" class="test-results"></div>
+    </div>
+
+    <script>
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        
+        const logResult = (elementId, message) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent += message + '\n';
+                element.scrollTop = element.scrollHeight;
+            }
+            console.log(message);
+        };
+
+        const clearResults = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = '';
+            }
+        };
+
+        const showStatus = (message, type = 'info') => {
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            document.body.insertBefore(status, document.body.firstChild);
+            setTimeout(() => status.remove(), 5000);
+        };
+
+        // Test 1: Energy Formula Verification
+        async function testEnergyFormulas() {
+            clearResults('formulaResults');
+            logResult('formulaResults', '🔬 Testing Energy Formula Implementation...');
+            
+            try {
+                // Check if energy functions exist
+                if (typeof window.calculateKineticEnergy !== 'function') {
+                    throw new Error('calculateKineticEnergy function not available');
+                }
+                if (typeof window.calculateGravitationalPotentialEnergy !== 'function') {
+                    throw new Error('calculateGravitationalPotentialEnergy function not available');
+                }
+                if (typeof window.calculateTotalPotentialEnergy !== 'function') {
+                    throw new Error('calculateTotalPotentialEnergy function not available');
+                }
+
+                logResult('formulaResults', '✅ Energy calculation functions found');
+
+                // Test kinetic energy formula
+                const testObject = {
+                    mass: 1000, // 1 solar mass in simulation units
+                    vel: { x: 10, y: 0 } // 10 units/s velocity
+                };
+
+                const ke = window.calculateKineticEnergy(testObject);
+                logResult('formulaResults', `\nKinetic Energy Test:`);
+                logResult('formulaResults', `  Mass: ${testObject.mass} simulation units`);
+                logResult('formulaResults', `  Velocity: ${testObject.vel.x} units/s`);
+                logResult('formulaResults', `  Calculated KE: ${ke.toExponential(2)} J`);
+
+                // Verify KE = 0.5 * m * v^2
+                const expectedKE = 0.5 * testObject.mass * testObject.vel.x * testObject.vel.x;
+                logResult('formulaResults', `  Expected KE (simulation units): ${expectedKE.toExponential(2)}`);
+                logResult('formulaResults', `  Formula verification: ${Math.abs(ke - expectedKE) < 1e-6 ? '✅ PASS' : '❌ FAIL'}`);
+
+                // Test potential energy formula
+                const testObject1 = { mass: 1000, pos: { x: 0, y: 0 } };
+                const testObject2 = { mass: 100, pos: { x: 100, y: 0 } };
+                const distance = 100;
+
+                const pe = window.calculateGravitationalPotentialEnergy(testObject1, testObject2, distance);
+                logResult('formulaResults', `\nPotential Energy Test:`);
+                logResult('formulaResults', `  Mass 1: ${testObject1.mass} simulation units`);
+                logResult('formulaResults', `  Mass 2: ${testObject2.mass} simulation units`);
+                logResult('formulaResults', `  Distance: ${distance} simulation units`);
+                logResult('formulaResults', `  Calculated PE: ${pe.toExponential(2)} J`);
+
+                // Verify PE is negative (attractive force)
+                if (pe < 0) {
+                    logResult('formulaResults', `  Sign verification: ✅ PASS (negative as expected)`);
+                } else {
+                    logResult('formulaResults', `  Sign verification: ❌ FAIL (should be negative)`);
+                }
+
+                logResult('formulaResults', '\n✅ Energy Formula Test Completed');
+                showStatus('Energy Formula Test Completed!', 'success');
+
+            } catch (error) {
+                logResult('formulaResults', `❌ Error: ${error.message}`);
+                showStatus(`Energy Formula Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 2: Gravitational Constant Consistency
+        async function testGravitationalConstant() {
+            clearResults('gravitationalResults');
+            logResult('gravitationalResults', '🌌 Testing Gravitational Constant Consistency...');
+            
+            try {
+                // Check if physics settings are available
+                if (!window.physicsSettings) {
+                    throw new Error('physicsSettings not available');
+                }
+
+                logResult('gravitationalResults', `Simulation gravitational constant: ${window.physicsSettings.gravitational_constant}`);
+
+                // Check if the new gravitational constant function exists
+                if (typeof window.getGravitationalConstantSI !== 'function') {
+                    throw new Error('getGravitationalConstantSI function not available');
+                }
+
+                const G_si = window.getGravitationalConstantSI();
+                logResult('gravitationalResults', `Calculated SI gravitational constant: ${G_si.toExponential(2)} m³/kg/s²`);
+
+                // Compare with standard SI value
+                const standardG = 6.67430e-11;
+                const ratio = G_si / standardG;
+                logResult('gravitationalResults', `Ratio to standard G: ${ratio.toExponential(2)}`);
+
+                if (Math.abs(ratio - 1.0) < 0.1) {
+                    logResult('gravitationalResults', '✅ Gravitational constant is close to standard SI value');
+                } else {
+                    logResult('gravitationalResults', '⚠️ Gravitational constant differs significantly from standard SI value');
+                    logResult('gravitationalResults', 'This is expected for a simplified simulation');
+                }
+
+                // Test that the energy calculations use the correct G
+                const testObject1 = { mass: 1000, pos: { x: 0, y: 0 } };
+                const testObject2 = { mass: 100, pos: { x: 100, y: 0 } };
+                const distance = 100;
+
+                const pe = window.calculateGravitationalPotentialEnergy(testObject1, testObject2, distance);
+                logResult('gravitationalResults', `\nTest potential energy calculation: ${pe.toExponential(2)} J`);
+
+                logResult('gravitationalResults', '\n✅ Gravitational Constant Test Completed');
+                showStatus('Gravitational Constant Test Completed!', 'success');
+
+            } catch (error) {
+                logResult('gravitationalResults', `❌ Error: ${error.message}`);
+                showStatus(`Gravitational Constant Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 3: Circular Orbit Energy Ratio
+        async function testCircularOrbitRatio() {
+            clearResults('orbitRatioResults');
+            logResult('orbitRatioResults', '🔄 Testing Circular Orbit Energy Ratio...');
+            
+            try {
+                // Check if simulation is available
+                if (!window.state) {
+                    throw new Error('Simulation not available. Please open the main simulation first.');
+                }
+
+                // Look for objects that might be in circular orbits
+                const allObjects = [];
+                if (window.planets) allObjects.push(...window.planets);
+                if (window.stars) allObjects.push(...window.stars);
+                if (window.gas_giants) allObjects.push(...window.gas_giants);
+
+                if (allObjects.length === 0) {
+                    throw new Error('No objects found. Please create some objects in the simulation.');
+                }
+
+                logResult('orbitRatioResults', `Found ${allObjects.length} objects to test`);
+
+                let bestRatio = null;
+                let bestObject = null;
+
+                for (const obj of allObjects) {
+                    if (!obj || !obj.alive) continue;
+
+                    // Calculate energies
+                    const ke = window.calculateKineticEnergy(obj);
+                    const pe = window.calculateTotalPotentialEnergy(obj, allObjects);
+
+                    if (ke > 0 && pe < 0) {
+                        const ratio = Math.abs(pe) / ke;
+                        logResult('orbitRatioResults', `\nObject ${obj.id || 'unknown'}:`);
+                        logResult('orbitRatioResults', `  KE: ${ke.toExponential(2)} J`);
+                        logResult('orbitRatioResults', `  PE: ${pe.toExponential(2)} J`);
+                        logResult('orbitRatioResults', `  |PE|/KE ratio: ${ratio.toFixed(3)}`);
+
+                        // Check if this is close to 2.0 (circular orbit)
+                        if (Math.abs(ratio - 2.0) < 0.5) {
+                            logResult('orbitRatioResults', `  ✅ Close to circular orbit ratio (2.0)`);
+                            if (!bestRatio || Math.abs(ratio - 2.0) < Math.abs(bestRatio - 2.0)) {
+                                bestRatio = ratio;
+                                bestObject = obj;
+                            }
+                        } else if (ratio > 2.5) {
+                            logResult('orbitRatioResults', `  📉 Elliptical orbit (ratio > 2.5)`);
+                        } else if (ratio < 1.5) {
+                            logResult('orbitRatioResults', `  📈 Hyperbolic trajectory (ratio < 1.5)`);
+                        }
+                    }
+                }
+
+                if (bestObject) {
+                    logResult('orbitRatioResults', `\n🎯 Best circular orbit candidate:`);
+                    logResult('orbitRatioResults', `  Object ID: ${bestObject.id || 'unknown'}`);
+                    logResult('orbitRatioResults', `  Ratio: ${bestRatio.toFixed(3)}`);
+                    logResult('orbitRatioResults', `  Deviation from 2.0: ${Math.abs(bestRatio - 2.0).toFixed(3)}`);
+                } else {
+                    logResult('orbitRatioResults', `\n⚠️ No objects found with ratio close to 2.0`);
+                    logResult('orbitRatioResults', `This might indicate elliptical orbits or hyperbolic trajectories`);
+                }
+
+                logResult('orbitRatioResults', '\n✅ Circular Orbit Ratio Test Completed');
+                showStatus('Circular Orbit Ratio Test Completed!', 'success');
+
+            } catch (error) {
+                logResult('orbitRatioResults', `❌ Error: ${error.message}`);
+                showStatus(`Circular Orbit Ratio Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 4: Energy Conservation
+        async function testEnergyConservation() {
+            clearResults('conservationResults');
+            logResult('conservationResults', '⚖️ Testing Energy Conservation...');
+            
+            try {
+                // Check if simulation is available
+                if (!window.state) {
+                    throw new Error('Simulation not available. Please open the main simulation first.');
+                }
+
+                // Check if energy history functions exist
+                if (typeof window.getObjectEnergyHistory !== 'function') {
+                    throw new Error('getObjectEnergyHistory function not available');
+                }
+
+                // Find an object with energy history
+                const allObjects = [];
+                if (window.planets) allObjects.push(...window.planets);
+                if (window.stars) allObjects.push(...window.stars);
+                if (window.gas_giants) allObjects.push(...window.gas_giants);
+
+                if (allObjects.length === 0) {
+                    throw new Error('No objects found. Please create some objects in the simulation.');
+                }
+
+                let bestObject = null;
+                let maxHistoryLength = 0;
+
+                for (const obj of allObjects) {
+                    if (!obj || !obj.alive || !obj.id) continue;
+
+                    const history = window.getObjectEnergyHistory(obj.id);
+                    if (history.length > maxHistoryLength) {
+                        maxHistoryLength = history.length;
+                        bestObject = obj;
+                    }
+                }
+
+                if (!bestObject || maxHistoryLength < 10) {
+                    throw new Error('No object with sufficient energy history found. Please run the simulation for a while.');
+                }
+
+                const history = window.getObjectEnergyHistory(bestObject.id);
+                logResult('conservationResults', `Testing energy conservation for object ${bestObject.id}`);
+                logResult('conservationResults', `Energy history points: ${history.length}`);
+
+                // Calculate energy variation
+                const totalEnergies = history.map(point => point.total);
+                const minEnergy = Math.min(...totalEnergies);
+                const maxEnergy = Math.max(...totalEnergies);
+                const avgEnergy = totalEnergies.reduce((sum, e) => sum + e, 0) / totalEnergies.length;
+                const energyVariation = (maxEnergy - minEnergy) / Math.abs(avgEnergy);
+
+                logResult('conservationResults', `\nEnergy Conservation Analysis:`);
+                logResult('conservationResults', `  Minimum total energy: ${minEnergy.toExponential(2)} J`);
+                logResult('conservationResults', `  Maximum total energy: ${maxEnergy.toExponential(2)} J`);
+                logResult('conservationResults', `  Average total energy: ${avgEnergy.toExponential(2)} J`);
+                logResult('conservationResults', `  Energy variation: ${(energyVariation * 100).toFixed(2)}%`);
+
+                if (energyVariation < 0.1) {
+                    logResult('conservationResults', `  ✅ Excellent energy conservation (< 10% variation)`);
+                } else if (energyVariation < 0.2) {
+                    logResult('conservationResults', `  ⚠️ Good energy conservation (< 20% variation)`);
+                } else {
+                    logResult('conservationResults', `  ❌ Poor energy conservation (> 20% variation)`);
+                }
+
+                // Check for systematic drift
+                const firstEnergy = totalEnergies[0];
+                const lastEnergy = totalEnergies[totalEnergies.length - 1];
+                const drift = (lastEnergy - firstEnergy) / Math.abs(firstEnergy);
+                logResult('conservationResults', `  Energy drift: ${(drift * 100).toFixed(2)}%`);
+
+                if (Math.abs(drift) < 0.05) {
+                    logResult('conservationResults', `  ✅ Minimal energy drift (< 5%)`);
+                } else {
+                    logResult('conservationResults', `  ⚠️ Significant energy drift detected`);
+                }
+
+                logResult('conservationResults', '\n✅ Energy Conservation Test Completed');
+                showStatus('Energy Conservation Test Completed!', 'success');
+
+            } catch (error) {
+                logResult('conservationResults', `❌ Error: ${error.message}`);
+                showStatus(`Energy Conservation Test Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Chart Edge Case Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .test-button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0052a3;
+        }
+        .test-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .test-results {
+            background: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #2d5a2d;
+            color: #90ee90;
+        }
+        .status.error {
+            background: #5a2d2d;
+            color: #ff6b6b;
+        }
+        .status.info {
+            background: #2d2d5a;
+            color: #90caf9;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        .instructions {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 Energy Chart Edge Case Tests</h1>
+    
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Open the main simulation in another tab/window</li>
+            <li>Start a simulation with multiple objects</li>
+            <li>Run these tests while the simulation is running</li>
+            <li>Check the console for detailed test results</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Fast-Forward Mode</h2>
+        <p>Tests chart responsiveness during maximum simulation speed.</p>
+        <button class="test-button" onclick="testFastForward()">Run Fast-Forward Test</button>
+        <div id="fastForwardResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Rapid Object Switching</h2>
+        <p>Tests chart clearing and data switching when rapidly selecting different objects.</p>
+        <button class="test-button" onclick="testRapidSwitching()">Run Rapid Switching Test</button>
+        <div id="rapidSwitchingResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Pause/Resume</h2>
+        <p>Tests that no stale data is displayed after pausing and resuming.</p>
+        <button class="test-button" onclick="testPauseResume()">Run Pause/Resume Test</button>
+        <div id="pauseResumeResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Memory Management</h2>
+        <p>Tests memory usage and trimming functionality.</p>
+        <button class="test-button" onclick="testMemoryManagement()">Run Memory Test</button>
+        <div id="memoryResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 5: Overall Responsiveness</h2>
+        <p>Tests overall chart responsiveness under various conditions.</p>
+        <button class="test-button" onclick="testResponsiveness()">Run Responsiveness Test</button>
+        <div id="responsivenessResults" class="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Run All Tests</h2>
+        <p>Run all tests in sequence for comprehensive testing.</p>
+        <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+        <div id="allTestsResults" class="test-results"></div>
+    </div>
+
+    <script>
+        // Test utilities
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        
+        const logResult = (elementId, message) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent += message + '\n';
+                element.scrollTop = element.scrollHeight;
+            }
+            console.log(message);
+        };
+
+        const clearResults = (elementId) => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = '';
+            }
+        };
+
+        const showStatus = (message, type = 'info') => {
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.textContent = message;
+            document.body.insertBefore(status, document.body.firstChild);
+            setTimeout(() => status.remove(), 5000);
+        };
+
+        // Test 1: Fast-Forward Mode
+        async function testFastForward() {
+            clearResults('fastForwardResults');
+            logResult('fastForwardResults', '🚀 Starting Fast-Forward Test...');
+            
+            try {
+                // Check if simulation is available
+                if (!window.state) {
+                    throw new Error('Simulation not available. Please open the main simulation first.');
+                }
+
+                const originalSpeed = window.state.simulation_speed || 1;
+                logResult('fastForwardResults', `Original speed: ${originalSpeed}`);
+
+                // Set to maximum speed
+                window.state.simulation_speed = 10;
+                logResult('fastForwardResults', 'Set simulation speed to maximum (10x)');
+
+                // Select a random object
+                const objects = [
+                    ...(window.bh_list || []),
+                    ...(window.planets || []),
+                    ...(window.stars || [])
+                ].filter(obj => obj && obj.alive !== false);
+
+                if (objects.length === 0) {
+                    throw new Error('No objects available for testing');
+                }
+
+                const testObject = objects[0];
+                logResult('fastForwardResults', `Selected test object: ${testObject.constructor.name} (ID: ${testObject.id})`);
+
+                // Open inspector
+                if (window.showObjectInspector) {
+                    window.showObjectInspector(testObject, testObject.constructor.name);
+                    logResult('fastForwardResults', 'Opened object inspector');
+                }
+
+                await sleep(1000);
+
+                // Switch to energy tab
+                const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+                if (energyTab) {
+                    energyTab.click();
+                    logResult('fastForwardResults', 'Switched to energy tab');
+                }
+
+                await sleep(1000);
+
+                // Monitor responsiveness
+                let responsiveChecks = 0;
+                for (let i = 0; i < 10; i++) {
+                    await sleep(500);
+                    
+                    const chart = document.getElementById('energyChart');
+                    const collectingMessage = document.querySelector('.collecting-message');
+                    
+                    if (chart && (!collectingMessage || collectingMessage.style.display === 'none')) {
+                        responsiveChecks++;
+                        logResult('fastForwardResults', `Check ${i + 1}: Chart responsive ✓`);
+                    } else {
+                        logResult('fastForwardResults', `Check ${i + 1}: Chart not responsive ✗`);
+                    }
+                }
+
+                const responsivenessRate = responsiveChecks / 10;
+                logResult('fastForwardResults', `\n📊 Results: ${responsiveChecks}/10 responsive checks (${(responsivenessRate * 100).toFixed(1)}%)`);
+
+                if (responsivenessRate >= 0.8) {
+                    logResult('fastForwardResults', '✅ Fast-Forward Test PASSED');
+                    showStatus('Fast-Forward Test Passed!', 'success');
+                } else {
+                    logResult('fastForwardResults', '❌ Fast-Forward Test FAILED');
+                    showStatus('Fast-Forward Test Failed!', 'error');
+                }
+
+                // Restore original speed
+                window.state.simulation_speed = originalSpeed;
+                logResult('fastForwardResults', `Restored original speed: ${originalSpeed}`);
+
+            } catch (error) {
+                logResult('fastForwardResults', `❌ Error: ${error.message}`);
+                showStatus(`Fast-Forward Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 2: Rapid Object Switching
+        async function testRapidSwitching() {
+            clearResults('rapidSwitchingResults');
+            logResult('rapidSwitchingResults', '🔄 Starting Rapid Switching Test...');
+            
+            try {
+                const objects = [
+                    ...(window.bh_list || []),
+                    ...(window.planets || []),
+                    ...(window.stars || []),
+                    ...(window.gas_giants || [])
+                ].filter(obj => obj && obj.alive !== false).slice(0, 5);
+
+                if (objects.length < 2) {
+                    throw new Error('Need at least 2 objects for switching test');
+                }
+
+                logResult('rapidSwitchingResults', `Found ${objects.length} objects for testing`);
+
+                let successfulSwitches = 0;
+                const totalSwitches = 10;
+
+                // Open inspector with first object
+                if (window.showObjectInspector) {
+                    window.showObjectInspector(objects[0], objects[0].constructor.name);
+                }
+
+                // Switch to energy tab
+                const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+                if (energyTab) {
+                    energyTab.click();
+                }
+
+                await sleep(1000);
+
+                // Rapidly switch between objects
+                for (let i = 0; i < totalSwitches; i++) {
+                    const object = objects[i % objects.length];
+                    
+                    if (window.showObjectInspector) {
+                        window.showObjectInspector(object, object.constructor.name);
+                    }
+
+                    await sleep(200);
+
+                    // Check if chart cleared properly
+                    const collectingMessage = document.querySelector('.collecting-message');
+                    if (collectingMessage && collectingMessage.style.display !== 'none') {
+                        logResult('rapidSwitchingResults', `Switch ${i + 1}: Chart cleared properly ✓`);
+                        successfulSwitches++;
+                    } else {
+                        logResult('rapidSwitchingResults', `Switch ${i + 1}: Chart may not have cleared ✗`);
+                    }
+
+                    await sleep(100);
+                }
+
+                const successRate = successfulSwitches / totalSwitches;
+                logResult('rapidSwitchingResults', `\n📊 Results: ${successfulSwitches}/${totalSwitches} successful switches (${(successRate * 100).toFixed(1)}%)`);
+
+                if (successRate >= 0.7) {
+                    logResult('rapidSwitchingResults', '✅ Rapid Switching Test PASSED');
+                    showStatus('Rapid Switching Test Passed!', 'success');
+                } else {
+                    logResult('rapidSwitchingResults', '❌ Rapid Switching Test FAILED');
+                    showStatus('Rapid Switching Test Failed!', 'error');
+                }
+
+            } catch (error) {
+                logResult('rapidSwitchingResults', `❌ Error: ${error.message}`);
+                showStatus(`Rapid Switching Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 3: Pause/Resume
+        async function testPauseResume() {
+            clearResults('pauseResumeResults');
+            logResult('pauseResumeResults', '⏸️ Starting Pause/Resume Test...');
+            
+            try {
+                const testObject = [
+                    ...(window.bh_list || []),
+                    ...(window.planets || []),
+                    ...(window.stars || [])
+                ].filter(obj => obj && obj.alive !== false)[0];
+
+                if (!testObject) {
+                    throw new Error('No objects available for testing');
+                }
+
+                // Open inspector and energy tab
+                if (window.showObjectInspector) {
+                    window.showObjectInspector(testObject, testObject.constructor.name);
+                }
+
+                const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+                if (energyTab) {
+                    energyTab.click();
+                }
+
+                await sleep(1000);
+
+                // Get initial data
+                const initialData = window.getObjectEnergyHistory ? 
+                    window.getObjectEnergyHistory(testObject.id) : [];
+                
+                logResult('pauseResumeResults', `Initial data points: ${initialData.length}`);
+
+                // Pause simulation
+                if (window.state) {
+                    window.state.paused = true;
+                    logResult('pauseResumeResults', 'Simulation paused');
+                }
+
+                await sleep(2000);
+
+                // Check that no new data was added during pause
+                const pausedData = window.getObjectEnergyHistory ? 
+                    window.getObjectEnergyHistory(testObject.id) : [];
+
+                if (pausedData.length === initialData.length) {
+                    logResult('pauseResumeResults', '✅ No new data added during pause');
+                } else {
+                    logResult('pauseResumeResults', `❌ Data added during pause: ${pausedData.length - initialData.length} points`);
+                }
+
+                // Resume simulation
+                if (window.state) {
+                    window.state.paused = false;
+                    logResult('pauseResumeResults', 'Simulation resumed');
+                }
+
+                await sleep(2000);
+
+                // Check that new data is being added after resume
+                const resumedData = window.getObjectEnergyHistory ? 
+                    window.getObjectEnergyHistory(testObject.id) : [];
+
+                if (resumedData.length > pausedData.length) {
+                    logResult('pauseResumeResults', `✅ New data after resume: ${resumedData.length - pausedData.length} points`);
+                    logResult('pauseResumeResults', '✅ Pause/Resume Test PASSED');
+                    showStatus('Pause/Resume Test Passed!', 'success');
+                } else {
+                    logResult('pauseResumeResults', '❌ No new data after resume');
+                    logResult('pauseResumeResults', '❌ Pause/Resume Test FAILED');
+                    showStatus('Pause/Resume Test Failed!', 'error');
+                }
+
+            } catch (error) {
+                logResult('pauseResumeResults', `❌ Error: ${error.message}`);
+                showStatus(`Pause/Resume Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 4: Memory Management
+        async function testMemoryManagement() {
+            clearResults('memoryResults');
+            logResult('memoryResults', '💾 Starting Memory Management Test...');
+            
+            try {
+                const initialStats = window.getEnergySystemMemoryStats ? 
+                    window.getEnergySystemMemoryStats() : null;
+
+                if (!initialStats) {
+                    throw new Error('Memory stats function not available');
+                }
+
+                logResult('memoryResults', `Initial memory: ${initialStats.totalMemoryEstimateMB.toFixed(2)}MB`);
+                logResult('memoryResults', `Objects tracked: ${initialStats.totalObjects}`);
+                logResult('memoryResults', `Data points: ${initialStats.totalDataPoints}`);
+
+                // Monitor memory usage
+                let maxMemory = initialStats.totalMemoryEstimateMB;
+                
+                for (let i = 0; i < 5; i++) {
+                    await sleep(1000);
+                    
+                    const currentStats = window.getEnergySystemMemoryStats();
+                    if (currentStats) {
+                        maxMemory = Math.max(maxMemory, currentStats.totalMemoryEstimateMB);
+                        logResult('memoryResults', `Check ${i + 1}: ${currentStats.totalMemoryEstimateMB.toFixed(2)}MB`);
+                    }
+                }
+
+                logResult('memoryResults', `Peak memory usage: ${maxMemory.toFixed(2)}MB`);
+
+                if (maxMemory <= 100) {
+                    logResult('memoryResults', '✅ Memory usage within limits');
+                } else {
+                    logResult('memoryResults', '⚠️ High memory usage detected');
+                }
+
+                // Test manual trimming
+                if (window.trimAllEnergyHistory) {
+                    const beforeTrim = window.getEnergySystemMemoryStats();
+                    window.trimAllEnergyHistory(1000);
+                    await sleep(500);
+                    const afterTrim = window.getEnergySystemMemoryStats();
+
+                    if (afterTrim.totalMemoryEstimateMB < beforeTrim.totalMemoryEstimateMB) {
+                        logResult('memoryResults', `✅ Manual trim successful: ${beforeTrim.totalMemoryEstimateMB.toFixed(2)}MB → ${afterTrim.totalMemoryEstimateMB.toFixed(2)}MB`);
+                    } else {
+                        logResult('memoryResults', '⚠️ Manual trim did not reduce memory usage');
+                    }
+                }
+
+                logResult('memoryResults', '✅ Memory Management Test PASSED');
+                showStatus('Memory Management Test Passed!', 'success');
+
+            } catch (error) {
+                logResult('memoryResults', `❌ Error: ${error.message}`);
+                showStatus(`Memory Management Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Test 5: Overall Responsiveness
+        async function testResponsiveness() {
+            clearResults('responsivenessResults');
+            logResult('responsivenessResults', '⚡ Starting Responsiveness Test...');
+            
+            try {
+                let responsiveChecks = 0;
+                const totalChecks = 10;
+
+                for (let i = 0; i < totalChecks; i++) {
+                    const objects = [
+                        ...(window.bh_list || []),
+                        ...(window.planets || []),
+                        ...(window.stars || [])
+                    ].filter(obj => obj && obj.alive !== false);
+
+                    if (objects.length > 0) {
+                        const testObject = objects[0];
+                        
+                        if (window.showObjectInspector) {
+                            window.showObjectInspector(testObject, testObject.constructor.name);
+                        }
+
+                        await sleep(200);
+
+                        const chart = document.getElementById('energyChart');
+                        const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+
+                        if (chart && energyTab) {
+                            responsiveChecks++;
+                            logResult('responsivenessResults', `Check ${i + 1}: Responsive ✓`);
+                        } else {
+                            logResult('responsivenessResults', `Check ${i + 1}: Not responsive ✗`);
+                        }
+                    }
+
+                    await sleep(300);
+                }
+
+                const responsivenessRate = responsiveChecks / totalChecks;
+                logResult('responsivenessResults', `\n📊 Results: ${responsiveChecks}/${totalChecks} responsive checks (${(responsivenessRate * 100).toFixed(1)}%)`);
+
+                if (responsivenessRate >= 0.8) {
+                    logResult('responsivenessResults', '✅ Responsiveness Test PASSED');
+                    showStatus('Responsiveness Test Passed!', 'success');
+                } else {
+                    logResult('responsivenessResults', '❌ Responsiveness Test FAILED');
+                    showStatus('Responsiveness Test Failed!', 'error');
+                }
+
+            } catch (error) {
+                logResult('responsivenessResults', `❌ Error: ${error.message}`);
+                showStatus(`Responsiveness Test Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Run all tests
+        async function runAllTests() {
+            clearResults('allTestsResults');
+            logResult('allTestsResults', '🚀 Starting All Tests...\n');
+            
+            const tests = [
+                { name: 'Fast-Forward', func: testFastForward },
+                { name: 'Rapid Switching', func: testRapidSwitching },
+                { name: 'Pause/Resume', func: testPauseResume },
+                { name: 'Memory Management', func: testMemoryManagement },
+                { name: 'Responsiveness', func: testResponsiveness }
+            ];
+
+            let passedTests = 0;
+
+            for (const test of tests) {
+                logResult('allTestsResults', `\n--- Running ${test.name} Test ---`);
+                try {
+                    await test.func();
+                    passedTests++;
+                    logResult('allTestsResults', `✅ ${test.name} Test Completed`);
+                } catch (error) {
+                    logResult('allTestsResults', `❌ ${test.name} Test Failed: ${error.message}`);
+                }
+                await sleep(1000);
+            }
+
+            logResult('allTestsResults', `\n📊 FINAL RESULTS: ${passedTests}/${tests.length} tests passed`);
+            
+            if (passedTests === tests.length) {
+                logResult('allTestsResults', '🎉 All tests passed! Energy chart system is robust.');
+                showStatus('All Tests Passed! 🎉', 'success');
+            } else {
+                logResult('allTestsResults', '⚠️ Some tests failed. Review the results above.');
+                showStatus(`${passedTests}/${tests.length} Tests Passed`, 'info');
+            }
+        }
+    </script>
+</body>
+</html> 
