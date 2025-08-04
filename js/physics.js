@@ -213,10 +213,13 @@ const screen_to_world = spos => {
  * @param {number} buffer_factor - Buffer factor for offscreen detection
  * @returns {boolean} True if position is offscreen
  */
-const is_offscreen = (pos, buffer_factor = 1.5) => {
+const is_offscreen = (pos, buffer_factor = 10.0) => {
   if (!state) return false; // Fallback if state not set
   if (!canvas) return false; // Fallback if canvas not available
-  return isOffscreen(pos, state, canvas, buffer_factor);
+  
+  // Scale buffer factor with zoom level to prevent aggressive culling
+  const zoom_adjusted_buffer = buffer_factor * Math.max(1.0, state.zoom);
+  return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
 };
 
 // Color utilities (using utils)
@@ -582,15 +585,18 @@ const updatePhysics = dt => {
     return filtered;
   };
   
-  planets = filterAndClearEnergy(planets, p => p.alive && !is_offscreen(p.pos));
-  stars = filterAndClearEnergy(stars, s => s.alive && !is_offscreen(s.pos));
-  gas_giants = filterAndClearEnergy(gas_giants, g => g.alive && !is_offscreen(g.pos));
-  asteroids = filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos));
-  debris = filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos));
-  neutron_stars = filterAndClearEnergy(neutron_stars, ns => ns.alive && !is_offscreen(ns.pos));
-  white_dwarfs = filterAndClearEnergy(white_dwarfs, wd => wd.alive && !is_offscreen(wd.pos));
-  bh_list = filterAndClearEnergy(bh_list, bh => (bh.alive !== false) && !is_offscreen(bh.pos));
-  accretion_disk_particles = filterAndClearEnergy(accretion_disk_particles, ap => ap.alive && !is_offscreen(ap.pos));
+  // More conservative filtering for important objects - only remove if truly far away
+  planets = filterAndClearEnergy(planets, p => p.alive && !is_offscreen(p.pos, 20.0));
+  stars = filterAndClearEnergy(stars, s => s.alive && !is_offscreen(s.pos, 20.0));
+  gas_giants = filterAndClearEnergy(gas_giants, g => g.alive && !is_offscreen(g.pos, 20.0));
+  neutron_stars = filterAndClearEnergy(neutron_stars, ns => ns.alive && !is_offscreen(ns.pos, 20.0));
+  white_dwarfs = filterAndClearEnergy(white_dwarfs, wd => wd.alive && !is_offscreen(wd.pos, 20.0));
+  bh_list = filterAndClearEnergy(bh_list, bh => (bh.alive !== false) && !is_offscreen(bh.pos, 50.0)); // Black holes should never be removed
+  
+  // More aggressive filtering for smaller/less important objects
+  asteroids = filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos, 5.0));
+  debris = filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos, 3.0));
+  accretion_disk_particles = filterAndClearEnergy(accretion_disk_particles, ap => ap.alive && !is_offscreen(ap.pos, 2.0));
 
   // Follow mode logic - matching original exactly
   let target = null;
