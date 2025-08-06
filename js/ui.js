@@ -5662,6 +5662,73 @@ document.getElementById('settingsCancel').onclick = () => {
   state.paused = false;
 };
 
+// Demo mode functionality
+let demoModeInterval = null;
+let demoModeActive = false;
+let demoScenarios = Object.keys(SCENARIO_INFO).filter(key => key !== 'None');
+let currentDemoIndex = 0;
+
+const startDemoMode = () => {
+  if (demoModeActive) return;
+  
+  demoModeActive = true;
+  const demoBtn = document.getElementById('demoModeBtn');
+  demoBtn.classList.add('active');
+  demoBtn.textContent = '⏹️ Stop Demo';
+  
+  // Start with a random scenario
+  currentDemoIndex = Math.floor(Math.random() * demoScenarios.length);
+  
+  const cycleScenario = () => {
+    if (!demoModeActive) return;
+    
+    const scenario = demoScenarios[currentDemoIndex];
+    SETTINGS.preset_scenario = scenario;
+    initialize_simulation();
+    state.paused = false;
+    show_enhanced_scenario_info(scenario);
+    updateSpeedDisplay();
+    
+    // Move to next scenario (randomly)
+    currentDemoIndex = Math.floor(Math.random() * demoScenarios.length);
+  };
+  
+  // Start cycling every 20 seconds
+  demoModeInterval = setInterval(cycleScenario, 20000);
+  
+  // Start immediately
+  cycleScenario();
+};
+
+const stopDemoMode = () => {
+  if (!demoModeActive) return;
+  
+  demoModeActive = false;
+  const demoBtn = document.getElementById('demoModeBtn');
+  demoBtn.classList.remove('active');
+  demoBtn.textContent = '🎬 Demo Mode';
+  
+  if (demoModeInterval) {
+    clearInterval(demoModeInterval);
+    demoModeInterval = null;
+  }
+};
+
+document.getElementById('demoModeBtn').onclick = () => {
+  if (demoModeActive) {
+    stopDemoMode();
+  } else {
+    startDemoMode();
+  }
+};
+
+// Cleanup demo mode on page unload
+window.addEventListener('beforeunload', () => {
+  if (demoModeActive) {
+    stopDemoMode();
+  }
+});
+
 // BH Masses Modal event handlers
 document.getElementById('bhMassesDone').onclick = hideBHMassesModal;
 
