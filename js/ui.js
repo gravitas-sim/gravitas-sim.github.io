@@ -36,6 +36,9 @@ import {
   clearObjectEnergyHistory,
   clearAllEnergyHistory,
   getObjectEnergyStats,
+  // Orbit preview helpers
+  getMostMassiveBody,
+  gravitational_acceleration,
 } from './physics.js';
 
 import { worldToScreen } from './utils.js';
@@ -56,6 +59,10 @@ const state = {
   pan: { x: 0.0, y: 0.0 },
   paused: false,
   mouse: { x: -1000, y: -1000, down: false }, // Initialize mouse off-screen to prevent accidental object detection
+  // Hold-to-add state
+  isHolding: false,
+  holdStart: null, // {x,y} in world coords
+  holdCurrent: null, // {x,y} in world coords
   adding_mass: false,
   add_start_screen: { x: 0, y: 0 },
   add_start_world: { x: 0, y: 0 },
@@ -65,7 +72,112 @@ const state = {
   last_time: 0,
   frame_count: 0,
   user_has_interacted: false, // Track if user has actually interacted with the page
+  // Orbit helper state
+  orbit_helper: {
+    enabled: true,
+    preview: null, // { center:{x,y}, radius:number, points:[{x,y}], vel:{x,y} }
+  },
+  // New drag preview state
+  isDragging: false,
+  dragStart: { x: 0, y: 0 },
+  dragCurrent: { x: 0, y: 0 },
+  // Sticky orbit snapping state for preview and spawn
+  stickyOrbit: {
+    active: false,
+    centralId: null,
+    snappedVel: null,
+  },
+  // Overlay for showing stable orbit when inspector is open
+  inspectorOrbitOverlay: {
+    active: false,
+    points: [],
+  },
 };
+// No global annotation helpers in clean state
+// Return attractors sorted by gravitational influence m/r^2
+function getDominantAttractors(startPos, limit = 1) {
+  const candidates = [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs];
+  const G = SETTINGS.gravitational_constant;
+  const scored = candidates
+    .filter(b => b && b.alive)
+    .map(b => {
+      const dx = b.pos.x - startPos.x;
+      const dy = b.pos.y - startPos.y;
+      const r2 = Math.max(1e-6, dx * dx + dy * dy);
+      return { body: b, influence: (G * b.mass) / r2 };
+    })
+    .sort((a, b) => b.influence - a.influence);
+  return scored.slice(0, Math.max(1, limit)).map(s => s.body);
+}
+
+function computeCircularVelocity(startPos, body) {
+  const G = SETTINGS.gravitational_constant;
+  const dx = startPos.x - body.pos.x;
+  const dy = startPos.y - body.pos.y;
+  const dist = Math.max(1e-6, Math.hypot(dx, dy));
+  const v = Math.sqrt((G * body.mass) / dist);
+  const angle = Math.atan2(startPos.y - body.pos.y, startPos.x - body.pos.x);
+  const tangent = angle + Math.PI / 2;
+  return { x: v * Math.cos(tangent), y: v * Math.sin(tangent) };
+}
+
+// Integrate a short trajectory preview under dominant attractors
+function computeTrajectoryPreview(
+  startPos,
+  initialVel,
+  useCircularSnap = false
+) {
+  const bodies = getDominantAttractors(startPos, 1);
+  if (bodies.length === 0) return null;
+  let vel = { x: initialVel.x, y: initialVel.y };
+  // If snapping, replace initial velocity with circular around most influential body
+  if (useCircularSnap && bodies[0]) {
+    vel = computeCircularVelocity(startPos, bodies[0]);
+  }
+  const points = [];
+  let p = { x: startPos.x, y: startPos.y };
+  const dt = 0.12; // preview integration step in sim seconds
+  const steps = 180; // total preview points
+  const softening2 = 1e-3;
+  const G = SETTINGS.gravitational_constant;
+  for (let i = 0; i < steps; i++) {
+    const b = bodies[0];
+    const dx = b.pos.x - p.x;
+    const dy = b.pos.y - p.y;
+    const r2 = dx * dx + dy * dy + softening2;
+    const invR = 1 / Math.sqrt(r2);
+    const aMag = (G * b.mass) / r2;
+    const ax = aMag * dx * invR;
+    const ay = aMag * dy * invR;
+    vel.x += ax * dt;
+    vel.y += ay * dt;
+    p.x += vel.x * dt;
+    p.y += vel.y * dt;
+    points.push({ x: p.x, y: p.y });
+    // Early stop if far off-screen to save work
+    if (Math.abs(p.x) > 1e6 || Math.abs(p.y) > 1e6) break;
+  }
+  return { points, velSuggested: vel, attractor: bodies[0] };
+}
+
+// Update orbit helper preview during drag (reflects trajectory if released now)
+function updateOrbitHelper(shiftSnap) {
+  if (!state.adding_mass || !state.orbit_helper.enabled) {
+    state.orbit_helper.preview = null;
+    return;
+  }
+  // Compute initial velocity from current drag vector (same scaling as placement)
+  const current = screen_to_world(state.mouse);
+  const initialVel = {
+    x: (current.x - state.add_start_world.x) * 3,
+    y: (current.y - state.add_start_world.y) * 3,
+  };
+  state.orbit_helper.preview = computeTrajectoryPreview(
+    state.add_start_world,
+    initialVel,
+    !!shiftSnap
+  );
+}
 
 // Immediately hide object inspector when module loads
 if (typeof document !== 'undefined') {
@@ -127,6 +239,17 @@ const DEFAULT_SETTINGS = {
   enable_star_merging: true,
   max_star_mass_before_bh: 20.0,
   show_gravitational_waves: true, // Enable GW visualization by default
+  // Performance/architecture toggles
+  use_barnes_hut: false,
+  barnes_hut_theta: 0.7,
+  use_worker_physics: false,
+  use_offscreen_canvas: false,
+  use_particle_sprites: true,
+  adaptive_detail: true,
+  target_fps: 60,
+  chart_update_hz: 8,
+  pool_debris: true,
+  pool_comets: false,
 };
 
 let SETTINGS = { ...DEFAULT_SETTINGS };
@@ -1275,6 +1398,65 @@ const showObjectInspector = (object, type) => {
   // Store the current object for auto-updating
   state.selectedObject = { object, type };
 
+  // If object appears in a near-circular, bound orbit around the dominant body, enable blue orbit overlay
+  try {
+    const centerCandidates = [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs, ...gas_giants];
+    const G = SETTINGS.gravitational_constant;
+    const obj = object;
+    let primary = null;
+    let maxInfluence = -Infinity;
+    for (const b of centerCandidates) {
+      if (!b || !b.alive || b === obj) continue;
+      const dx = obj.pos.x - b.pos.x;
+      const dy = obj.pos.y - b.pos.y;
+      const r2 = Math.max(1e-6, dx * dx + dy * dy);
+      const influence = (G * b.mass) / r2;
+      if (influence > maxInfluence) {
+        maxInfluence = influence;
+        primary = b;
+      }
+    }
+    if (primary) {
+      const rx = obj.pos.x - primary.pos.x;
+      const ry = obj.pos.y - primary.pos.y;
+      const r = Math.max(1e-6, Math.hypot(rx, ry));
+      const vCirc = Math.sqrt((G * primary.mass) / r);
+      const vMag = Math.hypot(obj.vel.x, obj.vel.y);
+      const dirTan = Math.atan2(ry, rx) + Math.PI / 2;
+      const vIdeal = { x: vCirc * Math.cos(dirTan), y: vCirc * Math.sin(dirTan) };
+      const dot = obj.vel.x * vIdeal.x + obj.vel.y * vIdeal.y;
+      const denom = Math.max(1e-6, vMag * vCirc);
+      const cosTheta = Math.max(-1, Math.min(1, dot / denom));
+      const angErr = Math.acos(cosTheta);
+      const speedRatio = vMag / vCirc;
+      const angleTol = ((SETTINGS.sticky_dir_only_angle_deg || 15) * Math.PI) / 180;
+      const speedTol = 0.2; // allow ~20% speed deviation
+      const isBound = 0.5 * vMag * vMag - (G * primary.mass) / r < 0;
+      if (isBound && angErr <= angleTol && speedRatio > 1 - speedTol && speedRatio < 1 + speedTol) {
+        // Build one-loop circular path for overlay
+        const samples = 240;
+        const theta0 = Math.atan2(ry, rx);
+        const loop = [];
+        for (let i = 0; i <= samples; i++) {
+          const t = i / samples;
+          const th = theta0 + 2 * Math.PI * t;
+          loop.push({ x: primary.pos.x + r * Math.cos(th), y: primary.pos.y + r * Math.sin(th) });
+        }
+        state.inspectorOrbitOverlay.active = true;
+        state.inspectorOrbitOverlay.points = loop;
+      } else {
+        state.inspectorOrbitOverlay.active = false;
+        state.inspectorOrbitOverlay.points = [];
+      }
+    } else {
+      state.inspectorOrbitOverlay.active = false;
+      state.inspectorOrbitOverlay.points = [];
+    }
+  } catch {
+    state.inspectorOrbitOverlay.active = false;
+    state.inspectorOrbitOverlay.points = [];
+  }
+
   const updateInspector = () => {
     if (!state.inspector_open || !state.selectedObject) return;
 
@@ -1505,6 +1687,9 @@ const hideObjectInspector = () => {
   objectInspector.classList.remove('visible');
   objectInspector.classList.remove('dragging');
   state.inspector_open = false;
+  // turn off orbit overlay when inspector closes
+  state.inspectorOrbitOverlay.active = false;
+  state.inspectorOrbitOverlay.points = [];
 
   // Re-apply hide styles to ensure inspector stays hidden
   objectInspector.style.display = 'none';
@@ -3443,7 +3628,7 @@ const apply_preset = () => {
       init_velocity: 15,
       velocity_stddev: 3,
       gravitational_constant: 1.0,
-      sim_speed: 0.5, // Slower for better observation
+      sim_speed: 1.0, // Start at 1x for Solar System
       enable_star_merging: true,
       show_trails: true,
       trail_length: 20,
@@ -3839,21 +4024,39 @@ const apply_placement = () => {
       });
       break;
 
-    case 'Circular':
+    case 'Circular': {
+      // Choose a central mass (prefer a star; else the most massive gravitating body)
+      const candidates = [...stars, ...bh_list, ...neutron_stars, ...white_dwarfs];
+      const central = candidates.length > 0 ? getMostMassiveBody(candidates) : null;
+      const G = SETTINGS.gravitational_constant;
       all_objects.forEach((obj, i) => {
-        const angle = (i / all_objects.length) * 2 * Math.PI;
+        const angle = (i / Math.max(1, all_objects.length)) * 2 * Math.PI;
         const radius = bounds * 0.7;
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
-        // Orbital velocity
-        const vel_mag = SETTINGS.init_velocity;
-        obj.vel.x = -Math.sin(angle) * vel_mag;
-        obj.vel.y = Math.cos(angle) * vel_mag;
+        if (central && central.pos && typeof central.mass === 'number') {
+          const dx = obj.pos.x - central.pos.x;
+          const dy = obj.pos.y - central.pos.y;
+          const r = Math.max(1e-6, Math.hypot(dx, dy));
+          const vCirc = Math.sqrt((G * central.mass) / r);
+          // Tangential (default CCW)
+          obj.vel.x = (-dy / r) * vCirc;
+          obj.vel.y = (dx / r) * vCirc;
+        } else {
+          // Fallback to legacy
+          const vel_mag = SETTINGS.init_velocity;
+          obj.vel.x = -Math.sin(angle) * vel_mag;
+          obj.vel.y = Math.cos(angle) * vel_mag;
+        }
       });
       break;
+    }
 
-    case 'Multi-Ring':
+    case 'Multi-Ring': {
+      const candidates = [...stars, ...bh_list, ...neutron_stars, ...white_dwarfs];
+      const central = candidates.length > 0 ? getMostMassiveBody(candidates) : null;
+      const G = SETTINGS.gravitational_constant;
       all_objects.forEach((obj, i) => {
         const ring = Math.floor(i / 20); // 20 objects per ring
         const angle = ((i % 20) / 20) * 2 * Math.PI;
@@ -3861,12 +4064,22 @@ const apply_placement = () => {
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
-        // Orbital velocity
-        const vel_mag = SETTINGS.init_velocity * (1 - ring * 0.1);
-        obj.vel.x = -Math.sin(angle) * vel_mag;
-        obj.vel.y = Math.cos(angle) * vel_mag;
+        if (central && central.pos && typeof central.mass === 'number') {
+          const dx = obj.pos.x - central.pos.x;
+          const dy = obj.pos.y - central.pos.y;
+          const r = Math.max(1e-6, Math.hypot(dx, dy));
+          const vCirc = Math.sqrt((G * central.mass) / r);
+          obj.vel.x = (-dy / r) * vCirc;
+          obj.vel.y = (dx / r) * vCirc;
+        } else {
+          // Fallback to legacy scaled by ring
+          const vel_mag = SETTINGS.init_velocity * (1 - ring * 0.1);
+          obj.vel.x = -Math.sin(angle) * vel_mag;
+          obj.vel.y = Math.cos(angle) * vel_mag;
+        }
       });
       break;
+    }
 
     case 'Grid': {
       const grid_size = Math.ceil(Math.sqrt(all_objects.length));
@@ -4269,7 +4482,7 @@ const initialize_simulation = () => {
         diameter: 4879, // km
         orbital_period: 88, // days
         type: 'terrestrial',
-        color: '#A0522D', // Mercury's actual color (brownish-gray)
+        color: '#9E9E9E', // Mercury grey/rocky
         density: 'rocky',
         temperature: 440, // Kelvin (daytime surface temperature)
         gravity: 3.7, // m/s²
@@ -4303,7 +4516,7 @@ const initialize_simulation = () => {
         diameter: 12742, // km
         orbital_period: 365, // days
         type: 'terrestrial',
-        color: '#4B7BE5', // Earth's actual color (blue oceans)
+        color: '#3FA7D6', // Earth blue-greenish
         density: 'rocky',
         temperature: 288, // Kelvin (average surface temperature)
         gravity: 9.81, // m/s²
@@ -4337,7 +4550,7 @@ const initialize_simulation = () => {
         diameter: 139822, // km
         orbital_period: 4333, // days
         type: 'gas_giant',
-        color: '#D8CA9D', // Jupiter's actual color (beige with bands)
+        color: '#D2B48C', // Jupiter tan/beige with bands
         giantType: 'jupiter_like',
         temperature: 165, // Kelvin (cloud top temperature)
         gravity: 24.79, // m/s²
@@ -4354,7 +4567,7 @@ const initialize_simulation = () => {
         diameter: 116464, // km
         orbital_period: 10759, // days
         type: 'gas_giant',
-        color: '#F4D03F', // Saturn's actual color (golden yellow)
+        color: '#F5DE8A', // Saturn pale yellow
         giantType: 'jupiter_like',
         temperature: 134, // Kelvin (cloud top temperature)
         gravity: 10.44, // m/s²
@@ -4371,7 +4584,7 @@ const initialize_simulation = () => {
         diameter: 50724, // km
         orbital_period: 30687, // days
         type: 'ice_giant',
-        color: '#85C1E9', // Uranus's actual color (light blue-green)
+        color: '#A7E3F1', // Uranus cyan
         giantType: 'neptune_like',
         temperature: 76, // Kelvin (cloud top temperature)
         gravity: 8.69, // m/s²
@@ -4388,7 +4601,7 @@ const initialize_simulation = () => {
         diameter: 49244, // km
         orbital_period: 60190, // days
         type: 'ice_giant',
-        color: '#5B5DDF', // Neptune's actual color (deep blue)
+        color: '#4B70DD', // Neptune deep blue
         giantType: 'neptune_like',
         temperature: 72, // Kelvin (cloud top temperature)
         gravity: 11.15, // m/s²
@@ -4433,6 +4646,17 @@ const initialize_simulation = () => {
         gasGiant.escape_velocity = planetData.escape_velocity;
         gasGiant.surface_pressure = planetData.surface_pressure;
         gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
+        // Ensure Saturn has visible rings; other giants do not
+        if (gasGiant.name === 'Saturn') {
+          gasGiant.hasRings = true;
+          // Set consistent, prominent ring parameters
+          gasGiant.ringInnerRadius = gasGiant.radius * 1.3;
+          gasGiant.ringOuterRadius = gasGiant.radius * 2.2;
+          gasGiant.ringAngle = 0.25; // slight tilt
+          gasGiant.ringOpacity = 0.65;
+        } else {
+          gasGiant.hasRings = false;
+        }
         gas_giants.push(gasGiant);
       } else {
         // Create new terrestrial planet objects
@@ -6215,7 +6439,10 @@ canvas.addEventListener('mousedown', e => {
   const clickedObject = findObjectAtPosition(worldPos);
 
   if (clickedObject) {
-    // Always show inspector when clicking on an object
+    // Clicking an existing object should ONLY open inspector, never start add/hold
+    state.isHolding = false;
+    state.adding_mass = false;
+    state.isDragging = false;
     showObjectInspector(clickedObject.object, clickedObject.type);
     return;
   }
@@ -6223,8 +6450,18 @@ canvas.addEventListener('mousedown', e => {
   // Only close inspector if we clicked on empty space and inspector is open
   if (state.inspector_open && !clickedObject) {
     hideObjectInspector();
+    // Do not add on this click when closing inspector
     return;
   }
+
+  // Begin hold for orbit preview on empty space only
+  state.isHolding = true;
+  state.holdStart = { ...worldPos };
+  state.holdCurrent = { ...worldPos };
+  // Reset sticky orbit on new hold
+  state.stickyOrbit.active = false;
+  state.stickyOrbit.centralId = null;
+  state.stickyOrbit.snappedVel = null;
 
   // Regular click handling for adding objects
   state.mouse.down = true;
@@ -6243,6 +6480,10 @@ canvas.addEventListener('mousedown', e => {
     state.adding_mass = true;
     state.add_start_screen = { x: e.clientX, y: e.clientY };
     state.add_start_world = worldPos;
+    // Start drag preview
+    state.isDragging = true;
+    state.dragStart = { ...worldPos };
+    state.dragCurrent = { ...worldPos };
   }
 });
 
@@ -6253,6 +6494,13 @@ window.addEventListener('mousemove', e => {
     state.pan.x += e.movementX;
     state.pan.y += e.movementY;
   }
+  if (state.adding_mass) {
+    updateOrbitHelper(e.shiftKey);
+    // Update drag preview current
+    const worldPos = screen_to_world({ x: e.clientX, y: e.clientY });
+    state.dragCurrent = worldPos;
+    if (state.isHolding) state.holdCurrent = { ...worldPos };
+  }
 });
 
 window.addEventListener('mouseup', e => {
@@ -6260,6 +6508,7 @@ window.addEventListener('mouseup', e => {
   state.mouse.down = false;
   if (state.adding_mass) {
     state.adding_mass = false;
+    state.isDragging = false;
     const add_end_world = screen_to_world({ x: e.clientX, y: e.clientY });
 
     // Validate both start and end world coordinates
@@ -6280,10 +6529,21 @@ window.addEventListener('mouseup', e => {
       return;
     }
 
-    const vel = {
-      x: (add_end_world.x - state.add_start_world.x) * 3,
-      y: (add_end_world.y - state.add_start_world.y) * 3,
+    let vel = {
+      x: (add_end_world.x - state.add_start_world.x) * 1.5,
+      y: (add_end_world.y - state.add_start_world.y) * 1.5,
     };
+    // If sticky orbit was active at release, use the snapped velocity for stable orbit
+    if (state.stickyOrbit.active && state.stickyOrbit.snappedVel) {
+      vel = { ...state.stickyOrbit.snappedVel };
+    }
+    // Snap to circular around dominant body if Shift key is held
+    if (state.orbit_helper.enabled && e.shiftKey) {
+      const prev = state.orbit_helper.preview;
+      if (prev && prev.attractor) {
+        vel = computeCircularVelocity(state.add_start_world, prev.attractor);
+      }
+    }
     const type = SETTINGS.input_object_type;
     let new_obj;
     if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
@@ -6311,8 +6571,269 @@ window.addEventListener('mouseup', e => {
     if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
     if (new_obj instanceof Comet) asteroids.push(new_obj);
     if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+    // Clear helper after placement
+    state.orbit_helper.preview = null;
+    // Clear holding flags
+    state.isHolding = false;
+    state.holdStart = null;
+    state.holdCurrent = null;
+    // Clear sticky state after placement
+    state.stickyOrbit.active = false;
+    state.stickyOrbit.centralId = null;
+    state.stickyOrbit.snappedVel = null;
   }
 });
+
+// Expose drag preview for rendering: returns { position, velocity } or null
+export function getDragPreview() {
+  if (!state.isDragging) return null;
+  const position = { ...state.dragStart };
+  // Use same scaling as placement velocity: factor 3 from delta world
+  const velocity = {
+    x: (state.dragCurrent.x - state.dragStart.x) * 3,
+    y: (state.dragCurrent.y - state.dragStart.y) * 3,
+  };
+  return { position, velocity };
+}
+
+// Compute an orbit preview from current hold/drag state
+export function getOrbitPreview() {
+  if (!state.isHolding || !state.holdStart || !state.holdCurrent) return null;
+
+  // Build array of all gravitating sources (alive only)
+  const sources = [
+    ...bh_list,
+    ...stars,
+    ...neutron_stars,
+    ...white_dwarfs,
+    ...gas_giants,
+    ...planets,
+    ...asteroids,
+    ...comets,
+  ].filter(b => b && b.alive !== false && b.pos && typeof b.mass === 'number');
+  if (sources.length === 0) return null;
+
+  // Initial position and velocity in world frame
+  const pos = { x: state.holdStart.x, y: state.holdStart.y };
+  let vel = {
+    x: (state.holdCurrent.x - state.holdStart.x) * 3,
+    y: (state.holdCurrent.y - state.holdStart.y) * 3,
+  };
+
+  // Integrate forward using symplectic Euler under many-body gravity
+  const dt = 0.02; // sim seconds per step
+  const steps = 160; // more points for smoother curve
+  const gravityBoost =
+    (typeof SETTINGS !== 'undefined' && SETTINGS.preview_gravity_boost) || 4.0;
+  const points = [{ x: pos.x, y: pos.y }];
+  let collisionInfo = null;
+  for (let i = 0; i < steps; i++) {
+    const a = gravitational_acceleration(pos, sources);
+    // Exaggerate bending by boosting gravity for preview path only
+    vel.x += a.ax * gravityBoost * dt;
+    vel.y += a.ay * gravityBoost * dt;
+    pos.x += vel.x * dt;
+    pos.y += vel.y * dt;
+    points.push({ x: pos.x, y: pos.y });
+
+    // Predict collision with any source: stop early and mark collision
+    if (!collisionInfo) {
+      for (let sIdx = 0; sIdx < sources.length; sIdx++) {
+        const s = sources[sIdx];
+        if (!s || !s.pos || typeof s.radius !== 'number') continue;
+        const dx = pos.x - s.pos.x;
+        const dy = pos.y - s.pos.y;
+        const distSq = dx * dx + dy * dy;
+        // Use a reduced effective radius for black holes to avoid overly eager preview collisions
+        const bhFactor =
+          (typeof SETTINGS !== 'undefined' && SETTINGS.preview_collision_bh_factor) ||
+          0.6;
+        const r =
+          s.obj_type === 'BlackHole'
+            ? Math.max(0, s.radius * bhFactor)
+            : Math.max(0, s.radius);
+        // Require inward radial motion for collision (reduces skim false positives)
+        const radialDot = dx * vel.x + dy * vel.y; // < 0 means moving inward
+        if (distSq <= r * r && radialDot < 0) {
+          collisionInfo = { x: pos.x, y: pos.y, withId: s.id ?? null, withType: s.obj_type ?? null };
+          break;
+        }
+      }
+      if (collisionInfo) break;
+    }
+  }
+
+  // Attempt stable orbit detection around most massive body
+  const primary = getMostMassiveBody(sources);
+  if (primary && primary.pos && typeof primary.mass === 'number') {
+    const last = points[points.length - 1];
+    if (last) {
+      // Relative initial state around primary (start of preview)
+      const r0 = {
+        x: points[0].x - primary.pos.x,
+        y: points[0].y - primary.pos.y,
+      };
+      const v0 = {
+        x: (state.holdCurrent.x - state.holdStart.x) * 3,
+        y: (state.holdCurrent.y - state.holdStart.y) * 3,
+      };
+      // Specific energy sign test (using normal G, not boosted)
+      const Gval =
+        (typeof SETTINGS !== 'undefined' && SETTINGS.gravitational_constant) ||
+        1.0;
+      const rMag = Math.hypot(r0.x, r0.y);
+      const vMag = Math.hypot(v0.x, v0.y);
+      // Minimal drag/speed gate, but we will override this if direction-only condition is met
+      const minSnapSpeed =
+        (typeof SETTINGS !== 'undefined' && SETTINGS.snap_min_speed) || 2.0;
+      // const E =
+      //   0.5 * vMag * vMag - (Gval * primary.mass) / Math.max(rMag, 1e-9);
+
+      // Sticky snapping: if velocity is roughly compatible with circular, snap
+      // Compute ideal circular speed and allow both CCW and CW tangential directions
+      const vCirc = Math.sqrt((Gval * primary.mass) / Math.max(rMag, 1e-9));
+      const baseAngle = Math.atan2(r0.y, r0.x);
+      const dirCCW = baseAngle + Math.PI / 2;
+      const dirCW = baseAngle - Math.PI / 2;
+      const vIdealCCW = { x: vCirc * Math.cos(dirCCW), y: vCirc * Math.sin(dirCCW) };
+      const vIdealCW = { x: vCirc * Math.cos(dirCW), y: vCirc * Math.sin(dirCW) };
+      // const dvx = v0.x - vIdeal.x;
+      // const dvy = v0.y - vIdeal.y;
+      // const velError = Math.hypot(dvx, dvy);
+      // Dial down stickiness: require closer match to ideal
+      // const baseTol =
+      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_orbit_tolerance) ||
+      //   5.0;
+      // const speedScale = Math.max(1, vMag * 0.1);
+      const denom = Math.max(1e-9, vMag * vCirc);
+      const dotCCW = v0.x * vIdealCCW.x + v0.y * vIdealCCW.y;
+      const cosCCW = Math.max(-1, Math.min(1, dotCCW / denom));
+      const angErrCCW = Math.acos(cosCCW);
+      const dotCW = v0.x * vIdealCW.x + v0.y * vIdealCW.y;
+      const cosCW = Math.max(-1, Math.min(1, dotCW / denom));
+      const angErrCW = Math.acos(cosCW);
+      const angErr = Math.min(angErrCCW, angErrCW);
+      // General angle tolerance removed in direction-only logic
+      // Direction-only snap: if within this narrower angle, snap regardless of speed
+      const dirOnlyDeg =
+        (typeof SETTINGS !== 'undefined' &&
+          SETTINGS.sticky_dir_only_angle_deg) ||
+        15;
+      const angleOkDirOnly = angErr <= (dirOnlyDeg * Math.PI) / 180;
+      // Speed factor band removed in direction-only logic
+
+      // If user hasn't dragged fast enough yet and not within direction-only band, show grey preview
+      if (vMag < minSnapSpeed && !angleOkDirOnly) {
+        return { points, snapped: false, collision: collisionInfo };
+      }
+
+      // Snap strictly by direction-only cone for seamless switching
+      if (angleOkDirOnly) {
+        const chosenIdeal = angErrCCW <= angErrCW ? vIdealCCW : vIdealCW;
+        // Activate snap and store snapped velocity
+        state.stickyOrbit.active = true;
+        state.stickyOrbit.centralId = primary.id ?? null;
+        state.stickyOrbit.snappedVel = { ...chosenIdeal };
+
+        // Use snapped velocity only for the loop preview, keep live arrow responsive
+
+        // Build a closed circular path (one full loop) for clear orbit outline
+        const r = Math.max(1e-9, Math.hypot(r0.x, r0.y));
+        const theta0 = Math.atan2(r0.y, r0.x);
+        const samples = 240;
+        const orbitPts = [];
+        for (let i = 0; i <= samples; i++) {
+          const t = i / samples;
+          const theta = theta0 + 2 * Math.PI * t;
+          orbitPts.push({
+            x: primary.pos.x + r * Math.cos(theta),
+            y: primary.pos.y + r * Math.sin(theta),
+          });
+        }
+
+        // Prepend starting segment from current hold point back to the first orbit point
+        // So the dashed path appears continuous from drop to orbit
+        const fullPoints = [];
+        // When snapped, show only the closed orbit (no connector)
+        // Then the full orbit
+        fullPoints.push(...orbitPts);
+
+        return { points: fullPoints, snapped: true };
+      }
+    }
+  }
+
+  // If previously in sticky mode, require a large deviation and angle change to break snap
+  if (state.stickyOrbit.active) {
+    const central = [...sources].find(
+      s => s.id === state.stickyOrbit.centralId
+    );
+    if (central) {
+      const r0 = {
+        x: state.holdStart.x - central.pos.x,
+        y: state.holdStart.y - central.pos.y,
+      };
+      const Gval =
+        (typeof SETTINGS !== 'undefined' && SETTINGS.gravitational_constant) ||
+        1.0;
+      const rMag = Math.hypot(r0.x, r0.y);
+      const vCirc = Math.sqrt((Gval * central.mass) / Math.max(rMag, 1e-9));
+      const baseAngle2 = Math.atan2(r0.y, r0.x);
+      const dirCCW2 = baseAngle2 + Math.PI / 2;
+      const dirCW2 = baseAngle2 - Math.PI / 2;
+      const vIdealCCW2 = { x: vCirc * Math.cos(dirCCW2), y: vCirc * Math.sin(dirCCW2) };
+      const vIdealCW2 = { x: vCirc * Math.cos(dirCW2), y: vCirc * Math.sin(dirCW2) };
+      // Choose ideal direction that is closest to current drag direction
+      const denom2 = Math.max(1e-9, Math.hypot(vel.x, vel.y) * vCirc);
+      const cosCCW2 = Math.max(-1, Math.min(1, (vel.x * vIdealCCW2.x + vel.y * vIdealCCW2.y) / denom2));
+      const cosCW2 = Math.max(-1, Math.min(1, (vel.x * vIdealCW2.x + vel.y * vIdealCW2.y) / denom2));
+      const angErrCCW2 = Math.acos(cosCCW2);
+      const angErrCW2 = Math.acos(cosCW2);
+      const useCCW2 = angErrCCW2 <= angErrCW2;
+      const vIdeal = useCCW2 ? vIdealCCW2 : vIdealCW2;
+      // deviation thresholds no longer used in direction-only maintain logic
+      const dot2 = vel.x * vIdeal.x + vel.y * vIdeal.y;
+      const cosTheta2 = Math.max(-1, Math.min(1, dot2 / denom2));
+      const angErr2 = Math.acos(cosTheta2);
+      // const breakAngleDeg =
+      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_break_angle_deg) ||
+      //   20;
+      // const breakAngle = (breakAngleDeg * Math.PI) / 180;
+      // Maintain snap only while within the direction-only cone
+      const dirOnlyDeg2 =
+        (typeof SETTINGS !== 'undefined' &&
+          SETTINGS.sticky_dir_only_angle_deg) ||
+        15;
+      if (angErr2 <= (dirOnlyDeg2 * Math.PI) / 180) {
+        // Stay snapped: show a simple closed circular orbit in blue (one full loop)
+        const r = Math.max(1e-9, Math.hypot(r0.x, r0.y));
+        const theta0 = Math.atan2(r0.y, r0.x);
+        const samples = 240;
+        const orbitPts = [];
+        for (let i = 0; i <= samples; i++) {
+          const t = i / samples;
+          const theta = theta0 + 2 * Math.PI * t;
+          orbitPts.push({
+            x: central.pos.x + r * Math.cos(theta),
+            y: central.pos.y + r * Math.sin(theta),
+          });
+        }
+        const fullPoints = [];
+        // When snapped, show only the closed orbit (no connector)
+        fullPoints.push(...orbitPts);
+        return { points: fullPoints, snapped: true };
+      }
+    }
+    // Break sticky if central not found or deviation too large
+    state.stickyOrbit.active = false;
+    state.stickyOrbit.centralId = null;
+    state.stickyOrbit.snappedVel = null;
+  }
+
+  return { points, snapped: false, collision: collisionInfo };
+}
+
+// Merge toast removed per request
 
 window.addEventListener(
   'wheel',

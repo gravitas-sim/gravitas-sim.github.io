@@ -3,6 +3,7 @@
 
 // Chart instance reference
 let chart = null;
+// Rollback: remove all event overlay/annotation logic to restore previous working chart
 
 // Chart configuration
 const chartConfig = {
@@ -236,6 +237,12 @@ export function initChart(canvas) {
  * @param {Array} data - Array of energy objects with { timestamp, ke, pe, total }
  */
 export function updateChart(data) {
+  // Decimate updates to requested Hz
+  const desiredHz = (window.SETTINGS && window.SETTINGS.chart_update_hz) || 8;
+  if (!updateChart._last) updateChart._last = 0;
+  const now = performance.now();
+  if (now - updateChart._last < 1000 / desiredHz) return;
+  updateChart._last = now;
   // Check if chart instance exists
   if (!chart) {
     console.warn('Chart not initialized - skipping update');
@@ -285,11 +292,13 @@ export function updateChart(data) {
       y: point.total || 0,
     }));
 
-    // Update chart datasets
-    chart.data.datasets[0].data = chartData;
-    chart.data.datasets[1].data = potentialData;
-    chart.data.datasets[2].data = totalData;
-
+    // Replace data to avoid duplicate lines when full history is passed repeatedly
+    const maxPoints = 200;
+    const trim = arr =>
+      arr.length > maxPoints ? arr.slice(arr.length - maxPoints) : arr;
+    chart.data.datasets[0].data = trim(chartData);
+    chart.data.datasets[1].data = trim(potentialData);
+    chart.data.datasets[2].data = trim(totalData);
     // Update the chart
     chart.update('none');
     console.log('Chart updated with', data.length, 'data points');
@@ -317,6 +326,13 @@ export function clearChart() {
     console.error('Failed to clear chart:', error);
   }
 }
+
+/**
+ * Push an annotation event for the energy chart.
+ * Consumers should pass timestamps from the same clock as energy sampling (performance.now()).
+ * @param {{timestamp:number, type:string, label?:string, color?:string}} evt
+ */
+// Rollback: no annotation API in clean state
 
 /**
  * Export the chart as a base64 image

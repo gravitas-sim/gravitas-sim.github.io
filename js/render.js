@@ -18,7 +18,7 @@ import {
   findObjectAtPosition,
 } from './physics.js';
 import { hexToRgb } from './utils.js';
-import { SETTINGS, state } from './ui.js';
+import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
@@ -441,6 +441,12 @@ const drawScene = () => {
     ctx.globalAlpha = 1;
   }
 
+  // Render aim line for drag preview
+  const preview = getDragPreview && getDragPreview();
+  if (preview) {
+    renderAimLine(preview);
+  }
+
   [
     ...debris,
     ...asteroids,
@@ -542,121 +548,60 @@ const drawScene = () => {
     }
   }
 
-  // Draw tooltip in screen coordinates (will be drawn after ctx.restore)
-  if (!state.inspector_open && state.user_has_interacted) {
-    const worldPos = screen_to_world(state.mouse);
-    const hoveredObject = findObjectAtPosition(worldPos);
-    if (hoveredObject) {
-      const tooltipX = state.mouse.x + 15;
-      const tooltipY = state.mouse.y - 10;
-
-      // Get object info for tooltip
-      let tooltipText = '';
-      switch (hoveredObject.type) {
-        case 'BlackHole': {
-          const bhMass = (hoveredObject.object.mass / SOLAR_MASS_UNIT).toFixed(
-            1
-          );
-          tooltipText = `Black Hole (${bhMass} M☉) - Click to inspect`;
-          break;
-        }
-        case 'Star': {
-          const starMass = (
-            hoveredObject.object.massInSuns ||
-            hoveredObject.object.mass / SOLAR_MASS_UNIT
-          ).toFixed(2);
-          tooltipText = `Star (${starMass} M☉) - Click to inspect`;
-          break;
-        }
-        case 'Planet': {
-          tooltipText = `Planet - Click to inspect`;
-          break;
-        }
-        case 'GasGiant': {
-          const gasGiantMass = (
-            hoveredObject.object.massInJupiters ||
-            hoveredObject.object.mass / 50.0
-          ).toFixed(2);
-          tooltipText = `Gas Giant (${gasGiantMass} M♃) - Click to inspect`;
-          break;
-        }
-        case 'Asteroid': {
-          tooltipText = `Asteroid - Click to inspect`;
-          break;
-        }
-        case 'NeutronStar': {
-          const neutronMass = (
-            hoveredObject.object.massInSuns ||
-            hoveredObject.object.mass / SOLAR_MASS_UNIT
-          ).toFixed(2);
-          tooltipText = `Neutron Star (${neutronMass} M☉) - Click to inspect`;
-          break;
-        }
-        case 'WhiteDwarf': {
-          const whiteDwarfMass = (
-            hoveredObject.object.massInSuns ||
-            hoveredObject.object.mass / SOLAR_MASS_UNIT
-          ).toFixed(2);
-          tooltipText = `White Dwarf (${whiteDwarfMass} M☉) - Click to inspect`;
-          break;
-        }
-        case 'Comet': {
-          const cometMass = (
-            hoveredObject.object.massInComets || 0.001
-          ).toFixed(3);
-          tooltipText = `Comet (${cometMass} C) - Click to inspect`;
-          break;
-        }
-      }
-
-      // Draw enhanced tooltip background with gradient
-      const textWidth = ctx.measureText(tooltipText).width;
-      const tooltipWidth = textWidth + 20;
-      const tooltipHeight = 30;
-
-      // Create gradient background
-      const gradient = ctx.createLinearGradient(
-        tooltipX,
-        tooltipY - tooltipHeight,
-        tooltipX,
-        tooltipY
-      );
-      gradient.addColorStop(0, 'rgba(15, 15, 35, 0.95)');
-      gradient.addColorStop(1, 'rgba(25, 25, 45, 0.95)');
-
-      // Draw tooltip background with shadow
-      ctx.fillStyle = gradient;
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-      ctx.shadowBlur = 10;
-      ctx.fillRect(
-        tooltipX - 10,
-        tooltipY - tooltipHeight,
-        tooltipWidth,
-        tooltipHeight
-      );
-
-      // Draw border
-      ctx.shadowBlur = 0;
-      ctx.strokeStyle = 'rgba(0, 170, 255, 0.6)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(
-        tooltipX - 10,
-        tooltipY - tooltipHeight,
-        tooltipWidth,
-        tooltipHeight
-      );
-
-      // Draw tooltip text
-      ctx.fillStyle = 'white';
-      ctx.font = '13px Inter';
-      ctx.fontWeight = '500';
-      ctx.textAlign = 'center';
-      ctx.fillText(tooltipText, tooltipX + tooltipWidth / 2 - 10, tooltipY - 8);
-      ctx.textAlign = 'left';
-    }
-  }
+  // Hover tooltip removed per request
 
   ctx.restore();
+
+  // Render orbit preview as dashed screen-space path (green if bound, red if unbound)
+  try {
+    const orbitPreview = getOrbitPreview && getOrbitPreview();
+    if (orbitPreview) {
+      renderOrbitPreview(orbitPreview);
+    }
+  } catch {
+    // ignore preview rendering errors
+  }
+
+  // If inspector orbit overlay is active, draw it as a blue dashed loop
+  if (state.inspectorOrbitOverlay && state.inspectorOrbitOverlay.active) {
+    const pts = state.inspectorOrbitOverlay.points || [];
+    if (pts.length > 1) {
+      ctx.save();
+      ctx.setLineDash([12, 8]);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(90, 160, 255, 0.95)';
+      ctx.beginPath();
+      const p0 = world_to_screen(pts[0]);
+      ctx.moveTo(p0.x, p0.y);
+      for (let i = 1; i < pts.length; i++) {
+        const ps = world_to_screen(pts[i]);
+        ctx.lineTo(ps.x, ps.y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // Label for inspector stable orbit
+      let top = null;
+      for (let i = 0; i < pts.length; i++) {
+        const s = world_to_screen(pts[i]);
+        if (!top || s.y < top.y) top = s;
+      }
+      if (top) {
+        ctx.save();
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 1;
+        ctx.fillText('Stable Orbit', top.x, top.y - 8);
+        ctx.restore();
+      }
+    }
+  }
 
   if (state.adding_mass) {
     // Draw drag line
@@ -712,6 +657,7 @@ const drawScene = () => {
       );
       ctx.stroke();
     }
+    // Removed orbit helper dashed preview path per request
   }
 
   if (SETTINGS.show_dynamic_overlays) {
@@ -732,10 +678,113 @@ const drawScene = () => {
   }
 };
 
+// Render drag aim line based on simple two-body forward Euler integration
+function renderAimLine(preview) {
+  try {
+    const primary = bh_list.length ? bh_list[0] : stars[0];
+    if (!primary) return;
+    const pos = { x: preview.position.x, y: preview.position.y };
+    const vel = { x: preview.velocity.x, y: preview.velocity.y };
+    const G = SETTINGS.gravitational_constant;
+    const M = primary.mass;
+    const dt = 0.01; // sim seconds
+    const steps = 20;
+    const soft2 = 1e-4;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1.0 / state.zoom;
+    ctx.setLineDash([6 / state.zoom, 6 / state.zoom]);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    for (let i = 0; i < steps; i++) {
+      const dx = primary.pos.x - pos.x;
+      const dy = primary.pos.y - pos.y;
+      const r2 = dx * dx + dy * dy + soft2;
+      const invR = 1 / Math.sqrt(r2);
+      const a = (G * M) / r2;
+      const ax = a * dx * invR;
+      const ay = a * dy * invR;
+      vel.x += ax * dt;
+      vel.y += ay * dt;
+      pos.x += vel.x * dt;
+      pos.y += vel.y * dt;
+      ctx.lineTo(pos.x, pos.y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  } catch {
+    // Ignore rendering preview errors
+  }
+}
+
+// Render orbit preview using screen-space points and dashed line
+function renderOrbitPreview(preview) {
+  if (!preview || !Array.isArray(preview.points) || preview.points.length < 2)
+    return;
+  // Nondescript dashed line; turn blue when snapped to a stable orbit
+  const color = preview.snapped
+    ? 'rgba(90, 160, 255, 0.95)'
+    : 'rgba(200, 200, 220, 0.9)';
+  ctx.save();
+  ctx.setLineDash([12, 8]);
+  ctx.lineWidth = preview.snapped ? 3 : 2.5;
+  ctx.strokeStyle = color;
+  ctx.beginPath();
+  const p0 = world_to_screen(preview.points[0]);
+  ctx.moveTo(p0.x, p0.y);
+  for (let i = 1; i < preview.points.length; i++) {
+    const ps = world_to_screen(preview.points[i]);
+    ctx.lineTo(ps.x, ps.y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // If unsnapped and a collision was predicted, draw a red X at the collision point
+  if (!preview.snapped && preview.collision && preview.collision.x != null) {
+    const cs = world_to_screen({ x: preview.collision.x, y: preview.collision.y });
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 80, 80, 0.95)';
+    ctx.lineWidth = 2.5;
+    const size = 10; // pixels
+    ctx.beginPath();
+    ctx.moveTo(cs.x - size, cs.y - size);
+    ctx.lineTo(cs.x + size, cs.y + size);
+    ctx.moveTo(cs.x - size, cs.y + size);
+    ctx.lineTo(cs.x + size, cs.y - size);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Label for stable orbit preview
+  if (preview.snapped) {
+    let top = null;
+    for (let i = 0; i < preview.points.length; i++) {
+      const s = world_to_screen(preview.points[i]);
+      if (!top || s.y < top.y) top = s;
+    }
+    if (top) {
+      ctx.save();
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.shadowColor = 'rgba(0,0,0,0.35)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 1;
+      ctx.fillText('Stable Orbit', top.x, top.y - 8);
+      ctx.restore();
+    }
+  }
+}
+
 // Performance monitoring
 let frameCount = 0;
 let lastPerformanceLog = 0;
 let frameTimeSum = 0;
+let adaptiveScale = 1;
 
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
@@ -783,6 +832,26 @@ const gameLoop = timestamp => {
       console.log(
         `Performance warning: Average frame time ${avgFrameTime.toFixed(1)}ms (target: 16.67ms for 60fps)`
       );
+    }
+    // Adaptive detail: adjust parameters based on performance
+    if (SETTINGS.adaptive_detail) {
+      const target = 1000 / (SETTINGS.target_fps || 60);
+      if (avgFrameTime > target * 1.2) {
+        adaptiveScale = Math.max(0.6, adaptiveScale * 0.9);
+      } else if (avgFrameTime < target * 0.9) {
+        adaptiveScale = Math.min(1.2, adaptiveScale * 1.05);
+      }
+      // Apply to trails and particle budget
+      SETTINGS.trail_length = Math.max(
+        5,
+        Math.floor((SETTINGS.trail_length || 15) * adaptiveScale)
+      );
+      if (window.particlePool) {
+        window.particlePool.maxPoolSize = Math.max(
+          100,
+          Math.floor((window.particlePool.maxPoolSize || 200) * adaptiveScale)
+        );
+      }
     }
     frameTimeSum = 0;
     frameCount = 0;
