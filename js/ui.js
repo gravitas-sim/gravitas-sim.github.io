@@ -6622,7 +6622,8 @@ export function getOrbitPreview() {
 
   // Integrate forward using symplectic Euler under many-body gravity
   const dt = 0.02; // sim seconds per step
-  const steps = 160; // more points for smoother curve
+  // Extend grey path length by 1.5x for a given insertion speed
+  const steps = Math.floor(160 * 1.5);
   const gravityBoost =
     (typeof SETTINGS !== 'undefined' && SETTINGS.preview_gravity_boost) || 4.0;
   const points = [{ x: pos.x, y: pos.y }];
@@ -6883,10 +6884,10 @@ window.addEventListener('keydown', e => {
     state.zoom = 1.0;
     state.pan = { x: 0, y: 0 };
   } else if (e.key === '-' || e.key === '_') {
-    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.5);
     updateSpeedDisplay();
   } else if (e.key === '=' || e.key === '+') {
-    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.5);
     updateSpeedDisplay();
   } else if (e.key.toLowerCase() === 'p') {
     takeScreenshot();
@@ -7040,12 +7041,12 @@ document.getElementById('bhMassesDone').onclick = hideBHMassesModal;
 
 // Speed control functionality
 document.getElementById('slowDownBtn').onclick = () => {
-  SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+  SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.5);
   updateSpeedDisplay();
 };
 
 document.getElementById('speedUpBtn').onclick = () => {
-  SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+  SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.5);
   updateSpeedDisplay();
 };
 
@@ -7386,12 +7387,12 @@ if (mobileMenuToggle && mobileMenuDropdown) {
 
   // Mobile speed controls
   document.getElementById('mobileSlowDownBtn').onclick = () => {
-    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.2);
+    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.5);
     updateSpeedDisplay();
   };
 
   document.getElementById('mobileSpeedUpBtn').onclick = () => {
-    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.2);
+    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.5);
     updateSpeedDisplay();
   };
 }
