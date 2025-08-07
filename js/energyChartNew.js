@@ -4,14 +4,6 @@
 // Chart instance reference
 let chart = null;
 
-// Rate limiting for chart updates to prevent overwhelming the system
-let lastUpdateTime = 0;
-const MIN_UPDATE_INTERVAL = 50; // Minimum 50ms between updates (20 FPS max)
-
-// Update queue to handle rapid updates
-let updateQueue = [];
-let isProcessingQueue = false;
-
 // Chart configuration
 const chartConfig = {
   type: 'line',
@@ -27,7 +19,7 @@ const chartConfig = {
         fill: false,
         tension: 0.1,
         pointRadius: 0,
-        pointHoverRadius: 4
+        pointHoverRadius: 4,
       },
       {
         label: 'Potential Energy',
@@ -38,7 +30,7 @@ const chartConfig = {
         fill: false,
         tension: 0.1,
         pointRadius: 0,
-        pointHoverRadius: 4
+        pointHoverRadius: 4,
       },
       {
         label: 'Total Energy',
@@ -49,20 +41,20 @@ const chartConfig = {
         fill: false,
         tension: 0.1,
         pointRadius: 0,
-        pointHoverRadius: 4
-      }
-    ]
+        pointHoverRadius: 4,
+      },
+    ],
   },
   options: {
     responsive: false,
     maintainAspectRatio: false,
     parsing: false,
     animation: {
-      duration: 0
+      duration: 0,
     },
     interaction: {
       intersect: false,
-      mode: 'index'
+      mode: 'index',
     },
     plugins: {
       legend: {
@@ -71,10 +63,10 @@ const chartConfig = {
         labels: {
           color: '#e0e0e0',
           font: {
-            size: 12
+            size: 12,
           },
-          usePointStyle: true
-        }
+          usePointStyle: true,
+        },
       },
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -85,19 +77,19 @@ const chartConfig = {
         cornerRadius: 6,
         displayColors: true,
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             const value = context.parsed.y;
             const absValue = Math.abs(value);
-            
+
             if (absValue === 0) {
               return `${context.dataset.label}: 0 J`;
             }
-            
+
             // Use scientific notation for very large or very small numbers
             if (absValue >= 1e6 || absValue < 1e-3) {
               return `${context.dataset.label}: ${value.toExponential(2)} J`;
             }
-            
+
             // For medium-sized numbers, use fixed decimal places
             if (absValue >= 1000) {
               return `${context.dataset.label}: ${value.toFixed(0)} J`;
@@ -106,9 +98,9 @@ const chartConfig = {
             } else {
               return `${context.dataset.label}: ${value.toFixed(3)} J`;
             }
-          }
-        }
-      }
+          },
+        },
+      },
     },
     scales: {
       x: {
@@ -120,19 +112,19 @@ const chartConfig = {
           color: '#e0e0e0',
           font: {
             size: 14,
-            weight: 'bold'
-          }
+            weight: 'bold',
+          },
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: true
+          drawBorder: true,
         },
         ticks: {
           color: '#e0e0e0',
           font: {
-            size: 12
-          }
-        }
+            size: 12,
+          },
+        },
       },
       y: {
         display: true,
@@ -142,31 +134,31 @@ const chartConfig = {
           color: '#e0e0e0',
           font: {
             size: 14,
-            weight: 'bold'
-          }
+            weight: 'bold',
+          },
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: true
+          drawBorder: true,
         },
         ticks: {
           color: '#e0e0e0',
           font: {
-            size: 12
+            size: 12,
           },
-          callback: function(value) {
+          callback: function (value) {
             // Handle extremely large numbers with better formatting
             const absValue = Math.abs(value);
-            
+
             if (absValue === 0) {
               return '0';
             }
-            
+
             // Use scientific notation for very large or very small numbers
             if (absValue >= 1e6 || absValue < 1e-3) {
               return value.toExponential(1);
             }
-            
+
             // For medium-sized numbers, use fixed decimal places
             if (absValue >= 1000) {
               return value.toFixed(0);
@@ -175,11 +167,11 @@ const chartConfig = {
             } else {
               return value.toFixed(3);
             }
-          }
-        }
-      }
-    }
-  }
+          },
+        },
+      },
+    },
+  },
 };
 
 /**
@@ -194,13 +186,17 @@ export function initChart(canvas) {
   }
 
   if (!(canvas instanceof HTMLCanvasElement)) {
-    console.error('Invalid canvas element provided - expected HTMLCanvasElement');
+    console.error(
+      'Invalid canvas element provided - expected HTMLCanvasElement'
+    );
     return false;
   }
 
   // Check if Chart.js is available
-  if (typeof Chart === 'undefined') {
-    console.error('Chart.js is not loaded. Please include Chart.js before using energy charts.');
+  if (typeof window !== 'undefined' && typeof window.Chart === 'undefined') {
+    console.error(
+      'Chart.js is not loaded. Please include Chart.js before using energy charts.'
+    );
     return false;
   }
 
@@ -209,18 +205,23 @@ export function initChart(canvas) {
     const container = canvas.parentElement;
     let containerWidth = container ? container.clientWidth - 30 : 500;
     let containerHeight = container ? container.clientHeight - 30 : 300;
-    
+
     // Use minimum dimensions if container has no size
     if (containerWidth <= 0) containerWidth = 500;
     if (containerHeight <= 0) containerHeight = 300;
-    
+
     canvas.width = containerWidth;
     canvas.height = containerHeight;
     canvas.style.width = containerWidth + 'px';
     canvas.style.height = containerHeight + 'px';
 
     // Create new chart instance
-    chart = new Chart(canvas.getContext('2d'), chartConfig);
+    const ChartCtor = typeof window !== 'undefined' ? window.Chart : undefined;
+    if (!ChartCtor) {
+      console.error('Chart.js is not available');
+      return false;
+    }
+    chart = new ChartCtor(canvas.getContext('2d'), chartConfig);
     console.log('Energy chart initialized successfully');
     return true;
   } catch (error) {
@@ -261,7 +262,9 @@ export function updateChart(data) {
     // Validate first data point has required properties
     const firstPoint = data[0];
     if (!firstPoint || typeof firstPoint.timestamp !== 'number') {
-      console.warn('Invalid data format: missing or invalid timestamp in first data point');
+      console.warn(
+        'Invalid data format: missing or invalid timestamp in first data point'
+      );
       return;
     }
 
@@ -269,17 +272,17 @@ export function updateChart(data) {
     const startTime = firstPoint.timestamp;
     const chartData = data.map(point => ({
       x: (point.timestamp - startTime) / 1000, // Convert to seconds
-      y: point.ke || 0
+      y: point.ke || 0,
     }));
 
     const potentialData = data.map(point => ({
       x: (point.timestamp - startTime) / 1000,
-      y: point.pe || 0
+      y: point.pe || 0,
     }));
 
     const totalData = data.map(point => ({
       x: (point.timestamp - startTime) / 1000,
-      y: point.total || 0
+      y: point.total || 0,
     }));
 
     // Update chart datasets
@@ -333,4 +336,4 @@ export function exportChart() {
     console.error('Failed to export chart:', error);
     return null;
   }
-} 
+}

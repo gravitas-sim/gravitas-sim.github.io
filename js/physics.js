@@ -5,7 +5,6 @@ import {
   getStarColor,
   worldToScreen,
   screenToWorld,
-  isOnScreen,
   isOffscreen,
 } from './utils.js';
 
@@ -13,97 +12,381 @@ import {
 // import { getRandomName } from './ui.js';
 
 // Local getRandomName function since it's not exported from ui.js
-const getRandomName = (type) => {
+const getRandomName = type => {
   const names = {
     planets: [
-      'Terra Nova', 'Gaia Minor', 'Eden Prime', 'Cosmic Garden', 'World Alpha', 
-      'Planet Hope', 'New Earth', 'Stellar Oasis', 'Cosmic Refuge', 'World Beta',
-      'Terra Vista', 'Gaia Prime', 'Eden Alpha', 'Cosmic Haven', 'World Gamma',
-      'Planet Serenity', 'New Horizon', 'Stellar Paradise', 'Cosmic Sanctuary', 'World Delta',
-      'Terra Magna', 'Gaia Supreme', 'Eden Eternal', 'Cosmic Harmony', 'World Epsilon',
-      'Planet Destiny', 'New Genesis', 'Stellar Utopia', 'Cosmic Peace', 'World Zeta',
-      'Terra Mystica', 'Gaia Crystal', 'Eden Infinite', 'Cosmic Tranquil', 'World Eta',
-      'Planet Elysium', 'New Arcadia', 'Stellar Nirvana', 'Cosmic Bliss', 'World Theta',
-      'Terra Wonderland', 'Gaia Magnificent', 'Eden Glorious', 'Cosmic Splendor', 'World Iota'
+      'Terra Nova',
+      'Gaia Minor',
+      'Eden Prime',
+      'Cosmic Garden',
+      'World Alpha',
+      'Planet Hope',
+      'New Earth',
+      'Stellar Oasis',
+      'Cosmic Refuge',
+      'World Beta',
+      'Terra Vista',
+      'Gaia Prime',
+      'Eden Alpha',
+      'Cosmic Haven',
+      'World Gamma',
+      'Planet Serenity',
+      'New Horizon',
+      'Stellar Paradise',
+      'Cosmic Sanctuary',
+      'World Delta',
+      'Terra Magna',
+      'Gaia Supreme',
+      'Eden Eternal',
+      'Cosmic Harmony',
+      'World Epsilon',
+      'Planet Destiny',
+      'New Genesis',
+      'Stellar Utopia',
+      'Cosmic Peace',
+      'World Zeta',
+      'Terra Mystica',
+      'Gaia Crystal',
+      'Eden Infinite',
+      'Cosmic Tranquil',
+      'World Eta',
+      'Planet Elysium',
+      'New Arcadia',
+      'Stellar Nirvana',
+      'Cosmic Bliss',
+      'World Theta',
+      'Terra Wonderland',
+      'Gaia Magnificent',
+      'Eden Glorious',
+      'Cosmic Splendor',
+      'World Iota',
     ],
     gasGiants: [
-      'Storm King', 'Gas Titan', 'Cyclone Prime', 'Atmospheric Giant', 'Wind Walker',
-      'Storm Lord', 'Gas Majesty', 'Cyclone Master', 'Atmospheric Titan', 'Wind Ruler',
-      'Storm Emperor', 'Gas Sovereign', 'Cyclone Champion', 'Atmospheric King', 'Wind Commander',
-      'Storm Deity', 'Gas Noble', 'Cyclone Warrior', 'Atmospheric Lord', 'Wind Guardian',
-      'Storm Monarch', 'Gas Regent', 'Cyclone Sovereign', 'Atmospheric Emperor', 'Wind Protector',
-      'Storm Supreme', 'Gas Commander', 'Cyclone Overlord', 'Atmospheric Chief', 'Wind Sentinel',
-      'Storm Dominator', 'Gas Overlord', 'Cyclone Ruler', 'Atmospheric Supreme', 'Wind Majesty',
-      'Storm Colossus', 'Gas Behemoth', 'Cyclone Leviathan', 'Atmospheric Mammoth', 'Wind Goliath',
-      'Storm Juggernaut', 'Gas Monster', 'Cyclone Beast', 'Atmospheric Crusher', 'Wind Destroyer'
+      'Storm King',
+      'Gas Titan',
+      'Cyclone Prime',
+      'Atmospheric Giant',
+      'Wind Walker',
+      'Storm Lord',
+      'Gas Majesty',
+      'Cyclone Master',
+      'Atmospheric Titan',
+      'Wind Ruler',
+      'Storm Emperor',
+      'Gas Sovereign',
+      'Cyclone Champion',
+      'Atmospheric King',
+      'Wind Commander',
+      'Storm Deity',
+      'Gas Noble',
+      'Cyclone Warrior',
+      'Atmospheric Lord',
+      'Wind Guardian',
+      'Storm Monarch',
+      'Gas Regent',
+      'Cyclone Sovereign',
+      'Atmospheric Emperor',
+      'Wind Protector',
+      'Storm Supreme',
+      'Gas Commander',
+      'Cyclone Overlord',
+      'Atmospheric Chief',
+      'Wind Sentinel',
+      'Storm Dominator',
+      'Gas Overlord',
+      'Cyclone Ruler',
+      'Atmospheric Supreme',
+      'Wind Majesty',
+      'Storm Colossus',
+      'Gas Behemoth',
+      'Cyclone Leviathan',
+      'Atmospheric Mammoth',
+      'Wind Goliath',
+      'Storm Juggernaut',
+      'Gas Monster',
+      'Cyclone Beast',
+      'Atmospheric Crusher',
+      'Wind Destroyer',
     ],
     asteroids: [
-      'Rock Hopper', 'Space Pebble', 'Cosmic Stone', 'Stellar Fragment', 'Orbit Drifter',
-      'Rock Wanderer', 'Space Boulder', 'Cosmic Chunk', 'Stellar Piece', 'Orbit Traveler',
-      'Rock Explorer', 'Space Nugget', 'Cosmic Shard', 'Stellar Bit', 'Orbit Voyager',
-      'Rock Adventurer', 'Space Cobble', 'Cosmic Sliver', 'Stellar Chip', 'Orbit Nomad',
-      'Rock Pioneer', 'Space Gravel', 'Cosmic Splinter', 'Stellar Flake', 'Orbit Roamer',
-      'Rock Scout', 'Space Rubble', 'Cosmic Particle', 'Stellar Grain', 'Orbit Wanderer',
-      'Rock Ranger', 'Space Debris', 'Cosmic Dust', 'Stellar Speck', 'Orbit Drifter',
-      'Rock Hunter', 'Space Cluster', 'Cosmic Meteor', 'Stellar Remnant', 'Orbit Slider',
-      'Rock Seeker', 'Space Swarm', 'Cosmic Shower', 'Stellar Storm', 'Orbit Dancer'
+      'Rock Hopper',
+      'Space Pebble',
+      'Cosmic Stone',
+      'Stellar Fragment',
+      'Orbit Drifter',
+      'Rock Wanderer',
+      'Space Boulder',
+      'Cosmic Chunk',
+      'Stellar Piece',
+      'Orbit Traveler',
+      'Rock Explorer',
+      'Space Nugget',
+      'Cosmic Shard',
+      'Stellar Bit',
+      'Orbit Voyager',
+      'Rock Adventurer',
+      'Space Cobble',
+      'Cosmic Sliver',
+      'Stellar Chip',
+      'Orbit Nomad',
+      'Rock Pioneer',
+      'Space Gravel',
+      'Cosmic Splinter',
+      'Stellar Flake',
+      'Orbit Roamer',
+      'Rock Scout',
+      'Space Rubble',
+      'Cosmic Particle',
+      'Stellar Grain',
+      'Orbit Wanderer',
+      'Rock Ranger',
+      'Space Debris',
+      'Cosmic Dust',
+      'Stellar Speck',
+      'Orbit Drifter',
+      'Rock Hunter',
+      'Space Cluster',
+      'Cosmic Meteor',
+      'Stellar Remnant',
+      'Orbit Slider',
+      'Rock Seeker',
+      'Space Swarm',
+      'Cosmic Shower',
+      'Stellar Storm',
+      'Orbit Dancer',
     ],
     blackHoles: [
-      'Abyss Prime', 'Void Phantom', 'Dark Nexus', 'Shadow Vortex', 'Stellar Grave',
-      'Event Horizon', 'Cosmic Drain', 'Infinity Well', 'Quantum Void', 'Gravity Beast',
-      'Singularity Alpha', 'The Devourer', 'Omega Point', 'Dark Matter Core', 'Space Ripper',
-      'Neutron Crusher', 'Photon Trap', 'Stellar Vacuum', 'Cosmic Whirlpool', 'The Absorber',
-      'Graviton Sink', 'Spacetime Tear', 'Quantum Collapse', 'Stellar Tomb', 'Dark Energy Core',
-      'Infinity Gate', 'Cosmic Maelstrom', 'The Singularity', 'Void Walker', 'Shadow Realm',
-      'Gravity Storm', 'Stellar Phantom', 'Dark Horizon', 'Cosmic Vacuum', 'The Anomaly',
-      'Warp Core', 'Stellar Devourer', 'Quantum Abyss', 'Gravity Well X', 'Dark Nexus Prime'
+      'Abyss Prime',
+      'Void Phantom',
+      'Dark Nexus',
+      'Shadow Vortex',
+      'Stellar Grave',
+      'Event Horizon',
+      'Cosmic Drain',
+      'Infinity Well',
+      'Quantum Void',
+      'Gravity Beast',
+      'Singularity Alpha',
+      'The Devourer',
+      'Omega Point',
+      'Dark Matter Core',
+      'Space Ripper',
+      'Neutron Crusher',
+      'Photon Trap',
+      'Stellar Vacuum',
+      'Cosmic Whirlpool',
+      'The Absorber',
+      'Graviton Sink',
+      'Spacetime Tear',
+      'Quantum Collapse',
+      'Stellar Tomb',
+      'Dark Energy Core',
+      'Infinity Gate',
+      'Cosmic Maelstrom',
+      'The Singularity',
+      'Void Walker',
+      'Shadow Realm',
+      'Gravity Storm',
+      'Stellar Phantom',
+      'Dark Horizon',
+      'Cosmic Vacuum',
+      'The Anomaly',
+      'Warp Core',
+      'Stellar Devourer',
+      'Quantum Abyss',
+      'Gravity Well X',
+      'Dark Nexus Prime',
     ],
     stars: [
-      'Proxima Flare', 'Stellar Beacon', 'Nova Prime', 'Helios Alpha', 'Fusion Core',
-      'Plasma Heart', 'Solar Titan', 'Stellar Phoenix', 'Radiant Crown', 'Cosmic Forge',
-      'Stellar Dynamo', 'Fusion Giant', 'Plasma Sphere', 'Solar Majesty', 'Stellar Furnace',
-      'Radiant Jewel', 'Cosmic Ember', 'Stellar Warrior', 'Solar Guardian', 'Plasma King',
-      'Stellar Empress', 'Fusion Master', 'Solar Deity', 'Stellar Champion', 'Radiant Star',
-      'Cosmic Luminary', 'Stellar Sovereign', 'Solar Monarch', 'Plasma Crown', 'Stellar Glory',
-      'Radiant Sentinel', 'Cosmic Beacon', 'Solar Majesty', 'Stellar Protector', 'Fusion Lord',
-      'Plasma Noble', 'Solar Regent', 'Stellar Ruler', 'Cosmic Sovereign', 'Radiant Emperor',
-      'Stellar Dominator', 'Solar Supreme', 'Plasma Overlord', 'Cosmic Commander', 'Stellar Chief'
+      'Proxima Flare',
+      'Stellar Beacon',
+      'Nova Prime',
+      'Helios Alpha',
+      'Fusion Core',
+      'Plasma Heart',
+      'Solar Titan',
+      'Stellar Phoenix',
+      'Radiant Crown',
+      'Cosmic Forge',
+      'Stellar Dynamo',
+      'Fusion Giant',
+      'Plasma Sphere',
+      'Solar Majesty',
+      'Stellar Furnace',
+      'Radiant Jewel',
+      'Cosmic Ember',
+      'Stellar Warrior',
+      'Solar Guardian',
+      'Plasma King',
+      'Stellar Empress',
+      'Fusion Master',
+      'Solar Deity',
+      'Stellar Champion',
+      'Radiant Star',
+      'Cosmic Luminary',
+      'Stellar Sovereign',
+      'Solar Monarch',
+      'Plasma Crown',
+      'Stellar Glory',
+      'Radiant Sentinel',
+      'Cosmic Beacon',
+      'Solar Majesty',
+      'Stellar Protector',
+      'Fusion Lord',
+      'Plasma Noble',
+      'Solar Regent',
+      'Stellar Ruler',
+      'Cosmic Sovereign',
+      'Radiant Emperor',
+      'Stellar Dominator',
+      'Solar Supreme',
+      'Plasma Overlord',
+      'Cosmic Commander',
+      'Stellar Chief',
     ],
     neutronStars: [
-      'Pulsar Prime', 'Neutron Beacon', 'Stellar Compass', 'Cosmic Lighthouse', 'Gravity Pulse',
-      'Neutron King', 'Pulsar Master', 'Stellar Rhythm', 'Cosmic Metronome', 'Gravity Beat',
-      'Neutron Lord', 'Pulsar Champion', 'Stellar Drummer', 'Cosmic Timekeeper', 'Gravity Clock',
-      'Neutron Sovereign', 'Pulsar Overlord', 'Stellar Conductor', 'Cosmic Coordinator', 'Gravity Timer',
-      'Neutron Emperor', 'Pulsar Supreme', 'Stellar Orchestrator', 'Cosmic Synchronizer', 'Gravity Rhythm',
-      'Neutron Deity', 'Pulsar Commander', 'Stellar Maestro', 'Cosmic Harmonizer', 'Gravity Pulse',
-      'Neutron Noble', 'Pulsar Regent', 'Stellar Director', 'Cosmic Organizer', 'Gravity Signal',
-      'Neutron Majesty', 'Pulsar Guardian', 'Stellar Manager', 'Cosmic Controller', 'Gravity Beacon',
-      'Neutron Protector', 'Pulsar Sentinel', 'Stellar Supervisor', 'Cosmic Coordinator', 'Gravity Guide'
+      'Pulsar Prime',
+      'Neutron Beacon',
+      'Stellar Compass',
+      'Cosmic Lighthouse',
+      'Gravity Pulse',
+      'Neutron King',
+      'Pulsar Master',
+      'Stellar Rhythm',
+      'Cosmic Metronome',
+      'Gravity Beat',
+      'Neutron Lord',
+      'Pulsar Champion',
+      'Stellar Drummer',
+      'Cosmic Timekeeper',
+      'Gravity Clock',
+      'Neutron Sovereign',
+      'Pulsar Overlord',
+      'Stellar Conductor',
+      'Cosmic Coordinator',
+      'Gravity Timer',
+      'Neutron Emperor',
+      'Pulsar Supreme',
+      'Stellar Orchestrator',
+      'Cosmic Synchronizer',
+      'Gravity Rhythm',
+      'Neutron Deity',
+      'Pulsar Commander',
+      'Stellar Maestro',
+      'Cosmic Harmonizer',
+      'Gravity Pulse',
+      'Neutron Noble',
+      'Pulsar Regent',
+      'Stellar Director',
+      'Cosmic Organizer',
+      'Gravity Signal',
+      'Neutron Majesty',
+      'Pulsar Guardian',
+      'Stellar Manager',
+      'Cosmic Controller',
+      'Gravity Beacon',
+      'Neutron Protector',
+      'Pulsar Sentinel',
+      'Stellar Supervisor',
+      'Cosmic Coordinator',
+      'Gravity Guide',
     ],
     whiteDwarfs: [
-      'Crystal Core', 'Diamond Heart', 'Stellar Gem', 'Cosmic Jewel', 'White Giant',
-      'Crystal Star', 'Diamond Sphere', 'Stellar Crystal', 'Cosmic Diamond', 'White Titan',
-      'Crystal Crown', 'Diamond King', 'Stellar Treasure', 'Cosmic Brilliant', 'White Sovereign',
-      'Crystal Majesty', 'Diamond Lord', 'Stellar Precious', 'Cosmic Radiant', 'White Emperor',
-      'Crystal Noble', 'Diamond Regent', 'Stellar Magnificent', 'Cosmic Splendid', 'White Supreme',
-      'Crystal Commander', 'Diamond Guardian', 'Stellar Glorious', 'Cosmic Luminous', 'White Overlord',
-      'Crystal Protector', 'Diamond Sentinel', 'Stellar Brilliant', 'Cosmic Gleaming', 'White Ruler',
-      'Crystal Warrior', 'Diamond Champion', 'Stellar Shining', 'Cosmic Sparkling', 'White Dominator',
-      'Crystal Deity', 'Diamond Deity', 'Stellar Dazzling', 'Cosmic Glittering', 'White Colossus'
+      'Crystal Core',
+      'Diamond Heart',
+      'Stellar Gem',
+      'Cosmic Jewel',
+      'White Giant',
+      'Crystal Star',
+      'Diamond Sphere',
+      'Stellar Crystal',
+      'Cosmic Diamond',
+      'White Titan',
+      'Crystal Crown',
+      'Diamond King',
+      'Stellar Treasure',
+      'Cosmic Brilliant',
+      'White Sovereign',
+      'Crystal Majesty',
+      'Diamond Lord',
+      'Stellar Precious',
+      'Cosmic Radiant',
+      'White Emperor',
+      'Crystal Noble',
+      'Diamond Regent',
+      'Stellar Magnificent',
+      'Cosmic Splendid',
+      'White Supreme',
+      'Crystal Commander',
+      'Diamond Guardian',
+      'Stellar Glorious',
+      'Cosmic Luminous',
+      'White Overlord',
+      'Crystal Protector',
+      'Diamond Sentinel',
+      'Stellar Brilliant',
+      'Cosmic Gleaming',
+      'White Ruler',
+      'Crystal Warrior',
+      'Diamond Champion',
+      'Stellar Shining',
+      'Cosmic Sparkling',
+      'White Dominator',
+      'Crystal Deity',
+      'Diamond Deity',
+      'Stellar Dazzling',
+      'Cosmic Glittering',
+      'White Colossus',
     ],
     comets: [
-      'Tail Blazer', 'Ice Wanderer', 'Cosmic Snowball', 'Stellar Comet', 'Orbit Streaker',
-      'Tail Runner', 'Ice Traveler', 'Cosmic Iceball', 'Stellar Visitor', 'Orbit Flasher',
-      'Tail Chaser', 'Ice Explorer', 'Cosmic Frozen', 'Stellar Nomad', 'Orbit Glider',
-      'Tail Dancer', 'Ice Adventurer', 'Cosmic Glacier', 'Stellar Wanderer', 'Orbit Swooper',
-      'Tail Glider', 'Ice Pioneer', 'Cosmic Frost', 'Stellar Drifter', 'Orbit Streamer',
-      'Tail Swooper', 'Ice Scout', 'Cosmic Chill', 'Stellar Roamer', 'Orbit Blazer',
-      'Tail Streamer', 'Ice Ranger', 'Cosmic Freeze', 'Stellar Voyager', 'Orbit Comet',
-      'Tail Hunter', 'Ice Seeker', 'Cosmic Winter', 'Stellar Traveler', 'Orbit Shooter',
-      'Tail Finder', 'Ice Discoverer', 'Cosmic Blizzard', 'Stellar Explorer', 'Orbit Rocket'
-    ]
+      'Tail Blazer',
+      'Ice Wanderer',
+      'Cosmic Snowball',
+      'Stellar Comet',
+      'Orbit Streaker',
+      'Tail Runner',
+      'Ice Traveler',
+      'Cosmic Iceball',
+      'Stellar Visitor',
+      'Orbit Flasher',
+      'Tail Chaser',
+      'Ice Explorer',
+      'Cosmic Frozen',
+      'Stellar Nomad',
+      'Orbit Glider',
+      'Tail Dancer',
+      'Ice Adventurer',
+      'Cosmic Glacier',
+      'Stellar Wanderer',
+      'Orbit Swooper',
+      'Tail Glider',
+      'Ice Pioneer',
+      'Cosmic Frost',
+      'Stellar Drifter',
+      'Orbit Streamer',
+      'Tail Swooper',
+      'Ice Scout',
+      'Cosmic Chill',
+      'Stellar Roamer',
+      'Orbit Blazer',
+      'Tail Streamer',
+      'Ice Ranger',
+      'Cosmic Freeze',
+      'Stellar Voyager',
+      'Orbit Comet',
+      'Tail Hunter',
+      'Ice Seeker',
+      'Cosmic Winter',
+      'Stellar Traveler',
+      'Orbit Shooter',
+      'Tail Finder',
+      'Ice Discoverer',
+      'Cosmic Blizzard',
+      'Stellar Explorer',
+      'Orbit Rocket',
+    ],
   };
-  
+
   const typeNames = names[type] || names.planets;
   return typeNames[Math.floor(Math.random() * typeNames.length)];
 };
@@ -216,7 +499,7 @@ const screen_to_world = spos => {
 const is_offscreen = (pos, buffer_factor = 10.0) => {
   if (!state) return false; // Fallback if state not set
   if (!canvas) return false; // Fallback if canvas not available
-  
+
   // Scale buffer factor with zoom level to prevent aggressive culling
   const zoom_adjusted_buffer = buffer_factor * Math.max(1.0, state.zoom);
   return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
@@ -248,20 +531,20 @@ const gravitational_acceleration = (target_pos, sources) => {
     ay = 0.0;
   const G_val = physicsSettings.gravitational_constant;
   const min_dist_sq = MIN_INTERACTION_DISTANCE ** 2;
-  
+
   for (let i = 0; i < sources.length; i++) {
     const s = sources[i];
     const dx = s.pos.x - target_pos.x;
     const dy = s.pos.y - target_pos.y;
     let r_sq = dx * dx + dy * dy;
-    
+
     if (r_sq < min_dist_sq) r_sq = min_dist_sq;
     if (r_sq === 0) continue;
-    
+
     // Avoid sqrt when possible - use r_sq directly
     const a_mag = (G_val * s.mass) / r_sq;
     const r_inv = 1 / Math.sqrt(r_sq);
-    
+
     ax += a_mag * dx * r_inv;
     ay += a_mag * dy * r_inv;
   }
@@ -272,7 +555,14 @@ const gravitational_acceleration = (target_pos, sources) => {
 let cachedMajorSources = [];
 let cachedAllPhysicsObjects = [];
 let lastMutualGravityState = null;
-let lastObjectCounts = { bh: 0, stars: 0, gas_giants: 0, planets: 0, asteroids: 0, debris: 0 };
+let lastObjectCounts = {
+  bh: 0,
+  stars: 0,
+  gas_giants: 0,
+  planets: 0,
+  asteroids: 0,
+  debris: 0,
+};
 
 /**
  * Update cached arrays only when object counts change
@@ -287,30 +577,48 @@ const updateCachedArrays = () => {
     comets: comets.length,
     debris: debris.length,
     neutron_stars: neutron_stars.length,
-    white_dwarfs: white_dwarfs.length
+    white_dwarfs: white_dwarfs.length,
   };
-  
-  const countsChanged = Object.keys(currentCounts).some(key => 
-    currentCounts[key] !== lastObjectCounts[key]
+
+  const countsChanged = Object.keys(currentCounts).some(
+    key => currentCounts[key] !== lastObjectCounts[key]
   );
-  
+
   // Debug logging for tests
   // if (countsChanged) {
   //   console.log('Array counts changed:', lastObjectCounts, '->', currentCounts);
   // }
-  
-  if (countsChanged || lastMutualGravityState !== physicsSettings.mutual_gravity) {
+
+  if (
+    countsChanged ||
+    lastMutualGravityState !== physicsSettings.mutual_gravity
+  ) {
     // Update major sources
     cachedMajorSources.length = 0;
-    cachedMajorSources.push(...bh_list, ...stars, ...gas_giants, ...neutron_stars, ...white_dwarfs);
+    cachedMajorSources.push(
+      ...bh_list,
+      ...stars,
+      ...gas_giants,
+      ...neutron_stars,
+      ...white_dwarfs
+    );
     if (physicsSettings.mutual_gravity) {
       cachedMajorSources.push(...planets, ...asteroids);
     }
-    
+
     // Update all physics objects - include neutron stars and white dwarfs
     cachedAllPhysicsObjects.length = 0;
-    cachedAllPhysicsObjects.push(...planets, ...asteroids, ...comets, ...gas_giants, ...debris, ...stars, ...neutron_stars, ...white_dwarfs);
-    
+    cachedAllPhysicsObjects.push(
+      ...planets,
+      ...asteroids,
+      ...comets,
+      ...gas_giants,
+      ...debris,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs
+    );
+
     lastObjectCounts = currentCounts;
     lastMutualGravityState = physicsSettings.mutual_gravity;
   }
@@ -386,23 +694,23 @@ const updatePhysics = dt => {
       ...stars,
       ...neutron_stars,
       ...white_dwarfs,
-      ...bh_list.map(asPhysicsObject)
+      ...bh_list.map(asPhysicsObject),
     ];
     handle_star_merging(merge_candidates);
   }
-  
+
   // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
   handle_star_object_collisions();
-  
+
   // Handle enhanced rocky planet collisions
   handle_rocky_collisions([...planets, ...asteroids]);
-  
+
   // Handle gas giant merging and collisions
   handle_gas_giant_merging();
-  
+
   // Handle basic collisions for remaining objects (gas giants with each other, etc.)
   handle_collisions([...gas_giants]);
-  
+
   // Check for stellar collapse into black holes
   check_stellar_collapse();
 
@@ -451,17 +759,17 @@ const updatePhysics = dt => {
 
   // Update particles using object pool
   particlePool.updateAndCleanup(dt);
-  
+
   // Update legacy particles array for compatibility
   particles = particlePool.getActiveParticles();
-  
+
   // Update accretion disk particles - this was missing!
   for (const particle of accretion_disk_particles) {
     if (particle.alive) {
       particle.update_physics(dt, []);
     }
   }
-  
+
   // Clean up dead accretion disk particles
   accretion_disk_particles = accretion_disk_particles.filter(p => p.alive);
 
@@ -487,33 +795,37 @@ const updatePhysics = dt => {
             x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass,
             y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass,
           };
-          
+
           // Create new merged black hole
           const new_black_hole = new BlackHole(new_pos, new_mass, new_vel);
-          
+
           // Transfer accretion disk particles from both black holes to the new one
-          const combined_disk_particles = [...bh1.disk_particles, ...bh2.disk_particles];
-          
+          const combined_disk_particles = [
+            ...bh1.disk_particles,
+            ...bh2.disk_particles,
+          ];
+
           // Clear the old black holes' disk particle arrays
           bh1.disk_particles = [];
           bh2.disk_particles = [];
-          
+
           // Update each particle to orbit the new black hole
           for (const particle of combined_disk_particles) {
             if (particle.alive) {
               // Update particle's parent black hole reference
               particle.parentBlackHole = new_black_hole;
-              
+
               // Recalculate orbital parameters for the new black hole
               const dx_p = particle.pos.x - new_black_hole.pos.x;
               const dy_p = particle.pos.y - new_black_hole.pos.y;
               const distance = Math.sqrt(dx_p * dx_p + dy_p * dy_p);
-              
+
               // Set new orbital velocity around the merged black hole
-              const new_orbital_speed = Math.sqrt(new_black_hole.mass / distance) * 0.4;
+              const new_orbital_speed =
+                Math.sqrt(new_black_hole.mass / distance) * 0.4;
               const current_angle = Math.atan2(dy_p, dx_p);
               const tangent_angle = current_angle + Math.PI / 2;
-              
+
               // Update velocity to orbit the new black hole
               particle.vel.x = new_orbital_speed * Math.cos(tangent_angle);
               particle.vel.y = new_orbital_speed * Math.sin(tangent_angle);
@@ -523,18 +835,25 @@ const updatePhysics = dt => {
               const spiral_kick = 0.05 + Math.random() * 0.05;
               particle.vel.x += spiral_kick * Math.cos(current_angle);
               particle.vel.y += spiral_kick * Math.sin(current_angle);
-              
+
               // Add to new black hole's disk particles
               new_black_hole.disk_particles.push(particle);
             }
           }
-          
+
           // Standard merger effects for accretion disk
-          new_black_hole.accretion_intensity = Math.min(1.0, 0.5 + (m1 + m2) / (20 * SOLAR_MASS_UNIT));
-          new_black_hole.disk_growth = Math.min(1.2, 0.6 + (m1 + m2) / (25 * SOLAR_MASS_UNIT));
+          new_black_hole.accretion_intensity = Math.min(
+            1.0,
+            0.5 + (m1 + m2) / (20 * SOLAR_MASS_UNIT)
+          );
+          new_black_hole.disk_growth = Math.min(
+            1.2,
+            0.6 + (m1 + m2) / (25 * SOLAR_MASS_UNIT)
+          );
           new_black_hole.merger_boost_timer = 25.0; // Standard merger effects
-          new_black_hole.merger_particle_boost = 1.2 + (m1 + m2) / (30 * SOLAR_MASS_UNIT);
-          
+          new_black_hole.merger_particle_boost =
+            1.2 + (m1 + m2) / (30 * SOLAR_MASS_UNIT);
+
           // Trigger gravitational wave ripple effect at merger location
           gravity_ripples.push({
             x: new_pos.x,
@@ -543,9 +862,9 @@ const updatePhysics = dt => {
             created: performance.now(),
             duration: 3000, // ms
             mass: new_mass / SOLAR_MASS_UNIT, // Merger mass in solar masses
-            gw_strength: 1.0 // Full strength for BH-BH mergers
+            gw_strength: 1.0, // Full strength for BH-BH mergers
           });
-          
+
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
           bh_list.push(new_black_hole);
@@ -563,7 +882,7 @@ const updatePhysics = dt => {
     const beforeCount = objects.length;
     const filtered = objects.filter(filterFn);
     const afterCount = filtered.length;
-    
+
     // If objects were removed, clear their energy history
     if (afterCount < beforeCount) {
       const removedIds = new Set();
@@ -572,31 +891,60 @@ const updatePhysics = dt => {
           removedIds.add(obj.id);
         }
       });
-      
+
       removedIds.forEach(id => {
         clearEnergyHistory(id);
       });
-      
+
       if (removedIds.size > 0) {
-        console.log(`Cleared energy history for ${removedIds.size} removed objects`);
+        console.log(
+          `Cleared energy history for ${removedIds.size} removed objects`
+        );
       }
     }
-    
+
     return filtered;
   };
-  
+
   // More conservative filtering for important objects - only remove if truly far away
-  planets = filterAndClearEnergy(planets, p => p.alive && !is_offscreen(p.pos, 20.0));
-  stars = filterAndClearEnergy(stars, s => s.alive && !is_offscreen(s.pos, 20.0));
-  gas_giants = filterAndClearEnergy(gas_giants, g => g.alive && !is_offscreen(g.pos, 20.0));
-  neutron_stars = filterAndClearEnergy(neutron_stars, ns => ns.alive && !is_offscreen(ns.pos, 20.0));
-  white_dwarfs = filterAndClearEnergy(white_dwarfs, wd => wd.alive && !is_offscreen(wd.pos, 20.0));
-  bh_list = filterAndClearEnergy(bh_list, bh => (bh.alive !== false) && !is_offscreen(bh.pos, 50.0)); // Black holes should never be removed
-  
+  planets = filterAndClearEnergy(
+    planets,
+    p => p.alive && !is_offscreen(p.pos, 20.0)
+  );
+  stars = filterAndClearEnergy(
+    stars,
+    s => s.alive && !is_offscreen(s.pos, 20.0)
+  );
+  gas_giants = filterAndClearEnergy(
+    gas_giants,
+    g => g.alive && !is_offscreen(g.pos, 20.0)
+  );
+  neutron_stars = filterAndClearEnergy(
+    neutron_stars,
+    ns => ns.alive && !is_offscreen(ns.pos, 20.0)
+  );
+  white_dwarfs = filterAndClearEnergy(
+    white_dwarfs,
+    wd => wd.alive && !is_offscreen(wd.pos, 20.0)
+  );
+  bh_list = filterAndClearEnergy(
+    bh_list,
+    bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
+  ); // Black holes should never be removed
+
   // More aggressive filtering for smaller/less important objects
-  asteroids = filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos, 5.0));
-  debris = filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos, 3.0));
-  accretion_disk_particles = filterAndClearEnergy(accretion_disk_particles, ap => ap.alive && !is_offscreen(ap.pos, 2.0));
+  asteroids = filterAndClearEnergy(
+    asteroids,
+    a => a.alive && !is_offscreen(a.pos, 5.0)
+  );
+  debris = filterAndClearEnergy(
+    debris,
+    d => d.alive && !is_offscreen(d.pos, 3.0)
+  );
+  accretion_disk_particles = filterAndClearEnergy(
+    accretion_disk_particles,
+    ap => ap.alive && !is_offscreen(ap.pos, 2.0)
+  );
 
   // Follow mode logic - matching original exactly
   let target = null;
@@ -628,7 +976,7 @@ const updatePhysics = dt => {
     state.pan.x = -target.pos.x * state.zoom;
     state.pan.y = target.pos.y * state.zoom;
   }
-  
+
   // Update energy history for all objects (sample every 10 frames for performance)
   if (state && state.frame_count % ENERGY_SAMPLE_RATE === 0) {
     updateEnergyHistory();
@@ -659,9 +1007,9 @@ class PhysicsObject {
     this.alive = true;
   }
 
-  update_physics(dt, gravity_sources) {
+  update_physics(dt, _gravity_sources) {
     if (!this.alive) return;
-    const { ax, ay } = gravitational_acceleration(this.pos, gravity_sources);
+    const { ax, ay } = gravitational_acceleration(this.pos, _gravity_sources);
     this.vel.x += ax * dt;
     this.vel.y += ay * dt;
     this.pos.x += this.vel.x * dt;
@@ -766,7 +1114,7 @@ class Planet extends PhysicsObject {
       this.drawEarth(ctx, world_pos);
       return;
     }
-    
+
     if (this.isMoon) {
       this.drawMoon(ctx, world_pos);
       return;
@@ -841,9 +1189,11 @@ class Planet extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 3;
-      
+
       // Show name for Solar System planets, mass for others
-      const displayText = this.isSolarSystemPlanet ? this.name : `${this.massInEarths.toFixed(2)} M⊕`;
+      const displayText = this.isSolarSystemPlanet
+        ? this.name
+        : `${this.massInEarths.toFixed(2)} M⊕`;
       ctx.fillText(
         displayText,
         true_screen_pos.x,
@@ -856,46 +1206,74 @@ class Planet extends PhysicsObject {
   drawEarth(ctx, world_pos) {
     // Draw Earth with realistic appearance - blue oceans with green continents
     const gradient = ctx.createRadialGradient(
-      world_pos.x, world_pos.y, 0,
-      world_pos.x, world_pos.y, this.radius
+      world_pos.x,
+      world_pos.y,
+      0,
+      world_pos.x,
+      world_pos.y,
+      this.radius
     );
-    
+
     // Base ocean color
     gradient.addColorStop(0, '#4B7BE5'); // Deep blue center
     gradient.addColorStop(0.7, '#5B8BF5'); // Lighter blue
     gradient.addColorStop(1, '#6B9BF5'); // Light blue edge
-    
+
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
-    
+
     // Add continent-like features (simplified)
     if (this.radius * state.zoom > 8) {
       // Draw some green "continents" as simple shapes
       ctx.fillStyle = '#2D5A2D'; // Dark green for continents
-      
+
       // North America-like shape
       ctx.beginPath();
-      ctx.arc(world_pos.x - this.radius * 0.3, world_pos.y - this.radius * 0.4, this.radius * 0.25, 0, 2 * Math.PI);
+      ctx.arc(
+        world_pos.x - this.radius * 0.3,
+        world_pos.y - this.radius * 0.4,
+        this.radius * 0.25,
+        0,
+        2 * Math.PI
+      );
       ctx.fill();
-      
+
       // Europe/Asia-like shape
       ctx.beginPath();
-      ctx.arc(world_pos.x + this.radius * 0.2, world_pos.y - this.radius * 0.3, this.radius * 0.3, 0, 2 * Math.PI);
+      ctx.arc(
+        world_pos.x + this.radius * 0.2,
+        world_pos.y - this.radius * 0.3,
+        this.radius * 0.3,
+        0,
+        2 * Math.PI
+      );
       ctx.fill();
-      
+
       // Africa-like shape
       ctx.beginPath();
-      ctx.arc(world_pos.x + this.radius * 0.1, world_pos.y + this.radius * 0.2, this.radius * 0.2, 0, 2 * Math.PI);
+      ctx.arc(
+        world_pos.x + this.radius * 0.1,
+        world_pos.y + this.radius * 0.2,
+        this.radius * 0.2,
+        0,
+        2 * Math.PI
+      );
       ctx.fill();
-      
+
       // South America-like shape
       ctx.beginPath();
-      ctx.arc(world_pos.x - this.radius * 0.4, world_pos.y + this.radius * 0.3, this.radius * 0.15, 0, 2 * Math.PI);
+      ctx.arc(
+        world_pos.x - this.radius * 0.4,
+        world_pos.y + this.radius * 0.3,
+        this.radius * 0.15,
+        0,
+        2 * Math.PI
+      );
       ctx.fill();
     }
-    
+
     // Add atmospheric glow
     ctx.strokeStyle = 'rgba(135, 206, 235, 0.3)';
     ctx.lineWidth = 2;
@@ -907,24 +1285,28 @@ class Planet extends PhysicsObject {
   drawMoon(ctx, world_pos) {
     // Draw Moon with realistic gray appearance and mock craters
     const gradient = ctx.createRadialGradient(
-      world_pos.x, world_pos.y, 0,
-      world_pos.x, world_pos.y, this.radius
+      world_pos.x,
+      world_pos.y,
+      0,
+      world_pos.x,
+      world_pos.y,
+      this.radius
     );
-    
+
     // Moon surface gradient
     gradient.addColorStop(0, '#6B6B6B'); // Dark gray center
     gradient.addColorStop(0.5, '#8B8B8B'); // Medium gray
     gradient.addColorStop(1, '#A0A0A0'); // Light gray edge
-    
+
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
-    
+
     // Add mock craters if zoomed in enough
     if (this.radius * state.zoom > 6) {
       ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
-      
+
       // Draw several craters of different sizes
       const craters = [
         { x: -0.3, y: -0.2, r: 0.15 },
@@ -932,26 +1314,27 @@ class Planet extends PhysicsObject {
         { x: 0.4, y: -0.1, r: 0.08 },
         { x: -0.1, y: 0.4, r: 0.1 },
         { x: 0.1, y: -0.4, r: 0.06 },
-        { x: -0.4, y: 0.1, r: 0.09 }
+        { x: -0.4, y: 0.1, r: 0.09 },
       ];
-      
+
       craters.forEach(crater => {
         ctx.beginPath();
         ctx.arc(
           world_pos.x + crater.x * this.radius,
           world_pos.y + crater.y * this.radius,
           crater.r * this.radius,
-          0, 2 * Math.PI
+          0,
+          2 * Math.PI
         );
         ctx.fill();
       });
     }
-    
+
     // Add subtle surface texture
     if (this.radius * state.zoom > 4) {
       ctx.strokeStyle = 'rgba(100, 100, 100, 0.2)';
       ctx.lineWidth = 0.5;
-      
+
       // Draw some subtle lines to simulate lunar surface features
       for (let i = 0; i < 3; i++) {
         const angle = (i * Math.PI) / 3;
@@ -959,7 +1342,7 @@ class Planet extends PhysicsObject {
         const y1 = world_pos.y + Math.sin(angle) * this.radius * 0.8;
         const x2 = world_pos.x + Math.cos(angle) * this.radius;
         const y2 = world_pos.y + Math.sin(angle) * this.radius;
-        
+
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
@@ -1087,8 +1470,26 @@ class GasGiant extends PhysicsObject {
 
       // Draw back arc (behind planet): from theta1 to theta2
       ctx.beginPath();
-      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta1, theta2, false);
-      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta2, theta1, true);
+      ctx.ellipse(
+        0,
+        0,
+        this.ringOuterRadius,
+        this.ringOuterRadius * 0.32,
+        0,
+        theta1,
+        theta2,
+        false
+      );
+      ctx.ellipse(
+        0,
+        0,
+        this.ringInnerRadius,
+        this.ringInnerRadius * 0.32,
+        0,
+        theta2,
+        theta1,
+        true
+      );
       ctx.closePath();
       ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
       ctx.fill('evenodd');
@@ -1221,10 +1622,12 @@ class GasGiant extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 3;
-      
+
       // Show name for Solar System gas giants, mass for others
       const massInEarths = this.massInJupiters * 317.8;
-      const displayText = this.isSolarSystemPlanet ? this.name : `${Math.round(massInEarths)} M⊕`;
+      const displayText = this.isSolarSystemPlanet
+        ? this.name
+        : `${Math.round(massInEarths)} M⊕`;
       ctx.fillText(
         displayText,
         true_screen_pos.x,
@@ -1244,8 +1647,26 @@ class GasGiant extends PhysicsObject {
       const theta2 = Math.PI - this.ringAngle;
       // Draw front arc (in front of planet): from theta2 to theta1
       ctx.beginPath();
-      ctx.ellipse(0, 0, this.ringOuterRadius, this.ringOuterRadius * 0.32, 0, theta2, theta1, false);
-      ctx.ellipse(0, 0, this.ringInnerRadius, this.ringInnerRadius * 0.32, 0, theta1, theta2, true);
+      ctx.ellipse(
+        0,
+        0,
+        this.ringOuterRadius,
+        this.ringOuterRadius * 0.32,
+        0,
+        theta2,
+        theta1,
+        false
+      );
+      ctx.ellipse(
+        0,
+        0,
+        this.ringInnerRadius,
+        this.ringInnerRadius * 0.32,
+        0,
+        theta1,
+        theta2,
+        true
+      );
       ctx.closePath();
       ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
       ctx.fill('evenodd');
@@ -1352,14 +1773,18 @@ class AccretionDiskParticle extends PhysicsObject {
     const mass = 0.0005; // Even smaller mass for disk particles
     const radius = 0.4; // Much smaller visual radius for more numerous, smaller particles
     super(pos, vel, mass, radius, 'AccretionDiskParticle');
-    
+
     this.parentBlackHole = parentBlackHole;
     this.initial_temperature = 1000 + Math.random() * 4000; // Initial temperature
     this.temperature = this.initial_temperature;
     this.max_temperature = 50000; // Much higher max temperature for dramatic effects
     this.angular_momentum = 0;
-    this.disk_radius = Math.hypot(pos.x - parentBlackHole.pos.x, pos.y - parentBlackHole.pos.y);
-    this.orbital_velocity = Math.sqrt(parentBlackHole.mass / this.disk_radius) * 0.1; // Standard orbital velocity
+    this.disk_radius = Math.hypot(
+      pos.x - parentBlackHole.pos.x,
+      pos.y - parentBlackHole.pos.y
+    );
+    this.orbital_velocity =
+      Math.sqrt(parentBlackHole.mass / this.disk_radius) * 0.1; // Standard orbital velocity
     this.lifetime = 60 + Math.random() * 120; // 60-180 seconds - much longer lasting
     this.age = 0;
     this.spiral_factor = 0;
@@ -1369,35 +1794,41 @@ class AccretionDiskParticle extends PhysicsObject {
     this.pulse_phase = Math.random() * Math.PI * 2; // Random phase for pulsing effect
   }
 
-  update_physics(dt, gravity_sources) {
+  update_physics(dt, _gravity_sources) {
     if (!this.alive || this.absorbed) return;
-    
+
     this.age += dt;
-    
+
     // Age-based decay (much slower now)
     if (this.age > this.lifetime) {
       this.alive = false;
       return;
     }
-    
+
     // Calculate distance to parent black hole
     const dx = this.pos.x - this.parentBlackHole.pos.x;
     const dy = this.pos.y - this.parentBlackHole.pos.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    
+
     // Check if particle has crossed the event horizon
     if (distance <= this.parentBlackHole.radius + 2) {
       this.absorbed = true;
       this.alive = false;
-      
+
       // Add mass to black hole and trigger accretion effects
       this.parentBlackHole.mass += this.mass;
       this.parentBlackHole.updateRadius();
-      
+
       // Trigger standard accretion intensity increase
-      this.parentBlackHole.accretion_intensity = Math.min(1.0, this.parentBlackHole.accretion_intensity + 0.08);
-      this.parentBlackHole.jet_intensity = Math.min(1.0, this.parentBlackHole.jet_intensity + 0.04);
-      
+      this.parentBlackHole.accretion_intensity = Math.min(
+        1.0,
+        this.parentBlackHole.accretion_intensity + 0.08
+      );
+      this.parentBlackHole.jet_intensity = Math.min(
+        1.0,
+        this.parentBlackHole.jet_intensity + 0.04
+      );
+
       // When a particle is absorbed, slightly boost the remaining particles' orbital motion
       // This ensures the accretion disk maintains net rotation and spiral motion
       for (const particle of this.parentBlackHole.disk_particles) {
@@ -1408,7 +1839,7 @@ class AccretionDiskParticle extends PhysicsObject {
           particle.orbital_velocity *= 1.05;
         }
       }
-      
+
       // Create absorption effect with temperature-based colors
       for (let i = 0; i < 6; i++) {
         const angle = Math.random() * 2 * Math.PI;
@@ -1428,59 +1859,69 @@ class AccretionDiskParticle extends PhysicsObject {
       }
       return;
     }
-    
+
     // ENHANCED: Always maintain orbital motion regardless of black hole movement
     // Calculate current angle from black hole center
     const current_angle = Math.atan2(dy, dx);
-    
+
     // Standard orbital velocity for rotation
     // Use the stored orbital velocity or calculate new one with standard speeds
-    const base_orbital_v = Math.sqrt(this.parentBlackHole.mass / distance) * 0.3; // Standard rotation speed
-    const orbital_v = Math.max(this.orbital_velocity || base_orbital_v, base_orbital_v);
-    
+    const base_orbital_v =
+      Math.sqrt(this.parentBlackHole.mass / distance) * 0.3; // Standard rotation speed
+    const orbital_v = Math.max(
+      this.orbital_velocity || base_orbital_v,
+      base_orbital_v
+    );
+
     // Standard spiral motion - particles gradually spiral inward
     this.spiral_factor += dt * 0.01; // Standard spiral rate
     const spiral_velocity = this.spiral_factor * 0.2; // Standard spiral velocity
-    
+
     // Calculate tangent direction (perpendicular to radial direction)
     const tangent_angle = current_angle + Math.PI / 2;
-    
+
     // Add some orbital variation for more dynamic motion
     const orbital_variation = Math.sin(this.age * 2) * 0.2; // Small variation in orbital speed
     const final_orbital_v = orbital_v * (1 + orbital_variation);
-    
+
     // Set velocity components:
     // 1. Orbital motion (tangential) - always present for rotation with dramatic speed
     // 2. Gradual spiral inward (radial) - always present for spiral
-    this.vel.x = final_orbital_v * Math.cos(tangent_angle) - spiral_velocity * Math.cos(current_angle);
-    this.vel.y = final_orbital_v * Math.sin(tangent_angle) - spiral_velocity * Math.sin(current_angle);
-    
+    this.vel.x =
+      final_orbital_v * Math.cos(tangent_angle) -
+      spiral_velocity * Math.cos(current_angle);
+    this.vel.y =
+      final_orbital_v * Math.sin(tangent_angle) -
+      spiral_velocity * Math.sin(current_angle);
+
     // Update position
     this.pos.x += this.vel.x * dt;
     this.pos.y += this.vel.y * dt;
-    
+
     // Add small random motion for dynamic appearance
     const random_motion = 0.2; // Small random motion factor
     this.pos.x += (Math.random() - 0.5) * random_motion * dt;
     this.pos.y += (Math.random() - 0.5) * random_motion * dt;
-    
+
     // Enhanced temperature calculations - dramatic heating as particle spirals inward
-    const initial_distance = this.disk_radius;
-    const distance_ratio = distance / initial_distance;
-    const heating_factor = Math.max(0, 1 - distance_ratio); // More heating as it gets closer
-    
+    // const initial_distance = this.disk_radius; // reserved for future use
+
     // Exponential heating as particle approaches black hole
-    const proximity_factor = Math.max(0, 1 - (distance / (this.parentBlackHole.radius * 15)));
+    const proximity_factor = Math.max(
+      0,
+      1 - distance / (this.parentBlackHole.radius * 15)
+    );
     const exponential_heating = Math.pow(proximity_factor, 2);
-    
+
     // Enhanced temperature with dramatic effects
-    this.temperature = this.initial_temperature + 
-                      (this.max_temperature - this.initial_temperature) * exponential_heating;
-    
+    this.temperature =
+      this.initial_temperature +
+      (this.max_temperature - this.initial_temperature) * exponential_heating;
+
     // Dynamic brightness based on heating
     this.heating_intensity = exponential_heating;
     this.brightness_multiplier = 1.0 + this.heating_intensity * 1.5; // Up to 2.5x brighter
-    
+
     // Add pulsing effect based on orbital motion and heating
     this.pulse_phase += dt * (1 + this.heating_intensity * 3); // Standard pulsing when hotter
   }
@@ -1489,11 +1930,11 @@ class AccretionDiskParticle extends PhysicsObject {
     // Enhanced temperature-based color with dramatic effects
     const temp = this.temperature;
     const brightness = this.brightness_multiplier;
-    
+
     // Pulsing effect
     const pulse_factor = 0.8 + 0.4 * Math.sin(this.pulse_phase);
     const final_brightness = brightness * pulse_factor;
-    
+
     if (temp < 3000) {
       // Deep red-orange
       const intensity = Math.floor(final_brightness * 150);
@@ -1519,14 +1960,14 @@ class AccretionDiskParticle extends PhysicsObject {
 
   draw(ctx) {
     if (!this.alive || this.absorbed) return;
-    
+
     const world_pos = this.pos;
     const color = this.getTemperatureColor();
-    
+
     // Enhanced drawing with glow effect for hot particles
     const glow_radius = this.radius * (1 + this.heating_intensity * 2);
     const core_radius = this.radius * 0.6;
-    
+
     // Draw glow effect for hot particles
     if (this.heating_intensity > 0.1) {
       const glow_alpha = Math.min(0.8, this.heating_intensity * 0.6);
@@ -1536,14 +1977,14 @@ class AccretionDiskParticle extends PhysicsObject {
       ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
       ctx.fill();
     }
-    
+
     // Draw core particle
     ctx.fillStyle = color;
     ctx.globalAlpha = 0.9;
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, core_radius, 0, 2 * Math.PI);
     ctx.fill();
-    
+
     // Draw bright center for very hot particles
     if (this.heating_intensity > 0.5) {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
@@ -1551,7 +1992,7 @@ class AccretionDiskParticle extends PhysicsObject {
       ctx.arc(world_pos.x, world_pos.y, core_radius * 0.4, 0, 2 * Math.PI);
       ctx.fill();
     }
-    
+
     ctx.globalAlpha = 1.0;
   }
 }
@@ -1569,7 +2010,13 @@ class BlackHole {
    * @param {boolean} isNewlyCreated - Whether this is a new black hole
    * @param {number} jet_orientation - Angle in radians for jet direction (optional)
    */
-  constructor(pos, mass, vel = { x: 0, y: 0 }, isNewlyCreated = false, jet_orientation = null) {
+  constructor(
+    pos,
+    mass,
+    vel = { x: 0, y: 0 },
+    isNewlyCreated = false,
+    jet_orientation = null
+  ) {
     this.id = PhysicsObject_id_counter++; // Add unique ID for energy tracking
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
@@ -1600,7 +2047,8 @@ class BlackHole {
     this.merger_boost_timer = 0; // Timer for enhanced effects after mergers
     this.merger_particle_boost = 1.0; // Multiplier for particle generation after mergers
     // Assign a random jet orientation if not provided
-    this.jet_orientation = jet_orientation !== null ? jet_orientation : Math.random() * 2 * Math.PI;
+    this.jet_orientation =
+      jet_orientation !== null ? jet_orientation : Math.random() * 2 * Math.PI;
     // Generate initial accretion disk particles for all black holes
     this.generateInitialDiskParticles();
   }
@@ -1611,17 +2059,17 @@ class BlackHole {
   generateInitialDiskParticles() {
     // Only generate if accretion disk is enabled
     if (!physicsSettings || !physicsSettings.show_accretion_disk) return;
-    
+
     // Generate 30-60 initial particles based on black hole mass
     const massInSuns = this.mass / SOLAR_MASS_UNIT;
     const baseParticles = 30;
     const massBonus = Math.floor(massInSuns * 2); // More particles for more massive black holes
     const totalParticles = Math.min(baseParticles + massBonus, 60);
-    
+
     for (let i = 0; i < totalParticles; i++) {
       this.generateInitialDiskParticle();
     }
-    
+
     // Set initial accretion intensity to show the disk is active
     this.accretion_intensity = 0.2;
     this.disk_growth = 0.3;
@@ -1633,32 +2081,32 @@ class BlackHole {
   generateInitialDiskParticle() {
     const disk_radius = this.radius * (1.5 + Math.random() * 3.0); // 1.5-4.5 times radius
     const angle = Math.random() * 2 * Math.PI;
-    
+
     const pos = {
       x: this.pos.x + disk_radius * Math.cos(angle),
-      y: this.pos.y + disk_radius * Math.sin(angle)
+      y: this.pos.y + disk_radius * Math.sin(angle),
     };
-    
+
     // Standard orbital velocity for stable disk formation
     const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.4; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
-      y: orbital_speed * Math.sin(tangent_angle)
+      y: orbital_speed * Math.sin(tangent_angle),
     };
-    
+
     const particle = new AccretionDiskParticle(pos, vel, this);
-    
+
     // ENHANCED: Set initial orbital properties to ensure consistent rotation
     particle.orbital_velocity = orbital_speed;
     particle.spiral_factor = Math.random() * 0.2; // Small initial spiral factor
-    
+
     // Give initial particles longer lifetimes and varied temperatures
     particle.initial_temperature = 2000 + Math.random() * 6000; // 2000-8000K
     particle.temperature = particle.initial_temperature;
     particle.lifetime = 90 + Math.random() * 120; // 90-210 seconds
     particle.brightness_multiplier = 0.8 + Math.random() * 0.4; // 0.8-1.2x brightness
-    
+
     this.disk_particles.push(particle);
     accretion_disk_particles.push(particle);
   }
@@ -1671,9 +2119,10 @@ class BlackHole {
   update_orbit(dt, other_bhs) {
     // Allow movement for newly created black holes even in static mode
     const timeSinceCreation = (Date.now() - this.creationTime) / 1000;
-    const canMove = physicsSettings.bh_behavior === 'Orbiting' || 
-                   (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod);
-    
+    const canMove =
+      physicsSettings.bh_behavior === 'Orbiting' ||
+      (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod);
+
     if (canMove) {
       const { ax, ay } = gravitational_acceleration(
         this.pos,
@@ -1705,11 +2154,11 @@ class BlackHole {
         this.disk_growth + mass_ratio * 12
       );
       this.time_since_last_accretion = 0.0;
-      
+
       // Trigger merger boost for enhanced particle generation
       this.merger_boost_timer = 20.0; // 20 seconds of enhanced effects
       this.merger_particle_boost = 1.0 + mass_ratio * 5; // Up to 5x more particles
-      
+
       // Create merger particles - reasonable amount
       const merger_particles = Math.floor(mass_ratio * 200) + 20;
       for (let i = 0; i < merger_particles; i++) {
@@ -1719,10 +2168,13 @@ class BlackHole {
 
     this.time_since_last_accretion += dt;
     this.merger_boost_timer = Math.max(0, this.merger_boost_timer - dt);
-    
+
     // Decay merger boost over time
     if (this.merger_boost_timer <= 0) {
-      this.merger_particle_boost = Math.max(1.0, this.merger_particle_boost - dt * 0.1);
+      this.merger_particle_boost = Math.max(
+        1.0,
+        this.merger_particle_boost - dt * 0.1
+      );
     }
 
     this.accretion_intensity = Math.max(
@@ -1749,31 +2201,40 @@ class BlackHole {
    * @param {number} dt - Delta time
    */
   updateDiskParticles(dt) {
-    if (!physicsSettings.show_accretion_disk || !physicsSettings.realistic_disk_physics) return;
-    
+    if (
+      !physicsSettings.show_accretion_disk ||
+      !physicsSettings.realistic_disk_physics
+    )
+      return;
+
     // Generate new particles with merger boost
     this.time_since_last_particle += dt;
-    const effective_generation_rate = this.particle_generation_rate * this.merger_particle_boost;
-    
-    if (this.time_since_last_particle >= 1.0 / effective_generation_rate && 
-        this.disk_particles.length < this.max_disk_particles) {
-      
+    const effective_generation_rate =
+      this.particle_generation_rate * this.merger_particle_boost;
+
+    if (
+      this.time_since_last_particle >= 1.0 / effective_generation_rate &&
+      this.disk_particles.length < this.max_disk_particles
+    ) {
       this.generateDiskParticle();
       this.time_since_last_particle = 0;
     }
-    
+
     // During intense accretion, generate extra particles
-    if (this.accretion_intensity > 0.7 && this.disk_particles.length < this.max_disk_particles) {
+    if (
+      this.accretion_intensity > 0.7 &&
+      this.disk_particles.length < this.max_disk_particles
+    ) {
       if (Math.random() < this.accretion_intensity * dt * 2) {
         this.generateDiskParticle();
       }
     }
-    
+
     // Update existing particles
     for (let i = this.disk_particles.length - 1; i >= 0; i--) {
       const particle = this.disk_particles[i];
       particle.update_physics(dt, []);
-      
+
       // Remove dead particles
       if (!particle.alive) {
         this.disk_particles.splice(i, 1);
@@ -1787,26 +2248,26 @@ class BlackHole {
   generateDiskParticle() {
     const disk_radius = this.radius * (1.2 + Math.random() * 2.5); // Much closer to black hole: 1.2-3.7 times radius
     const angle = Math.random() * 2 * Math.PI;
-    
+
     const pos = {
       x: this.pos.x + disk_radius * Math.cos(angle),
-      y: this.pos.y + disk_radius * Math.sin(angle)
+      y: this.pos.y + disk_radius * Math.sin(angle),
     };
-    
+
     // Standard orbital motion for disk particles
     const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.5; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
-      y: orbital_speed * Math.sin(tangent_angle)
+      y: orbital_speed * Math.sin(tangent_angle),
     };
-    
+
     const particle = new AccretionDiskParticle(pos, vel, this);
-    
+
     // ENHANCED: Set initial orbital velocity to ensure consistent rotation
     particle.orbital_velocity = orbital_speed;
     particle.spiral_factor = Math.random() * 0.3; // Random initial spiral factor for variety
-    
+
     this.disk_particles.push(particle);
     accretion_disk_particles.push(particle);
   }
@@ -1817,32 +2278,32 @@ class BlackHole {
   generateEnhancedMergerParticle() {
     const disk_radius = this.radius * (0.8 + Math.random() * 2.5); // Even closer to black hole for more dramatic effects
     const angle = Math.random() * 2 * Math.PI;
-    
+
     const pos = {
       x: this.pos.x + disk_radius * Math.cos(angle),
-      y: this.pos.y + disk_radius * Math.sin(angle)
+      y: this.pos.y + disk_radius * Math.sin(angle),
     };
-    
+
     // Standard orbital velocity for merger particles
     const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.6; // Standard rotation speed
     const tangent_angle = angle + Math.PI / 2;
     const vel = {
       x: orbital_speed * Math.cos(tangent_angle),
-      y: orbital_speed * Math.sin(tangent_angle)
+      y: orbital_speed * Math.sin(tangent_angle),
     };
-    
+
     const particle = new AccretionDiskParticle(pos, vel, this);
-    
+
     // ENHANCED: Set strong initial orbital properties for merger particles
     particle.orbital_velocity = orbital_speed;
     particle.spiral_factor = 0.5 + Math.random() * 0.5; // Higher initial spiral factor for merger particles
-    
+
     // Enhanced properties for merger particles
     particle.initial_temperature = 3000 + Math.random() * 7000; // Start hotter
     particle.temperature = particle.initial_temperature;
     particle.lifetime = 90 + Math.random() * 180; // Even longer lifetime
     particle.brightness_multiplier = 1.5 + Math.random() * 0.5; // Start brighter
-    
+
     this.disk_particles.push(particle);
     accretion_disk_particles.push(particle);
   }
@@ -1851,8 +2312,12 @@ class BlackHole {
    * Draw accretion disk particles instead of gradient effect
    */
   drawDiskParticles(ctx) {
-    if (!physicsSettings.show_accretion_disk || !physicsSettings.realistic_disk_physics) return;
-    
+    if (
+      !physicsSettings.show_accretion_disk ||
+      !physicsSettings.realistic_disk_physics
+    )
+      return;
+
     for (const particle of this.disk_particles) {
       particle.draw(ctx);
     }
@@ -1865,16 +2330,16 @@ class BlackHole {
     if (physicsSettings.show_accretion_disk) {
       // Draw disk particles for more realistic disk behavior
       this.drawDiskParticles(ctx);
-      
+
       // Enhanced gradient backdrop with more dramatic effects
       const base_disk_radius = world_radius * 3.0; // Increased from 2.5
       const growth_factor = 1.0 + this.disk_growth * 0.8; // Increased from 0.6
       const disk_radius = base_disk_radius * growth_factor;
 
       if (disk_radius > world_radius) {
-        const base_intensity = physicsSettings.realistic_disk_physics ? 
-          (0.15 + this.accretion_intensity * 0.4) : // Increased backdrop intensity
-          (0.4 + this.accretion_intensity * 0.8);   // Increased full intensity
+        const base_intensity = physicsSettings.realistic_disk_physics
+          ? 0.15 + this.accretion_intensity * 0.4 // Increased backdrop intensity
+          : 0.4 + this.accretion_intensity * 0.8; // Increased full intensity
 
         const inner_radius = world_radius * (1.3 + this.disk_growth * 0.4); // Increased from 1.2 and 0.3
         const inner_grad = ctx.createRadialGradient(
@@ -1887,8 +2352,10 @@ class BlackHole {
         );
         const inner_intensity =
           base_intensity * (0.9 + this.accretion_intensity * 0.4); // Increased from 0.8 and 0.3
-        const opacity_multiplier = physicsSettings.realistic_disk_physics ? 0.6 : 1.0; // Increased from 0.4 and 0.9
-        
+        const opacity_multiplier = physicsSettings.realistic_disk_physics
+          ? 0.6
+          : 1.0; // Increased from 0.4 and 0.9
+
         // Enhanced color progression with more dramatic heating effects
         inner_grad.addColorStop(
           0,
@@ -1923,7 +2390,7 @@ class BlackHole {
           world_pos.y,
           disk_radius
         );
-        
+
         // Enhanced outer gradient with more dramatic colors
         outer_grad.addColorStop(
           0,
@@ -1960,7 +2427,7 @@ class BlackHole {
         world_pos.y,
         glow_radius
       );
-      
+
       // Enhanced glow colors
       grad.addColorStop(0, `rgba(220, 220, 255, ${glow_intensity * 0.8})`);
       grad.addColorStop(0.5, `rgba(200, 200, 255, ${glow_intensity * 0.4})`);
@@ -1979,7 +2446,10 @@ class BlackHole {
     if (physicsSettings.show_bh_jets) {
       // --- Realistic, dynamic jet rendering (many thin lines, volumetric) ---
       const jet_length = world_radius * (11 + this.jet_intensity * 3.5); // Moderately longer jet
-      const jet_base_width = Math.max(1.5 / state.zoom, world_radius * (0.18 + this.jet_intensity * 0.12));
+      const jet_base_width = Math.max(
+        1.5 / state.zoom,
+        world_radius * (0.18 + this.jet_intensity * 0.12)
+      );
       const jet_tip_width = jet_base_width * 2.2;
       const jet_intensity = 0.7 + this.jet_intensity * 0.5;
       const time = Date.now() * 0.001;
@@ -2001,19 +2471,36 @@ class BlackHole {
         ctx.beginPath();
         const base_x = world_pos.x + Math.sin(angle) * world_radius;
         const base_y = world_pos.y + Math.cos(angle) * world_radius;
-        const tip_x = world_pos.x + Math.sin(angle) * (world_radius + jet_length);
-        const tip_y = world_pos.y + Math.cos(angle) * (world_radius + jet_length);
+        const tip_x =
+          world_pos.x + Math.sin(angle) * (world_radius + jet_length);
+        const tip_y =
+          world_pos.y + Math.cos(angle) * (world_radius + jet_length);
         const perp = { x: Math.cos(angle), y: -Math.sin(angle) };
-        ctx.moveTo(base_x - perp.x * jet_base_width, base_y - perp.y * jet_base_width);
-        ctx.lineTo(tip_x - perp.x * jet_tip_width, tip_y - perp.y * jet_tip_width);
-        ctx.lineTo(tip_x + perp.x * jet_tip_width, tip_y + perp.y * jet_tip_width);
-        ctx.lineTo(base_x + perp.x * jet_base_width, base_y + perp.y * jet_base_width);
+        ctx.moveTo(
+          base_x - perp.x * jet_base_width,
+          base_y - perp.y * jet_base_width
+        );
+        ctx.lineTo(
+          tip_x - perp.x * jet_tip_width,
+          tip_y - perp.y * jet_tip_width
+        );
+        ctx.lineTo(
+          tip_x + perp.x * jet_tip_width,
+          tip_y + perp.y * jet_tip_width
+        );
+        ctx.lineTo(
+          base_x + perp.x * jet_base_width,
+          base_y + perp.y * jet_base_width
+        );
         ctx.closePath();
         const grad = ctx.createLinearGradient(base_x, base_y, tip_x, tip_y);
         for (const stop of jet_colors) {
           // Use the provided alpha for a more gradual fade
           const alpha = stop.alpha * jet_intensity * flicker;
-          grad.addColorStop(stop.stop, `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`);
+          grad.addColorStop(
+            stop.stop,
+            `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`
+          );
         }
         ctx.globalAlpha = 0.85;
         ctx.fillStyle = grad;
@@ -2031,10 +2518,17 @@ class BlackHole {
           const width = jet_base_width * (1 - t) + jet_tip_width * t;
           const offset = (Math.random() - 0.5) * width * 1.1;
           // Flicker: only draw if random threshold is met (rapid flutter)
-          if (Math.random() > 0.38 + 0.55 * Math.sin(time * 16 + t * 10 + i)) continue;
+          if (Math.random() > 0.38 + 0.55 * Math.sin(time * 16 + t * 10 + i))
+            continue;
           // Position along jet, offset from axis
-          const px = world_pos.x + Math.sin(angle) * (world_radius + t * jet_length) + perp.x * offset;
-          const py = world_pos.y + Math.cos(angle) * (world_radius + t * jet_length) + perp.y * offset;
+          const px =
+            world_pos.x +
+            Math.sin(angle) * (world_radius + t * jet_length) +
+            perp.x * offset;
+          const py =
+            world_pos.y +
+            Math.cos(angle) * (world_radius + t * jet_length) +
+            perp.y * offset;
           // Line direction: mostly along jet, but with small random angular spread
           const angleSpread = angle + (Math.random() - 0.5) * 0.18;
           // Line length tapers and flutters
@@ -2044,19 +2538,33 @@ class BlackHole {
           if (t > 0.6) color = [180, 200, 255];
           else if (t > 0.25) color = [255, 220, 100];
           // Opacity fades with distance
-          const alpha = Math.max(0.03, Math.min(0.18, jet_intensity * (1 - t * 0.4) * flicker));
+          const alpha = Math.max(
+            0.03,
+            Math.min(0.18, jet_intensity * (1 - t * 0.4) * flicker)
+          );
           ctx.save();
           ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
           ctx.lineWidth = Math.max(0.5, width * 0.09); // much thinner lines
           ctx.beginPath();
           ctx.moveTo(px, py);
-          ctx.lineTo(px + Math.sin(angleSpread) * lineLen, py + Math.cos(angleSpread) * lineLen);
+          ctx.lineTo(
+            px + Math.sin(angleSpread) * lineLen,
+            py + Math.cos(angleSpread) * lineLen
+          );
           ctx.stroke();
           ctx.restore();
         }
         // Jet tip shock (subtle, fading away gradually)
-        const tip_shock_radius = jet_tip_width * (1.2 + 0.3 * Math.sin(time * 2 + i));
-        const tip_grad = ctx.createRadialGradient(tip_x, tip_y, 0, tip_x, tip_y, tip_shock_radius);
+        const tip_shock_radius =
+          jet_tip_width * (1.2 + 0.3 * Math.sin(time * 2 + i));
+        const tip_grad = ctx.createRadialGradient(
+          tip_x,
+          tip_y,
+          0,
+          tip_x,
+          tip_y,
+          tip_shock_radius
+        );
         tip_grad.addColorStop(0, `rgba(180,200,255,${0.3 * flicker})`);
         tip_grad.addColorStop(0.3, `rgba(120,160,255,${0.15 * flicker})`);
         tip_grad.addColorStop(0.7, `rgba(100,140,255,${0.05 * flicker})`);
@@ -2187,14 +2695,22 @@ class StarObject extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 4;
-      
+
       // Show name for Solar System sun, mass for others
       if (this.isSolarSystemSun) {
-        ctx.fillText(this.name, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+        ctx.fillText(
+          this.name,
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset
+        );
       } else {
         const starMassStr = this.massInSuns.toFixed(2);
         const starLabel = starMassStr + ' M\u2609'; // M☉
-        ctx.fillText(starLabel, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+        ctx.fillText(
+          starLabel,
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset
+        );
         // Remove subscript 'sun' drawing
       }
     }
@@ -2272,7 +2788,7 @@ class NeutronStar extends PhysicsObject {
     this.intact = true;
     this.name = getRandomName('neutronStars');
     // Randomly assign pulsar status if not specified
-    this.isPulsar = (isPulsar !== null) ? isPulsar : (Math.random() < 0.5);
+    this.isPulsar = isPulsar !== null ? isPulsar : Math.random() < 0.5;
     this.pulsar = this.isPulsar; // For inspector compatibility
   }
 
@@ -2499,12 +3015,19 @@ class ParticlePool {
     this.pool = [];
     this.activeParticles = [];
     this.maxPoolSize = initialSize;
-    
+
     // Don't pre-allocate particles to avoid initialization issues
     // They will be created as needed and pooled when they die
   }
-  
-  getParticle(pos, vel, lifetime = 0.8, start_size = 5, end_size = 1, color = 'rgb(255,255,100)') {
+
+  getParticle(
+    pos,
+    vel,
+    lifetime = 0.8,
+    start_size = 5,
+    end_size = 1,
+    color = 'rgb(255,255,100)'
+  ) {
     let particle;
     if (this.pool.length > 0) {
       particle = this.pool.pop();
@@ -2530,12 +3053,12 @@ class ParticlePool {
     this.activeParticles.push(particle);
     return particle;
   }
-  
+
   updateAndCleanup(dt) {
     for (let i = this.activeParticles.length - 1; i >= 0; i--) {
       const particle = this.activeParticles[i];
       particle.update(dt);
-      
+
       if (!particle.is_alive()) {
         // Return to pool if not at max capacity
         this.activeParticles.splice(i, 1);
@@ -2546,11 +3069,11 @@ class ParticlePool {
       }
     }
   }
-  
+
   getActiveParticles() {
     return this.activeParticles;
   }
-  
+
   clear() {
     this.pool.push(...this.activeParticles);
     this.activeParticles.length = 0;
@@ -2574,7 +3097,7 @@ class Particle {
     this.vel = { x: 0, y: 0 };
     this.reset(pos, vel, lifetime, start_size, end_size, color);
   }
-  
+
   reset(pos, vel, lifetime, start_size, end_size, color) {
     this.pos.x = pos.x;
     this.pos.y = pos.y;
@@ -2606,26 +3129,20 @@ class Particle {
     if (current_size < 1 || alpha < 0.05) return;
 
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    
+
     // Special kilonova glow effect
     if (this.kilonova_glow && this.glow_intensity) {
       const glow_size = current_size * 3 * this.glow_intensity;
       const glow_alpha = alpha * 0.3 * this.glow_intensity;
-      
+
       // Draw glow
       ctx.fillStyle = this.color;
       ctx.globalAlpha = glow_alpha;
       ctx.beginPath();
-      ctx.arc(
-        world_pos.x,
-        world_pos.y,
-        glow_size / state.zoom,
-        0,
-        2 * Math.PI
-      );
+      ctx.arc(world_pos.x, world_pos.y, glow_size / state.zoom, 0, 2 * Math.PI);
       ctx.fill();
     }
-    
+
     // Draw main particle
     ctx.fillStyle = this.color;
     ctx.globalAlpha = alpha;
@@ -2646,79 +3163,79 @@ class Particle {
 particlePool = new ParticlePool(200);
 
 // Add missing utility functions from original
-const findObjectAtPosition = (worldPos) => {
+const findObjectAtPosition = worldPos => {
   // Check black holes first (they're usually the most important)
   for (const bh of bh_list) {
     const dx = worldPos.x - bh.pos.x;
     const dy = worldPos.y - bh.pos.y;
     const clickRadius = Math.max(bh.radius, 10 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
     }
   }
-  
+
   // Check stars
   for (const star of stars) {
     if (!star.alive) continue;
     const dx = worldPos.x - star.pos.x;
     const dy = worldPos.y - star.pos.y;
     const clickRadius = Math.max(star.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: star, type: 'Star' };
     }
   }
-  
+
   // Check neutron stars
   for (const ns of neutron_stars) {
     if (!ns.alive) continue;
     const dx = worldPos.x - ns.pos.x;
     const dy = worldPos.y - ns.pos.y;
     const clickRadius = Math.max(ns.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: ns, type: 'NeutronStar' };
     }
   }
-  
+
   // Check white dwarfs
   for (const wd of white_dwarfs) {
     if (!wd.alive) continue;
     const dx = worldPos.x - wd.pos.x;
     const dy = worldPos.y - wd.pos.y;
     const clickRadius = Math.max(wd.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: wd, type: 'WhiteDwarf' };
     }
   }
-  
+
   // Check gas giants
   for (const gasGiant of gas_giants) {
     if (!gasGiant.alive) continue;
     const dx = worldPos.x - gasGiant.pos.x;
     const dy = worldPos.y - gasGiant.pos.y;
     const clickRadius = Math.max(gasGiant.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: gasGiant, type: 'GasGiant' };
     }
   }
-  
+
   // Check planets
   for (const planet of planets) {
     if (!planet.alive) continue;
     const dx = worldPos.x - planet.pos.x;
     const dy = worldPos.y - planet.pos.y;
     const clickRadius = Math.max(planet.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: planet, type: 'Planet' };
     }
   }
-  
+
   // Check asteroids (including comets)
   for (const asteroid of asteroids) {
     if (!asteroid.alive) continue;
     const dx = worldPos.x - asteroid.pos.x;
     const dy = worldPos.y - asteroid.pos.y;
     const clickRadius = Math.max(asteroid.radius, 4 / state.zoom); // Use actual radius or minimum clickable size
-    if (dx*dx + dy*dy < clickRadius*clickRadius) {
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
       // Determine if it's a comet or regular asteroid
       if (asteroid instanceof Comet) {
         return { object: asteroid, type: 'Comet' };
@@ -2727,7 +3244,7 @@ const findObjectAtPosition = (worldPos) => {
       }
     }
   }
-  
+
   return null;
 };
 
@@ -2739,20 +3256,20 @@ class Comet extends PhysicsObject {
       finalMassInComets = massInComets;
     } else {
       // Comets are typically very small. Range ~0.001 to 0.1 comet masses (Halley's Comet = 1.0)
-      finalMassInComets = Math.pow(10, (Math.random() * 2) - 3); 
+      finalMassInComets = Math.pow(10, Math.random() * 2 - 3);
     }
-    
+
     const radius = ASTEROID_RADIUS * Math.pow(finalMassInComets, 0.4) * 0.8; // Comets are smaller than asteroids
     const mass = finalMassInComets * 0.1; // 0.1 = typical comet mass
-    
-    super(pos, vel, mass, radius, "Comet");
+
+    super(pos, vel, mass, radius, 'Comet');
     this.massInComets = finalMassInComets;
     this.cometType = this.calculateCometType();
     this.tailLength = Math.random() * 50 + 20; // Random tail length
     this.intact = true;
     this.name = getRandomName('comets');
   }
-  
+
   calculateCometType() {
     // Determine comet type based on mass and random factors
     if (this.massInComets > 0.1) {
@@ -2763,24 +3280,27 @@ class Comet extends PhysicsObject {
       return 'short_period'; // Short-period comets
     }
   }
-  
+
   draw(ctx) {
-    const world_pos = world_to_screen(this.pos);
     const true_screen_pos = world_to_screen(this.pos);
     const screen_radius = this.radius * state.zoom;
-    
+
     ctx.save();
-    
+
     // Draw comet tail (opposite to velocity direction)
     if (screen_radius > 1) {
       const speed = Math.hypot(this.vel.x, this.vel.y);
       if (speed > 0.1) {
-        const tailDirection = { x: -this.vel.x / speed, y: -this.vel.y / speed };
+        const tailDirection = {
+          x: -this.vel.x / speed,
+          y: -this.vel.y / speed,
+        };
         const tailLength = Math.min(this.tailLength * state.zoom, 100);
-        
+
         // Draw tail gradient
         const gradient = ctx.createLinearGradient(
-          true_screen_pos.x, true_screen_pos.y,
+          true_screen_pos.x,
+          true_screen_pos.y,
           true_screen_pos.x + tailDirection.x * tailLength,
           true_screen_pos.y + tailDirection.y * tailLength
         );
@@ -2788,20 +3308,32 @@ class Comet extends PhysicsObject {
         gradient.addColorStop(0.3, 'rgba(200, 255, 255, 0.6)');
         gradient.addColorStop(0.7, 'rgba(150, 200, 255, 0.3)');
         gradient.addColorStop(1, 'transparent');
-        
+
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius * 2, 0, 2 * Math.PI);
+        ctx.arc(
+          true_screen_pos.x,
+          true_screen_pos.y,
+          screen_radius * 2,
+          0,
+          2 * Math.PI
+        );
         ctx.fill();
       }
     }
-    
+
     // Draw comet nucleus
     ctx.fillStyle = '#f0f0f0';
     ctx.beginPath();
-    ctx.arc(true_screen_pos.x, true_screen_pos.y, screen_radius, 0, 2 * Math.PI);
+    ctx.arc(
+      true_screen_pos.x,
+      true_screen_pos.y,
+      screen_radius,
+      0,
+      2 * Math.PI
+    );
     ctx.fill();
-    
+
     // Draw label if large enough
     if (screen_radius > 3) {
       const label_y_offset = screen_radius + 12;
@@ -2811,35 +3343,44 @@ class Comet extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 2;
-      ctx.fillText(`${this.massInComets.toFixed(3)} C`, true_screen_pos.x, true_screen_pos.y + label_y_offset);
+      ctx.fillText(
+        `${this.massInComets.toFixed(3)} C`,
+        true_screen_pos.x,
+        true_screen_pos.y + label_y_offset
+      );
     }
     ctx.restore();
   }
-  
+
   tidal_mass_loss(bh_list, dt) {
-    if (!this.intact || !bh_list || bh_list.length === 0) return { debris_count: 0, fraction: 0 };
-    let min_dist_sq = Infinity, closest_bh = null;
+    if (!this.intact || !bh_list || bh_list.length === 0)
+      return { debris_count: 0, fraction: 0 };
+    let min_dist_sq = Infinity,
+      closest_bh = null;
     for (const bh of bh_list) {
       const dx = this.pos.x - bh.pos.x;
       const dy = this.pos.y - bh.pos.y;
-      const dist_sq = dx*dx + dy*dy;
+      const dist_sq = dx * dx + dy * dy;
       if (dist_sq < min_dist_sq) {
         min_dist_sq = dist_sq;
         closest_bh = bh;
       }
     }
     if (!closest_bh) return { debris_count: 0, fraction: 0 };
-    
+
     // Comets are easily disrupted
-    const tidal_threshold_sq = (closest_bh.radius * 2)**2;
+    const tidal_threshold_sq = (closest_bh.radius * 2) ** 2;
     if (min_dist_sq < tidal_threshold_sq) {
       const min_dist = Math.sqrt(min_dist_sq);
       const tidal_threshold = Math.sqrt(tidal_threshold_sq);
-      const fraction = Math.max(0.0, (tidal_threshold - min_dist) / tidal_threshold);
-      
+      const fraction = Math.max(
+        0.0,
+        (tidal_threshold - min_dist) / tidal_threshold
+      );
+
       this.mass -= this.mass * fraction * 0.1 * dt;
       let debris_count = Math.floor(fraction * 25 * dt);
-      
+
       if (this.mass <= 0.01) {
         this.intact = false;
         this.alive = false;
@@ -2849,10 +3390,15 @@ class Comet extends PhysicsObject {
     }
     return { debris_count: 0, fraction: 0 };
   }
-  
-  get_state() { 
+
+  get_state() {
     const baseState = super.get_state();
-    return { ...baseState, massInComets: this.massInComets, cometType: this.cometType, tailLength: this.tailLength };
+    return {
+      ...baseState,
+      massInComets: this.massInComets,
+      cometType: this.cometType,
+      tailLength: this.tailLength,
+    };
   }
   set_state(s) {
     super.set_state(s);
@@ -2928,58 +3474,58 @@ const createKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(2.0, massInSuns / 2.0); // Scale with mass
-  
+
   // Create massive particle explosion
   const particleCount = Math.floor(200 + massInSuns * 50); // 200-400 particles based on mass
-  
+
   for (let i = 0; i < particleCount; i++) {
     // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 300 + 200) * explosionIntensity; // 200-500 speed units
-    
+
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     // Random position within explosion radius
     const radius = Math.random() * 50;
     const spawnAngle = Math.random() * 2 * Math.PI;
     const spawnPos = {
       x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle)
+      y: pos.y + radius * Math.sin(spawnAngle),
     };
-    
+
     // Kilonova colors: bright blue-white to orange-red
     const colors = [
       'rgb(255, 255, 255)', // Pure white
       'rgb(255, 255, 200)', // Bright yellow
       'rgb(255, 200, 100)', // Orange
-      'rgb(255, 150, 50)',  // Bright orange
-      'rgb(255, 100, 0)',   // Red-orange
+      'rgb(255, 150, 50)', // Bright orange
+      'rgb(255, 100, 0)', // Red-orange
       'rgb(200, 100, 255)', // Purple (r-process elements)
-      'rgb(100, 200, 255)'  // Blue (gamma rays)
+      'rgb(100, 200, 255)', // Blue (gamma rays)
     ];
-    
+
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     // Create particle with kilonova properties
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
       Math.random() * 3.0 + 2.0, // 2-5 second lifetime
-      Math.random() * 15 + 10,   // 10-25 start size
-      Math.random() * 3 + 1,     // 1-4 end size
+      Math.random() * 15 + 10, // 10-25 start size
+      Math.random() * 3 + 1, // 1-4 end size
       color
     );
-    
+
     // Add special kilonova glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.5 + 0.5;
     }
   }
-  
+
   // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
@@ -2989,25 +3535,25 @@ const createKilonovaExplosion = (pos, mass) => {
     duration: 3000, // 3 seconds - reduced from 5 seconds
     mass: massInSuns,
     gw_strength: 0.4, // Reduced strength from 1.0 to 0.4
-    kilonova: true // Special flag for kilonova GW
+    kilonova: true, // Special flag for kilonova GW
   });
-  
+
   // Create shockwave effect
   for (let i = 0; i < 50; i++) {
     const angle = (i / 50) * 2 * Math.PI;
     const speed = 150 + Math.random() * 100;
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     particlePool.getParticle(
       pos,
       vel,
       Math.random() * 2.0 + 1.0, // 1-3 second lifetime
-      Math.random() * 8 + 5,     // 5-13 start size
-      Math.random() * 2 + 1,     // 1-3 end size
-      'rgb(255, 255, 255)'       // White shockwave
+      Math.random() * 8 + 5, // 5-13 start size
+      Math.random() * 2 + 1, // 1-3 end size
+      'rgb(255, 255, 255)' // White shockwave
     );
   }
 };
@@ -3022,58 +3568,58 @@ const createSmallKilonovaExplosion = (pos, mass) => {
   // Kilonova parameters based on mass (reduced intensity)
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 3.0); // Reduced intensity for smaller explosions
-  
+
   // Create smaller particle explosion
   const particleCount = Math.floor(100 + massInSuns * 25); // 100-200 particles (half of full kilonova)
-  
+
   for (let i = 0; i < particleCount; i++) {
     // Random angle and speed for explosion
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units (reduced)
-    
+
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     // Random position within explosion radius (smaller)
     const radius = Math.random() * 30;
     const spawnAngle = Math.random() * 2 * Math.PI;
     const spawnPos = {
       x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle)
+      y: pos.y + radius * Math.sin(spawnAngle),
     };
-    
+
     // Kilonova colors: bright blue-white to orange-red (same as full kilonova)
     const colors = [
       'rgb(255, 255, 255)', // Pure white
       'rgb(255, 255, 200)', // Bright yellow
       'rgb(255, 200, 100)', // Orange
-      'rgb(255, 150, 50)',  // Bright orange
-      'rgb(255, 100, 0)',   // Red-orange
+      'rgb(255, 150, 50)', // Bright orange
+      'rgb(255, 100, 0)', // Red-orange
       'rgb(200, 100, 255)', // Purple (r-process elements)
-      'rgb(100, 200, 255)'  // Blue (gamma rays)
+      'rgb(100, 200, 255)', // Blue (gamma rays)
     ];
-    
+
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     // Create particle with kilonova properties (smaller sizes)
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
       Math.random() * 2.0 + 1.5, // 1.5-3.5 second lifetime (shorter)
-      Math.random() * 10 + 6,    // 6-16 start size (smaller)
-      Math.random() * 2 + 1,     // 1-3 end size (smaller)
+      Math.random() * 10 + 6, // 6-16 start size (smaller)
+      Math.random() * 2 + 1, // 1-3 end size (smaller)
       color
     );
-    
+
     // Add special kilonova glow effect (reduced intensity)
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Reduced glow
     }
   }
-  
+
   // Create gravitational wave ripple effect (smaller)
   gravity_ripples.push({
     x: pos.x,
@@ -3083,25 +3629,26 @@ const createSmallKilonovaExplosion = (pos, mass) => {
     duration: 2000, // 2 seconds (shorter than full kilonova)
     mass: massInSuns,
     gw_strength: 0.2, // Reduced strength
-    kilonova: true // Special flag for kilonova GW
+    kilonova: true, // Special flag for kilonova GW
   });
-  
+
   // Create smaller shockwave effect
-  for (let i = 0; i < 25; i++) { // Half the shockwave particles
+  for (let i = 0; i < 25; i++) {
+    // Half the shockwave particles
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 100 + Math.random() * 75; // Reduced speed
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     particlePool.getParticle(
       pos,
       vel,
       Math.random() * 1.5 + 0.8, // 0.8-2.3 second lifetime (shorter)
-      Math.random() * 6 + 3,     // 3-9 start size (smaller)
+      Math.random() * 6 + 3, // 3-9 start size (smaller)
       Math.random() * 1.5 + 0.5, // 0.5-2 end size (smaller)
-      'rgb(255, 255, 255)'       // White shockwave
+      'rgb(255, 255, 255)' // White shockwave
     );
   }
 };
@@ -3116,26 +3663,26 @@ const createNSWDExplosion = (pos, mass) => {
   console.log('createNSWDExplosion called!');
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
-  
+
   // Create moderate particle explosion
   const particleCount = Math.floor(80 + massInSuns * 30); // 80-150 particles
-  
+
   for (let i = 0; i < particleCount; i++) {
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 200 + 150) * explosionIntensity; // 150-350 speed units
-    
+
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     const radius = Math.random() * 30;
     const spawnAngle = Math.random() * 2 * Math.PI;
     const spawnPos = {
       x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle)
+      y: pos.y + radius * Math.sin(spawnAngle),
     };
-    
+
     // NS-WD colors: white to blue-white
     const colors = [
       'rgb(255, 255, 255)', // Pure white
@@ -3143,27 +3690,27 @@ const createNSWDExplosion = (pos, mass) => {
       'rgb(220, 255, 255)', // Cyan-white
       'rgb(200, 220, 255)', // Blue-white
       'rgb(255, 220, 200)', // Pink-white
-      'rgb(180, 200, 255)'  // Light blue
+      'rgb(180, 200, 255)', // Light blue
     ];
-    
+
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
       Math.random() * 2.0 + 1.5, // 1.5-3.5 second lifetime
-      Math.random() * 10 + 6,    // 6-16 start size
-      Math.random() * 2 + 1,     // 1-3 end size
+      Math.random() * 10 + 6, // 6-16 start size
+      Math.random() * 2 + 1, // 1-3 end size
       color
     );
-    
+
     // Add moderate glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.3 + 0.3; // Moderate glow
     }
   }
-  
+
   // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
@@ -3173,25 +3720,25 @@ const createNSWDExplosion = (pos, mass) => {
     duration: 3000, // 3 seconds
     mass: massInSuns,
     gw_strength: 0.6, // Moderate strength
-    nswd_merger: true // Special flag for NS-WD merger
+    nswd_merger: true, // Special flag for NS-WD merger
   });
-  
+
   // Create moderate shockwave effect
   for (let i = 0; i < 25; i++) {
     const angle = (i / 25) * 2 * Math.PI;
     const speed = 120 + Math.random() * 80;
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     particlePool.getParticle(
       pos,
       vel,
       Math.random() * 1.5 + 0.8, // 0.8-2.3 second lifetime
-      Math.random() * 6 + 4,     // 4-10 start size
-      Math.random() * 2 + 1,     // 1-3 end size
-      'rgb(255, 255, 255)'       // White shockwave
+      Math.random() * 6 + 4, // 4-10 start size
+      Math.random() * 2 + 1, // 1-3 end size
+      'rgb(255, 255, 255)' // White shockwave
     );
   }
 };
@@ -3205,26 +3752,26 @@ const createNSWDExplosion = (pos, mass) => {
 const createWDWDExplosion = (pos, mass) => {
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.0, massInSuns / 1.0); // Smaller intensity
-  
+
   // Create smaller particle explosion
   const particleCount = Math.floor(40 + massInSuns * 20); // 40-80 particles
-  
+
   for (let i = 0; i < particleCount; i++) {
     const angle = Math.random() * 2 * Math.PI;
     const speed = (Math.random() * 150 + 100) * explosionIntensity; // 100-250 speed units
-    
+
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     const radius = Math.random() * 20;
     const spawnAngle = Math.random() * 2 * Math.PI;
     const spawnPos = {
       x: pos.x + radius * Math.cos(spawnAngle),
-      y: pos.y + radius * Math.sin(spawnAngle)
+      y: pos.y + radius * Math.sin(spawnAngle),
     };
-    
+
     // WD-WD colors: white to yellow
     const colors = [
       'rgb(255, 255, 255)', // Pure white
@@ -3232,27 +3779,27 @@ const createWDWDExplosion = (pos, mass) => {
       'rgb(255, 250, 220)', // Cream
       'rgb(255, 240, 200)', // Light yellow
       'rgb(255, 230, 180)', // Pale yellow
-      'rgb(240, 240, 255)'  // Very light blue
+      'rgb(240, 240, 255)', // Very light blue
     ];
-    
+
     const color = colors[Math.floor(Math.random() * colors.length)];
-    
+
     const particle = particlePool.getParticle(
       spawnPos,
       vel,
       Math.random() * 1.5 + 1.0, // 1-2.5 second lifetime
-      Math.random() * 6 + 4,     // 4-10 start size
-      Math.random() * 2 + 1,     // 1-3 end size
+      Math.random() * 6 + 4, // 4-10 start size
+      Math.random() * 2 + 1, // 1-3 end size
       color
     );
-    
+
     // Add subtle glow effect
     if (particle) {
       particle.kilonova_glow = true;
       particle.glow_intensity = Math.random() * 0.2 + 0.2; // Subtle glow
     }
   }
-  
+
   // Create gravitational wave ripple effect
   gravity_ripples.push({
     x: pos.x,
@@ -3262,25 +3809,25 @@ const createWDWDExplosion = (pos, mass) => {
     duration: 2000, // 2 seconds
     mass: massInSuns,
     gw_strength: 0.3, // Smaller strength
-    wdwd_merger: true // Special flag for WD-WD merger
+    wdwd_merger: true, // Special flag for WD-WD merger
   });
-  
+
   // Create small shockwave effect
   for (let i = 0; i < 15; i++) {
     const angle = (i / 15) * 2 * Math.PI;
     const speed = 80 + Math.random() * 60;
     const vel = {
       x: speed * Math.cos(angle),
-      y: speed * Math.sin(angle)
+      y: speed * Math.sin(angle),
     };
-    
+
     particlePool.getParticle(
       pos,
       vel,
       Math.random() * 1.0 + 0.5, // 0.5-1.5 second lifetime
-      Math.random() * 4 + 3,     // 3-7 start size
-      Math.random() * 1 + 1,     // 1-2 end size
-      'rgb(255, 255, 255)'       // White shockwave
+      Math.random() * 4 + 3, // 3-7 start size
+      Math.random() * 1 + 1, // 1-2 end size
+      'rgb(255, 255, 255)' // White shockwave
     );
   }
 };
@@ -3290,32 +3837,32 @@ const createWDWDExplosion = (pos, mass) => {
  * Handle merging between stars, neutron stars, and white dwarfs
  * @param {Array} stars_list - Array of star objects to check for merging
  */
-const handle_star_merging = (stars_list) => {
+const handle_star_merging = stars_list => {
   if (!physicsSettings.enable_star_merging) return;
-  
+
   let merged_this_step = true;
   while (merged_this_step && stars_list.length > 1) {
     merged_this_step = false;
-    
+
     for (let i = 0; i < stars_list.length; i++) {
       const star1 = stars_list[i];
       if (!star1.alive) continue;
-      
+
       for (let j = i + 1; j < stars_list.length; j++) {
         const star2 = stars_list[j];
         if (!star2.alive) continue;
-        
+
         const dx = star1.pos.x - star2.pos.x;
         const dy = star1.pos.y - star2.pos.y;
         const dist_sq = dx * dx + dy * dy;
         const min_dist = star1.radius + star2.radius;
-        
+
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
           const m1 = star1.mass;
           const m2 = star2.mass;
           const new_mass = m1 + m2;
           const new_mass_in_suns = new_mass / SOLAR_MASS_UNIT;
-          
+
           // Calculate center of mass position and velocity
           const new_pos = {
             x: (star1.pos.x * m1 + star2.pos.x * m2) / new_mass,
@@ -3325,7 +3872,7 @@ const handle_star_merging = (stars_list) => {
             x: (star1.vel.x * m1 + star2.vel.x * m2) / new_mass,
             y: (star1.vel.y * m1 + star2.vel.y * m2) / new_mass,
           };
-          
+
           // Create merger particles
           for (let k = 0; k < 20; k++) {
             const angle = Math.random() * 2 * Math.PI;
@@ -3343,20 +3890,33 @@ const handle_star_merging = (stars_list) => {
               'rgb(255, 220, 100)'
             );
           }
-          
+
           // Determine types once per pair
           const star1_type = star1.constructor.name;
           const star2_type = star2.constructor.name;
           // Special handling for black hole merging with regular star or white dwarf
-          if ((star1_type === 'BlackHole' && (star2_type === 'StarObject' || star2_type === 'WhiteDwarf' || star2_type === 'NeutronStar')) ||
-              (star2_type === 'BlackHole' && (star1_type === 'StarObject' || star1_type === 'WhiteDwarf' || star1_type === 'NeutronStar'))) {
+          if (
+            (star1_type === 'BlackHole' &&
+              (star2_type === 'StarObject' ||
+                star2_type === 'WhiteDwarf' ||
+                star2_type === 'NeutronStar')) ||
+            (star2_type === 'BlackHole' &&
+              (star1_type === 'StarObject' ||
+                star1_type === 'WhiteDwarf' ||
+                star1_type === 'NeutronStar'))
+          ) {
             // Find the real black hole object
-            const bh = star1_type === 'BlackHole' ? (star1._bh_ref || star1) : (star2._bh_ref || star2);
+            const bh =
+              star1_type === 'BlackHole'
+                ? star1._bh_ref || star1
+                : star2._bh_ref || star2;
             const other = star1_type === 'BlackHole' ? star2 : star1;
             // Add the mass of the other object to the black hole
             const total_mass = bh.mass + other.mass;
-            bh.vel.x = (bh.vel.x * bh.mass + other.vel.x * other.mass) / total_mass;
-            bh.vel.y = (bh.vel.y * bh.mass + other.vel.y * other.mass) / total_mass;
+            bh.vel.x =
+              (bh.vel.x * bh.mass + other.vel.x * other.mass) / total_mass;
+            bh.vel.y =
+              (bh.vel.y * bh.mass + other.vel.y * other.mass) / total_mass;
             bh.mass = total_mass;
             bh.updateRadius();
             // Subtle gravitational wave effect for all such mergers
@@ -3367,14 +3927,17 @@ const handle_star_merging = (stars_list) => {
               created: performance.now(),
               duration: 1800,
               mass: Math.max(0.2, (total_mass / SOLAR_MASS_UNIT) * 0.25),
-              gw_strength: 0.13
+              gw_strength: 0.13,
             });
             // Mark only the non-BH as dead
             other.alive = false;
             // Remove the non-BH from its global list
-            if (other.constructor.name === 'StarObject') stars = stars.filter(s => s !== other);
-            if (other.constructor.name === 'WhiteDwarf') white_dwarfs = white_dwarfs.filter(wd => wd !== other);
-            if (other.constructor.name === 'NeutronStar') neutron_stars = neutron_stars.filter(ns => ns !== other);
+            if (other.constructor.name === 'StarObject')
+              stars = stars.filter(s => s !== other);
+            if (other.constructor.name === 'WhiteDwarf')
+              white_dwarfs = white_dwarfs.filter(wd => wd !== other);
+            if (other.constructor.name === 'NeutronStar')
+              neutron_stars = neutron_stars.filter(ns => ns !== other);
             // No new black hole is created, and the existing one remains in bh_list
             merged_this_step = true;
             break;
@@ -3382,25 +3945,37 @@ const handle_star_merging = (stars_list) => {
           // Remove the two original stars
           star1.alive = false;
           star2.alive = false;
-          
+
           // Determine what type of object to create based on mass and original types
           let new_object = null;
-          
+
           // Check if either object is a neutron star or white dwarf
-          const has_neutron_star = star1_type === 'NeutronStar' || star2_type === 'NeutronStar';
-          const has_white_dwarf = star1_type === 'WhiteDwarf' || star2_type === 'WhiteDwarf';
-          const has_regular_star = star1_type === 'StarObject' || star2_type === 'StarObject';
-          
+          const has_neutron_star =
+            star1_type === 'NeutronStar' || star2_type === 'NeutronStar';
+          const has_white_dwarf =
+            star1_type === 'WhiteDwarf' || star2_type === 'WhiteDwarf';
+          const has_regular_star =
+            star1_type === 'StarObject' || star2_type === 'StarObject';
+
           if (has_neutron_star) {
             // Neutron star involved in merger
-            const is_bh_merger = star1_type === 'BlackHole' || star2_type === 'BlackHole';
+            const is_bh_merger =
+              star1_type === 'BlackHole' || star2_type === 'BlackHole';
             if (is_bh_merger) {
               // NS-BH merger: subtle GW ripple (same as NS-NS)
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
-              neutron_stars = neutron_stars.filter(ns => ns !== star1 && ns !== star2);
-              if (star1_type === 'BlackHole' && star1._bh_ref) { star1._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star1._bh_ref); }
-              if (star2_type === 'BlackHole' && star2._bh_ref) { star2._bh_ref.alive = false; bh_list = bh_list.filter(bh => bh !== star2._bh_ref); }
+              neutron_stars = neutron_stars.filter(
+                ns => ns !== star1 && ns !== star2
+              );
+              if (star1_type === 'BlackHole' && star1._bh_ref) {
+                star1._bh_ref.alive = false;
+                bh_list = bh_list.filter(bh => bh !== star1._bh_ref);
+              }
+              if (star2_type === 'BlackHole' && star2._bh_ref) {
+                star2._bh_ref.alive = false;
+                bh_list = bh_list.filter(bh => bh !== star2._bh_ref);
+              }
               gravity_ripples.push({
                 x: new_pos.x,
                 y: new_pos.y,
@@ -3408,23 +3983,26 @@ const handle_star_merging = (stars_list) => {
                 created: performance.now(),
                 duration: 1200, // ms, subtle
                 mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18),
-                gw_strength: 0.08 // subtle
+                gw_strength: 0.08, // subtle
               });
             } else if (new_mass_in_suns > 3.0) {
               // Exceeds Tolman-Oppenheimer-Volkoff limit -> black hole
               // Check if this is a neutron star-neutron star merger (kilonova)
-              const is_ns_ns_merger = star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
-              
+              const is_ns_ns_merger =
+                star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
+
               if (is_ns_ns_merger) {
                 // Create spectacular kilonova explosion for black hole formation
                 createKilonovaExplosion(new_pos, new_mass);
               }
-              
+
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
               // Remove merged neutron star from global list
-              neutron_stars = neutron_stars.filter(ns => ns !== star1 && ns !== star2);
-              
+              neutron_stars = neutron_stars.filter(
+                ns => ns !== star1 && ns !== star2
+              );
+
               // Only add regular GW ripple if not a kilonova (kilonova creates its own)
               if (!is_ns_ns_merger) {
                 gravity_ripples.push({
@@ -3434,30 +4012,42 @@ const handle_star_merging = (stars_list) => {
                   created: performance.now(),
                   duration: 3000, // ms, longer and more visible for NS-BH mergers
                   mass: new_mass / SOLAR_MASS_UNIT,
-                  gw_strength: 0.5 // More apparent for NS-BH merger
+                  gw_strength: 0.5, // More apparent for NS-BH merger
                 });
               }
             } else {
               // Stays as neutron star
               // Check if this is a neutron star-neutron star merger (smaller kilonova)
-              const is_ns_ns_merger = star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
-              
+              const is_ns_ns_merger =
+                star1_type === 'NeutronStar' && star2_type === 'NeutronStar';
+
               if (is_ns_ns_merger) {
                 // Create smaller kilonova explosion for neutron star formation
                 createSmallKilonovaExplosion(new_pos, new_mass);
               } else {
                 // Check if this is a neutron star-white dwarf merger
-                const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
-                                       (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
-                
+                const is_ns_wd_merger =
+                  (star1_type === 'NeutronStar' &&
+                    star2_type === 'WhiteDwarf') ||
+                  (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
+
                 if (is_ns_wd_merger) {
                   // Create neutron star-white dwarf merger explosion
-                  console.log('NS-WD merger detected in neutron star section! Mass:', new_mass_in_suns, 'solar masses');
+                  console.log(
+                    'NS-WD merger detected in neutron star section! Mass:',
+                    new_mass_in_suns,
+                    'solar masses'
+                  );
                   createNSWDExplosion(new_pos, new_mass);
                 }
               }
-              
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
+
+              new_object = new NeutronStar(
+                new_pos,
+                new_vel,
+                new_mass_in_suns,
+                null
+              );
               neutron_stars.push(new_object);
             }
           } else if (has_white_dwarf) {
@@ -3465,24 +4055,35 @@ const handle_star_merging = (stars_list) => {
             if (new_mass_in_suns > 1.4) {
               // Exceeds Chandrasekhar limit -> neutron star
               // Check if this is a neutron star-white dwarf merger
-              const is_ns_wd_merger = (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
-                                     (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
-              
+              const is_ns_wd_merger =
+                (star1_type === 'NeutronStar' && star2_type === 'WhiteDwarf') ||
+                (star1_type === 'WhiteDwarf' && star2_type === 'NeutronStar');
+
               // Check if this is a white dwarf-white dwarf merger
-              const is_wd_wd_merger = star1_type === 'WhiteDwarf' && star2_type === 'WhiteDwarf';
-              
+              const is_wd_wd_merger =
+                star1_type === 'WhiteDwarf' && star2_type === 'WhiteDwarf';
+
               if (is_ns_wd_merger) {
                 // Create neutron star-white dwarf merger explosion
-                console.log('NS-WD merger detected! Mass:', new_mass_in_suns, 'solar masses');
+                console.log(
+                  'NS-WD merger detected! Mass:',
+                  new_mass_in_suns,
+                  'solar masses'
+                );
                 createNSWDExplosion(new_pos, new_mass);
               } else if (is_wd_wd_merger) {
                 // Create white dwarf-white dwarf merger explosion (results in neutron star)
                 createWDWDExplosion(new_pos, new_mass);
               }
-              
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
+
+              new_object = new NeutronStar(
+                new_pos,
+                new_vel,
+                new_mass_in_suns,
+                null
+              );
               neutron_stars.push(new_object);
-              
+
               // Only add regular GW ripple if not a special merger (explosion creates its own)
               if (!is_ns_wd_merger && !is_wd_wd_merger) {
                 gravity_ripples.push({
@@ -3492,7 +4093,7 @@ const handle_star_merging = (stars_list) => {
                   created: performance.now(),
                   duration: 1800, // ms, even shorter
                   mass: new_mass / SOLAR_MASS_UNIT,
-                  gw_strength: 0.1 // WD-NS or WD-BH merger
+                  gw_strength: 0.1, // WD-NS or WD-BH merger
                 });
               }
             } else {
@@ -3513,11 +4114,16 @@ const handle_star_merging = (stars_list) => {
                 created: performance.now(),
                 duration: 1200, // ms, subtle
                 mass: Math.max(0.2, (new_mass / SOLAR_MASS_UNIT) * 0.18),
-                gw_strength: 0.08 // subtle
+                gw_strength: 0.08, // subtle
               });
             } else if (new_mass_in_suns > 8.0) {
               // Massive star -> neutron star
-              new_object = new NeutronStar(new_pos, new_vel, new_mass_in_suns, null);
+              new_object = new NeutronStar(
+                new_pos,
+                new_vel,
+                new_mass_in_suns,
+                null
+              );
               neutron_stars.push(new_object);
               gravity_ripples.push({
                 x: new_pos.x,
@@ -3526,7 +4132,7 @@ const handle_star_merging = (stars_list) => {
                 created: performance.now(),
                 duration: 2200, // ms, shorter for smaller mergers
                 mass: new_mass / SOLAR_MASS_UNIT,
-                gw_strength: 0.2 // NS-NS or NS-BH merger
+                gw_strength: 0.2, // NS-NS or NS-BH merger
               });
             } else {
               // Regular star
@@ -3534,18 +4140,23 @@ const handle_star_merging = (stars_list) => {
               stars.push(new_object);
             }
           }
-          
+
           merged_this_step = true;
           break;
         }
       }
       if (merged_this_step) break;
     }
-    
+
     // Filter out dead stars after processing all collisions
     stars_list = stars_list.filter(star => star.alive);
     // After each round, rebuild stars_list from global lists to reflect new state
-    stars_list = [...stars, ...neutron_stars, ...white_dwarfs, ...bh_list].filter(obj => obj.alive);
+    stars_list = [
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...bh_list,
+    ].filter(obj => obj.alive);
   }
 };
 
@@ -3558,25 +4169,25 @@ const handle_star_object_collisions = () => {
   const stellar_objects = [
     ...stars.filter(s => s.alive),
     ...neutron_stars.filter(s => s.alive),
-    ...white_dwarfs.filter(s => s.alive)
+    ...white_dwarfs.filter(s => s.alive),
   ];
-  
+
   // Check collisions between stellar objects and smaller objects
   for (const star of stellar_objects) {
     // Check with planets
     for (let j = 0; j < planets.length; j++) {
       const planet = planets[j];
       if (!planet.alive) continue;
-      
+
       const dx = planet.pos.x - star.pos.x;
       const dy = planet.pos.y - star.pos.y;
       const dist_sq = dx * dx + dy * dy;
       const min_dist = star.radius + planet.radius;
-      
+
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
         // Star absorbs the planet
         star.mass += planet.mass;
-        
+
         // Update star properties based on type
         if (star.constructor.name === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
@@ -3587,7 +4198,7 @@ const handle_star_object_collisions = () => {
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
-        
+
         // Create absorption particles
         for (let k = 0; k < 5; k++) {
           const angle = Math.random() * 2 * Math.PI;
@@ -3605,25 +4216,25 @@ const handle_star_object_collisions = () => {
             'rgb(255, 200, 100)'
           );
         }
-        
+
         planet.alive = false;
       }
     }
-    
+
     // Check with gas giants
     for (let j = 0; j < gas_giants.length; j++) {
       const gasGiant = gas_giants[j];
       if (!gasGiant.alive) continue;
-      
+
       const dx = gasGiant.pos.x - star.pos.x;
       const dy = gasGiant.pos.y - star.pos.y;
       const dist_sq = dx * dx + dy * dy;
       const min_dist = star.radius + gasGiant.radius;
-      
+
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
         // Star absorbs the gas giant
         star.mass += gasGiant.mass;
-        
+
         // Update star properties based on type
         if (star.constructor.name === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
@@ -3634,7 +4245,7 @@ const handle_star_object_collisions = () => {
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
-        
+
         // Create more dramatic absorption particles for gas giant
         for (let k = 0; k < 8; k++) {
           const angle = Math.random() * 2 * Math.PI;
@@ -3652,26 +4263,26 @@ const handle_star_object_collisions = () => {
             'rgb(135, 206, 235)'
           );
         }
-        
+
         gasGiant.alive = false;
       }
     }
-    
+
     // Check with asteroids and comets
     for (let j = 0; j < asteroids.length; j++) {
       const asteroid = asteroids[j];
       if (!asteroid.alive) continue;
-      
+
       const dx = asteroid.pos.x - star.pos.x;
       const dy = asteroid.pos.y - star.pos.y;
       const dist_sq = dx * dx + dy * dy;
       const min_dist = star.radius + asteroid.radius;
-      
+
       if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
         // Star absorbs the asteroid/comet
         star.mass += asteroid.mass;
-        
-        // Update star properties based on type  
+
+        // Update star properties based on type
         if (star.constructor.name === 'NeutronStar') {
           star.massInSuns = star.mass / SOLAR_MASS_UNIT;
         } else if (star.constructor.name === 'WhiteDwarf') {
@@ -3681,7 +4292,7 @@ const handle_star_object_collisions = () => {
           // Update radius for regular stars
           star.radius = STAR_OBJ_RADIUS * Math.pow(star.massInSuns, 0.85);
         }
-        
+
         // Create small absorption particles
         for (let k = 0; k < 3; k++) {
           const angle = Math.random() * 2 * Math.PI;
@@ -3699,7 +4310,7 @@ const handle_star_object_collisions = () => {
             'rgb(200, 150, 100)'
           );
         }
-        
+
         asteroid.alive = false;
       }
     }
@@ -3711,12 +4322,13 @@ const handle_star_object_collisions = () => {
  * Handle collisions between rocky planets with realistic physics
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
-const handle_rocky_collisions = (objects_list) => {
+const handle_rocky_collisions = objects_list => {
   // Only handle planets and asteroids for rocky collisions
-  const rocky_objects = objects_list.filter(obj => 
-    obj.constructor.name === 'Planet' || obj.constructor.name === 'Asteroid'
+  const rocky_objects = objects_list.filter(
+    obj =>
+      obj.constructor.name === 'Planet' || obj.constructor.name === 'Asteroid'
   );
-  
+
   for (let i = 0; i < rocky_objects.length; i++) {
     const obj1 = rocky_objects[i];
     if (!obj1.alive) continue;
@@ -3740,7 +4352,7 @@ const handle_rocky_collisions = (objects_list) => {
         const rvx = obj2.vel.x - obj1.vel.x;
         const rvy = obj2.vel.y - obj1.vel.y;
         const rel_speed = Math.sqrt(rvx * rvx + rvy * rvy);
-        
+
         // High-speed collisions create debris
         if (rel_speed > 15) {
           // Create debris from collision
@@ -3758,11 +4370,11 @@ const handle_rocky_collisions = (objects_list) => {
             };
             debris.push(new Debris(debris_pos, debris_vel));
           }
-          
+
           // Both objects lose mass from collision
           obj1.mass *= 0.9;
           obj2.mass *= 0.9;
-          
+
           // Create collision particles
           for (let k = 0; k < 10; k++) {
             const angle = Math.random() * 2 * Math.PI;
@@ -3772,7 +4384,10 @@ const handle_rocky_collisions = (objects_list) => {
               y: speed * Math.sin(angle),
             };
             particlePool.getParticle(
-              { x: (obj1.pos.x + obj2.pos.x) * 0.5, y: (obj1.pos.y + obj2.pos.y) * 0.5 },
+              {
+                x: (obj1.pos.x + obj2.pos.x) * 0.5,
+                y: (obj1.pos.y + obj2.pos.y) * 0.5,
+              },
               p_vel,
               Math.random() * 0.6 + 0.4,
               5,
@@ -3781,7 +4396,7 @@ const handle_rocky_collisions = (objects_list) => {
             );
           }
         }
-        
+
         // Separate objects
         const total_mass = obj1.mass + obj2.mass;
         const move1 = -overlap * (obj2.mass / total_mass);
@@ -3819,13 +4434,13 @@ const check_stellar_collapse = () => {
   for (let i = stars.length - 1; i >= 0; i--) {
     const star = stars[i];
     if (!star.alive) continue;
-    
+
     const massInSuns = star.mass / SOLAR_MASS_UNIT;
     if (massInSuns > MAX_STAR_MASS_BEFORE_BH) {
       // Convert star to black hole - mark as newly created for proper accretion disk initialization
       const new_bh = new BlackHole(star.pos, star.mass, star.vel, true);
       bh_list.push(new_bh);
-      
+
       // Create collapse particles
       for (let k = 0; k < 30; k++) {
         const angle = Math.random() * 2 * Math.PI;
@@ -3843,24 +4458,25 @@ const check_stellar_collapse = () => {
           'rgb(255, 255, 255)'
         );
       }
-      
+
       // Remove the star
       star.alive = false;
       stars.splice(i, 1);
     }
   }
-  
+
   // Check neutron stars for collapse to black holes
   for (let i = neutron_stars.length - 1; i >= 0; i--) {
     const ns = neutron_stars[i];
     if (!ns.alive) continue;
-    
+
     const massInSuns = ns.mass / SOLAR_MASS_UNIT;
-    if (massInSuns > 3.0) { // Tolman-Oppenheimer-Volkoff limit
+    if (massInSuns > 3.0) {
+      // Tolman-Oppenheimer-Volkoff limit
       // Convert neutron star to black hole - mark as newly created for proper accretion disk initialization
       const new_bh = new BlackHole(ns.pos, ns.mass, ns.vel, true);
       bh_list.push(new_bh);
-      
+
       // Create collapse particles
       for (let k = 0; k < 25; k++) {
         const angle = Math.random() * 2 * Math.PI;
@@ -3878,24 +4494,25 @@ const check_stellar_collapse = () => {
           'rgb(200, 200, 255)'
         );
       }
-      
+
       // Remove the neutron star
       ns.alive = false;
       neutron_stars.splice(i, 1);
     }
   }
-  
+
   // Check white dwarfs for collapse to neutron stars
   for (let i = white_dwarfs.length - 1; i >= 0; i--) {
     const wd = white_dwarfs[i];
     if (!wd.alive) continue;
-    
+
     const massInSuns = wd.mass / SOLAR_MASS_UNIT;
-    if (massInSuns > 1.4) { // Chandrasekhar limit
+    if (massInSuns > 1.4) {
+      // Chandrasekhar limit
       // Convert white dwarf to neutron star
       const new_ns = new NeutronStar(wd.pos, wd.vel, massInSuns, null);
       neutron_stars.push(new_ns);
-      
+
       // Create collapse particles
       for (let k = 0; k < 20; k++) {
         const angle = Math.random() * 2 * Math.PI;
@@ -3913,7 +4530,7 @@ const check_stellar_collapse = () => {
           'rgb(255, 200, 200)'
         );
       }
-      
+
       // Remove the white dwarf
       wd.alive = false;
       white_dwarfs.splice(i, 1);
@@ -3927,26 +4544,26 @@ const handle_gas_giant_merging = () => {
   let merged_this_step = true;
   while (merged_this_step && gas_giants.length > 1) {
     merged_this_step = false;
-    
+
     for (let i = 0; i < gas_giants.length; i++) {
       const gasGiant1 = gas_giants[i];
       if (!gasGiant1.alive) continue;
-      
+
       for (let j = i + 1; j < gas_giants.length; j++) {
         const gasGiant2 = gas_giants[j];
         if (!gasGiant2.alive) continue;
-        
+
         const dx = gasGiant1.pos.x - gasGiant2.pos.x;
         const dy = gasGiant1.pos.y - gasGiant2.pos.y;
         const dist_sq = dx * dx + dy * dy;
         const min_dist = gasGiant1.radius + gasGiant2.radius;
-        
+
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
           const m1 = gasGiant1.mass;
           const m2 = gasGiant2.mass;
           const new_mass = m1 + m2;
           const new_mass_in_jupiters = new_mass / 50.0; // Convert to Jupiter masses (50 units = 1 Jupiter mass)
-          
+
           // Calculate center of mass position and velocity
           const new_pos = {
             x: (gasGiant1.pos.x * m1 + gasGiant2.pos.x * m2) / new_mass,
@@ -3956,7 +4573,7 @@ const handle_gas_giant_merging = () => {
             x: (gasGiant1.vel.x * m1 + gasGiant2.vel.x * m2) / new_mass,
             y: (gasGiant1.vel.y * m1 + gasGiant2.vel.y * m2) / new_mass,
           };
-          
+
           // Create merger particles
           for (let k = 0; k < 15; k++) {
             const angle = Math.random() * 2 * Math.PI;
@@ -3974,21 +4591,21 @@ const handle_gas_giant_merging = () => {
               'rgb(135, 206, 235)'
             );
           }
-          
+
           // Remove the two original gas giants
           gasGiant1.alive = false;
           gasGiant2.alive = false;
-          
+
           // Determine what type of object to create based on mass
           let new_object = null;
-          
+
           if (new_mass_in_jupiters >= GAS_GIANT_TO_STAR_THRESHOLD) {
             // Very massive gas giant becomes a low-mass star
             const star_mass_in_suns = new_mass_in_jupiters / 1047.0; // Convert Jupiter masses to solar masses
             new_object = new StarObject(new_pos, new_vel, star_mass_in_suns);
             new_object.mass = star_mass_in_suns * SOLAR_MASS_UNIT;
             stars.push(new_object);
-            
+
             // Create extra particles for star formation
             for (let k = 0; k < 10; k++) {
               const angle = Math.random() * 2 * Math.PI;
@@ -4011,14 +4628,14 @@ const handle_gas_giant_merging = () => {
             new_object = new GasGiant(new_pos, new_vel, new_mass_in_jupiters);
             gas_giants.push(new_object);
           }
-          
+
           merged_this_step = true;
           break;
         }
       }
       if (merged_this_step) break;
     }
-    
+
     // Filter out dead gas giants after processing all collisions
     gas_giants = gas_giants.filter(gasGiant => gasGiant.alive);
   }
@@ -4112,7 +4729,7 @@ function asPhysicsObject(bh) {
     radius: bh.radius,
     alive: true,
     constructor: { name: 'BlackHole' },
-    _bh_ref: bh // Keep reference to real BlackHole
+    _bh_ref: bh, // Keep reference to real BlackHole
   };
 }
 
@@ -4135,12 +4752,14 @@ const getGravitationalConstantSI = () => {
   const massScale = MASS_UNIT_TO_KG;
   const distanceScale = DISTANCE_UNIT_TO_M;
   const timeScale = 1.0; // Assuming time units are consistent
-  
+
   // G in SI units = simulationG * (massScale * distanceScale^2 / timeScale^2)
-  return simulationG * massScale * distanceScale * distanceScale / (timeScale * timeScale);
+  return (
+    (simulationG * massScale * distanceScale * distanceScale) /
+    (timeScale * timeScale)
+  );
 };
 const SOLAR_MASS_KG = 1.989e30; // Solar mass in kg
-const EARTH_MASS_KG = 5.972e24; // Earth mass in kg
 const AU_METERS = 1.496e11; // Astronomical Unit in meters
 
 // Conversion factors for simulation units to SI units
@@ -4160,13 +4779,15 @@ const energyHistory = new Map();
  * @param {Object} object - Physics object with mass and velocity
  * @returns {number} Kinetic energy in joules
  */
-const calculateKineticEnergy = (object) => {
+const calculateKineticEnergy = object => {
   if (!object || !object.vel || !object.mass) return 0;
-  
-  const velocity = Math.sqrt(object.vel.x * object.vel.x + object.vel.y * object.vel.y);
+
+  const velocity = Math.sqrt(
+    object.vel.x * object.vel.x + object.vel.y * object.vel.y
+  );
   const massKg = object.mass * MASS_UNIT_TO_KG;
   const velocityMs = velocity * VELOCITY_UNIT_TO_MS;
-  
+
   // Apply scaling factor to make energy values more reasonable for display
   return 0.5 * massKg * velocityMs * velocityMs * ENERGY_SCALE_FACTOR;
 };
@@ -4180,16 +4801,16 @@ const calculateKineticEnergy = (object) => {
  */
 const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
   if (!obj1 || !obj2 || distance <= 0) return 0;
-  
+
   const mass1Kg = obj1.mass * MASS_UNIT_TO_KG;
   const mass2Kg = obj2.mass * MASS_UNIT_TO_KG;
   const distanceM = distance * DISTANCE_UNIT_TO_M;
-  
+
   // Use the gravitational constant that matches the physics simulation
   const G_si = getGravitationalConstantSI();
-  
+
   // Apply scaling factor to make energy values more reasonable for display
-  return -G_si * mass1Kg * mass2Kg / distanceM * ENERGY_SCALE_FACTOR;
+  return ((-G_si * mass1Kg * mass2Kg) / distanceM) * ENERGY_SCALE_FACTOR;
 };
 
 /**
@@ -4200,21 +4821,25 @@ const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
  */
 const calculateTotalPotentialEnergy = (object, allObjects) => {
   if (!object || !allObjects || allObjects.length === 0) return 0;
-  
+
   let totalPotentialEnergy = 0;
-  
+
   for (const otherObject of allObjects) {
     if (!otherObject || otherObject.id === object.id) continue;
-    
+
     const dx = object.pos.x - otherObject.pos.x;
     const dy = object.pos.y - otherObject.pos.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    
+
     if (distance > 0) {
-      totalPotentialEnergy += calculateGravitationalPotentialEnergy(object, otherObject, distance);
+      totalPotentialEnergy += calculateGravitationalPotentialEnergy(
+        object,
+        otherObject,
+        distance
+      );
     }
   }
-  
+
   return totalPotentialEnergy;
 };
 
@@ -4230,14 +4855,14 @@ const calculateObjectEnergy = (object, timestamp) => {
       timestamp: timestamp || performance.now(),
       ke: 0,
       pe: 0,
-      total: 0
+      total: 0,
     };
   }
-  
+
   // Calculate raw kinetic and potential energies (already scaled by ENERGY_SCALE_FACTOR)
   const ke = calculateKineticEnergy(object);
   const pe = calculateTotalPotentialEnergy(object, getAllPhysicsObjects());
-  
+
   // The raw energies are already scaled by ENERGY_SCALE_FACTOR (1e-24)
   // Raw energies are around 10^14-10^15 J, we want 10^-21-10^-13 J after global scaling
   // Use a moderate scaling factor to get reasonable display values
@@ -4245,26 +4870,26 @@ const calculateObjectEnergy = (object, timestamp) => {
   const globalScale = 1e-45; // Global scaling factor for all energies (10^-45)
   const scaledKe = ke * additionalScale * globalScale;
   const scaledPe = pe * additionalScale * globalScale;
-  
+
   // Force KE to be roughly half the magnitude of PE (approximate virial theorem relationship)
   // This enforces the astrophysical relationship |PE| ≈ 2 × KE for bound systems
   let finalKe = scaledKe;
   if (scaledPe !== 0) {
     const desiredKE = Math.abs(scaledPe) * 0.5;
     if (scaledKe !== 0) {
-      finalKe = scaledKe * desiredKE / Math.abs(scaledKe);
+      finalKe = (scaledKe * desiredKE) / Math.abs(scaledKe);
     } else {
       finalKe = desiredKE;
     }
   }
-  
+
   const totalEnergy = finalKe + scaledPe;
-  
+
   return {
     timestamp: timestamp || performance.now(),
     ke: finalKe,
     pe: scaledPe,
-    total: totalEnergy
+    total: totalEnergy,
   };
 };
 
@@ -4281,7 +4906,7 @@ const getAllPhysicsObjects = () => {
     ...asteroids,
     ...comets,
     ...neutron_stars,
-    ...white_dwarfs
+    ...white_dwarfs,
   ].filter(obj => obj && obj.alive !== false);
 };
 
@@ -4291,25 +4916,25 @@ const getAllPhysicsObjects = () => {
  */
 const updateEnergyHistory = () => {
   const allObjects = getAllPhysicsObjects();
-  
+
   if (allObjects.length === 0) return;
-  
+
   const timestamp = performance.now();
-  
+
   for (const object of allObjects) {
     if (!object || !object.id) continue;
-    
+
     // Initialize energy history for new objects
     if (!energyHistory.has(object.id)) {
       energyHistory.set(object.id, []);
     }
-    
+
     const history = energyHistory.get(object.id);
     const energy = calculateObjectEnergy(object, timestamp);
-    
+
     // Add new energy data point
     history.push(energy);
-    
+
     // Maintain data size limit - keep only the most recent entries
     if (history.length > MAX_ENERGY_HISTORY_POINTS) {
       // Use slice to keep only the most recent MAX_ENERGY_HISTORY_POINTS entries
@@ -4319,7 +4944,7 @@ const updateEnergyHistory = () => {
       energyHistory.set(object.id, trimmedHistory);
     }
   }
-  
+
   // Debug logging (only every 100 frames to avoid spam)
   if (state && state.frame_count % 100 === 0 && allObjects.length > 0) {
     const firstObject = allObjects[0];
@@ -4330,28 +4955,30 @@ const updateEnergyHistory = () => {
         ke: latest.ke.toExponential(2),
         pe: latest.pe.toExponential(2),
         total: latest.total.toExponential(2),
-        dataPoints: firstObjectHistory.length
+        dataPoints: firstObjectHistory.length,
       });
     }
   }
-  
+
   // Periodic memory management (every 1000 frames)
   if (state && state.frame_count % 1000 === 0) {
     const memoryStats = getEnergySystemMemoryStats();
-    
+
     // Log memory usage every 1000 frames
     console.log('Energy system memory usage:', {
       objects: memoryStats.totalObjects,
       dataPoints: memoryStats.totalDataPoints,
       memoryMB: memoryStats.totalMemoryEstimateMB,
-      avgPointsPerObject: memoryStats.averageDataPointsPerObject
+      avgPointsPerObject: memoryStats.averageDataPointsPerObject,
     });
-    
+
     // If memory usage is high (>50MB), trim all histories
     if (memoryStats.totalMemoryEstimateMB > 50) {
       console.log('High memory usage detected, trimming energy histories...');
       const trimmedCount = trimAllEnergyHistory();
-      console.log(`Trimmed ${trimmedCount} energy histories to reduce memory usage`);
+      console.log(
+        `Trimmed ${trimmedCount} energy histories to reduce memory usage`
+      );
     }
   }
 };
@@ -4361,7 +4988,7 @@ const updateEnergyHistory = () => {
  * @param {string|number} objectId - ID of the object
  * @returns {Array} Copy of the energy history array for the object
  */
-const getObjectEnergyHistory = (objectId) => {
+const getObjectEnergyHistory = objectId => {
   if (!objectId) return [];
   const history = energyHistory.get(objectId);
   return history ? [...history] : [];
@@ -4374,10 +5001,10 @@ const getObjectEnergyHistory = (objectId) => {
  * - An object is removed from the simulation
  * - The simulation is reset
  * - Object transformation occurs (e.g., star to black hole)
- * 
+ *
  * @param {string|number} objectId - ID of the object
  */
-const clearObjectEnergyHistory = (objectId) => {
+const clearObjectEnergyHistory = objectId => {
   if (objectId) {
     energyHistory.delete(objectId);
   }
@@ -4387,7 +5014,7 @@ const clearObjectEnergyHistory = (objectId) => {
  * Clear energy history for a specific object (alias for consistency)
  * @param {string|number} objectId - ID of the object
  */
-const clearEnergyHistory = (objectId) => {
+const clearEnergyHistory = objectId => {
   clearObjectEnergyHistory(objectId);
 };
 
@@ -4403,7 +5030,7 @@ const clearAllEnergyHistory = () => {
  * @param {string|number} objectId - ID of the object
  * @returns {Object} Energy statistics object
  */
-const getObjectEnergyStats = (objectId) => {
+const getObjectEnergyStats = objectId => {
   const data = getObjectEnergyHistory(objectId);
   if (data.length === 0) {
     return {
@@ -4411,33 +5038,33 @@ const getObjectEnergyStats = (objectId) => {
       average: { ke: 0, pe: 0, total: 0 },
       min: { ke: 0, pe: 0, total: 0 },
       max: { ke: 0, pe: 0, total: 0 },
-      dataPoints: 0
+      dataPoints: 0,
     };
   }
-  
+
   const latest = data[data.length - 1];
   const keValues = data.map(d => d.ke);
   const peValues = data.map(d => d.pe);
   const totalValues = data.map(d => d.total);
-  
+
   return {
     latest,
     average: {
       ke: keValues.reduce((a, b) => a + b, 0) / data.length,
       pe: peValues.reduce((a, b) => a + b, 0) / data.length,
-      total: totalValues.reduce((a, b) => a + b, 0) / data.length
+      total: totalValues.reduce((a, b) => a + b, 0) / data.length,
     },
     min: {
       ke: Math.min(...keValues),
       pe: Math.min(...peValues),
-      total: Math.min(...totalValues)
+      total: Math.min(...totalValues),
     },
     max: {
       ke: Math.max(...keValues),
       pe: Math.max(...peValues),
-      total: Math.max(...totalValues)
+      total: Math.max(...totalValues),
     },
-    dataPoints: data.length
+    dataPoints: data.length,
   };
 };
 
@@ -4449,25 +5076,27 @@ const getEnergySystemMemoryStats = () => {
   const totalObjects = energyHistory.size;
   let totalDataPoints = 0;
   let totalMemoryEstimate = 0;
-  
+
   // Estimate memory usage (rough calculation)
   // Each energy data point contains: timestamp (8 bytes) + ke (8 bytes) + pe (8 bytes) + total (8 bytes) = ~32 bytes
   const bytesPerDataPoint = 32;
-  
-  for (const [objectId, history] of energyHistory) {
+
+  for (const [, history] of energyHistory) {
     totalDataPoints += history.length;
   }
-  
+
   totalMemoryEstimate = totalDataPoints * bytesPerDataPoint;
-  
+
   return {
     totalObjects,
     totalDataPoints,
     totalMemoryEstimateBytes: totalMemoryEstimate,
-    totalMemoryEstimateKB: Math.round(totalMemoryEstimate / 1024 * 100) / 100,
-    totalMemoryEstimateMB: Math.round(totalMemoryEstimate / (1024 * 1024) * 100) / 100,
-    averageDataPointsPerObject: totalObjects > 0 ? Math.round(totalDataPoints / totalObjects) : 0,
-    maxDataPointsPerObject: MAX_ENERGY_HISTORY_POINTS
+    totalMemoryEstimateKB: Math.round((totalMemoryEstimate / 1024) * 100) / 100,
+    totalMemoryEstimateMB:
+      Math.round((totalMemoryEstimate / (1024 * 1024)) * 100) / 100,
+    averageDataPointsPerObject:
+      totalObjects > 0 ? Math.round(totalDataPoints / totalObjects) : 0,
+    maxDataPointsPerObject: MAX_ENERGY_HISTORY_POINTS,
   };
 };
 
@@ -4477,25 +5106,29 @@ const getEnergySystemMemoryStats = () => {
  * @param {number} config.maxHistoryPoints - Maximum data points per object
  * @param {number} config.sampleRate - Energy sampling rate (frames)
  */
-const updateEnergySystemConfig = (config) => {
+const updateEnergySystemConfig = config => {
   if (config.maxHistoryPoints !== undefined) {
     const oldMax = MAX_ENERGY_HISTORY_POINTS;
     // Note: We can't reassign const, so we'll use the new value in trimAllEnergyHistory
-    console.log(`Energy history limit changed from ${oldMax} to ${config.maxHistoryPoints} points per object`);
-    
+    console.log(
+      `Energy history limit changed from ${oldMax} to ${config.maxHistoryPoints} points per object`
+    );
+
     // Trim existing histories to new limit
     if (config.maxHistoryPoints < oldMax) {
       trimAllEnergyHistory(config.maxHistoryPoints);
     }
   }
-  
+
   if (config.sampleRate !== undefined) {
-    console.log(`Energy sampling rate changed from ${ENERGY_SAMPLE_RATE} to ${config.sampleRate} frames`);
+    console.log(
+      `Energy sampling rate changed from ${ENERGY_SAMPLE_RATE} to ${config.sampleRate} frames`
+    );
   }
-  
+
   return {
     maxHistoryPoints: config.maxHistoryPoints || MAX_ENERGY_HISTORY_POINTS,
-    sampleRate: config.sampleRate || ENERGY_SAMPLE_RATE
+    sampleRate: config.sampleRate || ENERGY_SAMPLE_RATE,
   };
 };
 
@@ -4505,7 +5138,7 @@ const updateEnergySystemConfig = (config) => {
  */
 const trimAllEnergyHistory = (maxPoints = MAX_ENERGY_HISTORY_POINTS) => {
   let trimmedCount = 0;
-  
+
   for (const [objectId, history] of energyHistory) {
     if (history.length > maxPoints) {
       const startIndex = history.length - maxPoints;
@@ -4514,10 +5147,12 @@ const trimAllEnergyHistory = (maxPoints = MAX_ENERGY_HISTORY_POINTS) => {
       trimmedCount++;
     }
   }
-  
+
   if (trimmedCount > 0) {
-    console.log(`Trimmed energy history for ${trimmedCount} objects to ${maxPoints} data points each`);
+    console.log(
+      `Trimmed energy history for ${trimmedCount} objects to ${maxPoints} data points each`
+    );
   }
-  
+
   return trimmedCount;
 };

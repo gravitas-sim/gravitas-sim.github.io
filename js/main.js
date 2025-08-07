@@ -2,14 +2,12 @@
 import { resizeCanvas, gameLoop, generateStarfield } from './render.js';
 import {
   initialize_simulation,
-  show_scenario_info,
   state,
   updateSpeedDisplay,
   updateObjectTypeButton,
 } from './ui.js';
 
-// Add state variable to track splash screen status
-let isSplashActive = true;
+// Add global flag to track splash screen status
 window.isSplashActive = true;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,14 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
   splash.addEventListener('animationend', e => {
     if (e.animationName === 'splashFadeOut') {
       splash.remove(); // splash done
-      
+
       // Set global flag to indicate splash screen has ended
       window.splashScreenEnded = true;
-      
-      // Update our state variable
-      isSplashActive = false;
+
+      // Update global flag
       window.isSplashActive = false;
-      
+
       canvas.classList.add('showCanvas'); // NOW fade the sim in
       starfieldCanvas.classList.add('showCanvas');
 
@@ -51,27 +48,28 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(async () => {
         document.querySelector('.ui-container').classList.add('showUI');
         document.getElementById('overlay').classList.add('showUI');
-        
+
         // Set up overlay minimize functionality
         const { setupOverlayMinimize } = await import('./ui.js');
         setupOverlayMinimize();
-        
+
         // Show scenario info box after splash ends
         const scenarioInfoBox = document.getElementById('scenarioInfoBox');
         if (scenarioInfoBox) {
           scenarioInfoBox.classList.add('showUI');
         }
-        
+
         // Show mobile menu elements after splash ends
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const mobileMenuDropdown = document.getElementById('mobileMenuDropdown');
+        const mobileMenuDropdown =
+          document.getElementById('mobileMenuDropdown');
         if (mobileMenuToggle) {
           mobileMenuToggle.classList.add('showUI');
         }
         if (mobileMenuDropdown) {
           mobileMenuDropdown.classList.add('showUI');
         }
-        
+
         // Fade in the tutorial button with the rest of the UI
         const tutorialBtn = document.getElementById('tutorialBtn');
         if (tutorialBtn) {
@@ -82,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (attribution) {
           attribution.classList.add('showUI');
         }
-        
+
         // Show object inspector after splash ends (it will be hidden by default)
         const objectInspector = document.getElementById('objectInspector');
         if (objectInspector) {
@@ -138,9 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Show mobile instructions for first-time mobile users
   // More specific mobile detection to avoid showing on desktop
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
   const isSmallScreen = window.innerWidth <= 768;
-  
+
   if (isMobile && isSmallScreen) {
     const mobileInstructions = document.getElementById('mobileInstructions');
     if (
@@ -162,14 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with error handling
   try {
     resizeCanvas();
-    
+
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');
     if (inspector) {
       inspector.style.display = 'none';
       inspector.classList.remove('visible');
     }
-    
+
     initialize_simulation();
     requestAnimationFrame(gameLoop);
   } catch (error) {

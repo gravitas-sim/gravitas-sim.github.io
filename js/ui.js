@@ -35,14 +35,17 @@ import {
   getObjectEnergyHistory,
   clearObjectEnergyHistory,
   clearAllEnergyHistory,
-  calculateObjectEnergy,
-  getAllPhysicsObjects,
   getObjectEnergyStats,
 } from './physics.js';
 
 import { worldToScreen } from './utils.js';
 import { generateStarfield } from './render.js';
-import { initChart, updateChart, clearChart, exportChart } from './energyChartNew.js';
+import {
+  initChart,
+  updateChart,
+  clearChart,
+  exportChart,
+} from './energyChartNew.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const starfieldCanvas = document.getElementById('starfieldCanvas');
@@ -134,93 +137,380 @@ let current_scenario_name = null;
 // Space Object Name Database
 const SPACE_OBJECT_NAMES = {
   blackHoles: [
-    'Abyss Prime', 'Void Phantom', 'Dark Nexus', 'Shadow Vortex', 'Stellar Grave',
-    'Event Horizon', 'Cosmic Drain', 'Infinity Well', 'Quantum Void', 'Gravity Beast',
-    'Singularity Alpha', 'The Devourer', 'Omega Point', 'Dark Matter Core', 'Space Ripper',
-    'Neutron Crusher', 'Photon Trap', 'Stellar Vacuum', 'Cosmic Whirlpool', 'The Absorber',
-    'Graviton Sink', 'Spacetime Tear', 'Quantum Collapse', 'Stellar Tomb', 'Dark Energy Core',
-    'Infinity Gate', 'Cosmic Maelstrom', 'The Singularity', 'Void Walker', 'Shadow Realm',
-    'Gravity Storm', 'Stellar Phantom', 'Dark Horizon', 'Cosmic Vacuum', 'The Anomaly',
-    'Warp Core', 'Stellar Devourer', 'Quantum Abyss', 'Gravity Well X', 'Dark Nexus Prime'
+    'Abyss Prime',
+    'Void Phantom',
+    'Dark Nexus',
+    'Shadow Vortex',
+    'Stellar Grave',
+    'Event Horizon',
+    'Cosmic Drain',
+    'Infinity Well',
+    'Quantum Void',
+    'Gravity Beast',
+    'Singularity Alpha',
+    'The Devourer',
+    'Omega Point',
+    'Dark Matter Core',
+    'Space Ripper',
+    'Neutron Crusher',
+    'Photon Trap',
+    'Stellar Vacuum',
+    'Cosmic Whirlpool',
+    'The Absorber',
+    'Graviton Sink',
+    'Spacetime Tear',
+    'Quantum Collapse',
+    'Stellar Tomb',
+    'Dark Energy Core',
+    'Infinity Gate',
+    'Cosmic Maelstrom',
+    'The Singularity',
+    'Void Walker',
+    'Shadow Realm',
+    'Gravity Storm',
+    'Stellar Phantom',
+    'Dark Horizon',
+    'Cosmic Vacuum',
+    'The Anomaly',
+    'Warp Core',
+    'Stellar Devourer',
+    'Quantum Abyss',
+    'Gravity Well X',
+    'Dark Nexus Prime',
   ],
   stars: [
-    'Proxima Flare', 'Stellar Beacon', 'Nova Prime', 'Helios Alpha', 'Fusion Core',
-    'Plasma Heart', 'Solar Titan', 'Stellar Phoenix', 'Radiant Crown', 'Cosmic Forge',
-    'Stellar Dynamo', 'Fusion Giant', 'Plasma Sphere', 'Solar Majesty', 'Stellar Furnace',
-    'Radiant Jewel', 'Cosmic Ember', 'Stellar Warrior', 'Solar Guardian', 'Plasma King',
-    'Stellar Empress', 'Fusion Master', 'Solar Deity', 'Stellar Champion', 'Radiant Star',
-    'Cosmic Luminary', 'Stellar Sovereign', 'Solar Monarch', 'Plasma Crown', 'Stellar Glory',
-    'Radiant Sentinel', 'Cosmic Beacon', 'Solar Majesty', 'Stellar Protector', 'Fusion Lord',
-    'Plasma Noble', 'Solar Regent', 'Stellar Ruler', 'Cosmic Sovereign', 'Radiant Emperor',
-    'Stellar Dominator', 'Solar Supreme', 'Plasma Overlord', 'Cosmic Commander', 'Stellar Chief'
+    'Proxima Flare',
+    'Stellar Beacon',
+    'Nova Prime',
+    'Helios Alpha',
+    'Fusion Core',
+    'Plasma Heart',
+    'Solar Titan',
+    'Stellar Phoenix',
+    'Radiant Crown',
+    'Cosmic Forge',
+    'Stellar Dynamo',
+    'Fusion Giant',
+    'Plasma Sphere',
+    'Solar Majesty',
+    'Stellar Furnace',
+    'Radiant Jewel',
+    'Cosmic Ember',
+    'Stellar Warrior',
+    'Solar Guardian',
+    'Plasma King',
+    'Stellar Empress',
+    'Fusion Master',
+    'Solar Deity',
+    'Stellar Champion',
+    'Radiant Star',
+    'Cosmic Luminary',
+    'Stellar Sovereign',
+    'Solar Monarch',
+    'Plasma Crown',
+    'Stellar Glory',
+    'Radiant Sentinel',
+    'Cosmic Beacon',
+    'Solar Majesty',
+    'Stellar Protector',
+    'Fusion Lord',
+    'Plasma Noble',
+    'Solar Regent',
+    'Stellar Ruler',
+    'Cosmic Sovereign',
+    'Radiant Emperor',
+    'Stellar Dominator',
+    'Solar Supreme',
+    'Plasma Overlord',
+    'Cosmic Commander',
+    'Stellar Chief',
   ],
   planets: [
-    'Terra Nova', 'Gaia Minor', 'Eden Prime', 'Cosmic Garden', 'World Alpha', 
-    'Planet Hope', 'New Earth', 'Stellar Oasis', 'Cosmic Refuge', 'World Beta',
-    'Terra Vista', 'Gaia Prime', 'Eden Alpha', 'Cosmic Haven', 'World Gamma',
-    'Planet Serenity', 'New Horizon', 'Stellar Paradise', 'Cosmic Sanctuary', 'World Delta',
-    'Terra Magna', 'Gaia Supreme', 'Eden Eternal', 'Cosmic Harmony', 'World Epsilon',
-    'Planet Destiny', 'New Genesis', 'Stellar Utopia', 'Cosmic Peace', 'World Zeta',
-    'Terra Mystica', 'Gaia Crystal', 'Eden Infinite', 'Cosmic Tranquil', 'World Eta',
-    'Planet Elysium', 'New Arcadia', 'Stellar Nirvana', 'Cosmic Bliss', 'World Theta',
-    'Terra Wonderland', 'Gaia Magnificent', 'Eden Glorious', 'Cosmic Splendor', 'World Iota'
+    'Terra Nova',
+    'Gaia Minor',
+    'Eden Prime',
+    'Cosmic Garden',
+    'World Alpha',
+    'Planet Hope',
+    'New Earth',
+    'Stellar Oasis',
+    'Cosmic Refuge',
+    'World Beta',
+    'Terra Vista',
+    'Gaia Prime',
+    'Eden Alpha',
+    'Cosmic Haven',
+    'World Gamma',
+    'Planet Serenity',
+    'New Horizon',
+    'Stellar Paradise',
+    'Cosmic Sanctuary',
+    'World Delta',
+    'Terra Magna',
+    'Gaia Supreme',
+    'Eden Eternal',
+    'Cosmic Harmony',
+    'World Epsilon',
+    'Planet Destiny',
+    'New Genesis',
+    'Stellar Utopia',
+    'Cosmic Peace',
+    'World Zeta',
+    'Terra Mystica',
+    'Gaia Crystal',
+    'Eden Infinite',
+    'Cosmic Tranquil',
+    'World Eta',
+    'Planet Elysium',
+    'New Arcadia',
+    'Stellar Nirvana',
+    'Cosmic Bliss',
+    'World Theta',
+    'Terra Wonderland',
+    'Gaia Magnificent',
+    'Eden Glorious',
+    'Cosmic Splendor',
+    'World Iota',
   ],
   gasGiants: [
-    'Storm King', 'Gas Titan', 'Cyclone Prime', 'Atmospheric Giant', 'Wind Walker',
-    'Storm Lord', 'Gas Majesty', 'Cyclone Master', 'Atmospheric Titan', 'Wind Ruler',
-    'Storm Emperor', 'Gas Sovereign', 'Cyclone Champion', 'Atmospheric King', 'Wind Commander',
-    'Storm Deity', 'Gas Noble', 'Cyclone Warrior', 'Atmospheric Lord', 'Wind Guardian',
-    'Storm Monarch', 'Gas Regent', 'Cyclone Sovereign', 'Atmospheric Emperor', 'Wind Protector',
-    'Storm Supreme', 'Gas Commander', 'Cyclone Overlord', 'Atmospheric Chief', 'Wind Sentinel',
-    'Storm Dominator', 'Gas Overlord', 'Cyclone Ruler', 'Atmospheric Supreme', 'Wind Majesty',
-    'Storm Colossus', 'Gas Behemoth', 'Cyclone Leviathan', 'Atmospheric Mammoth', 'Wind Goliath',
-    'Storm Juggernaut', 'Gas Monster', 'Cyclone Beast', 'Atmospheric Crusher', 'Wind Destroyer'
+    'Storm King',
+    'Gas Titan',
+    'Cyclone Prime',
+    'Atmospheric Giant',
+    'Wind Walker',
+    'Storm Lord',
+    'Gas Majesty',
+    'Cyclone Master',
+    'Atmospheric Titan',
+    'Wind Ruler',
+    'Storm Emperor',
+    'Gas Sovereign',
+    'Cyclone Champion',
+    'Atmospheric King',
+    'Wind Commander',
+    'Storm Deity',
+    'Gas Noble',
+    'Cyclone Warrior',
+    'Atmospheric Lord',
+    'Wind Guardian',
+    'Storm Monarch',
+    'Gas Regent',
+    'Cyclone Sovereign',
+    'Atmospheric Emperor',
+    'Wind Protector',
+    'Storm Supreme',
+    'Gas Commander',
+    'Cyclone Overlord',
+    'Atmospheric Chief',
+    'Wind Sentinel',
+    'Storm Dominator',
+    'Gas Overlord',
+    'Cyclone Ruler',
+    'Atmospheric Supreme',
+    'Wind Majesty',
+    'Storm Colossus',
+    'Gas Behemoth',
+    'Cyclone Leviathan',
+    'Atmospheric Mammoth',
+    'Wind Goliath',
+    'Storm Juggernaut',
+    'Gas Monster',
+    'Cyclone Beast',
+    'Atmospheric Crusher',
+    'Wind Destroyer',
   ],
   neutronStars: [
-    'Pulsar Prime', 'Neutron Beacon', 'Stellar Compass', 'Cosmic Lighthouse', 'Gravity Pulse',
-    'Neutron King', 'Pulsar Master', 'Stellar Rhythm', 'Cosmic Metronome', 'Gravity Beat',
-    'Neutron Lord', 'Pulsar Champion', 'Stellar Drummer', 'Cosmic Timekeeper', 'Gravity Clock',
-    'Neutron Sovereign', 'Pulsar Overlord', 'Stellar Conductor', 'Cosmic Coordinator', 'Gravity Timer',
-    'Neutron Emperor', 'Pulsar Supreme', 'Stellar Orchestrator', 'Cosmic Synchronizer', 'Gravity Rhythm',
-    'Neutron Deity', 'Pulsar Commander', 'Stellar Maestro', 'Cosmic Harmonizer', 'Gravity Pulse',
-    'Neutron Noble', 'Pulsar Regent', 'Stellar Director', 'Cosmic Organizer', 'Gravity Signal',
-    'Neutron Majesty', 'Pulsar Guardian', 'Stellar Manager', 'Cosmic Controller', 'Gravity Beacon',
-    'Neutron Protector', 'Pulsar Sentinel', 'Stellar Supervisor', 'Cosmic Coordinator', 'Gravity Guide'
+    'Pulsar Prime',
+    'Neutron Beacon',
+    'Stellar Compass',
+    'Cosmic Lighthouse',
+    'Gravity Pulse',
+    'Neutron King',
+    'Pulsar Master',
+    'Stellar Rhythm',
+    'Cosmic Metronome',
+    'Gravity Beat',
+    'Neutron Lord',
+    'Pulsar Champion',
+    'Stellar Drummer',
+    'Cosmic Timekeeper',
+    'Gravity Clock',
+    'Neutron Sovereign',
+    'Pulsar Overlord',
+    'Stellar Conductor',
+    'Cosmic Coordinator',
+    'Gravity Timer',
+    'Neutron Emperor',
+    'Pulsar Supreme',
+    'Stellar Orchestrator',
+    'Cosmic Synchronizer',
+    'Gravity Rhythm',
+    'Neutron Deity',
+    'Pulsar Commander',
+    'Stellar Maestro',
+    'Cosmic Harmonizer',
+    'Gravity Pulse',
+    'Neutron Noble',
+    'Pulsar Regent',
+    'Stellar Director',
+    'Cosmic Organizer',
+    'Gravity Signal',
+    'Neutron Majesty',
+    'Pulsar Guardian',
+    'Stellar Manager',
+    'Cosmic Controller',
+    'Gravity Beacon',
+    'Neutron Protector',
+    'Pulsar Sentinel',
+    'Stellar Supervisor',
+    'Cosmic Coordinator',
+    'Gravity Guide',
   ],
   whiteDwarfs: [
-    'Crystal Core', 'Diamond Heart', 'Stellar Gem', 'Cosmic Jewel', 'White Giant',
-    'Crystal Star', 'Diamond Sphere', 'Stellar Crystal', 'Cosmic Diamond', 'White Titan',
-    'Crystal Crown', 'Diamond King', 'Stellar Treasure', 'Cosmic Brilliant', 'White Sovereign',
-    'Crystal Majesty', 'Diamond Lord', 'Stellar Precious', 'Cosmic Radiant', 'White Emperor',
-    'Crystal Noble', 'Diamond Regent', 'Stellar Magnificent', 'Cosmic Splendid', 'White Supreme',
-    'Crystal Commander', 'Diamond Guardian', 'Stellar Glorious', 'Cosmic Luminous', 'White Overlord',
-    'Crystal Protector', 'Diamond Sentinel', 'Stellar Brilliant', 'Cosmic Gleaming', 'White Ruler',
-    'Crystal Warrior', 'Diamond Champion', 'Stellar Shining', 'Cosmic Sparkling', 'White Dominator',
-    'Crystal Deity', 'Diamond Deity', 'Stellar Dazzling', 'Cosmic Glittering', 'White Colossus'
+    'Crystal Core',
+    'Diamond Heart',
+    'Stellar Gem',
+    'Cosmic Jewel',
+    'White Giant',
+    'Crystal Star',
+    'Diamond Sphere',
+    'Stellar Crystal',
+    'Cosmic Diamond',
+    'White Titan',
+    'Crystal Crown',
+    'Diamond King',
+    'Stellar Treasure',
+    'Cosmic Brilliant',
+    'White Sovereign',
+    'Crystal Majesty',
+    'Diamond Lord',
+    'Stellar Precious',
+    'Cosmic Radiant',
+    'White Emperor',
+    'Crystal Noble',
+    'Diamond Regent',
+    'Stellar Magnificent',
+    'Cosmic Splendid',
+    'White Supreme',
+    'Crystal Commander',
+    'Diamond Guardian',
+    'Stellar Glorious',
+    'Cosmic Luminous',
+    'White Overlord',
+    'Crystal Protector',
+    'Diamond Sentinel',
+    'Stellar Brilliant',
+    'Cosmic Gleaming',
+    'White Ruler',
+    'Crystal Warrior',
+    'Diamond Champion',
+    'Stellar Shining',
+    'Cosmic Sparkling',
+    'White Dominator',
+    'Crystal Deity',
+    'Diamond Deity',
+    'Stellar Dazzling',
+    'Cosmic Glittering',
+    'White Colossus',
   ],
   asteroids: [
-    'Rock Hopper', 'Space Pebble', 'Cosmic Stone', 'Stellar Fragment', 'Orbit Drifter',
-    'Rock Wanderer', 'Space Boulder', 'Cosmic Chunk', 'Stellar Piece', 'Orbit Traveler',
-    'Rock Explorer', 'Space Nugget', 'Cosmic Shard', 'Stellar Bit', 'Orbit Voyager',
-    'Rock Adventurer', 'Space Cobble', 'Cosmic Sliver', 'Stellar Chip', 'Orbit Nomad',
-    'Rock Pioneer', 'Space Gravel', 'Cosmic Splinter', 'Stellar Flake', 'Orbit Roamer',
-    'Rock Scout', 'Space Rubble', 'Cosmic Particle', 'Stellar Grain', 'Orbit Wanderer',
-    'Rock Ranger', 'Space Debris', 'Cosmic Dust', 'Stellar Speck', 'Orbit Drifter',
-    'Rock Hunter', 'Space Cluster', 'Cosmic Meteor', 'Stellar Remnant', 'Orbit Slider',
-    'Rock Seeker', 'Space Swarm', 'Cosmic Shower', 'Stellar Storm', 'Orbit Dancer'
+    'Rock Hopper',
+    'Space Pebble',
+    'Cosmic Stone',
+    'Stellar Fragment',
+    'Orbit Drifter',
+    'Rock Wanderer',
+    'Space Boulder',
+    'Cosmic Chunk',
+    'Stellar Piece',
+    'Orbit Traveler',
+    'Rock Explorer',
+    'Space Nugget',
+    'Cosmic Shard',
+    'Stellar Bit',
+    'Orbit Voyager',
+    'Rock Adventurer',
+    'Space Cobble',
+    'Cosmic Sliver',
+    'Stellar Chip',
+    'Orbit Nomad',
+    'Rock Pioneer',
+    'Space Gravel',
+    'Cosmic Splinter',
+    'Stellar Flake',
+    'Orbit Roamer',
+    'Rock Scout',
+    'Space Rubble',
+    'Cosmic Particle',
+    'Stellar Grain',
+    'Orbit Wanderer',
+    'Rock Ranger',
+    'Space Debris',
+    'Cosmic Dust',
+    'Stellar Speck',
+    'Orbit Drifter',
+    'Rock Hunter',
+    'Space Cluster',
+    'Cosmic Meteor',
+    'Stellar Remnant',
+    'Orbit Slider',
+    'Rock Seeker',
+    'Space Swarm',
+    'Cosmic Shower',
+    'Stellar Storm',
+    'Orbit Dancer',
   ],
   comets: [
-    'Tail Blazer', 'Ice Wanderer', 'Cosmic Snowball', 'Stellar Comet', 'Orbit Streaker',
-    'Tail Runner', 'Ice Traveler', 'Cosmic Iceball', 'Stellar Visitor', 'Orbit Flasher',
-    'Tail Chaser', 'Ice Explorer', 'Cosmic Frozen', 'Stellar Nomad', 'Orbit Glider',
-    'Tail Dancer', 'Ice Adventurer', 'Cosmic Glacier', 'Stellar Wanderer', 'Orbit Swooper',
-    'Tail Glider', 'Ice Pioneer', 'Cosmic Frost', 'Stellar Drifter', 'Orbit Streamer',
-    'Tail Swooper', 'Ice Scout', 'Cosmic Chill', 'Stellar Roamer', 'Orbit Blazer',
-    'Tail Streamer', 'Ice Ranger', 'Cosmic Freeze', 'Stellar Voyager', 'Orbit Comet',
-    'Tail Hunter', 'Ice Seeker', 'Cosmic Winter', 'Stellar Traveler', 'Orbit Shooter',
-    'Tail Finder', 'Ice Discoverer', 'Cosmic Blizzard', 'Stellar Explorer', 'Orbit Rocket'
-  ]
+    'Tail Blazer',
+    'Ice Wanderer',
+    'Cosmic Snowball',
+    'Stellar Comet',
+    'Orbit Streaker',
+    'Tail Runner',
+    'Ice Traveler',
+    'Cosmic Iceball',
+    'Stellar Visitor',
+    'Orbit Flasher',
+    'Tail Chaser',
+    'Ice Explorer',
+    'Cosmic Frozen',
+    'Stellar Nomad',
+    'Orbit Glider',
+    'Tail Dancer',
+    'Ice Adventurer',
+    'Cosmic Glacier',
+    'Stellar Wanderer',
+    'Orbit Swooper',
+    'Tail Glider',
+    'Ice Pioneer',
+    'Cosmic Frost',
+    'Stellar Drifter',
+    'Orbit Streamer',
+    'Tail Swooper',
+    'Ice Scout',
+    'Cosmic Chill',
+    'Stellar Roamer',
+    'Orbit Blazer',
+    'Tail Streamer',
+    'Ice Ranger',
+    'Cosmic Freeze',
+    'Stellar Voyager',
+    'Orbit Comet',
+    'Tail Hunter',
+    'Ice Seeker',
+    'Cosmic Winter',
+    'Stellar Traveler',
+    'Orbit Shooter',
+    'Tail Finder',
+    'Ice Discoverer',
+    'Cosmic Blizzard',
+    'Stellar Explorer',
+    'Orbit Rocket',
+  ],
 };
+if (typeof window !== 'undefined') {
+  window.SPACE_OBJECT_NAMES = SPACE_OBJECT_NAMES;
+}
 
 // Expanded scenario information
 const SCENARIO_INFO = {
@@ -239,9 +529,10 @@ const SCENARIO_INFO = {
     summary:
       'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
   },
-  'GW150914': {
+  GW150914: {
     title: 'GW150914: First Gravitational Wave Merger',
-    summary: 'Simulates the historic merger of two massive black holes (36 & 29 M☉) detected by LIGO in 2015. Watch as they spiral together, emit gravitational waves, and merge into a single, more massive black hole.'
+    summary:
+      'Simulates the historic merger of two massive black holes (36 & 29 M☉) detected by LIGO in 2015. Watch as they spiral together, emit gravitational waves, and merge into a single, more massive black hole.',
   },
   'Binary BH': {
     title: 'Binary Black Hole',
@@ -355,43 +646,53 @@ const SCENARIO_INFO = {
   },
   'Quasar Cannon': {
     title: 'Quasar Cannon',
-    summary: 'A supermassive black hole is actively feeding on a dense star cluster. Watch a beam of light form as stars spiral inward.'
+    summary:
+      'A supermassive black hole is actively feeding on a dense star cluster. Watch a beam of light form as stars spiral inward.',
   },
   'The Pinwheel Galaxy Core': {
     title: 'The Pinwheel Galaxy Core',
-    summary: 'Two intermediate black holes in the center of a stellar disk. The disk forms a rotating pinwheel pattern as stars are slung around.'
+    summary:
+      'Two intermediate black holes in the center of a stellar disk. The disk forms a rotating pinwheel pattern as stars are slung around.',
   },
   'Star Frisbee': {
     title: 'Star Frisbee',
-    summary: 'A dense stellar disk thrown past a rogue black hole. Will it be shredded or survive the flyby?'
+    summary:
+      'A dense stellar disk thrown past a rogue black hole. Will it be shredded or survive the flyby?',
   },
   'Kessler Cascade': {
     title: 'Kessler Cascade',
-    summary: 'Hundreds of micro‑stars orbiting chaotically, colliding and ejecting like a debris cloud.'
+    summary:
+      'Hundreds of micro‑stars orbiting chaotically, colliding and ejecting like a debris cloud.',
   },
   'Alien Dyson Swarm Collapse': {
     title: 'Alien Dyson Swarm Collapse',
-    summary: 'A hypothetical Dyson swarm of artificial satellites falls into a black hole after a catastrophic orbital failure.'
+    summary:
+      'A hypothetical Dyson swarm of artificial satellites falls into a black hole after a catastrophic orbital failure.',
   },
   'Tidal Arm Tango': {
     title: 'Tidal Arm Tango',
-    summary: 'Two black holes dance past each other, flinging stars into massive tidal arms like colliding galaxies.'
+    summary:
+      'Two black holes dance past each other, flinging stars into massive tidal arms like colliding galaxies.',
   },
   'Hungry Hungry Holes': {
     title: 'Hungry Hungry Holes',
-    summary: 'Four black holes at the corners of a square, pulling stars from a shared central cluster.'
+    summary:
+      'Four black holes at the corners of a square, pulling stars from a shared central cluster.',
   },
   'Slingshot Gauntlet': {
     title: 'Slingshot Gauntlet',
-    summary: 'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.'
+    summary:
+      'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.',
   },
   'Black Hole Billiards': {
     title: 'Black Hole Billiards',
-    summary: 'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.'
+    summary:
+      'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.',
   },
   'Stellar Nursery': {
     title: 'Stellar Nursery',
-    summary: 'A dense cluster of young stars around a proto-black hole. Watch interactions and ejections as the cluster evolves.'
+    summary:
+      'A dense cluster of young stars around a proto-black hole. Watch interactions and ejections as the cluster evolves.',
   },
 };
 
@@ -403,366 +704,539 @@ const NEUTRON_STAR_RADIUS = 3; // From physics.js
 const WHITE_DWARF_RADIUS = 8; // From physics.js
 const ASTEROID_RADIUS = 2; // From physics.js
 
-const getBlackHoleInfo = (bh) => {
-    const massInSuns = bh.mass / SOLAR_MASS_UNIT;
-    const massInKg = massInSuns * 1.989e30;
-    
-    // Real Schwarzschild radius calculation (in meters)
-    const G = 6.67430e-11; // Gravitational constant in m³/kg/s²
-    const c = 299792458; // Speed of light in m/s
-    const schwarzschildRadiusM = (2 * G * massInKg) / (c * c);
-    const schwarzschildRadiusKm = schwarzschildRadiusM / 1000;
-    const schwarzschildRadiusAU = schwarzschildRadiusM / 1.496e11; // 1 AU in meters
-    
-    // Real escape velocity at Schwarzschild radius (should be c)
-    const escapeVelocityAtRs = Math.sqrt((2 * G * massInKg) / schwarzschildRadiusM);
-    const escapeVelocityAtRsC = (escapeVelocityAtRs / c) * 100; // As percentage of light speed
-    
-    // Real density calculation (mass within Schwarzschild radius)
-    const volume = (4/3) * Math.PI * Math.pow(schwarzschildRadiusM, 3);
-    const density = massInKg / volume; // kg/m³
-    
-    // Hawking temperature (simplified)
-    const hbar = 1.054571817e-34; // Reduced Planck constant
-    const kB = 1.380649e-23; // Boltzmann constant
-    const hawkingTemp = (hbar * c * c * c) / (8 * Math.PI * G * massInKg * kB);
-    
-    // Hawking radiation lifetime (simplified)
-    const hawkingLifetime = (5120 * Math.PI * G * G * massInKg * massInKg * massInKg) / (hbar * c * c * c * c);
-    const hawkingLifetimeYears = hawkingLifetime / (365.25 * 24 * 3600);
-    
-    // Real orbital period at 3 Schwarzschild radii (innermost stable orbit)
-    const iscoRadius = 3 * schwarzschildRadiusM;
-    const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(iscoRadius, 3) / (G * massInKg));
-    const orbitalPeriodHours = orbitalPeriod / 3600;
-    
-    let bhType = 'Primordial';
-    if (massInSuns > 1e6) bhType = 'Supermassive';
-    else if (massInSuns > 100) bhType = 'Intermediate';
-    else if (massInSuns > 3) bhType = 'Stellar-Mass';
-    else bhType = 'Primordial';
-    
-    return {
-        icon: '⚫',
-        title: bh.name || 'Black Hole',
-        stats: [
-            { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Schwarzschild Radius', value: `${schwarzschildRadiusKm.toFixed(2)} km (${schwarzschildRadiusAU.toExponential(3)} AU)` },
-            { label: 'Escape Velocity at Rs', value: `${escapeVelocityAtRsC.toFixed(1)}% of light speed` },
-            { label: 'Average Density', value: `${density.toExponential(2)} kg/m³` },
-            { label: 'Hawking Temperature', value: `${hawkingTemp.toExponential(2)} K` },
-            { label: 'Hawking Lifetime', value: hawkingLifetimeYears > 1e10 ? `${(hawkingLifetimeYears/1e9).toFixed(1)} billion years` : `${hawkingLifetimeYears.toExponential(2)} years` },
-            { label: 'ISCO Period', value: `${orbitalPeriodHours.toFixed(1)} hours` },
-            { label: 'Type', value: bhType },
-            { label: 'Position', value: `(${bh.pos.x.toFixed(1)}, ${bh.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(bh.vel.x, bh.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${bhType.toLowerCase()} black hole with ${massInSuns > 1e6 ? 'enormous' : massInSuns > 100 ? 'substantial' : massInSuns > 3 ? 'moderate' : 'minimal'} mass. The event horizon has a radius of ${schwarzschildRadiusKm.toFixed(1)} km. ${hawkingTemp > 1 ? 'This black hole emits Hawking radiation.' : 'This black hole is too massive to emit significant Hawking radiation.'} ${massInSuns > 1e6 ? 'Supermassive black holes like this power active galactic nuclei and quasars.' : massInSuns > 100 ? 'Intermediate black holes are rare and may form from merging stellar-mass black holes.' : massInSuns > 3 ? 'Stellar-mass black holes form from the collapse of massive stars.' : 'Primordial black holes may have formed in the early universe.'}`
-    };
+const getBlackHoleInfo = bh => {
+  const massInSuns = bh.mass / SOLAR_MASS_UNIT;
+  const massInKg = massInSuns * 1.989e30;
+
+  // Real Schwarzschild radius calculation (in meters)
+  const G = 6.6743e-11; // Gravitational constant in m³/kg/s²
+  const c = 299792458; // Speed of light in m/s
+  const schwarzschildRadiusM = (2 * G * massInKg) / (c * c);
+  const schwarzschildRadiusKm = schwarzschildRadiusM / 1000;
+  const schwarzschildRadiusAU = schwarzschildRadiusM / 1.496e11; // 1 AU in meters
+
+  // Real escape velocity at Schwarzschild radius (should be c)
+  const escapeVelocityAtRs = Math.sqrt(
+    (2 * G * massInKg) / schwarzschildRadiusM
+  );
+  const escapeVelocityAtRsC = (escapeVelocityAtRs / c) * 100; // As percentage of light speed
+
+  // Real density calculation (mass within Schwarzschild radius)
+  const volume = (4 / 3) * Math.PI * Math.pow(schwarzschildRadiusM, 3);
+  const density = massInKg / volume; // kg/m³
+
+  // Hawking temperature (simplified)
+  const hbar = 1.054571817e-34; // Reduced Planck constant
+  const kB = 1.380649e-23; // Boltzmann constant
+  const hawkingTemp = (hbar * c * c * c) / (8 * Math.PI * G * massInKg * kB);
+
+  // Hawking radiation lifetime (simplified)
+  const hawkingLifetime =
+    (5120 * Math.PI * G * G * massInKg * massInKg * massInKg) /
+    (hbar * c * c * c * c);
+  const hawkingLifetimeYears = hawkingLifetime / (365.25 * 24 * 3600);
+
+  // Real orbital period at 3 Schwarzschild radii (innermost stable orbit)
+  const iscoRadius = 3 * schwarzschildRadiusM;
+  const orbitalPeriod =
+    2 * Math.PI * Math.sqrt(Math.pow(iscoRadius, 3) / (G * massInKg));
+  const orbitalPeriodHours = orbitalPeriod / 3600;
+
+  let bhType = 'Primordial';
+  if (massInSuns > 1e6) bhType = 'Supermassive';
+  else if (massInSuns > 100) bhType = 'Intermediate';
+  else if (massInSuns > 3) bhType = 'Stellar-Mass';
+  else bhType = 'Primordial';
+
+  return {
+    icon: '⚫',
+    title: bh.name || 'Black Hole',
+    stats: [
+      {
+        label: 'Mass',
+        value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)`,
+      },
+      {
+        label: 'Schwarzschild Radius',
+        value: `${schwarzschildRadiusKm.toFixed(2)} km (${schwarzschildRadiusAU.toExponential(3)} AU)`,
+      },
+      {
+        label: 'Escape Velocity at Rs',
+        value: `${escapeVelocityAtRsC.toFixed(1)}% of light speed`,
+      },
+      { label: 'Average Density', value: `${density.toExponential(2)} kg/m³` },
+      {
+        label: 'Hawking Temperature',
+        value: `${hawkingTemp.toExponential(2)} K`,
+      },
+      {
+        label: 'Hawking Lifetime',
+        value:
+          hawkingLifetimeYears > 1e10
+            ? `${(hawkingLifetimeYears / 1e9).toFixed(1)} billion years`
+            : `${hawkingLifetimeYears.toExponential(2)} years`,
+      },
+      { label: 'ISCO Period', value: `${orbitalPeriodHours.toFixed(1)} hours` },
+      { label: 'Type', value: bhType },
+      {
+        label: 'Position',
+        value: `(${bh.pos.x.toFixed(1)}, ${bh.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(bh.vel.x, bh.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${bhType.toLowerCase()} black hole with ${massInSuns > 1e6 ? 'enormous' : massInSuns > 100 ? 'substantial' : massInSuns > 3 ? 'moderate' : 'minimal'} mass. The event horizon has a radius of ${schwarzschildRadiusKm.toFixed(1)} km. ${hawkingTemp > 1 ? 'This black hole emits Hawking radiation.' : 'This black hole is too massive to emit significant Hawking radiation.'} ${massInSuns > 1e6 ? 'Supermassive black holes like this power active galactic nuclei and quasars.' : massInSuns > 100 ? 'Intermediate black holes are rare and may form from merging stellar-mass black holes.' : massInSuns > 3 ? 'Stellar-mass black holes form from the collapse of massive stars.' : 'Primordial black holes may have formed in the early universe.'}`,
+  };
 };
 
-const getStarInfo = (star) => {
-    const massInSuns = star.massInSuns || (star.mass / SOLAR_MASS_UNIT);
-    const radiusInSuns = star.radius / STAR_OBJ_RADIUS;
-    const radiusInKm = radiusInSuns * 696340; // Solar radius in km
-    const massInKg = massInSuns * 1.989e30; // Solar mass in kg
-    
-    // Real surface temperature estimate based on mass
-    const surfaceTemperature = 3000 + (massInSuns - 0.2) * 4000; // K
-    
-    // Real luminosity in solar units
-    const luminosity = Math.pow(massInSuns, 3.5); // Solar luminosity units
-    
-    // Real surface gravity (m/s²)
-    const G = 6.67430e-11;
-    const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
-    
-    // Real escape velocity (m/s)
-    const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-    
-    // Real orbital period at 1 AU (if applicable)
-    const distanceFromCenter = Math.hypot(star.pos.x, star.pos.y);
-    const centralMass = 1000; // Assume central mass in simulation units
-    const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
-    const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
-    
-    // Calculate stellar age based on mass and main sequence lifetime
-    // More massive stars have shorter lifetimes
-    // Use a deterministic calculation based on mass for consistent age
-    const mainSequenceLifetime = Math.pow(massInSuns, -2.5) * 10; // Billion years, rough approximation
-    const age = mainSequenceLifetime * 0.3; // Assume star is 30% through its main sequence lifetime
-    
-    let spectralType = 'M';
-    if (massInSuns > 2.1) spectralType = 'O';
-    else if (massInSuns > 1.4) spectralType = 'B';
-    else if (massInSuns > 1.04) spectralType = 'A';
-    else if (massInSuns > 0.8) spectralType = 'F';
-    else if (massInSuns > 0.45) spectralType = 'G';
-    else if (massInSuns > 0.08) spectralType = 'K';
-    
-    return {
-        icon: '⭐',
-        title: star.name || 'Star',
-        stats: [
-            { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Radius', value: `${radiusInSuns.toFixed(2)} R☉ (${radiusInKm.toFixed(0)} km)` },
-            { label: 'Surface Temperature', value: `${surfaceTemperature.toFixed(0)} K` },
-            { label: 'Luminosity', value: `${luminosity.toFixed(2)} L☉` },
-            { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(0)} m/s²` },
-            { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
-            { label: 'Spectral Type', value: spectralType },
-            { label: 'Lifespan', value: `${age.toFixed(1)} billion years` },
-            { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
-            { label: 'Position', value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(star.vel.x, star.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${spectralType}-type star with ${massInSuns > 3 ? 'high' : massInSuns > 0.8 ? 'moderate' : 'low'} mass. ${massInSuns > 20 ? 'This massive star will likely end its life as a black hole.' : massInSuns > 8 ? 'This star will become a neutron star or black hole.' : 'This star will become a white dwarf.'}`
-    };
+const getStarInfo = star => {
+  const massInSuns = star.massInSuns || star.mass / SOLAR_MASS_UNIT;
+  const radiusInSuns = star.radius / STAR_OBJ_RADIUS;
+  const radiusInKm = radiusInSuns * 696340; // Solar radius in km
+  const massInKg = massInSuns * 1.989e30; // Solar mass in kg
+
+  // Real surface temperature estimate based on mass
+  const surfaceTemperature = 3000 + (massInSuns - 0.2) * 4000; // K
+
+  // Real luminosity in solar units
+  const luminosity = Math.pow(massInSuns, 3.5); // Solar luminosity units
+
+  // Real surface gravity (m/s²)
+  const G = 6.6743e-11;
+  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+
+  // Real escape velocity (m/s)
+  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+
+  // Real orbital period at 1 AU (if applicable)
+  const distanceFromCenter = Math.hypot(star.pos.x, star.pos.y);
+  const centralMass = 1000; // Assume central mass in simulation units
+  const orbitalPeriod =
+    2 *
+    Math.PI *
+    Math.sqrt(
+      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
+    );
+  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+
+  // Calculate stellar age based on mass and main sequence lifetime
+  // More massive stars have shorter lifetimes
+  // Use a deterministic calculation based on mass for consistent age
+  const mainSequenceLifetime = Math.pow(massInSuns, -2.5) * 10; // Billion years, rough approximation
+  const age = mainSequenceLifetime * 0.3; // Assume star is 30% through its main sequence lifetime
+
+  let spectralType = 'M';
+  if (massInSuns > 2.1) spectralType = 'O';
+  else if (massInSuns > 1.4) spectralType = 'B';
+  else if (massInSuns > 1.04) spectralType = 'A';
+  else if (massInSuns > 0.8) spectralType = 'F';
+  else if (massInSuns > 0.45) spectralType = 'G';
+  else if (massInSuns > 0.08) spectralType = 'K';
+
+  return {
+    icon: '⭐',
+    title: star.name || 'Star',
+    stats: [
+      {
+        label: 'Mass',
+        value: `${massInSuns.toFixed(2)} M☉ (${massInKg.toExponential(2)} kg)`,
+      },
+      {
+        label: 'Radius',
+        value: `${radiusInSuns.toFixed(2)} R☉ (${radiusInKm.toFixed(0)} km)`,
+      },
+      {
+        label: 'Surface Temperature',
+        value: `${surfaceTemperature.toFixed(0)} K`,
+      },
+      { label: 'Luminosity', value: `${luminosity.toFixed(2)} L☉` },
+      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(0)} m/s²` },
+      {
+        label: 'Escape Velocity',
+        value: `${(escapeVelocity / 1000).toFixed(1)} km/s`,
+      },
+      { label: 'Spectral Type', value: spectralType },
+      { label: 'Lifespan', value: `${age.toFixed(1)} billion years` },
+      {
+        label: 'Orbital Period',
+        value:
+          orbitalPeriodDays > 365
+            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
+            : `${orbitalPeriodDays.toFixed(1)} days`,
+      },
+      {
+        label: 'Position',
+        value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(star.vel.x, star.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${spectralType}-type star with ${massInSuns > 3 ? 'high' : massInSuns > 0.8 ? 'moderate' : 'low'} mass. ${massInSuns > 20 ? 'This massive star will likely end its life as a black hole.' : massInSuns > 8 ? 'This star will become a neutron star or black hole.' : 'This star will become a white dwarf.'}`,
+  };
 };
 
-const getPlanetInfo = (planet) => {
-    const massInEarths = planet.massInEarths || (planet.mass / 1.0);
-    const radiusInEarths = planet.radius / PLANET_RADIUS;
-    const radiusInKm = radiusInEarths * 6371; // Earth radius in km
-    const massInKg = massInEarths * 5.972e24; // Earth mass in kg
-    
-    // Real density calculation (kg/m³)
-    const volume = (4/3) * Math.PI * Math.pow(radiusInKm * 1000, 3); // Convert km to m
-    const density = massInKg / volume;
-    
-    // Real escape velocity (m/s)
-    const G = 6.67430e-11; // Gravitational constant
-    const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-    
-    // Real orbital period (if orbiting a central mass)
-    const distanceFromCenter = Math.hypot(planet.pos.x, planet.pos.y);
-    const centralMass = 1000; // Assume central mass in simulation units
-    const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
-    const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
-    
-    // Real surface gravity (m/s²)
-    const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
-    
-    let planetType = 'Terrestrial';
-    if (massInEarths > 10) planetType = 'Ice Giant';
-    else if (massInEarths > 5) planetType = 'Gas Giant';
-    else if (massInEarths > 0.5) planetType = 'Super-Earth';
-    else planetType = 'Dwarf Planet';
-    
-    // Use the planet's actual density type if available
-    const densityType = planet.density || 'rocky';
-    let densityDescription = '';
-    switch (densityType) {
-        case 'gaseous':
-            densityDescription = 'Gaseous composition with hydrogen and helium atmosphere';
-            break;
-        case 'icy':
-            densityDescription = 'Icy composition with frozen volatiles';
-            break;
-        case 'rocky':
-        default:
-            densityDescription = 'Rocky composition with solid surface';
-            break;
-    }
-    
-    return {
-        icon: '🪐',
-        title: planet.name || 'Planet',
-        stats: [
-            { label: 'Mass', value: `${massInEarths.toFixed(2)} M⊕ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕ (${radiusInKm.toFixed(0)} km)` },
-            { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-            { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
-            { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(0)} m/s` },
-            { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
-            { label: 'Type', value: planetType },
-            { label: 'Position', value: `(${planet.pos.x.toFixed(1)}, ${planet.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(planet.vel.x, planet.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${planetType.toLowerCase()} with ${massInEarths > 10 ? 'substantial' : massInEarths > 1 ? 'moderate' : 'low'} mass. ${densityDescription}. ${planetType === 'Terrestrial' ? 'This rocky world could potentially support life.' : planetType === 'Gas Giant' ? 'This gaseous planet has no solid surface.' : planetType === 'Ice Giant' ? 'This icy world is composed mainly of frozen volatiles.' : 'This small world may be a captured asteroid or dwarf planet.'}`
-    };
+const getPlanetInfo = planet => {
+  const massInEarths = planet.massInEarths || planet.mass / 1.0;
+  const radiusInEarths = planet.radius / PLANET_RADIUS;
+  const radiusInKm = radiusInEarths * 6371; // Earth radius in km
+  const massInKg = massInEarths * 5.972e24; // Earth mass in kg
+
+  // Real density calculation (kg/m³)
+  const volume = (4 / 3) * Math.PI * Math.pow(radiusInKm * 1000, 3); // Convert km to m
+  const density = massInKg / volume;
+
+  // Real escape velocity (m/s)
+  const G = 6.6743e-11; // Gravitational constant
+  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+
+  // Real orbital period (if orbiting a central mass)
+  const distanceFromCenter = Math.hypot(planet.pos.x, planet.pos.y);
+  const centralMass = 1000; // Assume central mass in simulation units
+  const orbitalPeriod =
+    2 *
+    Math.PI *
+    Math.sqrt(
+      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
+    );
+  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+
+  // Real surface gravity (m/s²)
+  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+
+  let planetType = 'Terrestrial';
+  if (massInEarths > 10) planetType = 'Ice Giant';
+  else if (massInEarths > 5) planetType = 'Gas Giant';
+  else if (massInEarths > 0.5) planetType = 'Super-Earth';
+  else planetType = 'Dwarf Planet';
+
+  // Use the planet's actual density type if available
+  const densityType = planet.density || 'rocky';
+  let densityDescription = '';
+  switch (densityType) {
+    case 'gaseous':
+      densityDescription =
+        'Gaseous composition with hydrogen and helium atmosphere';
+      break;
+    case 'icy':
+      densityDescription = 'Icy composition with frozen volatiles';
+      break;
+    case 'rocky':
+    default:
+      densityDescription = 'Rocky composition with solid surface';
+      break;
+  }
+
+  return {
+    icon: '🪐',
+    title: planet.name || 'Planet',
+    stats: [
+      {
+        label: 'Mass',
+        value: `${massInEarths.toFixed(2)} M⊕ (${massInKg.toExponential(2)} kg)`,
+      },
+      {
+        label: 'Radius',
+        value: `${radiusInEarths.toFixed(2)} R⊕ (${radiusInKm.toFixed(0)} km)`,
+      },
+      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
+      { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(0)} m/s` },
+      {
+        label: 'Orbital Period',
+        value:
+          orbitalPeriodDays > 365
+            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
+            : `${orbitalPeriodDays.toFixed(1)} days`,
+      },
+      { label: 'Type', value: planetType },
+      {
+        label: 'Position',
+        value: `(${planet.pos.x.toFixed(1)}, ${planet.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(planet.vel.x, planet.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${planetType.toLowerCase()} with ${massInEarths > 10 ? 'substantial' : massInEarths > 1 ? 'moderate' : 'low'} mass. ${densityDescription}. ${planetType === 'Terrestrial' ? 'This rocky world could potentially support life.' : planetType === 'Gas Giant' ? 'This gaseous planet has no solid surface.' : planetType === 'Ice Giant' ? 'This icy world is composed mainly of frozen volatiles.' : 'This small world may be a captured asteroid or dwarf planet.'}`,
+  };
 };
 
-const getGasGiantInfo = (gasGiant) => {
-    const massInJupiters = gasGiant.massInJupiters || (gasGiant.mass / 50.0);
-    const massInEarths = massInJupiters * 317.8; // Convert Jupiter mass to Earth mass (1 Jupiter = 317.8 Earth masses)
-    const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
-    const radiusInEarths = radiusInJupiters * 11.2; // Convert Jupiter radius to Earth radius (1 Jupiter = 11.2 Earth radii)
-    const radiusInKm = radiusInEarths * 6371; // Earth radius in km
-    const massInKg = massInEarths * 5.972e24; // Earth mass in kg
-    
-    // Real density calculation (kg/m³)
-    const volume = (4/3) * Math.PI * Math.pow(radiusInKm * 1000, 3);
-    const density = massInKg / volume;
-    
-    // Real escape velocity (m/s)
-    const G = 6.67430e-11;
-    const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-    
-    // Real surface gravity (m/s²)
-    const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
-    
-    // Real orbital period
-    const distanceFromCenter = Math.hypot(gasGiant.pos.x, gasGiant.pos.y);
-    const centralMass = 1000; // Assume central mass in simulation units
-    const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
-    const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
-    
-    // Use the actual giant type from the object, or determine from mass
-    let giantType = gasGiant.giantType || 'Gas Giant';
-    if (!gasGiant.giantType) {
-        if (massInJupiters > 13) giantType = 'Brown Dwarf';
-        else if (massInJupiters > 5) giantType = 'Super-Jupiter';
-        else if (massInJupiters > 1) giantType = 'Jupiter-like';
-        else if (massInJupiters > 0.5) giantType = 'Neptune-like';
-        else giantType = 'Mini-Neptune';
-    }
-    
-    // Convert giant type to display format
-    const displayType = giantType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-    
-    return {
-        icon: '🪐',
-        title: gasGiant.name || 'Gas Giant',
-        stats: [
-            { label: 'Mass', value: `${massInEarths.toFixed(1)} M⊕ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Radius', value: `${radiusInEarths.toFixed(1)} R⊕ (${radiusInKm.toFixed(0)} km)` },
-            { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-            { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
-            { label: 'Escape Velocity', value: `${(escapeVelocity/1000).toFixed(1)} km/s` },
-            { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
-            { label: 'Type', value: displayType },
-            { label: 'Position', value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(gasGiant.vel.x, gasGiant.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`
-    };
+const getGasGiantInfo = gasGiant => {
+  const massInJupiters = gasGiant.massInJupiters || gasGiant.mass / 50.0;
+  const massInEarths = massInJupiters * 317.8; // Convert Jupiter mass to Earth mass (1 Jupiter = 317.8 Earth masses)
+  const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
+  const radiusInEarths = radiusInJupiters * 11.2; // Convert Jupiter radius to Earth radius (1 Jupiter = 11.2 Earth radii)
+  const radiusInKm = radiusInEarths * 6371; // Earth radius in km
+  const massInKg = massInEarths * 5.972e24; // Earth mass in kg
+
+  // Real density calculation (kg/m³)
+  const volume = (4 / 3) * Math.PI * Math.pow(radiusInKm * 1000, 3);
+  const density = massInKg / volume;
+
+  // Real escape velocity (m/s)
+  const G = 6.6743e-11;
+  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
+
+  // Real surface gravity (m/s²)
+  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+
+  // Real orbital period
+  const distanceFromCenter = Math.hypot(gasGiant.pos.x, gasGiant.pos.y);
+  const centralMass = 1000; // Assume central mass in simulation units
+  const orbitalPeriod =
+    2 *
+    Math.PI *
+    Math.sqrt(
+      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
+    );
+  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+
+  // Use the actual giant type from the object, or determine from mass
+  let giantType = gasGiant.giantType || 'Gas Giant';
+  if (!gasGiant.giantType) {
+    if (massInJupiters > 13) giantType = 'Brown Dwarf';
+    else if (massInJupiters > 5) giantType = 'Super-Jupiter';
+    else if (massInJupiters > 1) giantType = 'Jupiter-like';
+    else if (massInJupiters > 0.5) giantType = 'Neptune-like';
+    else giantType = 'Mini-Neptune';
+  }
+
+  // Convert giant type to display format
+  const displayType = giantType
+    .replace('_', ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+
+  return {
+    icon: '🪐',
+    title: gasGiant.name || 'Gas Giant',
+    stats: [
+      {
+        label: 'Mass',
+        value: `${massInEarths.toFixed(1)} M⊕ (${massInKg.toExponential(2)} kg)`,
+      },
+      {
+        label: 'Radius',
+        value: `${radiusInEarths.toFixed(1)} R⊕ (${radiusInKm.toFixed(0)} km)`,
+      },
+      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
+      {
+        label: 'Escape Velocity',
+        value: `${(escapeVelocity / 1000).toFixed(1)} km/s`,
+      },
+      {
+        label: 'Orbital Period',
+        value:
+          orbitalPeriodDays > 365
+            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
+            : `${orbitalPeriodDays.toFixed(1)} days`,
+      },
+      { label: 'Type', value: displayType },
+      {
+        label: 'Position',
+        value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(gasGiant.vel.x, gasGiant.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`,
+  };
 };
-const getAsteroidInfo = (asteroid) => {
-    const massInEarths = asteroid.mass / 1.0;
-    const massInKg = massInEarths * 5.972e24;
-    const radiusInKm = asteroid.radius * 1000; // Rough conversion
-    const radiusInM = radiusInKm * 1000;
-    
-    // Real density calculation (kg/m³)
-    const volume = (4/3) * Math.PI * Math.pow(radiusInM, 3);
-    const density = massInKg / volume;
-    
-    // Real escape velocity (m/s)
-    const G = 6.67430e-11;
-    const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
-    
-    // Real surface gravity (m/s²)
-    const surfaceGravity = (G * massInKg) / Math.pow(radiusInM, 2);
-    
-    // Real orbital period
-    const distanceFromCenter = Math.hypot(asteroid.pos.x, asteroid.pos.y);
-    const centralMass = 1000; // Assume central mass in simulation units
-    const orbitalPeriod = 2 * Math.PI * Math.sqrt(Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30));
-    const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
-    
-    let asteroidType = 'Asteroid';
-    if (asteroid.radius > 5) asteroidType = 'Dwarf Planet';
-    else if (asteroid.radius > 2) asteroidType = 'Large Asteroid';
-    else asteroidType = 'Small Asteroid';
-    
-    return {
-        icon: '☄️',
-        title: asteroid.name || 'Asteroid',
-        stats: [
-            { label: 'Mass', value: `${massInEarths.toFixed(4)} M⊕ (${massInKg.toExponential(2)} kg)` },
-            { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-            { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-            { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(3)} m/s²` },
-            { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} m/s` },
-            { label: 'Orbital Period', value: orbitalPeriodDays > 365 ? `${(orbitalPeriodDays/365).toFixed(1)} years` : `${orbitalPeriodDays.toFixed(1)} days` },
-            { label: 'Type', value: asteroidType },
-            { label: 'Position', value: `(${asteroid.pos.x.toFixed(1)}, ${asteroid.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(asteroid.vel.x, asteroid.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${asteroidType.toLowerCase()} with ${asteroid.radius > 5 ? 'significant' : asteroid.radius > 2 ? 'moderate' : 'minimal'} mass. ${asteroidType === 'Dwarf Planet' ? 'This object is large enough to be rounded by its own gravity.' : 'This rocky body orbits in the system, potentially as part of a belt or as a rogue object.'}`
-    };
+const getAsteroidInfo = asteroid => {
+  const massInEarths = asteroid.mass / 1.0;
+  const massInKg = massInEarths * 5.972e24;
+  const radiusInKm = asteroid.radius * 1000; // Rough conversion
+  const radiusInM = radiusInKm * 1000;
+
+  // Real density calculation (kg/m³)
+  const volume = (4 / 3) * Math.PI * Math.pow(radiusInM, 3);
+  const density = massInKg / volume;
+
+  // Real escape velocity (m/s)
+  const G = 6.6743e-11;
+  const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
+
+  // Real surface gravity (m/s²)
+  const surfaceGravity = (G * massInKg) / Math.pow(radiusInM, 2);
+
+  // Real orbital period
+  const distanceFromCenter = Math.hypot(asteroid.pos.x, asteroid.pos.y);
+  const centralMass = 1000; // Assume central mass in simulation units
+  const orbitalPeriod =
+    2 *
+    Math.PI *
+    Math.sqrt(
+      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
+    );
+  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+
+  let asteroidType = 'Asteroid';
+  if (asteroid.radius > 5) asteroidType = 'Dwarf Planet';
+  else if (asteroid.radius > 2) asteroidType = 'Large Asteroid';
+  else asteroidType = 'Small Asteroid';
+
+  return {
+    icon: '☄️',
+    title: asteroid.name || 'Asteroid',
+    stats: [
+      {
+        label: 'Mass',
+        value: `${massInEarths.toFixed(4)} M⊕ (${massInKg.toExponential(2)} kg)`,
+      },
+      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
+      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
+      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(3)} m/s²` },
+      { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} m/s` },
+      {
+        label: 'Orbital Period',
+        value:
+          orbitalPeriodDays > 365
+            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
+            : `${orbitalPeriodDays.toFixed(1)} days`,
+      },
+      { label: 'Type', value: asteroidType },
+      {
+        label: 'Position',
+        value: `(${asteroid.pos.x.toFixed(1)}, ${asteroid.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(asteroid.vel.x, asteroid.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${asteroidType.toLowerCase()} with ${asteroid.radius > 5 ? 'significant' : asteroid.radius > 2 ? 'moderate' : 'minimal'} mass. ${asteroidType === 'Dwarf Planet' ? 'This object is large enough to be rounded by its own gravity.' : 'This rocky body orbits in the system, potentially as part of a belt or as a rogue object.'}`,
+  };
 };
 
-const getNeutronStarInfo = (neutronStar) => {
-    const massInSuns = neutronStar.massInSuns || (neutronStar.mass / SOLAR_MASS_UNIT);
-    const radiusInKm = neutronStar.radius * 1000; // Rough conversion to km
-    const density = neutronStar.mass / (Math.PI * neutronStar.radius * neutronStar.radius);
-    const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * neutronStar.mass / neutronStar.radius);
-    const schwarzschildRadius = 2 * SETTINGS.gravitational_constant * neutronStar.mass / (3e8 * 3e8); // Simplified
-    
-    const starType = neutronStar.starType || 'Neutron Star';
-    const isPulsar = neutronStar.pulsar || false;
-    
-    return {
-        icon: isPulsar ? '⚡' : '⭐',
-        title: neutronStar.name || starType,
-        stats: [
-            { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
-            { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-            { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
-            { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
-            { label: 'Schwarzschild Radius', value: `${schwarzschildRadius.toFixed(6)} units` },
-            { label: 'Type', value: starType },
-            { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
-            { label: 'Position', value: `(${neutronStar.pos.x.toFixed(1)}, ${neutronStar.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(neutronStar.vel.x, neutronStar.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${starType.toLowerCase()} with ${massInSuns > 2.0 ? 'extreme' : 'high'} density. ${isPulsar ? 'This pulsar emits regular beams of radiation as it rotates.' : 'This neutron star is the collapsed core of a massive star.'} ${starType === 'Magnetar' ? 'This magnetar has an extremely strong magnetic field, making it one of the most powerful objects in the universe.' : starType === 'Pulsar' ? 'This pulsar rotates rapidly, emitting beams of radiation that sweep across space.' : 'This neutron star is composed almost entirely of neutrons, making it incredibly dense.'}`
-    };
+const getNeutronStarInfo = neutronStar => {
+  const massInSuns =
+    neutronStar.massInSuns || neutronStar.mass / SOLAR_MASS_UNIT;
+  const radiusInKm = neutronStar.radius * 1000; // Rough conversion to km
+  const density =
+    neutronStar.mass / (Math.PI * neutronStar.radius * neutronStar.radius);
+  const escapeVelocity = Math.sqrt(
+    (2 * SETTINGS.gravitational_constant * neutronStar.mass) /
+      neutronStar.radius
+  );
+  const schwarzschildRadius =
+    (2 * SETTINGS.gravitational_constant * neutronStar.mass) / (3e8 * 3e8); // Simplified
+
+  const starType = neutronStar.starType || 'Neutron Star';
+  const isPulsar = neutronStar.pulsar || false;
+
+  return {
+    icon: isPulsar ? '⚡' : '⭐',
+    title: neutronStar.name || starType,
+    stats: [
+      { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
+      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
+      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      {
+        label: 'Escape Velocity',
+        value: `${escapeVelocity.toFixed(1)} units/s`,
+      },
+      {
+        label: 'Schwarzschild Radius',
+        value: `${schwarzschildRadius.toFixed(6)} units`,
+      },
+      { label: 'Type', value: starType },
+      { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
+      {
+        label: 'Position',
+        value: `(${neutronStar.pos.x.toFixed(1)}, ${neutronStar.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(neutronStar.vel.x, neutronStar.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${starType.toLowerCase()} with ${massInSuns > 2.0 ? 'extreme' : 'high'} density. ${isPulsar ? 'This pulsar emits regular beams of radiation as it rotates.' : 'This neutron star is the collapsed core of a massive star.'} ${starType === 'Magnetar' ? 'This magnetar has an extremely strong magnetic field, making it one of the most powerful objects in the universe.' : starType === 'Pulsar' ? 'This pulsar rotates rapidly, emitting beams of radiation that sweep across space.' : 'This neutron star is composed almost entirely of neutrons, making it incredibly dense.'}`,
+  };
 };
 
-const getWhiteDwarfInfo = (whiteDwarf) => {
-    const massInSuns = whiteDwarf.massInSuns || (whiteDwarf.mass / SOLAR_MASS_UNIT);
-    const radiusInEarths = whiteDwarf.radius / PLANET_RADIUS; // Compare to Earth radius
-    const density = whiteDwarf.mass / (Math.PI * whiteDwarf.radius * whiteDwarf.radius);
-    const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * whiteDwarf.mass / whiteDwarf.radius);
-    const chandrasekharLimit = 1.4; // Solar masses
-    
-    const dwarfType = whiteDwarf.dwarfType || 'Carbon-Oxygen';
-    
-    return {
-        icon: '⭐',
-        title: whiteDwarf.name || 'White Dwarf',
-        stats: [
-            { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
-            { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕` },
-            { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
-            { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
-            { label: 'Chandrasekhar Limit', value: `${chandrasekharLimit} M☉` },
-            { label: 'Type', value: dwarfType },
-            { label: 'Position', value: `(${whiteDwarf.pos.x.toFixed(1)}, ${whiteDwarf.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${dwarfType.toLowerCase()} white dwarf with ${massInSuns > 1.2 ? 'high' : massInSuns > 0.6 ? 'moderate' : 'low'} mass. ${dwarfType === 'Oxygen-Neon' ? 'This massive white dwarf is near the Chandrasekhar limit and may become a neutron star.' : dwarfType === 'Carbon-Oxygen' ? 'This is the most common type of white dwarf, composed of carbon and oxygen.' : 'This low-mass white dwarf is composed primarily of helium.'} ${massInSuns > chandrasekharLimit ? 'This white dwarf exceeds the Chandrasekhar limit and may collapse into a neutron star.' : 'This white dwarf is stable and will slowly cool over billions of years.'}`
-    };
+const getWhiteDwarfInfo = whiteDwarf => {
+  const massInSuns = whiteDwarf.massInSuns || whiteDwarf.mass / SOLAR_MASS_UNIT;
+  const radiusInEarths = whiteDwarf.radius / PLANET_RADIUS; // Compare to Earth radius
+  const density =
+    whiteDwarf.mass / (Math.PI * whiteDwarf.radius * whiteDwarf.radius);
+  const escapeVelocity = Math.sqrt(
+    (2 * SETTINGS.gravitational_constant * whiteDwarf.mass) / whiteDwarf.radius
+  );
+  const chandrasekharLimit = 1.4; // Solar masses
+
+  const dwarfType = whiteDwarf.dwarfType || 'Carbon-Oxygen';
+
+  return {
+    icon: '⭐',
+    title: whiteDwarf.name || 'White Dwarf',
+    stats: [
+      { label: 'Mass', value: `${massInSuns.toFixed(2)} M☉` },
+      { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕` },
+      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      {
+        label: 'Escape Velocity',
+        value: `${escapeVelocity.toFixed(1)} units/s`,
+      },
+      { label: 'Chandrasekhar Limit', value: `${chandrasekharLimit} M☉` },
+      { label: 'Type', value: dwarfType },
+      {
+        label: 'Position',
+        value: `(${whiteDwarf.pos.x.toFixed(1)}, ${whiteDwarf.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${dwarfType.toLowerCase()} white dwarf with ${massInSuns > 1.2 ? 'high' : massInSuns > 0.6 ? 'moderate' : 'low'} mass. ${dwarfType === 'Oxygen-Neon' ? 'This massive white dwarf is near the Chandrasekhar limit and may become a neutron star.' : dwarfType === 'Carbon-Oxygen' ? 'This is the most common type of white dwarf, composed of carbon and oxygen.' : 'This low-mass white dwarf is composed primarily of helium.'} ${massInSuns > chandrasekharLimit ? 'This white dwarf exceeds the Chandrasekhar limit and may collapse into a neutron star.' : 'This white dwarf is stable and will slowly cool over billions of years.'}`,
+  };
 };
 
-const getCometInfo = (comet) => {
-    const massInComets = comet.massInComets || (comet.mass / 0.1);
-    const radiusInKm = comet.radius * 1000; // Rough conversion to km
-    const density = comet.mass / (Math.PI * comet.radius * comet.radius);
-    const escapeVelocity = Math.sqrt(2 * SETTINGS.gravitational_constant * comet.mass / comet.radius);
-    const tailLength = comet.tailLength || 35;
-    
-    const cometType = comet.cometType || 'short_period';
-    const displayType = cometType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
-    
-    return {
-        icon: '☄️',
-        title: comet.name || 'Comet',
-        stats: [
-            { label: 'Mass', value: `${massInComets.toFixed(3)} C` },
-            { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-            { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
-            { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} units/s` },
-            { label: 'Tail Length', value: `${tailLength.toFixed(0)} units` },
-            { label: 'Type', value: displayType },
-            { label: 'Position', value: `(${comet.pos.x.toFixed(1)}, ${comet.pos.y.toFixed(1)})` },
-            { label: 'Velocity', value: `${Math.hypot(comet.vel.x, comet.vel.y).toFixed(1)} units/s` }
-        ],
-        description: `A ${displayType.toLowerCase()} comet with ${massInComets > 0.1 ? 'substantial' : massInComets > 0.01 ? 'moderate' : 'small'} mass. ${cometType === 'periodic' ? 'This periodic comet returns to the inner solar system regularly, like Halley\'s Comet.' : cometType === 'long_period' ? 'This long-period comet has an orbital period of more than 200 years.' : 'This short-period comet completes its orbit in less than 200 years.'} The comet\'s tail is ${tailLength > 50 ? 'very long' : tailLength > 30 ? 'moderate' : 'short'} and points away from the sun due to solar radiation pressure.`
-    };
+const getCometInfo = comet => {
+  const massInComets = comet.massInComets || comet.mass / 0.1;
+  const radiusInKm = comet.radius * 1000; // Rough conversion to km
+  const density = comet.mass / (Math.PI * comet.radius * comet.radius);
+  const escapeVelocity = Math.sqrt(
+    (2 * SETTINGS.gravitational_constant * comet.mass) / comet.radius
+  );
+  const tailLength = comet.tailLength || 35;
+
+  const cometType = comet.cometType || 'short_period';
+  const displayType = cometType
+    .replace('_', ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+
+  return {
+    icon: '☄️',
+    title: comet.name || 'Comet',
+    stats: [
+      { label: 'Mass', value: `${massInComets.toFixed(3)} C` },
+      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
+      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      {
+        label: 'Escape Velocity',
+        value: `${escapeVelocity.toFixed(1)} units/s`,
+      },
+      { label: 'Tail Length', value: `${tailLength.toFixed(0)} units` },
+      { label: 'Type', value: displayType },
+      {
+        label: 'Position',
+        value: `(${comet.pos.x.toFixed(1)}, ${comet.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `${Math.hypot(comet.vel.x, comet.vel.y).toFixed(1)} units/s`,
+      },
+    ],
+    description: `A ${displayType.toLowerCase()} comet with ${massInComets > 0.1 ? 'substantial' : massInComets > 0.01 ? 'moderate' : 'small'} mass. ${cometType === 'periodic' ? "This periodic comet returns to the inner solar system regularly, like Halley's Comet." : cometType === 'long_period' ? 'This long-period comet has an orbital period of more than 200 years.' : 'This short-period comet completes its orbit in less than 200 years.'} The comet's tail is ${tailLength > 50 ? 'very long' : tailLength > 30 ? 'moderate' : 'short'} and points away from the sun due to solar radiation pressure.`,
+  };
 };
 
 /**
@@ -771,284 +1245,310 @@ const getCometInfo = (comet) => {
  * @param {string} type - Type of object (BlackHole, Star, Planet, etc.)
  */
 const showObjectInspector = (object, type) => {
-    
-    // Check if splash screen is still active using both the global flag and our state variable
-    if (!window.splashScreenEnded || window.isSplashActive) {
-        console.log('Splash screen still active, completely ignoring showObjectInspector call');
+  // Check if splash screen is still active using both the global flag and our state variable
+  if (!window.splashScreenEnded || window.isSplashActive) {
+    console.log(
+      'Splash screen still active, completely ignoring showObjectInspector call'
+    );
+    return;
+  }
+
+  // Check if inspector element exists
+  const objectInspector = document.getElementById('objectInspector');
+  if (!objectInspector) {
+    console.error('objectInspector element not found!');
+    return;
+  }
+
+  // Check if we're already showing the same object
+  if (
+    state.inspector_open &&
+    state.selectedObject &&
+    state.selectedObject.object &&
+    state.selectedObject.object.id === object.id &&
+    state.selectedObject.type === type
+  ) {
+    console.log('Inspector already open for this object, skipping');
+    return;
+  }
+
+  // Store the current object for auto-updating
+  state.selectedObject = { object, type };
+
+  const updateInspector = () => {
+    if (!state.inspector_open || !state.selectedObject) return;
+
+    // Skip updates if slider is being dragged
+    if (state.sliderDragging) {
+      return;
+    }
+
+    let info;
+    switch (state.selectedObject.type) {
+      case 'BlackHole':
+        info = getBlackHoleInfo(state.selectedObject.object);
+        break;
+      case 'Star':
+        info = getStarInfo(state.selectedObject.object);
+        break;
+      case 'NeutronStar':
+        info = getNeutronStarInfo(state.selectedObject.object);
+        break;
+      case 'WhiteDwarf':
+        info = getWhiteDwarfInfo(state.selectedObject.object);
+        break;
+      case 'Planet':
+        info = getPlanetInfo(state.selectedObject.object);
+        break;
+      case 'GasGiant':
+        info = getGasGiantInfo(state.selectedObject.object);
+        break;
+      case 'Comet':
+        info = getCometInfo(state.selectedObject.object);
+        break;
+      case 'Asteroid':
+        info = getAsteroidInfo(state.selectedObject.object);
+        break;
+      default:
+        console.error('Unknown object type:', state.selectedObject.type);
         return;
     }
-    
-    // Check if inspector element exists
-    const objectInspector = document.getElementById('objectInspector');
-    if (!objectInspector) {
-        console.error('objectInspector element not found!');
-        return;
+
+    const inspectorTitle = document.getElementById('inspectorTitle');
+    const detailsTabContent = document.getElementById('detailsTab');
+
+    if (!inspectorTitle || !detailsTabContent) {
+      // Silently return instead of logging error - elements may not exist during initialization
+      return;
     }
-    
-    // Check if we're already showing the same object
-    if (state.inspector_open && 
-        state.selectedObject && 
-        state.selectedObject.object && 
-        state.selectedObject.object.id === object.id &&
-        state.selectedObject.type === type) {
-        console.log('Inspector already open for this object, skipping');
-        return;
-    }
-    
-    // Store the current object for auto-updating
-    state.selectedObject = { object, type };
-    
-    const updateInspector = () => {
-        if (!state.inspector_open || !state.selectedObject) return;
-        
-        // Skip updates if slider is being dragged
-        if (state.sliderDragging) {
-            return;
-        }
-        
-        let info;
-        switch (state.selectedObject.type) {
-            case 'BlackHole':
-                info = getBlackHoleInfo(state.selectedObject.object);
-                break;
-            case 'Star':
-                info = getStarInfo(state.selectedObject.object);
-                break;
-            case 'NeutronStar':
-                info = getNeutronStarInfo(state.selectedObject.object);
-                break;
-            case 'WhiteDwarf':
-                info = getWhiteDwarfInfo(state.selectedObject.object);
-                break;
-            case 'Planet':
-                info = getPlanetInfo(state.selectedObject.object);
-                break;
-            case 'GasGiant':
-                info = getGasGiantInfo(state.selectedObject.object);
-                break;
-            case 'Comet':
-                info = getCometInfo(state.selectedObject.object);
-                break;
-            case 'Asteroid':
-                info = getAsteroidInfo(state.selectedObject.object);
-                break;
-            default:
-                console.error('Unknown object type:', state.selectedObject.type);
-                return;
-        }
-        
-        const inspectorTitle = document.getElementById('inspectorTitle');
-        const detailsTabContent = document.getElementById('detailsTab');
-        
-        if (!inspectorTitle || !detailsTabContent) {
-            // Silently return instead of logging error - elements may not exist during initialization
-            return;
-        }
-        
-        inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
-        
-        // Check if this is a new object selection or just a real-time update
-        const existingMassSlider = document.getElementById('massSlider');
-        const isNewObject = !existingMassSlider || 
-                           (state.selectedObject && state.selectedObject.object && 
-                            existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
-        
-        // Don't recreate inspector if it's just a mass update (to preserve energy chart)
-        // TODO: REMOVE - Energy chart preservation logic to be replaced
-        const isMassUpdate = existingMassSlider && 
-                            state.selectedObject && 
-                            state.selectedObject.object && 
-                            existingMassSlider.dataset.objectId === state.selectedObject.object.id &&
-                            Math.abs(parseFloat(existingMassSlider.value) - state.selectedObject.object.mass) < 0.1;
-        
-        if (isNewObject && !isMassUpdate) {
-                    // Reset energy log when switching to a new object
-        // TODO: REMOVE - Energy log reset to be replaced
-        state.energyLog = [];
-            // New object selected - recreate the entire inspector
-            let content = '';
-            
-            // Add mass adjustment slider
-            const massSlider = createMassSlider(state.selectedObject.object, state.selectedObject.type);
-            content += massSlider;
-            
-            // Add tooltip for mass slider
-            content += '<div class="mass-slider-tooltip" title="Drag to change the object\'s mass. Higher mass = stronger gravity and more influence on other objects. Some objects may transform when mass changes significantly.">💡 Hover for mass adjustment tips</div>';
-            
-            // Add separator
-            content += '<div class="stat-separator"></div>';
-            
-            info.stats.forEach(stat => {
-                const tooltip = getStatTooltip(stat.label, state.selectedObject.type);
-                content += `
+
+    inspectorTitle.innerHTML = `<span class="object-icon">${info.icon}</span>${info.title}`;
+
+    // Check if this is a new object selection or just a real-time update
+    const existingMassSlider = document.getElementById('massSlider');
+    const isNewObject =
+      !existingMassSlider ||
+      (state.selectedObject &&
+        state.selectedObject.object &&
+        existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
+
+    // Don't recreate inspector if it's just a mass update (to preserve energy chart)
+    // TODO: REMOVE - Energy chart preservation logic to be replaced
+    const isMassUpdate =
+      existingMassSlider &&
+      state.selectedObject &&
+      state.selectedObject.object &&
+      existingMassSlider.dataset.objectId === state.selectedObject.object.id &&
+      Math.abs(
+        parseFloat(existingMassSlider.value) - state.selectedObject.object.mass
+      ) < 0.1;
+
+    if (isNewObject && !isMassUpdate) {
+      // Reset energy log when switching to a new object
+      // TODO: REMOVE - Energy log reset to be replaced
+      state.energyLog = [];
+      // New object selected - recreate the entire inspector
+      let content = '';
+
+      // Add mass adjustment slider
+      const massSlider = createMassSlider(
+        state.selectedObject.object,
+        state.selectedObject.type
+      );
+      content += massSlider;
+
+      // Add tooltip for mass slider
+      content +=
+        '<div class="mass-slider-tooltip" title="Drag to change the object\'s mass. Higher mass = stronger gravity and more influence on other objects. Some objects may transform when mass changes significantly.">💡 Hover for mass adjustment tips</div>';
+
+      // Add separator
+      content += '<div class="stat-separator"></div>';
+
+      info.stats.forEach(stat => {
+        const tooltip = getStatTooltip(stat.label, state.selectedObject.type);
+        content += `
                     <div class="stat-row" ${tooltip ? `title="${tooltip}"` : ''}>
                         <span class="stat-label">${stat.label}:</span>
                         <span class="stat-value">${stat.value}</span>
                     </div>
                 `;
-            });
-            
-            content += `<div class="object-description">${info.description}</div>`;
-            
-        detailsTabContent.innerHTML = content;
-            
-            // Set up mass slider event listeners
-            setupMassSliderListeners();
-            
-            // Store object ID for future reference
-            const newMassSlider = document.getElementById('massSlider');
-            if (newMassSlider && state.selectedObject.object) {
-                newMassSlider.dataset.objectId = state.selectedObject.object.id || 'unknown';
-            }
-        } else if (isNewObject && isMassUpdate) {
-            // Just update the mass slider value without recreating the inspector
-            const existingMassSlider = document.getElementById('massSlider');
-            if (existingMassSlider) {
-                existingMassSlider.value = state.selectedObject.object.mass;
-            }
-        } else {
-            // Real-time update - only update stats and description, preserve the slider
-            const statRows = detailsTabContent.querySelectorAll('.stat-row');
-            const description = detailsTabContent.querySelector('.object-description');
-            
-            // Update stats
-            info.stats.forEach((stat, index) => {
-                if (statRows[index]) {
-                    statRows[index].innerHTML = `
+      });
+
+      content += `<div class="object-description">${info.description}</div>`;
+
+      detailsTabContent.innerHTML = content;
+
+      // Set up mass slider event listeners
+      setupMassSliderListeners();
+
+      // Store object ID for future reference
+      const newMassSlider = document.getElementById('massSlider');
+      if (newMassSlider && state.selectedObject.object) {
+        newMassSlider.dataset.objectId =
+          state.selectedObject.object.id || 'unknown';
+      }
+    } else if (isNewObject && isMassUpdate) {
+      // Just update the mass slider value without recreating the inspector
+      const existingMassSlider = document.getElementById('massSlider');
+      if (existingMassSlider) {
+        existingMassSlider.value = state.selectedObject.object.mass;
+      }
+    } else {
+      // Real-time update - only update stats and description, preserve the slider
+      const statRows = detailsTabContent.querySelectorAll('.stat-row');
+      const description = detailsTabContent.querySelector(
+        '.object-description'
+      );
+
+      // Update stats
+      info.stats.forEach((stat, index) => {
+        if (statRows[index]) {
+          statRows[index].innerHTML = `
                         <span class="stat-label">${stat.label}:</span>
                         <span class="stat-value">${stat.value}</span>
                     `;
-                }
-            });
-            
-            // Update description
-            if (description) {
-                description.innerHTML = info.description;
-            }
         }
-        
-        // Update energy chart if energy tab is active
-        const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
-        if (energyTab && energyTab.classList.contains('active')) {
-            updateEnergyChart();
-            updateCurrentEnergyValues();
-        }
-    };
-    
-    // Clear any existing update interval
-    if (state.inspectorUpdateInterval) {
-        clearInterval(state.inspectorUpdateInterval);
-        state.inspectorUpdateInterval = null;
+      });
+
+      // Update description
+      if (description) {
+        description.innerHTML = info.description;
+      }
     }
-    
-    // Initial update
-    updateInspector();
-    
-    // Update current energy values immediately (even if energy tab isn't active)
+
+    // Update energy chart if energy tab is active
+    const energyTab = document.querySelector(
+      '.inspector-tab[data-tab="energy"]'
+    );
+    if (energyTab && energyTab.classList.contains('active')) {
+      updateEnergyChart();
+      updateCurrentEnergyValues();
+    }
+  };
+
+  // Clear any existing update interval
+  if (state.inspectorUpdateInterval) {
+    clearInterval(state.inspectorUpdateInterval);
+    state.inspectorUpdateInterval = null;
+  }
+
+  // Initial update
+  updateInspector();
+
+  // Update current energy values immediately (even if energy tab isn't active)
+  updateCurrentEnergyValues();
+
+  // Set up auto-update interval
+  state.inspectorUpdateInterval = setInterval(updateInspector, 100); // Update 10 times per second
+
+  // Remove inline hide styles so CSS takes over
+  [
+    'display',
+    'opacity',
+    'visibility',
+    'pointerEvents',
+    'position',
+    'left',
+    'top',
+    'zIndex',
+  ].forEach(prop => {
+    objectInspector.style[prop] = '';
+  });
+
+  // Show the inspector
+  objectInspector.classList.add('visible');
+
+  // Ensure the showUI class is also present (added after splash screen ends)
+  if (!objectInspector.classList.contains('showUI')) {
+    objectInspector.classList.add('showUI');
+  }
+
+  state.inspector_open = true;
+
+  // Ensure inspector starts in centered position
+  objectInspector.style.left = '';
+  objectInspector.style.top = '';
+  objectInspector.style.transform = 'translate(-50%, -50%)';
+
+  // Set up mobile-friendly backdrop click to close
+  setupInspectorBackdropClick();
+
+  // Set up dragging functionality with a small delay to ensure proper positioning
+  setTimeout(() => {
+    setupInspectorDragging();
+  }, 50);
+
+  // Set up energy tab functionality
+  setupEnergyTab();
+
+  // Initialize energy chart immediately for new object selection
+  // This ensures the chart is ready even if the energy tab isn't active
+  setTimeout(() => {
+    ensureChartReady();
+    updateEnergyChart();
     updateCurrentEnergyValues();
-    
-    // Set up auto-update interval
-    state.inspectorUpdateInterval = setInterval(updateInspector, 100); // Update 10 times per second
-    
-    // Remove inline hide styles so CSS takes over
-    ['display', 'opacity', 'visibility', 'pointerEvents', 'position', 'left', 'top', 'zIndex'].forEach(prop => {
-        objectInspector.style[prop] = '';
-    });
-    
-    // Show the inspector
-    objectInspector.classList.add('visible');
-    
-    // Ensure the showUI class is also present (added after splash screen ends)
-    if (!objectInspector.classList.contains('showUI')) {
-        objectInspector.classList.add('showUI');
-    }
-    
-    state.inspector_open = true;
-    
-    // Ensure inspector starts in centered position
-    objectInspector.style.left = '';
-    objectInspector.style.top = '';
-    objectInspector.style.transform = 'translate(-50%, -50%)';
-    
-    // Set up mobile-friendly backdrop click to close
-    setupInspectorBackdropClick();
-    
-    // Set up dragging functionality with a small delay to ensure proper positioning
-    setTimeout(() => {
-        setupInspectorDragging();
-    }, 50);
-    
-    // Set up energy tab functionality
-    setupEnergyTab();
-    
-    // Initialize energy chart immediately for new object selection
-    // This ensures the chart is ready even if the energy tab isn't active
-    setTimeout(() => {
-        ensureChartReady();
-        updateEnergyChart();
-        updateCurrentEnergyValues();
-    }, 100); // Small delay to ensure DOM elements are ready
-    
-    // Update cursor state
-    updateInspectorCursor();
-    
-    // Set up overlay minimize functionality
-    setupOverlayMinimize();
+  }, 100); // Small delay to ensure DOM elements are ready
+
+  // Update cursor state
+  updateInspectorCursor();
+
+  // Set up overlay minimize functionality
+  setupOverlayMinimize();
 };
 
 const hideObjectInspector = () => {
-    const objectInspector = document.getElementById('objectInspector');
-    if (!objectInspector) {
-        console.error('objectInspector element not found when trying to hide!');
-        return;
-    }
-    objectInspector.classList.remove('visible');
-    objectInspector.classList.remove('dragging');
-    state.inspector_open = false;
-    
-    // Re-apply hide styles to ensure inspector stays hidden
-    objectInspector.style.display = 'none';
-    objectInspector.style.opacity = '0';
-    objectInspector.style.visibility = 'hidden';
-    objectInspector.style.pointerEvents = 'none';
-    objectInspector.style.position = 'absolute';
-    objectInspector.style.left = '-9999px';
-    objectInspector.style.top = '-9999px';
-    objectInspector.style.zIndex = '-9999';
-    
-    // Clear auto-update interval
-    if (state.inspectorUpdateInterval) {
-        clearInterval(state.inspectorUpdateInterval);
-        state.inspectorUpdateInterval = null;
-    }
-    
-    // Stop auto-refresh
-    stopAutoRefresh();
-    
-    // Reset chart state
-    chartInitialized = false;
-    currentObjectId = null;
-    
-    state.selectedObject = null;
+  const objectInspector = document.getElementById('objectInspector');
+  if (!objectInspector) {
+    console.error('objectInspector element not found when trying to hide!');
+    return;
+  }
+  objectInspector.classList.remove('visible');
+  objectInspector.classList.remove('dragging');
+  state.inspector_open = false;
+
+  // Re-apply hide styles to ensure inspector stays hidden
+  objectInspector.style.display = 'none';
+  objectInspector.style.opacity = '0';
+  objectInspector.style.visibility = 'hidden';
+  objectInspector.style.pointerEvents = 'none';
+  objectInspector.style.position = 'absolute';
+  objectInspector.style.left = '-9999px';
+  objectInspector.style.top = '-9999px';
+  objectInspector.style.zIndex = '-9999';
+
+  // Clear auto-update interval
+  if (state.inspectorUpdateInterval) {
+    clearInterval(state.inspectorUpdateInterval);
+    state.inspectorUpdateInterval = null;
+  }
+
+  // Stop auto-refresh
+  stopAutoRefresh();
+
+  // Reset chart state
+  chartInitialized = false;
+  currentObjectId = null;
+
+  state.selectedObject = null;
 };
 
 // Add mobile-friendly backdrop click to close functionality
 const setupInspectorBackdropClick = () => {
-    const objectInspector = document.getElementById('objectInspector');
-    if (!objectInspector) return;
-    
-    // Remove existing event listeners to prevent duplicates
-    objectInspector.removeEventListener('click', handleInspectorBackdropClick);
-    
-    // Add backdrop click handler
-    objectInspector.addEventListener('click', handleInspectorBackdropClick);
+  const objectInspector = document.getElementById('objectInspector');
+  if (!objectInspector) return;
+
+  // Remove existing event listeners to prevent duplicates
+  objectInspector.removeEventListener('click', handleInspectorBackdropClick);
+
+  // Add backdrop click handler
+  objectInspector.addEventListener('click', handleInspectorBackdropClick);
 };
 
-const handleInspectorBackdropClick = (e) => {
-    // Only close if clicking on the inspector backdrop (not on content)
-    if (e.target.id === 'objectInspector') {
-        hideObjectInspector();
-    }
+const handleInspectorBackdropClick = e => {
+  // Only close if clicking on the inspector backdrop (not on content)
+  if (e.target.id === 'objectInspector') {
+    hideObjectInspector();
+  }
 };
 
 // Dragging functionality for object inspector
@@ -1059,29 +1559,31 @@ let initialLeft = 0;
 let initialTop = 0;
 
 const setupInspectorDragging = () => {
-    const objectInspector = document.getElementById('objectInspector');
-    const inspectorHeader = objectInspector?.querySelector('.inspector-header');
-    
-    if (!objectInspector || !inspectorHeader) return;
-    
-    // Remove existing listeners to prevent duplicates
-    inspectorHeader.removeEventListener('mousedown', startDrag);
-    document.removeEventListener('mousemove', drag);
-    document.removeEventListener('mouseup', endDrag);
-    
-    // Add drag listeners
-    inspectorHeader.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', endDrag);
-    
-    // Touch support for mobile
-    inspectorHeader.removeEventListener('touchstart', startDragTouch);
-    document.removeEventListener('touchmove', dragTouch);
-    document.removeEventListener('touchend', endDrag);
-    
-    inspectorHeader.addEventListener('touchstart', startDragTouch, { passive: false }); // passive: false is required because startDragTouch calls preventDefault
-    document.addEventListener('touchmove', dragTouch);
-    document.addEventListener('touchend', endDrag);
+  const objectInspector = document.getElementById('objectInspector');
+  const inspectorHeader = objectInspector?.querySelector('.inspector-header');
+
+  if (!objectInspector || !inspectorHeader) return;
+
+  // Remove existing listeners to prevent duplicates
+  inspectorHeader.removeEventListener('mousedown', startDrag);
+  document.removeEventListener('mousemove', drag);
+  document.removeEventListener('mouseup', endDrag);
+
+  // Add drag listeners
+  inspectorHeader.addEventListener('mousedown', startDrag);
+  document.addEventListener('mousemove', drag);
+  document.addEventListener('mouseup', endDrag);
+
+  // Touch support for mobile
+  inspectorHeader.removeEventListener('touchstart', startDragTouch);
+  document.removeEventListener('touchmove', dragTouch);
+  document.removeEventListener('touchend', endDrag);
+
+  inspectorHeader.addEventListener('touchstart', startDragTouch, {
+    passive: false,
+  }); // passive: false is required because startDragTouch calls preventDefault
+  document.addEventListener('touchmove', dragTouch);
+  document.addEventListener('touchend', endDrag);
 };
 
 // REMOVED: Energy tab setup function
@@ -1089,8 +1591,6 @@ const setupInspectorDragging = () => {
 // REMOVED: Energy chart readiness function
 
 // REMOVED: Energy tab event listeners function
-
-
 
 // REMOVED: Energy chart update function
 
@@ -1113,20 +1613,22 @@ const AUTO_REFRESH_INTERVAL = 2000; // 2 seconds
  * Set up the energy tab with chart and controls
  */
 const setupEnergyTab = () => {
-    const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
-    const detailsTab = document.querySelector('.inspector-tab[data-tab="details"]');
-    const energyTabContent = document.getElementById('energyTab');
-    const detailsTabContent = document.getElementById('detailsTab');
-    
-    if (!energyTab || !detailsTab || !energyTabContent || !detailsTabContent) {
-        // Silently return instead of logging error - elements may not exist during initialization
-        return;
-    }
-    
-    console.log('Setting up energy tab system');
-    
-    // Build energy tab HTML structure
-    energyTabContent.innerHTML = `
+  const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
+  const detailsTab = document.querySelector(
+    '.inspector-tab[data-tab="details"]'
+  );
+  const energyTabContent = document.getElementById('energyTab');
+  const detailsTabContent = document.getElementById('detailsTab');
+
+  if (!energyTab || !detailsTab || !energyTabContent || !detailsTabContent) {
+    // Silently return instead of logging error - elements may not exist during initialization
+    return;
+  }
+
+  console.log('Setting up energy tab system');
+
+  // Build energy tab HTML structure
+  energyTabContent.innerHTML = `
         <!-- Current Energy Values Display -->
         <div class="energy-values-container">
             <div class="energy-values-grid">
@@ -1157,516 +1659,535 @@ const setupEnergyTab = () => {
             <button class="ui-button" id="exportEnergyChart" title="Export as PNG">📊 Export Chart</button>
         </div>
     `;
-    
-    // Set up tab switching
-    energyTab.addEventListener('click', () => {
-        console.log('Energy tab clicked');
-        energyTab.classList.add('active');
-        detailsTab.classList.remove('active');
-        energyTabContent.classList.add('active');
-        detailsTabContent.classList.remove('active');
-        
-        // Initialize chart if needed
-        ensureChartReady();
-        
-        // Update current energy values immediately
-        updateCurrentEnergyValues();
-        
-        // Update chart with current object data
+
+  // Set up tab switching
+  energyTab.addEventListener('click', () => {
+    console.log('Energy tab clicked');
+    energyTab.classList.add('active');
+    detailsTab.classList.remove('active');
+    energyTabContent.classList.add('active');
+    detailsTabContent.classList.remove('active');
+
+    // Initialize chart if needed
+    ensureChartReady();
+
+    // Update current energy values immediately
+    updateCurrentEnergyValues();
+
+    // Update chart with current object data
+    updateEnergyChart();
+
+    // Start auto-refresh for this tab
+    startAutoRefresh();
+
+    // Force a chart update to ensure it's visible
+    setTimeout(() => {
+      if (state.selectedObject) {
+        console.log('Forcing chart update after tab activation');
         updateEnergyChart();
-        
-        // Start auto-refresh for this tab
-        startAutoRefresh();
-        
-        // Force a chart update to ensure it's visible
-        setTimeout(() => {
-            if (state.selectedObject) {
-                console.log('Forcing chart update after tab activation');
-                updateEnergyChart();
-                updateCurrentEnergyValues();
-            }
-        }, 50);
-    });
-    
-    detailsTab.addEventListener('click', () => {
-        detailsTab.classList.add('active');
-        energyTab.classList.remove('active');
-        detailsTabContent.classList.add('active');
-        energyTabContent.classList.remove('active');
-        
-        // Stop auto-refresh when switching away from energy tab
-        stopAutoRefresh();
-    });
-    
-    // Set up export button
-    const exportButton = document.getElementById('exportEnergyChart');
-    if (exportButton) {
-        exportButton.addEventListener('click', handleExportChart);
+        updateCurrentEnergyValues();
+      }
+    }, 50);
+  });
+
+  detailsTab.addEventListener('click', () => {
+    detailsTab.classList.add('active');
+    energyTab.classList.remove('active');
+    detailsTabContent.classList.add('active');
+    energyTabContent.classList.remove('active');
+
+    // Stop auto-refresh when switching away from energy tab
+    stopAutoRefresh();
+  });
+
+  // Set up export button
+  const exportButton = document.getElementById('exportEnergyChart');
+  if (exportButton) {
+    exportButton.addEventListener('click', handleExportChart);
+  }
+
+  // Set up refresh button
+  const refreshButton = document.getElementById('refreshEnergyChart');
+  if (refreshButton) {
+    refreshButton.addEventListener('click', handleRefreshChart);
+    console.log('Refresh button event listener attached');
+  } else {
+    console.warn('Refresh button not found during setup');
+  }
+
+  console.log('Energy tab setup complete');
+
+  // Add a global click handler as a fallback for the refresh button
+  // This ensures the refresh button works even if the event listener wasn't properly attached
+  document.addEventListener('click', event => {
+    if (event.target && event.target.id === 'refreshEnergyChart') {
+      console.log('Refresh button clicked via global handler');
+      handleRefreshChart();
     }
-    
-    // Set up refresh button
-    const refreshButton = document.getElementById('refreshEnergyChart');
-    if (refreshButton) {
-        refreshButton.addEventListener('click', handleRefreshChart);
-        console.log('Refresh button event listener attached');
-    } else {
-        console.warn('Refresh button not found during setup');
-    }
-    
-    console.log('Energy tab setup complete');
-    
-    // Add a global click handler as a fallback for the refresh button
-    // This ensures the refresh button works even if the event listener wasn't properly attached
-    document.addEventListener('click', (event) => {
-        if (event.target && event.target.id === 'refreshEnergyChart') {
-            console.log('Refresh button clicked via global handler');
-            handleRefreshChart();
-        }
-    });
+  });
 };
 
 /**
  * Ensure chart is initialized and ready
  */
 const ensureChartReady = () => {
-    const canvas = document.getElementById('energyChart');
-    if (!canvas) return;
-    
-    if (!chartInitialized) {
-        console.log('Initializing energy chart');
-        const success = initChart(canvas);
-        if (success) {
-            chartInitialized = true;
-            console.log('Energy chart initialized successfully');
-        } else {
-            console.error('Failed to initialize energy chart');
-        }
+  const canvas = document.getElementById('energyChart');
+  if (!canvas) return;
+
+  if (!chartInitialized) {
+    console.log('Initializing energy chart');
+    const success = initChart(canvas);
+    if (success) {
+      chartInitialized = true;
+      console.log('Energy chart initialized successfully');
+    } else {
+      console.error('Failed to initialize energy chart');
     }
+  }
 };
 
 /**
  * Update the current energy values display
  */
 const updateCurrentEnergyValues = () => {
-    if (!state.selectedObject) {
-        // Clear all energy value displays
-        const elements = ['currentKineticEnergy', 'currentPotentialEnergy', 'currentTotalEnergy', 'currentDataPoints'];
-        elements.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = id === 'currentDataPoints' ? '0' : '0 J';
-            }
-        });
-        return;
+  if (!state.selectedObject) {
+    // Clear all energy value displays
+    const elements = [
+      'currentKineticEnergy',
+      'currentPotentialEnergy',
+      'currentTotalEnergy',
+      'currentDataPoints',
+    ];
+    elements.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = id === 'currentDataPoints' ? '0' : '0 J';
+      }
+    });
+    return;
+  }
+
+  const objectId = state.selectedObject.object.id;
+  const energyStats = getObjectEnergyStats(objectId);
+
+  // Format energy values for display
+  const formatEnergyValue = value => {
+    if (value === 0) return '0 J';
+
+    const absValue = Math.abs(value);
+    if (absValue >= 1e6 || absValue < 1e-3) {
+      return `${value.toExponential(2)} J`;
+    } else if (absValue >= 1000) {
+      return `${value.toFixed(0)} J`;
+    } else if (absValue >= 1) {
+      return `${value.toFixed(1)} J`;
+    } else {
+      return `${value.toFixed(3)} J`;
     }
-    
-    const objectId = state.selectedObject.object.id;
-    const energyStats = getObjectEnergyStats(objectId);
-    
-    // Format energy values for display
-    const formatEnergyValue = (value) => {
-        if (value === 0) return '0 J';
-        
-        const absValue = Math.abs(value);
-        if (absValue >= 1e6 || absValue < 1e-3) {
-            return `${value.toExponential(2)} J`;
-        } else if (absValue >= 1000) {
-            return `${value.toFixed(0)} J`;
-        } else if (absValue >= 1) {
-            return `${value.toFixed(1)} J`;
-        } else {
-            return `${value.toFixed(3)} J`;
-        }
-    };
-    
-    // Update kinetic energy
-    const kineticElement = document.getElementById('currentKineticEnergy');
-    if (kineticElement && energyStats.latest) {
-        kineticElement.textContent = formatEnergyValue(energyStats.latest.ke);
-    }
-    
-    // Update potential energy
-    const potentialElement = document.getElementById('currentPotentialEnergy');
-    if (potentialElement && energyStats.latest) {
-        potentialElement.textContent = formatEnergyValue(energyStats.latest.pe);
-    }
-    
-    // Update total energy
-    const totalElement = document.getElementById('currentTotalEnergy');
-    if (totalElement && energyStats.latest) {
-        totalElement.textContent = formatEnergyValue(energyStats.latest.total);
-    }
-    
-    // Update data points count
-    const dataPointsElement = document.getElementById('currentDataPoints');
-    if (dataPointsElement) {
-        dataPointsElement.textContent = energyStats.dataPoints.toString();
-    }
+  };
+
+  // Update kinetic energy
+  const kineticElement = document.getElementById('currentKineticEnergy');
+  if (kineticElement && energyStats.latest) {
+    kineticElement.textContent = formatEnergyValue(energyStats.latest.ke);
+  }
+
+  // Update potential energy
+  const potentialElement = document.getElementById('currentPotentialEnergy');
+  if (potentialElement && energyStats.latest) {
+    potentialElement.textContent = formatEnergyValue(energyStats.latest.pe);
+  }
+
+  // Update total energy
+  const totalElement = document.getElementById('currentTotalEnergy');
+  if (totalElement && energyStats.latest) {
+    totalElement.textContent = formatEnergyValue(energyStats.latest.total);
+  }
+
+  // Update data points count
+  const dataPointsElement = document.getElementById('currentDataPoints');
+  if (dataPointsElement) {
+    dataPointsElement.textContent = energyStats.dataPoints.toString();
+  }
 };
 
 /**
  * Update the energy chart with current object data
  */
 const updateEnergyChart = () => {
-    console.log('updateEnergyChart called');
-    
-    if (!state.selectedObject) {
-        console.log('No selected object, skipping chart update');
-        return;
-    }
-    
-    const objectId = state.selectedObject.object.id;
-    console.log('Updating chart for object ID:', objectId);
-    
-    // Clear chart if switching to a different object
-    if (currentObjectId !== null && currentObjectId !== objectId) {
-        console.log('Switching objects, clearing chart');
-        clearChart();
-    }
-    
-    currentObjectId = objectId;
-    
-    // Get energy history for the selected object
-    const energyHistory = getObjectEnergyHistory(objectId);
-    console.log('Energy history length:', energyHistory.length);
-    
-    if (energyHistory.length === 0) {
-        console.log('No energy data available for object:', objectId);
-        // Clear chart and show collecting message
-        clearChart();
-        showCollectingMessage();
-        // Start auto-refresh to check for new data
-        startAutoRefresh();
-        return;
-    }
-    
-    console.log('Updating chart with', energyHistory.length, 'data points for object:', objectId);
-    
-    // Ensure chart is ready before updating
-    ensureChartReady();
-    
-    // Update the chart
-    updateChart(energyHistory);
-    hideCollectingMessage();
-    
-    // Stop auto-refresh since we have data
-    stopAutoRefresh();
+  console.log('updateEnergyChart called');
+
+  if (!state.selectedObject) {
+    console.log('No selected object, skipping chart update');
+    return;
+  }
+
+  const objectId = state.selectedObject.object.id;
+  console.log('Updating chart for object ID:', objectId);
+
+  // Clear chart if switching to a different object
+  if (currentObjectId !== null && currentObjectId !== objectId) {
+    console.log('Switching objects, clearing chart');
+    clearChart();
+  }
+
+  currentObjectId = objectId;
+
+  // Get energy history for the selected object
+  const energyHistory = getObjectEnergyHistory(objectId);
+  console.log('Energy history length:', energyHistory.length);
+
+  if (energyHistory.length === 0) {
+    console.log('No energy data available for object:', objectId);
+    // Clear chart and show collecting message
+    clearChart();
+    showCollectingMessage();
+    // Start auto-refresh to check for new data
+    startAutoRefresh();
+    return;
+  }
+
+  console.log(
+    'Updating chart with',
+    energyHistory.length,
+    'data points for object:',
+    objectId
+  );
+
+  // Ensure chart is ready before updating
+  ensureChartReady();
+
+  // Update the chart
+  updateChart(energyHistory);
+  hideCollectingMessage();
+
+  // Stop auto-refresh since we have data
+  stopAutoRefresh();
 };
 
 /**
  * Show collecting data message in energy tab
  */
 const showCollectingMessage = () => {
-    const energyTabContent = document.getElementById('energyTab');
-    if (!energyTabContent) return;
-    
-    // Find or create the collecting message element
-    let collectingMessage = energyTabContent.querySelector('.collecting-message');
-    if (!collectingMessage) {
-        collectingMessage = document.createElement('div');
-        collectingMessage.className = 'collecting-message';
-        collectingMessage.innerHTML = `
+  const energyTabContent = document.getElementById('energyTab');
+  if (!energyTabContent) return;
+
+  // Find or create the collecting message element
+  let collectingMessage = energyTabContent.querySelector('.collecting-message');
+  if (!collectingMessage) {
+    collectingMessage = document.createElement('div');
+    collectingMessage.className = 'collecting-message';
+    collectingMessage.innerHTML = `
             <div class="collecting-content">
                 <div class="collecting-spinner"></div>
                 <div class="collecting-text">Collecting data...</div>
             </div>
         `;
-        
-        // Insert after the chart container
-        const chartContainer = energyTabContent.querySelector('.energy-chart-container');
-        if (chartContainer) {
-            chartContainer.parentNode.insertBefore(collectingMessage, chartContainer.nextSibling);
-        } else {
-            energyTabContent.appendChild(collectingMessage);
-        }
+
+    // Insert after the chart container
+    const chartContainer = energyTabContent.querySelector(
+      '.energy-chart-container'
+    );
+    if (chartContainer) {
+      chartContainer.parentNode.insertBefore(
+        collectingMessage,
+        chartContainer.nextSibling
+      );
+    } else {
+      energyTabContent.appendChild(collectingMessage);
     }
-    
-    collectingMessage.style.display = 'block';
+  }
+
+  collectingMessage.style.display = 'block';
 };
 
 /**
  * Hide collecting data message in energy tab
  */
 const hideCollectingMessage = () => {
-    const energyTabContent = document.getElementById('energyTab');
-    if (!energyTabContent) return;
-    
-    const collectingMessage = energyTabContent.querySelector('.collecting-message');
-    if (collectingMessage) {
-        collectingMessage.style.display = 'none';
-    }
+  const energyTabContent = document.getElementById('energyTab');
+  if (!energyTabContent) return;
+
+  const collectingMessage = energyTabContent.querySelector(
+    '.collecting-message'
+  );
+  if (collectingMessage) {
+    collectingMessage.style.display = 'none';
+  }
 };
 
 /**
  * Start auto-refresh for energy chart
  */
 const startAutoRefresh = () => {
-    if (autoRefreshInterval) {
-        clearInterval(autoRefreshInterval);
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval);
+  }
+
+  autoRefreshInterval = setInterval(() => {
+    if (autoRefreshEnabled && state.selectedObject) {
+      const energyTab = document.querySelector(
+        '.inspector-tab[data-tab="energy"]'
+      );
+      if (energyTab && energyTab.classList.contains('active')) {
+        updateEnergyChart();
+        updateCurrentEnergyValues();
+      }
     }
-    
-    autoRefreshInterval = setInterval(() => {
-        if (autoRefreshEnabled && state.selectedObject) {
-            const energyTab = document.querySelector('.inspector-tab[data-tab="energy"]');
-            if (energyTab && energyTab.classList.contains('active')) {
-                updateEnergyChart();
-                updateCurrentEnergyValues();
-            }
-        }
-    }, AUTO_REFRESH_INTERVAL);
-    
-    // Update refresh button to show auto-refresh is active
-    const refreshButton = document.getElementById('refreshEnergyChart');
-    if (refreshButton) {
-        refreshButton.title = 'Auto-refresh active - Click to refresh now';
-        refreshButton.classList.add('auto-refresh-active');
-    }
-    
-    console.log('Auto-refresh started for energy chart');
+  }, AUTO_REFRESH_INTERVAL);
+
+  // Update refresh button to show auto-refresh is active
+  const refreshButton = document.getElementById('refreshEnergyChart');
+  if (refreshButton) {
+    refreshButton.title = 'Auto-refresh active - Click to refresh now';
+    refreshButton.classList.add('auto-refresh-active');
+  }
+
+  console.log('Auto-refresh started for energy chart');
 };
 
 /**
  * Stop auto-refresh for energy chart
  */
 const stopAutoRefresh = () => {
-    if (autoRefreshInterval) {
-        clearInterval(autoRefreshInterval);
-        autoRefreshInterval = null;
-        
-        // Update refresh button to show auto-refresh is inactive
-        const refreshButton = document.getElementById('refreshEnergyChart');
-        if (refreshButton) {
-            refreshButton.title = 'Refresh Chart Data';
-            refreshButton.classList.remove('auto-refresh-active');
-        }
-        
-        console.log('Auto-refresh stopped for energy chart');
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval);
+    autoRefreshInterval = null;
+
+    // Update refresh button to show auto-refresh is inactive
+    const refreshButton = document.getElementById('refreshEnergyChart');
+    if (refreshButton) {
+      refreshButton.title = 'Refresh Chart Data';
+      refreshButton.classList.remove('auto-refresh-active');
     }
+
+    console.log('Auto-refresh stopped for energy chart');
+  }
 };
 
 /**
  * Handle chart refresh
  */
 const handleRefreshChart = () => {
-    console.log('Manual chart refresh requested');
-    
-    // Ensure chart is ready before updating
-    ensureChartReady();
-    
-    // Update the chart
-    updateEnergyChart();
-    
-    // Update current energy values
-    updateCurrentEnergyValues();
-    
-    // Provide visual feedback
-    const refreshButton = document.getElementById('refreshEnergyChart');
-    if (refreshButton) {
-        // Add a brief visual feedback
-        refreshButton.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            refreshButton.style.transform = '';
-        }, 150);
-    }
+  console.log('Manual chart refresh requested');
+
+  // Ensure chart is ready before updating
+  ensureChartReady();
+
+  // Update the chart
+  updateEnergyChart();
+
+  // Update current energy values
+  updateCurrentEnergyValues();
+
+  // Provide visual feedback
+  const refreshButton = document.getElementById('refreshEnergyChart');
+  if (refreshButton) {
+    // Add a brief visual feedback
+    refreshButton.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      refreshButton.style.transform = '';
+    }, 150);
+  }
 };
 
 /**
  * Handle chart export
  */
 const handleExportChart = () => {
-    const dataUrl = exportChart();
-    if (!dataUrl) {
-        alert('Chart is not ready yet.');
-        return;
-    }
-    
-    try {
-        const link = document.createElement('a');
-        const objectId = state.selectedObject ? state.selectedObject.object.id : 'unknown';
-        link.download = `energy-chart-${objectId}-${Date.now()}.png`;
-        link.href = dataUrl;
-        link.click();
-        console.log('Energy chart exported successfully');
-    } catch (error) {
-        console.error('Failed to export energy chart:', error);
-        alert('Failed to export chart. Please try again.');
-    }
+  const dataUrl = exportChart();
+  if (!dataUrl) {
+    alert('Chart is not ready yet.');
+    return;
+  }
+
+  try {
+    const link = document.createElement('a');
+    const objectId = state.selectedObject
+      ? state.selectedObject.object.id
+      : 'unknown';
+    link.download = `energy-chart-${objectId}-${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+    console.log('Energy chart exported successfully');
+  } catch (error) {
+    console.error('Failed to export energy chart:', error);
+    alert('Failed to export chart. Please try again.');
+  }
 };
 
 // Update cursor based on minimized state
 const updateInspectorCursor = () => {
-    const objectInspector = document.getElementById('objectInspector');
-    const inspectorHeader = objectInspector?.querySelector('.inspector-header');
-    
-    if (!objectInspector || !inspectorHeader) return;
-    
-    if (objectInspector.classList.contains('minimized')) {
-        inspectorHeader.style.cursor = 'default';
-    } else {
-        inspectorHeader.style.cursor = 'grab';
-    }
+  const objectInspector = document.getElementById('objectInspector');
+  const inspectorHeader = objectInspector?.querySelector('.inspector-header');
+
+  if (!objectInspector || !inspectorHeader) return;
+
+  if (objectInspector.classList.contains('minimized')) {
+    inspectorHeader.style.cursor = 'default';
+  } else {
+    inspectorHeader.style.cursor = 'grab';
+  }
 };
 
-const startDrag = (e) => {
-    e.preventDefault();
-    
-    const objectInspector = document.getElementById('objectInspector');
-    // Don't allow dragging when minimized
-    if (objectInspector.classList.contains('minimized')) {
-        return;
-    }
-    
-    isDragging = true;
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    
-    // Get the current visual position (after any transforms)
-    const rect = objectInspector.getBoundingClientRect();
-    
-    // The inspector starts centered with transform: translate(-50%, -50%)
-    // When we start dragging, we need to set the absolute position to match the current visual position
-    // The rect.left and rect.top give us the actual visual position on screen
-    initialLeft = rect.left;
-    initialTop = rect.top;
-    
-    objectInspector.classList.add('dragging');
-    
-    // Set the position immediately to prevent jumping
-    // We need to set the position BEFORE removing the transform
-    objectInspector.style.left = initialLeft + 'px';
-    objectInspector.style.top = initialTop + 'px';
-    objectInspector.style.transform = 'none';
+const startDrag = e => {
+  e.preventDefault();
+
+  const objectInspector = document.getElementById('objectInspector');
+  // Don't allow dragging when minimized
+  if (objectInspector.classList.contains('minimized')) {
+    return;
+  }
+
+  isDragging = true;
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+
+  // Get the current visual position (after any transforms)
+  const rect = objectInspector.getBoundingClientRect();
+
+  // The inspector starts centered with transform: translate(-50%, -50%)
+  // When we start dragging, we need to set the absolute position to match the current visual position
+  // The rect.left and rect.top give us the actual visual position on screen
+  initialLeft = rect.left;
+  initialTop = rect.top;
+
+  objectInspector.classList.add('dragging');
+
+  // Set the position immediately to prevent jumping
+  // We need to set the position BEFORE removing the transform
+  objectInspector.style.left = initialLeft + 'px';
+  objectInspector.style.top = initialTop + 'px';
+  objectInspector.style.transform = 'none';
 };
 
-const startDragTouch = (e) => {
-    e.preventDefault();
-    isDragging = true;
-    const touch = e.touches[0];
-    dragStartX = touch.clientX;
-    dragStartY = touch.clientY;
-    
-    const objectInspector = document.getElementById('objectInspector');
-    // Get the current visual position (after any transforms)
-    const rect = objectInspector.getBoundingClientRect();
-    
-    // The inspector starts centered with transform: translate(-50%, -50%)
-    // When we start dragging, we need to set the absolute position to match the current visual position
-    // The rect.left and rect.top give us the actual visual position on screen
-    initialLeft = rect.left;
-    initialTop = rect.top;
-    
-    objectInspector.classList.add('dragging');
-    
-    // Set the position immediately to prevent jumping
-    // We need to set the position BEFORE removing the transform
-    objectInspector.style.left = initialLeft + 'px';
-    objectInspector.style.top = initialTop + 'px';
-    objectInspector.style.transform = 'none';
+const startDragTouch = e => {
+  e.preventDefault();
+  isDragging = true;
+  const touch = e.touches[0];
+  dragStartX = touch.clientX;
+  dragStartY = touch.clientY;
+
+  const objectInspector = document.getElementById('objectInspector');
+  // Get the current visual position (after any transforms)
+  const rect = objectInspector.getBoundingClientRect();
+
+  // The inspector starts centered with transform: translate(-50%, -50%)
+  // When we start dragging, we need to set the absolute position to match the current visual position
+  // The rect.left and rect.top give us the actual visual position on screen
+  initialLeft = rect.left;
+  initialTop = rect.top;
+
+  objectInspector.classList.add('dragging');
+
+  // Set the position immediately to prevent jumping
+  // We need to set the position BEFORE removing the transform
+  objectInspector.style.left = initialLeft + 'px';
+  objectInspector.style.top = initialTop + 'px';
+  objectInspector.style.transform = 'none';
 };
 
-const drag = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    
-    const objectInspector = document.getElementById('objectInspector');
-    const deltaX = e.clientX - dragStartX;
-    const deltaY = e.clientY - dragStartY;
-    
-    // Small threshold to prevent accidental drags
-    if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
-    
-    const newLeft = initialLeft + deltaX;
-    const newTop = initialTop + deltaY;
-    
-    // Keep inspector within viewport bounds
-    const rect = objectInspector.getBoundingClientRect();
-    const maxLeft = window.innerWidth - rect.width;
-    const maxTop = window.innerHeight - rect.height;
-    
-    const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
-    const clampedTop = Math.max(0, Math.min(newTop, maxTop));
-    
-    // Set position and remove transform immediately to prevent jumping
-    objectInspector.style.left = clampedLeft + 'px';
-    objectInspector.style.top = clampedTop + 'px';
-    objectInspector.style.transform = 'none';
+const drag = e => {
+  if (!isDragging) return;
+  e.preventDefault();
+
+  const objectInspector = document.getElementById('objectInspector');
+  const deltaX = e.clientX - dragStartX;
+  const deltaY = e.clientY - dragStartY;
+
+  // Small threshold to prevent accidental drags
+  if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
+
+  const newLeft = initialLeft + deltaX;
+  const newTop = initialTop + deltaY;
+
+  // Keep inspector within viewport bounds
+  const rect = objectInspector.getBoundingClientRect();
+  const maxLeft = window.innerWidth - rect.width;
+  const maxTop = window.innerHeight - rect.height;
+
+  const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+  const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+
+  // Set position and remove transform immediately to prevent jumping
+  objectInspector.style.left = clampedLeft + 'px';
+  objectInspector.style.top = clampedTop + 'px';
+  objectInspector.style.transform = 'none';
 };
 
-const dragTouch = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    
-    const touch = e.touches[0];
-    const objectInspector = document.getElementById('objectInspector');
-    const deltaX = touch.clientX - dragStartX;
-    const deltaY = touch.clientY - dragStartY;
-    
-    // Small threshold to prevent accidental drags
-    if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
-    
-    const newLeft = initialLeft + deltaX;
-    const newTop = initialTop + deltaY;
-    
-    // Keep inspector within viewport bounds
-    const rect = objectInspector.getBoundingClientRect();
-    const maxLeft = window.innerWidth - rect.width;
-    const maxTop = window.innerHeight - rect.height;
-    
-    const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
-    const clampedTop = Math.max(0, Math.min(newTop, maxTop));
-    
-    // Set position and remove transform immediately to prevent jumping
-    objectInspector.style.left = clampedLeft + 'px';
-    objectInspector.style.top = clampedTop + 'px';
-    objectInspector.style.transform = 'none';
+const dragTouch = e => {
+  if (!isDragging) return;
+  e.preventDefault();
+
+  const touch = e.touches[0];
+  const objectInspector = document.getElementById('objectInspector');
+  const deltaX = touch.clientX - dragStartX;
+  const deltaY = touch.clientY - dragStartY;
+
+  // Small threshold to prevent accidental drags
+  if (Math.abs(deltaX) < 3 && Math.abs(deltaY) < 3) return;
+
+  const newLeft = initialLeft + deltaX;
+  const newTop = initialTop + deltaY;
+
+  // Keep inspector within viewport bounds
+  const rect = objectInspector.getBoundingClientRect();
+  const maxLeft = window.innerWidth - rect.width;
+  const maxTop = window.innerHeight - rect.height;
+
+  const clampedLeft = Math.max(0, Math.min(newLeft, maxLeft));
+  const clampedTop = Math.max(0, Math.min(newTop, maxTop));
+
+  // Set position and remove transform immediately to prevent jumping
+  objectInspector.style.left = clampedLeft + 'px';
+  objectInspector.style.top = clampedTop + 'px';
+  objectInspector.style.transform = 'none';
 };
 
 const endDrag = () => {
-    isDragging = false;
-    const objectInspector = document.getElementById('objectInspector');
-    if (objectInspector) {
-        objectInspector.classList.remove('dragging');
-    }
+  isDragging = false;
+  const objectInspector = document.getElementById('objectInspector');
+  if (objectInspector) {
+    objectInspector.classList.remove('dragging');
+  }
 };
-
-
 
 // Overlay minimize/maximize functionality
 const setupOverlayMinimize = () => {
-    const overlay = document.getElementById('overlay');
-    const minimizeBtn = document.getElementById('overlayMinimize');
-    
-    if (!overlay || !minimizeBtn) return;
-    
-    // Remove existing listeners to prevent duplicates
-    minimizeBtn.removeEventListener('click', toggleOverlayMinimize);
-    
-    // Add minimize/maximize handler
-    minimizeBtn.addEventListener('click', toggleOverlayMinimize);
+  const overlay = document.getElementById('overlay');
+  const minimizeBtn = document.getElementById('overlayMinimize');
+
+  if (!overlay || !minimizeBtn) return;
+
+  // Remove existing listeners to prevent duplicates
+  minimizeBtn.removeEventListener('click', toggleOverlayMinimize);
+
+  // Add minimize/maximize handler
+  minimizeBtn.addEventListener('click', toggleOverlayMinimize);
 };
 
-const toggleOverlayMinimize = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const overlay = document.getElementById('overlay');
-    const minimizeBtn = document.getElementById('overlayMinimize');
-    
-    if (!overlay || !minimizeBtn) return;
-    
-    const isMinimized = overlay.classList.contains('minimized');
-    
-    if (isMinimized) {
-        // Maximize
-        overlay.classList.remove('minimized');
-        minimizeBtn.textContent = '−';
-        minimizeBtn.title = 'Minimize';
-    } else {
-        // Minimize
-        overlay.classList.add('minimized');
-        minimizeBtn.textContent = '+';
-        minimizeBtn.title = 'Maximize';
-    }
+const toggleOverlayMinimize = e => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const overlay = document.getElementById('overlay');
+  const minimizeBtn = document.getElementById('overlayMinimize');
+
+  if (!overlay || !minimizeBtn) return;
+
+  const isMinimized = overlay.classList.contains('minimized');
+
+  if (isMinimized) {
+    // Maximize
+    overlay.classList.remove('minimized');
+    minimizeBtn.textContent = '−';
+    minimizeBtn.title = 'Minimize';
+  } else {
+    // Minimize
+    overlay.classList.add('minimized');
+    minimizeBtn.textContent = '+';
+    minimizeBtn.title = 'Maximize';
+  }
 };
 /**
  * Create a mass adjustment slider for the object inspector
@@ -1675,71 +2196,71 @@ const toggleOverlayMinimize = (e) => {
  * @returns {string} HTML string for the mass slider
  */
 const createMassSlider = (object, type) => {
-    console.log('Creating mass slider for:', type, object);
-    let currentMass, minMass, maxMass, massUnit, massLabel;
-    
-    switch (type) {
-        case 'BlackHole':
-            currentMass = object.mass / SOLAR_MASS_UNIT;
-            minMass = 0.1;
-            maxMass = 1000;
-            massUnit = 'M☉';
-            massLabel = 'Object Mass';
-            break;
-        case 'Star':
-            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
-            minMass = 0.08; // Lower minimum to allow very low mass stars
-            maxMass = 100;
-            massUnit = 'M☉';
-            massLabel = 'Object Mass';
-            break;
-        case 'NeutronStar':
-            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
-            minMass = 1.0;
-            maxMass = 3.0;
-            massUnit = 'M☉';
-            massLabel = 'Object Mass';
-            break;
-        case 'WhiteDwarf':
-            currentMass = object.massInSuns || (object.mass / SOLAR_MASS_UNIT);
-            minMass = 0.1;
-            maxMass = 1.4;
-            massUnit = 'M☉';
-            massLabel = 'Object Mass';
-            break;
-        case 'Planet':
-            currentMass = object.massInEarths || (object.mass / EARTH_MASS_UNIT);
-            minMass = 0.01;
-            maxMass = 10;
-            massUnit = 'M⊕';
-            massLabel = 'Object Mass';
-            break;
-        case 'GasGiant':
-            currentMass = object.massInJupiters || (object.mass / 50.0);
-            minMass = 0.1;
-            maxMass = 100; // Extended to allow transformation to star (threshold is 80 M♃)
-            massUnit = 'M♃';
-            massLabel = 'Object Mass';
-            break;
-        case 'Asteroid':
-            currentMass = object.mass / EARTH_MASS_UNIT;
-            minMass = 0.0001;
-            maxMass = 0.1;
-            massUnit = 'M⊕';
-            massLabel = 'Object Mass';
-            break;
-        case 'Comet':
-            currentMass = object.massInComets || (object.mass / 0.1);
-            minMass = 0.001;
-            maxMass = 1.0;
-            massUnit = 'C';
-            massLabel = 'Object Mass';
-            break;
-        default:
-            return '';
-    }
-    
-    return `
+  console.log('Creating mass slider for:', type, object);
+  let currentMass, minMass, maxMass, massUnit, massLabel;
+
+  switch (type) {
+    case 'BlackHole':
+      currentMass = object.mass / SOLAR_MASS_UNIT;
+      minMass = 0.1;
+      maxMass = 1000;
+      massUnit = 'M☉';
+      massLabel = 'Object Mass';
+      break;
+    case 'Star':
+      currentMass = object.massInSuns || object.mass / SOLAR_MASS_UNIT;
+      minMass = 0.08; // Lower minimum to allow very low mass stars
+      maxMass = 100;
+      massUnit = 'M☉';
+      massLabel = 'Object Mass';
+      break;
+    case 'NeutronStar':
+      currentMass = object.massInSuns || object.mass / SOLAR_MASS_UNIT;
+      minMass = 1.0;
+      maxMass = 3.0;
+      massUnit = 'M☉';
+      massLabel = 'Object Mass';
+      break;
+    case 'WhiteDwarf':
+      currentMass = object.massInSuns || object.mass / SOLAR_MASS_UNIT;
+      minMass = 0.1;
+      maxMass = 1.4;
+      massUnit = 'M☉';
+      massLabel = 'Object Mass';
+      break;
+    case 'Planet':
+      currentMass = object.massInEarths || object.mass / EARTH_MASS_UNIT;
+      minMass = 0.01;
+      maxMass = 10;
+      massUnit = 'M⊕';
+      massLabel = 'Object Mass';
+      break;
+    case 'GasGiant':
+      currentMass = object.massInJupiters || object.mass / 50.0;
+      minMass = 0.1;
+      maxMass = 100; // Extended to allow transformation to star (threshold is 80 M♃)
+      massUnit = 'M♃';
+      massLabel = 'Object Mass';
+      break;
+    case 'Asteroid':
+      currentMass = object.mass / EARTH_MASS_UNIT;
+      minMass = 0.0001;
+      maxMass = 0.1;
+      massUnit = 'M⊕';
+      massLabel = 'Object Mass';
+      break;
+    case 'Comet':
+      currentMass = object.massInComets || object.mass / 0.1;
+      minMass = 0.001;
+      maxMass = 1.0;
+      massUnit = 'C';
+      massLabel = 'Object Mass';
+      break;
+    default:
+      return '';
+  }
+
+  return `
         <div class="mass-adjustment-section">
             <div class="mass-slider-container">
                 <label class="mass-slider-label">${massLabel}</label>
@@ -1763,242 +2284,249 @@ const createMassSlider = (object, type) => {
  * Set up event listeners for the mass slider
  */
 const setupMassSliderListeners = () => {
-    const massSlider = document.getElementById('massSlider');
-    const massValueDisplay = document.getElementById('massValueDisplay');
-    
-    if (!massSlider || !massValueDisplay) {
-        return;
+  const massSlider = document.getElementById('massSlider');
+  const massValueDisplay = document.getElementById('massValueDisplay');
+
+  if (!massSlider || !massValueDisplay) {
+    return;
+  }
+
+  // Flag to track if slider is being dragged
+  let isDragging = false;
+
+  const updateMass = () => {
+    const newMass = parseFloat(massSlider.value);
+    const object = state.selectedObject.object;
+    const type = state.selectedObject.type;
+
+    // Skip mass update if we're in the middle of a transformation
+    if (state.isTransforming) {
+      return;
     }
-    
-    // Flag to track if slider is being dragged
-    let isDragging = false;
-    
-    const updateMass = () => {
-        const newMass = parseFloat(massSlider.value);
-        const object = state.selectedObject.object;
-        const type = state.selectedObject.type;
-        
-        // Skip mass update if we're in the middle of a transformation
-        if (state.isTransforming) {
+
+    // Update the object's mass and check for transformation
+    const newType = updateObjectMass(object, type, newMass);
+
+    // Clear the energy chart since mass change invalidates energy history
+    // This ensures the chart shows fresh data with the new mass
+    if (chartInitialized) {
+      console.log('Clearing energy chart due to mass change');
+      clearChart();
+      showCollectingMessage();
+    }
+
+    // If object type changed, refresh the entire inspector and stop processing
+    if (newType && newType !== type) {
+      console.log(`Object transformed from ${type} to ${newType}!`);
+
+      // Set transformation flag to prevent mass updates during the process
+      state.isTransforming = true;
+
+      // Update the selected object type
+      state.selectedObject.type = newType;
+
+      // Reset the slider value to prevent immediate further transformation
+      // For gas giant to star transformation, set slider to the star's actual mass
+      if (type === 'GasGiant' && newType === 'Star') {
+        // Use the new star object, not the old gas giant object
+        const starObject = state.selectedObject.object;
+        const massInSolarMasses =
+          starObject.massInSuns || starObject.mass / SOLAR_MASS_UNIT;
+        // Temporarily set the slider value to the correct star mass
+        setTimeout(() => {
+          const newSlider = document.getElementById('massSlider');
+          if (newSlider) {
+            newSlider.value = massInSolarMasses;
+            const massValueDisplay =
+              document.getElementById('massValueDisplay');
+            if (massValueDisplay) {
+              massValueDisplay.textContent = `${massInSolarMasses.toFixed(3)} M☉`;
+            }
+          }
+        }, 100);
+      }
+
+      // Refresh the inspector with new object type
+      const inspectorContent = document.getElementById('inspectorContent');
+      if (inspectorContent) {
+        // Create new mass slider for the new object type
+        const massSlider = createMassSlider(
+          state.selectedObject.object,
+          newType
+        );
+        let content = massSlider + '<div class="stat-separator"></div>';
+
+        // Get info for the new object type
+        let info;
+        switch (newType) {
+          case 'BlackHole':
+            info = getBlackHoleInfo(state.selectedObject.object);
+            break;
+          case 'Star':
+            info = getStarInfo(state.selectedObject.object);
+            break;
+          case 'NeutronStar':
+            info = getNeutronStarInfo(state.selectedObject.object);
+            break;
+          case 'WhiteDwarf':
+            info = getWhiteDwarfInfo(state.selectedObject.object);
+            break;
+          case 'Planet':
+            info = getPlanetInfo(state.selectedObject.object);
+            break;
+          case 'GasGiant':
+            info = getGasGiantInfo(state.selectedObject.object);
+            break;
+          case 'Comet':
+            info = getCometInfo(state.selectedObject.object);
+            break;
+          case 'Asteroid':
+            info = getAsteroidInfo(state.selectedObject.object);
+            break;
+          default:
             return;
         }
-        
-        // Update the object's mass and check for transformation
-        const newType = updateObjectMass(object, type, newMass);
-        
-        // Clear the energy chart since mass change invalidates energy history
-        // This ensures the chart shows fresh data with the new mass
-        if (chartInitialized) {
-            console.log('Clearing energy chart due to mass change');
-            clearChart();
-            showCollectingMessage();
-        }
-        
-        // If object type changed, refresh the entire inspector and stop processing
-        if (newType && newType !== type) {
-            console.log(`Object transformed from ${type} to ${newType}!`);
-            
-            // Set transformation flag to prevent mass updates during the process
-            state.isTransforming = true;
-            
-            // Update the selected object type
-            state.selectedObject.type = newType;
-            
-            // Reset the slider value to prevent immediate further transformation
-            // For gas giant to star transformation, set slider to the star's actual mass
-            if (type === 'GasGiant' && newType === 'Star') {
-                // Use the new star object, not the old gas giant object
-                const starObject = state.selectedObject.object;
-                const massInSolarMasses = starObject.massInSuns || (starObject.mass / SOLAR_MASS_UNIT);
-                // Temporarily set the slider value to the correct star mass
-                setTimeout(() => {
-                    const newSlider = document.getElementById('massSlider');
-                    if (newSlider) {
-                        newSlider.value = massInSolarMasses;
-                        const massValueDisplay = document.getElementById('massValueDisplay');
-                        if (massValueDisplay) {
-                            massValueDisplay.textContent = `${massInSolarMasses.toFixed(3)} M☉`;
-                        }
-                    }
-                }, 100);
-            }
-            
-            // Refresh the inspector with new object type
-            const inspectorContent = document.getElementById('inspectorContent');
-            if (inspectorContent) {
-                // Create new mass slider for the new object type
-                const massSlider = createMassSlider(state.selectedObject.object, newType);
-                let content = massSlider + '<div class="stat-separator"></div>';
-                
-                // Get info for the new object type
-                let info;
-                switch (newType) {
-                    case 'BlackHole':
-                        info = getBlackHoleInfo(state.selectedObject.object);
-                        break;
-                    case 'Star':
-                        info = getStarInfo(state.selectedObject.object);
-                        break;
-                    case 'NeutronStar':
-                        info = getNeutronStarInfo(state.selectedObject.object);
-                        break;
-                    case 'WhiteDwarf':
-                        info = getWhiteDwarfInfo(state.selectedObject.object);
-                        break;
-                    case 'Planet':
-                        info = getPlanetInfo(state.selectedObject.object);
-                        break;
-                    case 'GasGiant':
-                        info = getGasGiantInfo(state.selectedObject.object);
-                        break;
-                    case 'Comet':
-                        info = getCometInfo(state.selectedObject.object);
-                        break;
-                    case 'Asteroid':
-                        info = getAsteroidInfo(state.selectedObject.object);
-                        break;
-                    default:
-                        return;
-                }
-                
-                // Add stats and description
-                info.stats.forEach(stat => {
-                    content += `
+
+        // Add stats and description
+        info.stats.forEach(stat => {
+          content += `
                         <div class="stat-row">
                             <span class="stat-label">${stat.label}:</span>
                             <span class="stat-value">${stat.value}</span>
                         </div>
                     `;
-                });
-                
-                content += `<div class="object-description">${info.description}</div>`;
-                
-                // Only update the details tab content, not the entire inspector content
-                const detailsTabContent = document.getElementById('detailsTab');
-                if (detailsTabContent) {
-                    detailsTabContent.innerHTML = content;
-                }
-                
-                // Set up new mass slider listeners
-                setupMassSliderListeners();
-                
-                // Energy tab should still be intact since we only updated details tab
-                // Just ensure chart is ready for the new object
-                if (chartInitialized) {
-                    console.log('Ensuring chart is ready for transformed object');
-                    ensureChartReady();
-                    updateEnergyChart();
-                }
-                
-                // Show transformation notification
-                showTransformationNotification(type, newType);
-                
-                // Clear transformation flag after everything is set up
-                setTimeout(() => {
-                    state.isTransforming = false;
-                }, 200);
-            }
-            return; // Stop processing after transformation
-        } else {
-            // No transformation, just update the display
-            let massUnit;
-            switch (type) {
-                case 'BlackHole':
-                case 'Star':
-                case 'NeutronStar':
-                case 'WhiteDwarf':
-                    massUnit = 'M☉';
-                    break;
-                case 'Planet':
-                case 'Asteroid':
-                    massUnit = 'M⊕';
-                    break;
-                case 'GasGiant':
-                    massUnit = 'M♃';
-                    break;
-                case 'Comet':
-                    massUnit = 'C';
-                    break;
-            }
-            
-            massValueDisplay.textContent = `${newMass.toFixed(3)} ${massUnit}`;
-            
-            // Update the stats display to reflect the new mass
-            const inspectorContent = document.getElementById('inspectorContent');
-            if (inspectorContent && state.selectedObject) {
-                let info;
-                switch (state.selectedObject.type) {
-                    case 'BlackHole':
-                        info = getBlackHoleInfo(state.selectedObject.object);
-                        break;
-                    case 'Star':
-                        info = getStarInfo(state.selectedObject.object);
-                        break;
-                    case 'NeutronStar':
-                        info = getNeutronStarInfo(state.selectedObject.object);
-                        break;
-                    case 'WhiteDwarf':
-                        info = getWhiteDwarfInfo(state.selectedObject.object);
-                        break;
-                    case 'Planet':
-                        info = getPlanetInfo(state.selectedObject.object);
-                        break;
-                    case 'GasGiant':
-                        info = getGasGiantInfo(state.selectedObject.object);
-                        break;
-                    case 'Comet':
-                        info = getCometInfo(state.selectedObject.object);
-                        break;
-                    case 'Asteroid':
-                        info = getAsteroidInfo(state.selectedObject.object);
-                        break;
-                    default:
-                        return;
-                }
-                
-                // Update only the stats rows, preserve the mass slider
-                const statRows = inspectorContent.querySelectorAll('.stat-row');
-                const description = inspectorContent.querySelector('.object-description');
-                
-                // Update stats
-                info.stats.forEach((stat, index) => {
-                    if (statRows[index]) {
-                        statRows[index].innerHTML = `
+        });
+
+        content += `<div class="object-description">${info.description}</div>`;
+
+        // Only update the details tab content, not the entire inspector content
+        const detailsTabContent = document.getElementById('detailsTab');
+        if (detailsTabContent) {
+          detailsTabContent.innerHTML = content;
+        }
+
+        // Set up new mass slider listeners
+        setupMassSliderListeners();
+
+        // Energy tab should still be intact since we only updated details tab
+        // Just ensure chart is ready for the new object
+        if (chartInitialized) {
+          console.log('Ensuring chart is ready for transformed object');
+          ensureChartReady();
+          updateEnergyChart();
+        }
+
+        // Show transformation notification
+        showTransformationNotification(type, newType);
+
+        // Clear transformation flag after everything is set up
+        setTimeout(() => {
+          state.isTransforming = false;
+        }, 200);
+      }
+      return; // Stop processing after transformation
+    } else {
+      // No transformation, just update the display
+      let massUnit;
+      switch (type) {
+        case 'BlackHole':
+        case 'Star':
+        case 'NeutronStar':
+        case 'WhiteDwarf':
+          massUnit = 'M☉';
+          break;
+        case 'Planet':
+        case 'Asteroid':
+          massUnit = 'M⊕';
+          break;
+        case 'GasGiant':
+          massUnit = 'M♃';
+          break;
+        case 'Comet':
+          massUnit = 'C';
+          break;
+      }
+
+      massValueDisplay.textContent = `${newMass.toFixed(3)} ${massUnit}`;
+
+      // Update the stats display to reflect the new mass
+      const inspectorContent = document.getElementById('inspectorContent');
+      if (inspectorContent && state.selectedObject) {
+        let info;
+        switch (state.selectedObject.type) {
+          case 'BlackHole':
+            info = getBlackHoleInfo(state.selectedObject.object);
+            break;
+          case 'Star':
+            info = getStarInfo(state.selectedObject.object);
+            break;
+          case 'NeutronStar':
+            info = getNeutronStarInfo(state.selectedObject.object);
+            break;
+          case 'WhiteDwarf':
+            info = getWhiteDwarfInfo(state.selectedObject.object);
+            break;
+          case 'Planet':
+            info = getPlanetInfo(state.selectedObject.object);
+            break;
+          case 'GasGiant':
+            info = getGasGiantInfo(state.selectedObject.object);
+            break;
+          case 'Comet':
+            info = getCometInfo(state.selectedObject.object);
+            break;
+          case 'Asteroid':
+            info = getAsteroidInfo(state.selectedObject.object);
+            break;
+          default:
+            return;
+        }
+
+        // Update only the stats rows, preserve the mass slider
+        const statRows = inspectorContent.querySelectorAll('.stat-row');
+        const description = inspectorContent.querySelector(
+          '.object-description'
+        );
+
+        // Update stats
+        info.stats.forEach((stat, index) => {
+          if (statRows[index]) {
+            statRows[index].innerHTML = `
                             <span class="stat-label">${stat.label}:</span>
                             <span class="stat-value">${stat.value}</span>
                         `;
-                    }
-                });
-                
-                // Update description
-                if (description) {
-                    description.innerHTML = info.description;
-                }
-            }
+          }
+        });
+
+        // Update description
+        if (description) {
+          description.innerHTML = info.description;
         }
-    };
-    
-    // Update on slider change
-    massSlider.addEventListener('input', updateMass);
-    massSlider.addEventListener('change', updateMass);
-    
-    // Prevent inspector updates while dragging
-    massSlider.addEventListener('mousedown', () => {
-        isDragging = true;
-        state.sliderDragging = true; // Global flag for inspector updates
-    });
-    
-    massSlider.addEventListener('mouseup', () => {
-        isDragging = false;
-        state.sliderDragging = false;
-    });
-    
-    massSlider.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            state.sliderDragging = false;
-        }
-    });
+      }
+    }
+  };
+
+  // Update on slider change
+  massSlider.addEventListener('input', updateMass);
+  massSlider.addEventListener('change', updateMass);
+
+  // Prevent inspector updates while dragging
+  massSlider.addEventListener('mousedown', () => {
+    isDragging = true;
+    state.sliderDragging = true; // Global flag for inspector updates
+  });
+
+  massSlider.addEventListener('mouseup', () => {
+    isDragging = false;
+    state.sliderDragging = false;
+  });
+
+  massSlider.addEventListener('mouseleave', () => {
+    if (isDragging) {
+      isDragging = false;
+      state.sliderDragging = false;
+    }
+  });
 };
 
 /**
@@ -2009,352 +2537,369 @@ const setupMassSliderListeners = () => {
  * @returns {string|null} The new object type if transformation occurred, null otherwise
  */
 const updateObjectMass = (object, type, newMass) => {
-    let newType = null;
-    
-    // Clear energy history when mass changes to prevent invalid data
-    // Energy calculations depend on mass, so old energy data becomes invalid
-    if (object && object.id) {
-        console.log(`Clearing energy history for object ${object.id} due to mass change`);
-        clearObjectEnergyHistory(object.id);
-    }
-    
-    switch (type) {
-        case 'BlackHole':
-            object.mass = newMass * SOLAR_MASS_UNIT;
-            object.updateRadius(); // Update Schwarzschild radius
-            break;
-        case 'Star':
-            console.log(`DEBUG: Star mass update: newMass = ${newMass} solar masses`);
-            object.mass = newMass * SOLAR_MASS_UNIT;
-            object.massInSuns = newMass;
-            console.log(`DEBUG: Star mass updated: mass = ${object.mass} units, massInSuns = ${object.massInSuns}`);
-            // Recalculate star properties based on mass
-            object.radius = Math.pow(newMass, 0.8) * STAR_OBJ_RADIUS;
-            object.temperature = 3000 + (newMass - 0.2) * 4000;
-            object.luminosity = Math.pow(newMass, 3.5);
-            
-            // Check if star should become a black hole (mass > 20 M☉)
-            if (newMass > 20.0) {
-                console.log(`DEBUG: Star mass ${newMass} exceeds black hole threshold 20.0 - transforming to black hole`);
-                newType = 'BlackHole';
-                // Transform star to black hole
-                transformStarToBlackHole(object);
-            }
-            break;
-        case 'NeutronStar':
-            object.mass = newMass * SOLAR_MASS_UNIT;
-            object.massInSuns = newMass;
-            // Neutron stars have relatively constant radius
-            object.radius = NEUTRON_STAR_RADIUS;
-            
-            // Check if neutron star should become a black hole (mass > 3 M☉)
-            if (newMass > 3.0) {
-                newType = 'BlackHole';
-                // Transform neutron star to black hole
-                transformNeutronStarToBlackHole(object);
-            }
-            break;
-        case 'WhiteDwarf':
-            object.mass = newMass * SOLAR_MASS_UNIT;
-            object.massInSuns = newMass;
-            // White dwarf radius decreases with mass (inverse relationship)
-            object.radius = Math.max(WHITE_DWARF_RADIUS * Math.pow(newMass, -0.33), 2);
-            
-            // Check if white dwarf should become a neutron star (mass > 1.4 M☉ - Chandrasekhar limit)
-            if (newMass > 1.4) {
-                newType = 'NeutronStar';
-                // Transform white dwarf to neutron star
-                transformWhiteDwarfToNeutronStar(object);
-            }
-            break;
-        case 'Planet':
-            object.mass = newMass * EARTH_MASS_UNIT;
-            object.massInEarths = newMass;
-            // Recalculate planet radius based on mass
-            object.radius = Math.pow(newMass, 0.3) * PLANET_RADIUS;
-            object.calculateDensity();
-            
-            // Check if planet should become a gas giant (mass > 10 M⊕)
-            if (newMass > 10.0) {
-                newType = 'GasGiant';
-                // Transform planet to gas giant
-                transformPlanetToGasGiant(object);
-            }
-            break;
-        case 'GasGiant':
-            object.mass = newMass * 50.0; // Convert Jupiter masses to simulation units
-            object.massInJupiters = newMass;
-            object.massInEarths = newMass * 317.8;
-            // Recalculate gas giant radius and type
-            object.radius = Math.pow(newMass, 0.2) * GAS_GIANT_RADIUS;
-            object.calculateGiantType();
-            
-            // Check if gas giant should become a star (mass > 80 M♃)
-            if (newMass > 80.0) {
-                newType = 'Star';
-                // Transform gas giant to star
-                transformGasGiantToStar(object);
-            }
-            break;
-        case 'Asteroid':
-            object.mass = newMass * EARTH_MASS_UNIT;
-            // Asteroid radius scales with mass
-            object.radius = Math.pow(newMass * 1000, 0.33) * ASTEROID_RADIUS;
-            
-            // Check if asteroid should become a planet (mass > 0.1 M⊕)
-            if (newMass > 0.1) {
-                newType = 'Planet';
-                // Transform asteroid to planet
-                transformAsteroidToPlanet(object);
-            }
-            break;
-        case 'Comet':
-            object.mass = newMass * 0.1; // Convert comet units to simulation units
-            object.massInComets = newMass;
-            // Comet radius scales with mass
-            object.radius = Math.pow(newMass * 10, 0.33) * 2;
-            
-            // Check if comet should become an asteroid (mass > 1.0 C)
-            if (newMass > 1.0) {
-                newType = 'Asteroid';
-                // Transform comet to asteroid
-                transformCometToAsteroid(object);
-            }
-            break;
-    }
-    
-    return newType;
+  let newType = null;
+
+  // Clear energy history when mass changes to prevent invalid data
+  // Energy calculations depend on mass, so old energy data becomes invalid
+  if (object && object.id) {
+    console.log(
+      `Clearing energy history for object ${object.id} due to mass change`
+    );
+    clearObjectEnergyHistory(object.id);
+  }
+
+  switch (type) {
+    case 'BlackHole':
+      object.mass = newMass * SOLAR_MASS_UNIT;
+      object.updateRadius(); // Update Schwarzschild radius
+      break;
+    case 'Star':
+      console.log(`DEBUG: Star mass update: newMass = ${newMass} solar masses`);
+      object.mass = newMass * SOLAR_MASS_UNIT;
+      object.massInSuns = newMass;
+      console.log(
+        `DEBUG: Star mass updated: mass = ${object.mass} units, massInSuns = ${object.massInSuns}`
+      );
+      // Recalculate star properties based on mass
+      object.radius = Math.pow(newMass, 0.8) * STAR_OBJ_RADIUS;
+      object.temperature = 3000 + (newMass - 0.2) * 4000;
+      object.luminosity = Math.pow(newMass, 3.5);
+
+      // Check if star should become a black hole (mass > 20 M☉)
+      if (newMass > 20.0) {
+        console.log(
+          `DEBUG: Star mass ${newMass} exceeds black hole threshold 20.0 - transforming to black hole`
+        );
+        newType = 'BlackHole';
+        // Transform star to black hole
+        transformStarToBlackHole(object);
+      }
+      break;
+    case 'NeutronStar':
+      object.mass = newMass * SOLAR_MASS_UNIT;
+      object.massInSuns = newMass;
+      // Neutron stars have relatively constant radius
+      object.radius = NEUTRON_STAR_RADIUS;
+
+      // Check if neutron star should become a black hole (mass > 3 M☉)
+      if (newMass > 3.0) {
+        newType = 'BlackHole';
+        // Transform neutron star to black hole
+        transformNeutronStarToBlackHole(object);
+      }
+      break;
+    case 'WhiteDwarf':
+      object.mass = newMass * SOLAR_MASS_UNIT;
+      object.massInSuns = newMass;
+      // White dwarf radius decreases with mass (inverse relationship)
+      object.radius = Math.max(
+        WHITE_DWARF_RADIUS * Math.pow(newMass, -0.33),
+        2
+      );
+
+      // Check if white dwarf should become a neutron star (mass > 1.4 M☉ - Chandrasekhar limit)
+      if (newMass > 1.4) {
+        newType = 'NeutronStar';
+        // Transform white dwarf to neutron star
+        transformWhiteDwarfToNeutronStar(object);
+      }
+      break;
+    case 'Planet':
+      object.mass = newMass * EARTH_MASS_UNIT;
+      object.massInEarths = newMass;
+      // Recalculate planet radius based on mass
+      object.radius = Math.pow(newMass, 0.3) * PLANET_RADIUS;
+      object.calculateDensity();
+
+      // Check if planet should become a gas giant (mass > 10 M⊕)
+      if (newMass > 10.0) {
+        newType = 'GasGiant';
+        // Transform planet to gas giant
+        transformPlanetToGasGiant(object);
+      }
+      break;
+    case 'GasGiant':
+      object.mass = newMass * 50.0; // Convert Jupiter masses to simulation units
+      object.massInJupiters = newMass;
+      object.massInEarths = newMass * 317.8;
+      // Recalculate gas giant radius and type
+      object.radius = Math.pow(newMass, 0.2) * GAS_GIANT_RADIUS;
+      object.calculateGiantType();
+
+      // Check if gas giant should become a star (mass > 80 M♃)
+      if (newMass > 80.0) {
+        newType = 'Star';
+        // Transform gas giant to star
+        transformGasGiantToStar(object);
+      }
+      break;
+    case 'Asteroid':
+      object.mass = newMass * EARTH_MASS_UNIT;
+      // Asteroid radius scales with mass
+      object.radius = Math.pow(newMass * 1000, 0.33) * ASTEROID_RADIUS;
+
+      // Check if asteroid should become a planet (mass > 0.1 M⊕)
+      if (newMass > 0.1) {
+        newType = 'Planet';
+        // Transform asteroid to planet
+        transformAsteroidToPlanet(object);
+      }
+      break;
+    case 'Comet':
+      object.mass = newMass * 0.1; // Convert comet units to simulation units
+      object.massInComets = newMass;
+      // Comet radius scales with mass
+      object.radius = Math.pow(newMass * 10, 0.33) * 2;
+
+      // Check if comet should become an asteroid (mass > 1.0 C)
+      if (newMass > 1.0) {
+        newType = 'Asteroid';
+        // Transform comet to asteroid
+        transformCometToAsteroid(object);
+      }
+      break;
+  }
+
+  return newType;
 };
 
 /**
  * Transform a star into a black hole
  * @param {Object} object - The star object to transform
  */
-const transformStarToBlackHole = (object) => {
-    console.log('Star transforming into black hole!');
-    // Preserve position and velocity
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    const mass = object.mass;
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming star ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformStarToBlackHole = object => {
+  console.log('Star transforming into black hole!');
+  // Preserve position and velocity
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+  const mass = object.mass;
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(`Clearing energy history for transforming star ${object.id}`);
+    clearObjectEnergyHistory(object.id);
+  }
+
+  // Create new black hole
+  const blackHole = new BlackHole(pos, mass, vel);
+  blackHole.name = object.name || 'Transformed Black Hole';
+
+  // Replace the star in the stars array
+  const starIndex = stars.indexOf(object);
+  if (starIndex !== -1) {
+    stars.splice(starIndex, 1);
+    bh_list.push(blackHole);
+
+    // Update the selected object reference
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = blackHole;
+      state.selectedObject.type = 'BlackHole';
     }
-    
-    // Create new black hole
-    const blackHole = new BlackHole(pos, mass, vel);
-    blackHole.name = object.name || 'Transformed Black Hole';
-    
-    // Replace the star in the stars array
-    const starIndex = stars.indexOf(object);
-    if (starIndex !== -1) {
-        stars.splice(starIndex, 1);
-        bh_list.push(blackHole);
-        
-        // Update the selected object reference
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = blackHole;
-            state.selectedObject.type = 'BlackHole';
-        }
-    }
+  }
 };
 
 /**
  * Transform a neutron star into a black hole
  * @param {Object} object - The neutron star object to transform
  */
-const transformNeutronStarToBlackHole = (object) => {
-    console.log('Neutron star transforming into black hole!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    const mass = object.mass;
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming neutron star ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformNeutronStarToBlackHole = object => {
+  console.log('Neutron star transforming into black hole!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+  const mass = object.mass;
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(
+      `Clearing energy history for transforming neutron star ${object.id}`
+    );
+    clearObjectEnergyHistory(object.id);
+  }
+
+  const blackHole = new BlackHole(pos, mass, vel);
+  blackHole.name = object.name || 'Transformed Black Hole';
+
+  const nsIndex = neutron_stars.indexOf(object);
+  if (nsIndex !== -1) {
+    neutron_stars.splice(nsIndex, 1);
+    bh_list.push(blackHole);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = blackHole;
+      state.selectedObject.type = 'BlackHole';
     }
-    
-    const blackHole = new BlackHole(pos, mass, vel);
-    blackHole.name = object.name || 'Transformed Black Hole';
-    
-    const nsIndex = neutron_stars.indexOf(object);
-    if (nsIndex !== -1) {
-        neutron_stars.splice(nsIndex, 1);
-        bh_list.push(blackHole);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = blackHole;
-            state.selectedObject.type = 'BlackHole';
-        }
-    }
+  }
 };
 
 /**
  * Transform a white dwarf into a neutron star
  * @param {Object} object - The white dwarf object to transform
  */
-const transformWhiteDwarfToNeutronStar = (object) => {
-    console.log('White dwarf transforming into neutron star!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    const mass = object.mass;
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming white dwarf ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformWhiteDwarfToNeutronStar = object => {
+  console.log('White dwarf transforming into neutron star!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+  const mass = object.mass;
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(
+      `Clearing energy history for transforming white dwarf ${object.id}`
+    );
+    clearObjectEnergyHistory(object.id);
+  }
+
+  const neutronStar = new NeutronStar(pos, vel, mass / SOLAR_MASS_UNIT);
+  neutronStar.name = object.name || 'Transformed Neutron Star';
+
+  const wdIndex = white_dwarfs.indexOf(object);
+  if (wdIndex !== -1) {
+    white_dwarfs.splice(wdIndex, 1);
+    neutron_stars.push(neutronStar);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = neutronStar;
+      state.selectedObject.type = 'NeutronStar';
     }
-    
-    const neutronStar = new NeutronStar(pos, vel, mass / SOLAR_MASS_UNIT);
-    neutronStar.name = object.name || 'Transformed Neutron Star';
-    
-    const wdIndex = white_dwarfs.indexOf(object);
-    if (wdIndex !== -1) {
-        white_dwarfs.splice(wdIndex, 1);
-        neutron_stars.push(neutronStar);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = neutronStar;
-            state.selectedObject.type = 'NeutronStar';
-        }
-    }
+  }
 };
 
 /**
  * Transform a planet into a gas giant
  * @param {Object} object - The planet object to transform
  */
-const transformPlanetToGasGiant = (object) => {
-    console.log('Planet transforming into gas giant!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    const mass = object.mass / 50.0; // Convert to Jupiter masses
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming planet ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformPlanetToGasGiant = object => {
+  console.log('Planet transforming into gas giant!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+  const mass = object.mass / 50.0; // Convert to Jupiter masses
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(`Clearing energy history for transforming planet ${object.id}`);
+    clearObjectEnergyHistory(object.id);
+  }
+
+  const gasGiant = new GasGiant(pos, vel, mass);
+  gasGiant.name = object.name || 'Transformed Gas Giant';
+
+  const planetIndex = planets.indexOf(object);
+  if (planetIndex !== -1) {
+    planets.splice(planetIndex, 1);
+    gas_giants.push(gasGiant);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = gasGiant;
+      state.selectedObject.type = 'GasGiant';
     }
-    
-    const gasGiant = new GasGiant(pos, vel, mass);
-    gasGiant.name = object.name || 'Transformed Gas Giant';
-    
-    const planetIndex = planets.indexOf(object);
-    if (planetIndex !== -1) {
-        planets.splice(planetIndex, 1);
-        gas_giants.push(gasGiant);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = gasGiant;
-            state.selectedObject.type = 'GasGiant';
-        }
-    }
+  }
 };
 
 /**
  * Transform a gas giant into a star
  * @param {Object} object - The gas giant object to transform
  */
-const transformGasGiantToStar = (object) => {
-    console.log('Gas giant transforming into star!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming gas giant ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformGasGiantToStar = object => {
+  console.log('Gas giant transforming into star!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(
+      `Clearing energy history for transforming gas giant ${object.id}`
+    );
+    clearObjectEnergyHistory(object.id);
+  }
+
+  // Convert Jupiter masses to solar masses
+  // The simulation uses 50 units = 1 Jupiter mass, but we need to convert to real solar masses
+  // 1 Jupiter mass = 1/1047 solar masses (correct conversion)
+  const massInJupiters = object.massInJupiters || object.mass / 50.0;
+  const massInSolarMasses = massInJupiters / 1047.0;
+
+  // Create star with the converted mass in simulation units
+  const star = new StarObject(pos, vel, massInSolarMasses);
+  star.name = object.name || 'Transformed Star';
+
+  // Ensure the star has the correct mass properties
+  star.massInSuns = massInSolarMasses;
+  star.mass = massInSolarMasses * SOLAR_MASS_UNIT;
+
+  const ggIndex = gas_giants.indexOf(object);
+  if (ggIndex !== -1) {
+    gas_giants.splice(ggIndex, 1);
+    stars.push(star);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = star;
+      state.selectedObject.type = 'Star';
     }
-    
-    // Convert Jupiter masses to solar masses
-    // The simulation uses 50 units = 1 Jupiter mass, but we need to convert to real solar masses
-    // 1 Jupiter mass = 1/1047 solar masses (correct conversion)
-    const massInJupiters = object.massInJupiters || (object.mass / 50.0);
-    const massInSolarMasses = massInJupiters / 1047.0;
-    
-    // Create star with the converted mass in simulation units
-    const star = new StarObject(pos, vel, massInSolarMasses);
-    star.name = object.name || 'Transformed Star';
-    
-    // Ensure the star has the correct mass properties
-    star.massInSuns = massInSolarMasses;
-    star.mass = massInSolarMasses * SOLAR_MASS_UNIT;
-    
-    const ggIndex = gas_giants.indexOf(object);
-    if (ggIndex !== -1) {
-        gas_giants.splice(ggIndex, 1);
-        stars.push(star);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = star;
-            state.selectedObject.type = 'Star';
-        }
-    }
+  }
 };
 
 /**
  * Transform an asteroid into a planet
  * @param {Object} object - The asteroid object to transform
  */
-const transformAsteroidToPlanet = (object) => {
-    console.log('Asteroid transforming into planet!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    const mass = object.mass / EARTH_MASS_UNIT;
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming asteroid ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformAsteroidToPlanet = object => {
+  console.log('Asteroid transforming into planet!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+  const mass = object.mass / EARTH_MASS_UNIT;
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(
+      `Clearing energy history for transforming asteroid ${object.id}`
+    );
+    clearObjectEnergyHistory(object.id);
+  }
+
+  const planet = new Planet(pos, vel, mass);
+  planet.name = object.name || 'Transformed Planet';
+
+  const asteroidIndex = asteroids.indexOf(object);
+  if (asteroidIndex !== -1) {
+    asteroids.splice(asteroidIndex, 1);
+    planets.push(planet);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = planet;
+      state.selectedObject.type = 'Planet';
     }
-    
-    const planet = new Planet(pos, vel, mass);
-    planet.name = object.name || 'Transformed Planet';
-    
-    const asteroidIndex = asteroids.indexOf(object);
-    if (asteroidIndex !== -1) {
-        asteroids.splice(asteroidIndex, 1);
-        planets.push(planet);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = planet;
-            state.selectedObject.type = 'Planet';
-        }
-    }
+  }
 };
 
 /**
  * Transform a comet into an asteroid
  * @param {Object} object - The comet object to transform
  */
-const transformCometToAsteroid = (object) => {
-    console.log('Comet transforming into asteroid!');
-    const pos = { x: object.pos.x, y: object.pos.y };
-    const vel = { x: object.vel.x, y: object.vel.y };
-    
-    // Clear energy history for the old object before transformation
-    if (object && object.id) {
-        console.log(`Clearing energy history for transforming comet ${object.id}`);
-        clearObjectEnergyHistory(object.id);
+const transformCometToAsteroid = object => {
+  console.log('Comet transforming into asteroid!');
+  const pos = { x: object.pos.x, y: object.pos.y };
+  const vel = { x: object.vel.x, y: object.vel.y };
+
+  // Clear energy history for the old object before transformation
+  if (object && object.id) {
+    console.log(`Clearing energy history for transforming comet ${object.id}`);
+    clearObjectEnergyHistory(object.id);
+  }
+
+  const asteroid = new Asteroid(pos, vel);
+  asteroid.name = object.name || 'Transformed Asteroid';
+  asteroid.mass = object.mass;
+
+  const cometIndex = comets.indexOf(object);
+  if (cometIndex !== -1) {
+    comets.splice(cometIndex, 1);
+    asteroids.push(asteroid);
+
+    if (state.selectedObject && state.selectedObject.object === object) {
+      state.selectedObject.object = asteroid;
+      state.selectedObject.type = 'Asteroid';
     }
-    
-    const asteroid = new Asteroid(pos, vel);
-    asteroid.name = object.name || 'Transformed Asteroid';
-    asteroid.mass = object.mass;
-    
-    const cometIndex = comets.indexOf(object);
-    if (cometIndex !== -1) {
-        comets.splice(cometIndex, 1);
-        asteroids.push(asteroid);
-        
-        if (state.selectedObject && state.selectedObject.object === object) {
-            state.selectedObject.object = asteroid;
-            state.selectedObject.type = 'Asteroid';
-        }
-    }
+  }
 };
 /**
  * Show a notification when an object transforms
@@ -2362,40 +2907,40 @@ const transformCometToAsteroid = (object) => {
  * @param {string} newType - The new object type
  */
 const showTransformationNotification = (oldType, newType) => {
-    // Clear energy chart when object transforms
-    if (chartInitialized) {
-        console.log('Clearing energy chart due to object transformation');
-        clearChart();
-        showCollectingMessage();
-    }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = 'transformation-notification';
-    notification.innerHTML = `
+  // Clear energy chart when object transforms
+  if (chartInitialized) {
+    console.log('Clearing energy chart due to object transformation');
+    clearChart();
+    showCollectingMessage();
+  }
+
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = 'transformation-notification';
+  notification.innerHTML = `
         <div class="transformation-content">
             <span class="transformation-icon">✨</span>
             <span class="transformation-text">${oldType} → ${newType}</span>
         </div>
     `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Animate in
+
+  // Add to page
+  document.body.appendChild(notification);
+
+  // Animate in
+  setTimeout(() => {
+    notification.classList.add('visible');
+  }, 100);
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.classList.remove('visible');
     setTimeout(() => {
-        notification.classList.add('visible');
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.classList.remove('visible');
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 500);
-    }, 3000);
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 500);
+  }, 3000);
 };
 /**
  * Show scenario information banner with title and description
@@ -2407,7 +2952,7 @@ const show_scenario_info = () => {
   if (!state.user_has_interacted || state.frame_count < 300) {
     return;
   }
-  
+
   const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
   if (current_scenario_name && SCENARIO_INFO[current_scenario_name]) {
     const info = SCENARIO_INFO[current_scenario_name];
@@ -2420,33 +2965,40 @@ const show_scenario_info = () => {
 };
 
 // Enhanced scenario info box function
-const show_enhanced_scenario_info = (scenarioName) => {
+const show_enhanced_scenario_info = scenarioName => {
   if (!scenarioName || !SCENARIO_INFO[scenarioName]) {
     return;
   }
-  
+
   const info = SCENARIO_INFO[scenarioName];
   const infoBox = document.getElementById('scenarioInfoBox');
   const title = document.getElementById('scenarioInfoTitle');
   const summary = document.getElementById('scenarioInfoSummary');
   const features = document.getElementById('scenarioInfoFeatures');
-  
+
   // Set the title and summary
   title.textContent = info.title;
   summary.textContent = info.summary;
-  
+
   // Clear the features list since we're removing the key highlights section
   features.innerHTML = '';
-  
+
   // Check if splash screen is still active
   const splash = document.getElementById('splash');
-  const isSplashActive = splash && !splash.classList.contains('hidden') && splash.style.display !== 'none';
-  
+  const isSplashActive =
+    splash &&
+    !splash.classList.contains('hidden') &&
+    splash.style.display !== 'none';
+
   if (isSplashActive) {
     // If splash is still active, wait for it to end before showing info box
     const checkSplashEnd = () => {
       const currentSplash = document.getElementById('splash');
-      if (!currentSplash || currentSplash.classList.contains('hidden') || currentSplash.style.display === 'none') {
+      if (
+        !currentSplash ||
+        currentSplash.classList.contains('hidden') ||
+        currentSplash.style.display === 'none'
+      ) {
         // Splash has ended, show the info box
         infoBox.classList.add('showUI');
         // Auto-hide after 18 seconds
@@ -3391,27 +3943,27 @@ const apply_placement = () => {
           const m1 = bh_list[0].mass; // Mass of first black hole (60 M☉)
           const m2 = bh_list[1].mass; // Mass of second black hole (3 M☉)
           const totalMass = m1 + m2;
-          
+
           // Calculate center of mass positions
           const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
           const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-          
+
           // Position black holes around center of mass
           bh_list[0].pos.x = -r1;
           bh_list[0].pos.y = 0;
           bh_list[1].pos.x = r2;
           bh_list[1].pos.y = 0;
-          
+
           // Calculate orbital velocity for circular orbit
           const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt(G * totalMass / separation);
-          
+          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
+
           // Apply velocities for circular orbit (perpendicular to separation)
           bh_list[0].vel.x = 0;
           bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
           bh_list[1].vel.x = 0;
           bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-          
+
           // Add slight perturbation to make it more interesting
           const perturbation = 0.9; // Reduce velocity slightly to create more dynamic orbits
           bh_list[0].vel.y *= perturbation;
@@ -3426,28 +3978,28 @@ const apply_placement = () => {
           const m1 = bh_list[0].mass; // Mass of first black hole
           const m2 = bh_list[1].mass; // Mass of second black hole
           const totalMass = m1 + m2;
-          
+
           // Calculate center of mass positions
           const r1 = separation * (m2 / totalMass); // Distance from BH1 to center of mass
           const r2 = separation * (m1 / totalMass); // Distance from BH2 to center of mass
-          
+
           // Position black holes around center of mass
           bh_list[0].pos.x = -r1;
           bh_list[0].pos.y = 0;
           bh_list[1].pos.x = r2;
           bh_list[1].pos.y = 0;
-          
+
           // Calculate orbital velocity for circular orbit
           // v = sqrt(G * M_total / separation) for reduced mass system
           const G = SETTINGS.gravitational_constant;
-          const orbitalSpeed = Math.sqrt(G * totalMass / separation);
-          
+          const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
+
           // Apply velocities for circular orbit (perpendicular to separation)
           bh_list[0].vel.x = 0;
           bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass); // Reduced velocity based on mass ratio
           bh_list[1].vel.x = 0;
           bh_list[1].vel.y = -orbitalSpeed * (m1 / totalMass); // Opposite direction
-          
+
           // Add slight perturbation to start gravitational wave inspiral
           const perturbation = 0.95; // Slightly reduce velocity to start inspiral
           bh_list[0].vel.y *= perturbation;
@@ -3472,19 +4024,7 @@ const apply_placement = () => {
         }
         break;
 
-      case 'Slingshot':
-        if (bh_list.length >= 2) {
-          bh_list[0].pos.x = -200;
-          bh_list[0].pos.y = 0;
-          bh_list[0].vel.x = 0;
-          bh_list[0].vel.y = 0;
-
-          bh_list[1].pos.x = 200;
-          bh_list[1].pos.y = 0;
-          bh_list[1].vel.x = -30;
-          bh_list[1].vel.y = 0;
-        }
-        break;
+      // Duplicate 'Slingshot' case removed (handled earlier)
     }
   }
 };
@@ -3495,7 +4035,7 @@ const apply_placement = () => {
 const initialize_simulation = () => {
   // Set the state reference in physics.js to ensure single source of truth
   setStateReference(state);
-  
+
   const starting_preset = SETTINGS.preset_scenario;
   apply_preset();
   current_scenario_name = starting_preset;
@@ -3509,7 +4049,7 @@ const initialize_simulation = () => {
 
   // Update physics settings
   updatePhysicsSettings(SETTINGS);
-  
+
   state.zoom = SETTINGS.preset_zoom || 1.5; // Use preset zoom or default to 1.5
   state.pan = { x: 0.0, y: 0.0 };
   // Clear all arrays instead of reassigning them
@@ -3527,18 +4067,20 @@ const initialize_simulation = () => {
   accretion_disk_particles.length = 0;
   particlePool.clear(); // Clear particle pool
   resetPhysicsObjectCounter();
-  
+
   // Clear all energy history when simulation resets
   clearAllEnergyHistory();
 
   // Add central stars for specific presets
-  if (['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)) {
+  if (
+    ['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)
+  ) {
     stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0));
   }
 
   // Add stars based on num_stars setting
   if (SETTINGS.num_stars) {
-      for (let i = 0; i < SETTINGS.num_stars; i++) {
+    for (let i = 0; i < SETTINGS.num_stars; i++) {
       stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
@@ -3553,19 +4095,32 @@ const initialize_simulation = () => {
     for (let i = 0; i < SETTINGS.num_black_holes; i++) {
       bh_list.push(
         new BlackHole({ x: 0, y: 0 }, SETTINGS.bh_mass * SOLAR_MASS_UNIT)
-    );
+      );
     }
   }
 
   // Add neutron stars
-  if (SETTINGS.use_individual_ns_masses && SETTINGS.ns_masses && SETTINGS.ns_masses.length > 0) {
+  if (
+    SETTINGS.use_individual_ns_masses &&
+    SETTINGS.ns_masses &&
+    SETTINGS.ns_masses.length > 0
+  ) {
     for (let i = 0; i < SETTINGS.num_neutron_stars; i++) {
       const mass = SETTINGS.ns_masses[i] || 1.4; // Default to 1.4 M☉ if not specified
-      neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, mass * SOLAR_MASS_UNIT, null));
+      neutron_stars.push(
+        new NeutronStar(
+          { x: 0, y: 0 },
+          { x: 0, y: 0 },
+          mass * SOLAR_MASS_UNIT,
+          null
+        )
+      );
     }
   } else {
     for (let i = 0; i < (SETTINGS.num_neutron_stars || 0); i++) {
-      neutron_stars.push(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, null, null));
+      neutron_stars.push(
+        new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, null, null)
+      );
     }
   }
 
@@ -3600,7 +4155,7 @@ const initialize_simulation = () => {
 
   // Apply placement patterns to position objects
   apply_placement();
-  
+
   // --- Fix for GW150914 scenario: two black holes in close inspiral ---
   if (starting_preset === 'GW150914' && bh_list.length >= 2) {
     const separation = 90; // Slightly closer for faster merger
@@ -3616,7 +4171,7 @@ const initialize_simulation = () => {
     bh_list[1].pos.y = 0;
     // Orbital velocities
     const G = SETTINGS.gravitational_constant;
-    const orbitalSpeed = Math.sqrt(G * totalMass / separation);
+    const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
     bh_list[0].vel.x = 0;
     bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
     bh_list[1].vel.x = 0;
@@ -3626,7 +4181,7 @@ const initialize_simulation = () => {
     bh_list[0].vel.y *= perturbation;
     bh_list[1].vel.y *= perturbation;
   }
-  
+
   // Show enhanced scenario info box
   show_enhanced_scenario_info(starting_preset);
 
@@ -3634,12 +4189,12 @@ const initialize_simulation = () => {
   if (starting_preset === 'Binary Star System') {
     // Clear any existing stars and create binary system
     stars.length = 0;
-    
+
     // Create two stars in binary orbit
     const star1 = new StarObject({ x: -60, y: 0 }, { x: 0, y: 12 }, 1.2);
     const star2 = new StarObject({ x: 60, y: 0 }, { x: 0, y: -12 }, 0.8);
     stars.push(star1, star2);
-    
+
     // Add planets orbiting the binary system
     const centralMass = star1.mass + star2.mass;
     for (let i = 0; i < SETTINGS.num_planets; i++) {
@@ -3651,7 +4206,7 @@ const initialize_simulation = () => {
       planets[i].pos = pos;
       planets[i].vel = vel;
     }
-    
+
     // Add gas giants
     for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
       const r = 300 + i * 50;
@@ -3662,13 +4217,15 @@ const initialize_simulation = () => {
       gas_giants[i].pos = pos;
       gas_giants[i].vel = vel;
     }
-    
+
     // Add asteroids
     if (SETTINGS.enable_asteroids) {
       for (let i = 0; i < SETTINGS.num_asteroids; i++) {
         const r = 400 + Math.random() * 100;
         const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const v = Math.sqrt(
+          (SETTINGS.gravitational_constant * centralMass) / r
+        );
         const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
         asteroids[i].pos = pos;
@@ -3682,7 +4239,7 @@ const initialize_simulation = () => {
     gas_giants.length = 0;
     asteroids.length = 0;
     comets.length = 0;
-    
+
     // Create the Sun as a proper G-type main sequence star with accurate properties
     const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
     sun.name = 'Sol'; // Real name of our sun
@@ -3701,12 +4258,12 @@ const initialize_simulation = () => {
     sun.density = 1408; // kg/m³ (solar density)
     sun.isSolarSystemSun = true; // Flag for Solar System sun
     stars.push(sun);
-    
+
     // Real Solar System data with accurate properties
     // Distances in AU (scaled down for simulation), masses in Earth masses, diameters in km
     const solarSystemData = [
-      { 
-        name: 'Mercury', 
+      {
+        name: 'Mercury',
         mass: 0.055, // 0.055 Earth masses
         distance: 80, // ~0.39 AU (scaled) - increased for stability
         diameter: 4879, // km
@@ -3720,10 +4277,10 @@ const initialize_simulation = () => {
         atmosphere: 'none',
         density_kg_m3: 5427, // kg/m³
         escape_velocity: 4.25, // km/s
-        surface_pressure: 0 // Pa (no atmosphere)
+        surface_pressure: 0, // Pa (no atmosphere)
       },
-      { 
-        name: 'Venus', 
+      {
+        name: 'Venus',
         mass: 0.815, // 0.815 Earth masses
         distance: 120, // ~0.72 AU (scaled) - increased for stability
         diameter: 12104, // km
@@ -3737,10 +4294,10 @@ const initialize_simulation = () => {
         atmosphere: 'CO2',
         density_kg_m3: 5243, // kg/m³
         escape_velocity: 10.36, // km/s
-        surface_pressure: 9200000 // Pa (92 bar)
+        surface_pressure: 9200000, // Pa (92 bar)
       },
-      { 
-        name: 'Earth', 
+      {
+        name: 'Earth',
         mass: 1.0, // 1 Earth mass
         distance: 160, // ~1 AU (scaled) - increased for stability
         diameter: 12742, // km
@@ -3754,10 +4311,10 @@ const initialize_simulation = () => {
         atmosphere: 'N2/O2',
         density_kg_m3: 5514, // kg/m³
         escape_velocity: 11.19, // km/s
-        surface_pressure: 101325 // Pa (1 bar)
+        surface_pressure: 101325, // Pa (1 bar)
       },
-      { 
-        name: 'Mars', 
+      {
+        name: 'Mars',
         mass: 0.107, // 0.107 Earth masses
         distance: 200, // ~1.52 AU (scaled) - increased for stability
         diameter: 6779, // km
@@ -3771,10 +4328,10 @@ const initialize_simulation = () => {
         atmosphere: 'CO2',
         density_kg_m3: 3933, // kg/m³
         escape_velocity: 5.03, // km/s
-        surface_pressure: 636 // Pa (0.006 bar)
+        surface_pressure: 636, // Pa (0.006 bar)
       },
-      { 
-        name: 'Jupiter', 
+      {
+        name: 'Jupiter',
         mass: 317.8, // 317.8 Earth masses
         distance: 350, // ~5.2 AU (scaled) - increased for stability
         diameter: 139822, // km
@@ -3788,10 +4345,10 @@ const initialize_simulation = () => {
         atmosphere: 'H2/He',
         density_kg_m3: 1326, // kg/m³
         escape_velocity: 59.5, // km/s
-        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+        surface_pressure: 100000, // Pa (1 bar at cloud tops)
       },
-      { 
-        name: 'Saturn', 
+      {
+        name: 'Saturn',
         mass: 95.2, // 95.2 Earth masses
         distance: 500, // ~9.5 AU (scaled) - increased for stability
         diameter: 116464, // km
@@ -3805,10 +4362,10 @@ const initialize_simulation = () => {
         atmosphere: 'H2/He',
         density_kg_m3: 687, // kg/m³
         escape_velocity: 35.5, // km/s
-        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+        surface_pressure: 100000, // Pa (1 bar at cloud tops)
       },
-      { 
-        name: 'Uranus', 
+      {
+        name: 'Uranus',
         mass: 14.5, // 14.5 Earth masses
         distance: 650, // ~19.2 AU (scaled) - increased for stability
         diameter: 50724, // km
@@ -3822,10 +4379,10 @@ const initialize_simulation = () => {
         atmosphere: 'H2/He/CH4',
         density_kg_m3: 1271, // kg/m³
         escape_velocity: 21.3, // km/s
-        surface_pressure: 100000 // Pa (1 bar at cloud tops)
+        surface_pressure: 100000, // Pa (1 bar at cloud tops)
       },
-      { 
-        name: 'Neptune', 
+      {
+        name: 'Neptune',
         mass: 17.1, // 17.1 Earth masses
         distance: 800, // ~30.1 AU (scaled) - increased for stability
         diameter: 49244, // km
@@ -3839,20 +4396,25 @@ const initialize_simulation = () => {
         atmosphere: 'H2/He/CH4',
         density_kg_m3: 1638, // kg/m³
         escape_velocity: 23.5, // km/s
-        surface_pressure: 100000 // Pa (1 bar at cloud tops)
-      }
+        surface_pressure: 100000, // Pa (1 bar at cloud tops)
+      },
     ];
-    
+
     // Create planets with realistic properties
     for (let i = 0; i < solarSystemData.length; i++) {
       const planetData = solarSystemData[i];
       const r = planetData.distance;
       const theta = Math.random() * 2 * Math.PI;
       // Calculate orbital velocity based on real orbital periods
-      const orbitalVelocity = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
+      const orbitalVelocity = Math.sqrt(
+        (SETTINGS.gravitational_constant * sun.mass) / r
+      );
       const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
-      const vel = { x: -orbitalVelocity * Math.sin(theta), y: orbitalVelocity * Math.cos(theta) };
-      
+      const vel = {
+        x: -orbitalVelocity * Math.sin(theta),
+        y: orbitalVelocity * Math.cos(theta),
+      };
+
       if (planetData.type === 'gas_giant' || planetData.type === 'ice_giant') {
         // Create new gas giant objects
         const gasGiant = new GasGiant(pos, vel, planetData.mass / 50.0); // Convert to Jupiter masses
@@ -3893,7 +4455,7 @@ const initialize_simulation = () => {
         planets.push(planet);
       }
     }
-    
+
     // Add asteroid belt between Mars and Jupiter with real asteroids
     if (SETTINGS.enable_asteroids) {
       const realAsteroids = [
@@ -3912,17 +4474,21 @@ const initialize_simulation = () => {
         { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
         { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
         { name: 'Bamberga', diameter: 229, distance: 350, mass: 0.000003 },
-        { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 }
+        { name: 'Patientia', diameter: 225, distance: 355, mass: 0.000003 },
       ];
-      
-      for (let i = 0; i < Math.min(SETTINGS.num_asteroids, realAsteroids.length); i++) {
+
+      for (
+        let i = 0;
+        i < Math.min(SETTINGS.num_asteroids, realAsteroids.length);
+        i++
+      ) {
         const asteroidData = realAsteroids[i];
         const r = asteroidData.distance + (Math.random() - 0.5) * 20; // Add some variation for wider spacing
         const theta = Math.random() * 2 * Math.PI;
         const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r);
         const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        
+
         // Create new asteroid object
         const asteroid = new Asteroid(pos, vel);
         asteroid.name = asteroidData.name;
@@ -3931,34 +4497,111 @@ const initialize_simulation = () => {
         asteroids.push(asteroid);
       }
     }
-    
+
     // Add famous comets in distant orbits with real properties
     if (SETTINGS.num_comets) {
       const famousComets = [
-        { name: 'Halley', period: 76, perihelion: 0.586, aphelion: 35.1, diameter: 11 },
-        { name: 'Hale-Bopp', period: 2533, perihelion: 0.914, aphelion: 370.8, diameter: 60 },
-        { name: 'Hyakutake', period: 113783, perihelion: 0.230, aphelion: 4698.77, diameter: 4.2 },
-        { name: 'Shoemaker-Levy 9', period: 11.3, perihelion: 5.4, aphelion: 7.8, diameter: 1.8 },
-        { name: 'Comet ISON', period: 400000, perihelion: 0.012, aphelion: 73000, diameter: 2 },
-        { name: 'Lovejoy', period: 314, perihelion: 0.005, aphelion: 157, diameter: 0.5 },
-        { name: 'McNaught', period: 92, perihelion: 0.17, aphelion: 67, diameter: 19 },
-        { name: 'Pan-STARRS', period: 110000, perihelion: 0.3, aphelion: 16000, diameter: 1 },
-        { name: 'Swift-Tuttle', period: 133, perihelion: 0.96, aphelion: 51.2, diameter: 26 },
-        { name: 'Tempel-Tuttle', period: 33, perihelion: 0.98, aphelion: 19.7, diameter: 3.6 },
-        { name: 'Wild 2', period: 6.4, perihelion: 1.59, aphelion: 5.3, diameter: 5.5 },
-        { name: 'Hartley 2', period: 6.46, perihelion: 1.05, aphelion: 5.87, diameter: 1.2 }
+        {
+          name: 'Halley',
+          period: 76,
+          perihelion: 0.586,
+          aphelion: 35.1,
+          diameter: 11,
+        },
+        {
+          name: 'Hale-Bopp',
+          period: 2533,
+          perihelion: 0.914,
+          aphelion: 370.8,
+          diameter: 60,
+        },
+        {
+          name: 'Hyakutake',
+          period: 113783,
+          perihelion: 0.23,
+          aphelion: 4698.77,
+          diameter: 4.2,
+        },
+        {
+          name: 'Shoemaker-Levy 9',
+          period: 11.3,
+          perihelion: 5.4,
+          aphelion: 7.8,
+          diameter: 1.8,
+        },
+        {
+          name: 'Comet ISON',
+          period: 400000,
+          perihelion: 0.012,
+          aphelion: 73000,
+          diameter: 2,
+        },
+        {
+          name: 'Lovejoy',
+          period: 314,
+          perihelion: 0.005,
+          aphelion: 157,
+          diameter: 0.5,
+        },
+        {
+          name: 'McNaught',
+          period: 92,
+          perihelion: 0.17,
+          aphelion: 67,
+          diameter: 19,
+        },
+        {
+          name: 'Pan-STARRS',
+          period: 110000,
+          perihelion: 0.3,
+          aphelion: 16000,
+          diameter: 1,
+        },
+        {
+          name: 'Swift-Tuttle',
+          period: 133,
+          perihelion: 0.96,
+          aphelion: 51.2,
+          diameter: 26,
+        },
+        {
+          name: 'Tempel-Tuttle',
+          period: 33,
+          perihelion: 0.98,
+          aphelion: 19.7,
+          diameter: 3.6,
+        },
+        {
+          name: 'Wild 2',
+          period: 6.4,
+          perihelion: 1.59,
+          aphelion: 5.3,
+          diameter: 5.5,
+        },
+        {
+          name: 'Hartley 2',
+          period: 6.46,
+          perihelion: 1.05,
+          aphelion: 5.87,
+          diameter: 1.2,
+        },
       ];
-      
-      for (let i = 0; i < Math.min(SETTINGS.num_comets, famousComets.length); i++) {
+
+      for (
+        let i = 0;
+        i < Math.min(SETTINGS.num_comets, famousComets.length);
+        i++
+      ) {
         const cometData = famousComets[i];
         // Use semi-major axis for distance (average of perihelion and aphelion)
         const semiMajorAxis = (cometData.perihelion + cometData.aphelion) / 2;
         const r = semiMajorAxis * 15; // Scale for simulation
         const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
+        const v =
+          Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
         const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-        
+
         // Create new comet object with real properties
         const comet = new Comet(pos, vel);
         comet.name = cometData.name;
@@ -3973,7 +4616,7 @@ const initialize_simulation = () => {
     // Set up central star system first
     const centralStar = stars[0];
     const centralMass = centralStar.mass;
-    
+
     // Position planets around the central star
     for (let i = 0; i < SETTINGS.num_planets; i++) {
       const r = 50 + i * 25;
@@ -3984,7 +4627,7 @@ const initialize_simulation = () => {
       planets[i].pos = pos;
       planets[i].vel = vel;
     }
-    
+
     // Position gas giants
     for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
       const r = 200 + i * 50;
@@ -3995,20 +4638,22 @@ const initialize_simulation = () => {
       gas_giants[i].pos = pos;
       gas_giants[i].vel = vel;
     }
-    
+
     // Position asteroids
     if (SETTINGS.enable_asteroids) {
       for (let i = 0; i < SETTINGS.num_asteroids; i++) {
         const r = 350 + Math.random() * 100;
         const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const v = Math.sqrt(
+          (SETTINGS.gravitational_constant * centralMass) / r
+        );
         const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
         asteroids[i].pos = pos;
         asteroids[i].vel = vel;
       }
     }
-    
+
     // Position rogue black hole to approach the system
     if (bh_list.length > 0) {
       bh_list[0].pos = { x: -800, y: 200 }; // Start far away
@@ -4019,7 +4664,7 @@ const initialize_simulation = () => {
     const centralStar = stars[0];
     centralStar.name = 'Sol';
     const centralMass = centralStar.mass;
-    
+
     // Real Kuiper Belt objects with accurate names and properties
     const kuiperBeltObjects = [
       { name: 'Pluto', mass: 0.0022, distance: 200, type: 'dwarf_planet' },
@@ -4029,18 +4674,22 @@ const initialize_simulation = () => {
       { name: 'Quaoar', mass: 0.0002, distance: 280, type: 'large_kbo' },
       { name: 'Sedna', mass: 0.0001, distance: 300, type: 'large_kbo' },
       { name: 'Orcus', mass: 0.0001, distance: 320, type: 'large_kbo' },
-      { name: 'Varuna', mass: 0.0001, distance: 340, type: 'large_kbo' }
+      { name: 'Varuna', mass: 0.0001, distance: 340, type: 'large_kbo' },
     ];
-    
+
     // Create Kuiper Belt objects
-    for (let i = 0; i < Math.min(kuiperBeltObjects.length, SETTINGS.num_planets); i++) {
+    for (
+      let i = 0;
+      i < Math.min(kuiperBeltObjects.length, SETTINGS.num_planets);
+      i++
+    ) {
       const kboData = kuiperBeltObjects[i];
       const r = kboData.distance;
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
       const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
       const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      
+
       if (kboData.type === 'dwarf_planet') {
         // Use planets array for dwarf planets
         if (planets.length > 0) {
@@ -4061,18 +4710,34 @@ const initialize_simulation = () => {
         }
       }
     }
-    
+
     // Add smaller Kuiper Belt objects as asteroids
     if (SETTINGS.enable_asteroids) {
       const smallKBOs = [
-        'Ixion', 'Huya', '2002 AW197', '2002 UX25', '2002 TX300', '2003 AZ84',
-        '2003 VS2', '2004 GV9', '2005 RN43', '2005 UQ513', '2006 QH181', '2007 OR10'
+        'Ixion',
+        'Huya',
+        '2002 AW197',
+        '2002 UX25',
+        '2002 TX300',
+        '2003 AZ84',
+        '2003 VS2',
+        '2004 GV9',
+        '2005 RN43',
+        '2005 UQ513',
+        '2006 QH181',
+        '2007 OR10',
       ];
-      
-      for (let i = 0; i < Math.min(SETTINGS.num_asteroids, smallKBOs.length); i++) {
+
+      for (
+        let i = 0;
+        i < Math.min(SETTINGS.num_asteroids, smallKBOs.length);
+        i++
+      ) {
         const r = 500 + Math.random() * 200; // Kuiper Belt region
         const theta = Math.random() * 2 * Math.PI;
-        const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
+        const v = Math.sqrt(
+          (SETTINGS.gravitational_constant * centralMass) / r
+        );
         const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
         asteroids[i].pos = pos;
@@ -4085,47 +4750,100 @@ const initialize_simulation = () => {
     if (bh_list.length > 0) {
       bh_list[0].name = 'Sagittarius A*';
     }
-    
+
     // Add some real S-stars that orbit Sgr A* (the most famous ones)
     const sStars = [
-      'S2', 'S12', 'S14', 'S1', 'S8', 'S13', 'S9', 'S6', 'S4', 'S7',
-      'S31', 'S21', 'S24', 'S54', 'S55', 'S60', 'S66', 'S67', 'S83', 'S87'
+      'S2',
+      'S12',
+      'S14',
+      'S1',
+      'S8',
+      'S13',
+      'S9',
+      'S6',
+      'S4',
+      'S7',
+      'S31',
+      'S21',
+      'S24',
+      'S54',
+      'S55',
+      'S60',
+      'S66',
+      'S67',
+      'S83',
+      'S87',
     ];
-    
+
     // Name some of the stars with real S-star names
     for (let i = 0; i < Math.min(stars.length, sStars.length); i++) {
       stars[i].name = sStars[i];
     }
-    
+
     // Name some neutron stars with real names from the galactic center
     const galacticNeutronStars = [
-      'SGR J1745-2900', 'PSR J1745-2900', 'PSR J1746-2850', 'PSR J1745-2912',
-      'PSR J1746-2849', 'PSR J1745-2910', 'PSR J1746-2856', 'PSR J1745-2909'
+      'SGR J1745-2900',
+      'PSR J1745-2900',
+      'PSR J1746-2850',
+      'PSR J1745-2912',
+      'PSR J1746-2849',
+      'PSR J1745-2910',
+      'PSR J1746-2856',
+      'PSR J1745-2909',
     ];
-    
-    for (let i = 0; i < Math.min(neutron_stars.length, galacticNeutronStars.length); i++) {
+
+    for (
+      let i = 0;
+      i < Math.min(neutron_stars.length, galacticNeutronStars.length);
+      i++
+    ) {
       neutron_stars[i].name = galacticNeutronStars[i];
     }
-  } else if (starting_preset === 'Binary Star System') {
-    // Set up binary star system with real binary star names
+  } else if (starting_preset === 'Galactic Center') {
+    // Name some neutron stars with real binary star names for Galactic Center scenario
     const realBinaryStars = [
-      'Alpha Centauri A', 'Alpha Centauri B', 'Sirius A', 'Sirius B', 'Procyon A', 'Procyon B',
-      'Castor A', 'Castor B', 'Algol A', 'Algol B', 'Beta Lyrae A', 'Beta Lyrae B',
-      'W Ursae Majoris A', 'W Ursae Majoris B', 'RS Canum Venaticorum A', 'RS Canum Venaticorum B'
+      'Alpha Centauri A',
+      'Alpha Centauri B',
+      'Sirius A',
+      'Sirius B',
+      'Procyon A',
+      'Procyon B',
+      'Castor A',
+      'Castor B',
+      'Algol A',
+      'Algol B',
+      'Beta Lyrae A',
+      'Beta Lyrae B',
+      'W Ursae Majoris A',
+      'W Ursae Majoris B',
+      'RS Canum Venaticorum A',
+      'RS Canum Venaticorum B',
     ];
-    
+
     // Name the binary stars
     for (let i = 0; i < Math.min(stars.length, 2); i++) {
       stars[i].name = realBinaryStars[i];
     }
-    
+
     // Name planets with real exoplanet names from binary systems
     const binaryExoplanets = [
-      'Kepler-16b', 'Kepler-34b', 'Kepler-35b', 'Kepler-38b', 'Kepler-47b', 'Kepler-47c',
-      'Kepler-64b', 'Kepler-413b', 'Kepler-453b', 'Kepler-1647b'
+      'Kepler-16b',
+      'Kepler-34b',
+      'Kepler-35b',
+      'Kepler-38b',
+      'Kepler-47b',
+      'Kepler-47c',
+      'Kepler-64b',
+      'Kepler-413b',
+      'Kepler-453b',
+      'Kepler-1647b',
     ];
-    
-    for (let i = 0; i < Math.min(planets.length, binaryExoplanets.length); i++) {
+
+    for (
+      let i = 0;
+      i < Math.min(planets.length, binaryExoplanets.length);
+      i++
+    ) {
       planets[i].name = binaryExoplanets[i];
     }
   } else if (starting_preset === 'Pulsar System') {
@@ -4133,10 +4851,14 @@ const initialize_simulation = () => {
     if (neutron_stars.length > 0) {
       neutron_stars[0].name = 'PSR B1257+12'; // The real pulsar with the first confirmed exoplanets
     }
-    
+
     // Name planets with the real planets discovered around PSR B1257+12
-    const pulsarPlanets = ['PSR B1257+12 b', 'PSR B1257+12 c', 'PSR B1257+12 d'];
-    
+    const pulsarPlanets = [
+      'PSR B1257+12 b',
+      'PSR B1257+12 c',
+      'PSR B1257+12 d',
+    ];
+
     for (let i = 0; i < Math.min(planets.length, pulsarPlanets.length); i++) {
       planets[i].name = pulsarPlanets[i];
     }
@@ -4157,7 +4879,7 @@ const initialize_simulation = () => {
     neutron_stars.length = 0; // Clear any neutron stars
     white_dwarfs.length = 0; // Clear any white dwarfs
     debris.length = 0; // Clear any debris
-    
+
     // Create Earth at the center (we'll treat it as the primary body)
     const earth = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
     earth.name = 'Earth';
@@ -4179,14 +4901,22 @@ const initialize_simulation = () => {
     earth.magnetic_field = 25; // μT (microtesla)
     earth.albedo = 0.306; // Bond albedo
     planets.push(earth);
-    
+
     // Create Moon orbiting Earth
     const moonDistance = 35; // Distance from Earth (scaled for better visibility)
-    const moonOrbitalVelocity = Math.sqrt((SETTINGS.gravitational_constant * earth.mass) / moonDistance);
+    const moonOrbitalVelocity = Math.sqrt(
+      (SETTINGS.gravitational_constant * earth.mass) / moonDistance
+    );
     const moonTheta = Math.random() * 2 * Math.PI;
-    const moonPos = { x: moonDistance * Math.cos(moonTheta), y: moonDistance * Math.sin(moonTheta) };
-    const moonVel = { x: -moonOrbitalVelocity * Math.sin(moonTheta), y: moonOrbitalVelocity * Math.cos(moonTheta) };
-    
+    const moonPos = {
+      x: moonDistance * Math.cos(moonTheta),
+      y: moonDistance * Math.sin(moonTheta),
+    };
+    const moonVel = {
+      x: -moonOrbitalVelocity * Math.sin(moonTheta),
+      y: moonOrbitalVelocity * Math.cos(moonTheta),
+    };
+
     const moon = new Planet(moonPos, moonVel, 0.0123); // Moon is 0.0123 Earth masses
     moon.name = 'Luna';
     moon.mass = 0.0123 * EARTH_MASS_UNIT; // Moon mass
@@ -4207,7 +4937,7 @@ const initialize_simulation = () => {
     moon.magnetic_field = 0; // μT (no significant magnetic field)
     moon.albedo = 0.136; // Bond albedo
     planets.push(moon);
-    
+
     // Set up zoom and pan to focus on the Earth-Moon system
     // This will be handled by the camera system to show both objects clearly
     SETTINGS.sim_size = 'Small'; // Use small simulation size for better zoom
@@ -4228,7 +4958,7 @@ const initialize_simulation = () => {
       bh_list[1].pos.y = 0;
       // Orbital velocities
       const G = SETTINGS.gravitational_constant;
-      const orbitalSpeed = Math.sqrt(G * totalMass / separation);
+      const orbitalSpeed = Math.sqrt((G * totalMass) / separation);
       bh_list[0].vel.x = 0;
       bh_list[0].vel.y = orbitalSpeed * (m2 / totalMass);
       bh_list[1].vel.x = 0;
@@ -4288,7 +5018,7 @@ const initialize_simulation = () => {
       { name: 'b', a: 0.0115, mass: 1.017, radius: 1.121 },
       { name: 'c', a: 0.0158, mass: 1.156, radius: 1.095 },
       { name: 'd', a: 0.0223, mass: 0.297, radius: 0.784 },
-      { name: 'e', a: 0.0292, mass: 0.772, radius: 0.910 },
+      { name: 'e', a: 0.0292, mass: 0.772, radius: 0.91 },
       { name: 'f', a: 0.0385, mass: 0.934, radius: 1.046 },
       { name: 'g', a: 0.0469, mass: 1.148, radius: 1.148 },
       { name: 'h', a: 0.0619, mass: 0.326, radius: 0.773 },
@@ -4544,7 +5274,11 @@ const setting_items = [
   },
   { label: 'Show BH Glow', key: 'show_bh_glow', type: 'bool' },
   { label: 'Show Accretion Disk', key: 'show_accretion_disk', type: 'bool' },
-  { label: 'Realistic Disk Physics', key: 'realistic_disk_physics', type: 'bool' },
+  {
+    label: 'Realistic Disk Physics',
+    key: 'realistic_disk_physics',
+    type: 'bool',
+  },
   { label: 'Show BH Jets', key: 'show_bh_jets', type: 'bool' },
   {
     label: 'Star Field Density',
@@ -4582,7 +5316,11 @@ const setting_items = [
   },
   { label: 'Show Overlays', key: 'show_dynamic_overlays', type: 'bool' },
   { label: 'Record Simulation', key: 'record_simulation', type: 'bool' },
-  { label: 'Show Gravitational Waves', key: 'show_gravitational_waves', type: 'bool' },
+  {
+    label: 'Show Gravitational Waves',
+    key: 'show_gravitational_waves',
+    type: 'bool',
+  },
 ];
 // ===== Reusable Tooltip System =====
 class TooltipManager {
@@ -4616,7 +5354,7 @@ class TooltipManager {
       white-space: normal;
       font-family: 'Inter', sans-serif;
     `;
-    
+
     // Add close button
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
@@ -4641,22 +5379,22 @@ class TooltipManager {
       align-items: center;
       justify-content: center;
     `;
-    
+
     closeButton.addEventListener('mouseenter', () => {
       closeButton.style.color = '#e0e0e0';
       closeButton.style.background = 'rgba(255, 255, 255, 0.1)';
     });
-    
+
     closeButton.addEventListener('mouseleave', () => {
       closeButton.style.color = '#888';
       closeButton.style.background = 'none';
     });
-    
-    closeButton.addEventListener('click', (e) => {
+
+    closeButton.addEventListener('click', e => {
       e.stopPropagation();
       this.hide();
     });
-    
+
     // Add arrow
     const arrow = document.createElement('div');
     arrow.className = 'tooltip-arrow';
@@ -4666,12 +5404,12 @@ class TooltipManager {
       height: 0;
       border: 6px solid transparent;
     `;
-    
+
     this.tooltipElement.appendChild(closeButton);
     this.tooltipElement.appendChild(arrow);
-    
+
     document.body.appendChild(this.tooltipElement);
-    
+
     // Add event listeners
     document.addEventListener('click', this.handleOutsideClick.bind(this));
     document.addEventListener('keydown', this.handleKeydown.bind(this));
@@ -4682,7 +5420,7 @@ class TooltipManager {
   show(tooltipText, triggerElement, options = {}) {
     // Hide any existing tooltip
     this.hide();
-    
+
     // Create content container
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = `
@@ -4690,10 +5428,10 @@ class TooltipManager {
       margin-top: 8px;
     `;
     contentContainer.textContent = tooltipText;
-    
+
     // Clear existing content and add new content
     this.tooltipElement.innerHTML = '';
-    
+
     // Re-add close button
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
@@ -4718,22 +5456,22 @@ class TooltipManager {
       align-items: center;
       justify-content: center;
     `;
-    
+
     closeButton.addEventListener('mouseenter', () => {
       closeButton.style.color = '#e0e0e0';
       closeButton.style.background = 'rgba(255, 255, 255, 0.1)';
     });
-    
+
     closeButton.addEventListener('mouseleave', () => {
       closeButton.style.color = '#888';
       closeButton.style.background = 'none';
     });
-    
-    closeButton.addEventListener('click', (e) => {
+
+    closeButton.addEventListener('click', e => {
       e.stopPropagation();
       this.hide();
     });
-    
+
     // Add arrow
     const arrow = document.createElement('div');
     arrow.className = 'tooltip-arrow';
@@ -4743,23 +5481,23 @@ class TooltipManager {
       height: 0;
       border: 6px solid transparent;
     `;
-    
+
     this.tooltipElement.appendChild(closeButton);
     this.tooltipElement.appendChild(contentContainer);
     this.tooltipElement.appendChild(arrow);
-    
+
     // Position tooltip
     this.positionTooltip(triggerElement, options);
-    
+
     // Show tooltip
     this.tooltipElement.style.visibility = 'visible';
     this.tooltipElement.style.opacity = '1';
     this.tooltipElement.style.pointerEvents = 'auto';
-    
+
     // Store reference
     this.activeTooltip = {
       element: triggerElement,
-      options
+      options,
     };
   }
 
@@ -4776,18 +5514,18 @@ class TooltipManager {
     const tooltip = this.tooltipElement;
     const triggerRect = triggerElement.getBoundingClientRect();
     const arrow = tooltip.querySelector('.tooltip-arrow');
-    
+
     // Default position (below the trigger)
     let position = options.position || 'bottom';
     let x = triggerRect.left + triggerRect.width / 2;
     let y = triggerRect.bottom + 8;
-    
+
     // Calculate available space
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const tooltipWidth = tooltip.offsetWidth || 280;
     const tooltipHeight = tooltip.offsetHeight || 100;
-    
+
     // Auto-position if not enough space
     if (position === 'bottom' && y + tooltipHeight > viewportHeight - 20) {
       position = 'top';
@@ -4801,7 +5539,7 @@ class TooltipManager {
     if (position === 'left' && x - tooltipWidth < 20) {
       position = 'right';
     }
-    
+
     // Adjust position based on final position
     switch (position) {
       case 'top':
@@ -4841,18 +5579,22 @@ class TooltipManager {
         arrow.style.borderLeftColor = 'transparent';
         break;
     }
-    
+
     // Ensure tooltip stays within viewport bounds
     x = Math.max(10, Math.min(x, viewportWidth - tooltipWidth - 10));
     y = Math.max(10, Math.min(y, viewportHeight - tooltipHeight - 10));
-    
+
     // Apply position
     tooltip.style.left = `${x}px`;
     tooltip.style.top = `${y}px`;
   }
 
   handleOutsideClick(event) {
-    if (this.activeTooltip && !this.activeTooltip.element.contains(event.target) && !this.tooltipElement.contains(event.target)) {
+    if (
+      this.activeTooltip &&
+      !this.activeTooltip.element.contains(event.target) &&
+      !this.tooltipElement.contains(event.target)
+    ) {
       this.hide();
     }
   }
@@ -4865,13 +5607,19 @@ class TooltipManager {
 
   handleResize() {
     if (this.activeTooltip) {
-      this.positionTooltip(this.activeTooltip.element, this.activeTooltip.options);
+      this.positionTooltip(
+        this.activeTooltip.element,
+        this.activeTooltip.options
+      );
     }
   }
 
   handleScroll() {
     if (this.activeTooltip) {
-      this.positionTooltip(this.activeTooltip.element, this.activeTooltip.options);
+      this.positionTooltip(
+        this.activeTooltip.element,
+        this.activeTooltip.options
+      );
     }
   }
 }
@@ -4883,49 +5631,72 @@ const tooltipManager = new TooltipManager();
 const getSettingTooltip = (key, label) => {
   const tooltips = {
     // Simulation settings
-    'gravitational_constant': 'Determines the strength of gravity in the simulation. Higher values exaggerate gravitational effects for visualization.',
-    'sim_speed': 'Controls how fast the simulation runs. Higher values make time pass faster.',
-    'mutual_gravity': 'When enabled, all objects attract each other. When disabled, only black holes create gravity.',
-    'enable_star_merging': 'When enabled, stars and other objects can merge when they get too close to each other.',
-    
+    gravitational_constant:
+      'Determines the strength of gravity in the simulation. Higher values exaggerate gravitational effects for visualization.',
+    sim_speed:
+      'Controls how fast the simulation runs. Higher values make time pass faster.',
+    mutual_gravity:
+      'When enabled, all objects attract each other. When disabled, only black holes create gravity.',
+    enable_star_merging:
+      'When enabled, stars and other objects can merge when they get too close to each other.',
+
     // Object counts
-    'num_black_holes': 'Number of black holes in the simulation. Each black hole creates a strong gravitational field.',
-    'bh_mass': 'Mass of black holes in solar masses (M☉). Higher mass creates stronger gravity.',
-    'num_stars': 'Number of stars in the simulation. Stars are lighter than black holes but still create gravity.',
-    'num_planets': 'Number of planets in the simulation. Planets are small objects that orbit around larger bodies.',
-    'num_gas_giants': 'Number of gas giant planets. These are larger than regular planets.',
-    'num_asteroids': 'Number of asteroids in the simulation. These are small rocky objects.',
-    'num_comets': 'Number of comets. These objects have highly elliptical orbits.',
-    'num_neutron_stars': 'Number of neutron stars. These are dense stellar remnants.',
-    'num_white_dwarfs': 'Number of white dwarfs. These are small, dense stellar remnants.',
-    
+    num_black_holes:
+      'Number of black holes in the simulation. Each black hole creates a strong gravitational field.',
+    bh_mass:
+      'Mass of black holes in solar masses (M☉). Higher mass creates stronger gravity.',
+    num_stars:
+      'Number of stars in the simulation. Stars are lighter than black holes but still create gravity.',
+    num_planets:
+      'Number of planets in the simulation. Planets are small objects that orbit around larger bodies.',
+    num_gas_giants:
+      'Number of gas giant planets. These are larger than regular planets.',
+    num_asteroids:
+      'Number of asteroids in the simulation. These are small rocky objects.',
+    num_comets:
+      'Number of comets. These objects have highly elliptical orbits.',
+    num_neutron_stars:
+      'Number of neutron stars. These are dense stellar remnants.',
+    num_white_dwarfs:
+      'Number of white dwarfs. These are small, dense stellar remnants.',
+
     // Behavior settings
-    'bh_behavior': 'How black holes behave: Static (stationary), Orbiting (move in orbits), or Rogue (random movement).',
-    'use_individual_bh_masses': 'Toggle to assign unique masses to each black hole instead of a shared mass.',
-    
+    bh_behavior:
+      'How black holes behave: Static (stationary), Orbiting (move in orbits), or Rogue (random movement).',
+    use_individual_bh_masses:
+      'Toggle to assign unique masses to each black hole instead of a shared mass.',
+
     // Visual settings
-    'show_trails': 'When enabled, objects leave trails showing their recent path.',
-    'trail_length': 'How long object trails persist on screen before fading.',
-    'trail_style': 'Style of the trails: Simple lines or glowing effects.',
-    'show_accretion_disk': 'When enabled, black holes display accretion disk effects.',
-    'show_bh_glow': 'When enabled, black holes have a glowing effect.',
-    'star_density': 'Number of background stars in the starfield.',
-    
+    show_trails:
+      'When enabled, objects leave trails showing their recent path.',
+    trail_length: 'How long object trails persist on screen before fading.',
+    trail_style: 'Style of the trails: Simple lines or glowing effects.',
+    show_accretion_disk:
+      'When enabled, black holes display accretion disk effects.',
+    show_bh_glow: 'When enabled, black holes have a glowing effect.',
+    star_density: 'Number of background stars in the starfield.',
+
     // Initial conditions
-    'placement': 'How objects are initially positioned: Random, Circular, or Empty.',
-    'init_velocity': 'Initial velocity given to objects when they are created.',
-    'velocity_stddev': 'Standard deviation of initial velocities, creating variation.',
-    'orbit_decay_rate': 'How quickly orbits decay due to gravitational radiation.',
-    
+    placement:
+      'How objects are initially positioned: Random, Circular, or Empty.',
+    init_velocity: 'Initial velocity given to objects when they are created.',
+    velocity_stddev:
+      'Standard deviation of initial velocities, creating variation.',
+    orbit_decay_rate:
+      'How quickly orbits decay due to gravitational radiation.',
+
     // Scenario settings
-    'preset_scenario': 'Choose from predefined scenarios with specific object configurations.',
-    'sim_size': 'Overall scale of the simulation: Small, Medium, or Large.',
-    
+    preset_scenario:
+      'Choose from predefined scenarios with specific object configurations.',
+    sim_size: 'Overall scale of the simulation: Small, Medium, or Large.',
+
     // Additional settings
-    'softening_length': 'Reduces numerical instabilities by softening gravity at very small distances.',
-    'time_step': 'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.'
+    softening_length:
+      'Reduces numerical instabilities by softening gravity at very small distances.',
+    time_step:
+      'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.',
   };
-  
+
   return tooltips[key] || `This setting controls ${label.toLowerCase()}.`;
 };
 
@@ -4957,7 +5728,7 @@ const buildSettingsMenu = () => {
       if (currentSection && currentSectionItems.length > 0) {
         sections.push({
           title: currentSection,
-          items: currentSectionItems
+          items: currentSectionItems,
         });
       }
       // Start new section
@@ -4972,7 +5743,7 @@ const buildSettingsMenu = () => {
   if (currentSection && currentSectionItems.length > 0) {
     sections.push({
       title: currentSection,
-      items: currentSectionItems
+      items: currentSectionItems,
     });
   }
 
@@ -4980,26 +5751,26 @@ const buildSettingsMenu = () => {
   sections.forEach(section => {
     const sectionDiv = document.createElement('div');
     sectionDiv.className = 'settings-section';
-    
+
     // Create section header
     const headerDiv = document.createElement('div');
     headerDiv.className = 'settings-section-header';
-    
+
     const titleDiv = document.createElement('h3');
     titleDiv.className = 'settings-section-title';
     titleDiv.textContent = section.title;
-    
+
     const toggleDiv = document.createElement('div');
     toggleDiv.className = 'settings-section-toggle';
     toggleDiv.textContent = '▼';
-    
+
     headerDiv.appendChild(titleDiv);
     headerDiv.appendChild(toggleDiv);
-    
+
     // Create section content
     const contentDiv = document.createElement('div');
     contentDiv.className = 'settings-section-content';
-    
+
     // Create grid for this section
     const sectionGrid = document.createElement('div');
     sectionGrid.className = 'settings-grid';
@@ -5013,30 +5784,30 @@ const buildSettingsMenu = () => {
       // Create label container with info icon
       const labelContainer = document.createElement('div');
       labelContainer.className = 'setting-label-container';
-      
+
       const label = document.createElement('div');
       label.className = 'setting-label';
       label.textContent = item.label;
-      
+
       // Create info icon
       const infoIcon = document.createElement('button');
       infoIcon.className = 'setting-info-icon';
       infoIcon.textContent = 'ⓘ';
       infoIcon.setAttribute('aria-label', `Information about ${item.label}`);
-      
+
       // Add click handler for tooltip using the new tooltip system
-      infoIcon.addEventListener('click', (e) => {
+      infoIcon.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         const tooltipText = getSettingTooltip(item.key, item.label);
         tooltipManager.show(tooltipText, infoIcon, { position: 'bottom' });
       });
-      
+
       // Add label and icon to container
       labelContainer.appendChild(label);
       labelContainer.appendChild(infoIcon);
-      
+
       const controlContainer = document.createElement('div');
       controlContainer.className = 'setting-control';
       const value = localSettings[item.key];
@@ -5122,7 +5893,7 @@ const buildSettingsMenu = () => {
         });
         select.onchange = e => {
           localSettings[item.key] = e.target.value;
-        if (item.key === 'preset_scenario') {
+          if (item.key === 'preset_scenario') {
             updatePresetInfo(e.target.value);
             current_scenario_name = e.target.value;
           }
@@ -5161,7 +5932,7 @@ const buildSettingsMenu = () => {
       sectionDiv.classList.toggle('collapsed');
     });
   });
-  
+
   updateIndivBHMassButtonVisibility();
   updatePresetInfo(localSettings.preset_scenario);
 };
@@ -5295,10 +6066,12 @@ const load_simulation_state = () => {
       else if (type === 'GasGiant') new_obj = new GasGiant(pos, vel);
       else if (type === 'Asteroid') new_obj = new Asteroid(pos, vel);
       else if (type === 'StarObject') new_obj = new StarObject(pos, vel);
-      else if (type === 'NeutronStar') new_obj = new NeutronStar(pos, vel, null, null);
+      else if (type === 'NeutronStar')
+        new_obj = new NeutronStar(pos, vel, null, null);
       else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(pos, vel);
       else if (type === 'Debris') new_obj = new Debris(pos, vel);
-              else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, vel, true);
+      else if (type === 'BlackHole')
+        new_obj = new BlackHole(pos, mass, vel, true);
       if (new_obj) {
         new_obj.set_state(obj_state);
         if (new_obj instanceof Planet) planets.push(new_obj);
@@ -5363,14 +6136,14 @@ const takeScreenshot = () => {
 
 // Object type cycling functionality
 const objectTypes = [
-  { type: "Star", emoji: "⭐", label: "Add Stars" },
-  { type: "Planet", emoji: "🌍", label: "Add Rocky Planets" },
-  { type: "GasGiant", emoji: "🪐", label: "Add Gas Giants" },
-  { type: "Asteroid", emoji: "☄️", label: "Add Asteroids" },
-  { type: "Comet", emoji: "☄️", label: "Add Comets" },
-  { type: "WhiteDwarf", emoji: "💎", label: "Add White Dwarfs" },
-  { type: "NeutronStar", emoji: "⚡", label: "Add Neutron Stars" },
-  { type: "BlackHole", emoji: "⚫", label: "Add Black Holes" }
+  { type: 'Star', emoji: '⭐', label: 'Add Stars' },
+  { type: 'Planet', emoji: '🌍', label: 'Add Rocky Planets' },
+  { type: 'GasGiant', emoji: '🪐', label: 'Add Gas Giants' },
+  { type: 'Asteroid', emoji: '☄️', label: 'Add Asteroids' },
+  { type: 'Comet', emoji: '☄️', label: 'Add Comets' },
+  { type: 'WhiteDwarf', emoji: '💎', label: 'Add White Dwarfs' },
+  { type: 'NeutronStar', emoji: '⚡', label: 'Add Neutron Stars' },
+  { type: 'BlackHole', emoji: '⚫', label: 'Add Black Holes' },
 ];
 
 let currentTypeIndex = 0;
@@ -5379,25 +6152,25 @@ let currentTypeIndex = 0;
 const generateRandomBlackHoleMass = () => {
   // Find the largest black hole mass in the simulation
   let largestMass = SETTINGS.bh_mass * SOLAR_MASS_UNIT; // Default fallback
-  
+
   if (bh_list.length > 0) {
     largestMass = Math.max(...bh_list.map(bh => bh.mass));
   }
-  
+
   // Convert to solar masses for easier calculation
   const largestMassInSuns = largestMass / SOLAR_MASS_UNIT;
-  
+
   // Generate random mass with normal distribution centered around largest mass
   // Use a wider spread for more variety (±50% of the largest mass)
   const spread = largestMassInSuns * 0.5;
   const minMass = Math.max(1.0, largestMassInSuns - spread); // At least 1 solar mass
   const maxMass = largestMassInSuns + spread;
-  
+
   // Generate random value with bias toward center (using two random numbers for normal-ish distribution)
   const random1 = Math.random();
   const random2 = Math.random();
   const normalRandom = (random1 + random2) / 2; // Rough approximation of normal distribution
-  
+
   const randomMassInSuns = minMass + (maxMass - minMass) * normalRandom;
   return randomMassInSuns * SOLAR_MASS_UNIT;
 };
@@ -5419,18 +6192,22 @@ const updateObjectTypeButton = () => {
 // Event handlers
 canvas.addEventListener('mousedown', e => {
   if (e.button !== 0) return;
-  
+
   // Mark that user has interacted with the page
   state.user_has_interacted = true;
-  
+
   // Check if click is in UI area - improved detection with buffer zone
   const uiContainer = document.querySelector('.ui-container');
   const uiRect = uiContainer.getBoundingClientRect();
   const bufferZone = 5; // 5px buffer around UI elements
-  
+
   // Check if click is within the UI container bounds (including buffer zone)
-  if (e.clientX >= uiRect.left - bufferZone && e.clientX <= uiRect.right + bufferZone && 
-      e.clientY >= uiRect.top - bufferZone && e.clientY <= uiRect.bottom + bufferZone) {
+  if (
+    e.clientX >= uiRect.left - bufferZone &&
+    e.clientX <= uiRect.right + bufferZone &&
+    e.clientY >= uiRect.top - bufferZone &&
+    e.clientY <= uiRect.bottom + bufferZone
+  ) {
     return;
   }
 
@@ -5453,12 +6230,16 @@ canvas.addEventListener('mousedown', e => {
   state.mouse.down = true;
   if (SETTINGS.interactive_add) {
     // Validate world coordinates before proceeding
-    if (isNaN(worldPos.x) || isNaN(worldPos.y) || 
-        !isFinite(worldPos.x) || !isFinite(worldPos.y)) {
+    if (
+      isNaN(worldPos.x) ||
+      isNaN(worldPos.y) ||
+      !isFinite(worldPos.x) ||
+      !isFinite(worldPos.y)
+    ) {
       console.warn('Invalid world coordinates:', worldPos);
       return;
     }
-    
+
     state.adding_mass = true;
     state.add_start_screen = { x: e.clientX, y: e.clientY };
     state.add_start_world = worldPos;
@@ -5480,19 +6261,25 @@ window.addEventListener('mouseup', e => {
   if (state.adding_mass) {
     state.adding_mass = false;
     const add_end_world = screen_to_world({ x: e.clientX, y: e.clientY });
-    
+
     // Validate both start and end world coordinates
-    if (isNaN(add_end_world.x) || isNaN(add_end_world.y) || 
-        !isFinite(add_end_world.x) || !isFinite(add_end_world.y) ||
-        isNaN(state.add_start_world.x) || isNaN(state.add_start_world.y) || 
-        !isFinite(state.add_start_world.x) || !isFinite(state.add_start_world.y)) {
+    if (
+      isNaN(add_end_world.x) ||
+      isNaN(add_end_world.y) ||
+      !isFinite(add_end_world.x) ||
+      !isFinite(add_end_world.y) ||
+      isNaN(state.add_start_world.x) ||
+      isNaN(state.add_start_world.y) ||
+      !isFinite(state.add_start_world.x) ||
+      !isFinite(state.add_start_world.y)
+    ) {
       console.warn('Invalid world coordinates during object placement:', {
         start: state.add_start_world,
-        end: add_end_world
+        end: add_end_world,
       });
       return;
     }
-    
+
     const vel = {
       x: (add_end_world.x - state.add_start_world.x) * 3,
       y: (add_end_world.y - state.add_start_world.y) * 3,
@@ -5510,11 +6297,10 @@ window.addEventListener('mouseup', e => {
       new_obj = new NeutronStar(state.add_start_world, vel, null, null);
     else if (type === 'WhiteDwarf')
       new_obj = new WhiteDwarf(state.add_start_world, vel);
-    else if (type === 'Comet')
-      new_obj = new Comet(state.add_start_world, vel);
+    else if (type === 'Comet') new_obj = new Comet(state.add_start_world, vel);
     else if (type === 'BlackHole') {
       const randomMass = generateRandomBlackHoleMass();
-              new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
+      new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
     }
 
     if (new_obj instanceof Planet) planets.push(new_obj);
@@ -5533,26 +6319,26 @@ window.addEventListener(
   e => {
     if (e.target !== canvas) return;
     e.preventDefault();
-    
+
     // Use a smaller zoom factor for smoother zooming
     const zoomFactor = 1.05; // Reduced from 1.1
     const oldZoom = state.zoom;
     let newZoom = e.deltaY < 0 ? oldZoom * zoomFactor : oldZoom / zoomFactor;
     newZoom = Math.max(0.01, Math.min(newZoom, 100));
-    
+
     // Get the world position at the mouse cursor (using current zoom and pan)
     const worldPos = screen_to_world({ x: e.clientX, y: e.clientY });
-    
+
     // Update zoom
     state.zoom = newZoom;
-    
+
     // Calculate where that world position should be on screen with the new zoom
     const newScreenPos = worldToScreen(worldPos, state, canvas);
-    
+
     // Calculate the difference and adjust pan to keep the mouse position fixed
     const deltaX = newScreenPos.x - e.clientX;
     const deltaY = newScreenPos.y - e.clientY;
-    
+
     state.pan.x -= deltaX;
     state.pan.y -= deltaY;
   },
@@ -5596,29 +6382,28 @@ document.getElementById('inspectorClose').onclick = hideObjectInspector;
 
 // Delete object functionality
 const deleteSelectedObject = () => {
-    if (state.selectedObject && state.selectedObject.object) {
-        const object = state.selectedObject.object;
-        const type = state.selectedObject.type;
-        
-        // Clear energy history for the object being deleted
-        if (object.id) {
-            clearObjectEnergyHistory(object.id);
-            console.log(`Cleared energy history for deleted ${type}: ${object.id}`);
-        }
-        
-        // Mark the object as dead so it gets removed in the next physics update
-        object.alive = false;
-        
-        // Close the inspector
-        hideObjectInspector();
-        
-        // Show a brief notification
-        console.log(`Deleted ${type}: ${object.id}`);
+  if (state.selectedObject && state.selectedObject.object) {
+    const object = state.selectedObject.object;
+    const type = state.selectedObject.type;
+
+    // Clear energy history for the object being deleted
+    if (object.id) {
+      clearObjectEnergyHistory(object.id);
+      console.log(`Cleared energy history for deleted ${type}: ${object.id}`);
     }
+
+    // Mark the object as dead so it gets removed in the next physics update
+    object.alive = false;
+
+    // Close the inspector
+    hideObjectInspector();
+
+    // Show a brief notification
+    console.log(`Deleted ${type}: ${object.id}`);
+  }
 };
 
 document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
-
 
 document.getElementById('settingsBtn').onclick = () => {
   buildSettingsMenu();
@@ -5670,44 +6455,44 @@ let currentDemoIndex = 0;
 
 const startDemoMode = () => {
   if (demoModeActive) return;
-  
+
   demoModeActive = true;
   const demoBtn = document.getElementById('demoModeBtn');
   demoBtn.classList.add('active');
   demoBtn.textContent = '⏹️ Stop Demo';
-  
+
   // Start with a random scenario
   currentDemoIndex = Math.floor(Math.random() * demoScenarios.length);
-  
+
   const cycleScenario = () => {
     if (!demoModeActive) return;
-    
+
     const scenario = demoScenarios[currentDemoIndex];
     SETTINGS.preset_scenario = scenario;
     initialize_simulation();
     state.paused = false;
     show_enhanced_scenario_info(scenario);
     updateSpeedDisplay();
-    
+
     // Move to next scenario (randomly)
     currentDemoIndex = Math.floor(Math.random() * demoScenarios.length);
   };
-  
+
   // Start cycling every 20 seconds
   demoModeInterval = setInterval(cycleScenario, 20000);
-  
+
   // Start immediately
   cycleScenario();
 };
 
 const stopDemoMode = () => {
   if (!demoModeActive) return;
-  
+
   demoModeActive = false;
   const demoBtn = document.getElementById('demoModeBtn');
   demoBtn.classList.remove('active');
   demoBtn.textContent = '🎬 Demo Mode';
-  
+
   if (demoModeInterval) {
     clearInterval(demoModeInterval);
     demoModeInterval = null;
@@ -5753,47 +6538,49 @@ document.getElementById('resetViewBtn').onclick = () => {
     ...white_dwarfs,
     ...gas_giants,
     ...planets,
-    ...asteroids
+    ...asteroids,
   ].filter(obj => obj.alive);
-  
+
   if (allObjects.length > 0) {
     // Calculate center of mass
     let totalMass = 0;
     let centerX = 0;
     let centerY = 0;
-    
+
     for (const obj of allObjects) {
       totalMass += obj.mass;
       centerX += obj.pos.x * obj.mass;
       centerY += obj.pos.y * obj.mass;
     }
-    
+
     if (totalMass > 0) {
       centerX /= totalMass;
       centerY /= totalMass;
     }
-    
+
     // Calculate bounds to determine appropriate zoom level
-    let minX = Infinity, maxX = -Infinity;
-    let minY = Infinity, maxY = -Infinity;
-    
+    let minX = Infinity,
+      maxX = -Infinity;
+    let minY = Infinity,
+      maxY = -Infinity;
+
     for (const obj of allObjects) {
       minX = Math.min(minX, obj.pos.x);
       maxX = Math.max(maxX, obj.pos.x);
       minY = Math.min(minY, obj.pos.y);
       maxY = Math.max(maxY, obj.pos.y);
     }
-    
+
     // Add some padding around the objects
     const padding = 50;
     const width = maxX - minX + padding * 2;
     const height = maxY - minY + padding * 2;
-    
+
     // Calculate zoom to fit all objects on screen
     const zoomX = canvas.width / width;
     const zoomY = canvas.height / height;
     const newZoom = Math.min(zoomX, zoomY, 2.0); // Cap zoom at 2.0x
-    
+
     // Set the view to center on the objects
     state.zoom = Math.max(0.1, newZoom);
     state.pan.x = -centerX * state.zoom;
@@ -5814,9 +6601,10 @@ document.getElementById('objectTypeBtn').onclick = () => {
   updateObjectTypeButton();
 };
 
-document.getElementById('objectTypeBtn').addEventListener('contextmenu', (e) => {
+document.getElementById('objectTypeBtn').addEventListener('contextmenu', e => {
   e.preventDefault();
-  currentTypeIndex = (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
+  currentTypeIndex =
+    (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
   updateObjectTypeButton();
 });
 
@@ -5835,8 +6623,11 @@ if (mobileMenuToggle && mobileMenuDropdown) {
   });
 
   // Close mobile menu when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!mobileMenuToggle.contains(e.target) && !mobileMenuDropdown.contains(e.target)) {
+  document.addEventListener('click', e => {
+    if (
+      !mobileMenuToggle.contains(e.target) &&
+      !mobileMenuDropdown.contains(e.target)
+    ) {
       mobileMenuToggle.classList.remove('active');
       mobileMenuDropdown.classList.remove('show');
     }
@@ -5936,7 +6727,7 @@ if (mobileMenuToggle && mobileMenuDropdown) {
 
     // Optionally update UI overlays
     if (typeof show_scenario_info === 'function') show_scenario_info();
-    
+
     // Close mobile menu after clicking
     mobileMenuToggle.classList.remove('active');
     mobileMenuDropdown.classList.remove('show');
@@ -5951,43 +6742,45 @@ if (mobileMenuToggle && mobileMenuDropdown) {
       ...white_dwarfs,
       ...gas_giants,
       ...planets,
-      ...asteroids
+      ...asteroids,
     ].filter(obj => obj.alive);
-    
+
     if (allObjects.length > 0) {
       let totalMass = 0;
       let centerX = 0;
       let centerY = 0;
-      
+
       for (const obj of allObjects) {
         totalMass += obj.mass;
         centerX += obj.pos.x * obj.mass;
         centerY += obj.pos.y * obj.mass;
       }
-      
+
       if (totalMass > 0) {
         centerX /= totalMass;
         centerY /= totalMass;
       }
-      
-      let minX = Infinity, maxX = -Infinity;
-      let minY = Infinity, maxY = -Infinity;
-      
+
+      let minX = Infinity,
+        maxX = -Infinity;
+      let minY = Infinity,
+        maxY = -Infinity;
+
       for (const obj of allObjects) {
         minX = Math.min(minX, obj.pos.x);
         maxX = Math.max(maxX, obj.pos.x);
         minY = Math.min(minY, obj.pos.y);
         maxY = Math.max(maxY, obj.pos.y);
       }
-      
+
       const padding = 50;
       const width = maxX - minX + padding * 2;
       const height = maxY - minY + padding * 2;
-      
+
       const zoomX = canvas.width / width;
       const zoomY = canvas.height / height;
       const newZoom = Math.min(zoomX, zoomY, 2.0);
-      
+
       state.zoom = Math.max(0.1, newZoom);
       state.pan.x = -centerX * state.zoom;
       state.pan.y = centerY * state.zoom;
@@ -6002,7 +6795,8 @@ if (mobileMenuToggle && mobileMenuDropdown) {
 
   // Mobile object type navigation
   document.getElementById('mobileObjectTypePrevBtn').onclick = () => {
-    currentTypeIndex = (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
+    currentTypeIndex =
+      (currentTypeIndex - 1 + objectTypes.length) % objectTypes.length;
     updateObjectTypeButton();
     // Keep mobile menu open for object type changes
   };
@@ -6024,21 +6818,21 @@ if (mobileMenuToggle && mobileMenuDropdown) {
     const modal = document.getElementById('scenarioListModal');
     const itemsDiv = document.getElementById('scenarioListItems');
     itemsDiv.innerHTML = '';
-    
+
     Object.entries(SCENARIO_INFO).forEach(([key, info], index) => {
       if (!info || typeof info !== 'object') {
         console.warn(`Invalid scenario data for key: ${key}`);
         return;
       }
-      
+
       const title = info.title || 'Untitled Scenario';
       const summary = info.summary || 'No description available.';
       const category = info.category || 'General';
-      
+
       const item = document.createElement('div');
       item.className = 'scenario-list-item';
       item.style.animationDelay = `${index * 0.1}s`;
-      
+
       item.innerHTML = `
         <div class="scenario-title">
           <strong>${title}</strong>
@@ -6049,7 +6843,7 @@ if (mobileMenuToggle && mobileMenuDropdown) {
           <span>${summary}</span>
         </div>
       `;
-      
+
       item.onclick = () => {
         SETTINGS.preset_scenario = key;
         current_scenario_name = key;
@@ -6059,10 +6853,10 @@ if (mobileMenuToggle && mobileMenuDropdown) {
         show_enhanced_scenario_info(key);
         updateSpeedDisplay();
       };
-      
+
       itemsDiv.appendChild(item);
     });
-    
+
     modal.classList.remove('hidden');
     // Close mobile menu after clicking
     mobileMenuToggle.classList.remove('active');
@@ -6085,7 +6879,7 @@ if (mobileMenuToggle && mobileMenuDropdown) {
 const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');
 if (closeScenarioInfoBtn) {
   // Add multiple event listeners to ensure it works
-  closeScenarioInfoBtn.addEventListener('click', (e) => {
+  closeScenarioInfoBtn.addEventListener('click', e => {
     console.log('Close scenario info button clicked');
     e.preventDefault();
     e.stopPropagation();
@@ -6100,9 +6894,9 @@ if (closeScenarioInfoBtn) {
       console.error('Scenario info box element not found');
     }
   });
-  
+
   // Also add mousedown event as backup
-  closeScenarioInfoBtn.addEventListener('mousedown', (e) => {
+  closeScenarioInfoBtn.addEventListener('mousedown', e => {
     console.log('Close scenario info button mousedown');
     e.preventDefault();
     e.stopPropagation();
@@ -6122,7 +6916,7 @@ document.getElementById('loadScenarioBtn').onclick = () => {
   const modal = document.getElementById('scenarioListModal');
   const itemsDiv = document.getElementById('scenarioListItems');
   itemsDiv.innerHTML = '';
-  
+
   // Build scenario list with validation
   Object.entries(SCENARIO_INFO).forEach(([key, info], index) => {
     // Validate scenario data
@@ -6130,19 +6924,19 @@ document.getElementById('loadScenarioBtn').onclick = () => {
       console.warn(`Invalid scenario data for key: ${key}`);
       return;
     }
-    
+
     // Ensure required properties exist with fallbacks
     const title = info.title || 'Untitled Scenario';
     const summary = info.summary || 'No description available.';
     const scenarioKey = key || 'unknown';
-    
+
     const item = document.createElement('div');
     item.className = 'scenario-list-item';
-    
+
     // Add staggered animation delay
     const delay = index * 50; // 50ms delay between each card
     item.style.animationDelay = `${delay}ms`;
-    
+
     item.onclick = () => {
       SETTINGS.preset_scenario = key;
       initialize_simulation();
@@ -6150,14 +6944,14 @@ document.getElementById('loadScenarioBtn').onclick = () => {
       show_scenario_info();
       updateSpeedDisplay();
     };
-    
+
     // Sanitize HTML content to prevent XSS
-    const sanitizeHTML = (str) => {
+    const sanitizeHTML = str => {
       const div = document.createElement('div');
       div.textContent = str;
       return div.innerHTML;
     };
-    
+
     item.innerHTML = `
       <div class="scenario-title">
         <strong>${sanitizeHTML(title)}</strong>
@@ -6168,51 +6962,57 @@ document.getElementById('loadScenarioBtn').onclick = () => {
         <span>${sanitizeHTML(summary)}</span>
       </div>
     `;
-    
+
     itemsDiv.appendChild(item);
   });
-  
+
   // Log generation results for debugging
   const generatedItems = itemsDiv.children.length;
   const totalScenarios = Object.keys(SCENARIO_INFO).length;
-  console.log(`Generated ${generatedItems} scenario cards from ${totalScenarios} scenarios`);
-  
+  console.log(
+    `Generated ${generatedItems} scenario cards from ${totalScenarios} scenarios`
+  );
+
   modal.classList.remove('hidden');
 };
 
 // Validation function for scenario data
 const validateScenarioData = () => {
   const issues = [];
-  
+
   Object.entries(SCENARIO_INFO).forEach(([key, info]) => {
     if (!info || typeof info !== 'object') {
       issues.push(`Invalid scenario object for key: ${key}`);
       return;
     }
-    
+
     if (!info.title || typeof info.title !== 'string') {
       issues.push(`Missing or invalid title for scenario: ${key}`);
     }
-    
+
     if (!info.summary || typeof info.summary !== 'string') {
       issues.push(`Missing or invalid summary for scenario: ${key}`);
     }
-    
+
     if (info.title && info.title.length > 100) {
-      issues.push(`Title too long for scenario: ${key} (${info.title.length} chars)`);
+      issues.push(
+        `Title too long for scenario: ${key} (${info.title.length} chars)`
+      );
     }
-    
+
     if (info.summary && info.summary.length > 500) {
-      issues.push(`Summary too long for scenario: ${key} (${info.summary.length} chars)`);
+      issues.push(
+        `Summary too long for scenario: ${key} (${info.summary.length} chars)`
+      );
     }
   });
-  
+
   if (issues.length > 0) {
     console.warn('Scenario data validation issues:', issues);
   } else {
     console.log('All scenario data validated successfully');
   }
-  
+
   return issues.length === 0;
 };
 
@@ -6225,7 +7025,7 @@ document.getElementById('closeScenarioList').onclick = () => {
   document.getElementById('scenarioListModal').classList.add('hidden');
 };
 
-document.getElementById('scenarioListModal').onclick = (e) => {
+document.getElementById('scenarioListModal').onclick = e => {
   if (e.target === document.getElementById('scenarioListModal')) {
     document.getElementById('scenarioListModal').classList.add('hidden');
   }
@@ -6240,7 +7040,6 @@ canvas.addEventListener(
       e.preventDefault(); // Required to prevent scrolling during drag/zoom
     }
     const touchCount = e.touches.length;
-    const touchStartTime = Date.now();
 
     // Mark that user has interacted with the page
     state.user_has_interacted = true;
@@ -6248,18 +7047,22 @@ canvas.addEventListener(
     if (touchCount === 1) {
       const touch = e.touches[0];
       const touchStartPos = { x: touch.clientX, y: touch.clientY };
-      
+
       // Check if touch is in UI area - improved detection with buffer zone
       const uiContainer = document.querySelector('.ui-container');
       const uiRect = uiContainer.getBoundingClientRect();
       const bufferZone = 5; // 5px buffer around UI elements
-      
+
       // Check if touch is within the UI container bounds (including buffer zone)
-      if (touchStartPos.x >= uiRect.left - bufferZone && touchStartPos.x <= uiRect.right + bufferZone && 
-          touchStartPos.y >= uiRect.top - bufferZone && touchStartPos.y <= uiRect.bottom + bufferZone) {
+      if (
+        touchStartPos.x >= uiRect.left - bufferZone &&
+        touchStartPos.x <= uiRect.right + bufferZone &&
+        touchStartPos.y >= uiRect.top - bufferZone &&
+        touchStartPos.y <= uiRect.bottom + bufferZone
+      ) {
         return;
       }
-      
+
       state.touch_active = true;
       state.touch_id = touch.identifier;
 
@@ -6281,12 +7084,16 @@ canvas.addEventListener(
 
       if (SETTINGS.interactive_add) {
         // Validate world coordinates before proceeding
-        if (isNaN(worldPos.x) || isNaN(worldPos.y) || 
-            !isFinite(worldPos.x) || !isFinite(worldPos.y)) {
+        if (
+          isNaN(worldPos.x) ||
+          isNaN(worldPos.y) ||
+          !isFinite(worldPos.x) ||
+          !isFinite(worldPos.y)
+        ) {
           console.warn('Invalid world coordinates:', worldPos);
           return;
         }
-        
+
         state.adding_mass = true;
         state.add_start_screen = touchStartPos;
         state.add_start_world = worldPos;
@@ -6326,10 +7133,10 @@ canvas.addEventListener(
 
       if (state.lastTouchDistance > 0) {
         const zoomFactor = currentDistance / state.lastTouchDistance;
-        
+
         // Limit the zoom factor per frame to prevent excessive zooming
         const limitedZoomFactor = Math.max(0.95, Math.min(zoomFactor, 1.05));
-        
+
         const oldZoom = state.zoom;
         let newZoom = oldZoom * limitedZoomFactor;
         newZoom = Math.max(0.01, Math.min(newZoom, 100));
@@ -6337,20 +7144,20 @@ canvas.addEventListener(
         // Zoom towards the center of the two touches
         const centerX = (touch1.clientX + touch2.clientX) / 2;
         const centerY = (touch1.clientY + touch2.clientY) / 2;
-        
+
         // Get the world position at the center of the pinch
         const worldPos = screen_to_world({ x: centerX, y: centerY });
-        
+
         // Update zoom
         state.zoom = newZoom;
-        
+
         // Calculate where the center point should be on screen with the new zoom
         const newScreenPos = worldToScreen(worldPos, state, canvas);
-        
+
         // Calculate the difference and adjust pan to keep the pinch center fixed
         const deltaX = newScreenPos.x - centerX;
         const deltaY = newScreenPos.y - centerY;
-        
+
         state.pan.x -= deltaX;
         state.pan.y -= deltaY;
       }
@@ -6375,19 +7182,28 @@ canvas.addEventListener(
           x: touch.clientX,
           y: touch.clientY,
         });
-        
+
         // Validate both start and end world coordinates
-        if (isNaN(add_end_world.x) || isNaN(add_end_world.y) || 
-            !isFinite(add_end_world.x) || !isFinite(add_end_world.y) ||
-            isNaN(state.add_start_world.x) || isNaN(state.add_start_world.y) || 
-            !isFinite(state.add_start_world.x) || !isFinite(state.add_start_world.y)) {
-          console.warn('Invalid world coordinates during touch object placement:', {
-            start: state.add_start_world,
-            end: add_end_world
-          });
+        if (
+          isNaN(add_end_world.x) ||
+          isNaN(add_end_world.y) ||
+          !isFinite(add_end_world.x) ||
+          !isFinite(add_end_world.y) ||
+          isNaN(state.add_start_world.x) ||
+          isNaN(state.add_start_world.y) ||
+          !isFinite(state.add_start_world.x) ||
+          !isFinite(state.add_start_world.y)
+        ) {
+          console.warn(
+            'Invalid world coordinates during touch object placement:',
+            {
+              start: state.add_start_world,
+              end: add_end_world,
+            }
+          );
           return;
         }
-        
+
         const vel = {
           x: (add_end_world.x - state.add_start_world.x) * 3,
           y: (add_end_world.y - state.add_start_world.y) * 3,
@@ -6423,7 +7239,7 @@ canvas.addEventListener(
 
         state.adding_mass = false;
       }
-      
+
       state.touch_active = false;
       state.touch_id = null;
       state.lastTouchPos = null;
@@ -6464,7 +7280,7 @@ export {
   localSettings,
 };
 // === Tutorial Popup Logic ===
-(function() {
+(function () {
   const tutorialBtn = document.getElementById('tutorialBtn');
   const tutorialPopup = document.getElementById('tutorialPopup');
   const tutorialBody = document.getElementById('tutorialPopupBody');
@@ -6476,12 +7292,12 @@ export {
 
   // Tutorial steps: array of strings (more useful and practical)
   const steps = [
-    "Welcome to Gravitas! This is your cosmic playground. You can create black holes, stars, planets, and watch them interact through gravity.",
+    'Welcome to Gravitas! This is your cosmic playground. You can create black holes, stars, planets, and watch them interact through gravity.',
     "Try clicking and dragging in empty space to add objects. The longer you drag, the faster they'll move. Use the object type button to switch between stars, planets, and black holes.",
-    "Click any object to inspect it! The Object Inspector shows mass, velocity, and other properties. You can even edit some values to see how they affect the simulation.",
-    "Load different scenarios from the menu to see pre-built cosmic systems. Each one demonstrates different physics - from binary stars to galactic centers.",
-    "Use the speed controls to slow down or speed up time. The settings panel lets you adjust gravity, add more objects, and customize the simulation to your liking.",
-    "That's it! Have fun exploring the universe! 🚀"
+    'Click any object to inspect it! The Object Inspector shows mass, velocity, and other properties. You can even edit some values to see how they affect the simulation.',
+    'Load different scenarios from the menu to see pre-built cosmic systems. Each one demonstrates different physics - from binary stars to galactic centers.',
+    'Use the speed controls to slow down or speed up time. The settings panel lets you adjust gravity, add more objects, and customize the simulation to your liking.',
+    "That's it! Have fun exploring the universe! 🚀",
   ];
   let step = 0;
 
@@ -6491,7 +7307,7 @@ export {
     '#simulationCanvas', // Navigation: canvas
     '#settingsBtn', // Settings: settings button
     '#loadScenarioBtn', // Preset scenarios: load scenario button
-    '.ui-container' // Restart & Explore: main UI bar
+    '.ui-container', // Restart & Explore: main UI bar
   ];
 
   // Create overlay for dimming
@@ -6524,7 +7340,8 @@ export {
     highlightBox.style.width = rect.width + 'px';
     highlightBox.style.height = rect.height + 'px';
     highlightBox.style.boxShadow = '0 0 0 4px #00e0ff, 0 0 24px 8px #00e0ff99';
-    highlightBox.style.borderRadius = getComputedStyle(el).borderRadius || '10px';
+    highlightBox.style.borderRadius =
+      window.getComputedStyle(el).borderRadius || '10px';
     highlightBox.style.zIndex = '1004';
     highlightBox.style.pointerEvents = 'none';
     highlightBox.style.transition = 'all 0.2s';
@@ -6544,9 +7361,9 @@ export {
 
   function updateTutorial() {
     tutorialBody.textContent = steps[step];
-    tutorialPrev.disabled = (step === 0);
+    tutorialPrev.disabled = step === 0;
     // Change Next button text to 'Finish' on last step
-    tutorialNext.textContent = (step === steps.length - 1) ? 'Finish' : 'Next';
+    tutorialNext.textContent = step === steps.length - 1 ? 'Finish' : 'Next';
     showHighlight(step);
     setTimeout(() => tutorialPopup.focus(), 0);
   }
@@ -6583,7 +7400,6 @@ export {
   }
 
   // --- Draggable and swipe-to-dismiss tutorial popup ---
-  let dragOffset = null;
   let isDragging = false;
   let dragStart = { x: 0, y: 0 };
   let popupStart = { left: 0, top: 0 };
@@ -6592,7 +7408,7 @@ export {
 
   // Desktop drag
   if (header) {
-    header.addEventListener('mousedown', (e) => {
+    header.addEventListener('mousedown', e => {
       if (window.innerWidth < 700) return; // Only desktop
       isDragging = true;
       dragStart = { x: e.clientX, y: e.clientY };
@@ -6601,15 +7417,21 @@ export {
       document.body.style.userSelect = 'none';
     });
   }
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('mousemove', e => {
     if (!isDragging) return;
     let dx = e.clientX - dragStart.x;
     let dy = e.clientY - dragStart.y;
     let newLeft = popupStart.left + dx;
     let newTop = popupStart.top + dy;
     // Clamp to viewport
-    newLeft = Math.max(8, Math.min(window.innerWidth - popup.offsetWidth - 8, newLeft));
-    newTop = Math.max(8, Math.min(window.innerHeight - popup.offsetHeight - 8, newTop));
+    newLeft = Math.max(
+      8,
+      Math.min(window.innerWidth - popup.offsetWidth - 8, newLeft)
+    );
+    newTop = Math.max(
+      8,
+      Math.min(window.innerHeight - popup.offsetHeight - 8, newTop)
+    );
     popup.style.left = newLeft + 'px';
     popup.style.top = newTop + 'px';
     popup.style.right = '';
@@ -6626,22 +7448,30 @@ export {
   // Mobile swipe-to-dismiss
   let touchStartY = null;
   let touchMoved = false;
-  popup.addEventListener('touchstart', (e) => {
-    if (window.innerWidth >= 700) return;
-    if (e.touches.length !== 1) return;
-    touchStartY = e.touches[0].clientY;
-    touchMoved = false;
-  }, { passive: true });
-  popup.addEventListener('touchmove', (e) => {
-    if (window.innerWidth >= 700) return;
-    if (touchStartY === null) return;
-    const dy = e.touches[0].clientY - touchStartY;
-    if (Math.abs(dy) > 10) touchMoved = true;
-    if (touchMoved) {
-      popup.style.transform = `translateY(${dy}px)`;
-    }
-  }, { passive: true });
-  popup.addEventListener('touchend', (e) => {
+  popup.addEventListener(
+    'touchstart',
+    e => {
+      if (window.innerWidth >= 700) return;
+      if (e.touches.length !== 1) return;
+      touchStartY = e.touches[0].clientY;
+      touchMoved = false;
+    },
+    { passive: true }
+  );
+  popup.addEventListener(
+    'touchmove',
+    e => {
+      if (window.innerWidth >= 700) return;
+      if (touchStartY === null) return;
+      const dy = e.touches[0].clientY - touchStartY;
+      if (Math.abs(dy) > 10) touchMoved = true;
+      if (touchMoved) {
+        popup.style.transform = `translateY(${dy}px)`;
+      }
+    },
+    { passive: true }
+  );
+  popup.addEventListener('touchend', e => {
     if (window.innerWidth >= 700) return;
     if (!touchMoved) {
       popup.style.transform = '';
@@ -6676,17 +7506,27 @@ export {
       closeTutorial();
     }
   });
-  tutorialPopup.addEventListener('keydown', (e) => {
+  tutorialPopup.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeTutorial();
     } else if (e.key === 'ArrowLeft') {
-      if (step > 0) { step--; updateTutorial(); }
+      if (step > 0) {
+        step--;
+        updateTutorial();
+      }
     } else if (e.key === 'ArrowRight') {
-      if (step < steps.length - 1) { step++; updateTutorial(); }
+      if (step < steps.length - 1) {
+        step++;
+        updateTutorial();
+      }
     }
   });
-  document.addEventListener('mousedown', (e) => {
-    if (tutorialPopup.style.display === 'block' && !tutorialPopup.contains(e.target) && e.target !== tutorialBtn) {
+  document.addEventListener('mousedown', e => {
+    if (
+      tutorialPopup.style.display === 'block' &&
+      !tutorialPopup.contains(e.target) &&
+      e.target !== tutorialBtn
+    ) {
       closeTutorial();
     }
   });
@@ -6695,77 +7535,69 @@ export {
   // Users can access tutorial via the Tutorial button only
 })();
 
-// Remove the duplicate functions that were outside the IIFE
-// ... existing code ...
-
 // Helper: Ensure no two objects are initialized within a minimum separation distance
-function ensureMinSeparation(objects, candidate, minDist) {
-  // objects: array of {x, y, radius}
-  // candidate: {x, y, radius}
-  // minDist: minimum allowed center-to-center distance
-  for (let obj of objects) {
-    const dx = obj.x - candidate.x;
-    const dy = obj.y - candidate.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < minDist) return false;
-  }
-  return true;
-}
+// Removed unused ensureMinSeparation helper
 
 // Helper: Place an object with minimum separation, retrying up to maxTries
-function placeWithSeparation(objects, createCandidate, minDist, maxTries = 30) {
-  for (let i = 0; i < maxTries; i++) {
-    const candidate = createCandidate();
-    if (ensureMinSeparation(objects, candidate, minDist)) {
-      return candidate;
-    }
-  }
-  // If no valid position found, return null
-  return null;
-}
+// (Removed unused placeWithSeparation helper)
 
 // Helper: Get tooltip text for object properties
-function getStatTooltip(statLabel, objectType) {
+function getStatTooltip(statLabel, _objectType) {
   const tooltips = {
-    'Mass': 'Total mass. Determines gravitational strength and orbital dynamics.',
-    'Radius': 'Physical size. Affects collision detection and visual appearance.',
-    'Position': 'Current location in simulation space (x, y coordinates).',
-    'Velocity': 'Speed and direction of movement. Determines kinetic energy and trajectory.',
-    'Speed': 'Magnitude of velocity (how fast the object is moving).',
-    'Distance': 'Distance from center of simulation or reference point.',
+    Mass: 'Total mass. Determines gravitational strength and orbital dynamics.',
+    Radius: 'Physical size. Affects collision detection and visual appearance.',
+    Position: 'Current location in simulation space (x, y coordinates).',
+    Velocity:
+      'Speed and direction of movement. Determines kinetic energy and trajectory.',
+    Speed: 'Magnitude of velocity (how fast the object is moving).',
+    Distance: 'Distance from center of simulation or reference point.',
     'Orbital Period': 'Time for one complete orbit around primary object.',
-    'Escape Velocity': 'Minimum speed needed to escape gravitational influence.',
-    'Surface Gravity': 'Gravitational acceleration at object\'s surface.',
-    'Density': 'Mass per unit volume. Determines how compact the object is.',
-    'Temperature': 'Surface temperature (for stars and some planets).',
-    'Surface Temperature': 'Temperature at star\'s surface. Determines color and spectral type.',
-    'Luminosity': 'Total energy output per second (for stars).',
-    'Age': 'How long the object has existed in simulation.',
+    'Escape Velocity':
+      'Minimum speed needed to escape gravitational influence.',
+    'Surface Gravity': "Gravitational acceleration at object's surface.",
+    Density: 'Mass per unit volume. Determines how compact the object is.',
+    Temperature: 'Surface temperature (for stars and some planets).',
+    'Surface Temperature':
+      "Temperature at star's surface. Determines color and spectral type.",
+    Luminosity: 'Total energy output per second (for stars).',
+    Age: 'How long the object has existed in simulation.',
     'Life Expectancy': 'Estimated remaining lifetime (for stars).',
-    'Lifespan': 'Total expected lifetime of the star. More massive stars live shorter lives.',
-    'Spectral Type': 'Star classification (O, B, A, F, G, K, M). Based on temperature and color.',
-    'Event Horizon': 'Boundary around black hole from which nothing can escape.',
-    'Schwarzschild Radius': 'Event horizon radius. Point of no return where escape velocity equals light speed.',
-    'Escape Velocity at Rs': 'Escape speed at Schwarzschild radius. Always equals light speed (100%).',
-    'Average Density': 'Mass per volume within event horizon. Extremely high density.',
-    'Hawking Temperature': 'Temperature of Hawking radiation. Smaller black holes are hotter.',
-    'Hawking Lifetime': 'Time until complete evaporation via Hawking radiation. Larger holes live longer.',
-    'ISCO Period': 'Orbital period at Innermost Stable Circular Orbit (3x Schwarzschild radius).',
-    'Type': 'Classification: Primordial, Stellar-Mass, Intermediate, or Supermassive.',
+    Lifespan:
+      'Total expected lifetime of the star. More massive stars live shorter lives.',
+    'Spectral Type':
+      'Star classification (O, B, A, F, G, K, M). Based on temperature and color.',
+    'Event Horizon':
+      'Boundary around black hole from which nothing can escape.',
+    'Schwarzschild Radius':
+      'Event horizon radius. Point of no return where escape velocity equals light speed.',
+    'Escape Velocity at Rs':
+      'Escape speed at Schwarzschild radius. Always equals light speed (100%).',
+    'Average Density':
+      'Mass per volume within event horizon. Extremely high density.',
+    'Hawking Temperature':
+      'Temperature of Hawking radiation. Smaller black holes are hotter.',
+    'Hawking Lifetime':
+      'Time until complete evaporation via Hawking radiation. Larger holes live longer.',
+    'ISCO Period':
+      'Orbital period at Innermost Stable Circular Orbit (3x Schwarzschild radius).',
+    Type: 'Classification: Primordial, Stellar-Mass, Intermediate, or Supermassive.',
     'Accretion Rate': 'Rate at which matter falls into a black hole.',
-    'Spin': 'Rotational angular momentum of the object.',
-    'Magnetic Field': 'Strength of the object\'s magnetic field.',
-    'Atmosphere': 'Presence and composition of gaseous envelope.',
-    'Composition': 'Chemical makeup of the object\'s material.',
-    'Trail Length': 'Number of positions recorded in the object\'s motion trail.',
+    Spin: 'Rotational angular momentum of the object.',
+    'Magnetic Field': "Strength of the object's magnetic field.",
+    Atmosphere: 'Presence and composition of gaseous envelope.',
+    Composition: "Chemical makeup of the object's material.",
+    'Trail Length':
+      "Number of positions recorded in the object's motion trail.",
     'Collision Count': 'Number of times this object has collided with others.',
-    'Energy': 'Total mechanical energy (kinetic + potential).',
-    'Angular Momentum': 'Rotational momentum around the object\'s axis.',
+    Energy: 'Total mechanical energy (kinetic + potential).',
+    'Angular Momentum': "Rotational momentum around the object's axis.",
     'Tidal Force': 'Gravitational force gradient across the object.',
-    'Roche Limit': 'Distance at which tidal forces would break apart the object.',
-    'Hill Sphere': 'Region where the object\'s gravity dominates over other bodies.'
+    'Roche Limit':
+      'Distance at which tidal forces would break apart the object.',
+    'Hill Sphere':
+      "Region where the object's gravity dominates over other bodies.",
   };
-  
+
   return tooltips[statLabel] || null;
 }
 

@@ -717,7 +717,7 @@ export const deepClone = obj => {
  * @param {Object} body - The body with mass and velocity properties
  * @returns {number} Kinetic energy
  */
-export const kineticEnergy = (body) => {
+export const kineticEnergy = body => {
   const velocity = Math.sqrt(body.vel.x * body.vel.x + body.vel.y * body.vel.y);
   return 0.5 * body.mass * velocity * velocity;
 };
@@ -733,7 +733,9 @@ export const potentialEnergyPair = (body1, body2) => {
   const dy = body1.pos.y - body2.pos.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
   if (distance === 0) return 0; // Avoid division by zero
-  return -CONSTANTS.GRAVITATIONAL_CONSTANT * body1.mass * body2.mass / distance;
+  return (
+    (-CONSTANTS.GRAVITATIONAL_CONSTANT * body1.mass * body2.mass) / distance
+  );
 };
 
 /**
@@ -741,21 +743,21 @@ export const potentialEnergyPair = (body1, body2) => {
  * @param {Array} bodies - Array of all bodies in the simulation
  * @returns {number} Total system energy
  */
-export const totalSystemEnergy = (bodies) => {
+export const totalSystemEnergy = bodies => {
   let totalEnergy = 0;
-  
+
   // Add kinetic energy of all bodies
   for (let i = 0; i < bodies.length; i++) {
     totalEnergy += kineticEnergy(bodies[i]);
   }
-  
+
   // Add potential energy between all pairs (each pair counted once)
   for (let i = 0; i < bodies.length; i++) {
     for (let j = i + 1; j < bodies.length; j++) {
       totalEnergy += potentialEnergyPair(bodies[i], bodies[j]);
     }
   }
-  
+
   return totalEnergy;
 };
 
