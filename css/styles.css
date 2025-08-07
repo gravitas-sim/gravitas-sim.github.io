@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap');
 
+:root {
+  /* Color grading themes (can be adjusted via JS) */
+  --theme-hue-shift: 0deg; /* 0: neutral, 220deg: cool, 40deg: warm */
+  --theme-contrast: 1;
+  --theme-brightness: 1;
+}
+
 /* ===== Splash screen ===== */
 #splash{
     position:fixed;
@@ -77,6 +84,11 @@
     opacity:0;              /* fully transparent       */
     visibility:hidden;      /* not rendered at all     */
     transition:opacity 1.2s ease-in;  /* fade-in only */
+}
+
+/* Apply global color grading to the whole page */
+html, body {
+  filter: hue-rotate(var(--theme-hue-shift)) contrast(var(--theme-contrast)) brightness(var(--theme-brightness));
 }
 
 /*  added by JS after splash is gone  */

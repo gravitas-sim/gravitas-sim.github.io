@@ -1139,6 +1139,68 @@ class Planet extends PhysicsObject {
     ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
 
+    // Add soft bloom to offscreen bloom canvas
+    try {
+      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
+      const screenY =
+        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const screenR = this.radius * state.zoom;
+      const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
+      if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
+        const grad = window.bloomCtx.createRadialGradient(
+          screenX,
+          screenY,
+          0,
+          screenX,
+          screenY,
+          screenR * 2.5
+        );
+        grad.addColorStop(
+          0,
+          `rgba(${rgbPlanet.r},${rgbPlanet.g},${rgbPlanet.b},0.15)`
+        );
+        grad.addColorStop(
+          0.6,
+          `rgba(${rgbPlanet.r},${rgbPlanet.g},${rgbPlanet.b},0.06)`
+        );
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        window.bloomCtx.fillStyle = grad;
+        window.bloomCtx.beginPath();
+        window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
+        window.bloomCtx.fill();
+      }
+    } catch {
+      // no-op
+    }
+
+    // Add soft bloom to offscreen bloom canvas
+    try {
+      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
+      const screenY =
+        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const screenR = this.radius * state.zoom;
+      const color = { r: 210, g: 230, b: 255 };
+      if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
+        const grad = window.bloomCtx.createRadialGradient(
+          screenX,
+          screenY,
+          0,
+          screenX,
+          screenY,
+          screenR * 2.5
+        );
+        grad.addColorStop(0, `rgba(${color.r},${color.g},${color.b},0.35)`);
+        grad.addColorStop(0.6, `rgba(${color.r},${color.g},${color.b},0.15)`);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        window.bloomCtx.fillStyle = grad;
+        window.bloomCtx.beginPath();
+        window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
+        window.bloomCtx.fill();
+      }
+    } catch {
+      // no-op
+    }
+
     if (this.density === 'gaseous' && this.radius * state.zoom > 3) {
       ctx.fillStyle = 'rgba(135, 206, 235, 0.6)';
       const band_height = Math.max(1 / state.zoom, this.radius * 0.2);
@@ -1605,6 +1667,8 @@ class GasGiant extends PhysicsObject {
         ctx.fill();
       }
     }
+
+    // (Front ring arc intentionally omitted; the planet occludes the near side.)
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -2670,14 +2734,38 @@ class StarObject extends PhysicsObject {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
     // Use custom baseColor if set, otherwise use computed color
     const starColor = this.baseColor || getStarColor(this.massInSuns);
-    ctx.fillStyle = compute_dynamic_color(starColor, this.pos, bh_list, 400.0, {
-      r: 255,
-      g: 50,
-      b: 0,
-    });
+    const rgb = hexToRgb(starColor) || { r: 255, g: 220, b: 160 };
+    // Core
+    ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
+    // Soft bloom to offscreen canvas for compositing
+    try {
+      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
+      const screenY =
+        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const screenR = this.radius * state.zoom;
+      if (screenR > 2 && typeof window !== 'undefined' && window.bloomCtx) {
+        const grad = window.bloomCtx.createRadialGradient(
+          screenX,
+          screenY,
+          0,
+          screenX,
+          screenY,
+          screenR * 3
+        );
+        grad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},0.35)`);
+        grad.addColorStop(0.5, `rgba(${rgb.r},${rgb.g},${rgb.b},0.15)`);
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        window.bloomCtx.fillStyle = grad;
+        window.bloomCtx.beginPath();
+        window.bloomCtx.arc(screenX, screenY, screenR * 3, 0, 2 * Math.PI);
+        window.bloomCtx.fill();
+      }
+    } catch {
+      // no-op
+    }
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);

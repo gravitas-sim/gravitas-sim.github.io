@@ -28,10 +28,23 @@ const starfieldCanvas = document.getElementById('starfieldCanvas');
 const starCtx = starfieldCanvas.getContext('2d');
 const starfieldStars = [];
 
+// Bloom offscreen canvas for soft glows
+const bloomCanvas = document.createElement('canvas');
+const bloomCtx = bloomCanvas.getContext('2d');
+if (typeof window !== 'undefined') {
+  // Expose for cross-module use
+  window.bloomCtx = bloomCtx;
+}
+function resizeBloomCanvas() {
+  bloomCanvas.width = canvas.width;
+  bloomCanvas.height = canvas.height;
+}
+
 // Ensure canvas is properly sized on initialization
 if (starfieldCanvas) {
   starfieldCanvas.width = window.innerWidth;
   starfieldCanvas.height = window.innerHeight;
+  resizeBloomCanvas();
 
   // Generate initial starfield
   setTimeout(() => {
@@ -65,12 +78,16 @@ function generateStarfield() {
 
   // Generate stars with smaller size in screen coordinates
   for (let i = 0; i < totalStars; i++) {
+    // Assign depth layer for parallax (0.3 near, 0.6 mid, 1.0 far)
+    const layerRand = Math.random();
+    const depth = layerRand < 0.33 ? 0.3 : layerRand < 0.66 ? 0.6 : 1.0;
     starfieldStars.push({
       x: Math.random() * W,
       y: Math.random() * H,
       b: Math.random() * 0.8 + 0.2, // Brightness: 0.2 to 1.0
       s: Math.random() * 1.0 + 0.5, // Size: 0.5 to 1.5 (smaller)
       twinkle: Math.random() * Math.PI * 2, // Random twinkle phase
+      d: depth,
     });
   }
 
@@ -116,12 +133,13 @@ function drawStarfield() {
     }
   }
 
-  // Draw stars as static background (no zoom or pan transformations)
+  // Draw stars with parallax (slight offset vs. pan for depth illusion)
   const time = Date.now() * 0.001; // Current time for twinkling
 
   starfieldStars.forEach(st => {
-    let sx = st.x;
-    let sy = st.y;
+    const parallax = st.d || 1.0;
+    let sx = st.x - state.pan.x * 0.02 * parallax;
+    let sy = st.y - state.pan.y * 0.02 * parallax;
     // Apply lensing distortion if within any active ripple
     if (SETTINGS.show_gravitational_waves) {
       for (let i = 0; i < gravity_ripples.length; i++) {
@@ -233,22 +251,27 @@ function drawStarfield() {
       }
     }
     // Black holes
-    for (const bh of bh_list) {
-      // Lensing starts at a visually meaningful radius, scaling with event horizon
-      const lens_radius = Math.max(20, bh.radius * state.zoom * 2.5);
-      checkLensing(bh, 2.5, lens_radius, 2.5, '#fff');
-    }
-    // Neutron stars (stronger, blue tint)
-    for (const ns of neutron_stars) {
-      // Lensing starts close to the surface, but is more visible
-      const ns_lens_radius = Math.max(18, 1.5 * ns.radius * state.zoom);
-      checkLensing(ns, 1.3, ns_lens_radius, 2.8, '#6cf');
-    }
-    // White dwarfs (stronger, pale blue-white tint)
-    for (const wd of white_dwarfs) {
-      // Lensing starts close to the surface, but is visible
-      const wd_lens_radius = Math.max(16, 1.3 * wd.radius * state.zoom);
-      checkLensing(wd, 0.9, wd_lens_radius, 2.0, '#e0f7ff');
+    const enableObjectLensing =
+      (SETTINGS.lensing_quality && SETTINGS.lensing_quality !== 'off') ||
+      SETTINGS.show_object_lensing === true;
+    if (enableObjectLensing) {
+      for (const bh of bh_list) {
+        // Lensing starts at a visually meaningful radius, scaling with event horizon
+        const lens_radius = Math.max(20, bh.radius * state.zoom * 2.5);
+        checkLensing(bh, 2.5, lens_radius, 2.5, '#fff');
+      }
+      // Neutron stars (stronger, blue tint)
+      for (const ns of neutron_stars) {
+        // Lensing starts close to the surface, but is more visible
+        const ns_lens_radius = Math.max(18, 1.5 * ns.radius * state.zoom);
+        checkLensing(ns, 1.3, ns_lens_radius, 2.8, '#6cf');
+      }
+      // White dwarfs (stronger, pale blue-white tint)
+      for (const wd of white_dwarfs) {
+        // Lensing starts close to the surface, but is visible
+        const wd_lens_radius = Math.max(16, 1.3 * wd.radius * state.zoom);
+        checkLensing(wd, 0.9, wd_lens_radius, 2.0, '#e0f7ff');
+      }
     }
     if (max_lens_strength > 0) {
       sx += lens_dx;
@@ -306,8 +329,13 @@ const drawScene = () => {
         if (SETTINGS.trail_style === 'Cloud') {
           // Draw cloud-like trail with multiple passes
           for (let pass = 0; pass < 3; pass++) {
-            const trailWidth = (2.5 - pass * 0.5) / state.zoom;
-            const maxAlpha = 0.6 - pass * 0.15;
+            const velocityScale = Math.max(
+              0.6,
+              Math.min(1.8, obj.trail[0].velocity / 40)
+            );
+            const trailWidth =
+              ((2.5 - pass * 0.5) * velocityScale) / state.zoom;
+            const maxAlpha = (0.6 - pass * 0.15) * velocityScale;
 
             ctx.lineWidth = trailWidth;
             ctx.lineCap = 'round';
@@ -345,7 +373,8 @@ const drawScene = () => {
 
           // Draw bright core trail
           ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.9)`;
-          ctx.lineWidth = 1.0 / state.zoom;
+          ctx.lineWidth =
+            Math.max(0.8, obj.trail[0].velocity / 120) / state.zoom;
           ctx.lineCap = 'round';
           ctx.beginPath();
 
@@ -365,7 +394,7 @@ const drawScene = () => {
             const intensity = age_factor * velocity_factor;
 
             if (intensity > 0.05) {
-              const radius = (3 + intensity * 5) / state.zoom;
+              const radius = (3 + intensity * 7) / state.zoom;
               const gradient = ctx.createRadialGradient(
                 obj.trail[i].x,
                 obj.trail[i].y,
@@ -723,6 +752,23 @@ const gameLoop = timestamp => {
 
   // Draw simulation objects (foreground layer)
   drawScene();
+
+  // Composite bloom layer additively
+  try {
+    if (
+      bloomCanvas.width !== canvas.width ||
+      bloomCanvas.height !== canvas.height
+    ) {
+      resizeBloomCanvas();
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.drawImage(bloomCanvas, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    // Clear bloom for next frame
+    bloomCtx.clearRect(0, 0, bloomCanvas.width, bloomCanvas.height);
+  } catch {
+    // no-op
+  }
 
   // Performance monitoring
   const frameTime = performance.now() - frameStart;
