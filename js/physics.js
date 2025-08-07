@@ -804,6 +804,22 @@ const updateCachedArrays = () => {
  */
 const updatePhysics = dt => {
   if (dt <= 0) return;
+  // If simulation is effectively empty, clear particle pool and exported array
+  try {
+    const totalObjects =
+      bh_list.length +
+      planets.length +
+      stars.length +
+      gas_giants.length +
+      asteroids.length +
+      debris.length +
+      neutron_stars.length +
+      white_dwarfs.length;
+    if (totalObjects === 0) {
+      if (particlePool) particlePool.clear();
+      particles.length = 0;
+    }
+  } catch {}
 
   // Track frame count (matching original)
   if (state) state.frame_count++;
@@ -3522,7 +3538,7 @@ const findObjectAtPosition = worldPos => {
   for (const bh of bh_list) {
     const dx = worldPos.x - bh.pos.x;
     const dy = worldPos.y - bh.pos.y;
-    const clickRadius = Math.max(bh.radius, 10 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(bh.radius, 14 / state.zoom); // easier to click
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
     }
@@ -3533,7 +3549,7 @@ const findObjectAtPosition = worldPos => {
     if (!star.alive) continue;
     const dx = worldPos.x - star.pos.x;
     const dy = worldPos.y - star.pos.y;
-    const clickRadius = Math.max(star.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(star.radius, 12 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: star, type: 'Star' };
     }
@@ -3544,7 +3560,7 @@ const findObjectAtPosition = worldPos => {
     if (!ns.alive) continue;
     const dx = worldPos.x - ns.pos.x;
     const dy = worldPos.y - ns.pos.y;
-    const clickRadius = Math.max(ns.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(ns.radius, 10 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: ns, type: 'NeutronStar' };
     }
@@ -3555,7 +3571,7 @@ const findObjectAtPosition = worldPos => {
     if (!wd.alive) continue;
     const dx = worldPos.x - wd.pos.x;
     const dy = worldPos.y - wd.pos.y;
-    const clickRadius = Math.max(wd.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(wd.radius, 10 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: wd, type: 'WhiteDwarf' };
     }
@@ -3566,7 +3582,7 @@ const findObjectAtPosition = worldPos => {
     if (!gasGiant.alive) continue;
     const dx = worldPos.x - gasGiant.pos.x;
     const dy = worldPos.y - gasGiant.pos.y;
-    const clickRadius = Math.max(gasGiant.radius, 8 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(gasGiant.radius, 12 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: gasGiant, type: 'GasGiant' };
     }
@@ -3577,7 +3593,7 @@ const findObjectAtPosition = worldPos => {
     if (!planet.alive) continue;
     const dx = worldPos.x - planet.pos.x;
     const dy = worldPos.y - planet.pos.y;
-    const clickRadius = Math.max(planet.radius, 6 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(planet.radius, 10 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: planet, type: 'Planet' };
     }
@@ -3588,7 +3604,7 @@ const findObjectAtPosition = worldPos => {
     if (!asteroid.alive) continue;
     const dx = worldPos.x - asteroid.pos.x;
     const dy = worldPos.y - asteroid.pos.y;
-    const clickRadius = Math.max(asteroid.radius, 4 / state.zoom); // Use actual radius or minimum clickable size
+    const clickRadius = Math.max(asteroid.radius, 8 / state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       // Determine if it's a comet or regular asteroid
       if (asteroid instanceof Comet) {
