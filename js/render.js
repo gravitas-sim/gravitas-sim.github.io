@@ -665,11 +665,11 @@ const drawScene = () => {
       `<span class="category-label">Stars:</span> ${stars.length} | <span class="category-label">Neutron Stars:</span> ${neutron_stars.length} | <span class="category-label">White Dwarfs:</span> ${white_dwarfs.length}`,
       `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`,
       `<div class="separator-line"></div>`,
-      `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}x | <span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}x</span>`,
+      `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}x<br/><span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}x</span>`,
       `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused' : 'Running'}</span>`,
       `<div class="separator-line"></div>`,
-      `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan | Scroll = Zoom`,
-      `Spacebar = Pause/Resume | Click objects to inspect | ESC closes inspector`,
+      `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan<br/>Scroll = Zoom<br/>Space = Pause/Resume`,
+      `Click objects to inspect | ESC closes inspector`,
     ];
     overlayDiv.innerHTML = lines.join('<br>');
   } else {

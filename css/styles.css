@@ -211,8 +211,9 @@ html, body {
     pointer-events: none;
     line-height: 1.6;
     z-index: 10;
-    max-width: calc(100vw - 20px);
+    max-width: 320px; /* make panel thinner to avoid overlap */
     word-wrap: break-word;
+    overflow-wrap: anywhere;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 10px;
@@ -333,7 +334,7 @@ html, body {
     top: 15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: min(90%, 640px);
     max-width: 600px;
     padding: 10px 20px;
     background: var(--panel-bg);
