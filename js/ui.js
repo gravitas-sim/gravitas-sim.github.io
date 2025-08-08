@@ -6412,7 +6412,8 @@ const adjustSimSpeed = (current, direction) => {
   // Normalize very small values to exact 0
   if (Math.abs(current) < epsilon) current = 0.0;
 
-  if (current <= 0.5 + epsilon) {
+  // Handle <= 0.5x region with special stepping
+  if (current < 0.5 - epsilon) {
     if (direction > 0) {
       for (let i = 0; i < stepsBelow.length; i++) {
         if (stepsBelow[i] > current + epsilon) return stepsBelow[i];
@@ -6425,6 +6426,12 @@ const adjustSimSpeed = (current, direction) => {
       }
       return 0.0;
     }
+    return current;
+  }
+  // If exactly ~0.5x, go up to 1.0 or down to 0.3
+  if (Math.abs(current - 0.5) <= epsilon) {
+    if (direction > 0) return 1.0;
+    if (direction < 0) return 0.3;
     return current;
   }
 
