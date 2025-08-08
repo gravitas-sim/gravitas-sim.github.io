@@ -380,6 +380,25 @@ html, body {
 }
 
 @media (max-width: 480px) {
+    /* General UI scaling for small screens */
+    .ui-button {
+        padding: 6px 10px;
+        font-size: 12px;
+        border-radius: 8px;
+    }
+    .speed-controls {
+        gap: 6px;
+        padding: 6px 8px;
+    }
+    .speed-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+        min-width: 50px;
+    }
+    .speed-display {
+        font-size: 12px;
+        min-width: 42px;
+    }
     #scenarioInfoDisplay {
         top: 5px;
         width: 98%;
@@ -1481,6 +1500,13 @@ html, body {
         background: rgba(255, 255, 255, 0.2);
         border-radius: 12px;
     }
+    /* Keep inspector header visible so the X button is always reachable */
+    .inspector-header {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: linear-gradient(135deg, rgba(0, 170, 255, 0.12), rgba(0, 170, 255, 0.06));
+    }
     
     .settings-header {
         padding: 20px 25px;
@@ -1590,6 +1616,13 @@ html, body {
         top: 1%;
         left: 1%;
         border-radius: 12px;
+    }
+    /* Keep settings header visible with close/cancel access */
+    .settings-header {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: linear-gradient(135deg, rgba(0, 170, 255, 0.12), rgba(0, 170, 255, 0.06));
     }
 }
 
@@ -1898,6 +1931,13 @@ html, body {
     max-height: 50vh; 
     overflow-y: auto; 
 }
+/* Keep BH masses modal header visible */
+.bh-masses-header {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: rgba(13,13,26,0.95);
+}
 .bh-mass-item { 
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -2073,7 +2113,10 @@ html, body {
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 2px solid rgba(79, 172, 254, 0.3);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: rgba(26,26,46,0.9);
 }
 
 .scenario-list-header::after {
