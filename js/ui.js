@@ -6407,30 +6407,30 @@ const updateSpeedDisplay = () => {
 const adjustSimSpeed = (current, direction) => {
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
   const epsilon = 1e-9;
-  const seqDown = [0.5, 0.3, 0.1, 0.0];
-  const seqUp = [0.0, 0.1, 0.3, 0.5];
+  const stepsBelow = [0.0, 0.1, 0.3, 0.5]; // ascending
 
   // Normalize very small values to exact 0
   if (Math.abs(current) < epsilon) current = 0.0;
 
   if (current <= 0.5 + epsilon) {
-    const seq = direction > 0 ? seqUp : seqDown;
-    // Find current index in sequence (closest not greater than current)
-    let idx = 0;
-    for (let i = 0; i < seq.length; i++) {
-      idx = i;
-      if (current <= seq[i] + epsilon) break;
+    if (direction > 0) {
+      for (let i = 0; i < stepsBelow.length; i++) {
+        if (stepsBelow[i] > current + epsilon) return stepsBelow[i];
+      }
+      return 0.5;
     }
-    const stepDelta = direction > 0 ? 1 : -1;
-    // If exactly on a step and moving in that direction, advance one step; otherwise move to nearest
-    const atStep = Math.abs(current - seq[idx]) < 0.05;
-    const targetIdx = clamp(idx + (atStep ? stepDelta : 0), 0, seq.length - 1);
-    return seq[targetIdx];
+    if (direction < 0) {
+      for (let i = stepsBelow.length - 1; i >= 0; i--) {
+        if (stepsBelow[i] < current - epsilon) return stepsBelow[i];
+      }
+      return 0.0;
+    }
+    return current;
   }
 
   // Above 0.5x: increments of 0.5
   const next = current + (direction > 0 ? 0.5 : -0.5);
-  return clamp(parseFloat((Math.round(next * 10) / 10).toFixed(1)), 0.0, 5.0);
+  return clamp(Number(next.toFixed(1)), 0.0, 5.0);
 };
 
 /**
