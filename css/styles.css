@@ -211,7 +211,7 @@ html, body {
     pointer-events: none;
     line-height: 1.6;
     z-index: 10;
-    max-width: 320px; /* make panel thinner to avoid overlap */
+    max-width: 384px; /* ~1.2x wider than previous 320px */
     word-wrap: break-word;
     overflow-wrap: anywhere;
     background: rgba(0, 0, 0, 0.3);
