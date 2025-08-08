@@ -1039,6 +1039,13 @@ html, body {
     }
 }
 
+/* Rendering performance hints for large canvases */
+#simulationCanvas,
+#starfieldCanvas {
+  will-change: transform;
+  contain: strict;
+}
+
 @media (max-width: 480px) {
     #objectInspector {
         width: 98%;

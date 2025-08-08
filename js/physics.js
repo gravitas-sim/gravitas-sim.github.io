@@ -450,6 +450,18 @@ let physicsSettings = {
   orbit_decay_rate: 0.005,
 };
 
+// Click hit-radius minimums scaled by 1/state.zoom
+const CLICK_MIN_RADIUS = {
+  BlackHole: 14,
+  Star: 12,
+  GasGiant: 12,
+  Planet: 10,
+  NeutronStar: 10,
+  WhiteDwarf: 10,
+  Asteroid: 8,
+  Comet: 8,
+};
+
 // Function to update physics settings
 const updatePhysicsSettings = settings => {
   physicsSettings = { ...physicsSettings, ...settings };
@@ -819,7 +831,10 @@ const updatePhysics = dt => {
       if (particlePool) particlePool.clear();
       particles.length = 0;
     }
-  } catch {}
+  } catch {
+    // Ignore particle pool clearing errors in legacy test modes
+    void 0;
+  }
 
   // Track frame count (matching original)
   if (state) state.frame_count++;
@@ -3538,7 +3553,10 @@ const findObjectAtPosition = worldPos => {
   for (const bh of bh_list) {
     const dx = worldPos.x - bh.pos.x;
     const dy = worldPos.y - bh.pos.y;
-    const clickRadius = Math.max(bh.radius, 14 / state.zoom); // easier to click
+    const clickRadius = Math.max(
+      bh.radius,
+      CLICK_MIN_RADIUS.BlackHole / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
     }
@@ -3549,7 +3567,10 @@ const findObjectAtPosition = worldPos => {
     if (!star.alive) continue;
     const dx = worldPos.x - star.pos.x;
     const dy = worldPos.y - star.pos.y;
-    const clickRadius = Math.max(star.radius, 12 / state.zoom);
+    const clickRadius = Math.max(
+      star.radius,
+      CLICK_MIN_RADIUS.Star / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: star, type: 'Star' };
     }
@@ -3560,7 +3581,10 @@ const findObjectAtPosition = worldPos => {
     if (!ns.alive) continue;
     const dx = worldPos.x - ns.pos.x;
     const dy = worldPos.y - ns.pos.y;
-    const clickRadius = Math.max(ns.radius, 10 / state.zoom);
+    const clickRadius = Math.max(
+      ns.radius,
+      CLICK_MIN_RADIUS.NeutronStar / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: ns, type: 'NeutronStar' };
     }
@@ -3571,7 +3595,10 @@ const findObjectAtPosition = worldPos => {
     if (!wd.alive) continue;
     const dx = worldPos.x - wd.pos.x;
     const dy = worldPos.y - wd.pos.y;
-    const clickRadius = Math.max(wd.radius, 10 / state.zoom);
+    const clickRadius = Math.max(
+      wd.radius,
+      CLICK_MIN_RADIUS.WhiteDwarf / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: wd, type: 'WhiteDwarf' };
     }
@@ -3582,7 +3609,10 @@ const findObjectAtPosition = worldPos => {
     if (!gasGiant.alive) continue;
     const dx = worldPos.x - gasGiant.pos.x;
     const dy = worldPos.y - gasGiant.pos.y;
-    const clickRadius = Math.max(gasGiant.radius, 12 / state.zoom);
+    const clickRadius = Math.max(
+      gasGiant.radius,
+      CLICK_MIN_RADIUS.GasGiant / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: gasGiant, type: 'GasGiant' };
     }
@@ -3593,7 +3623,10 @@ const findObjectAtPosition = worldPos => {
     if (!planet.alive) continue;
     const dx = worldPos.x - planet.pos.x;
     const dy = worldPos.y - planet.pos.y;
-    const clickRadius = Math.max(planet.radius, 10 / state.zoom);
+    const clickRadius = Math.max(
+      planet.radius,
+      CLICK_MIN_RADIUS.Planet / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: planet, type: 'Planet' };
     }
@@ -3604,7 +3637,10 @@ const findObjectAtPosition = worldPos => {
     if (!asteroid.alive) continue;
     const dx = worldPos.x - asteroid.pos.x;
     const dy = worldPos.y - asteroid.pos.y;
-    const clickRadius = Math.max(asteroid.radius, 8 / state.zoom);
+    const clickRadius = Math.max(
+      asteroid.radius,
+      CLICK_MIN_RADIUS.Asteroid / state.zoom
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       // Determine if it's a comet or regular asteroid
       if (asteroid instanceof Comet) {

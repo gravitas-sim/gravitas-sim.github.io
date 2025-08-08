@@ -11,7 +11,6 @@ import {
   accretion_disk_particles,
   updatePhysics,
   DT,
-  SOLAR_MASS_UNIT,
   gravity_ripples,
   screen_to_world,
   world_to_screen,
@@ -743,7 +742,10 @@ function renderOrbitPreview(preview) {
 
   // If unsnapped and a collision was predicted, draw a red X at the collision point
   if (!preview.snapped && preview.collision && preview.collision.x != null) {
-    const cs = world_to_screen({ x: preview.collision.x, y: preview.collision.y });
+    const cs = world_to_screen({
+      x: preview.collision.x,
+      y: preview.collision.y,
+    });
     ctx.save();
     ctx.strokeStyle = 'rgba(255, 80, 80, 0.95)';
     ctx.lineWidth = 2.5;

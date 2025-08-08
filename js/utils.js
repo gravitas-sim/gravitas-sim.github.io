@@ -284,9 +284,9 @@ export const angleBetween = (p1, p2) => {
  * @returns {number} Normalized angle
  */
 export const normalizeAngle = angle => {
-  while (angle < 0) angle += 2 * Math.PI;
-  while (angle >= 2 * Math.PI) angle -= 2 * Math.PI;
-  return angle;
+  const twoPi = 2 * Math.PI;
+  angle = angle % twoPi;
+  return angle < 0 ? angle + twoPi : angle;
 };
 
 /**

@@ -137,7 +137,14 @@ function computeTrajectoryPreview(
   const points = [];
   let p = { x: startPos.x, y: startPos.y };
   const dt = 0.12; // preview integration step in sim seconds
-  const steps = 180; // total preview points
+  // Adaptive number of steps: fewer when moving slowly, more when fast
+  const vPreviewMag = Math.hypot(vel.x, vel.y);
+  const stepsBase = 120;
+  const stepsK = 0.8; // sensitivity; tune if needed
+  const steps = Math.max(
+    80,
+    Math.min(300, Math.floor(stepsBase + stepsK * vPreviewMag))
+  );
   const softening2 = 1e-3;
   const G = SETTINGS.gravitational_constant;
   for (let i = 0; i < steps; i++) {
@@ -250,6 +257,15 @@ const DEFAULT_SETTINGS = {
   chart_update_hz: 8,
   pool_debris: true,
   pool_comets: false,
+  // Sticky-orbit and preview defaults
+  sticky_dir_only_angle_deg: 15,
+  snap_min_speed: 2.0,
+  sticky_orbit_angle_deg: 45,
+  sticky_min_speed_factor: 0.6,
+  sticky_max_speed_factor: 1.8,
+  sticky_break_tolerance: 8.0,
+  sticky_break_angle_deg: 20,
+  preview_gravity_boost: 4.0,
 };
 
 let SETTINGS = { ...DEFAULT_SETTINGS };
@@ -1400,7 +1416,13 @@ const showObjectInspector = (object, type) => {
 
   // If object appears in a near-circular, bound orbit around the dominant body, enable blue orbit overlay
   try {
-    const centerCandidates = [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs, ...gas_giants];
+    const centerCandidates = [
+      ...bh_list,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...gas_giants,
+    ];
     const G = SETTINGS.gravitational_constant;
     const obj = object;
     let primary = null;
@@ -1423,16 +1445,25 @@ const showObjectInspector = (object, type) => {
       const vCirc = Math.sqrt((G * primary.mass) / r);
       const vMag = Math.hypot(obj.vel.x, obj.vel.y);
       const dirTan = Math.atan2(ry, rx) + Math.PI / 2;
-      const vIdeal = { x: vCirc * Math.cos(dirTan), y: vCirc * Math.sin(dirTan) };
+      const vIdeal = {
+        x: vCirc * Math.cos(dirTan),
+        y: vCirc * Math.sin(dirTan),
+      };
       const dot = obj.vel.x * vIdeal.x + obj.vel.y * vIdeal.y;
       const denom = Math.max(1e-6, vMag * vCirc);
       const cosTheta = Math.max(-1, Math.min(1, dot / denom));
       const angErr = Math.acos(cosTheta);
       const speedRatio = vMag / vCirc;
-      const angleTol = ((SETTINGS.sticky_dir_only_angle_deg || 15) * Math.PI) / 180;
+      const angleTol =
+        ((SETTINGS.sticky_dir_only_angle_deg || 15) * Math.PI) / 180;
       const speedTol = 0.2; // allow ~20% speed deviation
       const isBound = 0.5 * vMag * vMag - (G * primary.mass) / r < 0;
-      if (isBound && angErr <= angleTol && speedRatio > 1 - speedTol && speedRatio < 1 + speedTol) {
+      if (
+        isBound &&
+        angErr <= angleTol &&
+        speedRatio > 1 - speedTol &&
+        speedRatio < 1 + speedTol
+      ) {
         // Build one-loop circular path for overlay
         const samples = 240;
         const theta0 = Math.atan2(ry, rx);
@@ -1440,7 +1471,10 @@ const showObjectInspector = (object, type) => {
         for (let i = 0; i <= samples; i++) {
           const t = i / samples;
           const th = theta0 + 2 * Math.PI * t;
-          loop.push({ x: primary.pos.x + r * Math.cos(th), y: primary.pos.y + r * Math.sin(th) });
+          loop.push({
+            x: primary.pos.x + r * Math.cos(th),
+            y: primary.pos.y + r * Math.sin(th),
+          });
         }
         state.inspectorOrbitOverlay.active = true;
         state.inspectorOrbitOverlay.points = loop;
@@ -4026,8 +4060,14 @@ const apply_placement = () => {
 
     case 'Circular': {
       // Choose a central mass (prefer a star; else the most massive gravitating body)
-      const candidates = [...stars, ...bh_list, ...neutron_stars, ...white_dwarfs];
-      const central = candidates.length > 0 ? getMostMassiveBody(candidates) : null;
+      const candidates = [
+        ...stars,
+        ...bh_list,
+        ...neutron_stars,
+        ...white_dwarfs,
+      ];
+      const central =
+        candidates.length > 0 ? getMostMassiveBody(candidates) : null;
       const G = SETTINGS.gravitational_constant;
       all_objects.forEach((obj, i) => {
         const angle = (i / Math.max(1, all_objects.length)) * 2 * Math.PI;
@@ -4054,8 +4094,14 @@ const apply_placement = () => {
     }
 
     case 'Multi-Ring': {
-      const candidates = [...stars, ...bh_list, ...neutron_stars, ...white_dwarfs];
-      const central = candidates.length > 0 ? getMostMassiveBody(candidates) : null;
+      const candidates = [
+        ...stars,
+        ...bh_list,
+        ...neutron_stars,
+        ...white_dwarfs,
+      ];
+      const central =
+        candidates.length > 0 ? getMostMassiveBody(candidates) : null;
       const G = SETTINGS.gravitational_constant;
       all_objects.forEach((obj, i) => {
         const ring = Math.floor(i / 20); // 20 objects per ring
@@ -6647,7 +6693,8 @@ export function getOrbitPreview() {
         const distSq = dx * dx + dy * dy;
         // Use a reduced effective radius for black holes to avoid overly eager preview collisions
         const bhFactor =
-          (typeof SETTINGS !== 'undefined' && SETTINGS.preview_collision_bh_factor) ||
+          (typeof SETTINGS !== 'undefined' &&
+            SETTINGS.preview_collision_bh_factor) ||
           0.6;
         const r =
           s.obj_type === 'BlackHole'
@@ -6656,7 +6703,12 @@ export function getOrbitPreview() {
         // Require inward radial motion for collision (reduces skim false positives)
         const radialDot = dx * vel.x + dy * vel.y; // < 0 means moving inward
         if (distSq <= r * r && radialDot < 0) {
-          collisionInfo = { x: pos.x, y: pos.y, withId: s.id ?? null, withType: s.obj_type ?? null };
+          collisionInfo = {
+            x: pos.x,
+            y: pos.y,
+            withId: s.id ?? null,
+            withType: s.obj_type ?? null,
+          };
           break;
         }
       }
@@ -6696,8 +6748,14 @@ export function getOrbitPreview() {
       const baseAngle = Math.atan2(r0.y, r0.x);
       const dirCCW = baseAngle + Math.PI / 2;
       const dirCW = baseAngle - Math.PI / 2;
-      const vIdealCCW = { x: vCirc * Math.cos(dirCCW), y: vCirc * Math.sin(dirCCW) };
-      const vIdealCW = { x: vCirc * Math.cos(dirCW), y: vCirc * Math.sin(dirCW) };
+      const vIdealCCW = {
+        x: vCirc * Math.cos(dirCCW),
+        y: vCirc * Math.sin(dirCCW),
+      };
+      const vIdealCW = {
+        x: vCirc * Math.cos(dirCW),
+        y: vCirc * Math.sin(dirCW),
+      };
       // const dvx = v0.x - vIdeal.x;
       // const dvy = v0.y - vIdeal.y;
       // const velError = Math.hypot(dvx, dvy);
@@ -6782,12 +6840,24 @@ export function getOrbitPreview() {
       const baseAngle2 = Math.atan2(r0.y, r0.x);
       const dirCCW2 = baseAngle2 + Math.PI / 2;
       const dirCW2 = baseAngle2 - Math.PI / 2;
-      const vIdealCCW2 = { x: vCirc * Math.cos(dirCCW2), y: vCirc * Math.sin(dirCCW2) };
-      const vIdealCW2 = { x: vCirc * Math.cos(dirCW2), y: vCirc * Math.sin(dirCW2) };
+      const vIdealCCW2 = {
+        x: vCirc * Math.cos(dirCCW2),
+        y: vCirc * Math.sin(dirCCW2),
+      };
+      const vIdealCW2 = {
+        x: vCirc * Math.cos(dirCW2),
+        y: vCirc * Math.sin(dirCW2),
+      };
       // Choose ideal direction that is closest to current drag direction
       const denom2 = Math.max(1e-9, Math.hypot(vel.x, vel.y) * vCirc);
-      const cosCCW2 = Math.max(-1, Math.min(1, (vel.x * vIdealCCW2.x + vel.y * vIdealCCW2.y) / denom2));
-      const cosCW2 = Math.max(-1, Math.min(1, (vel.x * vIdealCW2.x + vel.y * vIdealCW2.y) / denom2));
+      const cosCCW2 = Math.max(
+        -1,
+        Math.min(1, (vel.x * vIdealCCW2.x + vel.y * vIdealCCW2.y) / denom2)
+      );
+      const cosCW2 = Math.max(
+        -1,
+        Math.min(1, (vel.x * vIdealCW2.x + vel.y * vIdealCW2.y) / denom2)
+      );
       const angErrCCW2 = Math.acos(cosCCW2);
       const angErrCW2 = Math.acos(cosCW2);
       const useCCW2 = angErrCCW2 <= angErrCW2;
