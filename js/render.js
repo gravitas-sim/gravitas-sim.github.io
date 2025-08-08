@@ -666,10 +666,10 @@ const drawScene = () => {
       `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`,
       `<div class="separator-line"></div>`,
       `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}x | <span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}x</span>`,
-      `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused (Space)' : 'Running'}</span>`,
+      `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused' : 'Running'}</span>`,
       `<div class="separator-line"></div>`,
-      `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan | Mouse Wheel = Zoom`,
-      `Click objects to inspect | ESC to close inspector`,
+      `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan | Scroll = Zoom`,
+      `Spacebar = Pause/Resume | Click objects to inspect | ESC closes inspector`,
     ];
     overlayDiv.innerHTML = lines.join('<br>');
   } else {

@@ -4085,9 +4085,9 @@ const apply_placement = () => {
           obj.vel.y = (dx / r) * vCirc;
         } else {
           // Fallback to legacy
-          const vel_mag = SETTINGS.init_velocity;
-          obj.vel.x = -Math.sin(angle) * vel_mag;
-          obj.vel.y = Math.cos(angle) * vel_mag;
+        const vel_mag = SETTINGS.init_velocity;
+        obj.vel.x = -Math.sin(angle) * vel_mag;
+        obj.vel.y = Math.cos(angle) * vel_mag;
         }
       });
       break;
@@ -4119,9 +4119,9 @@ const apply_placement = () => {
           obj.vel.y = (dx / r) * vCirc;
         } else {
           // Fallback to legacy scaled by ring
-          const vel_mag = SETTINGS.init_velocity * (1 - ring * 0.1);
-          obj.vel.x = -Math.sin(angle) * vel_mag;
-          obj.vel.y = Math.cos(angle) * vel_mag;
+        const vel_mag = SETTINGS.init_velocity * (1 - ring * 0.1);
+        obj.vel.x = -Math.sin(angle) * vel_mag;
+        obj.vel.y = Math.cos(angle) * vel_mag;
         }
       });
       break;
@@ -6399,6 +6399,41 @@ const updateSpeedDisplay = () => {
 };
 
 /**
+ * Adjust simulation speed with custom stepping:
+ * - From <=0.5x downward: 0.5 -> 0.3 -> 0.1 -> 0.0 (pause)
+ * - From <=0.5x upward: 0.0 -> 0.1 -> 0.3 -> 0.5
+ * - Above 0.5x: steps of 0.5x up to 5.0x
+ */
+const adjustSimSpeed = (current, direction) => {
+  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+  const epsilon = 1e-9;
+  const seqDown = [0.5, 0.3, 0.1, 0.0];
+  const seqUp = [0.0, 0.1, 0.3, 0.5];
+
+  // Normalize very small values to exact 0
+  if (Math.abs(current) < epsilon) current = 0.0;
+
+  if (current <= 0.5 + epsilon) {
+    const seq = direction > 0 ? seqUp : seqDown;
+    // Find current index in sequence (closest not greater than current)
+    let idx = 0;
+    for (let i = 0; i < seq.length; i++) {
+      idx = i;
+      if (current <= seq[i] + epsilon) break;
+    }
+    const stepDelta = direction > 0 ? 1 : -1;
+    // If exactly on a step and moving in that direction, advance one step; otherwise move to nearest
+    const atStep = Math.abs(current - seq[idx]) < 0.05;
+    const targetIdx = clamp(idx + (atStep ? stepDelta : 0), 0, seq.length - 1);
+    return seq[targetIdx];
+  }
+
+  // Above 0.5x: increments of 0.5
+  const next = current + (direction > 0 ? 0.5 : -0.5);
+  return clamp(parseFloat((Math.round(next * 10) / 10).toFixed(1)), 0.0, 5.0);
+};
+
+/**
  * Take a screenshot of the current simulation
  * Combines the starfield and simulation canvases into a single image
  */
@@ -6972,10 +7007,10 @@ window.addEventListener('keydown', e => {
     state.zoom = 1.0;
     state.pan = { x: 0, y: 0 };
   } else if (e.key === '-' || e.key === '_') {
-    SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.5);
+    SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, -1);
     updateSpeedDisplay();
   } else if (e.key === '=' || e.key === '+') {
-    SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.5);
+    SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, +1);
     updateSpeedDisplay();
   } else if (e.key.toLowerCase() === 'p') {
     takeScreenshot();
@@ -7129,12 +7164,12 @@ document.getElementById('bhMassesDone').onclick = hideBHMassesModal;
 
 // Speed control functionality
 document.getElementById('slowDownBtn').onclick = () => {
-  SETTINGS.sim_speed = Math.max(0.1, SETTINGS.sim_speed - 0.5);
+  SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, -1);
   updateSpeedDisplay();
 };
 
 document.getElementById('speedUpBtn').onclick = () => {
-  SETTINGS.sim_speed = Math.min(5.0, SETTINGS.sim_speed + 0.5);
+  SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, +1);
   updateSpeedDisplay();
 };
 
