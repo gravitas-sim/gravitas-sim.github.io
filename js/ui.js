@@ -4657,6 +4657,24 @@ const initialize_simulation = () => {
         escape_velocity: 23.5, // km/s
         surface_pressure: 100000, // Pa (1 bar at cloud tops)
       },
+      // Dwarf planet beyond Neptune
+      {
+        name: 'Pluto',
+        mass: 0.00218, // ~0.00218 Earth masses
+        distance: 950, // scaled beyond Neptune for visual separation
+        diameter: 2377, // km
+        orbital_period: 90560, // days (~248 years)
+        type: 'terrestrial', // treat as small terrestrial in this engine
+        color: '#C8B7A6', // light brown/gray
+        density: 'icy',
+        temperature: 44, // Kelvin
+        gravity: 0.62, // m/s²
+        rotation_period: -6.39, // days (retrograde)
+        atmosphere: 'N2 (tenuous)',
+        density_kg_m3: 1850, // kg/m³
+        escape_velocity: 1.21, // km/s
+        surface_pressure: 1, // Pa (very tenuous)
+      },
     ];
 
     // Create planets with realistic properties
