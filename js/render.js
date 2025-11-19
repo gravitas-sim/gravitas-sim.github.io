@@ -18,10 +18,13 @@ import {
 } from './physics.js';
 import { hexToRgb } from './utils.js';
 import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
+import { updateSonification } from './audio.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
-const overlayDiv = document.getElementById('overlay');
+const overlayDiv =
+  document.getElementById('overlayStats') ||
+  document.getElementById('overlay');
 // Starfield and rendering functions
 const starfieldCanvas = document.getElementById('starfieldCanvas');
 const starCtx = starfieldCanvas.getContext('2d');
@@ -910,6 +913,7 @@ const gameLoop = timestamp => {
 
   // Draw simulation objects (foreground layer)
   drawScene();
+  updateSonification(timestamp);
 
   // Composite bloom layer additively
   try {

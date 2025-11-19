@@ -48,6 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(async () => {
         document.querySelector('.ui-container').classList.add('showUI');
         document.getElementById('overlay').classList.add('showUI');
+        const sonificationPanel =
+          document.getElementById('sonificationControl');
+        if (sonificationPanel) {
+          sonificationPanel.classList.add('showUI');
+        }
 
         // Set up overlay minimize functionality
         const { setupOverlayMinimize } = await import('./ui.js');

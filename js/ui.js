@@ -43,6 +43,7 @@ import {
 
 import { worldToScreen } from './utils.js';
 import { generateStarfield } from './render.js';
+import { toggleSonification, getSonificationState } from './audio.js';
 import {
   initChart,
   updateChart,
@@ -3405,6 +3406,44 @@ const show_enhanced_scenario_info = scenarioName => {
     }, 18000);
   }
 };
+
+const refreshSonificationToggle = () => {
+  const toggle = document.getElementById('sonificationToggle');
+  if (!toggle) {
+    return;
+  }
+
+  const { muted, supported } = getSonificationState();
+  if (!supported) {
+    toggle.textContent = 'Audio N/A';
+    toggle.disabled = true;
+    toggle.dataset.state = 'disabled';
+    toggle.title = 'Web Audio is not available in this browser';
+    toggle.setAttribute('aria-pressed', 'false');
+    return;
+  }
+
+  toggle.disabled = false;
+  toggle.textContent = muted ? '🔇 Sound Off' : '🔊 Sound On';
+  toggle.dataset.state = muted ? 'muted' : 'active';
+  toggle.title = muted
+    ? 'Enable procedural sonification'
+    : 'Mute simulation sonification';
+  toggle.setAttribute('aria-pressed', (!muted).toString());
+};
+
+const sonificationToggleBtn = document.getElementById('sonificationToggle');
+if (sonificationToggleBtn) {
+  refreshSonificationToggle();
+  sonificationToggleBtn.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleSonification();
+    refreshSonificationToggle();
+  });
+} else {
+  console.warn('Sonification toggle button not found');
+}
 
 /**
  * Apply preset scenario settings to the simulation

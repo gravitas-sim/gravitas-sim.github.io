@@ -425,6 +425,45 @@ let bh_list = [],
   white_dwarfs = [],
   accretion_disk_particles = [];
 
+const dispatchSimulationEvent = (name, detail = {}) => {
+  if (
+    typeof window !== 'undefined' &&
+    typeof window.dispatchEvent === 'function' &&
+    typeof window.CustomEvent === 'function'
+  ) {
+    window.dispatchEvent(new window.CustomEvent(name, { detail }));
+  }
+};
+
+const emitCollisionEvent = detail => {
+  dispatchSimulationEvent('gravitasCollision', detail);
+};
+
+const buildImpactPayload = (source, target, impactType) => {
+  const sourcePos = source?.pos || target?.pos || { x: 0, y: 0 };
+  const targetPos = target?.pos || sourcePos;
+  const avgPos = {
+    x: (sourcePos.x + targetPos.x) / 2,
+    y: (sourcePos.y + targetPos.y) / 2,
+  };
+  const relativeSpeed = Math.hypot(
+    (source?.vel?.x || 0) - (target?.vel?.x || 0),
+    (source?.vel?.y || 0) - (target?.vel?.y || 0)
+  );
+  return {
+    impactType,
+    sourceType: source?.obj_type || source?.constructor?.name || 'Unknown',
+    targetType: target?.obj_type || target?.constructor?.name || impactType,
+    relativeSpeed,
+    masses: [source?.mass || 0, target?.mass || 0],
+    position: avgPos,
+  };
+};
+
+const broadcastImpact = (source, target, impactType) => {
+  emitCollisionEvent(buildImpactPayload(source, target, impactType));
+};
+
 // Worker state
 let physicsWorker = null;
 let workerBusy = false;
@@ -4740,6 +4779,7 @@ const handle_star_object_collisions = () => {
         }
 
         planet.alive = false;
+        broadcastImpact(star, planet, 'stellar-absorption');
       }
     }
 
@@ -4787,6 +4827,7 @@ const handle_star_object_collisions = () => {
         }
 
         gasGiant.alive = false;
+        broadcastImpact(star, gasGiant, 'stellar-absorption');
       }
     }
 
@@ -4834,6 +4875,7 @@ const handle_star_object_collisions = () => {
         }
 
         asteroid.alive = false;
+        broadcastImpact(star, asteroid, 'stellar-absorption');
       }
     }
   }
@@ -4917,6 +4959,8 @@ const handle_rocky_collisions = objects_list => {
               'rgb(255, 100, 50)'
             );
           }
+
+          broadcastImpact(obj1, obj2, 'rocky-collision');
         }
 
         // Separate objects

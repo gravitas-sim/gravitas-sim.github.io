@@ -2787,6 +2787,7 @@ html, body {
 }
 
 .scenario-info-header h3 {
+  flex: 1;
   margin: 0;
   font-size: 18px;
   font-weight: 600;
@@ -2796,6 +2797,85 @@ html, body {
   hyphens: auto;
   max-width: calc(100% - 50px);
   line-height: 1.3;
+}
+
+.scenario-info-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+  justify-content: flex-end;
+}
+
+.sonification-panel {
+  margin-top: 36px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.sonification-panel.showUI {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#overlay.minimized .sonification-panel {
+  display: none;
+}
+
+.sonification-toggle {
+  background: rgba(79, 172, 254, 0.12);
+  border: 1px solid rgba(79, 172, 254, 0.45);
+  color: #e8f6ff;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  pointer-events: auto;
+}
+
+.sonification-toggle:hover {
+  border-color: rgba(79, 172, 254, 0.8);
+  background: rgba(79, 172, 254, 0.25);
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.35);
+}
+
+.sonification-toggle[data-state='active'] {
+  background: rgba(79, 172, 254, 0.25);
+  border-color: rgba(79, 172, 254, 0.9);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(79, 172, 254, 0.45);
+}
+
+.sonification-toggle[data-state='disabled'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.sonification-description {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.overlay-stats {
+  margin-top: 12px;
 }
 
 .scenario-info-close {
@@ -2816,9 +2896,9 @@ html, body {
   height: auto !important;
   line-height: 1 !important;
   display: inline-block !important;
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
   z-index: 1001 !important;
   pointer-events: auto !important;
   flex-shrink: 0 !important;
@@ -2934,8 +3014,8 @@ html, body {
   .scenario-info-close {
     font-size: 20px !important;
     padding: 6px 10px !important;
-    top: -2px !important;
-    right: -2px !important;
+    top: auto !important;
+    right: auto !important;
   }
     
   .scenario-info-body p {
@@ -2969,8 +3049,8 @@ html, body {
   .scenario-info-close {
     font-size: 22px !important;
     padding: 8px 12px !important;
-    top: -4px !important;
-    right: -4px !important;
+    top: auto !important;
+    right: auto !important;
     background: rgba(0, 0, 0, 0.8) !important;
     border-radius: 50% !important;
     width: 36px !important;
@@ -3021,8 +3101,8 @@ html, body {
   .scenario-info-close {
     font-size: 20px !important;
     padding: 6px 10px !important;
-    top: -2px !important;
-    right: -2px !important;
+    top: auto !important;
+    right: auto !important;
     width: 32px !important;
     height: 32px !important;
   }

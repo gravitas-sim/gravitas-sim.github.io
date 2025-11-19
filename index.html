@@ -304,6 +304,20 @@
 
     <div id="overlay">
         <button id="overlayMinimize" class="overlay-minimize-btn" title="Minimize">−</button>
+        <div id="sonificationControl" class="sonification-panel">
+          <button
+            id="sonificationToggle"
+            class="sonification-toggle"
+            aria-pressed="false"
+            title="Enable procedural sonification"
+          >
+            🔇 Sound: Off
+          </button>
+          <p class="sonification-description">
+            Translates orbital motion, gravitational-wave frequencies, and collision signatures into live audio. Default preset: Off.
+          </p>
+        </div>
+        <div id="overlayStats" class="overlay-stats"></div>
     </div>
     <div id="scenarioInfoDisplay"></div>
     
@@ -312,7 +326,11 @@
       <div class="scenario-info-content">
         <div class="scenario-info-header">
           <h3 id="scenarioInfoTitle">Scenario Loaded</h3>
-          <button id="closeScenarioInfo" class="scenario-info-close">&times;</button>
+          <div class="scenario-info-actions">
+            <button id="closeScenarioInfo" class="scenario-info-close">
+              &times;
+            </button>
+          </div>
         </div>
         <div class="scenario-info-body">
           <p id="scenarioInfoSummary">Loading scenario information...</p>
