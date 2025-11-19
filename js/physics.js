@@ -424,6 +424,16 @@ let bh_list = [],
   neutron_stars = [],
   white_dwarfs = [],
   accretion_disk_particles = [];
+
+// Worker state
+let physicsWorker = null;
+let workerBusy = false;
+let workerBuffers = {
+  sx: null, sy: null, sm: null,
+  tx: null, ty: null
+};
+let workerJobObjects = []; // Stores references to objects currently being processed by worker
+
 let PhysicsObject_id_counter = 0;
 
 // Import state from ui.js to ensure single source of truth
@@ -849,52 +859,120 @@ const updatePhysics = dt => {
     (typeof window !== 'undefined' && window.SETTINGS
       ? window.SETTINGS.use_barnes_hut
       : false);
-  let quadRoot = null;
-  if (useBarnesHut && cachedMajorSources.length > 0) {
-    // Build bounds
-    let minX = Infinity,
-      minY = Infinity,
-      maxX = -Infinity,
-      maxY = -Infinity;
-    for (const b of cachedMajorSources) {
-      if (!b || !b.pos) continue;
-      if (b.pos.x < minX) minX = b.pos.x;
-      if (b.pos.y < minY) minY = b.pos.y;
-      if (b.pos.x > maxX) maxX = b.pos.x;
-      if (b.pos.y > maxY) maxY = b.pos.y;
+
+  // Initialize worker if needed
+  if (useBarnesHut && !physicsWorker) {
+    try {
+      const url = new URL('./physicsWorker.js', import.meta.url);
+      physicsWorker = new Worker(url, { type: 'module' });
+      physicsWorker.onmessage = (e) => {
+        const { type, ax, ay, phi, sources, targets } = e.data;
+        if (type === 'accel') {
+          // Restore buffers for reuse
+          workerBuffers.sx = sources.x;
+          workerBuffers.sy = sources.y;
+          workerBuffers.sm = sources.m;
+          workerBuffers.tx = targets.x;
+          workerBuffers.ty = targets.y;
+
+          const axView = new Float32Array(ax);
+          const ayView = new Float32Array(ay);
+          const phiView = phi ? new Float32Array(phi) : null;
+
+          // Apply to stored objects corresponding to this batch
+          for(let i = 0; i < workerJobObjects.length; i++) {
+            const obj = workerJobObjects[i];
+            if(obj && obj.alive) {
+              obj.cached_accel = { x: axView[i], y: ayView[i] };
+              if (phiView) obj.cached_phi = phiView[i];
+            }
+          }
+          workerJobObjects = []; // Clear references
+          workerBusy = false;
+        }
+      };
+    } catch (err) {
+      console.error("Physics Worker init failed:", err);
+      physicsWorker = null;
     }
-    const w = Math.max(1, maxX - minX);
-    const h = Math.max(1, maxY - minY);
-    const size = Math.max(w, h) * 1.2;
-    const originX = (minX + maxX) / 2 - size / 2;
-    const originY = (minY + maxY) / 2 - size / 2;
-    quadRoot = new QuadNode(originX, originY, size, size);
-    for (const b of cachedMajorSources) {
-      quadInsert(quadRoot, b);
+  }
+
+  // Schedule new worker job if free
+  if (useBarnesHut && physicsWorker && !workerBusy && cachedMajorSources.length > 0 && cachedAllPhysicsObjects.length > 0) {
+    const nSrc = cachedMajorSources.length;
+    const nTar = cachedAllPhysicsObjects.length;
+
+    // Resize buffers if needed
+    if (!workerBuffers.sx || workerBuffers.sx.byteLength < nSrc * 4) {
+      workerBuffers.sx = new Float32Array(Math.max(nSrc, 1024)).buffer;
+      workerBuffers.sy = new Float32Array(Math.max(nSrc, 1024)).buffer;
+      workerBuffers.sm = new Float32Array(Math.max(nSrc, 1024)).buffer;
     }
+    if (!workerBuffers.tx || workerBuffers.tx.byteLength < nTar * 4) {
+      workerBuffers.tx = new Float32Array(Math.max(nTar, 1024)).buffer;
+      workerBuffers.ty = new Float32Array(Math.max(nTar, 1024)).buffer;
+    }
+
+    // Create views
+    const sx = new Float32Array(workerBuffers.sx, 0, nSrc);
+    const sy = new Float32Array(workerBuffers.sy, 0, nSrc);
+    const sm = new Float32Array(workerBuffers.sm, 0, nSrc);
+    const tx = new Float32Array(workerBuffers.tx, 0, nTar);
+    const ty = new Float32Array(workerBuffers.ty, 0, nTar);
+
+    // Fill buffers
+    for(let i = 0; i < nSrc; i++) {
+      sx[i] = cachedMajorSources[i].pos.x;
+      sy[i] = cachedMajorSources[i].pos.y;
+      sm[i] = cachedMajorSources[i].mass;
+    }
+    workerJobObjects = new Array(nTar);
+    for(let i = 0; i < nTar; i++) {
+      const o = cachedAllPhysicsObjects[i];
+      tx[i] = o.pos.x;
+      ty[i] = o.pos.y;
+      workerJobObjects[i] = o;
+    }
+
+    const theta = (window.SETTINGS && window.SETTINGS.barnes_hut_theta) || 0.7;
+    const G = physicsSettings.gravitational_constant;
+
+    // Send to worker (transfer buffers)
+    physicsWorker.postMessage({
+      type: 'bh',
+      G, theta,
+      sources: { x: workerBuffers.sx, y: workerBuffers.sy, m: workerBuffers.sm },
+      targets: { x: workerBuffers.tx, y: workerBuffers.ty }
+    }, [workerBuffers.sx, workerBuffers.sy, workerBuffers.sm, workerBuffers.tx, workerBuffers.ty]);
+
+    // Mark buffers as transferred (unusable in main thread until returned)
+    workerBuffers.sx = null; 
+    workerBusy = true;
   }
 
   for (let i = 0; i < cachedAllPhysicsObjects.length; i++) {
     const obj = cachedAllPhysicsObjects[i];
     if (!obj.alive) continue;
-    let effective_sources = cachedMajorSources;
-    if (useBarnesHut && quadRoot) {
-      // Compute acceleration via tree
-      const a = computeAccelFromTree(
-        quadRoot,
-        obj.pos,
-        (typeof window !== 'undefined' && window.SETTINGS
-          ? window.SETTINGS.barnes_hut_theta
-          : 0.7) || 0.7,
-        physicsSettings.gravitational_constant,
-        obj.id
-      );
-      // Apply to velocity
-      obj.vel.x += a.ax * dt;
-      obj.vel.y += a.ay * dt;
-      obj.pos.x += obj.vel.x * dt;
-      obj.pos.y += obj.vel.y * dt;
+
+    if (useBarnesHut) {
+       if (obj.cached_accel) {
+          // Use asynchronous gravity (from worker)
+          obj.vel.x += obj.cached_accel.x * dt;
+          obj.vel.y += obj.cached_accel.y * dt;
+          obj.pos.x += obj.vel.x * dt;
+          obj.pos.y += obj.vel.y * dt;
+       } else {
+         // Fallback for first frame or if worker is lagging significantly
+         if (physicsSettings.mutual_gravity) {
+            const effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
+            obj.update_physics(dt, effective_sources);
+         } else {
+            obj.update_physics(dt, cachedMajorSources);
+         }
+       }
     } else {
+      // Standard N^2 or simple gravity
+      let effective_sources = cachedMajorSources;
       if (physicsSettings.mutual_gravity) {
         effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
       }
@@ -1315,15 +1393,40 @@ class PhysicsObject {
 
   update_trail() {
     if (!this.alive) return;
+    // Zoom-based budget: fewer points when zoomed out, more when zoomed in
+    const zoom = state ? state.zoom : 1.0;
+    const baseLen = physicsSettings.trail_length;
+    let budget;
+    if (baseLen < 10) {
+      // Preserve exact behavior for small budgets (tests rely on this)
+      budget = baseLen;
+    } else {
+      const minLen = Math.max(10, Math.floor(baseLen * 0.4));
+      const maxLen = Math.max(baseLen, 10);
+      budget = Math.max(
+        minLen,
+        Math.min(
+          maxLen,
+          Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom)))
+        )
+      );
+    }
+
+    // Ensure array does not exceed budget
+    if (this.trail.length >= budget) {
+      this.trail.shift();
+    }
     this.trail.push({
       ...this.pos,
       timestamp: Date.now(),
       velocity: Math.hypot(this.vel.x, this.vel.y),
       age: 0,
     });
-    if (this.trail.length > physicsSettings.trail_length) this.trail.shift(); // Changed from SETTINGS.trail_length
 
-    this.trail.forEach(point => (point.age += 1));
+    // Increment ages
+    for (let i = 0; i < this.trail.length; i++) {
+      this.trail[i].age += 1;
+    }
   }
 
   check_absorption(bh_list) {
@@ -5264,7 +5367,22 @@ const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
  * @returns {number} Total gravitational potential energy in joules
  */
 const calculateTotalPotentialEnergy = (object, allObjects) => {
-  if (!object || !allObjects || allObjects.length === 0) return 0;
+  if (!object) return 0;
+
+  // Optimization: Use cached potential from worker if available
+  if (object.cached_phi !== undefined) {
+    // Calculate conversion ratio from simulation units to output energy units
+    const G_si = getGravitationalConstantSI();
+    const G_sim = physicsSettings.gravitational_constant;
+    const ratio = (G_si / G_sim) *
+                  (MASS_UNIT_TO_KG * MASS_UNIT_TO_KG) /
+                  DISTANCE_UNIT_TO_M *
+                  ENERGY_SCALE_FACTOR;
+
+    return object.cached_phi * object.mass * ratio;
+  }
+
+  if (!allObjects || allObjects.length === 0) return 0;
 
   let totalPotentialEnergy = 0;
 

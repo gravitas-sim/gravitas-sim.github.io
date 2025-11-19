@@ -189,10 +189,16 @@ function drawStarfield() {
         const screen = world_to_screen({ x: ripple.x, y: ripple.y });
         const radius = c * age * state.zoom;
         const progress = age / ripple.duration;
+        const limit = radius + 1.5 * wavelength;
+
         const dx = sx - screen.x;
+        if (Math.abs(dx) > limit) continue; // Optimization: Bounding box check
+
         const dy = sy - screen.y;
+        if (Math.abs(dy) > limit) continue; // Optimization: Bounding box check
+
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < radius + 1.5 * wavelength && dist > 8) {
+        if (dist < limit && dist > 8) {
           // Sine-based lensing: offset outward, modulated by ripple
           const phase = (dist - radius) / wavelength;
           const local_amp = amplitude * Math.exp(-Math.abs(phase));
@@ -235,7 +241,9 @@ function drawStarfield() {
     function checkLensing(obj, strength, radius, blur, color) {
       const screen = world_to_screen(obj.pos);
       const dx = sx - screen.x;
+      if (Math.abs(dx) > radius) return;
       const dy = sy - screen.y;
+      if (Math.abs(dy) > radius) return;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < radius) {
         const falloff = 1 - dist / radius;

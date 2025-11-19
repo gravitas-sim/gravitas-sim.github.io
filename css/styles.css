@@ -1,3 +1,24 @@
+/* Floating close chip for small screens */
+.floating-close-chip {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2005;
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 480px) {
+  .floating-close-chip { display: flex; }
+}
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap');
 
 :root {
