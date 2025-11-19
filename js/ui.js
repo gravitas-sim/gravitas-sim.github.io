@@ -257,6 +257,7 @@ const DEFAULT_SETTINGS = {
   chart_update_hz: 8,
   pool_debris: true,
   pool_comets: false,
+  star_only_gravity: false,
   // Sticky-orbit and preview defaults
   sticky_dir_only_angle_deg: 15,
   snap_min_speed: 2.0,
@@ -1542,11 +1543,13 @@ const showObjectInspector = (object, type) => {
 
     // Check if this is a new object selection or just a real-time update
     const existingMassSlider = document.getElementById('massSlider');
-    const isNewObject =
-      !existingMassSlider ||
-      (state.selectedObject &&
-        state.selectedObject.object &&
-        existingMassSlider.dataset.objectId !== state.selectedObject.object.id);
+    const currentObjectId =
+      state.selectedObject && state.selectedObject.object
+        ? String(state.selectedObject.object.id ?? 'unknown')
+        : 'unknown';
+    const sliderObjectId =
+      existingMassSlider?.dataset?.objectId ?? 'unknown';
+    const isNewObject = !existingMassSlider || sliderObjectId !== currentObjectId;
 
     // Don't recreate inspector if it's just a mass update (to preserve energy chart)
     // TODO: REMOVE - Energy chart preservation logic to be replaced
@@ -1554,7 +1557,7 @@ const showObjectInspector = (object, type) => {
       existingMassSlider &&
       state.selectedObject &&
       state.selectedObject.object &&
-      existingMassSlider.dataset.objectId === state.selectedObject.object.id &&
+      sliderObjectId === currentObjectId &&
       Math.abs(
         parseFloat(existingMassSlider.value) - state.selectedObject.object.mass
       ) < 0.1;
@@ -1590,6 +1593,40 @@ const showObjectInspector = (object, type) => {
                 `;
       });
 
+      // Star-specific controls: Habitable (Goldilocks) zone visualizer toggle
+      if (state.selectedObject.type === 'Star') {
+        const hzEnabled = !!state.selectedObject.object.showHabitableZone;
+        const hzOptimism =
+          (typeof SETTINGS.habitable_zone_optimism === 'number'
+            ? SETTINGS.habitable_zone_optimism
+            : 1.0) || 1.0;
+
+        content += `
+          <div class="stat-separator"></div>
+          <div class="inspector-hz-block">
+            <div class="inspector-hz-header">
+              <span class="stat-label">Habitable Zone Ring</span>
+              <button
+                id="hzToggleBtn"
+                class="toggle-button"
+                data-state="${hzEnabled ? 'on' : 'off'}"
+                type="button"
+              >
+                ${hzEnabled ? 'On' : 'Off'}
+              </button>
+            </div>
+            <div class="inspector-hz-description">
+              The habitable (Goldilocks) zone is the range of orbits where a rocky planet could maintain liquid water on its surface.
+              The global <strong>Habitable Zone Optimism</strong> slider in Settings controls how wide this band is:
+              conservative values (around 0.5–1.0) focus on tighter, Earth-like orbits, while more optimistic values (above 1.0) can include
+              orbits like Venus or Mars that might be habitable with the right atmosphere or conditions. Current optimism: ${hzOptimism.toFixed(
+                1
+              )}×.
+            </div>
+          </div>
+        `;
+      }
+
       content += `<div class="object-description">${info.description}</div>`;
 
       detailsTabContent.innerHTML = content;
@@ -1597,11 +1634,37 @@ const showObjectInspector = (object, type) => {
       // Set up mass slider event listeners
       setupMassSliderListeners();
 
+      if (state.selectedObject.type === 'Star') {
+        const hzBtn = document.getElementById('hzToggleBtn');
+        const hzHeader = document.querySelector(
+          '.inspector-hz-block .inspector-hz-header'
+        );
+        if (hzBtn) {
+          const handleHzToggle = event => {
+            event.preventDefault();
+            event.stopPropagation();
+            if (state.selectedObject && state.selectedObject.object) {
+              const obj = state.selectedObject.object;
+              const newState = !obj.showHabitableZone;
+              obj.showHabitableZone = newState;
+              hzBtn.setAttribute('data-state', newState ? 'on' : 'off');
+              hzBtn.textContent = newState ? 'On' : 'Off';
+            }
+          };
+          hzBtn.onclick = handleHzToggle;
+          if (hzHeader) {
+            hzHeader.onclick = e => {
+              if (hzBtn.contains(e.target)) return;
+              handleHzToggle(e);
+            };
+          }
+        }
+      }
+
       // Store object ID for future reference
       const newMassSlider = document.getElementById('massSlider');
       if (newMassSlider && state.selectedObject.object) {
-        newMassSlider.dataset.objectId =
-          state.selectedObject.object.id || 'unknown';
+        newMassSlider.dataset.objectId = currentObjectId;
       }
     } else if (isNewObject && isMassUpdate) {
       // Just update the mass slider value without recreating the inspector
@@ -1610,7 +1673,7 @@ const showObjectInspector = (object, type) => {
         existingMassSlider.value = state.selectedObject.object.mass;
       }
     } else {
-      // Real-time update - only update stats and description, preserve the slider
+      // Real-time update - only update stats and description, preserve the slider and HZ button
       const statRows = detailsTabContent.querySelectorAll('.stat-row');
       const description = detailsTabContent.querySelector(
         '.object-description'
@@ -1629,6 +1692,20 @@ const showObjectInspector = (object, type) => {
       // Update description
       if (description) {
         description.innerHTML = info.description;
+      }
+      
+      // Update HZ button state to match object state (but don't recreate it)
+      if (state.selectedObject.type === 'Star') {
+        const hzBtn = document.getElementById('hzToggleBtn');
+        if (hzBtn && state.selectedObject.object) {
+          const currentState = state.selectedObject.object.showHabitableZone;
+          const btnState = hzBtn.getAttribute('data-state') === 'on';
+          // Only update if button is out of sync with object state
+          if (currentState !== btnState) {
+            hzBtn.setAttribute('data-state', currentState ? 'on' : 'off');
+            hzBtn.textContent = currentState ? 'On' : 'Off';
+          }
+        }
       }
     }
 
@@ -2076,8 +2153,36 @@ const updateEnergyChart = () => {
   // Ensure chart is ready before updating
   ensureChartReady();
 
-  // Update the chart
-  updateChart(energyHistory);
+  // Worker-decimated update
+  try {
+    if (!window._chartWorker) {
+      const workerUrl = new URL('./chartWorker.js', import.meta.url);
+      window._chartWorker = new Worker(workerUrl, { type: 'module' });
+      const desiredHz = (window.SETTINGS && window.SETTINGS.chart_update_hz) || 8;
+      window._chartWorker.postMessage({ type: 'config', desiredHz, maxPoints: 200 });
+      window._chartWorker.onmessage = evt => {
+        if (evt.data && evt.data.type === 'update') {
+          const payload = evt.data.data;
+          // Schedule non-critical chart update in idle time to avoid jank
+          const run = () => updateChart(payload);
+          if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(() => run());
+          } else {
+            setTimeout(run, 0);
+          }
+        }
+      };
+    }
+    window._chartWorker.postMessage({ type: 'data', data: energyHistory });
+  } catch (e) {
+    // Fallback: direct update if worker fails
+    const run = () => updateChart(energyHistory);
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(() => run());
+    } else {
+      setTimeout(run, 0);
+    }
+  }
   hideCollectingMessage();
 
   // Stop auto-refresh since we have data
@@ -2616,6 +2721,40 @@ const setupMassSliderListeners = () => {
                     `;
         });
 
+        // If the new type is a Star, also include habitable-zone controls
+        if (newType === 'Star') {
+          const hzEnabled = !!state.selectedObject.object.showHabitableZone;
+          const hzOptimism =
+            (typeof SETTINGS.habitable_zone_optimism === 'number'
+              ? SETTINGS.habitable_zone_optimism
+              : 1.0) || 1.0;
+
+          content += `
+            <div class="stat-separator"></div>
+            <div class="inspector-hz-block">
+              <div class="inspector-hz-header">
+                <span class="stat-label">Habitable Zone Ring</span>
+                <button
+                  id="hzToggleBtn"
+                  class="toggle-button"
+                  data-state="${hzEnabled ? 'on' : 'off'}"
+                  type="button"
+                >
+                  ${hzEnabled ? 'On' : 'Off'}
+                </button>
+              </div>
+              <div class="inspector-hz-description">
+                The habitable (Goldilocks) zone is the range of orbits where a rocky planet could maintain liquid water on its surface.
+                The global <strong>Habitable Zone Optimism</strong> slider in Settings controls how wide this band is:
+                conservative values (around 0.5–1.0) focus on tighter, Earth-like orbits, while more optimistic values (above 1.0) can include
+                orbits like Venus or Mars that might be habitable with the right atmosphere or conditions. Current optimism: ${hzOptimism.toFixed(
+                  1
+                )}×.
+              </div>
+            </div>
+          `;
+        }
+
         content += `<div class="object-description">${info.description}</div>`;
 
         // Only update the details tab content, not the entire inspector content
@@ -2626,6 +2765,33 @@ const setupMassSliderListeners = () => {
 
         // Set up new mass slider listeners
         setupMassSliderListeners();
+
+        if (newType === 'Star') {
+          const hzBtn = document.getElementById('hzToggleBtn');
+          const hzHeader = document.querySelector(
+            '.inspector-hz-block .inspector-hz-header'
+          );
+          if (hzBtn) {
+            const handleHzToggle = event => {
+              event.preventDefault();
+              event.stopPropagation();
+              if (state.selectedObject && state.selectedObject.object) {
+                const obj = state.selectedObject.object;
+                const newState = !obj.showHabitableZone;
+                obj.showHabitableZone = newState;
+                hzBtn.setAttribute('data-state', newState ? 'on' : 'off');
+                hzBtn.textContent = newState ? 'On' : 'Off';
+              }
+            };
+            hzBtn.onclick = handleHzToggle;
+            if (hzHeader) {
+              hzHeader.onclick = e => {
+                if (hzBtn.contains(e.target)) return;
+                handleHzToggle(e);
+              };
+            }
+          }
+        }
 
         // Energy tab should still be intact since we only updated details tab
         // Just ensure chart is ready for the new object
@@ -3653,7 +3819,9 @@ const apply_preset = () => {
     Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 1, // One sun-like star
-      mutual_gravity: true,
+      // Use central-star gravity but disable planet–planet mutual gravity
+      mutual_gravity: false,
+      star_only_gravity: true,
       placement: 'Empty',
       num_planets: 8, // 8 planets like our solar system
       num_gas_giants: 0, // Gas giants are included in planets
@@ -4525,6 +4693,7 @@ const initialize_simulation = () => {
         name: 'Mercury',
         mass: 0.055, // 0.055 Earth masses
         distance: 80, // ~0.39 AU (scaled) - increased for stability
+        phase_deg: 0,
         diameter: 4879, // km
         orbital_period: 88, // days
         type: 'terrestrial',
@@ -4542,6 +4711,7 @@ const initialize_simulation = () => {
         name: 'Venus',
         mass: 0.815, // 0.815 Earth masses
         distance: 120, // ~0.72 AU (scaled) - increased for stability
+        phase_deg: 45,
         diameter: 12104, // km
         orbital_period: 225, // days
         type: 'terrestrial',
@@ -4559,6 +4729,7 @@ const initialize_simulation = () => {
         name: 'Earth',
         mass: 1.0, // 1 Earth mass
         distance: 160, // ~1 AU (scaled) - increased for stability
+        phase_deg: 90,
         diameter: 12742, // km
         orbital_period: 365, // days
         type: 'terrestrial',
@@ -4576,6 +4747,7 @@ const initialize_simulation = () => {
         name: 'Mars',
         mass: 0.107, // 0.107 Earth masses
         distance: 200, // ~1.52 AU (scaled) - increased for stability
+        phase_deg: 135,
         diameter: 6779, // km
         orbital_period: 687, // days
         type: 'terrestrial',
@@ -4593,6 +4765,7 @@ const initialize_simulation = () => {
         name: 'Jupiter',
         mass: 317.8, // 317.8 Earth masses
         distance: 350, // ~5.2 AU (scaled) - increased for stability
+        phase_deg: 210,
         diameter: 139822, // km
         orbital_period: 4333, // days
         type: 'gas_giant',
@@ -4610,6 +4783,7 @@ const initialize_simulation = () => {
         name: 'Saturn',
         mass: 95.2, // 95.2 Earth masses
         distance: 500, // ~9.5 AU (scaled) - increased for stability
+        phase_deg: 260,
         diameter: 116464, // km
         orbital_period: 10759, // days
         type: 'gas_giant',
@@ -4627,6 +4801,7 @@ const initialize_simulation = () => {
         name: 'Uranus',
         mass: 14.5, // 14.5 Earth masses
         distance: 650, // ~19.2 AU (scaled) - increased for stability
+        phase_deg: 310,
         diameter: 50724, // km
         orbital_period: 30687, // days
         type: 'ice_giant',
@@ -4644,6 +4819,7 @@ const initialize_simulation = () => {
         name: 'Neptune',
         mass: 17.1, // 17.1 Earth masses
         distance: 800, // ~30.1 AU (scaled) - increased for stability
+        phase_deg: 350,
         diameter: 49244, // km
         orbital_period: 60190, // days
         type: 'ice_giant',
@@ -4678,10 +4854,16 @@ const initialize_simulation = () => {
     ];
 
     // Create planets with realistic properties
+    const SOLAR_SYSTEM_MASS_SCALE = 0.001;
+    const DEG2RAD = Math.PI / 180;
+
     for (let i = 0; i < solarSystemData.length; i++) {
       const planetData = solarSystemData[i];
       const r = planetData.distance;
-      const theta = Math.random() * 2 * Math.PI;
+      const theta =
+        typeof planetData.phase_deg === 'number'
+          ? planetData.phase_deg * DEG2RAD
+          : (i * 45 * DEG2RAD) % (2 * Math.PI);
       // Calculate orbital velocity based on real orbital periods
       const orbitalVelocity = Math.sqrt(
         (SETTINGS.gravitational_constant * sun.mass) / r
@@ -4710,6 +4892,11 @@ const initialize_simulation = () => {
         gasGiant.escape_velocity = planetData.escape_velocity;
         gasGiant.surface_pressure = planetData.surface_pressure;
         gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
+        const scaledGasMass = Math.max(
+          planetData.mass * EARTH_MASS_UNIT * SOLAR_SYSTEM_MASS_SCALE,
+          0.0001
+        );
+        gasGiant.mass = scaledGasMass;
         // Ensure Saturn has visible rings; other giants do not
         if (gasGiant.name === 'Saturn') {
           gasGiant.hasRings = true;
@@ -4726,7 +4913,7 @@ const initialize_simulation = () => {
         // Create new terrestrial planet objects
         const planet = new Planet(pos, vel, planetData.mass);
         planet.name = planetData.name;
-        planet.mass = planetData.mass * EARTH_MASS_UNIT;
+        planet.massInEarths = planetData.mass;
         planet.diameter = planetData.diameter;
         planet.orbital_period = planetData.orbital_period;
         planet.baseColor = planetData.color;
@@ -4740,6 +4927,10 @@ const initialize_simulation = () => {
         planet.escape_velocity = planetData.escape_velocity;
         planet.surface_pressure = planetData.surface_pressure;
         planet.isSolarSystemPlanet = true; // Flag for Solar System planets
+        planet.mass = Math.max(
+          planetData.mass * EARTH_MASS_UNIT * SOLAR_SYSTEM_MASS_SCALE,
+          0.00005
+        );
         planets.push(planet);
       }
     }
@@ -5609,6 +5800,15 @@ const setting_items = [
     key: 'show_gravitational_waves',
     type: 'bool',
   },
+  { label: '--- Educational ---', type: 'separator' },
+  {
+    label: 'Habitable Zone Optimism',
+    key: 'habitable_zone_optimism',
+    type: 'float',
+    min: 0.5,
+    max: 2.0,
+    step: 0.1,
+  },
 ];
 // ===== Reusable Tooltip System =====
 class TooltipManager {
@@ -5983,6 +6183,10 @@ const getSettingTooltip = (key, label) => {
       'Reduces numerical instabilities by softening gravity at very small distances.',
     time_step:
       'Controls simulation speed and precision. Smaller steps = more accuracy but slower performance.',
+
+    // Educational
+    habitable_zone_optimism:
+      'Controls how wide the “habitable zone” (Goldilocks zone) is around stars. Lower values (≈0.5–1.0) are conservative and focus on Earth-like orbits where liquid water is likely. Higher values (>1.0) are more optimistic and can include orbits like Venus or Mars that might be habitable with the right atmosphere or conditions.',
   };
 
   return tooltips[key] || `This setting controls ${label.toLowerCase()}.`;
@@ -7031,6 +7235,8 @@ window.addEventListener('keydown', e => {
 
 // Button event handlers
 document.getElementById('inspectorClose').onclick = hideObjectInspector;
+const inspectorCloseChip = document.getElementById('inspectorCloseChip');
+if (inspectorCloseChip) inspectorCloseChip.onclick = hideObjectInspector;
 
 // Delete object functionality
 const deleteSelectedObject = () => {
@@ -7098,6 +7304,12 @@ document.getElementById('settingsCancel').onclick = () => {
   document.getElementById('settingsPanel').classList.add('hidden');
   state.paused = false;
 };
+const settingsCloseChip = document.getElementById('settingsCloseChip');
+if (settingsCloseChip)
+  settingsCloseChip.onclick = () => {
+    document.getElementById('settingsPanel').classList.add('hidden');
+    state.paused = false;
+  };
 
 // Demo mode functionality
 let demoModeInterval = null;
@@ -7676,6 +7888,10 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('closeScenarioList').onclick = () => {
   document.getElementById('scenarioListModal').classList.add('hidden');
 };
+const scenarioListCloseChip = document.getElementById('scenarioListCloseChip');
+if (scenarioListCloseChip)
+  scenarioListCloseChip.onclick = () =>
+    document.getElementById('scenarioListModal').classList.add('hidden');
 
 document.getElementById('scenarioListModal').onclick = e => {
   if (e.target === document.getElementById('scenarioListModal')) {

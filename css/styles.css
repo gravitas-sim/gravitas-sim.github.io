@@ -794,6 +794,41 @@ html, body {
     color: var(--text-color);
 }
 
+/* Habitable zone controls inside the object inspector */
+.inspector-hz-block {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 170, 255, 0.18);
+}
+
+.inspector-hz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.inspector-hz-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #e0e0e0;
+}
+
+.inspector-hz-toggle input[type='checkbox'] {
+    accent-color: #22c55e;
+}
+
+.inspector-hz-description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: rgba(224, 224, 224, 0.9);
+    margin-top: 2px;
+}
+
 .object-icon {
     margin-right: 8px;
     font-size: 1.2em;

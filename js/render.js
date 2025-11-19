@@ -466,6 +466,105 @@ const drawScene = () => {
     if (obj.alive) obj.draw(ctx);
   });
 
+  // Draw habitable (Goldilocks) zones for stars that have it enabled
+  const hzOptimism =
+    (typeof SETTINGS.habitable_zone_optimism === 'number'
+      ? SETTINGS.habitable_zone_optimism
+      : 1.0) || 1.0;
+  // In the Solar System preset, Earth is placed at distance ~160 from the Sun (see solarSystemData),
+  // so we treat 1 AU as 160 simulation units for the habitable-zone visualizer.
+  const AU_IN_UNITS = 160;
+
+  stars.forEach(star => {
+    if (!star.alive || !star.showHabitableZone) return;
+
+    const massInSuns =
+      typeof star.massInSuns === 'number' && star.massInSuns > 0
+        ? star.massInSuns
+        : 1.0;
+
+    // Approximate luminosity scaling: L ∝ M^3.5 (in solar units)
+    const luminosity = Math.max(0.01, Math.pow(massInSuns, 3.5));
+
+    // Base conservative habitable zone around a Sun-like star in AU.
+    // We parameterize inner/outer edges and let the "optimism" slider widen or narrow them:
+    //  - At low optimism (~0.5): tight band around ~0.9–1.1 AU (very Earth-focused)
+    //  - At high optimism (~2.0): wider band ~0.6–1.4 AU (can include Venus/Mars)
+    const t = Math.max(0, Math.min(1, (hzOptimism - 0.5) / 1.5));
+    const baseInnerAU = 0.9 - 0.3 * t; // 0.9 → 0.6 as optimism increases
+    const baseOuterAU = 1.1 + 0.3 * t; // 1.1 → 1.4 as optimism increases
+
+    // Scale with stellar luminosity: HZ distance ∝ √L
+    const scale = Math.sqrt(luminosity);
+    let innerAU = baseInnerAU * scale;
+    let outerAU = baseOuterAU * scale;
+
+    // Ensure ordering stays sensible
+    if (innerAU < 0) innerAU = 0;
+    if (outerAU <= innerAU) outerAU = innerAU * 1.1 || 0.1;
+
+    const innerR = innerAU * AU_IN_UNITS;
+    const outerR = outerAU * AU_IN_UNITS;
+
+    // Skip if zone would be absurdly small or huge in current scale
+    if (!isFinite(innerR) || !isFinite(outerR) || outerR <= 0) return;
+
+    // Filled faint annulus plus dashed boundary lines
+    ctx.save();
+
+    // Soft greenish fill between inner and outer edge
+    ctx.fillStyle = 'rgba(80, 220, 160, 0.08)';
+    ctx.beginPath();
+    ctx.arc(star.pos.x, star.pos.y, outerR, 0, 2 * Math.PI);
+    ctx.arc(star.pos.x, star.pos.y, innerR, 0, 2 * Math.PI, true);
+    ctx.closePath();
+    ctx.fill();
+
+    // Inner edge (conservative "too hot" boundary)
+    ctx.setLineDash([10 / state.zoom, 6 / state.zoom]);
+    ctx.lineWidth = 1.5 / state.zoom;
+    ctx.strokeStyle = 'rgba(255, 180, 120, 0.9)';
+    ctx.beginPath();
+    ctx.arc(star.pos.x, star.pos.y, innerR, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    // Outer edge (conservative "too cold" boundary)
+    ctx.strokeStyle = 'rgba(120, 200, 255, 0.9)';
+    ctx.beginPath();
+    ctx.arc(star.pos.x, star.pos.y, outerR, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Screen-space label for clarity ("Habitable Zone")
+    try {
+      // Place the label in the middle of the annulus in world space
+      const midR = (innerR + outerR) / 2;
+      const labelWorld = {
+        x: star.pos.x,
+        y: star.pos.y + midR,
+      };
+      const labelScreen = world_to_screen(labelWorld);
+
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const screenRadius = outerR * state.zoom;
+      if (screenRadius > 30) {
+        ctx.font = '12px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(180, 255, 210, 0.95)';
+        ctx.shadowColor = 'rgba(0,0,0,0.7)';
+        ctx.shadowBlur = 4;
+        ctx.fillText('Habitable Zone', labelScreen.x, labelScreen.y);
+      }
+      ctx.restore();
+    } catch {
+      // non-fatal; label is just cosmetic
+    }
+  });
+
   particles.forEach(p => p.draw(ctx));
 
   // Draw accretion disk particles (they are drawn by black holes but also independently for cleanup)

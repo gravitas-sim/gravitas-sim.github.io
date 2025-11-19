@@ -458,6 +458,7 @@ let physicsSettings = {
   planet_base_color: '#6495ed',
   bh_behavior: 'Static',
   orbit_decay_rate: 0.005,
+  habitable_zone_optimism: 1.0,
 };
 
 // Click hit-radius minimums scaled by 1/state.zoom
@@ -788,16 +789,24 @@ const updateCachedArrays = () => {
     countsChanged ||
     lastMutualGravityState !== physicsSettings.mutual_gravity
   ) {
+    const starOnlyGravity =
+      typeof window !== 'undefined' &&
+      window.SETTINGS &&
+      window.SETTINGS.star_only_gravity === true;
+
     // Update major sources
     cachedMajorSources.length = 0;
-    cachedMajorSources.push(
-      ...bh_list,
-      ...stars,
-      ...gas_giants,
-      ...neutron_stars,
-      ...white_dwarfs
-    );
-    if (physicsSettings.mutual_gravity) {
+    cachedMajorSources.push(...bh_list, ...stars);
+
+    if (!starOnlyGravity) {
+      cachedMajorSources.push(
+        ...gas_giants,
+        ...neutron_stars,
+        ...white_dwarfs
+      );
+    }
+
+    if (physicsSettings.mutual_gravity && !starOnlyGravity) {
       cachedMajorSources.push(...planets, ...asteroids);
     }
 
@@ -3128,6 +3137,8 @@ class StarObject extends PhysicsObject {
     this.temperature = null; // Will be set for specific stars
     this.spectralType = null; // Will be set for specific stars
     this.age = null; // Will be set for specific stars
+    // Per-star toggle for rendering habitable (Goldilocks) zone rings
+    this.showHabitableZone = false;
   }
 
   draw(ctx) {
@@ -3246,6 +3257,7 @@ class StarObject extends PhysicsObject {
       ...baseState,
       massInSuns: this.massInSuns,
       baseColor: this.baseColor,
+      showHabitableZone: this.showHabitableZone,
     };
   }
 
@@ -3253,6 +3265,7 @@ class StarObject extends PhysicsObject {
     super.set_state(s);
     this.massInSuns = s.massInSuns;
     this.baseColor = s.baseColor;
+    this.showHabitableZone = !!s.showHabitableZone;
   }
 }
 
