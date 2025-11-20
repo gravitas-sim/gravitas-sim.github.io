@@ -9,9 +9,27 @@ import {
 } from './physics.js';
 
 const VOICE_CONFIGS = [
-  { type: 'sine', gain: 0.09, filterType: 'lowpass', filterFreq: 1200, filterQ: 0.9 },
-  { type: 'triangle', gain: 0.07, filterType: 'lowpass', filterFreq: 1000, filterQ: 0.8 },
-  { type: 'sine', gain: 0.055, filterType: 'bandpass', filterFreq: 720, filterQ: 1.2 },
+  {
+    type: 'sine',
+    gain: 0.09,
+    filterType: 'lowpass',
+    filterFreq: 1200,
+    filterQ: 0.9,
+  },
+  {
+    type: 'triangle',
+    gain: 0.07,
+    filterType: 'lowpass',
+    filterFreq: 1000,
+    filterQ: 0.8,
+  },
+  {
+    type: 'sine',
+    gain: 0.055,
+    filterType: 'bandpass',
+    filterFreq: 720,
+    filterQ: 1.2,
+  },
 ];
 const VOICE_REFRESH_MS = 140;
 const MUSICAL_SCALE = [0, 3, 5, 7, 10]; // minor pentatonic for deeper vibe
@@ -71,6 +89,36 @@ const smoothValue = (current, target, maxDelta) => {
   return current + Math.sign(delta) * maxDelta;
 };
 
+const getObjectMass = obj => {
+  if (!obj) return 1;
+  if (typeof obj.mass === 'number') return obj.mass;
+  if (typeof obj.massInSuns === 'number') return obj.massInSuns;
+  if (typeof obj.massInEarths === 'number') return obj.massInEarths;
+  return 1;
+};
+
+const resolveDetailMass = detail => {
+  if (!detail) return 1;
+  if (Array.isArray(detail.masses) && detail.masses.length) {
+    return detail.masses.reduce(
+      (sum, value) => sum + Math.max(value || 0, 0),
+      0
+    );
+  }
+  if (typeof detail.mergedMass === 'number') return detail.mergedMass;
+  if (typeof detail.mass === 'number') return detail.mass;
+  if (typeof detail.massInSuns === 'number') return detail.massInSuns;
+  return 1;
+};
+
+const getMassProfile = massValue => {
+  const safeMass = Math.max(massValue || 1, 1);
+  const logMass = Math.log10(safeMass);
+  const pitchShift = clamp(1 / (1 + logMass * 0.32), 0.35, 1.35);
+  const loudness = clamp(0.35 + logMass * 0.14, 0.2, 1.8);
+  return { logMass, pitchShift, loudness };
+};
+
 const hasAudioSupport = () =>
   typeof window !== 'undefined' &&
   (window.AudioContext || window.webkitAudioContext);
@@ -81,7 +129,6 @@ const ensureAudioContext = () => {
   }
 
   if (!audioCtx) {
-    // eslint-disable-next-line no-undef
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = 0.0001;
@@ -169,18 +216,23 @@ const mapOrbitersToVoices = () => {
       const radius = Math.max(5, Math.hypot(obj.pos.x || 0, obj.pos.y || 0));
       const orbitalFrequency = speed / (2 * Math.PI * radius);
       const closeness = 1 / radius;
-      const massFactor = Math.log10(Math.max(obj.mass || 1, 1));
+      const massProfile = getMassProfile(getObjectMass(obj));
       const score =
-        orbitalFrequency * 0.5 + closeness * 35 + Math.max(0, massFactor) * 0.06;
+        orbitalFrequency * 0.5 +
+        closeness * 35 +
+        Math.max(0, massProfile.logMass) * 0.08;
       const intensity = Math.min(
         1,
-        speed / 60 + Math.max(0, massFactor) * 0.02
+        speed / 55 + Math.max(0, massProfile.logMass) * 0.05 + closeness * 8
       );
       return {
         score,
         orbitalFrequency,
         intensity,
         label: obj.obj_type || obj.constructor?.name || 'Object',
+        pitchShift: massProfile.pitchShift,
+        loudness: massProfile.loudness,
+        massFactor: massProfile.logMass,
       };
     })
     .sort((a, b) => b.score - a.score);
@@ -204,11 +256,22 @@ const updateVoices = targets => {
   voices.forEach((voice, idx) => {
     const target = targets[idx];
     const voiceState = voiceStates[idx] || { freq: 220, gain: 0 };
-    const rawFreq = target ? simFrequencyToHz(target.orbitalFrequency) : 0;
+    const pitchShift = target?.pitchShift ?? 1;
+    const rawFreq = target
+      ? simFrequencyToHz(target.orbitalFrequency) * pitchShift
+      : 0;
     const quantizedFreq = target ? quantizeFrequency(rawFreq) : voiceState.freq;
     const nextFreq = target
-      ? smoothValue(voiceState.freq || quantizedFreq, quantizedFreq, FREQ_MAX_STEP)
-      : smoothValue(voiceState.freq || quantizedFreq, quantizedFreq * 0.8, FREQ_MAX_STEP);
+      ? smoothValue(
+          voiceState.freq || quantizedFreq,
+          quantizedFreq,
+          FREQ_MAX_STEP
+        )
+      : smoothValue(
+          voiceState.freq || quantizedFreq,
+          quantizedFreq * 0.8,
+          FREQ_MAX_STEP
+        );
     voiceState.freq = nextFreq;
     voiceStates[idx] = voiceState;
 
@@ -217,7 +280,10 @@ const updateVoices = targets => {
       voice.osc.frequency.linearRampToValueAtTime(nextFreq, now + 0.28);
     }
 
-    const desiredGain = target ? voice.config.gain * target.intensity : 0;
+    const loudnessWeight = target?.loudness ?? 1;
+    const desiredGain = target
+      ? Math.min(1.2, voice.config.gain * target.intensity * loudnessWeight)
+      : 0;
     const smoothedGain =
       voiceState.gain + (desiredGain - voiceState.gain) * GAIN_SMOOTH_FACTOR;
     voiceState.gain = smoothedGain;
@@ -233,11 +299,15 @@ const updateVoices = targets => {
 const triggerBassDrop = detail => {
   if (!audioCtx || muted) return;
 
+  const massProfile = getMassProfile(resolveDetailMass(detail));
+  const isKilonova = detail?.kilonova === true;
+  const crescendo = isKilonova ? 2.2 : 1;
+  const energyTerm = detail?.gw_strength || 0.4;
   const intensity =
-    (detail?.gw_strength || 0.2) + Math.min(1.5, (detail?.mass || 0) * 0.01);
-  const duration = 0.95 + intensity * 0.55;
+    (energyTerm * 0.6 + massProfile.loudness * 0.65 || 0.5) * crescendo;
+  const duration = (isKilonova ? 1.4 : 0.95) + intensity * 0.4;
   const baseFreq = quantizeFrequency(
-    85 + Math.min(210, (detail?.mass || 1) * 3.8)
+    clamp((120 + energyTerm * 240) * massProfile.pitchShift, 40, 520)
   );
   const lowOsc = audioCtx.createOscillator();
   lowOsc.type = 'sine';
@@ -245,8 +315,8 @@ const triggerBassDrop = detail => {
   overtone.type = 'triangle';
   const filter = audioCtx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = 520 + Math.min(760, baseFreq * 1.2);
-  filter.Q.value = 1.0;
+  filter.frequency.value = 420 + Math.min(900, baseFreq * 1.6);
+  filter.Q.value = isKilonova ? 1.3 : 1.0;
   const gainNode = audioCtx.createGain();
   gainNode.gain.value = 0.0001;
 
@@ -255,12 +325,12 @@ const triggerBassDrop = detail => {
   filter.connect(gainNode).connect(masterGain);
 
   const now = audioCtx.currentTime;
-  gainNode.gain.linearRampToValueAtTime(0.36 * intensity, now + 0.05);
+  gainNode.gain.linearRampToValueAtTime(0.28 * intensity, now + 0.05);
   gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
   lowOsc.frequency.setValueAtTime(baseFreq, now);
   lowOsc.frequency.exponentialRampToValueAtTime(
-    baseFreq * 0.42,
+    Math.max(35, baseFreq * 0.4),
     now + duration * 0.9
   );
 
@@ -274,20 +344,54 @@ const triggerBassDrop = detail => {
   overtone.start(now);
   lowOsc.stop(now + duration + 0.2);
   overtone.stop(now + duration + 0.2);
+
+  if (isKilonova) {
+    const choir = audioCtx.createOscillator();
+    choir.type = 'sawtooth';
+    const choirGain = audioCtx.createGain();
+    choirGain.gain.value = 0.0001;
+    choir.connect(choirGain).connect(masterGain);
+    choir.frequency.setValueAtTime(baseFreq * 1.8, now);
+    choirGain.gain.linearRampToValueAtTime(0.18 * crescendo, now + 0.35);
+    choirGain.gain.exponentialRampToValueAtTime(0.0001, now + duration + 0.7);
+    choir.start(now);
+    choir.stop(now + duration + 0.9);
+
+    const noise = audioCtx.createBufferSource();
+    const noiseFrames = Math.max(
+      1,
+      Math.ceil(audioCtx.sampleRate * (duration + 1))
+    );
+    const noiseBuffer = audioCtx.createBuffer(
+      1,
+      noiseFrames,
+      audioCtx.sampleRate
+    );
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      const fade = 1 - i / data.length;
+      data[i] = (Math.random() * 2 - 1) * fade;
+    }
+    noise.buffer = noiseBuffer;
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.value = 0.0001;
+    noise.connect(noiseGain).connect(masterGain);
+    noiseGain.gain.linearRampToValueAtTime(0.1 * crescendo, now + 0.45);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + duration + 0.9);
+    noise.start(now);
+    noise.stop(now + duration + 1.1);
+  }
 };
 
 const triggerCollisionChime = detail => {
   if (!audioCtx || muted) return;
 
   const relativeSpeed = Math.max(detail?.relativeSpeed || 4, 2);
-  const massMagnitude = Math.max(
-    detail?.masses?.[0] || 0,
-    detail?.masses?.[1] || 0
-  );
+  const massProfile = getMassProfile(resolveDetailMass(detail));
   const baseFreq = quantizeFrequency(
-    210 + Math.min(520, relativeSpeed * 22 + massMagnitude * 0.35)
+    clamp((230 + relativeSpeed * 16) * massProfile.pitchShift, 80, 900)
   );
-  const shimmerFreq = baseFreq * 1.35;
+  const shimmerFreq = baseFreq * (1.2 + 0.2 * (1 - massProfile.pitchShift));
 
   const osc = audioCtx.createOscillator();
   osc.type = 'sine';
@@ -304,9 +408,11 @@ const triggerCollisionChime = detail => {
   shimmer.connect(filter);
   filter.connect(gainNode).connect(masterGain);
 
-  const brightness = Math.min(1, massMagnitude / 1200 + 0.2);
   const now = audioCtx.currentTime;
-  gainNode.gain.linearRampToValueAtTime(0.17 + 0.08 * brightness, now + 0.025);
+  gainNode.gain.linearRampToValueAtTime(
+    0.12 * massProfile.loudness + 0.05,
+    now + 0.025
+  );
   gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
 
   osc.frequency.setValueAtTime(baseFreq, now);
@@ -315,7 +421,7 @@ const triggerCollisionChime = detail => {
   shimmer.frequency.setValueAtTime(shimmerFreq, now);
   shimmer.frequency.linearRampToValueAtTime(shimmerFreq * 0.85, now + 0.24);
 
-  filter.frequency.linearRampToValueAtTime(1500, now + 0.22);
+  filter.frequency.linearRampToValueAtTime(1600, now + 0.22);
 
   osc.start(now);
   shimmer.start(now);
@@ -375,4 +481,3 @@ export {
   getSonificationState,
   ensureAudioContext,
 };
-

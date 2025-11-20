@@ -6,6 +6,7 @@ import {
   updateSpeedDisplay,
   updateObjectTypeButton,
 } from './ui.js';
+import { init3DView } from './view3d.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -48,8 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(async () => {
         document.querySelector('.ui-container').classList.add('showUI');
         document.getElementById('overlay').classList.add('showUI');
-        const sonificationPanel =
-          document.getElementById('sonificationControl');
+        const sonificationPanel = document.getElementById(
+          'sonificationControl'
+        );
         if (sonificationPanel) {
           sonificationPanel.classList.add('showUI');
         }
@@ -168,6 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with error handling
   try {
     resizeCanvas();
+    init3DView();
+    
+    // Add a delayed re-initialization as a fallback for GitHub Pages
+    // Sometimes event listeners don't attach properly on first load
+    setTimeout(() => {
+      console.log('[Main] Running delayed 3D view initialization check...');
+      // Re-initialize to ensure event listeners are properly attached
+      // This is a workaround for GitHub Pages caching/loading issues
+      init3DView();
+    }, 500);
 
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');
