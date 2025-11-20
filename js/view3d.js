@@ -125,6 +125,7 @@ function init3DView() {
 
   const toggleHandler = (e) => {
     console.log('[View3D] Toggle button clicked. Current state:', viewEnabled, 'Event:', e);
+    e.stopPropagation(); // Prevent event from bubbling to fallback handler
     set3DViewEnabled(!viewEnabled);
   };
 
@@ -280,24 +281,7 @@ function init3DView() {
 
   updateToggleLabel();
   
-  // Add global fallback click handler for the toggle button
-  // This ensures it works even if the direct event listener fails (GitHub Pages workaround)
-  document.addEventListener('click', (e) => {
-    const target = e.target;
-    if (!target) return;
-    
-    // Check if the clicked element is one of our toggle buttons
-    if (target.id === 'toggle3DView' || target.id === 'mobileToggle3DViewBtn') {
-      console.log('[View3D] Global fallback handler caught button click:', target.id);
-      // Only trigger if the direct handler didn't fire
-      setTimeout(() => {
-        console.log('[View3D] Fallback handler executing toggle');
-        set3DViewEnabled(!viewEnabled);
-      }, 0);
-    }
-  }, { capture: true }); // Use capture phase to catch it early
-  
-  console.log('[View3D] Initialization complete. Fallback handler installed.');
+  console.log('[View3D] Initialization complete.');
 }
 
 /**
@@ -363,10 +347,10 @@ function set3DViewEnabled(next) {
     
     // Add/remove class for transitions if needed
     if (viewEnabled) {
-        setTimeout(() => {
-          containerEl.classList.add('visible');
-          console.log('[View3D] Added visible class to container');
-        }, 10);
+        // Immediately add the class instead of using setTimeout
+        // The setTimeout was causing issues with rapid toggles
+        containerEl.classList.add('visible');
+        console.log('[View3D] Added visible class to container');
     } else {
         containerEl.classList.remove('visible');
         console.log('[View3D] Removed visible class from container');
