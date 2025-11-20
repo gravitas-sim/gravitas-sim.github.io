@@ -110,7 +110,10 @@ function init3DView() {
   const resizeHandle = document.getElementById('threeViewResizeHandle');
   const header = containerEl?.querySelector('.three-view-toolbar');
 
-  const toggleHandler = () => set3DViewEnabled(!viewEnabled);
+  const toggleHandler = () => {
+    console.log('[View3D] Toggle button clicked. Current state:', viewEnabled);
+    set3DViewEnabled(!viewEnabled);
+  };
 
   if (toggleBtn) {
     toggleBtn.addEventListener('click', toggleHandler);
