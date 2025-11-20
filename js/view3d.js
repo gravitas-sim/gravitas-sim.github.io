@@ -274,9 +274,17 @@ function update3DScene(timestamp = performance.now()) {
 
 function set3DViewEnabled(next) {
   if (next === viewEnabled) return;
-  if (next && !ensureScene()) {
-    console.warn('Unable to initialize 3D renderer (WebGL not available?)');
-    return;
+  
+  if (next) {
+    try {
+      if (!ensureScene()) {
+        console.warn('Unable to initialize 3D renderer (WebGL not available or container missing?)');
+        return;
+      }
+    } catch (e) {
+      console.error('Error initializing 3D scene:', e);
+      return;
+    }
   }
 
   viewEnabled = next;
@@ -284,9 +292,19 @@ function set3DViewEnabled(next) {
   updateToggleLabel();
 
   if (containerEl) {
-    containerEl.classList.toggle('visible', viewEnabled);
+    // Force display style update to ensure visibility
+    containerEl.style.display = viewEnabled ? 'block' : 'none';
+    // Add/remove class for transitions if needed
+    if (viewEnabled) {
+        setTimeout(() => containerEl.classList.add('visible'), 10);
+    } else {
+        containerEl.classList.remove('visible');
+    }
     containerEl.setAttribute('aria-hidden', viewEnabled ? 'false' : 'true');
+  } else {
+    console.warn('Container element for 3D view not found!');
   }
+
   if (renderer?.domElement) {
     renderer.domElement.style.pointerEvents = viewEnabled ? 'auto' : 'none';
   }
