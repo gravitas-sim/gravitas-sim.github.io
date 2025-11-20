@@ -19,12 +19,12 @@ import {
 import { hexToRgb } from './utils.js';
 import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
 import { updateSonification } from './audio.js';
+import { update3DScene } from './view3d.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
 const overlayDiv =
-  document.getElementById('overlayStats') ||
-  document.getElementById('overlay');
+  document.getElementById('overlayStats') || document.getElementById('overlay');
 // Starfield and rendering functions
 const starfieldCanvas = document.getElementById('starfieldCanvas');
 const starCtx = starfieldCanvas.getContext('2d');
@@ -121,7 +121,9 @@ function drawStarfield() {
       const age = now - ripple.created;
       const fadeStart = ripple.duration;
       const fadeEnd = ripple.duration + FADE_OUT_MS;
-      if (age > fadeEnd) {
+      // Keep ripple alive longer for 3D view propagation (up to 15s)
+      // The 2D view stops rendering it after fadeEnd via the check at line 151.
+      if (age > 15000) {
         gravity_ripples.splice(i, 1);
         continue;
       }
@@ -914,6 +916,7 @@ const gameLoop = timestamp => {
   // Draw simulation objects (foreground layer)
   drawScene();
   updateSonification(timestamp);
+  update3DScene(timestamp);
 
   // Composite bloom layer additively
   try {

@@ -64,7 +64,7 @@ const meshCache = new Map();
 const SPACE_BG_COLOR = 0x010102;
 const GRID_COLOR = 0xffffff;
 const GRID_FADE = 0.75;
-const SPACETIME_SIZE = 2000;
+const SPACETIME_SIZE = 3000;
 const SPACETIME_SEGMENTS = 260;
 const GRID_SEGMENTS = 50; // Denser grid for better detail
 const SPACETIME_MAX_WELL = 2000; // Deep enough to look like a singularity
@@ -107,6 +107,8 @@ function init3DView() {
   mobileToggleBtn = document.getElementById('mobileToggle3DViewBtn');
   const closeBtn = document.getElementById('close3DViewBtn');
   const resetBtn = document.getElementById('reset3DCameraBtn');
+  const resizeHandle = document.getElementById('threeViewResizeHandle');
+  const header = containerEl?.querySelector('.three-view-toolbar');
 
   const toggleHandler = () => set3DViewEnabled(!viewEnabled);
 
@@ -121,6 +123,123 @@ function init3DView() {
   }
   if (resetBtn) {
     resetBtn.addEventListener('click', () => focusScene(true));
+  }
+
+  // Draggable logic
+  if (header && containerEl) {
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+
+    header.addEventListener('mousedown', e => {
+      // Don't drag if clicking buttons
+      if (e.target.closest('button')) return;
+      
+      isDragging = true;
+      containerEl.classList.add('interacting');
+      
+      const rect = containerEl.getBoundingClientRect();
+      // Switch to explicit left/top positioning if not already
+      containerEl.style.right = 'auto';
+      containerEl.style.bottom = 'auto';
+      containerEl.style.left = `${rect.left}px`;
+      containerEl.style.top = `${rect.top}px`;
+      
+      startX = e.clientX;
+      startY = e.clientY;
+      initialLeft = rect.left;
+      initialTop = rect.top;
+      
+      e.preventDefault(); // Prevent text selection
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      
+      // Constrain to window bounds
+      const newLeft = Math.max(0, Math.min(window.innerWidth - containerEl.offsetWidth, initialLeft + dx));
+      const newTop = Math.max(0, Math.min(window.innerHeight - containerEl.offsetHeight, initialTop + dy));
+      
+      containerEl.style.left = `${newLeft}px`;
+      containerEl.style.top = `${newTop}px`;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        containerEl.classList.remove('interacting');
+      }
+    });
+  }
+
+  // Resizable logic (Top-Left Handle)
+  if (resizeHandle && containerEl) {
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+    resizeHandle.addEventListener('mousedown', e => {
+      isResizing = true;
+      containerEl.classList.add('interacting');
+      
+      const rect = containerEl.getBoundingClientRect();
+      // Switch to explicit left/top positioning if not already
+      containerEl.style.right = 'auto';
+      containerEl.style.bottom = 'auto';
+      containerEl.style.left = `${rect.left}px`;
+      containerEl.style.top = `${rect.top}px`;
+
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = rect.width;
+      startHeight = rect.height;
+      startLeft = rect.left;
+      startTop = rect.top;
+      
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    window.addEventListener('mousemove', e => {
+      if (!isResizing) return;
+      
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      
+      // Calculate new dimensions (dragging top-left: moving right/down shrinks, left/up grows)
+      // Note: dx/dy is positive when moving right/down.
+      // So we subtract dx from width, dy from height.
+      let newWidth = Math.max(280, startWidth - dx);
+      let newHeight = Math.max(240, startHeight - dy);
+      
+      // Constrain against max window size (optional, but good practice)
+      newWidth = Math.min(newWidth, window.innerWidth - 20);
+      newHeight = Math.min(newHeight, window.innerHeight - 20);
+
+      // Calculate new position
+      // The right/bottom edge should theoretically stay fixed.
+      // right_edge = startLeft + startWidth
+      // newLeft = right_edge - newWidth
+      const rightEdge = startLeft + startWidth;
+      const bottomEdge = startTop + startHeight;
+      
+      const newLeft = rightEdge - newWidth;
+      const newTop = bottomEdge - newHeight;
+      
+      containerEl.style.width = `${newWidth}px`;
+      containerEl.style.height = `${newHeight}px`;
+      containerEl.style.left = `${newLeft}px`;
+      containerEl.style.top = `${newTop}px`;
+      
+      handleWindowResize();
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        containerEl.classList.remove('interacting');
+      }
+    });
   }
 
   updateToggleLabel();
@@ -319,6 +438,60 @@ function updateGridCurvature(sources) {
   const vertexCount = position.count;
   const now = performance.now();
   
+  // Precompute active ripples and their properties to optimize vertex loop
+  const activeRipples = [];
+  const halfSize = SPACETIME_SIZE / 2; // 1500
+
+  for (let j = 0; j < gravity_ripples.length; j++) {
+    const ripple = gravity_ripples[j];
+    const age = now - ripple.created;
+    
+    const rx = ripple.x;
+    const rz = -ripple.y; // Convert from simulation Y to 3D Z
+    
+    // Calculate max distance to any corner of the grid to ensure coverage
+    // Grid corners are at (+-halfSize, +-halfSize)
+    const d1 = Math.hypot(halfSize - rx, halfSize - rz);
+    const d2 = Math.hypot(halfSize - rx, -halfSize - rz);
+    const d3 = Math.hypot(-halfSize - rx, halfSize - rz);
+    const d4 = Math.hypot(-halfSize - rx, -halfSize - rz);
+    const maxDistToCorner = Math.max(d1, d2, d3, d4);
+    
+    // Wave parameters
+    const speed = 0.35; // Propagation speed
+    const wavelength = 120 + Math.log10(ripple.mass + 1) * 40;
+    const amplitude = (20 + Math.log10(ripple.mass + 1) * 15) * (ripple.gw_strength || 1);
+    
+    // Reduce packet cycles further (user requested ~half of previous 5)
+    // A value of 2.5 means we only see about 2-3 distinct wave crests
+    const packetCycles = 2.5; 
+    const packetLength = wavelength * packetCycles;
+    
+    // Fade out only after we pass the furthest corner
+    const edgeFadeStart = maxDistToCorner; 
+    const edgeFadeLength = wavelength * 4.0;
+    const maxDistance = maxDistToCorner + packetLength + edgeFadeLength;
+    const waveLifetime = maxDistance / speed;
+
+    if (age > waveLifetime) continue;
+
+    const waveFront = age * speed;
+    
+    activeRipples.push({
+      rx, rz,
+      waveFront,
+      wavelength,
+      amplitude,
+      packetLength,
+      packetStart: Math.max(0, waveFront - packetLength),
+      leadSoftness: wavelength * 1.5,
+      tailSoftness: wavelength * 2.5,
+      edgeFadeStart,
+      edgeFadeLength,
+      age
+    });
+  }
+  
   // Update each grid line vertex to follow gravitational curvature
   for (let i = 0; i < vertexCount; i++) {
     const vx = position.getX(i);
@@ -331,39 +504,63 @@ function updateGridCurvature(sources) {
     }
     
     // Add gravitational wave ripples
-    for (let j = 0; j < gravity_ripples.length; j++) {
-        const ripple = gravity_ripples[j];
-        const age = now - ripple.created;
-        const duration = ripple.duration || 3000;
-        
-        if (age > duration + 1000) continue; // Skip if expired
-        
-        const rx = ripple.x;
-        const rz = -ripple.y; // Convert from simulation Y to 3D Z
-        const dx = vx - rx;
-        const dz = vz - rz;
+    for (let j = 0; j < activeRipples.length; j++) {
+        const r = activeRipples[j];
+        const dx = vx - r.rx;
+        const dz = vz - r.rz;
         const dist = Math.sqrt(dx * dx + dz * dz);
         
-        // Wave parameters
-        const speed = 0.18; // Propagation speed
-        const waveFront = age * speed;
-        const wavelength = 60 + Math.log10(ripple.mass + 1) * 20;
-        const amplitude = (20 + Math.log10(ripple.mass + 1) * 15) * (ripple.gw_strength || 1);
-        
-        // Calculate wave displacement
-        // Only affect vertices near the wavefront
-        if (Math.abs(dist - waveFront) < wavelength * 2) {
-            const phase = (dist - waveFront) / wavelength * Math.PI * 2;
-            // Gaussian envelope for the wave packet
-            const envelope = Math.exp(-Math.pow((dist - waveFront) / (wavelength * 0.8), 2));
-            // Fade out over time
-            const timeFade = Math.max(0, 1 - age / duration);
+        const distanceBehindFront = r.waveFront - dist;
+        const distanceAheadOfTail = dist - r.packetStart;
+
+        // Only evaluate vertices within the traveling packet window
+        if (distanceBehindFront >= -r.leadSoftness && distanceAheadOfTail >= -r.tailSoftness) {
+            const phase = (dist - r.waveFront) / r.wavelength * Math.PI * 2;
+
+            let envelope = 1.0;
+            if (distanceBehindFront < 0) {
+                // Ahead of the wavefront (leading edge)
+                const normalized = THREE.MathUtils.clamp(
+                    (distanceBehindFront + r.leadSoftness) / r.leadSoftness,
+                    0,
+                    1
+                );
+                envelope *= normalized;
+            }
+            if (distanceAheadOfTail < 0) {
+                // Behind the packet tail (trailing edge)
+                const normalized = THREE.MathUtils.clamp(
+                    (distanceAheadOfTail + r.tailSoftness) / r.tailSoftness,
+                    0,
+                    1
+                );
+                envelope *= normalized;
+            }
             
-            targetHeight += Math.sin(phase) * amplitude * envelope * timeFade;
+            // Fade if extremely far (beyond grid corners)
+            if (dist > r.edgeFadeStart) {
+                const normalized = 1 - THREE.MathUtils.clamp(
+                    (dist - r.edgeFadeStart) / r.edgeFadeLength,
+                    0,
+                    1
+                );
+                envelope *= normalized;
+            }
+
+            // Slow decay to keep amplitude until the wave actually meets the edge
+            const distanceDecay = 1.0 / (1.0 + dist / 12000);
+
+            // Add an initial impulse at age~0 near center
+            let impulse = 0;
+            if (r.age < 500 && dist < 100) {
+                impulse = Math.sin(r.age * 0.01) * r.amplitude * 0.5 * (1 - dist / 100);
+            }
+
+            targetHeight += (Math.sin(phase) * r.amplitude * envelope * distanceDecay) + impulse;
         }
     }
     
-    targetHeight = Math.max(-SPACETIME_MAX_WELL, Math.min(50, targetHeight)); // Allow slightly higher positive peaks for ripples
+    targetHeight = Math.max(-SPACETIME_MAX_WELL, Math.min(150, targetHeight)); // Allow higher peaks
     position.setY(i, targetHeight);
   }
   
