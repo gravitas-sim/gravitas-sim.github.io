@@ -100,8 +100,6 @@ let gridMesh = null;
  * @param {{ state?: object }} options
  */
 function init3DView() {
-  console.log('[View3D] Initializing 3D view bindings...');
-  
   containerEl = document.getElementById('threeViewportContainer');
   canvasHost = document.getElementById('threeViewport');
   statusLabel = document.getElementById('threeViewStatus');
@@ -112,54 +110,27 @@ function init3DView() {
   const resizeHandle = document.getElementById('threeViewResizeHandle');
   const header = containerEl?.querySelector('.three-view-toolbar');
 
-  // Log which elements were found
-  console.log('[View3D] Elements found:', {
-    containerEl: !!containerEl,
-    canvasHost: !!canvasHost,
-    statusLabel: !!statusLabel,
-    toggleBtn: !!toggleBtn,
-    mobileToggleBtn: !!mobileToggleBtn,
-    closeBtn: !!closeBtn,
-    resetBtn: !!resetBtn
-  });
-
   const toggleHandler = (e) => {
-    console.log('[View3D] Toggle button clicked. Current state:', viewEnabled, 'Event:', e);
-    e.stopPropagation(); // Prevent event from bubbling to fallback handler
+    e.stopPropagation();
     set3DViewEnabled(!viewEnabled);
   };
 
-  // Use more robust event binding with multiple fallbacks
   if (toggleBtn) {
-    // Remove any existing listeners first
     toggleBtn.removeEventListener('click', toggleHandler);
-    // Add new listener
-    toggleBtn.addEventListener('click', toggleHandler, { capture: false });
-    console.log('[View3D] Desktop toggle button listener attached');
-  } else {
-    console.error('[View3D] Desktop toggle button (toggle3DView) not found!');
+    toggleBtn.addEventListener('click', toggleHandler);
   }
   
   if (mobileToggleBtn) {
     mobileToggleBtn.removeEventListener('click', toggleHandler);
-    mobileToggleBtn.addEventListener('click', toggleHandler, { capture: false });
-    console.log('[View3D] Mobile toggle button listener attached');
-  } else {
-    console.warn('[View3D] Mobile toggle button (mobileToggle3DViewBtn) not found');
+    mobileToggleBtn.addEventListener('click', toggleHandler);
   }
   
   if (closeBtn) {
     closeBtn.addEventListener('click', () => set3DViewEnabled(false));
-    console.log('[View3D] Close button listener attached');
-  } else {
-    console.warn('[View3D] Close button not found');
   }
   
   if (resetBtn) {
     resetBtn.addEventListener('click', () => focusScene(true));
-    console.log('[View3D] Reset button listener attached');
-  } else {
-    console.warn('[View3D] Reset button not found');
   }
 
   // Draggable logic
@@ -280,8 +251,6 @@ function init3DView() {
   }
 
   updateToggleLabel();
-  
-  console.log('[View3D] Initialization complete.');
 }
 
 /**
@@ -312,25 +281,16 @@ function update3DScene(timestamp = performance.now()) {
 }
 
 function set3DViewEnabled(next) {
-  console.log('[View3D] set3DViewEnabled called with:', next, 'current:', viewEnabled);
-  
-  if (next === viewEnabled) {
-    console.log('[View3D] State unchanged, returning');
-    return;
-  }
+  if (next === viewEnabled) return;
   
   if (next) {
-    console.log('[View3D] Enabling 3D view...');
     try {
       if (!ensureScene()) {
-        console.warn('[View3D] Unable to initialize 3D renderer (WebGL not available or container missing?)');
-        alert('Unable to initialize 3D view. WebGL may not be available in your browser.');
+        console.warn('Unable to initialize 3D renderer (WebGL not available)');
         return;
       }
-      console.log('[View3D] Scene initialized successfully');
     } catch (e) {
-      console.error('[View3D] Error initializing 3D scene:', e);
-      alert('Error initializing 3D view: ' + e.message);
+      console.error('Error initializing 3D scene:', e);
       return;
     }
   }
@@ -340,35 +300,22 @@ function set3DViewEnabled(next) {
   updateToggleLabel();
 
   if (containerEl) {
-    console.log('[View3D] Updating container visibility. viewEnabled:', viewEnabled);
-    // Force display style update to ensure visibility
     containerEl.style.display = viewEnabled ? 'block' : 'none';
-    console.log('[View3D] Container display set to:', containerEl.style.display);
     
-    // Add/remove class for transitions if needed
     if (viewEnabled) {
-        // Immediately add the class instead of using setTimeout
-        // The setTimeout was causing issues with rapid toggles
         containerEl.classList.add('visible');
-        console.log('[View3D] Added visible class to container');
     } else {
         containerEl.classList.remove('visible');
-        console.log('[View3D] Removed visible class from container');
     }
     containerEl.setAttribute('aria-hidden', viewEnabled ? 'false' : 'true');
-  } else {
-    console.error('[View3D] Container element for 3D view not found!');
   }
 
   if (renderer?.domElement) {
     renderer.domElement.style.pointerEvents = viewEnabled ? 'auto' : 'none';
-    console.log('[View3D] Renderer pointer events set to:', viewEnabled ? 'auto' : 'none');
   }
   if (!viewEnabled && statusLabel) {
     statusLabel.textContent = 'Hidden';
   }
-  
-  console.log('[View3D] set3DViewEnabled complete. New state:', viewEnabled);
 }
 
 function ensureScene() {
@@ -990,14 +937,12 @@ function focusScene(force = false) {
 
 function updateToggleLabel() {
   const label = viewEnabled ? 'Hide Spacetime View' : 'Show Spacetime View';
-  console.log('[View3D] Updating toggle label to:', label);
   
   [toggleBtn, mobileToggleBtn].forEach(btn => {
     if (!btn) return;
     btn.textContent = label;
     btn.setAttribute('aria-pressed', viewEnabled ? 'true' : 'false');
     btn.dataset.state = viewEnabled ? 'on' : 'off';
-    console.log('[View3D] Updated button:', btn.id, 'text:', btn.textContent);
   });
 
   if (!viewEnabled && statusLabel) {
