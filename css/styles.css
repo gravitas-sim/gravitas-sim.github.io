@@ -882,6 +882,29 @@ body {
   margin-top: 2px;
 }
 
+/* Kepler's 2nd Law area sweep controls inside the object inspector */
+.inspector-sweep-block {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 170, 255, 0.18);
+}
+
+.inspector-sweep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.inspector-sweep-description {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: rgba(224, 224, 224, 0.9);
+  margin-top: 2px;
+}
+
 .object-icon {
   margin-right: 8px;
   font-size: 1.2em;

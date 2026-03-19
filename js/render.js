@@ -675,7 +675,9 @@ const drawScene = () => {
   }
 
   // If inspector orbit overlay is active, draw it as a blue dashed loop
-  if (state.inspectorOrbitOverlay && state.inspectorOrbitOverlay.active) {
+  // Skip when area sweep is active to avoid visual overlap
+  if (state.inspectorOrbitOverlay && state.inspectorOrbitOverlay.active &&
+      !(state.areaSweepOverlay && state.areaSweepOverlay.active)) {
     const pts = state.inspectorOrbitOverlay.points || [];
     if (pts.length > 1) {
       ctx.save();
@@ -710,6 +712,129 @@ const drawScene = () => {
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 1;
         ctx.fillText('Stable Orbit', top.x, top.y - 8);
+        ctx.restore();
+      }
+    }
+  }
+
+  // Kepler's 2nd Law area sweep overlay
+  if (state.areaSweepOverlay && state.areaSweepOverlay.active) {
+    const sweep = state.areaSweepOverlay;
+    const sweepParent = sweep.parent;
+    if (sweepParent && sweepParent.alive) {
+      const WEDGE_COLORS = [
+        'rgba(255, 107, 107, 0.28)',
+        'rgba(78, 205, 196, 0.28)',
+        'rgba(255, 195, 0, 0.28)',
+        'rgba(107, 137, 255, 0.28)',
+        'rgba(255, 159, 243, 0.28)',
+        'rgba(0, 206, 158, 0.28)',
+        'rgba(255, 159, 67, 0.28)',
+        'rgba(165, 94, 234, 0.28)',
+      ];
+      const WEDGE_BORDER_COLORS = [
+        'rgba(255, 107, 107, 0.7)',
+        'rgba(78, 205, 196, 0.7)',
+        'rgba(255, 195, 0, 0.7)',
+        'rgba(107, 137, 255, 0.7)',
+        'rgba(255, 159, 243, 0.7)',
+        'rgba(0, 206, 158, 0.7)',
+        'rgba(255, 159, 67, 0.7)',
+        'rgba(165, 94, 234, 0.7)',
+      ];
+      const px = sweepParent.pos.x;
+      const py = sweepParent.pos.y;
+      const starScreen = world_to_screen({ x: px, y: py });
+      const stride = 3;
+
+      for (let w = 0; w < sweep.wedges.length; w++) {
+        const wedge = sweep.wedges[w];
+        if (wedge.length < 2) continue;
+        ctx.save();
+        ctx.fillStyle = WEDGE_COLORS[w % WEDGE_COLORS.length];
+        ctx.beginPath();
+        ctx.moveTo(starScreen.x, starScreen.y);
+        for (let k = 0; k < wedge.length; k += stride) {
+          const s = world_to_screen({ x: px + wedge[k].x, y: py + wedge[k].y });
+          ctx.lineTo(s.x, s.y);
+        }
+        const last = wedge[wedge.length - 1];
+        const sLast = world_to_screen({ x: px + last.x, y: py + last.y });
+        ctx.lineTo(sLast.x, sLast.y);
+        ctx.lineTo(starScreen.x, starScreen.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      if (sweep.orbitPoints.length > 1) {
+        ctx.save();
+        ctx.setLineDash([8, 6]);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(200, 200, 255, 0.6)';
+        ctx.beginPath();
+        const op0 = world_to_screen({
+          x: px + sweep.orbitPoints[0].x,
+          y: py + sweep.orbitPoints[0].y,
+        });
+        ctx.moveTo(op0.x, op0.y);
+        const orbitStride = Math.max(1, Math.floor(sweep.orbitPoints.length / 400));
+        for (let i = orbitStride; i < sweep.orbitPoints.length; i += orbitStride) {
+          const s = world_to_screen({
+            x: px + sweep.orbitPoints[i].x,
+            y: py + sweep.orbitPoints[i].y,
+          });
+          ctx.lineTo(s.x, s.y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
+
+      ctx.save();
+      ctx.lineWidth = 1.5;
+      for (let w = 0; w < sweep.wedges.length; w++) {
+        const wedge = sweep.wedges[w];
+        if (wedge.length === 0) continue;
+        const first = wedge[0];
+        const sf = world_to_screen({ x: px + first.x, y: py + first.y });
+        ctx.strokeStyle = WEDGE_BORDER_COLORS[w % WEDGE_BORDER_COLORS.length];
+        ctx.beginPath();
+        ctx.moveTo(starScreen.x, starScreen.y);
+        ctx.lineTo(sf.x, sf.y);
+        ctx.stroke();
+      }
+      const lastW = sweep.wedges[sweep.wedges.length - 1];
+      if (lastW && lastW.length > 0) {
+        const lastPt = lastW[lastW.length - 1];
+        const sl = world_to_screen({ x: px + lastPt.x, y: py + lastPt.y });
+        ctx.strokeStyle = WEDGE_BORDER_COLORS[0];
+        ctx.beginPath();
+        ctx.moveTo(starScreen.x, starScreen.y);
+        ctx.lineTo(sl.x, sl.y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      let sweepTop = null;
+      const labelStride = Math.max(1, Math.floor(sweep.orbitPoints.length / 200));
+      for (let i = 0; i < sweep.orbitPoints.length; i += labelStride) {
+        const s = world_to_screen({
+          x: px + sweep.orbitPoints[i].x,
+          y: py + sweep.orbitPoints[i].y,
+        });
+        if (!sweepTop || s.y < sweepTop.y) sweepTop = s;
+      }
+      if (sweepTop) {
+        ctx.save();
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillStyle = 'rgba(200, 200, 255, 0.9)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowBlur = 4;
+        ctx.fillText("Kepler's 2nd Law — Equal Areas", sweepTop.x, sweepTop.y - 10);
         ctx.restore();
       }
     }

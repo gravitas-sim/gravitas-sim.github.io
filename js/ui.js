@@ -93,6 +93,15 @@ const state = {
     active: false,
     points: [],
   },
+  // Kepler's 2nd Law area sweep overlay
+  areaSweepOverlay: {
+    active: false,
+    parentId: null,
+    objectId: null,
+    wedges: [],
+    orbitPoints: [],
+    parent: null,
+  },
 };
 // No global annotation helpers in clean state
 // Return attractors sorted by gravitational influence m/r^2
@@ -109,6 +118,73 @@ function getDominantAttractors(startPos, limit = 1) {
     })
     .sort((a, b) => b.influence - a.influence);
   return scored.slice(0, Math.max(1, limit)).map(s => s.body);
+}
+
+function computeAreaSweep(obj) {
+  const G = SETTINGS.gravitational_constant;
+  const candidates = [
+    ...bh_list, ...stars, ...neutron_stars, ...white_dwarfs, ...gas_giants,
+  ];
+  let parent = null;
+  let maxInfluence = -Infinity;
+  for (const b of candidates) {
+    if (!b || !b.alive || b === obj) continue;
+    const dx = obj.pos.x - b.pos.x;
+    const dy = obj.pos.y - b.pos.y;
+    const r2 = Math.max(1e-6, dx * dx + dy * dy);
+    const influence = (G * b.mass) / r2;
+    if (influence > maxInfluence) {
+      maxInfluence = influence;
+      parent = b;
+    }
+  }
+  if (!parent) return null;
+
+  const r0 = { x: obj.pos.x - parent.pos.x, y: obj.pos.y - parent.pos.y };
+  const v0 = { x: obj.vel.x - parent.vel.x, y: obj.vel.y - parent.vel.y };
+
+  const r = Math.hypot(r0.x, r0.y);
+  const v = Math.hypot(v0.x, v0.y);
+  const specificEnergy = 0.5 * v * v - (G * parent.mass) / r;
+  if (specificEnergy >= 0) return null;
+
+  const a = -(G * parent.mass) / (2 * specificEnergy);
+  const T = 2 * Math.PI * Math.sqrt((a * a * a) / (G * parent.mass));
+
+  const NUM_WEDGES = 8;
+  const STEPS_PER_WEDGE = 300;
+  const totalSteps = NUM_WEDGES * STEPS_PER_WEDGE;
+  const dt = T / totalSteps;
+
+  const pos = { x: r0.x, y: r0.y };
+  const vel = { x: v0.x, y: v0.y };
+
+  const wedges = [];
+  const orbitPoints = [{ x: pos.x, y: pos.y }];
+  let currentWedge = [{ x: pos.x, y: pos.y }];
+
+  for (let step = 1; step <= totalSteps; step++) {
+    const rx = pos.x, ry = pos.y;
+    const r2 = Math.max(rx * rx + ry * ry, 1e-9);
+    const invR3 = 1 / (Math.sqrt(r2) * r2);
+    const ax = -G * parent.mass * rx * invR3;
+    const ay = -G * parent.mass * ry * invR3;
+    vel.x += ax * dt;
+    vel.y += ay * dt;
+    pos.x += vel.x * dt;
+    pos.y += vel.y * dt;
+
+    const pt = { x: pos.x, y: pos.y };
+    orbitPoints.push(pt);
+    currentWedge.push(pt);
+
+    if (step % STEPS_PER_WEDGE === 0) {
+      wedges.push(currentWedge);
+      currentWedge = [{ x: pt.x, y: pt.y }];
+    }
+  }
+
+  return { parentId: parent.id, parent, objectId: obj.id, wedges, orbitPoints };
 }
 
 function computeCircularVelocity(startPos, body) {
@@ -669,6 +745,11 @@ const SCENARIO_INFO = {
     title: 'TRAPPIST-1 System',
     summary:
       'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
+  },
+  "Kepler's 2nd Law": {
+    title: "Kepler's 2nd Law — Equal Areas",
+    summary:
+      'A planet in a nearly circular orbit and an eccentric orbiter around a central star. The area sweep visualization starts automatically for the eccentric body — watch how the wedges change shape but maintain equal area, showing why objects move faster at periapsis than at apoapsis.',
   },
   GW150914: {
     title: 'GW150914: First Gravitational Wave Merger',
@@ -1628,6 +1709,42 @@ const showObjectInspector = (object, type) => {
         `;
       }
 
+      // Orbiting-object controls: Kepler's 2nd Law area sweep toggle
+      // Only available in scenarios where stable Keplerian orbits are meaningful
+      const sweepScenarios = ['Solar System', 'Earth-Moon System', "Kepler's 2nd Law"];
+      const orbitingTypes = ['Planet', 'GasGiant', 'Asteroid', 'Comet'];
+      if (
+        orbitingTypes.includes(state.selectedObject.type) &&
+        sweepScenarios.includes(current_scenario_name)
+      ) {
+        const sweepEnabled =
+          state.areaSweepOverlay.active &&
+          state.areaSweepOverlay.objectId === state.selectedObject.object.id;
+
+        content += `
+          <div class="stat-separator"></div>
+          <div class="inspector-sweep-block">
+            <div class="inspector-sweep-header">
+              <span class="stat-label">Kepler's 2nd Law</span>
+              <button
+                id="sweepToggleBtn"
+                class="toggle-button"
+                data-state="${sweepEnabled ? 'on' : 'off'}"
+                type="button"
+              >
+                ${sweepEnabled ? 'On' : 'Off'}
+              </button>
+            </div>
+            <div class="inspector-sweep-description">
+              Visualizes equal areas swept in equal times. Each colored wedge
+              represents the same time interval — near the star, wedges are thin
+              but long (faster motion); far away, they are wide but short
+              (slower motion).
+            </div>
+          </div>
+        `;
+      }
+
       content += `<div class="object-description">${info.description}</div>`;
 
       detailsTabContent.innerHTML = content;
@@ -1657,6 +1774,51 @@ const showObjectInspector = (object, type) => {
             hzHeader.onclick = e => {
               if (hzBtn.contains(e.target)) return;
               handleHzToggle(e);
+            };
+          }
+        }
+      }
+
+      // Area sweep toggle handler for orbiting objects
+      {
+        const sweepBtn = document.getElementById('sweepToggleBtn');
+        const sweepHeader = document.querySelector(
+          '.inspector-sweep-block .inspector-sweep-header'
+        );
+        if (sweepBtn) {
+          const handleSweepToggle = event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const obj = state.selectedObject?.object;
+            if (!obj) return;
+            const isOn =
+              state.areaSweepOverlay.active &&
+              state.areaSweepOverlay.objectId === obj.id;
+            if (isOn) {
+              state.areaSweepOverlay.active = false;
+              state.areaSweepOverlay.wedges = [];
+              state.areaSweepOverlay.orbitPoints = [];
+              sweepBtn.setAttribute('data-state', 'off');
+              sweepBtn.textContent = 'Off';
+            } else {
+              const data = computeAreaSweep(obj);
+              if (data) {
+                state.areaSweepOverlay.active = true;
+                state.areaSweepOverlay.parentId = data.parentId;
+                state.areaSweepOverlay.parent = data.parent;
+                state.areaSweepOverlay.objectId = data.objectId;
+                state.areaSweepOverlay.wedges = data.wedges;
+                state.areaSweepOverlay.orbitPoints = data.orbitPoints;
+                sweepBtn.setAttribute('data-state', 'on');
+                sweepBtn.textContent = 'On';
+              }
+            }
+          };
+          sweepBtn.onclick = handleSweepToggle;
+          if (sweepHeader) {
+            sweepHeader.onclick = e => {
+              if (sweepBtn.contains(e.target)) return;
+              handleSweepToggle(e);
             };
           }
         }
@@ -1701,11 +1863,23 @@ const showObjectInspector = (object, type) => {
         if (hzBtn && state.selectedObject.object) {
           const currentState = state.selectedObject.object.showHabitableZone;
           const btnState = hzBtn.getAttribute('data-state') === 'on';
-          // Only update if button is out of sync with object state
           if (currentState !== btnState) {
             hzBtn.setAttribute('data-state', currentState ? 'on' : 'off');
             hzBtn.textContent = currentState ? 'On' : 'Off';
           }
+        }
+      }
+
+      // Sync sweep button state during real-time updates
+      const sweepBtnLive = document.getElementById('sweepToggleBtn');
+      if (sweepBtnLive && state.selectedObject?.object) {
+        const sweepOn =
+          state.areaSweepOverlay.active &&
+          state.areaSweepOverlay.objectId === state.selectedObject.object.id;
+        const sweepBtnState = sweepBtnLive.getAttribute('data-state') === 'on';
+        if (sweepOn !== sweepBtnState) {
+          sweepBtnLive.setAttribute('data-state', sweepOn ? 'on' : 'off');
+          sweepBtnLive.textContent = sweepOn ? 'On' : 'Off';
         }
       }
     }
@@ -1802,6 +1976,10 @@ const hideObjectInspector = () => {
   // turn off orbit overlay when inspector closes
   state.inspectorOrbitOverlay.active = false;
   state.inspectorOrbitOverlay.points = [];
+  // turn off area sweep overlay
+  state.areaSweepOverlay.active = false;
+  state.areaSweepOverlay.wedges = [];
+  state.areaSweepOverlay.orbitPoints = [];
 
   // Re-apply hide styles to ensure inspector stays hidden
   objectInspector.style.display = 'none';
@@ -4154,6 +4332,25 @@ const apply_preset = () => {
       // Special: BH grows in mass over time (handled in simulation loop)
       preset_zoom: 1.5,
     });
+  } else if (ps === "Kepler's 2nd Law") {
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      mutual_gravity: false,
+      star_only_gravity: true,
+      placement: 'Empty',
+      num_planets: 2,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      gravitational_constant: 1.0,
+      sim_speed: 5.0,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 40,
+      sim_size: 'Small',
+      preset_zoom: 1.2,
+    });
   } else if (ps === 'TRAPPIST-1 System') {
     Object.assign(SETTINGS, {
       num_black_holes: 0,
@@ -5572,7 +5769,79 @@ const initialize_simulation = () => {
     }
   }
 
-  // In initialize_simulation(), at the end, add:
+  // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
+  if (starting_preset === "Kepler's 2nd Law") {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+
+    // Central star — Sun-like, pinned at origin
+    const kStar = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
+    kStar.name = 'Kepler Star';
+    kStar.mass = SOLAR_MASS_UNIT;
+    kStar.massInSuns = 1.0;
+    kStar.baseColor = '#FFFF00';
+    kStar.radius = 14;
+    stars.push(kStar);
+
+    // Planet — nearly circular orbit (e ≈ 0.02)
+    const planetDist = 180;
+    const eP = 0.02;
+    const aP = planetDist / (1 - eP);
+    const vPlanet = Math.sqrt((G * kStar.mass) / aP * (1 + eP) / (1 - eP));
+    const kPlanet = new Planet(
+      { x: planetDist, y: 0 },
+      { x: 0, y: vPlanet },
+      1.0
+    );
+    kPlanet.name = 'Circular Orbiter';
+    kPlanet.mass = 1.0 * EARTH_MASS_UNIT;
+    kPlanet.baseColor = '#4B90E2';
+    kPlanet.radius = 7;
+    planets.push(kPlanet);
+
+    // Eccentric body — a Planet (not Comet) for visibility, bright orange,
+    // on a tighter eccentric orbit (e ≈ 0.65) that fits within the view
+    const eccPeri = 50;
+    const eC = 0.65;
+    const aC = eccPeri / (1 - eC);
+    const vEcc = Math.sqrt((G * kStar.mass) / aC * (1 + eC) / (1 - eC));
+    const eccAngle = Math.PI * 0.6;
+    const eccPlanet = new Planet(
+      { x: eccPeri * Math.cos(eccAngle), y: eccPeri * Math.sin(eccAngle) },
+      { x: -vEcc * Math.sin(eccAngle), y: vEcc * Math.cos(eccAngle) },
+      0.3
+    );
+    eccPlanet.name = 'Eccentric Orbiter';
+    eccPlanet.mass = 0.3 * EARTH_MASS_UNIT;
+    eccPlanet.baseColor = '#FF6B35';
+    eccPlanet.radius = 6;
+    planets.push(eccPlanet);
+
+    // Auto-enable area sweep for the eccentric orbiter on startup
+    setTimeout(() => {
+      try {
+        const data = computeAreaSweep(eccPlanet);
+        if (data) {
+          state.areaSweepOverlay.active = true;
+          state.areaSweepOverlay.parentId = data.parentId;
+          state.areaSweepOverlay.parent = data.parent;
+          state.areaSweepOverlay.objectId = data.objectId;
+          state.areaSweepOverlay.wedges = data.wedges;
+          state.areaSweepOverlay.orbitPoints = data.orbitPoints;
+        }
+      } catch { /* non-fatal */ }
+    }, 200);
+  }
+
   generateStarfield();
 };
 
@@ -5587,6 +5856,7 @@ const setting_items = [
       'Solar System',
       'Earth-Moon System',
       'TRAPPIST-1 System',
+      "Kepler's 2nd Law",
       'GW150914',
       'Binary BH',
       'Triple BH System',
