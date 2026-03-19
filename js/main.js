@@ -7,6 +7,7 @@ import {
   updateObjectTypeButton,
 } from './ui.js';
 import { init3DView } from './view3d.js';
+import { initLightCurve } from './lightCurve.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -171,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     resizeCanvas();
     init3DView();
+    initLightCurve();
 
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');

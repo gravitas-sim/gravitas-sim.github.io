@@ -487,9 +487,10 @@ const setStateReference = stateRef => {
 let physicsSettings = {
   gravitational_constant: 1.0,
   mutual_gravity: false,
+  enable_star_merging: true,
   show_bh_glow: true,
   show_accretion_disk: true,
-  realistic_disk_physics: true, // ADDED: This was missing!
+  realistic_disk_physics: true,
   show_bh_jets: false,
   trail_length: 100,
   dynamic_object_properties: true,
@@ -1179,7 +1180,9 @@ const updatePhysics = dt => {
   while (merged_this_step && bh_list.length > 1) {
     merged_this_step = false;
     for (let i = 0; i < bh_list.length; i++) {
+      if (bh_list[i].alive === false) continue;
       for (let j = i + 1; j < bh_list.length; j++) {
+        if (bh_list[j].alive === false) continue;
         const bh1 = bh_list[i],
           bh2 = bh_list[j];
         const dx = bh1.pos.x - bh2.pos.x,
@@ -4419,6 +4422,15 @@ const handle_star_merging = stars_list => {
         const min_dist = star1.radius + star2.radius;
 
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
+          // Determine types once per pair
+          const star1_type = star1.constructor.name;
+          const star2_type = star2.constructor.name;
+
+          // Skip BH-BH pairs here; dedicated BH-BH merger runs separately
+          if (star1_type === 'BlackHole' && star2_type === 'BlackHole') {
+            continue;
+          }
+
           const m1 = star1.mass;
           const m2 = star2.mass;
           const new_mass = m1 + m2;
@@ -4452,9 +4464,6 @@ const handle_star_merging = stars_list => {
             );
           }
 
-          // Determine types once per pair
-          const star1_type = star1.constructor.name;
-          const star2_type = star2.constructor.name;
           // Special handling for black hole merging with regular star or white dwarf
           if (
             (star1_type === 'BlackHole' &&
@@ -4709,14 +4718,18 @@ const handle_star_merging = stars_list => {
       if (merged_this_step) break;
     }
 
-    // Filter out dead stars after processing all collisions
-    stars_list = stars_list.filter(star => star.alive);
-    // After each round, rebuild stars_list from global lists to reflect new state
+    // Purge dead objects from global arrays so subsequent iterations
+    // and later collision handlers never see stale references.
+    stars = stars.filter(s => s.alive);
+    neutron_stars = neutron_stars.filter(ns => ns.alive);
+    white_dwarfs = white_dwarfs.filter(wd => wd.alive);
+
+    // Rebuild stars_list from global lists (wrap BHs for consistent _bh_ref access)
     stars_list = [
       ...stars,
       ...neutron_stars,
       ...white_dwarfs,
-      ...bh_list,
+      ...bh_list.map(asPhysicsObject),
     ].filter(obj => obj.alive);
   }
 };

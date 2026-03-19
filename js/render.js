@@ -20,6 +20,7 @@ import { hexToRgb } from './utils.js';
 import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
 import { updateSonification } from './audio.js';
 import { update3DScene } from './view3d.js';
+import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
@@ -915,6 +916,10 @@ const gameLoop = timestamp => {
 
   // Draw simulation objects (foreground layer)
   drawScene();
+  try {
+    updateLightCurve(dt_sim);
+    drawObserverIndicator(ctx, canvas.width, canvas.height);
+  } catch { /* non-fatal */ }
   updateSonification(timestamp);
   update3DScene(timestamp);
 

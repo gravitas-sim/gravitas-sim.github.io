@@ -3342,7 +3342,10 @@ const show_scenario_info = () => {
   const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
   if (current_scenario_name && SCENARIO_INFO[current_scenario_name]) {
     const info = SCENARIO_INFO[current_scenario_name];
-    scenarioInfoDiv.innerHTML = `<h4>${info.title}</h4><p>${info.summary}</p>`;
+    const mergingNote = SETTINGS.enable_star_merging === false
+      ? '<p style="color:#f5a623;font-size:12px;margin-top:4px;">⚠ Object merging is disabled</p>'
+      : '';
+    scenarioInfoDiv.innerHTML = `<h4>${info.title}</h4><p>${info.summary}</p>${mergingNote}`;
     scenarioInfoDiv.classList.add('visible');
     setTimeout(() => scenarioInfoDiv.classList.remove('visible'), 6000);
   } else {
@@ -3366,8 +3369,14 @@ const show_enhanced_scenario_info = scenarioName => {
   title.textContent = info.title;
   summary.textContent = info.summary;
 
-  // Clear the features list since we're removing the key highlights section
+  // Populate features with relevant notices
   features.innerHTML = '';
+  if (SETTINGS.enable_star_merging === false) {
+    const li = document.createElement('li');
+    li.className = 'merging-disabled-notice';
+    li.textContent = 'Object merging is disabled for this scenario';
+    features.appendChild(li);
+  }
 
   // Check if splash screen is still active
   const splash = document.getElementById('splash');

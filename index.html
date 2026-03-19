@@ -422,6 +422,91 @@
       <div id="threeViewResizeHandle" class="three-view-resize-handle"></div>
     </div>
 
+    <!-- 📈 Light Curve panel -->
+    <div
+      id="lightCurveContainer"
+      class="light-curve-container"
+      style="display: none;"
+    >
+      <div class="light-curve-toolbar">
+        <div class="light-curve-meta">
+          <span class="light-curve-title">Transit Light Curve</span>
+          <span id="lightCurveStatus" class="light-curve-status">Hidden</span>
+        </div>
+        <div class="light-curve-actions">
+          <button
+            id="lightCurveInfoBtn"
+            class="light-curve-info-btn"
+            title="What is this?"
+          >ⓘ</button>
+          <button
+            id="clearLightCurve"
+            class="light-curve-btn"
+            title="Clear chart data"
+          >
+            Clear
+          </button>
+          <button
+            id="closeLightCurve"
+            class="light-curve-btn"
+            title="Hide the light curve panel"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      <div class="light-curve-controls">
+        <label class="light-curve-angle-label">
+          Observer Angle:
+          <span id="observerAngleDisplay">0°</span>
+        </label>
+        <input
+          type="range"
+          id="observerAngleSlider"
+          min="0"
+          max="360"
+          value="0"
+          step="1"
+        />
+      </div>
+      <div class="light-curve-stage">
+        <canvas id="lightCurveCanvas"></canvas>
+      </div>
+      <div class="light-curve-hint">
+        Drag the observer handle on the simulation or use the slider above
+      </div>
+      <div id="lightCurveInfoOverlay" class="light-curve-info-overlay" style="display: none;">
+        <h4>Transit Photometry</h4>
+        <p>
+          This chart shows the total brightness of the system as seen by a
+          distant observer. When a planet passes in front of a star along
+          the observer's line of sight, it blocks a fraction of the
+          starlight, producing a characteristic dip called a <strong>transit</strong>.
+        </p>
+        <p>
+          The dip depth is proportional to (R<sub>planet</sub>/R<sub>star</sub>)&sup2;
+          &mdash; a Jupiter-sized planet produces roughly a 1% dip, while
+          an Earth-sized planet produces about 0.008%.
+          The rounded U-shaped bottom comes from <strong>limb darkening</strong>:
+          stars are brighter at their center than at their edges, so the
+          depth varies as the planet crosses the disk.
+        </p>
+        <p>
+          A subtle <strong>secondary eclipse</strong> occurs when the planet
+          passes behind the star, briefly hiding its reflected and thermal
+          light. Between eclipses, the smooth <strong>phase curve</strong>
+          rises and falls as more or less of the planet's illuminated
+          hemisphere faces the observer.
+        </p>
+        <p>
+          This is the primary detection method used by NASA's
+          <em>Kepler</em> and <em>TESS</em> missions, responsible for
+          discovering thousands of exoplanets.
+        </p>
+        <button class="lc-info-close" id="lightCurveInfoClose">Got it</button>
+      </div>
+    </div>
+
     <!-- ✨ Splash screen -->
     <div id="splash">
       <h1>GRAVITAS</h1>
@@ -507,6 +592,13 @@
       >
         Spacetime View
       </button>
+      <button
+        id="toggleLightCurve"
+        class="ui-button secondary"
+        aria-pressed="false"
+      >
+        Light Curve
+      </button>
 
       <div class="speed-controls">
         <button
@@ -562,6 +654,9 @@
       <button id="mobileScreenshotBtn" class="ui-button">📸 Screenshot</button>
       <button id="mobileToggle3DViewBtn" class="ui-button" aria-pressed="false">
         Spacetime View
+      </button>
+      <button id="mobileToggleLightCurve" class="ui-button" aria-pressed="false">
+        Light Curve
       </button>
 
       <div class="speed-controls">
@@ -842,6 +937,7 @@
     <script type="module" src="js/physics.js"></script>
     <script type="module" src="js/render.js"></script>
     <script type="module" src="js/ui.js"></script>
+    <script type="module" src="js/lightCurve.js"></script>
     <script type="module" src="js/main.js"></script>
     <div
       id="attribution"
