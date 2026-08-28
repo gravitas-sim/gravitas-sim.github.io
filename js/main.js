@@ -8,6 +8,8 @@ import {
 } from './ui.js';
 import { init3DView } from './view3d.js';
 import { initLightCurve } from './lightCurve.js';
+import { initControls } from './controls.js';
+import { initTutorial } from './tutorial.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -30,72 +32,89 @@ document.addEventListener('DOMContentLoaded', () => {
   canvas.classList.remove('showCanvas');
   starfieldCanvas.classList.remove('showCanvas');
 
+  // The entire UI reveal used to hang on this one animationend event. If the
+  // animation never runs — reduced-motion, a background tab at load, an
+  // interrupted animation — the page stayed black for ever with no recovery.
+  // revealApp() is idempotent and also runs on a timer as a backstop.
+  let revealed = false;
+
+  const revealApp = () => {
+    if (revealed) return;
+    revealed = true;
+    splash.remove();
+
+    // Set global flag to indicate splash screen has ended
+    window.splashScreenEnded = true;
+
+    // Update global flag
+    window.isSplashActive = false;
+
+    canvas.classList.add('showCanvas'); // NOW fade the sim in
+    starfieldCanvas.classList.add('showCanvas');
+
+    // Generate starfield after canvases are visible
+    generateStarfield();
+
+    // Show UI elements after a short delay
+    setTimeout(async () => {
+      document.querySelector('.ui-container').classList.add('showUI');
+      document.getElementById('overlay').classList.add('showUI');
+      const sonificationPanel = document.getElementById('sonificationControl');
+      if (sonificationPanel) {
+        sonificationPanel.classList.add('showUI');
+      }
+
+      // Set up overlay minimize functionality
+      const { setupOverlayMinimize } = await import('./ui.js');
+      setupOverlayMinimize();
+
+      // Show scenario info box after splash ends
+      const scenarioInfoBox = document.getElementById('scenarioInfoBox');
+      if (scenarioInfoBox) {
+        scenarioInfoBox.classList.add('showUI');
+      }
+
+      // Show the narrow-screen menu button. The rail itself *is* the menu it
+      // opens, so there is no separate dropdown to reveal.
+      document.getElementById('mobileMenuToggle')?.classList.add('showUI');
+
+      // Fade in the transport bar with the rest of the UI
+      const timelineBar = document.getElementById('timelineBar');
+      if (timelineBar) {
+        timelineBar.classList.add('showUI');
+      }
+
+      // Fade in the tutorial button with the rest of the UI
+      const tutorialBtn = document.getElementById('tutorialBtn');
+      if (tutorialBtn) {
+        tutorialBtn.classList.add('showUI');
+      }
+      // Fade in the attribution text with the rest of the UI
+      const attribution = document.getElementById('attribution');
+      if (attribution) {
+        attribution.classList.add('showUI');
+      }
+
+      // Show object inspector after splash ends (it will be hidden by default)
+      const objectInspector = document.getElementById('objectInspector');
+      if (objectInspector) {
+        objectInspector.classList.add('showUI');
+      }
+    }, 200);
+  };
+
   splash.addEventListener('animationend', e => {
-    if (e.animationName === 'splashFadeOut') {
-      splash.remove(); // splash done
+    if (e.animationName === 'splashFadeOut') revealApp();
+  });
 
-      // Set global flag to indicate splash screen has ended
-      window.splashScreenEnded = true;
+  // Backstop: the splash animation totals ~3.5s, so this only fires when the
+  // event genuinely did not arrive.
+  setTimeout(revealApp, 4500);
 
-      // Update global flag
-      window.isSplashActive = false;
-
-      canvas.classList.add('showCanvas'); // NOW fade the sim in
-      starfieldCanvas.classList.add('showCanvas');
-
-      // Generate starfield after canvases are visible
-      generateStarfield();
-
-      // Show UI elements after a short delay
-      setTimeout(async () => {
-        document.querySelector('.ui-container').classList.add('showUI');
-        document.getElementById('overlay').classList.add('showUI');
-        const sonificationPanel = document.getElementById(
-          'sonificationControl'
-        );
-        if (sonificationPanel) {
-          sonificationPanel.classList.add('showUI');
-        }
-
-        // Set up overlay minimize functionality
-        const { setupOverlayMinimize } = await import('./ui.js');
-        setupOverlayMinimize();
-
-        // Show scenario info box after splash ends
-        const scenarioInfoBox = document.getElementById('scenarioInfoBox');
-        if (scenarioInfoBox) {
-          scenarioInfoBox.classList.add('showUI');
-        }
-
-        // Show mobile menu elements after splash ends
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const mobileMenuDropdown =
-          document.getElementById('mobileMenuDropdown');
-        if (mobileMenuToggle) {
-          mobileMenuToggle.classList.add('showUI');
-        }
-        if (mobileMenuDropdown) {
-          mobileMenuDropdown.classList.add('showUI');
-        }
-
-        // Fade in the tutorial button with the rest of the UI
-        const tutorialBtn = document.getElementById('tutorialBtn');
-        if (tutorialBtn) {
-          tutorialBtn.classList.add('showUI');
-        }
-        // Fade in the attribution text with the rest of the UI
-        const attribution = document.getElementById('attribution');
-        if (attribution) {
-          attribution.classList.add('showUI');
-        }
-
-        // Show object inspector after splash ends (it will be hidden by default)
-        const objectInspector = document.getElementById('objectInspector');
-        if (objectInspector) {
-          objectInspector.classList.add('showUI');
-        }
-      }, 200);
-    }
+  // A tab that was hidden at load gets its animations deferred; reveal as soon
+  // as it becomes visible rather than waiting out the timer.
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) setTimeout(revealApp, 100);
   });
 
   // Initialize object type button
@@ -171,8 +190,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with error handling
   try {
     resizeCanvas();
+    // Controls own the theme, so they initialise before anything paints.
+    initControls();
+    initTutorial();
     init3DView();
-    initLightCurve();
+    // An optional panel must never take the simulation down with it.
+    try {
+      initLightCurve();
+    } catch (err) {
+      console.error('Light curve unavailable:', err);
+    }
 
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');

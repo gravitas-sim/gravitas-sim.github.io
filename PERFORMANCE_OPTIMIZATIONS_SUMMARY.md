@@ -8,12 +8,16 @@ This document summarizes the performance optimizations implemented in the Gravit
 ### 1. Rendering Optimizations (js/render.js)
 
 #### Trail Rendering Optimization
-- **Problem**: Multiple canvas operations per object, frequent `globalAlpha` changes, no culling
-- **Solution**: Implemented `drawTrailsBatched()` function with:
-  - **Color Batching**: Group trails by color to minimize context switches
-  - **Culling**: Skip off-screen objects using simple screen bounds check
-  - **Reduced Context Switches**: Set stroke style once per color group
-- **Impact**: ~30-50% reduction in trail rendering time
+- **Problem**: The default `Glow` trail style built a fresh `createRadialGradient`
+  for every trail point of every object, every frame. On a dense scenario
+  (~180 trailed objects, ~4400 trail points) this alone cost ~12 ms/frame -
+  most of the 16.67 ms budget for 60fps.
+- **Solution**: `getGlowSprite()` in `js/render.js` pre-renders the gradient once
+  per colour into an offscreen canvas and `drawImage`s it per point, using
+  `globalAlpha` to reproduce the old per-stop alphas exactly. Colours are
+  quantised to 5 bits per channel and the cache is capped, so it stays small.
+- **Impact**: measured 12.37 ms -> 6.88 ms for the trail pass (1.8x), visually
+  identical output.
 
 #### DOM Update Optimization
 - **Problem**: `innerHTML` updates every frame causing layout thrashing

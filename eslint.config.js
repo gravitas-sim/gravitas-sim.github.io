@@ -5,7 +5,51 @@ import prettierConfig from 'eslint-config-prettier';
 export default [
   js.configs.recommended,
   {
+    // Node build tooling, not browser code
+    files: ['build.js', 'tools/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
+    // Web Workers run in a different global scope than the page modules
+    files: ['js/physicsWorker.js', 'js/chartWorker.js'],
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'module',
+      globals: {
+        self: 'readonly',
+        postMessage: 'readonly',
+        performance: 'readonly',
+        Math: 'readonly',
+        Float32Array: 'readonly',
+        Int32Array: 'readonly',
+        Array: 'readonly',
+        console: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
     files: ['js/*.js'],
+    ignores: ['js/physicsWorker.js', 'js/chartWorker.js'],
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
@@ -66,17 +110,33 @@ export default [
         decodeURI: 'readonly',
         decodeURIComponent: 'readonly',
         encodeURI: 'readonly',
-        encodeURIComponent: 'readonly'
-      }
+        encodeURIComponent: 'readonly',
+        Worker: 'readonly',
+        Blob: 'readonly',
+        MutationObserver: 'readonly',
+        CustomEvent: 'readonly',
+        Chart: 'readonly',
+        Float32Array: 'readonly',
+        Int32Array: 'readonly',
+        ArrayBuffer: 'readonly',
+        OffscreenCanvas: 'readonly',
+        matchMedia: 'readonly',
+        getComputedStyle: 'readonly',
+        CSS: 'readonly',
+        Int8Array: 'readonly',
+        Float64Array: 'readonly',
+        PointerEvent: 'readonly',
+        CustomEvent: 'readonly',
+      },
     },
     plugins: {
-      prettier
+      prettier,
     },
     rules: {
       ...prettierConfig.rules,
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
-      'prettier/prettier': 'error'
-    }
-  }
-]; 
+      'prettier/prettier': 'error',
+    },
+  },
+];

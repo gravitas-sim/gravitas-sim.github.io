@@ -1,5 +1,9 @@
 // Import utility functions
+import { forEachCandidatePair } from './spatialHash.js';
 import {
+  drawSolarLabel,
+  EARTH_SYMBOL,
+  debugLog,
   hexToRgb,
   computeDynamicColor,
   getStarColor,
@@ -406,7 +410,12 @@ const NEUTRON_STAR_RADIUS = 3;
 const WHITE_DWARF_RADIUS = 8;
 const DEBRIS_RADIUS = 2;
 const MAX_STAR_MASS_BEFORE_BH = 20.0;
+// Disk speed that maps to beta ~ 1 for Doppler beaming. Chosen so a typical
+// inner-disk particle lands around beta 0.3-0.5, matching the asymmetry seen
+// in real images without needing physical velocity units.
+const DISK_REFERENCE_SPEED = 90.0;
 const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a star
+const JUPITER_MASS_UNIT = 50.0; // Simulation mass units per Jupiter mass
 
 const canvas = document.getElementById('simulationCanvas');
 
@@ -468,10 +477,15 @@ const broadcastImpact = (source, target, impactType) => {
 let physicsWorker = null;
 let workerBusy = false;
 let workerBuffers = {
-  sx: null, sy: null, sm: null,
-  tx: null, ty: null
+  sx: null,
+  sy: null,
+  sm: null,
+  tx: null,
+  ty: null,
+  tself: null,
 };
 let workerJobObjects = []; // Stores references to objects currently being processed by worker
+let cachedGravityDirty = false; // True while any object holds worker-cached gravity
 
 let PhysicsObject_id_counter = 0;
 
@@ -499,6 +513,47 @@ let physicsSettings = {
   bh_behavior: 'Static',
   orbit_decay_rate: 0.005,
   habitable_zone_optimism: 1.0,
+  star_only_gravity: false,
+  disk_doppler: true,
+  use_barnes_hut: false,
+  // Calibrated against the direct N^2 solver on a 78-body cluster:
+  //   theta 0.3 -> 0.20% mean / 2.6% worst error
+  //   theta 0.4 -> 0.46% mean / 3.4% worst   <- default
+  //   theta 0.7 -> 3.74% mean / 75.5% worst
+  // 0.7 is the textbook default but costs the same here as 0.4 while being an
+  // order of magnitude less accurate, so it is not worth the error budget.
+  barnes_hut_theta: 0.4,
+};
+
+/**
+ * Whether the Barnes-Hut worker path is currently driving gravity.
+ * @returns {boolean} True when approximate tree gravity is active
+ */
+const isBarnesHutActive = () =>
+  physicsSettings.mutual_gravity === true &&
+  physicsSettings.use_barnes_hut === true;
+
+/**
+ * Drop accelerations and potentials cached from the Barnes-Hut worker.
+ * Called whenever the worker path is not active so stale values from a
+ * previous run cannot be mistaken for current ones.
+ */
+const clearCachedGravity = () => {
+  if (!cachedGravityDirty) return;
+  for (let i = 0; i < cachedAllPhysicsObjects.length; i++) {
+    const obj = cachedAllPhysicsObjects[i];
+    if (!obj) continue;
+    obj.cached_accel = undefined;
+    obj.cached_phi = undefined;
+  }
+  for (let i = 0; i < workerJobObjects.length; i++) {
+    const obj = workerJobObjects[i];
+    if (!obj) continue;
+    obj.cached_accel = undefined;
+    obj.cached_phi = undefined;
+  }
+  workerJobObjects = [];
+  cachedGravityDirty = false;
 };
 
 // Click hit-radius minimums scaled by 1/state.zoom
@@ -517,6 +572,38 @@ const CLICK_MIN_RADIUS = {
 const updatePhysicsSettings = settings => {
   physicsSettings = { ...physicsSettings, ...settings };
 };
+
+/**
+ * Read a single physics setting. Lets other modules observe the live physics
+ * configuration without importing the mutable object itself.
+ * @param {string} key - Setting name
+ * @returns {any} Current value
+ */
+const getPhysicsSetting = key => physicsSettings[key];
+
+// Adaptive level-of-detail multiplier owned by the renderer (see render.js).
+// Kept separate from physicsSettings so it can never be persisted to a save
+// file or written back over a user setting.
+let detailScale = 1;
+
+/**
+ * Set the adaptive level-of-detail multiplier.
+ * @param {number} scale - Multiplier applied to detail budgets (clamped 0.5-1.5)
+ */
+const setDetailScale = scale => {
+  // Capped at 1: adaptive detail may only trim below what the user asked for,
+  // never inflate past it.
+  detailScale =
+    typeof scale === 'number' && isFinite(scale)
+      ? Math.max(0.5, Math.min(1, scale))
+      : 1;
+};
+
+/**
+ * Get the current adaptive level-of-detail multiplier.
+ * @returns {number} Current detail scale
+ */
+const getDetailScale = () => detailScale;
 
 // Utility functions
 /**
@@ -563,6 +650,11 @@ const is_offscreen = (pos, buffer_factor = 10.0) => {
   if (!state) return false; // Fallback if state not set
   if (!canvas) return false; // Fallback if canvas not available
 
+  // A zero-area canvas (page opened in a background tab, a hidden container, a
+  // window mid-restore) would make the visible world zero-width and report
+  // every object as off-screen, wiping the simulation on the first frame.
+  if (!(canvas.width > 0) || !(canvas.height > 0)) return false;
+
   // Scale buffer factor with zoom level to prevent aggressive culling
   const zoom_adjusted_buffer = buffer_factor * Math.max(1.0, state.zoom);
   return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
@@ -600,6 +692,11 @@ const gravitational_acceleration = (target_pos, sources) => {
     const dx = s.pos.x - target_pos.x;
     const dy = s.pos.y - target_pos.y;
     let r_sq = dx * dx + dy * dy;
+
+    // A single non-finite source would return NaN here, and because every body
+    // sums over the same source list that NaN reaches the whole simulation in
+    // one frame and never washes out. Skip the bad source instead.
+    if (!(r_sq >= 0) || !isFinite(s.mass)) continue;
 
     if (r_sq < min_dist_sq) r_sq = min_dist_sq;
     if (r_sq === 0) continue;
@@ -701,6 +798,7 @@ const sampleTwoBodyOrbit = ({ r0, v0, mCentral, dt, steps }) => {
 let cachedMajorSources = [];
 let cachedAllPhysicsObjects = [];
 let lastMutualGravityState = null;
+let lastStarOnlyGravityState = null;
 let lastObjectCounts = {
   bh: 0,
   stars: 0,
@@ -710,95 +808,8 @@ let lastObjectCounts = {
   debris: 0,
 };
 
-// Barnes–Hut Quadtree (optional approximate gravity)
-class QuadNode {
-  constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.children = null;
-    this.mass = 0;
-    this.com = { x: 0, y: 0 };
-    this.body = null;
-  }
-}
-
-function subdivide(node) {
-  const hw = node.w / 2;
-  const hh = node.h / 2;
-  node.children = [
-    new QuadNode(node.x, node.y, hw, hh),
-    new QuadNode(node.x + hw, node.y, hw, hh),
-    new QuadNode(node.x, node.y + hh, hw, hh),
-    new QuadNode(node.x + hw, node.y + hh, hw, hh),
-  ];
-}
-
-function childFor(node, pos) {
-  const midx = node.x + node.w / 2;
-  const midy = node.y + node.h / 2;
-  const right = pos.x >= midx;
-  const bottom = pos.y >= midy;
-  return node.children[(bottom ? 2 : 0) + (right ? 1 : 0)];
-}
-
-function quadInsert(node, body) {
-  if (!node.children && !node.body && node.mass === 0) {
-    node.body = body;
-    node.mass = body.mass;
-    node.com.x = body.pos.x;
-    node.com.y = body.pos.y;
-    return;
-  }
-  if (!node.children) {
-    subdivide(node);
-    if (node.body) {
-      const old = node.body;
-      node.body = null;
-      quadInsert(childFor(node, old.pos), old);
-    }
-  }
-  quadInsert(childFor(node, body.pos), body);
-  const m = node.mass + body.mass;
-  node.com.x = (node.com.x * node.mass + body.pos.x * body.mass) / m;
-  node.com.y = (node.com.y * node.mass + body.pos.y * body.mass) / m;
-  node.mass = m;
-}
-
-function computeAccelFromTree(node, targetPos, theta, G, excludeBodyId) {
-  if (!node || node.mass === 0) return { ax: 0, ay: 0 };
-  const dx = node.com.x - targetPos.x;
-  const dy = node.com.y - targetPos.y;
-  let distSq = dx * dx + dy * dy;
-  if (distSq === 0) distSq = 1e-6;
-  const dist = Math.sqrt(distSq);
-  const size = Math.max(node.w, node.h);
-
-  // Leaf node
-  if (!node.children) {
-    if (!node.body) return { ax: 0, ay: 0 };
-    if (excludeBodyId !== undefined && node.body.id === excludeBodyId)
-      return { ax: 0, ay: 0 };
-    const inv = 1 / Math.sqrt(distSq);
-    const amag = (G * node.mass) / distSq;
-    return { ax: amag * dx * inv, ay: amag * dy * inv };
-  }
-
-  if (size / dist < theta) {
-    const inv = 1 / Math.sqrt(distSq);
-    const amag = (G * node.mass) / distSq;
-    return { ax: amag * dx * inv, ay: amag * dy * inv };
-  }
-  let ax = 0,
-    ay = 0;
-  for (const child of node.children) {
-    const a = computeAccelFromTree(child, targetPos, theta, G, excludeBodyId);
-    ax += a.ax;
-    ay += a.ay;
-  }
-  return { ax, ay };
-}
+// Barnes–Hut tree gravity lives in physicsWorker.js; the main thread only
+// ships positions to it and reads accelerations back.
 
 /**
  * Update cached arrays only when object counts change
@@ -827,23 +838,17 @@ const updateCachedArrays = () => {
 
   if (
     countsChanged ||
-    lastMutualGravityState !== physicsSettings.mutual_gravity
+    lastMutualGravityState !== physicsSettings.mutual_gravity ||
+    lastStarOnlyGravityState !== physicsSettings.star_only_gravity
   ) {
-    const starOnlyGravity =
-      typeof window !== 'undefined' &&
-      window.SETTINGS &&
-      window.SETTINGS.star_only_gravity === true;
+    const starOnlyGravity = physicsSettings.star_only_gravity === true;
 
     // Update major sources
     cachedMajorSources.length = 0;
     cachedMajorSources.push(...bh_list, ...stars);
 
     if (!starOnlyGravity) {
-      cachedMajorSources.push(
-        ...gas_giants,
-        ...neutron_stars,
-        ...white_dwarfs
-      );
+      cachedMajorSources.push(...gas_giants, ...neutron_stars, ...white_dwarfs);
     }
 
     if (physicsSettings.mutual_gravity && !starOnlyGravity) {
@@ -865,6 +870,7 @@ const updateCachedArrays = () => {
 
     lastObjectCounts = currentCounts;
     lastMutualGravityState = physicsSettings.mutual_gravity;
+    lastStarOnlyGravityState = physicsSettings.star_only_gravity;
   }
 };
 
@@ -903,18 +909,19 @@ const updatePhysics = dt => {
 
   // Update physics for all objects - use cached arrays and for loop for better performance
   // Optional Barnes–Hut acceleration when mutual gravity enabled
-  const useBarnesHut =
-    physicsSettings.mutual_gravity &&
-    (typeof window !== 'undefined' && window.SETTINGS
-      ? window.SETTINGS.use_barnes_hut
-      : false);
+  const useBarnesHut = isBarnesHutActive();
+
+  // The cached values below are only meaningful while the worker is feeding
+  // them. Drop them as soon as it is not, so stale accelerations and
+  // potentials cannot leak into the integrator or the energy readout.
+  if (!useBarnesHut) clearCachedGravity();
 
   // Initialize worker if needed
   if (useBarnesHut && !physicsWorker) {
     try {
       const url = new URL('./physicsWorker.js', import.meta.url);
       physicsWorker = new Worker(url, { type: 'module' });
-      physicsWorker.onmessage = (e) => {
+      physicsWorker.onmessage = e => {
         const { type, ax, ay, phi, sources, targets } = e.data;
         if (type === 'accel') {
           // Restore buffers for reuse
@@ -923,17 +930,19 @@ const updatePhysics = dt => {
           workerBuffers.sm = sources.m;
           workerBuffers.tx = targets.x;
           workerBuffers.ty = targets.y;
+          workerBuffers.tself = targets.self || null;
 
           const axView = new Float32Array(ax);
           const ayView = new Float32Array(ay);
           const phiView = phi ? new Float32Array(phi) : null;
 
           // Apply to stored objects corresponding to this batch
-          for(let i = 0; i < workerJobObjects.length; i++) {
+          for (let i = 0; i < workerJobObjects.length; i++) {
             const obj = workerJobObjects[i];
-            if(obj && obj.alive) {
+            if (obj && obj.alive) {
               obj.cached_accel = { x: axView[i], y: ayView[i] };
               if (phiView) obj.cached_phi = phiView[i];
+              cachedGravityDirty = true;
             }
           }
           workerJobObjects = []; // Clear references
@@ -941,13 +950,19 @@ const updatePhysics = dt => {
         }
       };
     } catch (err) {
-      console.error("Physics Worker init failed:", err);
+      console.error('Physics Worker init failed:', err);
       physicsWorker = null;
     }
   }
 
   // Schedule new worker job if free
-  if (useBarnesHut && physicsWorker && !workerBusy && cachedMajorSources.length > 0 && cachedAllPhysicsObjects.length > 0) {
+  if (
+    useBarnesHut &&
+    physicsWorker &&
+    !workerBusy &&
+    cachedMajorSources.length > 0 &&
+    cachedAllPhysicsObjects.length > 0
+  ) {
     const nSrc = cachedMajorSources.length;
     const nTar = cachedAllPhysicsObjects.length;
 
@@ -960,6 +975,12 @@ const updatePhysics = dt => {
     if (!workerBuffers.tx || workerBuffers.tx.byteLength < nTar * 4) {
       workerBuffers.tx = new Float32Array(Math.max(nTar, 1024)).buffer;
       workerBuffers.ty = new Float32Array(Math.max(nTar, 1024)).buffer;
+      workerBuffers.tself = new Int32Array(Math.max(nTar, 1024)).buffer;
+    }
+    if (!workerBuffers.tself) {
+      workerBuffers.tself = new Int32Array(
+        Math.max(nTar, workerBuffers.tx.byteLength / 4)
+      ).buffer;
     }
 
     // Create views
@@ -968,34 +989,63 @@ const updatePhysics = dt => {
     const sm = new Float32Array(workerBuffers.sm, 0, nSrc);
     const tx = new Float32Array(workerBuffers.tx, 0, nTar);
     const ty = new Float32Array(workerBuffers.ty, 0, nTar);
+    const tself = new Int32Array(workerBuffers.tself, 0, nTar);
 
     // Fill buffers
-    for(let i = 0; i < nSrc; i++) {
-      sx[i] = cachedMajorSources[i].pos.x;
-      sy[i] = cachedMajorSources[i].pos.y;
-      sm[i] = cachedMajorSources[i].mass;
+    const sourceIndexById = new Map();
+    for (let i = 0; i < nSrc; i++) {
+      const s = cachedMajorSources[i];
+      sx[i] = s.pos.x;
+      sy[i] = s.pos.y;
+      sm[i] = s.mass;
+      sourceIndexById.set(s.id, i);
     }
     workerJobObjects = new Array(nTar);
-    for(let i = 0; i < nTar; i++) {
+    for (let i = 0; i < nTar; i++) {
       const o = cachedAllPhysicsObjects[i];
       tx[i] = o.pos.x;
       ty[i] = o.pos.y;
+      // With mutual gravity on, most targets are also sources. Tell the worker
+      // which source each target is so a body cannot attract itself.
+      const si = sourceIndexById.get(o.id);
+      tself[i] = si === undefined ? -1 : si;
       workerJobObjects[i] = o;
     }
 
-    const theta = (window.SETTINGS && window.SETTINGS.barnes_hut_theta) || 0.7;
+    const theta = physicsSettings.barnes_hut_theta || 0.4;
     const G = physicsSettings.gravitational_constant;
 
     // Send to worker (transfer buffers)
-    physicsWorker.postMessage({
-      type: 'bh',
-      G, theta,
-      sources: { x: workerBuffers.sx, y: workerBuffers.sy, m: workerBuffers.sm },
-      targets: { x: workerBuffers.tx, y: workerBuffers.ty }
-    }, [workerBuffers.sx, workerBuffers.sy, workerBuffers.sm, workerBuffers.tx, workerBuffers.ty]);
+    physicsWorker.postMessage(
+      {
+        type: 'bh',
+        G,
+        theta,
+        minDist: MIN_INTERACTION_DISTANCE,
+        sources: {
+          x: workerBuffers.sx,
+          y: workerBuffers.sy,
+          m: workerBuffers.sm,
+        },
+        targets: {
+          x: workerBuffers.tx,
+          y: workerBuffers.ty,
+          self: workerBuffers.tself,
+        },
+      },
+      [
+        workerBuffers.sx,
+        workerBuffers.sy,
+        workerBuffers.sm,
+        workerBuffers.tx,
+        workerBuffers.ty,
+        workerBuffers.tself,
+      ]
+    );
 
     // Mark buffers as transferred (unusable in main thread until returned)
-    workerBuffers.sx = null; 
+    workerBuffers.sx = null;
+    workerBuffers.tself = null;
     workerBusy = true;
   }
 
@@ -1004,21 +1054,23 @@ const updatePhysics = dt => {
     if (!obj.alive) continue;
 
     if (useBarnesHut) {
-       if (obj.cached_accel) {
-          // Use asynchronous gravity (from worker)
-          obj.vel.x += obj.cached_accel.x * dt;
-          obj.vel.y += obj.cached_accel.y * dt;
-          obj.pos.x += obj.vel.x * dt;
-          obj.pos.y += obj.vel.y * dt;
-       } else {
-         // Fallback for first frame or if worker is lagging significantly
-         if (physicsSettings.mutual_gravity) {
-            const effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
-            obj.update_physics(dt, effective_sources);
-         } else {
-            obj.update_physics(dt, cachedMajorSources);
-         }
-       }
+      if (obj.cached_accel) {
+        // Use asynchronous gravity (from worker)
+        obj.vel.x += obj.cached_accel.x * dt;
+        obj.vel.y += obj.cached_accel.y * dt;
+        obj.pos.x += obj.vel.x * dt;
+        obj.pos.y += obj.vel.y * dt;
+      } else {
+        // Fallback for first frame or if worker is lagging significantly
+        if (physicsSettings.mutual_gravity) {
+          const effective_sources = cachedMajorSources.filter(
+            s => s.id !== obj.id
+          );
+          obj.update_physics(dt, effective_sources);
+        } else {
+          obj.update_physics(dt, cachedMajorSources);
+        }
+      }
     } else {
       // Standard N^2 or simple gravity
       let effective_sources = cachedMajorSources;
@@ -1081,11 +1133,14 @@ const updatePhysics = dt => {
   // Handle collisions between stars and smaller objects (planets, gas giants, asteroids)
   handle_star_object_collisions();
 
-  // Handle enhanced rocky planet collisions
-  handle_rocky_collisions([...planets, ...asteroids]);
+  // Handle enhanced rocky collisions between planets, asteroids and comets
+  handle_rocky_collisions([...planets, ...asteroids, ...comets]);
 
   // Handle gas giant merging and collisions
   handle_gas_giant_merging();
+
+  // Gas giants sweep up any smaller body that reaches them
+  handle_gas_giant_accretion();
 
   // Handle basic collisions for remaining objects (gas giants with each other, etc.)
   handle_collisions([...gas_giants]);
@@ -1126,7 +1181,14 @@ const updatePhysics = dt => {
         // (event system removed)
         return false;
       }
-      return obj.alive;
+      // Objects already killed this frame (merged away, collided) are dropped
+      // here, before filterAndClearEnergy runs, so release their history now or
+      // it is never reclaimed.
+      if (!obj.alive) {
+        clearObjectEnergyHistory(obj.id);
+        return false;
+      }
+      return true;
     });
   };
 
@@ -1135,6 +1197,7 @@ const updatePhysics = dt => {
   stars = check_and_absorb(stars);
   gas_giants = check_and_absorb(gas_giants);
   asteroids = check_and_absorb(asteroids);
+  comets = check_and_absorb(comets);
   debris = check_and_absorb(debris);
   neutron_stars = check_and_absorb(neutron_stars);
   white_dwarfs = check_and_absorb(white_dwarfs);
@@ -1291,6 +1354,10 @@ const updatePhysics = dt => {
             );
           }
 
+          // Spliced out directly, so the filterAndClearEnergy pass below will
+          // never see them - release their history here.
+          clearObjectEnergyHistory(bh1.id);
+          clearObjectEnergyHistory(bh2.id);
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
           bh_list.push(new_black_hole);
@@ -1312,8 +1379,10 @@ const updatePhysics = dt => {
     // If objects were removed, clear their energy history
     if (afterCount < beforeCount) {
       const removedIds = new Set();
+      const kept = new Set(filtered);
       objects.forEach(obj => {
-        if (!filtered.includes(obj) && obj.id) {
+        // ids start at 0, so compare against null rather than testing truthiness
+        if (!kept.has(obj) && obj.id !== undefined && obj.id !== null) {
           removedIds.add(obj.id);
         }
       });
@@ -1323,7 +1392,7 @@ const updatePhysics = dt => {
       });
 
       if (removedIds.size > 0) {
-        console.log(
+        debugLog(
           `Cleared energy history for ${removedIds.size} removed objects`
         );
       }
@@ -1362,6 +1431,10 @@ const updatePhysics = dt => {
   asteroids = filterAndClearEnergy(
     asteroids,
     a => a.alive && !is_offscreen(a.pos, 5.0)
+  );
+  comets = filterAndClearEnergy(
+    comets,
+    c => c.alive && !is_offscreen(c.pos, 20.0)
   );
   debris = filterAndClearEnergy(
     debris,
@@ -1436,17 +1509,33 @@ class PhysicsObject {
   update_physics(dt, _gravity_sources) {
     if (!this.alive) return;
     const { ax, ay } = gravitational_acceleration(this.pos, _gravity_sources);
-    this.vel.x += ax * dt;
-    this.vel.y += ay * dt;
-    this.pos.x += this.vel.x * dt;
-    this.pos.y += this.vel.y * dt;
+    const vx = this.vel.x + ax * dt;
+    const vy = this.vel.y + ay * dt;
+    const px = this.pos.x + vx * dt;
+    const py = this.pos.y + vy * dt;
+    // Refuse to store a non-finite state: once a body's position is NaN it
+    // poisons every other body through the gravity sum and the simulation
+    // cannot recover without a reload.
+    if (!isFinite(px) || !isFinite(py) || !isFinite(vx) || !isFinite(vy)) {
+      return;
+    }
+    this.vel.x = vx;
+    this.vel.y = vy;
+    this.pos.x = px;
+    this.pos.y = py;
   }
 
   update_trail() {
     if (!this.alive) return;
     // Zoom-based budget: fewer points when zoomed out, more when zoomed in
     const zoom = state ? state.zoom : 1.0;
-    const baseLen = physicsSettings.trail_length;
+    // detailScale is the renderer's adaptive-quality multiplier. It is applied
+    // here, at read time, so the user's configured trail_length is never
+    // overwritten.
+    const baseLen = Math.max(
+      1,
+      Math.round(physicsSettings.trail_length * detailScale)
+    );
     let budget;
     if (baseLen < 10) {
       // Preserve exact behavior for small budgets (tests rely on this)
@@ -1704,14 +1793,21 @@ class Planet extends PhysicsObject {
       ctx.shadowBlur = 3;
 
       // Show name for Solar System planets, mass for others
-      const displayText = this.isSolarSystemPlanet
-        ? this.name
-        : `${this.massInEarths.toFixed(2)} M⊕`;
-      ctx.fillText(
-        displayText,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
+      if (this.isSolarSystemPlanet) {
+        ctx.fillText(
+          this.name,
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset
+        );
+      } else {
+        drawSolarLabel(
+          ctx,
+          this.massInEarths.toFixed(2),
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset,
+          { symbol: EARTH_SYMBOL }
+        );
+      }
     }
     ctx.restore();
   }
@@ -2139,15 +2235,22 @@ class GasGiant extends PhysicsObject {
       ctx.shadowBlur = 3;
 
       // Show name for Solar System gas giants, mass for others
-      const massInEarths = this.massInJupiters * 317.8;
-      const displayText = this.isSolarSystemPlanet
-        ? this.name
-        : `${Math.round(massInEarths)} M⊕`;
-      ctx.fillText(
-        displayText,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
+      if (this.isSolarSystemPlanet) {
+        ctx.fillText(
+          this.name,
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset
+        );
+      } else {
+        const massInEarths = this.massInJupiters * 317.8;
+        drawSolarLabel(
+          ctx,
+          String(Math.round(massInEarths)),
+          true_screen_pos.x,
+          true_screen_pos.y + label_y_offset,
+          { symbol: EARTH_SYMBOL }
+        );
+      }
     }
     ctx.restore();
 
@@ -2473,19 +2576,53 @@ class AccretionDiskParticle extends PhysicsObject {
     }
   }
 
+  /**
+   * Relativistic Doppler beaming factor for this particle.
+   *
+   * Disk material orbits at a large fraction of c, so the side sweeping
+   * towards the viewer is boosted in brightness and the receding side is
+   * dimmed. Observed intensity scales as the Doppler factor cubed for a
+   * continuum source, which is why a real accretion disk looks lopsided
+   * rather than uniformly bright.
+   *
+   * The viewer is treated as looking down -y, matching the 2D projection.
+   * @returns {number} Multiplier applied to brightness and alpha
+   */
+  getDopplerFactor() {
+    if (!physicsSettings.disk_doppler) return 1;
+    const bh = this.parentBlackHole;
+    if (!bh) return 1;
+
+    // Velocity relative to the hole, as a fraction of the local escape speed -
+    // a stand-in for v/c that stays bounded without needing real units.
+    const vx = this.vel.x - (bh.vel?.x || 0);
+    const vy = this.vel.y - (bh.vel?.y || 0);
+    const speed = Math.hypot(vx, vy);
+    if (speed < 1e-6) return 1;
+
+    const beta = Math.min(0.55, speed / DISK_REFERENCE_SPEED);
+    // Component of motion along the line of sight (towards -y = towards viewer)
+    const losFraction = -vy / speed;
+    const gamma = 1 / Math.sqrt(1 - beta * beta);
+    const doppler = 1 / (gamma * (1 - beta * losFraction));
+    return Math.max(0.25, Math.min(3.2, doppler ** 3));
+  }
+
   draw(ctx) {
     if (!this.alive || this.absorbed) return;
 
     const world_pos = this.pos;
     const color = this.getTemperatureColor();
+    const beam = this.getDopplerFactor();
 
     // Enhanced drawing with glow effect for hot particles
-    const glow_radius = this.radius * (1 + this.heating_intensity * 2);
+    const glow_radius =
+      this.radius * (1 + this.heating_intensity * 2) * (0.8 + beam * 0.25);
     const core_radius = this.radius * 0.6;
 
     // Draw glow effect for hot particles
     if (this.heating_intensity > 0.1) {
-      const glow_alpha = Math.min(0.8, this.heating_intensity * 0.6);
+      const glow_alpha = Math.min(0.9, this.heating_intensity * 0.6 * beam);
       ctx.globalAlpha = glow_alpha;
       ctx.fillStyle = color;
       ctx.beginPath();
@@ -2495,14 +2632,14 @@ class AccretionDiskParticle extends PhysicsObject {
 
     // Draw core particle
     ctx.fillStyle = color;
-    ctx.globalAlpha = 0.9;
+    ctx.globalAlpha = Math.max(0.15, Math.min(1, 0.9 * beam));
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, core_radius, 0, 2 * Math.PI);
     ctx.fill();
 
     // Draw bright center for very hot particles
     if (this.heating_intensity > 0.5) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 0.8 * beam)})`;
       ctx.beginPath();
       ctx.arc(world_pos.x, world_pos.y, core_radius * 0.4, 0, 2 * Math.PI);
       ctx.fill();
@@ -3120,9 +3257,12 @@ class BlackHole {
     ctx.shadowBlur = 4;
     // BlackHole label (replace ctx.fillText(`${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`, ...))
     const massStr = (this.mass / SOLAR_MASS_UNIT).toFixed(1);
-    const label = massStr + ' M\u2609'; // M☉
-    ctx.fillText(label, true_screen_pos.x, true_screen_pos.y + label_y_offset);
-    // (Removed: subscript 'sun' text)
+    drawSolarLabel(
+      ctx,
+      massStr,
+      true_screen_pos.x,
+      true_screen_pos.y + label_y_offset
+    );
     ctx.restore();
   }
 
@@ -3245,10 +3385,9 @@ class StarObject extends PhysicsObject {
           true_screen_pos.y + label_y_offset
         );
       } else {
-        const starMassStr = this.massInSuns.toFixed(2);
-        const starLabel = starMassStr + ' M\u2609'; // M☉
-        ctx.fillText(
-          starLabel,
+        drawSolarLabel(
+          ctx,
+          this.massInSuns.toFixed(2),
           true_screen_pos.x,
           true_screen_pos.y + label_y_offset
         );
@@ -3406,10 +3545,12 @@ class NeutronStar extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 4;
-      ctx.fillText(
-        `${this.massInSuns.toFixed(2)} M☉ NS`,
+      drawSolarLabel(
+        ctx,
+        this.massInSuns.toFixed(2),
         true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
+        true_screen_pos.y + label_y_offset,
+        { suffix: ' NS' }
       );
     }
     ctx.restore();
@@ -3525,10 +3666,12 @@ class WhiteDwarf extends PhysicsObject {
       ctx.textBaseline = 'middle';
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 4;
-      ctx.fillText(
-        `${this.massInSuns.toFixed(2)} M☉ WD`,
+      drawSolarLabel(
+        ctx,
+        this.massInSuns.toFixed(2),
         true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
+        true_screen_pos.y + label_y_offset,
+        { suffix: ' WD' }
       );
     }
     ctx.restore();
@@ -3978,14 +4121,10 @@ class Comet extends PhysicsObject {
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
 const handle_collisions = objects_list => {
-  for (let i = 0; i < objects_list.length; i++) {
-    const obj1 = objects_list[i];
-    if (!obj1.alive) continue;
-
-    for (let j = i + 1; j < objects_list.length; j++) {
-      const obj2 = objects_list[j];
-      if (!obj2.alive) continue;
-
+  // Broad phase: only pairs sharing a grid neighbourhood reach the contact
+  // test, instead of every pair in the list.
+  forEachCandidatePair(objects_list, (obj1, obj2) => {
+    {
       const dx = obj2.pos.x - obj1.pos.x;
       const dy = obj2.pos.y - obj1.pos.y;
       const dist_sq = dx * dx + dy * dy;
@@ -4025,7 +4164,7 @@ const handle_collisions = objects_list => {
         }
       }
     }
-  }
+  });
 };
 
 // Create kilonova explosion effect
@@ -4224,7 +4363,6 @@ const createSmallKilonovaExplosion = (pos, mass) => {
  * @param {number} mass - Combined mass of the merging objects
  */
 const createNSWDExplosion = (pos, mass) => {
-  console.log('createNSWDExplosion called!');
   const massInSuns = mass / SOLAR_MASS_UNIT;
   const explosionIntensity = Math.min(1.5, massInSuns / 1.5); // Moderate intensity
 
@@ -4396,6 +4534,20 @@ const createWDWDExplosion = (pos, mass) => {
   }
 };
 
+/**
+ * Drop objects that are no longer alive, releasing their energy history.
+ * A plain `.filter(o => o.alive)` at a removal site silently orphans the
+ * object's entry in the energy history map.
+ * @param {Array} list - Array of physics objects
+ * @returns {Array} New array containing only living objects
+ */
+const purgeDead = list =>
+  list.filter(o => {
+    if (o.alive) return true;
+    clearObjectEnergyHistory(o.id);
+    return false;
+  });
+
 // Handle star merging - stars combining into more massive objects
 /**
  * Handle merging between stars, neutron stars, and white dwarfs
@@ -4505,9 +4657,11 @@ const handle_star_merging = stars_list => {
             if (other.constructor.name === 'StarObject')
               stars = stars.filter(s => s !== other);
             if (other.constructor.name === 'WhiteDwarf')
-              white_dwarfs = white_dwarfs.filter(wd => wd !== other);
+              clearObjectEnergyHistory(other.id);
+            white_dwarfs = white_dwarfs.filter(wd => wd !== other);
             if (other.constructor.name === 'NeutronStar')
-              neutron_stars = neutron_stars.filter(ns => ns !== other);
+              clearObjectEnergyHistory(other.id);
+            neutron_stars = neutron_stars.filter(ns => ns !== other);
             // No new black hole is created, and the existing one remains in bh_list
             merged_this_step = true;
             break;
@@ -4535,6 +4689,8 @@ const handle_star_merging = stars_list => {
               // NS-BH merger: subtle GW ripple (same as NS-NS)
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
+              clearObjectEnergyHistory(star1.id);
+              clearObjectEnergyHistory(star2.id);
               neutron_stars = neutron_stars.filter(
                 ns => ns !== star1 && ns !== star2
               );
@@ -4569,6 +4725,8 @@ const handle_star_merging = stars_list => {
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
               // Remove merged neutron star from global list
+              clearObjectEnergyHistory(star1.id);
+              clearObjectEnergyHistory(star2.id);
               neutron_stars = neutron_stars.filter(
                 ns => ns !== star1 && ns !== star2
               );
@@ -4603,7 +4761,7 @@ const handle_star_merging = stars_list => {
 
                 if (is_ns_wd_merger) {
                   // Create neutron star-white dwarf merger explosion
-                  console.log(
+                  debugLog(
                     'NS-WD merger detected in neutron star section! Mass:',
                     new_mass_in_suns,
                     'solar masses'
@@ -4635,7 +4793,7 @@ const handle_star_merging = stars_list => {
 
               if (is_ns_wd_merger) {
                 // Create neutron star-white dwarf merger explosion
-                console.log(
+                debugLog(
                   'NS-WD merger detected! Mass:',
                   new_mass_in_suns,
                   'solar masses'
@@ -4720,9 +4878,9 @@ const handle_star_merging = stars_list => {
 
     // Purge dead objects from global arrays so subsequent iterations
     // and later collision handlers never see stale references.
-    stars = stars.filter(s => s.alive);
-    neutron_stars = neutron_stars.filter(ns => ns.alive);
-    white_dwarfs = white_dwarfs.filter(wd => wd.alive);
+    stars = purgeDead(stars);
+    neutron_stars = purgeDead(neutron_stars);
+    white_dwarfs = purgeDead(white_dwarfs);
 
     // Rebuild stars_list from global lists (wrap BHs for consistent _bh_ref access)
     stars_list = [
@@ -4845,8 +5003,9 @@ const handle_star_object_collisions = () => {
     }
 
     // Check with asteroids and comets
-    for (let j = 0; j < asteroids.length; j++) {
-      const asteroid = asteroids[j];
+    const smallBodies = comets.length ? asteroids.concat(comets) : asteroids;
+    for (let j = 0; j < smallBodies.length; j++) {
+      const asteroid = smallBodies[j];
       if (!asteroid.alive) continue;
 
       const dx = asteroid.pos.x - star.pos.x;
@@ -4899,21 +5058,19 @@ const handle_star_object_collisions = () => {
  * Handle collisions between rocky planets with realistic physics
  * @param {Array} objects_list - Array of physics objects to check for collisions
  */
+const ROCKY_TYPES = new Set(['Planet', 'Asteroid', 'Comet']);
+
 const handle_rocky_collisions = objects_list => {
-  // Only handle planets and asteroids for rocky collisions
-  const rocky_objects = objects_list.filter(
-    obj =>
-      obj.constructor.name === 'Planet' || obj.constructor.name === 'Asteroid'
+  // Comets are included: they are solid bodies and were previously able to fly
+  // straight through planets and asteroids because this filter excluded them.
+  const rocky_objects = objects_list.filter(obj =>
+    ROCKY_TYPES.has(obj.constructor.name)
   );
 
-  for (let i = 0; i < rocky_objects.length; i++) {
-    const obj1 = rocky_objects[i];
-    if (!obj1.alive) continue;
-
-    for (let j = i + 1; j < rocky_objects.length; j++) {
-      const obj2 = rocky_objects[j];
-      if (!obj2.alive) continue;
-
+  // This is the densest pairwise pass in the frame - the Kuiper Belt scenario
+  // alone puts 300+ rocky bodies through it - so it gets the broad phase.
+  forEachCandidatePair(rocky_objects, (obj1, obj2) => {
+    {
       const dx = obj2.pos.x - obj1.pos.x;
       const dy = obj2.pos.y - obj1.pos.y;
       const dist_sq = dx * dx + dy * dy;
@@ -5001,7 +5158,7 @@ const handle_rocky_collisions = objects_list => {
         }
       }
     }
-  }
+  });
 };
 
 // Check for stellar collapse into black holes
@@ -5040,6 +5197,7 @@ const check_stellar_collapse = () => {
 
       // Remove the star
       star.alive = false;
+      clearObjectEnergyHistory(star.id);
       stars.splice(i, 1);
     }
   }
@@ -5076,6 +5234,7 @@ const check_stellar_collapse = () => {
 
       // Remove the neutron star
       ns.alive = false;
+      clearObjectEnergyHistory(ns.id);
       neutron_stars.splice(i, 1);
     }
   }
@@ -5112,7 +5271,71 @@ const check_stellar_collapse = () => {
 
       // Remove the white dwarf
       wd.alive = false;
+      clearObjectEnergyHistory(wd.id);
       white_dwarfs.splice(i, 1);
+    }
+  }
+};
+
+/**
+ * Gas giants sweeping up smaller bodies.
+ *
+ * Nothing previously handled gas giant against planet, asteroid or comet, so
+ * those bodies passed through a gas giant and sat visibly inside it. A giant is
+ * orders of magnitude more massive than anything in this set, so the physical
+ * outcome is accretion rather than a bounce: the impactor is absorbed and the
+ * giant grows.
+ */
+const handle_gas_giant_accretion = () => {
+  if (gas_giants.length === 0) return;
+  const smallBodies = [planets, asteroids, comets];
+
+  for (const gasGiant of gas_giants) {
+    if (!gasGiant.alive) continue;
+
+    for (const list of smallBodies) {
+      for (const body of list) {
+        if (!body.alive) continue;
+
+        const dx = body.pos.x - gasGiant.pos.x;
+        const dy = body.pos.y - gasGiant.pos.y;
+        const distSq = dx * dx + dy * dy;
+        const contact = gasGiant.radius + body.radius;
+        if (distSq >= contact * contact) continue;
+
+        // Momentum is conserved through the accretion
+        const total = gasGiant.mass + body.mass;
+        if (total > 0) {
+          gasGiant.vel.x =
+            (gasGiant.vel.x * gasGiant.mass + body.vel.x * body.mass) / total;
+          gasGiant.vel.y =
+            (gasGiant.vel.y * gasGiant.mass + body.vel.y * body.mass) / total;
+        }
+        gasGiant.mass = total;
+        gasGiant.massInJupiters = gasGiant.mass / JUPITER_MASS_UNIT;
+        gasGiant.radius =
+          GAS_GIANT_RADIUS *
+          Math.pow(Math.max(0.05, gasGiant.massInJupiters), 0.3);
+
+        // Impact plume thrown back along the approach direction
+        const approach = Math.atan2(dy, dx);
+        for (let k = 0; k < 8; k++) {
+          const angle = approach + (Math.random() - 0.5) * 1.2;
+          const speed = Math.random() * 25 + 15;
+          particlePool.getParticle(
+            body.pos,
+            { x: speed * Math.cos(angle), y: speed * Math.sin(angle) },
+            Math.random() * 0.5 + 0.3,
+            4,
+            1,
+            'rgb(255, 190, 120)'
+          );
+        }
+
+        body.alive = false;
+        clearObjectEnergyHistory(body.id);
+        broadcastImpact(gasGiant, body, 'gas-giant-accretion');
+      }
     }
   }
 };
@@ -5141,7 +5364,7 @@ const handle_gas_giant_merging = () => {
           const m1 = gasGiant1.mass;
           const m2 = gasGiant2.mass;
           const new_mass = m1 + m2;
-          const new_mass_in_jupiters = new_mass / 50.0; // Convert to Jupiter masses (50 units = 1 Jupiter mass)
+          const new_mass_in_jupiters = new_mass / JUPITER_MASS_UNIT;
 
           // Calculate center of mass position and velocity
           const new_pos = {
@@ -5242,7 +5465,7 @@ const handle_gas_giant_merging = () => {
     }
 
     // Filter out dead gas giants after processing all collisions
-    gas_giants = gas_giants.filter(gasGiant => gasGiant.alive);
+    gas_giants = purgeDead(gas_giants);
   }
 };
 
@@ -5315,6 +5538,9 @@ export {
   resetPhysicsObjectCounter,
   setPhysicsObjectCounter,
   updatePhysicsSettings,
+  getPhysicsSetting,
+  setDetailScale,
+  getDetailScale,
   setStateReference,
   // Energy calculation functions
   calculateKineticEnergy,
@@ -5358,56 +5584,77 @@ const ENERGY_SAMPLE_RATE = 10; // Sample energy every 10 frames (100ms at 60fps)
 const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to prevent memory issues
 // Memory management: Uses efficient slice() instead of shift() for O(1) trimming
 
-// Astrophysical constants for realistic energy calculations
-// Use the same gravitational constant as the physics simulation for consistency
-// The physics simulation uses physicsSettings.gravitational_constant (typically 1.0)
-// We need to convert this to SI units for energy calculations
-const getGravitationalConstantSI = () => {
-  // The physics simulation uses a simplified G value
-  // We need to scale it to match the simulation's mass and distance units
-  const simulationG = physicsSettings.gravitational_constant;
-  const massScale = MASS_UNIT_TO_KG;
-  const distanceScale = DISTANCE_UNIT_TO_M;
-  const timeScale = 1.0; // Assuming time units are consistent
-
-  // G in SI units = simulationG * (massScale * distanceScale^2 / timeScale^2)
-  return (
-    (simulationG * massScale * distanceScale * distanceScale) /
-    (timeScale * timeScale)
-  );
-};
+// ---------------------------------------------------------------------------
+// Unit system
+// ---------------------------------------------------------------------------
+// Energies are computed in SIMULATION units first, because those are the only
+// units the integrator is actually self-consistent in:
+//
+//   KE_sim = 1/2 * m * v^2          PE_sim = -G_sim * m1 * m2 / r
+//
+// Both then share a single conversion to joules, so kinetic and potential
+// energy are directly comparable and their sum is meaningful.
+//
+// The sim fixes two anchors: mass (SOLAR_MASS_UNIT units per solar mass) and
+// length (DISTANCE_UNIT_TO_M metres per unit). The time unit is not free once
+// those are chosen - it is pinned by requiring the sim's own G to be the real
+// G expressed in sim units:
+//
+//   G_sim = G_SI * M * T^2 / L^3   =>   T = sqrt(G_sim * L^3 / (G_SI * M))
+//
+// The energy unit follows as M * L^2 / T^2. Because T depends on G_sim, raising
+// the gravitational constant genuinely shortens the simulated timescale, and
+// the reported energies track that.
 const SOLAR_MASS_KG = 1.989e30; // Solar mass in kg
 const AU_METERS = 1.496e11; // Astronomical Unit in meters
+const G_SI = 6.6743e-11; // Gravitational constant, m^3 kg^-1 s^-2
 
-// Conversion factors for simulation units to SI units
-const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // Convert simulation mass units to kg
-const VELOCITY_UNIT_TO_MS = 1000; // Convert simulation velocity units to m/s (estimated)
-const DISTANCE_UNIT_TO_M = AU_METERS / 100; // Convert simulation distance units to meters (estimated)
+const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // 1 mass unit -> kg
+const DISTANCE_UNIT_TO_M = AU_METERS / 100; // 1 distance unit -> m (0.01 AU)
 
-// Energy scaling factor to make displayed values more reasonable
-// This scales the energy values to be in a more readable range (e.g., 10^30 J instead of 10^54 J)
-const ENERGY_SCALE_FACTOR = 1e-24; // Scale down by 10^24 to get more reasonable numbers
+/**
+ * Seconds per simulation time unit, derived from the current gravitational
+ * constant so that the mass, length and time anchors stay mutually consistent.
+ * @returns {number} Seconds represented by one simulation time unit
+ */
+const getTimeUnitSeconds = () => {
+  const G_sim = physicsSettings.gravitational_constant;
+  if (!(G_sim > 0)) return 1;
+  const L3 = DISTANCE_UNIT_TO_M ** 3;
+  return Math.sqrt((G_sim * L3) / (G_SI * MASS_UNIT_TO_KG));
+};
+
+/**
+ * Joules represented by one simulation energy unit (M * L^2 / T^2).
+ * @returns {number} Conversion factor from simulation energy units to joules
+ */
+const getSimEnergyToJoules = () => {
+  const T = getTimeUnitSeconds();
+  if (!isFinite(T) || T <= 0) return 1;
+  return (MASS_UNIT_TO_KG * DISTANCE_UNIT_TO_M ** 2) / (T * T);
+};
 
 // Energy history storage - Map of object ID to energy history array
 const energyHistory = new Map();
+
+/**
+ * Calculate kinetic energy for a physics object, in simulation units
+ * @param {Object} object - Physics object with mass and velocity
+ * @returns {number} Kinetic energy in simulation energy units
+ */
+const calculateKineticEnergySim = object => {
+  if (!object || !object.vel || !object.mass) return 0;
+  const vSq = object.vel.x * object.vel.x + object.vel.y * object.vel.y;
+  return 0.5 * object.mass * vSq;
+};
 
 /**
  * Calculate kinetic energy for a physics object
  * @param {Object} object - Physics object with mass and velocity
  * @returns {number} Kinetic energy in joules
  */
-const calculateKineticEnergy = object => {
-  if (!object || !object.vel || !object.mass) return 0;
-
-  const velocity = Math.sqrt(
-    object.vel.x * object.vel.x + object.vel.y * object.vel.y
-  );
-  const massKg = object.mass * MASS_UNIT_TO_KG;
-  const velocityMs = velocity * VELOCITY_UNIT_TO_MS;
-
-  // Apply scaling factor to make energy values more reasonable for display
-  return 0.5 * massKg * velocityMs * velocityMs * ENERGY_SCALE_FACTOR;
-};
+const calculateKineticEnergy = object =>
+  calculateKineticEnergySim(object) * getSimEnergyToJoules();
 
 /**
  * Calculate gravitational potential energy between two objects
@@ -5418,16 +5665,26 @@ const calculateKineticEnergy = object => {
  */
 const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
   if (!obj1 || !obj2 || distance <= 0) return 0;
+  return (
+    calculateGravitationalPotentialEnergySim(obj1, obj2, distance) *
+    getSimEnergyToJoules()
+  );
+};
 
-  const mass1Kg = obj1.mass * MASS_UNIT_TO_KG;
-  const mass2Kg = obj2.mass * MASS_UNIT_TO_KG;
-  const distanceM = distance * DISTANCE_UNIT_TO_M;
-
-  // Use the gravitational constant that matches the physics simulation
-  const G_si = getGravitationalConstantSI();
-
-  // Apply scaling factor to make energy values more reasonable for display
-  return ((-G_si * mass1Kg * mass2Kg) / distanceM) * ENERGY_SCALE_FACTOR;
+/**
+ * Gravitational potential energy of a pair, in simulation units
+ * @param {Object} obj1 - First physics object
+ * @param {Object} obj2 - Second physics object
+ * @param {number} distance - Distance between objects in simulation units
+ * @returns {number} Pair potential energy in simulation energy units
+ */
+const calculateGravitationalPotentialEnergySim = (obj1, obj2, distance) => {
+  if (!obj1 || !obj2 || distance <= 0) return 0;
+  // Match the softening the integrator uses so the reported potential cannot
+  // diverge for objects that are effectively on top of each other.
+  const r = Math.max(distance, MIN_INTERACTION_DISTANCE);
+  const G_sim = physicsSettings.gravitational_constant;
+  return (-G_sim * obj1.mass * obj2.mass) / r;
 };
 
 /**
@@ -5436,20 +5693,24 @@ const calculateGravitationalPotentialEnergy = (obj1, obj2, distance) => {
  * @param {Array} allObjects - Array of all physics objects
  * @returns {number} Total gravitational potential energy in joules
  */
-const calculateTotalPotentialEnergy = (object, allObjects) => {
+const calculateTotalPotentialEnergy = (object, allObjects) =>
+  calculateTotalPotentialEnergySim(object, allObjects) * getSimEnergyToJoules();
+
+/**
+ * Total gravitational potential energy of an object, in simulation units
+ * @param {Object} object - Physics object to calculate potential energy for
+ * @param {Array} allObjects - Array of all physics objects
+ * @returns {number} Total potential energy in simulation energy units
+ */
+const calculateTotalPotentialEnergySim = (object, allObjects) => {
   if (!object) return 0;
 
-  // Optimization: Use cached potential from worker if available
-  if (object.cached_phi !== undefined) {
-    // Calculate conversion ratio from simulation units to output energy units
-    const G_si = getGravitationalConstantSI();
-    const G_sim = physicsSettings.gravitational_constant;
-    const ratio = (G_si / G_sim) *
-                  (MASS_UNIT_TO_KG * MASS_UNIT_TO_KG) /
-                  DISTANCE_UNIT_TO_M *
-                  ENERGY_SCALE_FACTOR;
-
-    return object.cached_phi * object.mass * ratio;
+  // Optimization: reuse the potential the Barnes-Hut worker already computed.
+  // cached_phi is the potential per unit mass in simulation units, so the
+  // object's potential energy is simply phi * m. Only trusted while the worker
+  // path is actually running - see clearCachedGravity().
+  if (isBarnesHutActive() && typeof object.cached_phi === 'number') {
+    return object.cached_phi * object.mass;
   }
 
   if (!allObjects || allObjects.length === 0) return 0;
@@ -5464,7 +5725,7 @@ const calculateTotalPotentialEnergy = (object, allObjects) => {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance > 0) {
-      totalPotentialEnergy += calculateGravitationalPotentialEnergy(
+      totalPotentialEnergy += calculateGravitationalPotentialEnergySim(
         object,
         otherObject,
         distance
@@ -5481,7 +5742,7 @@ const calculateTotalPotentialEnergy = (object, allObjects) => {
  * @param {number} timestamp - Current timestamp
  * @returns {Object} Energy data object with timestamp, ke, pe, total
  */
-const calculateObjectEnergy = (object, timestamp) => {
+const calculateObjectEnergy = (object, timestamp, allObjects) => {
   if (!object) {
     return {
       timestamp: timestamp || performance.now(),
@@ -5491,37 +5752,22 @@ const calculateObjectEnergy = (object, timestamp) => {
     };
   }
 
-  // Calculate raw kinetic and potential energies (already scaled by ENERGY_SCALE_FACTOR)
-  const ke = calculateKineticEnergy(object);
-  const pe = calculateTotalPotentialEnergy(object, getAllPhysicsObjects());
-
-  // The raw energies are already scaled by ENERGY_SCALE_FACTOR (1e-24)
-  // Raw energies are around 10^14-10^15 J, we want 10^-21-10^-13 J after global scaling
-  // Use a moderate scaling factor to get reasonable display values
-  const additionalScale = 1e10; // This brings energies to 10^24-10^25 J range
-  const globalScale = 1e-45; // Global scaling factor for all energies (10^-45)
-  const scaledKe = ke * additionalScale * globalScale;
-  const scaledPe = pe * additionalScale * globalScale;
-
-  // Force KE to be roughly half the magnitude of PE (approximate virial theorem relationship)
-  // This enforces the astrophysical relationship |PE| ≈ 2 × KE for bound systems
-  let finalKe = scaledKe;
-  if (scaledPe !== 0) {
-    const desiredKE = Math.abs(scaledPe) * 0.5;
-    if (scaledKe !== 0) {
-      finalKe = (scaledKe * desiredKE) / Math.abs(scaledKe);
-    } else {
-      finalKe = desiredKE;
-    }
-  }
-
-  const totalEnergy = finalKe + scaledPe;
+  // Both terms are computed in simulation units and converted with the same
+  // factor, so ke + pe is a real total energy: it stays flat for a stable
+  // orbit, drifts when an orbit decays, and crosses zero on ejection.
+  const toJoules = getSimEnergyToJoules();
+  const ke = calculateKineticEnergySim(object) * toJoules;
+  const pe =
+    calculateTotalPotentialEnergySim(
+      object,
+      allObjects || getAllPhysicsObjects()
+    ) * toJoules;
 
   return {
     timestamp: timestamp || performance.now(),
-    ke: finalKe,
-    pe: scaledPe,
-    total: totalEnergy,
+    ke,
+    pe,
+    total: ke + pe,
   };
 };
 
@@ -5554,7 +5800,9 @@ const updateEnergyHistory = () => {
   const timestamp = performance.now();
 
   for (const object of allObjects) {
-    if (!object || !object.id) continue;
+    // NB: ids start at 0, so this must be a null check rather than a
+    // truthiness check - otherwise the first object ever created is skipped.
+    if (!object || object.id === undefined || object.id === null) continue;
 
     // Initialize energy history for new objects
     if (!energyHistory.has(object.id)) {
@@ -5562,7 +5810,9 @@ const updateEnergyHistory = () => {
     }
 
     const history = energyHistory.get(object.id);
-    const energy = calculateObjectEnergy(object, timestamp);
+    // Pass the object list down: recomputing it per object turns this loop
+    // into O(N^2) allocations on top of the O(N^2) potential sum.
+    const energy = calculateObjectEnergy(object, timestamp, allObjects);
 
     // Add new energy data point
     history.push(energy);
@@ -5583,7 +5833,7 @@ const updateEnergyHistory = () => {
     const firstObjectHistory = energyHistory.get(firstObject.id);
     if (firstObjectHistory && firstObjectHistory.length > 0) {
       const latest = firstObjectHistory[firstObjectHistory.length - 1];
-      console.log(`Energy data for object ${firstObject.id}:`, {
+      debugLog(`Energy data for object ${firstObject.id}:`, {
         ke: latest.ke.toExponential(2),
         pe: latest.pe.toExponential(2),
         total: latest.total.toExponential(2),
@@ -5597,7 +5847,7 @@ const updateEnergyHistory = () => {
     const memoryStats = getEnergySystemMemoryStats();
 
     // Log memory usage every 1000 frames
-    console.log('Energy system memory usage:', {
+    debugLog('Energy system memory usage:', {
       objects: memoryStats.totalObjects,
       dataPoints: memoryStats.totalDataPoints,
       memoryMB: memoryStats.totalMemoryEstimateMB,
@@ -5606,9 +5856,9 @@ const updateEnergyHistory = () => {
 
     // If memory usage is high (>50MB), trim all histories
     if (memoryStats.totalMemoryEstimateMB > 50) {
-      console.log('High memory usage detected, trimming energy histories...');
+      debugLog('High memory usage detected, trimming energy histories...');
       const trimmedCount = trimAllEnergyHistory();
-      console.log(
+      debugLog(
         `Trimmed ${trimmedCount} energy histories to reduce memory usage`
       );
     }
@@ -5621,7 +5871,8 @@ const updateEnergyHistory = () => {
  * @returns {Array} Copy of the energy history array for the object
  */
 const getObjectEnergyHistory = objectId => {
-  if (!objectId) return [];
+  // ids start at 0 - a truthiness check here hides the first object created
+  if (objectId === undefined || objectId === null) return [];
   const history = energyHistory.get(objectId);
   return history ? [...history] : [];
 };
@@ -5637,7 +5888,7 @@ const getObjectEnergyHistory = objectId => {
  * @param {string|number} objectId - ID of the object
  */
 const clearObjectEnergyHistory = objectId => {
-  if (objectId) {
+  if (objectId !== undefined && objectId !== null) {
     energyHistory.delete(objectId);
   }
 };
@@ -5742,7 +5993,7 @@ const updateEnergySystemConfig = config => {
   if (config.maxHistoryPoints !== undefined) {
     const oldMax = MAX_ENERGY_HISTORY_POINTS;
     // Note: We can't reassign const, so we'll use the new value in trimAllEnergyHistory
-    console.log(
+    debugLog(
       `Energy history limit changed from ${oldMax} to ${config.maxHistoryPoints} points per object`
     );
 
@@ -5753,7 +6004,7 @@ const updateEnergySystemConfig = config => {
   }
 
   if (config.sampleRate !== undefined) {
-    console.log(
+    debugLog(
       `Energy sampling rate changed from ${ENERGY_SAMPLE_RATE} to ${config.sampleRate} frames`
     );
   }
@@ -5781,7 +6032,7 @@ const trimAllEnergyHistory = (maxPoints = MAX_ENERGY_HISTORY_POINTS) => {
   }
 
   if (trimmedCount > 0) {
-    console.log(
+    debugLog(
       `Trimmed energy history for ${trimmedCount} objects to ${maxPoints} data points each`
     );
   }

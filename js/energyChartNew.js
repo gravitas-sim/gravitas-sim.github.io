@@ -1,3 +1,5 @@
+import { debugLog } from './utils.js';
+
 // ===== ENERGY CHART MODULE =====
 // Chart.js-based energy visualization system
 
@@ -223,7 +225,7 @@ export function initChart(canvas) {
       return false;
     }
     chart = new ChartCtor(canvas.getContext('2d'), chartConfig);
-    console.log('Energy chart initialized successfully');
+    debugLog('Energy chart initialized successfully');
     return true;
   } catch (error) {
     console.error('Failed to initialize energy chart:', error);
@@ -236,9 +238,9 @@ export function initChart(canvas) {
  * Update the chart with energy data
  * @param {Array} data - Array of energy objects with { timestamp, ke, pe, total }
  */
-export function updateChart(data) {
+export function updateChart(data, updateHz) {
   // Decimate updates to requested Hz
-  const desiredHz = (window.SETTINGS && window.SETTINGS.chart_update_hz) || 8;
+  const desiredHz = updateHz > 0 ? updateHz : 8;
   if (!updateChart._last) updateChart._last = 0;
   const now = performance.now();
   if (now - updateChart._last < 1000 / desiredHz) return;
@@ -261,7 +263,7 @@ export function updateChart(data) {
   }
 
   if (data.length === 0) {
-    console.log('No data provided to update chart');
+    debugLog('No data provided to update chart');
     return;
   }
 
@@ -301,7 +303,7 @@ export function updateChart(data) {
     chart.data.datasets[2].data = trim(totalData);
     // Update the chart
     chart.update('none');
-    console.log('Chart updated with', data.length, 'data points');
+    debugLog('Chart updated with', data.length, 'data points');
   } catch (error) {
     console.error('Failed to update chart:', error);
   }
@@ -321,7 +323,7 @@ export function clearChart() {
       dataset.data = [];
     });
     chart.update('none');
-    console.log('Chart data cleared');
+    debugLog('Chart data cleared');
   } catch (error) {
     console.error('Failed to clear chart:', error);
   }
@@ -346,7 +348,7 @@ export function exportChart() {
 
   try {
     const dataUrl = chart.toBase64Image('image/png', 1);
-    console.log('Chart exported successfully');
+    debugLog('Chart exported successfully');
     return dataUrl;
   } catch (error) {
     console.error('Failed to export chart:', error);

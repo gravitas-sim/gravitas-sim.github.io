@@ -38,7 +38,7 @@ let angleDisplay = null;
 let statusLabel = null;
 
 // Quadratic limb-darkening coefficients (Sun-like; Claret 2000)
-const LD_U1 = 0.40;
+const LD_U1 = 0.4;
 const LD_U2 = 0.26;
 const LD_I_AVG = 1 - LD_U1 / 3 - LD_U2 / 6;
 
@@ -77,12 +77,22 @@ export function initLightCurve() {
       animation: false,
       scales: {
         x: {
-          title: { display: true, text: 'Time (sim)', color: '#999', font: { size: 10 } },
+          title: {
+            display: true,
+            text: 'Time (sim)',
+            color: '#999',
+            font: { size: 10 },
+          },
           ticks: { color: '#666', maxTicksLimit: 6, font: { size: 9 } },
           grid: { color: 'rgba(255,255,255,0.04)' },
         },
         y: {
-          title: { display: true, text: 'Brightness', color: '#999', font: { size: 10 } },
+          title: {
+            display: true,
+            text: 'Brightness',
+            color: '#999',
+            font: { size: 10 },
+          },
           ticks: { color: '#666', font: { size: 9 } },
           grid: { color: 'rgba(255,255,255,0.06)' },
         },
@@ -104,15 +114,13 @@ export function initLightCurve() {
   if (angleSlider) {
     angleSlider.addEventListener('input', e => {
       observerAngleDeg = parseFloat(e.target.value);
-      if (angleDisplay) angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
+      if (angleDisplay)
+        angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
     });
   }
 
   const toggleBtn = document.getElementById('toggleLightCurve');
   if (toggleBtn) toggleBtn.addEventListener('click', toggle);
-
-  const mobileBtn = document.getElementById('mobileToggleLightCurve');
-  if (mobileBtn) mobileBtn.addEventListener('click', toggle);
 
   const closeBtn = document.getElementById('closeLightCurve');
   if (closeBtn) closeBtn.addEventListener('click', () => setEnabled(false));
@@ -125,7 +133,8 @@ export function initLightCurve() {
   const infoClose = document.getElementById('lightCurveInfoClose');
   if (infoBtn && infoOverlay) {
     infoBtn.addEventListener('click', () => {
-      infoOverlay.style.display = infoOverlay.style.display === 'none' ? 'flex' : 'none';
+      infoOverlay.style.display =
+        infoOverlay.style.display === 'none' ? 'flex' : 'none';
     });
   }
   if (infoClose && infoOverlay) {
@@ -147,10 +156,12 @@ function setEnabled(next) {
   enabled = next;
   if (container) container.style.display = enabled ? '' : 'none';
 
-  ['toggleLightCurve', 'mobileToggleLightCurve'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.setAttribute('aria-pressed', String(enabled));
-  });
+  const toggleBtn = document.getElementById('toggleLightCurve');
+  if (toggleBtn) {
+    toggleBtn.setAttribute('aria-pressed', String(enabled));
+    toggleBtn.dataset.state = enabled ? 'on' : 'off';
+    toggleBtn.textContent = enabled ? 'Hide Light Curve' : 'Light Curve';
+  }
 
   if (statusLabel) statusLabel.textContent = enabled ? 'Active' : 'Hidden';
 
@@ -195,7 +206,7 @@ function physicalRadiusRatio(obj, Rs_phys) {
   if (obj.pulsar_period !== undefined) return 0.000015 / Rs_phys;
   if (obj.cooling_age !== undefined) {
     const m = obj.massInSuns || 0.6;
-    return 0.009 * Math.pow(m, -1 / 3) / Rs_phys;
+    return (0.009 * Math.pow(m, -1 / 3)) / Rs_phys;
   }
   if (obj.obj_type === 'Asteroid') return 0.0001 / Rs_phys;
   return 0.00005 / Rs_phys; // BH event horizon — negligible
@@ -203,7 +214,7 @@ function physicalRadiusRatio(obj, Rs_phys) {
 
 function objectAlbedo(obj) {
   if (obj.massInJupiters !== undefined) return 0.12;
-  if (obj.massInEarths !== undefined) return 0.30;
+  if (obj.massInEarths !== undefined) return 0.3;
   return 0.05;
 }
 
@@ -234,8 +245,12 @@ function circleOverlapArea(R, r, d) {
   const R2 = R * R,
     r2 = r * r,
     d2 = d * d;
-  const alpha = Math.acos(Math.min(1, Math.max(-1, (d2 + R2 - r2) / (2 * d * R))));
-  const beta = Math.acos(Math.min(1, Math.max(-1, (d2 + r2 - R2) / (2 * d * r))));
+  const alpha = Math.acos(
+    Math.min(1, Math.max(-1, (d2 + R2 - r2) / (2 * d * R)))
+  );
+  const beta = Math.acos(
+    Math.min(1, Math.max(-1, (d2 + r2 - R2) / (2 * d * r)))
+  );
   const sqrtTerm = (-d + R + r) * (d + R - r) * (d - R + r) * (d + R + r);
   return R2 * alpha + r2 * beta - 0.5 * Math.sqrt(Math.max(0, sqrtTerm));
 }
@@ -279,7 +294,8 @@ function planetFlux(obj, star, k, distSim, alpha) {
   const distFactor = Rs_sim / Math.max(distSim, Rs_sim * 2);
 
   // Reflected component: Ag · k² · (Rs/a)² · Φ(α)
-  const reflected = ag * k * k * distFactor * distFactor * lambertianPhase(alpha);
+  const reflected =
+    ag * k * k * distFactor * distFactor * lambertianPhase(alpha);
 
   // Thermal re-emission: (Tp/Ts)⁴ · (Rp/Rs)² ≈ (Rs/2a)² · (1-Ag) · k²
   const thermal = 0.25 * (1 - ag) * distFactor * distFactor * k * k;
@@ -438,11 +454,11 @@ export function drawObserverIndicator(ctx, W, H) {
   ctx.moveTo(endX, endY);
   ctx.lineTo(
     endX - headLen * Math.cos(screenAngle - headHalf),
-    endY - headLen * Math.sin(screenAngle - headHalf),
+    endY - headLen * Math.sin(screenAngle - headHalf)
   );
   ctx.lineTo(
     endX - headLen * Math.cos(screenAngle + headHalf),
-    endY - headLen * Math.sin(screenAngle + headHalf),
+    endY - headLen * Math.sin(screenAngle + headHalf)
   );
   ctx.closePath();
   ctx.fill();
@@ -488,7 +504,7 @@ function setupCanvasInteraction() {
         e.preventDefault();
       }
     },
-    true,
+    true
   );
 
   document.addEventListener(
@@ -499,7 +515,7 @@ function setupCanvasInteraction() {
       e.stopPropagation();
       e.preventDefault();
     },
-    true,
+    true
   );
 
   document.addEventListener(
@@ -507,7 +523,7 @@ function setupCanvasInteraction() {
     () => {
       isDraggingHandle = false;
     },
-    true,
+    true
   );
 
   document.addEventListener(
@@ -521,7 +537,7 @@ function setupCanvasInteraction() {
         e.preventDefault();
       }
     },
-    { capture: true, passive: false },
+    { capture: true, passive: false }
   );
 
   document.addEventListener(
@@ -533,7 +549,7 @@ function setupCanvasInteraction() {
       e.stopPropagation();
       e.preventDefault();
     },
-    { capture: true, passive: false },
+    { capture: true, passive: false }
   );
 
   document.addEventListener(
@@ -541,7 +557,7 @@ function setupCanvasInteraction() {
     () => {
       isDraggingHandle = false;
     },
-    true,
+    true
   );
 }
 
@@ -565,5 +581,6 @@ function updateAngleFromPointer(clientX, clientY, canvas) {
   observerAngleDeg = ((Math.atan2(dy, dx) * 180) / Math.PI + 360) % 360;
 
   if (angleSlider) angleSlider.value = Math.round(observerAngleDeg);
-  if (angleDisplay) angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
+  if (angleDisplay)
+    angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
 }

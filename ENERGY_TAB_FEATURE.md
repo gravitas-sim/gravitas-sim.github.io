@@ -23,8 +23,23 @@ The Energy tab is a new feature added to the object inspector that displays the 
 
 #### Energy Sampling
 - Energy data is sampled every 10 frames (approximately 100ms at 60fps)
-- Data is stored per object with a maximum of 1000 data points to prevent memory issues
-- Energy values are scaled by a factor of 1e-6 for reasonable display values
+- Data is stored per object with a maximum of 5000 data points to prevent memory issues
+
+#### Units
+Kinetic and potential energy are both computed in **simulation units** first,
+because those are the only units the integrator is self-consistent in:
+
+    KE = 1/2 · m · v²          PE = -G · m₁ · m₂ / r
+
+Both are then converted to joules by the same factor, so the two are directly
+comparable and their sum is a real total energy. The conversion fixes mass
+(1000 units = 1 M☉) and length (1 unit = 0.01 AU) and derives the time unit
+from the simulation's own gravitational constant, so that G in simulation
+units equals the real G. Raising the gravitational constant therefore shortens
+the simulated timescale, and the reported energies follow.
+
+Because the total is a genuine sum, the chart is diagnostic: it stays flat for
+a stable orbit, drifts as an orbit decays, and crosses zero on ejection.
 
 #### Physics Integration
 - Energy calculations are integrated into the main physics update loop

@@ -1,0 +1,280 @@
+/* =============================================================================
+   Gravitas design tokens
+   -----------------------------------------------------------------------------
+   Every colour, space, radius, shadow and z-index in the UI resolves to one of
+   these. Nothing else in the codebase should hardcode a hex value.
+
+   Layer order is declared here and honoured by the other stylesheets:
+     tokens      - this file
+     base        - element defaults and layout primitives
+     legacy      - the historical styles.css rules
+     components  - the shared component language (buttons, panels, forms)
+     overrides   - narrow, deliberate exceptions
+
+   Because `components` sits after `legacy`, component rules win on layer order
+   alone. That is what lets the button and panel styles drop `!important`.
+   ========================================================================== */
+
+@layer tokens, base, legacy, components, overrides;
+
+@layer tokens {
+  :root {
+    /* --- Palette: deep space, cool accent ------------------------------- */
+    --surface-0: #07080f; /* page / canvas backdrop */
+    --surface-1: #0e1120; /* panels */
+    --surface-2: #161a2c; /* raised rows, inputs */
+    --surface-3: #212741; /* hover */
+    --surface-inset: rgba(0, 0, 0, 0.25);
+
+    --text-primary: #e9edf7;
+    --text-secondary: #9ba6bf;
+    --text-muted: #6a7490;
+    --text-inverse: #0b0e18;
+
+    --accent: #38bdf8;
+    --accent-strong: #0ea5e9;
+    --accent-deep: #0369a1;
+    --accent-soft: rgba(56, 189, 248, 0.14);
+    --accent-line: rgba(56, 189, 248, 0.28);
+    --accent-contrast: #04121d;
+
+    --success: #34d399;
+    --success-strong: #10b981;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --danger-strong: #ef4444;
+
+    /* Object-class accents, shared by UI chrome and canvas labels */
+    --hue-blackhole: #a78bfa;
+    --hue-star: #fbbf24;
+    --hue-planet: #60a5fa;
+    --hue-gasgiant: #fb923c;
+    --hue-asteroid: #a8a29e;
+    --hue-comet: #67e8f9;
+    --hue-neutron: #e0e7ff;
+    --hue-dwarf: #fef3c7;
+
+    /* Simulation backdrop - read by render.js so canvas follows the theme */
+    --space-near: #141833;
+    --space-far: #05060d;
+
+    /* --- Borders -------------------------------------------------------- */
+    --border-subtle: rgba(255, 255, 255, 0.07);
+    --border: rgba(148, 180, 235, 0.16);
+    --border-strong: rgba(56, 189, 248, 0.34);
+
+    /* --- Typography ----------------------------------------------------- */
+    --font-sans:
+      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+      sans-serif;
+    --font-mono:
+      'SFMono-Regular', ui-monospace, 'JetBrains Mono', Menlo, Consolas,
+      monospace;
+
+    --text-2xs: 0.6875rem; /* 11px */
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.8125rem; /* 13px */
+    --text-base: 0.875rem; /* 14px */
+    --text-md: 1rem; /* 16px */
+    --text-lg: 1.125rem; /* 18px */
+    --text-xl: 1.375rem; /* 22px */
+    --text-2xl: 1.75rem; /* 28px */
+
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    --leading-tight: 1.25;
+    --leading-normal: 1.55;
+
+    /* --- Spacing (4px base) --------------------------------------------- */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+
+    /* --- Radii ---------------------------------------------------------- */
+    --radius-sm: 6px;
+    --radius: 9px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 999px;
+
+    /* --- Elevation ------------------------------------------------------ */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-glow: 0 0 0 1px var(--accent-line), 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* --- Motion --------------------------------------------------------- */
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-fast: 120ms;
+    --duration: 200ms;
+    --duration-slow: 320ms;
+
+    /* --- Z-index scale --------------------------------------------------
+       Replaces the previous ad-hoc range (1 .. 10000). Anything that needs
+       to stack must use one of these. */
+    --z-canvas: 0;
+    --z-overlay: 10; /* HUD text drawn over the canvas */
+    --z-panel: 20; /* docked panels: 3D view, light curve */
+    --z-chrome: 30; /* main button bar, mobile menu */
+    --z-timeline: 40; /* transport bar */
+    --z-inspector: 50;
+    --z-modal: 60;
+    --z-toast: 70;
+    --z-splash: 80;
+
+    /* --- Backwards-compatible aliases -----------------------------------
+       styles.css still references these names in ~60 places. */
+    --bg-color: var(--surface-0);
+    --text-color: var(--text-primary);
+    --primary-color: var(--accent);
+    --secondary-color: var(--warning);
+    --panel-bg: var(--surface-1);
+    --button-bg: var(--surface-2);
+    --button-hover-bg: var(--surface-3);
+    --button-apply-bg: var(--success-strong);
+    --button-apply-hover-bg: var(--success);
+    --separator-color: var(--accent-line);
+
+    --theme-hue-shift: 0deg;
+    --theme-contrast: 1;
+    --theme-brightness: 1;
+
+    /* Fixed-panel widths, shared so the centre band can be computed rather
+       than guessed. The HUD sits left, the control rail right, and the
+       scenario card centres in what is left between them. */
+    --hud-width: 330px;
+    --rail-width: 208px;
+    --panel-inset: var(--space-4);
+
+    /* Overlays that float directly on the simulation. Only Daylight overrides
+       these - the canvas stays dark in every theme, so light chrome sitting on
+       a starfield would be unreadable. */
+    --hud-surface: var(--surface-1);
+    --hud-text: var(--text-secondary);
+    --hud-text-strong: var(--text-primary);
+    --hud-border: var(--border-subtle);
+  }
+
+  /* ---------------------------------------------------------------------
+     Midnight - higher contrast, near-black. Best for a darkened lecture room
+     or a projector.
+     ------------------------------------------------------------------ */
+  :root[data-theme='midnight'] {
+    --surface-0: #000105;
+    --surface-1: #06080f;
+    --surface-2: #0d111c;
+    --surface-3: #161c2e;
+    --text-primary: #f4f7ff;
+    --text-secondary: #a8b2c9;
+    --accent: #22d3ee;
+    --accent-strong: #06b6d4;
+    --accent-soft: rgba(34, 211, 238, 0.16);
+    --accent-line: rgba(34, 211, 238, 0.3);
+    --space-near: #080b1c;
+    --space-far: #000004;
+    --border: rgba(160, 200, 255, 0.2);
+  }
+
+  /* ---------------------------------------------------------------------
+     Observatory - warm red-shifted chrome, the palette used in domes to
+     preserve night vision.
+     ------------------------------------------------------------------ */
+  :root[data-theme='observatory'] {
+    --surface-0: #0c0605;
+    --surface-1: #170d0b;
+    --surface-2: #221310;
+    --surface-3: #331d18;
+    --text-primary: #ffe4dc;
+    --text-secondary: #c99a8d;
+    --text-muted: #8f6a60;
+    --accent: #fb7185;
+    --accent-strong: #f43f5e;
+    --accent-deep: #9f1239;
+    --accent-soft: rgba(251, 113, 133, 0.16);
+    --accent-line: rgba(251, 113, 133, 0.3);
+    --accent-contrast: #1a0508;
+    --space-near: #1d0c0a;
+    --space-far: #070203;
+    --border: rgba(251, 146, 160, 0.18);
+    --border-strong: rgba(251, 113, 133, 0.34);
+  }
+
+  /* ---------------------------------------------------------------------
+     Daylight - for printing, projectors that wash out, and bright rooms.
+     ------------------------------------------------------------------ */
+  :root[data-theme='daylight'] {
+    --surface-0: #eef2f9;
+    --surface-1: #ffffff;
+    --surface-2: #f1f5fb;
+    --surface-3: #e2e9f5;
+    --surface-inset: rgba(15, 23, 42, 0.05);
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #7c8798;
+    --text-inverse: #ffffff;
+
+    --accent: #0284c7;
+    --accent-strong: #0369a1;
+    --accent-deep: #075985;
+    --accent-soft: rgba(2, 132, 199, 0.1);
+    --accent-line: rgba(2, 132, 199, 0.25);
+    --accent-contrast: #ffffff;
+
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border: rgba(15, 23, 42, 0.14);
+    --border-strong: rgba(2, 132, 199, 0.4);
+
+    /* The simulation itself stays dark - a white starfield is unreadable -
+       but softened so it sits comfortably inside a light page. */
+    --space-near: #1c2340;
+    --space-far: #0a0d18;
+
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+    --shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+    --shadow-lg:
+      0 18px 48px rgba(15, 23, 42, 0.16), 0 2px 8px rgba(15, 23, 42, 0.08);
+    --shadow-glow:
+      0 0 0 1px var(--accent-line), 0 8px 32px rgba(15, 23, 42, 0.14);
+
+    /* Status colours need to darken for a light surface: the dark-theme
+       greens and ambers fall well below 4.5:1 against near-white. */
+    --success: #047857;
+    --success-strong: #065f46;
+    --warning: #b45309;
+    --danger: #b91c1c;
+    --danger-strong: #991b1b;
+
+    /* HUD stays dark even in Daylight - it sits on the starfield. */
+    --hud-surface: #101426;
+    --hud-text: #d6dcec;
+    --hud-text-strong: #ffffff;
+    --hud-border: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Respect an explicit OS preference when the user has not chosen a theme */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+      color-scheme: light;
+    }
+  }
+
+  /* Honour reduced-motion globally. Individual components do not need to
+     repeat this. */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: 1ms;
+      --duration: 1ms;
+      --duration-slow: 1ms;
+    }
+  }
+}

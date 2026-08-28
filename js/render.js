@@ -15,12 +15,16 @@ import {
   screen_to_world,
   world_to_screen,
   findObjectAtPosition,
+  setDetailScale,
 } from './physics.js';
-import { hexToRgb } from './utils.js';
+import { hexToRgb, debugLog } from './utils.js';
 import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
 import { updateSonification } from './audio.js';
 import { update3DScene } from './view3d.js';
 import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
+import { tickTimeline } from './timeline.js';
+import { readToken, onThemeChange } from './theme.js';
+import { speedTrailColor } from './palette.js';
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
@@ -38,6 +42,42 @@ if (typeof window !== 'undefined') {
   // Expose for cross-module use
   window.bloomCtx = bloomCtx;
 }
+// ---------------------------------------------------------------------------
+// Trail glow sprites
+// ---------------------------------------------------------------------------
+// One pre-rendered radial gradient per colour, reused for every trail point.
+// Colours are quantised to 5 bits per channel so the cache stays small even
+// when object colours vary; it is cleared outright if it ever grows past the
+// cap, which cannot happen with the handful of base colours in practice.
+const GLOW_SPRITE_SIZE = 64;
+const GLOW_SPRITE_CACHE_LIMIT = 64;
+const glowSpriteCache = new Map();
+
+function getGlowSprite(r, g, b) {
+  const qr = r & 0xf8;
+  const qg = g & 0xf8;
+  const qb = b & 0xf8;
+  const key = (qr << 16) | (qg << 8) | qb;
+  const cached = glowSpriteCache.get(key);
+  if (cached) return cached;
+
+  if (glowSpriteCache.size >= GLOW_SPRITE_CACHE_LIMIT) glowSpriteCache.clear();
+
+  const c = document.createElement('canvas');
+  c.width = GLOW_SPRITE_SIZE;
+  c.height = GLOW_SPRITE_SIZE;
+  const g2d = c.getContext('2d');
+  const half = GLOW_SPRITE_SIZE / 2;
+  const grad = g2d.createRadialGradient(half, half, 0, half, half, half);
+  grad.addColorStop(0, `rgba(${qr}, ${qg}, ${qb}, 0.8)`);
+  grad.addColorStop(0.5, `rgba(${qr}, ${qg}, ${qb}, 0.3)`);
+  grad.addColorStop(1, `rgba(${qr}, ${qg}, ${qb}, 0)`);
+  g2d.fillStyle = grad;
+  g2d.fillRect(0, 0, GLOW_SPRITE_SIZE, GLOW_SPRITE_SIZE);
+  glowSpriteCache.set(key, c);
+  return c;
+}
+
 function resizeBloomCanvas() {
   bloomCanvas.width = canvas.width;
   bloomCanvas.height = canvas.height;
@@ -63,8 +103,10 @@ if (starfieldCanvas) {
  */
 const createAmbientGradient = () => {
   const grad = starCtx.createLinearGradient(0, 0, 0, starfieldCanvas.height);
-  grad.addColorStop(0, '#1a1a3a');
-  grad.addColorStop(1, '#0a0a1a');
+  // Read from the design tokens so the canvas follows the active theme
+  // instead of carrying its own copy of the palette.
+  grad.addColorStop(0, readToken('--space-near') || '#141833');
+  grad.addColorStop(1, readToken('--space-far') || '#05060d');
   return grad;
 };
 
@@ -108,7 +150,7 @@ function drawStarfield() {
   // Draw background gradient
   starCtx.fillStyle = SETTINGS.show_ambient_lighting
     ? createAmbientGradient()
-    : '#0d0d1a';
+    : readToken('--space-far') || '#05060d';
   starCtx.fillRect(0, 0, W, H);
 
   const c = 0.18; // Speed of light in world units per ms (tweak for simulation scale)
@@ -121,7 +163,6 @@ function drawStarfield() {
       const ripple = gravity_ripples[i];
       const age = now - ripple.created;
       const fadeStart = ripple.duration;
-      const fadeEnd = ripple.duration + FADE_OUT_MS;
       // Keep ripple alive longer for 3D view propagation (up to 15s)
       // The 2D view stops rendering it after fadeEnd via the check at line 151.
       if (age > 15000) {
@@ -252,26 +293,41 @@ function drawStarfield() {
       if (Math.abs(dy) > radius) return;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist < radius) {
-        const falloff = 1 - dist / radius;
-        const lens = strength * (falloff * falloff) * radius;
-        if (strength > max_lens_strength) {
-          max_lens_strength = strength;
+        // Real light deflection falls off as 1/b (the Einstein angle), not
+        // linearly. Using the physical profile puts a tight, bright ring of
+        // distortion near the horizon and a long faint tail beyond it, which
+        // is what makes the effect read as lensing rather than as a smudge.
+        const core = Math.max(radius * 0.12, 1e-6);
+        const b = Math.max(dist, core);
+        const deflection = (strength * radius * core) / b;
+        // Taper to zero at the edge so the distortion has no visible seam.
+        const edge = 1 - dist / radius;
+        const lens = deflection * edge * edge;
+        if (lens > max_lens_strength) {
+          max_lens_strength = lens;
           lens_dx = (dx / (dist + 1e-6)) * lens;
           lens_dy = (dy / (dist + 1e-6)) * lens;
-          lens_blur = blur * falloff;
+          lens_blur = blur * edge;
           lens_color = color;
         }
       }
     }
     // Black holes
     const enableObjectLensing =
-      (SETTINGS.lensing_quality && SETTINGS.lensing_quality !== 'off') ||
-      SETTINGS.show_object_lensing === true;
+      SETTINGS.show_object_lensing !== false &&
+      SETTINGS.lensing_quality !== 'off';
     if (enableObjectLensing) {
+      const quality = SETTINGS.lensing_quality || 'medium';
+      const qScale = quality === 'high' ? 1.6 : quality === 'low' ? 0.7 : 1;
       for (const bh of bh_list) {
-        // Lensing starts at a visually meaningful radius, scaling with event horizon
-        const lens_radius = Math.max(20, bh.radius * state.zoom * 2.5);
-        checkLensing(bh, 2.5, lens_radius, 2.5, '#fff');
+        // Einstein radius grows as sqrt(M), so a supermassive hole bends a much
+        // wider patch of sky than a stellar-mass one.
+        const massScale = Math.sqrt(Math.max(0.2, bh.mass / 10000));
+        const lens_radius = Math.max(
+          24,
+          bh.radius * state.zoom * 3.2 * massScale * qScale
+        );
+        checkLensing(bh, 3.0 * qScale, lens_radius, 2.5, '#fff');
       }
       // Neutron stars (stronger, blue tint)
       for (const ns of neutron_stars) {
@@ -337,7 +393,13 @@ const drawScene = () => {
           obj.baseColor ||
           SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] ||
           '#6495ed';
-        const rgb = hexToRgb(baseColor);
+        // trail_colour_mode 'speed' maps each trail point's recorded velocity
+        // onto a perceptual ramp, which makes an eccentric orbit read at a
+        // glance: bright and hot at periapsis, cool and dim at apoapsis.
+        const bySpeed = SETTINGS.trail_colour_mode === 'speed';
+        const rgb = bySpeed
+          ? speedTrailColor(Math.hypot(obj.vel.x, obj.vel.y))
+          : hexToRgb(baseColor);
 
         if (SETTINGS.trail_style === 'Cloud') {
           // Draw cloud-like trail with multiple passes
@@ -400,7 +462,13 @@ const drawScene = () => {
           }
           ctx.stroke();
         } else if (SETTINGS.trail_style === 'Glow') {
-          // Draw glowing trail with radial gradients
+          // Draw glowing trail from a cached sprite. The gradient's shape is
+          // identical for every point - only colour, alpha and radius vary - so
+          // building it per point was pure waste. globalAlpha reproduces the
+          // old per-stop alphas exactly (sprite bakes 0.8/0.3/0, multiplied by
+          // intensity here).
+          const sprite = getGlowSprite(rgb.r, rgb.g, rgb.b);
+          const prevAlpha = ctx.globalAlpha;
           for (let i = 0; i < obj.trail.length; i++) {
             const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
             const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
@@ -408,30 +476,17 @@ const drawScene = () => {
 
             if (intensity > 0.05) {
               const radius = (3 + intensity * 7) / state.zoom;
-              const gradient = ctx.createRadialGradient(
-                obj.trail[i].x,
-                obj.trail[i].y,
-                0,
-                obj.trail[i].x,
-                obj.trail[i].y,
-                radius
+              ctx.globalAlpha = intensity;
+              ctx.drawImage(
+                sprite,
+                obj.trail[i].x - radius,
+                obj.trail[i].y - radius,
+                radius * 2,
+                radius * 2
               );
-              gradient.addColorStop(
-                0,
-                `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.8})`
-              );
-              gradient.addColorStop(
-                0.5,
-                `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.3})`
-              );
-              gradient.addColorStop(1, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0)`);
-
-              ctx.fillStyle = gradient;
-              ctx.beginPath();
-              ctx.arc(obj.trail[i].x, obj.trail[i].y, radius, 0, 2 * Math.PI);
-              ctx.fill();
             }
           }
+          ctx.globalAlpha = prevAlpha;
         } else {
           // Simple style
           // Draw simple trail with fade-out
@@ -676,8 +731,11 @@ const drawScene = () => {
 
   // If inspector orbit overlay is active, draw it as a blue dashed loop
   // Skip when area sweep is active to avoid visual overlap
-  if (state.inspectorOrbitOverlay && state.inspectorOrbitOverlay.active &&
-      !(state.areaSweepOverlay && state.areaSweepOverlay.active)) {
+  if (
+    state.inspectorOrbitOverlay &&
+    state.inspectorOrbitOverlay.active &&
+    !(state.areaSweepOverlay && state.areaSweepOverlay.active)
+  ) {
     const pts = state.inspectorOrbitOverlay.points || [];
     if (pts.length > 1) {
       ctx.save();
@@ -778,8 +836,15 @@ const drawScene = () => {
           y: py + sweep.orbitPoints[0].y,
         });
         ctx.moveTo(op0.x, op0.y);
-        const orbitStride = Math.max(1, Math.floor(sweep.orbitPoints.length / 400));
-        for (let i = orbitStride; i < sweep.orbitPoints.length; i += orbitStride) {
+        const orbitStride = Math.max(
+          1,
+          Math.floor(sweep.orbitPoints.length / 400)
+        );
+        for (
+          let i = orbitStride;
+          i < sweep.orbitPoints.length;
+          i += orbitStride
+        ) {
           const s = world_to_screen({
             x: px + sweep.orbitPoints[i].x,
             y: py + sweep.orbitPoints[i].y,
@@ -818,7 +883,10 @@ const drawScene = () => {
       ctx.restore();
 
       let sweepTop = null;
-      const labelStride = Math.max(1, Math.floor(sweep.orbitPoints.length / 200));
+      const labelStride = Math.max(
+        1,
+        Math.floor(sweep.orbitPoints.length / 200)
+      );
       for (let i = 0; i < sweep.orbitPoints.length; i += labelStride) {
         const s = world_to_screen({
           x: px + sweep.orbitPoints[i].x,
@@ -834,7 +902,11 @@ const drawScene = () => {
         ctx.textBaseline = 'bottom';
         ctx.shadowColor = 'rgba(0,0,0,0.5)';
         ctx.shadowBlur = 4;
-        ctx.fillText("Kepler's 2nd Law — Equal Areas", sweepTop.x, sweepTop.y - 10);
+        ctx.fillText(
+          "Kepler's 2nd Law — Equal Areas",
+          sweepTop.x,
+          sweepTop.y - 10
+        );
         ctx.restore();
       }
     }
@@ -1034,7 +1106,10 @@ const gameLoop = timestamp => {
   const dt_seconds = (timestamp - state.last_time) / 1000.0;
   state.last_time = timestamp;
   const dt_sim = Math.min(dt_seconds, 0.05) * SETTINGS.sim_speed * 50 * DT;
-  if (!state.paused) updatePhysics(dt_sim);
+  // While scrubbing, tickTimeline holds the restored frame and physics is
+  // skipped so the recorded state is what gets drawn.
+  const mayIntegrate = tickTimeline(dt_sim);
+  if (!state.paused && mayIntegrate) updatePhysics(dt_sim);
 
   // Draw star field first (background layer)
   drawStarfield();
@@ -1044,7 +1119,9 @@ const gameLoop = timestamp => {
   try {
     updateLightCurve(dt_sim);
     drawObserverIndicator(ctx, canvas.width, canvas.height);
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
   updateSonification(timestamp);
   update3DScene(timestamp);
 
@@ -1075,29 +1152,25 @@ const gameLoop = timestamp => {
     const avgFrameTime = frameTimeSum / frameCount;
     if (avgFrameTime > 16.67) {
       // Only log if performance is poor
-      console.log(
+      debugLog(
         `Performance warning: Average frame time ${avgFrameTime.toFixed(1)}ms (target: 16.67ms for 60fps)`
       );
     }
-    // Adaptive detail: adjust parameters based on performance
+    // Adaptive detail: adjust the render budget based on performance.
+    // adaptiveScale is applied to the user's setting at read time - it must
+    // never be written back into SETTINGS, or each pass would compound on the
+    // last and the setting would run away instead of tracking frame time.
     if (SETTINGS.adaptive_detail) {
       const target = 1000 / (SETTINGS.target_fps || 60);
       if (avgFrameTime > target * 1.2) {
         adaptiveScale = Math.max(0.6, adaptiveScale * 0.9);
       } else if (avgFrameTime < target * 0.9) {
-        adaptiveScale = Math.min(1.2, adaptiveScale * 1.05);
+        adaptiveScale = Math.min(1, adaptiveScale * 1.05);
       }
-      // Apply to trails and particle budget
-      SETTINGS.trail_length = Math.max(
-        5,
-        Math.floor((SETTINGS.trail_length || 15) * adaptiveScale)
-      );
-      if (window.particlePool) {
-        window.particlePool.maxPoolSize = Math.max(
-          100,
-          Math.floor((window.particlePool.maxPoolSize || 200) * adaptiveScale)
-        );
-      }
+      setDetailScale(adaptiveScale);
+    } else if (adaptiveScale !== 1) {
+      adaptiveScale = 1;
+      setDetailScale(1);
     }
     frameTimeSum = 0;
     frameCount = 0;
@@ -1109,8 +1182,11 @@ const gameLoop = timestamp => {
 
 // Original resizeCanvas function from index.html
 function resizeCanvas() {
-  const W = window.innerWidth;
-  const H = window.innerHeight;
+  // Never fall to zero: a 0x0 canvas makes every drawing and culling
+  // calculation degenerate. Browsers can report 0 for a page that is not
+  // being presented yet (background tab, hidden container).
+  const W = Math.max(1, window.innerWidth || 0);
+  const H = Math.max(1, window.innerHeight || 0);
   canvas.width = W;
   canvas.height = H; // sim layer
   starfieldCanvas.width = W;
@@ -1118,6 +1194,15 @@ function resizeCanvas() {
   generateStarfield(); // redraw background
 }
 window.addEventListener('resize', resizeCanvas);
+
+// The starfield is only redrawn on demand, so a theme switch has to ask for it.
+onThemeChange(() => {
+  try {
+    drawStarfield();
+  } catch {
+    /* canvas may not be ready during very early init */
+  }
+});
 
 // Export functions
 export { generateStarfield, drawStarfield, drawScene, gameLoop, resizeCanvas };

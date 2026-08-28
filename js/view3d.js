@@ -23,7 +23,6 @@ let camera = null;
 let controls = null;
 let rootGroup = null;
 let toggleBtn = null;
-let mobileToggleBtn = null;
 let statusLabel = null;
 let resizeObserver = null;
 let viewEnabled = false;
@@ -62,13 +61,9 @@ const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const smallSphereGeometry = new THREE.SphereGeometry(1, 18, 18);
 const meshCache = new Map();
 const SPACE_BG_COLOR = 0x010102;
-const GRID_COLOR = 0xffffff;
-const GRID_FADE = 0.75;
 const SPACETIME_SIZE = 3000;
-const SPACETIME_SEGMENTS = 260;
 const GRID_SEGMENTS = 50; // Denser grid for better detail
 const SPACETIME_MAX_WELL = 2000; // Deep enough to look like a singularity
-const SPACETIME_SMOOTHING = 0.3;
 const WELL_STRENGTH = {
   BlackHole: 80,
   StarObject: 25,
@@ -90,9 +85,6 @@ const WELL_FALLOFF = {
 const OBJECT_BASE_ALTITUDE = 42;
 const OBJECT_ALTITUDE_SPREAD = 26;
 const BLACK_HOLE_ALTITUDE_OFFSET = -18;
-let spacetimeSurface = null;
-let spacetimeGeometry = null;
-let spacetimeHeights = null;
 let gridMesh = null;
 
 /**
@@ -104,13 +96,12 @@ function init3DView() {
   canvasHost = document.getElementById('threeViewport');
   statusLabel = document.getElementById('threeViewStatus');
   toggleBtn = document.getElementById('toggle3DView');
-  mobileToggleBtn = document.getElementById('mobileToggle3DViewBtn');
   const closeBtn = document.getElementById('close3DViewBtn');
   const resetBtn = document.getElementById('reset3DCameraBtn');
   const resizeHandle = document.getElementById('threeViewResizeHandle');
   const header = containerEl?.querySelector('.three-view-toolbar');
 
-  const toggleHandler = (e) => {
+  const toggleHandler = e => {
     e.stopPropagation();
     set3DViewEnabled(!viewEnabled);
   };
@@ -119,16 +110,11 @@ function init3DView() {
     toggleBtn.removeEventListener('click', toggleHandler);
     toggleBtn.addEventListener('click', toggleHandler);
   }
-  
-  if (mobileToggleBtn) {
-    mobileToggleBtn.removeEventListener('click', toggleHandler);
-    mobileToggleBtn.addEventListener('click', toggleHandler);
-  }
-  
+
   if (closeBtn) {
     closeBtn.addEventListener('click', () => set3DViewEnabled(false));
   }
-  
+
   if (resetBtn) {
     resetBtn.addEventListener('click', () => focusScene(true));
   }
@@ -141,22 +127,22 @@ function init3DView() {
     header.addEventListener('mousedown', e => {
       // Don't drag if clicking buttons
       if (e.target.closest('button')) return;
-      
+
       isDragging = true;
       containerEl.classList.add('interacting');
-      
+
       const rect = containerEl.getBoundingClientRect();
       // Switch to explicit left/top positioning if not already
       containerEl.style.right = 'auto';
       containerEl.style.bottom = 'auto';
       containerEl.style.left = `${rect.left}px`;
       containerEl.style.top = `${rect.top}px`;
-      
+
       startX = e.clientX;
       startY = e.clientY;
       initialLeft = rect.left;
       initialTop = rect.top;
-      
+
       e.preventDefault(); // Prevent text selection
     });
 
@@ -164,11 +150,17 @@ function init3DView() {
       if (!isDragging) return;
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-      
+
       // Constrain to window bounds
-      const newLeft = Math.max(0, Math.min(window.innerWidth - containerEl.offsetWidth, initialLeft + dx));
-      const newTop = Math.max(0, Math.min(window.innerHeight - containerEl.offsetHeight, initialTop + dy));
-      
+      const newLeft = Math.max(
+        0,
+        Math.min(window.innerWidth - containerEl.offsetWidth, initialLeft + dx)
+      );
+      const newTop = Math.max(
+        0,
+        Math.min(window.innerHeight - containerEl.offsetHeight, initialTop + dy)
+      );
+
       containerEl.style.left = `${newLeft}px`;
       containerEl.style.top = `${newTop}px`;
     });
@@ -189,7 +181,7 @@ function init3DView() {
     resizeHandle.addEventListener('mousedown', e => {
       isResizing = true;
       containerEl.classList.add('interacting');
-      
+
       const rect = containerEl.getBoundingClientRect();
       // Switch to explicit left/top positioning if not already
       containerEl.style.right = 'auto';
@@ -203,23 +195,23 @@ function init3DView() {
       startHeight = rect.height;
       startLeft = rect.left;
       startTop = rect.top;
-      
+
       e.preventDefault();
       e.stopPropagation();
     });
 
     window.addEventListener('mousemove', e => {
       if (!isResizing) return;
-      
+
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-      
+
       // Calculate new dimensions (dragging top-left: moving right/down shrinks, left/up grows)
       // Note: dx/dy is positive when moving right/down.
       // So we subtract dx from width, dy from height.
       let newWidth = Math.max(280, startWidth - dx);
       let newHeight = Math.max(240, startHeight - dy);
-      
+
       // Constrain against max window size (optional, but good practice)
       newWidth = Math.min(newWidth, window.innerWidth - 20);
       newHeight = Math.min(newHeight, window.innerHeight - 20);
@@ -230,15 +222,15 @@ function init3DView() {
       // newLeft = right_edge - newWidth
       const rightEdge = startLeft + startWidth;
       const bottomEdge = startTop + startHeight;
-      
+
       const newLeft = rightEdge - newWidth;
       const newTop = bottomEdge - newHeight;
-      
+
       containerEl.style.width = `${newWidth}px`;
       containerEl.style.height = `${newHeight}px`;
       containerEl.style.left = `${newLeft}px`;
       containerEl.style.top = `${newTop}px`;
-      
+
       handleWindowResize();
     });
 
@@ -282,7 +274,7 @@ function update3DScene(timestamp = performance.now()) {
 
 function set3DViewEnabled(next) {
   if (next === viewEnabled) return;
-  
+
   if (next) {
     try {
       if (!ensureScene()) {
@@ -301,11 +293,11 @@ function set3DViewEnabled(next) {
 
   if (containerEl) {
     containerEl.style.display = viewEnabled ? 'block' : 'none';
-    
+
     if (viewEnabled) {
-        containerEl.classList.add('visible');
+      containerEl.classList.add('visible');
     } else {
-        containerEl.classList.remove('visible');
+      containerEl.classList.remove('visible');
     }
     containerEl.setAttribute('aria-hidden', viewEnabled ? 'false' : 'true');
   }
@@ -356,7 +348,6 @@ function ensureScene() {
   scene.add(rootGroup);
 
   addEnvironment();
-  createSpacetimeSurface();
 
   if (hasWindow) {
     window.addEventListener('resize', handleWindowResize);
@@ -399,14 +390,14 @@ function addEnvironment() {
     depthTest: true,
     toneMapped: false,
   });
-  
+
   // Create grid with subdivided lines so they can bend
   const points = [];
   const halfSize = SPACETIME_SIZE / 2;
   const gridStep = SPACETIME_SIZE / GRID_SEGMENTS;
   const subdivisions = 100; // High subdivision for smooth tight curves
   const subStep = SPACETIME_SIZE / subdivisions;
-  
+
   // Create horizontal lines (parallel to X axis) with subdivisions
   for (let i = 0; i <= GRID_SEGMENTS; i++) {
     const z = -halfSize + i * gridStep;
@@ -418,7 +409,7 @@ function addEnvironment() {
       points.push(new THREE.Vector3(x2, 0, z));
     }
   }
-  
+
   // Create vertical lines (parallel to Z axis) with subdivisions
   for (let i = 0; i <= GRID_SEGMENTS; i++) {
     const x = -halfSize + i * gridStep;
@@ -430,37 +421,28 @@ function addEnvironment() {
       points.push(new THREE.Vector3(x, 0, z2));
     }
   }
-  
+
   const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
   gridMesh = new THREE.LineSegments(lineGeometry, gridMaterial);
-  gridMesh.position.y = -OBJECT_BASE_ALTITUDE * 0.45; 
+  gridMesh.position.y = -OBJECT_BASE_ALTITUDE * 0.45;
   rootGroup.add(gridMesh);
-}
-
-function createSpacetimeSurface() {
-  // Deprecated: User requested ONLY the grid, not the solid surface.
-  // Leaving empty or minimal if needed for logic preservation, 
-  // but we will disable the mesh creation.
-  spacetimeSurface = null;
-  spacetimeGeometry = null;
-  spacetimeHeights = null;
 }
 
 function updateSpacetimeSurface() {
   // Update grid directly
   const sources = getSpacetimeSources();
   if (!sources.length && !gravity_ripples.length) return;
-  
+
   updateGridCurvature(sources);
 }
 
 function updateGridCurvature(sources) {
   if (!gridMesh) return;
-  
+
   const position = gridMesh.geometry.attributes.position;
   const vertexCount = position.count;
   const now = performance.now();
-  
+
   // Precompute active ripples and their properties to optimize vertex loop
   const activeRipples = [];
   const halfSize = SPACETIME_SIZE / 2; // 1500
@@ -468,10 +450,10 @@ function updateGridCurvature(sources) {
   for (let j = 0; j < gravity_ripples.length; j++) {
     const ripple = gravity_ripples[j];
     const age = now - ripple.created;
-    
+
     const rx = ripple.x;
     const rz = -ripple.y; // Convert from simulation Y to 3D Z
-    
+
     // Calculate max distance to any corner of the grid to ensure coverage
     // Grid corners are at (+-halfSize, +-halfSize)
     const d1 = Math.hypot(halfSize - rx, halfSize - rz);
@@ -479,19 +461,20 @@ function updateGridCurvature(sources) {
     const d3 = Math.hypot(-halfSize - rx, halfSize - rz);
     const d4 = Math.hypot(-halfSize - rx, -halfSize - rz);
     const maxDistToCorner = Math.max(d1, d2, d3, d4);
-    
+
     // Wave parameters
     const speed = 0.35; // Propagation speed
     const wavelength = 120 + Math.log10(ripple.mass + 1) * 40;
-    const amplitude = (20 + Math.log10(ripple.mass + 1) * 15) * (ripple.gw_strength || 1);
-    
+    const amplitude =
+      (20 + Math.log10(ripple.mass + 1) * 15) * (ripple.gw_strength || 1);
+
     // Reduce packet cycles further (user requested ~half of previous 5)
     // A value of 2.5 means we only see about 2-3 distinct wave crests
-    const packetCycles = 2.5; 
+    const packetCycles = 2.5;
     const packetLength = wavelength * packetCycles;
-    
+
     // Fade out only after we pass the furthest corner
-    const edgeFadeStart = maxDistToCorner; 
+    const edgeFadeStart = maxDistToCorner;
     const edgeFadeLength = wavelength * 4.0;
     const maxDistance = maxDistToCorner + packetLength + edgeFadeLength;
     const waveLifetime = maxDistance / speed;
@@ -499,9 +482,10 @@ function updateGridCurvature(sources) {
     if (age > waveLifetime) continue;
 
     const waveFront = age * speed;
-    
+
     activeRipples.push({
-      rx, rz,
+      rx,
+      rz,
       waveFront,
       wavelength,
       amplitude,
@@ -511,82 +495,89 @@ function updateGridCurvature(sources) {
       tailSoftness: wavelength * 2.5,
       edgeFadeStart,
       edgeFadeLength,
-      age
+      age,
     });
   }
-  
+
   // Update each grid line vertex to follow gravitational curvature
   for (let i = 0; i < vertexCount; i++) {
     const vx = position.getX(i);
     const vz = position.getZ(i);
     let targetHeight = 0;
-    
+
     // Calculate gravitational well depth from massive objects
     for (let j = 0; j < sources.length; j++) {
       targetHeight += computeWellDepth(sources[j], vx, vz);
     }
-    
+
     // Add gravitational wave ripples
     for (let j = 0; j < activeRipples.length; j++) {
-        const r = activeRipples[j];
-        const dx = vx - r.rx;
-        const dz = vz - r.rz;
-        const dist = Math.sqrt(dx * dx + dz * dz);
-        
-        const distanceBehindFront = r.waveFront - dist;
-        const distanceAheadOfTail = dist - r.packetStart;
+      const r = activeRipples[j];
+      const dx = vx - r.rx;
+      const dz = vz - r.rz;
+      const dist = Math.sqrt(dx * dx + dz * dz);
 
-        // Only evaluate vertices within the traveling packet window
-        if (distanceBehindFront >= -r.leadSoftness && distanceAheadOfTail >= -r.tailSoftness) {
-            const phase = (dist - r.waveFront) / r.wavelength * Math.PI * 2;
+      const distanceBehindFront = r.waveFront - dist;
+      const distanceAheadOfTail = dist - r.packetStart;
 
-            let envelope = 1.0;
-            if (distanceBehindFront < 0) {
-                // Ahead of the wavefront (leading edge)
-                const normalized = THREE.MathUtils.clamp(
-                    (distanceBehindFront + r.leadSoftness) / r.leadSoftness,
-                    0,
-                    1
-                );
-                envelope *= normalized;
-            }
-            if (distanceAheadOfTail < 0) {
-                // Behind the packet tail (trailing edge)
-                const normalized = THREE.MathUtils.clamp(
-                    (distanceAheadOfTail + r.tailSoftness) / r.tailSoftness,
-                    0,
-                    1
-                );
-                envelope *= normalized;
-            }
-            
-            // Fade if extremely far (beyond grid corners)
-            if (dist > r.edgeFadeStart) {
-                const normalized = 1 - THREE.MathUtils.clamp(
-                    (dist - r.edgeFadeStart) / r.edgeFadeLength,
-                    0,
-                    1
-                );
-                envelope *= normalized;
-            }
+      // Only evaluate vertices within the traveling packet window
+      if (
+        distanceBehindFront >= -r.leadSoftness &&
+        distanceAheadOfTail >= -r.tailSoftness
+      ) {
+        const phase = ((dist - r.waveFront) / r.wavelength) * Math.PI * 2;
 
-            // Slow decay to keep amplitude until the wave actually meets the edge
-            const distanceDecay = 1.0 / (1.0 + dist / 12000);
-
-            // Add an initial impulse at age~0 near center
-            let impulse = 0;
-            if (r.age < 500 && dist < 100) {
-                impulse = Math.sin(r.age * 0.01) * r.amplitude * 0.5 * (1 - dist / 100);
-            }
-
-            targetHeight += (Math.sin(phase) * r.amplitude * envelope * distanceDecay) + impulse;
+        let envelope = 1.0;
+        if (distanceBehindFront < 0) {
+          // Ahead of the wavefront (leading edge)
+          const normalized = THREE.MathUtils.clamp(
+            (distanceBehindFront + r.leadSoftness) / r.leadSoftness,
+            0,
+            1
+          );
+          envelope *= normalized;
         }
+        if (distanceAheadOfTail < 0) {
+          // Behind the packet tail (trailing edge)
+          const normalized = THREE.MathUtils.clamp(
+            (distanceAheadOfTail + r.tailSoftness) / r.tailSoftness,
+            0,
+            1
+          );
+          envelope *= normalized;
+        }
+
+        // Fade if extremely far (beyond grid corners)
+        if (dist > r.edgeFadeStart) {
+          const normalized =
+            1 -
+            THREE.MathUtils.clamp(
+              (dist - r.edgeFadeStart) / r.edgeFadeLength,
+              0,
+              1
+            );
+          envelope *= normalized;
+        }
+
+        // Slow decay to keep amplitude until the wave actually meets the edge
+        const distanceDecay = 1.0 / (1.0 + dist / 12000);
+
+        // Add an initial impulse at age~0 near center
+        let impulse = 0;
+        if (r.age < 500 && dist < 100) {
+          impulse =
+            Math.sin(r.age * 0.01) * r.amplitude * 0.5 * (1 - dist / 100);
+        }
+
+        targetHeight +=
+          Math.sin(phase) * r.amplitude * envelope * distanceDecay + impulse;
+      }
     }
-    
+
     targetHeight = Math.max(-SPACETIME_MAX_WELL, Math.min(150, targetHeight)); // Allow higher peaks
     position.setY(i, targetHeight);
   }
-  
+
   position.needsUpdate = true;
 }
 
@@ -839,17 +830,18 @@ function computeWellDepth(obj, vx, vz) {
   const dz = vz - objZ;
   const distSq = dx * dx + dz * dz;
   const distance = Math.sqrt(distSq) + 0.1; // Avoid division by zero
-  
+
   const baseStrength = WELL_STRENGTH[obj.obj_type] ?? WELL_STRENGTH.default;
   const falloff = WELL_FALLOFF[obj.obj_type] ?? WELL_FALLOFF.default;
   const mass = Math.max(getObjectMassApprox(obj), 1);
-  
+
   // Special handling for Black Holes to create a "singularity" punch-through effect
   if (obj.obj_type === 'BlackHole') {
     // Sharper falloff for BH
-    const sharpness = 3.5; 
+    const sharpness = 3.5;
     // The well should be extremely deep near the center
-    const deepWell = (baseStrength * mass * 5.0) / (Math.pow(distance / 6, sharpness) + 0.05);
+    const deepWell =
+      (baseStrength * mass * 5.0) / (Math.pow(distance / 6, sharpness) + 0.05);
     return -Math.min(SPACETIME_MAX_WELL, deepWell);
   }
 
@@ -937,13 +929,12 @@ function focusScene(force = false) {
 
 function updateToggleLabel() {
   const label = viewEnabled ? 'Hide Spacetime View' : 'Show Spacetime View';
-  
-  [toggleBtn, mobileToggleBtn].forEach(btn => {
-    if (!btn) return;
-    btn.textContent = label;
-    btn.setAttribute('aria-pressed', viewEnabled ? 'true' : 'false');
-    btn.dataset.state = viewEnabled ? 'on' : 'off';
-  });
+
+  if (toggleBtn) {
+    toggleBtn.textContent = label;
+    toggleBtn.setAttribute('aria-pressed', viewEnabled ? 'true' : 'false');
+    toggleBtn.dataset.state = viewEnabled ? 'on' : 'off';
+  }
 
   if (!viewEnabled && statusLabel) {
     statusLabel.textContent = 'Hidden';

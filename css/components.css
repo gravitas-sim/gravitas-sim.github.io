@@ -1,0 +1,1753 @@
+/* =============================================================================
+   Gravitas component language
+   -----------------------------------------------------------------------------
+   Buttons, panels, form controls and the shared chrome. Everything here lives
+   in the `components` layer, which sits after `legacy` in the cascade, so these
+   rules win on layer order rather than on `!important`.
+   ========================================================================== */
+
+@layer components {
+  /* ==========================================================================
+     Buttons
+     ====================================================================== */
+  .ui-button,
+  button,
+  .toggle-button {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    line-height: 1;
+    letter-spacing: 0.01em;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+
+    padding: var(--space-2) var(--space-4);
+    min-height: 34px;
+
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+
+    cursor: pointer;
+    user-select: none;
+    text-shadow: none;
+    transition:
+      background var(--duration) var(--ease),
+      border-color var(--duration) var(--ease),
+      color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease),
+      transform var(--duration-fast) var(--ease);
+  }
+
+  .ui-button:hover,
+  button:hover,
+  .toggle-button:hover {
+    background: var(--surface-3);
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .ui-button:active,
+  button:active,
+  .toggle-button:active {
+    background: var(--surface-2);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(0);
+  }
+
+  .ui-button:disabled,
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Primary action */
+  .ui-button.is-primary,
+  button.is-primary,
+  #settingsApply,
+  .settings-apply {
+    background: var(--accent);
+    border-color: transparent;
+    color: var(--accent-contrast);
+    font-weight: var(--weight-semibold);
+  }
+
+  .ui-button.is-primary:hover,
+  button.is-primary:hover,
+  #settingsApply:hover,
+  .settings-apply:hover {
+    background: var(--accent-strong);
+    border-color: transparent;
+    color: var(--accent-contrast);
+  }
+
+  /* Quiet / icon-only */
+  .ui-button.is-quiet,
+  button.is-quiet {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-secondary);
+  }
+
+  .ui-button.is-quiet:hover,
+  button.is-quiet:hover {
+    background: var(--surface-2);
+    border-color: var(--border-subtle);
+    color: var(--text-primary);
+  }
+
+  .ui-button.is-danger,
+  button.is-danger {
+    color: var(--danger);
+    border-color: color-mix(in srgb, var(--danger) 35%, transparent);
+  }
+
+  .ui-button.is-danger:hover,
+  button.is-danger:hover {
+    background: color-mix(in srgb, var(--danger) 16%, var(--surface-2));
+    border-color: var(--danger);
+    color: var(--text-primary);
+  }
+
+  /* ==========================================================================
+     Toggle buttons - state carried by colour AND a label, never colour alone
+     ====================================================================== */
+  .toggle-button {
+    position: relative;
+    min-width: 62px;
+    font-weight: var(--weight-medium);
+  }
+
+  /* Tint kept low so the label clears 4.5:1 against the mixed background in
+     every theme — at 18% the light theme measured 3.92:1. */
+  .toggle-button[data-state='on'] {
+    background: color-mix(in srgb, var(--success) 6%, var(--surface-2));
+    border-color: color-mix(in srgb, var(--success) 55%, transparent);
+    color: var(--success);
+  }
+
+  .toggle-button[data-state='on']:hover {
+    background: color-mix(in srgb, var(--success) 12%, var(--surface-2));
+    border-color: var(--success);
+  }
+
+  .toggle-button[data-state='off'] {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text-muted);
+  }
+
+  .toggle-button[data-state='off']:hover {
+    background: var(--surface-3);
+    color: var(--text-secondary);
+  }
+
+  /* ==========================================================================
+     Elements that hide themselves
+     -----------------------------------------------------------------------
+     HAZARD: the generic button rule above sets `display: inline-flex`, which
+     lands in this layer and therefore beats any `display: none` declared in
+     the legacy layer. Every button that is meant to be conditionally hidden
+     has to restate that here, or it appears everywhere.
+
+     The floating close chips are pinned to the viewport corner for small
+     screens where a panel header can scroll out of reach. On desktop the
+     header already has its own close control, so showing both put two X
+     buttons on top of each other.
+     ====================================================================== */
+  .floating-close-chip {
+    display: none;
+    position: fixed;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: var(--z-toast);
+
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--surface-2) 92%, transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow);
+  }
+
+  @media (max-width: 480px) {
+    .floating-close-chip {
+      display: flex;
+    }
+  }
+
+  /* ==========================================================================
+     Focus - visible for keyboard users, quiet for pointer users
+     ====================================================================== */
+  :where(
+    button,
+    .ui-button,
+    .toggle-button,
+    select,
+    input,
+    textarea,
+    [tabindex]
+  ):focus {
+    outline: none;
+  }
+
+  :where(
+    button,
+    .ui-button,
+    .toggle-button,
+    select,
+    input,
+    textarea,
+    [tabindex]
+  ):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ==========================================================================
+     Panels - one surface treatment for every floating container
+     ====================================================================== */
+  .settings-content,
+  .settings-header,
+  .settings-footer,
+  .bh-masses-header,
+  .bh-masses-footer,
+  .inspector-header,
+  .inspector-content,
+  .mobile-instructions-content,
+  .preset-info,
+  .three-view-container,
+  .light-curve-container {
+    font-family: var(--font-sans);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .three-view-container,
+  .light-curve-container {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .three-view-toolbar,
+  .light-curve-toolbar {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .three-view-title,
+  .light-curve-title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .three-view-status,
+  .light-curve-status {
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .three-toolbar-btn,
+  .light-curve-btn,
+  .light-curve-info-btn {
+    min-height: 26px;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    background: transparent;
+    border-color: var(--border-subtle);
+    color: var(--text-secondary);
+    box-shadow: none;
+  }
+
+  .three-toolbar-btn:hover,
+  .light-curve-btn:hover,
+  .light-curve-info-btn:hover {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+
+  .three-view-hint,
+  .light-curve-hint {
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* ==========================================================================
+     Settings sections
+     ====================================================================== */
+  .settings-section {
+    margin-bottom: var(--space-4);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--surface-inset);
+    transition: border-color var(--duration) var(--ease);
+  }
+
+  .settings-section:hover {
+    border-color: var(--border);
+  }
+
+  .settings-section-header {
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    transition: background var(--duration) var(--ease);
+    user-select: none;
+  }
+
+  .settings-section-header:hover {
+    background: var(--surface-3);
+  }
+
+  .settings-section.collapsed .settings-section-header {
+    border-bottom-color: transparent;
+  }
+
+  .settings-section-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.01em;
+    color: var(--text-primary);
+    text-shadow: none;
+    margin: 0;
+  }
+
+  .settings-section-toggle {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: var(--text-muted);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--duration) var(--ease);
+  }
+
+  .settings-section.collapsed .settings-section-toggle {
+    transform: rotate(-90deg);
+  }
+
+  .settings-section-content {
+    padding: var(--space-4);
+    max-height: 1400px;
+    opacity: 1;
+    overflow: hidden;
+    transition:
+      max-height var(--duration-slow) var(--ease),
+      opacity var(--duration) var(--ease),
+      padding var(--duration-slow) var(--ease);
+  }
+
+  .settings-section.collapsed .settings-section-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+
+  .settings-header,
+  .settings-footer,
+  .settings-content,
+  .settings-grid,
+  .preset-info {
+    font-family: var(--font-sans);
+  }
+
+  /* ==========================================================================
+     Form controls
+     ====================================================================== */
+  select,
+  input[type='text'],
+  input[type='number'],
+  input[type='search'] {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    transition:
+      border-color var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+
+  select:hover,
+  input[type='text']:hover,
+  input[type='number']:hover,
+  input[type='search']:hover {
+    border-color: var(--border-strong);
+  }
+
+  input[type='range'] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: var(--surface-3);
+    outline: none;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    border: 2px solid var(--surface-1);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform var(--duration-fast) var(--ease);
+  }
+
+  input[type='range']::-webkit-slider-thumb:hover {
+    transform: scale(1.18);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    border: 2px solid var(--surface-1);
+    cursor: pointer;
+  }
+
+  /* ==========================================================================
+     Utility
+     ====================================================================== */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .numeric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* =============================================================================
+   Application chrome
+   -----------------------------------------------------------------------------
+   The HUD, the control rail, the tutorial affordance and the transport bar.
+   Moved here out of three competing inline <style> blocks in index.html.
+   ========================================================================== */
+
+@layer components {
+  /* ==========================================================================
+     Control rail (right-hand button column)
+     ====================================================================== */
+  .ui-container {
+    /* Revealed by .showUI after the splash. Using a transition rather than an
+       entrance animation keeps opacity in the normal cascade, where the
+       narrow-screen .is-open rule can still win. */
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+
+    /* The rail can outgrow short viewports once every group is present, so it
+       scrolls internally rather than running off the bottom of the screen. */
+    top: var(--space-4);
+    right: var(--space-4);
+    max-height: calc(100vh - var(--space-8));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    width: var(--rail-width);
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-chrome);
+  }
+
+  .ui-container.showUI {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ui-container .ui-button {
+    justify-content: flex-start;
+    width: 100%;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-secondary);
+    font-weight: var(--weight-normal);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .ui-container .ui-button:hover {
+    background: var(--surface-2);
+    border-color: transparent;
+    color: var(--text-primary);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .ui-container .ui-button:active {
+    background: var(--surface-3);
+  }
+
+  /* ==========================================================================
+     HUD overlay (top-left readout)
+     ====================================================================== */
+  #overlay {
+    z-index: var(--z-overlay);
+  }
+
+  #overlayStats,
+  #overlay .overlay-panel {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal);
+    color: var(--hud-text);
+    background: color-mix(in srgb, var(--hud-surface) 82%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  #overlayStats b,
+  #overlayStats strong {
+    color: var(--hud-text-strong);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* ==========================================================================
+     Scenario info card
+     ====================================================================== */
+  /* The wrapper positions; .scenario-info-content carries the surface. Styling
+     both produced two nested rounded boxes, one inset from the other. */
+  #scenarioInfoBox,
+  .scenario-info-box {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    z-index: var(--z-panel);
+
+    /* Centre in the band between the HUD and the rail, not in the viewport,
+       so the card cannot sit on top of the readout panel. */
+    --side-left: calc(var(--hud-width) + var(--panel-inset) + var(--space-3));
+    --side-right: calc(var(--rail-width) + var(--panel-inset) + var(--space-3));
+    width: min(720px, calc(100vw - var(--side-left) - var(--side-right)));
+    transform: translateX(
+      calc(-50% + (var(--side-left) - var(--side-right)) / 2)
+    );
+  }
+
+  /* Below the rail's breakpoint the HUD and rail no longer flank it. */
+  @media (max-width: 1024px) {
+    #scenarioInfoBox,
+    .scenario-info-box {
+      --side-left: var(--space-4);
+      --side-right: var(--space-4);
+      width: min(720px, calc(100vw - var(--space-8)));
+      transform: translateX(-50%);
+    }
+  }
+
+  .scenario-info-content {
+    width: 100%;
+    max-width: none;
+    padding: var(--space-4) var(--space-5);
+    background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .scenario-info-body p {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  .scenario-info-close {
+    min-height: 26px;
+    min-width: 26px;
+    padding: 0;
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-muted);
+    font-size: var(--text-md);
+    line-height: 1;
+  }
+
+  .scenario-info-close:hover {
+    background: var(--surface-2);
+    border-color: transparent;
+    color: var(--text-primary);
+    transform: none;
+  }
+
+  .scenario-info-title,
+  #scenarioInfoBox h3 {
+    color: var(--accent);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.01em;
+    margin: 0 0 var(--space-2);
+  }
+
+  /* ==========================================================================
+     Tutorial affordance
+     ====================================================================== */
+  .tutorial-btn {
+    position: fixed;
+    left: var(--space-4);
+    bottom: var(--space-4);
+    z-index: var(--z-chrome);
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    font-size: var(--text-md);
+    font-weight: var(--weight-bold);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  .tutorial-btn.showUI {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .tutorial-popup {
+    position: fixed;
+    left: var(--space-4);
+    bottom: calc(var(--space-10) + var(--space-6));
+    width: min(360px, calc(100vw - var(--space-8)));
+    max-height: 80vh;
+    background: var(--surface-1);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    z-index: var(--z-modal);
+    touch-action: none;
+    user-select: none;
+  }
+
+  .tutorial-popup-header {
+    cursor: grab;
+    user-select: none;
+  }
+
+  @media (max-width: 600px) {
+    .tutorial-btn {
+      left: var(--space-3);
+      bottom: var(--space-3);
+    }
+
+    .tutorial-popup {
+      left: var(--space-3);
+      width: calc(100vw - var(--space-6));
+      max-height: 70vh;
+    }
+  }
+
+  /* ==========================================================================
+     Speed control cluster
+     ====================================================================== */
+  .speed-control,
+  .speed-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: var(--space-1) 0;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: var(--space-1);
+  }
+
+  .ui-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .ui-container::-webkit-scrollbar-thumb {
+    background: var(--surface-3);
+    border-radius: var(--radius-full);
+  }
+
+  /* Short viewports: shrink the rail rather than clipping it */
+  @media (max-height: 720px) {
+    .ui-container .ui-button {
+      min-height: 30px;
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--text-xs);
+    }
+
+    .rail-group + .rail-group {
+      margin-top: var(--space-2);
+      padding-top: var(--space-2);
+    }
+  }
+
+  .speed-control .ui-button,
+  .speed-controls .ui-button {
+    flex: 1;
+    justify-content: center;
+    min-height: 28px;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+
+  #speedDisplay,
+  .speed-display {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-xs);
+    color: var(--accent);
+    min-width: 44px;
+    text-align: center;
+  }
+}
+
+/* =============================================================================
+   New surfaces: rail groups, transport bar, toasts, shortcut sheet
+   ========================================================================== */
+
+@layer components {
+  /* ==========================================================================
+     Narrow-screen menu
+     -----------------------------------------------------------------------
+     The hamburger opens the control rail itself rather than a second copy of
+     it. It must stay hidden on desktop - the generic button rule below sets
+     display:inline-flex, which would otherwise override the legacy
+     display:none and leave the hamburger sitting on top of the rail.
+     ====================================================================== */
+  .mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: calc(var(--z-chrome) + 1);
+
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    background: color-mix(in srgb, var(--surface-1) 90%, transparent);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .mobile-menu-toggle .hamburger {
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 0;
+    border-radius: var(--radius-full);
+    background: var(--text-secondary);
+    transition:
+      transform var(--duration) var(--ease),
+      opacity var(--duration) var(--ease),
+      background var(--duration) var(--ease);
+  }
+
+  .mobile-menu-toggle:hover .hamburger {
+    background: var(--text-primary);
+  }
+
+  .mobile-menu-toggle.active .hamburger:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .mobile-menu-toggle.active .hamburger:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-toggle.active .hamburger:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (max-width: 1024px) {
+    .mobile-menu-toggle {
+      display: flex;
+    }
+
+    /* The rail becomes the dropdown the hamburger opens. */
+    .ui-container {
+      display: flex;
+      top: calc(var(--space-4) + 52px);
+      right: var(--space-3);
+      left: var(--space-3);
+      width: auto;
+      max-height: calc(100vh - var(--space-10) - 64px);
+
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.985);
+      transform-origin: top right;
+      pointer-events: none;
+      transition:
+        opacity var(--duration) var(--ease),
+        transform var(--duration) var(--ease-out),
+        visibility 0s linear var(--duration);
+    }
+
+    /* Higher specificity than .ui-container.showUI so the menu state wins */
+    .ui-container.is-open,
+    .ui-container.showUI.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    /* .showUI alone must not reveal the rail on narrow screens - only the
+       hamburger does. */
+    .ui-container.showUI:not(.is-open) {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Two columns of controls on tablets, so the sheet is not a long scroll */
+    .rail-group > [role='group'] {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-1);
+    }
+
+    .rail-field,
+    .rail-toggle,
+    .rail-primary {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .rail-group > [role='group'] {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ==========================================================================
+     Control rail grouping
+     ====================================================================== */
+  .rail-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .rail-group + .rail-group {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .rail-group > [role='group'] {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rail-label {
+    margin: 0 0 var(--space-1);
+    padding: 0 var(--space-3);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .rail-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  .rail-field select {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+
+  .rail-toggle {
+    margin: var(--space-1) var(--space-3) 0;
+    width: calc(100% - var(--space-6));
+  }
+
+  .rail-primary {
+    margin-top: var(--space-3);
+  }
+
+  /* ==========================================================================
+     Transport bar
+     ====================================================================== */
+  .timeline-bar {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-4);
+    transform: translateX(-50%);
+    z-index: var(--z-timeline);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: min(680px, calc(100vw - var(--space-8)));
+    padding: var(--space-2) var(--space-3);
+
+    background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  .timeline-bar.showUI {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .timeline-bar.is-scrubbing {
+    border-color: var(--warning);
+    box-shadow:
+      var(--shadow-lg),
+      0 0 0 1px color-mix(in srgb, var(--warning) 45%, transparent);
+  }
+
+  .timeline-btn {
+    flex: none;
+    min-height: 30px;
+    min-width: 30px;
+    padding: 0 var(--space-2);
+    font-size: var(--text-xs);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-secondary);
+  }
+
+  .timeline-btn:hover {
+    background: var(--surface-2);
+    border-color: transparent;
+    color: var(--text-primary);
+    transform: none;
+  }
+
+  .timeline-scrubber {
+    flex: 1;
+    min-width: 0;
+    margin: 0 var(--space-1);
+  }
+
+  .timeline-scrubber:disabled {
+    opacity: 0.35;
+  }
+
+  .timeline-time {
+    flex: none;
+    min-width: 68px;
+    text-align: right;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  .timeline-live {
+    color: var(--warning);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .timeline-bar {
+      width: calc(100vw - var(--space-4));
+      bottom: var(--space-2);
+      gap: var(--space-1);
+      padding: var(--space-2);
+    }
+
+    .timeline-time {
+      min-width: 52px;
+      font-size: var(--text-2xs);
+    }
+  }
+
+  /* ==========================================================================
+     Toast
+     ====================================================================== */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--space-10) + var(--space-8));
+    transform: translate(-50%, 8px);
+    z-index: var(--z-toast);
+
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--duration) var(--ease),
+      transform var(--duration) var(--ease-out);
+  }
+
+  .toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  /* ==========================================================================
+     Shortcut cheatsheet
+     ====================================================================== */
+  .shortcut-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--surface-0) 78%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .shortcut-overlay[hidden] {
+    display: none;
+  }
+
+  .shortcut-sheet {
+    width: min(720px, 100%);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .shortcut-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .shortcut-header h2 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .shortcut-body {
+    padding: var(--space-5);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-5);
+  }
+
+  .shortcut-group h3 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .shortcut-group dl {
+    margin: 0;
+  }
+
+  .shortcut-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding: var(--space-1) 0;
+  }
+
+  .shortcut-row dt {
+    flex: none;
+    min-width: 92px;
+  }
+
+  .shortcut-row dd {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .shortcut-overlay kbd {
+    display: inline-block;
+    padding: 2px var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .shortcut-footer {
+    padding: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  /* ==========================================================================
+     Scenario search
+     ====================================================================== */
+  .scenario-search-wrap {
+    position: relative;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  #scenarioSearch {
+    width: 100%;
+    padding-left: var(--space-8);
+  }
+
+  .scenario-search-icon {
+    position: absolute;
+    left: calc(var(--space-4) + var(--space-2));
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    font-size: var(--text-sm);
+  }
+
+  .scenario-search-empty {
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+}
+
+/* =============================================================================
+   Overlay panel — a single card holding the sonification toggle and the HUD
+   readout, instead of two loose blocks with a floating minimise button.
+   ========================================================================== */
+
+@layer components {
+  #overlay {
+    position: fixed;
+    top: var(--space-4);
+    left: var(--space-4);
+    z-index: var(--z-overlay);
+    width: min(var(--hud-width), calc(100vw - var(--space-8)));
+
+    display: flex;
+    flex-direction: column;
+
+    background: color-mix(in srgb, var(--hud-surface) 84%, transparent);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  /* The card already provides the surface — the inner blocks must not repeat it */
+  #overlay #overlayStats,
+  #overlay .overlay-stats {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  #overlay .sonification-panel {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--hud-border);
+    background: transparent;
+  }
+
+  #overlay .sonification-description {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-2xs);
+    line-height: var(--leading-normal);
+    color: var(--text-muted);
+  }
+
+  /* The collapse control is a labelled chip, not a bare dash: a lone "−" gave
+     no indication the readout could be collapsed, and once collapsed the panel
+     became an unlabelled square with no hint of how to get it back. */
+  .overlay-minimize-btn {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    z-index: 1;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+
+    /* The legacy rule pins this to a 28px square, which clipped the label to
+       a sliver. The chip has to size to its own text. */
+    width: auto;
+    min-width: 0;
+    height: 24px;
+    min-height: 24px;
+    padding: 0 var(--space-3);
+
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-medium);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+
+    white-space: nowrap;
+    flex: none;
+
+    background: color-mix(in srgb, var(--hud-text-strong) 8%, transparent);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-full);
+    box-shadow: none;
+  }
+
+  .overlay-minimize-btn:hover {
+    background: color-mix(in srgb, var(--hud-text-strong) 16%, transparent);
+    border-color: var(--hud-border);
+    color: var(--hud-text-strong);
+    transform: none;
+  }
+
+  #overlay.minimized .sonification-panel,
+  #overlay.minimized #overlayStats {
+    display: none;
+  }
+
+  /* Collapsed: the panel shrinks to the labelled chip itself, so the whole
+     thing reads as "Show readout" and is clickable anywhere. */
+  /* Collapsed the panel shrink-wraps its chip, so the label must drive the
+     width rather than being squeezed by a fixed one. */
+  /* Collapsed the panel shrink-wraps its chip. align-items must be flex-start:
+     the default `stretch` sized the button to the container instead of the
+     other way round, squeezing the label to a single character per line. */
+  #overlay.minimized {
+    width: auto;
+    max-width: calc(100vw - var(--space-8));
+    min-width: 0;
+    align-items: flex-start;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--hud-surface) 88%, transparent);
+  }
+
+  #overlay.minimized:hover {
+    border-color: var(--border-strong);
+  }
+
+  #overlay.minimized .overlay-minimize-btn {
+    position: static;
+    margin: var(--space-2);
+    height: 28px;
+    width: auto;
+    flex: 0 0 auto;
+    color: var(--hud-text-strong);
+  }
+
+  /* Section rules inside the readout, so the three blocks read as a list */
+  #overlayStats > div + div,
+  #overlayStats > p + p {
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--hud-border);
+  }
+
+  @media (max-width: 640px) {
+    #overlay {
+      top: var(--space-2);
+      left: var(--space-2);
+      width: calc(100vw - var(--space-4));
+      font-size: var(--text-2xs);
+    }
+  }
+}
+
+/* =============================================================================
+   Accessibility
+   ========================================================================== */
+
+@layer components {
+  .skip-link {
+    position: fixed;
+    top: var(--space-2);
+    left: var(--space-2);
+    z-index: calc(var(--z-splash) + 1);
+    padding: var(--space-2) var(--space-4);
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform var(--duration) var(--ease);
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+  }
+
+  /* Motion. The simulation itself is the content, so it keeps moving — but the
+     decorative chrome animations, the splash and the transitions all stop. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .ui-button:hover,
+    button:hover,
+    .toggle-button:hover {
+      transform: none;
+    }
+  }
+
+  /* Windows high-contrast / forced-colors: let the OS palette through rather
+     than fighting it with backdrop filters and translucent surfaces. */
+  @media (forced-colors: active) {
+    .ui-container,
+    #overlay,
+    .timeline-bar,
+    .shortcut-sheet,
+    .toast {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid CanvasText;
+    }
+
+    .ui-button,
+    button,
+    .toggle-button {
+      border: 1px solid ButtonText;
+    }
+  }
+}
+
+/* =============================================================================
+   Panel header controls
+   ========================================================================== */
+
+@layer components {
+  .inspector-close,
+  .inspector-delete,
+  #closeScenarioList,
+  .scenario-info-close {
+    width: 30px;
+    height: 30px;
+    min-height: 30px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--text-md);
+    line-height: 1;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    box-shadow: none;
+  }
+
+  .inspector-close:hover,
+  #closeScenarioList:hover,
+  .scenario-info-close:hover {
+    background: var(--surface-2);
+    border-color: var(--border-subtle);
+    color: var(--text-primary);
+    transform: none;
+  }
+
+  .inspector-delete:hover {
+    background: color-mix(in srgb, var(--danger) 14%, var(--surface-2));
+    border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+    transform: none;
+  }
+
+  .inspector-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+}
+
+/* =============================================================================
+   Solar-unit notation
+   -----------------------------------------------------------------------------
+   Astronomical convention subscripts the Sun symbol: M⊙, R⊙, L⊙.
+   ========================================================================== */
+
+@layer components {
+  .solar-sub {
+    font-size: 0.72em;
+    line-height: 1;
+    vertical-align: baseline;
+    position: relative;
+    top: 0.28em;
+    margin-left: 0.02em;
+  }
+}
+
+/* =============================================================================
+   Attribution
+   -----------------------------------------------------------------------------
+   Previously white text at 0.7 opacity inside a container faded to 0.45 — an
+   effective 0.31 alpha, which vanished against the darker themes. It now sits
+   on its own tinted chip and takes its colours from the theme.
+   ========================================================================== */
+
+@layer components {
+  .attribution {
+    position: fixed;
+    right: var(--space-4);
+    bottom: var(--space-3);
+    z-index: var(--z-overlay);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+
+    font-family: var(--font-sans);
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    color: var(--hud-text);
+    white-space: nowrap;
+
+    background: color-mix(in srgb, var(--hud-surface) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(1.15);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-full);
+
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  .attribution.showUI {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .attribution a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    pointer-events: auto;
+    transition:
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .attribution a:hover,
+  .attribution a:focus-visible {
+    color: var(--accent-strong);
+    border-bottom-color: currentColor;
+  }
+
+  .attribution-sep {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  /* The transport bar owns the bottom centre; on narrow screens the
+     attribution moves out of its way rather than sitting behind it. */
+  @media (max-width: 720px) {
+    .attribution {
+      right: var(--space-2);
+      bottom: calc(var(--space-10) + var(--space-6));
+      font-size: 10px;
+      padding: 2px var(--space-2);
+      gap: var(--space-1);
+    }
+  }
+}
+
+/* =============================================================================
+   Guided tour
+   ========================================================================== */
+
+@layer components {
+  .tutorial-popup {
+    position: fixed;
+    left: var(--space-4);
+    bottom: calc(var(--space-10) + var(--space-8));
+    width: min(400px, calc(100vw - var(--space-8)));
+    max-height: 78vh;
+    z-index: var(--z-modal);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    font-family: var(--font-sans);
+    user-select: none;
+  }
+
+  .tutorial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-2);
+  }
+
+  .tutorial-eyebrow {
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .tutorial-close {
+    width: 26px;
+    height: 26px;
+    min-height: 26px;
+    padding: 0;
+    font-size: var(--text-xs);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-muted);
+  }
+
+  .tutorial-close:hover {
+    background: var(--surface-3);
+    border-color: transparent;
+    color: var(--text-primary);
+    transform: none;
+  }
+
+  .tutorial-body {
+    padding: var(--space-5);
+    overflow-y: auto;
+  }
+
+  .tutorial-step-count {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .tutorial-title {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    color: var(--text-primary);
+  }
+
+  .tutorial-text {
+    margin: 0;
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+
+  .tutorial-tip {
+    display: flex;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: var(--space-3);
+
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+
+  .tutorial-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: var(--space-5);
+  }
+
+  .tutorial-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--surface-3);
+    transition: background var(--duration) var(--ease);
+  }
+
+  .tutorial-dots span.is-done {
+    background: var(--accent-deep);
+  }
+
+  .tutorial-dots span.is-current {
+    width: 18px;
+    background: var(--accent);
+  }
+
+  .tutorial-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    background: var(--surface-2);
+  }
+
+  .tutorial-footer .ui-button {
+    min-width: 88px;
+    justify-content: center;
+  }
+
+  /* Spotlight: four scrim panels leave the highlighted control undimmed. */
+  .tutorial-scrim {
+    position: fixed;
+    z-index: calc(var(--z-modal) - 2);
+    background: color-mix(in srgb, var(--surface-0) 72%, transparent);
+    pointer-events: none;
+  }
+
+  .tutorial-ring {
+    position: fixed;
+    z-index: calc(var(--z-modal) - 1);
+    border: 2px solid var(--accent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
+      0 0 28px color-mix(in srgb, var(--accent) 45%, transparent);
+    pointer-events: none;
+  }
+
+  @media (max-width: 600px) {
+    .tutorial-popup {
+      left: var(--space-3);
+      right: var(--space-3);
+      width: auto;
+      bottom: calc(var(--space-10) + var(--space-6));
+      max-height: 70vh;
+    }
+  }
+}

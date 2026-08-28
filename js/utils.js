@@ -821,3 +821,125 @@ export const CONSTANTS = {
     PURPLE: '#800080',
   },
 };
+
+/**
+ * Whether verbose diagnostic logging is enabled.
+ * Off by default; enable from the console with `localStorage.gravitasDebug = 1`
+ * (or `window.GRAVITAS_DEBUG = true`) and reload.
+ * @returns {boolean} True when debug logging should be emitted
+ */
+export const isDebugEnabled = () => {
+  if (typeof window === 'undefined') return false;
+  if (window.GRAVITAS_DEBUG === true) return true;
+  try {
+    return window.localStorage?.getItem('gravitasDebug') === '1';
+  } catch {
+    return false; // Storage can throw in private/sandboxed contexts
+  }
+};
+
+/**
+ * console.log that only emits when debug logging is enabled.
+ * @param {...any} args - Values to log
+ */
+export const debugLog = (...args) => {
+  if (isDebugEnabled()) console.log(...args);
+};
+
+// =============================================================================
+// Solar-unit notation
+// -----------------------------------------------------------------------------
+// Astronomical convention writes the Sun symbol as a subscript: M⊙, R⊙, L⊙.
+// The DOM can express that with <sub>; canvas text cannot, so the glyph is
+// drawn separately at a reduced size and dropped below the baseline.
+// =============================================================================
+
+/** Astronomical body symbols used as unit subscripts. */
+export const SUN_SYMBOL = '\u2609'; // ☉
+export const EARTH_SYMBOL = '\u2295'; // ⊕
+export const JUPITER_SYMBOL = '\u2643'; // ♃
+
+/**
+ * Solar-unit label as HTML, with the Sun symbol correctly subscripted.
+ * @param {number|string} value - The numeric part, already formatted
+ * @param {string} [base] - Quantity letter: 'M' mass, 'R' radius, 'L' luminosity
+ * @returns {string} HTML string, e.g. "1.40 M<sub>⊙</sub>"
+ */
+export const solarHTML = (value, base = 'M', symbol = SUN_SYMBOL) =>
+  `${value} ${base}<sub class="solar-sub">${symbol}</sub>`;
+
+/**
+ * Earth-unit label as HTML, subscripted the same way.
+ * @param {number|string} value - The numeric part, already formatted
+ * @param {string} [base] - Quantity letter
+ * @returns {string} HTML string, e.g. "5.97 M<sub>⊕</sub>"
+ */
+export const earthHTML = (value, base = 'M') =>
+  solarHTML(value, base, EARTH_SYMBOL);
+
+/**
+ * Jupiter-unit label as HTML, subscripted the same way.
+ * @param {number|string} value - The numeric part, already formatted
+ * @param {string} [base] - Quantity letter
+ * @returns {string} HTML string, e.g. "1.00 M<sub>♃</sub>"
+ */
+export const jupiterHTML = (value, base = 'M') =>
+  solarHTML(value, base, JUPITER_SYMBOL);
+
+/**
+ * Plain-text solar-unit label, for tooltips, exports and aria labels where
+ * markup is not available.
+ * @param {number|string} value - The numeric part, already formatted
+ * @param {string} [base] - Quantity letter
+ * @returns {string} e.g. "1.40 M⊙"
+ */
+export const solarText = (value, base = 'M') => `${value} ${base}${SUN_SYMBOL}`;
+
+/**
+ * Draw a solar-unit label on a canvas with a true subscript.
+ *
+ * Canvas has no rich text, so the run is measured and drawn in three parts —
+ * number, base letter, then the Sun glyph at 68% size and pushed below the
+ * baseline — and centred as a whole so it stays aligned under its object.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Target context
+ * @param {string} value - Formatted numeric part
+ * @param {number} x - Centre x
+ * @param {number} y - Baseline y
+ * @param {Object} [opts]
+ * @param {string} [opts.base] - Quantity letter
+ * @param {string} [opts.suffix] - Text appended after the unit, e.g. ' NS'
+ */
+export const drawSolarLabel = (ctx, value, x, y, opts = {}) => {
+  const { base = 'M', suffix = '', symbol = SUN_SYMBOL } = opts;
+  const mainFont = ctx.font;
+  const size = parseFloat(mainFont) || 14;
+  const subFont = mainFont.replace(
+    /^\s*[\d.]+px/,
+    `${(size * 0.68).toFixed(1)}px`
+  );
+
+  const head = `${value} ${base}`;
+  const headW = ctx.measureText(head).width;
+  ctx.font = subFont;
+  const subW = ctx.measureText(symbol).width;
+  ctx.font = mainFont;
+  const tailW = suffix ? ctx.measureText(suffix).width : 0;
+
+  const total = headW + subW + tailW;
+  const prevAlign = ctx.textAlign;
+  ctx.textAlign = 'left';
+  let cursor = x - total / 2;
+
+  ctx.fillText(head, cursor, y);
+  cursor += headW;
+
+  ctx.font = subFont;
+  ctx.fillText(symbol, cursor, y + size * 0.22);
+  cursor += subW;
+
+  ctx.font = mainFont;
+  if (suffix) ctx.fillText(suffix, cursor, y);
+
+  ctx.textAlign = prevAlign;
+};

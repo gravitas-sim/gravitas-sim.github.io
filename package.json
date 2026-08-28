@@ -13,7 +13,11 @@
     "format": "prettier --write js/*.js",
     "format:check": "prettier --check js/*.js",
     "dev": "npx http-server . -p 8003 -o",
-    "serve": "npx http-server . -p 8003"
+    "serve": "npx http-server . -p 8003",
+    "build": "node tools/make-social-card.js && node build.js",
+    "build:watch": "node build.js --watch",
+    "preview": "npm run build && npx http-server dist -p 8004 -o",
+    "social-card": "node tools/make-social-card.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@jest/globals": "^30.0.4",
+    "esbuild": "^0.28.2",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",

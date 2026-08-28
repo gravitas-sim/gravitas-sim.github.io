@@ -3,67 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gravitas - Web Black Hole Sandbox</title>
-    <!-- Immediately hide object inspector before anything else loads -->
-    <script>
-      (function () {
-        // Set up a mutation observer to hide object inspector as soon as it's created
-        const observer = new MutationObserver(function (mutations) {
-          mutations.forEach(function (mutation) {
-            if (mutation.type === 'childList') {
-              mutation.addedNodes.forEach(function (node) {
-                if (node.nodeType === 1 && node.id === 'objectInspector') {
-                  // Immediately hide the object inspector
-                  node.style.display = 'none';
-                  node.style.opacity = '0';
-                  node.style.visibility = 'hidden';
-                  node.style.pointerEvents = 'none';
-                  node.style.position = 'absolute';
-                  node.style.left = '-9999px';
-                  node.style.top = '-9999px';
-                  node.style.zIndex = '-9999';
-                  node.classList.remove('visible');
-                  node.classList.remove('showUI');
-                  console.log(
-                    'Object inspector hidden immediately upon creation'
-                  );
-                }
-              });
-            }
-          });
-        });
+    <title>Gravitas — Interactive Black Hole & Gravity Sandbox</title>
+    <meta
+      name="description"
+      content="Gravitas is a browser-based astrophysics sandbox: build star systems, collide black holes, and watch real orbital mechanics, tidal disruption and gravitational waves unfold in real time."
+    />
+    <meta name="author" content="Gravitas" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="canonical" href="https://gravitas-sim.online/" />
 
-        // Start observing as soon as possible
-        if (document.body) {
-          observer.observe(document.body, { childList: true, subtree: true });
-        } else {
-          document.addEventListener('DOMContentLoaded', function () {
-            observer.observe(document.body, { childList: true, subtree: true });
-          });
-        }
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Gravitas" />
+    <meta property="og:url" content="https://gravitas-sim.online/" />
+    <meta
+      property="og:title"
+      content="Gravitas — Interactive Black Hole & Gravity Sandbox"
+    />
+    <meta
+      property="og:description"
+      content="Build star systems, collide black holes, and watch real orbital mechanics unfold in your browser. 36 scenarios, from the Solar System to GW150914."
+    />
+    <meta
+      property="og:image"
+      content="https://gravitas-sim.online/social-card.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Two black holes orbiting with glowing accretion disks against a starfield"
+    />
 
-        // Also hide any existing object inspector
-        document.addEventListener('DOMContentLoaded', function () {
-          const objectInspector = document.getElementById('objectInspector');
-          if (objectInspector) {
-            objectInspector.style.display = 'none';
-            objectInspector.style.opacity = '0';
-            objectInspector.style.visibility = 'hidden';
-            objectInspector.style.pointerEvents = 'none';
-            objectInspector.style.position = 'absolute';
-            objectInspector.style.left = '-9999px';
-            objectInspector.style.top = '-9999px';
-            objectInspector.style.zIndex = '-9999';
-            objectInspector.classList.remove('visible');
-            objectInspector.classList.remove('showUI');
-            console.log('Object inspector hidden on DOMContentLoaded');
-          }
-        });
-      })();
-    </script>
-    <!-- Google Fonts: Inter -->
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Gravitas — Interactive Black Hole & Gravity Sandbox"
+    />
+    <meta
+      name="twitter:description"
+      content="Build star systems, collide black holes, and watch real orbital mechanics unfold in your browser."
+    />
+    <meta
+      name="twitter:image"
+      content="https://gravitas-sim.online/social-card.png"
+    />
+    <!-- Fonts: preconnect first so the CSS request starts immediately -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <script type="importmap">
@@ -74,324 +64,44 @@
         }
       }
     </script>
-    <style>
-      html,
-      body {
-        font-family: 'Inter', sans-serif !important;
-        background: #0d0d1a;
-      }
-      .ui-container,
-      #settingsPanel,
-      #bhMassesModal,
-      #objectInspector,
-      .settings-content,
-      .settings-header,
-      .settings-footer,
-      .bh-masses-header,
-      .bh-masses-footer,
-      .inspector-header,
-      .inspector-content,
-      .mobile-instructions-content,
-      .preset-info {
-        border-radius: 8px !important;
-        box-shadow:
-          0 4px 24px rgba(0, 0, 0, 0.1),
-          0 1.5px 6px rgba(0, 0, 0, 0.08);
-      }
-      .ui-button,
-      button,
-      select,
-      input,
-      .toggle-button {
-        font-family: 'Inter', sans-serif !important;
-        border-radius: 8px !important;
-        transition:
-          box-shadow 0.2s,
-          background 0.2s,
-          transform 0.18s cubic-bezier(0.4, 1.4, 0.6, 1),
-          color 0.2s;
-      }
-      .ui-button,
-      button,
-      .toggle-button {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        background: #23233a;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-      }
-      .ui-button:hover,
-      button:hover,
-      .toggle-button:hover {
-        background: #2e2e4d;
-        color: #fff;
-        transform: scale(1.045);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.13);
-      }
-      .ui-button:active,
-      button:active,
-      .toggle-button:active {
-        background: #23233a;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        transform: scale(0.98);
-      }
-
-      /* Enhanced toggle button styling */
-      .toggle-button {
-        position: relative;
-        overflow: hidden;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        min-width: 60px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      }
-
-      .toggle-button[data-state='on'] {
-        background: linear-gradient(135deg, #22c55e, #16a34a) !important;
-        color: #ffffff !important;
-        box-shadow:
-          0 4px 12px rgba(34, 197, 94, 0.3),
-          0 2px 8px rgba(0, 0, 0, 0.15) !important;
-        border: 1px solid rgba(34, 197, 94, 0.4) !important;
-      }
-
-      .toggle-button[data-state='off'] {
-        background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-        color: #ffffff !important;
-        box-shadow:
-          0 4px 12px rgba(239, 68, 68, 0.3),
-          0 2px 8px rgba(0, 0, 0, 0.15) !important;
-        border: 1px solid rgba(239, 68, 68, 0.4) !important;
-      }
-
-      .toggle-button[data-state='on']:hover {
-        background: linear-gradient(135deg, #16a34a, #15803d) !important;
-        transform: scale(1.05) !important;
-        box-shadow:
-          0 6px 20px rgba(34, 197, 94, 0.4),
-          0 4px 12px rgba(0, 0, 0, 0.2) !important;
-      }
-
-      .toggle-button[data-state='off']:hover {
-        background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
-        transform: scale(1.05) !important;
-        box-shadow:
-          0 6px 20px rgba(239, 68, 68, 0.4),
-          0 4px 12px rgba(0, 0, 0, 0.2) !important;
-      }
-
-      .toggle-button[data-state='on']:active {
-        background: linear-gradient(135deg, #15803d, #166534) !important;
-        transform: scale(0.98) !important;
-        box-shadow:
-          0 2px 8px rgba(34, 197, 94, 0.3),
-          0 1px 4px rgba(0, 0, 0, 0.15) !important;
-      }
-
-      .toggle-button[data-state='off']:active {
-        background: linear-gradient(135deg, #b91c1c, #991b1b) !important;
-        transform: scale(0.98) !important;
-        box-shadow:
-          0 2px 8px rgba(239, 68, 68, 0.3),
-          0 1px 4px rgba(0, 0, 0, 0.15) !important;
-      }
-
-      /* Collapsible sections styling */
-      .settings-section {
-        margin-bottom: 20px;
-        border: 1px solid rgba(0, 170, 255, 0.2);
-        border-radius: 12px;
-        overflow: hidden;
-        background: rgba(0, 0, 0, 0.1);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .settings-section-header {
-        padding: 16px 20px;
-        background: linear-gradient(
-          135deg,
-          rgba(0, 170, 255, 0.1),
-          rgba(0, 170, 255, 0.05)
-        );
-        border-bottom: 1px solid rgba(0, 170, 255, 0.2);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: all 0.2s ease;
-        user-select: none;
-      }
-
-      .settings-section-header:hover {
-        background: linear-gradient(
-          135deg,
-          rgba(0, 170, 255, 0.15),
-          rgba(0, 170, 255, 0.08)
-        );
-      }
-
-      .settings-section-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--primary-color);
-        text-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
-        margin: 0;
-      }
-
-      .settings-section-toggle {
-        width: 20px;
-        height: 20px;
-        position: relative;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        color: var(--primary-color);
-        font-size: 18px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .settings-section.collapsed .settings-section-toggle {
-        transform: rotate(-90deg);
-      }
-
-      .settings-section-content {
-        padding: 20px;
-        max-height: 1000px;
-        opacity: 1;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-      }
-
-      .settings-section.collapsed .settings-section-content {
-        max-height: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        opacity: 0;
-      }
-
-      /* Responsive collapsible sections */
-      @media (max-width: 768px) {
-        .settings-section-header {
-          padding: 14px 16px;
-        }
-
-        .settings-section-title {
-          font-size: 16px;
-        }
-
-        .settings-section-content {
-          padding: 16px;
-        }
-
-        .settings-section-toggle {
-          width: 18px;
-          height: 18px;
-          font-size: 16px;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .settings-section-header {
-          padding: 12px 14px;
-        }
-
-        .settings-section-title {
-          font-size: 15px;
-        }
-
-        .settings-section-content {
-          padding: 14px;
-        }
-
-        .settings-section-toggle {
-          width: 16px;
-          height: 16px;
-          font-size: 14px;
-        }
-      }
-      .settings-header,
-      .settings-footer,
-      .settings-content,
-      .settings-grid,
-      .preset-info {
-        font-family: 'Inter', sans-serif !important;
-      }
-      /* Global button gradient styling */
-      button,
-      .ui-button {
-        background: linear-gradient(
-          135deg,
-          #4facfe 0%,
-          #00f2fe 100%
-        ) !important;
-        color: white !important;
-        border-radius: 10px !important;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-        font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
-        padding: 8px 16px !important;
-        transition: all 0.3s ease !important;
-        border: none !important;
-        cursor: pointer !important;
-      }
-
-      button:hover,
-      .ui-button:hover {
-        background: linear-gradient(
-          315deg,
-          #3a8be8 0%,
-          #00d0e0 100%
-        ) !important;
-        box-shadow:
-          0 6px 12px rgba(0, 0, 0, 0.3),
-          0 0 10px rgba(0, 255, 255, 0.5) !important;
-        transform: translateY(-1px) !important;
-        transition: all 0.3s ease !important;
-      }
-
-      button:active,
-      .ui-button:active {
-        background: linear-gradient(
-          135deg,
-          #2a8bfe 0%,
-          #00d0e0 100%
-        ) !important;
-        box-shadow:
-          0 2px 4px rgba(0, 0, 0, 0.2),
-          0 0 5px rgba(0, 255, 255, 0.3) !important;
-        transform: translateY(0) !important;
-        transition: all 0.3s ease !important;
-      }
-
-      /* Remove default outlines for a cleaner look, but keep focus visible for accessibility */
-      button:focus,
-      .ui-button:focus,
-      .toggle-button:focus,
-      select:focus,
-      input:focus {
-        outline: 2px solid #00aaff;
-        outline-offset: 2px;
-      }
-    </style>
-    <link rel="stylesheet" href="css/styles.css?v=2.1" />
+    <link rel="stylesheet" href="css/tokens.css?v=3" />
+    <link rel="stylesheet" href="css/styles.css?v=3" />
+    <link rel="stylesheet" href="css/components.css?v=3" />
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
   <body>
+    <a class="skip-link" href="#mainControls">Skip to controls</a>
+
     <div class="simulation-container">
-      <canvas id="starfieldCanvas" class="sim-canvas"></canvas>
-      <canvas id="simulationCanvas" class="sim-canvas"></canvas>
+      <canvas
+        id="starfieldCanvas"
+        class="sim-canvas"
+        aria-hidden="true"
+      ></canvas>
+      <canvas
+        id="simulationCanvas"
+        class="sim-canvas"
+        role="img"
+        aria-label="Gravitational simulation viewport. Object counts and status are announced in the readout panel."
+      ></canvas>
     </div>
+
+    <!-- Screen-reader announcements for state the canvas cannot convey -->
+    <p
+      id="srStatus"
+      class="visually-hidden"
+      role="status"
+      aria-live="polite"
+    ></p>
 
     <!-- ⚙️ Spacetime viewport -->
     <div
       id="threeViewportContainer"
       class="three-view-container"
       aria-hidden="true"
-      style="display: none;"
+      style="display: none"
     >
       <div class="three-view-toolbar">
         <div class="three-view-meta">
@@ -426,7 +136,7 @@
     <div
       id="lightCurveContainer"
       class="light-curve-container"
-      style="display: none;"
+      style="display: none"
     >
       <div class="light-curve-toolbar">
         <div class="light-curve-meta">
@@ -438,7 +148,9 @@
             id="lightCurveInfoBtn"
             class="light-curve-info-btn"
             title="What is this?"
-          >ⓘ</button>
+          >
+            ⓘ
+          </button>
           <button
             id="clearLightCurve"
             class="light-curve-btn"
@@ -467,6 +179,7 @@
           max="360"
           value="0"
           step="1"
+          title="Rotate the observer around the system. 0° views along the +X axis; the light curve updates live as the viewing geometry changes."
         />
       </div>
       <div class="light-curve-stage">
@@ -475,35 +188,46 @@
       <div class="light-curve-hint">
         Drag the observer handle on the simulation or use the slider above
       </div>
-      <div id="lightCurveInfoOverlay" class="light-curve-info-overlay" style="display: none;">
+      <div
+        id="lightCurveInfoOverlay"
+        class="light-curve-info-overlay"
+        style="display: none"
+      >
         <h4>Transit Photometry</h4>
         <p>
           This chart shows the total brightness of the system as seen by a
-          distant observer. When a planet passes in front of a star along
-          the observer's line of sight, it blocks a fraction of the
-          starlight, producing a characteristic dip called a <strong>transit</strong>.
+          distant observer. When a planet passes in front of a star along the
+          observer's line of sight, it blocks a fraction of the starlight,
+          producing a characteristic dip called a <strong>transit</strong>.
         </p>
         <p>
-          The dip depth is proportional to (R<sub>planet</sub>/R<sub>star</sub>)&sup2;
-          &mdash; a Jupiter-sized planet produces roughly a 1% dip, while
-          an Earth-sized planet produces about 0.008%.
-          The rounded U-shaped bottom comes from <strong>limb darkening</strong>:
-          stars are brighter at their center than at their edges, so the
-          depth varies as the planet crosses the disk.
+          The dip depth is proportional to
+          (R<sub>planet</sub>/R<sub>star</sub>)&sup2; &mdash; a Jupiter-sized
+          planet produces roughly a 1% dip, while an Earth-sized planet produces
+          about 0.008%. The rounded U-shaped bottom comes from
+          <strong>limb darkening</strong>: stars are brighter at their center
+          than at their edges, so the depth varies as the planet crosses the
+          disk.
         </p>
         <p>
           A subtle <strong>secondary eclipse</strong> occurs when the planet
           passes behind the star, briefly hiding its reflected and thermal
           light. Between eclipses, the smooth <strong>phase curve</strong>
-          rises and falls as more or less of the planet's illuminated
-          hemisphere faces the observer.
+          rises and falls as more or less of the planet's illuminated hemisphere
+          faces the observer.
         </p>
         <p>
           This is the primary detection method used by NASA's
           <em>Kepler</em> and <em>TESS</em> missions, responsible for
           discovering thousands of exoplanets.
         </p>
-        <button class="lc-info-close" id="lightCurveInfoClose">Got it</button>
+        <button
+          class="lc-info-close"
+          id="lightCurveInfoClose"
+          title="Close this explanation"
+        >
+          Got it
+        </button>
       </div>
     </div>
 
@@ -544,7 +268,11 @@
         <div class="scenario-info-header">
           <h3 id="scenarioInfoTitle">Scenario Loaded</h3>
           <div class="scenario-info-actions">
-            <button id="closeScenarioInfo" class="scenario-info-close">
+            <button
+              id="closeScenarioInfo"
+              class="scenario-info-close"
+              title="Dismiss this scenario description"
+            >
               &times;
             </button>
           </div>
@@ -564,66 +292,181 @@
         <p>• <strong>Drag without adding:</strong> Pan the view</p>
         <p>• <strong>Pinch:</strong> Zoom in/out</p>
         <p>• <strong>Double tap:</strong> Reset view</p>
-        <button id="closeMobileInstructions" class="ui-button">Got it!</button>
+        <button
+          id="closeMobileInstructions"
+          class="ui-button"
+          title="Dismiss these touch instructions"
+        >
+          Got it!
+        </button>
       </div>
     </div>
 
-    <div class="ui-container">
-      <button id="loadScenarioBtn" class="ui-button">Load Scenario</button>
-      <button id="settingsBtn" class="ui-button">Settings</button>
-      <button id="refreshScenarioBtn" class="ui-button">
-        Refresh Scenario
-      </button>
-      <button id="resetAllBtn" class="ui-button">Reset to Default</button>
-      <button id="cleanSimBtn" class="ui-button">Blank Simulation</button>
-      <button id="saveBtn" class="ui-button">Save State</button>
-      <button id="loadBtn" class="ui-button">Load State</button>
-      <button
-        id="screenshotBtn"
-        class="ui-button"
-        title="Take a screenshot (or press P)"
-      >
-        📸 Screenshot
-      </button>
-      <button
-        id="toggle3DView"
-        class="ui-button secondary"
-        aria-pressed="false"
-      >
-        Spacetime View
-      </button>
-      <button
-        id="toggleLightCurve"
-        class="ui-button secondary"
-        aria-pressed="false"
-      >
-        Light Curve
-      </button>
-
-      <div class="speed-controls">
-        <button
-          id="slowDownBtn"
-          class="ui-button speed-btn"
-          title="Decrease speed by 0.5x"
-          aria-label="Decrease speed"
-        >
-          ⏪ Slow
-        </button>
-        <span id="speedDisplay" class="speed-display">1.0x</span>
-        <button
-          id="speedUpBtn"
-          class="ui-button speed-btn"
-          title="Increase speed by 0.5x"
-          aria-label="Increase speed"
-        >
-          Fast ⏩
-        </button>
+    <div
+      id="mainControls"
+      class="ui-container"
+      role="toolbar"
+      aria-label="Simulation controls"
+      tabindex="-1"
+    >
+      <div class="rail-group">
+        <p class="rail-label" id="railScenario">Scenario</p>
+        <div role="group" aria-labelledby="railScenario">
+          <button
+            id="loadScenarioBtn"
+            class="ui-button"
+            title="Browse all 37 built-in scenarios — from the Solar System to the GW150914 black-hole merger. Search by name or keyword."
+          >
+            Load Scenario
+          </button>
+          <button
+            id="settingsBtn"
+            class="ui-button"
+            title="Open the full settings panel: object counts, gravity, visuals and performance. Structural changes restart the simulation; the rest apply live."
+          >
+            Settings
+          </button>
+          <button
+            id="refreshScenarioBtn"
+            class="ui-button"
+            title="Rebuild the current scenario from scratch, discarding anything you have added or changed."
+          >
+            Refresh Scenario
+          </button>
+          <button
+            id="resetAllBtn"
+            class="ui-button"
+            title="Restore every setting to its factory default and load the Binary Black Hole scenario."
+          >
+            Reset to Default
+          </button>
+          <button
+            id="cleanSimBtn"
+            class="ui-button"
+            title="Clear the universe to empty space so you can build a system from nothing by clicking and dragging."
+          >
+            Blank Simulation
+          </button>
+        </div>
       </div>
 
-      <button id="resetViewBtn" class="ui-button">Reset View</button>
+      <div class="rail-group">
+        <p class="rail-label" id="railState">State</p>
+        <div role="group" aria-labelledby="railState">
+          <button
+            id="saveBtn"
+            class="ui-button"
+            title="Save the current objects, settings and view to this browser. Only one save slot; saving again overwrites it."
+          >
+            Save State
+          </button>
+          <button
+            id="loadBtn"
+            class="ui-button"
+            title="Restore the simulation you last saved in this browser."
+          >
+            Load State
+          </button>
+          <button
+            id="undoBtn"
+            class="ui-button"
+            disabled
+            title="Remove the last object you placed (Z)"
+          >
+            Undo Placement
+          </button>
+        </div>
+      </div>
+
+      <div class="rail-group">
+        <p class="rail-label" id="railView">View</p>
+        <div role="group" aria-labelledby="railView">
+          <label class="rail-field" for="themeSelect">
+            <span>Theme</span>
+            <select
+              id="themeSelect"
+              aria-label="Colour theme"
+              title="Change the interface colour scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
+            ></select>
+          </label>
+          <button
+            id="unitToggle"
+            class="toggle-button rail-toggle"
+            data-state="on"
+            title="Switch between physical and simulation units (U)"
+          >
+            Physical units
+          </button>
+        </div>
+      </div>
+
+      <div class="rail-group">
+        <p class="rail-label" id="railTools">Tools</p>
+        <div role="group" aria-labelledby="railTools">
+          <button
+            id="screenshotBtn"
+            class="ui-button"
+            title="Take a screenshot (or press P)"
+          >
+            📸 Screenshot
+          </button>
+          <button
+            id="toggle3DView"
+            class="ui-button secondary"
+            aria-pressed="false"
+            title="Open a 3D view of the gravity well — a rubber-sheet grid that dips around each mass. Drag to orbit, scroll to zoom."
+          >
+            Spacetime View
+          </button>
+          <button
+            id="toggleLightCurve"
+            class="ui-button secondary"
+            aria-pressed="false"
+            title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction — planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
+          >
+            Light Curve
+          </button>
+
+          <div class="speed-controls">
+            <button
+              id="slowDownBtn"
+              class="ui-button speed-btn"
+              title="Decrease speed by 0.5x"
+              aria-label="Decrease speed"
+            >
+              ⏪ Slow
+            </button>
+            <span id="speedDisplay" class="speed-display">1.0x</span>
+            <button
+              id="speedUpBtn"
+              class="ui-button speed-btn"
+              title="Increase speed by 0.5x"
+              aria-label="Increase speed"
+            >
+              Fast ⏩
+            </button>
+          </div>
+
+          <button
+            id="resetViewBtn"
+            class="ui-button"
+            title="Recentre the camera and return to 1× zoom (R)."
+          >
+            Reset View
+          </button>
+          <button
+            id="shortcutsBtn"
+            class="ui-button"
+            title="Keyboard shortcuts (?)"
+          >
+            Shortcuts
+          </button>
+        </div>
+      </div>
+
       <button
         id="objectTypeBtn"
-        class="ui-button primary"
+        class="ui-button is-primary rail-primary"
         title="Click to change what type of object you insert"
         aria-label="Change object insertion type"
       >
@@ -631,91 +474,150 @@
       </button>
     </div>
 
+    <!-- Transport bar: playback and timeline scrubbing -->
+    <div
+      id="timelineBar"
+      class="timeline-bar"
+      role="group"
+      aria-label="Playback and timeline"
+    >
+      <button
+        id="timelinePlay"
+        class="timeline-btn"
+        aria-label="Pause simulation"
+        title="Pause (Space)"
+      >
+        ❚❚
+      </button>
+      <button
+        id="timelineStepBack"
+        class="timeline-btn"
+        aria-label="Step back one frame"
+        title="Step back (,)"
+      >
+        ⏮
+      </button>
+      <button
+        id="timelineStepFwd"
+        class="timeline-btn"
+        aria-label="Step forward one frame"
+        title="Step forward (.)"
+      >
+        ⏭
+      </button>
+
+      <input
+        id="timelineScrubber"
+        class="timeline-scrubber"
+        type="range"
+        min="0"
+        max="1"
+        value="1"
+        step="1"
+        disabled
+        aria-label="Scrub through recorded simulation history"
+        title="Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live."
+      />
+
+      <span id="timelineTime" class="timeline-time numeric">0 s</span>
+      <button
+        id="timelineLive"
+        class="timeline-btn timeline-live"
+        hidden
+        title="Return to live (L)"
+      >
+        ● LIVE
+      </button>
+    </div>
+
     <!-- Mobile Menu Toggle -->
-    <button id="mobileMenuToggle" class="mobile-menu-toggle">
+    <button
+      id="mobileMenuToggle"
+      class="mobile-menu-toggle"
+      aria-label="Open controls menu"
+      aria-controls="mainControls"
+      aria-expanded="false"
+      title="Show the simulation controls"
+    >
       <span class="hamburger"></span>
       <span class="hamburger"></span>
       <span class="hamburger"></span>
     </button>
-
-    <!-- Mobile Menu Dropdown -->
-    <div id="mobileMenuDropdown" class="mobile-menu-dropdown">
-      <button id="mobileLoadScenarioBtn" class="ui-button">
-        Load Scenario
-      </button>
-      <button id="mobileSettingsBtn" class="ui-button">Settings</button>
-      <button id="mobileRefreshScenarioBtn" class="ui-button">
-        Refresh Scenario
-      </button>
-      <button id="mobileResetAllBtn" class="ui-button">Reset to Default</button>
-      <button id="mobileCleanSimBtn" class="ui-button">Blank Simulation</button>
-      <button id="mobileSaveBtn" class="ui-button">Save State</button>
-      <button id="mobileLoadBtn" class="ui-button">Load State</button>
-      <button id="mobileScreenshotBtn" class="ui-button">📸 Screenshot</button>
-      <button id="mobileToggle3DViewBtn" class="ui-button" aria-pressed="false">
-        Spacetime View
-      </button>
-      <button id="mobileToggleLightCurve" class="ui-button" aria-pressed="false">
-        Light Curve
-      </button>
-
-      <div class="speed-controls">
-        <button id="mobileSlowDownBtn" class="ui-button speed-btn">
-          ⏪ Slow
-        </button>
-        <span id="mobileSpeedDisplay" class="speed-display">1.0x</span>
-        <button id="mobileSpeedUpBtn" class="ui-button speed-btn">
-          Fast ⏩
-        </button>
-      </div>
-
-      <button id="mobileResetViewBtn" class="ui-button">Reset View</button>
-      <div class="mobile-object-type-controls">
-        <button id="mobileObjectTypePrevBtn" class="ui-button object-type-nav">
-          ◀
-        </button>
-        <button id="mobileObjectTypeBtn" class="ui-button primary">
-          ⭐ Add Stars
-        </button>
-        <button id="mobileObjectTypeNextBtn" class="ui-button object-type-nav">
-          ▶
-        </button>
-      </div>
-    </div>
 
     <!-- Scenario List Modal -->
     <div id="scenarioListModal" class="hidden">
       <div id="scenarioListContent">
         <div class="scenario-list-header">
           <h3>Select a Scenario</h3>
-          <button id="closeScenarioList" class="ui-button">&times;</button>
+          <button
+            id="closeScenarioList"
+            class="ui-button"
+            title="Close the scenario browser"
+          >
+            &times;
+          </button>
         </div>
         <button
           class="floating-close-chip"
           id="scenarioListCloseChip"
           aria-label="Close"
+          title="Close the scenario browser"
         >
           ✕
         </button>
-        <div id="scenarioListItems"></div>
+        <div class="scenario-search-wrap">
+          <span class="scenario-search-icon" aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            id="scenarioSearch"
+            placeholder="Search scenarios…"
+            autocomplete="off"
+            aria-label="Search scenarios"
+            title='Filter scenarios by name or description — try "neutron", "merger" or "kepler". Enter loads the first match.'
+          />
+        </div>
+        <div id="scenarioListItems" role="list"></div>
+        <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden>
+          No scenarios match that search.
+        </p>
       </div>
     </div>
 
     <div id="settingsPanel" class="hidden">
       <div class="settings-header">Simulation Settings</div>
+      <button
+        class="floating-close-chip"
+        id="settingsCloseChip"
+        aria-label="Close"
+        title="Close settings without applying changes"
+      >
+        ✕
+      </button>
       <div class="settings-content">
         <div id="presetInfo" class="preset-info"></div>
 
         <div id="settingsGrid" class="settings-grid"></div>
       </div>
       <div class="settings-footer">
-        <button id="settingsApply" class="ui-button footer-button">
+        <button
+          id="settingsApply"
+          class="ui-button footer-button"
+          title="Apply these settings. Changing object counts, placement or scenario rebuilds the simulation; everything else takes effect immediately."
+        >
           Apply & Restart
         </button>
-        <button id="settingsReset" class="ui-button footer-button">
+        <button
+          id="settingsReset"
+          class="ui-button footer-button"
+          title="Reset every setting in this panel back to its default value (does not apply until you press Apply)."
+        >
           Reset to Defaults
         </button>
-        <button id="settingsCancel" class="ui-button footer-button">
+        <button
+          id="settingsCancel"
+          class="ui-button footer-button"
+          title="Discard these changes and close the panel."
+        >
           Cancel
         </button>
         <button
@@ -730,18 +632,25 @@
 
     <div id="bhMassesModal" class="hidden">
       <div class="bh-masses-header">
-        Set Individual Black Hole Masses (M<sub>sun</sub>)
+        Set Individual Black Hole Masses (M<sub class="solar-sub">☉</sub>)
       </div>
       <button
         class="floating-close-chip"
         id="bhMassesCloseChip"
         aria-label="Close"
+        title="Close without changing the masses"
       >
         ✕
       </button>
       <div id="bhMassesContent" class="bh-masses-content"></div>
       <div class="bh-masses-footer">
-        <button id="bhMassesDone" class="ui-button">Done</button>
+        <button
+          id="bhMassesDone"
+          class="ui-button"
+          title="Confirm these black hole masses and close"
+        >
+          Done
+        </button>
       </div>
     </div>
 
@@ -766,15 +675,24 @@
         class="floating-close-chip"
         id="inspectorCloseChip"
         aria-label="Close"
+        title="Close the object inspector (Esc)"
       >
         ✕
       </button>
       <div class="inspector-tabs">
-        <button class="inspector-tab active" data-tab="details">
+        <button
+          class="inspector-tab active"
+          data-tab="details"
+          title="Physical properties of the selected object: mass, radius, temperature, orbit and composition"
+        >
           <span class="tab-icon">📋</span>
           <span class="tab-text">Details</span>
         </button>
-        <button class="inspector-tab" data-tab="energy">
+        <button
+          class="inspector-tab"
+          data-tab="energy"
+          title="Kinetic, potential and total energy of this object over time. A flat total means a stable orbit; a rising one means the orbit is decaying or the object is being ejected."
+        >
           <span class="tab-icon">⚡</span>
           <span class="tab-text">Energy</span>
         </button>
@@ -790,127 +708,54 @@
     </div>
 
     <!-- Tutorial Button -->
-    <button id="tutorialBtn" class="ui-button tutorial-btn">?</button>
+    <button
+      id="tutorialBtn"
+      class="ui-button tutorial-btn"
+      title="Open the guided tour of the simulation controls. Drag the panel to move it."
+    >
+      ?
+    </button>
 
-    <!-- Tutorial Popup (initially hidden) -->
-    <div id="tutorialPopup" class="tutorial-popup" style="display: none">
-      <div
-        id="tutorialPopupBody"
-        style="
-          padding: 24px;
-          font-size: 1.05rem;
-          min-height: 70px;
-          line-height: 1.6;
-        "
-      ></div>
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 24px 16px 24px;
-          border-top: 1px solid rgba(0, 170, 255, 0.1);
-          background: rgba(0, 0, 0, 0.03);
-        "
-      >
-        <button id="tutorialPrevBtn" class="ui-button" style="min-width: 90px">
-          Previous
+    <!-- Guided tour (initially hidden) -->
+    <div
+      id="tutorialPopup"
+      class="tutorial-popup"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Guided tour"
+      aria-hidden="true"
+      style="display: none"
+    >
+      <div class="tutorial-header">
+        <span class="tutorial-eyebrow">Guided tour</span>
+        <button
+          id="tutorialCloseBtn"
+          class="tutorial-close"
+          aria-label="Close the tour"
+          title="Close the tour (Esc)"
+        >
+          ✕
         </button>
-        <button id="tutorialNextBtn" class="ui-button" style="min-width: 90px">
+      </div>
+      <div id="tutorialPopupBody" class="tutorial-body"></div>
+      <div class="tutorial-footer">
+        <button
+          id="tutorialPrevBtn"
+          class="ui-button"
+          title="Back to the previous step (left arrow)"
+        >
+          Back
+        </button>
+        <button
+          id="tutorialNextBtn"
+          class="ui-button is-primary"
+          title="On to the next step (right arrow)"
+        >
           Next
         </button>
       </div>
     </div>
 
-    <style>
-      /* Responsive and draggable tutorial popup/button styles */
-      .tutorial-btn {
-        position: fixed;
-        left: 2vw;
-        bottom: 2vw;
-        z-index: 1001;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
-        padding: 12px 18px;
-        font-size: 1.1rem;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.5s cubic-bezier(0.4, 1.4, 0.6, 1);
-      }
-      .tutorial-btn.showUI {
-        opacity: 1;
-        pointer-events: auto;
-      }
-      .tutorial-popup {
-        position: fixed;
-        left: 2vw;
-        bottom: 8vw;
-        width: 340px;
-        min-width: 0;
-        max-width: 340px;
-        max-height: 80vh;
-        background: #18182a;
-        color: #fff;
-        border-radius: 14px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
-        padding: 0;
-        overflow: hidden;
-        font-family: 'Inter', sans-serif;
-        z-index: 1002;
-        touch-action: none;
-        user-select: none;
-        transition:
-          left 0.2s,
-          bottom 0.2s,
-          right 0.2s,
-          top 0.2s,
-          width 0.2s;
-      }
-      .tutorial-popup-header {
-        cursor: grab;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-      @media (max-width: 600px) {
-        .tutorial-btn {
-          left: 2vw;
-          transform: none;
-          bottom: 2vw;
-          width: 44px;
-          height: 44px;
-        }
-        .tutorial-popup {
-          left: 2vw;
-          bottom: 10vw;
-          transform: none;
-          width: 90vw;
-          min-width: 0;
-          max-width: 90vw;
-          max-height: 70vh;
-          border-radius: 10px;
-        }
-      }
-      @media (max-width: 400px) {
-        .tutorial-btn {
-          left: 1vw;
-          bottom: 1vw;
-        }
-        .tutorial-popup {
-          left: 1vw;
-          bottom: 8vw;
-          width: 98vw;
-          max-width: 100vw;
-          border-radius: 8px;
-        }
-      }
-    </style>
     <!-- Immediately hide object inspector before any other scripts load -->
     <script>
       (function () {
@@ -932,77 +777,40 @@
     </script>
     <!-- JavaScript modules in dependency order -->
     <!-- Chart.js for energy charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
     <script type="module" src="js/render.js"></script>
     <script type="module" src="js/ui.js"></script>
     <script type="module" src="js/lightCurve.js"></script>
     <script type="module" src="js/main.js"></script>
-    <div
-      id="attribution"
-      class="attribution-fade"
-      style="
-        position: fixed;
-        right: 1vw;
-        bottom: 1vw;
-        z-index: 10;
-        font-size: 0.85rem;
-        color: #fff;
-        pointer-events: none;
-        font-family: 'Inter', sans-serif;
-        text-align: right;
-        user-select: none;
-        opacity: 0;
-        transition: opacity 0.5s cubic-bezier(0.4, 1.4, 0.6, 1);
-      "
-    >
-      © 2025
+    <footer id="attribution" class="attribution attribution-fade">
+      <span>&copy; 2025</span>
       <a
         href="https://carlziegler.space/"
-        style="
-          color: #fff;
-          text-decoration: underline;
-          opacity: 0.7;
-          pointer-events: auto;
-        "
         target="_blank"
         rel="noopener"
+        title="Carl Ziegler — author of Gravitas"
         >Carl Ziegler</a
       >
-      · Open source (MIT) ·
+      <span class="attribution-sep" aria-hidden="true">·</span>
+      <span>MIT</span>
+      <span class="attribution-sep" aria-hidden="true">·</span>
       <a
         href="https://github.com/gravitas-sim/gravitas-sim.github.io"
-        style="
-          color: #fff;
-          text-decoration: underline;
-          opacity: 0.7;
-          pointer-events: auto;
-        "
         target="_blank"
         rel="noopener"
-        >Github</a
+        title="Browse or contribute to the source code on GitHub"
+        >GitHub</a
       >
-      ·
+      <span class="attribution-sep" aria-hidden="true">·</span>
       <a
         href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf"
-        style="
-          color: #fff;
-          text-decoration: underline;
-          opacity: 0.7;
-          pointer-events: auto;
-        "
         target="_blank"
         rel="noopener"
-        >User Manual</a
+        title="Open the Gravitas user manual (PDF)"
+        >Manual</a
       >
-    </div>
-    <style>
-      #attribution.attribution-fade.showUI {
-        opacity: 0.38 !important;
-        pointer-events: auto !important;
-        transition: opacity 0.5s cubic-bezier(0.4, 1.4, 0.6, 1);
-      }
-    </style>
+    </footer>
   </body>
 </html>
