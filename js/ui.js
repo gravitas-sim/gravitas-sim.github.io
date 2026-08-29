@@ -301,6 +301,8 @@ if (typeof document !== 'undefined') {
 
 // Global variables
 const SAVE_KEY = 'gravitas_simulation_save';
+// Hold this long on empty canvas to arm object placement on touch devices.
+const LONG_PRESS_MS = 380;
 
 const DEFAULT_SETTINGS = {
   preset_scenario: 'Binary BH',
@@ -6905,17 +6907,18 @@ canvas.addEventListener(
       const touch = e.touches[0];
       const touchStartPos = { x: touch.clientX, y: touch.clientY };
 
-      // Check if touch is in UI area - improved detection with buffer zone
-      const uiContainer = document.querySelector('.ui-container');
-      const uiRect = uiContainer.getBoundingClientRect();
-      const bufferZone = 5; // 5px buffer around UI elements
-
-      // Check if touch is within the UI container bounds (including buffer zone)
+      // Was: a bounding-box test against .ui-container. On mobile that element
+      // is the closed menu — still laid out, just visibility:hidden — so its
+      // 340x697 rect swallowed 78% of the screen and the canvas was mostly
+      // untouchable. elementFromPoint only reports what is actually hit-
+      // testable, so a hidden panel no longer blocks anything.
+      const hit = document.elementFromPoint(touchStartPos.x, touchStartPos.y);
       if (
-        touchStartPos.x >= uiRect.left - bufferZone &&
-        touchStartPos.x <= uiRect.right + bufferZone &&
-        touchStartPos.y >= uiRect.top - bufferZone &&
-        touchStartPos.y <= uiRect.bottom + bufferZone
+        hit &&
+        hit !== canvas &&
+        hit.closest(
+          'button, input, select, a, [role="dialog"], .ui-container, #overlay, .timeline-bar'
+        )
       ) {
         return;
       }
@@ -6939,21 +6942,30 @@ canvas.addEventListener(
         return;
       }
 
+      // A fresh touch must not inherit the previous one's position, or the
+      // first move jumps by the distance between them.
+      state.lastTouchPos = touchStartPos;
+
       if (SETTINGS.interactive_add) {
-        // Validate world coordinates before proceeding
-        if (
-          isNaN(worldPos.x) ||
-          isNaN(worldPos.y) ||
-          !isFinite(worldPos.x) ||
-          !isFinite(worldPos.y)
-        ) {
+        if (!isFinite(worldPos.x) || !isFinite(worldPos.y)) {
           console.warn('Invalid world coordinates:', worldPos);
           return;
         }
 
-        state.adding_mass = true;
-        state.add_start_screen = touchStartPos;
-        state.add_start_world = worldPos;
+        // Touch drag pans, the way every map behaves. Placement is armed by a
+        // long press instead — previously a single finger could only ever
+        // place an object, so the view could not be panned at all on a phone.
+        state.touchHoldTimer = setTimeout(() => {
+          if (!state.touch_active) return;
+          state.adding_mass = true;
+          state.isDragging = true;
+          state.add_start_screen = touchStartPos;
+          state.add_start_world = worldPos;
+          state.dragStart = { ...worldPos };
+          state.dragCurrent = { ...worldPos };
+          if (navigator.vibrate) navigator.vibrate(12);
+          window.dispatchEvent(new CustomEvent('gravitasPlacementArmed'));
+        }, LONG_PRESS_MS);
       }
     }
   },
@@ -6970,7 +6982,22 @@ canvas.addEventListener(
       const touch = e.touches[0];
       const currentPos = { x: touch.clientX, y: touch.clientY };
 
-      if (!state.adding_mass) {
+      // Moving means this is a drag, not a hold: cancel the pending arm.
+      if (state.touchHoldTimer && !state.adding_mass) {
+        const moved = Math.hypot(
+          currentPos.x - (state.add_start_screen?.x ?? currentPos.x),
+          currentPos.y - (state.add_start_screen?.y ?? currentPos.y)
+        );
+        if (moved > 10) {
+          clearTimeout(state.touchHoldTimer);
+          state.touchHoldTimer = null;
+        }
+      }
+
+      if (state.adding_mass) {
+        state.dragCurrent = screen_to_world(currentPos);
+        updateOrbitHelper(false);
+      } else {
         // Pan the view
         const deltaX = currentPos.x - (state.lastTouchPos?.x || currentPos.x);
         const deltaY = currentPos.y - (state.lastTouchPos?.y || currentPos.y);
@@ -6980,6 +7007,13 @@ canvas.addEventListener(
 
       state.lastTouchPos = currentPos;
     } else if (touchCount === 2) {
+      // A second finger cancels placement and switches to pinch-zoom.
+      if (state.touchHoldTimer) {
+        clearTimeout(state.touchHoldTimer);
+        state.touchHoldTimer = null;
+      }
+      state.adding_mass = false;
+      state.isDragging = false;
       // Pinch zoom handling
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
@@ -6992,7 +7026,10 @@ canvas.addEventListener(
         const zoomFactor = currentDistance / state.lastTouchDistance;
 
         // Limit the zoom factor per frame to prevent excessive zooming
-        const limitedZoomFactor = Math.max(0.95, Math.min(zoomFactor, 1.05));
+        // Was clamped to +/-5% per frame, which made pinching feel like it
+        // barely responded. A wider clamp still guards against a jump if a
+        // touch is momentarily lost.
+        const limitedZoomFactor = Math.max(0.7, Math.min(zoomFactor, 1.4));
 
         const oldZoom = state.zoom;
         let newZoom = oldZoom * limitedZoomFactor;
@@ -7022,7 +7059,10 @@ canvas.addEventListener(
       state.lastTouchDistance = currentDistance;
     }
   },
-  { passive: true }
+  // Must be non-passive: this handler calls preventDefault to stop the page
+  // rubber-banding while you drag the simulation. As a passive listener the
+  // call was silently ignored.
+  { passive: false }
 );
 
 canvas.addEventListener(
@@ -7085,22 +7125,42 @@ canvas.addEventListener(
           new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
         }
 
-        if (new_obj instanceof Planet) planets.push(new_obj);
-        if (new_obj instanceof StarObject) stars.push(new_obj);
-        if (new_obj instanceof Asteroid) asteroids.push(new_obj);
-        if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
-        if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
-        if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
-        if (new_obj instanceof Comet) asteroids.push(new_obj);
-        if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+        // Comet first, and else-if throughout: this had the same defect as the
+        // mouse path, pushing hand-placed comets into `asteroids`.
+        if (new_obj instanceof Comet) comets.push(new_obj);
+        else if (new_obj instanceof Planet) planets.push(new_obj);
+        else if (new_obj instanceof StarObject) stars.push(new_obj);
+        else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
+        else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
+        else if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
+        else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
+        else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+
+        if (new_obj) {
+          window.dispatchEvent(
+            new CustomEvent('gravitasObjectPlaced', {
+              detail: { object: new_obj },
+            })
+          );
+        }
 
         state.adding_mass = false;
+        state.isDragging = false;
+        state.orbit_helper.preview = null;
       }
 
       state.touch_active = false;
       state.touch_id = null;
       state.lastTouchPos = null;
-      state.lastTouchDistance = 0;
+    }
+
+    // Reset the pinch baseline whenever fewer than two fingers remain, or
+    // lifting one finger of a pinch makes the next one jump.
+    if (touchCount < 2) state.lastTouchDistance = 0;
+
+    if (state.touchHoldTimer) {
+      clearTimeout(state.touchHoldTimer);
+      state.touchHoldTimer = null;
     }
   },
   { passive: false }

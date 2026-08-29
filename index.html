@@ -2,14 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Gravitas — Interactive Black Hole & Gravity Sandbox</title>
     <meta
       name="description"
       content="Gravitas is a browser-based astrophysics sandbox: build star systems, collide black holes, and watch real orbital mechanics, tidal disruption and gravitational waves unfold in real time."
     />
     <meta name="author" content="Gravitas" />
-    <meta name="theme-color" content="#07080f" />
+    <meta name="theme-color" content="#000105" />
     <link rel="canonical" href="https://gravitas-sim.online/" />
 
     <!-- Open Graph -->
@@ -287,11 +290,15 @@
     </div>
     <div id="mobileInstructions">
       <div class="mobile-instructions-content">
-        <h3>Mobile Controls</h3>
-        <p>• <strong>Single tap & drag:</strong> Add object with velocity</p>
-        <p>• <strong>Drag without adding:</strong> Pan the view</p>
-        <p>• <strong>Pinch:</strong> Zoom in/out</p>
-        <p>• <strong>Double tap:</strong> Reset view</p>
+        <h3>Touch controls</h3>
+        <p>• <strong>Drag:</strong> pan the view</p>
+        <p>• <strong>Pinch:</strong> zoom in and out</p>
+        <p>• <strong>Tap an object:</strong> open its details</p>
+        <p>
+          • <strong>Press and hold, then drag:</strong> place a new object — the
+          drag sets its speed and direction
+        </p>
+        <p>• <strong>Double tap:</strong> reset the view</p>
         <button
           id="closeMobileInstructions"
           class="ui-button"

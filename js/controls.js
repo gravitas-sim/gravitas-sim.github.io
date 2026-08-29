@@ -489,6 +489,40 @@ function adjustSpeed(direction) {
 
 // --- Entry point --------------------------------------------------------------
 
+/**
+ * Confirm that a long press has armed object placement on a touch device.
+ * Without this the gesture is invisible: nothing on screen changes until the
+ * finger is released and an object appears.
+ */
+function setupPlacementHint() {
+  let el = null;
+  let timer = null;
+  window.addEventListener('gravitasPlacementArmed', () => {
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'placement-armed-hint';
+      el.setAttribute('role', 'status');
+      document.body.appendChild(el);
+    }
+    el.textContent = `Drag to aim · release to place ${SETTINGS.input_object_type}`;
+    el.classList.add('is-visible');
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => el.classList.remove('is-visible'), 1800);
+  });
+}
+
+/**
+ * Phones get the readout collapsed to its chip on first load: expanded it
+ * covers most of a 375px screen, and the simulation is the point.
+ */
+export function collapseReadoutOnSmallScreens() {
+  if (window.innerWidth > 720) return;
+  const overlay = document.getElementById('overlay');
+  const btn = document.getElementById('overlayMinimize');
+  if (!overlay || !btn || overlay.classList.contains('minimized')) return;
+  btn.click();
+}
+
 /** Initialise every control surface this module owns. */
 export function initControls() {
   initTheme();
@@ -503,6 +537,7 @@ export function initControls() {
   });
   setupTransport();
   setupViewMenu();
+  setupPlacementHint();
   setupScenarioSearch();
   setupShortcuts();
   refreshTransport();

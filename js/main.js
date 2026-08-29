@@ -68,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const { setupOverlayMinimize } = await import('./ui.js');
       setupOverlayMinimize();
 
+      // On a phone the readout starts collapsed — expanded it covers most of
+      // the screen, and the simulation is the point.
+      const { collapseReadoutOnSmallScreens } = await import('./controls.js');
+      collapseReadoutOnSmallScreens();
+
       // Show scenario info box after splash ends
       const scenarioInfoBox = document.getElementById('scenarioInfoBox');
       if (scenarioInfoBox) {

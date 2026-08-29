@@ -19,23 +19,26 @@
 
 @layer tokens {
   :root {
-    /* --- Palette: deep space, cool accent ------------------------------- */
-    --surface-0: #07080f; /* page / canvas backdrop */
-    --surface-1: #0e1120; /* panels */
-    --surface-2: #161a2c; /* raised rows, inputs */
-    --surface-3: #212741; /* hover */
+    /* --- Palette: Midnight (the default) -------------------------------
+       The bare :root carries the default theme so the first paint is already
+       correct. A theme defined only under [data-theme] would flash the wrong
+       palette between first paint and initTheme() running. */
+    --surface-0: #000105; /* page / canvas backdrop */
+    --surface-1: #06080f; /* panels */
+    --surface-2: #0d111c; /* raised rows, inputs */
+    --surface-3: #161c2e; /* hover */
     --surface-inset: rgba(0, 0, 0, 0.25);
 
-    --text-primary: #e9edf7;
-    --text-secondary: #9ba6bf;
+    --text-primary: #f4f7ff;
+    --text-secondary: #a8b2c9;
     --text-muted: #6a7490;
     --text-inverse: #0b0e18;
 
-    --accent: #38bdf8;
-    --accent-strong: #0ea5e9;
+    --accent: #22d3ee;
+    --accent-strong: #06b6d4;
     --accent-deep: #0369a1;
-    --accent-soft: rgba(56, 189, 248, 0.14);
-    --accent-line: rgba(56, 189, 248, 0.28);
+    --accent-soft: rgba(34, 211, 238, 0.16);
+    --accent-line: rgba(34, 211, 238, 0.3);
     --accent-contrast: #04121d;
 
     --success: #34d399;
@@ -55,12 +58,12 @@
     --hue-dwarf: #fef3c7;
 
     /* Simulation backdrop - read by render.js so canvas follows the theme */
-    --space-near: #141833;
-    --space-far: #05060d;
+    --space-near: #080b1c;
+    --space-far: #000004;
 
     /* --- Borders -------------------------------------------------------- */
     --border-subtle: rgba(255, 255, 255, 0.07);
-    --border: rgba(148, 180, 235, 0.16);
+    --border: rgba(160, 200, 255, 0.2);
     --border-strong: rgba(56, 189, 248, 0.34);
 
     /* --- Typography ----------------------------------------------------- */
@@ -165,23 +168,23 @@
   }
 
   /* ---------------------------------------------------------------------
-     Midnight - higher contrast, near-black. Best for a darkened lecture room
-     or a projector.
+     Deep Space - softer blue, slightly lifted surfaces. Was the default; kept
+     as an explicit choice for anyone who prefers less contrast.
      ------------------------------------------------------------------ */
-  :root[data-theme='midnight'] {
-    --surface-0: #000105;
-    --surface-1: #06080f;
-    --surface-2: #0d111c;
-    --surface-3: #161c2e;
-    --text-primary: #f4f7ff;
-    --text-secondary: #a8b2c9;
-    --accent: #22d3ee;
-    --accent-strong: #06b6d4;
-    --accent-soft: rgba(34, 211, 238, 0.16);
-    --accent-line: rgba(34, 211, 238, 0.3);
-    --space-near: #080b1c;
-    --space-far: #000004;
-    --border: rgba(160, 200, 255, 0.2);
+  :root[data-theme='deep'] {
+    --surface-0: #07080f;
+    --surface-1: #0e1120;
+    --surface-2: #161a2c;
+    --surface-3: #212741;
+    --text-primary: #e9edf7;
+    --text-secondary: #9ba6bf;
+    --accent: #38bdf8;
+    --accent-strong: #0ea5e9;
+    --accent-soft: rgba(56, 189, 248, 0.14);
+    --accent-line: rgba(56, 189, 248, 0.28);
+    --space-near: #141833;
+    --space-far: #05060d;
+    --border: rgba(148, 180, 235, 0.16);
   }
 
   /* ---------------------------------------------------------------------

@@ -9,8 +9,12 @@
 const STORAGE_KEY = 'gravitas_theme';
 
 export const THEMES = [
-  { id: 'deep', label: 'Deep Space', hint: 'Default. Balanced dark blue.' },
-  { id: 'midnight', label: 'Midnight', hint: 'Near-black, high contrast.' },
+  {
+    id: 'midnight',
+    label: 'Midnight',
+    hint: 'Default. Near-black, high contrast.',
+  },
+  { id: 'deep', label: 'Deep Space', hint: 'Softer blue, lifted surfaces.' },
   {
     id: 'observatory',
     label: 'Observatory',
@@ -19,7 +23,7 @@ export const THEMES = [
   { id: 'daylight', label: 'Daylight', hint: 'Light UI for bright rooms.' },
 ];
 
-let current = 'deep';
+let current = 'midnight';
 const listeners = new Set();
 
 /** @returns {string} The active theme id */
@@ -31,10 +35,10 @@ export const getTheme = () => current;
  */
 export function setTheme(id) {
   const known = THEMES.some(t => t.id === id);
-  current = known ? id : 'deep';
+  current = known ? id : 'midnight';
 
-  // 'deep' is the bare :root definition, so it carries no attribute.
-  if (current === 'deep')
+  // The default theme is the bare :root definition, so it carries no attribute.
+  if (current === 'midnight')
     document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', current);
 
@@ -106,5 +110,5 @@ export function initTheme() {
   // Deliberately not following prefers-color-scheme: this is a dark-first
   // visualisation and a light chrome around a black starfield reads as broken.
   // Daylight stays available as an explicit choice for bright rooms.
-  setTheme('deep');
+  setTheme('midnight');
 }

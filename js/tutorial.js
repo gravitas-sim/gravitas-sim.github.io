@@ -23,7 +23,7 @@ const STEPS = [
     body: `Click empty space and drag before releasing. The direction and length
            of the drag set the launch velocity, so a short drag drops an object
            almost at rest and a long one flings it away.`,
-    tip: 'Hold Shift while dragging to snap to a circular orbit around the dominant body.',
+    tip: 'Hold Shift while dragging to snap to a circular orbit. On a touch screen, press and hold first — a plain drag pans the view.',
     target: '#simulationCanvas',
   },
   {

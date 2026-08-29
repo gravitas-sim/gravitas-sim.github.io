@@ -359,12 +359,10 @@
     }
   }
 
-  /* Hide data panel on mobile devices */
-  @media (max-width: 1024px) {
-    #overlay {
-      display: none !important;
-    }
-  }
+  /* The readout is no longer hidden on small screens — it collapses instead.
+     Hiding it outright meant a phone user could not see object counts, zoom,
+     speed or the controls hint at all. See the mobile block in
+     components.css. */
 
   #scenarioInfoDisplay {
     position: fixed;
