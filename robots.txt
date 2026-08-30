@@ -6,4 +6,7 @@ Disallow: /coverage/
 Disallow: /tests/
 Disallow: /dist/
 
+# Instructor materials are encrypted, but there is no reason to index the page
+Disallow: /instructors/
+
 Sitemap: https://gravitas-sim.online/sitemap.xml

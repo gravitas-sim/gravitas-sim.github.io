@@ -1,5 +1,6 @@
 // UI and event handling functions
 
+import { formatNumber, withUnit } from './format.js';
 import {
   screen_to_world,
   bh_list,
@@ -15,6 +16,7 @@ import {
   white_dwarfs,
   accretion_disk_particles,
   resetPhysicsObjectCounter,
+  bumpWorldGeneration,
   setPhysicsObjectCounter,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
@@ -50,7 +52,19 @@ import {
 } from './utils.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
+import { SCENARIO_TAGS } from './data/scenarioTags.js';
+import { TRAPPIST1_STAR, TRAPPIST1_PLANETS } from './data/trappist1.js';
 import { applyPreset, applyPresetLayout } from './scenarios.js';
+import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
+import { orbitalElements, dominantPrimary } from './orbital.js';
+import { timeUnitSeconds, SIM_UNITS_PER_AU } from './units.js';
+import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
+import {
+  buildPayload,
+  packBody,
+  payloadSeed,
+  chooseKind,
+} from './shareState.js';
 
 /**
  * Apply the selected preset scenario to the live settings.
@@ -138,7 +152,150 @@ function getDominantAttractors(startPos, limit = 1) {
   return scored.slice(0, Math.max(1, limit)).map(s => s.body);
 }
 
-function computeAreaSweep(obj) {
+// How many equal-time slices the area-sweep overlay is cut into. Exposed so a
+// lesson can let a student change it and watch the areas stay equal.
+let areaSweepWedges = 8;
+
+/**
+ * Set the number of equal-area wedges and rebuild the overlay.
+ * @param {number} n - Wedge count
+ */
+const setAreaSweepWedges = n => {
+  areaSweepWedges = Math.max(2, Math.min(24, Math.round(n)));
+  const ov = state.areaSweepOverlay;
+  if (!ov.active || !ov.objectId) return;
+  const body = [...planets, ...asteroids, ...comets, ...gas_giants].find(
+    o => o.id === ov.objectId
+  );
+  if (!body) return;
+  const data = computeAreaSweep(body, areaSweepWedges);
+  if (data) Object.assign(state.areaSweepOverlay, data, { active: true });
+};
+
+/** @returns {number} Current wedge count */
+const getAreaSweepWedges = () => areaSweepWedges;
+
+// How far the orbit may drift before the drawn wedges stop describing it.
+// Generous enough to survive ordinary integrator wobble, tight enough that a
+// collision, a mass change or a slingshot retires the overlay immediately.
+const SWEEP_STALE_FRACTION = 0.06;
+
+/**
+ * Retire the equal-area overlay once it no longer matches the real orbit.
+ *
+ * The overlay is a snapshot of one particular ellipse. If the body is absorbed,
+ * flung onto a different orbit, or has its mass changed, the wedges become a
+ * picture of an orbit nothing is on, which is worse than showing nothing.
+ *
+ * @returns {boolean} True if the overlay is still valid
+ */
+const checkAreaSweepValidity = () => {
+  const ov = state.areaSweepOverlay;
+  if (!ov.active) return false;
+
+  const body = [...planets, ...asteroids, ...comets, ...gas_giants].find(
+    o => o.id === ov.objectId
+  );
+  const parent = ov.parent;
+  if (!body || body.alive === false || !parent || parent.alive === false) {
+    ov.active = false;
+    return false;
+  }
+  if (ov.a === undefined) return true; // built before this data was recorded
+
+  const el = orbitalElements(body, parent, SETTINGS.gravitational_constant);
+  if (!el || !el.bound) {
+    ov.active = false;
+    return false;
+  }
+  const dA = Math.abs(el.a - ov.a) / Math.max(ov.a, 1e-9);
+  const dE = Math.abs(el.e - ov.e);
+  if (dA > SWEEP_STALE_FRACTION || dE > SWEEP_STALE_FRACTION) {
+    ov.active = false;
+    ov.wedges = [];
+    ov.orbitPoints = [];
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Draw the equal-area wedges for a given body.
+ *
+ * Normally this is reached through the inspector's toggle, which a lesson
+ * hides. A lesson that asks a student to click planets and compare their
+ * orbits needs the overlay to follow the selection instead.
+ *
+ * @param {Object} obj - Body to draw the sweep for
+ * @returns {boolean} True if an overlay was produced
+ */
+const showAreaSweepFor = obj => {
+  if (!obj || areaSweepSuppressed) return false;
+  const data = computeAreaSweep(obj, areaSweepWedges);
+  if (!data) return false;
+  Object.assign(state.areaSweepOverlay, data, { active: true });
+  return true;
+};
+
+// The Kepler's 2nd Law scenario switches the wedges on when it builds, a fifth
+// of a second after the rest of it. That is right for the lesson that scenario
+// was made for and wrong for any other lesson borrowing the same star and
+// planets, so a caller can refuse them outright rather than racing that timer
+// to switch them off again.
+let areaSweepSuppressed = false;
+
+/**
+ * Refuse or allow the equal-area wedges.
+ * @param {boolean} on - True to keep them off the screen
+ */
+const setAreaSweepSuppressed = on => {
+  areaSweepSuppressed = Boolean(on);
+  if (areaSweepSuppressed) state.areaSweepOverlay.active = false;
+};
+
+/** @returns {boolean} True while the wedges are being refused */
+const isAreaSweepSuppressed = () => areaSweepSuppressed;
+
+/**
+ * Solve Kepler's equation M = E - e sin(E) for the eccentric anomaly.
+ *
+ * Newton's method, which converges in a handful of iterations for every
+ * eccentricity a bound orbit can have.
+ *
+ * @param {number} M - Mean anomaly, radians
+ * @param {number} e - Eccentricity
+ * @returns {number} Eccentric anomaly, radians
+ */
+function solveKepler(M, e) {
+  let E = e < 0.8 ? M : Math.PI;
+  for (let i = 0; i < 40; i++) {
+    const f = E - e * Math.sin(E) - M;
+    const fp = 1 - e * Math.cos(E);
+    const dE = f / fp;
+    E -= dE;
+    if (Math.abs(dE) < 1e-13) break;
+  }
+  return E;
+}
+
+/**
+ * Build the equal-area wedges for a body's orbit.
+ *
+ * The orbit is constructed analytically from the orbital elements rather than
+ * by integrating. Integrating stepped for exactly one analytic period, but
+ * symplectic Euler's own period differs from the analytic one by a fraction of
+ * a percent, so the path never quite closed: the wedges spanned 359.3 degrees
+ * and left a thin unfilled remainder at periapsis, where the angular rate is
+ * highest and the gap is most visible. Solving Kepler's equation instead closes
+ * the ellipse exactly and divides it into intervals of exactly equal time,
+ * which by conservation of angular momentum are intervals of exactly equal
+ * area.
+ *
+ * @param {Object} obj - The orbiting body
+ * @param {number} [wedgeCount] - How many equal-time segments to cut
+ * @returns {Object|null} Overlay data, or null if the orbit is not bound
+ */
+function computeAreaSweep(obj, wedgeCount = areaSweepWedges) {
   const G = SETTINGS.gravitational_constant;
   const candidates = [
     ...bh_list,
@@ -162,52 +319,84 @@ function computeAreaSweep(obj) {
   }
   if (!parent) return null;
 
-  const r0 = { x: obj.pos.x - parent.pos.x, y: obj.pos.y - parent.pos.y };
-  const v0 = { x: obj.vel.x - parent.vel.x, y: obj.vel.y - parent.vel.y };
+  const rx = obj.pos.x - parent.pos.x;
+  const ry = obj.pos.y - parent.pos.y;
+  const vx = obj.vel.x - parent.vel.x;
+  const vy = obj.vel.y - parent.vel.y;
 
-  const r = Math.hypot(r0.x, r0.y);
-  const v = Math.hypot(v0.x, v0.y);
-  const specificEnergy = 0.5 * v * v - (G * parent.mass) / r;
-  if (specificEnergy >= 0) return null;
+  const r = Math.hypot(rx, ry);
+  if (!(r > 0)) return null;
+  const mu = G * (parent.mass + (obj.mass || 0));
+  const energy = (vx * vx + vy * vy) / 2 - mu / r;
+  if (!(energy < 0)) return null; // unbound: no closed orbit to divide
 
-  const a = -(G * parent.mass) / (2 * specificEnergy);
-  const T = 2 * Math.PI * Math.sqrt((a * a * a) / (G * parent.mass));
+  const a = -mu / (2 * energy);
+  const h = rx * vy - ry * vx;
+  // Eccentricity vector, which points from the focus toward periapsis.
+  const ex = (vy * h) / mu - rx / r;
+  const ey = (-vx * h) / mu - ry / r;
+  const e = Math.min(0.999, Math.hypot(ex, ey));
+  const omega = Math.atan2(ey, ex);
+  // Sign of the angular momentum sets the direction of travel.
+  const dir = h >= 0 ? 1 : -1;
 
-  const NUM_WEDGES = 8;
-  const STEPS_PER_WEDGE = 300;
-  const totalSteps = NUM_WEDGES * STEPS_PER_WEDGE;
-  const dt = T / totalSteps;
+  // Where the body is now, as a mean anomaly, so the wedges start from it.
+  const cosNu = (ex * rx + ey * ry) / (Math.max(e, 1e-9) * r);
+  const nu0 =
+    Math.sign(rx * ey - ry * ex) === 0
+      ? Math.acos(Math.max(-1, Math.min(1, cosNu)))
+      : -Math.sign(rx * ey - ry * ex) *
+        Math.acos(Math.max(-1, Math.min(1, cosNu)));
+  const E0 =
+    2 *
+    Math.atan2(
+      Math.sqrt(1 - e) * Math.sin(nu0 / 2),
+      Math.sqrt(1 + e) * Math.cos(nu0 / 2)
+    );
+  const M0 = E0 - e * Math.sin(E0);
 
-  const pos = { x: r0.x, y: r0.y };
-  const vel = { x: v0.x, y: v0.y };
+  const N = Math.max(2, Math.min(24, Math.round(wedgeCount)));
+  const PER_WEDGE = 90;
+  const b = a * Math.sqrt(1 - e * e);
+  const cosW = Math.cos(omega);
+  const sinW = Math.sin(omega);
+
+  const at = M => {
+    const E = solveKepler(M, e);
+    // Perifocal coordinates, then rotated into the simulation frame.
+    const xp = a * (Math.cos(E) - e);
+    const yp = b * Math.sin(E) * dir;
+    return { x: xp * cosW - yp * sinW, y: xp * sinW + yp * cosW };
+  };
 
   const wedges = [];
-  const orbitPoints = [{ x: pos.x, y: pos.y }];
-  let currentWedge = [{ x: pos.x, y: pos.y }];
-
-  for (let step = 1; step <= totalSteps; step++) {
-    const rx = pos.x,
-      ry = pos.y;
-    const r2 = Math.max(rx * rx + ry * ry, 1e-9);
-    const invR3 = 1 / (Math.sqrt(r2) * r2);
-    const ax = -G * parent.mass * rx * invR3;
-    const ay = -G * parent.mass * ry * invR3;
-    vel.x += ax * dt;
-    vel.y += ay * dt;
-    pos.x += vel.x * dt;
-    pos.y += vel.y * dt;
-
-    const pt = { x: pos.x, y: pos.y };
-    orbitPoints.push(pt);
-    currentWedge.push(pt);
-
-    if (step % STEPS_PER_WEDGE === 0) {
-      wedges.push(currentWedge);
-      currentWedge = [{ x: pt.x, y: pt.y }];
+  const orbitPoints = [];
+  for (let w = 0; w < N; w++) {
+    const wedge = [];
+    for (let k = 0; k <= PER_WEDGE; k++) {
+      const M = M0 + 2 * Math.PI * ((w + k / PER_WEDGE) / N);
+      const pt = at(M);
+      wedge.push(pt);
+      if (k < PER_WEDGE || w === N - 1) orbitPoints.push(pt);
     }
+    wedges.push(wedge);
   }
+  // Close the outline exactly on the point it started from.
+  orbitPoints.push({ ...orbitPoints[0] });
 
-  return { parentId: parent.id, parent, objectId: obj.id, wedges, orbitPoints };
+  const period = 2 * Math.PI * Math.sqrt((a * a * a) / mu);
+  return {
+    parentId: parent.id,
+    parent,
+    objectId: obj.id,
+    wedges,
+    orbitPoints,
+    wedgeCount: N,
+    period,
+    wedgeTime: period / N,
+    a,
+    e,
+  };
 }
 
 function computeCircularVelocity(startPos, body) {
@@ -321,6 +510,11 @@ const DEFAULT_SETTINGS = {
   use_individual_bh_masses: false,
   bh_masses: [],
   orbit_decay_rate: 0.005,
+  // 0 = integrate at whatever step the frame gives. A scenario that needs its
+  // orbits to hold their shape sets a cap; see the substep loop in render.js.
+  max_timestep: 0,
+  // 0 = use the physics default. A compact scenario lowers it; see physics.js.
+  min_interaction_distance: 0,
   placement: 'Random',
   mutual_gravity: false,
   show_trails: true,
@@ -388,77 +582,52 @@ const ASTEROID_RADIUS = 2; // From physics.js
 
 const getBlackHoleInfo = bh => {
   const massInSuns = bh.mass / SOLAR_MASS_UNIT;
-  const massInKg = massInSuns * 1.989e30;
-
-  // Real Schwarzschild radius calculation (in meters)
-  const G = 6.6743e-11; // Gravitational constant in m³/kg/s²
-  const c = 299792458; // Speed of light in m/s
-  const schwarzschildRadiusM = (2 * G * massInKg) / (c * c);
-  const schwarzschildRadiusKm = schwarzschildRadiusM / 1000;
-  const schwarzschildRadiusAU = schwarzschildRadiusM / 1.496e11; // 1 AU in meters
-
-  // Real escape velocity at Schwarzschild radius (should be c)
-  const escapeVelocityAtRs = Math.sqrt(
-    (2 * G * massInKg) / schwarzschildRadiusM
-  );
-  const escapeVelocityAtRsC = (escapeVelocityAtRs / c) * 100; // As percentage of light speed
-
-  // Real density calculation (mass within Schwarzschild radius)
-  const volume = (4 / 3) * Math.PI * Math.pow(schwarzschildRadiusM, 3);
-  const density = massInKg / volume; // kg/m³
-
-  // Hawking temperature (simplified)
-  const hbar = 1.054571817e-34; // Reduced Planck constant
-  const kB = 1.380649e-23; // Boltzmann constant
-  const hawkingTemp = (hbar * c * c * c) / (8 * Math.PI * G * massInKg * kB);
-
-  // Hawking radiation lifetime (simplified)
-  const hawkingLifetime =
-    (5120 * Math.PI * G * G * massInKg * massInKg * massInKg) /
-    (hbar * c * c * c * c);
-  const hawkingLifetimeYears = hawkingLifetime / (365.25 * 24 * 3600);
-
-  // Real orbital period at 3 Schwarzschild radii (innermost stable orbit)
-  const iscoRadius = 3 * schwarzschildRadiusM;
-  const orbitalPeriod =
-    2 * Math.PI * Math.sqrt(Math.pow(iscoRadius, 3) / (G * massInKg));
-  const orbitalPeriodHours = orbitalPeriod / 3600;
-
-  let bhType = 'Primordial';
-  if (massInSuns > 1e6) bhType = 'Supermassive';
-  else if (massInSuns > 100) bhType = 'Intermediate';
-  else if (massInSuns > 3) bhType = 'Stellar-Mass';
-  else bhType = 'Primordial';
+  // Every derived number comes from blackHolePhysics.js, which is also what the
+  // "Black Holes by the Numbers" investigation reads. The lesson asks students
+  // to discover the trends in exactly these quantities, so the two have to
+  // agree to the last digit.
+  const f = blackHoleFacts(massInSuns);
+  const bhType = f.category;
 
   return {
-    icon: '⚫',
+    icon: '\u26ab',
     title: bh.name || 'Black Hole',
     stats: [
       {
         label: 'Mass',
-        value: `${solarHTML(massInSuns.toFixed(2))} (${massInKg.toExponential(2)} kg)`,
+        value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(f.massKg, 'kg')})`,
       },
       {
         label: 'Schwarzschild Radius',
-        value: `${schwarzschildRadiusKm.toFixed(2)} km (${schwarzschildRadiusAU.toExponential(3)} AU)`,
+        value: `${withUnit(f.rsKm, 'km')} (${withUnit(f.rsAU, 'AU')})`,
       },
       {
         label: 'Escape Velocity at Rs',
-        value: `${escapeVelocityAtRsC.toFixed(1)}% of light speed`,
+        value: '100.0% of light speed',
       },
-      { label: 'Average Density', value: `${density.toExponential(2)} kg/m³` },
+      {
+        label: 'Average Density',
+        value: withUnit(f.density, 'kg/m\u00b3'),
+      },
       {
         label: 'Hawking Temperature',
-        value: `${hawkingTemp.toExponential(2)} K`,
+        value: withUnit(f.temperature, 'K'),
       },
       {
+        // toFixed() gives up above 1e21 and returns the raw float, so this row
+        // used to read "2.0973585980140657e+61 billion years".
         label: 'Hawking Lifetime',
-        value:
-          hawkingLifetimeYears > 1e10
-            ? `${(hawkingLifetimeYears / 1e9).toFixed(1)} billion years`
-            : `${hawkingLifetimeYears.toExponential(2)} years`,
+        value: yearsLabel(f.lifetimeYears),
       },
-      { label: 'ISCO Period', value: `${orbitalPeriodHours.toFixed(1)} hours` },
+      {
+        // A stellar-mass hole's innermost stable orbit takes milliseconds, and
+        // rounding that to "0.0 hours" hid the most striking thing about it.
+        label: 'ISCO Period',
+        value:
+          f.iscoPeriodSeconds < 60
+            ? withUnit(f.iscoPeriodSeconds, 's')
+            : withUnit(f.iscoPeriodHours, 'hours'),
+      },
       { label: 'Type', value: bhType },
       {
         label: 'Position',
@@ -466,11 +635,50 @@ const getBlackHoleInfo = bh => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(bh.vel.x, bh.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(bh.vel.x, bh.vel.y), 'units/s'),
       },
     ],
-    description: `A ${bhType.toLowerCase()} black hole with ${massInSuns > 1e6 ? 'enormous' : massInSuns > 100 ? 'substantial' : massInSuns > 3 ? 'moderate' : 'minimal'} mass. The event horizon has a radius of ${schwarzschildRadiusKm.toFixed(1)} km. ${hawkingTemp > 1 ? 'This black hole emits Hawking radiation.' : 'This black hole is too massive to emit significant Hawking radiation.'} ${massInSuns > 1e6 ? 'Supermassive black holes like this power active galactic nuclei and quasars.' : massInSuns > 100 ? 'Intermediate black holes are rare and may form from merging stellar-mass black holes.' : massInSuns > 3 ? 'Stellar-mass black holes form from the collapse of massive stars.' : 'Primordial black holes may have formed in the early universe.'}`,
+    description: `A ${bhType.toLowerCase()} black hole with ${massInSuns > 1e6 ? 'enormous' : massInSuns > 100 ? 'substantial' : massInSuns > 3 ? 'moderate' : 'minimal'} mass. The event horizon has a radius of ${f.rsKm.toFixed(1)} km. ${f.temperature > 1 ? 'This black hole emits Hawking radiation.' : 'This black hole is too massive to emit significant Hawking radiation.'} ${massInSuns > 1e6 ? 'Supermassive black holes like this power active galactic nuclei and quasars.' : massInSuns > 100 ? 'Intermediate black holes are rare and may form from merging stellar-mass black holes.' : massInSuns > 3 ? 'Stellar-mass black holes form from the collapse of massive stars.' : 'Primordial black holes may have formed in the early universe.'}`,
   };
+};
+
+/**
+ * Orbital period of a body about whatever it is actually orbiting, in days.
+ *
+ * Replaces four copies of a calculation that assumed a 1000-unit primary
+ * sitting at the origin and measured distance from the origin rather than from
+ * the primary, on a length scale that matched neither the simulation nor
+ * units.js. In the Kepler scenario it reported 3.1 days for an orbit whose real
+ * period is about 1.7 years, which is the sort of number a student is asked to
+ * write down in an investigation.
+ *
+ * @param {Object} body - The orbiting object
+ * @returns {number|null} Period in days, or null if unbound or with no primary
+ */
+const realOrbitalPeriodDays = body => {
+  if (!body?.pos) return null;
+  const primary = dominantPrimary(
+    body,
+    [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs].filter(
+      p => p !== body
+    )
+  );
+  if (!primary) return null;
+  const el = orbitalElements(body, primary, SETTINGS.gravitational_constant);
+  if (!el || !el.bound || !isFinite(el.period)) return null;
+  return (el.period * timeUnitSeconds()) / 86400;
+};
+
+/**
+ * Format an orbital period for the inspector.
+ * @param {number|null} days - Period in days
+ * @returns {string} Display text
+ */
+const formatOrbitalPeriod = days => {
+  if (days === null) return 'unbound';
+  if (days > 365) return withUnit(days / 365, 'years');
+  if (days < 1) return withUnit(days * 24, 'hours');
+  return withUnit(days, 'days');
 };
 
 const getStarInfo = star => {
@@ -493,15 +701,7 @@ const getStarInfo = star => {
   const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
 
   // Real orbital period at 1 AU (if applicable)
-  const distanceFromCenter = Math.hypot(star.pos.x, star.pos.y);
-  const centralMass = 1000; // Assume central mass in simulation units
-  const orbitalPeriod =
-    2 *
-    Math.PI *
-    Math.sqrt(
-      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
-    );
-  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+  const orbitalPeriodDays = realOrbitalPeriodDays(star);
 
   // Calculate stellar age based on mass and main sequence lifetime
   // More massive stars have shorter lifetimes
@@ -523,30 +723,27 @@ const getStarInfo = star => {
     stats: [
       {
         label: 'Mass',
-        value: `${solarHTML(massInSuns.toFixed(2))} (${massInKg.toExponential(2)} kg)`,
+        value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(massInKg, 'kg')})`,
       },
       {
         label: 'Radius',
-        value: `${solarHTML(radiusInSuns.toFixed(2), 'R')} (${radiusInKm.toFixed(0)} km)`,
+        value: `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`,
       },
       {
         label: 'Surface Temperature',
-        value: `${surfaceTemperature.toFixed(0)} K`,
+        value: withUnit(surfaceTemperature, 'K'),
       },
-      { label: 'Luminosity', value: solarHTML(luminosity.toFixed(2), 'L') },
-      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(0)} m/s²` },
+      { label: 'Luminosity', value: solarHTML(formatNumber(luminosity), 'L') },
+      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
       {
         label: 'Escape Velocity',
-        value: `${(escapeVelocity / 1000).toFixed(1)} km/s`,
+        value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
       { label: 'Spectral Type', value: spectralType },
-      { label: 'Lifespan', value: `${age.toFixed(1)} billion years` },
+      { label: 'Lifespan', value: withUnit(age, 'billion years') },
       {
         label: 'Orbital Period',
-        value:
-          orbitalPeriodDays > 365
-            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
-            : `${orbitalPeriodDays.toFixed(1)} days`,
+        value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       {
         label: 'Position',
@@ -554,7 +751,7 @@ const getStarInfo = star => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(star.vel.x, star.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(star.vel.x, star.vel.y), 'units/s'),
       },
     ],
     description: `A ${spectralType}-type star with ${massInSuns > 3 ? 'high' : massInSuns > 0.8 ? 'moderate' : 'low'} mass. ${massInSuns > 20 ? 'This massive star will likely end its life as a black hole.' : massInSuns > 8 ? 'This star will become a neutron star or black hole.' : 'This star will become a white dwarf.'}`,
@@ -576,15 +773,7 @@ const getPlanetInfo = planet => {
   const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
 
   // Real orbital period (if orbiting a central mass)
-  const distanceFromCenter = Math.hypot(planet.pos.x, planet.pos.y);
-  const centralMass = 1000; // Assume central mass in simulation units
-  const orbitalPeriod =
-    2 *
-    Math.PI *
-    Math.sqrt(
-      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
-    );
-  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+  const orbitalPeriodDays = realOrbitalPeriodDays(planet);
 
   // Real surface gravity (m/s²)
   const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
@@ -618,21 +807,21 @@ const getPlanetInfo = planet => {
     stats: [
       {
         label: 'Mass',
-        value: `${earthHTML(massInEarths.toFixed(2))} (${massInKg.toExponential(2)} kg)`,
+        value: `${earthHTML(formatNumber(massInEarths))} (${withUnit(massInKg, 'kg')})`,
       },
       {
         label: 'Radius',
-        value: `${radiusInEarths.toFixed(2)} R⊕ (${radiusInKm.toFixed(0)} km)`,
+        value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
-      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
-      { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(0)} m/s` },
+      { label: 'Density', value: withUnit(density, 'kg/m³') },
+      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
+      {
+        label: 'Escape Velocity',
+        value: withUnit(escapeVelocity / 1000, 'km/s'),
+      },
       {
         label: 'Orbital Period',
-        value:
-          orbitalPeriodDays > 365
-            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
-            : `${orbitalPeriodDays.toFixed(1)} days`,
+        value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       { label: 'Type', value: planetType },
       {
@@ -641,7 +830,7 @@ const getPlanetInfo = planet => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(planet.vel.x, planet.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(planet.vel.x, planet.vel.y), 'units/s'),
       },
     ],
     description: `A ${planetType.toLowerCase()} with ${massInEarths > 10 ? 'substantial' : massInEarths > 1 ? 'moderate' : 'low'} mass. ${densityDescription}. ${planetType === 'Terrestrial' ? 'This rocky world could potentially support life.' : planetType === 'Gas Giant' ? 'This gaseous planet has no solid surface.' : planetType === 'Ice Giant' ? 'This icy world is composed mainly of frozen volatiles.' : 'This small world may be a captured asteroid or dwarf planet.'}`,
@@ -668,15 +857,7 @@ const getGasGiantInfo = gasGiant => {
   const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
 
   // Real orbital period
-  const distanceFromCenter = Math.hypot(gasGiant.pos.x, gasGiant.pos.y);
-  const centralMass = 1000; // Assume central mass in simulation units
-  const orbitalPeriod =
-    2 *
-    Math.PI *
-    Math.sqrt(
-      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
-    );
-  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+  const orbitalPeriodDays = realOrbitalPeriodDays(gasGiant);
 
   // Use the actual giant type from the object, or determine from mass
   let giantType = gasGiant.giantType || 'Gas Giant';
@@ -699,24 +880,21 @@ const getGasGiantInfo = gasGiant => {
     stats: [
       {
         label: 'Mass',
-        value: `${jupiterHTML(massInJupiters.toFixed(2))} · ${earthHTML(massInEarths.toFixed(1))}`,
+        value: `${jupiterHTML(formatNumber(massInJupiters))} · ${earthHTML(formatNumber(massInEarths))}`,
       },
       {
         label: 'Radius',
-        value: `${radiusInEarths.toFixed(1)} R⊕ (${radiusInKm.toFixed(0)} km)`,
+        value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
-      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(1)} m/s²` },
+      { label: 'Density', value: withUnit(density, 'kg/m³') },
+      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
       {
         label: 'Escape Velocity',
-        value: `${(escapeVelocity / 1000).toFixed(1)} km/s`,
+        value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
       {
         label: 'Orbital Period',
-        value:
-          orbitalPeriodDays > 365
-            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
-            : `${orbitalPeriodDays.toFixed(1)} days`,
+        value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       { label: 'Type', value: displayType },
       {
@@ -725,7 +903,7 @@ const getGasGiantInfo = gasGiant => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(gasGiant.vel.x, gasGiant.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(gasGiant.vel.x, gasGiant.vel.y), 'units/s'),
       },
     ],
     description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`,
@@ -749,15 +927,7 @@ const getAsteroidInfo = asteroid => {
   const surfaceGravity = (G * massInKg) / Math.pow(radiusInM, 2);
 
   // Real orbital period
-  const distanceFromCenter = Math.hypot(asteroid.pos.x, asteroid.pos.y);
-  const centralMass = 1000; // Assume central mass in simulation units
-  const orbitalPeriod =
-    2 *
-    Math.PI *
-    Math.sqrt(
-      Math.pow(distanceFromCenter * 1e9, 3) / (G * centralMass * 1.989e30)
-    );
-  const orbitalPeriodDays = orbitalPeriod / (24 * 3600);
+  const orbitalPeriodDays = realOrbitalPeriodDays(asteroid);
 
   let asteroidType = 'Asteroid';
   if (asteroid.radius > 5) asteroidType = 'Dwarf Planet';
@@ -770,18 +940,18 @@ const getAsteroidInfo = asteroid => {
     stats: [
       {
         label: 'Mass',
-        value: `${earthHTML(massInEarths.toFixed(4))} (${massInKg.toExponential(2)} kg)`,
+        value: `${earthHTML(formatNumber(massInEarths, { sig: 4 }))} (${withUnit(massInKg, 'kg')})`,
       },
-      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-      { label: 'Density', value: `${density.toFixed(0)} kg/m³` },
-      { label: 'Surface Gravity', value: `${surfaceGravity.toFixed(3)} m/s²` },
-      { label: 'Escape Velocity', value: `${escapeVelocity.toFixed(1)} m/s` },
+      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
+      { label: 'Density', value: withUnit(density, 'kg/m³') },
+      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
+      {
+        label: 'Escape Velocity',
+        value: withUnit(escapeVelocity / 1000, 'km/s'),
+      },
       {
         label: 'Orbital Period',
-        value:
-          orbitalPeriodDays > 365
-            ? `${(orbitalPeriodDays / 365).toFixed(1)} years`
-            : `${orbitalPeriodDays.toFixed(1)} days`,
+        value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       { label: 'Type', value: asteroidType },
       {
@@ -790,7 +960,7 @@ const getAsteroidInfo = asteroid => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(asteroid.vel.x, asteroid.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(asteroid.vel.x, asteroid.vel.y), 'units/s'),
       },
     ],
     description: `A ${asteroidType.toLowerCase()} with ${asteroid.radius > 5 ? 'significant' : asteroid.radius > 2 ? 'moderate' : 'minimal'} mass. ${asteroidType === 'Dwarf Planet' ? 'This object is large enough to be rounded by its own gravity.' : 'This rocky body orbits in the system, potentially as part of a belt or as a rogue object.'}`,
@@ -817,16 +987,16 @@ const getNeutronStarInfo = neutronStar => {
     icon: isPulsar ? '⚡' : '⭐',
     title: neutronStar.name || starType,
     stats: [
-      { label: 'Mass', value: solarHTML(massInSuns.toFixed(2)) },
-      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
+      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
+      { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: `${escapeVelocity.toFixed(1)} units/s`,
+        value: withUnit(escapeVelocity, 'units/s'),
       },
       {
         label: 'Schwarzschild Radius',
-        value: `${schwarzschildRadius.toFixed(6)} units`,
+        value: withUnit(schwarzschildRadius, 'units'),
       },
       { label: 'Type', value: starType },
       { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
@@ -836,7 +1006,10 @@ const getNeutronStarInfo = neutronStar => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(neutronStar.vel.x, neutronStar.vel.y).toFixed(1)} units/s`,
+        value: withUnit(
+          Math.hypot(neutronStar.vel.x, neutronStar.vel.y),
+          'units/s'
+        ),
       },
     ],
     description: `A ${starType.toLowerCase()} with ${massInSuns > 2.0 ? 'extreme' : 'high'} density. ${isPulsar ? 'This pulsar emits regular beams of radiation as it rotates.' : 'This neutron star is the collapsed core of a massive star.'} ${starType === 'Magnetar' ? 'This magnetar has an extremely strong magnetic field, making it one of the most powerful objects in the universe.' : starType === 'Pulsar' ? 'This pulsar rotates rapidly, emitting beams of radiation that sweep across space.' : 'This neutron star is composed almost entirely of neutrons, making it incredibly dense.'}`,
@@ -859,12 +1032,12 @@ const getWhiteDwarfInfo = whiteDwarf => {
     icon: '⭐',
     title: whiteDwarf.name || 'White Dwarf',
     stats: [
-      { label: 'Mass', value: solarHTML(massInSuns.toFixed(2)) },
-      { label: 'Radius', value: `${radiusInEarths.toFixed(2)} R⊕` },
-      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
+      { label: 'Radius', value: withUnit(radiusInEarths, 'R⊕') },
+      { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: `${escapeVelocity.toFixed(1)} units/s`,
+        value: withUnit(escapeVelocity, 'units/s'),
       },
       { label: 'Chandrasekhar Limit', value: solarHTML(chandrasekharLimit) },
       { label: 'Type', value: dwarfType },
@@ -874,7 +1047,10 @@ const getWhiteDwarfInfo = whiteDwarf => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y).toFixed(1)} units/s`,
+        value: withUnit(
+          Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y),
+          'units/s'
+        ),
       },
     ],
     description: `A ${dwarfType.toLowerCase()} white dwarf with ${massInSuns > 1.2 ? 'high' : massInSuns > 0.6 ? 'moderate' : 'low'} mass. ${dwarfType === 'Oxygen-Neon' ? 'This massive white dwarf is near the Chandrasekhar limit and may become a neutron star.' : dwarfType === 'Carbon-Oxygen' ? 'This is the most common type of white dwarf, composed of carbon and oxygen.' : 'This low-mass white dwarf is composed primarily of helium.'} ${massInSuns > chandrasekharLimit ? 'This white dwarf exceeds the Chandrasekhar limit and may collapse into a neutron star.' : 'This white dwarf is stable and will slowly cool over billions of years.'}`,
@@ -899,14 +1075,14 @@ const getCometInfo = comet => {
     icon: '☄️',
     title: comet.name || 'Comet',
     stats: [
-      { label: 'Mass', value: `${massInComets.toFixed(3)} C` },
-      { label: 'Radius', value: `${radiusInKm.toFixed(0)} km` },
-      { label: 'Density', value: `${density.toFixed(2)} mass/unit²` },
+      { label: 'Mass', value: withUnit(massInComets, 'C') },
+      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
+      { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: `${escapeVelocity.toFixed(1)} units/s`,
+        value: withUnit(escapeVelocity, 'units/s'),
       },
-      { label: 'Tail Length', value: `${tailLength.toFixed(0)} units` },
+      { label: 'Tail Length', value: withUnit(tailLength, 'units') },
       { label: 'Type', value: displayType },
       {
         label: 'Position',
@@ -914,7 +1090,7 @@ const getCometInfo = comet => {
       },
       {
         label: 'Velocity',
-        value: `${Math.hypot(comet.vel.x, comet.vel.y).toFixed(1)} units/s`,
+        value: withUnit(Math.hypot(comet.vel.x, comet.vel.y), 'units/s'),
       },
     ],
     description: `A ${displayType.toLowerCase()} comet with ${massInComets > 0.1 ? 'substantial' : massInComets > 0.01 ? 'moderate' : 'small'} mass. ${cometType === 'periodic' ? "This periodic comet returns to the inner solar system regularly, like Halley's Comet." : cometType === 'long_period' ? 'This long-period comet has an orbital period of more than 200 years.' : 'This short-period comet completes its orbit in less than 200 years.'} The comet's tail is ${tailLength > 50 ? 'very long' : tailLength > 30 ? 'moderate' : 'short'} and points away from the sun due to solar radiation pressure.`,
@@ -1056,6 +1232,12 @@ const showObjectInspector = (object, type) => {
     state.inspectorOrbitOverlay.points = [];
   }
 
+  // A guided lesson does its own reporting in its own panel, and the inspector
+  // is a large floating card that lands squarely over the orbit the student has
+  // just been asked to watch. Selection and the orbit overlay above still
+  // happen - only the panel is withheld.
+  if (inspectorSuppressed) return;
+
   const updateInspector = () => {
     if (!state.inspector_open || !state.selectedObject) return;
 
@@ -1188,12 +1370,15 @@ const showObjectInspector = (object, type) => {
               </button>
             </div>
             <div class="inspector-hz-description">
-              The habitable (Goldilocks) zone is the range of orbits where a rocky planet could maintain liquid water on its surface.
-              The global <strong>Habitable Zone Optimism</strong> slider in Settings controls how wide this band is:
-              conservative values (around 0.5–1.0) focus on tighter, Earth-like orbits, while more optimistic values (above 1.0) can include
-              orbits like Venus or Mars that might be habitable with the right atmosphere or conditions. Current optimism: ${hzOptimism.toFixed(
-                1
-              )}×.
+              The circumstellar habitable zone is the range of orbital distances where a rocky planet
+              with suitable atmospheric conditions <em>could potentially</em> maintain liquid water on its
+              surface. Being inside it does not establish that a planet has water, is habitable, or is inhabited:
+              it is a first filter for where to look, not a measurement of a world.
+              The edges come from a published prescription (Kopparapu et al. 2013) and depend on the star's
+              luminosity and temperature. The <strong>Habitable Zone Optimism</strong> setting selects between the
+              <strong>conservative</strong> zone, bounded by the runaway and maximum greenhouse limits, and the
+              <strong>optimistic</strong> zone, bounded by the empirical recent-Venus and early-Mars limits.
+              Currently showing the <strong>${hzOptimism >= 1.3 ? 'optimistic' : 'conservative'}</strong> zone.
             </div>
           </div>
         `;
@@ -1231,7 +1416,7 @@ const showObjectInspector = (object, type) => {
             </div>
             <div class="inspector-sweep-description">
               Visualizes equal areas swept in equal times. Each colored wedge
-              represents the same time interval — near the star, wedges are thin
+              represents the same time interval - near the star, wedges are thin
               but long (faster motion); far away, they are wide but short
               (slower motion).
             </div>
@@ -1470,10 +1655,10 @@ const hideObjectInspector = () => {
   // turn off orbit overlay when inspector closes
   state.inspectorOrbitOverlay.active = false;
   state.inspectorOrbitOverlay.points = [];
-  // turn off area sweep overlay
-  state.areaSweepOverlay.active = false;
-  state.areaSweepOverlay.wedges = [];
-  state.areaSweepOverlay.orbitPoints = [];
+  // The equal-area overlay deliberately survives: it is a thing the user turned
+  // on to look at, and closing the panel that switched it on is not a request
+  // to stop looking. It clears itself instead when the orbit it describes stops
+  // being the orbit the body is on. See checkAreaSweepValidity.
 
   // Re-apply hide styles to ensure inspector stays hidden
   objectInspector.style.display = 'none';
@@ -1699,19 +1884,22 @@ const setupEnergyTab = () => {
 /**
  * Ensure chart is initialized and ready
  */
-const ensureChartReady = () => {
+const ensureChartReady = async () => {
   const canvas = document.getElementById('energyChart');
-  if (!canvas) return;
+  if (!canvas || chartInitialized) return;
 
-  if (!chartInitialized) {
-    debugLog('Initializing energy chart');
-    const success = initChart(canvas);
-    if (success) {
-      chartInitialized = true;
-      debugLog('Energy chart initialized successfully');
-    } else {
-      console.error('Failed to initialize energy chart');
-    }
+  // Chart.js is fetched the first time a chart is actually wanted rather than
+  // on every page load. initChart() reads the global, so it has to wait for it.
+  const { ensureChartJs } = await import('./chartjs.js');
+  if (!(await ensureChartJs())) return;
+  if (chartInitialized) return;
+
+  debugLog('Initializing energy chart');
+  if (initChart(canvas)) {
+    chartInitialized = true;
+    debugLog('Energy chart initialized successfully');
+  } else {
+    console.error('Failed to initialize energy chart');
   }
 };
 
@@ -1745,13 +1933,13 @@ const updateCurrentEnergyValues = () => {
 
     const absValue = Math.abs(value);
     if (absValue >= 1e6 || absValue < 1e-3) {
-      return `${value.toExponential(2)} J`;
+      return withUnit(value, 'J');
     } else if (absValue >= 1000) {
-      return `${value.toFixed(0)} J`;
+      return withUnit(value, 'J');
     } else if (absValue >= 1) {
-      return `${value.toFixed(1)} J`;
+      return withUnit(value, 'J');
     } else {
-      return `${value.toFixed(3)} J`;
+      return withUnit(value, 'J');
     }
   };
 
@@ -2196,7 +2384,7 @@ const toggleOverlayMinimize = e => {
 
 /**
  * Apply the minimised/expanded state to the readout panel and its control.
- * The button carries a word as well as a glyph — a bare "−" gave no clue that
+ * The button carries a word as well as a glyph - a bare "−" gave no clue that
  * the panel could be collapsed, and the collapsed state was an unlabelled box.
  * @param {HTMLElement} overlay - The overlay panel
  * @param {HTMLElement} btn - The minimise/expand button
@@ -2326,6 +2514,8 @@ const setupMassSliderListeners = () => {
     if (!isFinite(newMass) || newMass <= 0) return;
     const object = state.selectedObject.object;
     const type = state.selectedObject.type;
+    // Editing a mass by hand puts the world beyond what its seed rebuilds.
+    markWorldTouched();
 
     // Skip mass update if we're in the middle of a transformation
     if (state.isTransforming) {
@@ -2450,12 +2640,15 @@ const setupMassSliderListeners = () => {
                 </button>
               </div>
               <div class="inspector-hz-description">
-                The habitable (Goldilocks) zone is the range of orbits where a rocky planet could maintain liquid water on its surface.
-                The global <strong>Habitable Zone Optimism</strong> slider in Settings controls how wide this band is:
-                conservative values (around 0.5–1.0) focus on tighter, Earth-like orbits, while more optimistic values (above 1.0) can include
-                orbits like Venus or Mars that might be habitable with the right atmosphere or conditions. Current optimism: ${hzOptimism.toFixed(
-                  1
-                )}×.
+                The circumstellar habitable zone is the range of orbital distances where a rocky planet
+                with suitable atmospheric conditions <em>could potentially</em> maintain liquid water on its
+                surface. Being inside it does not establish that a planet has water, is habitable, or is inhabited:
+                it is a first filter for where to look, not a measurement of a world.
+                The edges come from a published prescription (Kopparapu et al. 2013) and depend on the star's
+                luminosity and temperature. The <strong>Habitable Zone Optimism</strong> setting selects between the
+                <strong>conservative</strong> zone, bounded by the runaway and maximum greenhouse limits, and the
+                <strong>optimistic</strong> zone, bounded by the empirical recent-Venus and early-Mars limits.
+                Currently showing the <strong>${hzOptimism >= 1.3 ? 'optimistic' : 'conservative'}</strong> zone.
               </div>
             </div>
           `;
@@ -2538,7 +2731,7 @@ const setupMassSliderListeners = () => {
           break;
       }
 
-      // massUnit carries <sub> markup, so this must be innerHTML — textContent
+      // massUnit carries <sub> markup, so this must be innerHTML - textContent
       // escaped it and rendered the tags literally.
       massValueDisplay.innerHTML = `${newMass.toFixed(3)} ${massUnit}`;
 
@@ -3063,6 +3256,12 @@ const show_enhanced_scenario_info = scenarioName => {
     return;
   }
 
+  // A lesson loads a scenario every time a step asks for one, and this card is
+  // 720px wide and lands on top of the instrument panel. During an
+  // investigation the step's own text is the introduction to the scenario, so
+  // the card is redundant as well as in the way.
+  if (document.body.classList.contains('investigation-open')) return;
+
   const info = SCENARIO_INFO[scenarioName];
   const infoBox = document.getElementById('scenarioInfoBox');
   const title = document.getElementById('scenarioInfoTitle');
@@ -3086,41 +3285,40 @@ const show_enhanced_scenario_info = scenarioName => {
     features.appendChild(li);
   }
 
-  // Check if splash screen is still active
-  const splash = document.getElementById('splash');
-  const isSplashActive =
-    splash &&
-    !splash.classList.contains('hidden') &&
-    splash.style.display !== 'none';
+  // Whether anything is currently covering the simulation. The card is shown
+  // for eighteen seconds and then hides itself, so raising it under a
+  // full-screen layer would burn the whole eighteen seconds where nobody can
+  // read it: a first-time visitor would enter the sandbox to find the card that
+  // names their scenario already gone. Both start-up layers are checked, and
+  // the welcome screen through a body class rather than an import, because
+  // welcome.js imports this module to load scenarios.
+  const onboardingLayerUp = () => {
+    const splash = document.getElementById('splash');
+    const splashUp =
+      splash &&
+      !splash.classList.contains('hidden') &&
+      splash.style.display !== 'none';
+    return (
+      Boolean(splashUp) || document.body.classList.contains('welcome-open')
+    );
+  };
 
-  if (isSplashActive) {
-    // If splash is still active, wait for it to end before showing info box
-    const checkSplashEnd = () => {
-      const currentSplash = document.getElementById('splash');
-      if (
-        !currentSplash ||
-        currentSplash.classList.contains('hidden') ||
-        currentSplash.style.display === 'none'
-      ) {
-        // Splash has ended, show the info box
-        infoBox.classList.add('showUI');
-        // Auto-hide after 18 seconds
-        setTimeout(() => {
-          infoBox.classList.remove('showUI');
-        }, 18000);
-      } else {
-        // Splash still active, check again in 100ms
-        setTimeout(checkSplashEnd, 100);
-      }
-    };
-    checkSplashEnd();
-  } else {
-    // Splash has ended, show the info box immediately
+  const raise = () => {
     infoBox.classList.add('showUI');
-    // Auto-hide after 18 seconds
-    setTimeout(() => {
-      infoBox.classList.remove('showUI');
-    }, 18000);
+    setTimeout(() => infoBox.classList.remove('showUI'), 18000);
+  };
+
+  if (onboardingLayerUp()) {
+    const waitForClearScreen = () => {
+      if (onboardingLayerUp()) {
+        setTimeout(waitForClearScreen, 100);
+        return;
+      }
+      raise();
+    };
+    waitForClearScreen();
+  } else {
+    raise();
   }
 };
 
@@ -3190,53 +3388,125 @@ const apply_placement = () => {
       bounds = 300;
   }
 
-  // Get all objects that need positioning (excluding central stars)
+  // The body everything else orbits is decided once, here, and then held out
+  // of the placement loop. That fixes two separate faults in one move.
+  //
+  // Stars were missing from this list entirely. Any scenario that asked for a
+  // stellar population and did not position it by hand got every one of its
+  // stars at the origin with zero velocity, stacked on top of each other and
+  // usually on top of a black hole: 20 in Black Hole Billiards, 50 in Quasar
+  // Cannon, 100 in Stellar Nursery, 200 in The Pinwheel Galaxy Core, 300 in
+  // Tidal Arm Tango. All of them merged or were swallowed within a few
+  // seconds, which is why those scenarios looked alike - there was nothing
+  // left in them to tell apart.
+  //
+  // The central body was also being placed like everything else and then given
+  // a velocity for a circular orbit around itself. The separation is zero, so
+  // the speed came out of a divide by 1e-6: The Pinwheel Galaxy Core opened
+  // with a center-of-mass velocity of 811 units per time unit.
+  const gravitating = [...stars, ...bh_list, ...neutron_stars, ...white_dwarfs];
+  const central =
+    gravitating.find(obj => obj.isCentralBody) ||
+    (gravitating.length > 0 ? getMostMassiveBody(gravitating) : null);
+
   const all_objects = [
     ...bh_list,
     ...planets,
     ...gas_giants,
     ...asteroids,
     ...comets,
+    ...stars,
     ...neutron_stars,
     ...white_dwarfs,
-  ];
+  ].filter(obj => obj !== central);
 
   // Skip placement for Empty preset
   if (placement === 'Empty') return;
+
+  // Whatever everything else is drawn to stays at the origin, at rest.
+  if (central) {
+    central.pos.x = 0;
+    central.pos.y = 0;
+    central.vel.x = 0;
+    central.vel.y = 0;
+  }
+
+  // Nothing is placed inside the central body. A black hole's drawn radius
+  // grows as the cube root of its mass and takes no notice of the simulation
+  // bounds, so a heavy enough one swallows the entire placement volume before
+  // the first frame: Black Hole Billiards put a radius-505 hole at the center
+  // of a region 300 units across and ate all twenty of its stars at once.
+  const keepOut = central ? (central.radius || 0) * 2.5 : 0;
+  // "Dominant" means the rest of the system is a test population around it, so
+  // circular orbits about it are the sensible default. Below that it is a
+  // self-gravitating cluster, where an isotropic spread of random velocities is
+  // the honest starting condition and a disc would be a fiction.
+  //
+  // Three is taken from the catalogue rather than picked out of the air: of the
+  // scenarios that place randomly, the ones this helps sit at mass ratios of
+  // 12, 20, 110, 1900 and upwards, and the cluster-like ones sit at 0.35 and
+  // below. Nothing in the library falls in between, so the boundary is not
+  // delicate.
+  const CENTRAL_DOMINANCE = 3;
+  const otherMass = all_objects.reduce((sum, o) => sum + (o.mass || 0), 0);
+  const centralDominates =
+    Boolean(central) && (central.mass || 0) > otherMass * CENTRAL_DOMINANCE;
+  const spread = Math.max(bounds, keepOut * 1.6);
+  const atLeastKeepOut = r => (keepOut > 0 ? Math.max(r, keepOut) : r);
 
   switch (placement) {
     case 'Random':
       all_objects.forEach(obj => {
         // Random position within bounds
         const angle = Math.random() * 2 * Math.PI;
-        const radius = Math.random() * bounds;
+        const radius = atLeastKeepOut(keepOut + Math.random() * spread);
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
-        // Random velocity
+        // A random velocity is the right answer for a loose cloud of
+        // comparable bodies, and the wrong one when a single mass dominates:
+        // nothing given a few tens of units per time unit a thousand units
+        // from a supermassive black hole is doing anything except falling in.
+        // Where there is a dominant central mass, orbit it and let the random
+        // component perturb that orbit instead of replacing it.
         const vel_angle = Math.random() * 2 * Math.PI;
         const vel_mag =
           (Math.random() - 0.5) * SETTINGS.init_velocity +
           (Math.random() - 0.5) * SETTINGS.velocity_stddev;
-        obj.vel.x = Math.cos(vel_angle) * vel_mag;
-        obj.vel.y = Math.sin(vel_angle) * vel_mag;
+        if (centralDominates) {
+          const r = Math.max(1e-6, Math.hypot(obj.pos.x, obj.pos.y));
+          const vCirc = Math.sqrt(
+            (SETTINGS.gravitational_constant * central.mass) / r
+          );
+          obj.vel.x =
+            (-obj.pos.y / r) * vCirc + Math.cos(vel_angle) * vel_mag * 0.3;
+          obj.vel.y =
+            (obj.pos.x / r) * vCirc + Math.sin(vel_angle) * vel_mag * 0.3;
+        } else {
+          obj.vel.x = Math.cos(vel_angle) * vel_mag;
+          obj.vel.y = Math.sin(vel_angle) * vel_mag;
+        }
       });
       break;
 
     case 'Circular': {
       // Choose a central mass (prefer a star; else the most massive gravitating body)
-      const candidates = [
-        ...stars,
-        ...bh_list,
-        ...neutron_stars,
-        ...white_dwarfs,
-      ];
-      const central =
-        candidates.length > 0 ? getMostMassiveBody(candidates) : null;
       const G = SETTINGS.gravitational_constant;
+      // Every object used to go on one ring at exactly 0.7 of the bounds. For
+      // a handful that reads as a ring; for the 200 stars of The Pinwheel
+      // Galaxy Core it put neighbours about nine units apart, closer than the
+      // stars are wide, and the whole population merged into a couple of black
+      // holes within seconds. A golden-angle spiral fills an annulus evenly at
+      // any count, which is also what a galaxy core and a nursery should look
+      // like.
+      const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+      const n = Math.max(1, all_objects.length);
       all_objects.forEach((obj, i) => {
-        const angle = (i / Math.max(1, all_objects.length)) * 2 * Math.PI;
-        const radius = bounds * 0.7;
+        const angle = n > 24 ? i * GOLDEN : (i / n) * 2 * Math.PI;
+        const radius =
+          n > 24
+            ? atLeastKeepOut(spread * (0.35 + 0.65 * Math.sqrt((i + 0.5) / n)))
+            : atLeastKeepOut(spread * 0.7);
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
@@ -3259,19 +3529,11 @@ const apply_placement = () => {
     }
 
     case 'Multi-Ring': {
-      const candidates = [
-        ...stars,
-        ...bh_list,
-        ...neutron_stars,
-        ...white_dwarfs,
-      ];
-      const central =
-        candidates.length > 0 ? getMostMassiveBody(candidates) : null;
       const G = SETTINGS.gravitational_constant;
       all_objects.forEach((obj, i) => {
         const ring = Math.floor(i / 20); // 20 objects per ring
         const angle = ((i % 20) / 20) * 2 * Math.PI;
-        const radius = bounds * (0.3 + ring * 0.2);
+        const radius = atLeastKeepOut(spread * (0.3 + ring * 0.2));
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
@@ -3294,7 +3556,7 @@ const apply_placement = () => {
 
     case 'Grid': {
       const grid_size = Math.ceil(Math.sqrt(all_objects.length));
-      const spacing = (bounds * 2) / grid_size;
+      const spacing = (spread * 2) / grid_size;
       all_objects.forEach((obj, i) => {
         const row = Math.floor(i / grid_size);
         const col = i % grid_size;
@@ -3451,17 +3713,175 @@ const apply_placement = () => {
       // Duplicate 'Slingshot' case removed (handled earlier)
     }
   }
+
+  zeroNetMomentum();
+};
+
+/**
+ * Move the whole system into its own center-of-mass frame.
+ *
+ * Placement assigns each body a velocity for its own orbit and never checks
+ * what they sum to, so a scenario could open already coasting: Binary Star
+ * System left at 2.4 units per time unit and walked out of frame, and The
+ * Pinwheel Galaxy Core left at 811. Subtracting the mass-weighted mean makes
+ * the barycenter stationary, which is what a viewer expects of a system
+ * presented as self-contained, and costs nothing physically - it is a change
+ * of reference frame, not of the dynamics.
+ *
+ * Scenarios that mean to show something arriving from outside - Rogue
+ * Encounter, Interstellar Visitor - place their objects by hand and return
+ * before this point, so their net motion is left alone.
+ */
+const zeroNetMomentum = () => {
+  const bodies = [
+    ...bh_list,
+    ...planets,
+    ...gas_giants,
+    ...asteroids,
+    ...comets,
+    ...stars,
+    ...neutron_stars,
+    ...white_dwarfs,
+  ];
+  let total = 0;
+  let px = 0;
+  let py = 0;
+  for (const b of bodies) {
+    const m = b.mass || 0;
+    if (!Number.isFinite(m) || m <= 0) continue;
+    if (!Number.isFinite(b.vel?.x) || !Number.isFinite(b.vel?.y)) continue;
+    total += m;
+    px += m * b.vel.x;
+    py += m * b.vel.y;
+  }
+  if (total <= 0) return;
+  const vx = px / total;
+  const vy = py / total;
+  if (Math.abs(vx) < 1e-9 && Math.abs(vy) < 1e-9) return;
+  for (const b of bodies) {
+    if (!Number.isFinite(b.vel?.x) || !Number.isFinite(b.vel?.y)) continue;
+    b.vel.x -= vx;
+    b.vel.y -= vy;
+  }
 };
 /**
  * Initialize the physics simulation with current settings
  * Creates all physics objects and applies initial conditions
  */
-const initialize_simulation = () => {
+/**
+ * Build the world, then hand it a fresh identity.
+ *
+ * World generation draws on Math.random in roughly 180 places, so on its own
+ * it produces a different system every time - which is fine for a sandbox and
+ * useless for a shared link. Running it inside withSeed() makes the whole
+ * build a function of one number, so the same seed rebuilds the same universe
+ * and a link only has to carry the seed.
+ *
+ * @param {Object} [options]
+ * @param {string|number} [options.seed] - Reuse this seed instead of a new one
+ * @param {boolean} [options.keepSeed] - Rebuild with the seed already in use
+ * @returns {number} The seed the world was built from
+ */
+const initialize_simulation = (options = {}) => {
+  if (options.seed !== undefined) {
+    setWorldSeed(options.seed);
+  } else if (!options.keepSeed) {
+    // A plain rebuild - a new scenario, or Refresh - is meant to give
+    // something new to look at, so it gets a new seed.
+    setWorldSeed(randomSeed());
+  }
+  // applyPreset signs off by setting preset_scenario to the 'None' sentinel,
+  // so a second build reads no scenario: it skips the preset, keeps the old
+  // settings and records the scenario name as 'None'. Callers compensate by
+  // reassigning the name first - the Refresh and Reset buttons each do it by
+  // hand - which is a precondition easy to forget and silent when missed.
+  // Restoring it here makes every rebuild idempotent instead.
+  if (SETTINGS.preset_scenario === 'None' && current_scenario_name) {
+    SETTINGS.preset_scenario = current_scenario_name;
+  }
+
+  const seed = getWorldSeed();
+  withSeed(seed, () => build_simulation());
+  // The object lists have just been repopulated; the physics caches hold the
+  // previous set and must not be reused.
+  bumpWorldGeneration();
+  worldTouched = false;
+  // A preset sets its own speed, so the readout is stale until it is told.
+  updateSpeedDisplay();
+  // Kept so a shared link can rebuild under the settings that actually
+  // produced this world, then apply anything changed since. Some scenarios
+  // read settings while generating - Kepler's 2nd Law derives its launch
+  // velocities from the gravitational constant - so applying a later value
+  // during the rebuild would quietly hand over a different experiment.
+  generationSettings = JSON.parse(JSON.stringify(SETTINGS));
+  return seed;
+};
+
+// Settings as they stood when the current world was built.
+let generationSettings = null;
+
+// Set when the author changes the world by hand. A seeded link stops being a
+// truthful description of the simulation at that moment, because re-running
+// generation would not produce what is now on screen.
+let worldTouched = false;
+
+/** Mark the world as hand-edited, so sharing switches to full state. */
+const markWorldTouched = () => {
+  worldTouched = true;
+};
+
+// Settings from a shared link, waiting for the next build to apply them.
+let pendingSettingsOverride = null;
+
+// Set while a guided investigation is running; see showObjectInspector.
+let inspectorSuppressed = false;
+
+/**
+ * Hide the object inspector without disabling selection.
+ * @param {boolean} value - True to withhold the panel on click
+ */
+const setInspectorSuppressed = value => {
+  inspectorSuppressed = !!value;
+  // Deliberately not hideObjectInspector(): that also clears the orbit overlay
+  // and the equal-areas wedges, which are exactly what a lesson wants left on
+  // screen. Only the panel itself is put away.
+  if (inspectorSuppressed) {
+    const el = document.getElementById('objectInspector');
+    if (el) {
+      el.classList.remove('visible');
+      el.style.display = 'none';
+      el.style.pointerEvents = 'none';
+    }
+    state.inspector_open = false;
+    if (state.inspectorUpdateInterval) {
+      clearInterval(state.inspectorUpdateInterval);
+      state.inspectorUpdateInterval = null;
+    }
+  } else {
+    const el = document.getElementById('objectInspector');
+    if (el) el.style.display = '';
+  }
+};
+
+// Placing anything by hand puts the world beyond what its seed rebuilds, so
+// from here on a link has to carry the bodies themselves.
+window.addEventListener('gravitasObjectPlaced', markWorldTouched);
+
+const build_simulation = () => {
   // Set the state reference in physics.js to ensure single source of truth
   setStateReference(state);
 
   const starting_preset = SETTINGS.preset_scenario;
   apply_preset();
+
+  // Settings carried in a shared link land here rather than before the call,
+  // because apply_preset() has just reset everything to the scenario's own
+  // defaults and would have wiped them.
+  if (pendingSettingsOverride) {
+    Object.assign(SETTINGS, pendingSettingsOverride);
+    pendingSettingsOverride = null;
+  }
+
   current_scenario_name = starting_preset;
 
   // Reset insertion object type to scenario default (or 'Star') and update button
@@ -3502,12 +3922,22 @@ const initialize_simulation = () => {
   if (
     ['Kuiper Belt', 'Rogue Encounter', 'Solar System'].includes(starting_preset)
   ) {
-    stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0));
+    const central = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
+    // Named as the anchor rather than inferred from mass: num_stars can add a
+    // randomly generated star of up to about 6 solar masses, which would
+    // otherwise win the comparison and drag the whole system around it.
+    central.isCentralBody = true;
+    stars.push(central);
   }
 
   // Add stars based on num_stars setting
+  // Counting from what is already there matters for the presets above, which
+  // have just added their central star and also ask for num_stars: 1 meaning
+  // that same star. They used to get two - one anchored at the center and one
+  // randomly generated - and the spare was dropped into the belt it was
+  // supposed to be lighting.
   if (SETTINGS.num_stars) {
-    for (let i = 0; i < SETTINGS.num_stars; i++) {
+    for (let i = stars.length; i < SETTINGS.num_stars; i++) {
       stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
@@ -3617,9 +4047,26 @@ const initialize_simulation = () => {
     // Clear any existing stars and create binary system
     stars.length = 0;
 
-    // Create two stars in binary orbit
-    const star1 = new StarObject({ x: -60, y: 0 }, { x: 0, y: 12 }, 1.2);
-    const star2 = new StarObject({ x: 60, y: 0 }, { x: 0, y: -12 }, 0.8);
+    // Two stars of unequal mass were given equal and opposite speeds, which
+    // is not the same as equal and opposite momentum: 1.2 x 12 against
+    // 0.8 x 12 left the pair coasting at 2.4 units per time unit and the whole
+    // system walked out of frame within twenty seconds. Splitting a circular
+    // relative velocity by the mass ratio makes the barycenter stationary.
+    const SEP = 120;
+    const M1 = 1.2 * SOLAR_MASS_UNIT;
+    const M2 = 0.8 * SOLAR_MASS_UNIT;
+    const MTOT = M1 + M2;
+    const vRel = Math.sqrt((SETTINGS.gravitational_constant * MTOT) / SEP);
+    const star1 = new StarObject(
+      { x: (-SEP * M2) / MTOT, y: 0 },
+      { x: 0, y: (vRel * M2) / MTOT },
+      1.2
+    );
+    const star2 = new StarObject(
+      { x: (SEP * M1) / MTOT, y: 0 },
+      { x: 0, y: (-vRel * M1) / MTOT },
+      0.8
+    );
     stars.push(star1, star2);
 
     // Add planets orbiting the binary system
@@ -3659,6 +4106,83 @@ const initialize_simulation = () => {
         asteroids[i].vel = vel;
       }
     }
+
+    // The stars are balanced against each other by construction, but the
+    // planets, giants and asteroids all circulate the same way and their
+    // momentum does not cancel on its own.
+    zeroNetMomentum();
+  } else if (starting_preset === 'Tidal Disruption Event') {
+    // One star, falling in on a long ellipse whose closest approach is inside
+    // the hole's tidal radius but outside the radius at which it would simply
+    // be absorbed. StarObject.tidal_mass_loss strips it there and sheds the
+    // debris that gives the scenario its name.
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    debris.length = 0;
+
+    const hole = bh_list[0];
+    if (hole) {
+      hole.pos.x = 0;
+      hole.pos.y = 0;
+      hole.vel.x = 0;
+      hole.vel.y = 0;
+
+      const G = SETTINGS.gravitational_constant;
+      const GM = G * hole.mass;
+      // Tidal disruption begins at three times the drawn radius, and the hole
+      // swallows anything within its radius plus six. Periapsis at 1.5 radii
+      // sits well inside the first and comfortably outside the second, so the
+      // star is stripped over repeated passes instead of being eaten on the
+      // first one.
+      const apo = Math.max(900, hole.radius * 11);
+      const peri = hole.radius * 1.5;
+      const a = (apo + peri) / 2;
+
+      // Started partway down the infall rather than at apoapsis, so the first
+      // passage happens within a few seconds of opening the scenario instead
+      // of after most of a period spent as a dot at the edge of the frame.
+      const r0 = Math.min(apo, Math.max(peri * 2.5, apo * 0.45));
+      const vPeri = Math.sqrt(GM * (2 / peri - 1 / a));
+      const angularMomentum = peri * vPeri;
+      const speed = Math.sqrt(GM * (2 / r0 - 1 / a));
+      const vTangential = angularMomentum / r0;
+      // Inbound: the radial component points back towards the hole.
+      const vRadial = -Math.sqrt(
+        Math.max(0, speed * speed - vTangential * vTangential)
+      );
+
+      const star = new StarObject(
+        { x: r0, y: 0 },
+        { x: vRadial, y: vTangential },
+        1.0
+      );
+      star.name = 'Doomed star';
+      stars.push(star);
+    }
+  } else if (starting_preset === 'Black Hole Billiards') {
+    // Three light holes on staggered circular orbits around the heavy one, so
+    // the scene opens as something recognisably in motion rather than four
+    // holes scattered at random that have merged by the time anyone looks.
+    const heavy = bh_list[0];
+    if (heavy && bh_list.length >= 2) {
+      heavy.pos.x = 0;
+      heavy.pos.y = 0;
+      heavy.vel.x = 0;
+      heavy.vel.y = 0;
+      const G = SETTINGS.gravitational_constant;
+      for (let i = 1; i < bh_list.length; i++) {
+        const r = heavy.radius * (3.2 + (i - 1) * 1.9);
+        const angle = ((i - 1) / (bh_list.length - 1)) * 2 * Math.PI;
+        const v = Math.sqrt((G * heavy.mass) / r);
+        bh_list[i].pos.x = Math.cos(angle) * r;
+        bh_list[i].pos.y = Math.sin(angle) * r;
+        bh_list[i].vel.x = -Math.sin(angle) * v;
+        bh_list[i].vel.y = Math.cos(angle) * v;
+      }
+    }
   } else if (starting_preset === 'Solar System') {
     // Clear any existing objects
     stars.length = 0;
@@ -3684,6 +4208,11 @@ const initialize_simulation = () => {
     sun.surfaceGravity = 274; // m/s² (solar surface gravity)
     sun.density = 1408; // kg/m³ (solar density)
     sun.isSolarSystemSun = true; // Flag for Solar System sun
+    // Measured, so the habitable-zone model uses it rather than a fallback.
+    sun.massInSuns = 1.0;
+    sun.luminosityInSuns = 1.0;
+    sun.radiusInSuns = 1.0;
+    sun.temperature = 5772; // K, effective temperature
     stars.push(sun);
 
     // Real Solar System data with accurate properties
@@ -3692,7 +4221,7 @@ const initialize_simulation = () => {
       {
         name: 'Mercury',
         mass: 0.055, // 0.055 Earth masses
-        distance: 80, // ~0.39 AU (scaled) - increased for stability
+        distance: 38.7, // 0.387 AU at 100 units per AU
         phase_deg: 0,
         diameter: 4879, // km
         orbital_period: 88, // days
@@ -3710,7 +4239,7 @@ const initialize_simulation = () => {
       {
         name: 'Venus',
         mass: 0.815, // 0.815 Earth masses
-        distance: 120, // ~0.72 AU (scaled) - increased for stability
+        distance: 72.3, // 0.723 AU at 100 units per AU
         phase_deg: 45,
         diameter: 12104, // km
         orbital_period: 225, // days
@@ -3728,7 +4257,7 @@ const initialize_simulation = () => {
       {
         name: 'Earth',
         mass: 1.0, // 1 Earth mass
-        distance: 160, // ~1 AU (scaled) - increased for stability
+        distance: 100.0, // 1.000 AU at 100 units per AU
         phase_deg: 90,
         diameter: 12742, // km
         orbital_period: 365, // days
@@ -3746,7 +4275,7 @@ const initialize_simulation = () => {
       {
         name: 'Mars',
         mass: 0.107, // 0.107 Earth masses
-        distance: 200, // ~1.52 AU (scaled) - increased for stability
+        distance: 152.4, // 1.524 AU at 100 units per AU
         phase_deg: 135,
         diameter: 6779, // km
         orbital_period: 687, // days
@@ -3764,7 +4293,7 @@ const initialize_simulation = () => {
       {
         name: 'Jupiter',
         mass: 317.8, // 317.8 Earth masses
-        distance: 350, // ~5.2 AU (scaled) - increased for stability
+        distance: 520.4, // 5.204 AU at 100 units per AU
         phase_deg: 210,
         diameter: 139822, // km
         orbital_period: 4333, // days
@@ -3782,7 +4311,7 @@ const initialize_simulation = () => {
       {
         name: 'Saturn',
         mass: 95.2, // 95.2 Earth masses
-        distance: 500, // ~9.5 AU (scaled) - increased for stability
+        distance: 958.3, // 9.583 AU at 100 units per AU
         phase_deg: 260,
         diameter: 116464, // km
         orbital_period: 10759, // days
@@ -3800,7 +4329,7 @@ const initialize_simulation = () => {
       {
         name: 'Uranus',
         mass: 14.5, // 14.5 Earth masses
-        distance: 650, // ~19.2 AU (scaled) - increased for stability
+        distance: 1919.1, // 19.191 AU at 100 units per AU
         phase_deg: 310,
         diameter: 50724, // km
         orbital_period: 30687, // days
@@ -3818,7 +4347,7 @@ const initialize_simulation = () => {
       {
         name: 'Neptune',
         mass: 17.1, // 17.1 Earth masses
-        distance: 800, // ~30.1 AU (scaled) - increased for stability
+        distance: 3007.0, // 30.070 AU at 100 units per AU
         phase_deg: 350,
         diameter: 49244, // km
         orbital_period: 60190, // days
@@ -3834,23 +4363,6 @@ const initialize_simulation = () => {
         surface_pressure: 100000, // Pa (1 bar at cloud tops)
       },
       // Dwarf planet beyond Neptune
-      {
-        name: 'Pluto',
-        mass: 0.00218, // ~0.00218 Earth masses
-        distance: 950, // scaled beyond Neptune for visual separation
-        diameter: 2377, // km
-        orbital_period: 90560, // days (~248 years)
-        type: 'terrestrial', // treat as small terrestrial in this engine
-        color: '#C8B7A6', // light brown/gray
-        density: 'icy',
-        temperature: 44, // Kelvin
-        gravity: 0.62, // m/s²
-        rotation_period: -6.39, // days (retrograde)
-        atmosphere: 'N2 (tenuous)',
-        density_kg_m3: 1850, // kg/m³
-        escape_velocity: 1.21, // km/s
-        surface_pressure: 1, // Pa (very tenuous)
-      },
     ];
 
     // Create planets with realistic properties
@@ -3938,17 +4450,17 @@ const initialize_simulation = () => {
     // Add asteroid belt between Mars and Jupiter with real asteroids
     if (SETTINGS.enable_asteroids) {
       const realAsteroids = [
-        { name: 'Ceres', diameter: 939, distance: 280, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
-        { name: 'Vesta', diameter: 525, distance: 285, mass: 0.00004 },
-        { name: 'Pallas', diameter: 512, distance: 290, mass: 0.00003 },
-        { name: 'Hygiea', diameter: 434, distance: 295, mass: 0.00002 },
-        { name: 'Interamnia', diameter: 350, distance: 300, mass: 0.00001 },
-        { name: 'Europa', diameter: 315, distance: 305, mass: 0.000008 },
-        { name: 'Davida', diameter: 289, distance: 310, mass: 0.000006 },
-        { name: 'Sylvia', diameter: 286, distance: 315, mass: 0.000006 },
-        { name: 'Hektor', diameter: 225, distance: 320, mass: 0.000003 },
-        { name: 'Juno', diameter: 257, distance: 325, mass: 0.000004 },
-        { name: 'Iris', diameter: 200, distance: 330, mass: 0.000002 },
+        { name: 'Ceres', diameter: 939, distance: 277, mass: 0.00016 }, // Dwarf planet - between Mars and Jupiter
+        { name: 'Vesta', diameter: 525, distance: 236, mass: 0.00004 },
+        { name: 'Pallas', diameter: 512, distance: 277, mass: 0.00003 },
+        { name: 'Hygiea', diameter: 434, distance: 314, mass: 0.00002 },
+        { name: 'Interamnia', diameter: 350, distance: 306, mass: 0.00001 },
+        { name: 'Europa', diameter: 315, distance: 310, mass: 0.000008 },
+        { name: 'Davida', diameter: 289, distance: 316, mass: 0.000006 },
+        { name: 'Sylvia', diameter: 286, distance: 321, mass: 0.000006 },
+        { name: 'Hektor', diameter: 225, distance: 524, mass: 0.000003 },
+        { name: 'Juno', diameter: 257, distance: 267, mass: 0.000004 },
+        { name: 'Iris', diameter: 200, distance: 239, mass: 0.000002 },
         { name: 'Eunomia', diameter: 255, distance: 335, mass: 0.000004 },
         { name: 'Psyche', diameter: 226, distance: 340, mass: 0.000003 },
         { name: 'Themis', diameter: 198, distance: 345, mass: 0.000002 },
@@ -4078,7 +4590,7 @@ const initialize_simulation = () => {
         const cometData = famousComets[i];
         // Use semi-major axis for distance (average of perihelion and aphelion)
         const semiMajorAxis = (cometData.perihelion + cometData.aphelion) / 2;
-        const r = semiMajorAxis * 15; // Scale for simulation
+        const r = semiMajorAxis * 100; // 100 units per AU, as everywhere else
         const theta = Math.random() * 2 * Math.PI;
         const v =
           Math.sqrt((SETTINGS.gravitational_constant * sun.mass) / r) * 0.7; // Comets are slower
@@ -4486,46 +4998,399 @@ const initialize_simulation = () => {
   } else if (starting_preset === 'TRAPPIST-1 System') {
     // Clear planets array
     planets.length = 0;
-    // TRAPPIST-1 star properties
+    // Every number here comes from js/data/trappist1.js, which the habitable
+    // zone instruments read too, so the scenario and the lesson cannot end up
+    // describing two different systems.
     if (stars.length > 0) {
       const star = stars[0];
-      star.name = 'TRAPPIST-1';
-      star.mass = 0.089 * SOLAR_MASS_UNIT; // 0.089 solar masses
-      star.baseColor = '#a83232'; // Cool red dwarf
-      star.radius = 7; // Small star
-      star.temperature = 2550; // K
-      star.spectralType = 'M8V';
+      star.name = TRAPPIST1_STAR.name;
+      star.mass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
+      star.baseColor = TRAPPIST1_STAR.baseColor;
+      // TRAPPIST-1 is barely larger than Jupiter. At 100 units per AU its true
+      // radius is 0.054 units; 0.4 keeps it comfortably inside the innermost
+      // orbit at 1.15 units, where the old value of 7 swallowed three planets.
+      star.radius = 0.4;
+      // The true radius and luminosity, so the light curve reports the real
+      // transit depths even though the star is drawn seven times oversized to
+      // keep the planets clickable.
+      star.radiusInSuns = TRAPPIST1_STAR.radiusInSuns;
+      star.luminosityInSuns = TRAPPIST1_STAR.luminosityInSuns;
+      star.massInSuns = TRAPPIST1_STAR.massInSuns;
+      star.temperature = TRAPPIST1_STAR.temperatureK;
+      star.spectralType = TRAPPIST1_STAR.spectralType;
+      // The one scenario in the app where the habitable zone lands in the
+      // middle of the planets rather than off past the edge of the view, so
+      // the ring is on by default here.
+      star.showHabitableZone = true;
     }
-    // TRAPPIST-1 planets (b-h), semi-major axes in AU, masses in Earth masses, radii in Earth radii
-    const planetsData = [
-      { name: 'b', a: 0.0115, mass: 1.017, radius: 1.121 },
-      { name: 'c', a: 0.0158, mass: 1.156, radius: 1.095 },
-      { name: 'd', a: 0.0223, mass: 0.297, radius: 0.784 },
-      { name: 'e', a: 0.0292, mass: 0.772, radius: 0.91 },
-      { name: 'f', a: 0.0385, mass: 0.934, radius: 1.046 },
-      { name: 'g', a: 0.0469, mass: 1.148, radius: 1.148 },
-      { name: 'h', a: 0.0619, mass: 0.326, radius: 0.773 },
-    ];
-    const AU = 400; // Increased scale factor for more spacing
-    const starMass = 0.089 * SOLAR_MASS_UNIT;
-    for (let i = 0; i < planetsData.length; i++) {
-      const p = planetsData[i];
+
+    // 100 units per AU, the scale units.js fixes and every other scenario now
+    // uses. The old 400 put the displayed semi-major axes at four times the
+    // real values, so the periods came out eight times too long.
+    const AU = SIM_UNITS_PER_AU;
+    const starMass = TRAPPIST1_STAR.massInSuns * SOLAR_MASS_UNIT;
+    if (stars.length > 0) stars[0].mass = starMass;
+
+    // Adjacent orbits here are as little as 0.0043 AU apart, which is 0.43
+    // units. Bodies have to be small enough that neighbors cannot touch: the
+    // largest sum of radii below is 0.26, leaving a clear margin on the
+    // tightest pair. The screen-space draw floor keeps them visible anyway.
+    const RADIUS_UNITS_PER_EARTH = 0.115;
+    // Gravitationally negligible, so the two-body period of each planet is set
+    // by the star alone and every planet returns the same a^3/P^2. The same
+    // scaling the Solar System uses.
+    const MASS_SCALE = 0.001;
+
+    for (let i = 0; i < TRAPPIST1_PLANETS.length; i++) {
+      const p = TRAPPIST1_PLANETS[i];
       const r = p.a * AU;
-      // Place each planet at a unique angle, evenly spaced
-      const theta = (i / planetsData.length) * 2 * Math.PI;
+      // Evenly spaced in phase so no two start near each other.
+      const theta = (i / TRAPPIST1_PLANETS.length) * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * starMass) / r);
       const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
       const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
-      // Scale planet radius: 1 Earth radius = 1.2 sim units
-      const simRadius = p.radius * 1.2;
       const planet = new Planet(pos, vel, p.mass);
       planet.name = `TRAPPIST-1${p.name}`;
-      planet.mass = p.mass * EARTH_MASS_UNIT;
+      planet.mass = Math.max(p.mass * EARTH_MASS_UNIT * MASS_SCALE, 1e-4);
+      planet.massInEarths = p.mass;
       planet.baseColor = '#6ec6ff';
-      planet.radius = simRadius;
+      planet.radius = p.radius * RADIUS_UNITS_PER_EARTH;
+      // Drawn oversized, measured true: the transit depth comes from this.
+      planet.radiusInEarths = p.radius;
       planet.isTrappist = true;
       planets.push(planet);
     }
+  }
+
+  // --- Binary Pair: two equal stars round their common center ---
+  if (starting_preset === 'Binary Pair') {
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const AU = 100;
+    const SEP = 4 * AU;
+    const M = 2 * SOLAR_MASS_UNIT;
+    const total = 2 * M;
+    // Barycentric, so the pair genuinely circles a fixed point rather than
+    // drifting across the view: the fixed point is the thing being taught.
+    const vRel = Math.sqrt((G * total) / SEP);
+    const v1 = vRel * (M / total);
+
+    for (const [i, star] of [stars[0], stars[1]].entries()) {
+      if (!star) continue;
+      const side = i === 0 ? -1 : 1;
+      star.name = i === 0 ? 'Star A' : 'Star B';
+      star.pos = { x: (side * SEP) / 2, y: 0 };
+      star.vel = { x: 0, y: side * v1 };
+      star.mass = M;
+      star.massInSuns = 2;
+      star.radiusInSuns = 1.6;
+      star.luminosityInSuns = 10;
+      star.radius = 9;
+      star.temperature = 8000;
+      star.spectralType = 'A5V';
+      star.baseColor = i === 0 ? '#ffd97d' : '#8fd4ff';
+      star.persistent = true;
+    }
+  }
+
+  // --- Black Hole Lab: one hole, four things happily orbiting it ---
+  if (starting_preset === 'Black Hole Lab') {
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    stars.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const bh = bh_list[0];
+    if (bh) {
+      bh.pos = { x: 0, y: 0 };
+      bh.vel = { x: 0, y: 0 };
+      bh.name = 'Black Hole';
+      bh.persistent = true;
+      // Radii are set from the hole's own drawn size, so the four orbits stay
+      // outside it and stay on screen whatever mass a lesson step asks for.
+      const spacing = [4.2, 6.4, 9.2, 12.6];
+      const orbiters = [
+        { name: 'Inner Orbiter', earths: 1 },
+        { name: 'Second Orbiter', earths: 3 },
+        { name: 'Third Orbiter', earths: 0.5 },
+        { name: 'Outer Orbiter', earths: 8 },
+      ];
+      for (const [i, planet] of planets.entries()) {
+        if (i >= spacing.length) {
+          planet.alive = false;
+          continue;
+        }
+        const r = bh.radius * spacing[i];
+        const theta = (i * Math.PI) / 2 + 0.3;
+        const v = Math.sqrt((G * bh.mass) / r);
+        planet.name = orbiters[i].name;
+        // Explicit planet-sized masses. The default generator makes these a
+        // sizeable fraction of a solar mass, and a label reading "0.3 M☉"
+        // beside a planet is a distraction in a lesson about what masses mean.
+        planet.mass = orbiters[i].earths * EARTH_MASS_UNIT;
+        planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+        planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+        planet.persistent = true;
+      }
+      planets.length = Math.min(planets.length, spacing.length);
+    }
+  }
+
+  // --- Habitable Zone Lab: the inner Solar System, with the zone drawn ---
+  if (starting_preset === 'Habitable Zone Lab') {
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    bh_list.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const AU = SIM_UNITS_PER_AU;
+    const sun = stars[0];
+    if (sun) {
+      sun.name = 'Sun';
+      sun.pos = { x: 0, y: 0 };
+      sun.vel = { x: 0, y: 0 };
+      sun.mass = SOLAR_MASS_UNIT;
+      sun.massInSuns = 1;
+      sun.luminosityInSuns = 1;
+      sun.radiusInSuns = 1;
+      sun.temperature = 5772;
+      sun.spectralType = 'G2V';
+      sun.radius = 6;
+      sun.baseColor = '#ffd27f';
+      // On by default: the ring is the instrument this scenario exists for.
+      sun.showHabitableZone = true;
+      sun.persistent = true;
+    }
+
+    // Real semi-major axes. Mercury is left out: it is so far inside the zone
+    // that including it compresses everything else against the star.
+    const worlds = [
+      { name: 'Venus', a: 0.723, color: '#e8c39e', radius: 4.6 },
+      { name: 'Earth', a: 1.0, color: '#6ec6ff', radius: 4.8 },
+      { name: 'Mars', a: 1.524, color: '#d9744a', radius: 3.6 },
+      { name: 'Ceres', a: 2.77, color: '#9aa3b5', radius: 2.4 },
+    ];
+    for (const [i, planet] of planets.entries()) {
+      if (i >= worlds.length) {
+        planet.alive = false;
+        continue;
+      }
+      const w = worlds[i];
+      const r = w.a * AU;
+      // Spread in phase so no two start on top of each other.
+      const theta = (i / worlds.length) * 2 * Math.PI + 0.4;
+      const v = Math.sqrt((G * SOLAR_MASS_UNIT) / r);
+      planet.name = w.name;
+      planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+      planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
+      // Small enough not to perturb anything, drawn large enough to click.
+      planet.mass = EARTH_MASS_UNIT;
+      planet.massInEarths = 1;
+      planet.radius = w.radius;
+      planet.baseColor = w.color;
+      planet.persistent = true;
+    }
+    planets.length = Math.min(planets.length, worlds.length);
+  }
+
+  // --- Interstellar Visitor: 1I/'Oumuamua on its measured hyperbolic orbit ---
+  if (starting_preset === 'Interstellar Visitor') {
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const AU = 100;
+    const sun = stars[0] || new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
+    if (!stars.length) stars.push(sun);
+    stars.length = 1;
+    sun.name = 'Sun';
+    sun.pos = { x: 0, y: 0 };
+    sun.vel = { x: 0, y: 0 };
+    sun.mass = SOLAR_MASS_UNIT;
+    sun.massInSuns = 1;
+    sun.radiusInSuns = 1;
+    sun.luminosityInSuns = 1;
+    // Drawn far larger than life: at this zoom the true radius is a third of a
+    // pixel, and the scenario is about the shape of a path, not about the Sun.
+    sun.radius = 9;
+    sun.temperature = 5772;
+    sun.spectralType = 'G2V';
+    sun.baseColor = '#ffd34d';
+    sun.persistent = true;
+
+    // Earth, for scale: one AU, one year.
+    const earth = new Planet(
+      { x: 0, y: AU },
+      { x: -Math.sqrt((G * sun.mass) / AU), y: 0 },
+      1.0
+    );
+    earth.name = 'Earth';
+    earth.mass = EARTH_MASS_UNIT;
+    earth.massInEarths = 1;
+    earth.radiusInEarths = 1;
+    earth.radius = 3;
+    earth.baseColor = '#4b90e2';
+    earth.persistent = true;
+    planets.push(earth);
+
+    // 1I/'Oumuamua. Perihelion 0.2559 AU, eccentricity 1.2011: the first
+    // object ever seen on an orbit that is not merely eccentric but open. The
+    // state below is that orbit evaluated at four AU on the way in, so the
+    // simulation reproduces the real 87.7 km/s perihelion speed.
+    const visitor = new Planet(
+      { x: -286.14, y: -279.48 },
+      { x: 2.9436, y: 2.0454 },
+      1.0
+    );
+    visitor.name = "1I/'Oumuamua";
+    // Small enough to leave the Sun and Earth entirely undisturbed, which is
+    // true of the real thing as well.
+    visitor.mass = 1e-9;
+    visitor.radius = 2.2;
+    visitor.baseColor = '#d96a4a';
+    visitor.persistent = true;
+    planets.push(visitor);
+  }
+
+  // --- Transit Lab / Blended Binary: HD 209458 at true relative scale ---
+  if (
+    starting_preset === 'Transit Lab' ||
+    starting_preset === 'Blended Binary'
+  ) {
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const AU = 100; // units per AU, the scale units.js fixes
+    const R_SUN = 0.00465047 * AU; // one solar radius, in simulation units
+    const R_JUP_IN_SUNS = 0.102763; // 71,492 km / 695,700 km
+
+    // HD 209458 (Peter Sallis / "Osiris"), from the transit and radial-velocity
+    // literature. The radii are set explicitly rather than inferred from mass,
+    // so the light curve, the drawn silhouette and the arithmetic in the lesson
+    // all use the same numbers.
+    const M_STAR_SUNS = 1.148;
+    const R_STAR_SUNS = 1.155;
+    const L_STAR_SUNS = 1.77;
+    // The published mass and semi-major axis together return the published
+    // 3.5247-day period to within a minute, so nothing here has to be quietly
+    // adjusted to make Kepler's third law come out.
+    const A_PLANET_AU = 0.04747;
+    const R_PLANET_JUP = 1.38;
+    const M_PLANET_JUP = 0.69;
+
+    const starMass = M_STAR_SUNS * SOLAR_MASS_UNIT;
+    const aPlanet = A_PLANET_AU * AU;
+
+    // Companion, only for the blended case. Half a magnitude fainter: a
+    // contrast Robo-AO and SOAR both detect routinely, and one that changes the
+    // measured planet radius by a quarter.
+    const blended = starting_preset === 'Blended Binary';
+    const DELTA_MAG = 0.5;
+    const COMPANION_SEP_AU = 300;
+    const M_COMP_SUNS = 1.0;
+    const R_COMP_SUNS = 0.95;
+
+    const compMass = M_COMP_SUNS * SOLAR_MASS_UNIT;
+    const sep = COMPANION_SEP_AU * AU;
+    const totalMass = starMass + (blended ? compMass : 0);
+    // Worked in the primary's rest frame rather than the barycenter's. The
+    // relative orbit is the same either way, which is the part that is physics;
+    // what changes is that the primary stays where the camera is pointed
+    // instead of tracing out its own 300 AU circle and leaving the view. The
+    // pull the primary does feel from 300 AU moves it 0.015 units in an hour.
+    const vRel = blended ? Math.sqrt((G * totalMass) / sep) : 0;
+
+    const primary =
+      stars[0] || new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
+    if (!stars.length) stars.push(primary);
+    stars.length = blended ? Math.min(stars.length, 2) : 1;
+    primary.name = 'HD 209458';
+    primary.pos = { x: 0, y: 0 };
+    primary.vel = { x: 0, y: 0 };
+    primary.mass = starMass;
+    primary.massInSuns = M_STAR_SUNS;
+    primary.radiusInSuns = R_STAR_SUNS;
+    primary.luminosityInSuns = L_STAR_SUNS;
+    primary.radius = R_STAR_SUNS * R_SUN;
+    primary.persistent = true;
+    primary.temperature = 6065;
+    primary.spectralType = 'G0V';
+    primary.baseColor = '#fff3df';
+
+    if (blended) {
+      const companion =
+        stars[1] || new StarObject({ x: sep, y: 0 }, { x: 0, y: 0 }, 1);
+      if (stars.length < 2) stars.push(companion);
+      companion.name = 'HD 209458 B (companion)';
+      companion.pos = { x: sep, y: 0 };
+      companion.vel = { x: 0, y: -vRel };
+      companion.mass = compMass;
+      companion.massInSuns = M_COMP_SUNS;
+      companion.radiusInSuns = R_COMP_SUNS;
+      // Fixed rather than derived, so the contrast is exactly half a magnitude
+      // and the dilution a student measures is exactly the textbook factor.
+      companion.luminosityInSuns = L_STAR_SUNS * Math.pow(10, -0.4 * DELTA_MAG);
+      companion.radius = R_COMP_SUNS * R_SUN;
+      // Three hundred AU is far outside the cull box at the zoom this scenario
+      // needs, and being invisible is the entire point of it.
+      companion.persistent = true;
+      companion.temperature = 5700;
+      companion.spectralType = 'G5V';
+      companion.baseColor = '#ffe9c4';
+    }
+
+    // Start a quarter of an orbit before the first transit, so the light curve
+    // has a flat baseline to establish before anything happens to it.
+    const theta = -Math.PI / 2;
+    const vOrbit = Math.sqrt((G * starMass) / aPlanet);
+    const planet = new Planet(
+      {
+        x: aPlanet * Math.cos(theta),
+        y: aPlanet * Math.sin(theta),
+      },
+      {
+        x: -vOrbit * Math.sin(theta),
+        y: vOrbit * Math.cos(theta),
+      },
+      1.0
+    );
+    planet.name = 'HD 209458 b';
+    planet.mass = M_PLANET_JUP * 0.0009546 * SOLAR_MASS_UNIT;
+    planet.massInJupiters = M_PLANET_JUP;
+    planet.radiusInJupiters = R_PLANET_JUP;
+    planet.radius = R_PLANET_JUP * R_JUP_IN_SUNS * R_SUN;
+    planet.persistent = true;
+    planet.baseColor = '#b8875a';
+    planets.push(planet);
   }
 
   // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
@@ -4542,7 +5407,7 @@ const initialize_simulation = () => {
 
     const G = SETTINGS.gravitational_constant;
 
-    // Central star — Sun-like, pinned at origin
+    // Central star - Sun-like, pinned at origin
     const kStar = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
     kStar.name = 'Kepler Star';
     kStar.mass = SOLAR_MASS_UNIT;
@@ -4551,8 +5416,14 @@ const initialize_simulation = () => {
     kStar.radius = 14;
     stars.push(kStar);
 
-    // Planet — nearly circular orbit (e ≈ 0.02)
-    const planetDist = 180;
+    // Planet - nearly circular orbit (e ≈ 0.02)
+    // Well outside the eccentric body's apoapsis of about 236. These two orbits
+    // used to cross: the eccentric orbiter swept from 50 out to 236 while this
+    // one sat at 180, so once an orbit they collided. Merging is off for this
+    // scenario, so instead of combining they bounced, and each bounce kicked
+    // both orbits by several percent in energy and angular momentum. That is
+    // what made a scenario built to show a fixed ellipse visibly drift.
+    const planetDist = 320;
     const eP = 0.02;
     const aP = planetDist / (1 - eP);
     const vPlanet = Math.sqrt((((G * kStar.mass) / aP) * (1 + eP)) / (1 - eP));
@@ -4567,7 +5438,7 @@ const initialize_simulation = () => {
     kPlanet.radius = 7;
     planets.push(kPlanet);
 
-    // Eccentric body — a Planet (not Comet) for visibility, bright orange,
+    // Eccentric body - a Planet (not Comet) for visibility, bright orange,
     // on a tighter eccentric orbit (e ≈ 0.65) that fits within the view
     const eccPeri = 50;
     const eC = 0.65;
@@ -4589,7 +5460,7 @@ const initialize_simulation = () => {
     setTimeout(() => {
       try {
         const data = computeAreaSweep(eccPlanet);
-        if (data) {
+        if (data && !areaSweepSuppressed) {
           state.areaSweepOverlay.active = true;
           state.areaSweepOverlay.parentId = data.parentId;
           state.areaSweepOverlay.parent = data.parent;
@@ -4603,10 +5474,22 @@ const initialize_simulation = () => {
     }, 200);
   }
 
-  // Geometry that can only be set once the objects exist — e.g. the Pinwheel
+  // Geometry that can only be set once the objects exist - e.g. the Pinwheel
   // flyby, which previously ran against the *previous* scenario's black holes
   // and was wiped a few lines later.
   applyPresetLayout(SETTINGS, bh_list);
+
+  // Placement balances the system, and then eight scenarios reposition their
+  // own objects afterwards and unbalance it again: Kuiper Belt reassigns every
+  // belt object onto a prograde circular orbit, so whether the whole belt
+  // coasted came down to which angles the seeded generator happened to draw.
+  // Rebalancing here, under the same guard placement uses, catches all of
+  // them. Scenarios built entirely by hand keep the 'Empty' placement and are
+  // left alone - some of them, like Interstellar Visitor, are about something
+  // arriving from outside and are supposed to be moving.
+  if (SETTINGS.placement !== 'Empty') {
+    zeroNetMomentum();
+  }
 
   generateStarfield();
 };
@@ -4617,46 +5500,10 @@ const setting_items = [
     label: 'Preset Scenario',
     key: 'preset_scenario',
     type: 'option',
-    options: [
-      'None',
-      'Solar System',
-      'Earth-Moon System',
-      'TRAPPIST-1 System',
-      "Kepler's 2nd Law",
-      'GW150914',
-      'Binary BH',
-      'Triple BH System',
-      'Supermassive BH',
-      'Star Cluster',
-      'Kuiper Belt',
-      'Sagittarius A*',
-      'Binary Star System',
-      'Slingshot',
-      'Rogue Encounter',
-      'Neutron Star Collision',
-      'Pulsar System',
-      'White Dwarf Binary',
-      'Stellar Graveyard',
-      'Galactic Center',
-      'Supernova Remnant',
-      'Compact Object Zoo',
-      'Millisecond Pulsar',
-      'Tidal Disruption Event',
-      'Intermediate Mass BH',
-      'Galactic Collision',
-      'Micro BH Swarm',
-      'Exoplanet Lab',
-      'Quasar Cannon',
-      'The Pinwheel Galaxy Core',
-      'Star Frisbee',
-      'Kessler Cascade',
-      'Alien Dyson Swarm Collapse',
-      'Tidal Arm Tango',
-      'Hungry Hungry Holes',
-      'Slingshot Gauntlet',
-      'Black Hole Billiards',
-      'Stellar Nursery',
-    ],
+    // Derived, never listed: this used to be a hand-written copy of all
+    // forty-three scenario names, which is a second catalog that silently
+    // drifts the first time someone adds a scenario and forgets this list.
+    options: ['None', ...Object.keys(SCENARIO_INFO)],
   },
   { label: '--- Simulation ---', type: 'separator' },
   {
@@ -4928,7 +5775,7 @@ const setting_items = [
   },
   { label: '--- Educational ---', type: 'separator' },
   {
-    label: 'Habitable Zone Optimism',
+    label: 'Habitable Zone Model',
     key: 'habitable_zone_optimism',
     type: 'float',
     min: 0.5,
@@ -5316,7 +6163,7 @@ const getSettingTooltip = (key, label) => {
 
     // Educational
     habitable_zone_optimism:
-      'Controls how wide the “habitable zone” (Goldilocks zone) is around stars. Lower values (≈0.5–1.0) are conservative and focus on Earth-like orbits where liquid water is likely. Higher values (>1.0) are more optimistic and can include orbits like Venus or Mars that might be habitable with the right atmosphere or conditions.',
+      'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimistic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
   };
 
   return tooltips[key] || `This setting controls ${label.toLowerCase()}.`;
@@ -5623,6 +6470,96 @@ const hideBHMassesModal = () => {
   document.getElementById('bhMassesModal').classList.add('hidden');
 };
 // Save/Load functions
+
+/** Every body currently in the simulation, in a stable order. */
+const allBodies = () => [
+  ...bh_list,
+  ...planets,
+  ...stars,
+  ...gas_giants,
+  ...asteroids,
+  ...comets,
+  ...neutron_stars,
+  ...white_dwarfs,
+  ...debris,
+];
+
+/** Empty every object list, pool and derived cache. */
+const clearWorld = () => {
+  bh_list.length = 0;
+  planets.length = 0;
+  stars.length = 0;
+  gas_giants.length = 0;
+  asteroids.length = 0;
+  comets.length = 0;
+  neutron_stars.length = 0;
+  white_dwarfs.length = 0;
+  debris.length = 0;
+  particles.length = 0;
+  gravity_ripples.length = 0;
+  accretion_disk_particles.length = 0;
+  particlePool.clear();
+  // Restored bodies reuse their saved ids, so any surviving history from the
+  // previous run would be silently attributed to them.
+  clearAllEnergyHistory();
+  resetPhysicsObjectCounter();
+};
+
+/**
+ * Rebuild the object lists from an array of saved states.
+ *
+ * Shared by the localStorage load and the shared-link load: both need exactly
+ * this, and when it existed only inside load_simulation_state the two would
+ * have drifted the first time a new body type was added.
+ *
+ * @param {Array<Object>} objectStates - Results of get_state(), in any order
+ * @returns {number} How many bodies were restored
+ */
+const rebuildWorldFromStates = objectStates => {
+  clearWorld();
+  let maxId = 0;
+  let restored = 0;
+
+  for (const obj_state of objectStates || []) {
+    if (!obj_state || typeof obj_state !== 'object') continue;
+    const { type, pos, vel, mass } = obj_state;
+    // A link can be edited by hand, so nothing here may assume well-formed
+    // input; a body without a position would otherwise throw on first draw.
+    if (!pos || !Number.isFinite(pos.x) || !Number.isFinite(pos.y)) continue;
+    const v = vel && Number.isFinite(vel.x) ? vel : { x: 0, y: 0 };
+
+    let new_obj = null;
+    if (type === 'Planet') new_obj = new Planet(pos, v);
+    else if (type === 'GasGiant') new_obj = new GasGiant(pos, v);
+    else if (type === 'Asteroid') new_obj = new Asteroid(pos, v);
+    else if (type === 'Comet') new_obj = new Comet(pos, v);
+    else if (type === 'StarObject') new_obj = new StarObject(pos, v);
+    else if (type === 'NeutronStar')
+      new_obj = new NeutronStar(pos, v, null, null);
+    else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(pos, v);
+    else if (type === 'Debris') new_obj = new Debris(pos, v);
+    else if (type === 'BlackHole') new_obj = new BlackHole(pos, mass, v, true);
+    if (!new_obj) continue;
+
+    new_obj.set_state(obj_state);
+    if (new_obj instanceof Planet) planets.push(new_obj);
+    else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
+    else if (new_obj instanceof Comet) comets.push(new_obj);
+    else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
+    else if (new_obj instanceof StarObject) stars.push(new_obj);
+    else if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
+    else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
+    else if (new_obj instanceof Debris) debris.push(new_obj);
+    else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
+    maxId = Math.max(maxId, new_obj.id ?? 0);
+    restored++;
+  }
+
+  setPhysicsObjectCounter(maxId + 1);
+  bumpWorldGeneration();
+  return restored;
+};
+
 /**
  * Save the current simulation state to localStorage
  * Includes all settings, object states, and view parameters
@@ -5632,17 +6569,7 @@ const save_simulation_state = () => {
     const savedState = {
       settings: SETTINGS,
       view: { zoom: state.zoom, pan: state.pan },
-      objects: [
-        ...bh_list.map(o => o.get_state()),
-        ...planets.map(o => o.get_state()),
-        ...stars.map(o => o.get_state()),
-        ...gas_giants.map(o => o.get_state()),
-        ...asteroids.map(o => o.get_state()),
-        ...comets.map(o => o.get_state()),
-        ...neutron_stars.map(o => o.get_state()),
-        ...white_dwarfs.map(o => o.get_state()),
-        ...debris.map(o => o.get_state()),
-      ],
+      objects: allBodies().map(o => o.get_state()),
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(savedState));
     alert('Simulation state saved!');
@@ -5671,54 +6598,12 @@ const load_simulation_state = () => {
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
-    bh_list.length = 0;
-    planets.length = 0;
-    stars.length = 0;
-    gas_giants.length = 0;
-    asteroids.length = 0;
-    comets.length = 0;
-    neutron_stars.length = 0;
-    white_dwarfs.length = 0;
-    debris.length = 0;
-    particles.length = 0;
-    gravity_ripples.length = 0;
-    accretion_disk_particles.length = 0;
-    particlePool.clear();
-    // Loaded objects reuse their saved ids, so any surviving history from the
-    // previous run would be silently attributed to them.
-    clearAllEnergyHistory();
-    resetPhysicsObjectCounter();
     updatePhysicsSettings(SETTINGS);
-    let max_id = 0;
-    loadedState.objects.forEach(obj_state => {
-      const { type, pos, vel, mass } = obj_state;
-      let new_obj = null;
-      if (type === 'Planet') new_obj = new Planet(pos, vel);
-      else if (type === 'GasGiant') new_obj = new GasGiant(pos, vel);
-      else if (type === 'Asteroid') new_obj = new Asteroid(pos, vel);
-      else if (type === 'Comet') new_obj = new Comet(pos, vel);
-      else if (type === 'StarObject') new_obj = new StarObject(pos, vel);
-      else if (type === 'NeutronStar')
-        new_obj = new NeutronStar(pos, vel, null, null);
-      else if (type === 'WhiteDwarf') new_obj = new WhiteDwarf(pos, vel);
-      else if (type === 'Debris') new_obj = new Debris(pos, vel);
-      else if (type === 'BlackHole')
-        new_obj = new BlackHole(pos, mass, vel, true);
-      if (new_obj) {
-        new_obj.set_state(obj_state);
-        if (new_obj instanceof Planet) planets.push(new_obj);
-        else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
-        else if (new_obj instanceof Comet) comets.push(new_obj);
-        else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
-        else if (new_obj instanceof StarObject) stars.push(new_obj);
-        else if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
-        else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
-        else if (new_obj instanceof Debris) debris.push(new_obj);
-        else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
-        max_id = Math.max(max_id, new_obj.id ?? 0);
-      }
-    });
-    setPhysicsObjectCounter(max_id + 1);
+    rebuildWorldFromStates(loadedState.objects);
+    // A restored save is a hand-made world by definition: no seed regenerates
+    // it, so sharing it has to carry the bodies themselves.
+    markWorldTouched();
+    window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
     alert('Simulation state loaded!');
     state.paused = false;
     updateSpeedDisplay();
@@ -5728,6 +6613,106 @@ const load_simulation_state = () => {
   }
 };
 
+// --- Shared links -------------------------------------------------------------
+
+/**
+ * Describe the current simulation as a payload fit for a URL.
+ *
+ * Takes the elapsed simulation clock as an argument rather than importing
+ * timeline.js: timeline.js already imports this module, and the cycle is
+ * avoidable by letting the caller - which imports both - supply the number.
+ *
+ * @param {Object} [opts]
+ * @param {'seeded'|'full'|'auto'} [opts.kind] - Payload kind; 'auto' decides
+ * @param {boolean} [opts.includeCamera] - Carry zoom and pan
+ * @param {number} [opts.elapsed] - Simulated seconds run since the world built
+ * @returns {Object} Payload for encodePayload()
+ */
+const captureShareState = ({
+  kind = 'auto',
+  includeCamera = true,
+  elapsed = 0,
+} = {}) => {
+  const resolved =
+    kind === 'auto' ? chooseKind({ touched: worldTouched, elapsed }) : kind;
+
+  return buildPayload({
+    // current_scenario_name, not SETTINGS.preset_scenario: applyPreset leaves
+    // the latter set to the 'None' sentinel, so reading it would stamp every
+    // link with a scenario that loads nothing.
+    scenario: current_scenario_name,
+    seed: getWorldSeed(),
+    settings: SETTINGS,
+    generationSettings,
+    DEFAULT_SETTINGS,
+    camera: includeCamera ? { zoom: state.zoom, pan: state.pan } : null,
+    bodies:
+      resolved === 'full'
+        ? allBodies()
+            .filter(o => o && o.alive !== false)
+            .map(o => packBody(o.get_state()))
+        : null,
+    paused: state.paused,
+  });
+};
+
+/**
+ * Rebuild the simulation described by a decoded payload.
+ *
+ * @param {Object} payload - From decodePayload()
+ * @returns {{scenario:string, kind:string, bodies:number}} What was restored
+ */
+const applyShareState = payload => {
+  const scenario = payload.s;
+  SETTINGS.preset_scenario = scenario;
+
+  // Held for build_simulation() to apply. Settings cannot simply be assigned
+  // here: apply_preset() runs first inside the build and resets everything to
+  // the scenario's own defaults, which would discard them.
+  pendingSettingsOverride = payload.d ? { ...payload.d } : null;
+
+  const seed = payloadSeed(payload);
+
+  if (Array.isArray(payload.b) && payload.b.length) {
+    // A full payload describes a world no seed reproduces. Build the scenario
+    // first so settings, starfield and preset geometry are right, then replace
+    // the bodies with the ones the link actually carries.
+    initialize_simulation({ seed });
+    rebuildWorldFromStates(payload.b);
+    updatePhysicsSettings(SETTINGS);
+    markWorldTouched();
+  } else {
+    initialize_simulation({ seed });
+  }
+
+  // Settings the author changed after the world was built are applied now, in
+  // the same order they happened, so live-applied values like gravity land on
+  // an already-generated system rather than shaping the generation itself.
+  if (payload.a) {
+    Object.assign(SETTINGS, payload.a);
+    updatePhysicsSettings(SETTINGS);
+  }
+
+  if (Array.isArray(payload.c) && payload.c.length === 3) {
+    const [zoom, panX, panY] = payload.c;
+    if (Number.isFinite(zoom) && zoom > 0) state.zoom = zoom;
+    if (Number.isFinite(panX) && Number.isFinite(panY)) {
+      state.pan = { x: panX, y: panY };
+    }
+  }
+
+  state.paused = payload.p === 1;
+  current_scenario_name = scenario;
+  updateSpeedDisplay();
+  updateObjectTypeButton();
+
+  return {
+    scenario,
+    kind: payload.b ? 'full' : 'seeded',
+    bodies: allBodies().length,
+  };
+};
+
 // Utility functions
 /**
  * Update the speed display in the UI to show current simulation speed
@@ -5735,7 +6720,11 @@ const load_simulation_state = () => {
 const updateSpeedDisplay = () => {
   const speedDisplay = document.getElementById('speedDisplay');
   if (speedDisplay) {
-    speedDisplay.textContent = `${SETTINGS.sim_speed.toFixed(1)}x`;
+    // One decimal reads any speed below 0.05 as "0.0x", which looks like the
+    // simulation is stopped. A compact scenario can legitimately run at 0.01.
+    const v = SETTINGS.sim_speed;
+    const shown = v === 0 ? '0' : v < 0.1 ? v.toFixed(2) : v.toFixed(1);
+    speedDisplay.textContent = `${shown}\u00d7`;
   }
 };
 
@@ -6005,7 +6994,7 @@ window.addEventListener('mouseup', e => {
       new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
     }
 
-    // NB: Comet is checked before Asteroid and lands in `comets` — it used to
+    // NB: Comet is checked before Asteroid and lands in `comets` - it used to
     // be pushed into `asteroids`, so every hand-placed comet behaved as a rock.
     if (new_obj instanceof Comet) comets.push(new_obj);
     else if (new_obj instanceof Planet) planets.push(new_obj);
@@ -6343,7 +7332,37 @@ window.addEventListener(
   { passive: false }
 );
 
+/**
+ * True when a key event came from somewhere that owns the keyboard.
+ *
+ * Kept local rather than imported from shortcuts.js: that module is loaded by
+ * controls.js, which imports this one, and a static import here would close the
+ * cycle for the sake of one predicate.
+ *
+ * @param {EventTarget} target - Event target
+ * @returns {boolean} True if the user is typing
+ */
+const isTypingTarget = target => {
+  if (!target) return false;
+  const tag = target.tagName;
+  return (
+    tag === 'INPUT' ||
+    tag === 'TEXTAREA' ||
+    tag === 'SELECT' ||
+    target.isContentEditable === true
+  );
+};
+
 window.addEventListener('keydown', e => {
+  // Typing into a field must not also drive the simulation. This handler binds
+  // bare letters, so without the guard writing a planet's name into a lesson
+  // answer pans the view on W, A, S and D, pauses on space and fires a
+  // screenshot on P. shortcuts.js already guards its own registry the same way;
+  // this listener predates it and was never given the check.
+  if (isTypingTarget(e.target)) return;
+  // A modifier means the key belongs to the browser or the OS, not to us.
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
   const panSpeed = 40 / state.zoom;
   if (e.key === ' ') {
     state.paused = !state.paused;
@@ -6430,7 +7449,7 @@ document.getElementById('resetAllBtn').onclick = () => {
 };
 document.getElementById('saveBtn').onclick = save_simulation_state;
 document.getElementById('loadBtn').onclick = load_simulation_state;
-// Settings that describe how the simulation is *built* — changing any of them
+// Settings that describe how the simulation is *built* - changing any of them
 // genuinely requires a rebuild. Everything else is presentation or a live
 // physics knob and can be applied to the running simulation, so that adjusting
 // a trail style no longer throws away the system you were watching.
@@ -6748,88 +7767,40 @@ if (closeScenarioInfoBtn) {
   console.error('Close scenario info button not found');
 }
 
-// Scenario list modal handlers
-document.getElementById('loadScenarioBtn').onclick = () => {
-  const modal = document.getElementById('scenarioListModal');
-  const itemsDiv = document.getElementById('scenarioListItems');
-  itemsDiv.innerHTML = '';
-  const search = document.getElementById('scenarioSearch');
-  if (search) {
-    search.value = '';
-    setTimeout(() => search.focus(), 60);
+/**
+ * Load a built-in scenario by its SCENARIO_INFO key.
+ *
+ * The one authoritative way to switch scenario from the UI. The scenario
+ * browser and the welcome screen's featured gallery both call this, so the two
+ * cannot drift: an unknown key is refused in one place, the rebuild happens in
+ * one place, and the readouts that depend on the new world are refreshed in one
+ * place.
+ *
+ * @param {string} key - A key of SCENARIO_INFO
+ * @returns {boolean} True if the scenario existed and was loaded
+ */
+export function loadScenarioByKey(key) {
+  if (!key || !SCENARIO_INFO[key]) {
+    console.warn(`Unknown scenario key: ${key}`);
+    return false;
   }
+  SETTINGS.preset_scenario = key;
+  // The rebuild raises the scenario card itself, through apply_preset, so this
+  // must not call show_enhanced_scenario_info() as well: a second call stacks a
+  // second 18-second auto-hide timer on the same element.
+  initialize_simulation();
+  // The small transient readout over the canvas. It refuses to fire before the
+  // user has interacted and in the first few hundred frames, which is what
+  // keeps it off the screen during start-up.
+  show_scenario_info();
+  updateSpeedDisplay();
+  return true;
+}
 
-  // Build scenario list with validation
-  Object.entries(SCENARIO_INFO).forEach(([key, info], index) => {
-    // Validate scenario data
-    if (!info || typeof info !== 'object') {
-      console.warn(`Invalid scenario data for key: ${key}`);
-      return;
-    }
-
-    // Ensure required properties exist with fallbacks
-    const title = info.title || 'Untitled Scenario';
-    const summary = info.summary || 'No description available.';
-    const scenarioKey = key || 'unknown';
-
-    const item = document.createElement('div');
-    item.className = 'scenario-list-item';
-    item.setAttribute('role', 'listitem');
-    item.tabIndex = 0;
-    // Searchable metadata for the filter in controls.js
-    item.dataset.scenario = scenarioKey;
-    item.dataset.keywords = `${title} ${summary}`;
-    item.title = summary;
-
-    // Add staggered animation delay
-    const delay = index * 50; // 50ms delay between each card
-    item.style.animationDelay = `${delay}ms`;
-
-    const choose = () => {
-      SETTINGS.preset_scenario = key;
-      initialize_simulation();
-      modal.classList.add('hidden');
-      show_scenario_info();
-      updateSpeedDisplay();
-    };
-    item.onclick = choose;
-    item.onkeydown = ev => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        ev.preventDefault();
-        choose();
-      }
-    };
-
-    // Sanitize HTML content to prevent XSS
-    const sanitizeHTML = str => {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    };
-
-    item.innerHTML = `
-      <div class="scenario-title">
-        <strong>${sanitizeHTML(title)}</strong>
-        <span>${sanitizeHTML(scenarioKey)}</span>
-      </div>
-      <hr class="scenario-separator">
-      <div class="scenario-description">
-        <span>${sanitizeHTML(summary)}</span>
-      </div>
-    `;
-
-    itemsDiv.appendChild(item);
-  });
-
-  // Log generation results for debugging
-  const generatedItems = itemsDiv.children.length;
-  const totalScenarios = Object.keys(SCENARIO_INFO).length;
-  debugLog(
-    `Generated ${generatedItems} scenario cards from ${totalScenarios} scenarios`
-  );
-
-  modal.classList.remove('hidden');
-};
+// The scenario gallery lives in js/scenarioBrowser.js. It renders the catalog,
+// the concept chips and the search, and calls loadScenarioByKey() above when a
+// card is chosen. It used to be built inline here, which put four hundred lines
+// of list markup in the middle of the simulation module.
 
 // Validation function for scenario data
 const validateScenarioData = () => {
@@ -6860,6 +7831,35 @@ const validateScenarioData = () => {
         `Summary too long for scenario: ${key} (${info.summary.length} chars)`
       );
     }
+
+    // The gallery browses by concept and shows a picture, so a scenario with
+    // no tags is unreachable through the chips and one with no thumbnail shows
+    // a placeholder. Neither is fatal, which is why this warns rather than
+    // throwing: a scenario added before its thumbnail is captured should still
+    // load and still be searchable.
+    if (!Array.isArray(info.tags) || info.tags.length === 0) {
+      issues.push(`No concept tags for scenario: ${key}`);
+    } else {
+      const seen = new Set();
+      for (const tag of info.tags) {
+        if (!SCENARIO_TAGS[tag]) {
+          issues.push(`Unknown tag "${tag}" on scenario: ${key}`);
+        }
+        if (seen.has(tag)) {
+          issues.push(`Duplicate tag "${tag}" on scenario: ${key}`);
+        }
+        seen.add(tag);
+      }
+      if (info.tags.length > 4) {
+        issues.push(
+          `Too many tags on scenario: ${key} (${info.tags.length}); the card shows three`
+        );
+      }
+    }
+
+    if (!info.thumbnail || typeof info.thumbnail !== 'string') {
+      issues.push(`No thumbnail path for scenario: ${key}`);
+    }
   });
 
   if (issues.length > 0) {
@@ -6875,20 +7875,6 @@ const validateScenarioData = () => {
 document.addEventListener('DOMContentLoaded', () => {
   validateScenarioData();
 });
-
-document.getElementById('closeScenarioList').onclick = () => {
-  document.getElementById('scenarioListModal').classList.add('hidden');
-};
-const scenarioListCloseChip = document.getElementById('scenarioListCloseChip');
-if (scenarioListCloseChip)
-  scenarioListCloseChip.onclick = () =>
-    document.getElementById('scenarioListModal').classList.add('hidden');
-
-document.getElementById('scenarioListModal').onclick = e => {
-  if (e.target === document.getElementById('scenarioListModal')) {
-    document.getElementById('scenarioListModal').classList.add('hidden');
-  }
-};
 
 // Touch event handlers for mobile
 canvas.addEventListener(
@@ -6908,7 +7894,7 @@ canvas.addEventListener(
       const touchStartPos = { x: touch.clientX, y: touch.clientY };
 
       // Was: a bounding-box test against .ui-container. On mobile that element
-      // is the closed menu — still laid out, just visibility:hidden — so its
+      // is the closed menu - still laid out, just visibility:hidden - so its
       // 340x697 rect swallowed 78% of the screen and the canvas was mostly
       // untouchable. elementFromPoint only reports what is actually hit-
       // testable, so a hidden panel no longer blocks anything.
@@ -6953,7 +7939,7 @@ canvas.addEventListener(
         }
 
         // Touch drag pans, the way every map behaves. Placement is armed by a
-        // long press instead — previously a single finger could only ever
+        // long press instead - previously a single finger could only ever
         // place an object, so the view could not be panned at all on a phone.
         state.touchHoldTimer = setTimeout(() => {
           if (!state.touch_active) return;
@@ -7186,6 +8172,16 @@ export {
   buildSettingsMenu,
   save_simulation_state,
   load_simulation_state,
+  setAreaSweepWedges,
+  getAreaSweepWedges,
+  showAreaSweepFor,
+  setAreaSweepSuppressed,
+  isAreaSweepSuppressed,
+  checkAreaSweepValidity,
+  captureShareState,
+  applyShareState,
+  markWorldTouched,
+  setInspectorSuppressed,
   updateSpeedDisplay,
   takeScreenshot,
   updateObjectTypeButton,
@@ -7196,7 +8192,7 @@ export {
   DEFAULT_SETTINGS,
   localSettings,
 };
-// Tutorial lives in js/tutorial.js — see initTutorial(), wired from main.js.
+// Tutorial lives in js/tutorial.js - see initTutorial(), wired from main.js.
 
 // Helper: Ensure no two objects are initialized within a minimum separation distance
 // Removed unused ensureMinSeparation helper

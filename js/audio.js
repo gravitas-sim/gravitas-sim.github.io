@@ -151,11 +151,17 @@ const ensureAudioContext = () => {
     });
 
     if (typeof document !== 'undefined') {
+      // Suspend as well as resume. This only resumed, so a tab switched away
+      // from kept its oscillators running and its context awake: audible from
+      // another tab, and a Web Audio graph kept alive for a simulation nobody
+      // was watching.
       document.addEventListener(
         'visibilitychange',
         () => {
-          if (document.visibilityState === 'visible' && !muted) {
-            audioCtx.resume().catch(() => {});
+          if (document.visibilityState === 'visible') {
+            if (!muted) audioCtx.resume().catch(() => {});
+          } else {
+            audioCtx.suspend().catch(() => {});
           }
         },
         { passive: true }

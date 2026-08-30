@@ -1,7 +1,7 @@
 /* =============================================================================
    Gravitas design tokens
    -----------------------------------------------------------------------------
-   Every colour, space, radius, shadow and z-index in the UI resolves to one of
+   Every color, space, radius, shadow and z-index in the UI resolves to one of
    these. Nothing else in the codebase should hardcode a hex value.
 
    Layer order is declared here and honoured by the other stylesheets:
@@ -106,6 +106,10 @@
     --radius: 9px;
     --radius-md: 12px;
     --radius-lg: 16px;
+    /* The empty part of a slider track. Light enough to clear 3:1 against the
+       inspector's dark panel, which stays dark in every theme by design, so a
+       half-used slider reads as a slider rather than as a stray line. */
+    --range-track: #55627f;
     --radius-full: 999px;
 
     /* --- Elevation ------------------------------------------------------ */
@@ -132,6 +136,9 @@
     --z-inspector: 50;
     --z-modal: 60;
     --z-toast: 70;
+    /* The front door sits above every panel but below the splash, so the
+       splash still covers it while a first visit is being decided. */
+    --z-welcome: 75;
     --z-splash: 80;
 
     /* --- Backwards-compatible aliases -----------------------------------
@@ -147,13 +154,9 @@
     --button-apply-hover-bg: var(--success);
     --separator-color: var(--accent-line);
 
-    --theme-hue-shift: 0deg;
-    --theme-contrast: 1;
-    --theme-brightness: 1;
-
-    /* Fixed-panel widths, shared so the centre band can be computed rather
+    /* Fixed-panel widths, shared so the center band can be computed rather
        than guessed. The HUD sits left, the control rail right, and the
-       scenario card centres in what is left between them. */
+       scenario card centers in what is left between them. */
     --hud-width: 330px;
     --rail-width: 208px;
     --panel-inset: var(--space-4);
@@ -249,7 +252,7 @@
     --shadow-glow:
       0 0 0 1px var(--accent-line), 0 8px 32px rgba(15, 23, 42, 0.14);
 
-    /* Status colours need to darken for a light surface: the dark-theme
+    /* Status colors need to darken for a light surface: the dark-theme
        greens and ambers fall well below 4.5:1 against near-white. */
     --success: #047857;
     --success-strong: #065f46;

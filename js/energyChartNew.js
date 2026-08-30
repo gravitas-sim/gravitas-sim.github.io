@@ -1,3 +1,4 @@
+import { tickLabel, withUnit } from './format.js';
 import { debugLog } from './utils.js';
 
 // ===== ENERGY CHART MODULE =====
@@ -81,26 +82,7 @@ const chartConfig = {
         displayColors: true,
         callbacks: {
           label: function (context) {
-            const value = context.parsed.y;
-            const absValue = Math.abs(value);
-
-            if (absValue === 0) {
-              return `${context.dataset.label}: 0 J`;
-            }
-
-            // Use scientific notation for very large or very small numbers
-            if (absValue >= 1e6 || absValue < 1e-3) {
-              return `${context.dataset.label}: ${value.toExponential(2)} J`;
-            }
-
-            // For medium-sized numbers, use fixed decimal places
-            if (absValue >= 1000) {
-              return `${context.dataset.label}: ${value.toFixed(0)} J`;
-            } else if (absValue >= 1) {
-              return `${context.dataset.label}: ${value.toFixed(1)} J`;
-            } else {
-              return `${context.dataset.label}: ${value.toFixed(3)} J`;
-            }
+            return `${context.dataset.label}: ${withUnit(context.parsed.y, 'J')}`;
           },
         },
       },
@@ -150,26 +132,7 @@ const chartConfig = {
             size: 12,
           },
           callback: function (value) {
-            // Handle extremely large numbers with better formatting
-            const absValue = Math.abs(value);
-
-            if (absValue === 0) {
-              return '0';
-            }
-
-            // Use scientific notation for very large or very small numbers
-            if (absValue >= 1e6 || absValue < 1e-3) {
-              return value.toExponential(1);
-            }
-
-            // For medium-sized numbers, use fixed decimal places
-            if (absValue >= 1000) {
-              return value.toFixed(0);
-            } else if (absValue >= 1) {
-              return value.toFixed(1);
-            } else {
-              return value.toFixed(3);
-            }
+            return tickLabel(value);
           },
         },
       },

@@ -1,5 +1,5 @@
 // =============================================================================
-// Theme — switches the design-token set and keeps the canvas in step
+// Theme: switches the design-token set and keeps the canvas in step
 // -----------------------------------------------------------------------------
 // The DOM is themed by CSS custom properties alone. The simulation canvas is
 // painted by JS, so it reads the same tokens back out of the cascade rather
@@ -18,7 +18,7 @@ export const THEMES = [
   {
     id: 'observatory',
     label: 'Observatory',
-    hint: 'Red chrome — preserves night vision.',
+    hint: 'Red chrome: preserves night vision.',
   },
   { id: 'daylight', label: 'Daylight', hint: 'Light UI for bright rooms.' },
 ];

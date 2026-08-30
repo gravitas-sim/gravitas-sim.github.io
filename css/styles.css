@@ -118,12 +118,23 @@
     transition: opacity 1.2s ease-in; /* fade-in only */
   }
 
-  /* Apply global color grading to the whole page */
-  html,
-  body {
-    filter: hue-rotate(var(--theme-hue-shift)) contrast(var(--theme-contrast))
-      brightness(var(--theme-brightness));
-  }
+  /* The whole page used to carry
+       filter: hue-rotate(var(--theme-hue-shift))
+               contrast(var(--theme-contrast))
+               brightness(var(--theme-brightness));
+     for "global colour grading". No theme ever set those three tokens: they
+     were declared once as 0deg/1/1 and left there, so the filter was the
+     identity and changed nothing on screen.
+
+     It was not free. A filter on html/body promotes the entire document,
+     including both full-screen canvases, into a filtered composited layer that
+     has to be re-filtered on every paint - which for this application is every
+     frame - and it makes html a containing block for fixed-position elements,
+     which is not what any of the panels expect. Removing it is invisible and
+     saves a full-screen composite pass per frame.
+
+     Theme colour lives in tokens.css, where each theme redefines the palette
+     directly; that is the mechanism this was duplicating badly. */
 
   /*  added by JS after splash is gone  */
   #simulationCanvas.showCanvas,
@@ -2859,7 +2870,7 @@
     position: relative;
   }
 
-  .scenario-info-header h3 {
+  .scenario-info-header h2 {
     flex: 1;
     margin: 0;
     font-size: 18px;
@@ -3090,7 +3101,7 @@
       padding: 8px 16px;
     }
 
-    .scenario-info-header h3 {
+    .scenario-info-header h2 {
       font-size: 16px;
       max-width: calc(100% - 40px);
     }
@@ -3125,7 +3136,7 @@
       padding: 8px 14px;
     }
 
-    .scenario-info-header h3 {
+    .scenario-info-header h2 {
       font-size: 15px;
       max-width: calc(100% - 45px);
     }
@@ -3177,7 +3188,7 @@
       padding: 6px 12px;
     }
 
-    .scenario-info-header h3 {
+    .scenario-info-header h2 {
       font-size: 14px;
       max-width: calc(100% - 50px);
     }

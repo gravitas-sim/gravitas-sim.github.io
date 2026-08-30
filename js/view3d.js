@@ -941,4 +941,4 @@ function updateToggleLabel() {
   }
 }
 
-export { init3DView, update3DScene };
+export { init3DView, update3DScene, set3DViewEnabled };

@@ -1,15 +1,16 @@
 // =============================================================================
-// Units — one place that decides how a quantity is written down
+// Units: one place that decides how a quantity is written down
 // -----------------------------------------------------------------------------
 // The simulation runs in its own units. Two anchors are fixed by the physics
 // (1000 mass units = 1 M☉, 1 length unit = 0.01 AU) and the time unit follows
-// from requiring the simulation's G to be the real G — the same derivation the
+// from requiring the simulation's G to be the real G: the same derivation the
 // energy system uses, kept in sync here.
 //
 // "Simulation" mode shows the raw numbers the integrator works in.
 // "Physical" mode shows astronomer-facing units: AU, M☉, km/s, years.
 // =============================================================================
 
+import { formatNumber, withUnit } from './format.js';
 import {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
@@ -22,7 +23,33 @@ const G_SI = 6.6743e-11;
 const SECONDS_PER_YEAR = 3.15576e7;
 
 const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
-const DISTANCE_UNIT_TO_M = AU_METERS / 100; // 1 unit = 0.01 AU
+
+/**
+ * Simulation length units in one astronomical unit.
+ *
+ * This is the anchor the whole distance scale hangs from, and it belongs in
+ * exactly one place. The habitable-zone renderer used to carry its own private
+ * copy of this number, set to 160, from a time when the Solar System scenario
+ * placed Earth at 160 units. The scenario was rebuilt at 100 and the renderer
+ * was not, so the ring was drawn sixty percent too far out for a long time.
+ */
+export const SIM_UNITS_PER_AU = 100;
+
+const DISTANCE_UNIT_TO_M = AU_METERS / SIM_UNITS_PER_AU; // 1 unit = 0.01 AU
+
+/**
+ * Convert astronomical units to simulation distance units.
+ * @param {number} au - Distance in AU
+ * @returns {number} Distance in simulation units
+ */
+export const auToSim = au => au * SIM_UNITS_PER_AU;
+
+/**
+ * Convert simulation distance units to astronomical units.
+ * @param {number} units - Distance in simulation units
+ * @returns {number} Distance in AU
+ */
+export const simToAu = units => units / SIM_UNITS_PER_AU;
 
 const MODES = ['physical', 'simulation'];
 const STORAGE_KEY = 'gravitas_units';
@@ -86,18 +113,17 @@ export function velocityUnitToMs() {
 
 /**
  * Format a number with a sensible number of significant digits.
+ *
+ * Kept as the name every caller already uses; the typography itself lives in
+ * js/format.js so that a canvas label, a chart axis and a PDF cell all reach
+ * the same decision.
+ *
  * @param {number} v - Value
- * @param {number} sig - Significant digits
+ * @param {number} digits - Significant digits
  * @returns {string} Formatted number
  */
-export function sig(v, sig = 3) {
-  if (!isFinite(v)) return '—';
-  const a = Math.abs(v);
-  if (a === 0) return '0';
-  if (a >= 1e6 || a < 1e-3) return v.toExponential(Math.max(0, sig - 1));
-  return Number(v.toPrecision(sig)).toLocaleString(undefined, {
-    maximumFractionDigits: 6,
-  });
+export function sig(v, digits = 3) {
+  return formatNumber(v, { sig: digits });
 }
 
 /**
@@ -106,14 +132,14 @@ export function sig(v, sig = 3) {
  * @returns {string} Formatted distance with unit
  */
 export function formatDistance(simDistance) {
-  if (!isPhysical()) return `${sig(simDistance)} u`;
+  if (!isPhysical()) return withUnit(sig(simDistance), 'u');
   const au = (simDistance * DISTANCE_UNIT_TO_M) / AU_METERS;
   if (Math.abs(au) < 0.01) {
     const km = (simDistance * DISTANCE_UNIT_TO_M) / 1000;
-    return `${sig(km)} km`;
+    return withUnit(sig(km), 'km');
   }
-  if (Math.abs(au) >= 6.324e4) return `${sig(au / 6.324e4)} ly`;
-  return `${sig(au)} AU`;
+  if (Math.abs(au) >= 6.324e4) return withUnit(sig(au / 6.324e4), 'ly');
+  return withUnit(sig(au), 'AU');
 }
 
 /**
@@ -122,13 +148,13 @@ export function formatDistance(simDistance) {
  * @returns {string} Formatted mass with unit
  */
 export function formatMass(simMass) {
-  if (!isPhysical()) return `${sig(simMass)} u`;
+  if (!isPhysical()) return withUnit(sig(simMass), 'u');
   const solar = simMass / SOLAR_MASS_UNIT;
-  if (Math.abs(solar) >= 0.05) return `${sig(solar)} M☉`;
+  if (Math.abs(solar) >= 0.05) return withUnit(sig(solar), 'M☉');
   const earths = simMass / EARTH_MASS_UNIT;
-  if (Math.abs(earths) >= 0.02) return `${sig(earths)} M⊕`;
+  if (Math.abs(earths) >= 0.02) return withUnit(sig(earths), 'M⊕');
   const kg = simMass * MASS_UNIT_TO_KG;
-  return `${sig(kg)} kg`;
+  return withUnit(sig(kg), 'kg');
 }
 
 /**
@@ -137,11 +163,11 @@ export function formatMass(simMass) {
  * @returns {string} Formatted speed with unit
  */
 export function formatSpeed(simSpeed) {
-  if (!isPhysical()) return `${sig(simSpeed)} u/t`;
+  if (!isPhysical()) return withUnit(sig(simSpeed), 'u/t');
   const ms = simSpeed * velocityUnitToMs();
   const c = 299792458;
-  if (Math.abs(ms) >= 0.01 * c) return `${sig(ms / c, 3)} c`;
-  return `${sig(ms / 1000)} km/s`;
+  if (Math.abs(ms) >= 0.01 * c) return withUnit(sig(ms / c, 3), 'c');
+  return withUnit(sig(ms / 1000), 'km/s');
 }
 
 /**
@@ -150,15 +176,15 @@ export function formatSpeed(simSpeed) {
  * @returns {string} Formatted duration with unit
  */
 export function formatTime(simTime) {
-  if (!isPhysical()) return `${sig(simTime)} t`;
+  if (!isPhysical()) return withUnit(sig(simTime), 't');
   const seconds = simTime * timeUnitSeconds();
   const years = seconds / SECONDS_PER_YEAR;
-  if (Math.abs(years) >= 1e6) return `${sig(years / 1e6)} Myr`;
-  if (Math.abs(years) >= 1e3) return `${sig(years / 1e3)} kyr`;
-  if (Math.abs(years) >= 1) return `${sig(years)} yr`;
+  if (Math.abs(years) >= 1e6) return withUnit(sig(years / 1e6), 'Myr');
+  if (Math.abs(years) >= 1e3) return withUnit(sig(years / 1e3), 'kyr');
+  if (Math.abs(years) >= 1) return withUnit(sig(years), 'yr');
   const days = seconds / 86400;
-  if (Math.abs(days) >= 1) return `${sig(days)} d`;
-  return `${sig(seconds / 3600)} h`;
+  if (Math.abs(days) >= 1) return withUnit(sig(days), 'd');
+  return withUnit(sig(seconds / 3600), 'h');
 }
 
 /**
@@ -167,9 +193,9 @@ export function formatTime(simTime) {
  * @returns {string} Formatted energy with unit
  */
 export function formatEnergy(joules) {
-  if (!isFinite(joules)) return '—';
+  if (!isFinite(joules)) return '-';
   if (!isPhysical()) return sig(joules);
-  return `${sig(joules)} J`;
+  return withUnit(sig(joules), 'J');
 }
 
 /** @returns {string} Short label for the active mode, for buttons and chips */

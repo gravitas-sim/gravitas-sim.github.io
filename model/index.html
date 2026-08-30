@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How Gravitas Models the Universe</title>
+    <meta
+      name="description"
+      content="What the Gravitas simulation calculates, what it approximates, and what it visualizes: the physics model behind the interactive astronomy sandbox, stated plainly."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="canonical" href="https://gravitas-sim.online/model/" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta property="og:title" content="How Gravitas Models the Universe" />
+    <meta
+      property="og:description"
+      content="What the simulation calculates, what it approximates, and what it visualizes."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://gravitas-sim.online/model/" />
+    <meta
+      property="og:image"
+      content="https://gravitas-sim.online/social-card.png"
+    />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <script>
+      // Applied before paint so the page never flashes the wrong theme. The key
+      // and the values are the ones js/theme.js uses.
+      try {
+        const t = localStorage.getItem('gravitas_theme');
+        if (
+          t &&
+          t !== 'midnight' &&
+          ['deep', 'observatory', 'daylight'].includes(t)
+        ) {
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme =
+            t === 'daylight' ? 'light' : 'dark';
+        }
+      } catch (e) {
+        /* storage unavailable; the default theme is correct */
+      }
+    </script>
+  </head>
+  <body class="doc-page">
+    <a class="doc-skip" href="#main">Skip to content</a>
+
+    <header class="doc-top">
+      <a class="doc-brand" href="/">GRAVITAS <span>simulation</span></a>
+      <nav class="doc-nav" aria-label="Site">
+        <a href="/">Simulation</a>
+        <a href="/model/" aria-current="page">The model</a>
+        <a href="/instructors/">Instructors</a>
+        <a
+          href="https://github.com/gravitas-sim/gravitas-sim.github.io"
+          rel="noopener"
+          >Source</a
+        >
+      </nav>
+    </header>
+
+    <main class="doc-main" id="main">
+      <div class="doc-hero">
+        <p class="doc-eyebrow">The Gravitas model</p>
+        <h1>How Gravitas Models the Universe</h1>
+        <p class="doc-lede">
+          What the simulation calculates, what it approximates, and what it
+          visualizes.
+        </p>
+      </div>
+
+      <p>
+        Every scientific model is a set of choices. Some parts of reality are
+        kept because they carry the behavior you are trying to understand;
+        others are simplified or left out because including them would cost more
+        than it explains. A model is judged by whether those choices suit the
+        question being asked, not by how much of the universe it contains.
+      </p>
+      <p>
+        This page states the choices Gravitas makes. It is written for
+        instructors deciding whether to assign it, for students who want to know
+        what they are looking at, and for anyone who wants to check a claim
+        against the code. Where the implementation is simpler than the
+        astronomy, it says so and says why.
+      </p>
+
+      <nav class="doc-toc" aria-label="Contents">
+        <h2>On this page</h2>
+        <ol>
+          <li><a href="#glance">The core model at a glance</a></li>
+          <li><a href="#why">Why simplify?</a></li>
+          <li><a href="#gravity">Gravity and motion</a></li>
+          <li><a href="#dimensions">Two dimensions</a></li>
+          <li><a href="#collisions">Collisions and mergers</a></li>
+          <li><a href="#inspiral">Gravitational-wave inspiral</a></li>
+          <li><a href="#blackholes">Black holes</a></li>
+          <li><a href="#spacetime">The spacetime view</a></li>
+          <li><a href="#visual">Visual effects</a></li>
+          <li><a href="#other">Other educational models</a></li>
+          <li><a href="#trust">What should I trust this to show?</a></li>
+          <li>
+            <a href="#investigations">Which model each investigation uses</a>
+          </li>
+        </ol>
+      </nav>
+
+      <h2 id="glance">The core model at a glance</h2>
+      <ul class="doc-glance">
+        <li>
+          <span class="glance-key">Gravity</span>
+          <span class="glance-value">Newtonian N-body</span>
+        </li>
+        <li>
+          <span class="glance-key">Dimensions</span>
+          <span class="glance-value">Two spatial dimensions</span>
+        </li>
+        <li>
+          <span class="glance-key">Motion</span>
+          <span class="glance-value">Numerically integrated, step by step</span>
+        </li>
+        <li>
+          <span class="glance-key">Collisions</span>
+          <span class="glance-value">Perfectly inelastic mergers</span>
+        </li>
+        <li>
+          <span class="glance-key">Relativity</span>
+          <span class="glance-value"
+            >Not solved; used analytically for display</span
+          >
+        </li>
+        <li>
+          <span class="glance-key">Inspiral</span>
+          <span class="glance-value">Phenomenological energy loss</span>
+        </li>
+        <li>
+          <span class="glance-key">Jets and disks</span>
+          <span class="glance-value">Visual only</span>
+        </li>
+        <li>
+          <span class="glance-key">Built for</span>
+          <span class="glance-value">Interactive astronomy education</span>
+        </li>
+      </ul>
+
+      <p>
+        Throughout this page, five labels are used for how a feature is handled:
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <caption class="visually-hidden">
+            The five model levels used on this page
+          </caption>
+          <tbody>
+            <tr>
+              <td><span class="doc-badge is-simulated">Simulated</span></td>
+              <td>
+                Computed by the dynamical simulation, step by step, from the
+                equations of motion.
+              </td>
+            </tr>
+            <tr>
+              <td><span class="doc-badge is-analytic">Analytic</span></td>
+              <td>
+                Evaluated from a closed-form expression for display. Correct for
+                the idealized case it describes, but not evolved by the
+                simulation.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="doc-badge is-approximate">Approximated</span>
+              </td>
+              <td>
+                A prescription chosen to reproduce the right qualitative
+                behavior, not derived from the governing theory.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="doc-badge is-illustrative">Illustrative</span>
+              </td>
+              <td>
+                Drawn to make a phenomenon recognizable. Carries no physics.
+              </td>
+            </tr>
+            <tr>
+              <td><span class="doc-badge is-absent">Not modeled</span></td>
+              <td>Absent from the simulation entirely.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="why">Why simplify?</h2>
+      <p>
+        Astronomers choose models to fit questions. Kepler's laws ignore the
+        pull of the planets on each other, and they are still how orbits are
+        taught and how most orbital calculations begin. Newtonian gravity is not
+        the final word on gravity, and it is entirely sufficient to fly a
+        spacecraft to Saturn. A transit model that treats a star as a uniform
+        disk gets the planet's radius to a few percent without knowing anything
+        about stellar atmospheres.
+      </p>
+      <p>
+        None of those are failures. They are models matched to questions. The
+        useful question about any model is not
+        <em>is this perfectly realistic?</em> but
+        <em>is this appropriate for what I am asking?</em>
+      </p>
+      <p>
+        Gravitas is built for one kind of question: what happens to a
+        gravitational system when you change something about it, and what can
+        you measure from watching. It is optimized for visualization,
+        experiment, and conceptual understanding at the undergraduate
+        introductory level. It is not a replacement for professional N-body,
+        stellar-evolution, hydrodynamics or numerical-relativity codes, and it
+        is not trying to be.
+      </p>
+
+      <h2 id="gravity">Gravity and motion</h2>
+      <p>
+        <span class="doc-badge is-simulated">Simulated</span>
+      </p>
+      <p>
+        Every object is a point mass. The acceleration of a body is the sum of
+        the Newtonian pull of every gravitating source:
+      </p>
+      <p class="doc-eq-block">
+        a = &Sigma; G&thinsp;M&#8339; / r&#8339;&sup2; &nbsp;&nbsp;(directed at
+        each source)
+      </p>
+      <p>
+        This is the acceleration form of
+        <span class="doc-eq">F = GMm/r&sup2;</span>. Writing it as an
+        acceleration is deliberate: the mass of the body being moved cancels,
+        which is why a feather and a cannonball follow the same orbit.
+      </p>
+      <p>
+        The simulation advances by repeatedly taking a small step in time. At
+        each step it computes the acceleration at each body's current position,
+        updates the velocity with it, and then moves the body using the
+        <em>updated</em> velocity. That ordering matters: it is the
+        semi-implicit, or symplectic, Euler method, and unlike the naive
+        alternative it does not systematically pump energy into an orbit. A
+        planet left running for a long time stays on its orbit rather than
+        slowly spiralling outward.
+      </p>
+      <p>
+        Two details are worth stating because they are visible in the
+        simulation's behavior.
+      </p>
+      <ul>
+        <li>
+          <strong>Not every object pulls.</strong> Every object always
+          <em>feels</em> gravity. Which objects <em>exert</em> it depends on the
+          scenario settings: black holes and stars always do; gas giants,
+          neutron stars and white dwarfs do unless star-only gravity is on;
+          planets and asteroids do only when mutual gravity is enabled. A scene
+          of a hundred asteroids runs at a usable frame rate because the
+          asteroids are not pulling on each other.
+        </li>
+        <li>
+          <strong>Close encounters are softened.</strong> The separation used in
+          the force calculation has a floor, five simulation length units by
+          default. Without it, two objects passing arbitrarily close would
+          produce an arbitrarily large acceleration in a single step and be
+          flung across the screen, which is a numerical artifact rather than
+          physics. Softening is standard practice in N-body work; the cost is
+          that very close passages are gentler than reality.
+        </li>
+      </ul>
+      <div class="doc-note">
+        <p>
+          <strong>Not modeled:</strong> general-relativistic corrections to
+          orbits, including perihelion precession; radiation pressure;
+          non-gravitational forces such as cometary outgassing; tidal torques
+          and spin.
+        </p>
+      </div>
+
+      <h2 id="dimensions">Two dimensions</h2>
+      <p><span class="doc-badge is-simulated">Simulated</span></p>
+      <p>
+        The dynamical simulation is two-dimensional. Every object has a position
+        and velocity in a single plane, and everything therefore orbits in that
+        one plane.
+      </p>
+      <p>
+        For most of what Gravitas teaches this is not a compromise at all. A
+        two-body orbit is planar in reality too: the orbit of a planet around a
+        star lies in a fixed plane, and drawing it in that plane is drawing it
+        correctly. Kepler's laws, orbital energy, escape trajectories, binary
+        star motion and the barycenter are all fully represented.
+      </p>
+      <p>What the restriction removes:</p>
+      <ul>
+        <li>
+          <strong>Mutual inclinations.</strong> Real planetary systems are not
+          exactly coplanar, and the small mutual inclinations matter for
+          long-term stability and for how systems form.
+        </li>
+        <li>
+          <strong>Out-of-plane encounters.</strong> A three-body encounter in
+          three dimensions has more ways to unfold than one confined to a plane,
+          and scattering outcomes differ.
+        </li>
+        <li>
+          <strong>Viewing geometry.</strong> Because every orbit is edge-on to
+          an observer in the plane, every planet transits its star. Real transit
+          surveys see only the small fraction of systems that happen to be
+          aligned, which is a central fact about exoplanet detection. The
+          transit investigation handles this in a dedicated panel rather than
+          pretending the simulation does it.
+        </li>
+      </ul>
+
+      <h2 id="collisions">Collisions and mergers</h2>
+      <p><span class="doc-badge is-approximate">Approximated</span></p>
+      <p>
+        When two objects come within the sum of their radii, Gravitas replaces
+        them with a single object. The new object's mass is the sum of the two,
+        and its position and velocity are the mass-weighted average of theirs.
+      </p>
+      <div class="doc-feature">
+        <h3>What a merger conserves</h3>
+        <dl>
+          <dt>Mass</dt>
+          <dd>Conserved exactly. The merged object has the total mass.</dd>
+          <dt>Momentum</dt>
+          <dd>
+            Conserved exactly. The new velocity is the center-of-momentum
+            velocity of the pair.
+          </dd>
+          <dt>Kinetic energy</dt>
+          <dd>
+            <strong>Not conserved</strong>, and it should not be. This is a
+            perfectly inelastic collision, and the missing kinetic energy is
+            exactly what would go into heating, deformation and debris in a real
+            impact. Gravitas does not track where it goes; it simply is not
+            carried forward.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        There is one exception worth knowing about. When a small body falls into
+        a black hole, its mass is added to the hole but the hole's velocity is
+        left unchanged, so that particular interaction conserves mass but not
+        momentum. For a planet spiralling into a supermassive black hole the
+        error is negligible; for a body of comparable mass it is not. Full
+        mergers between stars, compact objects and black holes use the
+        center-of-momentum calculation described above.
+      </p>
+      <div class="doc-note">
+        <p>
+          <strong>Not modeled:</strong> fragmentation, shock heating, tidal
+          disruption physics, hydrodynamics, debris production from impacts,
+          stellar structure, or any radiation from a collision. A merger in
+          Gravitas is an instantaneous bookkeeping operation.
+        </p>
+      </div>
+      <p>
+        This makes a good teaching example in its own right: the trajectories
+        <em>before</em> the collision are modeled dynamically and are as good as
+        the integrator; the collision itself is a simplification. Students can
+        reason confidently about the approach and should be sceptical about the
+        aftermath.
+      </p>
+
+      <h2 id="inspiral">Gravitational-wave inspiral</h2>
+      <p><span class="doc-badge is-approximate">Approximated</span></p>
+      <p>
+        Gravitas does not solve Einstein's field equations. There is no
+        numerical relativity in it, and no post-Newtonian expansion.
+      </p>
+      <p>
+        What it has is an orbital-decay term. In scenarios with orbiting black
+        holes, each black hole's velocity is multiplied by a factor slightly
+        less than one on every step, at a rate set per scenario. Energy leaves
+        the orbit, the separation shrinks, and by Kepler's third law the orbital
+        frequency rises as it does so. The pair spirals together and merges.
+      </p>
+      <div class="doc-feature">
+        <h3>What this reproduces, and what it does not</h3>
+        <dl>
+          <dt>Reproduces</dt>
+          <dd>
+            The qualitative sequence: a binary loses orbital energy, the
+            separation decreases, the orbital frequency rises, and the two
+            objects merge. This is the story of a compact-binary inspiral and it
+            is the story the visualization tells correctly.
+          </dd>
+          <dt>Does not reproduce</dt>
+          <dd>
+            The rate. Real gravitational-wave emission removes energy at a rate
+            that depends extremely steeply on separation, so a real inspiral is
+            almost imperceptible for millions of years and then completes in
+            seconds. The decay term here is a constant fractional damping and
+            does not carry that separation dependence, so the characteristic
+            runaway at the end is not reproduced with the right steepness.
+          </dd>
+          <dt>Also absent</dt>
+          <dd>
+            A real black-hole merger radiates several percent of the total mass
+            away as gravitational waves. In Gravitas the merged black hole has
+            exactly the sum of the two masses.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        The visible ripple at a merger and the sound it makes are
+        <span class="doc-badge is-illustrative">Illustrative</span>. Their
+        strength is a value chosen per merger type to make an event read on
+        screen, not a strain amplitude computed from the masses. The merger
+        sound is designed audio: its pitch falls, whereas a real
+        gravitational-wave chirp rises in frequency before ringing down. It
+        marks an event; it is not a sonified waveform.
+      </p>
+      <div class="doc-note">
+        <p>
+          <strong>Good for:</strong> the concept of inspiral, orbital energy
+          loss, rising orbital frequency, compact-object mergers as events in a
+          simulation.
+          <br />
+          <strong>Not for:</strong> gravitational-waveform prediction,
+          strong-field numerical relativity, or anything resembling parameter
+          estimation from a signal.
+        </p>
+      </div>
+
+      <h2 id="blackholes">Black holes</h2>
+      <p>
+        <span class="doc-badge is-simulated">Simulated</span>
+        <span class="doc-badge is-analytic">Analytic</span>
+      </p>
+      <p>
+        This distinction is the most important one on the page. A black hole in
+        Gravitas participates in the gravitational simulation
+        <strong
+          >using the same Newtonian N-body dynamics as everything else</strong
+        >. Adding a black hole to a scene does not make the simulation
+        relativistic. There is no event horizon in the dynamics, no innermost
+        stable circular orbit enforced on trajectories, and no light bending. An
+        object orbiting a black hole is on a Newtonian orbit around a point
+        mass.
+      </p>
+      <p>
+        Separately, when you select a black hole, Gravitas evaluates a set of
+        analytic expressions for display. These are correct closed-form results
+        for a Schwarzschild black hole, computed from its mass:
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Quantity</th>
+              <th scope="col">How it is obtained</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Schwarzschild radius</td>
+              <td>
+                <span class="doc-eq">R&#8347; = 2GM/c&sup2;</span>, about 2.95
+                km per solar mass.
+              </td>
+            </tr>
+            <tr>
+              <td>Escape speed at the horizon</td>
+              <td>Exactly the speed of light, by construction.</td>
+            </tr>
+            <tr>
+              <td>Average density</td>
+              <td>
+                Mass divided by the volume of a sphere of radius
+                <span class="doc-eq">R&#8347;</span>. A comparison quantity, not
+                a claim about the interior.
+              </td>
+            </tr>
+            <tr>
+              <td>Hawking temperature</td>
+              <td>
+                <span class="doc-eq"
+                  >T = &#8463;c&sup3; / (8&pi;GMk&#8331;)</span
+                >.
+              </td>
+            </tr>
+            <tr>
+              <td>Evaporation lifetime</td>
+              <td>
+                <span class="doc-eq"
+                  >t = 5120&pi;G&sup2;M&sup3; / (&#8463;c&#8308;)</span
+                >.
+              </td>
+            </tr>
+            <tr>
+              <td>Innermost stable circular orbit</td>
+              <td>
+                Its period, computed at
+                <span class="doc-eq">3R&#8347;</span>. Reported for interest;
+                the simulation does not enforce it.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Every one of these assumes a <strong>Schwarzschild black hole</strong>:
+        non-rotating and uncharged. Real astrophysical black holes generally
+        rotate, often rapidly, which changes the horizon geometry, moves the
+        innermost stable orbit, and adds an ergosphere. None of that is modeled.
+        The trends taught in the black-hole investigation, that radius grows
+        with mass while density, temperature and lifetime fall, survive rotation
+        unchanged.
+      </p>
+      <div class="doc-note">
+        <p>
+          <strong
+            >The black disk on screen is not the event horizon to scale.</strong
+          >
+          Drawn object sizes across Gravitas are chosen for visibility. A black
+          hole's drawn radius grows as roughly the cube root of its mass so that
+          a supermassive hole is visibly bigger without filling the screen; the
+          true Schwarzschild radius grows in direct proportion to mass and, for
+          a stellar-mass black hole, would be far too small to see. The number
+          in the inspector is the real one.
+        </p>
+      </div>
+
+      <h2 id="spacetime">The spacetime view</h2>
+      <p><span class="doc-badge is-illustrative">Illustrative</span></p>
+      <p>
+        The three-dimensional grid view shows a mesh that dips beneath each
+        massive object. It is an educational visualization of the idea that mass
+        shapes the geometry objects move through. It is not a numerical solution
+        of anything.
+      </p>
+      <p>
+        Specifically: the depth of the well beneath an object is a smooth
+        falloff function scaled by the logarithm of its mass, with a sharper
+        profile for black holes so the singularity reads visually. It is not the
+        Newtonian potential, and it is not an embedding diagram of the
+        Schwarzschild metric. The shape was chosen to look right and to keep
+        every object legible across the enormous mass range Gravitas allows.
+      </p>
+      <p>
+        The familiar rubber-sheet picture is a metaphor even when drawn
+        rigorously, since it depicts curved space using a surface embedded in a
+        flat space, and it says nothing about the curvature of <em>time</em>,
+        which is what actually produces the fall of a dropped object. Gravitas's
+        version is a metaphor drawn for clarity. It is genuinely useful for
+        talking about why mass matters and why a deeper well is harder to climb
+        out of, and it should not be read as a calculation.
+      </p>
+
+      <h2 id="visual">Visual effects</h2>
+      <p><span class="doc-badge is-illustrative">Illustrative</span></p>
+      <p>
+        Several features exist to make phenomena recognizable and discussable.
+        None of them affects the dynamics: switching them all off changes what
+        you see and nothing about where anything goes.
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">What it is</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Relativistic jets</td>
+              <td>
+                A drawn beam whose brightness responds to recent accretion. No
+                accretion-disk magnetohydrodynamics, no relativistic plasma, no
+                magnetic field launching, no radiative transfer. It exists so
+                that students meet the phenomenon and can ask what produces it.
+              </td>
+            </tr>
+            <tr>
+              <td>Accretion disks</td>
+              <td>
+                Drawn particles orbiting a black hole, with a brightness that
+                rises when the hole gains mass. Decorative rather than
+                hydrodynamic.
+              </td>
+            </tr>
+            <tr>
+              <td>Merger flashes and debris</td>
+              <td>
+                Particle effects marking an event. The particles are not
+                gravitating matter and carry no mass.
+              </td>
+            </tr>
+            <tr>
+              <td>Gravitational-wave ripples</td>
+              <td>
+                An expanding ring drawn at a merger. Its amplitude is an
+                authored constant, not a computed strain.
+              </td>
+            </tr>
+            <tr>
+              <td>Object sizes and colors</td>
+              <td>
+                Drawn sizes are fixed per object type so that a planet is
+                visible beside a star. Stellar colors follow temperature, which
+                is physically motivated, but the disk sizes on screen are not to
+                scale with each other or with the orbits.
+              </td>
+            </tr>
+            <tr>
+              <td>Trails</td>
+              <td>
+                A record of where an object has been, kept for a limited number
+                of recent positions. A drawing aid, not a computed orbit.
+              </td>
+            </tr>
+            <tr>
+              <td>Sonification</td>
+              <td>
+                Designed audio cues for events, with pitch and loudness driven
+                by object mass and event type. Not a rendering of any physical
+                signal.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="other">Other educational models</h2>
+      <p>
+        Several teaching instruments are analytic models evaluated for display
+        rather than simulated. Each is correct for what it describes and each
+        leaves something out.
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">What Gravitas does</th>
+              <th scope="col">Important limitation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Transit light curve</td>
+              <td>
+                Computes the overlap of an opaque planetary disk with a
+                limb-darkened stellar disk by numerical integration over the
+                stellar surface, sampled as the simulation runs.
+              </td>
+              <td>
+                The planet is perfectly opaque and perfectly circular; the star
+                has no spots, flares or granulation, and no instrumental noise
+                is added.
+              </td>
+            </tr>
+            <tr>
+              <td>Limb darkening</td>
+              <td>
+                A quadratic limb-darkening law with fixed coefficients, the
+                standard parameterization used on real light curves.
+              </td>
+              <td>
+                Real coefficients depend on the star and on the wavelength
+                observed. Gravitas uses one set for all stars.
+              </td>
+            </tr>
+            <tr>
+              <td>Secondary eclipse</td>
+              <td>
+                The planet is occulted by the star, producing a much shallower
+                dip half an orbit from the transit.
+              </td>
+              <td>
+                Depth is geometric. Thermal emission and reflected light from
+                the planet are not modeled, so the depth should not be read as a
+                measurement of the planet's brightness.
+              </td>
+            </tr>
+            <tr>
+              <td>Transmission spectrum</td>
+              <td>
+                An instrument panel showing how transit depth varies with
+                wavelength for an atmosphere.
+              </td>
+              <td>
+                Illustrative. It is a teaching model of the effect, not a
+                radiative-transfer calculation for a specific atmosphere.
+              </td>
+            </tr>
+            <tr>
+              <td>Companion-star dilution</td>
+              <td>
+                Applies the correct flux-ratio arithmetic: an unresolved
+                companion fills in the dip by a factor
+                <span class="doc-eq">1/(1+f)</span>, and the recovered radius is
+                too small by <span class="doc-eq">&radic;(1+f)</span>.
+              </td>
+              <td>
+                Both stars are treated as point sources within one aperture. No
+                point-spread function, seeing or detector model.
+              </td>
+            </tr>
+            <tr>
+              <td>Habitable zone</td>
+              <td>
+                Evaluates a published prescription (Kopparapu et al. 2013, with
+                the 2014 erratum coefficients) from the star's luminosity and
+                effective temperature, and draws the resulting range of orbital
+                distances. Measured stellar luminosities are used wherever a
+                scenario carries one.
+              </td>
+              <td>
+                A calculated range of distances, not a region of space, and a
+                statement about the star rather than about any planet. It says
+                nothing about whether a planet has an atmosphere, has water, or
+                is rocky. The polynomial fit is calibrated for stars between
+                2,600 K and 7,200 K; outside that range Gravitas evaluates it at
+                the nearest calibrated temperature and says so rather than
+                extrapolating silently. Where that applies, the ring drawn in
+                the simulation carries the caveat in its own label: TRAPPIST-1
+                at 2,566 K reads &ldquo;star cooler than the model
+                covers&rdquo;.
+              </td>
+            </tr>
+            <tr>
+              <td>Object properties in the inspector</td>
+              <td>
+                Orbital elements, energies and periods computed analytically
+                from the live state relative to the dominant nearby mass.
+              </td>
+              <td>
+                A two-body calculation. In a strongly interacting multi-body
+                configuration the reported elements are instantaneous osculating
+                values, not a stable description of the orbit.
+              </td>
+            </tr>
+            <tr>
+              <td>Stellar properties</td>
+              <td>
+                Radii, luminosities, temperatures and colors are assigned from
+                mass using standard main-sequence relations, or set explicitly
+                in scenarios drawn from real systems.
+              </td>
+              <td>
+                No stellar evolution. A star does not age, change radius, leave
+                the main sequence or lose mass in a wind.
+              </td>
+            </tr>
+            <tr>
+              <td>Compact-object radii</td>
+              <td>
+                Neutron stars and white dwarfs are drawn at fixed sizes and
+                their masses behave as ordinary point masses.
+              </td>
+              <td>
+                No equation of state, no mass-radius relation, no Chandrasekhar
+                or Tolman-Oppenheimer-Volkoff limit enforced by the dynamics.
+              </td>
+            </tr>
+            <tr>
+              <td>Timeline and replay</td>
+              <td>
+                Records the state of every object ten times a second and replays
+                it when you scrub backward.
+              </td>
+              <td>
+                Replay is recorded history, not reverse integration. Mergers
+                destroy information, so the simulation cannot be run backward;
+                it can only be rewound through what it saved.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="trust">What should I trust this to show?</h2>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Model level</th>
+              <th scope="col">Good for</th>
+              <th scope="col">Not intended for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Orbit shape and pacing</td>
+              <td><span class="doc-badge is-simulated">Simulated</span></td>
+              <td>
+                Kepler's laws, orbital energy, encounters, escape, binary motion
+              </td>
+              <td>Ephemeris-grade prediction of a real body's position</td>
+            </tr>
+            <tr>
+              <td>Orbital energy and boundedness</td>
+              <td><span class="doc-badge is-simulated">Simulated</span></td>
+              <td>
+                Bound versus unbound, the sign of the total energy, escape speed
+              </td>
+              <td>Precision mission design</td>
+            </tr>
+            <tr>
+              <td>Many-body encounters</td>
+              <td><span class="doc-badge is-simulated">Simulated</span></td>
+              <td>
+                Slingshots, ejections, the qualitative chaos of three bodies
+              </td>
+              <td>
+                Long-term stability studies; close passages are softened and the
+                system is confined to a plane
+              </td>
+            </tr>
+            <tr>
+              <td>Transit light curves</td>
+              <td><span class="doc-badge is-analytic">Analytic</span></td>
+              <td>
+                Depth to radius, limb darkening, timing a period, dilution by a
+                companion
+              </td>
+              <td>Fitting a real light curve with a noise model</td>
+            </tr>
+            <tr>
+              <td>Black-hole properties</td>
+              <td><span class="doc-badge is-analytic">Analytic</span></td>
+              <td>
+                Schwarzschild radius, the scaling of density, temperature and
+                lifetime with mass
+              </td>
+              <td>
+                Rotating black holes, horizon dynamics, anything in the strong
+                field
+              </td>
+            </tr>
+            <tr>
+              <td>Habitable zone</td>
+              <td><span class="doc-badge is-analytic">Analytic</span></td>
+              <td>
+                Where a zone sits for a given star, how it moves with
+                luminosity, where real planets fall relative to it
+              </td>
+              <td>
+                Deciding whether a planet is habitable, which the zone does not
+                address
+              </td>
+            </tr>
+            <tr>
+              <td>Compact-object inspiral</td>
+              <td>
+                <span class="doc-badge is-approximate">Approximated</span>
+              </td>
+              <td>
+                The inspiral concept, energy loss, a shrinking orbit, merger as
+                an event
+              </td>
+              <td>
+                Waveform modeling, chirp rates, gravitational-wave data analysis
+              </td>
+            </tr>
+            <tr>
+              <td>Collisions</td>
+              <td>
+                <span class="doc-badge is-approximate">Approximated</span>
+              </td>
+              <td>
+                Mass and momentum bookkeeping, that kinetic energy is lost
+              </td>
+              <td>Impact physics, debris fields, tidal disruption</td>
+            </tr>
+            <tr>
+              <td>Jets, disks and ripples</td>
+              <td>
+                <span class="doc-badge is-illustrative">Illustrative</span>
+              </td>
+              <td>Recognizing and discussing the phenomena</td>
+              <td>Anything quantitative</td>
+            </tr>
+            <tr>
+              <td>Spacetime grid</td>
+              <td>
+                <span class="doc-badge is-illustrative">Illustrative</span>
+              </td>
+              <td>
+                Talking about mass shaping the geometry objects move through
+              </td>
+              <td>Reading curvature values off the surface</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="investigations">Which model each investigation uses</h2>
+      <p>
+        Each guided investigation relies on a different part of the model. These
+        notes also appear in the instructor guide for each lesson.
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Investigation</th>
+              <th scope="col">Model used</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kepler's Laws</td>
+              <td>
+                Newtonian two-body dynamics, simulated. Appropriate throughout:
+                the quantities being measured are the ones Newtonian gravity
+                describes. Relativistic precession is not modeled and is not
+                needed.
+              </td>
+            </tr>
+            <tr>
+              <td>Finding Planets by Their Shadows</td>
+              <td>
+                Newtonian orbits, simulated; light curve and limb darkening,
+                analytic; transmission spectrum, illustrative. Because the
+                simulation is two-dimensional, every orbit is edge-on and
+                inclination is handled in its own panel.
+              </td>
+            </tr>
+            <tr>
+              <td>Bound, Unbound and Escape</td>
+              <td>
+                Newtonian orbital energy, simulated. The launch panel integrates
+                its own trajectory with an adaptive step so an extreme orbit
+                does not drift. ʻOumuamua follows its measured orbit, without
+                the non-gravitational acceleration the real object showed.
+              </td>
+            </tr>
+            <tr>
+              <td>Weighing the Stars</td>
+              <td>
+                Newtonian two-body dynamics. The instrument panels evaluate
+                circular orbits in closed form rather than integrating them, so
+                that a timed lap reads exactly and the arithmetic the lesson
+                depends on lands cleanly.
+              </td>
+            </tr>
+            <tr>
+              <td>Black Holes by the Numbers</td>
+              <td>
+                Schwarzschild analytic relationships for every quantity
+                displayed. The black hole in the scene is an ordinary Newtonian
+                point mass. Nothing in this investigation is a
+                general-relativistic evolution.
+              </td>
+            </tr>
+            <tr>
+              <td>The Goldilocks Question</td>
+              <td>
+                Inverse-square insolation and a published habitable-zone
+                prescription, both analytic. The eccentric-orbit instrument
+                solves Kepler's equation rather than integrating, so the timing
+                of a year and the fraction of it spent inside the zone are
+                exact. No climate is modeled anywhere: the zone is a statement
+                about incident starlight against limits taken from a published
+                climate model, and the lesson is explicit that being inside it
+                establishes nothing about a planet. Three of its steps run the
+                live simulation rather than a lesson panel: the Sun with Venus,
+                Earth, Mars and Ceres on each of the two published zone
+                definitions, and the real TRAPPIST-1 system. The ring in those
+                scenes is drawn by the same module as the panels, from the same
+                stellar data.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Checking any of this</h2>
+      <p>
+        Gravitas is open source under the MIT license. Every statement on this
+        page describes code you can read: the gravitational solver and collision
+        handling are in
+        <code>js/physics.js</code>, black-hole quantities in
+        <code>js/blackHolePhysics.js</code>, the light curve in
+        <code>js/lightCurve.js</code>, habitable zones in
+        <code>js/habitability.js</code>, and the spacetime view in
+        <code>js/view3d.js</code>. If you find a claim here that the code does
+        not support, that is a bug in this page and worth reporting.
+      </p>
+      <p>
+        Simulation data can also be exported as CSV from the simulation itself,
+        with a companion notebook for analyzing it, if you would rather check
+        the model's behavior against your own calculation than read the source.
+      </p>
+    </main>
+
+    <footer class="doc-foot">
+      <a href="/">Gravitas</a>
+      <span class="doc-foot-sep">·</span>
+      <a href="/instructors/">Instructor resources</a>
+      <span class="doc-foot-sep">·</span>
+      <a
+        href="https://github.com/gravitas-sim/gravitas-sim.github.io"
+        rel="noopener"
+        >Source</a
+      >
+      <span class="doc-foot-sep">·</span>
+      <span>MIT licensed</span>
+    </footer>
+  </body>
+</html>

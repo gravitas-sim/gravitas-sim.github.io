@@ -1,4 +1,5 @@
 // Import utility functions
+import { formatNumber, withUnit } from './format.js';
 import { forEachCandidatePair } from './spatialHash.js';
 import {
   drawSolarLabel,
@@ -400,7 +401,20 @@ const DT = 0.1;
 const SOLAR_MASS_UNIT = 1000;
 const EARTH_MASS_UNIT = 3; // Earth mass unit (1 Earth = 3 units, 1 Sun = 1000 units)
 const ABSORB_BUFFER = 6;
+// Softening floor on the gravity calculation, to keep a near-miss from
+// producing a singular force. Five units is right for scenarios laid out at
+// hundreds of units, and completely wrong for a compact one: TRAPPIST-1's seven
+// planets orbit between 1.15 and 6.19 units of their star, so six of them sat
+// inside the floor, felt a fraction of the gravity they should, and left on
+// hyperbolic orbits within a few hundred circuits regardless of timestep. A
+// scenario can lower it to suit its own scale.
 const MIN_INTERACTION_DISTANCE = 5.0;
+
+/** @returns {number} The softening floor currently in force */
+const minInteractionDistance = () => {
+  const v = physicsSettings.min_interaction_distance;
+  return Number.isFinite(v) && v > 0 ? v : MIN_INTERACTION_DISTANCE;
+};
 const BH_RADIUS_BASE = 8; // Reduced from 15 to make black holes smaller
 const PLANET_RADIUS = 5;
 const GAS_GIANT_RADIUS = 8; // Reduced from 15 to make gas giants smaller than stars
@@ -512,6 +526,8 @@ let physicsSettings = {
   planet_base_color: '#6495ed',
   bh_behavior: 'Static',
   orbit_decay_rate: 0.005,
+  max_timestep: 0,
+  min_interaction_distance: 0,
   habitable_zone_optimism: 1.0,
   star_only_gravity: false,
   disk_doppler: true,
@@ -557,6 +573,50 @@ const clearCachedGravity = () => {
 };
 
 // Click hit-radius minimums scaled by 1/state.zoom
+
+// Screen-space floor for drawing a body, in pixels of radius.
+//
+// At true Solar System scale Neptune sits 78x further out than Mercury, so no
+// single zoom shows the whole system with everything visible: zoomed out far
+// enough to see Neptune, Earth's 7-unit radius covers less than a pixel and the
+// planets vanish. Clicking already had this problem and already solved it with
+// CLICK_MIN_RADIUS, so drawing uses the same trick.
+//
+// This is deliberately a *drawing* floor only. The world radius is what decides
+// collisions and merging, and inflating that to make planets visible would let
+// the Sun swallow Mercury for cosmetic reasons. Zoom in and the dot grows into
+// the body's true relative size; zoom out and it holds at a visible minimum.
+const DRAW_MIN_RADIUS_PX = 2.75;
+
+// In a crowded scenario the floor works against itself: a thousand bodies each
+// held at 2.75px turns a galaxy into a single blob, where the point is the
+// structure. Dense fields get a smaller floor, so they read as a field of
+// specks while an eight-planet system still reads as eight planets.
+const CROWDED_COUNT = 250;
+const DRAW_MIN_RADIUS_PX_CROWDED = 1.35;
+
+let liveBodyCount = 0;
+
+/** Record how many bodies are on screen, for the crowding rule above. */
+const setLiveBodyCount = n => {
+  liveBodyCount = n;
+};
+
+/**
+ * Radius to draw a body at, in world units.
+ * @param {Object} obj - Body with a radius
+ * @returns {number} Radius to draw, never below a few screen pixels
+ */
+const drawRadius = obj => {
+  const z = (state && state.zoom) || 1;
+  const px =
+    liveBodyCount > CROWDED_COUNT
+      ? DRAW_MIN_RADIUS_PX_CROWDED
+      : DRAW_MIN_RADIUS_PX;
+  const floor = px / z;
+  return obj.radius > floor ? obj.radius : floor;
+};
+
 const CLICK_MIN_RADIUS = {
   BlackHole: 14,
   Star: 12,
@@ -685,7 +745,7 @@ const gravitational_acceleration = (target_pos, sources) => {
   let ax = 0.0,
     ay = 0.0;
   const G_val = physicsSettings.gravitational_constant;
-  const min_dist_sq = MIN_INTERACTION_DISTANCE ** 2;
+  const min_dist_sq = minInteractionDistance() ** 2;
 
   for (let i = 0; i < sources.length; i++) {
     const s = sources[i];
@@ -814,6 +874,19 @@ let lastObjectCounts = {
 /**
  * Update cached arrays only when object counts change
  */
+// Bumped whenever the object lists are repopulated. The cache below keyed only
+// off list *lengths*, so rebuilding a scenario into the same shape (Refresh
+// Scenario, or a lesson re-applying its setup) left cachedAllPhysicsObjects
+// holding the discarded objects: the integrator went on advancing bodies that
+// were no longer in the simulation while the renderer drew the new ones.
+let worldGeneration = 0;
+let lastWorldGeneration = -1;
+
+/** Invalidate the physics caches. Call after repopulating the object lists. */
+const bumpWorldGeneration = () => {
+  worldGeneration++;
+};
+
 const updateCachedArrays = () => {
   const currentCounts = {
     bh: bh_list.length,
@@ -838,6 +911,7 @@ const updateCachedArrays = () => {
 
   if (
     countsChanged ||
+    lastWorldGeneration !== worldGeneration ||
     lastMutualGravityState !== physicsSettings.mutual_gravity ||
     lastStarOnlyGravityState !== physicsSettings.star_only_gravity
   ) {
@@ -869,6 +943,7 @@ const updateCachedArrays = () => {
     );
 
     lastObjectCounts = currentCounts;
+    lastWorldGeneration = worldGeneration;
     lastMutualGravityState = physicsSettings.mutual_gravity;
     lastStarOnlyGravityState = physicsSettings.star_only_gravity;
   }
@@ -903,6 +978,18 @@ const updatePhysics = dt => {
 
   // Track frame count (matching original)
   if (state) state.frame_count++;
+
+  setLiveBodyCount(
+    bh_list.length +
+      planets.length +
+      stars.length +
+      gas_giants.length +
+      asteroids.length +
+      comets.length +
+      neutron_stars.length +
+      white_dwarfs.length +
+      debris.length
+  );
 
   // Update cached arrays only when needed
   updateCachedArrays();
@@ -1021,7 +1108,7 @@ const updatePhysics = dt => {
         type: 'bh',
         G,
         theta,
-        minDist: MIN_INTERACTION_DISTANCE,
+        minDist: minInteractionDistance(),
         sources: {
           x: workerBuffers.sx,
           y: workerBuffers.sy,
@@ -1401,26 +1488,35 @@ const updatePhysics = dt => {
     return filtered;
   };
 
+  // A body a scenario declares as permanent survives the distance cull.
+  //
+  // The cull box is about ten canvas widths of world on each side, which is
+  // generous for a sandbox and far too small for a system whose whole point is
+  // that part of it sits outside the field of view: a stellar companion three
+  // hundred AU from a hot Jupiter is unresolvable from Earth and off-screen
+  // here for the same reason, and deleting it would delete the lesson.
+  const kept = obj => obj.persistent === true;
+
   // More conservative filtering for important objects - only remove if truly far away
   planets = filterAndClearEnergy(
     planets,
-    p => p.alive && !is_offscreen(p.pos, 20.0)
+    p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
   );
   stars = filterAndClearEnergy(
     stars,
-    s => s.alive && !is_offscreen(s.pos, 20.0)
+    s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
   );
   gas_giants = filterAndClearEnergy(
     gas_giants,
-    g => g.alive && !is_offscreen(g.pos, 20.0)
+    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
   );
   neutron_stars = filterAndClearEnergy(
     neutron_stars,
-    ns => ns.alive && !is_offscreen(ns.pos, 20.0)
+    ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
   );
   white_dwarfs = filterAndClearEnergy(
     white_dwarfs,
-    wd => wd.alive && !is_offscreen(wd.pos, 20.0)
+    wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
   );
   bh_list = filterAndClearEnergy(
     bh_list,
@@ -1660,23 +1756,30 @@ class Planet extends PhysicsObject {
       return;
     }
 
-    let baseColor;
-    switch (this.density) {
-      case 'gaseous':
-        baseColor = '#87CEEB';
-        break;
-      case 'icy':
-        baseColor = '#E6E6FA';
-        break;
-      case 'rocky':
-      default:
-        baseColor = '#87CEEB'; // Changed from SETTINGS.planet_base_color
-        break;
+    // A scenario that names a color means it: the Solar System sets Mercury
+    // grey, Venus cream, Mars red, and the Kepler lesson distinguishes its two
+    // orbiters by color in the text. Falling straight through to the density
+    // switch ignored all of that and drew every planet the same sky blue,
+    // including two side by side that the lesson calls "blue" and "orange".
+    let baseColor = this.baseColor;
+    if (!baseColor) {
+      switch (this.density) {
+        case 'gaseous':
+          baseColor = '#87CEEB';
+          break;
+        case 'icy':
+          baseColor = '#E6E6FA';
+          break;
+        case 'rocky':
+        default:
+          baseColor = '#87CEEB';
+          break;
+      }
     }
 
     ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     // Add soft bloom to offscreen bloom canvas
@@ -1802,7 +1905,7 @@ class Planet extends PhysicsObject {
       } else {
         drawSolarLabel(
           ctx,
-          this.massInEarths.toFixed(2),
+          formatNumber(this.massInEarths),
           true_screen_pos.x,
           true_screen_pos.y + label_y_offset,
           { symbol: EARTH_SYMBOL }
@@ -1830,7 +1933,7 @@ class Planet extends PhysicsObject {
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     // Add continent-like features (simplified)
@@ -1887,7 +1990,7 @@ class Planet extends PhysicsObject {
     ctx.strokeStyle = 'rgba(135, 206, 235, 0.3)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius + 1, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this) + 1, 0, 2 * Math.PI);
     ctx.stroke();
   }
 
@@ -1909,7 +2012,7 @@ class Planet extends PhysicsObject {
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     // Add mock craters if zoomed in enough
@@ -2129,7 +2232,7 @@ class GasGiant extends PhysicsObject {
 
     ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     if (this.radius * state.zoom > 4) {
@@ -2358,7 +2461,7 @@ class Asteroid extends PhysicsObject {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
     ctx.fillStyle = '#8B4513';
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
   }
 }
@@ -2377,7 +2480,7 @@ class Debris extends PhysicsObject {
       b: 0,
     });
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
   }
 }
@@ -3255,8 +3358,9 @@ class BlackHole {
     ctx.textBaseline = 'middle';
     ctx.shadowColor = 'black';
     ctx.shadowBlur = 4;
-    // BlackHole label (replace ctx.fillText(`${(this.mass / SOLAR_MASS_UNIT).toFixed(1)} Msun`, ...))
-    const massStr = (this.mass / SOLAR_MASS_UNIT).toFixed(1);
+    // Significant figures rather than one decimal place: a stellar-mass hole
+    // reads 9.80 and a supermassive one reads 1.00 x 10^6 instead of 1000000.0.
+    const massStr = formatNumber(this.mass / SOLAR_MASS_UNIT);
     drawSolarLabel(
       ctx,
       massStr,
@@ -3331,7 +3435,7 @@ class StarObject extends PhysicsObject {
     // Core
     ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
     // Soft bloom to offscreen canvas for compositing
     try {
@@ -3387,7 +3491,7 @@ class StarObject extends PhysicsObject {
       } else {
         drawSolarLabel(
           ctx,
-          this.massInSuns.toFixed(2),
+          formatNumber(this.massInSuns),
           true_screen_pos.x,
           true_screen_pos.y + label_y_offset
         );
@@ -3489,7 +3593,7 @@ class NeutronStar extends PhysicsObject {
       b: 255,
     });
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     // Magnetic field visualization
@@ -3547,7 +3651,7 @@ class NeutronStar extends PhysicsObject {
       ctx.shadowBlur = 4;
       drawSolarLabel(
         ctx,
-        this.massInSuns.toFixed(2),
+        formatNumber(this.massInSuns),
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset,
         { suffix: ' NS' }
@@ -3624,7 +3728,7 @@ class WhiteDwarf extends PhysicsObject {
       { r: 255, g: 255, b: 255 }
     );
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, this.radius, 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
     // Glow effect based on temperature
@@ -3668,7 +3772,7 @@ class WhiteDwarf extends PhysicsObject {
       ctx.shadowBlur = 4;
       drawSolarLabel(
         ctx,
-        this.massInSuns.toFixed(2),
+        formatNumber(this.massInSuns),
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset,
         { suffix: ' WD' }
@@ -4051,7 +4155,7 @@ class Comet extends PhysicsObject {
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 2;
       ctx.fillText(
-        `${this.massInComets.toFixed(3)} C`,
+        withUnit(formatNumber(this.massInComets), 'C'),
         true_screen_pos.x,
         true_screen_pos.y + label_y_offset
       );
@@ -5510,6 +5614,7 @@ export {
   EARTH_MASS_UNIT,
   ABSORB_BUFFER,
   MIN_INTERACTION_DISTANCE,
+  minInteractionDistance,
   BH_RADIUS_BASE,
   PLANET_RADIUS,
   GAS_GIANT_RADIUS,
@@ -5536,6 +5641,7 @@ export {
   PhysicsObject_id_counter,
   state,
   resetPhysicsObjectCounter,
+  bumpWorldGeneration,
   setPhysicsObjectCounter,
   updatePhysicsSettings,
   getPhysicsSetting,
@@ -5682,7 +5788,7 @@ const calculateGravitationalPotentialEnergySim = (obj1, obj2, distance) => {
   if (!obj1 || !obj2 || distance <= 0) return 0;
   // Match the softening the integrator uses so the reported potential cannot
   // diverge for objects that are effectively on top of each other.
-  const r = Math.max(distance, MIN_INTERACTION_DISTANCE);
+  const r = Math.max(distance, minInteractionDistance());
   const G_sim = physicsSettings.gravitational_constant;
   return (-G_sim * obj1.mass * obj2.mass) / r;
 };

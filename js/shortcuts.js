@@ -33,8 +33,7 @@ export const setShortcutsEnabled = v => {
 };
 
 /**
- * True when the event came from somewhere that owns the keyboard —
- * a text field, a select, or anything contenteditable.
+ * True when the event came from somewhere that owns the keyboard: * a text field, a select, or anything contenteditable.
  */
 function isTypingTarget(target) {
   if (!target) return false;

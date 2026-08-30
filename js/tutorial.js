@@ -14,7 +14,7 @@ const STEPS = [
   {
     title: 'Welcome to Gravitas',
     body: `A sandbox for gravity. Everything you see is integrated from Newton's
-           law in real time — nothing here is on rails or pre-animated.`,
+           law in real time: nothing here is on rails or pre-animated.`,
     tip: 'This tour takes about a minute. Use ← and → to move through it.',
     target: null,
   },
@@ -23,21 +23,21 @@ const STEPS = [
     body: `Click empty space and drag before releasing. The direction and length
            of the drag set the launch velocity, so a short drag drops an object
            almost at rest and a long one flings it away.`,
-    tip: 'Hold Shift while dragging to snap to a circular orbit. On a touch screen, press and hold first — a plain drag pans the view.',
+    tip: 'Hold Shift while dragging to snap to a circular orbit. On a touch screen, press and hold first: a plain drag pans the view.',
     target: '#simulationCanvas',
   },
   {
     title: 'Choose what you are placing',
-    body: `This button cycles the object type — star, planet, gas giant,
+    body: `This button cycles the object type: star, planet, gas giant,
            asteroid, comet, neutron star, white dwarf or black hole. Each has
-           its own mass range and behaviour.`,
+           its own mass range and behavior.`,
     tip: 'Placed something you did not mean to? Press Z, or use Undo Placement.',
     target: '#objectTypeBtn',
   },
   {
     title: 'Inspect anything',
     body: `Click an object to open the inspector: mass, radius, temperature,
-           orbital elements and composition. The mass slider is live — push a
+           orbital elements and composition. The mass slider is live: push a
            star past 20 M☉ and it will collapse into a black hole in front of
            you.`,
     tip: 'The Energy tab plots kinetic, potential and total energy. A flat total means a stable orbit; a rising one means the orbit is decaying or the object is escaping.',
@@ -53,7 +53,7 @@ const STEPS = [
   },
   {
     title: 'Start from a real system',
-    body: `Thirty-seven scenarios, from the Solar System to GW150914 — the first
+    body: `Thirty-seven scenarios, from the Solar System to GW150914: the first
            black hole merger LIGO detected. Search by name or by keyword.`,
     tip: 'Refresh Scenario rebuilds the current one if an experiment gets away from you.',
     target: '#loadScenarioBtn',

@@ -6,10 +6,15 @@ import {
   updateSpeedDisplay,
   updateObjectTypeButton,
 } from './ui.js';
-import { init3DView } from './view3d.js';
+import { watchFor3DView } from './view3dBridge.js';
 import { initLightCurve } from './lightCurve.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
+import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
+import { initExportDialog } from './exportDialog.js';
+import { watchForInvestigations } from './investigationsLoader.js';
+import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
+import { initScenarioBrowser } from './scenarioBrowser.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -38,6 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // revealApp() is idempotent and also runs on a timer as a backstop.
   let revealed = false;
 
+  // Whether this load ends at the front door rather than at the sandbox.
+  // Decided once, at boot: a first-time visitor with no deep link in the URL.
+  // Reading it here rather than at splash-end means the answer cannot change
+  // underneath the start-up sequence.
+  const frontDoorPending = shouldShowWelcome();
+
   const revealApp = () => {
     if (revealed) return;
     revealed = true;
@@ -55,7 +66,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Generate starfield after canvases are visible
     generateStarfield();
 
-    // Show UI elements after a short delay
+    // The two paths diverge here, and only here. A returning visitor gets the
+    // interface exactly as before. A first-time visitor gets the front door
+    // over a simulation that is already running, and the interface is revealed
+    // only once they enter: splash straight to welcome, with no flash of a
+    // control rail in between, and nothing underneath competing for attention.
+    if (frontDoorPending) {
+      openWelcome({ automatic: true, onEnter: revealInterface });
+    } else {
+      revealInterface();
+    }
+  };
+
+  /**
+   * Fade in the interface and run the start-up notices that belong with it.
+   *
+   * Split out of revealApp() so the front door can hold it back: the scenario
+   * card and the touch-controls popup both hide themselves on a timer, and
+   * raising either behind a full-screen welcome layer would burn that timer
+   * where nobody can see them.
+   */
+  function revealInterface() {
     setTimeout(async () => {
       document.querySelector('.ui-container').classList.add('showUI');
       document.getElementById('overlay').classList.add('showUI');
@@ -73,9 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const { collapseReadoutOnSmallScreens } = await import('./controls.js');
       collapseReadoutOnSmallScreens();
 
-      // Show scenario info box after splash ends
+      // Show scenario info box after splash ends, unless a lesson has already
+      // started: a deep link straight into an investigation opens the panel
+      // before this fires, and the card lands on top of its instruments.
       const scenarioInfoBox = document.getElementById('scenarioInfoBox');
-      if (scenarioInfoBox) {
+      if (
+        scenarioInfoBox &&
+        !document.body.classList.contains('investigation-open')
+      ) {
         scenarioInfoBox.classList.add('showUI');
       }
 
@@ -105,8 +141,45 @@ document.addEventListener('DOMContentLoaded', () => {
       if (objectInspector) {
         objectInspector.classList.add('showUI');
       }
+
+      showMobileInstructionsOnce();
     }, 200);
-  };
+  }
+
+  /**
+   * The touch-controls popup, on a phone, on the first visit only.
+   *
+   * Called from revealInterface() rather than at DOMContentLoaded, which is
+   * what keeps a first-time phone visitor from meeting the front door and this
+   * popup at once. It hides itself after five seconds, so on a first visit it
+   * used to spend those five seconds behind the welcome layer and be gone by
+   * the time anyone reached the simulation.
+   */
+  function showMobileInstructionsOnce() {
+    // More specific mobile detection to avoid showing on desktop
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+    if (!isMobile || window.innerWidth > 768) return;
+
+    const mobileInstructions = document.getElementById('mobileInstructions');
+    if (!mobileInstructions) return;
+    try {
+      if (localStorage.getItem('mobile_instructions_shown')) return;
+      localStorage.setItem('mobile_instructions_shown', 'true');
+    } catch {
+      // Storage refused. Showing the instructions once per load is a better
+      // failure than never showing them.
+    }
+
+    mobileInstructions.style.display = 'block';
+    setTimeout(() => {
+      if (mobileInstructions.style.display === 'block') {
+        mobileInstructions.style.display = 'none';
+      }
+    }, 5000);
+  }
 
   splash.addEventListener('animationend', e => {
     if (e.animationName === 'splashFadeOut') revealApp();
@@ -166,39 +239,15 @@ document.addEventListener('DOMContentLoaded', () => {
     lastTap = currentTime;
   });
 
-  // Show mobile instructions for first-time mobile users
-  // More specific mobile detection to avoid showing on desktop
-  const isMobile =
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-  const isSmallScreen = window.innerWidth <= 768;
-
-  if (isMobile && isSmallScreen) {
-    const mobileInstructions = document.getElementById('mobileInstructions');
-    if (
-      mobileInstructions &&
-      !localStorage.getItem('mobile_instructions_shown')
-    ) {
-      mobileInstructions.style.display = 'block';
-      localStorage.setItem('mobile_instructions_shown', 'true');
-
-      // Auto-hide after 5 seconds if user doesn't interact
-      setTimeout(() => {
-        if (mobileInstructions.style.display === 'block') {
-          mobileInstructions.style.display = 'none';
-        }
-      }, 5000);
-    }
-  }
-
   // Initialize with error handling
   try {
     resizeCanvas();
     // Controls own the theme, so they initialise before anything paints.
     initControls();
     initTutorial();
-    init3DView();
+    // Not init3DView(): that reaches three.js, 256KB from a CDN, for a panel
+    // that starts closed. The bridge holds the button until it is pressed.
+    watchFor3DView();
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();
@@ -213,7 +262,32 @@ document.addEventListener('DOMContentLoaded', () => {
       inspector.classList.remove('visible');
     }
 
-    initialize_simulation();
+    initShare();
+    initExportDialog();
+    // Not initInvestigations(): the lesson system is half the bundle and is
+    // loaded the first time somebody asks for it. See investigationsLoader.js.
+    watchForInvestigations();
+    initWelcome();
+    // The gallery does not load scenarios itself: it hands the chosen key to
+    // the one authoritative loader, the same one the front door's featured
+    // cards use.
+    initScenarioBrowser({
+      onScenarioSelected: async key => {
+        const { loadScenarioByKey } = await import('./ui.js');
+        loadScenarioByKey(key);
+      },
+    });
+    if (hasSharedLink()) {
+      // A link names its own scenario, so building the default one first would
+      // be work thrown away — and on a heavy scenario that is a visible stall.
+      // Decoding is async (the payload is deflated), so the loop starts on an
+      // empty world for a frame or two, behind the splash.
+      applySharedLinkFromUrl().then(applied => {
+        if (!applied) initialize_simulation();
+      });
+    } else {
+      initialize_simulation();
+    }
     requestAnimationFrame(gameLoop);
   } catch (error) {
     console.error('Initialization failed:', error);

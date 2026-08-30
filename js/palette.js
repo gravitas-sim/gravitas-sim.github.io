@@ -1,13 +1,13 @@
 // =============================================================================
-// Palette — perceptual ramps for encoding physical quantities as colour
+// Palette: perceptual ramps for encoding physical quantities as color
 // -----------------------------------------------------------------------------
 // Speed and energy are continuous scalars, so they get sequential ramps that
 // increase monotonically in lightness. That keeps them readable in greyscale
-// and for viewers with colour vision deficiency, which a rainbow ramp does not.
+// and for viewers with color vision deficiency, which a rainbow ramp does not.
 // =============================================================================
 
 // Viridis-like: dark blue → teal → green → yellow. Uniform in lightness, safe
-// for every common form of colour blindness.
+// for every common form of color blindness.
 const SPEED_STOPS = [
   [68, 1, 84],
   [59, 82, 139],
@@ -48,7 +48,7 @@ const LOG_SPAN = Math.log(SPEED_MAX) - LOG_MIN;
 /**
  * Map an orbital speed onto the sequential ramp.
  * @param {number} speed - Speed in simulation units
- * @returns {{r:number,g:number,b:number}} RGB colour
+ * @returns {{r:number,g:number,b:number}} RGB color
  */
 export function speedTrailColor(speed) {
   const s = Math.max(SPEED_MIN, Math.abs(speed) || SPEED_MIN);
@@ -56,16 +56,16 @@ export function speedTrailColor(speed) {
 }
 
 /**
- * Map a normalised total energy onto the diverging ramp.
+ * Map a normalized total energy onto the diverging ramp.
  * @param {number} t - 0 = deeply bound, 0.5 = marginal, 1 = unbound
- * @returns {{r:number,g:number,b:number}} RGB colour
+ * @returns {{r:number,g:number,b:number}} RGB color
  */
 export function energyColor(t) {
   return sample(ENERGY_STOPS, t);
 }
 
 /**
- * Colour ramp legend stops, for drawing a key.
+ * Color ramp legend stops, for drawing a key.
  * @param {number} n - Number of samples
  * @returns {Array<{r:number,g:number,b:number}>} Ramp samples
  */

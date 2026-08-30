@@ -16,15 +16,48 @@ import {
   world_to_screen,
   findObjectAtPosition,
   setDetailScale,
+  SOLAR_MASS_UNIT,
 } from './physics.js';
 import { hexToRgb, debugLog } from './utils.js';
-import { SETTINGS, state, getDragPreview, getOrbitPreview } from './ui.js';
+import {
+  SETTINGS,
+  state,
+  getDragPreview,
+  getOrbitPreview,
+  checkAreaSweepValidity,
+} from './ui.js';
 import { updateSonification } from './audio.js';
-import { update3DScene } from './view3d.js';
+// Through the bridge, not the module: view3d.js pulls in three.js, and the
+// render loop importing it would put 256KB on the start-up path for a panel
+// that begins closed.
+import { update3DScene } from './view3dBridge.js';
 import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
 import { tickTimeline } from './timeline.js';
 import { readToken, onThemeChange } from './theme.js';
 import { speedTrailColor } from './palette.js';
+import { auToSim } from './units.js';
+import { habitableZoneBounds, stellarPropertiesFor } from './habitability.js';
+
+/**
+ * Translate the legacy "habitable zone optimism" setting into a model name.
+ *
+ * The old slider ran from 0.5 to 2.0 and multiplied the width of an arbitrary
+ * band. Shared links and saved settings still carry it, so it keeps working:
+ * anything above the midpoint asks for the optimistic prescription, anything
+ * below asks for the conservative one. New wording says which is which rather
+ * than implying that 1.7 means something physical.
+ *
+ * @param {Object} settings - Live settings
+ * @returns {string} 'conservative' or 'optimistic'
+ */
+export function habitableZoneModelFromSettings(settings) {
+  const legacy = settings?.habitable_zone_optimism;
+  // One stored value, so a shared link from before this change still selects a
+  // zone and cannot disagree with the settings menu.
+  return typeof legacy === 'number' && legacy >= 1.3
+    ? 'optimistic'
+    : 'conservative';
+}
 
 const canvas = document.getElementById('simulationCanvas');
 const ctx = canvas.getContext('2d');
@@ -38,9 +71,28 @@ const starfieldStars = [];
 // Bloom offscreen canvas for soft glows
 const bloomCanvas = document.createElement('canvas');
 const bloomCtx = bloomCanvas.getContext('2d');
+
+// Whether anything drew a glow into the bloom layer this frame.
+//
+// Compositing it costs a full-screen `drawImage` in `lighter` mode plus a
+// full-screen clear, every frame, whether or not a single glow was drawn.
+// Most scenarios have no bloom content at all, so most of the time that was
+// two full-screen operations to add nothing.
+//
+// The flag is set by the getter rather than by eighteen call sites across
+// physics.js, all of which read `window.bloomCtx` immediately before drawing
+// into it. Reading it is the intent to draw, so the getter is the one place
+// that cannot be forgotten when a new glow is added.
+let bloomDirty = false;
+
 if (typeof window !== 'undefined') {
-  // Expose for cross-module use
-  window.bloomCtx = bloomCtx;
+  Object.defineProperty(window, 'bloomCtx', {
+    configurable: true,
+    get() {
+      bloomDirty = true;
+      return bloomCtx;
+    },
+  });
 }
 // ---------------------------------------------------------------------------
 // Trail glow sprites
@@ -136,6 +188,66 @@ function generateStarfield() {
     });
   }
 
+  starfieldDirty = true;
+  drawStarfield();
+}
+
+// --- When the starfield actually needs repainting ----------------------------
+//
+// It lives on its own canvas, so whatever it painted last frame is still on
+// screen. Repainting it is not free: every star is offset for parallax, tested
+// against every active ripple, and tested against every black hole, neutron
+// star and white dwarf for lensing. At three hundred stars and a dozen compact
+// objects that is thousands of distance checks, and profiling put it at 2-10ms
+// per frame, consistently more than drawing the simulation itself.
+//
+// Almost none of that changes between one frame and the next. What does:
+//   - the view moves (pan or zoom)
+//   - a gravitational-wave ripple is expanding
+//   - a lensing object has moved
+//   - the twinkle phase advances
+//
+// The first three are detected; the last is an amplitude-0.1 sine that nobody
+// can see stepping at 20Hz. So the starfield repaints when the view changes,
+// at 30Hz while something on it is genuinely moving, and at 20Hz otherwise.
+let starfieldDirty = true;
+let lastStarPaint = 0;
+let lastStarPan = { x: 0, y: 0 };
+let lastStarZoom = 0;
+
+const STAR_DYNAMIC_MS = 1000 / 30;
+const STAR_TWINKLE_MS = 1000 / 20;
+
+/** Does anything on the starfield move by itself right now? */
+function starfieldHasMotion() {
+  if (SETTINGS.show_gravitational_waves && gravity_ripples.length) return true;
+  if (SETTINGS.show_object_lensing === false) return false;
+  if (SETTINGS.lensing_quality === 'off') return false;
+  return (
+    bh_list.length > 0 || neutron_stars.length > 0 || white_dwarfs.length > 0
+  );
+}
+
+/**
+ * Repaint the starfield if it is worth repainting.
+ * @param {number} now - Frame timestamp
+ */
+function tickStarfield(now) {
+  const moved =
+    state.pan.x !== lastStarPan.x ||
+    state.pan.y !== lastStarPan.y ||
+    state.zoom !== lastStarZoom;
+
+  if (!starfieldDirty && !moved) {
+    const interval = starfieldHasMotion() ? STAR_DYNAMIC_MS : STAR_TWINKLE_MS;
+    if (now - lastStarPaint < interval) return;
+  }
+
+  lastStarPan = { x: state.pan.x, y: state.pan.y };
+  lastStarZoom = state.zoom;
+  lastStarPaint = now;
+  starfieldDirty = false;
+  if (perf.enabled) perf.starPaints++;
   drawStarfield();
 }
 
@@ -379,6 +491,38 @@ const drawScene = () => {
   );
   ctx.scale(state.zoom, -state.zoom);
 
+  /**
+   * Brightness reference for a trail, in the object's own speed units.
+   *
+   * Trail brightness used to be scaled against a hard-coded 50 sim-units/time,
+   * which silently deleted the trail of anything slower. A two-solar-mass binary
+   * four AU apart orbits at 1.58 units/time, giving every one of its points an
+   * intensity of 0.032 against a draw threshold of 0.05: the trail was computed,
+   * aged and stored, and then skipped on every frame. Scenarios whose entire
+   * subject is an orbit drew two dots and nothing else.
+   *
+   * Scaling against the fastest point in the object's own trail keeps what the
+   * cue was for - periapsis brighter than apoapsis - while making it scale-free,
+   * so a slow binary and a black-hole inspiral both read. The floor stops a
+   * near-circular orbit, where every point is the same speed, from sitting at
+   * the bottom of the ramp.
+   *
+   * @param {Array<{velocity: number}>} trail - The object's trail points
+   * @returns {number} Speed to treat as full brightness, never zero
+   */
+  function trailSpeedScale(trail) {
+    let peak = 0;
+    for (let i = 0; i < trail.length; i++) {
+      if (trail[i].velocity > peak) peak = trail[i].velocity;
+    }
+    return peak > 0 ? peak : 1;
+  }
+
+  // Slowest a trail point is ever drawn at, as a fraction of full brightness.
+  // A circular orbit has no speed variation to show, so without a floor it would
+  // render at whatever the ramp's bottom happens to be.
+  const TRAIL_MIN_INTENSITY = 0.45;
+
   if (SETTINGS.show_trails) {
     [
       ...planets,
@@ -400,13 +544,15 @@ const drawScene = () => {
         const rgb = bySpeed
           ? speedTrailColor(Math.hypot(obj.vel.x, obj.vel.y))
           : hexToRgb(baseColor);
+        // Relative to this object's own motion, so slow orbits still draw.
+        const speedScale = trailSpeedScale(obj.trail);
 
         if (SETTINGS.trail_style === 'Cloud') {
           // Draw cloud-like trail with multiple passes
           for (let pass = 0; pass < 3; pass++) {
             const velocityScale = Math.max(
               0.6,
-              Math.min(1.8, obj.trail[0].velocity / 40)
+              Math.min(1.8, obj.trail[0].velocity / speedScale)
             );
             const trailWidth =
               ((2.5 - pass * 0.5) * velocityScale) / state.zoom;
@@ -424,7 +570,10 @@ const drawScene = () => {
 
             for (let i = 1; i < obj.trail.length; i++) {
               const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
-              const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
+              const velocity_factor = Math.max(
+                TRAIL_MIN_INTENSITY,
+                Math.min(1, obj.trail[i].velocity / speedScale)
+              );
               const alpha = age_factor * velocity_factor * maxAlpha;
 
               ctx.globalAlpha = alpha;
@@ -471,7 +620,10 @@ const drawScene = () => {
           const prevAlpha = ctx.globalAlpha;
           for (let i = 0; i < obj.trail.length; i++) {
             const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
-            const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
+            const velocity_factor = Math.max(
+              TRAIL_MIN_INTENSITY,
+              Math.min(1, obj.trail[i].velocity / speedScale)
+            );
             const intensity = age_factor * velocity_factor;
 
             if (intensity > 0.05) {
@@ -527,53 +679,30 @@ const drawScene = () => {
     if (obj.alive) obj.draw(ctx);
   });
 
-  // Draw habitable (Goldilocks) zones for stars that have it enabled
-  const hzOptimism =
-    (typeof SETTINGS.habitable_zone_optimism === 'number'
-      ? SETTINGS.habitable_zone_optimism
-      : 1.0) || 1.0;
-  // In the Solar System preset, Earth is placed at distance ~160 from the Sun (see solarSystemData),
-  // so we treat 1 AU as 160 simulation units for the habitable-zone visualizer.
-  const AU_IN_UNITS = 160;
+  // Draw habitable zones for stars that have the ring switched on.
+  //
+  // Every number comes from js/habitability.js, which the lesson instruments
+  // read too. This block used to carry its own physics: 1 AU = 160 units (the
+  // scenarios use 100), luminosity from mass as M^3.5 with a floor of
+  // 0.01 L_sun (TRAPPIST-1 is 0.000553), and an "optimism" slider that widened
+  // an arbitrary band around 1 AU. The ring was in the wrong place and,
+  // for a red dwarf, wrong by a factor of several.
+  const hzModel = habitableZoneModelFromSettings(SETTINGS);
 
   stars.forEach(star => {
     if (!star.alive || !star.showHabitableZone) return;
 
-    const massInSuns =
-      typeof star.massInSuns === 'number' && star.massInSuns > 0
-        ? star.massInSuns
-        : 1.0;
+    const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
+    const bounds = habitableZoneBounds(props, hzModel);
+    if (!isFinite(bounds.innerAU) || !isFinite(bounds.outerAU)) return;
 
-    // Approximate luminosity scaling: L ∝ M^3.5 (in solar units)
-    const luminosity = Math.max(0.01, Math.pow(massInSuns, 3.5));
+    const innerR = auToSim(bounds.innerAU);
+    const outerR = auToSim(bounds.outerAU);
+    if (!isFinite(innerR) || !isFinite(outerR) || outerR <= innerR) return;
 
-    // Base conservative habitable zone around a Sun-like star in AU.
-    // We parameterize inner/outer edges and let the "optimism" slider widen or narrow them:
-    //  - At low optimism (~0.5): tight band around ~0.9–1.1 AU (very Earth-focused)
-    //  - At high optimism (~2.0): wider band ~0.6–1.4 AU (can include Venus/Mars)
-    const t = Math.max(0, Math.min(1, (hzOptimism - 0.5) / 1.5));
-    const baseInnerAU = 0.9 - 0.3 * t; // 0.9 → 0.6 as optimism increases
-    const baseOuterAU = 1.1 + 0.3 * t; // 1.1 → 1.4 as optimism increases
-
-    // Scale with stellar luminosity: HZ distance ∝ √L
-    const scale = Math.sqrt(luminosity);
-    let innerAU = baseInnerAU * scale;
-    let outerAU = baseOuterAU * scale;
-
-    // Ensure ordering stays sensible
-    if (innerAU < 0) innerAU = 0;
-    if (outerAU <= innerAU) outerAU = innerAU * 1.1 || 0.1;
-
-    const innerR = innerAU * AU_IN_UNITS;
-    const outerR = outerAU * AU_IN_UNITS;
-
-    // Skip if zone would be absurdly small or huge in current scale
-    if (!isFinite(innerR) || !isFinite(outerR) || outerR <= 0) return;
-
-    // Filled faint annulus plus dashed boundary lines
     ctx.save();
 
-    // Soft greenish fill between inner and outer edge
+    // Soft fill between the edges
     ctx.fillStyle = 'rgba(80, 220, 160, 0.08)';
     ctx.beginPath();
     ctx.arc(star.pos.x, star.pos.y, outerR, 0, 2 * Math.PI);
@@ -581,15 +710,16 @@ const drawScene = () => {
     ctx.closePath();
     ctx.fill();
 
-    // Inner edge (conservative "too hot" boundary)
-    ctx.setLineDash([10 / state.zoom, 6 / state.zoom]);
+    // The two edges are drawn with different dash patterns as well as
+    // different colors, so which is which does not depend on seeing color.
     ctx.lineWidth = 1.5 / state.zoom;
+    ctx.setLineDash([10 / state.zoom, 6 / state.zoom]);
     ctx.strokeStyle = 'rgba(255, 180, 120, 0.9)';
     ctx.beginPath();
     ctx.arc(star.pos.x, star.pos.y, innerR, 0, 2 * Math.PI);
     ctx.stroke();
 
-    // Outer edge (conservative "too cold" boundary)
+    ctx.setLineDash([3 / state.zoom, 5 / state.zoom]);
     ctx.strokeStyle = 'rgba(120, 200, 255, 0.9)';
     ctx.beginPath();
     ctx.arc(star.pos.x, star.pos.y, outerR, 0, 2 * Math.PI);
@@ -598,31 +728,58 @@ const drawScene = () => {
     ctx.setLineDash([]);
     ctx.restore();
 
-    // Screen-space label for clarity ("Habitable Zone")
+    // Screen-space labels. The band is named, and each edge is named, so the
+    // ring is not a green region whose meaning has to be guessed.
     try {
-      // Place the label in the middle of the annulus in world space
-      const midR = (innerR + outerR) / 2;
-      const labelWorld = {
-        x: star.pos.x,
-        y: star.pos.y + midR,
+      const label = (worldR, text, color, align) => {
+        const p = world_to_screen({ x: star.pos.x, y: star.pos.y + worldR });
+        ctx.fillStyle = color;
+        ctx.textAlign = align;
+        ctx.fillText(text, p.x, p.y);
       };
-      const labelScreen = world_to_screen(labelWorld);
-
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      const screenRadius = outerR * state.zoom;
-      if (screenRadius > 30) {
+      if (outerR * state.zoom > 30) {
         ctx.font = '12px Inter, system-ui, sans-serif';
-        ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = 'rgba(180, 255, 210, 0.95)';
-        ctx.shadowColor = 'rgba(0,0,0,0.7)';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = 4;
-        ctx.fillText('Habitable Zone', labelScreen.x, labelScreen.y);
+        // Below 2600 K the published polynomial is evaluated at its own
+        // lower limit rather than extrapolated, which is a modeling choice
+        // and not a measurement. The ring says so for the red dwarfs where
+        // it applies, rather than quoting a clamped fit as fact.
+        const bandName =
+          hzModel === 'optimistic'
+            ? 'Habitable zone (optimistic)'
+            : 'Habitable zone (conservative)';
+        label(
+          (innerR + outerR) / 2,
+          bounds.extrapolated
+            ? `${bandName} · star cooler than the model covers`
+            : bandName,
+          'rgba(180, 255, 210, 0.95)',
+          'center'
+        );
+        // Edge labels only once there is room for them to not collide.
+        if ((outerR - innerR) * state.zoom > 46) {
+          ctx.font = '10px Inter, system-ui, sans-serif';
+          label(
+            innerR,
+            bounds.innerLabel,
+            'rgba(255, 200, 150, 0.9)',
+            'center'
+          );
+          label(
+            outerR,
+            bounds.outerLabel,
+            'rgba(160, 215, 255, 0.9)',
+            'center'
+          );
+        }
       }
       ctx.restore();
     } catch {
-      // non-fatal; label is just cosmetic
+      // non-fatal; labels are cosmetic
     }
   });
 
@@ -775,7 +932,11 @@ const drawScene = () => {
     }
   }
 
-  // Kepler's 2nd Law area sweep overlay
+  // Kepler's 2nd Law area sweep overlay. Checked here rather than on a timer
+  // so a stale overlay is never drawn even once.
+  if (state.areaSweepOverlay && state.areaSweepOverlay.active) {
+    checkAreaSweepValidity();
+  }
   if (state.areaSweepOverlay && state.areaSweepOverlay.active) {
     const sweep = state.areaSweepOverlay;
     const sweepParent = sweep.parent;
@@ -805,6 +966,43 @@ const drawScene = () => {
       const starScreen = world_to_screen({ x: px, y: py });
       const stride = 3;
 
+      // Each wedge's area, and where to write it. The areas are equal to well
+      // under a percent, but they do not look equal: a short fat wedge near the
+      // star and a long thin one near apoapsis read as very different sizes to
+      // the eye, which judges partly by linear extent. Printing the number on
+      // each one turns "trust me" into something the student can check, which
+      // is the whole point of the figure.
+      const wedgeAreas = [];
+      const wedgeLabelAt = [];
+      for (let w = 0; w < sweep.wedges.length; w++) {
+        const wedge = sweep.wedges[w];
+        if (wedge.length < 2) {
+          wedgeAreas.push(0);
+          wedgeLabelAt.push(null);
+          continue;
+        }
+        let twice = 0;
+        let cx = 0;
+        let cy = 0;
+        for (let k = 0; k < wedge.length - 1; k++) {
+          const a = wedge[k];
+          const b = wedge[k + 1];
+          const cross = a.x * b.y - b.x * a.y;
+          twice += cross;
+          cx += (a.x + b.x) * cross;
+          cy += (a.y + b.y) * cross;
+        }
+        const area = Math.abs(twice) / 2;
+        wedgeAreas.push(area);
+        // Centroid of the swept sector, pulled toward the star so the label
+        // sits inside the coloured region rather than out on the arc.
+        wedgeLabelAt.push(
+          twice !== 0
+            ? { x: (cx / (3 * twice)) * 0.82, y: (cy / (3 * twice)) * 0.82 }
+            : null
+        );
+      }
+
       for (let w = 0; w < sweep.wedges.length; w++) {
         const wedge = sweep.wedges[w];
         if (wedge.length < 2) continue;
@@ -822,6 +1020,30 @@ const drawScene = () => {
         ctx.lineTo(starScreen.x, starScreen.y);
         ctx.closePath();
         ctx.fill();
+        ctx.restore();
+      }
+
+      // Area labels, drawn after every fill so no wedge paints over a label.
+      if (state.zoom > 0.35) {
+        const total = wedgeAreas.reduce((a, b) => a + b, 0);
+        ctx.save();
+        ctx.font =
+          '600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+        ctx.shadowBlur = 4;
+        for (let w = 0; w < wedgeLabelAt.length; w++) {
+          const at = wedgeLabelAt[w];
+          if (!at || !total) continue;
+          const s = world_to_screen({ x: px + at.x, y: py + at.y });
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+          ctx.fillText(
+            `${((wedgeAreas[w] / total) * 100).toFixed(1)}%`,
+            s.x,
+            s.y
+          );
+        }
         ctx.restore();
       }
 
@@ -903,7 +1125,7 @@ const drawScene = () => {
         ctx.shadowColor = 'rgba(0,0,0,0.5)';
         ctx.shadowBlur = 4;
         ctx.fillText(
-          "Kepler's 2nd Law — Equal Areas",
+          "Kepler's 2nd Law: Equal Areas",
           sweepTop.x,
           sweepTop.y - 10
         );
@@ -975,7 +1197,7 @@ const drawScene = () => {
       `<span class="category-label">Stars:</span> ${stars.length} | <span class="category-label">Neutron Stars:</span> ${neutron_stars.length} | <span class="category-label">White Dwarfs:</span> ${white_dwarfs.length}`,
       `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`,
       `<div class="separator-line"></div>`,
-      `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}x<br/><span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}x</span>`,
+      `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}\u00d7<br/><span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}\u00d7</span>`,
       `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused' : 'Running'}</span>`,
       `<div class="separator-line"></div>`,
       `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan<br/>Scroll = Zoom<br/>Space = Pause/Resume`,
@@ -1098,6 +1320,83 @@ let lastPerformanceLog = 0;
 let frameTimeSum = 0;
 let adaptiveScale = 1;
 
+/**
+ * Per-phase frame timings, for development profiling.
+ *
+ * Off unless something sets `enabled`, so the cost in normal use is one boolean
+ * test per phase per frame. It exists because "the starfield feels expensive"
+ * is not a measurement: tools/perf-probe.mjs turns this on, runs a scenario and
+ * reports where the frame budget actually goes, which is the only way to tell
+ * whether a rendering change helped.
+ */
+export const perf = {
+  enabled: false,
+  frames: 0,
+  starfield: 0,
+  scene: 0,
+  bloom: 0,
+  // How many frames actually repainted each throttled layer. Time per frame is
+  // the wrong measure for work that is skipped: on a machine slow enough that
+  // every frame exceeds the repaint interval, nothing is ever skipped and the
+  // saving looks like zero. The ratio of paints to frames is what the change
+  // is really doing.
+  starPaints: 0,
+  bloomPaints: 0,
+  reset() {
+    this.frames = 0;
+    this.starfield = 0;
+    this.scene = 0;
+    this.bloom = 0;
+    this.starPaints = 0;
+    this.bloomPaints = 0;
+  },
+};
+
+/** Time one phase into the counters above. Free when profiling is off. */
+function phase(bucket, fn) {
+  if (!perf.enabled) return fn();
+  const t = performance.now();
+  const out = fn();
+  perf[bucket] += performance.now() - t;
+  return out;
+}
+
+// --- Idle rendering ----------------------------------------------------------
+//
+// A paused simulation is a still image, but the loop kept redrawing it sixty
+// times a second: a tab left paused on a laptop held a core warm for nothing.
+//
+// It cannot simply stop, because plenty still changes while paused - panning,
+// zooming, selecting, dragging an object into place, scrubbing the timeline.
+// So rather than trying to enumerate every source of change and risking a
+// frame that never arrives, any input at all opens a window of full-rate
+// rendering. Outside that window, and only while paused, the scene redraws at
+// 10Hz, which is invisible on a static picture.
+const IDLE_REDRAW_MS = 100;
+const INTERACTION_GRACE_MS = 700;
+let interactionUntil = 0;
+let lastIdleDraw = 0;
+
+/** Render at full rate for a moment: something the user did may be animating. */
+export function noteInteraction() {
+  interactionUntil = performance.now() + INTERACTION_GRACE_MS;
+}
+
+if (typeof window !== 'undefined') {
+  for (const ev of [
+    'pointerdown',
+    'pointermove',
+    'wheel',
+    'keydown',
+    'touchmove',
+  ]) {
+    window.addEventListener(ev, noteInteraction, {
+      passive: true,
+      capture: true,
+    });
+  }
+}
+
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
   const frameStart = performance.now();
@@ -1109,13 +1408,46 @@ const gameLoop = timestamp => {
   // While scrubbing, tickTimeline holds the restored frame and physics is
   // skipped so the recorded state is what gets drawn.
   const mayIntegrate = tickTimeline(dt_sim);
-  if (!state.paused && mayIntegrate) updatePhysics(dt_sim);
+  if (!state.paused && mayIntegrate) {
+    // Symplectic Euler's error grows with the step, and it shows up first as a
+    // slow change in eccentricity: an orbit that should be fixed visibly
+    // reshapes over a minute or two. That is fine in a sandbox and fatal in a
+    // lesson that asks students to measure a supposedly constant orbit, so a
+    // scenario can cap the step it is integrated at and take several smaller
+    // ones per frame instead.
+    //
+    // The ceiling is 64 rather than 16 because a tightly packed system needs a
+    // genuinely small step: TRAPPIST-1's innermost planet has a year of a day
+    // and a half, and at 16 substeps it was getting 225 steps per orbit, which
+    // symplectic Euler turns into unbound orbits after a few hundred circuits.
+    // Only scenarios that opt in pay for this, and those are small ones.
+    const maxStep = SETTINGS.max_timestep || 0;
+    if (maxStep > 0 && dt_sim > maxStep) {
+      const n = Math.min(64, Math.ceil(dt_sim / maxStep));
+      const sub = dt_sim / n;
+      for (let i = 0; i < n; i++) updatePhysics(sub);
+    } else {
+      updatePhysics(dt_sim);
+    }
+  }
 
-  // Draw star field first (background layer)
-  drawStarfield();
+  // While paused and untouched, the picture cannot change; drop to 10Hz rather
+  // than repainting an identical frame. tickTimeline above still runs, so a
+  // scrub is never missed, and any input restores full rate immediately.
+  const idle =
+    state.paused &&
+    frameStart > interactionUntil &&
+    frameStart - lastIdleDraw < IDLE_REDRAW_MS;
 
-  // Draw simulation objects (foreground layer)
-  drawScene();
+  if (!idle) {
+    lastIdleDraw = frameStart;
+    // Draw star field first (background layer)
+    phase('starfield', () => tickStarfield(timestamp));
+
+    // Draw simulation objects (foreground layer)
+    phase('scene', drawScene);
+  }
+  if (perf.enabled) perf.frames++;
   try {
     updateLightCurve(dt_sim);
     drawObserverIndicator(ctx, canvas.width, canvas.height);
@@ -1125,22 +1457,29 @@ const gameLoop = timestamp => {
   updateSonification(timestamp);
   update3DScene(timestamp);
 
-  // Composite bloom layer additively
-  try {
-    if (
-      bloomCanvas.width !== canvas.width ||
-      bloomCanvas.height !== canvas.height
-    ) {
-      resizeBloomCanvas();
+  // Composite the bloom layer additively, if anything drew into it. When
+  // nothing did, the layer is already clear from the last frame that did, so
+  // both the composite and the clear can be skipped outright.
+  phase('bloom', () => {
+    if (!bloomDirty) return;
+    bloomDirty = false;
+    if (perf.enabled) perf.bloomPaints++;
+    try {
+      if (
+        bloomCanvas.width !== canvas.width ||
+        bloomCanvas.height !== canvas.height
+      ) {
+        resizeBloomCanvas();
+      }
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.drawImage(bloomCanvas, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      // Cleared here, which is what lets the next clean frame do nothing.
+      bloomCtx.clearRect(0, 0, bloomCanvas.width, bloomCanvas.height);
+    } catch {
+      // no-op
     }
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.drawImage(bloomCanvas, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
-    // Clear bloom for next frame
-    bloomCtx.clearRect(0, 0, bloomCanvas.width, bloomCanvas.height);
-  } catch {
-    // no-op
-  }
+  });
 
   // Performance monitoring
   const frameTime = performance.now() - frameStart;
@@ -1187,16 +1526,32 @@ function resizeCanvas() {
   // being presented yet (background tab, hidden container).
   const W = Math.max(1, window.innerWidth || 0);
   const H = Math.max(1, window.innerHeight || 0);
+  if (canvas.width === W && canvas.height === H) return;
   canvas.width = W;
   canvas.height = H; // sim layer
   starfieldCanvas.width = W;
   starfieldCanvas.height = H; // star layer
   generateStarfield(); // redraw background
 }
-window.addEventListener('resize', resizeCanvas);
 
-// The starfield is only redrawn on demand, so a theme switch has to ask for it.
+// Dragging a window edge fires resize continuously, and each one reallocated
+// three full-screen canvases and generated three hundred new stars. Coalescing
+// into the next frame does that once per painted frame instead, and the early
+// return above drops the ones where nothing actually changed.
+let resizePending = false;
+window.addEventListener('resize', () => {
+  if (resizePending) return;
+  resizePending = true;
+  requestAnimationFrame(() => {
+    resizePending = false;
+    resizeCanvas();
+  });
+});
+
+// The starfield is only repainted when it needs to be, so a theme switch has to
+// mark it dirty rather than assume the next frame will pick the change up.
 onThemeChange(() => {
+  starfieldDirty = true;
   try {
     drawStarfield();
   } catch {

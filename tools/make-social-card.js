@@ -6,7 +6,7 @@
  *
  * Written as a generator rather than a checked-in binary so the card can be
  * regenerated when the branding changes, and reviewed as a diff. Uses only
- * Node's built-in zlib — no image dependencies.
+ * Node's built-in zlib: no image dependencies.
  */
 
 import { deflateSync } from 'node:zlib';
@@ -75,10 +75,10 @@ for (let i = 0; i < 1400; i++) {
 
 /**
  * Draw a soft radial glow.
- * @param {number} cx - Centre x
- * @param {number} cy - Centre y
+ * @param {number} cx - Center x
+ * @param {number} cy - Center y
  * @param {number} radius - Falloff radius
- * @param {Array<number>} rgb - Colour
+ * @param {Array<number>} rgb - Color
  * @param {number} strength - Peak intensity
  */
 function glow(cx, cy, radius, rgb, strength) {
@@ -93,8 +93,8 @@ function glow(cx, cy, radius, rgb, strength) {
   }
 }
 
-/** Draw a filled disc (the event horizon). */
-function disc(cx, cy, radius, rgb) {
+/** Draw a filled disk (the event horizon). */
+function disk(cx, cy, radius, rgb) {
   const r0 = Math.ceil(radius) + 2;
   for (let dy = -r0; dy <= r0; dy++) {
     for (let dx = -r0; dx <= r0; dx++) {
@@ -111,7 +111,7 @@ function disc(cx, cy, radius, rgb) {
 }
 
 /**
- * Draw an accretion disc as a thin ellipse, brighter on one side to stand in
+ * Draw an accretion disk as a thin ellipse, brighter on one side to stand in
  * for the Doppler beaming the simulation renders.
  */
 function accretionDisc(cx, cy, rx, ry, tilt, rgb, strength) {
@@ -135,11 +135,11 @@ function accretionDisc(cx, cy, rx, ry, tilt, rgb, strength) {
 // Two black holes, echoing the default Binary BH scenario
 accretionDisc(455, 330, 210, 30, -0.22, [255, 205, 140], 0.5);
 glow(455, 330, 105, [255, 190, 120], 0.5);
-disc(455, 330, 40, [3, 3, 6]);
+disk(455, 330, 40, [3, 3, 6]);
 
 accretionDisc(775, 300, 165, 24, -0.22, [255, 214, 165], 0.42);
 glow(775, 300, 82, [255, 200, 140], 0.42);
-disc(775, 300, 31, [3, 3, 6]);
+disk(775, 300, 31, [3, 3, 6]);
 
 // --- Vignette ----------------------------------------------------------------
 for (let y = 0; y < H; y++) {
@@ -171,11 +171,11 @@ const FONT = {
 /**
  * Render text with the bitmap font.
  * @param {string} text - Characters to draw (must exist in FONT)
- * @param {number} cx - Centre x
+ * @param {number} cx - Center x
  * @param {number} y - Top y
  * @param {number} scale - Pixels per font cell
  * @param {number} tracking - Extra pixels between glyphs
- * @param {Array<number>} rgb - Colour
+ * @param {Array<number>} rgb - Color
  */
 function drawText(text, cx, y, scale, tracking, rgb) {
   const glyphW = 5 * scale + tracking;
@@ -245,7 +245,7 @@ const ihdr = Buffer.alloc(13);
 ihdr.writeUInt32BE(W, 0);
 ihdr.writeUInt32BE(H, 4);
 ihdr[8] = 8; // bit depth
-ihdr[9] = 2; // colour type: truecolour
+ihdr[9] = 2; // color type: truecolour
 const png = Buffer.concat([
   Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
   chunk('IHDR', ihdr),

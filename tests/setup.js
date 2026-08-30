@@ -27,7 +27,7 @@ const mockCanvas = {
 
 // Mock DOM elements that are used in the physics module
 global.document = {
-  getElementById: jest.fn((id) => {
+  getElementById: jest.fn(id => {
     if (id === 'simulationCanvas') {
       return mockCanvas;
     }
@@ -67,4 +67,26 @@ global.console = {
 };
 
 // Mock Date.now for consistent testing
-global.Date.now = jest.fn(() => 1234567890); 
+global.Date.now = jest.fn(() => 1234567890);
+// --- Web platform APIs jsdom does not implement ------------------------------
+// TextEncoder/TextDecoder, the compression streams and Blob.stream() all exist
+// in every browser Gravitas targets, but jsdom ships none of them. Node has
+// real implementations, so borrowing them tests the actual code paths rather
+// than mocking around them — which matters most for the compressed branch of
+// the shared-link codec, the one a stub would hide.
+import { TextEncoder, TextDecoder } from 'node:util';
+import { CompressionStream, DecompressionStream } from 'node:stream/web';
+import { Blob } from 'node:buffer';
+
+if (typeof global.TextEncoder === 'undefined') global.TextEncoder = TextEncoder;
+if (typeof global.TextDecoder === 'undefined') global.TextDecoder = TextDecoder;
+if (typeof global.CompressionStream === 'undefined') {
+  global.CompressionStream = CompressionStream;
+}
+if (typeof global.DecompressionStream === 'undefined') {
+  global.DecompressionStream = DecompressionStream;
+}
+// jsdom's Blob has no .stream(); Node's does.
+if (typeof global.Blob === 'undefined' || !global.Blob.prototype.stream) {
+  global.Blob = Blob;
+}

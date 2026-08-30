@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instructor Resources | Gravitas</title>
+    <meta
+      name="description"
+      content="Teaching guides, learning objectives, answer keys and classroom materials for the Gravitas investigations."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <script>
+      try {
+        const t = localStorage.getItem('gravitas_theme');
+        if (
+          t &&
+          t !== 'midnight' &&
+          ['deep', 'observatory', 'daylight'].includes(t)
+        ) {
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme =
+            t === 'daylight' ? 'light' : 'dark';
+        }
+      } catch (e) {
+        /* storage unavailable; the default theme is correct */
+      }
+    </script>
+  </head>
+  <body class="doc-page">
+    <a class="doc-skip" href="#main">Skip to content</a>
+
+    <header class="doc-top">
+      <a class="doc-brand" href="/">GRAVITAS <span>simulation</span></a>
+      <nav class="doc-nav" aria-label="Site">
+        <a href="/">Simulation</a>
+        <a href="/model/">The model</a>
+        <a href="/instructors/" aria-current="page">Instructors</a>
+        <button type="button" id="logoutBtn" class="ui-button is-quiet" hidden>
+          Log out
+        </button>
+      </nav>
+    </header>
+
+    <main class="doc-main is-wide" id="main">
+      <p id="portalLoading" class="portal-loading">Loading…</p>
+
+      <!-- Login -->
+      <section id="loginScreen" class="portal-login" hidden>
+        <div class="portal-login-card">
+          <p class="doc-eyebrow">Gravitas</p>
+          <h1>Instructor Resources</h1>
+          <p class="doc-lede">
+            Teaching guides, learning objectives, answer keys and classroom
+            materials for the Gravitas investigations.
+          </p>
+
+          <form id="loginForm" novalidate>
+            <label class="portal-field" for="passwordInput">
+              <span>Instructor passphrase</span>
+              <span class="portal-input-row">
+                <input
+                  type="password"
+                  id="passwordInput"
+                  name="instructor-passphrase"
+                  autocomplete="current-password"
+                  autocapitalize="off"
+                  autocorrect="off"
+                  spellcheck="false"
+                  aria-describedby="loginHint loginError"
+                  required
+                />
+                <button
+                  type="button"
+                  id="togglePassword"
+                  class="ui-button is-quiet"
+                  aria-pressed="false"
+                  aria-label="Show or hide the passphrase"
+                >
+                  Show
+                </button>
+              </span>
+            </label>
+            <p id="loginError" class="portal-error" role="alert" hidden></p>
+            <button type="submit" id="loginSubmit" class="ui-button is-primary">
+              Enter Instructor Resources
+            </button>
+          </form>
+
+          <p id="loginHint" class="portal-hint">
+            One shared passphrase, distributed to instructors. Contact the
+            project if you need it for your course.
+          </p>
+        </div>
+
+        <aside class="portal-aside">
+          <h2>How this is protected</h2>
+          <p>
+            Gravitas is a static site with no server, so there is nowhere to
+            check a password. Instead the materials are
+            <strong>encrypted</strong>. The file your browser downloads is
+            ciphertext; the passphrase you type derives the key that decrypts
+            it, here in the browser. A wrong passphrase does not fail a check
+            that could be bypassed, it simply cannot produce the key.
+          </p>
+          <p>
+            The honest limit: the encrypted file is publicly downloadable, so
+            its security is the strength of the passphrase against an offline
+            attack. The key derivation is deliberately slow to make guessing
+            expensive. Please do not post the passphrase where it can be
+            indexed.
+          </p>
+          <p>
+            <a href="/model/">How Gravitas Models the Universe</a> is public and
+            needs no passphrase. Share it with students freely.
+          </p>
+        </aside>
+      </section>
+
+      <!-- Dashboard -->
+      <section id="dashboard" hidden>
+        <div class="doc-hero">
+          <p class="doc-eyebrow">Gravitas</p>
+          <h1>Instructor Resources</h1>
+          <p class="doc-lede">
+            Everything needed to assign Gravitas investigations in an
+            introductory astronomy course.
+          </p>
+          <p class="portal-version" id="materialsVersion"></p>
+        </div>
+
+        <h2>General resources</h2>
+        <div class="res-grid" id="generalResources"></div>
+
+        <h2>Investigation materials</h2>
+        <p>
+          Each investigation has an instructor guide and a separate answer key.
+          Answer keys are generated from the live lesson definitions and checked
+          against the same rule the website uses to mark student work, so they
+          cannot disagree with what students see.
+        </p>
+        <div
+          class="res-filters"
+          id="resourceFilters"
+          role="group"
+          aria-label="Filter investigations"
+        ></div>
+        <div class="res-grid is-stacked" id="investigationResources"></div>
+        <p id="noMatches" class="portal-hint" hidden>
+          No investigations match that filter.
+        </p>
+      </section>
+    </main>
+
+    <footer class="doc-foot">
+      <a href="/">Gravitas</a>
+      <span class="doc-foot-sep">·</span>
+      <a href="/model/">The model</a>
+      <span class="doc-foot-sep">·</span>
+      <a
+        href="https://github.com/gravitas-sim/gravitas-sim.github.io"
+        rel="noopener"
+        >Source</a
+      >
+      <span class="doc-foot-sep">·</span>
+      <span>MIT licensed</span>
+    </footer>
+
+    <script type="module">
+      import { initInstructorPortal } from '/js/instructorPortal.js';
+      initInstructorPortal();
+    </script>
+  </body>
+</html>

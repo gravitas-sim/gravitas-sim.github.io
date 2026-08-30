@@ -1,5 +1,5 @@
 // =============================================================================
-// Controls — the transport bar, view menu, shortcuts and placement undo
+// Controls: the transport bar, view menu, shortcuts and placement undo
 // -----------------------------------------------------------------------------
 // New chrome lives here rather than growing ui.js. Everything is built from
 // markup already present in index.html; nothing is injected blind.
@@ -46,7 +46,7 @@ import {
 
 // --- Placement undo -----------------------------------------------------------
 // Only user-placed objects are undoable. Simulation-created bodies (merger
-// products, collapse remnants) are not — undoing those would mean rewriting
+// products, collapse remnants) are not: undoing those would mean rewriting
 // history, which is what the timeline is for.
 const placementStack = [];
 const MAX_UNDO = 50;
@@ -99,7 +99,7 @@ export function undoPlacement() {
   return false;
 }
 
-/** Drop the undo stack — called when the simulation is rebuilt. */
+/** Drop the undo stack: called when the simulation is rebuilt. */
 export function clearPlacementHistory() {
   placementStack.length = 0;
   refreshUndoButton();
@@ -236,16 +236,143 @@ function refreshTransport() {
   playBtn.title = showPlayIcon ? 'Play (Space)' : 'Pause (Space)';
 }
 
+// --- Theme dock ---------------------------------------------------------------
+//
+// The picker sits beside the copyright rather than in the control rail: it is a
+// preference for the page, not a control for the simulation, and the rail had
+// grown past the height of a laptop screen. Closed it is a swatch and a word;
+// open it lists every theme with its one-line hint, so choosing Daylight is one
+// click rather than three presses of the cycle shortcut.
+
+/** Repaint the dock's swatch and label from the active theme. */
+function syncThemeDock() {
+  const name = document.getElementById('themeButtonName');
+  const active = THEMES.find(t => t.id === getTheme());
+  if (name) name.textContent = active?.label ?? 'Theme';
+  for (const item of document.querySelectorAll('[data-theme-option]')) {
+    const on = item.dataset.themeOption === getTheme();
+    item.setAttribute('aria-checked', String(on));
+    item.classList.toggle('is-active', on);
+  }
+}
+
+function setupThemeDock() {
+  const btn = document.getElementById('themeButton');
+  const menu = document.getElementById('themeMenu');
+  if (!btn || !menu) return;
+
+  menu.innerHTML = THEMES.map(
+    t => `<button type="button" role="menuitemradio" aria-checked="false"
+             class="theme-menu-item" data-theme-option="${t.id}">
+             <span class="theme-menu-swatch" data-swatch="${t.id}"></span>
+             <span class="theme-menu-text">
+               <span class="theme-menu-label">${t.label}</span>
+               <span class="theme-menu-hint">${t.hint}</span>
+             </span>
+           </button>`
+  ).join('');
+
+  const close = ({ refocus = false } = {}) => {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (refocus) btn.focus();
+  };
+
+  const open = () => {
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    menu.querySelector('.is-active, .theme-menu-item')?.focus();
+  };
+
+  btn.addEventListener('click', () => (menu.hidden ? open() : close()));
+
+  menu.addEventListener('click', e => {
+    const item = e.target.closest('[data-theme-option]');
+    if (!item) return;
+    setTheme(item.dataset.themeOption);
+    close({ refocus: true });
+  });
+
+  // A menu that cannot be dismissed by Escape or by clicking away is a trap,
+  // and this one floats over the simulation.
+  menu.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      close({ refocus: true });
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!menu.hidden && !e.target.closest('.theme-dock')) close();
+  });
+  window.addEventListener('gravitasEscape', () => close({ refocus: true }));
+
+  // The T shortcut and any other caller change the theme without going through
+  // this menu, so the dock follows the theme rather than its own clicks.
+  window.addEventListener('gravitasThemeChanged', syncThemeDock);
+  syncThemeDock();
+}
+
+// --- Rail sections ------------------------------------------------------------
+//
+// The rail outgrew a laptop screen once every group was present. Collapsing is
+// the user's answer to that: shut the sections you are not using and the rest
+// fits without scrolling. What is open is remembered, because a panel that
+// reopens everything on every visit is not a preference, it is a chore.
+
+const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
+
+// Shut on a first visit. Learn is reference material rather than controls, and
+// with it open the rail is taller than a laptop screen before the user has done
+// anything. Its header stays visible, so it is folded rather than hidden.
+const DEFAULT_COLLAPSED = ['railLearn'];
+
+function readCollapsedSections() {
+  try {
+    const raw = window.localStorage?.getItem(RAIL_SECTIONS_KEY);
+    return new Set(raw ? JSON.parse(raw) : DEFAULT_COLLAPSED);
+  } catch {
+    return new Set(DEFAULT_COLLAPSED);
+  }
+}
+
+function setupRailSections() {
+  const collapsed = readCollapsedSections();
+  const save = () => {
+    try {
+      window.localStorage?.setItem(
+        RAIL_SECTIONS_KEY,
+        JSON.stringify([...collapsed])
+      );
+    } catch {
+      /* the rail still works; the preference just will not persist */
+    }
+  };
+
+  for (const toggle of document.querySelectorAll('.rail-section-toggle')) {
+    const body = document.getElementById(toggle.getAttribute('aria-controls'));
+    if (!body) continue;
+
+    const apply = () => {
+      const shut = collapsed.has(toggle.id);
+      toggle.setAttribute('aria-expanded', String(!shut));
+      body.hidden = shut;
+    };
+    apply();
+
+    toggle.addEventListener('click', () => {
+      if (collapsed.has(toggle.id)) collapsed.delete(toggle.id);
+      else collapsed.add(toggle.id);
+      apply();
+      save();
+    });
+  }
+}
+
 // --- View menu ----------------------------------------------------------------
 function setupViewMenu() {
-  const themeSelect = document.getElementById('themeSelect');
-  if (themeSelect) {
-    themeSelect.innerHTML = THEMES.map(
-      t => `<option value="${t.id}">${t.label}</option>`
-    ).join('');
-    themeSelect.value = getTheme();
-    themeSelect.addEventListener('change', () => setTheme(themeSelect.value));
-  }
+  setupThemeDock();
+  setupRailSections();
 
   const unitBtn = document.getElementById('unitToggle');
   if (unitBtn) {
@@ -274,45 +401,10 @@ function setupViewMenu() {
 }
 
 // --- Scenario search ----------------------------------------------------------
-function setupScenarioSearch() {
-  const input = document.getElementById('scenarioSearch');
-  const list = document.getElementById('scenarioListItems');
-  if (!input || !list) return;
-
-  const filter = () => {
-    const q = input.value.trim().toLowerCase();
-    let visible = 0;
-    for (const item of list.querySelectorAll('[data-scenario]')) {
-      const hay = (
-        item.dataset.scenario +
-        ' ' +
-        (item.dataset.keywords || '') +
-        ' ' +
-        item.textContent
-      ).toLowerCase();
-      const show = !q || hay.includes(q);
-      item.hidden = !show;
-      if (show) visible++;
-    }
-    const empty = document.getElementById('scenarioSearchEmpty');
-    if (empty) empty.hidden = visible > 0;
-  };
-
-  input.addEventListener('input', filter);
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      input.value = '';
-      filter();
-      e.stopPropagation();
-    }
-    if (e.key === 'Enter') {
-      const first = list.querySelector('[data-scenario]:not([hidden])');
-      first?.click();
-    }
-  });
-  // Re-filter whenever the list is repopulated
-  new MutationObserver(filter).observe(list, { childList: true });
-}
+// Scenario search used to be wired here, filtering the browser's DOM after the
+// fact by hiding list items. It now lives in js/scenarioBrowser.js, which owns
+// the gallery and filters the catalog rather than the markup: that is what lets
+// search combine with the concept chips instead of fighting them.
 
 // --- Shortcuts ----------------------------------------------------------------
 function setupShortcuts() {
@@ -390,14 +482,49 @@ function setupShortcuts() {
     },
   });
   registerShortcut({
+    keys: 'I',
+    match: 'i',
+    group: 'Learn',
+    label: 'Open the guided investigations',
+    run: () => {
+      // Through the loader rather than importing the module directly: it is the
+      // one place that guarantees initInvestigations() has run, and the module
+      // does nothing useful before it has.
+      import('./investigationsLoader.js').then(m =>
+        m.ensureInvestigations().then(inv => inv.openBrowser())
+      );
+    },
+  });
+  registerShortcut({
+    keys: 'K',
+    match: 'k',
+    group: 'State',
+    label: 'Share a link to this simulation',
+    run: () => {
+      // Imported lazily: share.js imports this module, so a static import here
+      // would close a cycle that only exists for one keystroke.
+      import('./share.js').then(m => m.openShareDialog());
+    },
+  });
+  registerShortcut({
+    keys: 'E',
+    match: 'e',
+    group: 'State',
+    label: 'Export the recorded data as CSV',
+    run: () => {
+      // Lazily imported for the same reason as the two above: exportDialog.js
+      // imports this module for its toast, so a static import here would close
+      // a cycle for one keystroke.
+      import('./exportDialog.js').then(m => m.openExportDialog());
+    },
+  });
+  registerShortcut({
     keys: 'T',
     match: 't',
     group: 'View',
     label: 'Cycle theme',
     run: () => {
       const id = cycleTheme();
-      const sel = document.getElementById('themeSelect');
-      if (sel) sel.value = id;
       toast(`Theme: ${THEMES.find(t => t.id === id)?.label ?? id}`);
     },
   });
@@ -523,8 +650,55 @@ export function collapseReadoutOnSmallScreens() {
   btn.click();
 }
 
+/**
+ * Keep every range input's filled portion in step with its value.
+ *
+ * The fill is a CSS gradient stop rather than a native progress element,
+ * because the sliders set -webkit-appearance: none and so lose the platform's
+ * own filled track. Delegated from the document and re-run on demand, so it
+ * covers sliders that are created long after load, like the inspector's mass
+ * control and the lesson panels.
+ *
+ * @param {HTMLInputElement} el - The range input
+ */
+function paintRangeFill(el) {
+  const min = Number(el.min || 0);
+  const max = Number(el.max || 100);
+  const span = max - min;
+  const pct = span > 0 ? ((Number(el.value) - min) / span) * 100 : 0;
+  el.style.setProperty('--range-fill', `${Math.max(0, Math.min(100, pct))}%`);
+}
+
+/** Paint every range input currently in the document. */
+export function refreshRangeFills() {
+  document.querySelectorAll('input[type="range"]').forEach(paintRangeFill);
+}
+
+function setupRangeFills() {
+  document.addEventListener(
+    'input',
+    e => {
+      if (e.target?.type === 'range') paintRangeFill(e.target);
+    },
+    true
+  );
+  refreshRangeFills();
+  // Sliders appear when a panel opens, so repaint as the DOM changes rather
+  // than only at load.
+  new MutationObserver(muts => {
+    for (const m of muts) {
+      for (const node of m.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        if (node.matches?.('input[type="range"]')) paintRangeFill(node);
+        node.querySelectorAll?.('input[type="range"]').forEach(paintRangeFill);
+      }
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 /** Initialise every control surface this module owns. */
 export function initControls() {
+  setupRangeFills();
   initTheme();
   initUnits();
   window.addEventListener('gravitasObjectPlaced', e => {
@@ -538,7 +712,6 @@ export function initControls() {
   setupTransport();
   setupViewMenu();
   setupPlacementHint();
-  setupScenarioSearch();
   setupShortcuts();
   refreshTransport();
 }

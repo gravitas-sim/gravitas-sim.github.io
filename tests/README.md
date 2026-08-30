@@ -11,7 +11,9 @@ This directory contains comprehensive unit tests for the core physics functions 
 ## Test Suites
 
 ### 1. gravitational-acceleration.test.js
+
 Tests the `gravitational_acceleration` function with various scenarios:
+
 - Single and multiple gravity sources
 - Different mass configurations
 - Minimum interaction distance handling
@@ -19,7 +21,9 @@ Tests the `gravitational_acceleration` function with various scenarios:
 - Gravitational constant variations
 
 ### 2. physics-object.test.js
+
 Tests the `PhysicsObject` class and its methods:
+
 - Object construction and property initialization
 - Physics updates (`update_physics` method)
 - Trail management (`update_trail` method)
@@ -27,7 +31,9 @@ Tests the `PhysicsObject` class and its methods:
 - State management (`get_state` and `set_state` methods)
 
 ### 3. collisions.test.js
+
 Tests the `handle_collisions` function:
+
 - Object separation when overlapping
 - Collision response with different masses
 - Momentum conservation
@@ -36,7 +42,9 @@ Tests the `handle_collisions` function:
 - Multiple collision scenarios
 
 ### 4. update-physics.test.js
+
 Tests the main `updatePhysics` function:
+
 - Time step handling
 - Mutual gravity settings
 - Black hole behaviors (static vs orbiting)
@@ -64,6 +72,7 @@ npm run test:verbose
 ## Test Coverage
 
 The test suite achieves:
+
 - **physics.js**: 41.13% statement coverage, 47.36% function coverage
 - **utils.js**: 24.6% statement coverage, 7.27% function coverage
 - **Total**: 70 tests passing, covering all core physics functions
@@ -97,4 +106,4 @@ When adding new physics functions or modifying existing ones:
 
 - Jest: Testing framework
 - @jest/globals: ES modules support
-- jest-environment-jsdom: DOM environment simulation 
+- jest-environment-jsdom: DOM environment simulation

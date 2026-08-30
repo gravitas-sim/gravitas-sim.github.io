@@ -46,7 +46,12 @@ describe('PhysicsObject', () => {
     });
 
     test('should handle string mass and radius by converting to numbers', () => {
-      const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, '50.5', '5.5');
+      const obj = new PhysicsObject(
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        '50.5',
+        '5.5'
+      );
 
       expect(obj.mass).toBe(50.5);
       expect(obj.radius).toBe(5.5);
@@ -221,7 +226,14 @@ describe('PhysicsObject', () => {
 
     test('should return false when object is outside absorption range', () => {
       const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 50, 5);
-      const bh_list = [{ pos: { x: 100, y: 0 }, radius: 10, mass: 100, updateRadius: jest.fn() }];
+      const bh_list = [
+        {
+          pos: { x: 100, y: 0 },
+          radius: 10,
+          mass: 100,
+          updateRadius: jest.fn(),
+        },
+      ];
 
       const result = obj.check_absorption(bh_list);
 
@@ -231,11 +243,11 @@ describe('PhysicsObject', () => {
 
     test('should return true and mark object as not alive when absorbed', () => {
       const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 50, 5);
-      const mockBH = { 
-        pos: { x: 0, y: 0 }, 
-        radius: 10, 
-        mass: 100, 
-        updateRadius: jest.fn() 
+      const mockBH = {
+        pos: { x: 0, y: 0 },
+        radius: 10,
+        mass: 100,
+        updateRadius: jest.fn(),
       };
       const bh_list = [mockBH];
 
@@ -249,17 +261,17 @@ describe('PhysicsObject', () => {
 
     test('should handle multiple black holes and absorb to closest one', () => {
       const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 50, 5);
-      const mockBH1 = { 
-        pos: { x: 5, y: 0 }, 
-        radius: 10, 
-        mass: 100, 
-        updateRadius: jest.fn() 
+      const mockBH1 = {
+        pos: { x: 5, y: 0 },
+        radius: 10,
+        mass: 100,
+        updateRadius: jest.fn(),
       };
-      const mockBH2 = { 
-        pos: { x: 20, y: 0 }, 
-        radius: 10, 
-        mass: 200, 
-        updateRadius: jest.fn() 
+      const mockBH2 = {
+        pos: { x: 20, y: 0 },
+        radius: 10,
+        mass: 200,
+        updateRadius: jest.fn(),
       };
       const bh_list = [mockBH1, mockBH2];
 
@@ -276,7 +288,13 @@ describe('PhysicsObject', () => {
 
   describe('get_state and set_state', () => {
     test('should return correct state object', () => {
-      const obj = new PhysicsObject({ x: 10, y: 20 }, { x: 1, y: 2 }, 50, 5, 'TestObject');
+      const obj = new PhysicsObject(
+        { x: 10, y: 20 },
+        { x: 1, y: 2 },
+        50,
+        5,
+        'TestObject'
+      );
 
       const state = obj.get_state();
 
@@ -290,7 +308,13 @@ describe('PhysicsObject', () => {
     });
 
     test('should restore state correctly', () => {
-      const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1, 1, 'Original');
+      const obj = new PhysicsObject(
+        { x: 0, y: 0 },
+        { x: 0, y: 0 },
+        1,
+        1,
+        'Original'
+      );
       obj.trail = [{ x: 1, y: 1 }]; // Add some trail data
 
       const new_state = {
@@ -315,4 +339,4 @@ describe('PhysicsObject', () => {
       expect(obj.trail).toEqual([]); // Trail should be reset
     });
   });
-}); 
+});

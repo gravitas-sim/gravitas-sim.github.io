@@ -1,0 +1,644 @@
+/* =============================================================================
+   Document pages: the model page and the instructor area
+   -----------------------------------------------------------------------------
+   Gravitas itself is a single canvas with floating panels. These two pages are
+   documents, so they need a reading column, a page header and a footer, none of
+   which the app has. Everything else comes from tokens.css: the same palette,
+   the same four themes, the same radii and spacing scale, so a reader arriving
+   from the simulation does not feel they have left the product.
+
+   Not styled here: buttons, panels and form fields, which reuse the app's
+   existing classes.
+   ============================================================================ */
+
+@layer components {
+  body.doc-page {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: var(--text-md);
+    line-height: var(--leading-normal);
+    color: var(--text-primary);
+    background: var(--bg-color);
+    /* The app's body is a flex column with overflow hidden, because it is a
+       full-screen canvas. These pages are documents and have to scroll, so
+       both are reset explicitly: the production build concatenates that rule
+       into the same stylesheet. */
+    display: block;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  /* --- Page chrome ------------------------------------------------------- */
+  .doc-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .doc-brand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .doc-brand span {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+    color: var(--text-muted);
+  }
+  .doc-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-left: auto;
+    font-size: var(--text-sm);
+  }
+  .doc-nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 4px 2px;
+    border-bottom: 1px solid transparent;
+  }
+  .doc-nav a:hover,
+  .doc-nav a:focus-visible {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent);
+  }
+  /* The accent alone does not clear 4.5:1 against every theme's ground, so the
+     current page is marked by the rule underneath it and by weight instead. */
+  .doc-nav a[aria-current='page'] {
+    color: var(--text-primary);
+    font-weight: var(--weight-semibold);
+    border-bottom-color: var(--accent);
+  }
+
+  /* --- Reading column ---------------------------------------------------- */
+  .doc-main {
+    max-width: 74ch;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-5) var(--space-10);
+  }
+  .doc-main.is-wide {
+    max-width: 1080px;
+  }
+  .doc-hero {
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .doc-eyebrow {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .doc-hero h1 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .doc-lede {
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .doc-main h2 {
+    margin: var(--space-9) 0 var(--space-3);
+    font-size: var(--text-xl);
+    letter-spacing: -0.01em;
+    scroll-margin-top: 84px;
+    text-wrap: balance;
+  }
+  .doc-main h3 {
+    margin: var(--space-6) 0 var(--space-2);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    scroll-margin-top: 84px;
+  }
+  .doc-main p {
+    margin: 0 0 var(--space-4);
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  .doc-main li {
+    margin-bottom: var(--space-2);
+    color: var(--text-secondary);
+  }
+  .doc-main strong {
+    color: var(--text-primary);
+    font-weight: var(--weight-semibold);
+  }
+  .doc-main a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+  .doc-main code,
+  .doc-eq {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+    color: var(--text-primary);
+  }
+  /* A displayed relation. Not MathML: these are short enough that a monospace
+     line is clearer than a rendering dependency, and it copies and pastes. */
+  .doc-eq-block {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    overflow-x: auto;
+  }
+
+  /* --- At a glance ------------------------------------------------------- */
+  .doc-glance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-5) 0 var(--space-7);
+    padding: 0;
+    list-style: none;
+  }
+  .doc-glance li {
+    margin: 0;
+    padding: var(--space-4);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .doc-glance dt,
+  .doc-glance .glance-key {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    /* Muted grey fails contrast at this size in every theme. */
+    color: var(--text-secondary);
+  }
+  .doc-glance .glance-value {
+    display: block;
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  /* --- Model-level badges ------------------------------------------------ */
+  /* Tuned for a dark ground. The light theme needs its own set: the greens and
+     oranges that read well on near-black drop to under 2:1 on white. */
+  :root {
+    --badge-simulated: #6fd08a;
+    --badge-approximate: #f2a65a;
+    --badge-illustrative: #c58cf0;
+  }
+  :root[data-theme='daylight'] {
+    --badge-simulated: #10714a;
+    --badge-approximate: #96530b;
+    --badge-illustrative: #6b3fa0;
+  }
+  .doc-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: var(--radius-full);
+    border: 1px solid currentColor;
+  }
+  .doc-badge.is-simulated {
+    color: var(--badge-simulated);
+  }
+  .doc-badge.is-analytic {
+    color: var(--accent-strong, var(--accent));
+  }
+  .doc-badge.is-approximate {
+    color: var(--badge-approximate);
+  }
+  .doc-badge.is-illustrative {
+    color: var(--badge-illustrative);
+  }
+  .doc-badge.is-absent {
+    color: var(--text-secondary);
+  }
+
+  /* --- Feature blocks ---------------------------------------------------- */
+  .doc-feature {
+    margin: var(--space-5) 0;
+    padding: var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .doc-feature > h3 {
+    margin-top: 0;
+  }
+  .doc-feature dl {
+    display: grid;
+    grid-template-columns: minmax(120px, max-content) 1fr;
+    gap: var(--space-2) var(--space-4);
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-sm);
+  }
+  .doc-feature dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-top: 3px;
+  }
+  .doc-feature dd {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  .doc-note {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .doc-note p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* --- Tables ------------------------------------------------------------ */
+  .doc-table-wrap {
+    margin: var(--space-4) 0 var(--space-6);
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+  .doc-table th,
+  .doc-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .doc-table th {
+    font-size: var(--text-2xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: var(--panel-bg);
+    white-space: nowrap;
+  }
+  .doc-table td {
+    color: var(--text-secondary);
+  }
+  .doc-table tr:last-child td {
+    border-bottom: none;
+  }
+  .doc-table td:first-child {
+    color: var(--text-primary);
+    font-weight: var(--weight-medium);
+  }
+
+  /* --- Contents ---------------------------------------------------------- */
+  .doc-toc {
+    margin: var(--space-6) 0 var(--space-8);
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .doc-toc h2 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .doc-toc ol {
+    margin: 0;
+    padding-left: var(--space-5);
+    columns: 2;
+    column-gap: var(--space-6);
+  }
+  .doc-toc li {
+    margin-bottom: 6px;
+    break-inside: avoid;
+  }
+
+  /* --- Footer ------------------------------------------------------------ */
+  .doc-foot {
+    padding: var(--space-6) var(--space-5) var(--space-8);
+    margin-top: var(--space-9);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-align: center;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .doc-foot a {
+    color: var(--text-secondary);
+  }
+  .doc-foot-sep {
+    margin: 0 var(--space-2);
+    opacity: 0.5;
+  }
+
+  /* --- Skip link --------------------------------------------------------- */
+  .doc-skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+  }
+  .doc-skip:focus {
+    left: var(--space-3);
+    top: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Narrow screens ---------------------------------------------------- */
+  @media (max-width: 720px) {
+    .doc-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+    }
+    .doc-nav {
+      margin-left: 0;
+      gap: var(--space-3);
+    }
+    .doc-main {
+      padding: var(--space-6) var(--space-4) var(--space-8);
+    }
+    .doc-toc ol {
+      columns: 1;
+    }
+    .doc-feature dl {
+      grid-template-columns: 1fr;
+      gap: 2px var(--space-3);
+    }
+    .doc-feature dd {
+      margin-bottom: var(--space-2);
+    }
+  }
+
+  /* --- Print ------------------------------------------------------------- */
+  @media print {
+    .doc-top,
+    .doc-foot,
+    .doc-skip {
+      display: none;
+    }
+    .doc-main {
+      max-width: none;
+    }
+  }
+}
+
+/* =============================================================================
+   Instructor portal
+   ============================================================================ */
+
+@layer components {
+  /* The component layer sets `display` on every button and several containers,
+     which beats the user-agent rule for [hidden]. Without this, anything hidden
+     by the portal's own logic stays on screen. */
+  .doc-page [hidden] {
+    display: none !important;
+  }
+
+  .portal-loading {
+    padding: var(--space-8) 0;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  /* --- Login ------------------------------------------------------------- */
+  .portal-login {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+    padding-top: var(--space-6);
+  }
+  .portal-login-card h1 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.4rem);
+    line-height: 1.15;
+  }
+  .portal-login-card .doc-lede {
+    margin-bottom: var(--space-6);
+    font-size: var(--text-base);
+  }
+  .portal-field {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  .portal-field > span:first-child {
+    display: block;
+    margin-bottom: 6px;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .portal-input-row {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .portal-input-row input {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-3) var(--space-3);
+    font-family: inherit;
+    font-size: var(--text-md);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .portal-input-row input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  .portal-error {
+    margin: 0 0 var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+    border-left: 2px solid var(--danger);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .portal-error[hidden] {
+    display: none;
+  }
+  .portal-hint {
+    margin-top: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  .portal-aside {
+    padding: var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .portal-aside h2 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-base);
+  }
+  .portal-aside p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .portal-aside p:last-child {
+    margin-bottom: 0;
+  }
+  .portal-version {
+    margin: var(--space-3) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  /* --- Resource cards ---------------------------------------------------- */
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .res-grid.is-stacked {
+    grid-template-columns: 1fr;
+  }
+  .res-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .res-card h3 {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+  .res-card p {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .res-card .ui-button {
+    align-self: flex-start;
+    text-decoration: none;
+    text-align: center;
+  }
+  .res-card.is-investigation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, max-content);
+    gap: var(--space-5);
+    align-items: start;
+  }
+  /* The subtitle is body-size text, so it needs body-text contrast rather than
+     the muted grey used for labels. */
+  .res-sub {
+    color: var(--text-secondary) !important;
+  }
+  .res-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    margin-top: var(--space-3) !important;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary) !important;
+  }
+  .res-meta span {
+    padding: 2px 8px;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+  }
+  .res-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .res-actions .ui-button {
+    align-self: stretch;
+    text-align: center;
+  }
+
+  /* --- Filters ----------------------------------------------------------- */
+  .res-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-5);
+  }
+  .res-filter {
+    padding: 5px 14px;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+  }
+  .res-filter:hover {
+    color: var(--text-primary);
+    background: var(--button-hover-bg);
+  }
+  .res-filter[aria-pressed='true'] {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 860px) {
+    .portal-login {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+    .res-card.is-investigation {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+}

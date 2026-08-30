@@ -34,3 +34,6 @@ coverage/
 # Temporary files
 *.tmp
 *.temp 
+# Instructor materials: the passphrase and the plaintext PDFs
+.instructor-password
+.instructor-build/

@@ -3,12 +3,12 @@
 // -----------------------------------------------------------------------------
 // The collision handlers each walked their own O(N²) double loop, so a frame
 // did five full pairwise sweeps. This narrows every one of them to the pairs
-// that actually share a neighbourhood.
+// that actually share a neighborhood.
 //
 // A uniform grid (rather than a tree) suits this simulation: bodies are small
 // relative to their separations, and the cell size can track the largest radius
-// present, so the usual failure mode of uniform grids — one huge object
-// touching every cell — is bounded by clamping the cell count instead.
+// present, so the usual failure mode of uniform grids: one huge object
+// touching every cell: is bounded by clamping the cell count instead.
 // =============================================================================
 
 const MIN_CELL = 8;
@@ -73,7 +73,7 @@ function hash(x, y) {
   const cy = Math.floor(y / cellSize);
   // A string key rather than a bit-mixed integer: an integer hash can alias two
   // distinct cells into one bucket, and an aliased bucket would hand the same
-  // pair to visit() twice — applying a collision impulse or a merge twice.
+  // pair to visit() twice: applying a collision impulse or a merge twice.
   return `${cx},${cy}`;
 }
 
@@ -81,8 +81,8 @@ function hash(x, y) {
  * Visit every candidate pair exactly once.
  *
  * Correctness note: because cellSize >= 2 * maxRadius, two touching bodies
- * always land in the same or adjacent cells, so scanning the 3x3 neighbourhood
- * cannot miss a contact. Each unordered pair is yielded once — for the same
+ * always land in the same or adjacent cells, so scanning the 3x3 neighborhood
+ * cannot miss a contact. Each unordered pair is yielded once: for the same
  * cell by index ordering, and for neighbours by only scanning forward.
  *
  * @param {Array} objects - Bodies with pos, radius and alive
@@ -107,7 +107,7 @@ export function forEachCandidatePair(objects, visit) {
 
   build(objects);
 
-  // Only half of the 3x3 neighbourhood is scanned; the mirrored half is
+  // Only half of the 3x3 neighborhood is scanned; the mirrored half is
   // covered when the other cell takes its turn.
   const FORWARD = [
     [1, -1],

@@ -206,23 +206,31 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       preset_zoom: 1.5,
     });
   } else if (ps === 'Tidal Disruption Event') {
+    // Tidal disruption is only ever applied to stars, and this scenario had
+    // num_stars: 0. Its planets and asteroids were left at the origin, inside
+    // the hole, and absorbed on the first frame: the title promised a star
+    // being pulled apart and the scene delivered a merger. It now opens with a
+    // star on a plunging orbit whose closest approach falls inside the tidal
+    // radius, so the existing mass-loss code has something to act on.
     Object.assign(SETTINGS, {
       num_black_holes: 1,
       bh_mass: 2000,
+      num_stars: 1,
       num_neutron_stars: 0,
       num_white_dwarfs: 0,
-      num_planets: 3, // Multiple objects for dramatic effect
-      num_gas_giants: 1,
-      num_asteroids: 50, // Debris from tidal disruption
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
       placement: 'Empty',
-      init_velocity: 80,
-      velocity_stddev: 15,
       show_accretion_disk: true,
       show_bh_glow: true,
       show_bh_jets: true,
-      sim_speed: 0.7,
+      sim_speed: 0.5,
       gravitational_constant: 2.0,
-      preset_zoom: 1.5,
+      show_trails: true,
+      trail_length: 320,
+      enable_star_merging: false,
+      preset_zoom: 0.7,
     });
   } else if (ps === 'Intermediate Mass BH') {
     Object.assign(SETTINGS, {
@@ -362,8 +370,7 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Kuiper Belt') {
     Object.assign(SETTINGS, {
-      // Was 'Empty', which — with no custom placement code for this scenario —
-      // left all 300 belt objects stacked at the origin. Multi-Ring gives the
+      // Was 'Empty', which: with no custom placement code for this scenario: // left all 300 belt objects stacked at the origin. Multi-Ring gives the
       // nested rings a Kuiper Belt actually wants, on circular orbits around
       // the central star.
       placement: 'Multi-Ring',
@@ -419,14 +426,22 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       sim_speed: 0.8,
       enable_star_merging: true,
       show_trails: true,
-      trail_length: 30,
+      // Trail length is a frame count, so 30 held about half a second of
+      // motion: a stub the width of the star itself. This is roughly a
+      // quarter of the binary's period, which is enough to read as an orbit.
+      trail_length: 240,
       preset_zoom: 1.5,
+      // A 120-unit binary needs a bounded step or the integration loses energy
+      // and the pair spirals together: at six times speed the separation fell
+      // from 120 to 85 in twenty seconds and the stars merged. Binary Pair
+      // carries the same guard for the same reason.
+      max_timestep: 0.15,
     });
   } else if (ps === 'Solar System') {
     Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 1, // One sun-like star
-      // Use central-star gravity but disable planet–planet mutual gravity
+      // Use central-star gravity but disable planet-planet mutual gravity
       mutual_gravity: false,
       star_only_gravity: true,
       placement: 'Empty',
@@ -441,8 +456,12 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       enable_star_merging: true,
       show_trails: true,
       trail_length: 20,
-      sim_size: 'Small', // Focused view
-      preset_zoom: 1.5,
+      sim_size: 'Large', // Neptune sits 30 AU out at true scale
+      // At 100 units per AU, Neptune is 3007 units from the Sun and no zoom
+      // shows it alongside a legible inner system. This frames Mercury out to
+      // Saturn, where the planets are clearly separated; scroll out for the ice
+      // giants.
+      preset_zoom: 0.25,
     });
   } else if (ps === 'Earth-Moon System') {
     Object.assign(SETTINGS, {
@@ -666,11 +685,16 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
     SETTINGS.test_star_slingshot = true;
   } else if (ps === 'Black Hole Billiards') {
+    // The central hole used to be a million solar masses, which gives it a
+    // drawn radius of 505 units inside a region 300 units across: the camera
+    // started inside its own horizon and the thumbnail was a black rectangle.
+    // Two thousand solar masses puts the radius at 78, small enough to see
+    // around and still four times the radius of the three that orbit it.
     Object.assign(SETTINGS, {
       num_black_holes: 4,
       use_individual_bh_masses: true,
-      bh_masses: [1e6, 10, 10, 10],
-      num_stars: 20,
+      bh_masses: [2000, 25, 25, 25],
+      num_stars: 14,
       placement: 'Random',
       sim_size: 'Large',
       init_velocity: 30,
@@ -679,10 +703,11 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_bh_glow: true,
       sim_speed: 0.9,
       show_trails: true,
-      trail_length: 35,
+      trail_length: 240,
       enable_star_merging: true,
-      // Special: 3 small BHs orbiting a supermassive one (handled in initialization)
-      preset_zoom: 1.5,
+      // The three light holes are put on explicit orbits in build_simulation;
+      // the comment that used to sit here claimed that already happened.
+      preset_zoom: 0.85,
     });
   } else if (ps === 'Stellar Nursery') {
     Object.assign(SETTINGS, {
@@ -719,13 +744,193 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_trails: true,
       trail_length: 40,
       sim_size: 'Small',
-      preset_zoom: 1.2,
+      // The outer body now sits at 320 units, so the view has to reach further.
+      preset_zoom: 0.9,
+      // This scenario exists to show that an orbit keeps its shape, so it
+      // cannot be allowed to drift. At sim_speed 5 a frame is a step of about
+      // 0.42, which symplectic Euler turns into a visible creep in
+      // eccentricity over a minute or two. Capping the step makes the frame
+      // take several smaller ones instead, at the same apparent speed.
+      max_timestep: 0.05,
+    });
+  } else if (ps === 'Binary Pair') {
+    // Two stars of two solar masses each, four AU apart, going round their
+    // common center once every four years. The numbers are chosen so that the
+    // lesson's own arithmetic lands on whole numbers: 4 cubed over 4 squared is
+    // 4, which is the total mass.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 2,
+      mutual_gravity: false,
+      star_only_gravity: true,
+      placement: 'Empty',
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      // One lap takes about forty seconds, which is long enough to watch both
+      // stars move and short enough to see the loop close.
+      sim_speed: 4.0,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 300,
+      sim_size: 'Medium',
+      preset_zoom: 1.5,
+      max_timestep: 0.15,
+      min_interaction_distance: 1.0,
+    });
+  } else if (ps === 'Black Hole Lab') {
+    // One black hole and four bodies on stable circular orbits around it. The
+    // orbits are the point: the commonest thing a student believes about black
+    // holes is that they pull everything in, and nothing argues with that as
+    // well as watching four objects go round one for a minute without falling.
+    //
+    // The mass is left as a setting so a lesson step can change it, and the
+    // orbit radii are worked out from the black hole's drawn size rather than
+    // fixed, so the picture holds together at any mass.
+    Object.assign(SETTINGS, {
+      num_black_holes: 1,
+      bh_mass: 10,
+      bh_behavior: 'Static',
+      num_stars: 0,
+      num_planets: 4,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      placement: 'Empty',
+      mutual_gravity: false,
+      star_only_gravity: false,
+      gravitational_constant: 1.0,
+      show_accretion_disk: true,
+      show_bh_glow: true,
+      show_bh_jets: false,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 260,
+      sim_speed: 1.6,
+      sim_size: 'Medium',
+      preset_zoom: 1.5,
+      max_timestep: 0.05,
+      min_interaction_distance: 1.0,
+    });
+  } else if (ps === 'Habitable Zone Lab') {
+    // The inner Solar System with the habitable-zone ring switched on. Venus,
+    // Earth and Mars are the three worlds the lesson argues about, and having
+    // them on screen against a correctly placed zone is the whole point: two of
+    // the three sit outside the conservative band, and the one inside it is the
+    // only one with liquid water on its surface.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      num_planets: 4,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      placement: 'Empty',
+      mutual_gravity: false,
+      star_only_gravity: true,
+      gravitational_constant: 1.0,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 220,
+      sim_speed: 3.0,
+      sim_size: 'Medium',
+      preset_zoom: 1.9,
+      max_timestep: 0.05,
+      min_interaction_distance: 1.0,
+      // Conservative by default; the lesson switches it to compare.
+      habitable_zone_optimism: 1.0,
+    });
+  } else if (ps === 'Interstellar Visitor') {
+    // 1I/'Oumuamua on its real hyperbolic orbit, with Earth in for scale. The
+    // point of the scenario is a single reading: the total energy is positive,
+    // so it is not bound to the Sun and this pass is the only one there will
+    // ever be.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      mutual_gravity: false,
+      star_only_gravity: true,
+      placement: 'Empty',
+      num_planets: 2,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      // About three quarters of a minute from four AU out, through perihelion
+      // and back out again: long enough to watch it happen, short enough to sit
+      // through twice.
+      sim_speed: 0.8,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 400,
+      sim_size: 'Large',
+      preset_zoom: 1.1,
+      // Perihelion is inside Mercury's orbit and the visitor is moving at
+      // 88 km/s when it gets there, so the step has to be small enough to keep
+      // the turn sharp rather than rounding it off.
+      max_timestep: 0.01,
+      min_interaction_distance: 1.0,
+    });
+  } else if (ps === 'Transit Lab' || ps === 'Blended Binary') {
+    // HD 209458: the first planet ever caught transiting, in 1999, and still
+    // the best-studied. Everything here is at true relative scale, which is
+    // what makes it usable as a measuring instrument: the star is drawn at
+    // 1.155 solar radii and the planet at 1.38 Jupiter radii, so the silhouette
+    // on screen, the depth of the dip and the radius ratio a student works out
+    // from it are all the same number. The view has to zoom a long way in for
+    // that to be visible, which is the honest price of not exaggerating.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: ps === 'Blended Binary' ? 2 : 1,
+      mutual_gravity: false,
+      star_only_gravity: true,
+      placement: 'Empty',
+      num_planets: 1,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      // One orbit takes about 13 seconds of wall clock, so a student waiting to
+      // time successive transits waits seconds rather than minutes. The transit
+      // itself goes past in half a second, which is far too quick to catch by
+      // hand: the light curve panel finds it in the recording instead, and
+      // sampling every frame still puts about thirty points inside it.
+      sim_speed: 0.03,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 60,
+      sim_size: 'Small',
+      // The orbit is 9.5 units across at 100 units per AU. This fills the view
+      // with it without clipping the trail.
+      preset_zoom: 60.0,
+      // About 4700 integration steps per orbit, which holds the orbit fixed
+      // over the many circuits a student watching for repeat transits needs.
+      max_timestep: 0.0004,
+      // The default floor of 5 units is larger than the whole orbit.
+      min_interaction_distance: 0.1,
     });
   } else if (ps === 'TRAPPIST-1 System') {
     Object.assign(SETTINGS, {
       num_black_holes: 0,
       num_stars: 1,
-      mutual_gravity: true,
+      // Seven Earth-mass planets one or two units apart pulled each other into
+      // crossing orbits within seconds. The real system's planets do perturb
+      // each other measurably, which is how their masses were weighed, but at
+      // this scale and timestep it is just a collision cascade.
+      mutual_gravity: false,
+      star_only_gravity: true,
       placement: 'Empty',
       num_planets: 7,
       num_gas_giants: 0,
@@ -734,12 +939,28 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       init_velocity: 7,
       velocity_stddev: 0.5,
       gravitational_constant: 1.0,
-      sim_speed: 0.7,
+      // TRAPPIST-1b's year is a day and a half and its whole orbit is 63px
+      // across on screen, so it crosses the view very fast for any given speed
+      // setting. At 0.05 it was still moving too quickly to click. This gives it
+      // roughly half a minute per orbit, which is slow enough to select a
+      // planet and read its numbers.
+      sim_speed: 0.01,
       enable_star_merging: false,
       show_trails: true,
       trail_length: 25,
       sim_size: 'Small',
-      preset_zoom: 8.0,
+      // The whole system is 0.062 AU across, which at the project's 100 units
+      // per AU is 6.2 units. Everything else is drawn at this scale, so the
+      // view has to zoom a long way in rather than the scenario inventing its
+      // own units.
+      preset_zoom: 55.0,
+      // About 1400 integration steps per orbit of the innermost planet, which
+      // holds every orbit's shape over thousands of circuits.
+      max_timestep: 0.0006,
+      // The default softening floor of 5 units is larger than six of the seven
+      // orbits here, which starved them of gravity. Well below the innermost
+      // orbit at 1.15 units, and still far from zero.
+      min_interaction_distance: 0.2,
     });
   } else if (ps === 'GW150914') {
     Object.assign(SETTINGS, {

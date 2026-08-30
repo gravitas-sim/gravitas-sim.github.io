@@ -6,10 +6,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <title>Gravitas — Interactive Black Hole & Gravity Sandbox</title>
+    <title>Gravitas: Interactive Astrophysics Sandbox</title>
     <meta
       name="description"
-      content="Gravitas is a browser-based astrophysics sandbox: build star systems, collide black holes, and watch real orbital mechanics, tidal disruption and gravitational waves unfold in real time."
+      content="A browser-based astrophysics sandbox and astronomy teaching tool. Build planetary systems, orbit binary stars, collide black holes, and work through guided investigations in orbital mechanics, exoplanet transits and compact objects."
     />
     <meta name="author" content="Gravitas" />
     <meta name="theme-color" content="#000105" />
@@ -21,11 +21,11 @@
     <meta property="og:url" content="https://gravitas-sim.online/" />
     <meta
       property="og:title"
-      content="Gravitas — Interactive Black Hole & Gravity Sandbox"
+      content="Gravitas: Interactive Astrophysics Sandbox"
     />
     <meta
       property="og:description"
-      content="Build star systems, collide black holes, and watch real orbital mechanics unfold in your browser. 36 scenarios, from the Solar System to GW150914."
+      content="Build star systems, collide black holes, and measure what happens. Ready-made scenarios from the Solar System to GW150914, plus guided astronomy investigations with lab reports."
     />
     <meta
       property="og:image"
@@ -42,11 +42,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Gravitas — Interactive Black Hole & Gravity Sandbox"
+      content="Gravitas: Interactive Astrophysics Sandbox"
     />
     <meta
       name="twitter:description"
-      content="Build star systems, collide black holes, and watch real orbital mechanics unfold in your browser."
+      content="Build star systems, collide black holes, and measure what happens. Interactive astrophysics with guided astronomy investigations."
     />
     <meta
       name="twitter:image"
@@ -76,6 +76,15 @@
   </head>
   <body>
     <a class="skip-link" href="#mainControls">Skip to controls</a>
+
+    <!--
+      The document's one top-level heading. The splash carries a visible
+      GRAVITAS wordmark but is removed from the DOM once it has played, which
+      left the running application with no h1 at all: a screen reader landed on
+      a page whose only heading was whichever panel happened to be open. It is
+      visually hidden because the simulation is the page's visual identity.
+    -->
+    <h1 class="visually-hidden">Gravitas: interactive astrophysics sandbox</h1>
 
     <div class="simulation-container">
       <canvas
@@ -205,9 +214,9 @@
         </p>
         <p>
           The dip depth is proportional to
-          (R<sub>planet</sub>/R<sub>star</sub>)&sup2; &mdash; a Jupiter-sized
-          planet produces roughly a 1% dip, while an Earth-sized planet produces
-          about 0.008%. The rounded U-shaped bottom comes from
+          (R<sub>planet</sub>/R<sub>star</sub>)&sup2;. A Jupiter-sized planet
+          produces roughly a 1% dip, while an Earth-sized planet produces about
+          0.008%. The rounded U-shaped bottom comes from
           <strong>limb darkening</strong>: stars are brighter at their center
           than at their edges, so the depth varies as the planet crosses the
           disk.
@@ -237,6 +246,37 @@
     <!-- ✨ Splash screen -->
     <div id="splash">
       <h1>GRAVITAS</h1>
+    </div>
+
+    <!--
+      The front door. Shown once, on a first visit, between the splash and the
+      sandbox; reopened later from "About Gravitas" in the footer. Everything
+      inside #welcomeBody is written by js/welcome.js from the live scenario and
+      investigation registries, so no title or summary is duplicated here.
+
+      It starts `hidden` so it cannot flash before the module runs, and the
+      splash covers the whole screen until the moment it is shown.
+    -->
+    <div id="welcomeScreen" class="welcome-screen" hidden>
+      <div
+        id="welcomeDialog"
+        class="welcome-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="welcomeTitle"
+        tabindex="-1"
+      >
+        <button
+          type="button"
+          id="welcomeClose"
+          class="welcome-close"
+          aria-label="Close and enter the sandbox"
+          title="Close and enter the sandbox"
+        >
+          ✕
+        </button>
+        <div id="welcomeBody" class="welcome-body"></div>
+      </div>
     </div>
 
     <div id="overlay">
@@ -269,7 +309,7 @@
     <div id="scenarioInfoBox" class="scenario-info-box">
       <div class="scenario-info-content">
         <div class="scenario-info-header">
-          <h3 id="scenarioInfoTitle">Scenario Loaded</h3>
+          <h2 id="scenarioInfoTitle">Scenario Loaded</h2>
           <div class="scenario-info-actions">
             <button
               id="closeScenarioInfo"
@@ -295,7 +335,7 @@
         <p>• <strong>Pinch:</strong> zoom in and out</p>
         <p>• <strong>Tap an object:</strong> open its details</p>
         <p>
-          • <strong>Press and hold, then drag:</strong> place a new object — the
+          • <strong>Press and hold, then drag:</strong> place a new object: the
           drag sets its speed and direction
         </p>
         <p>• <strong>Double tap:</strong> reset the view</p>
@@ -317,14 +357,36 @@
       tabindex="-1"
     >
       <div class="rail-group">
-        <p class="rail-label" id="railScenario">Scenario</p>
-        <div role="group" aria-labelledby="railScenario">
+        <button
+          type="button"
+          class="rail-label rail-section-toggle"
+          id="railScenario"
+          aria-expanded="true"
+          aria-controls="railScenarioBody"
+          title="Show or hide the scenario controls"
+        >
+          <span>Scenario</span>
+          <span class="rail-chevron" aria-hidden="true"></span>
+        </button>
+        <div
+          id="railScenarioBody"
+          class="rail-section"
+          role="group"
+          aria-labelledby="railScenario"
+        >
           <button
             id="loadScenarioBtn"
             class="ui-button"
-            title="Browse all 37 built-in scenarios — from the Solar System to the GW150914 black-hole merger. Search by name or keyword."
+            title="Browse the built-in scenarios by image, concept or keyword: from the Solar System to the GW150914 black-hole merger."
           >
             Load Scenario
+          </button>
+          <button
+            id="investigationsBtn"
+            class="ui-button"
+            title="Guided lessons that walk you through a concept step by step, with questions and an optional lab report you can submit"
+          >
+            🎓 Investigations
           </button>
           <button
             id="settingsBtn"
@@ -358,8 +420,23 @@
       </div>
 
       <div class="rail-group">
-        <p class="rail-label" id="railState">State</p>
-        <div role="group" aria-labelledby="railState">
+        <button
+          type="button"
+          class="rail-label rail-section-toggle"
+          id="railState"
+          aria-expanded="true"
+          aria-controls="railStateBody"
+          title="Show or hide the state controls"
+        >
+          <span>State</span>
+          <span class="rail-chevron" aria-hidden="true"></span>
+        </button>
+        <div
+          id="railStateBody"
+          class="rail-section"
+          role="group"
+          aria-labelledby="railState"
+        >
           <button
             id="saveBtn"
             class="ui-button"
@@ -382,20 +459,41 @@
           >
             Undo Placement
           </button>
+          <button
+            id="shareBtn"
+            class="ui-button"
+            title="Create a link that reopens this exact simulation: hand it out as an assignment, or send back what you built (K)"
+          >
+            🔗 Share Link
+          </button>
+          <button
+            id="exportDataBtn"
+            class="ui-button"
+            title="Download the recorded simulation as CSV: positions, velocities and energies over time, and the light curve if it is running. Open them in Excel, or in the companion Python notebook (E)"
+          >
+            📊 Export Data
+          </button>
         </div>
       </div>
 
       <div class="rail-group">
-        <p class="rail-label" id="railView">View</p>
-        <div role="group" aria-labelledby="railView">
-          <label class="rail-field" for="themeSelect">
-            <span>Theme</span>
-            <select
-              id="themeSelect"
-              aria-label="Colour theme"
-              title="Change the interface colour scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
-            ></select>
-          </label>
+        <button
+          type="button"
+          class="rail-label rail-section-toggle"
+          id="railTools"
+          aria-expanded="true"
+          aria-controls="railToolsBody"
+          title="Show or hide the tools controls"
+        >
+          <span>Tools</span>
+          <span class="rail-chevron" aria-hidden="true"></span>
+        </button>
+        <div
+          id="railToolsBody"
+          class="rail-section"
+          role="group"
+          aria-labelledby="railTools"
+        >
           <button
             id="unitToggle"
             class="toggle-button rail-toggle"
@@ -404,12 +502,6 @@
           >
             Physical units
           </button>
-        </div>
-      </div>
-
-      <div class="rail-group">
-        <p class="rail-label" id="railTools">Tools</p>
-        <div role="group" aria-labelledby="railTools">
           <button
             id="screenshotBtn"
             class="ui-button"
@@ -421,7 +513,7 @@
             id="toggle3DView"
             class="ui-button secondary"
             aria-pressed="false"
-            title="Open a 3D view of the gravity well — a rubber-sheet grid that dips around each mass. Drag to orbit, scroll to zoom."
+            title="Open a 3D view of the gravity well: a rubber-sheet grid that dips around each mass. Drag to orbit, scroll to zoom."
           >
             Spacetime View
           </button>
@@ -429,7 +521,7 @@
             id="toggleLightCurve"
             class="ui-button secondary"
             aria-pressed="false"
-            title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction — planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
+            title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction: planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
           >
             Light Curve
           </button>
@@ -468,6 +560,61 @@
           >
             Shortcuts
           </button>
+        </div>
+      </div>
+
+      <!--
+        Where Gravitas explains itself. Deliberately text links rather than
+        buttons: these are navigation away from the simulation, not controls
+        for it, and a fifth block of full-width buttons would compete with the
+        ones that actually do something.
+      -->
+      <div class="rail-group rail-group-learn">
+        <button
+          type="button"
+          class="rail-label rail-section-toggle"
+          id="railLearn"
+          aria-expanded="true"
+          aria-controls="railLearnBody"
+          title="Show or hide the learn controls"
+        >
+          <span>Learn</span>
+          <span class="rail-chevron" aria-hidden="true"></span>
+        </button>
+        <div
+          id="railLearnBody"
+          class="rail-links rail-section"
+          role="group"
+          aria-labelledby="railLearn"
+        >
+          <button
+            type="button"
+            id="aboutGravitasBtn"
+            class="rail-link"
+            title="What Gravitas is, what you can do here, and where to start"
+          >
+            About Gravitas
+          </button>
+          <a
+            class="rail-link"
+            href="/model/"
+            title="How Gravitas models the universe: what the simulation calculates, approximates and visualizes"
+            >How the model works</a
+          >
+          <a
+            class="rail-link"
+            href="/instructors/"
+            title="Teaching guides, answer keys and a curriculum map for instructors"
+            >Instructor resources</a
+          >
+          <a
+            class="rail-link"
+            href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf"
+            target="_blank"
+            rel="noopener"
+            title="Open the Gravitas user manual (PDF)"
+            >User manual (PDF)</a
+          >
         </div>
       </div>
 
@@ -551,15 +698,28 @@
       <span class="hamburger"></span>
     </button>
 
-    <!-- Scenario List Modal -->
+    <!--
+      Scenario gallery. Cards, concept chips, counts and the result line are all
+      written by js/scenarioBrowser.js from the catalog in
+      js/data/scenarioInfo.js: no scenario title, summary, tag or count is
+      spelled out here, so nothing in this file can go stale.
+    -->
     <div id="scenarioListModal" class="hidden">
-      <div id="scenarioListContent">
-        <div class="scenario-list-header">
-          <h3>Select a Scenario</h3>
+      <div
+        id="scenarioListContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scenarioBrowserTitle"
+      >
+        <div class="sc-head">
+          <div class="sc-head-text">
+            <h3 id="scenarioBrowserTitle">Explore scenarios</h3>
+            <p id="scenarioBrowserSubtitle" class="sc-subtitle"></p>
+          </div>
           <button
             id="closeScenarioList"
             class="ui-button"
-            title="Close the scenario browser"
+            title="Close the scenario gallery"
           >
             &times;
           </button>
@@ -568,24 +728,468 @@
           class="floating-close-chip"
           id="scenarioListCloseChip"
           aria-label="Close"
-          title="Close the scenario browser"
+          title="Close the scenario gallery"
         >
           ✕
         </button>
+
         <div class="scenario-search-wrap">
           <span class="scenario-search-icon" aria-hidden="true">⌕</span>
           <input
             type="search"
             id="scenarioSearch"
-            placeholder="Search scenarios…"
+            placeholder="Search scenarios, objects, or concepts…"
             autocomplete="off"
             aria-label="Search scenarios"
-            title='Filter scenarios by name or description — try "neutron", "merger" or "kepler". Enter loads the first match.'
+            title='Filter by name, description or concept. Try "neutron", "merger", "tides" or "kepler". Enter loads the first result.'
           />
         </div>
-        <div id="scenarioListItems" role="list"></div>
-        <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden>
-          No scenarios match that search.
+
+        <div class="sc-concepts">
+          <p class="sc-concepts-label" id="scenarioConceptsLabel">
+            Browse by concept
+          </p>
+          <div
+            id="scenarioTagChips"
+            class="sc-chips"
+            role="group"
+            aria-labelledby="scenarioConceptsLabel"
+          ></div>
+          <p id="scenarioConceptNote" class="sc-concept-note" hidden></p>
+        </div>
+
+        <p
+          id="scenarioResultCount"
+          class="sc-count"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <div id="scenarioListScroll" class="sc-scroll">
+          <div id="scenarioListItems" class="sc-grid"></div>
+          <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden>
+            No scenarios match that search. Try a different word, or choose
+            <strong>All</strong> above.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investigations: the lesson browser -->
+    <div id="investigationBrowser" class="hidden">
+      <div id="investigationBrowserContent">
+        <div class="inv-browser-header">
+          <div>
+            <h3>Investigations</h3>
+            <p class="inv-browser-sub">
+              Guided lessons you work through beside the simulation. Finish one
+              and you can download a lab report with your answers.
+            </p>
+            <p class="inv-browser-links">
+              <a href="/model/">About the physics model</a>
+              <span aria-hidden="true">·</span>
+              <a href="/instructors/">Instructor resources</a>
+            </p>
+          </div>
+          <button
+            id="investigationBrowserClose"
+            class="ui-button"
+            title="Close the investigation list"
+          >
+            &times;
+          </button>
+        </div>
+        <button
+          class="floating-close-chip"
+          id="investigationBrowserChip"
+          aria-label="Close"
+          title="Close the investigation list"
+        >
+          ✕
+        </button>
+        <div id="investigationList" role="list"></div>
+      </div>
+    </div>
+
+    <!-- Investigations: the working panel -->
+    <aside
+      id="investigationPanel"
+      class="investigation-panel"
+      hidden
+      aria-label="Investigation"
+    >
+      <header class="inv-header">
+        <div class="inv-header-text">
+          <h2 id="investigationTitle">Investigation</h2>
+          <p id="investigationSubtitle"></p>
+        </div>
+        <button
+          id="investigationClose"
+          class="ui-button"
+          title="Close this lesson. Your progress is saved."
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="inv-progress">
+        <div
+          class="inv-progress-track"
+          role="progressbar"
+          aria-label="Lesson progress"
+        >
+          <div id="investigationProgressBar"></div>
+        </div>
+        <span id="investigationProgressText"></span>
+        <button
+          id="investigationResetScenario"
+          class="inv-reset-scenario"
+          title="Put this step's system back the way it started. Useful once objects have drifted, merged or left the view."
+          aria-label="Reset the scenario for this step"
+        >
+          ↺
+        </button>
+      </div>
+
+      <div id="investigationBody" class="inv-body"></div>
+
+      <div id="investigationProbeWrap" class="inv-probe-wrap" hidden>
+        <p class="inv-probe-title">Live readout</p>
+        <div id="investigationProbe" class="inv-probe"></div>
+      </div>
+
+      <footer class="inv-footer">
+        <button
+          id="investigationReset"
+          class="ui-button subtle"
+          title="Clear every answer and start this lesson again"
+        >
+          Restart
+        </button>
+        <div class="inv-footer-nav">
+          <button
+            id="investigationPrev"
+            class="ui-button"
+            title="Previous step (Shift + Left arrow)"
+          >
+            Back
+          </button>
+          <button
+            id="investigationNext"
+            class="ui-button primary"
+            title="Next step (Shift + Right arrow)"
+          >
+            Next
+          </button>
+        </div>
+      </footer>
+    </aside>
+
+    <!-- Investigations: the measurement plot, docked beside the lesson -->
+    <aside
+      id="investigationPlot"
+      class="inv-plot-panel"
+      hidden
+      aria-label="Measurement plot"
+    >
+      <header class="inv-plot-panel-head">
+        <span id="investigationPlotTitle" class="inv-plot-title"
+          >Your measurements</span
+        >
+        <div class="inv-plot-actions">
+          <button
+            type="button"
+            id="investigationPlotLog"
+            class="inv-plot-toggle"
+            aria-pressed="false"
+            title="Plot both axes logarithmically. On a log-log plot a power law is a straight line whatever its exponent, and the inner planets stop being squashed into the corner."
+          >
+            Log axes
+          </button>
+          <button
+            type="button"
+            id="investigationPlotToggle"
+            class="inv-plot-toggle"
+            aria-pressed="false"
+          ></button>
+        </div>
+      </header>
+      <canvas id="investigationPlotCanvas"></canvas>
+      <p id="investigationPlotNote" class="inv-plot-note"></p>
+    </aside>
+
+    <!-- Investigations: the ellipse explorer, in its own panel -->
+    <aside
+      id="investigationEllipse"
+      class="inv-plot-panel"
+      hidden
+      aria-label="Ellipse explorer"
+    >
+      <header class="inv-plot-panel-head">
+        <span class="inv-plot-title">Anatomy of an ellipse</span>
+      </header>
+      <canvas id="investigationEllipseCanvas"></canvas>
+      <div class="inv-ellipse-key">
+        <span class="k-a">a: semi-major axis, the orbit's size</span>
+        <span class="k-c">c = a&times;e: focus offset from center</span>
+        <span class="k-b">b: semi-minor axis</span>
+        <span class="k-star">focus holding the star</span>
+        <span class="k-empty">the empty focus</span>
+      </div>
+      <label class="inv-ecc-row" for="investigationEcc">
+        <span>Eccentricity</span>
+        <input
+          type="range"
+          id="investigationEcc"
+          min="0"
+          max="0.98"
+          step="0.001"
+          value="0.017"
+        />
+        <output id="investigationEccOut">0.017</output>
+      </label>
+      <div id="investigationPresets" class="inv-presets"></div>
+      <p id="investigationPresetNote" class="inv-preset-note"></p>
+    </aside>
+
+    <!-- Investigations: the interactive instrument for the current step -->
+    <aside
+      id="investigationTool"
+      class="inv-plot-panel inv-tool-panel"
+      hidden
+      aria-label="Interactive tool"
+    >
+      <header class="inv-plot-panel-head">
+        <span id="investigationToolTitle" class="inv-plot-title"></span>
+      </header>
+      <canvas id="investigationToolCanvas"></canvas>
+      <p id="investigationToolNote" class="inv-plot-note"></p>
+      <div id="investigationToolReadout" class="inv-tool-readout"></div>
+      <div id="investigationToolControls" class="inv-tool-controls"></div>
+      <div id="investigationToolActions" class="inv-tool-actions" hidden></div>
+      <div id="investigationToolPresets" class="inv-presets"></div>
+      <p id="investigationToolPresetNote" class="inv-preset-note"></p>
+    </aside>
+
+    <!-- Data export -->
+    <div id="dataExport" class="hidden">
+      <div
+        id="dataExportContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dataExportTitle"
+      >
+        <div class="inv-finish-header">
+          <h3 id="dataExportTitle">Export data</h3>
+          <button id="dataExportClose" class="ui-button" title="Close">
+            &times;
+          </button>
+        </div>
+        <p class="export-intro">
+          Everything the simulation has recorded, as CSV. Open it in a
+          spreadsheet, or read it straight into pandas.
+        </p>
+
+        <fieldset class="export-scope" id="dataExportScope">
+          <legend>Which objects</legend>
+          <label>
+            <input type="radio" name="exportScope" value="selected" />
+            <span id="dataExportSelectedLabel">Selected object only</span>
+          </label>
+          <label>
+            <input type="radio" name="exportScope" value="all" checked />
+            <span>Every object</span>
+          </label>
+        </fieldset>
+
+        <div class="export-files" id="dataExportFiles"></div>
+
+        <p class="export-fineprint">
+          Columns carry their units in the name: distances in AU, times in days,
+          speeds in km/s, energies in joules. Positions are recorded ten times a
+          second of real time, and the history holds the last several hundred
+          frames.
+        </p>
+        <p class="export-fineprint">
+          <a
+            id="dataExportNotebook"
+            href="https://colab.research.google.com/github/gravitas-sim/gravitas-sim.github.io/blob/main/notebooks/gravitas_analysis.ipynb"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open the companion notebook in Colab</a
+          >
+          to plot the orbits, fit a period and recover the central mass from
+          these files. No installation: it runs in a browser tab.
+        </p>
+      </div>
+    </div>
+
+    <!-- Investigations: finish and report -->
+    <div id="investigationFinish" class="hidden">
+      <div
+        id="investigationFinishContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="investigationFinishTitle"
+      >
+        <div class="inv-finish-header">
+          <h3 id="investigationFinishTitle">Finished</h3>
+          <button
+            id="investigationFinishClose"
+            class="ui-button"
+            title="Close without downloading"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="investigationFinishSummary" class="inv-finish-summary"></div>
+
+        <label class="inv-name-field" for="investigationName">
+          <span>Your name, as it should appear on the report</span>
+          <input
+            type="text"
+            id="investigationName"
+            autocomplete="name"
+            placeholder="e.g. Ada Lovelace"
+          />
+        </label>
+        <p id="investigationNameError" class="inv-name-error" hidden>
+          Enter a name so the report can be attributed to you.
+        </p>
+
+        <div class="inv-finish-actions">
+          <button id="investigationFinishBack" class="ui-button">
+            Keep working
+          </button>
+          <button id="investigationDownload" class="ui-button primary">
+            Download lab report (PDF)
+          </button>
+        </div>
+        <p class="inv-finish-fineprint">
+          The report lists every question, your answers, and which of the
+          automatically checked ones matched. It also carries links that reopen
+          the exact simulations you used.
+        </p>
+      </div>
+    </div>
+
+    <div id="shareModal" class="hidden">
+      <div
+        id="shareContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shareTitle"
+      >
+        <div class="share-header">
+          <h3 id="shareTitle">Share this simulation</h3>
+          <button
+            id="shareCloseBtn"
+            class="ui-button"
+            title="Close without copying"
+          >
+            &times;
+          </button>
+        </div>
+        <button
+          class="floating-close-chip"
+          id="shareCloseChip"
+          aria-label="Close"
+          title="Close without copying"
+        >
+          ✕
+        </button>
+
+        <p class="share-intro">
+          Anyone who opens this link lands on exactly this system: no account,
+          no setup, nothing stored on a server.
+        </p>
+
+        <div
+          class="share-kind"
+          role="radiogroup"
+          aria-label="What the link carries"
+        >
+          <button
+            type="button"
+            id="shareKindSeeded"
+            class="share-kind-option"
+            role="radio"
+            aria-checked="true"
+            title="The scenario, its seed and any settings you changed. Short enough to paste anywhere, and rebuilds the same starting system every time."
+          >
+            <span class="share-kind-name">Starting setup</span>
+            <span class="share-kind-note"
+              >Short link. Rebuilds this system from its seed.</span
+            >
+          </button>
+          <button
+            type="button"
+            id="shareKindFull"
+            class="share-kind-option"
+            role="radio"
+            aria-checked="false"
+            title="Every object's position, velocity and mass, written out. Use this once the simulation has run, or after you have placed objects by hand."
+          >
+            <span class="share-kind-name">Exact state now</span>
+            <span class="share-kind-note"
+              >Longer link. Carries every object where it stands.</span
+            >
+          </button>
+        </div>
+
+        <label class="share-check" for="shareCamera">
+          <input type="checkbox" id="shareCamera" checked />
+          <span>Open at the same zoom and position</span>
+        </label>
+
+        <div class="share-link-row">
+          <label class="visually-hidden" for="shareUrl">Shareable link</label>
+          <input
+            type="text"
+            id="shareUrl"
+            readonly
+            spellcheck="false"
+            aria-describedby="shareMeta"
+          />
+          <button
+            id="shareCopyBtn"
+            class="ui-button primary"
+            title="Copy the link to the clipboard"
+          >
+            Copy
+          </button>
+        </div>
+        <p id="shareMeta" class="share-meta" role="status"></p>
+        <p id="shareStale" class="share-note" hidden>
+          This link opens the system as it started, not as it looks now. Choose
+          <strong>Exact state now</strong> to send what is on screen.
+        </p>
+        <p id="shareWarning" class="share-warning" hidden>
+          This link is long enough that some mail clients and course tools will
+          break it across lines. Share the starting setup instead where you can,
+          or attach the link as a file.
+        </p>
+
+        <div class="share-seed-row" id="shareSeedRow">
+          <label for="shareSeed">Seed</label>
+          <input
+            type="text"
+            id="shareSeed"
+            spellcheck="false"
+            autocomplete="off"
+            title="The number this system was generated from. Type one and press Enter to rebuild: give the same seed to a whole class and everyone sees the same system."
+          />
+          <button
+            id="shareRerollBtn"
+            class="ui-button"
+            title="Rebuild this scenario from a new random seed"
+          >
+            New
+          </button>
+        </div>
+        <p class="share-hint">
+          The seed decides every randomised detail of this scenario. Hand out
+          the same seed and everyone gets the same system to measure.
         </p>
       </div>
     </div>
@@ -783,21 +1387,58 @@
       })();
     </script>
     <!-- JavaScript modules in dependency order -->
-    <!-- Chart.js for energy charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+    <!--
+      Chart.js is not loaded here any more. It is 70KB and only two panels use
+      it, both of which start closed; js/chartjs.js fetches it the first time
+      one of them is opened.
+    -->
     <script type="module" src="js/utils.js"></script>
     <script type="module" src="js/physics.js"></script>
     <script type="module" src="js/render.js"></script>
     <script type="module" src="js/ui.js"></script>
     <script type="module" src="js/lightCurve.js"></script>
     <script type="module" src="js/main.js"></script>
+    <!--
+      Credit and licence only. The documentation links that used to live here
+      moved to the rail's Learn group: seven items made this too wide to sit in
+      the strip between the transport bar and the rail, so it had been pushed up
+      above the scrubber where it read as a floating panel rather than a footer.
+    -->
     <footer id="attribution" class="attribution attribution-fade">
-      <span>&copy; 2025</span>
+      <!--
+        The theme picker lives here rather than in the rail: it is a preference
+        for the whole page, not a simulation control, and it was one of the
+        taller rows in a rail that had outgrown the screen. Options are written
+        by controls.js from the THEMES registry so the list cannot drift.
+      -->
+      <div class="theme-dock">
+        <button
+          type="button"
+          id="themeButton"
+          class="theme-dock-btn"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="themeMenu"
+          title="Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
+        >
+          <span class="theme-dock-swatch" aria-hidden="true"></span>
+          <span class="theme-dock-name" id="themeButtonName">Theme</span>
+        </button>
+        <div
+          id="themeMenu"
+          class="theme-menu"
+          role="menu"
+          aria-labelledby="themeButton"
+          hidden
+        ></div>
+      </div>
+      <span class="attribution-sep" aria-hidden="true">·</span>
+      <span>&copy;&nbsp;<span class="attribution-year">2025</span></span>
       <a
         href="https://carlziegler.space/"
         target="_blank"
         rel="noopener"
-        title="Carl Ziegler — author of Gravitas"
+        title="Carl Ziegler: author of Gravitas"
         >Carl Ziegler</a
       >
       <span class="attribution-sep" aria-hidden="true">·</span>
@@ -809,14 +1450,6 @@
         rel="noopener"
         title="Browse or contribute to the source code on GitHub"
         >GitHub</a
-      >
-      <span class="attribution-sep" aria-hidden="true">·</span>
-      <a
-        href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/Gravitas_User_Manual.pdf"
-        target="_blank"
-        rel="noopener"
-        title="Open the Gravitas user manual (PDF)"
-        >Manual</a
       >
     </footer>
   </body>

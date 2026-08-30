@@ -5,8 +5,11 @@ import prettierConfig from 'eslint-config-prettier';
 export default [
   js.configs.recommended,
   {
-    // Node build tooling, not browser code
-    files: ['build.js', 'tools/*.js'],
+    // Node build tooling. Mostly not browser code, with one exception: the
+    // thumbnail generator's page.evaluate() callbacks are serialized and run
+    // inside headless Chromium, so this file legitimately contains both halves
+    // and needs both sets of globals.
+    files: ['build.js', 'tools/*.js', 'tools/*.mjs'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -14,6 +17,13 @@ export default [
         process: 'readonly',
         console: 'readonly',
         Buffer: 'readonly',
+        URL: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        getComputedStyle: 'readonly',
+        performance: 'readonly',
+        requestAnimationFrame: 'readonly',
       },
     },
     plugins: { prettier },
@@ -48,7 +58,7 @@ export default [
     },
   },
   {
-    files: ['js/*.js'],
+    files: ['js/**/*.js'],
     ignores: ['js/physicsWorker.js', 'js/chartWorker.js'],
     languageOptions: {
       ecmaVersion: 2021,
@@ -72,6 +82,18 @@ export default [
         fetch: 'readonly',
         URL: 'readonly',
         URLSearchParams: 'readonly',
+        location: 'readonly',
+        history: 'readonly',
+        crypto: 'readonly',
+        // Used by the shared-link codec in shareState.js
+        btoa: 'readonly',
+        atob: 'readonly',
+        Blob: 'readonly',
+        Response: 'readonly',
+        TextEncoder: 'readonly',
+        TextDecoder: 'readonly',
+        CompressionStream: 'readonly',
+        DecompressionStream: 'readonly',
         performance: 'readonly',
         navigator: 'readonly',
         alert: 'readonly',

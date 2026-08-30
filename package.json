@@ -1,31 +1,35 @@
 {
   "name": "gravitas-sim.github.io",
   "version": "1.0.0",
-  "description": "",
+  "description": "An interactive astrophysics sandbox and astronomy teaching tool that runs entirely in the browser.",
   "main": "index.js",
   "scripts": {
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
     "test:watch": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",
     "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage",
     "test:verbose": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose",
-    "lint": "eslint js/*.js",
-    "lint:fix": "eslint js/*.js --fix",
-    "format": "prettier --write js/*.js",
-    "format:check": "prettier --check js/*.js",
+    "lint": "eslint js/**/*.js",
+    "lint:fix": "eslint js/**/*.js --fix",
+    "format": "prettier --write js/**/*.js",
+    "format:check": "prettier --check js/**/*.js",
     "dev": "npx http-server . -p 8003 -o",
     "serve": "npx http-server . -p 8003",
-    "build": "node tools/make-social-card.js && node build.js",
+    "build": "node tools/make-social-card.js && node tools/build-instructor-materials.js && node build.js",
     "build:watch": "node build.js --watch",
     "preview": "npm run build && npx http-server dist -p 8004 -o",
-    "social-card": "node tools/make-social-card.js"
+    "social-card": "node tools/make-social-card.js",
+    "build:instructors": "node tools/build-instructor-materials.js",
+    "thumbnails": "node tools/generate-scenario-thumbnails.mjs",
+    "thumbnails:check": "node tools/generate-scenario-thumbnails.mjs --check",
+    "perf": "node tools/perf-probe.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gravitas-sim/gravitas-sim.github.io.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Carl Ziegler",
+  "license": "MIT",
   "type": "module",
   "bugs": {
     "url": "https://github.com/gravitas-sim/gravitas-sim.github.io/issues"
@@ -40,6 +44,10 @@
     "eslint-plugin-prettier": "^5.5.1",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.0.4",
+    "playwright": "^1.62.1",
     "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

@@ -7,6 +7,15 @@
    ========================================================================== */
 
 @layer components {
+  /* The rules below set `display` on buttons and several containers, which
+     beats the user-agent style for [hidden]. Without this, anything the app
+     hides by setting the attribute stays on screen: the plot panel's unlabelled
+     transform toggle was rendering as an empty pill on every plot step that
+     does not define one. */
+  [hidden] {
+    display: none !important;
+  }
+
   /* ==========================================================================
      Buttons
      ====================================================================== */
@@ -120,7 +129,7 @@
   }
 
   /* ==========================================================================
-     Toggle buttons - state carried by colour AND a label, never colour alone
+     Toggle buttons - state carried by color AND a label, never color alone
      ====================================================================== */
   .toggle-button {
     position: relative;
@@ -129,7 +138,7 @@
   }
 
   /* Tint kept low so the label clears 4.5:1 against the mixed background in
-     every theme — at 18% the light theme measured 3.92:1. */
+     every theme: at 18% the light theme measured 3.92:1. */
   .toggle-button[data-state='on'] {
     background: color-mix(in srgb, var(--success) 6%, var(--surface-2));
     border-color: color-mix(in srgb, var(--success) 55%, transparent);
@@ -413,24 +422,45 @@
     border-color: var(--border-strong);
   }
 
+  /* The track used to be a 4px bar of --surface-3, which against the Midnight
+     panel background is very nearly the same color: the control was easy to
+     miss entirely, and there was no indication of where in its range the value
+     sat. Taller, outlined, and filled up to the current value. --range-fill is
+     set from JS; the fallback keeps the track sensible if that never runs. */
   input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
-    height: 4px;
+    height: 7px;
     border-radius: var(--radius-full);
-    background: var(--surface-3);
+    background: linear-gradient(
+      to right,
+      var(--accent) 0%,
+      var(--accent) var(--range-fill, 0%),
+      var(--range-track, #2b3245) var(--range-fill, 0%),
+      var(--range-track, #2b3245) 100%
+    );
+    border: 1px solid var(--border-strong);
     outline: none;
+  }
+
+  input[type='range']:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
-    border: 2px solid var(--surface-1);
-    box-shadow: var(--shadow-sm);
+    /* A ring in the panel color separates the thumb from the filled track it
+       sits on, which is otherwise the same color. */
+    border: 2px solid var(--panel-bg);
+    box-shadow:
+      0 0 0 1px var(--accent),
+      0 1px 4px rgb(0 0 0 / 45%);
     cursor: pointer;
     transition: transform var(--duration-fast) var(--ease);
   }
@@ -440,11 +470,12 @@
   }
 
   input[type='range']::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: var(--radius-full);
     background: var(--accent);
-    border: 2px solid var(--surface-1);
+    border: 2px solid var(--panel-bg);
+    box-shadow: 0 0 0 1px var(--accent);
     cursor: pointer;
   }
 
@@ -528,7 +559,9 @@
     box-shadow: none;
     color: var(--text-secondary);
     font-weight: var(--weight-normal);
-    padding: var(--space-2) var(--space-3);
+    /* Slightly tighter than the app's default button. Seventeen of these stack
+       in one column, so four pixels each is seventy pixels of rail. */
+    padding: 6px var(--space-3);
   }
 
   .ui-container .ui-button:hover {
@@ -541,6 +574,28 @@
 
   .ui-container .ui-button:active {
     background: var(--surface-3);
+  }
+
+  /* ==========================================================================
+     Numerals that sit in columns
+     --------------------------------------------------------------------------
+     Proportional figures are right for prose and wrong the moment numbers are
+     stacked: a 1 is narrower than a 7, so a live readout shifts sideways as its
+     own values change and the eye has to re-find the decimal point on every
+     update. Tabular figures give every digit the same advance.
+
+     Applied to the surfaces that show measurements, not to prose, where
+     proportional figures still read better. Widget readouts, the speed display
+     and the .numeric utility already carried this; these are the readouts that
+     had been missed, chiefly the object inspector and the live HUD.
+     ====================================================================== */
+  #overlayStats,
+  .stat-row,
+  .stat-value,
+  .energy-value-display,
+  .inv-wedge-readout,
+  .inv-answer-num {
+    font-variant-numeric: tabular-nums;
   }
 
   /* ==========================================================================
@@ -586,7 +641,7 @@
     -webkit-backdrop-filter: none;
     z-index: var(--z-panel);
 
-    /* Centre in the band between the HUD and the rail, not in the viewport,
+    /* Center in the band between the HUD and the rail, not in the viewport,
        so the card cannot sit on top of the readout panel. */
     --side-left: calc(var(--hud-width) + var(--panel-inset) + var(--space-3));
     --side-right: calc(var(--rail-width) + var(--panel-inset) + var(--space-3));
@@ -915,8 +970,8 @@
   }
 
   .rail-group + .rail-group {
-    margin-top: var(--space-3);
-    padding-top: var(--space-3);
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
     border-top: 1px solid var(--border-subtle);
   }
 
@@ -934,6 +989,93 @@
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--text-muted);
+  }
+
+  /* A section header that opens and shuts its group. Styled as the label it
+     replaced rather than as a button: it is a hinge on a heading, and giving it
+     button chrome would put four more boxes in a rail this change exists to
+     calm down. */
+  .rail-section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: 100%;
+    padding: 2px var(--space-3);
+    font-family: inherit;
+    text-align: left;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: color var(--duration) var(--ease);
+  }
+
+  .rail-section-toggle:hover,
+  .rail-section-toggle:focus-visible {
+    color: var(--text-secondary);
+  }
+
+  .rail-chevron {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    /* Points down when the section is open, right when it is shut. The extra
+       translate keeps the glyph optically centred as it turns. */
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform var(--duration) var(--ease);
+  }
+
+  .rail-section-toggle[aria-expanded='false'] .rail-chevron {
+    transform: translateX(-2px) rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail-chevron {
+      transition: none;
+    }
+  }
+
+  /* --- Rail: the Learn group ------------------------------------------------
+     Text links, not buttons. Everything else in the rail acts on the
+     simulation; these navigate away from it, and giving them button chrome
+     would put four more full-width controls in front of the ones that matter.
+     The group sits last for the same reason. */
+  .rail-group-learn {
+    margin-top: var(--space-1);
+  }
+
+  .rail-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 0 var(--space-3);
+  }
+
+  .rail-link {
+    padding: var(--space-1) 0;
+    font: inherit;
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    text-align: left;
+    text-decoration: none;
+    color: var(--text-secondary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .rail-link:hover,
+  .rail-link:focus-visible {
+    color: var(--accent);
+    border-bottom-color: currentColor;
   }
 
   .rail-field {
@@ -958,8 +1100,20 @@
     width: calc(100% - var(--space-6));
   }
 
+  /* The primary action stays put while the groups above it scroll. The rail
+     holds seventeen controls and is taller than a laptop screen with everything
+     open; without this, "Add Stars" was the one item that fell off the bottom,
+     which is exactly the wrong one to lose. */
   .rail-primary {
-    margin-top: var(--space-3);
+    position: sticky;
+    bottom: calc(var(--space-3) * -1);
+    z-index: 1;
+    margin-top: var(--space-2);
+    padding-block: var(--space-2);
+    /* Opaque, so rows scrolling underneath do not show through it. The rail's
+       own surface is translucent over the canvas; this matches what sits
+       behind it rather than the canvas itself. */
+    background: color-mix(in srgb, var(--surface-1) 96%, transparent);
   }
 
   /* ==========================================================================
@@ -993,6 +1147,21 @@
   .timeline-bar.showUI {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  /* Centred in the band left of the rail, not on the viewport.
+     
+     The rail is docked over the right two hundred pixels, so a viewport-centred
+     bar sits visibly right of the working area's centre, and its right end runs
+     into the only corner the footer can occupy. Shifting it by half the rail
+     puts it where the eye expects it and opens that corner. The scenario card
+     above already frames itself against the same band. */
+  @media (min-width: 1025px) {
+    .timeline-bar {
+      transform: translateX(
+        calc(-50% - (var(--rail-width) + var(--space-4)) / 2)
+      );
+    }
   }
 
   .timeline-bar.is-scrubbing {
@@ -1229,7 +1398,7 @@
 }
 
 /* =============================================================================
-   Overlay panel — a single card holding the sonification toggle and the HUD
+   Overlay panel: a single card holding the sonification toggle and the HUD
    readout, instead of two loose blocks with a floating minimise button.
    ========================================================================== */
 
@@ -1253,7 +1422,7 @@
     overflow: hidden;
   }
 
-  /* The card already provides the surface — the inner blocks must not repeat it */
+  /* The card already provides the surface: the inner blocks must not repeat it */
   #overlay #overlayStats,
   #overlay .overlay-stats {
     background: transparent;
@@ -1276,7 +1445,7 @@
     color: var(--text-muted);
   }
 
-  /* The collapse control is a labelled chip, not a bare dash: a lone "−" gave
+  /* The collapse control is a labeled chip, not a bare dash: a lone "−" gave
      no indication the readout could be collapsed, and once collapsed the panel
      became an unlabelled square with no hint of how to get it back. */
   .overlay-minimize-btn {
@@ -1325,7 +1494,7 @@
     display: none;
   }
 
-  /* Collapsed: the panel shrinks to the labelled chip itself, so the whole
+  /* Collapsed: the panel shrinks to the labeled chip itself, so the whole
      thing reads as "Show readout" and is clickable anywhere. */
   /* Collapsed the panel shrink-wraps its chip, so the label must drive the
      width rather than being squeezed by a fixed one. */
@@ -1399,7 +1568,7 @@
     outline-offset: 2px;
   }
 
-  /* Motion. The simulation itself is the content, so it keeps moving — but the
+  /* Motion. The simulation itself is the content, so it keeps moving, but the
      decorative chrome animations, the splash and the transitions all stop. */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -1507,19 +1676,19 @@
 /* =============================================================================
    Attribution
    -----------------------------------------------------------------------------
-   Previously white text at 0.7 opacity inside a container faded to 0.45 — an
+   Previously white text at 0.7 opacity inside a container faded to 0.45: an
    effective 0.31 alpha, which vanished against the darker themes. It now sits
-   on its own tinted chip and takes its colours from the theme.
+   on its own tinted chip and takes its colors from the theme.
    ========================================================================== */
 
 @layer components {
   .attribution {
     position: fixed;
-    /* The bottom strip is shared with the transport bar (centred, ~48px tall
-       at bottom var(--space-4)) and the control rail on the right. Sit above
-       the one and clear of the other rather than under either. */
-    right: calc(var(--rail-width) + var(--panel-inset) + var(--space-3));
-    bottom: calc(var(--space-4) + 48px + var(--space-2));
+    /* Tucked into the corner, below the control rail and to the right of the
+       transport bar, so it reads as a footer rather than as another piece of
+       chrome floating in the working area. */
+    right: var(--space-3);
+    bottom: var(--space-3);
     z-index: var(--z-overlay);
 
     display: flex;
@@ -1571,17 +1740,214 @@
     opacity: 0.7;
   }
 
-  /* The transport bar owns the bottom centre; on narrow screens the
-     attribution moves out of its way rather than sitting behind it. */
-  @media (max-width: 1024px) {
+  /* --- Theme dock -----------------------------------------------------------
+     Docked in the footer pill, left of the copyright. Closed it is a swatch and
+     a word; the list opens upward, because there is nothing below it. */
+  .theme-dock {
+    position: relative;
+    display: flex;
+    pointer-events: auto;
+  }
+
+  .theme-dock-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    /* Padding, not zero: collapsed to a swatch this is a 14px-wide control, and
+       a 14px target is not one most people can hit. The negative margin keeps
+       the extra area from pushing the row wider. */
+    padding: var(--space-2);
+    margin: calc(var(--space-2) * -1) 0 calc(var(--space-2) * -1)
+      calc(var(--space-2) * -1);
+    font: inherit;
+    color: var(--hud-text);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color var(--duration) var(--ease);
+  }
+
+  .theme-dock-btn:hover,
+  .theme-dock-btn:focus-visible {
+    color: var(--accent);
+  }
+
+  /* The swatch is the theme itself: page ground, panel and accent, in the three
+     bands the interface actually uses. It recolours with the tokens, so it
+     cannot fall out of step with what it is describing. */
+  .theme-dock-swatch,
+  .theme-menu-swatch {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: linear-gradient(
+      135deg,
+      var(--surface-0) 0 40%,
+      var(--surface-2) 40% 70%,
+      var(--accent) 70% 100%
+    );
+  }
+
+  .theme-menu {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + var(--space-3));
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: max-content;
+    min-width: 13rem;
+    padding: var(--space-2);
+
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .theme-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font: inherit;
+    font-size: var(--text-xs);
+    text-align: left;
+    color: var(--text-secondary);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition:
+      color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
+  }
+
+  .theme-menu-item:hover,
+  .theme-menu-item:focus-visible {
+    color: var(--text-primary);
+    background: var(--surface-2);
+  }
+
+  .theme-menu-item.is-active {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+  }
+
+  /* Each row previews its own theme rather than the active one, which is the
+     only way a swatch helps before you have switched. */
+  .theme-menu-swatch[data-swatch='midnight'] {
+    background: linear-gradient(
+      135deg,
+      #000105 0 40%,
+      #0d111c 40% 70%,
+      #22d3ee 70% 100%
+    );
+  }
+  .theme-menu-swatch[data-swatch='deep'] {
+    background: linear-gradient(
+      135deg,
+      #070a16 0 40%,
+      #161a2c 40% 70%,
+      #38bdf8 70% 100%
+    );
+  }
+  .theme-menu-swatch[data-swatch='observatory'] {
+    background: linear-gradient(
+      135deg,
+      #0a0304 0 40%,
+      #221310 40% 70%,
+      #fb7185 70% 100%
+    );
+  }
+  .theme-menu-swatch[data-swatch='daylight'] {
+    background: linear-gradient(
+      135deg,
+      #eef2f9 0 40%,
+      #f1f5fb 40% 70%,
+      #0284c7 70% 100%
+    );
+  }
+
+  .theme-menu-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .theme-menu-label {
+    font-weight: var(--weight-semibold);
+  }
+
+  .theme-menu-hint {
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* Where the footer sits once the control rail is docked.
+
+     The rail is docked against the right edge and painted above the footer, so
+     a footer anchored to the viewport edge runs underneath it and its last
+     items are unreachable. It anchors to the rail's inner edge instead, which
+     leaves it sharing the bottom strip with the transport bar.
+
+     That strip is the constraint on what may live here. Between the transport
+     bar and the rail there is room for a short line and nothing more, which is
+     why the documentation links moved to the rail: with seven items this had to
+     be lifted above the scrubber, where a footer stops reading as a footer and
+     starts reading as a panel someone forgot to close. */
+  @media (min-width: 1025px) {
     .attribution {
-      right: var(--space-4);
+      right: calc(var(--rail-width) + var(--space-4) + var(--space-3));
     }
   }
 
-  @media (max-width: 720px) {
+  /* The transport bar is centred on the viewport while the rail takes the right
+     two hundred pixels, so the gap between them closes as the window narrows.
+     Rather than move the line somewhere else at a breakpoint, it tightens:
+     smaller, closer, and without the separator dots, which is enough to keep it
+     clear of the elapsed-time readout down to the width where the rail stops
+     being docked at all. */
+  @media (min-width: 1321px) and (max-width: 1599px) {
+    .attribution {
+      gap: var(--space-1);
+      padding: 2px var(--space-2);
+      font-size: 10px;
+    }
+
+    .attribution .attribution-sep {
+      display: none;
+    }
+
+    /* The last pixels. The symbol carries the notice and the swatch carries the
+       theme; the words beside them are what a reader can lose without losing
+       the meaning, and both come back as soon as there is room. */
+    .attribution-year,
+    .theme-dock-name {
+      display: none;
+    }
+  }
+
+  /* Below the rail's breakpoint there is no rail to clear, so the footer goes
+     back to the viewport edge. */
+  @media (max-width: 1024px) {
     .attribution {
       right: var(--space-2);
+    }
+  }
+
+  /* The transport bar is a fixed 680px, so below about 1250px it fills the
+     strip and there is no room for a footer beside it. Only then does the line
+     lift clear of the bar: it is the last resort, not the default, because a
+     footer floating above the scrubber reads as a panel someone forgot to close
+     rather than as a footer. */
+  @media (max-width: 1320px) {
+    .attribution {
       bottom: calc(var(--space-10) + var(--space-6));
       font-size: 10px;
       padding: 2px var(--space-2);
@@ -1906,7 +2272,7 @@
 
     /* --- Modals become full-height sheets --------------------------------
        #scenarioListContent is a flex child of its modal, not a fixed element,
-       so left/right do nothing for it — it needs width/height instead, and
+       so left/right do nothing for it: it needs width/height instead, and
        min-width must be released or a 320px floor overflows a 375px screen. */
     #scenarioListModal:not(.hidden) {
       padding: calc(var(--space-2) + env(safe-area-inset-top, 0px))
@@ -2061,5 +2427,2699 @@
 
   .scenario-list-item .scenario-title strong {
     color: var(--text-primary);
+  }
+}
+
+/* =============================================================================
+   Share dialog
+   -----------------------------------------------------------------------------
+   Built on the tokens rather than following the older modals, which hardcode
+   their gradients and so ignore three of the four themes.
+   ========================================================================== */
+@layer components {
+  #shareModal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  #shareModal.hidden {
+    display: none;
+  }
+
+  #shareContent {
+    position: relative;
+    width: min(560px, 100%);
+    max-height: min(90vh, 720px);
+    overflow-y: auto;
+    padding: var(--space-6);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+  }
+
+  .share-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .share-header h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+  }
+  .share-header .ui-button {
+    flex: none;
+    min-width: 0;
+    padding: 2px 10px;
+    font-size: var(--text-lg);
+    line-height: 1.1;
+  }
+
+  .share-intro {
+    margin: 0 0 var(--space-5);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  /* --- Which payload ------------------------------------------------------ */
+  .share-kind {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  .share-kind-option {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: var(--space-3);
+    text-align: left;
+    cursor: pointer;
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: inherit;
+    transition:
+      border-color var(--duration-fast) var(--ease),
+      background var(--duration-fast) var(--ease);
+  }
+  .share-kind-option:hover {
+    background: var(--button-hover-bg);
+    border-color: var(--border-strong);
+  }
+  .share-kind-option.is-active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+  }
+  .share-kind-name {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+  .share-kind-note {
+    font-size: var(--text-xs);
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  /* --- Options ------------------------------------------------------------ */
+  .share-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .share-check input {
+    accent-color: var(--accent);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  /* --- The link ----------------------------------------------------------- */
+  .share-link-row {
+    display: flex;
+    gap: var(--space-2);
+    align-items: stretch;
+  }
+  #shareUrl {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    /* The payload is one long unbroken token; without this it is impossible to
+       tell a truncated link from a complete one. */
+    text-overflow: ellipsis;
+  }
+  #shareUrl:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .share-link-row .ui-button {
+    flex: none;
+    min-width: 74px;
+  }
+
+  .share-meta {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .share-meta.is-warning {
+    color: var(--warning);
+  }
+  .share-warning {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--warning) 12%, transparent);
+    border-left: 2px solid var(--warning);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Seed --------------------------------------------------------------- */
+  .share-seed-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .share-seed-row[hidden] {
+    display: none;
+  }
+  .share-seed-row label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  #shareSeed {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+  }
+  #shareSeed:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .share-seed-row .ui-button {
+    flex: none;
+    min-width: 60px;
+  }
+  .share-hint {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 560px) {
+    #shareContent {
+      padding: var(--space-4);
+    }
+    .share-kind {
+      grid-template-columns: 1fr;
+    }
+    /* Below 480px the floating close chip appears; showing the header button
+       as well leaves two X controls a few pixels apart, which is exactly the
+       duplication the rest of the interface was cleaned up to avoid. */
+    @media (max-width: 480px) {
+      .share-header .ui-button {
+        display: none;
+      }
+    }
+    /* Stacked, the Copy button gets a full-width target instead of a 74px one
+       squeezed against a field that already cannot show the whole link. */
+    .share-link-row {
+      flex-wrap: wrap;
+    }
+    .share-link-row .ui-button {
+      width: 100%;
+    }
+  }
+}
+
+@layer components {
+  .share-note {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+  .share-note[hidden] {
+    display: none;
+  }
+}
+
+/* =============================================================================
+   Investigations
+   -----------------------------------------------------------------------------
+   The lesson panel is docked rather than modal: a student has to read a step
+   and drive the simulation at the same time, so the panel must never be the
+   thing standing between them and the canvas.
+   ========================================================================== */
+@layer components {
+  /* --- Lesson browser ----------------------------------------------------- */
+  #investigationBrowser {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  #investigationBrowser.hidden {
+    display: none;
+  }
+
+  #investigationBrowserContent {
+    position: relative;
+    width: min(720px, 100%);
+    max-height: min(88vh, 780px);
+    overflow-y: auto;
+    padding: var(--space-6);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+  }
+
+  .inv-browser-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .inv-browser-header h3 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+  }
+  .inv-browser-sub {
+    margin: 0;
+    max-width: 52ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--text-secondary);
+  }
+  .inv-browser-header .ui-button {
+    flex: none;
+    min-width: 0;
+    padding: 2px 10px;
+    font-size: var(--text-lg);
+  }
+
+  #investigationList {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .inv-card {
+    display: flex;
+    flex-direction: column;
+    /* The generic button rule sets align-items/justify-content to center. In a
+       column flex that centers every child horizontally, which quietly turned
+       this card into centered text. Restated here rather than left to inherit: the same trap that produced the stray hamburger button earlier. */
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+    padding: var(--space-4);
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition:
+      border-color var(--duration-fast) var(--ease),
+      background var(--duration-fast) var(--ease),
+      transform var(--duration-fast) var(--ease);
+  }
+  .inv-card:hover {
+    background: var(--button-hover-bg);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .inv-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .inv-card-title {
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+  .inv-card-status {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-card-status.is-done {
+    color: var(--accent);
+  }
+  .inv-card-sub {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  .inv-card-summary {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .inv-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-card-bar {
+    height: 3px;
+    margin-top: 6px;
+    background: var(--surface-2);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .inv-card-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  /* --- The working panel -------------------------------------------------- */
+  .investigation-panel {
+    position: fixed;
+    top: var(--space-3);
+    left: var(--space-3);
+    /* Clears the transport bar, which is fixed to the bottom at a higher
+       z-index: overlapping it would put the Next button underneath the
+       scrubber. 88px is the bar's 48px plus its 16px offset plus a gap. */
+    bottom: 88px;
+    z-index: var(--z-panel);
+    display: flex;
+    flex-direction: column;
+    width: min(396px, 40vw);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+    overflow: hidden;
+  }
+  .investigation-panel[hidden] {
+    display: none;
+  }
+
+  .inv-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-4) var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .inv-header h2 {
+    margin: 0;
+    font-size: var(--text-md);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+  }
+  .inv-header p {
+    margin: 2px 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+  .inv-header .ui-button {
+    flex: none;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: var(--text-lg);
+  }
+
+  .inv-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .inv-progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  #investigationProgressBar {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    transition: width var(--duration) var(--ease);
+  }
+  #investigationProgressText {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    /* As above: small text carrying real information needs the 4.5:1 tone. */
+    color: var(--text-secondary);
+  }
+
+  .inv-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--space-4);
+  }
+
+  .inv-step-count {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* --text-muted measures 4.3:1 here, just under the 4.5:1 AA needs at this
+       size. Secondary clears it, and this text tells a student where they are
+       in the lesson, which is not decoration. */
+    color: var(--text-secondary);
+  }
+  .inv-step-kind {
+    padding: 1px 7px;
+    font-size: 0.62rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: var(--radius-full);
+  }
+  .inv-step-title {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    line-height: 1.22;
+    letter-spacing: -0.012em;
+  }
+  .inv-step-body p {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.62;
+    color: var(--text-secondary);
+  }
+  .inv-step-body strong {
+    color: var(--text-primary);
+    font-weight: var(--weight-semibold);
+  }
+
+  .inv-tip {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+
+  .inv-prompt {
+    margin: var(--space-4) 0 var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  /* --- Multiple choice ---------------------------------------------------- */
+  .inv-options {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .inv-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    line-height: 1.45;
+    cursor: pointer;
+    color: var(--text-secondary);
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition:
+      border-color var(--duration-fast) var(--ease),
+      background var(--duration-fast) var(--ease);
+  }
+  .inv-option:hover:not(:disabled) {
+    background: var(--button-hover-bg);
+    border-color: var(--border-strong);
+  }
+  .inv-option:disabled {
+    cursor: default;
+  }
+  .inv-option-mark {
+    flex: none;
+    width: 19px;
+    height: 19px;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    border-radius: var(--radius-full);
+  }
+  /* The chosen answer and the right answer are marked differently on purpose:
+     a student who picked wrongly needs to see both at once. */
+  .inv-option.is-chosen {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
+  .inv-option.is-correct {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+  }
+  .inv-option.is-correct .inv-option-mark {
+    color: var(--accent-contrast);
+    background: var(--accent);
+  }
+  .inv-option.is-wrong {
+    border-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+  }
+
+  .inv-because {
+    margin: var(--space-3) 0 0;
+    padding: var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Short-answer model answer ------------------------------------------ */
+  .inv-short-reveal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+    margin-top: var(--space-3);
+  }
+  .inv-short-hint {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary, var(--text-secondary));
+  }
+  .inv-because.is-model {
+    align-self: stretch;
+    margin-top: 0;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* --- Written and numeric answers ---------------------------------------- */
+  .inv-answer {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    resize: vertical;
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .inv-numeric {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  .inv-answer-num {
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .inv-unit {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-answer:focus,
+  .inv-answer-num:focus,
+  .inv-field input:focus,
+  #investigationName:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .inv-feedback {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    border-radius: var(--radius-sm);
+  }
+  .inv-feedback.is-right {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+  }
+  .inv-feedback.is-wrong {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    border-left: 2px solid var(--danger);
+  }
+
+  /* --- Measurement fields ------------------------------------------------- */
+  .inv-fields {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .inv-field {
+    display: grid;
+    gap: 4px;
+  }
+  .inv-field-label {
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+  .inv-field-unit {
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+  .inv-field input {
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Exploration checklist ---------------------------------------------- */
+  .inv-checklist {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .inv-checklist label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    line-height: 1.45;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .inv-checklist input {
+    flex: none;
+    margin-top: 2px;
+    width: 15px;
+    height: 15px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* --- Live readout ------------------------------------------------------- */
+  .inv-probe-wrap {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+    background: var(--surface-2);
+  }
+  .inv-probe-wrap[hidden] {
+    display: none;
+  }
+  .inv-probe-title {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-probe {
+    display: grid;
+    gap: 3px;
+    /* Selectable on purpose: copying a measured number out of here into the
+       answer field above is the core loop of a measure step. */
+    user-select: text;
+  }
+  .inv-probe-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .inv-probe-row > :last-child {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .inv-probe-row.is-emphasis > :last-child {
+    color: var(--accent);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* --- Panel footer ------------------------------------------------------- */
+  .inv-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .inv-footer-nav {
+    display: flex;
+    gap: var(--space-2);
+  }
+  .inv-footer .ui-button.subtle {
+    color: var(--text-muted);
+    background: transparent;
+    border-color: transparent;
+  }
+  .inv-footer .ui-button.subtle:hover {
+    color: var(--text-secondary);
+    background: var(--button-hover-bg);
+  }
+
+  /* --- Data export dialog ------------------------------------------------- */
+  /* Shares the finish dialog's surface: same ground, same header, same close
+     button, so the two read as one family rather than two apps. */
+  #dataExport {
+    position: fixed;
+    inset: 0;
+    /* Above the object inspector, which sits at 2000 and so covers every other
+       modal in the app. This dialog is most useful with an object selected,
+       because that is when "export the selected object only" means something,
+       and that is exactly when the inspector is open in front of it. Raising
+       one dialog is a smaller change than renumbering the app's z-index scale;
+       the inspector stays visible, dimmed, behind the backdrop. */
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  #dataExport.hidden {
+    display: none;
+  }
+  #dataExportContent {
+    width: min(540px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: var(--space-6);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+  }
+  .export-intro {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .export-scope {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin: 0 0 var(--space-4);
+    padding: var(--space-3) var(--space-3) var(--space-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .export-scope[hidden] {
+    display: none;
+  }
+  .export-scope legend {
+    padding: 0 var(--space-2);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .export-scope label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .export-scope input:disabled + span {
+    color: var(--text-muted);
+    cursor: default;
+  }
+  .export-files {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .export-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .export-file-text {
+    min-width: 0;
+  }
+  .export-file-name {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+  .export-file-detail {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  .export-file .ui-button {
+    flex: none;
+  }
+  .export-file.is-empty .export-file-name {
+    color: var(--text-muted);
+  }
+  .export-fineprint {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .export-fineprint a {
+    color: var(--accent);
+  }
+
+  /* On a phone the file rows stop being a row: the button goes underneath its
+     description rather than squeezing it to two words a line. */
+  @media (max-width: 560px) {
+    .export-file {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .export-file .ui-button {
+      width: 100%;
+    }
+  }
+
+  /* --- Finish dialog ------------------------------------------------------ */
+  #investigationFinish {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  #investigationFinish.hidden {
+    display: none;
+  }
+  #investigationFinishContent {
+    width: min(520px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: var(--space-6);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+  }
+  .inv-finish-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+  }
+  .inv-finish-header h3 {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+  }
+  .inv-finish-header .ui-button {
+    min-width: 0;
+    padding: 2px 10px;
+    font-size: var(--text-lg);
+  }
+  .inv-finish-summary p {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .inv-finish-note {
+    color: var(--text-muted) !important;
+    font-size: var(--text-xs) !important;
+  }
+  .inv-name-field {
+    display: grid;
+    gap: 6px;
+    margin: var(--space-4) 0 var(--space-2);
+  }
+  .inv-name-field span {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+  #investigationName {
+    padding: var(--space-2) var(--space-3);
+    font-family: inherit;
+    font-size: var(--text-md);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .inv-name-error {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--danger);
+  }
+  .inv-name-error[hidden] {
+    display: none;
+  }
+  .inv-finish-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+  .inv-finish-fineprint {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* The scenario introduction card is 720px wide and docks exactly where the
+     lesson's instrument panel goes. A lesson loads a scenario on every step
+     that asks for one, so during an investigation the card is both redundant
+     (the step text introduces the scenario) and directly in the way. */
+  body.investigation-open #scenarioInfoBox {
+    display: none !important;
+  }
+
+  /* --- Narrow screens ----------------------------------------------------- */
+  @media (max-width: 900px) {
+    /* Only once the panel is a bottom sheet does the floating help button land
+       on top of the Next button. On a wide screen the two do not meet, so the
+       tour stays reachable there. */
+    body.investigation-open #tutorialBtn {
+      display: none;
+    }
+
+    .investigation-panel {
+      /* A sheet across the bottom rather than a side panel: on a phone the
+         canvas is already the smaller dimension, and a full-height panel down
+         one side would leave the simulation a strip. Still above the transport
+         bar, which occupies the very bottom. */
+      top: auto;
+      left: var(--space-2);
+      right: var(--space-2);
+      bottom: 76px;
+      width: auto;
+      max-height: min(52vh, 420px);
+    }
+    .inv-footer,
+    .inv-progress,
+    .inv-header {
+      padding-left: var(--space-3);
+      padding-right: var(--space-3);
+    }
+    .inv-body {
+      padding: var(--space-3);
+    }
+  }
+  @media (max-width: 480px) {
+    #investigationBrowserContent {
+      padding: var(--space-4);
+    }
+    .inv-browser-header .ui-button {
+      display: none;
+    }
+    .inv-finish-actions {
+      flex-direction: column-reverse;
+    }
+    .inv-finish-actions .ui-button {
+      width: 100%;
+    }
+  }
+}
+
+/* --- Investigations: derived fields, checks and plots --------------------- */
+@layer components {
+  .inv-reset-scenario {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    min-height: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    font-size: var(--text-md);
+    line-height: 1;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .inv-reset-scenario:hover {
+    color: var(--text-primary);
+    background: var(--button-hover-bg);
+    border-color: var(--border-strong);
+  }
+
+  .inv-field.is-derived input {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-style: dashed;
+    cursor: default;
+  }
+  .inv-field-auto {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Sanity check on entered measurements. Warnings read as guidance rather
+     than failure: the numbers are a student's own observations, and the tool
+     is pointing out a disagreement, not marking them wrong. */
+  .inv-check {
+    margin-top: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--border-strong);
+    background: var(--surface-2);
+    color: var(--text-secondary);
+  }
+  .inv-check[hidden] {
+    display: none;
+  }
+  .inv-check.is-ok {
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text-primary);
+  }
+  .inv-check.is-warn {
+    border-left-color: var(--warning);
+    background: color-mix(in srgb, var(--warning) 12%, transparent);
+  }
+  .inv-check.is-error {
+    border-left-color: var(--danger);
+    background: color-mix(in srgb, var(--danger) 12%, transparent);
+  }
+
+  .inv-plot {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .inv-plot-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  .inv-plot-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .inv-plot-toggle {
+    flex: none;
+    padding: 3px 9px;
+    font-family: inherit;
+    font-size: var(--text-xs);
+    line-height: 1.3;
+    cursor: pointer;
+    color: var(--text-secondary);
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+  }
+  .inv-plot-toggle:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+  .inv-plot-toggle.is-on {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+  .inv-plot canvas {
+    display: block;
+    width: 100%;
+  }
+  .inv-plot-note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+}
+
+/* --- Investigations: the measurement plot, in its own panel ---------------- */
+@layer components {
+  /* Docked beside the lesson rather than inside its scroll: the whole point is
+     watching points land as they are typed, and at the bottom of a scrolling
+     column it went unnoticed until the last value went in. */
+  .inv-plot-panel {
+    position: fixed;
+    top: var(--space-3);
+    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    z-index: var(--z-panel);
+    width: min(460px, 42vw);
+    /* Clears the transport bar, same as the lesson panel. Anything taller than
+       the window scrolls inside the panel rather than off the bottom of it,
+       which is what the widgets with three sliders and five presets need. */
+    max-height: calc(100vh - var(--space-3) - 88px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--text-primary);
+  }
+  .inv-plot-panel[hidden] {
+    display: none;
+  }
+  .inv-plot-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .inv-plot-panel canvas {
+    display: block;
+    width: 100%;
+  }
+  .inv-plot-panel .inv-plot-note {
+    margin-top: var(--space-2);
+  }
+
+  .inv-import-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 var(--space-1);
+  }
+  .inv-import-btn {
+    flex: none;
+    padding: 5px 12px;
+    font-family: inherit;
+    font-size: var(--text-xs);
+    cursor: pointer;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-full);
+  }
+  .inv-import-btn:disabled {
+    color: var(--text-muted);
+    background: var(--button-bg);
+    border-color: var(--border);
+    cursor: default;
+  }
+  .inv-import-hint {
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* Not enough width for a fixed 460px column beside the lesson, so the panel
+     takes whatever is left of the window instead.
+
+     It used to go `position: static` here, on the reasoning that it would fall
+     back into the flow under the fields. It is a sibling of the lesson panel
+     rather than a child of it, so what actually happened was that it landed at
+     the bottom of a body with `overflow: hidden` and could not be reached at
+     all. */
+  @media (max-width: 1180px) {
+    .inv-plot-panel {
+      left: calc(min(396px, 40vw) + var(--space-3) * 2);
+      right: var(--space-3);
+      width: auto;
+    }
+  }
+
+  /* Below this the lesson is a sheet across the bottom, so the instrument takes
+     the space above it rather than a column beside it. The sheet gives some
+     height back on the steps that carry an instrument, which is enough to put
+     the picture and its readout above the fold; the controls under them are a
+     flick away, which is ordinary on a phone and better than shrinking a
+     diagram until it cannot be read. */
+  @media (max-width: 900px) {
+    .inv-plot-panel {
+      top: var(--space-2);
+      left: var(--space-2);
+      right: var(--space-2);
+      max-height: calc(100vh - 76px - min(38vh, 300px) - var(--space-2) * 3);
+    }
+    body.investigation-aux .investigation-panel {
+      max-height: min(38vh, 300px);
+    }
+  }
+}
+
+/* --- Investigations: the ellipse explorer --------------------------------- */
+@layer components {
+  .inv-ellipse {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .inv-ellipse canvas {
+    display: block;
+    width: 100%;
+  }
+  .inv-ecc-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .inv-ecc-row input[type='range'] {
+    flex: 1;
+    min-width: 0;
+    accent-color: var(--accent);
+  }
+  .inv-ecc-row output {
+    flex: none;
+    min-width: 4.2em;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--accent);
+  }
+  .inv-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: var(--space-3);
+  }
+  .inv-preset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    padding: 4px 9px;
+    font-family: inherit;
+    font-size: var(--text-xs);
+    line-height: 1.2;
+    cursor: pointer;
+    color: var(--text-secondary);
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .inv-preset:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+  }
+  .inv-preset span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+  }
+  .inv-preset-note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .inv-preset-note:empty {
+    display: none;
+  }
+
+  /* Real subscripts, without the leading that browsers give them by default
+     pushing lines apart in a column of dense prose. */
+  .inv-body sub,
+  .inv-body sup,
+  .inv-tool-row sub,
+  .inv-tool-row sup {
+    position: relative;
+    font-size: 0.72em;
+    line-height: 0;
+    vertical-align: baseline;
+  }
+  .inv-body sub,
+  .inv-tool-row sub {
+    bottom: -0.28em;
+  }
+  .inv-body sup,
+  .inv-tool-row sup {
+    top: -0.45em;
+  }
+
+  /* --- Investigations: the interactive instrument panel -------------------- */
+  .inv-tool-readout {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .inv-tool-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .inv-tool-row > :last-child {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--text-primary);
+  }
+  .inv-tool-row.is-emphasis > :last-child {
+    color: var(--accent);
+    font-weight: var(--weight-semibold);
+  }
+  .inv-tool-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .inv-tool-controls .inv-ecc-row > span:first-child {
+    flex: none;
+    min-width: 10.5em;
+  }
+  .inv-tool-controls[hidden],
+  .inv-tool-actions[hidden],
+  .inv-tool-readout[hidden] {
+    display: none;
+  }
+  .inv-tool-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+  .inv-tool-action {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    font-family: inherit;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--text-primary);
+    cursor: pointer;
+    background: var(--button-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .inv-tool-action:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .inv-tool-action:active {
+    background: var(--accent-soft);
+  }
+}
+
+/* --- Investigations: the Light Curve tool, docked clear of the lesson ------ */
+@layer overrides {
+  /* Its own home is the bottom left, which is exactly where the lesson panel
+     lives: opening it during a lesson used to bury the step you were reading.
+     Here it takes the strip between the lesson panel and the control rail,
+     which is the widest free space on the screen and the right shape for a
+     light curve. The rail is content-sized and measures 208px; 240 clears it. */
+  body.investigation-open .light-curve-container {
+    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    right: 240px;
+    bottom: 88px;
+    width: auto;
+    height: 300px;
+  }
+  /* Steps that show an instrument panel as well. No lesson step asks for both
+     at once, but a student can open the light curve from Tools at any point, so
+     the two have to share the column rather than one of them being cut off.
+     The light curve gives up most of its height, since on those steps the
+     instrument is the thing being read. */
+  body.investigation-lightcurve.investigation-aux .light-curve-container {
+    /* min-height has to come down with it: the tool's own stylesheet floors it
+       at 220px, which would silently ignore the height set here. */
+    min-height: 0;
+    height: 168px;
+  }
+  body.investigation-lightcurve .inv-plot-panel {
+    max-height: calc(100vh - var(--space-3) - 88px - 184px);
+  }
+
+  /* --- A step that carries both an instrument and a plot ------------------- */
+  /* Both dock to the same fixed position, so a measure step whose values feed a
+     graph could previously show only one of them: the student had to page back
+     to the previous screen to read the instrument they were recording from.
+     When both are present they share the column, instrument above. */
+  /* The instrument takes the larger share: it carries a picture, a readout of
+     several rows and its own controls, where the plot below it is a picture and
+     a caption. At 0.56 the slider a measurement step tells students to move
+     ended up below the fold. */
+  body.investigation-split #investigationTool {
+    max-height: calc((100vh - var(--space-3) - 88px) * 0.62);
+  }
+  body.investigation-split #investigationPlot {
+    top: calc((100vh - var(--space-3) - 88px) * 0.62 + var(--space-3) * 2);
+    max-height: calc((100vh - var(--space-3) - 88px) * 0.38 - var(--space-3));
+  }
+  @media (max-width: 900px) {
+    /* No room to stack two panels above a bottom sheet. The instrument keeps
+       the space and the plot scrolls with the lesson underneath it. */
+    body.investigation-split #investigationTool {
+      max-height: calc(100vh - 76px - min(38vh, 300px) - var(--space-2) * 3);
+    }
+    body.investigation-split #investigationPlot {
+      position: static;
+      max-height: none;
+      margin: var(--space-3) 0 0;
+      width: auto;
+    }
+  }
+  @media (max-width: 1100px) {
+    body.investigation-open .light-curve-container {
+      left: calc(min(396px, 40vw) + var(--space-2) * 2);
+      right: var(--space-2);
+      bottom: 76px;
+      height: 240px;
+    }
+  }
+  @media (max-width: 900px) {
+    /* The lesson is a bottom sheet at this width, so the light curve sits on
+       top of it rather than beside it. */
+    body.investigation-open .light-curve-container {
+      left: var(--space-2);
+      right: var(--space-2);
+      bottom: calc(76px + min(52vh, 420px) + var(--space-2));
+      height: min(30vh, 210px);
+    }
+  }
+}
+
+/* --- Investigations: figures ---------------------------------------------- */
+@layer components {
+  .inv-figure {
+    margin: var(--space-4) 0;
+  }
+  .inv-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    /* The photograph is its own light source, so it keeps the same ground in
+       every theme rather than sitting on a panel that changes under it. */
+    background: #000;
+  }
+  .inv-figure figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: var(--space-2);
+  }
+  .inv-figure-caption {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .inv-figure-credit {
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+  .inv-figure-credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .inv-figure-credit a:hover {
+    color: var(--text-secondary);
+  }
+}
+
+/* --- Investigations: pull quotes ------------------------------------------ */
+@layer components {
+  .inv-quote {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+  .inv-quote blockquote {
+    margin: 0;
+    font-size: var(--text-sm);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+  .inv-quote blockquote::before {
+    content: '\201C';
+  }
+  .inv-quote blockquote::after {
+    content: '\201D';
+  }
+  .inv-quote figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--accent);
+  }
+  .inv-quote figcaption::before {
+    content: '\2014\00a0';
+  }
+}
+
+@layer components {
+  .inv-ellipse-key {
+    display: grid;
+    gap: 3px;
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+  }
+  .inv-ellipse-key span::before {
+    content: '\25CF\00a0\00a0';
+  }
+  .inv-ellipse-key .k-a {
+    color: #5ec8f5;
+  }
+  .inv-ellipse-key .k-b {
+    color: #8de08a;
+  }
+  .inv-ellipse-key .k-c {
+    color: #f2a65a;
+  }
+  .inv-ellipse-key .k-star {
+    color: #ffd34d;
+  }
+  .inv-ellipse-key .k-empty {
+    color: #9aa2b8;
+  }
+}
+
+@layer components {
+  .inv-wedge-control {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .inv-wedge-readout {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .inv-wedge-readout strong {
+    color: var(--accent);
+  }
+}
+
+/* --- Investigations browser: the quiet line to the model and instructor pages */
+@layer components {
+  .inv-browser-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-browser-links a {
+    color: var(--text-secondary);
+    text-underline-offset: 2px;
+  }
+  .inv-browser-links a:hover,
+  .inv-browser-links a:focus-visible {
+    color: var(--accent);
+  }
+}
+
+/* =============================================================================
+   The front door
+   -----------------------------------------------------------------------------
+   A full-screen orientation layer shown once, on a first visit, between the
+   splash and the sandbox. Markup shell in index.html, content and behavior in
+   js/welcome.js.
+
+   Three things shape everything below:
+
+   1. It floats over a running simulation. The scrim is built from --surface-0
+      so it is correct in all four themes, including Daylight, where the UI is
+      light but the canvas deliberately stays dark. Gradients rather than
+      backdrop-filter: a blur over a canvas that repaints every frame forces a
+      full recomposite every frame, which is a real cost on a phone for an
+      effect a gradient gets most of the way to.
+
+   2. The wordmark continues the splash. Same face, weight, tracking and glow,
+      so the splash appears to hand off to this rather than being replaced.
+
+   3. Every grid is auto-fit with a min track, so cards reflow rather than
+      overlap and the page never scrolls sideways.
+   ========================================================================== */
+
+@layer components {
+  .welcome-screen {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-welcome);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    /* Darkened, not blurred: the system underneath stays faintly visible at
+       the top of the hero and is progressively covered as the reading starts. */
+    background:
+      radial-gradient(
+        120% 80% at 50% 0%,
+        var(--accent-soft) 0%,
+        transparent 62%
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--surface-0) 86%, transparent) 0%,
+        color-mix(in srgb, var(--surface-0) 95%, transparent) 34%,
+        color-mix(in srgb, var(--surface-0) 98%, transparent) 100%
+      );
+
+    opacity: 0;
+    transition: opacity var(--duration-slow) var(--ease-out);
+  }
+
+  .welcome-screen.is-shown {
+    opacity: 1;
+  }
+
+  .welcome-dialog {
+    position: relative;
+    width: min(60rem, 100% - var(--space-8));
+    margin: 0 auto;
+    padding: clamp(var(--space-8), 7vh, var(--space-10)) 0
+      calc(var(--space-10) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .welcome-dialog:focus {
+    outline: none;
+  }
+
+  .welcome-close {
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 1;
+
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+
+    /* Fixed, so it floats over whatever is scrolling past underneath. It has
+       to be opaque enough that card text never shows through the glyph. */
+    background: var(--surface-1);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition:
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .welcome-close:hover,
+  .welcome-close:focus-visible {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+
+  /* --- Hero ---------------------------------------------------------------- */
+
+  .wel-hero {
+    padding: clamp(var(--space-6), 6vh, var(--space-10)) 0
+      clamp(var(--space-8), 7vh, var(--space-10));
+    text-align: center;
+  }
+
+  .wel-eyebrow {
+    margin: 0 0 var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Deliberately identical to #splash h1, so the wordmark does not appear to
+     move or change when one layer replaces the other. */
+  .wel-wordmark {
+    margin: 0;
+    font-family: 'Poppins', var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 9vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: 0.12em;
+    color: var(--text-primary);
+    text-shadow: 0 0 34px var(--accent-soft);
+  }
+
+  .wel-lede {
+    max-width: 34em;
+    margin: var(--space-5) auto 0;
+    font-size: clamp(var(--text-base), 1.6vw, var(--text-lg));
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .wel-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-top: clamp(var(--space-6), 4vh, var(--space-8));
+  }
+
+  .wel-primary.ui-button {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border-color: var(--accent-strong);
+  }
+
+  .wel-primary.ui-button:hover,
+  .wel-primary.ui-button:focus-visible {
+    background: var(--accent-strong);
+  }
+
+  .wel-secondary.ui-button {
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-base);
+  }
+
+  /* Tertiary actions read as links: the hero must have one obvious next step,
+     and three equally weighted buttons do not give it one. */
+  .wel-quiet {
+    padding: var(--space-2) var(--space-1);
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .wel-quiet:hover,
+  .wel-quiet:focus-visible {
+    color: var(--accent);
+    border-bottom-color: currentColor;
+  }
+
+  /* --- Sections ------------------------------------------------------------ */
+
+  .wel-section {
+    padding: clamp(var(--space-8), 6vh, var(--space-10)) 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .wel-h2 {
+    margin: 0 0 var(--space-5);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  .wel-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .wel-section-head .wel-h2 {
+    margin-bottom: var(--space-5);
+  }
+
+  .wel-say {
+    max-width: 62ch;
+    margin: 0 0 var(--space-6);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* --- Build / Explore / Learn --------------------------------------------- */
+
+  .wel-triad {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-5);
+  }
+
+  .wel-point h3 {
+    margin: 0 0 var(--space-2);
+    padding-bottom: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent-line);
+  }
+
+  .wel-point p {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* --- Three ways in ------------------------------------------------------- */
+
+  .wel-doors {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .wel-door {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5);
+    background: color-mix(in srgb, var(--surface-1) 72%, transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .wel-door-eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .wel-door-title {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .wel-door-text {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Pushed to the bottom so the three buttons line up however unevenly the
+     descriptions wrap. */
+  .wel-door-cta.ui-button {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+
+  /* --- Featured scenarios --------------------------------------------------- */
+
+  .wel-scenarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .wel-scenario {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    text-align: left;
+
+    background: color-mix(in srgb, var(--surface-1) 68%, transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
+  }
+
+  .wel-scenario:hover,
+  .wel-scenario:focus-visible {
+    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--surface-2) 85%, transparent);
+    border-color: var(--accent-line);
+  }
+
+  /* The featured cards show the same capture the gallery does, through the
+     shared .sc-card-shot markup, so a scenario looks the same wherever it is
+     offered and there is only one thumbnail fallback to maintain. This used to
+     be six hand-drawn SVG diagrams, which was a second visual vocabulary for
+     the same six systems. */
+  .wel-scenario .sc-card-shot {
+    border: 0;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .wel-scenario-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .wel-scenario-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .wel-scenario-summary {
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    /* A catalog summary can run long. Clamping keeps six cards the same height
+       without a second, shorter copy of every description. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* --- Investigations ------------------------------------------------------- */
+
+  .wel-lessons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-3);
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+
+  .wel-lesson {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+    border-left: 2px solid var(--accent-line);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .wel-lesson-title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .wel-lesson-sub {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .wel-lesson-meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  /* --- Audiences ------------------------------------------------------------ */
+
+  .wel-audiences {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-5);
+  }
+
+  .wel-audience h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+
+  .wel-audience p {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* --- Teaching links ------------------------------------------------------- */
+
+  .wel-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .wel-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    text-decoration: none;
+
+    background: color-mix(in srgb, var(--surface-1) 68%, transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    transition:
+      border-color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease);
+  }
+
+  .wel-link:hover,
+  .wel-link:focus-visible {
+    background: color-mix(in srgb, var(--surface-2) 85%, transparent);
+    border-color: var(--accent-line);
+  }
+
+  .wel-link-label {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--accent);
+  }
+
+  .wel-link-note {
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* --- Foot ----------------------------------------------------------------- */
+
+  .wel-foot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: clamp(var(--space-8), 6vh, var(--space-10));
+    text-align: center;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .wel-foot-note {
+    max-width: 40ch;
+    margin: 0;
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  /* --- Narrow screens -------------------------------------------------------- */
+
+  @media (max-width: 700px) {
+    .welcome-dialog {
+      width: calc(100% - var(--space-4) * 2);
+      padding-top: var(--space-8);
+    }
+
+    /* The whole page has to stay a reasonable scroll on a phone, so every
+       section is tightened rather than any section being dropped: a visitor on
+       a phone should meet the same Gravitas as a visitor on a laptop. */
+    .wel-section {
+      padding: var(--space-6) 0;
+    }
+
+    .wel-hero {
+      padding: var(--space-4) 0 var(--space-6);
+    }
+
+    .wel-lede {
+      margin-top: var(--space-4);
+      font-size: var(--text-base);
+    }
+
+    .wel-say {
+      margin-bottom: var(--space-5);
+    }
+
+    .wel-triad,
+    .wel-audiences {
+      gap: var(--space-4);
+    }
+
+    .wel-door {
+      padding: var(--space-4);
+    }
+
+    /* The eyebrow is a desktop nicety: on a phone the three doors are stacked
+       and the headings alone already read as a list. */
+    .wel-door-eyebrow {
+      display: none;
+    }
+
+    /* Title and length are enough to show what a lesson looks like. The
+       subtitle is three more lines each, for three lessons, and the button
+       underneath goes to the real browser where all of it is shown. */
+    .wel-lesson-sub {
+      display: none;
+    }
+
+    /* The heading and its "browse all" link stop sitting on one line here, and
+       the heading's own bottom margin then opens a gap that makes the link look
+       like a stray subtitle. */
+    .wel-section-head .wel-h2 {
+      margin-bottom: var(--space-2);
+    }
+
+    .wel-section-head .wel-quiet {
+      padding-left: 0;
+    }
+
+    /* One card per row rather than six desktop-sized cards stacked: the same
+       content, a third of the scrolling. */
+    .wel-scenario {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+
+    .wel-scenario-art {
+      flex: 0 0 5.5rem;
+    }
+
+    .wel-scenario-summary {
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    .wel-hero-actions .ui-button {
+      flex: 1 1 100%;
+      justify-content: center;
+    }
+
+    .welcome-close {
+      top: var(--space-2);
+      right: var(--space-2);
+    }
+  }
+
+  /* The layer scrolls itself; the page behind it must not move underneath. */
+  body.welcome-open {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-screen {
+      transition: none;
+    }
+
+    .wel-scenario:hover,
+    .wel-scenario:focus-visible {
+      transform: none;
+    }
+  }
+}
+
+/* =============================================================================
+   Scenario gallery
+   -----------------------------------------------------------------------------
+   The scenario browser as a visual catalog: a thumbnail grid, concept chips and
+   a search box. Markup shell in index.html, behavior in js/scenarioBrowser.js.
+
+   The old browser is still styled in styles.css, in the `legacy` layer, with
+   hardcoded #1a1a2e / #4facfe values. Because `components` is declared after
+   `legacy`, the rules below win on layer order without !important, and the
+   panel picks up the theme like everything else. The legacy block is left
+   alone rather than deleted: it is not this change's job to unpick it, and
+   nothing in it now paints.
+   ========================================================================== */
+
+@layer components {
+  #scenarioListContent {
+    /* A gallery needs width the old text column did not. */
+    width: min(1180px, calc(100vw - var(--space-8)));
+    min-width: 0;
+    max-width: none;
+    max-height: min(88vh, 960px);
+    padding: var(--space-6) var(--space-6) 0;
+
+    display: flex;
+    flex-direction: column;
+    /* The header, search, chips and count stay put; only the grid scrolls, so
+       the filters are always reachable however far down the catalog you are. */
+    overflow: hidden;
+
+    color: var(--text-primary);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* The legacy tint sheet, which sat above the content on its own stacking
+     context. It has no job now that the panel uses surface tokens. */
+  #scenarioListContent::before {
+    content: none;
+  }
+
+  /* --- Header --------------------------------------------------------------- */
+
+  .sc-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .sc-head h3 {
+    margin: 0;
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .sc-subtitle {
+    max-width: 62ch;
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  #scenarioListContent .scenario-search-wrap {
+    margin: var(--space-5) 0 0;
+  }
+
+  /* --- Concept chips -------------------------------------------------------- */
+
+  .sc-concepts {
+    margin-top: var(--space-5);
+  }
+
+  .sc-concepts-label {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .sc-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .sc-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+
+    font-family: inherit;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color var(--duration) var(--ease),
+      background-color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .sc-chip:hover,
+  .sc-chip:focus-visible {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+  }
+
+  /* One accent, on the chip that is actually active. Twelve differently colored
+     concepts would turn a scientific catalog into a bag of sweets, and colour
+     alone would be the only thing carrying the state. aria-pressed carries it
+     for anyone who cannot see the fill. */
+  .sc-chip.is-active {
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border-color: var(--accent-strong);
+  }
+
+  .sc-chip-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    opacity: 0.65;
+  }
+
+  .sc-concept-note {
+    max-width: 78ch;
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .sc-count {
+    margin: var(--space-4) 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* --- The grid ------------------------------------------------------------- */
+
+  .sc-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: var(--space-6);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  .sc-grid {
+    display: grid;
+    /* auto-fill rather than auto-fit: a single result keeps a card-sized card
+       instead of stretching across the whole panel. */
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .sc-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    text-align: left;
+
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
+  }
+
+  .sc-card:hover,
+  .sc-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow);
+  }
+
+  /* --- Thumbnail ------------------------------------------------------------ */
+
+  .sc-card-shot {
+    position: relative;
+    display: block;
+    /* Never shrink. The card is a column flex container, and a flex item with
+       only an aspect ratio to size it gets collapsed to a sliver when the text
+       below it is tall: on a phone every thumbnail came out four pixels high. */
+    flex: 0 0 auto;
+    /* Reserved before the image arrives, so lazy loading cannot make the grid
+       jump as cards scroll into view. */
+    aspect-ratio: 16 / 9;
+    background: var(--space-far);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .sc-card-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The fallback sits under the image and is only revealed when the image is
+     missing or fails: a scenario added before its thumbnail is generated gets a
+     titled placeholder rather than the browser's broken-image glyph. */
+  .sc-card-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    text-align: center;
+    background:
+      radial-gradient(
+        90% 120% at 50% 0%,
+        color-mix(in srgb, var(--accent) 12%, transparent) 0%,
+        transparent 70%
+      ),
+      var(--space-far);
+  }
+
+  .sc-card-shot.is-missing img {
+    display: none;
+  }
+
+  .sc-card-shot.is-missing .sc-card-fallback {
+    display: flex;
+  }
+
+  .sc-card-fallback-mark {
+    font-size: var(--text-lg);
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .sc-card-fallback-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* --- Card text ------------------------------------------------------------ */
+
+  .sc-card-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) var(--space-4);
+  }
+
+  .sc-card-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    line-height: 1.35;
+    color: var(--text-primary);
+    /* Some catalog titles carry a subtitle after a colon. Two lines is enough
+       for those and stops one long title setting the height of a whole row. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .sc-card-summary {
+    font-size: var(--text-xs);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    /* Clamped, not rewritten: the full summary stays in the catalog, reaches
+       the card's title attribute, and is shown in full by the scenario card
+       once the scenario is loaded. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .sc-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: auto;
+    padding-top: var(--space-1);
+  }
+
+  .sc-pill {
+    padding: 2px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.5;
+    color: var(--text-muted);
+    background: var(--surface-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .sc-pill.is-more {
+    color: var(--text-secondary);
+    background: none;
+  }
+
+  #scenarioListContent .scenario-search-empty {
+    margin: var(--space-8) 0;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  /* --- Narrow screens -------------------------------------------------------- */
+
+  @media (max-width: 900px) {
+    #scenarioListContent {
+      width: calc(100vw - var(--space-4));
+      max-height: 92vh;
+      padding: var(--space-5) var(--space-4) 0;
+    }
+
+    /* One row that scrolls sideways, rather than four rows of chips before the
+       first scenario is visible. The row is a flex line with no wrapping, so
+       the active concept can be swept to without losing vertical space. */
+    .sc-chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: var(--space-1);
+      /* A soft edge is the only affordance needed to say "this scrolls". */
+      mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(100% - 24px),
+        transparent 100%
+      );
+    }
+
+    .sc-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sc-chip {
+      /* Comfortable as a touch target without becoming a button wall. */
+      min-height: 36px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .sc-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sc-card {
+      min-height: 44px;
+    }
+
+    .sc-head h3 {
+      font-size: var(--text-lg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-card:hover,
+    .sc-card:focus-visible {
+      transform: none;
+    }
   }
 }

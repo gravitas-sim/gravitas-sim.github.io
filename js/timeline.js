@@ -1,12 +1,12 @@
 // =============================================================================
-// Timeline — record, scrub and replay the simulation
+// Timeline. Record, scrub and replay the simulation
 // -----------------------------------------------------------------------------
 // The simulation is deterministic forward but not reversible (mergers and
 // absorptions destroy information), so rewinding means replaying recorded
 // state rather than integrating backwards.
 //
-// State is kept in a ring buffer of flat Float64Arrays — one row per object,
-// nine columns — because allocating an object literal per body per snapshot at
+// State is kept in a ring buffer of flat Float64Arrays: one row per object,
+// nine columns, because allocating an object literal per body per snapshot at
 // 10 Hz produces enough garbage to show up as frame stutter.
 // =============================================================================
 
@@ -213,7 +213,7 @@ function restore(offset) {
   if (!row) return;
 
   // Index everything currently alive so restoring reuses instances where it
-  // can — preserving trails, disks and names rather than rebuilding them.
+  // can: preserving trails, disks and names rather than rebuilding them.
   const existing = new Map();
   for (const [, list] of ALL_LISTS()) {
     for (const o of list) existing.set(o.id, o);
@@ -328,7 +328,7 @@ export function stepForward() {
 
 /**
  * Leave scrub mode. Recording continues from the restored state, so the
- * frames that were ahead of the playhead are discarded — the same way an
+ * frames that were ahead of the playhead are discarded: the same way an
  * edit after an undo drops the redo stack.
  */
 export function resumeLive() {
@@ -374,6 +374,69 @@ function syncUI() {
 }
 
 /** @returns {{frames:number, bytes:number}} Recording memory footprint */
+/**
+ * Walk every recorded frame, oldest first.
+ *
+ * The ring buffer is the only record of where things have been, and the CSV
+ * export is the one caller that needs all of it rather than one frame at a
+ * time. It is handed one decoded frame per call rather than the whole history
+ * as an array: a dense scenario holds nine hundred frames of a hundred bodies,
+ * and materialising ninety thousand object literals to write a file that is
+ * consumed line by line is a lot of garbage for no gain.
+ *
+ * @param {Function} visit - Called as visit(simSeconds, bodies) per frame
+ */
+export function forEachRecordedFrame(visit) {
+  for (let back = frameCount - 1; back >= 0; back--) {
+    const idx = indexForOffset(back);
+    const row = frames[idx];
+    if (!row) continue;
+    const bodies = [];
+    for (let b = 0; b < row.length; b += STRIDE) {
+      bodies.push({
+        id: row[b + F_ID],
+        kind: KINDS[row[b + F_KIND]] ?? 'Unknown',
+        x: row[b + F_X],
+        y: row[b + F_Y],
+        vx: row[b + F_VX],
+        vy: row[b + F_VY],
+        mass: row[b + F_MASS],
+        radius: row[b + F_RADIUS],
+        alive: row[b + F_ALIVE] !== 0,
+      });
+    }
+    visit(frameTimes[idx], bodies);
+  }
+}
+
+/**
+ * The whole recorded history as an array. Convenience over
+ * forEachRecordedFrame for tests and small scenarios.
+ * @returns {Array<{t:number, bodies:Array}>} Frames, oldest first
+ */
+export function recordedFrames() {
+  const out = [];
+  forEachRecordedFrame((t, bodies) => out.push({ t, bodies }));
+  return out;
+}
+
+/**
+ * How much history there is to export, without decoding any of it.
+ * @returns {{frames:number, bodies:number, simTime:number}} Frame count, rows
+ *   in the most recent frame, and the span covered in simulation time units
+ */
+export function recordedExtent() {
+  if (frameCount === 0) return { frames: 0, bodies: 0, simTime: 0 };
+  const newest = frames[indexForOffset(0)];
+  const oldestT = frameTimes[indexForOffset(frameCount - 1)] ?? 0;
+  const newestT = frameTimes[indexForOffset(0)] ?? 0;
+  return {
+    frames: frameCount,
+    bodies: newest ? newest.length / STRIDE : 0,
+    simTime: Math.max(0, newestT - oldestT),
+  };
+}
+
 export function getTimelineStats() {
   let bytes = 0;
   for (const f of frames) if (f) bytes += f.byteLength;
