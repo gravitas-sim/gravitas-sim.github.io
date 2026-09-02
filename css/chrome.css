@@ -585,4 +585,83 @@
   .rail-group > [role='group'] {
     gap: 2px;
   }
+
+  /* ==========================================================================
+     The recording indicator
+     --------------------------------------------------------------------------
+     Top centre of the viewport, over the simulation and above every panel.
+     The one piece of state in the interface that costs something to be wrong
+     about - a clip that is still running, or one the user believes is running
+     and is not - so it is placed where nothing can cover it and it is the only
+     thing on screen that moves on its own.
+     ======================================================================== */
+  .recording-badge {
+    position: fixed;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Above the scenario info card, which is also fixed to the top centre and
+       sits at 1000. The card is transient and the badge is the more urgent of
+       the two; the badge clears the card's title and covers only the blank
+       strip of padding above it. */
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1, 6px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(20, 6, 10, 0.82);
+    border: 1px solid rgba(255, 92, 92, 0.55);
+    color: #ffe6e6;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--text-2xs, 11px);
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+  }
+
+  .recording-badge[hidden] {
+    display: none;
+  }
+
+  .recording-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff4d4d;
+    animation: recordingPulse 1.4s ease-in-out infinite;
+  }
+
+  /* A recording is not over when the budget is nearly spent, but the user
+     should know it is about to be. */
+  .recording-badge[data-nearly='true'] {
+    border-color: rgba(255, 196, 92, 0.8);
+    color: #ffeccd;
+  }
+
+  @keyframes recordingPulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  /* The blink is the indicator, so it does not go away under reduced motion -
+     it slows to something that reads as a state rather than as animation. */
+  @media (prefers-reduced-motion: reduce) {
+    .recording-dot {
+      animation-duration: 3s;
+    }
+  }
+
+  /* The button says what it will do next, and looks like what it is doing. */
+  .ui-container #recordBtn[aria-pressed='true'] {
+    background: rgba(120, 26, 34, 0.75);
+    border-color: rgba(255, 92, 92, 0.6);
+    color: #ffe6e6;
+  }
 }

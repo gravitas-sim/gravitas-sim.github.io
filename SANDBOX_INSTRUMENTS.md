@@ -114,11 +114,57 @@ rendering path and the export cannot drift away from the live view. Any
 measurement tool that is out goes into the screenshot too, so an image can
 document the distance or angle it was taken to show.
 
+### What a captured frame carries that the live view does not
+
+The clock, the stopwatch and the vector key are all in the readout panel, which
+is HTML and is not part of the export, so painting them onto the canvas as well
+would be saying the same thing twice — live. For the one frame a capture is
+taken from, `setCaptureMode` switches them on, along with the **scenario name**
+across the top left. Three facts, and they are the three a figure has to carry
+to be worth citing: which run this is, how big it is, and how far into it the
+picture was taken. The clock is labelled `t =` there and not in the readout,
+where the row it sits in already says what it is.
+
 The panel measures the page's own bottom-left chrome — the transport bar and the
 tutorial button — a few times a second and sits above it, because both of them
 move: the transport bar is centred on the window and is a different size on a
 phone. On a narrow canvas the panel drops the longest row and shortens the rest
 rather than running off the edge.
+
+---
+
+## Recording a clip
+
+The Capture group also records a stretch of the run to a video file, through
+`MediaRecorder` on a canvas stream (`js/capture.js`). Most of what this
+simulation is for is motion — a resonance locking, a tidal stream peeling off —
+and none of that survives a still.
+
+Three things about it are worth knowing:
+
+**It records a composite.** The simulation canvas is transparent and the
+starfield sits behind it in a second canvas, so a stream taken off the
+simulation canvas alone would be objects on black. Each frame is flattened onto
+an offscreen canvas — background, starfield, simulation — and that canvas is
+what is streamed, at up to 30 fps and at most 1600 px on its longest side.
+Capture mode is on for the whole take, so every frame carries the title, the
+scale bar and the clock. The recording indicator is HTML, over the canvas and
+not in it, so it does not appear in the file.
+
+**It is bounded.** MediaRecorder hands back chunks that have to be held in
+memory until the file is assembled, so an unattended recording is an unbounded
+array. A one-second timeslice means the running total is known as it grows, and
+a take stops itself and saves what it has at **80 MB** or **3 minutes**,
+whichever comes first. The indicator counts both.
+
+**The container is chosen for where the clip is going, not for its own sake.**
+H.264 in MP4 where the browser can encode it — which Chromium-based browsers
+can — and WebM (VP9, then VP8) where it cannot. PowerPoint and Keynote will not
+open a WebM at all, and a PDF reader that plays embedded video plays H.264 and
+nothing else, so on Firefox the clip plays in browsers, in Google Slides and in
+VLC, but a slide deck or a lab report needs a conversion step or the still
+instead. The filename's extension follows whatever the browser actually
+produced.
 
 ---
 

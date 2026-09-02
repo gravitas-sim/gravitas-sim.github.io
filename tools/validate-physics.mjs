@@ -61,6 +61,9 @@ function fmt(v, width = 0) {
 /** Format the error column, which is always either relative or absolute. */
 function fmtError(check) {
   if (check.toleranceKind === 'exact') return check.pass ? 'exact' : 'mismatch';
+  if (check.toleranceKind === 'bound') {
+    return check.pass ? 'under' : check.error.toExponential(2) + ' over';
+  }
   if (!Number.isFinite(check.error)) return String(check.error);
   if (check.error === 0) return '0';
   return check.error.toExponential(2);
@@ -68,6 +71,9 @@ function fmtError(check) {
 
 function fmtTolerance(check) {
   if (check.toleranceKind === 'exact') return 'exact';
+  // A bound is one-sided: the column says what the measured value has to stay
+  // under, not how close to it the value is allowed to be.
+  if (check.toleranceKind === 'bound') return 'upper bound';
   const t = check.tolerance;
   const suffix = check.toleranceKind === 'absolute' ? ' abs' : ' rel';
   return (t === 0 ? '0' : t.toExponential(1)) + suffix;

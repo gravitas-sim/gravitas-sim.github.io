@@ -507,16 +507,29 @@ function drawProtractor(ctx) {
 // about the picture rather than about the run.
 let capturing = false;
 
+// What the frame is of. The scale bar says how big, the clock says how long
+// into the run, and this says which run - the three facts a figure in a slide
+// or a lab report has to carry to be worth citing. It is set by the caller
+// rather than read from here because the scenario name lives in ui.js, and a
+// module that owns no physics should not start reaching for application state.
+let captureCaption = '';
+
 /**
  * Draw the provenance line on the next frame, for a screenshot.
  * @param {boolean} on - True while a capture is in flight
+ * @param {object} [meta] - {caption} - the scenario title to burn in
  */
-export const setCaptureMode = on => {
+export const setCaptureMode = (on, meta = {}) => {
   capturing = Boolean(on);
+  if (capturing) captureCaption = String(meta.caption || '');
+  else captureCaption = '';
 };
 
 /** @returns {boolean} True while a frame is being prepared for export */
 export const isCapturing = () => capturing;
+
+/** @returns {string} The caption that would be burned into a captured frame */
+export const captionText = () => captureCaption;
 
 /**
  * The always-on instrumentation, drawn along the bottom-left edge: a scale bar,
@@ -574,7 +587,11 @@ export function drawInstrumentation(
   // for the same reason: an arrow whose colour is unexplained is a decoration.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
-    readings.push(formatTime(getSimulationTime()));
+    // Labelled, unlike the live readout, where the row it sits in says what it
+    // is. A bare '6.59 d' in the corner of a figure in somebody's lab report
+    // could be a period, an age or an exposure; 't =' makes it the one thing
+    // it is, at the cost of three characters.
+    readings.push(`t = ${formatTime(getSimulationTime())}`);
   }
   if (capturing) {
     for (const row of stopwatchRows()) {
@@ -589,6 +606,24 @@ export function drawInstrumentation(
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
+
+  // The title, top left, where the readout panel sits in the live view and
+  // where a saved frame has nothing at all - the readout is HTML and is not
+  // composited into the export. Larger than the bottom line and set slightly
+  // brighter: on a slide it is read from the back of a room, and in a lab
+  // report it is the caption the figure would otherwise need underneath it.
+  if (capturing && captureCaption) {
+    ctx.save();
+    ctx.font = `${narrow ? 13 : 15}px ${INSTRUMENT_MONO}`;
+    // A dark backing, because a title in pale ink over a white star or the
+    // bright side of an accretion disk is a title nobody can read.
+    const tw = ctx.measureText(captureCaption).width;
+    ctx.fillStyle = 'rgba(6, 10, 20, 0.55)';
+    ctx.fillRect(pad - 4, pad - 2, Math.min(tw + 16, W - 2 * pad + 8), 24);
+    ctx.fillStyle = 'rgba(232, 240, 252, 0.98)';
+    ctx.fillText(captureCaption, pad + 4, pad + 10);
+    ctx.restore();
+  }
 
   // The key, one row of swatches above the scale line. Horizontal rather than
   // stacked: three arrows explained in three short phrases fit across the

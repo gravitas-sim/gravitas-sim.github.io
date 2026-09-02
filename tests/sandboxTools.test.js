@@ -3,6 +3,7 @@ import {
   drawInstrumentation,
   setCaptureMode,
   isCapturing,
+  captionText,
   sandboxToolState,
   toggleTool,
   isToolActive,
@@ -403,6 +404,42 @@ describe('the canvas instrumentation', () => {
       []
     );
     expect(ctx.text).toEqual([]);
+  });
+
+  test('burns the scenario name into a captured frame', () => {
+    const live = recordingContext();
+    drawInstrumentation(live, canvas, settings, 1, 0, []);
+    expect(live.text).not.toContain('Solar System');
+
+    setCaptureMode(true, { caption: 'Solar System' });
+    expect(captionText()).toBe('Solar System');
+    const shot = recordingContext();
+    drawInstrumentation(shot, canvas, settings, 1, 0, []);
+    setCaptureMode(false);
+
+    // The title, a distance and a clock: what a figure has to carry to be
+    // worth citing.
+    expect(shot.text).toContain('Solar System');
+    expect(shot.text.some(x => /AU|km|m\b/.test(x))).toBe(true);
+    // Backed by a panel, because pale text over a star is not text.
+    expect(shot.calls.some(c => c[0] === 'fillRect')).toBe(true);
+  });
+
+  test('the caption does not outlive the capture it was set for', () => {
+    setCaptureMode(true, { caption: 'Binary BH' });
+    setCaptureMode(false);
+    expect(captionText()).toBe('');
+    const ctx = recordingContext();
+    drawInstrumentation(ctx, canvas, settings, 1, 0, []);
+    expect(ctx.text).not.toContain('Binary BH');
+  });
+
+  test('an unnamed capture still draws its scale and clock', () => {
+    setCaptureMode(true);
+    const ctx = recordingContext();
+    drawInstrumentation(ctx, canvas, settings, 1, 0, []);
+    setCaptureMode(false);
+    expect(ctx.text.length).toBeGreaterThan(0);
   });
 
   test('a canvas too small for any of it is left alone', () => {

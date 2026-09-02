@@ -68,7 +68,12 @@ kilometres, a protractor, and a stopwatch that runs on simulated time and can be
 latched to a body's periapsis passages so a period is timed from closest approach
 rather than by reaction time. A scale bar and an elapsed-time readout are always
 on the canvas. All of it is painted onto the simulation canvas rather than into
-the page, so a screenshot documents its own spatial and temporal scale.
+the page, so a screenshot documents its own spatial and temporal scale: an
+exported frame carries the scenario's name, the scale bar and the simulated
+clock burned into it. The same Capture group records a clip of a stretch of the
+run — H.264 where the browser can encode it, WebM where it cannot — with the
+same three facts in every frame, a visible recording indicator, and a hard stop
+at three minutes or 80 MB so a long take cannot exhaust the tab.
 
 **Force and acceleration arrows.** For the selected body, its velocity, its total
 acceleration, and one arrow per gravitational source acting on it, in colours

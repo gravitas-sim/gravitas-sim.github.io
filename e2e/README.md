@@ -80,6 +80,7 @@ was not worth it.
 | `investigations.spec.js` | Opening a lesson, every representative step type, grading, persistence across a reload, the PDF report |
 | `sharing.spec.js` | Encoding and restoring a shared-state URL, seeded determinism, a corrupt link |
 | `robustness.spec.js` | The heaviest scenarios, a NaN sweep over all 48, scenario churn |
+| `scenarioContract.spec.js` | That a scenario named after specific objects contains them: names, classifications, masses, ordering, survival, and seeded reproducibility |
 | `assets.spec.js` | Failed requests, deferred chunks, thumbnails decoding, the document pages |
 | `mobile.spec.js` | A Pixel 7 profile: layout, overflow, the menu, a lesson on a phone |
 | `production.spec.js` | The built `dist/` — DOM only, the only spec that runs against a bundle |

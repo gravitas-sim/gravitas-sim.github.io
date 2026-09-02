@@ -106,6 +106,26 @@
       ></canvas>
     </div>
 
+    <!--
+      The recording indicator. Not in the rail, because the rail can be
+      collapsed and Lecture Mode hides it outright, and a recording nobody can
+      see is running is the one state that must never be in doubt. Not inside
+      .simulation-container either: that element animates its own opacity and
+      so opens a stacking context, which would trap the badge underneath the
+      panels it has to sit above. It is HTML, so it does not appear in the
+      recording itself.
+    -->
+    <div
+      id="recordingBadge"
+      class="recording-badge"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="recording-dot" aria-hidden="true"></span>
+      <span id="recordingReadout" class="recording-readout">0:00</span>
+    </div>
+
     <!-- Screen-reader announcements for state the canvas cannot convey -->
     <p
       id="srStatus"
@@ -1100,6 +1120,13 @@
           </div>
 
           <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
+          <!--
+            Two ways of taking the same picture, side by side: a still and a
+            clip. Paired in a grid rather than stacked because the rail is an
+            accordion whose open section has to fit the window without
+            scrolling, and one row is what there was room for.
+          -->
+          <div class="rail-grid">
           <button
             id="screenshotBtn"
             class="ui-button"
@@ -1109,6 +1136,17 @@
           >
             📸 Screenshot
           </button>
+          <button
+            id="recordBtn"
+            class="ui-button"
+            title="Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first."
+            data-i18n-title="rail.record.hint"
+            data-i18n="rail.record"
+            aria-pressed="false"
+          >
+            🎬 Record Clip
+          </button>
+          </div>
           <button
             id="lectureBtn"
             class="ui-button"

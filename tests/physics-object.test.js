@@ -259,6 +259,47 @@ describe('PhysicsObject', () => {
       expect(mockBH.updateRadius).toHaveBeenCalled();
     });
 
+    // The absorption update now moves the hole as well as feeding it: see the
+    // note on absorb_into_black_hole in js/physics.js, and the ten checks in the
+    // Absorption group of the validation suite for the conservation claims. What
+    // is pinned here is the contract for a *mock* hole, which the tests above
+    // rely on: a bare object with no `can_move` and no velocity is treated as a
+    // hole that cannot move, so it gains the mass and nothing reads an
+    // undefined vector.
+    test('a mock hole with no velocity gains the mass and does not move', () => {
+      const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 4, y: -2 }, 50, 5);
+      const mockBH = {
+        pos: { x: 0, y: 0 },
+        radius: 10,
+        mass: 100,
+        updateRadius: jest.fn(),
+      };
+
+      expect(obj.check_absorption([mockBH])).toBe(true);
+      expect(mockBH.mass).toBe(150);
+      expect(mockBH.pos).toEqual({ x: 0, y: 0 });
+      expect(mockBH.vel).toBeUndefined();
+    });
+
+    test('a hole that reports it cannot move keeps its state', () => {
+      const obj = new PhysicsObject({ x: 3, y: 0 }, { x: 9, y: 9 }, 50, 5);
+      const mockBH = {
+        pos: { x: 0, y: 0 },
+        vel: { x: 1, y: 1 },
+        radius: 10,
+        mass: 100,
+        can_move: () => false,
+        updateRadius: jest.fn(),
+      };
+
+      expect(obj.check_absorption([mockBH])).toBe(true);
+      // A static hole is a fixed potential well, which is a deliberate model
+      // and is reported as a departure rather than silently corrected.
+      expect(mockBH.mass).toBe(150);
+      expect(mockBH.vel).toEqual({ x: 1, y: 1 });
+      expect(mockBH.pos).toEqual({ x: 0, y: 0 });
+    });
+
     test('should handle multiple black holes and absorb to closest one', () => {
       const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 50, 5);
       const mockBH1 = {

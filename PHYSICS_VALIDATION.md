@@ -48,9 +48,11 @@ are two front ends onto it.
 | Dark matter and rotation curves | 18 | 17 analytic, 1 integrated |
 | Compact objects | 12 | 8 analytic, 4 published |
 | Mergers | 3 | 2 integrated, 1 approximation |
+| Absorption by a black hole | 10 | 4 integrated, 6 approximation |
+| Tidal disruption | 5 | 5 integrated |
 | Gravitational-wave inspiral | 4 | 4 approximation |
 | Stored parameters for real systems | 11 | 11 published |
-| **Total** | **147** | 75 analytic, 37 integrated, 29 published, 6 approximation |
+| **Total** | **162** | 75 analytic, 46 integrated, 29 published, 12 approximation |
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
 number-out computation, so a failure names a quantity rather than a screenshot.
@@ -552,6 +554,95 @@ not. Mass is conserved exactly, which is itself the approximation: a real
 compact-object merger radiates several percent of the total mass away as
 gravitational waves, and Gravitas radiates none.
 
+### Absorption by a black hole
+
+A body that crosses `bh.radius + ABSORB_BUFFER` is merged into the hole. The
+model is the same perfectly inelastic collision the merger above uses, applied to
+both position and velocity:
+
+```
+M     = m_bh + m_body
+r_new = (m_bh r_bh + m_body r_body) / M
+v_new = (m_bh v_bh + m_body v_body) / M
+```
+
+Mass, total linear momentum and the pair's centre of mass are conserved exactly
+(all three measured at 0 to round-off). Kinetic energy is not, and is not meant
+to be.
+
+Until this pass the engine did `bh.mass += body.mass` and nothing else, so a body
+falling into a moving hole deposited its mass and threw its momentum away. That
+was the dominant term in the momentum drift the scenario probe reported for Star
+Cluster, Stellar Graveyard and Black Hole Billiards, and it was inconsistent with
+the engine's own two other paths: `handle_star_merging` already gave a hole that
+swallowed a star the mass-weighted mean velocity, and the black-hole/black-hole
+merger already built its product at the mass-weighted mean of both position and
+velocity.
+
+**What cannot be conserved.** Total angular momentum splits into the motion of
+the centre of mass and the pair's motion about it:
+
+```
+L_total = L_com + L_spin,   L_spin = mu (r_rel x v_rel),   mu = m_bh m_body / M
+```
+
+Collapsing the pair to one point mass keeps `L_com` exactly and discards
+`L_spin`. Physically `L_spin` is not lost — it is the spin the hole acquires, and
+spin-up by accretion is how real holes are spun. Gravitas models a hole as a
+point mass with no spin degree of freedom, so there is nowhere to put it.
+
+It is therefore banked rather than dropped. Each hole accumulates it in
+`spin_angular_momentum`, the module keeps the running total, and two checks pin
+the accounting: that the angular momentum which went missing equals the spin term
+computed independently from the pre-event state, and that the engine's own ledger
+agrees with it. A third bounds it:
+
+```
+|L_spin| <= mu (r_horizon + ABSORB_BUFFER) |v_rel|
+```
+
+The body is inside that radius when the event fires, so the discarded term is
+bounded rather than merely believed small, and it shrinks as the hole grows —
+`mu` tends to the body's own mass while the horizon grows only as `M^0.3`.
+
+**Where the transfer is suppressed.** Two configurations are documented
+departures in which the hole is not a dynamical participant at all: a static hole
+(`bh_behavior` other than `'Orbiting'`), and one-way gravity (`mutual_gravity`
+off, or `star_only_gravity` on). In both, absorption adds the mass and leaves the
+hole's position and velocity alone, exactly as before. Momentum a test particle
+never exerted through gravity should not appear at the moment it is eaten, and a
+static hole given a recoil would be visibly nudged off the mark its scenario
+placed it on. The momentum that consequently goes nowhere is added to a discarded
+total, checked against the absorbed body's own momentum, so the approximation is
+allowed to break conservation but not to break it silently.
+
+### Tidal disruption
+
+Four classes implement `tidal_mass_loss` — `StarObject`, `Planet`, `GasGiant` and
+`Comet` — each with its own tidal radius as a multiple of the hole's (5, 3, 4 and
+2 respectively) and its own stripping rate. `updatePhysics` iterated `stars`
+alone, so three of the four were unreachable: a comet could fall through a black
+hole's tidal radius intact, which is the one thing a comet is famous for not
+doing. It read as a deliberate restriction and was not.
+
+All four are now iterated, and five checks establish that each is reached. One
+repair was needed first. `GasGiant`'s destruction threshold was a bare
+`this.mass <= 0.5`, written when `JUPITER_MASS_UNIT` was a literal 50 and 0.5
+simulation units therefore meant a hundredth of a Jupiter. Correcting that
+constant to the real 0.955 silently turned the same literal into half a Jupiter —
+heavier than most gas giants the generator makes, so every one of them would have
+been destroyed on the frame it entered the tidal radius the moment the loop
+started calling it. Both that threshold and `StarObject`'s are now written against
+the unit they mean rather than the number the unit used to be, which is the same
+repair the asteroid and comet thresholds already carried.
+
+Tidal disruption is **not** conservative and never was: the body loses mass
+continuously while the `Debris` it sheds carry a fixed fragment mass unrelated to
+the amount stripped. It is a mass sink, and therefore an energy and momentum sink.
+`conservationCaveats()` now reports it whenever there is a hole in the scene for
+it to happen near, so a drift readout says so rather than leaving it to be blamed
+on the integrator.
+
 ### Mass–luminosity fallback
 
 A star a user invented carries no measured luminosity, so one is estimated from a
@@ -585,6 +676,15 @@ rather than presenting an artifact as a measurement.
 accelerates every body and receives no reaction, so it conserves neither momentum
 nor energy — the same kind of object as a static hole, and equally deliberate: the
 halo represents a mass distribution too diffuse to render as bodies.
+
+**Tidal stripping.** A body inside a black hole's tidal radius loses mass
+continuously and sheds fixed-mass `Debris` fragments that do not account for it.
+It is a mass sink, reported by `conservationCaveats()` whenever a hole is present.
+
+**Black-hole spin.** A hole is a point mass with no spin degree of freedom, so the
+angular momentum a body carries about the hole as it is absorbed has nowhere to
+go. It is banked and reported rather than silently dropped; see *Absorption by a
+black hole* above for the bound on its size.
 
 **Two dimensions.** The dynamics are planar. Observer inclination is applied as a
 3-D viewing geometry over a 2-D dynamical model, which is exact for a planar orbit
@@ -620,16 +720,16 @@ energy and angular momentum over a simulated run at the scenario's own
 `sim_speed`, and flags every documented departure that scenario has switched on.
 
 Across all 48 scenarios: every scenario whose settings claim momentum
-conservation conserves it to round-off (`≤ 1.4e-15`), and every resolved few-body
+conservation conserves it to round-off (`≤ 2.0e-15`), and every resolved few-body
 scenario holds its energy and angular momentum within 5%. Representative rows:
 
 ```
 scenario                           dP         dE         dL      bodies
-Earth-Moon System            1.28e-15    2.80e-06   1.73e-15      2 -> 2
-Binary Star System           1.35e-15    4.37e-06   1.30e-10    29 -> 29
-Kuiper Belt                  1.01e-16    1.40e-05    1.62e-09  305 -> 305
-Pulsar System                7.04e-16    1.87e-07   3.38e-16    19 -> 19
-Spiral Galaxy                1.62e-15    4.38e-02   1.21e-15    91 -> 91
+Earth-Moon System            1.28e-15    3.95e-06   1.73e-15      2 -> 2
+Binary Star System           1.79e-15    6.64e-06   7.02e-16    29 -> 29
+Kuiper Belt                  4.15e-16    4.87e-07    4.71e-08  309 -> 309
+Pulsar System                1.03e-15    1.91e-07   8.86e-16    19 -> 19
+Spiral Galaxy                1.99e-15    4.38e-02   1.36e-15    91 -> 91
 TRAPPIST-1 System             1.05e+00    8.25e-05    1.90e-04     8 -> 8   one-way gravity
 ```
 

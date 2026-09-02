@@ -14,6 +14,10 @@ import {
   white_dwarfs,
 } from './physics.js';
 import { getStarColor } from './utils.js';
+import {
+  layoutObservationPanels,
+  noteObservationPanelUsed,
+} from './observationLayout.js';
 
 let containerEl = null;
 let canvasHost = null;
@@ -61,7 +65,10 @@ const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const smallSphereGeometry = new THREE.SphereGeometry(1, 18, 18);
 const meshCache = new Map();
 const SPACE_BG_COLOR = 0x010102;
+// The grid's default width in world units, and the smallest it ever gets. It
+// grows to cover scenes wider than this - see ensureGridCovers().
 const SPACETIME_SIZE = 3000;
+const SPACETIME_MAX_SIZE = 80000;
 const GRID_SEGMENTS = 50; // Denser grid for better detail
 const SPACETIME_MAX_WELL = 2000; // Deep enough to look like a singularity
 const WELL_STRENGTH = {
@@ -86,6 +93,10 @@ const OBJECT_BASE_ALTITUDE = 42;
 const OBJECT_ALTITUDE_SPREAD = 26;
 const BLACK_HOLE_ALTITUDE_OFFSET = -18;
 let gridMesh = null;
+// The grid's current width in world units. It stays centred on the origin, so
+// a vertex's local x/z are also its world x/z and everything that deforms the
+// grid can go on comparing them directly with body positions.
+let gridSize = SPACETIME_SIZE;
 
 /**
  * Initialize DOM bindings for the 3D viewport.
@@ -119,6 +130,17 @@ function init3DView() {
     resetBtn.addEventListener('click', () => focusScene(true));
   }
 
+  // A new world is a new extent - the Solar System is sixty times wider than a
+  // binary - so the camera and the grid have to be told to reframe. Every other
+  // instrument already listens for this; without it, loading a wide scenario
+  // while the view was open left it pointed at where the old one used to be,
+  // which looks exactly like a panel that has stopped working.
+  if (hasWindow) {
+    window.addEventListener('gravitasSimulationReset', () => {
+      needsFocusReset = true;
+    });
+  }
+
   // Draggable logic
   if (header && containerEl) {
     let isDragging = false;
@@ -130,6 +152,10 @@ function init3DView() {
 
       isDragging = true;
       containerEl.classList.add('interacting');
+      // Put by hand from here on. js/observationLayout.js reads this and stops
+      // writing a `bottom` onto the panel, which would otherwise pull it back
+      // into the column the next time another instrument opened.
+      containerEl.dataset.userPlaced = '1';
 
       const rect = containerEl.getBoundingClientRect();
       // Switch to explicit left/top positioning if not already
@@ -181,6 +207,7 @@ function init3DView() {
     resizeHandle.addEventListener('mousedown', e => {
       isResizing = true;
       containerEl.classList.add('interacting');
+      containerEl.dataset.userPlaced = '1';
 
       const rect = containerEl.getBoundingClientRect();
       // Switch to explicit left/top positioning if not already
@@ -206,30 +233,21 @@ function init3DView() {
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
 
-      // Calculate new dimensions (dragging top-left: moving right/down shrinks, left/up grows)
-      // Note: dx/dy is positive when moving right/down.
-      // So we subtract dx from width, dy from height.
-      let newWidth = Math.max(280, startWidth - dx);
+      // The handle is the top-right corner, so the left and bottom edges are
+      // the ones that stay put: moving right widens, moving up heightens.
+      let newWidth = Math.max(300, startWidth + dx);
       let newHeight = Math.max(240, startHeight - dy);
 
-      // Constrain against max window size (optional, but good practice)
-      newWidth = Math.min(newWidth, window.innerWidth - 20);
+      // Never larger than the window it has to live in.
+      newWidth = Math.min(newWidth, window.innerWidth - startLeft - 20);
       newHeight = Math.min(newHeight, window.innerHeight - 20);
 
-      // Calculate new position
-      // The right/bottom edge should theoretically stay fixed.
-      // right_edge = startLeft + startWidth
-      // newLeft = right_edge - newWidth
-      const rightEdge = startLeft + startWidth;
       const bottomEdge = startTop + startHeight;
-
-      const newLeft = rightEdge - newWidth;
-      const newTop = bottomEdge - newHeight;
 
       containerEl.style.width = `${newWidth}px`;
       containerEl.style.height = `${newHeight}px`;
-      containerEl.style.left = `${newLeft}px`;
-      containerEl.style.top = `${newTop}px`;
+      containerEl.style.left = `${startLeft}px`;
+      containerEl.style.top = `${bottomEdge - newHeight}px`;
 
       handleWindowResize();
     });
@@ -292,7 +310,10 @@ function set3DViewEnabled(next) {
   updateToggleLabel();
 
   if (containerEl) {
-    containerEl.style.display = viewEnabled ? 'block' : 'none';
+    // 'flex', not 'block': the stage inside is `flex: 1` and takes its height
+    // from this column. An inline `display: block` here silently collapses the
+    // WebGL canvas to nothing.
+    containerEl.style.display = viewEnabled ? 'flex' : 'none';
 
     if (viewEnabled) {
       containerEl.classList.add('visible');
@@ -300,6 +321,13 @@ function set3DViewEnabled(next) {
       containerEl.classList.remove('visible');
     }
     containerEl.setAttribute('aria-hidden', viewEnabled ? 'false' : 'true');
+
+    // The spacetime view shares the bottom-left corner with the observing
+    // instruments, so opening or closing it re-stacks the column. Both paths
+    // come through here - the rail button, the close button and the public
+    // setter - so this is the one place that has to do it.
+    if (viewEnabled) noteObservationPanelUsed('threeViewportContainer');
+    layoutObservationPanels();
   }
 
   if (renderer?.domElement) {
@@ -332,6 +360,8 @@ function ensureScene() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(SPACE_BG_COLOR);
 
+  // near/far are provisional: focusScene() sets them from the scene's real
+  // extent as soon as it frames it, which is before the first render.
   camera = new THREE.PerspectiveCamera(55, width / height, 1, 6000);
   camera.position.set(0, 260, 360);
 
@@ -391,17 +421,31 @@ function addEnvironment() {
     toneMapped: false,
   });
 
-  // Create grid with subdivided lines so they can bend
-  const points = [];
-  const halfSize = SPACETIME_SIZE / 2;
-  const gridStep = SPACETIME_SIZE / GRID_SEGMENTS;
-  const subdivisions = 100; // High subdivision for smooth tight curves
-  const subStep = SPACETIME_SIZE / subdivisions;
+  gridMesh = new THREE.LineSegments(buildGridGeometry(gridSize), gridMaterial);
+  gridMesh.position.y = -OBJECT_BASE_ALTITUDE * 0.45;
+  rootGroup.add(gridMesh);
+}
 
-  // Create horizontal lines (parallel to X axis) with subdivisions
+/**
+ * The grid, as subdivided line segments so that the wells can bend it.
+ *
+ * The vertex count does not depend on the size: a wider grid is the same lines
+ * further apart, so the per-frame deformation loop costs the same whatever the
+ * scene's scale.
+ *
+ * @param {number} size - Width and depth of the grid in world units
+ * @returns {THREE.BufferGeometry} Line-segment geometry centred on the origin
+ */
+function buildGridGeometry(size) {
+  const points = [];
+  const halfSize = size / 2;
+  const gridStep = size / GRID_SEGMENTS;
+  const subdivisions = 100; // High subdivision for smooth tight curves
+  const subStep = size / subdivisions;
+
+  // Horizontal lines (parallel to X axis) with subdivisions
   for (let i = 0; i <= GRID_SEGMENTS; i++) {
     const z = -halfSize + i * gridStep;
-    // Create a continuous line for this row
     for (let j = 0; j < subdivisions; j++) {
       const x1 = -halfSize + j * subStep;
       const x2 = -halfSize + (j + 1) * subStep;
@@ -410,10 +454,9 @@ function addEnvironment() {
     }
   }
 
-  // Create vertical lines (parallel to Z axis) with subdivisions
+  // Vertical lines (parallel to Z axis) with subdivisions
   for (let i = 0; i <= GRID_SEGMENTS; i++) {
     const x = -halfSize + i * gridStep;
-    // Create a continuous line for this column
     for (let j = 0; j < subdivisions; j++) {
       const z1 = -halfSize + j * subStep;
       const z2 = -halfSize + (j + 1) * subStep;
@@ -422,10 +465,34 @@ function addEnvironment() {
     }
   }
 
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-  gridMesh = new THREE.LineSegments(lineGeometry, gridMaterial);
-  gridMesh.position.y = -OBJECT_BASE_ALTITUDE * 0.45;
-  rootGroup.add(gridMesh);
+  return new THREE.BufferGeometry().setFromPoints(points);
+}
+
+/**
+ * Widen the grid until it reaches the outermost body.
+ *
+ * A grid 3000 units across is right for a binary, and nowhere near the Solar
+ * System, whose comets reach 186 AU - 18,600 units - so the sheet the bodies
+ * are supposed to be sitting in was a small square near the middle of an
+ * otherwise empty view. It stays centred on the origin, which every scenario
+ * is built around, so nothing that reads a vertex position has to learn about
+ * an offset.
+ *
+ * @param {number} radius - Distance from the origin to the furthest body
+ * @returns {void}
+ */
+function ensureGridCovers(radius) {
+  if (!gridMesh) return;
+  const wanted = Math.min(
+    SPACETIME_MAX_SIZE,
+    Math.max(SPACETIME_SIZE, radius * 2.4)
+  );
+  // Only when it matters: rebuilding is 20,000 vertices, and a grid that
+  // twitched every time a comet moved would rebuild every frame.
+  if (Math.abs(wanted - gridSize) < gridSize * 0.25) return;
+  gridSize = wanted;
+  gridMesh.geometry.dispose();
+  gridMesh.geometry = buildGridGeometry(gridSize);
 }
 
 function updateSpacetimeSurface() {
@@ -445,7 +512,7 @@ function updateGridCurvature(sources) {
 
   // Precompute active ripples and their properties to optimize vertex loop
   const activeRipples = [];
-  const halfSize = SPACETIME_SIZE / 2; // 1500
+  const halfSize = gridSize / 2;
 
   for (let j = 0; j < gravity_ripples.length; j++) {
     const ripple = gravity_ripples[j];
@@ -896,6 +963,7 @@ function focusScene(force = false) {
   if (objects.length === 0) {
     controls.target.set(0, 0, 0);
     camera.position.set(160, 180, 220);
+    setClipPlanes(400);
     controls.update();
     needsFocusReset = false;
     return;
@@ -919,12 +987,43 @@ function focusScene(force = false) {
   const centerX = (minX + maxX) / 2;
   const centerZ = -((minY + maxY) / 2);
 
+  // The grid has to reach the bodies it is meant to be holding up.
+  ensureGridCovers(
+    objects.reduce((r, o) => Math.max(r, Math.hypot(o.pos.x, o.pos.y)), 0)
+  );
+
   controls.target.set(centerX, 0, centerZ);
   const distance = extent * 1.5;
   const height = Math.max(120, extent * 0.9);
   camera.position.set(centerX + distance * 0.35, height, centerZ + distance);
+  setClipPlanes(distance);
   controls.update();
   needsFocusReset = false;
+}
+
+/**
+ * Put the clipping planes around the scene the camera has just been placed to
+ * see.
+ *
+ * They used to be fixed at 1 and 6000 world units, which is fine for a compact
+ * scenario and useless for a wide one: the Solar System with its comets spans
+ * about 20,000 units, so the camera was parked 30,000 units back and the
+ * entire scene sat behind the far plane. The view opened, reported "LIVE · 32
+ * bodies", and drew nothing but the background colour.
+ *
+ * The near plane has to move with it too. A ratio much beyond 1e5 between the
+ * planes exhausts the depth buffer and surfaces start punching through each
+ * other, so it is pinned to a fraction of the viewing distance rather than
+ * left at 1.
+ *
+ * @param {number} distance - How far the camera has been placed from its target
+ */
+function setClipPlanes(distance) {
+  if (!camera) return;
+  const reach = Math.max(400, distance);
+  camera.near = Math.max(0.5, reach / 2000);
+  camera.far = reach * 8;
+  camera.updateProjectionMatrix();
 }
 
 function updateToggleLabel() {

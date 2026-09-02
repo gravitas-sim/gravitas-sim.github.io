@@ -24,6 +24,10 @@ const PANEL_IDS = [
   'rvContainer',
   'astrometryContainer',
   'rotationCurveContainer',
+  // The spacetime view is the odd one out - it is draggable and resizable,
+  // and the moment a user moves it, it drops out of the stack (see isStacked).
+  // Until then it is an instrument like the rest and queues with them.
+  'threeViewportContainer',
 ];
 
 // Clear of the transport bar along the bottom.
@@ -73,12 +77,29 @@ function isOpen(el) {
 }
 
 /**
+ * Is this panel still the stack's to place?
+ *
+ * A panel the user has dragged somewhere is somewhere for a reason, and
+ * writing a `bottom` onto it every time another panel opens would drag it
+ * back. Only the spacetime view can be moved by hand today; it sets the flag
+ * when it is picked up.
+ *
+ * @param {HTMLElement} el - An open panel
+ * @returns {boolean} Whether the stack should position it
+ */
+function isStacked(el) {
+  return !el.dataset.userPlaced;
+}
+
+/**
  * Position every open observing panel in a column.
  *
  * Cheap and idempotent: reads a few heights, writes a few `bottom` values.
  */
 export function layoutObservationPanels() {
-  const open = PANEL_IDS.map(id => document.getElementById(id)).filter(isOpen);
+  const open = PANEL_IDS.map(id => document.getElementById(id))
+    .filter(isOpen)
+    .filter(isStacked);
   if (!open.length) return;
 
   const available = window.innerHeight - BASE_BOTTOM - TOP_MARGIN;
@@ -148,7 +169,9 @@ export function initObservationLayout() {
   // Clicking a collapsed panel's title bar brings it back. The click is caught
   // on the document so it keeps working for panels built after start-up.
   document.addEventListener('click', event => {
-    const panel = event.target.closest?.('.obs-panel, .light-curve-container');
+    const panel = event.target.closest?.(
+      '.obs-panel, .light-curve-container, .three-view-container'
+    );
     if (!panel || !panel.id) return;
     if (event.target.closest('button, input, label')) return;
     noteObservationPanelUsed(panel.id);

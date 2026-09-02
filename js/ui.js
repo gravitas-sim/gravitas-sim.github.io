@@ -41,6 +41,7 @@ import {
   syncReportedMass,
   INTEGRATORS,
   resetSimulationTime,
+  resetAbsorptionAccounting,
   resetConservationBaseline,
   JUPITER_MASS_UNIT,
   Planet,
@@ -107,6 +108,14 @@ import {
   stopwatchTarget,
   setCaptureMode,
 } from './sandboxTools.js';
+import {
+  canRecord,
+  isRecording,
+  startRecording,
+  stopRecording,
+  recordingStatus,
+  extensionFor,
+} from './capture.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
 import {
@@ -4214,6 +4223,12 @@ const zeroNetMomentum = () => {
  * @param {boolean} [options.keepSeed] - Rebuild with the seed already in use
  * @returns {number} The seed the world was built from
  */
+// The Kuiper Belt scenario's schematic radial ladder: eight named objects,
+// evenly spaced, ordered by real semi-major axis. See the scenario block below
+// for why the spacing is not linear in AU.
+const KUIPER_LADDER_INNER = 200;
+const KUIPER_LADDER_STEP = 20;
+
 const initialize_simulation = (options = {}) => {
   if (options.seed !== undefined) {
     setWorldSeed(options.seed);
@@ -4242,6 +4257,9 @@ const initialize_simulation = (options = {}) => {
   // bumped, so it is measured over the bodies that now exist rather than over
   // whatever the previous scenario left in the cached lists.
   resetSimulationTime();
+  // The absorption ledger counts spin banked and momentum discarded since the
+  // world was built, so it starts over with the world.
+  resetAbsorptionAccounting();
   resetConservationBaseline();
   resetPotentialCache();
   worldTouched = false;
@@ -5106,58 +5124,67 @@ const build_simulation = () => {
     centralStar.name = 'Sol';
     const centralMass = centralStar.mass;
 
-    // Real Kuiper Belt objects with accurate names and properties
+    // The named trans-Neptunian objects.
+    //
+    // These used to be written onto the first entry of `planets` (or of
+    // `gas_giants`) and then spliced straight back out of it, so all eight were
+    // configured and then deleted before the first frame: the scenario named
+    // after them ran without any of them in it. They are built here instead,
+    // the same way the Solar System scenario builds its planets - constructed
+    // with their own mass and pushed - so nothing downstream has to keep a
+    // pool index in step with them.
+    //
+    // Classification: every one of these is an icy solid body, so every one of
+    // them is a Planet. Quaoar, Sedna, Orcus and Varuna were previously built
+    // as GasGiants purely because that array had spare entries, which put four
+    // gas giants in a Kuiper Belt and made the inspector say so.
+    //
+    // Masses are published values in Earth masses (M_E = 5.972e24 kg). Sedna's
+    // is an estimate; it has no satellite and therefore no measured mass.
+    //
+    // Radial scale is SCHEMATIC, not linear in AU. The real belt runs from
+    // 39 AU to Sedna's 507 AU, a factor of thirteen that cannot be drawn on
+    // one screen and still show the classical objects apart from each other.
+    // The eight are laid out on an evenly spaced ladder instead, ordered by
+    // real semi-major axis, so the ordering a student reads off the screen is
+    // the true one even though the spacing is not. `semi_major_axis_au` on
+    // each body carries the real value for anything that wants it.
     const kuiperBeltObjects = [
-      { name: 'Pluto', mass: 0.0022, distance: 200, type: 'dwarf_planet' },
-      { name: 'Eris', mass: 0.0028, distance: 220, type: 'dwarf_planet' },
-      { name: 'Haumea', mass: 0.0007, distance: 240, type: 'dwarf_planet' },
-      { name: 'Makemake', mass: 0.0005, distance: 260, type: 'dwarf_planet' },
-      { name: 'Quaoar', mass: 0.0002, distance: 280, type: 'large_kbo' },
-      { name: 'Sedna', mass: 0.0001, distance: 300, type: 'large_kbo' },
-      { name: 'Orcus', mass: 0.0001, distance: 320, type: 'large_kbo' },
-      { name: 'Varuna', mass: 0.0001, distance: 340, type: 'large_kbo' },
+      { name: 'Orcus', mass: 0.000106, semiMajorAxisAu: 39.17 },
+      { name: 'Pluto', mass: 0.00218, semiMajorAxisAu: 39.48 },
+      { name: 'Varuna', mass: 0.0000619, semiMajorAxisAu: 42.92 },
+      { name: 'Haumea', mass: 0.000671, semiMajorAxisAu: 43.13 },
+      { name: 'Quaoar', mass: 0.000201, semiMajorAxisAu: 43.69 },
+      { name: 'Makemake', mass: 0.000519, semiMajorAxisAu: 45.43 },
+      { name: 'Eris', mass: 0.00276, semiMajorAxisAu: 67.78 },
+      { name: 'Sedna', mass: 0.00017, semiMajorAxisAu: 506.8 },
     ];
 
-    // Create Kuiper Belt objects
-    for (
-      let i = 0;
-      i < Math.min(kuiperBeltObjects.length, SETTINGS.num_planets);
-      i++
-    ) {
-      const kboData = kuiperBeltObjects[i];
-      const r = kboData.distance;
+    // The pool `apply_placement` just laid out is replaced wholesale: these
+    // eight are the scenario's planets, and a random ninth would be a body
+    // with no name in a scenario whose whole subject is named ones.
+    planets.length = 0;
+    gas_giants.length = 0;
+
+    kuiperBeltObjects.forEach((kboData, i) => {
+      const r = KUIPER_LADDER_INNER + i * KUIPER_LADDER_STEP;
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
       const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
       const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
 
-      if (kboData.type === 'dwarf_planet') {
-        // Use planets array for dwarf planets
-        if (planets.length > 0) {
-          planets[0].pos = pos;
-          planets[0].vel = vel;
-          planets[0].mass = kboData.mass * EARTH_MASS_UNIT;
-          // These bodies are recycled from the random generator, which already
-          // put a mass in massInEarths. Without this the stored value and the
-          // simulated mass describe two different objects.
-          planets[0].massInEarths = kboData.mass;
-          planets[0].name = kboData.name;
-          planets.splice(0, 1);
-        }
-      } else {
-        // Use gas giants array for large KBOs
-        if (gas_giants.length > 0) {
-          gas_giants[0].pos = pos;
-          gas_giants[0].vel = vel;
-          gas_giants[0].mass = kboData.mass * EARTH_MASS_UNIT;
-          gas_giants[0].massInEarths = kboData.mass;
-          gas_giants[0].massInJupiters =
-            kboData.mass / EARTH_MASSES_PER_JUPITER_MASS;
-          gas_giants[0].name = kboData.name;
-          gas_giants.splice(0, 1);
-        }
-      }
-    }
+      const kbo = new Planet(pos, vel, kboData.mass);
+      kbo.name = kboData.name;
+      // The constructor already derived these from the same mass; setting them
+      // again is cheap insurance against the two drifting apart if it changes.
+      kbo.mass = kboData.mass * EARTH_MASS_UNIT;
+      kbo.massInEarths = kboData.mass;
+      kbo.semi_major_axis_au = kboData.semiMajorAxisAu;
+      kbo.density = 'icy';
+      kbo.baseColor = '#CFE6F5';
+      kbo.isKuiperBeltObject = true;
+      planets.push(kbo);
+    });
 
     // Add smaller Kuiper Belt objects as asteroids
     if (SETTINGS.enable_asteroids) {
@@ -5176,12 +5203,19 @@ const build_simulation = () => {
         '2007 OR10',
       ];
 
+      // Inside the same band as the named objects, not beyond it. These are all
+      // classical-belt bodies at 39-48 AU, so the previous 500-700 placed every
+      // one of them outside Sedna, which is the single most distant object in
+      // the scenario by an order of magnitude.
       for (
         let i = 0;
         i < Math.min(SETTINGS.num_asteroids, smallKBOs.length);
         i++
       ) {
-        const r = 500 + Math.random() * 200; // Kuiper Belt region
+        const r =
+          KUIPER_LADDER_INNER -
+          10 +
+          Math.random() * (KUIPER_LADDER_STEP * 5 + 20);
         const theta = Math.random() * 2 * Math.PI;
         const v = Math.sqrt(
           (SETTINGS.gravitational_constant * centralMass) / r
@@ -7679,6 +7713,23 @@ const adjustSimSpeed = (current, direction) => {
 };
 
 /**
+ * What a captured frame should call itself.
+ *
+ * The scenario's translated title, or 'Sandbox' when the user has built the
+ * scene by hand and there is no scenario to name. Either way the exported
+ * image says which run it is a picture of, which - with the scale bar and the
+ * clock beside it - is what makes it citable rather than decorative.
+ *
+ * @returns {string} The caption to burn into the frame
+ */
+const captureCaption = () => {
+  const named = current_scenario_name && current_scenario_name !== 'None';
+  return named
+    ? scenarioTitle(current_scenario_name) || current_scenario_name
+    : t('capture.caption.sandbox');
+};
+
+/**
  * Take a screenshot of the current simulation
  * Combines the starfield and simulation canvases into a single image
  */
@@ -7688,7 +7739,7 @@ const takeScreenshot = () => {
   // before reading the pixels back. Live, those readings are in the readout
   // panel and painting them over the simulation as well would say the same
   // thing twice; a saved image has no readout panel, so it needs them.
-  setCaptureMode(true);
+  setCaptureMode(true, { caption: captureCaption() });
   const capture = () => {
     try {
       const tempCanvas = document.createElement('canvas');
@@ -7707,7 +7758,11 @@ const takeScreenshot = () => {
       console.error('Screenshot failed:', error);
       alert('Screenshot failed. Please try again.');
     } finally {
-      setCaptureMode(false);
+      // A recording holds capture mode on for its whole length. A still taken
+      // during one must not switch the burnt-in caption and clock off in the
+      // middle of the clip.
+      if (isRecording()) setCaptureMode(true, { caption: captureCaption() });
+      else setCaptureMode(false);
     }
   };
   // Two frames: the first is the one that repaints with the flag set, the
@@ -8622,6 +8677,132 @@ document.getElementById('resetViewBtn').onclick = () => {
 
 // Screenshot functionality
 document.getElementById('screenshotBtn').onclick = takeScreenshot;
+
+// --- Clip recording -----------------------------------------------------------
+//
+// A screenshot documents a moment and most of what this simulation shows is
+// motion, so the same Capture group also records a stretch of the run to a
+// video file. The recorder itself - the compositing, the container choice, the
+// byte and time budgets - is in js/capture.js; what is here is the button, the
+// indicator and the save, which are the parts that have to know about this
+// page.
+
+const recordBtn = document.getElementById('recordBtn');
+const recordingBadge = document.getElementById('recordingBadge');
+const recordingReadout = document.getElementById('recordingReadout');
+
+/** mm:ss, for the indicator. @param {number} s - Seconds @returns {string} */
+const clockText = s => {
+  const whole = Math.max(0, Math.floor(s));
+  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
+};
+
+/**
+ * Paint the button and the indicator from the recorder's own counters, so the
+ * two can never disagree with what is actually being written.
+ * @param {object|null} status - recordingStatus(), or null when idle
+ */
+const paintRecordingState = status => {
+  const on = Boolean(status?.recording);
+  if (recordBtn) {
+    recordBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    recordBtn.textContent = on ? t('rail.record.stop') : t('rail.record');
+    recordBtn.title = on ? t('rail.record.stop.hint') : t('rail.record.hint');
+  }
+  if (!recordingBadge || !recordingReadout) return;
+  recordingBadge.hidden = !on;
+  if (!on) {
+    recordingBadge.removeAttribute('data-nearly');
+    return;
+  }
+  const mb = status.bytes / (1024 * 1024);
+  const capMb = status.maxBytes / (1024 * 1024);
+  recordingReadout.textContent = `REC ${clockText(status.seconds)}  ${mb.toFixed(0)}/${capMb.toFixed(0)} MB`;
+  // Within a tenth of either budget the recording is about to stop itself,
+  // which is worth a colour rather than a surprise.
+  const nearly =
+    status.seconds > status.maxSeconds * 0.9 ||
+    status.bytes > status.maxBytes * 0.9;
+  if (nearly) recordingBadge.setAttribute('data-nearly', 'true');
+  else recordingBadge.removeAttribute('data-nearly');
+};
+
+/**
+ * Save a finished clip, and say why it ended when it was not the user who
+ * ended it.
+ * @param {Blob|null} blob - The assembled recording
+ * @param {object} meta - {reason, seconds, bytes, type}
+ */
+const saveRecording = (blob, meta) => {
+  setCaptureMode(false);
+  paintRecordingState(null);
+  if (!blob || !blob.size) {
+    toast(t('capture.record.failed'));
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = `gravitas-clip-${Date.now()}.${extensionFor(meta.type)}`;
+  link.href = url;
+  link.click();
+  // The Blob is the last thing holding the recording; the URL keeps it alive
+  // until it is revoked, so it is revoked as soon as the download has taken
+  // its reference.
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+  const mb = (meta.bytes / (1024 * 1024)).toFixed(1);
+  if (meta.reason === 'size') toast(t('capture.record.cappedSize', { mb }));
+  else if (meta.reason === 'duration')
+    toast(t('capture.record.cappedTime', { mb }));
+  else toast(t('capture.record.saved', { s: clockText(meta.seconds), mb }));
+};
+
+const toggleRecording = () => {
+  if (isRecording()) {
+    stopRecording('user');
+    return;
+  }
+  // The clip carries the same provenance a still does: the scenario title, the
+  // scale bar and the simulated clock, burned in for every frame of it.
+  setCaptureMode(true, { caption: captureCaption() });
+  const started = startRecording({
+    sources: [starfieldCanvas, canvas],
+    onTick: status => {
+      // Re-read the caption rather than holding the one the take started with:
+      // a lecturer who loads a second scenario mid-clip would otherwise have
+      // the rest of the recording labelled with the first one's name.
+      setCaptureMode(true, { caption: captureCaption() });
+      paintRecordingState(status);
+    },
+    onStop: saveRecording,
+  });
+  if (!started) {
+    setCaptureMode(false);
+    toast(t('capture.record.unsupported'));
+    return;
+  }
+  paintRecordingState(recordingStatus());
+};
+
+if (recordBtn) {
+  // Nothing to offer where MediaRecorder or captureStream is missing: a button
+  // that can only apologise is worse than no button.
+  if (!canRecord()) recordBtn.hidden = true;
+  else recordBtn.onclick = toggleRecording;
+}
+
+// A language change rewrites every data-i18n element from its key, which would
+// put "Record Clip" back on a button that is currently recording.
+onLocaleChange(() => {
+  if (isRecording()) paintRecordingState(recordingStatus());
+});
+
+// Leaving the page mid-take releases the encoder and the chunks it is holding.
+// The file is lost - a download cannot be started from a page that is going
+// away - but a take that is abandoned should not also leave a recorder running
+// against a canvas that is about to be torn down.
+window.addEventListener('pagehide', () => {
+  if (isRecording()) stopRecording('user');
+});
 
 // --- Measurement tools --------------------------------------------------------
 //

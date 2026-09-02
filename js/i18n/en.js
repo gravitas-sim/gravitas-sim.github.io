@@ -198,6 +198,9 @@ export const EN = {
   'rail.stopwatchLatch.hint':
     "Latch onto the selected body's periapsis passages, so each lap is one orbit measured from closest approach",
   'rail.stopwatchReset.hint': 'Back to zero',
+  'rail.record.hint':
+    'Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first.',
+  'rail.record.stop.hint': 'Stop recording and save the clip',
   'rail.screenshot.hint':
     'Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock.',
   'rail.toggle3DView.hint':
@@ -255,6 +258,16 @@ export const EN = {
   'rail.stopwatchLatch': '⌖ Periapsis',
   'rail.stopwatchReset': '↺ Reset',
   'rail.screenshot': '📸 Screenshot',
+  'rail.record': '🎬 Record Clip',
+  'rail.record.stop': '⏹ Stop Rec',
+  'capture.caption.sandbox': 'Gravitas sandbox',
+  'capture.record.saved': 'Clip saved - {s}, {mb} MB',
+  'capture.record.cappedSize':
+    'Clip saved at the 80 MB size cap - {mb} MB. Record shorter stretches for a longer sequence.',
+  'capture.record.cappedTime': 'Clip saved at the 3 minute limit - {mb} MB.',
+  'capture.record.failed': 'Recording produced no video. Nothing was saved.',
+  'capture.record.unsupported':
+    'This browser cannot record the canvas. Safari and older browsers lack the WebM recorder; Chrome, Edge and Firefox have it.',
   'rail.toggle3DView': 'Spacetime View',
   'rail.toggleLightCurve': 'Light Curve',
   'rail.toggleRadialVelocity': 'Radial Velocity',
@@ -471,6 +484,8 @@ export const EN = {
   'caveat.halo': 'the halo is a fixed background field',
   'caveat.orbitDecay': 'black-hole orbits are being damped',
   'caveat.merging': 'mergers and collisions are enabled',
+  'caveat.tidalDisruption':
+    'tidal stripping near a black hole removes mass from bodies',
 
   // --- Canvas overlay labels -------------------------------------------------
   'overlay.stableOrbit': 'Stable Orbit',

@@ -628,17 +628,20 @@
      one above another on an ordinary screen, and a panel reduced to its name is
      more useful than one pushed off the top of the window. */
   .obs-panel.is-collapsed > :not(.obs-panel-toolbar),
-  .light-curve-container.is-collapsed > :not(.light-curve-toolbar) {
+  .light-curve-container.is-collapsed > :not(.light-curve-toolbar),
+  .three-view-container.is-collapsed > :not(.three-view-toolbar) {
     display: none;
   }
   .obs-panel.is-collapsed,
-  .light-curve-container.is-collapsed {
+  .light-curve-container.is-collapsed,
+  .three-view-container.is-collapsed {
     height: auto;
     min-height: 0;
     cursor: pointer;
   }
   .obs-panel.is-collapsed .obs-panel-toolbar,
-  .light-curve-container.is-collapsed .light-curve-toolbar {
+  .light-curve-container.is-collapsed .light-curve-toolbar,
+  .three-view-container.is-collapsed .three-view-toolbar {
     border-bottom: none;
   }
 

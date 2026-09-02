@@ -260,21 +260,43 @@ nothing here changed it.
 `npm test` passes 726 tests across 19 suites. All 43 thumbnails were regenerated
 from the fixed scenarios.
 
+## Resolved in a later pass
+
+The three items below were left alone in the pass above and have since been
+fixed. Details, with the numbers, are in `PHYSICS_VALIDATION.md`.
+
+- **Absorption now conserves momentum.** `check_absorption` merged the mass into
+  the hole and left its velocity untouched. It now applies the same perfectly
+  inelastic update the black-hole/black-hole merger already used - the hole moves
+  to the pair's centre of mass and takes the mass-weighted mean velocity - so
+  mass, linear momentum and the centre of mass are all conserved exactly. The
+  angular momentum of the pair about its own centre of mass cannot be: a hole is
+  a point mass with no spin, so that term is banked in
+  `spin_angular_momentum`, bounded by `mu (r_horizon + ABSORB_BUFFER) |v_rel|`,
+  and checked. Static holes and one-way-gravity scenarios keep the old behaviour
+  on purpose - the hole is not a dynamical participant in either - and the
+  momentum that then goes nowhere is recorded in a discarded total rather than
+  vanishing unnoticed. Ten checks in the `Absorption` group.
+- **Tidal disruption reaches all four classes.** `updatePhysics` iterated `stars`
+  alone, so the working `tidal_mass_loss` on `Planet`, `GasGiant` and `Comet` was
+  dead code. All four are iterated now. `GasGiant`'s destruction threshold had to
+  be repaired first: a bare `this.mass <= 0.5` from when `JUPITER_MASS_UNIT` was
+  50, which the corrected constant silently turned from a hundredth of a Jupiter
+  into half a Jupiter, so every gas giant would have been destroyed on arrival.
+  Tidal stripping is a mass sink and is now reported as one by
+  `conservationCaveats()`. Five checks in the `Tidal disruption` group.
+- **`Kuiper Belt` keeps its named objects.** All eight - Pluto, Eris, Haumea,
+  Makemake, Quaoar, Sedna, Orcus and Varuna - are built with published masses and
+  survive startup. They are all `Planet`s: the four that were previously built as
+  `GasGiant`s were only there because that array had spare entries, which put
+  four gas giants in a Kuiper Belt. The scenario's `num_gas_giants` is 0 now, and
+  the radial ladder is ordered by real semi-major axis rather than arbitrarily.
+  The scenario went from 305 bodies to 309, and its energy drift over 20 s from
+  8.4e-6 to 4.9e-7. Covered by `e2e/scenarioContract.spec.js`.
+
 ## Left alone, on purpose
 
-- **Absorption does not conserve momentum.** `check_absorption` adds the
-  absorbed mass to the hole and leaves its velocity untouched. Fixing it means
-  changing the engine, and it would change the outcome of every scenario that
-  absorbs anything. Worth doing deliberately, not as a side effect of this.
-- **Planets, gas giants and comets all implement `tidal_mass_loss` and it is
-  never called for them.** `updatePhysics` only iterates `stars`. Three working
-  implementations are dead code. Tidal Disruption Event was fixed by giving it a
-  star, which is also the more correct scenario, so this was not needed here.
 - **Stellar Graveyard, Compact Object Zoo, Galactic Center and Hungry Hungry
   Holes still lose most of their bodies within seconds.** All are improved and
   none is fixed. They were not among the audit's findings and rebalancing them
   is scenario design rather than defect repair.
-- **`Kuiper Belt` configures Pluto, Eris, Haumea and Makemake and then splices
-  them out of the `planets` array**, so the four named dwarf planets are removed
-  from the simulation immediately after being set up. Found while tracing the
-  drift, unrelated to it, and left for a separate change.

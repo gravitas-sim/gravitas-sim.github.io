@@ -377,8 +377,12 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       mutual_gravity: true,
       num_black_holes: 0,
       num_stars: 1, // Central star for Kuiper Belt objects
+      // Eight named trans-Neptunian objects, built by name in ui.js. They are
+      // all icy solid bodies, so they are all Planets: the four that used to be
+      // built as gas giants were only there because this count left four spare
+      // entries in that array.
       num_planets: 8,
-      num_gas_giants: 4,
+      num_gas_giants: 0,
       enable_asteroids: true,
       num_asteroids: 300,
       init_velocity: 15,

@@ -410,20 +410,38 @@
         </dl>
       </div>
       <p>
-        There is one exception worth knowing about. When a small body falls into
-        a black hole, its mass is added to the hole but the hole's velocity is
-        left unchanged, so that particular interaction conserves mass but not
-        momentum. For a planet spiralling into a supermassive black hole the
-        error is negligible; for a body of comparable mass it is not. Full
-        mergers between stars, compact objects and black holes use the
-        center-of-momentum calculation described above.
+        Absorption by a black hole uses the same calculation. A body that
+        crosses the hole's absorption radius is merged into it: the hole moves
+        to the center of mass of the pair and takes the mass-weighted mean
+        velocity, so mass, linear momentum and the center of mass are all
+        conserved exactly. This used to be the one exception - the mass was
+        added and the hole's velocity was left alone, which threw the body's
+        momentum away - and it is no longer.
+      </p>
+      <p>
+        What still cannot be carried forward is the angular momentum of the pair
+        about its own center of mass. Physically that becomes black-hole spin,
+        which is how real holes are spun up by accretion; Gravitas models a hole
+        as a point mass with no spin, so there is nowhere for it to go. It is
+        recorded rather than dropped, and it is bounded by the absorption radius,
+        so it is small for the usual case of a light body falling into a heavy
+        hole.
+      </p>
+      <p>
+        Two configurations keep the old behaviour deliberately, because in both
+        of them the hole is not a dynamical participant: a <em>static</em> black
+        hole, which is a fixed potential well that pulls without being pulled,
+        and <em>one-way gravity</em>, where the small bodies are test particles
+        with no influence of their own. In those the hole gains the mass and does
+        not move. Both are already flagged as departures wherever conservation is
+        reported.
       </p>
       <div class="doc-note">
         <p>
-          <strong>Not modeled:</strong> fragmentation, shock heating, tidal
-          disruption physics, hydrodynamics, debris production from impacts,
-          stellar structure, or any radiation from a collision. A merger in
-          Gravitas is an instantaneous bookkeeping operation.
+          <strong>Not modeled:</strong> fragmentation, shock heating,
+          hydrodynamics, debris production from impacts, stellar structure, or
+          any radiation from a collision. A merger in Gravitas is an
+          instantaneous bookkeeping operation.
         </p>
       </div>
       <p>
@@ -1068,7 +1086,24 @@
               <td>
                 Mass and momentum bookkeeping, that kinetic energy is lost
               </td>
-              <td>Impact physics, debris fields, tidal disruption</td>
+              <td>Impact physics, debris fields, shock heating</td>
+            </tr>
+            <tr>
+              <td>Tidal disruption</td>
+              <td>
+                <span class="doc-badge is-approximate">Approximated</span>
+              </td>
+              <td>
+                That a body close enough to a black hole is torn apart, and that
+                the closer it passes the faster it comes apart
+              </td>
+              <td>
+                Where the mass goes. The body loses mass smoothly inside a tidal
+                radius set by the hole's own size, and the fragments it sheds
+                carry a fixed mass unrelated to the amount stripped, so this is a
+                mass sink rather than bookkeeping. There is no hydrodynamics, no
+                stream, and no fallback rate.
+              </td>
             </tr>
             <tr>
               <td>Jets, disks and ripples</td>

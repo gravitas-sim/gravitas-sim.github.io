@@ -288,6 +288,201 @@ const resetSimulationTime = () => {
 };
 
 // =============================================================================
+// Absorption by a black hole
+// -----------------------------------------------------------------------------
+// What accretion does to the hole that did the accreting.
+//
+// This used to be one line - `bh.mass += this.mass` - inside
+// PhysicsObject.check_absorption. The hole gained the mass and kept its own
+// velocity, so a body falling into a moving hole deposited its mass and threw
+// its momentum away. That is not a small effect in the scenarios that lean on
+// it: Stellar Graveyard absorbs 98% of its mass within a few seconds, and the
+// linear-momentum drift the stability probe reported for Star Cluster,
+// Stellar Graveyard and Black Hole Billiards was almost entirely this.
+//
+// Awkwardly, the engine already had the right answer written down twice.
+// handle_star_merging sets a hole that swallows a star to the mass-weighted
+// mean velocity, and the black-hole/black-hole merger below builds its product
+// at the mass-weighted mean of both position and velocity. Absorption was the
+// one path of the three that did neither. It now does the same thing as the
+// BH-BH merger, which is the more complete of the two.
+//
+// The model is a perfectly inelastic collision:
+//
+//   M      = m_bh + m_body
+//   r_new  = (m_bh r_bh + m_body r_body) / M
+//   v_new  = (m_bh v_bh + m_body v_body) / M
+//
+// Total mass, total linear momentum and the system's centre of mass are then
+// all exactly preserved across the event. Kinetic energy is not, and is not
+// meant to be: an inelastic merger is where the energy goes.
+//
+// What is NOT preserved, and cannot be
+// -----------------------------------------------------------------------------
+// Total angular momentum splits into the motion of the centre of mass and the
+// pair's motion about it:
+//
+//   L_total = L_com + L_spin,     L_spin = mu * (r_rel x v_rel)
+//   mu      = m_bh * m_body / M
+//
+// Collapsing the pair to a single point mass keeps L_com exactly and discards
+// L_spin. Physically L_spin is not lost at all - it becomes black-hole spin,
+// and a body spiralling in through an accretion disk is the standard way a real
+// hole is spun up. Gravitas models a hole as a point mass with no spin degree
+// of freedom, so there is nowhere for it to go.
+//
+// It is therefore banked rather than dropped. Each hole accumulates the spin
+// angular momentum it has swallowed in `spin_angular_momentum`, and the module
+// keeps the running total, so the size of the departure is a number anyone can
+// read instead of a caveat in a comment. It is bounded and small: the body is
+// inside `bh.radius + ABSORB_BUFFER` when this runs, so
+//
+//   |L_spin| <= mu * (r_horizon + ABSORB_BUFFER) * |v_rel|
+//
+// and for the usual case of a small body falling into a large hole mu tends to
+// the body's own mass.
+//
+// When the transfer is suppressed
+// -----------------------------------------------------------------------------
+// Two configurations are deliberate approximations, documented as such on the
+// model page and flagged by conservationCaveats(), and both of them describe a
+// hole that is not a dynamical participant:
+//
+//   * A static hole (bh_behavior other than 'Orbiting') is a fixed potential
+//     well - it pulls on everything and is pulled by nothing. Giving one a
+//     recoil would be the one moment in its life it responded to another body,
+//     and it would then be visibly nudged off the mark a scenario placed it on.
+//
+//   * One-way gravity (mutual_gravity off, or star_only_gravity on) makes the
+//     small bodies test particles with no dynamical influence. Momentum they
+//     never exerted through gravity should not appear at the moment they are
+//     eaten.
+//
+// In both cases the hole still gains the mass, exactly as before, and the
+// momentum that goes nowhere is added to the discarded total below so that it
+// too is quantified rather than silent.
+// =============================================================================
+
+let absorbedSpinAngularMomentum = 0;
+let discardedAbsorptionMomentum = { x: 0, y: 0 };
+
+/**
+ * The angular momentum banked as black-hole spin by every absorption so far.
+ * @returns {number} Sum of mu * (r_rel x v_rel), in simulation units
+ */
+const getAbsorbedSpinAngularMomentum = () => absorbedSpinAngularMomentum;
+
+/**
+ * The linear momentum absorption has thrown away in static and one-way-gravity
+ * configurations, where the hole is not a dynamical participant.
+ * @returns {{x: number, y: number}} Running total
+ */
+const getDiscardedAbsorptionMomentum = () => ({
+  ...discardedAbsorptionMomentum,
+});
+
+/** Clear the absorption accounting. Called when a world is built. */
+const resetAbsorptionAccounting = () => {
+  absorbedSpinAngularMomentum = 0;
+  discardedAbsorptionMomentum = { x: 0, y: 0 };
+};
+
+/**
+ * Whether an absorption by this hole should move the hole.
+ *
+ * A mock hole from a unit test carries neither `can_move` nor a velocity; it is
+ * treated as a hole that cannot move, so the mass transfer still happens and
+ * nothing reads an undefined vector.
+ *
+ * @param {object} bh - The absorbing black hole
+ * @returns {boolean} True when the hole takes the recoil
+ */
+const absorptionMovesHole = bh => {
+  if (!bh || !bh.vel) return false;
+  if (!Number.isFinite(bh.vel.x) || !Number.isFinite(bh.vel.y)) return false;
+  if (typeof bh.can_move === 'function' && !bh.can_move()) return false;
+  if (typeof bh.can_move !== 'function') return false;
+  if (physicsSettings.mutual_gravity !== true) return false;
+  if (physicsSettings.star_only_gravity === true) return false;
+  return true;
+};
+
+/**
+ * Merge a body into a black hole, conserving what the model can conserve.
+ *
+ * @param {object} bh - The absorbing black hole
+ * @param {object} body - The body being absorbed; already marked not alive
+ * @returns {void}
+ */
+const absorb_into_black_hole = (bh, body) => {
+  const m1 = Number.isFinite(bh.mass) ? bh.mass : 0;
+  const m2 = Number.isFinite(body.mass) ? body.mass : 0;
+  const total = m1 + m2;
+
+  if (!(total > 0) || m2 === 0) {
+    bh.mass = total;
+    if (typeof bh.updateRadius === 'function') bh.updateRadius();
+    return;
+  }
+
+  if (!absorptionMovesHole(bh)) {
+    // The hole keeps its state. Record the momentum that consequently goes
+    // nowhere, so the departure is measured rather than assumed small.
+    if (
+      body.vel &&
+      Number.isFinite(body.vel.x) &&
+      Number.isFinite(body.vel.y)
+    ) {
+      discardedAbsorptionMomentum.x += m2 * body.vel.x;
+      discardedAbsorptionMomentum.y += m2 * body.vel.y;
+    }
+    bh.mass = total;
+    if (typeof bh.updateRadius === 'function') bh.updateRadius();
+    return;
+  }
+
+  const bx = body.pos?.x ?? bh.pos.x;
+  const by = body.pos?.y ?? bh.pos.y;
+  const bvx = body.vel?.x ?? bh.vel.x;
+  const bvy = body.vel?.y ?? bh.vel.y;
+
+  // Banked before the state is overwritten: r_rel and v_rel are relative to the
+  // hole as it is now, not as the merged object will be.
+  const mu = (m1 * m2) / total;
+  const rx = bx - bh.pos.x;
+  const ry = by - bh.pos.y;
+  const vx = bvx - bh.vel.x;
+  const vy = bvy - bh.vel.y;
+  const spin = mu * (rx * vy - ry * vx);
+  if (Number.isFinite(spin)) {
+    absorbedSpinAngularMomentum += spin;
+    bh.spin_angular_momentum = (bh.spin_angular_momentum || 0) + spin;
+  }
+
+  const px = (bh.pos.x * m1 + bx * m2) / total;
+  const py = (bh.pos.y * m1 + by * m2) / total;
+  const pvx = (bh.vel.x * m1 + bvx * m2) / total;
+  const pvy = (bh.vel.y * m1 + bvy * m2) / total;
+
+  // The same refusal PhysicsObject.apply_step makes: a non-finite hole poisons
+  // every body in the scene through the gravity sum and nothing recovers.
+  if (
+    Number.isFinite(px) &&
+    Number.isFinite(py) &&
+    Number.isFinite(pvx) &&
+    Number.isFinite(pvy)
+  ) {
+    bh.pos.x = px;
+    bh.pos.y = py;
+    bh.vel.x = pvx;
+    bh.vel.y = pvy;
+  }
+
+  bh.mass = total;
+  if (typeof bh.updateRadius === 'function') bh.updateRadius();
+};
+
+// =============================================================================
 // Live conservation diagnostics
 // -----------------------------------------------------------------------------
 // Energy and angular momentum, against a baseline taken when the world was
@@ -435,6 +630,13 @@ const conservationCaveats = () => {
   }
   if (physicsSettings.enable_star_merging === true) {
     out.push('caveat.merging');
+  }
+  // Tidal stripping runs whenever there is a hole for a body to pass close to,
+  // and it is not gated by a setting the way merging is. It removes mass from
+  // the body and returns fixed-mass fragments that do not account for it, so it
+  // is a mass sink and therefore an energy and momentum sink too.
+  if (bh_list.length > 0) {
+    out.push('caveat.tidalDisruption');
   }
   return out;
 };
@@ -1778,34 +1980,58 @@ const updatePhysics = dt => {
     bh.update_dynamic_effects(dt);
   });
 
-  // Handle tidal disruption and mass loss - improved debris generation matching original
+  // ---------------------------------------------------------------------------
+  // Tidal disruption
+  // ---------------------------------------------------------------------------
+  // Four classes implement tidal_mass_loss - StarObject, Planet, GasGiant and
+  // Comet - each with its own tidal radius and its own stripping rate, and for
+  // a long time this loop iterated `stars` alone. Three of the four
+  // implementations were unreachable: a comet could fall through a black hole's
+  // tidal radius intact, which is the one thing a comet is famous for not
+  // doing. It read as a deliberate restriction and was not; the loop simply
+  // never grew past the class it was written for.
+  //
+  // Connecting them needed one repair first. GasGiant's destruction threshold
+  // was a bare `this.mass <= 0.5`, a literal from when JUPITER_MASS_UNIT was 50
+  // and 0.5 units meant a hundredth of a Jupiter. After that constant was
+  // corrected the same literal meant half a Jupiter, so every gas giant lighter
+  // than that - most of them - would have been destroyed on the frame it
+  // entered the tidal radius, the moment this loop started calling it. The
+  // threshold is expressed against its own unit now, as the asteroid and comet
+  // ones already were.
+  //
+  // Not conservative, and never was: the body loses mass continuously while the
+  // Debris it sheds carry a fixed fragment mass that has nothing to do with the
+  // amount stripped. Tidal disruption is a mass sink, which is why it is
+  // reported by conservationCaveats() as soon as there is a hole in the scene
+  // for it to happen near.
   const new_debris = [];
-  stars.forEach(star => {
-    if (star.alive && star.intact && star.tidal_mass_loss) {
-      const { debris_count, fraction } = star.tidal_mass_loss(bh_list, dt);
-      if (debris_count > 0) {
-        for (let i = 0; i < debris_count; i++) {
-          const eject_speed = (Math.random() * 9 + 1) * (1 + fraction);
-          const angle = Math.random() * 2 * Math.PI;
-          const dv = {
-            x: eject_speed * Math.cos(angle),
-            y: eject_speed * Math.sin(angle),
-          };
-          const spawn_pos = {
-            x: star.pos.x + Math.random() * 4 - 2,
-            y: star.pos.y + Math.random() * 4 - 2,
-          };
-          new_debris.push(
-            new Debris(spawn_pos, {
-              x: star.vel.x * 0.1 + dv.x,
-              y: star.vel.y * 0.1 + dv.y,
-            })
-          );
-        }
-        // (event system removed)
+  const tidal_candidates = [stars, planets, gas_giants, comets];
+  for (const list of tidal_candidates) {
+    for (const body of list) {
+      if (!body.alive || !body.intact || !body.tidal_mass_loss) continue;
+      const { debris_count, fraction } = body.tidal_mass_loss(bh_list, dt);
+      if (debris_count <= 0) continue;
+      for (let i = 0; i < debris_count; i++) {
+        const eject_speed = (Math.random() * 9 + 1) * (1 + fraction);
+        const angle = Math.random() * 2 * Math.PI;
+        const dv = {
+          x: eject_speed * Math.cos(angle),
+          y: eject_speed * Math.sin(angle),
+        };
+        const spawn_pos = {
+          x: body.pos.x + Math.random() * 4 - 2,
+          y: body.pos.y + Math.random() * 4 - 2,
+        };
+        new_debris.push(
+          new Debris(spawn_pos, {
+            x: body.vel.x * 0.1 + dv.x,
+            y: body.vel.y * 0.1 + dv.y,
+          })
+        );
       }
     }
-  });
+  }
   debris.push(...new_debris);
 
   // Handle star merging separately from other collisions
@@ -2291,8 +2517,10 @@ class PhysicsObject {
       const dy = this.pos.y - bh.pos.y;
       if (dx * dx + dy * dy < (bh.radius + ABSORB_BUFFER) ** 2) {
         this.alive = false;
-        bh.mass += this.mass || 0;
-        bh.updateRadius();
+        // Mass, momentum and centre of mass, rather than mass alone. See the
+        // note on absorb_into_black_hole for what it conserves, what it cannot,
+        // and which configurations opt out.
+        absorb_into_black_hole(bh, this);
         // Clear energy history for absorbed object
         clearObjectEnergyHistory(this.id);
         return true;
@@ -3045,7 +3273,14 @@ class GasGiant extends PhysicsObject {
       this.mass -= this.mass * fraction * 0.08 * dt;
       let debris_count = Math.floor(fraction * 35 * dt);
 
-      if (this.mass <= 0.5) {
+      // A hundredth of a Jupiter, which is what the bare 0.5 always meant:
+      // JUPITER_MASS_UNIT was a literal 50 when this line was written, so 0.5
+      // units was 0.01 M_J. Correcting the unit to the real 0.955 left the
+      // threshold at 0.52 M_J, which is heavier than most of the gas giants the
+      // generator makes - every one of them would have come apart on the frame
+      // it entered the tidal radius. Same repair as the asteroid and comet
+      // thresholds above and below.
+      if (this.mass <= 0.01 * JUPITER_MASS_UNIT) {
         this.intact = false;
         this.alive = false;
         debris_count += 20;
@@ -4226,7 +4461,10 @@ class StarObject extends PhysicsObject {
       );
       this.mass -= this.mass * fraction * 0.1 * dt;
       let debris_count = Math.floor(fraction * 50 * dt);
-      if (this.mass <= 1.0) {
+      // A thousandth of a solar mass - about one Jupiter - which is the same
+      // number the bare 1.0 was, written against the unit it means. Below this
+      // there is no star left to strip.
+      if (this.mass <= 0.001 * SOLAR_MASS_UNIT) {
         this.intact = false;
         this.alive = false;
         debris_count += 30;
@@ -6452,6 +6690,10 @@ export {
   activeIntegrator,
   getSimulationTime,
   resetSimulationTime,
+  absorb_into_black_hole,
+  getAbsorbedSpinAngularMomentum,
+  getDiscardedAbsorptionMomentum,
+  resetAbsorptionAccounting,
   conservedQuantities,
   conservationDrift,
   resetConservationBaseline,

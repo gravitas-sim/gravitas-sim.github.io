@@ -150,6 +150,9 @@ export const ES = {
   'rail.stopwatchLatch.hint':
     'Engancharse a los pasos por el periastro del cuerpo seleccionado, de modo que cada vuelta sea una órbita medida desde la máxima aproximación',
   'rail.stopwatchReset.hint': 'Volver a cero',
+  'rail.record.hint':
+    'Grabar un clip de la simulación en marcha: un MP4 si el navegador puede codificarlo, un WebM si no. El nombre del escenario, la barra de escala y el reloj simulado se graban en cada fotograma, de modo que el clip se documenta a sí mismo en una diapositiva. La grabación se detiene sola a los 3 minutos o a los 80 MB, lo que llegue antes.',
+  'rail.record.stop.hint': 'Detener la grabación y guardar el clip',
   'rail.screenshot.hint':
     'Capturar la pantalla (o pulsar P). La barra de escala, el tiempo de simulación transcurrido y las herramientas de medida que estén desplegadas se dibujan sobre el propio lienzo, de modo que la imagen documenta su escala y su reloj.',
   'rail.toggle3DView.hint':
@@ -214,6 +217,17 @@ export const ES = {
   'rail.stopwatchLatch': '⌖ Periastro',
   'rail.stopwatchReset': '↺ Reiniciar',
   'rail.screenshot': '📸 Captura',
+  'rail.record': '🎬 Grabar clip',
+  'rail.record.stop': '⏹ Parar grab.',
+  'capture.caption.sandbox': 'Zona de pruebas de Gravitas',
+  'capture.record.saved': 'Clip guardado: {s}, {mb} MB',
+  'capture.record.cappedSize':
+    'Clip guardado al alcanzar el límite de 80 MB: {mb} MB. Graba tramos más cortos para una secuencia más larga.',
+  'capture.record.cappedTime':
+    'Clip guardado al alcanzar el límite de 3 minutos: {mb} MB.',
+  'capture.record.failed': 'La grabación no produjo vídeo. No se guardó nada.',
+  'capture.record.unsupported':
+    'Este navegador no puede grabar el lienzo. Safari y los navegadores antiguos carecen del grabador WebM; Chrome, Edge y Firefox lo tienen.',
   'rail.toggle3DView': 'Vista espaciotemporal',
   'rail.toggleLightCurve': 'Curva de luz',
   'rail.toggleRadialVelocity': 'Velocidad radial',
@@ -507,6 +521,8 @@ export const ES = {
   'caveat.halo': 'el halo es un campo de fondo fijo',
   'caveat.orbitDecay': 'las órbitas de los agujeros negros están amortiguadas',
   'caveat.merging': 'las fusiones y colisiones están activadas',
+  'caveat.tidalDisruption':
+    'la disrupción de marea cerca de un agujero negro quita masa a los cuerpos',
 
   // --- Canvas overlay labels -------------------------------------------------
   'overlay.stableOrbit': 'Órbita estable',
