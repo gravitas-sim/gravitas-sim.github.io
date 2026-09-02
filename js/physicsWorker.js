@@ -108,7 +108,7 @@ function containsPoint(node, px, py) {
 // selfIdx is the target's own index in the source array, or -1 when the target
 // is not itself a gravity source. A body must not pull on itself: at a leaf we
 // skip it outright, and we never collapse a cell that still contains it into a
-// single centre-of-mass term (which would fold its own mass into the result).
+// single center-of-mass term (which would fold its own mass into the result).
 function computeAccelFromTree(node, tx, ty, theta, G, selfIdx, minDistSq) {
   if (!node || node.mass === 0) return [0, 0, 0];
 

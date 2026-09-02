@@ -1,0 +1,353 @@
+# =============================================================================
+# Continuous integration
+# -----------------------------------------------------------------------------
+# What this is for: a future change should not be able to silently break the
+# sandbox, the observing tools, the guided lessons, the mobile layout or the
+# production build. Every job here exists because one of those can break in a way
+# that reading the diff will not reveal.
+#
+# The shape, and why
+# -----------------------------------------------------------------------------
+#   checks       Everything that needs no browser: lint, formatting, the jest
+#                suite, the physics validation table, the link checker, the
+#                thumbnail manifest. Under two minutes, and it is the job that
+#                catches most mistakes, so it runs first and independently.
+#
+#   build        Produces dist/ and uploads it. Runs in parallel with checks
+#                rather than after it: a broken build and a lint error are
+#                independent facts and a contributor should learn both at once.
+#
+#   e2e          The browser smoke suite against the unbundled sources, where it
+#                can see inside the application. Chromium plus a phone profile.
+#
+#   e2e-build    The same browser, against the artifact `build` produced. A
+#                narrower, DOM-only spec that defends what the source suite
+#                structurally cannot reach: chunk splitting, deferred imports,
+#                assets the build forgot to copy.
+#
+#   cross-browser  Firefox and WebKit. Not on pull requests: they roughly triple
+#                  the wall clock and what they find in a canvas application is
+#                  overwhelmingly engine timing rather than a product regression.
+#                  They run on pushes to main and once a week, which is often
+#                  enough to catch a real engine problem and rare enough that
+#                  nobody waits for them.
+#
+# On the instructor materials
+# -----------------------------------------------------------------------------
+# `npm run build` encrypts the instructor guides with a passphrase that is not in
+# the repository, and a pull request from a fork cannot read repository secrets.
+# So CI uses `npm run build:ci`, which builds every document and answer key for
+# real - that is where breakage actually happens - and encrypts them with a
+# random throwaway secret. The output is deliberately undecryptable and is never
+# published; the artifact exists only so the browser job has something to load.
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Monday morning, UTC. Catches an engine or dependency change that landed
+    # while nobody was pushing.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# A second push to the same branch makes the first one irrelevant. Never cancel
+# a run on main, though: those are the ones whose result gets referenced later.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+  # The suite is noisy about colour codes in a log that has none.
+  NO_COLOR: '1'
+
+jobs:
+  checks:
+    name: Lint, tests and physics validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          # Caches the npm download cache, keyed on package-lock.json.
+          cache: npm
+
+      - run: npm ci
+
+      # Ordered cheapest-first so a formatting mistake does not wait behind a
+      # two-minute test run to be reported.
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit and integration tests
+        run: npm test
+
+      - name: Physics validation
+        run: npm run validate:physics
+
+      - name: Internal links and anchors
+        run: npm run validate:links
+
+      - name: Scenario thumbnail manifest
+        run: npm run thumbnails:check
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # build:ci differs from build in one respect: it does not need the real
+      # instructor passphrase. See the header.
+      - name: Build
+        run: npm run build:ci
+
+      - name: Check the built site's internal links
+        run: node tools/check-links.mjs --root dist
+
+      - name: Report what a visitor downloads
+        run: |
+          echo "### Built bundle" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          du -sh dist >> "$GITHUB_STEP_SUMMARY"
+          find dist/js -name '*.js' -not -name '*.map' -printf '%10s  %p\n' \
+            | sort -rn | head -12 >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+          # Source maps are large and no job downstream reads them.
+          if-no-files-found: error
+
+  e2e:
+    name: Browser smoke tests (sources)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Playwright's browsers are ~400MB and unpack slowly, so they are cached
+      # separately from npm and keyed on the pinned version: a browser build and
+      # the client that drives it have to match.
+      - name: Resolve the Playwright version
+        id: pw
+        run: |
+          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Cache browsers
+        uses: actions/cache@v4
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
+
+      - name: Install Chromium
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # The system libraries the browser links against are not in the cache, so
+      # they are installed even on a hit. This is a few seconds.
+      - name: Install browser dependencies
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: Run the suite
+        run: npm run e2e
+
+      - name: Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-sources
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  e2e-build:
+    name: Browser smoke tests (production build)
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # The artifact rather than a second build: this job tests exactly the bytes
+      # the build job produced, which is the point of separating them.
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Resolve the Playwright version
+        id: pw
+        run: |
+          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Cache browsers
+        uses: actions/cache@v4
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
+
+      - name: Install Chromium
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install browser dependencies
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: Run the production spec
+        run: npm run e2e:dist
+
+      - name: Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-build
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  cross-browser:
+    name: Browser smoke tests (${{ matrix.browser }})
+    # Not on pull requests. See the header for why.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      # One engine failing should not hide the other's result.
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Resolve the Playwright version
+        id: pw
+        run: |
+          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Cache browsers
+        uses: actions/cache@v4
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: >-
+            playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-${{
+            matrix.browser }}
+
+      - name: Install ${{ matrix.browser }}
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Install browser dependencies
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps ${{ matrix.browser }}
+
+      - name: Run the suite
+        env:
+          GRAVITAS_E2E_BROWSERS: ${{ matrix.browser }}
+        run: npm run e2e
+
+      - name: Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # A single job to require in branch protection, so the rule does not have to be
+  # edited every time a job is added or a matrix entry changes. It fails if any
+  # job it needs failed, and tolerates cross-browser being skipped on a pull
+  # request.
+  ci:
+    name: CI
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    needs: [checks, build, e2e, e2e-build, cross-browser]
+    steps:
+      - name: Report
+        run: |
+          echo "checks:        ${{ needs.checks.result }}"
+          echo "build:         ${{ needs.build.result }}"
+          echo "e2e:           ${{ needs.e2e.result }}"
+          echo "e2e-build:     ${{ needs.e2e-build.result }}"
+          echo "cross-browser: ${{ needs.cross-browser.result }}"
+          failed=0
+          for result in \
+            "${{ needs.checks.result }}" \
+            "${{ needs.build.result }}" \
+            "${{ needs.e2e.result }}" \
+            "${{ needs.e2e-build.result }}" \
+            "${{ needs.cross-browser.result }}"
+          do
+            case "$result" in
+              success|skipped) ;;
+              *) failed=1 ;;
+            esac
+          done
+          if [ "$failed" -ne 0 ]; then
+            echo "::error::At least one CI job did not pass."
+            exit 1
+          fi
+          echo "All required jobs passed."

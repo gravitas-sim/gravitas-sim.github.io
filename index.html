@@ -144,6 +144,328 @@
       <div id="threeViewResizeHandle" class="three-view-resize-handle"></div>
     </div>
 
+    <!-- 🔭 Radial Velocity panel -->
+    <div id="rvContainer" class="obs-panel rv-container" style="display: none">
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title">Radial Velocity</span>
+          <span id="rvStatus" class="obs-panel-status">0 samples</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="rvClear"
+            class="obs-panel-btn"
+            title="Start a new observing run"
+          >
+            Clear
+          </button>
+          <button
+            id="rvClose"
+            class="obs-panel-btn"
+            title="Hide the radial velocity panel"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <p id="rvNotice" class="rv-notice" role="status" hidden></p>
+
+      <div class="rv-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Observing</span>
+          <span id="rvTarget" class="rv-readout-value">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Radial velocity</span>
+          <span id="rvCurrent" class="rv-readout-value numeric">—</span>
+          <span id="rvDirection" class="rv-direction"></span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Semi-amplitude K</span>
+          <span id="rvAmplitude" class="rv-readout-value numeric"
+            >Keep observing…</span
+          >
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Elapsed</span>
+          <span id="rvTime" class="rv-readout-value numeric">—</span>
+        </div>
+      </div>
+
+      <div class="rv-spectrum" aria-hidden="true">
+        <span class="rv-spectrum-label">Spectral line</span>
+        <div class="rv-spectrum-band">
+          <span class="rv-spectrum-rest"></span>
+          <span id="rvLineShift" class="rv-spectrum-shift"></span>
+        </div>
+        <span class="rv-spectrum-note">shift exaggerated for visibility</span>
+      </div>
+
+      <div class="obs-panel-stage">
+        <canvas id="rvCanvas"></canvas>
+      </div>
+
+      <div id="rvObserverControls" class="obs-controls"></div>
+
+      <p class="obs-panel-hint">
+        Measured relative to the system's own center of mass. A real spectrum
+        also carries the system's motion through the Galaxy: a constant offset
+        that shifts the curve without changing its shape.
+      </p>
+    </div>
+
+    <!-- 🎯 Astrometry panel -->
+    <div
+      id="astrometryContainer"
+      class="obs-panel astrometry-container"
+      style="display: none"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title">Astrometry</span>
+          <span id="astrometryStatus" class="obs-panel-status">0 points</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="astrometryClear"
+            class="obs-panel-btn"
+            title="Start a new observing run"
+          >
+            Clear
+          </button>
+          <button
+            id="astrometryClose"
+            class="obs-panel-btn"
+            title="Hide the astrometry panel"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <p id="astrometryNotice" class="rv-notice" role="status" hidden></p>
+
+      <div class="astrometry-body">
+        <div class="astrometry-stage">
+          <canvas id="astrometryCanvas"></canvas>
+          <span class="astrometry-caption">The star's path on the sky</span>
+        </div>
+        <div class="astrometry-readout">
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Observing</span>
+            <span id="astrometryTarget" class="rv-readout-value">—</span>
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Reflex orbit</span>
+            <span id="astrometryReflex" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Angular signature</span>
+            <span id="astrometrySignature" class="rv-readout-value numeric"
+              >Keep observing…</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Offset now</span>
+            <span id="astrometryPosition" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="astrometry-distance">
+        <label for="astrometryDistance">Distance (parsecs)</label>
+        <input
+          type="number"
+          id="astrometryDistance"
+          min="0.1"
+          max="10000"
+          step="0.1"
+          value="10"
+          class="astrometry-distance-input"
+        />
+        <span
+          id="astrometryDistanceNote"
+          class="astrometry-distance-note"
+        ></span>
+      </div>
+
+      <div id="astrometryObserverControls" class="obs-controls"></div>
+
+      <p class="obs-panel-hint">
+        Distance changes the angle, not the orbit. The star's reflex path is the
+        same size whether the system is near or far; moving it further away only
+        makes that path subtend a smaller angle on the sky.
+      </p>
+    </div>
+
+    <!-- 🌀 Rotation Curve panel -->
+    <div
+      id="rotationCurveContainer"
+      class="obs-panel rotation-curve-container"
+      style="display: none"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title">Rotation Curve</span>
+          <span id="rotationCurveStatus" class="obs-panel-status"
+            >0 bodies</span
+          >
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="rotationCurveClose"
+            class="obs-panel-btn"
+            title="Hide the rotation curve panel"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <p id="rotationCurveNotice" class="rv-notice" role="status" hidden></p>
+
+      <div class="rv-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Outer slope</span>
+          <span id="rotationCurveSlope" class="rv-readout-value numeric"
+            >—</span
+          >
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Shape</span>
+          <span id="rotationCurveVerdict" class="rv-readout-value">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label">Visible mass</span>
+          <span id="rotationCurveVisible" class="rv-readout-value numeric"
+            >—</span
+          >
+        </div>
+      </div>
+
+      <div id="rotationCurveCluster" class="rc-cluster" hidden>
+        <p class="rc-cluster-title">Cluster measurements</p>
+        <div class="rv-readout">
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Members</span>
+            <span id="rotationCurveMembers" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Speed spread σ</span>
+            <span id="rotationCurveSigma" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label">Cluster radius</span>
+            <span id="rotationCurveRadius" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+        </div>
+        <p class="obs-control-help rc-cluster-note">
+          A cluster is a swarm, not a disc, so the curve below is not the
+          instrument here: these three numbers are. Switch to simulation units
+          before working the virial arithmetic, where G = 1 and the mass comes
+          out in the same units the readouts use.
+        </p>
+      </div>
+
+      <div class="obs-panel-stage">
+        <canvas
+          id="rotationCurveCanvas"
+          role="img"
+          aria-label="Orbital speed plotted against distance from the center of mass, with the speeds predicted from the visible mass alone shown as a dashed line."
+        ></canvas>
+      </div>
+
+      <p class="rc-legend">
+        <span class="rc-key rc-key-points"></span> measured bodies
+        <span class="rc-key rc-key-visible"></span> visible mass only
+        <span class="rc-key rc-key-total"></span> with halo
+      </p>
+
+      <div class="obs-controls rc-controls">
+        <div class="rc-toggle-row">
+          <span id="rotationCurveHaloLabel">Dark matter halo</span>
+          <button
+            type="button"
+            id="rotationCurveHalo"
+            class="toggle-button"
+            data-state="off"
+            role="switch"
+            aria-checked="false"
+            aria-labelledby="rotationCurveHaloLabel"
+          >
+            <span id="rotationCurveHaloState">Off</span>
+          </button>
+        </div>
+
+        <div class="obs-control-row">
+          <span class="obs-control-label">
+            <label for="rotationCurveVFlat">Flat speed</label>
+            <output
+              id="rotationCurveVFlatValue"
+              class="obs-control-value"
+              for="rotationCurveVFlat"
+              >—</output
+            >
+          </span>
+          <input
+            type="range"
+            class="obs-control-slider"
+            id="rotationCurveVFlat"
+            min="0.5"
+            max="30"
+            step="0.5"
+            value="6"
+          />
+          <p class="obs-control-help">
+            How fast the curve settles far out. This is the one number a flat
+            rotation curve actually measures.
+          </p>
+        </div>
+
+        <div class="obs-control-row">
+          <span class="obs-control-label">
+            <label for="rotationCurveCore">Core radius</label>
+            <output
+              id="rotationCurveCoreValue"
+              class="obs-control-value"
+              for="rotationCurveCore"
+              >—</output
+            >
+          </span>
+          <input
+            type="range"
+            class="obs-control-slider"
+            id="rotationCurveCore"
+            min="20"
+            max="2000"
+            step="10"
+            value="300"
+          />
+          <p class="obs-control-help">
+            Inside this radius the halo's pull rises with distance; outside it,
+            the halo's contribution levels off.
+          </p>
+        </div>
+      </div>
+
+      <p class="obs-panel-hint">
+        Each point is one body's real distance and real speed this instant. The
+        dashed line is what those speeds would be if the objects you can see
+        were all the mass there is.
+      </p>
+    </div>
+
     <!-- 📈 Light Curve panel -->
     <div
       id="lightCurveContainer"
@@ -179,21 +501,7 @@
           </button>
         </div>
       </div>
-      <div class="light-curve-controls">
-        <label class="light-curve-angle-label">
-          Observer Angle:
-          <span id="observerAngleDisplay">0°</span>
-        </label>
-        <input
-          type="range"
-          id="observerAngleSlider"
-          min="0"
-          max="360"
-          value="0"
-          step="1"
-          title="Rotate the observer around the system. 0° views along the +X axis; the light curve updates live as the viewing geometry changes."
-        />
-      </div>
+      <div id="lightCurveObserverControls" class="obs-controls"></div>
       <div class="light-curve-stage">
         <canvas id="lightCurveCanvas"></canvas>
       </div>
@@ -502,6 +810,21 @@
           >
             Physical units
           </button>
+          <div class="rail-field">
+            <label class="rail-field-label" for="referenceFrameSelect">
+              Frame
+            </label>
+            <select
+              id="referenceFrameSelect"
+              class="rail-select"
+              title="Re-express every position, and every trail, in the frame of the barycenter or of the selected object. Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards."
+            >
+              <option value="world">World</option>
+              <option value="barycenter">Barycenter</option>
+              <option value="object" disabled>Selected object</option>
+            </select>
+          </div>
+          <p class="rail-field-note" id="referenceFrameNote" hidden></p>
           <button
             id="screenshotBtn"
             class="ui-button"
@@ -524,6 +847,33 @@
             title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction: planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
           >
             Light Curve
+          </button>
+
+          <button
+            id="toggleRadialVelocity"
+            class="ui-button secondary"
+            aria-pressed="false"
+            title="Open the radial velocity panel: the star's motion toward and away from us, measured the way a spectrograph measures it. A planet pulls its star around their common center of mass, and the size of that wobble is what tells us the planet's mass."
+          >
+            Radial Velocity
+          </button>
+
+          <button
+            id="toggleRotationCurve"
+            class="ui-button secondary"
+            aria-pressed="false"
+            title="Open the rotation curve panel: orbital speed against distance from the center, one point per body, drawn against the speeds the visible mass alone would produce. Switch on the dark-matter halo and watch a falling curve flatten."
+          >
+            Rotation Curve
+          </button>
+
+          <button
+            id="toggleAstrometry"
+            class="ui-button secondary"
+            aria-pressed="false"
+            title="Open the astrometry panel: the tiny ellipse the star traces across the sky as its planet swings it around their common center of mass. Where radial velocity fails on a face-on orbit, astrometry works best."
+          >
+            Astrometry
           </button>
 
           <div class="speed-controls">
@@ -549,7 +899,7 @@
           <button
             id="resetViewBtn"
             class="ui-button"
-            title="Recentre the camera and return to 1× zoom (R)."
+            title="Recenter the camera and return to 1× zoom (R)."
           >
             Reset View
           </button>
@@ -775,15 +1125,29 @@
       </div>
     </div>
 
-    <!-- Investigations: the lesson browser -->
+    <!--
+      Investigations: the lesson browser. A sibling of the scenario gallery
+      above, on purpose - same shell, same borrowed thumbnails, same count line
+      - but the cards are wide landscape ones because a lesson is an hour of
+      work, not a tile you click on a whim. Every card, the count line and the
+      level note are written by js/investigations.js from the catalog in
+      js/data/investigations.js: no lesson title, duration, step count or total
+      is spelled out here, so nothing in this file can go stale.
+    -->
     <div id="investigationBrowser" class="hidden">
-      <div id="investigationBrowserContent">
+      <div
+        id="investigationBrowserContent"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="investigationBrowserTitle"
+      >
         <div class="inv-browser-header">
           <div>
-            <h3>Investigations</h3>
+            <h3 id="investigationBrowserTitle">Investigations</h3>
             <p class="inv-browser-sub">
-              Guided lessons you work through beside the simulation. Finish one
-              and you can download a lab report with your answers.
+              Guided lessons you work through beside the simulation, each one a
+              sitting's worth of measuring and writing down. Progress saves as
+              you go, and finishing one gets you a lab report with your answers.
             </p>
             <p class="inv-browser-links">
               <a href="/model/">About the physics model</a>
@@ -807,7 +1171,28 @@
         >
           ✕
         </button>
-        <div id="investigationList" role="list"></div>
+
+        <p class="inv-browser-count-row">
+          <span
+            id="investigationBrowserCount"
+            class="inv-count"
+            role="status"
+            aria-live="polite"
+          ></span>
+          <span
+            id="investigationBrowserLevel"
+            class="inv-count-level"
+            hidden
+          ></span>
+        </p>
+
+        <div id="investigationBrowserScroll" class="inv-browser-scroll">
+          <!--
+            No role="list": the children are buttons, which cannot be
+            listitems, and the scenario grid above carries no role either.
+          -->
+          <div id="investigationList" class="inv-grid"></div>
+        </div>
       </div>
     </div>
 
@@ -820,7 +1205,9 @@
     >
       <header class="inv-header">
         <div class="inv-header-text">
-          <h2 id="investigationTitle">Investigation</h2>
+          <!-- tabindex="-1" so choosing a lesson can move focus in here
+               rather than leaving it on the card the browser just destroyed. -->
+          <h2 id="investigationTitle" tabindex="-1">Investigation</h2>
           <p id="investigationSubtitle"></p>
         </div>
         <button
@@ -1266,57 +1653,126 @@
     </div>
 
     <!-- Object Inspector Modal -->
-    <div id="objectInspector">
-      <div class="inspector-header">
-        <h3 class="inspector-title" id="inspectorTitle">Object Details</h3>
-        <div class="inspector-controls">
+    <!-- Object inspector: a compact instrument readout, not a modal -->
+    <div
+      id="objectInspector"
+      role="dialog"
+      aria-labelledby="inspectorTitle"
+      aria-modal="false"
+    >
+      <div class="inspector-header" id="inspectorDragHandle">
+        <span
+          class="inspector-icon"
+          id="inspectorIcon"
+          aria-hidden="true"
+        ></span>
+        <span class="inspector-identity">
+          <span class="inspector-title" id="inspectorTitle">Object</span>
+          <span class="inspector-kind" id="inspectorKind"></span>
+        </span>
+        <span class="inspector-controls">
+          <button
+            class="inspector-pin"
+            id="inspectorPin"
+            type="button"
+            aria-label="Pin a copy of this object for comparison"
+            title="Pin a copy for comparison"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 1.8h4l-.6 3.3 2.1 2.3H4.5l2.1-2.3zM8 7.4v6.8"
+              />
+            </svg>
+          </button>
           <button
             class="inspector-delete"
             id="inspectorDelete"
-            title="Delete Object"
+            type="button"
+            aria-label="Delete this object"
+            title="Delete this object"
           >
-            🗑️
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                d="M2.5 4h11M6.5 4V2.6h3V4M4 4l.7 9.4h6.6L12 4M6.6 6.6v4.4M9.4 6.6v4.4"
+              />
+            </svg>
           </button>
-          <button class="inspector-close" id="inspectorClose" title="Close">
+          <button
+            class="inspector-close"
+            id="inspectorClose"
+            type="button"
+            aria-label="Close the inspector"
+            title="Close (Esc)"
+          >
             &times;
           </button>
-        </div>
+        </span>
       </div>
-      <button
-        class="floating-close-chip"
-        id="inspectorCloseChip"
-        aria-label="Close"
-        title="Close the object inspector (Esc)"
-      >
-        ✕
-      </button>
-      <div class="inspector-tabs">
+
+      <div class="inspector-tabs" role="tablist" aria-label="Inspector views">
         <button
           class="inspector-tab active"
+          id="inspectorTabDetails"
           data-tab="details"
-          title="Physical properties of the selected object: mass, radius, temperature, orbit and composition"
+          role="tab"
+          type="button"
+          aria-selected="true"
+          aria-controls="detailsTab"
         >
-          <span class="tab-icon">📋</span>
-          <span class="tab-text">Details</span>
+          Details
         </button>
         <button
           class="inspector-tab"
+          id="inspectorTabEnergy"
           data-tab="energy"
-          title="Kinetic, potential and total energy of this object over time. A flat total means a stable orbit; a rising one means the orbit is decaying or the object is being ejected."
+          role="tab"
+          type="button"
+          aria-selected="false"
+          aria-controls="energyTab"
         >
-          <span class="tab-icon">⚡</span>
-          <span class="tab-text">Energy</span>
+          Energy
         </button>
       </div>
+
       <div class="inspector-content" id="inspectorContent">
-        <div class="inspector-tab-content active" id="detailsTab">
-          <!-- Details content will be populated by JavaScript -->
-        </div>
-        <div class="inspector-tab-content" id="energyTab">
-          <!-- Energy tab content will be populated by JavaScript -->
-        </div>
+        <div
+          class="inspector-tab-content active"
+          id="detailsTab"
+          role="tabpanel"
+          aria-labelledby="inspectorTabDetails"
+        ></div>
+        <div
+          class="inspector-tab-content"
+          id="energyTab"
+          role="tabpanel"
+          aria-labelledby="inspectorTabEnergy"
+        ></div>
       </div>
     </div>
+
+    <!-- Pinned comparison cards, one per pinned object -->
+    <div id="pinnedInspectors" aria-label="Pinned objects"></div>
 
     <!-- Tutorial Button -->
     <button
@@ -1397,6 +1853,8 @@
     <script type="module" src="js/render.js"></script>
     <script type="module" src="js/ui.js"></script>
     <script type="module" src="js/lightCurve.js"></script>
+    <script type="module" src="js/radialVelocity.js"></script>
+    <script type="module" src="js/astrometry.js"></script>
     <script type="module" src="js/main.js"></script>
     <!--
       Credit and licence only. The documentation links that used to live here
@@ -1443,6 +1901,17 @@
       >
       <span class="attribution-sep" aria-hidden="true">·</span>
       <span>MIT</span>
+      <span class="attribution-sep" aria-hidden="true">·</span>
+      <!--
+        The one number worth putting in the footer: an instructor deciding
+        whether to assign this wants to know what the physics has been checked
+        against, and the answer should not be several clicks into a repository.
+      -->
+      <a
+        href="/validation/"
+        title="What the physics engine has been checked against: 135 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        >Validated</a
+      >
       <span class="attribution-sep" aria-hidden="true">·</span>
       <a
         href="https://github.com/gravitas-sim/gravitas-sim.github.io"

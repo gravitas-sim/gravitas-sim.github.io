@@ -299,7 +299,7 @@ function build() {
       </div>
     </header>
 
-    <section class="wel-section wel-what" aria-labelledby="welWhat">
+    <section class="wel-section wel-what" aria-labeledby="welWhat">
       <h2 id="welWhat" class="wel-h2">What Gravitas is</h2>
       <p class="wel-say">
         A gravity simulation you can steer, paired with guided astronomy lessons
@@ -334,12 +334,12 @@ function build() {
       </div>
     </section>
 
-    <section class="wel-section" aria-labelledby="welDoors">
+    <section class="wel-section" aria-labeledby="welDoors">
       <h2 id="welDoors" class="wel-h2">Three ways in</h2>
       <div class="wel-doors">${entryCardsHtml()}</div>
     </section>
 
-    <section class="wel-section" aria-labelledby="welScenarios">
+    <section class="wel-section" aria-labeledby="welScenarios">
       <div class="wel-section-head">
         <h2 id="welScenarios" class="wel-h2">Featured scenarios</h2>
         <button type="button" class="wel-quiet" data-action="scenarios">
@@ -349,7 +349,7 @@ function build() {
       <div class="wel-scenarios">${scenarioCardsHtml()}</div>
     </section>
 
-    <section class="wel-section wel-lessons-block" aria-labelledby="welLessons">
+    <section class="wel-section wel-lessons-block" aria-labeledby="welLessons">
       <h2 id="welLessons" class="wel-h2">Guided investigations</h2>
       <p class="wel-say">
         Structured undergraduate astronomy activities built into the simulation
@@ -364,12 +364,12 @@ function build() {
       </button>
     </section>
 
-    <section class="wel-section" aria-labelledby="welWho">
+    <section class="wel-section" aria-labeledby="welWho">
       <h2 id="welWho" class="wel-h2">Who it is for</h2>
       <div class="wel-audiences">${audiencesHtml()}</div>
     </section>
 
-    <section class="wel-section wel-teaching" aria-labelledby="welTeaching">
+    <section class="wel-section wel-teaching" aria-labeledby="welTeaching">
       <h2 id="welTeaching" class="wel-h2">Teaching with Gravitas</h2>
       <p class="wel-say">
         Written for introductory undergraduate astronomy, including

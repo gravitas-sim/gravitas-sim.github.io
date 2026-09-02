@@ -28,6 +28,9 @@ import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
 import { HABITABILITY_WIDGETS } from './habitabilityWidgets.js';
+import { EXOPLANET_WIDGETS } from './exoplanetWidgets.js';
+import { TIDAL_WIDGETS } from './tidalWidgets.js';
+import { DARK_MATTER_WIDGETS } from './darkMatterWidgets.js';
 
 const WIDGETS = [
   ...TRANSIT_WIDGETS,
@@ -35,6 +38,9 @@ const WIDGETS = [
   ...BINARY_WIDGETS,
   ...BLACK_HOLE_WIDGETS,
   ...HABITABILITY_WIDGETS,
+  ...EXOPLANET_WIDGETS,
+  ...TIDAL_WIDGETS,
+  ...DARK_MATTER_WIDGETS,
 ];
 
 /**

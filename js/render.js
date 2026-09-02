@@ -8,6 +8,7 @@ import {
   particles,
   neutron_stars,
   white_dwarfs,
+  galaxies,
   accretion_disk_particles,
   updatePhysics,
   DT,
@@ -16,6 +17,9 @@ import {
   world_to_screen,
   findObjectAtPosition,
   setDetailScale,
+  getTrailTick,
+  trailBudget,
+  barycenterBodies,
   SOLAR_MASS_UNIT,
 } from './physics.js';
 import { hexToRgb, debugLog } from './utils.js';
@@ -32,11 +36,20 @@ import { updateSonification } from './audio.js';
 // that begins closed.
 import { update3DScene } from './view3dBridge.js';
 import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
+import { updateRadialVelocity } from './radialVelocity.js';
+import { updateAstrometry } from './astrometry.js';
+import { updateRotationCurve } from './rotationCurve.js';
 import { tickTimeline } from './timeline.js';
 import { readToken, onThemeChange } from './theme.js';
 import { speedTrailColor } from './palette.js';
 import { auToSim } from './units.js';
 import { habitableZoneBounds, stellarPropertiesFor } from './habitability.js';
+import {
+  resolveFrameOrigin,
+  frameShifts,
+  isWorldFrame,
+  resetFrame,
+} from './referenceFrame.js';
 
 /**
  * Translate the legacy "habitable zone optimism" setting into a model name.
@@ -97,10 +110,10 @@ if (typeof window !== 'undefined') {
 // ---------------------------------------------------------------------------
 // Trail glow sprites
 // ---------------------------------------------------------------------------
-// One pre-rendered radial gradient per colour, reused for every trail point.
-// Colours are quantised to 5 bits per channel so the cache stays small even
-// when object colours vary; it is cleared outright if it ever grows past the
-// cap, which cannot happen with the handful of base colours in practice.
+// One pre-rendered radial gradient per color, reused for every trail point.
+// Colors are quantised to 5 bits per channel so the cache stays small even
+// when object colors vary; it is cleared outright if it ever grows past the
+// cap, which cannot happen with the handful of base colors in practice.
 const GLOW_SPRITE_SIZE = 64;
 const GLOW_SPRITE_CACHE_LIMIT = 64;
 const glowSpriteCache = new Map();
@@ -479,10 +492,81 @@ function drawStarfield() {
 // Remove all lensing-related functions and variables below this point.
 // Only keep starfield rendering, generation, and unrelated rendering logic.
 
+// --- Reference-frame trail projection -----------------------------------------
+// Trails are recorded in world coordinates. To draw them in another frame every
+// point has to be moved by where that frame's origin was *when the point was
+// recorded*, which no single canvas transform can express. These two pools let
+// that happen without allocating on the render path: framedTrail refills them
+// each time it is called and the caller draws before calling it again.
+const framedPointPool = [];
+const framedTrailView = [];
+
+/**
+ * A trail as the current reference frame would have seen it.
+ *
+ * Points older than the origin's own history are dropped rather than drawn
+ * unshifted. A body that has been alive longer than the frame's origin has trail
+ * points that simply cannot be expressed in that frame, and drawing them where
+ * they happen to sit in world coordinates would splice a piece of a different
+ * picture onto the end of this one.
+ *
+ * @param {Array} trail - The body's recorded trail, oldest first
+ * @param {?object} shifts - From frameShifts, or null in the world frame
+ * @param {number} newestTick - Tick the shifts are indexed against
+ * @returns {Array} The trail itself in the world frame, or a reused view
+ */
+function framedTrail(trail, shifts, newestTick) {
+  if (!shifts) return trail;
+
+  // The unknown region is always a prefix - the origin's history is shorter, not
+  // holed - so one scan back from the newest point finds where drawing starts.
+  let start = 0;
+  for (let i = trail.length - 1; i >= 0; i--) {
+    const k = newestTick - trail[i].tick;
+    if (k < 0 || k >= shifts.known.length || !shifts.known[k]) {
+      start = i + 1;
+      break;
+    }
+  }
+
+  framedTrailView.length = 0;
+  for (let i = start; i < trail.length; i++) {
+    const p = trail[i];
+    const k = newestTick - p.tick;
+    let q = framedPointPool[framedTrailView.length];
+    if (!q) {
+      q = { x: 0, y: 0, age: 0, velocity: 0 };
+      framedPointPool.push(q);
+    }
+    q.x = p.x + shifts.dx[k];
+    q.y = p.y + shifts.dy[k];
+    q.age = p.age;
+    q.velocity = p.velocity;
+    framedTrailView.push(q);
+  }
+  return framedTrailView;
+}
+
 // Original drawScene function from index.html
 const drawScene = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Resolve the reference frame once per rendered frame. Everything downstream
+  // reads state.frameOffset - the canvas transform below, world_to_screen for
+  // hit-testing and bloom, the overlays - so choosing a frame does not need a
+  // second code path anywhere. The world frame resolves to null and writes
+  // zeroes, which is exactly the old behavior.
+  let frameOrigin = resolveFrameOrigin(barycenterBodies());
+  if (!frameOrigin && !isWorldFrame()) {
+    // The body the frame was tied to has been absorbed, merged or culled. There
+    // is no origin any more, so say so and fall back rather than leaving the
+    // rail claiming a frame that no longer exists.
+    resetFrame();
+    frameOrigin = null;
+  }
+  state.frameOffset.x = frameOrigin ? frameOrigin.now.x : 0;
+  state.frameOffset.y = frameOrigin ? frameOrigin.now.y : 0;
 
   ctx.save();
   ctx.translate(
@@ -490,6 +574,7 @@ const drawScene = () => {
     canvas.height / 2 + state.pan.y
   );
   ctx.scale(state.zoom, -state.zoom);
+  ctx.translate(-state.frameOffset.x, -state.frameOffset.y);
 
   /**
    * Brightness reference for a trail, in the object's own speed units.
@@ -524,6 +609,14 @@ const drawScene = () => {
   const TRAIL_MIN_INTENSITY = 0.45;
 
   if (SETTINGS.show_trails) {
+    // The correction a trail point needs depends only on when it was recorded,
+    // not on which body recorded it, so it is computed once for the whole scene
+    // rather than once per body.
+    const newestTick = getTrailTick();
+    const shifts = frameOrigin
+      ? frameShifts(frameOrigin, newestTick, trailBudget() + 2)
+      : null;
+
     [
       ...planets,
       ...gas_giants,
@@ -531,8 +624,10 @@ const drawScene = () => {
       ...stars,
       ...neutron_stars,
       ...white_dwarfs,
+      ...galaxies,
     ].forEach(obj => {
-      if (obj.alive && obj.trail.length > 1) {
+      const trail = framedTrail(obj.trail, shifts, newestTick);
+      if (obj.alive && trail.length > 1) {
         const baseColor =
           obj.baseColor ||
           SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] ||
@@ -545,14 +640,14 @@ const drawScene = () => {
           ? speedTrailColor(Math.hypot(obj.vel.x, obj.vel.y))
           : hexToRgb(baseColor);
         // Relative to this object's own motion, so slow orbits still draw.
-        const speedScale = trailSpeedScale(obj.trail);
+        const speedScale = trailSpeedScale(trail);
 
         if (SETTINGS.trail_style === 'Cloud') {
           // Draw cloud-like trail with multiple passes
           for (let pass = 0; pass < 3; pass++) {
             const velocityScale = Math.max(
               0.6,
-              Math.min(1.8, obj.trail[0].velocity / speedScale)
+              Math.min(1.8, trail[0].velocity / speedScale)
             );
             const trailWidth =
               ((2.5 - pass * 0.5) * velocityScale) / state.zoom;
@@ -566,30 +661,25 @@ const drawScene = () => {
             ctx.beginPath();
 
             // Draw trail with smooth curves and fade-out (use world coordinates directly)
-            ctx.moveTo(obj.trail[0].x, obj.trail[0].y);
+            ctx.moveTo(trail[0].x, trail[0].y);
 
-            for (let i = 1; i < obj.trail.length; i++) {
-              const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
+            for (let i = 1; i < trail.length; i++) {
+              const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
               const velocity_factor = Math.max(
                 TRAIL_MIN_INTENSITY,
-                Math.min(1, obj.trail[i].velocity / speedScale)
+                Math.min(1, trail[i].velocity / speedScale)
               );
               const alpha = age_factor * velocity_factor * maxAlpha;
 
               ctx.globalAlpha = alpha;
 
               // Use quadratic curves for smoother trails
-              if (i < obj.trail.length - 1) {
-                const cp_x = (obj.trail[i].x + obj.trail[i + 1].x) / 2;
-                const cp_y = (obj.trail[i].y + obj.trail[i + 1].y) / 2;
-                ctx.quadraticCurveTo(
-                  obj.trail[i].x,
-                  obj.trail[i].y,
-                  cp_x,
-                  cp_y
-                );
+              if (i < trail.length - 1) {
+                const cp_x = (trail[i].x + trail[i + 1].x) / 2;
+                const cp_y = (trail[i].y + trail[i + 1].y) / 2;
+                ctx.quadraticCurveTo(trail[i].x, trail[i].y, cp_x, cp_y);
               } else {
-                ctx.lineTo(obj.trail[i].x, obj.trail[i].y);
+                ctx.lineTo(trail[i].x, trail[i].y);
               }
             }
             ctx.stroke();
@@ -597,32 +687,31 @@ const drawScene = () => {
 
           // Draw bright core trail
           ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.9)`;
-          ctx.lineWidth =
-            Math.max(0.8, obj.trail[0].velocity / 120) / state.zoom;
+          ctx.lineWidth = Math.max(0.8, trail[0].velocity / 120) / state.zoom;
           ctx.lineCap = 'round';
           ctx.beginPath();
 
-          ctx.moveTo(obj.trail[0].x, obj.trail[0].y);
+          ctx.moveTo(trail[0].x, trail[0].y);
 
-          for (let i = 1; i < obj.trail.length; i++) {
-            const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
+          for (let i = 1; i < trail.length; i++) {
+            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
             ctx.globalAlpha = age_factor * 0.9;
-            ctx.lineTo(obj.trail[i].x, obj.trail[i].y);
+            ctx.lineTo(trail[i].x, trail[i].y);
           }
           ctx.stroke();
         } else if (SETTINGS.trail_style === 'Glow') {
           // Draw glowing trail from a cached sprite. The gradient's shape is
-          // identical for every point - only colour, alpha and radius vary - so
+          // identical for every point - only color, alpha and radius vary - so
           // building it per point was pure waste. globalAlpha reproduces the
           // old per-stop alphas exactly (sprite bakes 0.8/0.3/0, multiplied by
           // intensity here).
           const sprite = getGlowSprite(rgb.r, rgb.g, rgb.b);
           const prevAlpha = ctx.globalAlpha;
-          for (let i = 0; i < obj.trail.length; i++) {
-            const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
+          for (let i = 0; i < trail.length; i++) {
+            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
             const velocity_factor = Math.max(
               TRAIL_MIN_INTENSITY,
-              Math.min(1, obj.trail[i].velocity / speedScale)
+              Math.min(1, trail[i].velocity / speedScale)
             );
             const intensity = age_factor * velocity_factor;
 
@@ -631,8 +720,8 @@ const drawScene = () => {
               ctx.globalAlpha = intensity;
               ctx.drawImage(
                 sprite,
-                obj.trail[i].x - radius,
-                obj.trail[i].y - radius,
+                trail[i].x - radius,
+                trail[i].y - radius,
                 radius * 2,
                 radius * 2
               );
@@ -647,12 +736,12 @@ const drawScene = () => {
           ctx.lineCap = 'round';
           ctx.beginPath();
 
-          ctx.moveTo(obj.trail[0].x, obj.trail[0].y);
+          ctx.moveTo(trail[0].x, trail[0].y);
 
-          for (let i = 1; i < obj.trail.length; i++) {
-            const age_factor = 1 - obj.trail[i].age / SETTINGS.trail_length;
+          for (let i = 1; i < trail.length; i++) {
+            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
             ctx.globalAlpha = age_factor * 0.8;
-            ctx.lineTo(obj.trail[i].x, obj.trail[i].y);
+            ctx.lineTo(trail[i].x, trail[i].y);
           }
           ctx.stroke();
         }
@@ -668,6 +757,9 @@ const drawScene = () => {
   }
 
   [
+    // Galaxies first, so a cluster member's diffuse glow sits behind anything
+    // that happens to be in front of it rather than washing it out.
+    ...galaxies,
     ...debris,
     ...asteroids,
     ...planets,
@@ -995,7 +1087,7 @@ const drawScene = () => {
         const area = Math.abs(twice) / 2;
         wedgeAreas.push(area);
         // Centroid of the swept sector, pulled toward the star so the label
-        // sits inside the coloured region rather than out on the arc.
+        // sits inside the colored region rather than out on the arc.
         wedgeLabelAt.push(
           twice !== 0
             ? { x: (cx / (3 * twice)) * 0.82, y: (cy / (3 * twice)) * 0.82 }
@@ -1196,6 +1288,12 @@ const drawScene = () => {
       `<span class="category-label">Planets:</span> ${planets.length} | <span class="category-label">Gas Giants:</span> ${gas_giants.length} | <span class="category-label">Asteroids:</span> ${asteroids.length}`,
       `<span class="category-label">Stars:</span> ${stars.length} | <span class="category-label">Neutron Stars:</span> ${neutron_stars.length} | <span class="category-label">White Dwarfs:</span> ${white_dwarfs.length}`,
       `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`,
+      // Only shown when there are any: every other scenario in the app has
+      // none, and a permanent "Galaxies: 0" line would cost every user a row of
+      // the readout to tell them about a thing that is not there.
+      ...(galaxies.length
+        ? [`<span class="category-label">Galaxies:</span> ${galaxies.length}`]
+        : []),
       `<div class="separator-line"></div>`,
       `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}\u00d7<br/><span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}\u00d7</span>`,
       `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused' : 'Running'}</span>`,
@@ -1450,6 +1548,10 @@ const gameLoop = timestamp => {
   if (perf.enabled) perf.frames++;
   try {
     updateLightCurve(dt_sim);
+    // Returns on a cheap guard when the panel is closed, like the light curve.
+    updateRadialVelocity();
+    updateAstrometry();
+    updateRotationCurve();
     drawObserverIndicator(ctx, canvas.width, canvas.height);
   } catch {
     /* non-fatal */

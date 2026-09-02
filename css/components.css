@@ -9,7 +9,7 @@
 @layer components {
   /* The rules below set `display` on buttons and several containers, which
      beats the user-agent style for [hidden]. Without this, anything the app
-     hides by setting the attribute stays on screen: the plot panel's unlabelled
+     hides by setting the attribute stays on screen: the plot panel's unlabeled
      transform toggle was rendering as an empty pill on every plot step that
      does not define one. */
   [hidden] {
@@ -599,6 +599,376 @@
   }
 
   /* ==========================================================================
+     Observing panels: light curve, radial velocity, astrometry
+     --------------------------------------------------------------------------
+     Three instruments that must read as three views of one rig. They share a
+     chrome, and they stack rather than overlap: js/observationLayout.js sets
+     each open panel's `bottom` so a second instrument opens above the first
+     instead of on top of it.
+     ====================================================================== */
+  .obs-panel {
+    position: fixed;
+    left: 20px;
+    bottom: 120px;
+    width: 420px;
+    background: var(--surface-1, rgba(5, 9, 22, 0.95));
+    border: 1px solid var(--border-subtle, rgba(0, 180, 255, 0.3));
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: var(--shadow-lg, 0 12px 48px rgba(0, 0, 0, 0.5));
+    backdrop-filter: blur(6px);
+    z-index: 160;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+    overflow: hidden;
+  }
+
+  /* Collapsed: the title bar and nothing else. Three instruments will not fit
+     one above another on an ordinary screen, and a panel reduced to its name is
+     more useful than one pushed off the top of the window. */
+  .obs-panel.is-collapsed > :not(.obs-panel-toolbar),
+  .light-curve-container.is-collapsed > :not(.light-curve-toolbar) {
+    display: none;
+  }
+  .obs-panel.is-collapsed,
+  .light-curve-container.is-collapsed {
+    height: auto;
+    min-height: 0;
+    cursor: pointer;
+  }
+  .obs-panel.is-collapsed .obs-panel-toolbar,
+  .light-curve-container.is-collapsed .light-curve-toolbar {
+    border-bottom: none;
+  }
+
+  .obs-panel-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .obs-panel-meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+  .obs-panel-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .obs-panel-status {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .obs-panel-actions {
+    display: flex;
+    gap: var(--space-1);
+    flex: 0 0 auto;
+  }
+  .obs-panel-btn {
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 4px);
+    font-size: var(--text-xs);
+    padding: 2px 8px;
+    cursor: pointer;
+    min-height: 24px;
+  }
+  .obs-panel-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+  }
+  .obs-panel-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* The flexible part of the panel. Everything else - readouts, the observer
+     controls - has its own intrinsic height, so when the stack is short of
+     room and the layout caps a panel, the chart is what gives way and the
+     controls stay reachable. */
+  .obs-panel-stage {
+    position: relative;
+    flex: 1 1 150px;
+    min-height: 90px;
+    margin: 0 var(--space-3);
+  }
+  .obs-panel-stage canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+  .obs-panel-hint {
+    margin: 0 var(--space-3);
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug, 1.35);
+    color: var(--text-muted);
+  }
+
+  /* A scenario that pins its star cannot show a wobble. Saying so is the
+     difference between a simplification and a false lesson. */
+  .rv-notice {
+    margin: 0 var(--space-3);
+    padding: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border-left: 3px solid var(--warning, #e0a458);
+    border-radius: var(--radius-sm, 4px);
+  }
+
+  /* --- Radial velocity readouts ------------------------------------------- */
+  .rv-readout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+    padding: 0 var(--space-3);
+  }
+  .rv-readout-cell {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .rv-readout-label {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .rv-readout-value {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Direction is stated in words. The color is a second cue, never the only
+     one: a red line means nothing to a color-blind student or a screen
+     reader, and "AWAY FROM US" means the same thing to everybody. */
+  .rv-direction {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  .rv-direction.is-receding {
+    color: var(--danger, #e2725b);
+  }
+  .rv-direction.is-approaching {
+    color: var(--info, #5b9bd5);
+  }
+  .rv-direction.is-zero {
+    color: var(--text-muted);
+  }
+
+  /* --- The Doppler line ---------------------------------------------------- */
+  .rv-spectrum {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 var(--space-3);
+  }
+  .rv-spectrum-label,
+  .rv-spectrum-note {
+    font-size: 10px;
+    color: var(--text-muted);
+    flex: 0 0 auto;
+  }
+  .rv-spectrum-note {
+    font-style: italic;
+  }
+  .rv-spectrum-band {
+    position: relative;
+    flex: 1 1 auto;
+    height: 20px;
+    border-radius: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--info, #5b9bd5) 0%,
+      var(--surface-2) 45%,
+      var(--surface-2) 55%,
+      var(--danger, #e2725b) 100%
+    );
+    opacity: 0.5;
+  }
+  .rv-spectrum-rest {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--text-muted);
+  }
+  .rv-spectrum-shift {
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    bottom: 2px;
+    width: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    transition: transform 90ms linear;
+  }
+
+  /* --- Astrometry ---------------------------------------------------------- */
+  /* The flexible region of this panel, for the same reason .obs-panel-stage is
+     the flexible region of the radial-velocity one: when the layout caps the
+     panel to fit the stack, the sky plot gives way and the observer controls
+     below it keep their height. Without this the cap clipped the inclination
+     slider clean off. */
+  .astrometry-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-3);
+    padding: 0 var(--space-3);
+    align-items: start;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+  /* Equal scales on both axes: the sky path is a shape, and a box that
+     stretched it would turn a face-on circle into an ellipse and destroy the
+     one thing the panel exists to show. */
+  .astrometry-stage {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    min-height: 96px;
+    max-height: 100%;
+  }
+  .astrometry-stage canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .astrometry-caption {
+    position: absolute;
+    left: 0;
+    bottom: -14px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .astrometry-readout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+  .astrometry-distance {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) 0;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .astrometry-distance-input {
+    width: 82px;
+    min-height: 26px;
+    background: var(--surface-2);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 4px);
+    padding: 2px 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .astrometry-distance-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .astrometry-distance-note {
+    font-size: 10px;
+    font-style: italic;
+    color: var(--text-muted);
+    flex: 1 1 100%;
+  }
+
+  @media (max-width: 620px) {
+    .astrometry-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* --- The shared observer control ---------------------------------------- */
+  .obs-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .obs-control-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px var(--space-2);
+    align-items: center;
+  }
+  .obs-control-label {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-2);
+    grid-column: 1 / -1;
+  }
+  .obs-control-value {
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .obs-control-slider {
+    grid-column: 1;
+    width: 100%;
+    min-height: 24px;
+  }
+  .obs-control-slider:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .obs-control-help {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  /* Inclination cannot be shown honestly by the 2-D observer arrow on the
+     simulation, so it gets its own picture: a disc squashed by cos i. */
+  .obs-tilt {
+    grid-column: 2;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+  }
+  .obs-tilt > span {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    transform-origin: center;
+  }
+
+  @media (max-width: 900px) {
+    .obs-panel {
+      left: 10px;
+      right: 10px;
+      width: auto;
+    }
+    .rv-readout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* ==========================================================================
      HUD overlay (top-left readout)
      ====================================================================== */
   #overlay {
@@ -811,13 +1181,21 @@
     }
   }
 
+  /* The two buttons mirror each other so the arrows point outward: "rewind
+     Slow" on the left, "Fast forward" on the right. That only reads as a pair
+     when both stay on one line and take the same width - at the rail's width
+     "Slow" was wrapping under its own arrow while "Fast" stayed beside its own,
+     which made the two look like different kinds of control. */
   .speed-control .ui-button,
   .speed-controls .ui-button {
-    flex: 1;
+    flex: 1 1 0;
     justify-content: center;
+    align-items: center;
+    gap: 4px;
     min-height: 28px;
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-1) var(--space-1);
     font-size: var(--text-xs);
+    white-space: nowrap;
   }
 
   #speedDisplay,
@@ -1023,7 +1401,7 @@
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     /* Points down when the section is open, right when it is shut. The extra
-       translate keeps the glyph optically centred as it turns. */
+       translate keeps the glyph optically centered as it turns. */
     transform: translateY(-2px) rotate(45deg);
     transition: transform var(--duration) var(--ease);
   }
@@ -1149,10 +1527,10 @@
     pointer-events: auto;
   }
 
-  /* Centred in the band left of the rail, not on the viewport.
+  /* Centered in the band left of the rail, not on the viewport.
      
-     The rail is docked over the right two hundred pixels, so a viewport-centred
-     bar sits visibly right of the working area's centre, and its right end runs
+     The rail is docked over the right two hundred pixels, so a viewport-centered
+     bar sits visibly right of the working area's center, and its right end runs
      into the only corner the footer can occupy. Shifting it by half the rail
      puts it where the eye expects it and opens that corner. The scenario card
      above already frames itself against the same band. */
@@ -1447,7 +1825,7 @@
 
   /* The collapse control is a labeled chip, not a bare dash: a lone "−" gave
      no indication the readout could be collapsed, and once collapsed the panel
-     became an unlabelled square with no hint of how to get it back. */
+     became an unlabeled square with no hint of how to get it back. */
   .overlay-minimize-btn {
     position: absolute;
     top: var(--space-2);
@@ -1773,7 +2151,7 @@
   }
 
   /* The swatch is the theme itself: page ground, panel and accent, in the three
-     bands the interface actually uses. It recolours with the tokens, so it
+     bands the interface actually uses. It recolors with the tokens, so it
      cannot fall out of step with what it is describing. */
   .theme-dock-swatch,
   .theme-menu-swatch {
@@ -1907,7 +2285,7 @@
     }
   }
 
-  /* The transport bar is centred on the viewport while the rail takes the right
+  /* The transport bar is centered on the viewport while the rail takes the right
      two hundred pixels, so the gap between them closes as the window narrows.
      Rather than move the line somewhere else at a breakpoint, it tightens:
      smaller, closer, and without the separator dots, which is enough to keep it
@@ -2710,13 +3088,22 @@
     display: none;
   }
 
+  /* Narrower than the scenario gallery's 1180px on purpose. Two wide landscape
+     cards is the layout; three would make them scenario tiles with extra text,
+     which is the distinction this panel exists to draw. */
   #investigationBrowserContent {
     position: relative;
-    width: min(720px, 100%);
-    max-height: min(88vh, 780px);
-    overflow-y: auto;
-    padding: var(--space-6);
-    background: var(--panel-bg);
+    width: min(1040px, calc(100vw - var(--space-8)));
+    max-height: min(88vh, 900px);
+    padding: var(--space-6) var(--space-6) 0;
+
+    display: flex;
+    flex-direction: column;
+    /* The header and the count line stay put; only the grid scrolls, the same
+       way the gallery keeps its filters reachable. */
+    overflow: hidden;
+
+    background: var(--surface-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -2728,7 +3115,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-4);
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
   }
   .inv-browser-header h3 {
     margin: 0 0 var(--space-1);
@@ -2738,7 +3125,7 @@
   }
   .inv-browser-sub {
     margin: 0;
-    max-width: 52ch;
+    max-width: 66ch;
     font-size: var(--text-sm);
     line-height: var(--leading-normal);
     color: var(--text-secondary);
@@ -2750,81 +3137,259 @@
     font-size: var(--text-lg);
   }
 
-  #investigationList {
-    display: grid;
-    gap: var(--space-3);
+  /* --- Count line ---------------------------------------------------------- */
+  /* Echoes the gallery's .sc-count so the two panels read as one family, with
+     the shared level appended in sentence case: it is a fact about the set, not
+     a pill worth repeating on all eight cards. */
+  .inv-browser-count-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    margin: 0 0 var(--space-3);
   }
+  .inv-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-count-level {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-count-level[hidden] {
+    display: none;
+  }
+
+  /* --- The grid ------------------------------------------------------------- */
+
+  .inv-browser-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: var(--space-6);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  /* 27rem, against the gallery's 15.5rem: a lesson card is landscape, with the
+     thumbnail beside the text rather than above it, and it needs the width for
+     a subtitle, a summary and a progress row to sit legibly side by side. */
+  .inv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(27rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  /* --- The card ------------------------------------------------------------- */
 
   .inv-card {
     display: flex;
-    flex-direction: column;
-    /* The generic button rule sets align-items/justify-content to center. In a
-       column flex that centers every child horizontally, which quietly turned
-       this card into centered text. Restated here rather than left to inherit: the same trap that produced the stray hamburger button earlier. */
+    flex-direction: row;
+    /* The generic button rule centers both axes. In this card that would center
+       every line of text; restated rather than left to inherit. */
     align-items: stretch;
     justify-content: flex-start;
-    gap: 5px;
+    gap: 0;
     width: 100%;
-    padding: var(--space-4);
+    padding: 0;
+    overflow: hidden;
     text-align: left;
     cursor: pointer;
     font-family: inherit;
-    background: var(--button-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
     color: var(--text-secondary);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
     transition:
-      border-color var(--duration-fast) var(--ease),
-      background var(--duration-fast) var(--ease),
-      transform var(--duration-fast) var(--ease);
+      transform var(--duration) var(--ease-out),
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
   }
-  .inv-card:hover {
-    background: var(--button-hover-bg);
-    border-color: var(--accent);
-    transform: translateY(-1px);
+
+  .inv-card:hover,
+  .inv-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow);
   }
-  .inv-card-head {
+
+  /* --- Thumbnail ------------------------------------------------------------ */
+  /* A wrapper around the shared .sc-card-shot block, which is what the gallery
+     and the front door use: same lazy load, same titled fallback when a capture
+     is missing. The wrapper exists only to hang the two overlays on. */
+  .inv-card-shot {
+    position: relative;
+    flex: 0 0 40%;
+    /* Never shrink, and never be sized by the text beside it. A flex item with
+       only an aspect ratio collapses to a sliver when its sibling is tall. */
+    align-self: stretch;
+    min-width: 8.5rem;
+    max-width: 13rem;
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  /* The shot fills the card's full height here rather than holding a 16/9 box:
+     a landscape card is as tall as its text, and letterboxing the capture would
+     leave two grey bands. The aspect ratio the gallery sets has to be undone. */
+  .inv-card .sc-card-shot {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    border-bottom: none;
+  }
+
+  /* The lesson's place in the list, set into the corner of the capture. The
+     gallery's tiles carry no such number, and that is the difference being
+     drawn: these are ordered, and working down them in order is the intent. */
+  .inv-card-index {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 3px var(--space-2) 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--accent-contrast);
+    background: color-mix(in srgb, var(--accent) 88%, transparent);
+    border-bottom-right-radius: var(--radius-sm);
+  }
+
+  /* Borrowed from every video thumbnail ever made, because it answers the
+     question a student actually has about a guided lesson: how long is this?
+     On the HUD tokens rather than the panel ones: it sits on a capture of the
+     starfield, which stays dark in every theme including Daylight, so panel
+     text colors would put dark type on a dark image. */
+  .inv-card-clock {
+    position: absolute;
+    right: var(--space-2);
+    bottom: var(--space-2);
+    padding: 2px var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    line-height: 1.5;
+    white-space: nowrap;
+    color: var(--hud-text-strong);
+    background: color-mix(in srgb, var(--hud-surface) 82%, transparent);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-sm);
+    backdrop-filter: blur(4px);
+  }
+
+  /* --- Card text ------------------------------------------------------------ */
+
+  .inv-card-body {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-3);
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+    padding: var(--space-4);
   }
+
+  /* Always present, even with nothing in it. Only some lessons belong to a
+     series, and letting the row collapse on the others started their titles a
+     pill's height above their neighbours' - a ragged top edge across every row
+     of the grid, for the sake of 20px. */
+  .inv-card-flags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1) var(--space-2);
+    min-height: 1.35rem;
+  }
+
+  .inv-flag {
+    padding: 1px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.6;
+    color: var(--text-muted);
+    background: var(--surface-3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  /* The one flag worth an accent: it says this lesson has lessons either side
+     of it, which is the strongest signal that this list is a course. */
+  .inv-flag.is-series {
+    color: var(--text-secondary);
+    border-color: var(--accent-line);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+  .inv-flag.is-series b {
+    font-family: var(--font-mono);
+    font-weight: var(--weight-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+
   .inv-card-title {
     font-size: var(--text-md);
     font-weight: var(--weight-semibold);
+    line-height: 1.3;
     color: var(--text-primary);
   }
-  .inv-card-status {
-    flex: none;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--text-muted);
-  }
-  .inv-card-status.is-done {
-    color: var(--accent);
-  }
+
+  /* The line the gallery's tiles have no room for. It says what the student
+     will do, which is a different promise from what the lesson is about. */
   .inv-card-sub {
     font-size: var(--text-sm);
+    line-height: 1.4;
     color: var(--text-secondary);
   }
+
   .inv-card-summary {
     font-size: var(--text-xs);
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--text-muted);
+    /* Clamped, not rewritten: the full summary stays in the catalog and reaches
+       the card's title attribute. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
   }
+
   .inv-card-meta {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-3);
-    margin-top: 3px;
     font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--text-muted);
   }
+
+  /* --- Footer: progress, and what the card promises -------------------------- */
+
+  .inv-card-foot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    /* Pinned to the bottom so the call to action lines up across a row however
+       differently the summaries wrap. */
+    margin-top: auto;
+    padding-top: var(--space-1);
+  }
+
+  .inv-card-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
   .inv-card-bar {
-    height: 3px;
-    margin-top: 6px;
-    background: var(--surface-2);
+    flex: 1 1 auto;
+    height: 4px;
+    background: var(--surface-3);
     border-radius: var(--radius-full);
     overflow: hidden;
   }
@@ -2832,6 +3397,82 @@
     display: block;
     height: 100%;
     background: var(--accent);
+    border-radius: var(--radius-full);
+  }
+
+  .inv-card-status {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    white-space: nowrap;
+    color: var(--text-muted);
+  }
+  .inv-card-status.is-done {
+    color: var(--accent);
+  }
+
+  /* Not a nested button - the card is the control - but it looks like the thing
+     you are about to press, and it says which of the three things it does:
+     start, resume at the step you left off at, or reread a finished one. */
+  .inv-card-cta {
+    align-self: flex-start;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--accent);
+    transition: transform var(--duration) var(--ease-out);
+  }
+  .inv-card:hover .inv-card-cta,
+  .inv-card:focus-visible .inv-card-cta {
+    transform: translateX(2px);
+  }
+
+  /* A finished lesson keeps its accent on the bar and the tick, and nothing
+     else: it should read as done, not as the loudest card in the grid. */
+  .inv-card.is-complete .inv-card-shot {
+    border-right-color: var(--accent-line);
+  }
+
+  /* --- Narrow screens -------------------------------------------------------- */
+
+  @media (max-width: 760px) {
+    .inv-grid {
+      grid-template-columns: 1fr;
+    }
+    /* One card per row has no neighbour to line up with, so the reserved flag
+       row is just a gap above the title. */
+    .inv-card-flags.is-empty {
+      display: none;
+    }
+  }
+
+  /* Below this the split card stops working: the thumbnail is either too narrow
+     to show anything or steals the width the text needs, so the card stacks and
+     becomes a taller version of a gallery tile. */
+  @media (max-width: 560px) {
+    .inv-card {
+      flex-direction: column;
+    }
+    .inv-card-shot {
+      flex: 0 0 auto;
+      max-width: none;
+      aspect-ratio: 16 / 9;
+      border-right: none;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .inv-card.is-complete .inv-card-shot {
+      border-bottom-color: var(--accent-line);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .inv-card:hover,
+    .inv-card:focus-visible {
+      transform: none;
+    }
+    .inv-card:hover .inv-card-cta,
+    .inv-card:focus-visible .inv-card-cta {
+      transform: none;
+    }
   }
 
   /* --- The working panel -------------------------------------------------- */
@@ -3509,9 +4150,35 @@
       padding: var(--space-3);
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: 900px) {
     #investigationBrowserContent {
-      padding: var(--space-4);
+      width: calc(100vw - var(--space-4));
+      max-height: 92vh;
+      padding: var(--space-5) var(--space-4) 0;
+    }
+  }
+  /* On a phone the pinned header - title, four lines of intro, two links and
+     the count - took nearly half the panel and stayed there. The gallery pins
+     its header because the filters have to stay reachable; there are no filters
+     here, so the whole panel scrolls and the intro gets out of the way. */
+  @media (max-width: 560px) {
+    #investigationBrowserContent {
+      display: block;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .inv-browser-scroll {
+      overflow: visible;
+    }
+  }
+  @media (max-width: 480px) {
+    /* The bottom stays zero: the scroller below the header carries the bottom
+       padding, so the last card can scroll clear of the panel edge. */
+    #investigationBrowserContent {
+      padding: var(--space-4) var(--space-4) 0;
+    }
+    .inv-browser-header h3 {
+      font-size: var(--text-lg);
     }
     .inv-browser-header .ui-button {
       display: none;
@@ -4856,7 +5523,7 @@
   }
 
   /* One accent, on the chip that is actually active. Twelve differently colored
-     concepts would turn a scientific catalog into a bag of sweets, and colour
+     concepts would turn a scientific catalog into a bag of sweets, and color
      alone would be the only thing carrying the state. aria-pressed carries it
      for anyone who cannot see the fill. */
   .sc-chip.is-active {
@@ -5122,4 +5789,675 @@
       transform: none;
     }
   }
+}
+
+@layer components {
+  /* ==========================================================================
+     Object inspector
+     --------------------------------------------------------------------------
+     A compact instrument readout, not a modal. It replaced a 600px panel with a
+     2px cyan border, a 20px blur and four separate glows, which covered 35% of
+     a 1440x900 window and made the thing it was describing hard to watch.
+
+     The rule that shapes the rest: the simulation is the spectacle, and this
+     panel is the label beside it. One-pixel border, one shadow, accent used
+     only where it carries meaning.
+     ====================================================================== */
+  #objectInspector {
+    position: fixed;
+    top: 96px;
+    right: 300px;
+    width: 420px;
+    max-width: calc(100vw - 2 * var(--space-4));
+    max-height: min(72vh, 640px);
+
+    display: none;
+    flex-direction: column;
+
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    background: color-mix(in srgb, var(--surface-1) 94%, transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    /* 10px rather than 20: the panel still reads as glass, and half the
+       compositing work goes away. */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    overflow: hidden;
+    /* Never animate: the drag implementation writes left/top directly, and a
+       transition on that produces the jump this panel used to be famous for. */
+    transition: none;
+  }
+
+  #objectInspector.visible {
+    display: flex;
+  }
+
+  #objectInspector.dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  /* --- Header: identity on the left, actions on the right ------------------ */
+  .inspector-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: grab;
+    flex: 0 0 auto;
+  }
+  .inspector-header:active {
+    cursor: grabbing;
+  }
+
+  .inspector-icon {
+    font-size: 19px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+
+  .inspector-identity {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 1px;
+  }
+
+  .inspector-title {
+    margin: 0;
+    font-size: var(--text-md);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-primary);
+    /* A long name truncates rather than pushing the delete button off. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The object type as a quiet eyebrow, so the name can be the loud thing. */
+  .inspector-kind {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.2;
+  }
+  .inspector-kind:empty {
+    display: none;
+  }
+
+  /* Buttons must not start a drag: the header is the drag handle. */
+  .inspector-controls > * {
+    cursor: pointer;
+  }
+
+  /* --- Tabs: a restrained segmented control, not two large buttons --------- */
+  .inspector-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: var(--space-2) var(--space-3) 0;
+    padding: 2px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    flex: 0 0 auto;
+  }
+
+  .inspector-tab {
+    min-height: 28px;
+    padding: 0 var(--space-2);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--radius-sm) - 1px);
+    cursor: pointer;
+  }
+  .inspector-tab:hover {
+    color: var(--text-secondary);
+  }
+  .inspector-tab.active {
+    color: var(--text-primary);
+    background: var(--surface-3, var(--surface-1));
+    box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3));
+  }
+  .inspector-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .inspector-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-3);
+  }
+  .inspector-tab-content {
+    display: none;
+  }
+  .inspector-tab-content.active {
+    display: block;
+  }
+
+  /* --- Mass: label, slider and value on one row --------------------------- */
+  .insp-mass {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .insp-mass-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .insp-mass input[type='range'] {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+  /* A readout, not a badge: no glow, no fill, just a bordered number. */
+  .insp-mass-value {
+    min-width: 84px;
+    max-width: 124px;
+    padding: 2px 6px;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  /* --- Properties: a dense key/value table -------------------------------- */
+  .insp-props {
+    margin: 0;
+  }
+  .insp-prop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 5px 0;
+  }
+  /* A hairline between rows rather than a border under every one: enough to
+     carry the eye across, not enough to draw a grid. Two grid children per row
+     left a gap in the line where the columns met, which read as a stack of
+     boxes rather than a table. */
+  .insp-prop + .insp-prop {
+    border-top: 1px solid
+      color-mix(in srgb, var(--border-subtle) 55%, transparent);
+  }
+  .insp-prop-label {
+    flex: 0 0 auto;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .insp-prop-value {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  /* A group heading, used only where a section genuinely clarifies. */
+  .insp-group {
+    grid-column: 1 / -1;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .insp-props > .insp-group:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  /* --- Overlay toggles, as one compact section ---------------------------- */
+  .insp-overlays {
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .insp-overlays-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--space-1);
+  }
+  .insp-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 28px;
+  }
+  .insp-toggle-row > span:first-child {
+    flex: 1 1 auto;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  /* --- Help and disclosure ------------------------------------------------ */
+  .insp-help {
+    width: 16px;
+    height: 16px;
+    min-height: 16px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    cursor: help;
+  }
+  .insp-help:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+  }
+
+  .insp-about {
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .insp-about > summary {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+  }
+  .insp-about > summary::-webkit-details-marker {
+    display: none;
+  }
+  .insp-about > summary::before {
+    content: '▸';
+    font-size: 9px;
+    color: var(--text-muted);
+    transition: transform 120ms ease;
+  }
+  .insp-about[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  .insp-about-body {
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal, 1.5);
+    color: var(--text-secondary);
+  }
+  .insp-about-body p {
+    margin: 0 0 var(--space-2);
+  }
+  .insp-about-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* --- Energy tab --------------------------------------------------------- */
+  .insp-energy-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  .insp-energy-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .insp-energy-actions {
+    display: flex;
+    gap: var(--space-1);
+  }
+  .insp-icon-btn {
+    width: 26px;
+    height: 26px;
+    min-height: 26px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .insp-icon-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+    background: var(--surface-2);
+  }
+
+  .insp-energy-chart {
+    position: relative;
+    height: 190px;
+    margin-top: var(--space-2);
+  }
+  /* Pinned to the container so the chart can never push the panel taller than
+     the box it was given. Chart.js still owns the bitmap size and the device
+     pixel ratio; this only fixes the box it draws into. */
+  .insp-energy-chart canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  /* Between a wide desktop and a phone - a small laptop, or a big window at
+     200% browser zoom - the control rail takes a bigger share of the width, so
+     the panel docks nearer the edge rather than sitting on top of it. */
+  @media (max-width: 1180px) {
+    #objectInspector {
+      right: var(--space-3);
+      width: min(400px, calc(100vw - 2 * var(--space-3)));
+    }
+  }
+
+  /* --- Narrow screens: a sheet, but only as tall as it needs to be -------- */
+  @media (max-width: 620px) {
+    #objectInspector {
+      top: auto;
+      right: var(--space-2);
+      left: var(--space-2);
+      bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+      width: auto;
+      max-width: none;
+      /* Content-driven. A planet with six properties has no business filling
+         the screen just because the device is narrow. */
+      max-height: min(78vh, calc(100vh - 120px));
+    }
+
+    /* The header is the only way out once the body scrolls, so it stays put. */
+    .inspector-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: color-mix(in srgb, var(--surface-1) 96%, transparent);
+      /* Dragging a sheet by its header fights the scroll underneath it. */
+      cursor: default;
+    }
+    .inspector-header:active {
+      cursor: default;
+    }
+
+    .inspector-tab {
+      min-height: 36px;
+    }
+    .insp-toggle-row {
+      min-height: 44px;
+    }
+    .insp-about > summary {
+      min-height: 40px;
+    }
+    /* Visually small, but a comfortable target underneath. */
+    .inspector-close,
+    .inspector-delete {
+      position: relative;
+    }
+    .inspector-close::after,
+    .inspector-delete::after {
+      content: '';
+      position: absolute;
+      inset: -7px;
+    }
+    .insp-mass {
+      grid-template-columns: auto 1fr;
+      row-gap: var(--space-1);
+    }
+    .insp-mass-value {
+      grid-column: 2;
+      justify-self: end;
+    }
+    .insp-mass input[type='range'] {
+      grid-column: 1 / -1;
+      min-height: 32px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insp-about > summary::before {
+      transition: none;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Pinned comparison cards
+   ---------------------------------------------------------------------------
+   A pinned card is the inspector's property table with an identity strip on
+   top, and nothing else. It reads as a smaller, quieter sibling of the panel it
+   came from rather than a second copy of it: narrower, no tabs, no controls.
+   --------------------------------------------------------------------------- */
+
+.inspector-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.inspector-pin:hover {
+  background: var(--surface-3);
+  color: var(--text-primary);
+}
+
+.inspector-pin:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#pinnedInspectors {
+  /* A positioning context only; the cards themselves are fixed. */
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 950;
+}
+
+.insp-pin {
+  position: fixed;
+  width: 300px;
+  /* Two cards plus the gaps have to fit one column of an 800px window, or the
+     comparison the pin exists for does not fit on screen. */
+  max-height: 38vh;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  /* Matches the inspector's own ground so a card reads as the same instrument
+     in a smaller case. --surface-raised does not exist; it rendered clear. */
+  background: color-mix(in srgb, var(--surface-1) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  pointer-events: auto;
+}
+
+.insp-pin-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: grab;
+  user-select: none;
+}
+
+.insp-pin-header:active {
+  cursor: grabbing;
+}
+
+.insp-pin-header .inspector-identity {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.insp-pin .insp-props {
+  font-size: var(--text-xs);
+}
+
+@media (max-width: 620px) {
+  /* One narrow column of cards would leave no room for the panel they are
+     being compared against, so on a phone they span the width and stack. */
+  .insp-pin {
+    width: calc(100vw - 2 * var(--space-3));
+    max-height: 34vh;
+  }
+
+  /* 30px is under the 44px a finger needs, and this is the control that gets
+     the card off the screen again. */
+  .insp-pin .inspector-close,
+  .inspector-pin {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reference-frame switcher
+   ---------------------------------------------------------------------------
+   A .rail-field row, plus a line of state that appears only while a frame is
+   active. The rail is already taller than a laptop screen with every group
+   open, so a permanent three-line explainer here would push the primary action
+   over the last tool; the note earns its space only when there is something to
+   say.
+   --------------------------------------------------------------------------- */
+
+.rail-field-note {
+  margin: 0;
+  padding: 0 var(--space-3) var(--space-2);
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  color: var(--accent);
+}
+
+.rail-field-note[hidden] {
+  display: none;
+}
+
+/* Shown only when the scene contains a cluster of galaxies. A rotation curve is
+   the wrong instrument for a swarm on randomly oriented orbits; these three
+   numbers are the right one, and they are the same three Zwicky worked from. */
+.rc-cluster {
+  padding: 0 var(--space-3);
+}
+
+.rc-cluster-title {
+  margin: 0 0 var(--space-1);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* --- Rotation curve panel ----------------------------------------------------
+   Reuses the shared observation-panel shell. Only two things are new: a legend
+   that has to name three marks the canvas draws, and the halo switch, which is
+   the one control in the app that changes the force law rather than the view.
+   --------------------------------------------------------------------------- */
+
+.rc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-3);
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.rc-key {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  flex: none;
+  vertical-align: middle;
+}
+
+.rc-key-points {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* These two must match what chartColors() hands the canvas, fallbacks included.
+   --info is not defined in tokens.css, so chartColors falls back to #5b9bd5 and
+   a legend key written as plain var(--info) drew nothing at all. Dashed here
+   because the canvas draws that series dashed: two different marks for one
+   series would be worse than no legend. */
+.rc-key-visible {
+  height: 0;
+  border-top: 2px dashed var(--danger, #e2725b);
+}
+
+.rc-key-total {
+  background: var(--info, #5b9bd5);
+}
+
+.rc-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.rc-controls .obs-control-row + .obs-control-row {
+  margin-top: var(--space-1);
+}
+
+.rc-cluster-note {
+  margin: var(--space-1) 0 0;
 }

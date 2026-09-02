@@ -1,10 +1,16 @@
 import { describe, test, expect } from '@jest/globals';
+import { existsSync, statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import {
   INVESTIGATIONS,
   getInvestigation,
   gradedSteps,
+  seriesPosition,
 } from '../js/data/investigations.js';
+import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 import { getWidget } from '../js/widgets.js';
+
+const repoFile = rel => fileURLToPath(new URL(`../${rel}`, import.meta.url));
 
 const STEP_TYPES = new Set([
   'read',
@@ -40,6 +46,21 @@ const stubContext = () => ({
     log: [],
     last: null,
   }),
+  // The rotation-curve instrument with nothing to plot, which is the state a
+  // step is in the moment it opens and before the panel has been shown.
+  rotationCurve: () => ({
+    bodies: [],
+    center: { x: 0, y: 0, mass: 0 },
+    points: [],
+    G: 1,
+    halo: null,
+    rFitMin: 0,
+    fit: null,
+    visibleMass: 0,
+    enclosedAtEdge: 0,
+  }),
+  cluster: () => null,
+  haloOn: () => false,
   find: () => null,
 });
 
@@ -381,5 +402,90 @@ describe('the transit lesson', () => {
     // step has nothing to compare against.
     const measureDip = inv.steps.findIndex(s => s.title === 'Measure the dip');
     expect(measureDip).toBeLessThan(withSetup.at(-1).i);
+  });
+});
+
+// =============================================================================
+// The lesson browser's view of the catalog
+// -----------------------------------------------------------------------------
+// The browser reads every card from these fields, so a lesson added without
+// them shows a placeholder card rather than a broken one - and these tests say
+// so out loud instead of leaving it to be noticed in a screenshot.
+// =============================================================================
+
+describe('every lesson carries what its card needs', () => {
+  const IDS = INVESTIGATIONS.map(i => i.id);
+
+  test.each(IDS)('%s has a subtitle, a duration and a level', id => {
+    const inv = getInvestigation(id);
+    expect(inv.subtitle.trim().length).toBeGreaterThan(10);
+    // Two numbers and a unit: the card turns this into the chip on the
+    // thumbnail, and the header sums it into hours of work.
+    expect(inv.duration).toMatch(/^\d+[-–]\d+\s*min$/);
+    expect(inv.level.trim().length).toBeGreaterThan(3);
+  });
+
+  test.each(IDS)('%s lists what the student will be able to do', id => {
+    const { objectives } = getInvestigation(id);
+    expect(Array.isArray(objectives)).toBe(true);
+    expect(objectives.length).toBeGreaterThanOrEqual(3);
+  });
+
+  test.each(IDS)('%s names a committed thumbnail', id => {
+    const { thumbnail } = getInvestigation(id);
+    expect(thumbnail).toMatch(/^images\/scenarios\/[a-z0-9-]+\.webp$/);
+    const file = repoFile(thumbnail);
+    expect(existsSync(file)).toBe(true);
+    // A blank or failed capture encodes to almost nothing.
+    expect(statSync(file).size).toBeGreaterThan(2048);
+  });
+
+  test.each(IDS)(
+    '%s borrows the capture of a scenario it actually uses',
+    id => {
+      // The card is claiming to show the system the lesson opens in. If it
+      // borrows some other scenario's capture, the card is lying.
+      const inv = getInvestigation(id);
+      const used = new Set(
+        inv.steps.map(s => s.setup?.scenario).filter(Boolean)
+      );
+      const owners = [...used]
+        .map(key => SCENARIO_INFO[key]?.thumbnail)
+        .filter(Boolean);
+      expect(owners).toContain(inv.thumbnail);
+    }
+  );
+});
+
+describe('series positions are derived, not written down', () => {
+  test('a lesson outside a series has no position', () => {
+    const loner = INVESTIGATIONS.find(i => !i.series);
+    expect(loner).toBeTruthy();
+    expect(seriesPosition(loner)).toBeNull();
+  });
+
+  test('a series numbers its members 1..n in catalog order', () => {
+    const named = [...new Set(INVESTIGATIONS.map(i => i.series))].filter(
+      Boolean
+    );
+    expect(named.length).toBeGreaterThan(0);
+    for (const label of named) {
+      const members = INVESTIGATIONS.filter(i => i.series === label);
+      // A series of one is not a series; it would put a "1/1" pill on a card
+      // for no reason.
+      expect(members.length).toBeGreaterThan(1);
+      expect(members.map(m => seriesPosition(m).index)).toEqual(
+        members.map((_, i) => i + 1)
+      );
+      for (const m of members) {
+        expect(seriesPosition(m).of).toBe(members.length);
+        expect(seriesPosition(m).label).toBe(label);
+      }
+    }
+  });
+
+  test('a lesson that is not in the catalog gets nothing', () => {
+    expect(seriesPosition(null)).toBeNull();
+    expect(seriesPosition({ id: 'nope' })).toBeNull();
   });
 });

@@ -24,6 +24,13 @@ export const SCENARIO_INFO = {
     tags: ['solar-system', 'orbits-kepler'],
     thumbnail: 'images/scenarios/solar-system.webp',
   },
+  'Retrograde Mars': {
+    title: 'Retrograde Mars: the loop that needed epicycles',
+    summary:
+      'The Sun, Earth and Mars at their real distances and periods, and nothing else. Watched from outside, both planets go round the Sun the same way and never turn back. Switch the reference frame to Earth, in Tools, and Mars stops circling and starts drawing a loop that doubles back on itself. Nothing about the physics changed; only the frame did. That loop is the observation Ptolemy built epicycles to reproduce and Copernicus explained away, and here you can turn it on and off with one control.',
+    tags: ['solar-system', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/retrograde-mars.webp',
+  },
   'Earth-Moon System': {
     title: 'Earth-Moon System',
     summary:
@@ -58,6 +65,34 @@ export const SCENARIO_INFO = {
       'The first exoplanet ever caught crossing its star, found in 1999 after radial velocities said where to look. A hot Jupiter on a 3.5-day orbit, drawn here at true relative scale: the star is 1.155 solar radii, the planet 1.38 Jupiter radii, and the silhouette on screen is the same 12% radius ratio the light curve reports. Open the Light Curve panel and watch the 1.7% dip repeat.',
     tags: ['exoplanets', 'detection'],
     thumbnail: 'images/scenarios/transit-lab.webp',
+  },
+  'Spiral Galaxy': {
+    title: 'Spiral Galaxy: what we expected',
+    summary:
+      'A galactic bulge with ninety stars orbiting it, each launched at exactly the speed the visible mass says it should have. This is the prediction, not the observation: with the mass concentrated in the middle, orbital speed falls away as the inverse square root of radius, the same way it does across the Solar System. Open the Rotation Curve panel and read the slope. Then load Milky Way Rotation and read it again.',
+    tags: ['galaxies-clusters', 'orbits-kepler', 'dark-matter'],
+    thumbnail: 'images/scenarios/spiral-galaxy.webp',
+  },
+  'Milky Way Rotation': {
+    title: 'Milky Way Rotation: what we actually see',
+    summary:
+      'The same disc, with every star moving at the same speed no matter how far out it is. That is what telescopes measure in real spiral galaxies, and it is far too fast for the stars you can see to hold on to: this scenario starts with a dark-matter halo switched on, because without one the disc does not survive. Open the Rotation Curve panel and switch the halo off to watch it come apart.',
+    tags: ['galaxies-clusters', 'dark-matter'],
+    thumbnail: 'images/scenarios/milky-way-rotation.webp',
+  },
+  'Coma Cluster': {
+    title: 'Coma Cluster: Zwicky, 1933',
+    summary:
+      'Twenty-four galaxies swarming in a bound cluster, on randomly oriented orbits, named after the members of the real Coma Cluster that Fritz Zwicky measured. He added up the light, added up the motions, and found the second answer hundreds of times larger than the first. He called the difference dunkle Materie and was ignored for forty years. Select a galaxy to read its speed, and work the same calculation he did.',
+    tags: ['galaxies-clusters', 'dark-matter'],
+    thumbnail: 'images/scenarios/coma-cluster.webp',
+  },
+  'Exoplanet Characterization Lab': {
+    title: 'Exoplanet Characterization Lab',
+    summary:
+      'HD 209458 again, but with the star free to move. In the Transit Lab the star is pinned so the light curve stays centered; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 metres per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet a year before anyone saw it transit.',
+    tags: ['exoplanets', 'detection', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
   },
   'Blended Binary': {
     title: 'Blended Binary: a hidden companion',

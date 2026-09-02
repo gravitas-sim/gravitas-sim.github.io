@@ -140,6 +140,10 @@ const TRANSLITERATE = new Map(
     // turns a product into a subtraction in a document about physics.
     '·': '*',
     '∝': ' proportional to ',
+    // Ensemble-average brackets. <v^2> is the conventional ASCII form and is
+    // what a physicist writes when the angle brackets are unavailable.
+    '⟨': '<',
+    '⟩': '>',
     '≫': ' >> ',
     '≪': ' << ',
     '√': 'sqrt',
@@ -592,7 +596,7 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
     /**
      * A table with a shaded header row and hairline separators.
      *
-     * Column widths are fractions of the content width and are normalised, so
+     * Column widths are fractions of the content width and are normalized, so
      * a caller cannot accidentally describe a table wider than the page: the
      * one failure mode that makes a printed table unreadable.
      *

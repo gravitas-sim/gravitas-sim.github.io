@@ -17,6 +17,17 @@
 // That is not a special case bolted on for the lesson: it falls out of adding
 // the light up correctly.
 
+import { chartColors } from './observationChart.js';
+import { mountObserverControls } from './observerControls.js';
+import {
+  layoutObservationPanels,
+  noteObservationPanelUsed,
+} from './observationLayout.js';
+import {
+  observerGeometry,
+  getPositionAngle,
+  setPositionAngle,
+} from './observerGeometry.js';
 import { ensureChartJs } from './chartjs.js';
 import {
   stars,
@@ -33,7 +44,11 @@ import { getSimClock } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
 
 let enabled = false;
-let observerAngleDeg = 0;
+// The observer used to live here. It now lives in js/observerGeometry.js,
+// because photometry is no longer the only instrument that depends on where you
+// are standing: radial velocity and astrometry need the same answer. What stays
+// here is the snapshot used to notice that the observer moved, which is when
+// recorded photometry stops describing the geometry it was taken from.
 let prevAngleSnapshot = 0;
 let chart = null;
 let chartCanvas = null;
@@ -93,20 +108,6 @@ const LD_I_AVG = 1 - LD_U1 / 3 - LD_U2 / 6;
 // the grid lines were white at 4% opacity, which is invisible on the two light
 // themes: exactly the panel a student is asked to read numbers off.
 
-function chartColors() {
-  const css = getComputedStyle(document.documentElement);
-  const token = (name, fallback) =>
-    css.getPropertyValue(name).trim() || fallback;
-  const accent = token('--accent', '#4facfe');
-  return {
-    accent,
-    accentSoft: token('--accent-soft', 'rgba(79, 172, 254, 0.1)'),
-    label: token('--text-secondary', '#999'),
-    tick: token('--text-muted', '#666'),
-    grid: token('--border-subtle', 'rgba(128,128,128,0.25)'),
-  };
-}
-
 function repaintChart() {
   if (!chart) return;
   const t = chartColors();
@@ -125,8 +126,14 @@ function repaintChart() {
 
 export function initLightCurve() {
   container = document.getElementById('lightCurveContainer');
-  angleSlider = document.getElementById('observerAngleSlider');
-  angleDisplay = document.getElementById('observerAngleDisplay');
+  // The bespoke angle slider that used to live here has been replaced by the
+  // shared observer control, so that this panel, radial velocity and astrometry
+  // are demonstrably driving one observer rather than three that happen to
+  // agree. It also gains an inclination control it never had.
+  const controlHost = document.getElementById('lightCurveObserverControls');
+  if (controlHost) mountObserverControls(controlHost);
+  angleSlider = null;
+  angleDisplay = null;
   statusLabel = document.getElementById('lightCurveStatus');
 
   // The controls work whether or not the chart library ever arrives.
@@ -210,7 +217,7 @@ async function buildChart(chartCanvas) {
     },
   });
 
-  // The chart is created after the panel's colours are known, so it starts in
+  // The chart is created after the panel's colors are known, so it starts in
   // the active theme rather than repainting on the first frame.
   repaintChart();
 }
@@ -219,7 +226,8 @@ async function buildChart(chartCanvas) {
 function wireLightCurveControls() {
   if (angleSlider) {
     angleSlider.addEventListener('input', e => {
-      observerAngleDeg = parseFloat(e.target.value);
+      setPositionAngle(parseFloat(e.target.value));
+      const observerAngleDeg = getPositionAngle();
       if (angleDisplay)
         angleDisplay.textContent = `${Math.round(observerAngleDeg)}°`;
     });
@@ -271,6 +279,11 @@ function setEnabled(next) {
   if (next && !enabled) clearData();
   enabled = next;
   if (container) container.style.display = enabled ? '' : 'none';
+  if (enabled) noteObservationPanelUsed('lightCurveContainer');
+  // Every path that opens or closes this panel comes through here - the toggle
+  // button, the close button and the public setter - so this is the one place
+  // the observing stack can be re-laid out without being bypassed.
+  layoutObservationPanels();
 
   // First time the panel is opened: fetch Chart.js and build the chart. Until
   // then the 70KB library has not been downloaded at all.
@@ -452,9 +465,14 @@ function planetFlux(obj, star, k, distSim, alpha) {
 // ── Main brightness calculation ─────────────────────────────────────
 
 function calculateBrightness() {
-  const angle = (observerAngleDeg * Math.PI) / 180;
-  const cosA = Math.cos(angle);
-  const sinA = Math.sin(angle);
+  // Shared geometry. At the default inclination of 90 degrees cosA and sinA are
+  // exactly the values this function used when it owned the angle itself, so
+  // the edge-on results are unchanged rather than approximately reproduced.
+  const geometry = observerGeometry();
+  const cosA = geometry.cosPhi;
+  const sinA = geometry.sinPhi;
+  const cosI = geometry.cosI;
+  const sinI = geometry.sinI;
 
   const liveStars = stars.filter(s => s.alive);
   if (liveStars.length === 0) return 1.0;
@@ -491,9 +509,20 @@ function calculateBrightness() {
       const k = physicalRadiusRatio(obj, Rs_phys);
       const Rp_sim = obj.radius || 1;
 
-      // LOS depth: positive ⇒ object closer to observer than star
-      const losDepth = dx * cosA + dy * sinA;
-      const sep = Math.abs(-dx * sinA + dy * cosA);
+      // LOS depth: positive ⇒ object closer to observer than star.
+      // Both quantities are the shared projection written out inline: the
+      // per-body cost of calling into observerGeometry.js here would be paid
+      // once per planet per frame for no benefit, and the geometry snapshot
+      // above already did the trigonometry once.
+      const along = dx * cosA + dy * sinA;
+      const losDepth = sinI * along;
+      // Sky-plane separation. The second term is the foreshortened axis, zero
+      // when edge-on: tilt the orbit away from 90 degrees and the planet's
+      // track slides off the stellar disk, which is why an inclined system
+      // stops transiting without any need for a fake fade.
+      const skyX = -dx * sinA + dy * cosA;
+      const skyY = -cosI * along;
+      const sep = Math.hypot(skyX, skyY);
       const b = sep / Rs_sim; // normalized impact parameter on visual disk
 
       // Phase angle at planet: 0 = full (behind star), π = transit
@@ -528,9 +557,9 @@ export function updateLightCurve() {
   if (!enabled || state.paused) return;
 
   // Clear chart when observer angle changes
-  if (Math.abs(observerAngleDeg - prevAngleSnapshot) > 0.5) {
+  if (Math.abs(getPositionAngle() - prevAngleSnapshot) > 0.5) {
     clearData();
-    prevAngleSnapshot = observerAngleDeg;
+    prevAngleSnapshot = getPositionAngle();
   }
 
   frameCounter++;
@@ -722,14 +751,23 @@ export function currentBrightness() {
 export const currentTimeDays = () => simTimeToDays(getSimClock());
 
 /** @returns {number} Observer direction, in degrees */
-export const getObserverAngle = () => observerAngleDeg;
+/**
+ * The observer's position angle.
+ *
+ * Kept as a thin wrapper because investigations.js and lesson steps already
+ * call it. The state itself is in observerGeometry.js.
+ *
+ * @returns {number} Position angle in degrees
+ */
+export const getObserverAngle = () => getPositionAngle();
 
 /**
  * Point the observer somewhere.
  * @param {number} deg - Direction in degrees
  */
 export function setObserverAngle(deg) {
-  observerAngleDeg = (((Number(deg) || 0) % 360) + 360) % 360;
+  setPositionAngle(deg);
+  const observerAngleDeg = getPositionAngle();
   prevAngleSnapshot = observerAngleDeg;
   if (angleSlider) angleSlider.value = String(Math.round(observerAngleDeg));
   if (angleDisplay)
@@ -761,7 +799,7 @@ export const clearLightCurve = clearData;
 export function drawObserverIndicator(ctx, W, H) {
   if (!enabled) return;
 
-  const angle = (observerAngleDeg * Math.PI) / 180;
+  const angle = (getPositionAngle() * Math.PI) / 180;
   const screenAngle = -angle;
 
   // Center on the sole star when there is exactly one; otherwise use viewport center
@@ -922,7 +960,8 @@ function updateAngleFromPointer(clientX, clientY, canvas) {
   const cy = canvas.height / 2;
   const dx = x - cx;
   const dy = -(y - cy);
-  observerAngleDeg = ((Math.atan2(dy, dx) * 180) / Math.PI + 360) % 360;
+  setPositionAngle((Math.atan2(dy, dx) * 180) / Math.PI);
+  const observerAngleDeg = getPositionAngle();
 
   if (angleSlider) angleSlider.value = Math.round(observerAngleDeg);
   if (angleDisplay)

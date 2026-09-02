@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What Gravitas Has Been Checked Against</title>
+    <meta
+      name="description"
+      content="The scientific validation suite behind Gravitas: 135 checks of the physics engine against closed-form solutions and published values, each with its measured error, its tolerance, and a written reason for that tolerance."
+    />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="canonical" href="https://gravitas-sim.online/validation/" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta
+      property="og:title"
+      content="What Gravitas Has Been Checked Against"
+    />
+    <meta
+      property="og:description"
+      content="135 physics checks with measured error, stated tolerance, and a reason for every tolerance. Run them yourself in the browser."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://gravitas-sim.online/validation/" />
+    <meta
+      property="og:image"
+      content="https://gravitas-sim.online/social-card.png"
+    />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <script>
+      // Applied before paint so the page never flashes the wrong theme. The key
+      // and the values are the ones js/theme.js uses.
+      try {
+        const t = localStorage.getItem('gravitas_theme');
+        if (
+          t &&
+          t !== 'midnight' &&
+          ['deep', 'observatory', 'daylight'].includes(t)
+        ) {
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme =
+            t === 'daylight' ? 'light' : 'dark';
+        }
+      } catch (e) {
+        /* storage unavailable; the default theme is correct */
+      }
+    </script>
+  </head>
+  <body class="doc-page">
+    <a class="doc-skip" href="#main">Skip to content</a>
+
+    <header class="doc-top">
+      <a class="doc-brand" href="/">GRAVITAS <span>simulation</span></a>
+      <nav class="doc-nav" aria-label="Site">
+        <a href="/">Simulation</a>
+        <a href="/model/">The model</a>
+        <a href="/validation/" aria-current="page">Validation</a>
+        <a href="/instructors/">Instructors</a>
+        <a
+          href="https://github.com/gravitas-sim/gravitas-sim.github.io"
+          rel="noopener"
+          >Source</a
+        >
+      </nav>
+    </header>
+
+    <main class="doc-main is-wide" id="main">
+      <div class="doc-hero">
+        <p class="doc-eyebrow">Validation</p>
+        <h1>What Gravitas Has Been Checked Against</h1>
+        <p class="doc-lede">
+          Not a claim that the physics is right. A list of quantities, the value
+          this engine produces for each one, the value it should have, where
+          that value came from, and how much error was allowed.
+        </p>
+      </div>
+
+      <!-- The verdict, before any explanation of it. A reader who wants only
+           the headline should not have to hunt for it. -->
+      <section class="val-verdict" id="verdict" aria-label="Headline result">
+        <div class="val-verdict-main">
+          <p class="val-score" id="valScore"><span>—</span></p>
+          <p class="val-score-label" id="valScoreLabel">checks loading</p>
+        </div>
+        <dl class="val-facts">
+          <div>
+            <dt>Last run</dt>
+            <dd id="valDate">—</dd>
+          </div>
+          <div>
+            <dt>Took</dt>
+            <dd id="valElapsed">—</dd>
+          </div>
+          <div>
+            <dt>Areas covered</dt>
+            <dd id="valGroups">—</dd>
+          </div>
+          <div>
+            <dt>Sources cited</dt>
+            <dd id="valSources">—</dd>
+          </div>
+        </dl>
+      </section>
+
+      <p>
+        Every number on this page came out of
+        <a
+          href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/tools/physics-checks.mjs"
+          rel="noopener"
+          >one file</a
+        >
+        that both this page and the project's test suite read, so the table a
+        reader prints and the suite that gates a commit cannot drift apart. You
+        do not have to take the table's word for it either: the button below
+        runs the entire suite again, here, on your machine, against the same
+        modules the simulation itself loads.
+      </p>
+
+      <section class="val-run" aria-label="Run the suite">
+        <div class="val-run-head">
+          <div>
+            <h2>Run it yourself</h2>
+            <p id="valRunNote">
+              About ten seconds. Nothing is sent anywhere; the whole suite
+              executes in a background thread in this tab.
+            </p>
+          </div>
+          <button type="button" class="val-run-btn" id="valRunBtn">
+            Run all checks
+          </button>
+        </div>
+        <div class="val-run-bar" id="valRunBar" hidden>
+          <div class="val-run-fill"></div>
+        </div>
+        <p class="val-run-result" id="valRunResult" hidden></p>
+      </section>
+
+      <nav class="doc-toc" aria-label="Contents">
+        <h2>On this page</h2>
+        <ol>
+          <li><a href="#kinds">Four kinds of check</a></li>
+          <li><a href="#margin">How much room was left</a></li>
+          <li><a href="#areas">Every check, by area</a></li>
+          <li><a href="#limits">What this does not establish</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="kinds">Four kinds of check</h2>
+      <p>
+        These do not mean the same thing, and a suite that mixed them would be
+        able to hide a weak result behind a strong one. Each check is labeled
+        with its kind everywhere it appears.
+      </p>
+      <div class="val-kinds" id="valKinds"></div>
+
+      <h2 id="margin">How much room was left</h2>
+      <p>
+        Passing is a yes or no. The more useful question is by how much, so
+        every check is plotted below at its measured error as a fraction of the
+        tolerance it was allowed. A dot at the right-hand edge only just passed.
+        A dot at the far left came out at machine precision, meaning the code
+        reproduces its own equation to fifteen decimal places and the tolerance
+        never came into it.
+      </p>
+      <figure class="val-chart-wrap">
+        <div class="val-chart" id="valChart" role="img" aria-label=""></div>
+        <figcaption id="valChartCaption"></figcaption>
+      </figure>
+      <p class="doc-note">
+        Checks held to an exact match are not on this chart: dividing by a
+        tolerance of zero has no meaning. They are counted separately below and
+        every one of them is exact.
+      </p>
+      <div class="val-exact" id="valExact"></div>
+
+      <h2 id="areas">Every check, by area</h2>
+      <p>
+        Measured against expected, with the error and the tolerance it was held
+        to. Open a row to see why that tolerance is what it is, and where the
+        expected value came from when it is a published one. A tolerance with no
+        stated reason is a number chosen to make a test pass, so every one here
+        carries its reason with it.
+      </p>
+      <div
+        class="val-filters"
+        id="valFilters"
+        role="group"
+        aria-label="Filter by kind"
+      ></div>
+      <div class="val-groups" id="valGroups2"></div>
+
+      <h2 id="limits">What this does not establish</h2>
+      <p>
+        A validation suite is only worth as much as its statement of what it
+        leaves out.
+      </p>
+      <ul>
+        <li>
+          <strong>Nothing here tests rendering.</strong> No check reads a pixel.
+          Every one is a number in and a number out, so a failure names a
+          quantity rather than a screenshot.
+        </li>
+        <li>
+          <strong>An approximation check never compares with reality.</strong>
+          The inspiral model is phenomenological: it is validated against the
+          equation it says it uses, and it would not reproduce a real
+          gravitational-wave chirp. It is labeled so that the two can never be
+          confused.
+        </li>
+        <li>
+          <strong
+            >Passing a tolerance is not the same as being accurate.</strong
+          >
+          An integrated check is held to the discretization error of the
+          integrator at a stated timestep, which is a real and sometimes large
+          number. The chart above is there so that size is visible rather than
+          hidden behind a verdict.
+        </li>
+        <li>
+          <strong>Coverage is not completeness.</strong> These are the
+          quantities that have been checked. Parts of the engine with no entry
+          in the table below have not been checked by it, and the honest reading
+          of a blank is that nobody has looked.
+        </li>
+      </ul>
+      <p>
+        The reasoning behind the model itself, including what it deliberately
+        simplifies, is on <a href="/model/">the model page</a>. The full
+        write-up of this suite, with every literature source, is in
+        <a
+          href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/PHYSICS_VALIDATION.md"
+          rel="noopener"
+          >PHYSICS_VALIDATION.md</a
+        >. To run it in a terminal instead of a browser:
+      </p>
+      <p class="doc-eq-block">npm run validate:physics</p>
+
+      <footer class="doc-foot">
+        <a href="/">Back to the simulation</a>
+        <span class="doc-foot-sep" aria-hidden="true">·</span>
+        <a href="/model/">The model</a>
+        <span class="doc-foot-sep" aria-hidden="true">·</span>
+        <a href="/instructors/">Instructors</a>
+      </footer>
+    </main>
+
+    <script type="module" src="/js/validationPage.js"></script>
+  </body>
+</html>

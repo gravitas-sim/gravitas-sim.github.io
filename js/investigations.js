@@ -26,7 +26,12 @@ import {
   INVESTIGATIONS,
   getInvestigation,
   gradedSteps,
+  seriesPosition,
 } from './data/investigations.js';
+// The thumbnail block and its fallback wiring are shared with the scenario
+// gallery and the front door's featured cards, so a borrowed capture lazy-loads
+// and degrades identically wherever it appears.
+import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
 import {
   applyShareState,
   state,
@@ -58,6 +63,11 @@ import {
 } from './units.js';
 import { getWidget, widgetDefaults } from './widgets.js';
 import {
+  rotationCurveState,
+  clusterState,
+  darkMatterHaloOn,
+} from './rotationCurve.js';
+import {
   setLightCurveEnabled,
   isLightCurveEnabled,
   setObserverAngle,
@@ -74,6 +84,7 @@ import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer } from './answerCheck.js';
+import { frameState } from './referenceFrame.js';
 
 export { checkAnswer };
 
@@ -158,8 +169,13 @@ function setStudentName(name) {
 
 /**
  * How far through an investigation a student is.
+ *
+ * `done` counts steps seen, which is what the progress bar shows; `at` is the
+ * step a resume would land on, which is not the same number once a student has
+ * gone back to reread something.
+ *
  * @param {string} id - Investigation id
- * @returns {{done:number, total:number, started:boolean}} Progress
+ * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
 export function progressFor(id) {
   const inv = getInvestigation(id);
@@ -169,6 +185,7 @@ export function progressFor(id) {
     done: saved ? saved.visited.size : 0,
     total,
     started: Boolean(saved),
+    at: saved ? saved.stepIndex + 1 : 1,
   };
 }
 
@@ -237,6 +254,31 @@ function probeContext() {
     // second cannot be caught by hand, and a real measurement is not made that
     // way either.
     photometry: () => transitAnalysis(),
+    // The rotation curve and the cluster measurements, so a step can ask a
+    // student to read a slope or a dispersion and then check what they read.
+    // Same functions the panel itself calls: a lesson and the instrument it
+    // points at must not be able to disagree.
+    rotationCurve: () => rotationCurveState(),
+    cluster: () => clusterState(),
+    haloOn: () => darkMatterHaloOn(),
+    // Which reference frame the view is in, and where a body lies as seen from
+    // its origin. A lesson about retrograde motion has to be able to say
+    // "you have not switched frames yet" and to report the direction a body is
+    // in, which is the observable the whole subject rests on.
+    frame: () => frameState(),
+    seenFrom: (body, originName) => {
+      const origin = allBodies().find(b =>
+        String(b.name || '')
+          .toLowerCase()
+          .includes(String(originName).toLowerCase())
+      );
+      if (!body || !origin || body === origin) return null;
+      const dx = body.pos.x - origin.pos.x;
+      const dy = body.pos.y - origin.pos.y;
+      let lon = (Math.atan2(dy, dx) * 180) / Math.PI;
+      if (lon < 0) lon += 360;
+      return { separation: Math.hypot(dx, dy), longitude: lon };
+    },
     find: name =>
       allBodies().find(b =>
         String(b.name || '')
@@ -1156,7 +1198,17 @@ function syncToolPanel(step) {
     .join('');
   els.toolActions.hidden = !actions.length;
 
-  const presets = spec.presets === false ? [] : widget.presets || [];
+  // Presets can depend on the step, the same way actions already can. A step
+  // that hides a control has to be able to hide the presets that would set it:
+  // the rotation-curve fitting instrument hides its halo sliders while a student
+  // is asked to fit with stars alone, and a reachable "published decomposition"
+  // button there would hand over the answer and, worse, show a good fit with no
+  // visible reason for it.
+  const declared =
+    typeof widget.presets === 'function'
+      ? widget.presets(spec)
+      : widget.presets;
+  const presets = spec.presets === false ? [] : declared || [];
   els.toolPresets.innerHTML = presets
     .map(
       (pr, i) =>
@@ -1684,7 +1736,11 @@ export function openInvestigation(id) {
   els.title.textContent = inv.title;
   els.subtitle.textContent = inv.subtitle;
   document.body.classList.add('investigation-open');
-  closeBrowser();
+  closeBrowser({ restoreFocus: false });
+  // Focus follows the choice into the panel. Without this, closing the browser
+  // destroys the focused card and drops a keyboard user at the top of the
+  // document, with the lesson they just started somewhere below them.
+  els.title.focus?.();
   // A scenario introduction card left over from before the lesson opened lands
   // squarely on top of the instrument panel. New ones are suppressed for the
   // duration; this dismisses the one that may already be up.
@@ -1735,31 +1791,182 @@ function stopProbeLoop() {
 }
 
 // --- The lesson browser -------------------------------------------------------
+//
+// Visually a sibling of the scenario gallery: the same surface tokens, the same
+// borrowed thumbnails, the same monospaced count line above the grid. It is not
+// the same card, though, and the differences are the point. A scenario is a
+// portrait tile you click on a whim; a lesson is an hour of work with a report
+// at the end, so it gets a wide landscape card with room to say how long it
+// takes, how many steps it is, what you will be able to do afterwards, and how
+// far through it you already are. Eight of those read as a syllabus. Forty-odd
+// small tiles read as a catalog. Each list looks like the thing it is.
+//
+// There is deliberately no search box and no filter chips here. Eight lessons
+// fit on two scrolls, and a filter over eight items is furniture.
 
-function renderBrowser() {
-  if (!els.list) return;
-  els.list.innerHTML = INVESTIGATIONS.map(inv => {
-    const p = progressFor(inv.id);
-    const pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
-    const status = !p.started
-      ? 'Not started'
-      : p.done >= p.total
-        ? 'Complete'
-        : `${p.done} of ${p.total} steps`;
-    return `<button type="button" class="inv-card" data-investigation="${escape(inv.id)}">
-        <span class="inv-card-head">
-          <span class="inv-card-title">${escape(inv.title)}</span>
-          <span class="inv-card-status${p.done >= p.total && p.started ? ' is-done' : ''}">${escape(status)}</span>
+/** Minutes named in a `duration` string, as a [low, high] pair. */
+function durationRange(text) {
+  const nums = String(text || '').match(/\d+/g);
+  if (!nums?.length) return [0, 0];
+  const low = Number(nums[0]);
+  return [low, nums.length > 1 ? Number(nums[1]) : low];
+}
+
+/**
+ * The line above the grid: how much work the whole set is, and where the
+ * student has got to in it.
+ *
+ * Nothing here is written down anywhere. Adding a lesson changes the sentence.
+ *
+ * @param {Array<Object>} list - The catalog
+ * @returns {string} A sentence
+ */
+export function browserSummary(list = INVESTIGATIONS) {
+  const steps = list.reduce((n, inv) => n + inv.steps.length, 0);
+  const [low, high] = list.reduce(
+    ([a, b], inv) => {
+      const [l, h] = durationRange(inv.duration);
+      return [a + l, b + h];
+    },
+    [0, 0]
+  );
+  const hours = (lo, hi) => {
+    const l = Math.round(lo / 60);
+    const h = Math.round(hi / 60);
+    return l === h ? `about ${h} hours` : `${l}–${h} hours`;
+  };
+
+  const parts = [
+    `${list.length} lesson${list.length === 1 ? '' : 's'}`,
+    `${steps} steps`,
+    `${hours(low, high)} of work`,
+  ];
+
+  // Progress, only once there is some: eight "not started" markers say nothing.
+  const progress = list.map(inv => progressFor(inv.id));
+  const done = progress.filter(p => p.started && p.done >= p.total).length;
+  const going = progress.filter(p => p.started && p.done < p.total).length;
+  if (done) parts.push(`${done} complete`);
+  if (going) parts.push(`${going} in progress`);
+
+  return parts.join(' · ');
+}
+
+/**
+ * The level to show on a card, if any.
+ *
+ * Every lesson currently reads "Introductory astronomy", and eight identical
+ * pills are noise. So the shared level is stated once in the header and a card
+ * carries one only when it is the odd one out.
+ *
+ * @param {Object} inv - Investigation
+ * @param {string|null} shared - The level the whole catalog shares, or null
+ * @returns {string} A level, or the empty string
+ */
+const cardLevel = (inv, shared) =>
+  inv.level === shared ? '' : inv.level || '';
+
+/** The one level the whole catalog shares, or null if they differ. */
+function sharedLevel(list = INVESTIGATIONS) {
+  const levels = new Set(list.map(inv => inv.level).filter(Boolean));
+  return levels.size === 1 ? [...levels][0] : null;
+}
+
+function browserCardHtml(inv, index, shared) {
+  const p = progressFor(inv.id);
+  const complete = p.started && p.done >= p.total;
+  const pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
+  const series = seriesPosition(inv);
+  const level = cardLevel(inv, shared);
+
+  // What the card's one control promises. A student who left off at step 12 of
+  // 35 wants to be told that, not "Start".
+  const cta = complete
+    ? 'Review lesson'
+    : p.started
+      ? `Resume at step ${p.at}`
+      : 'Start lesson';
+
+  const status = complete
+    ? 'Complete'
+    : p.started
+      ? `${p.done} of ${p.total} steps seen`
+      : '';
+
+  // The whole card is the control, so its accessible name has to carry
+  // everything scanning it gives a sighted reader.
+  const label = [
+    inv.title,
+    inv.subtitle,
+    series ? `${series.label}, lesson ${series.index} of ${series.of}` : '',
+    `${inv.steps.length} steps`,
+    inv.duration,
+    status,
+    cta,
+  ]
+    .filter(Boolean)
+    .join('. ');
+
+  return `<button type="button" class="inv-card${complete ? ' is-complete' : ''}"
+            data-investigation="${escape(inv.id)}"
+            aria-label="${attr(label)}" title="${attr(inv.summary || inv.title)}">
+      <span class="inv-card-shot">
+        ${scenarioShotHtml(inv, inv.title)}
+        <span class="inv-card-index" aria-hidden="true">${String(index + 1).padStart(2, '0')}</span>
+        <span class="inv-card-clock" aria-hidden="true">${escape(inv.duration)}</span>
+      </span>
+      <span class="inv-card-body">
+        <span class="inv-card-flags${series || level ? '' : ' is-empty'}">
+          ${
+            series
+              ? `<span class="inv-flag is-series">${escape(series.label)}
+                   <b>${series.index}/${series.of}</b></span>`
+              : ''
+          }
+          ${level ? `<span class="inv-flag">${escape(level)}</span>` : ''}
         </span>
+        <span class="inv-card-title">${escape(inv.title)}</span>
         <span class="inv-card-sub">${escape(inv.subtitle)}</span>
         <span class="inv-card-summary">${escape(inv.summary)}</span>
         <span class="inv-card-meta">
-          <span>${escape(inv.duration)}</span><span>${escape(inv.level)}</span>
           <span>${inv.steps.length} steps</span>
+          <span>${inv.objectives?.length || 0} objectives</span>
+          <span>Lab report</span>
         </span>
-        <span class="inv-card-bar"><span style="width:${pct}%"></span></span>
-      </button>`;
-  }).join('');
+        <span class="inv-card-foot">
+          ${
+            p.started
+              ? `<span class="inv-card-progress">
+                   <span class="inv-card-bar"><span style="width:${pct}%"></span></span>
+                   <span class="inv-card-status${complete ? ' is-done' : ''}">${escape(status)}</span>
+                 </span>`
+              : ''
+          }
+          <span class="inv-card-cta">${escape(cta)}<span aria-hidden="true"> →</span></span>
+        </span>
+      </span>
+    </button>`;
+}
+
+function renderBrowser() {
+  if (!els.list) return;
+  const shared = sharedLevel();
+
+  if (els.count) {
+    els.count.textContent = browserSummary();
+  }
+  // The level, said once, where it is a fact about the set rather than a pill
+  // repeated eight times.
+  if (els.level) {
+    els.level.hidden = !shared;
+    if (shared) els.level.textContent = `All at ${shared.toLowerCase()} level.`;
+  }
+
+  els.list.innerHTML = INVESTIGATIONS.map((inv, i) =>
+    browserCardHtml(inv, i, shared)
+  ).join('');
+
+  wireThumbnailFallbacks(els.list);
 
   els.list.querySelectorAll('[data-investigation]').forEach(btn => {
     btn.addEventListener('click', () =>
@@ -1768,16 +1975,43 @@ function renderBrowser() {
   });
 }
 
+// Where focus was when the browser opened. The panel is an aria-modal dialog,
+// so leaving focus behind it would let a keyboard user tab through the rail
+// underneath, and closing it would drop them at the top of the document.
+let browserLastFocus = null;
+
 /** Show the list of available investigations. */
 export function openBrowser() {
   if (!els.browser) return;
+  browserLastFocus = document.activeElement;
   renderBrowser();
   els.browser.classList.remove('hidden');
+  if (els.browserScroll) els.browserScroll.scrollTop = 0;
+  // The first lesson, not the close button: the point of arriving here is to
+  // choose one, and it puts the keyboard user at the top of the same list a
+  // sighted user is reading. Deferred because a display change has to land
+  // before the element can take focus.
+  setTimeout(() => els.list?.querySelector('.inv-card')?.focus(), 60);
 }
 
-/** Hide the list of investigations. */
-export function closeBrowser() {
+/**
+ * Hide the list of investigations.
+ * @param {Object} [opts]
+ * @param {boolean} [opts.restoreFocus] - Send focus back where it came from.
+ *   False when a lesson is opening: the panel takes focus instead, and putting
+ *   it back on the rail button first would be a visible detour.
+ */
+export function closeBrowser({ restoreFocus = true } = {}) {
   els.browser?.classList.add('hidden');
+  if (
+    restoreFocus &&
+    browserLastFocus &&
+    document.contains(browserLastFocus) &&
+    browserLastFocus !== document.body
+  ) {
+    browserLastFocus.focus();
+  }
+  browserLastFocus = null;
 }
 
 const isBrowserOpen = () =>
@@ -1954,6 +2188,9 @@ export function initInvestigations() {
   els = {
     browser: document.getElementById('investigationBrowser'),
     list: document.getElementById('investigationList'),
+    browserScroll: document.getElementById('investigationBrowserScroll'),
+    count: document.getElementById('investigationBrowserCount'),
+    level: document.getElementById('investigationBrowserLevel'),
     browserClose: document.getElementById('investigationBrowserClose'),
     browserChip: document.getElementById('investigationBrowserChip'),
     panel: document.getElementById('investigationPanel'),

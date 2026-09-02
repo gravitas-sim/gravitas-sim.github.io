@@ -53,6 +53,7 @@
       <nav class="doc-nav" aria-label="Site">
         <a href="/">Simulation</a>
         <a href="/model/" aria-current="page">The model</a>
+        <a href="/validation/">Validation</a>
         <a href="/instructors/">Instructors</a>
         <a
           href="https://github.com/gravitas-sim/gravitas-sim.github.io"
@@ -94,6 +95,7 @@
           <li><a href="#why">Why simplify?</a></li>
           <li><a href="#gravity">Gravity and motion</a></li>
           <li><a href="#dimensions">Two dimensions</a></li>
+          <li><a href="#frames">Reference frames</a></li>
           <li><a href="#collisions">Collisions and mergers</a></li>
           <li><a href="#inspiral">Gravitational-wave inspiral</a></li>
           <li><a href="#blackholes">Black holes</a></li>
@@ -101,6 +103,7 @@
           <li><a href="#visual">Visual effects</a></li>
           <li><a href="#other">Other educational models</a></li>
           <li><a href="#trust">What should I trust this to show?</a></li>
+          <li><a href="#validation">Validation: what has been checked</a></li>
           <li>
             <a href="#investigations">Which model each investigation uses</a>
           </li>
@@ -308,14 +311,76 @@
           and scattering outcomes differ.
         </li>
         <li>
-          <strong>Viewing geometry.</strong> Because every orbit is edge-on to
-          an observer in the plane, every planet transits its star. Real transit
-          surveys see only the small fraction of systems that happen to be
-          aligned, which is a central fact about exoplanet detection. The
-          transit investigation handles this in a dedicated panel rather than
-          pretending the simulation does it.
+          <strong>Viewing geometry.</strong> The dynamics are planar, but the
+          <em>observing</em> geometry is not. A line-of-sight direction is built
+          analytically in three dimensions from a position angle and an
+          inclination, and simulated positions and velocities are projected onto
+          it. Tilting the observer away from edge-on therefore moves a planet's
+          track off the stellar disk and ends the transit, reduces the
+          radial-velocity amplitude by sin <em>i</em>, and opens the astrometric
+          path from a line into an ellipse, all from one shared calculation.
+          What the simulation does not do is evolve orbits out of the plane:
+          mutual inclinations, nodal precession and the three-dimensional
+          architecture of real multi-planet systems are all absent.
         </li>
       </ul>
+
+      <h2 id="frames">Reference frames</h2>
+      <p><span class="doc-badge is-simulated">Simulated</span></p>
+      <p>
+        The equations are integrated in one frame, the one the scenario was
+        built in. The view can be re-expressed in another: the system's
+        barycenter, or any single body. This changes nothing about the physics
+        and everything about the picture, which is the point.
+      </p>
+      <p>
+        Positions are re-expressed by subtracting the frame's origin, and trails
+        by subtracting where that origin was
+        <em>at the time each point was recorded</em>. That second part is what
+        makes the transformation honest. Subtracting only the origin's present
+        position would slide the whole drawing sideways without changing its
+        shape, which is what following a body with the camera does.
+      </p>
+      <p>
+        Put the Solar System into Earth's frame and Mars traces a loop that
+        doubles back on itself. Nothing was added to produce it: retrograde
+        motion is already present in the recorded positions of two bodies on
+        circular orbits with different periods, and choosing the frame is what
+        makes it visible. It is the observation that Ptolemy's epicycles were
+        built to reproduce and that Copernicus explained away.
+      </p>
+      <p>Two things to know about how this is implemented:</p>
+      <ul>
+        <li>
+          <strong>The barycenter is taken over the massive bodies.</strong>
+          Stars, black holes, compact remnants, planets, gas giants, asteroids
+          and comets. Debris and particles are excluded: they carry little mass
+          and are culled aggressively when they leave the visible region, so
+          including them would make the frame's origin jump whenever a fragment
+          disappeared.
+        </li>
+        <li>
+          <strong>The starfield does not move with the frame.</strong> That is
+          deliberate and it is correct: the background stars stand in for
+          objects at effectively infinite distance, and translating the observer
+          does not change the direction to them. It is also what makes the loop
+          legible, because retrograde motion is defined against the fixed stars.
+        </li>
+      </ul>
+      <p>
+        Speeds are reported in the frame as well, but beside the world-frame
+        velocity rather than instead of it. While a frame is active the object
+        inspector gains a row reading, for example, <code>Speed vs Mars</code>,
+        and the existing <code>Velocity</code> row keeps its original meaning.
+        Quietly changing what a labelled number refers to would be worse than
+        showing both.
+      </p>
+      <p>
+        A trail point older than the frame origin's own history cannot be
+        expressed in that frame at all, and is not drawn. The alternative would
+        be to leave those points where they sit in world coordinates, splicing a
+        piece of a different picture onto the end of this one.
+      </p>
 
       <h2 id="collisions">Collisions and mergers</h2>
       <p><span class="doc-badge is-approximate">Approximated</span></p>
@@ -647,6 +712,137 @@
           </thead>
           <tbody>
             <tr>
+              <td>Radial velocity</td>
+              <td>
+                Projects the observed star's actual simulated velocity onto the
+                shared line of sight and plots it against time, relative to the
+                system's measured center of mass. The semi-amplitude reported is
+                half the peak-to-peak range of what has been recorded, not a
+                fitted Keplerian model.
+              </td>
+              <td>
+                Only one star is measured at a time; a spectrograph observes one
+                object, and summing unrelated stars would not be a measurement.
+                No instrumental noise, no stellar activity jitter, and no
+                systemic velocity: a real spectrum also carries the whole
+                system's motion through the Galaxy, a constant offset that
+                shifts the curve without changing its shape. Scenarios that pin
+                their star report no measurement at all rather than a misleading
+                zero.
+              </td>
+            </tr>
+            <tr>
+              <td>Astrometric wobble</td>
+              <td>
+                Projects the star's offset from the system barycenter onto the
+                plane of the sky and records the path it traces. The physical
+                reflex orbit is reported in AU; the angle it subtends follows
+                from the system distance, using the definition that one AU at
+                one parsec is one arcsecond.
+              </td>
+              <td>
+                Distance is a stored property of a real system or an explicit
+                assumption for an invented one, never inferred from simulation
+                coordinates. Parallax, proper motion and the astrometric
+                perturbations of additional bodies are not modeled, and no
+                instrument's detection threshold is applied: a signature shown
+                here is not a claim that any telescope could measure it.
+              </td>
+            </tr>
+            <tr>
+              <td>Rotation curve</td>
+              <td>
+                Plots one point per body from the simulation's own positions and
+                velocities: distance from the mass-weighted center against speed
+                about it, measured in that center's frame. Overlaid is
+                &radic;(<em>GM</em>(&lt;<em>r</em>)/<em>r</em>) computed from
+                the mass of the objects actually present, and a power law fitted
+                by least squares to the outer part of the curve. Nothing is
+                smoothed and no model is assumed.
+              </td>
+              <td>
+                The single heaviest body, when it lies near the center, is
+                excluded from the plot: it is the source of the field rather
+                than a tracer of it. The overlaid prediction treats the enclosed
+                mass as spherically distributed, which is a good approximation
+                for a bulge and a rougher one for a disc. The fit covers the
+                outer three quarters of the radial range and the excluded region
+                is shaded, so a reported slope is visibly the slope of the outer
+                curve rather than of everything.
+              </td>
+            </tr>
+            <tr>
+              <td>Dark-matter halo</td>
+              <td>
+                An optional term in the force law: a smooth, static,
+                pseudo-isothermal mass distribution centered on the origin, with
+                circular speed
+                <em>v</em><sub>flat</sub>&radic;(1 &minus; (<em>r</em
+                ><sub>c</sub>/<em>r</em>)&nbsp;arctan(<em>r</em>/<em>r</em
+                ><sub>c</sub>)). It is applied as a velocity kick before
+                whichever gravity solver is running, so it is present on both
+                the direct-sum and Barnes&ndash;Hut paths. It is not an object:
+                no position of its own, nothing drawn, nothing in the body
+                counts.
+              </td>
+              <td>
+                Off by default. The profile is a fitted phenomenological model,
+                the same family used on real rotation curves, not a prediction
+                from any theory of what dark matter is; its two parameters are
+                free and the user sets them. The halo does not respond to the
+                bodies moving in it, does not form or evolve, and is fixed at
+                the origin rather than following the system's center of mass. An
+                NFW profile would match structure-formation simulations better
+                and is not used, because it is cuspy at the center and would
+                place a singularity inside scenarios students fly through.
+              </td>
+            </tr>
+            <tr>
+              <td>Rotation-curve decomposition</td>
+              <td>
+                A separate model, used only by the fitting instrument in "The
+                Missing Mass" and not by the simulation. A model galaxy is built
+                from a point-mass bulge, a thin exponential stellar disc using
+                the Freeman&nbsp;(1970) solution, and the same pseudo-isothermal
+                halo as above; their circular speeds add in quadrature, because
+                accelerations add and each equals <em>v</em>&sup2;/<em>r</em>.
+                The curve being fitted is synthetic, generated from
+                NGC&nbsp;3198's published structural parameters with a fixed
+                scatter, so the exercise has an exact answer.
+              </td>
+              <td>
+                The disc is a real solution rather than an approximation: its
+                shape is fixed by the geometry, which is the point, because it
+                means only the disc's mass and scale length are adjustable and
+                neither can turn a declining curve into a level one. The
+                enclosed-mass relation <em>M</em>(&lt;<em>r</em>) =
+                <em>v</em>&sup2;<em>r</em>/<em>G</em> that the lesson uses is
+                the spherical one, and a disc is not spherical; the geometry
+                factor is of order one and does not affect the conclusion that
+                the enclosed total keeps growing where the light has stopped.
+                The fitted curve is not measured data and the panel says so.
+              </td>
+            </tr>
+            <tr>
+              <td>Galaxies</td>
+              <td>
+                A point mass with a disc drawn on it, used as a member of a
+                cluster. It participates in gravity exactly as any other body
+                does.
+              </td>
+              <td>
+                Nothing internal is modeled: a galaxy here has no stars, no
+                rotation of its own and no structure beyond its picture, and it
+                cannot merge, accrete or evolve. The scenarios containing them
+                are scale models, stated as such on their cards, because
+                Gravitas's units are calibrated so that <em>G</em> = 1 works for
+                planetary systems. The quantities those scenarios are used to
+                measure &mdash; the exponent of a power law and the ratio of two
+                masses &mdash; are dimensionless, which is what makes the
+                scaling harmless.
+              </td>
+            </tr>
+            <tr>
               <td>Transit light curve</td>
               <td>
                 Computes the overlap of an opaque planetary disk with a
@@ -896,6 +1092,101 @@
         </table>
       </div>
 
+      <h2 id="validation">Validation: what has been checked</h2>
+      <p>
+        Everything above describes what Gravitas calculates. This section is
+        about a different question, and it is the one a physicist assigning this
+        to a class should ask: not what the model claims, but what has been
+        measured against something independent.
+      </p>
+      <p>
+        Every result described here is published, with its measured error and
+        its tolerance, on the
+        <a href="/validation/">validation page</a>, which will also run the
+        whole suite in your browser if you would rather not take the table's
+        word for it.
+      </p>
+      <p>
+        The repository carries an automated validation suite. It runs 135
+        deterministic checks and prints a table of measured value, expected
+        value, error and tolerance:
+      </p>
+      <p class="doc-eq-block">npm run validate:physics</p>
+      <p>
+        There are four kinds of check and the table labels each one, because
+        they do not mean the same thing.
+      </p>
+      <div class="doc-feature">
+        <h3>What the four labels mean</h3>
+        <dl>
+          <dt>Analytic</dt>
+          <dd>
+            Closed-form arithmetic against the equation the code claims to
+            implement. Held at or near machine precision, because there is
+            nothing for a tolerance to absorb.
+          </dd>
+          <dt>Integrated</dt>
+          <dd>
+            A quantity measured by actually running the N-body engine, through
+            the same step function the application calls sixty times a second.
+            Tolerances come from the discretization error of the integrator at
+            the stated timestep, and the suite measures the integrator's
+            convergence order rather than assuming it.
+          </dd>
+          <dt>Published</dt>
+          <dd>
+            A stored parameter or derived observable compared against a
+            literature value, with the source named. The tolerance is set by the
+            precision the reference is quoted to.
+          </dd>
+          <dt>Approximation</dt>
+          <dd>
+            An educational model that is not the full physics, validated against
+            the equation it says it uses and never against reality. Labeled
+            <code>APPROX</code> so the two cannot be confused.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        Every tolerance carries a written justification, which the suite prints
+        on request, because a tolerance with no stated reason is a number chosen
+        to make a test pass. A few representative results: Kepler's third law
+        recovered from four integrated orbits gives a slope of 1.49987 against
+        1.5; linear and angular momentum are conserved to floating-point
+        round-off; the total energy error is bounded rather than accumulating,
+        and is the same after sixty orbits as after six; the transit depth of HD
+        209458 b computed from its stored radii is 1.5075% against a measured
+        1.5%; the habitable zone of TRAPPIST-1 comes out at 0.0254 to 0.0499 AU,
+        putting planets e, f and g inside it, which is what the literature
+        reports.
+      </p>
+      <p>
+        The suite also records what is <em>not</em> conserved and why. Static
+        black holes, one-way gravity and the dark-matter halo all conserve less
+        than the full model does, deliberately, and the audit excludes them
+        explicitly rather than passing them quietly.
+      </p>
+      <div class="doc-note">
+        <p>
+          <strong>Not validated:</strong> anything drawn rather than computed;
+          the Barnes&ndash;Hut tree solver, which is approximate by construction
+          and calibrated separately; debris and particle bookkeeping; long-term
+          N-body statistics such as cluster relaxation and ejection rates; and
+          all of numerical relativity.
+        </p>
+      </div>
+      <p>
+        The full write-up, with every number, every tolerance and its reasoning,
+        every literature source, and the two physics bugs the validation pass
+        found and fixed, is in
+        <code>PHYSICS_VALIDATION.md</code> in the repository:
+        <a
+          href="https://github.com/gravitas-sim/gravitas-sim.github.io/blob/main/PHYSICS_VALIDATION.md"
+          rel="noopener"
+          >PHYSICS_VALIDATION.md</a
+        >.
+      </p>
+
       <h2 id="investigations">Which model each investigation uses</h2>
       <p>
         Each guided investigation relies on a different part of the model. These
@@ -993,6 +1284,14 @@
         Simulation data can also be exported as CSV from the simulation itself,
         with a companion notebook for analyzing it, if you would rather check
         the model's behavior against your own calculation than read the source.
+      </p>
+      <p>
+        And if you would rather not do either, the validation suite has already
+        done a good deal of it:
+        <code>npm run validate:physics</code> prints the table described under
+        <a href="#validation">Validation</a>, and
+        <code>npm run validate:scenarios</code> extends the conservation audit
+        to all 48 shipped scenarios in a real browser.
       </p>
     </main>
 

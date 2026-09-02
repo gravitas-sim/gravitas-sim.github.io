@@ -1,7 +1,7 @@
 // =============================================================================
 // Object name pools
 // -----------------------------------------------------------------------------
-// Pure data, extracted from ui.js so the UI module holds behaviour rather than
+// Pure data, extracted from ui.js so the UI module holds behavior rather than
 // 370 lines of string tables.
 // =============================================================================
 
@@ -376,6 +376,37 @@ export const SPACE_OBJECT_NAMES = {
     'Cosmic Blizzard',
     'Stellar Explorer',
     'Orbit Rocket',
+  ],
+
+  // Cluster members. Named the way real catalogues name them - a survey
+  // designation and a running number - rather than with the invented-sounding
+  // names the other pools use, because a galaxy in a cluster is a catalogue
+  // entry and that is part of what the scenario is showing.
+  galaxies: [
+    'NGC 4874',
+    'NGC 4889',
+    'NGC 4839',
+    'NGC 4911',
+    'NGC 4921',
+    'IC 4051',
+    'IC 3973',
+    'NGC 4860',
+    'NGC 4841A',
+    'NGC 4926',
+    'IC 4011',
+    'NGC 4869',
+    'IC 3976',
+    'NGC 4908',
+    'IC 4045',
+    'NGC 4881',
+    'IC 3949',
+    'NGC 4873',
+    'IC 4012',
+    'NGC 4906',
+    'IC 3959',
+    'NGC 4872',
+    'IC 4088',
+    'NGC 4952',
   ],
 };
 

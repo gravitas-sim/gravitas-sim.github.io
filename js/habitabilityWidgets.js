@@ -13,7 +13,7 @@
 // point of that section.
 //
 // Accessibility note: habitable-zone status is never carried by color alone.
-// Every band is labelled, the two edges use different dash patterns as well as
+// Every band is labeled, the two edges use different dash patterns as well as
 // different colors, and the readout says in words where a planet sits.
 // =============================================================================
 
@@ -670,7 +670,7 @@ const fmtAU = au =>
       : au >= 0.1
         ? au.toFixed(3)
         : au.toFixed(4);
-/** A tick spacing that gives four to six labelled marks. */
+/** A tick spacing that gives four to six labeled marks. */
 function niceStep(span) {
   const raw = span / 4.5;
   const mag = 10 ** Math.floor(Math.log10(raw));
@@ -814,7 +814,7 @@ const BOUNDARIES_WIDGET = {
     ctx.font = `10px ${MONO}`;
     ctx.fillStyle = EARTHY;
     // Offset to the right: Earth at 1 AU sits within a couple of pixels of the
-    // conservative inner edge, and a centred label lands on that line.
+    // conservative inner edge, and a centered label lands on that line.
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     halo(ctx, 'Earth', ex + 9, cy + 44);
@@ -1199,7 +1199,7 @@ const TRAPPIST = {
     const right = w - 20;
     const track = right - left;
     // A square-root axis, so the inner planets are not piled on the star while
-    // the outer ones sit alone. The axis is labelled, so the compression is
+    // the outer ones sit alone. The axis is labeled, so the compression is
     // visible rather than misleading.
     const maxAU = 0.07;
     const X = au => left + Math.sqrt(Math.max(0, au) / maxAU) * track;
@@ -1237,7 +1237,7 @@ const TRAPPIST = {
     ctx.textBaseline = 'top';
     halo(ctx, 'TRAPPIST-1', left - 4, rowY + 14);
 
-    // Seven planets, labelled above and below alternately so that seven labels
+    // Seven planets, labeled above and below alternately so that seven labels
     // on a compressed axis cannot collide.
     c.planets.forEach((p, i) => {
       const x = X(p.a);

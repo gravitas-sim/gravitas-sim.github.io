@@ -1,4 +1,13 @@
 // Import utility functions
+import {
+  SOLAR_MASS_KG,
+  AU_METERS,
+  G_SI,
+  JUPITER_MASSES_PER_SOLAR_MASS,
+  EARTH_MASSES_PER_JUPITER_MASS,
+  EARTH_MASSES_PER_SOLAR_MASS,
+} from './constants.js';
+import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { formatNumber, withUnit } from './format.js';
 import { forEachCandidatePair } from './spatialHash.js';
 import {
@@ -12,394 +21,43 @@ import {
   screenToWorld,
   isOffscreen,
 } from './utils.js';
+import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
+import { haloAcceleration } from './darkMatter.js';
 
 // Import the getRandomName function from ui.js
 // import { getRandomName } from './ui.js';
 
 // Local getRandomName function since it's not exported from ui.js
+/**
+ * Pick a random display name for a new object of the given type.
+ *
+ * The pools used to be written out again here, all 355 of them, byte for byte
+ * identical to js/data/objectNames.js. Two copies of a table is one copy too
+ * many: adding a ninth pool meant adding it twice, and the moment one edit
+ * missed the other the same object would be named from two different lists
+ * depending on which module made it.
+ *
+ * @param {string} type - Pool name, e.g. 'stars' or 'galaxies'
+ * @returns {string} A name from that pool
+ */
 const getRandomName = type => {
-  const names = {
-    planets: [
-      'Terra Nova',
-      'Gaia Minor',
-      'Eden Prime',
-      'Cosmic Garden',
-      'World Alpha',
-      'Planet Hope',
-      'New Earth',
-      'Stellar Oasis',
-      'Cosmic Refuge',
-      'World Beta',
-      'Terra Vista',
-      'Gaia Prime',
-      'Eden Alpha',
-      'Cosmic Haven',
-      'World Gamma',
-      'Planet Serenity',
-      'New Horizon',
-      'Stellar Paradise',
-      'Cosmic Sanctuary',
-      'World Delta',
-      'Terra Magna',
-      'Gaia Supreme',
-      'Eden Eternal',
-      'Cosmic Harmony',
-      'World Epsilon',
-      'Planet Destiny',
-      'New Genesis',
-      'Stellar Utopia',
-      'Cosmic Peace',
-      'World Zeta',
-      'Terra Mystica',
-      'Gaia Crystal',
-      'Eden Infinite',
-      'Cosmic Tranquil',
-      'World Eta',
-      'Planet Elysium',
-      'New Arcadia',
-      'Stellar Nirvana',
-      'Cosmic Bliss',
-      'World Theta',
-      'Terra Wonderland',
-      'Gaia Magnificent',
-      'Eden Glorious',
-      'Cosmic Splendor',
-      'World Iota',
-    ],
-    gasGiants: [
-      'Storm King',
-      'Gas Titan',
-      'Cyclone Prime',
-      'Atmospheric Giant',
-      'Wind Walker',
-      'Storm Lord',
-      'Gas Majesty',
-      'Cyclone Master',
-      'Atmospheric Titan',
-      'Wind Ruler',
-      'Storm Emperor',
-      'Gas Sovereign',
-      'Cyclone Champion',
-      'Atmospheric King',
-      'Wind Commander',
-      'Storm Deity',
-      'Gas Noble',
-      'Cyclone Warrior',
-      'Atmospheric Lord',
-      'Wind Guardian',
-      'Storm Monarch',
-      'Gas Regent',
-      'Cyclone Sovereign',
-      'Atmospheric Emperor',
-      'Wind Protector',
-      'Storm Supreme',
-      'Gas Commander',
-      'Cyclone Overlord',
-      'Atmospheric Chief',
-      'Wind Sentinel',
-      'Storm Dominator',
-      'Gas Overlord',
-      'Cyclone Ruler',
-      'Atmospheric Supreme',
-      'Wind Majesty',
-      'Storm Colossus',
-      'Gas Behemoth',
-      'Cyclone Leviathan',
-      'Atmospheric Mammoth',
-      'Wind Goliath',
-      'Storm Juggernaut',
-      'Gas Monster',
-      'Cyclone Beast',
-      'Atmospheric Crusher',
-      'Wind Destroyer',
-    ],
-    asteroids: [
-      'Rock Hopper',
-      'Space Pebble',
-      'Cosmic Stone',
-      'Stellar Fragment',
-      'Orbit Drifter',
-      'Rock Wanderer',
-      'Space Boulder',
-      'Cosmic Chunk',
-      'Stellar Piece',
-      'Orbit Traveler',
-      'Rock Explorer',
-      'Space Nugget',
-      'Cosmic Shard',
-      'Stellar Bit',
-      'Orbit Voyager',
-      'Rock Adventurer',
-      'Space Cobble',
-      'Cosmic Sliver',
-      'Stellar Chip',
-      'Orbit Nomad',
-      'Rock Pioneer',
-      'Space Gravel',
-      'Cosmic Splinter',
-      'Stellar Flake',
-      'Orbit Roamer',
-      'Rock Scout',
-      'Space Rubble',
-      'Cosmic Particle',
-      'Stellar Grain',
-      'Orbit Wanderer',
-      'Rock Ranger',
-      'Space Debris',
-      'Cosmic Dust',
-      'Stellar Speck',
-      'Orbit Drifter',
-      'Rock Hunter',
-      'Space Cluster',
-      'Cosmic Meteor',
-      'Stellar Remnant',
-      'Orbit Slider',
-      'Rock Seeker',
-      'Space Swarm',
-      'Cosmic Shower',
-      'Stellar Storm',
-      'Orbit Dancer',
-    ],
-    blackHoles: [
-      'Abyss Prime',
-      'Void Phantom',
-      'Dark Nexus',
-      'Shadow Vortex',
-      'Stellar Grave',
-      'Event Horizon',
-      'Cosmic Drain',
-      'Infinity Well',
-      'Quantum Void',
-      'Gravity Beast',
-      'Singularity Alpha',
-      'The Devourer',
-      'Omega Point',
-      'Dark Matter Core',
-      'Space Ripper',
-      'Neutron Crusher',
-      'Photon Trap',
-      'Stellar Vacuum',
-      'Cosmic Whirlpool',
-      'The Absorber',
-      'Graviton Sink',
-      'Spacetime Tear',
-      'Quantum Collapse',
-      'Stellar Tomb',
-      'Dark Energy Core',
-      'Infinity Gate',
-      'Cosmic Maelstrom',
-      'The Singularity',
-      'Void Walker',
-      'Shadow Realm',
-      'Gravity Storm',
-      'Stellar Phantom',
-      'Dark Horizon',
-      'Cosmic Vacuum',
-      'The Anomaly',
-      'Warp Core',
-      'Stellar Devourer',
-      'Quantum Abyss',
-      'Gravity Well X',
-      'Dark Nexus Prime',
-    ],
-    stars: [
-      'Proxima Flare',
-      'Stellar Beacon',
-      'Nova Prime',
-      'Helios Alpha',
-      'Fusion Core',
-      'Plasma Heart',
-      'Solar Titan',
-      'Stellar Phoenix',
-      'Radiant Crown',
-      'Cosmic Forge',
-      'Stellar Dynamo',
-      'Fusion Giant',
-      'Plasma Sphere',
-      'Solar Majesty',
-      'Stellar Furnace',
-      'Radiant Jewel',
-      'Cosmic Ember',
-      'Stellar Warrior',
-      'Solar Guardian',
-      'Plasma King',
-      'Stellar Empress',
-      'Fusion Master',
-      'Solar Deity',
-      'Stellar Champion',
-      'Radiant Star',
-      'Cosmic Luminary',
-      'Stellar Sovereign',
-      'Solar Monarch',
-      'Plasma Crown',
-      'Stellar Glory',
-      'Radiant Sentinel',
-      'Cosmic Beacon',
-      'Solar Majesty',
-      'Stellar Protector',
-      'Fusion Lord',
-      'Plasma Noble',
-      'Solar Regent',
-      'Stellar Ruler',
-      'Cosmic Sovereign',
-      'Radiant Emperor',
-      'Stellar Dominator',
-      'Solar Supreme',
-      'Plasma Overlord',
-      'Cosmic Commander',
-      'Stellar Chief',
-    ],
-    neutronStars: [
-      'Pulsar Prime',
-      'Neutron Beacon',
-      'Stellar Compass',
-      'Cosmic Lighthouse',
-      'Gravity Pulse',
-      'Neutron King',
-      'Pulsar Master',
-      'Stellar Rhythm',
-      'Cosmic Metronome',
-      'Gravity Beat',
-      'Neutron Lord',
-      'Pulsar Champion',
-      'Stellar Drummer',
-      'Cosmic Timekeeper',
-      'Gravity Clock',
-      'Neutron Sovereign',
-      'Pulsar Overlord',
-      'Stellar Conductor',
-      'Cosmic Coordinator',
-      'Gravity Timer',
-      'Neutron Emperor',
-      'Pulsar Supreme',
-      'Stellar Orchestrator',
-      'Cosmic Synchronizer',
-      'Gravity Rhythm',
-      'Neutron Deity',
-      'Pulsar Commander',
-      'Stellar Maestro',
-      'Cosmic Harmonizer',
-      'Gravity Pulse',
-      'Neutron Noble',
-      'Pulsar Regent',
-      'Stellar Director',
-      'Cosmic Organizer',
-      'Gravity Signal',
-      'Neutron Majesty',
-      'Pulsar Guardian',
-      'Stellar Manager',
-      'Cosmic Controller',
-      'Gravity Beacon',
-      'Neutron Protector',
-      'Pulsar Sentinel',
-      'Stellar Supervisor',
-      'Cosmic Coordinator',
-      'Gravity Guide',
-    ],
-    whiteDwarfs: [
-      'Crystal Core',
-      'Diamond Heart',
-      'Stellar Gem',
-      'Cosmic Jewel',
-      'White Giant',
-      'Crystal Star',
-      'Diamond Sphere',
-      'Stellar Crystal',
-      'Cosmic Diamond',
-      'White Titan',
-      'Crystal Crown',
-      'Diamond King',
-      'Stellar Treasure',
-      'Cosmic Brilliant',
-      'White Sovereign',
-      'Crystal Majesty',
-      'Diamond Lord',
-      'Stellar Precious',
-      'Cosmic Radiant',
-      'White Emperor',
-      'Crystal Noble',
-      'Diamond Regent',
-      'Stellar Magnificent',
-      'Cosmic Splendid',
-      'White Supreme',
-      'Crystal Commander',
-      'Diamond Guardian',
-      'Stellar Glorious',
-      'Cosmic Luminous',
-      'White Overlord',
-      'Crystal Protector',
-      'Diamond Sentinel',
-      'Stellar Brilliant',
-      'Cosmic Gleaming',
-      'White Ruler',
-      'Crystal Warrior',
-      'Diamond Champion',
-      'Stellar Shining',
-      'Cosmic Sparkling',
-      'White Dominator',
-      'Crystal Deity',
-      'Diamond Deity',
-      'Stellar Dazzling',
-      'Cosmic Glittering',
-      'White Colossus',
-    ],
-    comets: [
-      'Tail Blazer',
-      'Ice Wanderer',
-      'Cosmic Snowball',
-      'Stellar Comet',
-      'Orbit Streaker',
-      'Tail Runner',
-      'Ice Traveler',
-      'Cosmic Iceball',
-      'Stellar Visitor',
-      'Orbit Flasher',
-      'Tail Chaser',
-      'Ice Explorer',
-      'Cosmic Frozen',
-      'Stellar Nomad',
-      'Orbit Glider',
-      'Tail Dancer',
-      'Ice Adventurer',
-      'Cosmic Glacier',
-      'Stellar Wanderer',
-      'Orbit Swooper',
-      'Tail Glider',
-      'Ice Pioneer',
-      'Cosmic Frost',
-      'Stellar Drifter',
-      'Orbit Streamer',
-      'Tail Swooper',
-      'Ice Scout',
-      'Cosmic Chill',
-      'Stellar Roamer',
-      'Orbit Blazer',
-      'Tail Streamer',
-      'Ice Ranger',
-      'Cosmic Freeze',
-      'Stellar Voyager',
-      'Orbit Comet',
-      'Tail Hunter',
-      'Ice Seeker',
-      'Cosmic Winter',
-      'Stellar Traveler',
-      'Orbit Shooter',
-      'Tail Finder',
-      'Ice Discoverer',
-      'Cosmic Blizzard',
-      'Stellar Explorer',
-      'Orbit Rocket',
-    ],
-  };
-
-  const typeNames = names[type] || names.planets;
+  const typeNames = SPACE_OBJECT_NAMES[type] || SPACE_OBJECT_NAMES.planets;
   return typeNames[Math.floor(Math.random() * typeNames.length)];
 };
 
 // Physics constants and utilities
 const DT = 0.1;
 const SOLAR_MASS_UNIT = 1000;
-const EARTH_MASS_UNIT = 3; // Earth mass unit (1 Earth = 3 units, 1 Sun = 1000 units)
+// Simulation mass units per Earth mass. Derived from the solar mass for the
+// same reason JUPITER_MASS_UNIT is, and it had the same failure: this was a
+// literal 3, which is 1000x too heavy. A body built as "1 Earth mass" weighed a
+// thousandth of the Sun, and formatMass divided by the same 3 to print "1 M_E"
+// back, so the number on screen agreed with itself and disagreed with physics.
+//
+// Two scenarios had already noticed and patched around it locally with a
+// SOLAR_SYSTEM_MASS_SCALE of 0.001, which is exactly the error. Those patches
+// are gone; the constant is right instead.
+const EARTH_MASS_UNIT = SOLAR_MASS_UNIT / EARTH_MASSES_PER_SOLAR_MASS;
 const ABSORB_BUFFER = 6;
 // Softening floor on the gravity calculation, to keep a near-miss from
 // producing a singular force. Five units is right for scenarios laid out at
@@ -429,7 +87,14 @@ const MAX_STAR_MASS_BEFORE_BH = 20.0;
 // in real images without needing physical velocity units.
 const DISK_REFERENCE_SPEED = 90.0;
 const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a star
-const JUPITER_MASS_UNIT = 50.0; // Simulation mass units per Jupiter mass
+// Simulation mass units per Jupiter mass. Derived from the solar mass rather
+// than chosen, because the solar mass is the anchor the whole mass scale hangs
+// from and a second independent number is a second chance to disagree with it.
+// This was 50 for a long time, which is 52.4x too heavy: a gas giant labeled
+// "1.00 M_J" in the inspector pulled on its neighbours with 52 Jupiter masses,
+// a twentieth of a star. Nothing in the display was wrong about the mass it was
+// given; the mass it was given was wrong about Jupiter.
+const JUPITER_MASS_UNIT = SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS;
 
 const canvas = document.getElementById('simulationCanvas');
 
@@ -446,6 +111,7 @@ let bh_list = [],
   gravity_ripples = [],
   neutron_stars = [],
   white_dwarfs = [],
+  galaxies = [],
   accretion_disk_particles = [];
 
 const dispatchSimulationEvent = (name, detail = {}) => {
@@ -539,7 +205,34 @@ let physicsSettings = {
   // 0.7 is the textbook default but costs the same here as 0.4 while being an
   // order of magnitude less accurate, so it is not worth the error budget.
   barnes_hut_theta: 0.4,
+
+  // A dark-matter halo added to the force law as a smooth background field.
+  // Off by default: the halo is a claim about the universe, and a student
+  // should switch it on deliberately and watch what changes.
+  //
+  // The halo is a field, not a body. It has no position of its own to
+  // integrate, it never merges or is captured, and it does not appear in the
+  // object counts, because nothing about it is visible. That is the point.
+  dark_matter_halo: false,
+  halo_v_flat: 6.0,
+  halo_core_radius: 300,
 };
+
+/**
+ * The halo parameters currently in force, or null when the halo is switched off.
+ *
+ * Centered on the origin, which is where every scenario that means to have a
+ * halo puts the thing the halo belongs to.
+ *
+ * @returns {?{vFlat: number, coreRadius: number}} Halo parameters
+ */
+const activeHalo = () =>
+  physicsSettings.dark_matter_halo
+    ? {
+        vFlat: physicsSettings.halo_v_flat,
+        coreRadius: physicsSettings.halo_core_radius,
+      }
+    : null;
 
 /**
  * Whether the Barnes-Hut worker path is currently driving gravity.
@@ -626,6 +319,7 @@ const CLICK_MIN_RADIUS = {
   WhiteDwarf: 10,
   Asteroid: 8,
   Comet: 8,
+  Galaxy: 16,
 };
 
 // Function to update physics settings
@@ -663,6 +357,57 @@ const setDetailScale = scale => {
  * Get the current adaptive level-of-detail multiplier.
  * @returns {number} Current detail scale
  */
+/**
+ * Sample counter for trails.
+ *
+ * Every live body appends one trail point per physics step, so a shared counter
+ * is enough to say which samples were taken at the same moment. That is what
+ * lets one body's trail be re-expressed in another body's frame: without a
+ * common clock the two arrays are just two lists of coordinates, and lining them
+ * up by array index breaks the moment one body is younger than the other.
+ */
+let trailTick = 0;
+
+/** @returns {number} The tick of the most recent trail sample */
+const getTrailTick = () => trailTick;
+
+/** Restart the trail clock and drop frame history. Called when the world is rebuilt. */
+const resetTrailTick = () => {
+  trailTick = 0;
+  clearFrameHistory();
+};
+
+/**
+ * How many trail samples a body keeps.
+ *
+ * Extracted from update_trail so the barycenter history can be kept to exactly
+ * the same length. A barycenter history shorter than the trails would silently
+ * truncate the re-expressed trails; one longer would just waste memory.
+ *
+ * @returns {number} Sample budget, at least 1
+ */
+const trailBudget = () => {
+  // Zoom-based budget: fewer points when zoomed out, more when zoomed in
+  const zoom = state ? state.zoom : 1.0;
+  // detailScale is the renderer's adaptive-quality multiplier. It is applied
+  // here, at read time, so the user's configured trail_length is never
+  // overwritten.
+  const baseLen = Math.max(
+    1,
+    Math.round(physicsSettings.trail_length * detailScale)
+  );
+  if (baseLen < 10) {
+    // Preserve exact behavior for small budgets (tests rely on this)
+    return baseLen;
+  }
+  const minLen = Math.max(10, Math.floor(baseLen * 0.4));
+  const maxLen = Math.max(baseLen, 10);
+  return Math.max(
+    minLen,
+    Math.min(maxLen, Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom))))
+  );
+};
+
 const getDetailScale = () => detailScale;
 
 // Utility functions
@@ -854,9 +599,27 @@ const sampleTwoBodyOrbit = ({ r0, v0, mCentral, dt, steps }) => {
   return positions;
 };
 
+// Scratch acceleration buffers for the two-pass step, grown as the world does
+// and reused between frames so a per-frame allocation does not appear in the
+// profile of a scenario with a few thousand bodies.
+let stepAx = new Float64Array(256);
+let stepAy = new Float64Array(256);
+
 // Physics optimization: Cache arrays to avoid repeated spread operations
 let cachedMajorSources = [];
 let cachedAllPhysicsObjects = [];
+const cachedBarycenterBodies = [];
+
+/**
+ * Every body a reference frame's barycenter is averaged over.
+ *
+ * Exposed so the renderer's current barycenter and the recorded history are
+ * taken over exactly the same set. If they disagreed, the origin would jump by
+ * the difference the moment a frame was selected.
+ *
+ * @returns {Array} The live list, not a copy
+ */
+const barycenterBodies = () => cachedBarycenterBodies;
 let lastMutualGravityState = null;
 let lastStarOnlyGravityState = null;
 let lastObjectCounts = {
@@ -898,6 +661,7 @@ const updateCachedArrays = () => {
     debris: debris.length,
     neutron_stars: neutron_stars.length,
     white_dwarfs: white_dwarfs.length,
+    galaxies: galaxies.length,
   };
 
   const countsChanged = Object.keys(currentCounts).some(
@@ -921,6 +685,11 @@ const updateCachedArrays = () => {
     cachedMajorSources.length = 0;
     cachedMajorSources.push(...bh_list, ...stars);
 
+    // Galaxies are always sources. A cluster whose members did not attract
+    // each other would not be a cluster, and star_only_gravity is a
+    // simplification aimed at planetary systems.
+    cachedMajorSources.push(...galaxies);
+
     if (!starOnlyGravity) {
       cachedMajorSources.push(...gas_giants, ...neutron_stars, ...white_dwarfs);
     }
@@ -939,7 +708,30 @@ const updateCachedArrays = () => {
       ...debris,
       ...stars,
       ...neutron_stars,
-      ...white_dwarfs
+      ...white_dwarfs,
+      ...galaxies
+    );
+
+    // The bodies a barycenter is taken over. Black holes are in it and are not
+    // in cachedAllPhysicsObjects, which integrates their orbits separately; a
+    // barycenter of the default binary-black-hole scenario that left them out
+    // would be a barycenter of the debris.
+    //
+    // Debris, particles and disk fragments are left out on purpose. They carry
+    // little mass and they are culled aggressively when they drift off screen,
+    // so counting them would make the origin of the frame jump every time a
+    // fragment left the visible world.
+    cachedBarycenterBodies.length = 0;
+    cachedBarycenterBodies.push(
+      ...bh_list,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+      ...planets,
+      ...gas_giants,
+      ...asteroids,
+      ...comets,
+      ...galaxies
     );
 
     lastObjectCounts = currentCounts;
@@ -1136,42 +928,81 @@ const updatePhysics = dt => {
     workerBusy = true;
   }
 
-  for (let i = 0; i < cachedAllPhysicsObjects.length; i++) {
+  // One tick per step, before anything appends: every point pushed below shares
+  // this number, which is what makes cross-body frame changes possible.
+  trailTick++;
+
+  // One place for the halo, applied before whichever gravity solver runs.
+  //
+  // It goes here rather than inside gravitational_acceleration because there
+  // are two solvers - the direct sum and the Barnes-Hut worker - and the worker
+  // is handed a list of point masses, which a smooth background field is not.
+  // Adding it here is an operator split: a velocity kick from the halo, then
+  // the existing step. The halo field is smooth and slowly varying compared
+  // with the timestep, so the split costs nothing measurable; the check that
+  // matters is that a circular orbit in the halo stays circular, and there is
+  // a test for exactly that.
+  const halo = activeHalo();
+
+  // Two passes, and the order matters more than it looks. Every acceleration is
+  // computed from the same snapshot of positions, and only then is any body
+  // moved. Advancing bodies one at a time made the second member of a pair feel
+  // the first at its already-updated position, which broke the equal-and-
+  // opposite pairing and with it both conservation laws the simulation exists
+  // to show. See PhysicsObject.apply_step for the measured cost of that.
+  const stepCount = cachedAllPhysicsObjects.length;
+  if (stepAx.length < stepCount) {
+    stepAx = new Float64Array(Math.max(stepCount, 256));
+    stepAy = new Float64Array(stepAx.length);
+  }
+
+  for (let i = 0; i < stepCount; i++) {
     const obj = cachedAllPhysicsObjects[i];
+    stepAx[i] = 0;
+    stepAy[i] = 0;
     if (!obj.alive) continue;
 
-    if (useBarnesHut) {
-      if (obj.cached_accel) {
-        // Use asynchronous gravity (from worker)
-        obj.vel.x += obj.cached_accel.x * dt;
-        obj.vel.y += obj.cached_accel.y * dt;
-        obj.pos.x += obj.vel.x * dt;
-        obj.pos.y += obj.vel.y * dt;
-      } else {
-        // Fallback for first frame or if worker is lagging significantly
-        if (physicsSettings.mutual_gravity) {
-          const effective_sources = cachedMajorSources.filter(
-            s => s.id !== obj.id
-          );
-          obj.update_physics(dt, effective_sources);
-        } else {
-          obj.update_physics(dt, cachedMajorSources);
-        }
-      }
+    if (halo) {
+      const { ax, ay } = haloAcceleration(obj.pos, halo);
+      stepAx[i] += ax;
+      stepAy[i] += ay;
+    }
+
+    if (useBarnesHut && obj.cached_accel) {
+      // Asynchronous gravity from the worker, already computed against one
+      // snapshot of the source positions.
+      stepAx[i] += obj.cached_accel.x;
+      stepAy[i] += obj.cached_accel.y;
     } else {
-      // Standard N^2 or simple gravity
+      // Direct sum: the N^2 solver, and the first-frame fallback when the
+      // Barnes-Hut worker has not answered yet.
       let effective_sources = cachedMajorSources;
       if (physicsSettings.mutual_gravity) {
         effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
       }
-      obj.update_physics(dt, effective_sources);
+      const { ax, ay } = gravitational_acceleration(obj.pos, effective_sources);
+      stepAx[i] += ax;
+      stepAy[i] += ay;
     }
+  }
+
+  for (let i = 0; i < stepCount; i++) {
+    const obj = cachedAllPhysicsObjects[i];
+    if (!obj.alive) continue;
+    obj.apply_step(dt, stepAx[i], stepAy[i]);
     obj.update_trail();
   }
 
+  // Same tick, same budget as the trails just appended, so the barycenter frame
+  // can be resolved for exactly the span the trails cover.
+  recordBarycenter(trailTick, cachedBarycenterBodies, trailBudget());
+
   // Update black hole orbits and effects
-  bh_list.forEach(bh => {
-    bh.update_orbit(dt, bh_list);
+  // Same two-pass rule as the bodies above: every hole's acceleration comes
+  // from one snapshot of the positions, and only then does any hole move.
+  const bhAccel = bh_list.map(bh => bh.orbit_acceleration(bh_list));
+  bh_list.forEach((bh, i) => {
+    bh.apply_orbit_step(dt, bhAccel[i].ax, bhAccel[i].ay);
     bh.update_dynamic_effects(dt);
   });
 
@@ -1518,6 +1349,10 @@ const updatePhysics = dt => {
     white_dwarfs,
     wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
   );
+  galaxies = filterAndClearEnergy(
+    galaxies,
+    g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
+  );
   bh_list = filterAndClearEnergy(
     bh_list,
     bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
@@ -1545,6 +1380,7 @@ const updatePhysics = dt => {
   let target = null;
   if (physicsSettings.follow_mode !== 'None') {
     const follow_map = {
+      Galaxy: galaxies,
       BlackHole: bh_list,
       Planet: planets,
       GasGiant: gas_giants,
@@ -1568,8 +1404,14 @@ const updatePhysics = dt => {
     }
   }
   if (target && state) {
-    state.pan.x = -target.pos.x * state.zoom;
-    state.pan.y = target.pos.y * state.zoom;
+    // Follow moves the camera; a reference frame moves the coordinates. They
+    // compose, so the pan that centers the target has to be measured in the
+    // frame the target is being drawn in, not in world coordinates. Without
+    // this, turning on a frame while following sends the camera off by however
+    // far the frame's origin sits from the world origin.
+    const off = state.frameOffset || { x: 0, y: 0 };
+    state.pan.x = -(target.pos.x - off.x) * state.zoom;
+    state.pan.y = (target.pos.y - off.y) * state.zoom;
   }
 
   // Update energy history for all objects (sample every 10 frames for performance)
@@ -1605,6 +1447,33 @@ class PhysicsObject {
   update_physics(dt, _gravity_sources) {
     if (!this.alive) return;
     const { ax, ay } = gravitational_acceleration(this.pos, _gravity_sources);
+    this.apply_step(dt, ax, ay);
+  }
+
+  /**
+   * One symplectic-Euler step from an acceleration that has already been
+   * computed: kick the velocity, then drift the position with the new velocity.
+   *
+   * Split out from update_physics so the main loop can compute every body's
+   * acceleration from the *same* snapshot of positions before any of them move.
+   * When bodies were advanced one at a time, the second body of a pair felt the
+   * first at its already-updated position, so the two forces were no longer
+   * equal and opposite. That cost the simulation both of the conservation laws
+   * it is meant to demonstrate: linear momentum drifted, and a two-body orbit
+   * lost energy secularly - about 1% of its binding energy per orbit at
+   * dt = 0.1 - instead of oscillating about a fixed value the way a symplectic
+   * integrator should. The visible symptom was binaries spiralling together and
+   * merging on their own, which several scenarios worked around by capping the
+   * timestep. Computing first and applying afterwards restores both laws:
+   * momentum is now conserved to machine precision and the energy error is
+   * bounded rather than accumulating.
+   *
+   * @param {number} dt - Timestep
+   * @param {number} ax - Acceleration, x
+   * @param {number} ay - Acceleration, y
+   */
+  apply_step(dt, ax, ay) {
+    if (!this.alive) return;
     const vx = this.vel.x + ax * dt;
     const vy = this.vel.y + ay * dt;
     const px = this.pos.x + vx * dt;
@@ -1623,30 +1492,7 @@ class PhysicsObject {
 
   update_trail() {
     if (!this.alive) return;
-    // Zoom-based budget: fewer points when zoomed out, more when zoomed in
-    const zoom = state ? state.zoom : 1.0;
-    // detailScale is the renderer's adaptive-quality multiplier. It is applied
-    // here, at read time, so the user's configured trail_length is never
-    // overwritten.
-    const baseLen = Math.max(
-      1,
-      Math.round(physicsSettings.trail_length * detailScale)
-    );
-    let budget;
-    if (baseLen < 10) {
-      // Preserve exact behavior for small budgets (tests rely on this)
-      budget = baseLen;
-    } else {
-      const minLen = Math.max(10, Math.floor(baseLen * 0.4));
-      const maxLen = Math.max(baseLen, 10);
-      budget = Math.max(
-        minLen,
-        Math.min(
-          maxLen,
-          Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom)))
-        )
-      );
-    }
+    const budget = trailBudget();
 
     // Ensure array does not exceed budget
     if (this.trail.length >= budget) {
@@ -1654,6 +1500,7 @@ class PhysicsObject {
     }
     this.trail.push({
       ...this.pos,
+      tick: trailTick,
       timestamp: Date.now(),
       velocity: Math.hypot(this.vel.x, this.vel.y),
       age: 0,
@@ -1723,7 +1570,11 @@ class Planet extends PhysicsObject {
     }
 
     const radius = PLANET_RADIUS * Math.pow(finalMassInEarths, 0.3);
-    const mass = finalMassInEarths;
+    // The unit conversion was simply missing here: a planet asked for in Earth
+    // masses was built with that number as its mass in simulation units, so
+    // "1 Earth mass" arrived weighing 333 of them. GasGiant a few hundred lines
+    // down has always multiplied by JUPITER_MASS_UNIT; this is the same line.
+    const mass = finalMassInEarths * EARTH_MASS_UNIT;
 
     super(pos, vel, mass, radius, 'Planet');
     this.massInEarths = finalMassInEarths;
@@ -1784,9 +1635,7 @@ class Planet extends PhysicsObject {
 
     // Add soft bloom to offscreen bloom canvas
     try {
-      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
-      const screenY =
-        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const { x: screenX, y: screenY } = world_to_screen(world_pos);
       const screenR = this.radius * state.zoom;
       const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
       if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
@@ -1818,9 +1667,7 @@ class Planet extends PhysicsObject {
 
     // Add soft bloom to offscreen bloom canvas
     try {
-      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
-      const screenY =
-        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const { x: screenX, y: screenY } = world_to_screen(world_pos);
       const screenR = this.radius * state.zoom;
       const color = { r: 210, g: 230, b: 255 };
       if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
@@ -1880,10 +1727,7 @@ class Planet extends PhysicsObject {
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = this.radius * state.zoom;
 
     if (screen_radius > 4) {
@@ -2128,7 +1972,7 @@ class GasGiant extends PhysicsObject {
     }
 
     const radius = GAS_GIANT_RADIUS * Math.pow(finalMassInJupiters, 0.3);
-    const mass = finalMassInJupiters * 50.0;
+    const mass = finalMassInJupiters * JUPITER_MASS_UNIT;
 
     super(pos, vel, mass, radius, 'GasGiant');
     this.massInJupiters = finalMassInJupiters;
@@ -2322,10 +2166,7 @@ class GasGiant extends PhysicsObject {
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = this.radius * state.zoom;
 
     if (screen_radius > 6) {
@@ -2345,7 +2186,8 @@ class GasGiant extends PhysicsObject {
           true_screen_pos.y + label_y_offset
         );
       } else {
-        const massInEarths = this.massInJupiters * 317.8;
+        const massInEarths =
+          this.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
         drawSolarLabel(
           ctx,
           String(Math.round(massInEarths)),
@@ -2871,26 +2713,72 @@ class BlackHole {
     this.radius = BH_RADIUS_BASE * Math.pow(mass_scale, 0.3); // Changed from 0.5 to 0.3 for more conservative scaling
   }
 
-  update_orbit(dt, other_bhs) {
-    // Allow movement for newly created black holes even in static mode
+  /**
+   * Whether this hole is allowed to move this step.
+   *
+   * Static holes are a deliberate model: a fixed potential well a student can
+   * fly things past. A newly created hole gets a short grace period so a merger
+   * product does not freeze in place mid-flight.
+   *
+   * @returns {boolean} True when the hole integrates its own motion
+   */
+  can_move() {
     const timeSinceCreation = (Date.now() - this.creationTime) / 1000;
-    const canMove =
+    return (
       physicsSettings.bh_behavior === 'Orbiting' ||
-      (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod);
+      (this.isNewlyCreated && timeSinceCreation < this.movementGracePeriod)
+    );
+  }
 
-    if (canMove) {
-      const { ax, ay } = gravitational_acceleration(
-        this.pos,
-        other_bhs.filter(bh => bh !== this)
-      );
-      this.vel.x += ax * dt;
-      this.vel.y += ay * dt;
-      const decay_factor = 1.0 - physicsSettings.orbit_decay_rate * dt;
-      this.vel.x *= decay_factor;
-      this.vel.y *= decay_factor;
-      this.pos.x += this.vel.x * dt;
-      this.pos.y += this.vel.y * dt;
-    }
+  /**
+   * The acceleration on this hole from the other holes and the halo.
+   *
+   * Separated from the step for the same reason as PhysicsObject.apply_step:
+   * a black-hole binary advanced one hole at a time loses orbital energy on its
+   * own, which is indistinguishable on screen from the inspiral term below and
+   * is not physics.
+   *
+   * @param {Array} other_bhs - Every black hole, including this one
+   * @returns {{ax: number, ay: number}} Acceleration
+   */
+  orbit_acceleration(other_bhs) {
+    if (!this.can_move()) return { ax: 0, ay: 0 };
+    const { ax, ay } = gravitational_acceleration(
+      this.pos,
+      other_bhs.filter(bh => bh !== this)
+    );
+    // Black holes take their own path through the integrator, so the halo has
+    // to be applied here too. Inside the can_move guard, not outside it: a
+    // static black hole that quietly accumulated halo velocity would leap the
+    // moment anything set it moving.
+    const halo = activeHalo();
+    if (!halo) return { ax, ay };
+    const h = haloAcceleration(this.pos, halo);
+    return { ax: ax + h.ax, ay: ay + h.ay };
+  }
+
+  /**
+   * Advance this hole with an acceleration already computed.
+   * @param {number} dt - Timestep
+   * @param {number} ax - Acceleration, x
+   * @param {number} ay - Acceleration, y
+   */
+  apply_orbit_step(dt, ax, ay) {
+    if (!this.can_move()) return;
+    this.vel.x += ax * dt;
+    this.vel.y += ay * dt;
+    // The phenomenological inspiral term. Not gravitational-wave emission: a
+    // constant fractional damping, documented as such on the model page.
+    const decay_factor = 1.0 - physicsSettings.orbit_decay_rate * dt;
+    this.vel.x *= decay_factor;
+    this.vel.y *= decay_factor;
+    this.pos.x += this.vel.x * dt;
+    this.pos.y += this.vel.y * dt;
+  }
+
+  update_orbit(dt, other_bhs) {
+    const { ax, ay } = this.orbit_acceleration(other_bhs);
+    this.apply_orbit_step(dt, ax, ay);
   }
 
   update_dynamic_effects(dt) {
@@ -3339,10 +3227,7 @@ class BlackHole {
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = world_radius * state.zoom;
     let label_y_offset = screen_radius + 15;
     if (physicsSettings.show_bh_jets) {
@@ -3439,9 +3324,7 @@ class StarObject extends PhysicsObject {
     ctx.fill();
     // Soft bloom to offscreen canvas for compositing
     try {
-      const screenX = world_pos.x * state.zoom + canvas.width / 2 + state.pan.x;
-      const screenY =
-        -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y;
+      const { x: screenX, y: screenY } = world_to_screen(world_pos);
       const screenR = this.radius * state.zoom;
       if (screenR > 2 && typeof window !== 'undefined' && window.bloomCtx) {
         const grad = window.bloomCtx.createRadialGradient(
@@ -3466,10 +3349,7 @@ class StarObject extends PhysicsObject {
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = this.radius * state.zoom;
 
     if (screen_radius > 5) {
@@ -3635,10 +3515,7 @@ class NeutronStar extends PhysicsObject {
     // Label
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = this.radius * state.zoom;
 
     if (screen_radius > 2) {
@@ -3756,10 +3633,7 @@ class WhiteDwarf extends PhysicsObject {
     // Label
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = {
-      x: world_pos.x * state.zoom + canvas.width / 2 + state.pan.x,
-      y: -world_pos.y * state.zoom + canvas.height / 2 + state.pan.y,
-    };
+    const true_screen_pos = world_to_screen(world_pos);
     const screen_radius = this.radius * state.zoom;
 
     if (screen_radius > 3) {
@@ -3800,6 +3674,105 @@ class WhiteDwarf extends PhysicsObject {
 }
 
 // Particle object pool for memory optimization
+// Visual radius of a galaxy. Drawing size only: as far as the dynamics are
+// concerned a member of a cluster is a point mass, which is exactly how Zwicky
+// treated them.
+//
+// The real ratio would put this at about 65. Coma is roughly two megaparsecs
+// across and its members roughly fifty kiloparsecs, so a member is about a
+// fortieth of the cluster, and the cluster scenario is 2600 units in radius. At
+// that size a galaxy is thirteen pixels across at the zoom the whole cluster
+// fits in, which is a dot. This is a little over twice the true proportion, for
+// the same reason drawRadius enforces a minimum pixel size on everything else:
+// an object nobody can see the shape of might as well not have one.
+const GALAXY_RADIUS = 150;
+
+/**
+ * A galaxy, as a member of a cluster.
+ *
+ * Deliberately the simplest object in the file. It has a mass, a position and
+ * a picture, and that is all, because the only thing any scenario asks of it is
+ * to orbit in a cluster and be counted. It does not merge, accrete, collapse or
+ * turn into anything else: those are all things that happen to galaxies over
+ * billions of years and none of them are what a student is being asked to look
+ * at here.
+ *
+ * The scale is a scale model, and the scenario says so. A real cluster is
+ * megaparsecs across and its members are 10^11 solar masses; running those
+ * numbers directly would need the whole app's unit system rebuilt around them
+ * for no gain, because the quantity the lesson measures - the ratio of the mass
+ * implied by the motion to the mass that is visible - is a ratio, and ratios do
+ * not care what the units were.
+ */
+class Galaxy extends PhysicsObject {
+  /**
+   * @param {Object} pos - Initial position
+   * @param {Object} vel - Initial velocity
+   * @param {number} mass - Mass in simulation units
+   * @param {string} [galaxyType] - 'spiral' or 'elliptical', for the drawing
+   */
+  constructor(pos, vel, mass, galaxyType = 'spiral') {
+    super(pos, vel, mass, GALAXY_RADIUS, 'Galaxy');
+    this.galaxyType = galaxyType;
+    this.name = getRandomName('galaxies');
+    // A cluster is meant to stay a cluster: a member that wanders out of the
+    // view box is still a member, and culling it would quietly change the
+    // dispersion the lesson is measuring.
+    this.persistent = true;
+    // Fixed at construction so the drawing does not spin from frame to frame.
+    this.tilt = (this.id % 8) * (Math.PI / 8);
+  }
+
+  draw(ctx) {
+    const { x, y } = this.pos;
+    const r = drawRadius(this);
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(this.tilt);
+    // Spirals are seen at some angle; ellipticals are round enough that
+    // squashing them would just look like a spiral.
+    if (this.galaxyType === 'spiral') ctx.scale(1, 0.42);
+
+    const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+    halo.addColorStop(0, 'rgba(255, 246, 224, 0.95)');
+    halo.addColorStop(0.28, 'rgba(255, 220, 170, 0.55)');
+    halo.addColorStop(1, 'rgba(150, 170, 255, 0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, 2 * Math.PI);
+    ctx.fill();
+
+    if (this.galaxyType === 'spiral') {
+      ctx.strokeStyle = 'rgba(186, 210, 255, 0.45)';
+      ctx.lineWidth = Math.max(0.4, r * 0.05);
+      ctx.lineCap = 'round';
+      for (let arm = 0; arm < 2; arm++) {
+        ctx.beginPath();
+        for (let t = 0.3; t <= 1.02; t += 0.04) {
+          // A logarithmic spiral, which is what real arms approximate: the
+          // angle grows with the log of the radius rather than with the radius.
+          const a = arm * Math.PI + Math.log(t / 0.3) * 2.4;
+          const rr = r * t;
+          const px = rr * Math.cos(a);
+          const py = rr * Math.sin(a);
+          if (t === 0.3) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // The bright core, drawn round: it is the one part of a tilted disc that
+    // is not foreshortened.
+    ctx.restore();
+    ctx.fillStyle = 'rgba(255, 252, 238, 0.9)';
+    ctx.beginPath();
+    ctx.arc(x, y, Math.max(0.6, r * 0.11), 0, 2 * Math.PI);
+    ctx.fill();
+  }
+}
+
 class ParticlePool {
   constructor(initialSize = 100) {
     this.pool = [];
@@ -3964,6 +3937,21 @@ const findObjectAtPosition = worldPos => {
     );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
+    }
+  }
+
+  // Check galaxies. Before stars because the only scenarios with galaxies in
+  // them have nothing else, and a galaxy is the largest click target there is.
+  for (const g of galaxies) {
+    if (!g.alive) continue;
+    const dx = worldPos.x - g.pos.x;
+    const dy = worldPos.y - g.pos.y;
+    const clickRadius = Math.max(
+      g.radius,
+      CLICK_MIN_RADIUS.Galaxy / state.zoom
+    );
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
+      return { object: g, type: 'Galaxy' };
     }
   }
 
@@ -4678,7 +4666,19 @@ const handle_star_merging = stars_list => {
         const min_dist = star1.radius + star2.radius;
 
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-          // Determine types once per pair
+          // These comparisons are against class names, so the build must not
+          // rename the classes. esbuild would: minified, constructor.name comes
+          // back as "t" and every branch below is false, which left star
+          // merging, stellar collapse, tidal disruption and rocky collisions
+          // dead on the deployed site while working perfectly in development.
+          // build.js sets keepNames for exactly this, and the validation page's
+          // three Mergers checks are what catch it if anyone turns it off.
+          //
+          // Not obj_type, though every class sets that to its own class name
+          // too. The two are not interchangeable: a body that has been
+          // transformed carries the obj_type of what it became and the class of
+          // what it was, and swapping them here changed behavior enough to hang
+          // the physics test suite.
           const star1_type = star1.constructor.name;
           const star2_type = star2.constructor.name;
 
@@ -5209,9 +5209,15 @@ const handle_rocky_collisions = objects_list => {
             debris.push(new Debris(debris_pos, debris_vel));
           }
 
-          // Both objects lose mass from collision
-          obj1.mass *= 0.9;
-          obj2.mass *= 0.9;
+          // Both objects lose mass from collision. The reported mass has to
+          // follow the simulated one: leaving massInEarths behind is how a body
+          // ends up gravitating as one thing and labelled as another.
+          for (const obj of [obj1, obj2]) {
+            obj.mass *= 0.9;
+            if (obj.massInEarths != null) obj.massInEarths *= 0.9;
+            if (obj.massInJupiters != null) obj.massInJupiters *= 0.9;
+            if (obj.massInSuns != null) obj.massInSuns *= 0.9;
+          }
 
           // Create collision particles
           for (let k = 0; k < 10; k++) {
@@ -5507,7 +5513,8 @@ const handle_gas_giant_merging = () => {
 
           if (new_mass_in_jupiters >= GAS_GIANT_TO_STAR_THRESHOLD) {
             // Very massive gas giant becomes a low-mass star
-            const star_mass_in_suns = new_mass_in_jupiters / 1047.0; // Convert Jupiter masses to solar masses
+            const star_mass_in_suns =
+              new_mass_in_jupiters / JUPITER_MASSES_PER_SOLAR_MASS;
             new_object = new StarObject(new_pos, new_vel, star_mass_in_suns);
             new_object.mass = star_mass_in_suns * SOLAR_MASS_UNIT;
             stars.push(new_object);
@@ -5593,6 +5600,7 @@ export {
   StarObject,
   NeutronStar,
   WhiteDwarf,
+  Galaxy,
   Particle,
   ParticlePool,
   AccretionDiskParticle,
@@ -5612,6 +5620,7 @@ export {
   DT,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
+  JUPITER_MASS_UNIT,
   ABSORB_BUFFER,
   MIN_INTERACTION_DISTANCE,
   minInteractionDistance,
@@ -5622,6 +5631,7 @@ export {
   STAR_OBJ_RADIUS,
   NEUTRON_STAR_RADIUS,
   WHITE_DWARF_RADIUS,
+  GALAXY_RADIUS,
   DEBRIS_RADIUS,
   MAX_STAR_MASS_BEFORE_BH,
   GAS_GIANT_TO_STAR_THRESHOLD,
@@ -5637,10 +5647,15 @@ export {
   gravity_ripples,
   neutron_stars,
   white_dwarfs,
+  galaxies,
   accretion_disk_particles,
   PhysicsObject_id_counter,
   state,
   resetPhysicsObjectCounter,
+  resetTrailTick,
+  getTrailTick,
+  trailBudget,
+  barycenterBodies,
   bumpWorldGeneration,
   setPhysicsObjectCounter,
   updatePhysicsSettings,
@@ -5711,9 +5726,6 @@ const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to pre
 // The energy unit follows as M * L^2 / T^2. Because T depends on G_sim, raising
 // the gravitational constant genuinely shortens the simulated timescale, and
 // the reported energies track that.
-const SOLAR_MASS_KG = 1.989e30; // Solar mass in kg
-const AU_METERS = 1.496e11; // Astronomical Unit in meters
-const G_SI = 6.6743e-11; // Gravitational constant, m^3 kg^-1 s^-2
 
 const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // 1 mass unit -> kg
 const DISTANCE_UNIT_TO_M = AU_METERS / 100; // 1 distance unit -> m (0.01 AU)

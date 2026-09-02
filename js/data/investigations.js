@@ -22,6 +22,16 @@
 // gain when the student commits to an answer first. Without that, they watch,
 // see whatever happens, and remember having known it all along. Predict steps
 // are therefore never optional and never graded on correctness.
+//
+// Two fields exist for the lesson browser rather than for the lesson:
+//
+//   thumbnail  the capture of the scenario the lesson opens in, borrowed from
+//              images/scenarios/. Not a separate render: a card that shows the
+//              system a student is about to be dropped into is telling the
+//              truth, and it stays true when `npm run thumbnails` reruns.
+//   series     lessons that build on each other. The position within a series
+//              is derived from the order of INVESTIGATIONS, not written down,
+//              so inserting a lesson renumbers the sequence by itself.
 // =============================================================================
 
 /** Format a number for display in a probe row. */
@@ -31,6 +41,7 @@ const fixed = (v, n = 3) => (Number.isFinite(v) ? v.toFixed(n) : '-');
 
 const KEPLER = {
   id: 'keplers-laws',
+  thumbnail: 'images/scenarios/keplers-2nd-law.webp',
   title: "Kepler's Laws",
   subtitle: 'Measure the shape, pacing and timing of real orbits',
   duration: '35-45 min',
@@ -1008,6 +1019,8 @@ const timing = ctx => {
 
 const TRANSITS = {
   id: 'transit-photometry',
+  thumbnail: 'images/scenarios/transit-lab.webp',
+  series: 'Detecting exoplanets',
   title: 'Finding Planets by Their Shadows',
   subtitle:
     'Measure a transit, weigh what it tells you, and find what is hiding',
@@ -2163,6 +2176,7 @@ const energyProbe = ctx => {
 
 const ENERGY = {
   id: 'orbital-energy',
+  thumbnail: 'images/scenarios/interstellar-visitor.webp',
   title: 'Bound, Unbound and Escape',
   subtitle: 'Find out what decides whether something comes back',
   duration: '35-45 min',
@@ -2432,7 +2446,7 @@ const ENERGY = {
         'no longer acting on it: it has escaped',
         'still pulling it backwards and still slowing it down',
         'pushing it away, which is what escape means',
-        'exactly cancelled by its speed',
+        'exactly canceled by its speed',
       ],
       answer: 1,
       because:
@@ -2615,6 +2629,7 @@ const BINARY_LAB = {
 
 const WEIGHING = {
   id: 'weighing-stars',
+  thumbnail: 'images/scenarios/binary-pair.webp',
   title: 'Weighing the Stars',
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
   duration: '35-45 min',
@@ -3510,6 +3525,7 @@ const horizonTool = (extra = {}) => ({ id: 'bh-horizon', ...extra });
 
 const BLACK_HOLES = {
   id: 'black-holes',
+  thumbnail: 'images/scenarios/black-hole-lab.webp',
   title: 'Black Holes by the Numbers',
   subtitle: 'Make a black hole bigger and discover some surprising rules',
   duration: '35-45 min',
@@ -3992,7 +4008,7 @@ const BLACK_HOLES = {
              to cover is enormous: every small tick going up is ten times hotter
              than the one below it.
              \n\nThe coldest thing marked is the coldest temperature ever
-             produced in a laboratory. The one labelled "the microwave
+             produced in a laboratory. The one labeled "the microwave
              background" is the temperature of empty space itself, 2.7 degrees
              above absolute zero, left over from the Big Bang.
              \n\nUse the buttons to work up through the masses.`,
@@ -4292,6 +4308,8 @@ const HZ_TRAPPIST_RUN = { ...HZ_TRAPPIST };
 
 const GOLDILOCKS = {
   id: 'goldilocks-question',
+  thumbnail: 'images/scenarios/habitable-zone-lab.webp',
+  series: 'Detecting exoplanets',
   title: 'The Goldilocks Question',
   subtitle:
     "Move a planet, change its star, and decide what 'habitable' really means",
@@ -5193,13 +5211,3215 @@ const GOLDILOCKS = {
   ],
 };
 
+// --- Finding Planets by Their Tug -------------------------------------------
+// The third of the exoplanet sequence. Shadows measured a radius; this one
+// measures a mass, and then puts the two together into a density and asks the
+// question The Goldilocks Question was built to answer.
+//
+// The scenario the live steps use puts the star in genuine barycentric motion,
+// because the transit scenarios pin theirs and a radial-velocity panel pointed
+// at a pinned star would teach that planets do not move their stars.
+
+const RV_LAB = {
+  scenario: 'Exoplanet Characterization Lab',
+  seed: 'tug',
+  camera: { zoom: 55, pan: { x: 0, y: 0 } },
+  paused: false,
+};
+
+const RV_LAB_PAUSED = { ...RV_LAB, paused: true };
+
+export const RADIAL_VELOCITY = {
+  id: 'radial-velocity',
+  thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+  series: 'Detecting exoplanets',
+  title: 'Finding Planets by Their Tug',
+  subtitle: 'Watch a star wobble, weigh its planet, and combine the clues',
+  duration: '45-55 min',
+  level: 'Introductory astronomy',
+  lock: { placement: true, inspector: true, areaSweep: false },
+  summary:
+    'A planet you cannot see still pulls on its star, and the star moves. Measure that motion two different ways, turn it into a mass, and combine it with the radius a transit gave you to work out what kind of world it is.',
+  objectives: [
+    'Explain why a star and its planet both orbit their common center of mass',
+    'Read a radial-velocity curve and identify its period and semi-amplitude K',
+    'Use a measured K to estimate a planet mass, and say why that mass is usually a lower limit',
+    'Explain why a transiting planet escapes the M sin i ambiguity',
+    'Describe what astrometry measures and when it works better than radial velocity',
+    'Combine a mass and a radius into a bulk density, and say what density can and cannot tell you',
+    'Place a characterized planet against a modeled habitable zone without overclaiming',
+  ],
+  steps: [
+    // --- Part 1: the planet found before it cast a shadow -------------------
+    {
+      type: 'read',
+      title: 'The planet you already measured',
+      setup: RV_LAB,
+      body: `In <em>Finding Planets by Their Shadows</em> you watched HD 209458 b
+             cross its star and used the depth of the dip to work out how big the
+             planet is. Here is the same system again.
+             \n\nThere is something that lesson did not mention. When the transit
+             was first seen in 1999, astronomers already knew the planet was
+             there. They had been watching the star for months, and the star had
+             been telling them.`,
+      tip: 'The star is the bright disc at the center. The planet is the small point tracing the ring around it.',
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'How does an invisible planet give itself away?',
+      body: `The planet is far too faint to see next to its star, and at this
+             point in the story nobody has watched it transit. Yet the star alone
+             was enough to say a planet was there.`,
+      prompt: 'What could the star be doing that reveals the planet?',
+      options: [
+        'The planet blocks some of the star’s light',
+        'The planet pulls on the star, so the star moves',
+        'The planet heats the star up',
+        'The star does not move; only the planet does',
+      ],
+      answer: 1,
+      because: `Gravity works both ways. The star pulls the planet into orbit, and
+                the planet pulls back just as hard. The star is far heavier, so it
+                moves far less, but it does move, and that motion is measurable.`,
+    },
+    {
+      type: 'predict',
+      title: 'Which one moves?',
+      setup: RV_LAB_PAUSED,
+      body: `Before you run anything: the star here is about 1.15 times the mass
+             of the Sun. The planet is roughly two thirds the mass of Jupiter,
+             which makes it about a seventeen-hundredth of the star.`,
+      prompt: 'When the simulation runs, which objects will actually move?',
+      options: [
+        'Only the planet. The star stays where it is.',
+        'Both, around a fixed point between them, but by very different amounts',
+        'Both, by the same amount',
+        'Only the star',
+      ],
+      answer: 1,
+      because: `Both move, around their common center of mass. Because the star is
+                about seventeen hundred times heavier, its own orbit is about
+                seventeen hundred times smaller. That is why it looks stationary
+                here and is not.`,
+    },
+    {
+      type: 'explore',
+      title: 'Both of them go round',
+      body: `This instrument draws the same idea with the star’s orbit magnified
+             so you can see it. The planet’s orbit is at true scale; the star’s is
+             blown up by the amount written at the bottom of the picture.
+             \n\nThe cross is the center of mass: the point they both circle.
+             Notice that the star and the planet are always on opposite sides of
+             it.`,
+      tool: {
+        id: 'reflex-motion',
+        values: { mp: 0.69, a: 0.04747, mag: 400 },
+        title: 'Who is actually moving?',
+        note: 'Try the presets. The magnification changes; the physics does not.',
+      },
+    },
+
+    // --- Part 2: the star wobbles ------------------------------------------
+    {
+      type: 'predict',
+      title: 'Make the planet heavier',
+      body: `Keep the orbit the same size and make the planet more massive.`,
+      prompt:
+        'A heavier planet at the same distance makes the star’s own orbit…',
+      options: ['smaller', 'the same size', 'larger', 'disappear'],
+      answer: 2,
+      because: `A heavier companion pulls the balance point further from the star’s
+                center, so the star has further to travel. More planet mass means a
+                bigger stellar wobble.`,
+    },
+    {
+      type: 'explore',
+      title: 'Watch it grow',
+      body: `Drag the planet-mass slider from an Earth up to a heavy Jupiter and
+             watch the star’s circle open out. Read the number labeled
+             <strong>Star’s own orbit</strong> as you go.
+             \n\nThen try the Earth preset. The physical wobble becomes tiny, and
+             the magnification has to go up by a factor of thousands before you
+             can see it at all. It is still there.
+             \n\nThat is the whole idea behind this lesson. A planet does not have
+             to be bright to be found, or visible at all. It only has to be heavy
+             enough to move its star by an amount we can measure.`,
+      tool: {
+        id: 'reflex-motion',
+        values: { mp: 0.69, a: 0.04747, mag: 400 },
+        title: 'More mass, bigger wobble',
+      },
+    },
+
+    // --- Part 3: measuring motion we cannot see -----------------------------
+    {
+      type: 'read',
+      title: 'Light carries the answer',
+      body: `Starlight is not a smooth spread of color. Running through it are
+             dark lines, at wavelengths where atoms in the star’s atmosphere have
+             absorbed light. Each element puts its lines at wavelengths we can
+             measure in a laboratory, so we know exactly where they belong.
+             \n\nWhen the star moves toward us, every line shifts very slightly
+             toward shorter wavelengths. When it moves away, they shift toward
+             longer ones. Measure the shift and you have measured the speed.`,
+      tip: 'This is the Doppler effect, the same reason a siren drops in pitch as it passes you.',
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Which way is it going?',
+      body: `An astronomer measures a star’s spectral lines and finds them all at
+             slightly <em>longer</em> wavelengths than they should be.`,
+      prompt: 'The star is…',
+      options: [
+        'moving toward us',
+        'moving away from us',
+        'not moving',
+        'getting hotter',
+      ],
+      answer: 1,
+      because: `Longer wavelengths mean the star is receding. Astronomers write
+                that as a positive radial velocity. Shorter wavelengths, an
+                approaching star, count as negative.`,
+    },
+    {
+      type: 'explore',
+      title: 'Toward, away, toward again',
+      body: `On the left, the star goes round its small orbit and an arrow shows
+             how much of its motion is pointing at us. On the right, that quantity
+             is plotted as the star goes round.
+             \n\nWatch what happens at the two points where the star is moving
+             straight across your view.`,
+      tool: {
+        id: 'rv-observer',
+        values: { mp: 0.69, inc: 90 },
+        title: 'The part we can measure',
+      },
+    },
+
+    // --- Part 4: build the curve --------------------------------------------
+    {
+      type: 'explore',
+      title: 'Open the real instrument',
+      setup: RV_LAB,
+      body: `Now the live system. Open <strong>Radial Velocity</strong> from the
+             Tools list on the right. It measures the star in this simulation, the
+             same way a spectrograph measures a real one, and builds the curve as
+             the orbit proceeds.
+             \n\nLet it run for at least two full cycles before moving on. One
+             orbit takes about thirteen seconds.`,
+      tip: 'The panel reports the velocity relative to the system’s own center of mass, so the curve sits around zero.',
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Reading the curve',
+      body: `Look at the curve the panel has drawn.`,
+      prompt: 'When the curve is at its most negative, the star is…',
+      options: [
+        'moving toward us as fast as it ever does',
+        'moving away from us as fast as it ever does',
+        'closest to the planet',
+        'stationary',
+      ],
+      answer: 0,
+      because: `Negative means approaching. The lowest point of the curve is the
+                moment the star is coming at us fastest; the highest point is the
+                moment it is receding fastest.`,
+    },
+    {
+      type: 'measure',
+      title: 'Measure the period',
+      body: `The curve repeats. Find the time between two matching points, for
+             example two successive peaks, and record it.
+             \n\nThis is the orbital period of the planet, measured without ever
+             seeing the planet.`,
+      fields: [
+        {
+          id: 'period',
+          label: 'Time for one full cycle',
+          unit: 'days',
+          hint: '3.5',
+        },
+      ],
+    },
+    {
+      type: 'read',
+      title: 'The semi-amplitude, K',
+      body: `The curve swings from a maximum down to a minimum and back.
+             <strong>K</strong> is <em>half</em> that full range: the distance from
+             the middle of the curve to its top, not from top to bottom.
+             \n\nThat factor of two is the commonest mistake in this whole
+             subject. K is the semi-amplitude.`,
+      tip: 'The panel reports K for you once it has seen a full cycle, so you can check yourself.',
+    },
+    {
+      type: 'measure',
+      title: 'Read K off the panel',
+      setup: RV_LAB,
+      body: `With the Radial Velocity panel open and at least one complete cycle
+             recorded, read the semi-amplitude it reports.`,
+      fields: [{ id: 'k', label: 'Semi-amplitude K', unit: 'm/s', hint: '84' }],
+    },
+
+    // --- Part 5: what controls K --------------------------------------------
+    {
+      type: 'predict',
+      title: 'What would make K bigger?',
+      body: `Hold the star, the orbit and the viewing angle fixed, and change only
+             the planet.`,
+      prompt: 'A more massive planet produces a K that is…',
+      options: ['smaller', 'unchanged', 'larger', 'negative'],
+      answer: 2,
+      because: `More planet mass means a bigger stellar orbit, and a bigger orbit
+                covered in the same period means a faster star. K goes up.`,
+    },
+    {
+      type: 'explore',
+      title: 'One thing at a time',
+      body: `This instrument holds the star, the period and the viewing angle
+             still, and lets you change only the planet’s mass. Work along the
+             presets from an Earth to a heavy Jupiter.
+             \n\nThe relationship is a straight line: double the planet’s mass and
+             you double K.`,
+      tool: {
+        id: 'rv-mass',
+        values: { mp: 0.69 },
+        title: 'Mass against K',
+      },
+    },
+
+    // --- Part 6: weigh the planet -------------------------------------------
+    {
+      type: 'question',
+      kind: 'numeric',
+      title: 'Weigh HD 209458 b',
+      body: `Use the instrument below. Set the true planet mass until the K it
+             reports matches the K you measured from the panel, about 84 metres
+             per second, with the inclination left at 90 degrees.
+             \n\nWhat planet mass gives that?`,
+      tool: {
+        id: 'rv-inclination',
+        values: { inc: 90, mp: 0.69 },
+        title: 'Match the measured K',
+      },
+      prompt: 'Planet mass, in Jupiter masses',
+      answer: 0.69,
+      unit: 'M_J',
+      tolerance: 0.08,
+      because: `About 0.69 Jupiter masses, which is the published value. The star’s
+                speed told you the mass of a planet nobody had seen.`,
+    },
+
+    // --- Part 7: the inclination problem ------------------------------------
+    {
+      type: 'predict',
+      title: 'Now tilt the whole system',
+      body: `Leave the planet exactly as it is. Change only where we happen to be
+             standing, so that instead of seeing the orbit edge-on we see it more
+             nearly face-on.`,
+      prompt: 'Tilting the system toward face-on makes the measured K…',
+      options: [
+        'larger',
+        'smaller',
+        'unchanged, because the planet has not changed',
+        'negative',
+      ],
+      answer: 1,
+      because: `The planet has not changed, but less of the star’s motion now points
+                at us. Radial velocity only ever sees the along-our-line-of-sight
+                part, so the measured K shrinks.`,
+    },
+    {
+      type: 'explore',
+      title: 'The same planet, four viewing angles',
+      body: `Work through the inclination presets. The bar labeled
+             <strong>true mass</strong> never moves. The bar labeled
+             <strong>RV says at least</strong> shrinks as the system tilts.
+             \n\nAt 30 degrees the same planet appears to be half its real mass. At
+             5 degrees it nearly disappears.`,
+      tool: {
+        id: 'rv-inclination',
+        values: { inc: 90, mp: 0.69 },
+        title: 'Tilt it',
+      },
+    },
+    {
+      type: 'read',
+      title: 'M sin i',
+      body: `Radial velocity on its own cannot separate a planet’s mass from the
+             tilt of its orbit. A light planet seen edge-on and a heavier planet
+             seen at an angle produce the same curve.
+             \n\nSo what an RV survey reports is not a mass. It is a
+             <strong>minimum</strong> mass, written <em>M</em> sin <em>i</em>. The
+             real planet is that heavy or heavier.`,
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'What a transit adds',
+      body: `Now remember what a transit requires. For the planet to cross the face
+             of its star from where we sit, the orbit has to be very nearly edge-on
+             to our line of sight.`,
+      prompt: 'For a planet we can watch transit, the RV minimum mass is…',
+      options: [
+        'still only a lower limit, no better than for any other planet',
+        'very close to the true mass, because a transit means the orbit is nearly edge-on',
+        'always exactly double the true mass',
+        'meaningless',
+      ],
+      answer: 1,
+      because: `A transit pins the inclination near 90 degrees, so sin i is near 1
+                and the minimum mass is essentially the mass. This is why transiting
+                planets are the ones we know best: the transit gives the radius and
+                fixes the geometry, and radial velocity then gives a real mass.`,
+    },
+
+    // --- Part 8: a second kind of wobble ------------------------------------
+    {
+      type: 'predict',
+      title: 'A face-on system',
+      body: `Suppose a system sits almost exactly face-on to us. Its radial-velocity
+             signal is nearly nothing.`,
+      prompt: 'Is the planet undetectable?',
+      options: [
+        'Yes. No wobble method can work on a face-on system.',
+        'No. The star still moves; it just moves across our view instead of along it.',
+        'Yes, unless the planet is very large',
+        'No, because face-on systems always transit',
+      ],
+      answer: 1,
+      because: `The star is still tracing its little orbit. Face-on, all of that
+                motion is across our view, which is exactly the motion radial
+                velocity cannot see and a different method can.`,
+    },
+    {
+      type: 'read',
+      title: 'Astrometry',
+      body: `Astrometry measures <em>where</em> a star is, very precisely, over and
+             over. A star with a planet does not sit still: it traces a small closed
+             path on the sky, once per orbit.
+             \n\nThis is not a picture of the planet. The planet stays invisible
+             throughout. What is being measured is the star’s position.`,
+      tip: 'The angles involved are tiny: often millionths of an arcsecond.',
+    },
+    {
+      type: 'explore',
+      title: 'Tilt it again, and watch the other method',
+      body: `Move the inclination slider from edge-on to face-on.
+             \n\nEdge-on, the star’s path on the sky collapses to a line. Face-on,
+             it opens into a circle. In between it is an ellipse.
+             \n\nThe important part: the <em>size</em> of the path never changes.
+             Only its shape does.`,
+      tool: {
+        id: 'astrometry-signature',
+        values: { mp: 1, a: 5.2, d: 10, inc: 45 },
+        title: 'The path on the sky',
+      },
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Two methods, opposite weaknesses',
+      body: `Compare what the two methods do as a system tilts from edge-on toward
+             face-on.`,
+      prompt: 'For a nearly face-on system…',
+      options: [
+        'both radial velocity and astrometry fail',
+        'radial velocity nearly vanishes, while astrometry works well',
+        'astrometry nearly vanishes, while radial velocity works well',
+        'both work equally well at every angle',
+      ],
+      answer: 1,
+      because: `Radial velocity scales with sin i and dies face-on. The astrometric
+                orbit does not shrink at all; it simply appears as a circle rather
+                than a line. The two methods fail in opposite directions, which is
+                why they are described as complementary.`,
+    },
+    {
+      type: 'explore',
+      title: 'All three at once',
+      body: `This panel puts the three methods side by side for one system as you
+             tilt it. Watch which measurements survive.
+             \n\nNotice that the transit is the most fragile of the three: a few
+             degrees away from edge-on and it stops happening entirely.`,
+      tool: {
+        id: 'method-comparison',
+        values: { inc: 90 },
+        title: 'Which signals survive',
+      },
+    },
+
+    // --- Part 9: distance and orbit size ------------------------------------
+    {
+      type: 'predict',
+      title: 'Move the system further away',
+      body: `Take a system with a known stellar wobble and imagine it twice as far
+             from Earth.`,
+      prompt: 'The star’s physical orbit around the center of mass…',
+      options: [
+        'halves',
+        'doubles',
+        'stays exactly the same; only the angle we measure changes',
+        'disappears',
+      ],
+      answer: 2,
+      because: `Distance is our problem, not the system’s. The star’s orbit is
+                whatever it is. What changes is the angle that orbit subtends from
+                here, and that is what astrometry has to measure.`,
+    },
+    {
+      type: 'explore',
+      title: 'Distance, and orbit size',
+      body: `Use the distance slider first: the reflex orbit in AU stays put while
+             the angular signature shrinks.
+             \n\nThen use the orbit-size slider. A wider orbit puts the star further
+             from the center of mass, so the physical wobble genuinely grows.
+             \n\nCompare the two presets: HD 209458 b, and the Sun with Jupiter
+             seen from ten parsecs.`,
+      tool: {
+        id: 'astrometry-signature',
+        values: {
+          mp: 0.69,
+          a: 0.04747,
+          d: 48.3,
+          inc: 87,
+        },
+        title: 'What makes an astrometric signal detectable',
+      },
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Different methods, different planets',
+      body: `HD 209458 b gives a large radial-velocity signal, 84 metres per
+             second, and an astrometric signature under one millionth of an
+             arcsecond. The Sun and Jupiter seen from ten parsecs give a much
+             smaller RV signal but an astrometric wobble hundreds of times larger.`,
+      prompt: 'Astrometry is at its best for planets that are…',
+      options: [
+        'massive, in wide orbits, around nearby stars',
+        'small, in tight orbits, around distant stars',
+        'exactly like Earth',
+        'transiting',
+      ],
+      answer: 0,
+      because: `A wide orbit means a large physical wobble; a nearby star means that
+                wobble subtends a large angle. Transits favour the opposite - close-in
+                planets - and radial velocity sits in between. No method surveys the
+                whole population, which is why we use several.`,
+    },
+
+    // --- Part 10: combine transit and RV ------------------------------------
+    {
+      type: 'read',
+      title: 'Bring the transit back',
+      body: `You now have two independent measurements of the same planet.
+             \n\nFrom the transit, in the previous investigation: its
+             <strong>radius</strong>, about 1.38 Jupiter radii.
+             \n\nFrom the wobble, in this one: its <strong>mass</strong>, about
+             0.69 Jupiter masses.
+             \n\nNeither number alone says what kind of object this is. Together
+             they do.`,
+    },
+    {
+      type: 'explore',
+      title: 'Characterize the planet',
+      body: `The panel below takes each measurement in turn and shows what it buys.
+             The top two rows are the transit and the radial velocity. The third
+             combines them.
+             \n\nRead the bulk density for HD 209458 b, and compare it with water at
+             1 gram per cubic centimetre and with Earth at 5.5.`,
+      tool: {
+        id: 'planet-characterization',
+        values: {
+          rp: 1.38,
+          mp: 0.69,
+          a: 0.04747,
+          lum: 1.77,
+          teff: 6065,
+        },
+        title: 'The inference chain',
+      },
+    },
+    {
+      type: 'question',
+      kind: 'numeric',
+      title: 'How dense is it?',
+      body: `Read the bulk density from the panel for HD 209458 b.`,
+      prompt: 'Bulk density, in g/cm³',
+      answer: 0.33,
+      unit: 'g/cm³',
+      tolerance: 0.08,
+      because: `About 0.33 grams per cubic centimetre: roughly a third the density of
+                water, and about a sixteenth of Earth’s. A Jupiter-sized planet with
+                two thirds of Jupiter’s mass has to be dominated by gas.`,
+    },
+
+    // --- Part 11: the habitability question ---------------------------------
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Where does HD 209458 b sit?',
+      body: `Look at the last two rows of the characterization panel.`,
+      prompt:
+        'HD 209458 b receives roughly 785 times the starlight Earth does, which puts it…',
+      options: [
+        'inside the modeled habitable zone',
+        'far closer than the inner edge of the zone',
+        'far beyond the outer edge of the zone',
+        'exactly at the inner edge',
+      ],
+      answer: 1,
+      because: `It orbits at a twentieth of Earth’s distance from a star brighter than
+                the Sun. We now know a great deal about this planet: its size, its
+                mass, its density and its irradiation. All of it says hot gas giant.`,
+    },
+
+    // --- Part 12: the characterization challenge ----------------------------
+    {
+      type: 'read',
+      title: 'Three candidates',
+      body: `Here are three planets from a survey. For each you have a radius from
+             its transit, a mass from its radial velocity, and an orbit around a
+             star slightly cooler and fainter than the Sun.
+             \n\nUse the presets on the panel to load each one in turn, and read all
+             four numbers: radius, mass, density and where it sits relative to the
+             zone.`,
+      tool: {
+        id: 'planet-characterization',
+        values: { rp: 0.0981, mp: 0.0044, a: 1.02, lum: 0.6, teff: 5400 },
+        title: 'Three candidates',
+        note: 'Load Planet A, then Planet B, then Planet C.',
+      },
+    },
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'Which is the strongest candidate?',
+      body: `Planet A is 1.1 Earth radii and 1.4 Earth masses, in the zone.
+             \n\nPlanet B is 2.5 Earth radii and 6 Earth masses, also in the zone.
+             \n\nPlanet C is 1.05 Earth radii and 1.3 Earth masses, but receives
+             about thirty times the starlight Earth does.`,
+      prompt:
+        'Which is the strongest candidate for a rocky world at a temperate level of irradiation?',
+      options: [
+        'Planet A',
+        'Planet B, because it is the largest',
+        'Planet C, because it is rocky',
+        'All three are equally good candidates',
+      ],
+      answer: 0,
+      because: `Only A satisfies both conditions. B sits in the zone but its density of
+                about 2 grams per cubic centimetre is far too low for rock, so it is
+                more likely a small world with a thick envelope. C has a rocky density
+                but is thirty times too irradiated. Neither column answers the question
+                on its own.`,
+    },
+    {
+      type: 'question',
+      kind: 'short',
+      title: 'What would you still want to know?',
+      body: `You have a radius, a mass, a density and an irradiation for Planet A.
+             That is a great deal for a planet nobody has seen.
+             \n\nIt is not everything.`,
+      prompt:
+        'Name one thing you still do not know about Planet A that would matter for whether it could actually support liquid water, and say briefly why it matters.',
+      rubric: `Full credit for naming any property the measurements so far cannot
+               reach, together with a reason it bears on surface liquid water.
+               Expected answers include: whether it has an atmosphere at all, and of
+               what composition, since surface pressure decides whether liquid water
+               is stable; whether it rotates or is tidally locked, which governs
+               whether one side freezes; its albedo, since reflected light never
+               warms the surface; whether it retains a magnetic field, which bears on
+               atmospheric loss; and the star's flare activity. Also accept that the
+               habitable-zone calculation is a statement about the orbit under
+               assumed climate conditions, not a measurement of the planet. One
+               property is enough; do not penalise an answer outside this list whose
+               reasoning connects it to liquid water.`,
+      because: `There are several good answers: whether it has an atmosphere at all,
+                what that atmosphere is made of, whether it rotates or keeps one face
+                to its star, whether it has a magnetic field, how much of the starlight
+                it reflects, and whether the star flares. The habitable zone is a
+                statement about the orbit, not about the planet. It says where liquid
+                water is possible given a set of climate assumptions, and nothing about
+                whether this particular world has any.`,
+    },
+
+    // --- Synthesis ----------------------------------------------------------
+    {
+      type: 'question',
+      kind: 'choice',
+      title: 'The point of all this',
+      body: `You began this lesson unable to see a planet at all.`,
+      prompt: 'The single most important idea here is that…',
+      options: [
+        'radial velocity is the best way to find planets',
+        'combining different measurements tells you things no single measurement can',
+        'transits are the only reliable method',
+        'a planet in the habitable zone is inhabited',
+      ],
+      answer: 1,
+      because: `Each method has a blind spot, and they are not the same blind spot. A
+                transit without a mass leaves you a size and no idea what it is made
+                of. A radial velocity without a transit leaves you a lower limit on a
+                mass. Together they give a real planet. That combination, not any one
+                technique, is what characterizing another world actually consists of.`,
+    },
+  ],
+};
+
+// --- The Missing Mass --------------------------------------------------------
+// The short one. Fifteen steps against the thirty-seven of the exoplanet
+// lessons, because it makes a single argument and the argument is short: you
+// can weigh a system two ways, by adding up its light and by watching how it
+// moves, and for anything bigger than a solar system the two answers do not
+// agree.
+//
+// The order is the historical order, and it is also the pedagogical one. The
+// Solar System first, because it is the case where the two answers do agree and
+// so it establishes what the method is. Then a galaxy as it would be if the
+// light told the truth. Then a galaxy as telescopes actually find it. Then
+// Zwicky's cluster, which came first in time and lands harder once a student
+// has already seen one system misbehave.
+//
+// Nothing in this lesson asks a student to believe in dark matter. It asks them
+// to make two measurements and notice that they disagree, which is all the
+// evidence itself does.
+
+const DM_SOLAR = {
+  scenario: 'Solar System',
+  seed: 'missing-mass',
+  paused: false,
+};
+
+const DM_EXPECTED = {
+  scenario: 'Spiral Galaxy',
+  seed: 'missing-mass',
+  paused: false,
+};
+
+const DM_OBSERVED = {
+  scenario: 'Milky Way Rotation',
+  seed: 'missing-mass',
+  paused: false,
+};
+
+// Paused, and on a fixed seed, so that every student measuring this cluster
+// measures the same cluster. A swarm on randomly oriented orbits changes its
+// dispersion and its extent as it moves, and a lesson that asks a class to
+// compute a number from a moving target gets thirty different numbers and no
+// way to tell a mistake from a moment.
+const DM_CLUSTER = {
+  scenario: 'Coma Cluster',
+  seed: 'zwicky',
+  paused: true,
+};
+
+export const DARK_MATTER = {
+  id: 'missing-mass',
+  thumbnail: 'images/scenarios/milky-way-rotation.webp',
+  title: 'The Missing Mass',
+  subtitle: 'Weigh a system twice, and find the two answers do not agree',
+  duration: '45-60 min',
+  level: 'Introductory astronomy',
+  lock: { placement: true, inspector: false, areaSweep: false },
+  summary:
+    'There are two ways to weigh a system in space: add up the light, or watch how things move. For the Solar System the two agree. For a galaxy they do not, and for a cluster of galaxies they are out by more than a factor of ten. Students arrange mass and watch the rotation curve it makes, turn a measured speed into an enclosed mass, then take a real galaxy’s curve and try to fit it with stars alone — and fail, in the specific way the field failed for a decade, before adding a halo and getting it right. It closes on Zwicky’s cluster and the mass budget of the universe. It is how dark matter was found, and it is a measurement rather than a theory.',
+  objectives: [
+    'Explain why orbital speed falls as the inverse square root of radius when the mass is concentrated in the middle',
+    'Read a rotation curve and describe what its slope says about where the mass is',
+    'Convert a measured orbital speed into an enclosed mass, and state what a flat curve implies about how that mass grows with radius',
+    'Decompose a measured rotation curve into a stellar disc and a dark halo, and judge a fit against the measurement errors',
+    'Argue from the shape of the residual, not just its size, that no arrangement of visible matter reproduces a flat curve',
+    'Apply the virial theorem to a cluster of galaxies to estimate its mass from the motion of its members, including the conversion from a line-of-sight dispersion',
+    'Compare a dynamical mass with a visible mass and quantify the discrepancy',
+    'Distinguish what these measurements establish from what they do not',
+  ],
+  steps: [
+    // --- Part 1: what the shape of a curve is telling you --------------------
+    {
+      type: 'read',
+      title: 'Two ways to weigh a thing you cannot touch',
+      setup: DM_SOLAR,
+      body: `You cannot put a galaxy on a scale. There are two ways to find out
+             how much a system in space weighs, and they are completely
+             independent of each other.
+             \n\nThe first is to <strong>add up what you can see</strong>. Count
+             the stars, work out the mass of each from its brightness and colour,
+             and add. This is what astronomers mean by the visible mass, or the
+             luminous mass.
+             \n\nThe second is to <strong>watch how things move</strong>. Gravity
+             sets the speed of an orbit, so an orbital speed and an orbital
+             radius together give you the mass that must be inside. This is the
+             dynamical mass.
+             \n\nThe two ways are measuring the same thing, so they had better
+             agree. This lesson is about three systems. In the first, they do.`,
+      tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole lesson.',
+    },
+    {
+      type: 'explore',
+      title: 'Put the mass somewhere',
+      tool: { id: 'dm-shapes' },
+      body: `Before measuring anything, get a feel for what a rotation curve is
+             for. A curve of orbital speed against radius is not a picture of the
+             stars. It is a readout of <strong>where the mass is</strong>, and
+             nothing else.
+             \n\nThis instrument holds the total mass fixed and lets you rearrange
+             it. Every one of the four arrangements contains the same amount of
+             matter inside 30 kpc. Look at how differently they spin.`,
+      checklist: [
+        'Press each of the four preset buttons in turn and watch the curve change shape',
+        'On "Solar System", note the speed falling away: the outer orbits are the slow ones',
+        'On "Uniform ball", drag the spread slider and watch the peak follow the edge of the ball',
+        'On "Spiral disc", notice the curve rises, peaks and then falls: still not flat',
+        'On "What galaxies do", read the outer slope and compare it with the first preset',
+      ],
+      tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole lesson turns on.',
+    },
+    {
+      type: 'question',
+      title: 'Which arrangement gives a flat curve?',
+      kind: 'choice',
+      tool: { id: 'dm-shapes' },
+      body: `You have just seen four ways of arranging the same mass, and only one
+             of them produced a curve that stays level as you go out. Use the
+             instrument to check your answer before committing to it.`,
+      prompt: 'A rotation curve stays flat when…',
+      options: [
+        'the mass is concentrated in the middle',
+        'the mass is in a ball with a definite edge',
+        'the mass is in a disc that thins out with radius',
+        'the mass keeps being added as you go further out',
+      ],
+      answer: 3,
+      because: `Only the fourth. The first three all have something in common: the
+                mass runs out somewhere, and past that point going further out
+                adds nothing to the total inside your orbit. Once the enclosed
+                mass stops growing, the speed has to fall. A flat curve is the
+                signature of a mass distribution that has not finished yet, and
+                that is a strange thing for a galaxy to be, because galaxies
+                visibly do end.`,
+    },
+    {
+      type: 'explore',
+      title: 'The Solar System, plotted',
+      body: `Now a real system, measured live. The panel is plotting one point for
+             every body in the Solar System: how far it is from the Sun, across,
+             and how fast it is moving, up. Both axes are the real, measured
+             values, taken from the simulation this instant. Nothing is fitted.
+             \n\nThe dashed red line is the prediction. It is
+             √(G·M/r) using only the mass of the objects on screen: what the
+             speeds ought to be if the things you can see are all the mass there
+             is.
+             \n\nThe points sit on the line.`,
+      checklist: [
+        'Find Mercury at the left-hand end and Neptune at the right',
+        'Notice that the inner planets are the fast ones',
+        'Check that the measured points follow the dashed prediction across the whole range',
+        'Read the "Outer slope" number at the top of the panel',
+      ],
+      probe: ctx => {
+        const rc = ctx.rotationCurve();
+        if (!rc || !rc.points.length) {
+          return [{ label: 'Rotation curve', value: 'open the panel' }];
+        }
+        const inner = rc.points[0];
+        const outer = rc.points[rc.points.length - 1];
+        return [
+          { label: 'Bodies plotted', value: String(rc.points.length) },
+          {
+            label: 'Innermost',
+            value: `${ctx.distance(inner.r)} at ${ctx.speed(inner.speed)}`,
+          },
+          {
+            label: 'Outermost',
+            value: `${ctx.distance(outer.r)} at ${ctx.speed(outer.speed)}`,
+          },
+          {
+            label: 'Fitted slope',
+            value: rc.fit ? rc.fit.exponent.toFixed(3) : '—',
+          },
+        ];
+      },
+    },
+    {
+      type: 'question',
+      title: 'What the slope means',
+      kind: 'choice',
+      body: `The panel reports the slope as a power: speed goes as radius raised
+             to some exponent. For the Solar System that exponent is very close
+             to −0.5, which is another way of writing v ∝ 1/√r.
+             \n\nThat number is not a coincidence and it is not a fit to data.
+             It falls straight out of setting the gravitational pull equal to
+             what a circular orbit needs: v = √(G·M/r), with M the mass inside
+             the orbit.`,
+      prompt: 'Speed falls off as 1/√r in the Solar System because…',
+      options: [
+        'the outer planets are older and have slowed down',
+        'almost all the mass is in the Sun, so M inside the orbit stops growing as you go out',
+        'gravity gets weaker with distance, and that alone sets the speed',
+        'the outer planets are lighter than the inner ones',
+      ],
+      answer: 1,
+      because: `The Sun holds 99.8% of the mass of the Solar System. Past
+                Mercury, going further out adds essentially nothing to the mass
+                inside the orbit, so M is a constant in v = √(G·M/r) and only the
+                r changes. Gravity does weaken with distance, but that is already
+                inside the formula: what makes the exponent exactly −0.5 rather
+                than something else is the mass staying put. Orbits do not decay
+                on their own, and the outer planets are not the lightest ones:
+                Jupiter is the heaviest thing here after the Sun.`,
+    },
+
+    // --- Part 2: turning a speed into a mass --------------------------------
+    {
+      type: 'explore',
+      title: 'What the speed tells you about the mass',
+      tool: { id: 'dm-enclosed' },
+      body: `The relation you have been using runs both ways. Written as
+             v = √(G·M/r) it predicts a speed from a mass. Rearranged, it does
+             something far more useful:
+             \n\n<strong>M(&lt;r) = v²·r / G</strong>
+             \n\nA speed and a radius give you the mass inside, and the
+             calculation says nothing at all about what that mass is made of or
+             whether it gives off any light. That is the entire reason this
+             method can find something a telescope cannot.
+             \n\nThe top plot is a rotation curve. The bottom plot is the same
+             measurement rearranged. Drag the radius marker and watch both.`,
+      checklist: [
+        'Start on "Falling curve" and drag the marker from 2 kpc out to 30',
+        'Watch the bottom plot go flat: everything is already inside, so there is nothing left to enclose',
+        'Switch to "Flat curve" and drag the marker out again',
+        'Watch the bottom plot climb in a straight line, and read the "go out twice as far" row',
+        'Switch to "A real galaxy" and compare the orange dashed line with the green one',
+      ],
+      tip: 'The bottom plot is not a second measurement. It is the top plot with one line of algebra applied to it.',
+    },
+    {
+      type: 'question',
+      title: 'What a flat curve requires',
+      kind: 'choice',
+      tool: { id: 'dm-enclosed', values: { shape: 1, radius: 10 } },
+      body: `Go back to M(&lt;r) = v²·r/G, and this time treat the speed as known
+             and the mass as the unknown. If v is the same at every radius, then
+             M(&lt;r) is proportional to r.
+             \n\nThe instrument will tell you the answer if you drag the marker.
+             Work it out first.`,
+      prompt: 'A flat rotation curve means that as you go further out…',
+      options: [
+        'the enclosed mass stops growing',
+        'the enclosed mass keeps growing, in proportion to the radius',
+        'gravity stops obeying the inverse square law',
+        'the stars have too much angular momentum to fall in',
+      ],
+      answer: 1,
+      because: `The enclosed mass has to keep growing, and specifically it has to
+                grow in proportion to r. Double the radius and you have to double
+                the mass inside to hold the speed constant. Out where the disc
+                has run out of stars there is nothing visible left to supply it,
+                yet the speed does not drop. Something out there is still adding
+                mass. Modifying gravity is a real alternative and people have
+                proposed it, but it is a different claim from this one and it is
+                not what this measurement shows on its own.`,
+    },
+    {
+      type: 'measure',
+      title: 'Measure the enclosed mass yourself',
+      tool: { id: 'dm-enclosed', values: { shape: 1, radius: 5 } },
+      body: `Set the instrument to <strong>Flat curve</strong> and read the
+             enclosed mass off the bottom plot at four radii. Then switch to
+             <strong>Falling curve</strong> and read it once more, at 30 kpc, for
+             the contrast.
+             \n\nEvery number is in units of 10¹⁰ solar masses, which is what the
+             readout gives you. Type the mantissa: for 5.23 × 10¹⁰, type 5.23.`,
+      fields: [
+        {
+          id: 'flat5',
+          label: 'Flat curve: mass inside 5 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+        {
+          id: 'flat10',
+          label: 'Flat curve: mass inside 10 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+        {
+          id: 'flat20',
+          label: 'Flat curve: mass inside 20 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+        {
+          id: 'flat30',
+          label: 'Flat curve: mass inside 30 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+        {
+          id: 'kep30',
+          label: 'Falling curve: mass inside 30 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+      ],
+      plot: {
+        title: 'Your four measurements',
+        xLabel: 'radius  (kpc)',
+        yLabel: 'mass inside  (10¹⁰ M☉)',
+        height: 190,
+        points: v =>
+          [5, 10, 20, 30].map(r => ({
+            x: r,
+            y: v[`flat${r}`],
+            label: `${r}`,
+          })),
+        note: `Four points on a straight line through the origin. That is what
+               "proportional to radius" looks like, and it is what the flat curve
+               forces. Compare your last number: on the falling curve the mass
+               inside 30 kpc is the same as the mass inside 10, because there is
+               nothing out there.`,
+      },
+      tip: 'The radius slider stops at 30 kpc, which is about as far out as a real rotation curve can be measured before there is nothing left bright enough to see.',
+    },
+
+    // --- Part 3: the galaxy we expected, and the galaxy we found -------------
+    {
+      type: 'predict',
+      title: 'Now a galaxy',
+      setup: DM_EXPECTED,
+      body: `A spiral galaxy is a disc of stars with a dense bulge in the
+             middle, and most of its light comes from that bulge and the inner
+             disc. In that respect it is built like the Solar System: bright and
+             heavy in the center, thin and faint further out.
+             \n\nThis scenario is a galaxy built on exactly that assumption. Every
+             star was launched at the speed the visible mass says it should have.
+             \n\nBefore you look at the panel, commit to an answer.`,
+      prompt: 'The rotation curve of this galaxy will…',
+      options: [
+        'fall off as 1/√r, like the Solar System',
+        'stay flat all the way out',
+        'rise with radius',
+        'have no particular shape',
+      ],
+      answer: 0,
+      because: `It falls off as 1/√r. The reasoning is the same as for the Solar
+                System and so is the answer: put most of the mass in the middle,
+                and the mass enclosed by an orbit stops growing once you are
+                outside the bulge. This scenario is the prediction, drawn out in
+                full. The next one is what telescopes actually find.`,
+    },
+    {
+      type: 'measure',
+      title: 'Measure the expected curve',
+      body: `Read the panel. The shaded strip on the left of the plot is the
+             inner region, which is excluded from the fit: inside the bulge the
+             curve rises with radius for reasons that have nothing to do with
+             this lesson, and including it would drag the slope towards zero.
+             \n\nRecord the slope and the shape the panel reports.`,
+      fields: [
+        { id: 'exp_slope', label: 'Outer slope (the exponent)', unit: '' },
+        {
+          id: 'exp_shape',
+          label: 'Shape reported by the panel',
+          unit: '',
+          kind: 'text',
+        },
+        { id: 'exp_visible', label: 'Visible mass', unit: 'M☉' },
+      ],
+      tip: 'The slope will not be exactly −0.500 the way the Solar System’s was. The disc carries some mass of its own, so the enclosed total does keep growing a little.',
+    },
+    {
+      type: 'read',
+      title: 'What Rubin and Ford found',
+      setup: DM_OBSERVED,
+      body: `Through the 1960s and 1970s Vera Rubin and Kent Ford measured
+             rotation curves of spiral galaxies, starting with Andromeda. Their
+             instrument was a spectrograph: light from the approaching side of a
+             galaxy is blueshifted, light from the receding side is redshifted,
+             and the size of the shift gives the orbital speed at that radius.
+             \n\nThey expected the curve to fall. It did not. In galaxy after
+             galaxy the speed climbed out of the bulge, levelled off, and then
+             simply stayed there, as far out as there was anything bright enough
+             to measure.
+             \n\nThis scenario is that result. Same disc, same visible mass, same
+             number of stars. Every star is now moving at the speed a real galaxy
+             gives, which is the same speed at every radius.`,
+      tip: 'Look at the plot. The dashed red line has not moved: that is still the prediction from the visible mass. The points have.',
+    },
+    {
+      type: 'measure',
+      title: 'Measure the real curve',
+      body: `Record what the panel reports now. The visible mass is unchanged
+             from the previous scenario, so any difference is in the motion and
+             not in the bookkeeping.`,
+      fields: [
+        { id: 'obs_slope', label: 'Outer slope (the exponent)', unit: '' },
+        {
+          id: 'obs_shape',
+          label: 'Shape reported by the panel',
+          unit: '',
+          kind: 'text',
+        },
+        {
+          id: 'obs_gap',
+          label:
+            'At the outer edge, roughly how many times faster are the stars moving than the dashed prediction?',
+          unit: '×',
+        },
+      ],
+    },
+
+    // --- Part 4: do what the astronomers actually do -------------------------
+    {
+      type: 'read',
+      title: 'Now do what the astronomers did',
+      tool: { id: 'dm-fit', values: { haloVFlat: 0 } },
+      body: `Measuring a flat curve is the easy half. The hard half, and the one
+             that took the 1970s and 1980s to settle, is working out what mass
+             distribution could possibly produce it — and showing that no
+             arrangement of the visible matter will do.
+             \n\nThat is a fitting problem, and it is what this instrument is.
+             The pink points with error bars are a measured rotation curve. The
+             sliders are a model of the galaxy: a disc of stars, and a halo of
+             something else. Your job is to reproduce the points.
+             \n\nThe rules are the ones a real astronomer works under. You may
+             choose how much mass the disc has and how spread out it is, because
+             neither is known precisely from the light alone. You may not move the
+             data.`,
+      tip: 'The panel scores you: "average miss" is how far your curve sits from the points, in km/s, and the data itself is only good to about ±5. Get under that and the plot says FITTED.',
+    },
+    {
+      type: 'explore',
+      title: 'Try it with stars alone',
+      tool: {
+        id: 'dm-fit',
+        values: { haloVFlat: 0 },
+        hide: ['haloVFlat', 'haloCore'],
+      },
+      body: `The halo is switched off and hidden. You have two sliders: how much
+             mass is in the disc, and how far it is spread. Both are genuinely
+             uncertain in a real galaxy, so this is a fair fight.
+             \n\nTry to fit the curve. Really try — the point of this step is not
+             to fail quickly.`,
+      checklist: [
+        'Start from the "Stars only" preset and look at where the model falls below the data',
+        'Push the disc mass up until the outer points are matched, and look at what happened to the inner ones',
+        'Bring the mass back down until the inner points are matched, and look at the outer ones',
+        'Try spreading the disc out with the scale-length slider, and then squeezing it in',
+        'Find the best "average miss" you can manage, and write down what it is',
+      ],
+      tip: 'A heavier disc lifts the whole curve. A wider disc moves its peak outward and flattens it a little. Neither changes the fact that a disc curve comes back down.',
+    },
+    {
+      type: 'measure',
+      title: 'Record your best stars-only fit',
+      tool: {
+        id: 'dm-fit',
+        values: { haloVFlat: 0 },
+        hide: ['haloVFlat', 'haloCore'],
+      },
+      body: `Whatever your best attempt was, record it. This is a real result and
+             it is worth having in your own handwriting: it is the number that
+             rules out the obvious explanation.`,
+      fields: [
+        { id: 'so_rms', label: 'Best average miss you achieved', unit: 'km/s' },
+        { id: 'so_disc', label: 'Disc mass that gave it', unit: '× 10¹⁰ M☉' },
+        {
+          id: 'so_worst',
+          label: 'Radius where the model missed worst',
+          unit: 'kpc',
+        },
+        {
+          id: 'so_sign',
+          label: 'At that radius, was your model too fast or too slow?',
+          unit: '',
+          kind: 'text',
+        },
+      ],
+      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the measurement error, and it is worst at the outer edge. If you got close to that, you found the real answer.',
+    },
+    {
+      type: 'question',
+      title: 'Why a heavier disc cannot rescue it',
+      kind: 'choice',
+      tool: {
+        id: 'dm-fit',
+        values: { haloVFlat: 0 },
+        hide: ['haloVFlat', 'haloCore'],
+      },
+      body: `You have just discovered something that took the field a decade to
+             accept. Adding mass to the disc does lift the outer curve — but it
+             lifts the inner curve at the same time, and by more.`,
+      prompt: 'No disc, at any mass, fits the whole curve because…',
+      options: [
+        'a disc cannot hold enough mass to matter',
+        'the shortfall is not just an amount, it is the wrong shape: the data needs mass added where the light is not',
+        'the outer measurements are less reliable than the inner ones',
+        'discs are two-dimensional and galaxies are three-dimensional',
+      ],
+      answer: 1,
+      because: `The problem is the shape of the shortfall, not its size. A disc's
+                contribution peaks a couple of scale lengths out and then declines,
+                because that is where its mass is. The data does not decline. To
+                fix the outer curve without wrecking the inner one you need mass
+                that is <em>negligible in the middle and dominant at the edge</em>,
+                which is the opposite of how light is distributed in every spiral
+                ever photographed. A disc can be made heavier; it cannot be made
+                to have that shape. The outer points are, if anything, measured
+                more reliably than the inner ones, because they come from cold
+                hydrogen gas that extends well beyond the stars.`,
+    },
+    {
+      type: 'explore',
+      title: 'Now add the halo',
+      tool: {
+        id: 'dm-fit',
+        values: { discMass: 3.3, discScale: 2.6, haloVFlat: 0 },
+      },
+      body: `Two more sliders, controlling a component that is not made of stars.
+             The halo's flat speed sets how much of it there is; its core radius
+             sets how quickly it takes over from the disc.
+             \n\nGet the plot to say FITTED.`,
+      checklist: [
+        'Set the disc back to about 3.3 and its scale length to about 2.6',
+        'Raise the halo strength from zero and watch the outer curve lift while the inner curve barely moves',
+        'Adjust the core radius until the two components hand over smoothly',
+        'Drive the average miss below 5 km/s and read the FITTED marker',
+        'Read the last row: how much dark mass there is for every unit of visible mass',
+      ],
+      tip: 'This is the shape the halo has to have, and the reason the pseudo-isothermal profile is used: negligible in the middle, growing without limit outward. Nothing made of stars does that.',
+    },
+    {
+      type: 'measure',
+      title: 'Record the fit that works',
+      tool: { id: 'dm-fit' },
+      body: `Write down the model that fitted. These four numbers are a
+             decomposition of a galaxy, and they are the same four numbers a
+             published rotation-curve paper reports.`,
+      fields: [
+        { id: 'fit_vflat', label: 'Halo flat speed', unit: 'km/s' },
+        { id: 'fit_core', label: 'Halo core radius', unit: 'kpc' },
+        { id: 'fit_rms', label: 'Average miss', unit: 'km/s' },
+        { id: 'fit_visible', label: 'Visible mass', unit: '× 10¹⁰ M☉' },
+        {
+          id: 'fit_halo',
+          label: 'Halo mass inside 30 kpc',
+          unit: '× 10¹⁰ M☉',
+        },
+      ],
+      tip: 'A good fit lands near 150 km/s and a core of about 6 kpc, with an average miss around 2 km/s. There is a genuine degeneracy between the two halo sliders, which is why real papers quote them together with a covariance.',
+    },
+    {
+      type: 'question',
+      title: 'How much of it is dark?',
+      kind: 'numeric',
+      tool: { id: 'dm-fit' },
+      body: `You fitted a galaxy. Divide the halo mass inside 30 kpc by the
+             visible mass and you have the headline number of forty years of
+             galaxy dynamics.`,
+      prompt: 'Halo mass inside 30 kpc, divided by visible mass',
+      unit: '×',
+      answer: 3.4,
+      tolerance: 0.9,
+      because: `About three and a half. Roughly three-quarters of the mass inside
+                the visible extent of this galaxy is in something that gives off
+                no light — and the fraction keeps climbing if you measure further
+                out, because the halo's mass keeps growing while the disc's does
+                not. Note carefully what this is and is not: it is a mass you
+                measured from motion, minus a mass you measured from light. It is
+                not a claim about what the difference is made of.`,
+    },
+
+    // --- Part 5: what the halo actually does --------------------------------
+    {
+      type: 'explore',
+      title: 'What the halo is holding',
+      tool: { id: 'dm-flyby' },
+      body: `A halo is a term in the force law. It has no position, it is not an
+             object, and it is not drawn on the simulation, which makes it easy to
+             suspect it of being a bookkeeping trick.
+             \n\nIt is not. Here is a single star, launched on a circular orbit at
+             the speed a real galaxy gives it at that radius. Watch it hold its
+             orbit, then take the halo away while it runs.`,
+      checklist: [
+        'Press Run and watch the star complete an orbit with the halo on',
+        'Compare the two speeds in the readout: the launch speed, and the speed the visible disc alone could hold',
+        'Now drag the halo slider to OFF, without touching anything else',
+        'Watch the star leave. It has not been given any extra energy: the mass holding it was removed',
+        'Try relaunching at 8 kpc with the halo off, where the disc still dominates, and see it stay',
+      ],
+      tip: 'This is exactly the situation the flat rotation curve presents. Real stars at 20 kpc really are moving at this speed, and the visible mass really cannot hold them.',
+    },
+    {
+      type: 'explore',
+      title: 'Take the halo away from the whole galaxy',
+      setup: DM_OBSERVED,
+      body: `Now the same experiment on ninety stars at once, in the live
+             simulation rather than a model panel.
+             \n\nThis scenario has a dark-matter halo switched on, and the panel
+             draws it as the solid blue line the points are sitting on. Switch it
+             off with the toggle in the panel and watch what happens to the disc.`,
+      checklist: [
+        'Switch the Dark matter halo toggle off and let the simulation run',
+        'Watch the stars begin to drift outward: at these speeds the visible mass cannot hold them',
+        'Watch the measured points climb away from the solid line and the disc come apart',
+        'Switch the halo back on and reload the scenario to restore it',
+      ],
+      probe: ctx => {
+        const rc = ctx.rotationCurve();
+        if (!rc) return [{ label: 'Rotation curve', value: 'open the panel' }];
+        const outer = rc.points.length ? rc.points[rc.points.length - 1] : null;
+        return [
+          { label: 'Halo', value: ctx.haloOn() ? 'On' : 'Off' },
+          {
+            label: 'Outermost star',
+            value: outer ? ctx.distance(outer.r) : '—',
+          },
+          {
+            label: 'Slope',
+            value: rc.fit ? rc.fit.exponent.toFixed(3) : '—',
+          },
+        ];
+      },
+      tip: 'The stars do not stop suddenly. They keep the speed they had and simply stop being held, so the disc unwinds from the outside in.',
+    },
+
+    // --- Part 6: Zwicky got there first -------------------------------------
+    {
+      type: 'read',
+      title: 'Forty years earlier',
+      setup: DM_CLUSTER,
+      body: `Rubin and Ford were not the first. In 1933 Fritz Zwicky pointed a
+             spectrograph at the Coma Cluster, a swarm of about a thousand
+             galaxies, and measured how fast its members were moving relative to
+             each other.
+             \n\nA cluster is not a disc. Its members are on long, randomly
+             oriented orbits, so there is no rotation to plot: what there is
+             instead is a spread of speeds. But the same logic applies. A bound
+             system's members move at speeds set by the mass holding them, so the
+             spread of speeds gives the mass.
+             \n\nZwicky did the arithmetic, compared the answer with the light of
+             the galaxies, and found the two out by a factor of several hundred.
+             He named the excess <em>dunkle Materie</em>. Almost nobody took it
+             seriously for four decades.
+             \n\nThis cluster is paused, so that everyone measuring it measures
+             the same thing.`,
+      tip: 'The panel now shows a Cluster measurements block. A rotation curve is the wrong instrument for a swarm; those three numbers are the right one.',
+    },
+    {
+      type: 'explore',
+      title: 'Zwicky’s arithmetic, and the two ways to get it wrong',
+      tool: { id: 'dm-virial' },
+      body: `Before doing it on the simulated cluster, do it on the real one. This
+             instrument holds the actual Coma Cluster: a measured line-of-sight
+             velocity spread of about 1000 km/s across a radius of about 1.4 Mpc,
+             against the mass of its galaxies and of the hot gas between them.
+             \n\nThe virial theorem is the tool:
+             \n\n<strong>M = (5/3)·R·⟨v²⟩ / G</strong>
+             \n\nThe only difficulty in the whole calculation is the step from a
+             measured σ to ⟨v²⟩, and there are two classic ways to get it wrong.
+             Both are on the third slider. Try them.`,
+      checklist: [
+        'Start on "Coma, done right" and read the two bars against each other',
+        'Switch to "Forget the factor of 3" and watch the mass fall by exactly three',
+        'Switch to "Forget to square it" and watch the discrepancy disappear entirely',
+        'Go back to the correct setting and drag the σ slider: notice the mass goes as σ², not σ',
+        'Note how much of the visible mass is hot gas rather than galaxies',
+      ],
+      tip: 'A spectrograph measures one component of a velocity, not three. If the orbits are randomly oriented, each direction carries an equal share, so ⟨v²⟩ = 3σ². That factor of three is the step everyone drops.',
+    },
+    {
+      type: 'measure',
+      title: 'Measure the simulated cluster',
+      body: `Now the cluster in the simulation. Switch to <strong>simulation
+             units</strong> using the Physical units button in the Tools section
+             of the rail. That is not cosmetic. In the app's own units the
+             gravitational constant G is exactly 1, so the arithmetic below has no
+             unit conversions in it at all, and a mass comes out directly in
+             simulation mass units.
+             \n\nRecord the three numbers.`,
+      fields: [
+        { id: 'cl_n', label: 'Number of member galaxies', unit: '' },
+        {
+          id: 'cl_sigma',
+          label: 'Speed spread σ',
+          unit: 'simulation units per time',
+        },
+        { id: 'cl_R', label: 'Cluster radius R', unit: 'simulation units' },
+        {
+          id: 'cl_visible',
+          label: 'Visible mass: the galaxies themselves',
+          unit: 'M☉',
+        },
+      ],
+      tip: 'One thousand simulation mass units is one solar mass, which is the conversion you will need at the end.',
+    },
+    {
+      type: 'question',
+      title: 'Weigh the cluster by its motion',
+      kind: 'numeric',
+      body: `For any system held together by its own gravity and settled down,
+             the kinetic and potential energies are locked in a fixed ratio:
+             2K + U = 0. This is the virial theorem, and it is what turns a
+             spread of speeds into a mass.
+             \n\nWrite the kinetic energy as K = ½·M·⟨v²⟩, and take the potential
+             energy of a uniform sphere, U = −(3/5)·G·M²/R. Substitute, cancel one
+             factor of M, and rearrange:
+             \n\n<strong>M = (5/3)·R·⟨v²⟩ / G</strong>
+             \n\nThe simulation is planar, so its velocities are spread over two
+             dimensions rather than three, and the spread the panel reports is
+             already the full two-dimensional one rather than a line-of-sight
+             projection. So ⟨v²⟩ is simply σ², and in simulation units G is 1 and
+             drops out. That leaves M = (5/3)·R·σ², which gives a mass in
+             simulation units. Divide by 1000 to turn it into solar masses.`,
+      tip: 'The uniform-sphere assumption is an approximation and the estimator is only good to a factor of order one. That is enough: the discrepancy you are about to find is far larger than the error in the method, which is exactly why the result survived.',
+      prompt:
+        'The dynamical mass of the cluster, in solar masses (this is a scale model, so treat the number as the model’s own)',
+      unit: 'M☉',
+      answer: 1756,
+      tolerance: 180,
+      because: `σ = 20.46 and R = 2516, so ⟨v²⟩ = 418.7 and
+                M = (5/3) × 2516 × 418.7 = 1.76 × 10⁶ simulation mass units,
+                which is 1756 solar masses in this model. If you got something a
+                thousand times larger you forgot to convert; if you got something
+                near 84,000 you used σ rather than σ².`,
+    },
+    {
+      type: 'question',
+      title: 'Now compare',
+      kind: 'numeric',
+      body: `You have weighed the same cluster twice. Once by adding up its
+             galaxies, which is the visible mass the panel reports, and once by
+             watching how those galaxies move.`,
+      prompt: 'Dynamical mass divided by visible mass',
+      unit: '×',
+      answer: 18.3,
+      tolerance: 4,
+      because: `About eighteen. The galaxies you can see account for roughly one
+                twentieth of the mass needed to hold the cluster together at the
+                speeds its members are actually moving. Zwicky's own figure for
+                Coma was larger still, partly because the distance scale of the
+                universe was wrong in 1933 and partly because he had no way to
+                count the hot gas between the galaxies, which turns out to carry
+                several times more mass than the galaxies do. The modern figure
+                for Coma is around a factor of ten once that gas is included —
+                which is the number the instrument two steps back reports.`,
+    },
+
+    // --- Part 7: what this does and does not establish ----------------------
+    {
+      type: 'question',
+      title: 'What have you actually shown?',
+      kind: 'short',
+      body: `You have made three measurements now, in two kinds of system, using
+             two different methods: you fitted a galaxy's rotation curve and found
+             no arrangement of its stars would do, and you weighed a cluster by
+             its motion and found five times more mass than light. Both say the
+             same thing.
+             \n\nBe careful about what follows from that.`,
+      prompt:
+        'In two or three sentences: what do these measurements establish, and what do they not establish? Name at least one thing other than a new kind of particle that could in principle explain them.',
+      rubric: `They establish a discrepancy between mass inferred from motion and
+               mass inferred from light, in systems larger than a planetary
+               system. They do not establish what the extra mass is made of, or
+               that it is made of anything at all. Credit any of: ordinary matter
+               that is simply too faint to count (cold gas, dim stars, black
+               holes, free-floating planets - collectively MACHOs), which was the
+               leading hypothesis for decades and is now ruled out for most of the
+               mass by microlensing surveys and by the abundances of light
+               elements from big bang nucleosynthesis; or a modification of
+               gravity on large scales, such as MOND, which fits rotation curves
+               well and clusters poorly. Strong answers note that the two
+               measurements here are independent of each other, which is what
+               makes an error in either one an unlikely explanation, and that the
+               rotation-curve result is a statement about the <em>shape</em> of the
+               missing mass and not only its amount.`,
+    },
+    {
+      type: 'read',
+      title: 'How much of the universe is this?',
+      tool: { id: 'dm-budget' },
+      body: `You have been working on one galaxy and one cluster. It is fair to
+             ask what the accounting looks like for everything.
+             \n\nStep through the four layers. Each one takes the slice you were
+             looking at and asks what it is made of.`,
+      tip: 'The last layer is the one to sit with. Every star, nebula and galaxy ever photographed, in every wavelength, is about half a percent of the universe.',
+    },
+    {
+      type: 'read',
+      title: 'Where it stands',
+      body: `The evidence has grown a great deal since 1933 and since 1970, and
+             it no longer rests on rotation curves at all. The pattern of hot and
+             cold spots in the cosmic microwave background, the way galaxies are
+             distributed across the sky, how gravitational lensing bends light
+             around clusters, and the abundances of hydrogen and helium left over
+             from the first few minutes all point the same way, and they are
+             sensitive to different things. Ordinary matter that happens to be
+             dark cannot account for what they show; there has to be something
+             that has mass and does not interact with light.
+             \n\nWhat that something is, nobody knows. It has never been detected
+             in a laboratory, no candidate particle has been found, and searches
+             have been running for forty years. The Bullet Cluster, where two
+             clusters passed through each other and the mass visibly separated
+             from the gas, is the single hardest observation for modified-gravity
+             alternatives to accommodate.
+             \n\nThat is an honest place to leave it. The measurement is solid and
+             has been repeated in a dozen independent ways. The explanation is a
+             name for something we have not identified. Those are different kinds
+             of statement and it is worth keeping them apart.`,
+      tip: 'You fitted a real galaxy and weighed a real cluster. That part is not in doubt, and you did not have to take anyone’s word for it.',
+    },
+  ],
+};
+
+// Order matters: the browser lists them in this order, and the three exoplanet
+// lessons form a sequence. Shadows measures a radius, Tug measures a mass and
+// turns the pair into a density, and Goldilocks asks what that buys. Each still
+// stands alone, but a student working straight down the list meets them in the
+// order the inference chain is actually built.
+//
+// The Missing Mass sits after all of them. It belongs to no sequence, it is
+// half the length of the others, and it uses an instrument none of them touch,
+// so it reads as what it is: a short, self-contained argument at the end.
+
+// --- 9. Tides ------------------------------------------------------------------
+
+const TIDES_EARTH_MOON = {
+  scenario: 'Earth-Moon System',
+  seed: 'tides-lab',
+  camera: { zoom: 2.2, pan: { x: 0, y: 0 } },
+  paused: false,
+};
+
+const TIDES_DISRUPTION = {
+  scenario: 'Tidal Disruption Event',
+  seed: 'tides-lab',
+  camera: { zoom: 0.9, pan: { x: 0, y: 0 } },
+  paused: false,
+};
+
+const TIDES = {
+  id: 'tides',
+  thumbnail: 'images/scenarios/earth-moon-system.webp',
+  title: 'Tides',
+  subtitle:
+    'Stretch a world, move a moon, and discover why gravity can tear objects apart',
+  duration: '35-45 min',
+  level: 'Introductory astronomy',
+  lock: { placement: true, inspector: true },
+  summary:
+    'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the centre away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',
+  objectives: [
+    'Explain why an extended object feels a different gravitational pull at each point in it',
+    'State that a tide is the difference between the local pull and the pull on the centre, and use that to say why there are two ocean bulges rather than one',
+    'Measure how tidal strength changes with separation and with the mass of the companion, and state both relationships',
+    'Compare the tide a body raises against that body’s own gravity, and predict whether it holds together',
+    'Explain why a Roche limit is different for every pair of objects, and say what it does and does not predict',
+  ],
+  steps: [
+    {
+      type: 'read',
+      title: 'Twice a day, everywhere',
+      body: `Stand on almost any coast and the sea comes in and goes out roughly
+             twice a day. Not once. Twice.
+             \n\nThat "twice" is the whole puzzle. The Moon is on one side of
+             the Earth at a time, and the ocean bulges on <em>both</em> sides at
+             once: there is a high tide under the Moon and another high tide on
+             the opposite face of the planet, twelve thousand kilometres away
+             from it. Any explanation that amounts to "the Moon pulls the water
+             toward it" predicts one bulge and is therefore wrong.
+             \n\nOn screen is the real Earth-Moon system: the Earth at the
+             centre and the Moon, <strong>Luna</strong>, on its 27.3 day orbit.
+             The simulation is a straightforward Newtonian one, and that turns
+             out to be all you need. Nothing in this lesson requires a force
+             that is not already in that picture. What it requires is
+             subtraction.`,
+      tip: 'While a lesson is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      setup: TIDES_EARTH_MOON,
+      probe: ctx => {
+        const moon = ctx.find('Luna');
+        const el = moon && ctx.elements(moon);
+        return [
+          { label: 'Bodies on screen', value: 'Earth, and the Moon' },
+          {
+            label: 'Moon’s distance now',
+            value: el ? ctx.distance(el.r) : 'building the system…',
+          },
+          { label: 'Real separation', value: '384,400 km, on average' },
+        ];
+      },
+    },
+
+    {
+      type: 'predict',
+      title: 'Is the pull the same everywhere?',
+      body: `The Earth is not a point. It is a ball 12,742 km across, and the
+             side facing the Moon is 12,742 km closer to the Moon than the side
+             facing away.
+             \n\nGravity weakens with distance. Commit to an answer before you
+             are shown anything.`,
+      prompt: 'The Moon’s gravitational pull on the Earth is…',
+      options: [
+        'exactly the same strength at every point in the Earth',
+        'stronger on the side facing the Moon than on the far side',
+        'stronger on the far side, because it has further to reach',
+        'only felt at the Earth’s centre, where all the mass is treated as being',
+      ],
+      answer: 1,
+      because:
+        'Stronger on the near side. Gravity falls off with distance, and the near side really is closer, so it really is pulled harder. The last option is a genuinely useful half-truth: the Earth’s own gravity can be treated as coming from its centre, and for working out the Earth’s orbit the Moon can be too. But the Earth is being pulled by something outside it, and for that the difference between one part of the Earth and another is the entire story.',
+    },
+
+    {
+      type: 'read',
+      title: 'Three points, three pulls',
+      body: `The panel shows the Earth with an arrow leaving three places on it:
+             the <strong>near side</strong>, the <strong>centre</strong>, and
+             the <strong>far side</strong>. The companion is off to the right,
+             so every arrow points right.
+             \n\nEach arrow is drawn in true proportion to the others. Look at
+             them. At the Moon’s real distance they look identical, and that is
+             not a failure of the drawing: the Earth is small compared with
+             384,400 km, so the three distances are nearly the same and the
+             three pulls are nearly the same.
+             \n\nNow read the three numbers underneath the picture. They are not
+             the same.`,
+      tool: {
+        id: 'tide-vectors',
+        values: { dist: 1, mass: 1 },
+        hide: ['mass'],
+        title: 'The pull on three points of the Earth',
+        note: 'Distance is in units of the Moon’s real distance. Leave it at 1.00 for now: this is the real Earth-Moon system.',
+      },
+      tip: 'Slide the distance down toward 0.2 and watch the three arrows stop looking alike. Bring it back to 1.00 before moving on.',
+    },
+
+    {
+      type: 'question',
+      title: 'How different are they?',
+      kind: 'choice',
+      body: `Read the three accelerations off the panel on the previous screen,
+             or set the distance back to 1.00 here and read them again. The near
+             side is pulled hardest, the far side least, and the centre sits
+             between them.`,
+      prompt:
+        'At the Moon’s real distance, the pull on the near side is bigger than the pull on the far side by roughly…',
+      options: [
+        'a factor of two',
+        'a factor of ten',
+        'about seven percent',
+        'nothing measurable: they are identical',
+      ],
+      answer: 2,
+      because:
+        'About seven percent. That is a tiny difference, and it is the entire cause of every ocean tide on Earth. Hold on to how small it is: a seven percent variation in a pull that is itself only about a three-hundred-thousandth of the Earth’s own surface gravity. Tides are a small residue of a small quantity, which is why the seas move a few metres rather than being ripped off the planet.',
+      tool: {
+        id: 'tide-vectors',
+        values: { dist: 1, mass: 1 },
+        hide: ['mass'],
+        title: 'Read the three numbers again',
+        note: 'Near side, centre, far side. The last row does the comparison for you.',
+      },
+    },
+
+    {
+      type: 'predict',
+      title: 'So why two bulges?',
+      body: `Everything you have seen so far points one way: toward the Moon.
+             The near side is pulled toward the Moon, the centre is pulled
+             toward the Moon, the far side is pulled toward the Moon. Nothing
+             anywhere is pulled away from it.
+             \n\nAnd yet there is a high tide on the far side of the Earth, at
+             the same time as the one underneath the Moon. Commit to an
+             explanation.`,
+      prompt: 'The far-side bulge exists because…',
+      options: [
+        'the Moon pushes on the far side of the Earth',
+        'centrifugal force from the Earth’s spin throws the water outward there',
+        'the far side is pulled toward the Moon less than the Earth as a whole is, so it gets left behind',
+        'the water displaced from the near side has to go somewhere',
+      ],
+      answer: 2,
+      because:
+        'The far side is left behind. Nobody pushes it: it is pulled toward the Moon like everything else, just less than average, so relative to the Earth as a whole it lags on the far side. That is the answer, and the next screen shows the arithmetic that produces it. The spin option is a common and stubborn story, and it is worth being clear that it is not the cause: the two bulges are there for a non-rotating Earth too, and the Earth’s rotation is what carries you through them twice a day rather than what creates them.',
+    },
+
+    {
+      type: 'read',
+      title: 'Take the centre away',
+      body: `Here is the move that makes tides make sense.
+             \n\nThe Earth as a whole is in free fall around the Earth-Moon
+             centre of mass. It accelerates at whatever rate the pull on its
+             <em>centre</em> dictates, and it carries everything on it along at
+             that rate: you, the seas, the rocks. What you can feel is not the
+             pull. It is the difference between the pull where you are and the
+             pull the whole planet is being carried along by.
+             \n\nSo subtract the centre’s pull from all three. The panel now
+             shows both rows: the raw pulls on top, and underneath what is left
+             after the subtraction.
+             \n\n<strong>Near side:</strong> pulled harder than average, so what
+             is left points toward the Moon.
+             \n\n<strong>Centre:</strong> exactly average, so nothing is left. A
+             dot.
+             \n\n<strong>Far side:</strong> pulled less than average, so what is
+             left points <em>away</em> from the Moon.
+             \n\nStretched at both ends. Two bulges, from one pull, by
+             subtraction.`,
+      tool: {
+        id: 'tide-vectors',
+        values: { dist: 1, mass: 1 },
+        hide: ['mass'],
+        residual: true,
+        title: 'The pulls, and what is left after the centre is taken away',
+        note: 'The bottom row is drawn far larger than the top row, and the panel says by how much. Drawn to the same scale it would be invisible, which is exactly why the subtraction has to be done rather than looked at.',
+      },
+      tip: 'Nothing new has been added between the two rows. The bottom row is the top row minus one number.',
+    },
+
+    {
+      type: 'question',
+      title: 'What the far-side arrow means',
+      kind: 'choice',
+      body: `On the bottom row, the far-side arrow points away from the Moon.
+             That is the thing most worth getting right in this entire lesson,
+             so it is worth stating carefully.`,
+      prompt: 'The outward-pointing far-side arrow means that…',
+      options: [
+        'gravity from the Moon reverses direction on the far side of the Earth',
+        'the far side is still pulled toward the Moon, but less than the Earth’s centre is',
+        'a second force, separate from gravity, acts on the far side',
+        'the far side is beyond the Moon’s reach',
+      ],
+      answer: 1,
+      because:
+        'Still pulled toward the Moon, just less than average. Gravity never reverses and never switches off; there is no second force. The outward arrow is a bookkeeping result, not a push: it is what is left over after you subtract the acceleration the whole planet shares. If you insist on describing tides without subtracting the centre, you are stuck with one bulge and a coastline that disagrees with you twice a day.',
+      tool: {
+        id: 'tide-vectors',
+        values: { dist: 1, mass: 1 },
+        hide: ['mass'],
+        residual: true,
+        title: 'Both rows again',
+        note: 'Compare the far-side arrows on the two rows. On the top it points toward the companion. On the bottom, after the subtraction, it points away.',
+      },
+    },
+
+    {
+      type: 'read',
+      title: 'What a tide actually is',
+      body: `A definition worth memorising, because it is short and it is the
+             whole subject:
+             \n\n<strong>A tide is the difference in gravitational acceleration
+             across an object.</strong>
+             \n\nNot the strength of gravity. The <em>difference</em> in it.
+             This distinction does real work. You are, right now, being pulled
+             on by the Sun about 180 times harder than by the Moon: the Sun is
+             enormously more massive. And yet the Moon raises the bigger ocean
+             tide, by more than a factor of two. Strong gravity and strong tides
+             are simply not the same thing, and you will measure why in a few
+             screens.
+             \n\nThe same difference is at work everywhere gravity meets
+             something with a size: the seas moving up a beach, a moon kept
+             molten by being kneaded, a comet coming apart into a string of
+             fragments, and a star being pulled into a stream around a black
+             hole. One mechanism, and you have already seen all of it.`,
+      quote: {
+        text: 'The waters of the sea rise twice and fall twice in the space of a lunar day, and the greatest tides occur at the third hour after the appulse of the luminaries to the meridian of the place.',
+        by: 'Isaac Newton, Principia, Book III, 1687',
+      },
+      tip: 'Newton got the two bulges right in 1687, in the same book that introduced universal gravitation. It was one of the first things his theory explained that no previous one could.',
+    },
+
+    {
+      type: 'predict',
+      title: 'Bring the companion closer',
+      body: `You are about to be handed a distance slider, and a graph that
+             records what you read off it. Before you touch either, commit.
+             \n\nSuppose the Moon moved to half its present distance from the
+             Earth, with nothing else changed.`,
+      prompt: 'At half the distance, the tide the Moon raises would be…',
+      options: [
+        'twice as strong',
+        'four times as strong',
+        'eight times as strong',
+        'unchanged, because the Moon’s mass has not changed',
+      ],
+      answer: 2,
+      because:
+        'Eight times. Most people say four, reasoning from the inverse-square law, and that reasoning is sound for the pull itself: halve the distance and the pull quadruples. But a tide is a difference between two pulls, and moving in closer makes the near and far distances differ by a larger fraction as well as making both pulls stronger. The two effects compound. You are about to measure it.',
+    },
+
+    {
+      type: 'measure',
+      title: 'Four distances',
+      body: `The panel reports the tidal stretch as a multiple of the real lunar
+             tide, so the real Moon reads 1.00 and everything else is measured
+             against it.
+             \n\nSet the slider to each of the four distances in turn and type
+             what the panel says. Your points land on the graph as you type, so
+             nothing has to be remembered from one row to the next.`,
+      fields: [
+        { id: 'd1', label: 'Distance 1', unit: '× Moon’s', hint: '2' },
+        {
+          id: 't1',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '0.13',
+        },
+        { id: 'd2', label: 'Distance 2', unit: '× Moon’s', hint: '1' },
+        {
+          id: 't2',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '1',
+        },
+        { id: 'd3', label: 'Distance 3', unit: '× Moon’s', hint: '0.5' },
+        {
+          id: 't3',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '8',
+        },
+        { id: 'd4', label: 'Distance 4', unit: '× Moon’s', hint: '0.25' },
+        {
+          id: 't4',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '64',
+        },
+      ],
+      validate: v => {
+        const rows = [
+          [v.d1, v.t1],
+          [v.d2, v.t2],
+          [v.d3, v.t3],
+          [v.d4, v.t4],
+        ].filter(([d, t]) => Number.isFinite(d) && Number.isFinite(t));
+        if (rows.length < 2) return null;
+        if (rows.some(([d, t]) => d <= 0 || t <= 0)) {
+          return {
+            level: 'error',
+            message: 'Distances and tidal strengths are both positive numbers.',
+          };
+        }
+        // Every reading should satisfy tide x distance^3 = 1 at unit mass.
+        const products = rows.map(([d, t]) => t * d * d * d);
+        const mean = products.reduce((a, b) => a + b, 0) / products.length;
+        const spread = (Math.max(...products) - Math.min(...products)) / mean;
+        if (spread > 0.35) {
+          return {
+            level: 'warn',
+            message:
+              'These do not all sit on one relationship. The usual cause is a strength read at a different distance from the one beside it: check each row against the slider position that produced it.',
+          };
+        }
+        return {
+          level: 'ok',
+          message: `Every one of your readings satisfies stretch × distance × distance × distance = ${mean.toFixed(2)}. Distance appears three times. Nobody told you that; it is in your own numbers.`,
+        };
+      },
+      plot: {
+        title: 'Your four readings',
+        xLabel: 'distance  (× Moon’s)',
+        yLabel: 'stretch  (× lunar tide)',
+        height: 200,
+        points: v => [
+          { x: v.d1, y: v.t1, label: '1' },
+          { x: v.d2, y: v.t2, label: '2' },
+          { x: v.d3, y: v.t3, label: '3' },
+          { x: v.d4, y: v.t4, label: '4' },
+        ],
+        transform: {
+          label: 'Try 1 ÷ distance³',
+          xLabel: '1 ÷ distance³',
+          yLabel: 'stretch  (× lunar tide)',
+          map: p => ({ x: 1 / (p.x * p.x * p.x), y: p.y, label: p.label }),
+        },
+        note: `Raw, the points climb away from the axis far too steeply for a
+               straight line. Press <strong>Try 1 ÷ distance³</strong>: if the
+               tide really does go as one over the distance cubed, they will
+               drop onto a straight line through the corner. Straightening a
+               curve by choosing the right axes is how a relationship gets
+               identified rather than guessed.`,
+      },
+      tool: {
+        id: 'tide-strength',
+        values: { dist: 2, mass: 1 },
+        hide: ['mass'],
+        axis: 'distance',
+        title: 'Read each distance here',
+        note: 'Set the slider to 2, then 1, then 0.5, then 0.25, and type each reading into the boxes. The companion’s mass is held at the Moon’s.',
+      },
+      tip: 'The four suggested distances are only suggestions. Any four will do, so long as each strength was read at the distance beside it.',
+    },
+
+    {
+      type: 'question',
+      title: 'How steeply does it fall?',
+      kind: 'numeric',
+      body: `Look at rows 2 and 3 of your own table: you went from 1.00 to 0.50
+             times the Moon’s distance, which is half the distance.
+             \n\nAn ordinary inverse-square pull would have gone up by four. A
+             tide is not an ordinary pull.`,
+      prompt:
+        'By what factor did the tidal stretch increase when you halved the distance?',
+      unit: '×',
+      answer: 8,
+      tolerance: 0.6,
+      because:
+        'Eight, which is two cubed. Halving again multiplies by eight again: your fourth reading, at a quarter of the Moon’s distance, should be about 64 times the lunar tide. Distance enters three times over, not twice: the tide goes as one divided by the separation cubed. That is why the transformed plot straightens, and it is why tidal effects are almost always negligible until something gets close, and then suddenly are not.',
+      tool: {
+        id: 'tide-strength',
+        values: { dist: 0.5, mass: 1 },
+        hide: ['mass'],
+        axis: 'distance',
+        title: 'The curve you measured',
+        note: 'The dot is your slider. Slide from 1.00 to 0.50 and watch the readout, if you want to check the factor directly.',
+      },
+    },
+
+    {
+      type: 'read',
+      title: 'The relationship, written down',
+      body: `You have measured it, so here it is in symbols. You are not being
+             asked to derive it or to calculate with it, only to recognise the
+             three things in it.
+             \n\nFor a body of radius <em>R</em> sitting a distance <em>d</em>
+             from a companion of mass <em>M</em>, the tidal stretch across it is
+             about
+             \n\n<strong>2 G M R ÷ d³</strong>
+             \n\nRead it as three statements you already believe:
+             \n\n<strong>M on top.</strong> A heavier companion stretches you
+             harder. You will test this next.
+             \n\n<strong>R on top.</strong> A bigger object gets stretched
+             harder, because its two ends are further apart and so differ more.
+             A pebble feels essentially no tide at all.
+             \n\n<strong>d³ underneath.</strong> The one you just measured.
+             Distance matters far more than anything else in the expression.
+             \n\nOne honest caveat: this is an approximation, good when the
+             object is small compared with its distance. It is excellent for the
+             Moon on the Earth, and it gets worse as a body closes in on
+             something. Later in this lesson, where that matters, the exact
+             difference is used instead.`,
+      tip: 'The 2 is not important. The three letters and where they sit are.',
+    },
+
+    {
+      type: 'predict',
+      title: 'Now change the companion',
+      body: `Put the distance back where it started and change the other thing
+             instead. Commit before you measure.
+             \n\nSuppose the Moon kept its orbit exactly but was twice as
+             massive.`,
+      prompt: 'At twice the mass and the same distance, the tide would be…',
+      options: [
+        'unchanged',
+        'twice as strong',
+        'four times as strong',
+        'eight times as strong',
+      ],
+      answer: 1,
+      because:
+        'Twice as strong. Mass enters once, plainly: double it and the tide doubles. This is much less dramatic than the distance relationship, and that contrast is the point of the next few screens. Where a companion sits matters enormously more than how heavy it is.',
+    },
+
+    {
+      type: 'measure',
+      title: 'Three masses',
+      body: `The distance is now held at the Moon’s real distance and the mass
+             slider is yours. Set it to each value in turn and record what the
+             panel reads.
+             \n\nThree points are plenty here, because you are looking for a
+             straight line and three points either make one or do not.`,
+      fields: [
+        { id: 'm1', label: 'Mass 1', unit: '× Moon’s', hint: '1' },
+        {
+          id: 's1',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '1',
+        },
+        { id: 'm2', label: 'Mass 2', unit: '× Moon’s', hint: '2' },
+        {
+          id: 's2',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '2',
+        },
+        { id: 'm3', label: 'Mass 3', unit: '× Moon’s', hint: '4' },
+        {
+          id: 's3',
+          label: 'Tidal stretch there',
+          unit: '× lunar tide',
+          hint: '4',
+        },
+      ],
+      validate: v => {
+        const rows = [
+          [v.m1, v.s1],
+          [v.m2, v.s2],
+          [v.m3, v.s3],
+        ].filter(([m, s]) => Number.isFinite(m) && Number.isFinite(s));
+        if (rows.length < 2) return null;
+        if (rows.some(([m, s]) => m <= 0 || s <= 0)) {
+          return {
+            level: 'error',
+            message: 'Masses and tidal strengths are both positive numbers.',
+          };
+        }
+        const ratios = rows.map(([m, s]) => s / m);
+        const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+        const spread = (Math.max(...ratios) - Math.min(...ratios)) / mean;
+        if (spread > 0.25) {
+          return {
+            level: 'warn',
+            message:
+              'Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for.',
+          };
+        }
+        return {
+          level: 'ok',
+          message: `Stretch ÷ mass is ${mean.toFixed(2)} for every row you filled in. A constant ratio is what a straight line through the corner looks like in a table.`,
+        };
+      },
+      plot: {
+        title: 'Your three readings',
+        xLabel: 'companion mass  (× Moon’s)',
+        yLabel: 'stretch  (× lunar tide)',
+        height: 200,
+        points: v => [
+          { x: v.m1, y: v.s1, label: '1' },
+          { x: v.m2, y: v.s2, label: '2' },
+          { x: v.m3, y: v.s3, label: '3' },
+        ],
+        note: `No transformation offered this time, and none needed: if these
+               three land on a straight line through the corner as they are,
+               the relationship is as simple as a relationship gets.`,
+      },
+      tool: {
+        id: 'tide-strength',
+        values: { dist: 1, mass: 1 },
+        hide: ['dist'],
+        axis: 'mass',
+        title: 'Read each mass here',
+        note: 'Set the slider to 1, then 2, then 4 times the Moon’s mass. The distance is held at the Moon’s real distance.',
+      },
+      tip: 'If your three points make a straight line that goes through the corner of the graph rather than starting partway up an axis, the two quantities are simply proportional.',
+    },
+
+    {
+      type: 'question',
+      title: 'What the mass graph says',
+      kind: 'choice',
+      body: `Compare the two graphs you have now made. One of them bent away
+             from the axis so steeply that it needed re-plotting before it would
+             straighten. The other did not need anything.`,
+      prompt: 'The tidal stretch a companion raises is…',
+      options: [
+        'proportional to its mass: double the mass, double the tide',
+        'proportional to the square of its mass',
+        'proportional to the cube of its mass, like the distance relationship',
+        'independent of its mass once it is far enough away',
+      ],
+      answer: 0,
+      because:
+        'Simply proportional. Both relationships are now in your own numbers: one power of mass on top, three powers of distance underneath. Which is why the answer to "what raises the biggest tide" is almost never "the heaviest thing nearby".',
+    },
+
+    {
+      type: 'predict',
+      title: 'The Sun against the Moon',
+      body: `Two bodies raise measurable tides on the Earth, and they are wildly
+             mismatched.
+             \n\nThe <strong>Sun</strong> is about 27 million times the Moon’s
+             mass, and about 390 times further away.
+             \n\nYou now know both relationships. One power of mass, three
+             powers of distance. Work it out or guess it, but commit.`,
+      prompt: 'The bigger ocean tide on Earth is raised by…',
+      options: [
+        'the Sun, by an enormous margin, because of its mass',
+        'the Sun, but only slightly',
+        'the Moon, by about a factor of two',
+        'the Moon, by a factor of several hundred',
+      ],
+      answer: 2,
+      because:
+        'The Moon, by a bit more than two. The Sun brings 27 million times the mass, which helps it by a factor of 27 million. It is 390 times further away, which costs it 390 cubed, or about 59 million. The distance term wins, and it wins by roughly the factor of two you are about to see measured. This is the cleanest demonstration in astronomy that a tide is not the same thing as a pull: the Sun pulls the Earth about 180 times harder than the Moon does, and raises less than half the tide.',
+    },
+
+    {
+      type: 'read',
+      title: 'Seven real tides on one scale',
+      body: `The panel lists seven real pairings, with the tide the first body
+             raises on the second. They span fourteen powers of ten, so the bars
+             are drawn on a scale where every gridline is ten times the one
+             before: bar length counts zeros, not units.
+             \n\nMove the highlight slider through them and read each one off.
+             \n\n<strong>Moon and Sun on the Earth.</strong> Your prediction,
+             measured: the Moon wins by 2.2. When the Sun and Moon line up, at
+             new and full moon, the two tides add and you get the unusually
+             large <em>spring</em> tides; when they are at right angles the
+             solar tide partly cancels the lunar one and you get the small
+             <em>neap</em> tides. Coastal tide tables are that sum, plus a great
+             deal of local coastline.
+             \n\n<strong>The Earth on the Moon.</strong> Same separation, other
+             direction, and 22 times stronger, because the Earth is 81 times the
+             Moon’s mass. Same physics, read backwards.
+             \n\n<strong>Jupiter on Io.</strong> Five thousand times the lunar
+             tide. Io is squeezed and released as its slightly non-circular
+             orbit carries it in and out, and the friction from that kneading
+             keeps its interior molten. It is the most volcanically active body
+             in the Solar System, and it is heated by a difference in gravity.`,
+      tool: {
+        id: 'tide-compare',
+        values: { which: 0 },
+        title: 'Seven real tides',
+        note: 'Slide the highlight through all seven. The bottom two are the same black hole at two different distances, which is the distance relationship doing its work again.',
+      },
+      tip: 'The last two rows differ only in separation: fifty times closer, and the tide is over a hundred thousand times larger. Fifty cubed is 125,000.',
+    },
+
+    {
+      type: 'read',
+      title: 'Locking, and what this simulation does not do',
+      body: `You always see the same face of the Moon. That is not a
+             coincidence and not a coincidence of viewing angle: the Moon turns
+             on its axis exactly once per orbit. It is <strong>tidally
+             locked</strong>.
+             \n\nThe mechanism, in outline. The Earth raises a tidal bulge on
+             the Moon, as you just measured. If the Moon spins at a rate other
+             than its orbital rate, that bulge is dragged slightly out of line
+             with the Earth, and the Earth’s pull on the misaligned bulge acts
+             as a brake. The braking continues until the spin matches the orbit
+             and the bulge sits still, at which point there is nothing left to
+             drag. The same thing is happening to the Earth, more slowly: our
+             day is lengthening by about 1.7 milliseconds per century, and the
+             Moon is receding by 3.8 cm a year.
+             \n\n<strong>An honest note about the model.</strong> This is a
+             conceptual account, not something happening on your screen.
+             Gravitas is a Newtonian N-body simulation: it moves point masses
+             under mutual gravity. It does not deform bodies, does not model the
+             internal friction that makes tidal braking work, and does not
+             evolve rotation from tidal torques. Every tidal number in this
+             lesson is computed from the positions and masses in the picture,
+             which is legitimate, and the deformation you are shown is drawn
+             rather than simulated. That distinction is worth keeping.`,
+      tip: 'Tidal locking is the normal outcome, not the exception: most large moons in the Solar System are locked to their planets, and Pluto and Charon are locked to each other.',
+    },
+
+    {
+      type: 'question',
+      title: 'Say it in your own words',
+      kind: 'short',
+      body: `Halfway. Before the lesson moves from tides that move water to
+             tides that destroy things, put the core idea into a sentence of
+             your own.`,
+      prompt:
+        'Why does the Earth have a high tide on the side facing away from the Moon? Answer in one or two sentences, and be careful about what is doing what to what.',
+      rubric:
+        'The far side is pulled toward the Moon more weakly than the Earth’s centre is, because it is further away. The whole planet is accelerated at the rate its centre feels, so relative to that shared motion the far side lags behind, producing a bulge pointing away from the Moon. Full credit requires the comparison with the centre, or an equivalent statement that a tide is a difference. Common wrong answers to watch for and not credit: that the Moon pushes the far side; that gravity reverses there; that the Earth’s rotation flings the water outward; that the water displaced from the near side has to go somewhere. Partial credit for "the far side is pulled less" without saying less than what.',
+    },
+
+    {
+      type: 'predict',
+      title: 'What holds a moon together?',
+      body: `Everything so far has been about stretching. Nothing has broken.
+             \n\nIf a tide pulls the two ends of a body in opposite directions,
+             something must be resisting, or every moon in the Solar System
+             would already have come apart. For a body of any decent size,
+             what resists is the body’s own gravity: every part of it pulls on
+             every other part, holding it in a ball.
+             \n\nSo there are two accelerations at the surface of a moon,
+             pointing opposite ways, and which one is bigger decides everything.`,
+      prompt: 'A moon will be pulled apart by tides when…',
+      options: [
+        'the planet’s gravity at the moon exceeds the moon’s own surface gravity',
+        'the tidal stretch across the moon exceeds the moon’s own surface gravity',
+        'the moon’s orbital speed exceeds its escape speed',
+        'the moon passes inside the planet’s atmosphere',
+      ],
+      answer: 1,
+      because:
+        'The stretch has to beat the grip. Note carefully what the first option compares: the planet’s pull on the moon is always vastly bigger than the moon’s own surface gravity, for every moon that exists, and none of them are coming apart. It is the pull on the moon that keeps it in orbit; it is the difference across the moon that tries to take it apart. The comparison that matters is the second one, and the next screen draws it as two bars.',
+    },
+
+    {
+      type: 'explore',
+      title: 'Stretch against grip',
+      body: `The panel takes a body the size of the Moon and lets you walk it in
+             toward the Earth. Two bars, measured at the body’s surface:
+             \n\n<strong>Green</strong> is its own gravity, holding it together.
+             It does not change as you move the body, because it depends only on
+             the body itself.
+             \n\n<strong>Red</strong> is the tidal stretch trying to pull its
+             ends apart. It grows as one over the distance cubed, so it climbs
+             very fast as you bring the body in.
+             \n\nSomewhere the red bar catches the green one. Find it.
+             \n\nThe Moon really sits at about sixty Earth radii, far off the
+             right-hand end of this slider. You are bringing it in to somewhere
+             it has never been.`,
+      checklist: [
+        'Start at 5 Earth radii and note that the green bar dwarfs the red one',
+        'Bring the distance slider down slowly and watch only the red bar',
+        'Find the distance where the two bars are the same length',
+        'Read the verdict line, and the distance the panel reports underneath',
+        'Press Comet ice and find the crossing point again',
+        'Press Iron and find it a third time',
+      ],
+      tool: {
+        id: 'tide-balance',
+        values: { dist: 5, density: 3300 },
+        title: 'Its own gravity, against the tide',
+        note: 'Green is grip, red is stretch. The marker on the ruler at the bottom is where you have put the body; the tick is where the two become equal.',
+      },
+      tip: 'The green bar never moves when you change the distance, and the red bar never moves when you change the density. Each control drives exactly one bar, which makes the balance easy to reason about.',
+    },
+
+    {
+      type: 'question',
+      title: 'Where the balance tips',
+      kind: 'numeric',
+      body: `Set the density back to the Moon’s own, 3 300 kg/m³, and read the
+             distance at which the two bars become equal. The panel reports it
+             in Earth radii, on the line that says the two are equal.`,
+      prompt:
+        'For a body of the Moon’s density, the stretch equals the grip at a distance of about…',
+      unit: 'Earth radii',
+      answer: 1.5,
+      tolerance: 0.2,
+      because:
+        'About 1.5 Earth radii from the Earth’s centre, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the Roche limit is defined by exactly that balance, and the textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
+      tool: {
+        id: 'tide-balance',
+        values: { dist: 3, density: 3300 },
+        hide: ['density'],
+        title: 'Read the crossing distance',
+        note: 'The density is held at the Moon’s own for this question. Slide the distance until the two bars match, or just read the line that says where they are equal.',
+      },
+    },
+
+    {
+      type: 'read',
+      title: 'The Roche limit, and why there are two of them',
+      body: `The picture moves to Saturn, which is where this idea earns its
+             keep. The moon you are moving is drawn at the distance your slider
+             sets, and two arcs mark two different Roche limits.
+             \n\nWhy two? Because a real body does not stay a perfect ball as
+             the tide gets hold of it. It stretches, which puts its ends further
+             apart, which gives the tide a longer lever, which stretches it
+             more. A body with no strength at all, free to deform, therefore
+             comes apart <em>further out</em> than a body that keeps its shape
+             does. The outer arc is the no-strength limit; the inner one is the
+             keeps-its-shape limit. Between them is a genuine grey band, not a
+             rounding error.
+             \n\nAnd now look at the rings. Saturn’s ring system ends abruptly
+             at 136,780 km, and the innermost round moon, Mimas, orbits well
+             outside that. Set the density to porous ice, which is what ring
+             particles actually are, and compare the outer arc with where the
+             rings stop. The rings sit inside the limit; the moons sit outside
+             it. Saturn has a hundred thousand kilometres of debris where a moon
+             cannot assemble, and a moon at the first distance where one can.`,
+      tool: {
+        id: 'roche-model',
+        values: { dist: 3.2, density: 600 },
+        title: 'A moon brought in toward Saturn',
+        note: 'Distances are in Saturn radii. The readout gives both limits, the A ring’s outer edge, and Mimas, so you can compare all four numbers directly.',
+      },
+      tip: 'The drawing of a stretched or shattered moon is exactly that: a drawing of the outcome. Gravitas does not compute fluid flow, and nothing in this panel is a hydrodynamic simulation.',
+    },
+
+    {
+      type: 'explore',
+      title: 'Change what the moon is made of',
+      body: `Leave the distance alone for a moment and change the material
+             instead. Watch the two arcs move.
+             \n\nThis is the point of the screen, and it is the thing most
+             often got wrong: <strong>a Roche limit is not one distance.</strong>
+             There is no radius around Saturn inside which everything shatters.
+             There is a different limit for every body, and it depends on what
+             that body is made of and on the mass of what it is falling toward.
+             \n\nDenser bodies grip themselves harder for their size, so their
+             limits sit closer in. Push the density high enough and the
+             inner arc disappears inside Saturn itself, which is the honest
+             answer that a dense enough body could orbit inside Saturn’s cloud
+             tops without the tide troubling it at all.`,
+      checklist: [
+        'Press Porous ice and note where the outer arc sits',
+        'Press Solid ice and watch both arcs move inward',
+        'Press Rock, then Iron, and watch them keep moving inward',
+        'Find a density at which the inner arc vanishes inside Saturn',
+        'Put the density back to porous ice and bring the distance slider in until the moon comes apart',
+      ],
+      tool: {
+        id: 'roche-model',
+        values: { dist: 3.2, density: 600 },
+        title: 'Same planet, different moons',
+        note: 'Only the density is changing. Saturn’s mass is fixed and so is the moon’s size, and the arcs still move a long way.',
+      },
+      tip: 'The moon’s size does not appear in the answer at all. A 5 km icy chunk and a 500 km icy moon have the same Roche limit around Saturn, because making the body bigger increases the stretch and its own grip by the same factor.',
+    },
+
+    {
+      type: 'question',
+      title: 'Not one distance',
+      kind: 'choice',
+      body: `You have now moved the arcs around by changing one property of the
+             infalling body, without touching the planet at all.`,
+      prompt: 'A Roche limit is set by…',
+      options: [
+        'the mass of the planet alone, so it is a fixed radius around each planet',
+        'the mass of the planet and the density of the body falling in',
+        'the size of the body falling in, with bigger bodies breaking further out',
+        'the orbital speed of the body falling in',
+      ],
+      answer: 1,
+      because:
+        'The planet’s mass and the infalling body’s density. Its size cancels out entirely, which surprises most people: doubling a moon’s radius doubles the stretch across it and also doubles its own surface gravity, so the balance is untouched. A single "the Roche limit of Saturn" is therefore an incomplete statement. It has to be the Roche limit of Saturn for something.',
+    },
+
+    {
+      type: 'read',
+      title: 'What a Roche limit does not tell you',
+      body: `Four qualifications, because this is the idea in the lesson most
+             likely to be over-applied.
+             \n\n<strong>It is about self-gravity, not glue.</strong> The whole
+             argument compares the tide against a body’s own gravity. Small
+             bodies are held together mostly by material strength instead: a
+             one-metre rock is not going to be pulled apart by Saturn at any
+             distance, because the forces holding a rock together have nothing
+             to do with its gravity. The limit applies to bodies big enough that
+             gravity is what is holding them.
+             \n\n<strong>Crossing it is not an explosion.</strong> Nothing
+             detonates at a radius. A body brought inside its limit loses
+             material from its ends first, and disruption takes time: a passage
+             through, on an orbit that comes out again, may leave a body
+             stretched and cracked rather than destroyed.
+             \n\n<strong>Spin and shape matter.</strong> The two limits here
+             bracket the real answer for a body that is round and not spinning
+             fast. A rapidly rotating or elongated body behaves differently.
+             \n\n<strong>Comet Shoemaker-Levy 9 is what it actually looks
+             like.</strong> In July 1992 it passed about 40,000 km above
+             Jupiter’s cloud tops, inside its Roche limit, and did not vanish.
+             It came apart into a line of roughly twenty fragments, strung out
+             along its orbit, which then hit Jupiter one after another in 1994.
+             A string of pieces, not a puff of dust.`,
+      tip: 'Rubble piles are the interesting case: many asteroids are loose aggregates held together by little more than their own gravity, and those really do behave the way this argument predicts.',
+    },
+
+    {
+      type: 'explore',
+      title: 'The extreme case, running live',
+      body: `The simulation has switched to a scenario built around a
+             supermassive black hole with stars and planets falling past it.
+             Watch for a while. Bodies that pass close enough are stripped:
+             material is pulled off them and drawn out into streams that wind
+             around the hole.
+             \n\n<strong>Read what you are seeing carefully.</strong> Gravitas
+             moves point masses under Newtonian gravity. When a body passes
+             inside a disruption radius the simulation sheds debris particles
+             from it and lets those particles orbit on their own, which is a
+             reasonable cartoon of tidal stripping and is not a calculation of
+             it. There is no fluid in this model, no pressure, no shock heating,
+             and no radiation. The stream you see is a plausible picture of the
+             geometry, produced by a rule rather than by physics.
+             \n\nWhat is real in the picture is the gravity: the orbits, the
+             fact that closer passages do more damage, and the fact that the
+             debris ends up on a spread of different orbits because different
+             parts of the body were at different distances when it came apart.
+             That last one is the same subtraction you started the lesson with.`,
+      checklist: [
+        'Watch one body make a close pass and follow what comes off it',
+        'Notice that bodies passing further out are left alone',
+        'Follow a debris stream and notice it spreads out along the orbit rather than staying in a clump',
+        'Look for material that ends up bound to the hole and material that leaves',
+      ],
+      setup: TIDES_DISRUPTION,
+      tip: 'Debris spreading along the orbit rather than falling in together is a real feature of tidal disruption: the near end of the object was on a slightly tighter orbit than the far end, so the pieces have slightly different periods.',
+      probe: ctx => {
+        const bodies = ctx.bodies || [];
+        return [
+          { label: 'Bodies being tracked', value: String(bodies.length) },
+          {
+            label: 'What is simulated',
+            value: 'Newtonian gravity between point masses',
+          },
+          { label: 'What is not', value: 'Fluid flow, pressure, radiation' },
+        ];
+      },
+    },
+
+    {
+      type: 'read',
+      title: 'A star, and a black hole that is too big',
+      body: `Finish with the extreme case, done properly with numbers instead of
+             pictures.
+             \n\nDrop a Sun-like star toward a black hole. Two distances matter.
+             The <strong>tidal radius</strong> is where the stretch across the
+             star beats the star’s own gravity: the same balance you found for
+             the Moon, with the same arithmetic. The <strong>event
+             horizon</strong> is where the star disappears from view for good.
+             \n\nSlide the mass up from ten solar masses and watch the two
+             circles close on each other. For a stellar-mass hole the star is
+             shredded tens of thousands of horizon radii out. For Sagittarius A*
+             at the centre of our galaxy it is still shredded outside, by a
+             factor of about eleven, and astronomers do see the resulting
+             flares. Keep going and the two meet at around 160 million solar
+             masses, and beyond that the tidal radius is <em>inside</em> the
+             horizon: the star crosses whole and there is nothing for anyone
+             outside to see.
+             \n\nThat is a real and slightly perverse result. The most massive
+             black holes are the ones least able to tear a star apart where you
+             could watch, because horizon size grows in proportion to mass while
+             tidal radius grows only as the cube root of it.
+             \n\n<strong>The approximation, stated.</strong> Both radii here are
+             Newtonian estimates, and the tidal radius uses the same
+             self-gravity balance as the rest of the lesson. Real tidal
+             disruption events are hydrodynamic: the star is compressed as well
+             as stretched, the debris shocks and radiates, and general
+             relativity matters near the horizon. None of that is modelled here
+             or anywhere in Gravitas. What survives the approximation is the
+             comparison of two lengths, and that comparison is the reason the
+             flares are seen where they are seen.`,
+      tool: {
+        id: 'tide-disrupt',
+        values: { logm: 1 },
+        title: 'Tidal radius against event horizon',
+        note: 'The dashed circle is where the star comes apart; the filled disc is the horizon. Both are drawn on a scale that counts zeros, because at ten solar masses they differ by a factor of sixty thousand.',
+      },
+      tip: 'The three preset buttons take you to a stellar-mass hole, to Sagittarius A*, and to a billion-solar-mass giant where the star is swallowed whole.',
+    },
+
+    {
+      type: 'question',
+      title: 'The whole lesson in three sentences',
+      kind: 'short',
+      body: `You have gone from a beach to a black hole using one idea and two
+             measured relationships. Write it down.`,
+      prompt:
+        'Explain what causes tides, what makes them stronger, and how they can destroy an object. Three sentences is plenty.',
+      rubric:
+        'Expect three components. (1) Tides are caused by gravity being unequal across an extended object: the difference between the pull at a point and the pull on the centre, not the strength of gravity itself. (2) They get stronger with the companion’s mass, in proportion, and far more sharply with decreasing separation, as one over separation cubed. (3) A body is destroyed when the tidal stretch across it exceeds its own surface gravity, which happens inside its Roche limit, and that limit depends on the two bodies involved rather than being one universal distance. Credit any correct statement of the inverse-cube relationship however phrased. Do not require a formula. Deduct for "tides are caused by strong gravity", for the far-side bulge being pushed or flung outward, or for a Roche limit described as a fixed radius around a planet.',
+    },
+
+    {
+      type: 'read',
+      title: 'What you worked out',
+      body: `<strong>A tide is a difference.</strong> Not a pull. Take the pull
+             on the centre away from the pull where you are, and what is left is
+             what deforms things. It is the reason there are two bulges and not
+             one, and the reason the far side bulges without anything pushing it.
+             \n\n<strong>Distance dominates.</strong> One power of mass, three
+             powers of separation. This is why the Moon beats the Sun, why the
+             last two rows of the comparison chart differ by five orders of
+             magnitude, and why tidal effects are usually irrelevant right up
+             until they are catastrophic.
+             \n\n<strong>Size matters too.</strong> A bigger object has ends
+             further apart, so it feels a bigger difference. You feel essentially
+             no tide. The Earth feels a few metres of one.
+             \n\n<strong>Breaking is a competition.</strong> Stretch against the
+             body’s own grip. Inside the Roche limit the stretch wins, and that
+             limit is different for every pair of objects, because it depends on
+             what is falling in as well as on what it is falling toward.
+             \n\n<strong>Same mechanism, fourteen orders of magnitude.</strong>
+             The sea coming up a beach, Io kept molten, the Moon showing one
+             face, Saturn’s rings ending where they do, a comet strung out into
+             fragments, and a star pulled into a stream. One subtraction.
+             \n\nAnd one sentence to keep: <em>tides happen because gravity is
+             not equally strong across an extended object; the difference grows
+             sharply as objects get closer, and in extreme cases it overcomes
+             the object’s own gravity and tears it apart.</em>`,
+      tip: 'The next time you see a tide table, notice that it lists two highs and two lows per day, and that they are largest around new and full moon. Both of those are things you can now explain.',
+    },
+  ],
+};
+
+const RETROGRADE = {
+  id: 'retrograde-motion',
+  thumbnail: 'images/scenarios/retrograde-mars.webp',
+  title: 'Why Mars Goes Backwards',
+  subtitle: 'Change the frame, and fourteen centuries of epicycles fall away',
+  duration: '35-45 min',
+  level: 'Introductory astronomy',
+  lock: { placement: true, inspector: false },
+  summary:
+    'Twice every three years Mars stops in the sky, reverses, and loops back on itself. Watched from outside, nothing of the sort happens: Earth and Mars both go round the Sun the same way and never turn back. You will measure both orbits, predict what Mars does when seen from Earth, then switch the reference frame and watch the loop draw itself. Nothing in the physics changes when you do. That is the entire point, and it is what took astronomy from Ptolemy to Copernicus.',
+  objectives: [
+    'Describe retrograde motion as an observation, separately from any explanation of it',
+    'Compute a synodic period from two orbital periods and say what it counts',
+    'Predict and then verify that a retrograde loop happens at opposition',
+    'Explain retrograde motion as a consequence of the observer’s own motion, without invoking anything the planet does',
+    'Say what a reference frame is, and what changes and what does not when you switch one',
+    'State what the retrograde loop does and does not establish about which body is at the center',
+  ],
+  steps: [
+    {
+      type: 'read',
+      title: 'The wandering stars',
+      body: `Almost everything in the night sky moves together. The stars turn
+             overhead as one rigid pattern, night after night, and the patterns
+             themselves do not change within a human lifetime.
+             \n\nFive points of light do not obey. They drift slowly through the
+             fixed stars along their own paths, and the Greeks called them
+             <em>planētai</em>, the wanderers. Most of the time each one creeps
+             steadily eastward against the stars.
+             \n\nAnd then, at intervals, one of them stops. It hangs still for a
+             few days, reverses, and travels westward for weeks or months. Then
+             it stops again and resumes its eastward march, having traced a loop
+             or a zigzag against the background. Mars does this once every 780
+             days, and the reversal lasts about ten weeks.
+             \n\nThis is not a subtle effect visible only to specialists. Anyone
+             who watches Mars for a few months with the naked eye can see it, and
+             every civilization that kept sky records noticed it.`,
+      quote: {
+        text: 'The planets appear sometimes to move forward, sometimes backward, and sometimes to stand still.',
+        by: 'Claudius Ptolemy, Almagest, c. 150 CE',
+      },
+      tip: 'This lesson leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
+      setup: {
+        scenario: 'Retrograde Mars',
+        seed: 'retrograde-lab',
+        camera: { zoom: 1.6, pan: { x: 0, y: 0 } },
+        paused: false,
+      },
+    },
+    {
+      type: 'read',
+      title: 'What you are looking at',
+      body: `Three bodies, and nothing else. The <strong>Sun</strong> at the
+             center, <strong>Earth</strong> in blue on the inner orbit, and
+             <strong>Mars</strong> in orange on the outer one.
+             \n\nThe distances are real: Earth at 1.00 AU, Mars at 1.52. The
+             masses are real, so the periods are real too, and the whole system
+             is running about four hundred thousand times faster than the sky
+             does. A year of Earth's takes a few seconds here.
+             \n\nWatch for a moment. Both planets go round the Sun the same way,
+             counterclockwise, and neither ever slows, stops or turns back. Whatever
+             makes Mars appear to reverse, it is not something Mars does.`,
+      tip: 'If the trails are not showing, press the reset button beside the progress bar to rebuild the system.',
+    },
+    {
+      type: 'read',
+      title: 'Against the fixed stars',
+      body: `Before you measure anything, be clear about what the measurement is.
+             \n\nAn ancient astronomer had no distances. Nobody knew how far away
+             Mars was, and estimates were wrong by orders of magnitude until the
+             seventeenth century. What could be measured, and measured well, was
+             a <em>direction</em>: which way Mars lay, recorded against the
+             pattern of stars behind it.
+             \n\nSo retrograde motion is a statement about one number, the
+             direction to the planet, changing the wrong way over weeks. The
+             loop that appears in a modern diagram is that direction plotted
+             against time, not a path anyone ever saw traced out.
+             \n\nGravitas gives you the same number and a distance as well, which
+             is more than any observer had until radar. The direction is the one
+             to watch.`,
+    },
+    {
+      type: 'explore',
+      title: 'Watch from outside first',
+      body: `Before changing anything, spend a moment on the view you already
+             have. This is the God's-eye view no observer has ever had: outside
+             the system, looking down on it.
+             \n\nWatch both planets go round. Click each one and read its speed.
+             Nothing here reverses, hesitates or loops.`,
+      checklist: [
+        'Earth goes counterclockwise around the Sun, and never turns back',
+        'Mars goes counterclockwise too, and never turns back',
+        'Earth completes a lap in noticeably less time than Mars does',
+        'Watch Earth catch up with Mars and pass it on the inside',
+      ],
+      probe: ctx => {
+        const rows = [];
+        for (const name of ['Earth', 'Mars']) {
+          const b = ctx.find(name);
+          rows.push({
+            label: `${name}: speed`,
+            value: b ? ctx.speed(Math.hypot(b.vel.x, b.vel.y)) : '-',
+          });
+        }
+        rows.push({ label: 'Day', value: ctx.days().toFixed(0) });
+        return rows;
+      },
+    },
+    {
+      type: 'measure',
+      title: 'The two orbits',
+      body: `Click <strong>Earth</strong> and read its orbital period from the
+             inspector, then click <strong>Mars</strong> and read its. The
+             inspector reports the period of the orbit each body is actually on,
+             computed from its live position and velocity.
+             \n\nWhile you are there, record how far each one is from the Sun.`,
+      fields: [
+        { id: 'earth_a', label: 'Earth: distance from the Sun', unit: 'AU' },
+        { id: 'mars_a', label: 'Mars: distance from the Sun', unit: 'AU' },
+        { id: 'earth_P', label: 'Earth: orbital period', unit: 'days' },
+        { id: 'mars_P', label: 'Mars: orbital period', unit: 'days' },
+      ],
+      probe: ctx => {
+        const rows = [];
+        for (const name of ['Earth', 'Mars']) {
+          const b = ctx.find(name);
+          if (!b) {
+            rows.push({ label: name, value: 'not found' });
+            continue;
+          }
+          const el = ctx.elements(b);
+          rows.push({
+            label: `${name}: distance from the Sun`,
+            value: el ? ctx.distance(el.semiMajorAxis) : '-',
+          });
+          rows.push({
+            label: `${name}: period`,
+            value: el ? ctx.time(el.period) : '-',
+          });
+        }
+        return rows;
+      },
+    },
+    {
+      type: 'question',
+      title: 'Which one is faster?',
+      kind: 'choice',
+      body: `You have two periods and two distances. Kepler's third law relates
+             them, but you do not need it here: you can read the answer straight
+             off the numbers you just wrote down.`,
+      prompt: 'Going round the Sun, Earth…',
+      options: [
+        'completes an orbit in less time than Mars, so it is going round faster',
+        'completes an orbit in more time than Mars, because it has further to go',
+        'goes round in the same time as Mars, since both orbit the same Sun',
+        'goes round faster only when it is closer to Mars',
+      ],
+      answer: 0,
+      because:
+        'Earth takes 365 days and Mars 687, so Earth laps the Sun nearly twice for every one lap of Mars. That is the whole mechanism of retrograde motion, and you have already measured it. The inner planet is on a shorter track and it also moves faster along it: both effects run the same way, which is what Kepler’s third law says.',
+    },
+    {
+      type: 'measure',
+      title: 'How fast each one goes round',
+      body: `A period is awkward to compare directly. Turn each one into an
+             angular speed instead: a full lap is 360°, so a planet covers
+             360 ÷ P degrees every day.
+             \n\nUse the two periods you just measured.`,
+      fields: [
+        {
+          id: 'earth_w',
+          label: 'Earth: degrees per day',
+          unit: '°/day',
+          compute: v => 360 / v.earth_P,
+        },
+        {
+          id: 'mars_w',
+          label: 'Mars: degrees per day',
+          unit: '°/day',
+          compute: v => 360 / v.mars_P,
+        },
+        {
+          id: 'gain_w',
+          label: 'Degrees Earth gains on Mars each day',
+          unit: '°/day',
+          compute: v => 360 / v.earth_P - 360 / v.mars_P,
+        },
+      ],
+      probe: ctx => {
+        const rows = [];
+        for (const name of ['Earth', 'Mars']) {
+          const b = ctx.find(name);
+          const el = b ? ctx.elements(b) : null;
+          rows.push({
+            label: `${name}: period`,
+            value: el ? ctx.time(el.period) : '-',
+          });
+        }
+        return rows;
+      },
+    },
+    {
+      type: 'read',
+      title: 'The synodic period',
+      body: `Two runners on a circular track, one faster than the other, meet
+             again at intervals. Not once per lap: the faster runner has to gain
+             a whole lap on the slower one.
+             \n\nFor planets this interval is called the <em>synodic period</em>,
+             and it is the time between one alignment of Sun, Earth and Mars and
+             the next. Because it counts laps gained rather than laps run, it is
+             longer than either planet's own year.
+             \n\nIf the faster planet goes round in <em>P</em>₁ and the slower in
+             <em>P</em>₂, then in one synodic period <em>S</em> the fast one
+             completes exactly one more lap than the slow one:
+             \n\n<strong>1/S = 1/P₁ − 1/P₂</strong>
+             \n\nThe alignment that matters here is <em>opposition</em>: Earth
+             directly between the Sun and Mars, with Mars on the opposite side of
+             our sky from the Sun. It is also when Mars is closest to us and
+             brightest.`,
+    },
+    {
+      type: 'question',
+      title: 'How often does Earth catch up?',
+      kind: 'numeric',
+      body: `Use your two measured periods in 1/S = 1/P₁ − 1/P₂, with P₁ the
+             shorter one. Work in days.
+             \n\nWith 365 and 687 the subtraction gives 1/S = 0.00274 − 0.00146 =
+             0.00128 per day.`,
+      prompt: 'How many days between one opposition of Mars and the next?',
+      unit: 'days',
+      answer: 780,
+      tolerance: 60,
+      because:
+        'S = 780 days, about two years and seven weeks. That is why Mars is well placed for observing roughly every other year rather than every year: Earth needs 780 days to gain a full lap on it. Venus, being much faster, comes round to the same alignment every 584 days; Jupiter, being much slower, every 399, barely more than an Earth year, because Jupiter has hardly moved while Earth goes round.',
+    },
+    {
+      type: 'question',
+      title: 'A lap gained',
+      kind: 'numeric',
+      body: `You have the rate at which Earth gains on Mars, in degrees per day.
+             A full lap gained is 360°.
+             \n\nDivide one by the other and you have the synodic period again,
+             by a different route. It should agree with what you got from the
+             reciprocals.`,
+      prompt:
+        'At about 0.46° gained per day, how many days to gain a full 360°?',
+      unit: 'days',
+      answer: 783,
+      tolerance: 60,
+      because:
+        'The same 780 days, reached without touching a reciprocal. This is worth doing twice because the reciprocal formula is easy to apply and hard to feel: what it counts is laps gained, and gaining a lap at half a degree a day takes a little over two years. Every retrograde loop of Mars is one lap gained.',
+    },
+    {
+      type: 'predict',
+      title: 'Before you look',
+      body: `You are about to change what the view is measured against. Right
+             now every position on screen is given relative to the scenario's own
+             coordinates, which happen to have the Sun sitting still at the
+             middle. You are going to re-express the same simulation with
+             <strong>Earth</strong> sitting still instead.
+             \n\nNothing about the physics will change. No force is added, no
+             orbit is altered, no body is moved. Only the question "measured
+             against what?" gets a different answer.
+             \n\nCommit to a prediction first.`,
+      prompt: 'Seen from Earth, Mars’s path will…',
+      options: [
+        'still be a circle around the Sun, just drawn off-center',
+        'be a loop that doubles back on itself at intervals',
+        'be a straight line, since neither planet accelerates much',
+        'be unchanged, because changing the frame changes only the labels',
+      ],
+      answer: 1,
+      because:
+        'The path doubles back. Mars keeps moving steadily round the Sun the entire time, but Earth is moving too, and faster; near opposition Earth overtakes Mars on the inside and the direction from Earth to Mars swings backwards. The last option is the tempting one and it is half right: a frame change alters no physics. It does, however, change the path, because a path is a set of positions and positions are always measured against something.',
+    },
+    {
+      type: 'read',
+      title: 'Reference frames',
+      body: `A position is never a property of a body on its own. It is a
+             relationship between that body and something else, and the something
+             else is the <em>reference frame</em>.
+             \n\nYou change frames constantly without noticing. Walking down a
+             train carriage you move at about 1 m/s in the frame of the train and
+             at 55 m/s in the frame of the track. Both are correct. Neither is
+             more true than the other, and no experiment on the train can tell
+             you which one you are "really" doing.
+             \n\nGravitas lets you pick the frame. In the <strong>Tools</strong>
+             section of the right-hand panel there is a control marked
+             <strong>Frame</strong>, and the object inspector carries the same
+             switch under <strong>Overlays</strong>. Choosing a body puts that
+             body at rest and re-expresses everything else, trails included,
+             around it.
+             \n\nThe trails are the part worth watching. They are not slid across
+             the screen; they are redrawn as the path that frame would have seen,
+             using where the origin body was at the moment each point was
+             recorded.`,
+      tip: 'This is not the same as Follow Mode in Settings. Follow Mode moves the camera and leaves the drawing alone. Changing the frame changes the drawing.',
+    },
+    {
+      type: 'read',
+      title: 'What the trails are doing',
+      body: `One detail matters for trusting what you are about to see.
+             \n\nWhen you change the frame, the trails are not slid sideways
+             across the screen. Each point in a trail was recorded at a
+             particular moment, and each one is re-expressed against where the
+             origin body was <em>at that moment</em>. Sliding the whole drawing
+             would move it without changing its shape; this changes the shape,
+             because that is what a different observer would have drawn.
+             \n\nThe difference is exactly why Follow Mode, which does slide the
+             camera, never showed you a retrograde loop.
+             \n\nA point older than the origin body's own recorded history cannot
+             be re-expressed at all, and is not drawn. So a freshly rebuilt
+             system has no loop yet: the trail has to grow first.`,
+      tip: 'The trail here holds about 110 days of history, which is a little longer than a whole retrograde episode. That is deliberate: much shorter and the loop never closes.',
+    },
+    {
+      type: 'explore',
+      title: 'Put yourself on Earth',
+      body: `Click <strong>Earth</strong>, then switch its
+             <strong>Reference frame</strong> on in the inspector. Or use
+             <strong>Tools &gt; Frame</strong> and choose the selected object.
+             \n\nGive it half a minute. The trail has to redraw itself over a
+             good fraction of the 780 days you calculated before the loop
+             appears, and you may need to wait for Earth to come round to
+             opposition.`,
+      checklist: [
+        'Earth is now motionless at the middle of the view',
+        'The Sun is no longer at rest: it circles Earth once a year',
+        'Mars’s trail is no longer a circle round the Sun',
+        'Somewhere on Mars’s trail there is a cusp or a loop where it doubles back',
+      ],
+      probe: ctx => {
+        const frame = ctx.frame ? ctx.frame() : null;
+        if (!frame || frame.mode === 'world') {
+          return [
+            { label: 'Reference frame', value: 'World, not switched yet' },
+          ];
+        }
+        const mars = ctx.find('Mars');
+        const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
+        if (!seen) return [{ label: 'Reference frame', value: 'Earth' }];
+        return [
+          { label: 'Reference frame', value: 'Earth' },
+          {
+            label: 'Mars: distance from Earth',
+            value: ctx.distance(seen.separation),
+          },
+          {
+            label: 'Mars: direction from Earth',
+            value: `${seen.longitude.toFixed(1)}°`,
+          },
+        ];
+      },
+    },
+    {
+      type: 'read',
+      title: 'That is the observation',
+      body: `The loop on your screen is not a model of anything. It is what the
+             recorded positions say, re-expressed against a different origin, and
+             it is what people actually see when they watch Mars.
+             \n\nEvery point on that trail is a place Mars really was, in a
+             simulation where Mars never once slowed down or turned round. The
+             reversal is entirely a statement about where the observer was
+             standing.
+             \n\nNotice what did not change when you flipped the switch. The
+             orbital periods are the same. The distances from the Sun are the
+             same. Every force is the same. If you switch back to the world frame
+             the loop vanishes and the circles return, and switching frames again
+             brings it back. Nothing was created or destroyed; the same motion was
+             described twice.`,
+    },
+    {
+      type: 'measure',
+      title: 'Catch the reversal',
+      body: `The picture shows the loop; now put a number on it. With Earth's
+             frame still on and Mars selected, the inspector shows
+             <strong>Direction from Earth</strong> in degrees. That single number
+             is the observable: it is the direction you would point at, and the
+             thing an ancient astronomer recorded against the fixed stars.
+             \n\nLet it run and watch that number. Most of the time it climbs
+             steadily. Record it, wait, record it again, and keep going until you
+             catch a reading that is <em>lower</em> than the one before. Press
+             <strong>Space</strong> to pause when you want to read carefully.
+             \n\nThe day counter is on the timeline at the bottom of the screen.`,
+      fields: [
+        {
+          id: 'lon_a',
+          label: 'Direction from Earth, first reading',
+          unit: '°',
+        },
+        { id: 'day_a', label: 'Day of that reading', unit: 'days' },
+        {
+          id: 'lon_b',
+          label: 'Direction, a reading that went backwards',
+          unit: '°',
+        },
+        { id: 'day_b', label: 'Day of that reading', unit: 'days' },
+      ],
+      probe: ctx => {
+        const mars = ctx.find('Mars');
+        const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
+        if (!seen) return [{ label: 'Select Mars', value: '-' }];
+        return [
+          {
+            label: 'Mars: direction from Earth',
+            value: `${seen.longitude.toFixed(1)}°`,
+          },
+          {
+            label: 'Mars: distance from Earth',
+            value: ctx.distance(seen.separation),
+          },
+          { label: 'Day', value: ctx.days().toFixed(0) },
+        ];
+      },
+    },
+    {
+      type: 'measure',
+      title: 'Nearest and furthest',
+      body: `Keep Mars selected and watch <strong>Distance from Earth</strong>
+             instead. Unlike the direction, this one has a clear smallest value
+             and a clear largest one.
+             \n\nRecord the closest Mars comes to Earth and the furthest it gets.
+             You will need to let it run through a good part of a synodic period
+             to see both.`,
+      fields: [
+        { id: 'sep_min', label: 'Closest Mars comes to Earth', unit: 'AU' },
+        { id: 'sep_max', label: 'Furthest Mars gets from Earth', unit: 'AU' },
+        {
+          id: 'sep_ratio',
+          label: 'Furthest ÷ closest',
+          unit: '',
+          compute: v => v.sep_max / v.sep_min,
+        },
+      ],
+      probe: ctx => {
+        const mars = ctx.find('Mars');
+        const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
+        if (!seen) return [{ label: 'Select Mars', value: '-' }];
+        return [
+          {
+            label: 'Mars: distance from Earth',
+            value: ctx.distance(seen.separation),
+          },
+        ];
+      },
+    },
+    {
+      type: 'question',
+      title: 'Bright and backwards together',
+      kind: 'choice',
+      body: `Your two distances differ by a factor of three or so. Brightness
+             falls off as the square of distance, so a factor of three in
+             distance is a factor of about nine in brightness.
+             \n\nNow recall when the direction ran backwards.`,
+      prompt: 'In this simulation, Mars is closest to Earth…',
+      options: [
+        'at a random point unrelated to the retrograde loop',
+        'at the same time as the retrograde loop, because both happen when Earth passes it',
+        'when Mars is at the far side of its own orbit from the Sun',
+        'twice per retrograde loop, once at each end',
+      ],
+      answer: 1,
+      because:
+        'Closest approach and retrograde motion are the same event seen two ways: both happen when Earth passes Mars on the inside. So Mars is at its brightest in our sky precisely while it is moving backwards. In the heliocentric picture that is forced. In an epicyclic one it is an extra fact to be arranged, and Ptolemy did arrange it, by putting the planet at the near side of its epicycle during the loop. It works, but it is another thing the model has to be told rather than something it predicts.',
+    },
+    {
+      type: 'question',
+      title: 'When does it reverse?',
+      kind: 'choice',
+      body: `Compare your two measurements. The direction ran backwards at some
+             point, and the distance had a minimum at some point. Think about
+             where Earth is relative to Mars when each of those happens.`,
+      prompt: 'Mars appears to move backwards…',
+      options: [
+        'when Mars is furthest from Earth, on the far side of the Sun',
+        'when Earth is passing between the Sun and Mars, at their closest',
+        'at random intervals, with no relation to the geometry',
+        'whenever Mars is at the far point of its own orbit',
+      ],
+      answer: 1,
+      because:
+        'The reversal happens at opposition, when Earth overtakes Mars on the inside track. That is also when the two are closest, which is why Mars is at its brightest during a retrograde loop. The coincidence of "brightest" and "moving backwards" was known for two thousand years before anyone had an explanation that tied the two together, and in a geocentric model it is a coincidence: nothing about an epicycle requires the planet to be nearest while it loops.',
+    },
+    {
+      type: 'read',
+      title: 'Overtaking on the inside',
+      body: `The mechanism is the one you know from a motorway.
+             \n\nYou are in the fast lane, overtaking a lorry. As you come up
+             behind it, it is ahead of you and drifting slowly forward against
+             the hills behind. As you draw level and pass, the lorry slides
+             backwards against those hills, even though it is still driving
+             forwards at seventy. Once you are well past, it falls behind and
+             begins drifting forward again.
+             \n\nThe lorry never reversed. You overtook it.
+             \n\nEarth does exactly this to Mars every 780 days. Earth is on the
+             inside track and moving faster, so around opposition it sweeps past,
+             and for those ten weeks Mars slides backwards against the fixed
+             stars. Mars is doing nothing unusual for the whole of it.`,
+      tip: 'The fixed stars are the hills. Notice that the starfield behind the simulation does not move when you switch frames: objects that far away do not shift when the observer does, which is exactly why they make a good background to measure against.',
+    },
+    {
+      type: 'question',
+      title: 'Say it in your own words',
+      kind: 'short',
+      body: `You have measured both orbits, watched the loop draw itself, and
+             seen where in the geometry it happens.`,
+      prompt:
+        'In two or three sentences, explain why Mars appears to reverse, without saying anything about what Mars does differently during those weeks.',
+      rubric:
+        'A good answer says that Mars moves steadily throughout, and that the reversal is produced by the observer’s own motion: Earth is on a smaller, faster orbit, and near opposition it overtakes Mars, so the direction from Earth to Mars swings backwards against the distant stars. Credit for naming opposition, for connecting it to Earth passing between the Sun and Mars, and for noting that this also makes Mars closest and brightest at that time. An answer that has Mars slowing down, stopping or being pulled back has missed the point of the lesson.',
+    },
+    {
+      type: 'read',
+      title: 'What it cost to explain this',
+      body: `In a model where Earth sits still at the center and everything
+             circles it, retrograde motion is a genuine puzzle. Planets are
+             supposed to move on circles at constant speed. This one stops and
+             goes backwards.
+             \n\nThe answer, refined over centuries and set down by Ptolemy
+             around 150 CE, was the <em>epicycle</em>: the planet rides a small
+             circle whose center rides the large one. Get the two sizes and the
+             two speeds right and the combined path makes a loop, at the right
+             times, of the right size. It worked. It predicted planetary
+             positions well enough to be used for fourteen hundred years.
+             \n\nIt also needed one epicycle per planet, plus an off-center
+             <em>eccentric</em> to fix the timing, plus an <em>equant</em> point
+             about which the motion was uniform instead of about the center.
+             Three separate devices, tuned per planet, to reproduce something no
+             single one of them explained.`,
+      quote: {
+        text: 'If the Sun be assumed to be the center, the retrogradations of the planets follow of necessity.',
+        by: 'Nicolaus Copernicus, De revolutionibus, 1543',
+      },
+    },
+    {
+      type: 'question',
+      title: 'What the epicycle was really tracking',
+      kind: 'choice',
+      body: `In Ptolemy's model each planet needs its own epicycle, with its own
+             size and its own period. For Mars, Jupiter and Saturn those epicycle
+             periods all come out the same as something you have already
+             calculated.`,
+      prompt:
+        'The period of the epicycle for each outer planet turns out to equal…',
+      options: [
+        'that planet’s own orbital period',
+        'one Earth year, for every one of them',
+        'the planet’s distance from the Sun, in years',
+        'a different number for each, with nothing in common',
+      ],
+      answer: 1,
+      because:
+        'Every outer planet’s epicycle takes exactly one year. Ptolemy knew this and recorded it; the model gives no reason for it. In the heliocentric picture the reason is immediate: the epicycle is not the planet’s motion at all, it is Earth’s, reflected onto the planet’s apparent path. Three unrelated planets sharing one period is the sort of coincidence that should make you suspicious of a model, and it is the specific fact Copernicus pointed at.',
+    },
+    {
+      type: 'question',
+      title: 'Counting the machinery',
+      kind: 'numeric',
+      body: `Ptolemy's model needed, for each of the five visible planets, a
+             deferent circle, an epicycle riding on it, an eccentric offset for
+             the deferent's center, and an equant point for the timing. Four
+             devices per planet.
+             \n\nCount the devices needed for the five wandering planets alone,
+             leaving out the Sun and Moon.`,
+      prompt: 'How many separate geometric devices is that, for five planets?',
+      unit: 'devices',
+      answer: 20,
+      tolerance: 1,
+      because:
+        'Twenty, each tuned separately against observation. None of them is wrong, exactly: the model reproduced the sky to about the accuracy of naked-eye measurement and stayed in use for fourteen centuries. What it never did was explain why the five epicycles should have the periods they have. Heliocentrism replaces all twenty devices with one fact about the observer, and gets the one-year epicycle for nothing.',
+    },
+    {
+      type: 'predict',
+      title: 'And what about the Sun?',
+      body: `Stay in Earth's frame. You have watched Mars, which loops. Now
+             think about what the Sun does when it is measured against Earth.
+             \n\nCommit before you look.`,
+      prompt: 'Seen from Earth, the Sun’s path is…',
+      options: [
+        'a loop with a cusp, like Mars’s',
+        'a simple closed circle, once a year, with no reversal',
+        'a straight line, because the Sun does not orbit anything',
+        'stationary, because the Sun is the center of the system',
+      ],
+      answer: 1,
+      because:
+        'A clean circle, once a year. The Sun never goes retrograde as seen from Earth, and that is the observational fact that separates the Sun from the planets in every ancient scheme. The reason is that Earth’s orbit is the Sun’s apparent orbit: there is no third motion to interfere with it. The loops belong to bodies whose own motion has to be combined with Earth’s.',
+    },
+    {
+      type: 'explore',
+      title: 'Do it for the Sun',
+      body: `Keep Earth's frame on and watch the <strong>Sun</strong> instead of
+             Mars.
+             \n\nIn this frame the Sun goes round Earth once a year, on a
+             near-perfect circle. That is not an error and it is not a
+             concession: measured against Earth, the Sun really does go round
+             once a year, and that is exactly what the sky looks like.`,
+      checklist: [
+        'The Sun traces a closed circle around Earth once a year',
+        'The Sun’s path has no loop and no cusp in it',
+        'Switch back to the world frame and the Sun stops moving entirely',
+        'Switch to the Sun’s own frame and now Earth is the one going round',
+      ],
+      probe: ctx => {
+        const frame = ctx.frame ? ctx.frame() : null;
+        const sun = ctx.find('Sun');
+        const seen = sun && ctx.seenFrom ? ctx.seenFrom(sun, 'Earth') : null;
+        const rows = [
+          {
+            label: 'Reference frame',
+            value: !frame || frame.mode === 'world' ? 'World' : 'A body',
+          },
+        ];
+        if (seen) {
+          rows.push({
+            label: 'Sun: distance from Earth',
+            value: ctx.distance(seen.separation),
+          });
+          rows.push({
+            label: 'Sun: direction from Earth',
+            value: `${seen.longitude.toFixed(1)}°`,
+          });
+        }
+        return rows;
+      },
+    },
+    {
+      type: 'question',
+      title: 'Which one is moving?',
+      kind: 'choice',
+      body: `You have now watched the same three bodies in two frames. In one the
+             Sun sits still and Earth goes round it. In the other Earth sits
+             still and the Sun goes round it. Both pictures came from the same
+             simulation, with the same forces, and neither was edited.`,
+      prompt: 'Given only what you have seen so far…',
+      options: [
+        'the heliocentric picture is proved, because the loop disappears in it',
+        'the geocentric picture is proved, because that is what we observe',
+        'neither is proved: both frames describe the same motion, and the loop only tells you the observer is moving',
+        'the question is meaningless, because motion is entirely arbitrary',
+      ],
+      answer: 2,
+      because:
+        'The retrograde loop establishes that the observer is moving relative to Mars. It does not, by itself, establish what is at the center. Both descriptions reproduce the observation, which is precisely why the argument lasted so long. What eventually settled it was not this loop: it was that the heliocentric picture explains the one-year epicycle without being told to, gives the planets an ordering by distance that matches their periods, and predicts stellar parallax, which was finally measured in 1838. The last option goes too far the other way: frames are not arbitrary, because only some of them are inertial, and picking the wrong one puts forces in your equations that no object exerts.',
+    },
+    {
+      type: 'read',
+      title: 'Frames are not all equal',
+      body: `Choosing a frame is free, but not consequence-free.
+             \n\nIn Earth's frame the Sun circles Earth once a year. Nothing is
+             wrong with that description, but if you now ask what force bends the
+             Sun onto that circle, you are stuck: Earth's gravity is nowhere near
+             enough to hold a body a third of a million times its mass in orbit.
+             To make the equations work in that frame you have to add fictitious
+             forces, which are not exerted by anything and exist only to account
+             for the frame's own acceleration.
+             \n\nIn the Sun's frame you do not need them. That is the real
+             argument for heliocentrism, and it is Newton's rather than
+             Copernicus's: the frame in which the description is simplest, and in
+             which every force can be traced to a mass, is the one worth
+             building physics in.
+             \n\nStrictly the Sun is not at rest either. It orbits the
+             barycenter of the Solar System, which is what the
+             <strong>Barycenter</strong> option in the same menu shows you.`,
+      tip: 'Try it: switch Frame to Barycenter. For this three-body system the barycenter sits almost exactly on the Sun, because the Sun holds essentially all the mass.',
+    },
+    {
+      type: 'read',
+      title: 'What actually settled it',
+      body: `If the loop does not decide between the two pictures, what did?
+             \n\nCopernicus's own arguments were about economy: one moving Earth
+             in place of five epicycles, and an ordering of the planets by
+             distance that finally matched their periods. Good reasons, not
+             proof, and his model was no more accurate than Ptolemy's because he
+             kept the circles.
+             \n\nThe decisive prediction was <em>stellar parallax</em>. If Earth
+             really swings 2 AU across space every six months, then nearby stars
+             must shift very slightly against more distant ones over the year.
+             Tycho Brahe looked for exactly this, found nothing, and concluded
+             correctly that either Earth does not move or the stars are
+             impossibly far away. He chose the first.
+             \n\nHe was wrong about which, and right that it was the test. The
+             stars are impossibly far away: the largest parallax of any star is
+             0.77 arcseconds, about the width of a coin seen from three miles. It
+             was finally measured in 1838, three centuries after Copernicus.`,
+    },
+    {
+      type: 'question',
+      title: 'Why Tycho found nothing',
+      kind: 'choice',
+      body: `Tycho's instruments were the best in the world before the telescope,
+             good to about one arcminute. The largest stellar parallax is
+             0.77 arcseconds, and an arcminute is sixty arcseconds.`,
+      prompt: 'Tycho’s failure to detect parallax shows that…',
+      options: [
+        'Earth does not move, exactly as he concluded',
+        'his measurements were careless',
+        'the effect was about eighty times smaller than his best precision, so a null result was the only possible outcome',
+        'parallax does not exist',
+      ],
+      answer: 2,
+      because:
+        'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the lesson: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
+    },
+    {
+      type: 'measure',
+      title: 'How long does a loop last?',
+      body: `One last measurement, and it is a prediction you can check against
+             the real sky.
+             \n\nWith Earth's frame on and Mars selected, watch
+             <strong>Direction from Earth</strong> and record the day the number
+             starts falling and the day it starts rising again. The gap between
+             them is the length of the retrograde episode.`,
+      fields: [
+        {
+          id: 'retro_start',
+          label: 'Day the direction starts falling',
+          unit: 'days',
+        },
+        { id: 'retro_end', label: 'Day it starts rising again', unit: 'days' },
+        {
+          id: 'retro_len',
+          label: 'Length of the retrograde episode',
+          unit: 'days',
+          compute: v => v.retro_end - v.retro_start,
+        },
+      ],
+      probe: ctx => {
+        const mars = ctx.find('Mars');
+        const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
+        if (!seen) return [{ label: 'Select Mars', value: '-' }];
+        return [
+          {
+            label: 'Mars: direction from Earth',
+            value: `${seen.longitude.toFixed(1)}°`,
+          },
+          { label: 'Day', value: ctx.days().toFixed(0) },
+        ];
+      },
+    },
+    {
+      type: 'question',
+      title: 'Mars or Jupiter?',
+      kind: 'choice',
+      body: `Jupiter is at 5.2 AU and takes 11.9 years to go round. Use the
+             synodic formula on Earth and Jupiter: 1/S = 1/365 − 1/4333.`,
+      prompt: 'Compared with Mars, Jupiter’s retrograde loops happen…',
+      options: [
+        'less often, because Jupiter is so much further away',
+        'more often, roughly once an Earth year, because Jupiter has barely moved while Earth goes round',
+        'at the same interval, since both are outer planets',
+        'never: only Mars shows retrograde motion',
+      ],
+      answer: 1,
+      because:
+        'Jupiter’s synodic period is 399 days, barely more than an Earth year, so it goes retrograde almost every year. Saturn’s is 378 days and Neptune’s 367. The further out a planet is, the less it moves while Earth laps it, so the synodic period converges on one year: in the limit the loop is purely Earth’s own orbit, reflected. That limit is the same fact as the one-year epicycle two steps back, arrived at from the other direction.',
+    },
+    {
+      type: 'read',
+      title: 'What you did',
+      body: `You measured two orbital periods and computed a synodic period from
+             them. You predicted what a planet would look like from a moving
+             observer, then changed the frame and watched the prediction come
+             true. You located the reversal at opposition, tied it to the
+             overtaking geometry, and found the one-year epicycle that a
+             geocentric model has to accept as a coincidence.
+             \n\nThe simulation was doing exactly one thing throughout: two
+             planets on circular orbits, under an inverse-square force from a
+             star. Every loop, cusp and reversal came out of subtracting one
+             body's position from another's.
+             \n\nThat is worth holding onto beyond this lesson. A great many
+             things that look like anomalies in the sky turn out to be statements
+             about where the observer is standing, and the first question to ask
+             of a strange motion is always: measured against what?`,
+    },
+  ],
+};
+
 export const INVESTIGATIONS = [
   KEPLER,
+  RETROGRADE,
   TRANSITS,
   ENERGY,
   WEIGHING,
   BLACK_HOLES,
+  RADIAL_VELOCITY,
   GOLDILOCKS,
+  DARK_MATTER,
+  TIDES,
 ];
 
 /**
@@ -5218,3 +8438,23 @@ export const gradedSteps = inv =>
   (inv?.steps || []).filter(s =>
     ['predict', 'measure', 'question'].includes(s.type)
   );
+
+/**
+ * Where a lesson sits in its series, if it belongs to one.
+ *
+ * Derived rather than stored: the three exoplanet lessons are not adjacent in
+ * INVESTIGATIONS, and writing "2 of 3" into the data would go stale the moment
+ * a fourth was added or the order changed.
+ *
+ * @param {Object} inv - Investigation
+ * @returns {{label: string, index: number, of: number}|null} Position, or null
+ */
+export function seriesPosition(inv) {
+  if (!inv?.series) return null;
+  const siblings = INVESTIGATIONS.filter(i => i.series === inv.series);
+  return {
+    label: inv.series,
+    index: siblings.indexOf(inv) + 1,
+    of: siblings.length,
+  };
+}

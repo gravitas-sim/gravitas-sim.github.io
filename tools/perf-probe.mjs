@@ -18,10 +18,9 @@
 // =============================================================================
 
 import { chromium } from 'playwright';
-import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, join, resolve, dirname } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { serveStatic } from './static-server.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 8126;
@@ -38,36 +37,6 @@ const DEFAULT_SCENARIOS = [
   'Tidal Disruption Event',
 ];
 
-const MIME = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.webp': 'image/webp',
-  '.png': 'image/png',
-  '.ico': 'image/x-icon',
-};
-
-function serve() {
-  const server = createServer(async (req, res) => {
-    try {
-      const url = new URL(req.url, `http://localhost:${PORT}`);
-      let p = decodeURIComponent(url.pathname);
-      if (p.endsWith('/')) p += 'index.html';
-      const file = join(ROOT, p);
-      if (!file.startsWith(ROOT)) return res.writeHead(403).end();
-      res.writeHead(200, {
-        'Content-Type': MIME[extname(file)] || 'application/octet-stream',
-        'Cache-Control': 'no-store',
-      });
-      res.end(await readFile(file));
-    } catch {
-      res.writeHead(404).end('not found');
-    }
-  });
-  return new Promise(r => server.listen(PORT, () => r(server)));
-}
-
 const ms = n => `${n.toFixed(2)}ms`;
 const pad = (s, n) => String(s).padEnd(n);
 
@@ -78,7 +47,7 @@ async function main() {
   const wanted = args.filter((a, i) => !a.startsWith('--') && i !== si + 1);
   const scenarios = wanted.length ? wanted : DEFAULT_SCENARIOS;
 
-  const server = await serve();
+  const server = await serveStatic({ root: ROOT, port: PORT });
   // Headless Chromium rasterises the canvas in software by default, which caps
   // the loop far below what a real machine does and hides every saving that
   // comes from skipping work: if each frame already takes 80ms, no throttle

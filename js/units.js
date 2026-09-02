@@ -10,17 +10,18 @@
 // "Physical" mode shows astronomer-facing units: AU, M☉, km/s, years.
 // =============================================================================
 
+import {
+  SOLAR_MASS_KG,
+  AU_METERS,
+  G_SI,
+  SECONDS_PER_YEAR,
+} from './constants.js';
 import { formatNumber, withUnit } from './format.js';
 import {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
   getPhysicsSetting,
 } from './physics.js';
-
-const SOLAR_MASS_KG = 1.989e30;
-const AU_METERS = 1.496e11;
-const G_SI = 6.6743e-11;
-const SECONDS_PER_YEAR = 3.15576e7;
 
 const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
 

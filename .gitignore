@@ -37,3 +37,9 @@ coverage/
 # Instructor materials: the passphrase and the plaintext PDFs
 .instructor-password
 .instructor-build/
+
+# Playwright
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/

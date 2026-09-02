@@ -496,9 +496,14 @@ export const blackHoleRadius = (mass, baseMass, baseRadius = 15) => {
  * @returns {Object} Screen position with x, y properties
  */
 export const worldToScreen = (worldPos, state, canvas) => {
+  // The reference frame is subtracted here rather than folded into the pan, so
+  // a user who has panned somewhere keeps that pan when they change frames.
+  const off = state.frameOffset;
+  const ox = off ? off.x : 0;
+  const oy = off ? off.y : 0;
   return {
-    x: worldPos.x * state.zoom + state.pan.x + canvas.width / 2,
-    y: -worldPos.y * state.zoom + state.pan.y + canvas.height / 2,
+    x: (worldPos.x - ox) * state.zoom + state.pan.x + canvas.width / 2,
+    y: -(worldPos.y - oy) * state.zoom + state.pan.y + canvas.height / 2,
   };
 };
 
@@ -510,9 +515,12 @@ export const worldToScreen = (worldPos, state, canvas) => {
  * @returns {Object} World position with x, y properties
  */
 export const screenToWorld = (screenPos, state, canvas) => {
+  const off = state.frameOffset;
+  const ox = off ? off.x : 0;
+  const oy = off ? off.y : 0;
   return {
-    x: (screenPos.x - state.pan.x - canvas.width / 2) / state.zoom,
-    y: -(screenPos.y - state.pan.y - canvas.height / 2) / state.zoom,
+    x: (screenPos.x - state.pan.x - canvas.width / 2) / state.zoom + ox,
+    y: -(screenPos.y - state.pan.y - canvas.height / 2) / state.zoom + oy,
   };
 };
 
@@ -900,11 +908,11 @@ export const solarText = (value, base = 'M') => `${value} ${base}${SUN_SYMBOL}`;
  *
  * Canvas has no rich text, so the run is measured and drawn in three parts —
  * number, base letter, then the Sun glyph at 68% size and pushed below the
- * baseline — and centred as a whole so it stays aligned under its object.
+ * baseline — and centered as a whole so it stays aligned under its object.
  *
  * @param {CanvasRenderingContext2D} ctx - Target context
  * @param {string} value - Formatted numeric part
- * @param {number} x - Centre x
+ * @param {number} x - Center x
  * @param {number} y - Baseline y
  * @param {Object} [opts]
  * @param {string} [opts.base] - Quantity letter

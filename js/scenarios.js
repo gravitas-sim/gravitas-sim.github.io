@@ -431,10 +431,14 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // quarter of the binary's period, which is enough to read as an orbit.
       trail_length: 240,
       preset_zoom: 1.5,
-      // A 120-unit binary needs a bounded step or the integration loses energy
-      // and the pair spirals together: at six times speed the separation fell
-      // from 120 to 85 in twenty seconds and the stars merged. Binary Pair
-      // carries the same guard for the same reason.
+      // A 120-unit binary needs a bounded step. The dramatic version of this -
+      // the separation falling from 120 to 85 in twenty seconds at six times
+      // speed, ending in a merger - was a genuine bug in the integrator, since
+      // fixed: bodies were advanced one at a time, so the pair's forces were no
+      // longer equal and opposite and the orbit lost energy secularly. What
+      // remains is the ordinary first-order phase and eccentricity error of
+      // symplectic Euler, which is bounded but still visible over a lesson at a
+      // large step. Binary Pair carries the same guard for the same reason.
       max_timestep: 0.15,
     });
   } else if (ps === 'Solar System') {
@@ -474,8 +478,29 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       placement: 'Empty', // Special placement handled in initialization
       init_velocity: 10,
       velocity_stddev: 2,
-      gravitational_constant: 1.0,
-      sim_speed: 0.3, // Very slow for detailed observation
+      // This scenario is a schematic, and the thing it exaggerates is distance:
+      // the Moon is drawn 35 units out, where the truth at 100 units per AU is
+      // 0.26. Every mass, radius and density here is the real one, so the
+      // inspector tells the truth about both bodies; what cannot also be true
+      // at that separation is the period. Earth's real mass over 35 units gives
+      // an orbit of about 145 years, and at G = 1 the Moon takes seven hours of
+      // wall clock to go round once.
+      //
+      // So the constant carries the exaggeration instead of the masses, which
+      // is where the previous version hid it: Earth was built 1000x too heavy
+      // by a broken EARTH_MASS_UNIT and the inspector reported that 1000x mass
+      // as one Earth. A wrong G is visible in Settings and spoils no readout.
+      gravitational_constant: 9000,
+      // Without these two the scenario had no gravity in it at all. Planets are
+      // only gravitational sources when mutual_gravity is on - with it off the
+      // solver builds its source list from stars, black holes and galaxies, and
+      // this is the one scenario in the app whose whole subject is two planets
+      // and no star. The Moon travelled in a straight line, drifting from 35
+      // units to 36 over a run while its trail drew something close enough to
+      // the start of an arc to survive a glance.
+      mutual_gravity: true,
+      star_only_gravity: false,
+      sim_speed: 1.0, // About a minute per lunar orbit
       enable_star_merging: false,
       show_trails: true,
       trail_length: 30,
@@ -753,6 +778,46 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // take several smaller ones instead, at the same apparent speed.
       max_timestep: 0.05,
     });
+  } else if (ps === 'Retrograde Mars') {
+    // The Sun, Earth and Mars at their true distances and periods, and nothing
+    // else. The full Solar System draws this too, but with fifty asteroids and
+    // ten comets all looping at once it is a beautiful mess rather than a
+    // measurement.
+    //
+    // The trail length is the number doing the pedagogical work, and it has to
+    // be set against the retrograde episode rather than against the synodic
+    // period. The episode lasts about 72 days. A trail that covers only that
+    // much is entirely backwards at opposition, with no forward motion at
+    // either end to show the reversal against, which is what 300 samples gave
+    // on a fast machine. 900 covers roughly three times the episode, so the
+    // loop is drawn with straight track on both sides of it whatever frame rate
+    // the browser manages. The max timestep is capped because a lesson that
+    // asks a student to read the direction of motion cannot afford an
+    // integrator that is quietly changing the orbits underneath them.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      mutual_gravity: false,
+      star_only_gravity: true,
+      placement: 'Empty',
+      num_planets: 2,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      sim_speed: 4.0,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 2400,
+      trail_style: 'Simple',
+      sim_size: 'Small',
+      // Mars sits at 152 units; this frames both orbits with room for the loop
+      // Mars draws outside them once the view is put into Earth's frame.
+      preset_zoom: 1.6,
+      max_timestep: 0.1,
+    });
   } else if (ps === 'Binary Pair') {
     // Two stars of two solar masses each, four AU apart, going round their
     // common center once every four years. The numbers are chosen so that the
@@ -880,6 +945,107 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // the turn sharp rather than rounding it off.
       max_timestep: 0.01,
       min_interaction_distance: 1.0,
+    });
+  } else if (
+    ps === 'Spiral Galaxy' ||
+    ps === 'Milky Way Rotation' ||
+    ps === 'Coma Cluster'
+  ) {
+    // The three dark-matter scenarios. All bodies are placed by hand in
+    // build_simulation, so every count here is zero and placement is 'Empty'.
+    //
+    // These are scale models and say so on their cards. A real galaxy bulge is
+    // around 10^10 solar masses and a real cluster is megaparsecs across;
+    // Gravitas's units are calibrated so that G = 1 works for planetary
+    // systems, and rebuilding them around galactic scales would change nothing
+    // a student measures here. Every quantity these scenarios are used to
+    // measure - the exponent of a rotation curve, the ratio of dynamical mass
+    // to visible mass - is dimensionless.
+    const cluster = ps === 'Coma Cluster';
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 0,
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      placement: 'Empty',
+      // Every body pulls on every other. A galaxy held up by a single central
+      // point mass would be begging the question the lesson asks.
+      mutual_gravity: true,
+      star_only_gravity: false,
+      gravitational_constant: 1.0,
+      // Nothing here should merge. A cluster that lost members would lose the
+      // dispersion being measured, and a disc whose tracers ate each other
+      // would erase its own rotation curve.
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: cluster ? 300 : 90,
+      sim_size: 'Large',
+      sim_speed: cluster ? 1.5 : 2.0,
+      preset_zoom: cluster ? 0.16 : 0.5,
+      // The disc spans a decade of radius and the inner tracers are fast; a
+      // loose step lets them spiral rather than orbit, which would look like
+      // the rotation curve changing on its own.
+      max_timestep: 0.01,
+      // Only the flat-curve scenario switches the halo on. The other two are
+      // the observations that need explaining.
+      // The cluster needs its halo on too, for the same reason the flat disc
+      // does: without it the members are moving far too fast to stay a cluster
+      // and it would disperse while being measured. That is not hiding the
+      // answer. A student measures the members' speeds and the cluster's size
+      // and works out how much mass is needed; the panel never tells them how
+      // much halo is there.
+      dark_matter_halo: ps !== 'Spiral Galaxy',
+      halo_v_flat: cluster ? 27 : 12,
+      halo_core_radius: cluster ? 400 : 150,
+    });
+  } else if (ps === 'Exoplanet Characterization Lab') {
+    // The transit scenarios pin the star at rest, which was harmless while
+    // photometry was the only instrument. It stops being harmless the moment a
+    // radial-velocity panel is pointed at it: a student would read RV = 0 and
+    // learn that planets do not move their stars.
+    //
+    // Here both bodies orbit their common center of mass, initialized in the
+    // barycentric frame with zero net momentum, so the wobble the instruments
+    // measure is the wobble the simulation is actually doing.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      mutual_gravity: true,
+      star_only_gravity: false,
+      placement: 'Empty',
+      num_planets: 0,
+      num_gas_giants: 1,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      enable_star_merging: false,
+      show_trails: true,
+      trail_length: 400,
+      // A 3.5-day orbit is over in a second at ordinary speeds, which is no use
+      // to a student asked to watch one full cycle and find its maximum, its
+      // minimum and its zero crossings. At 0.03 one orbit takes about thirteen
+      // seconds: slow enough to read a curve building, fast enough not to wait.
+      sim_speed: 0.03,
+      sim_size: 'Small',
+      // The orbit is 0.047 AU across, which is 4.75 simulation units, and the
+      // star is 0.54 units in radius. Zoom 55 puts the whole orbit in frame
+      // with the star still a legible disc; anything much tighter and the
+      // camera ends up inside the star.
+      preset_zoom: 55,
+      // A 3.5-day orbit needs a tightly bounded step for the same reason Binary
+      // Pair does, and more so: the reflex motion being measured is a
+      // ten-thousandth of the orbit. At 0.02 the integrator put a spurious
+      // eccentricity of 0.034 on a circular orbit and overstated K by 8% once
+      // the speed slider was pushed up; at 0.005 the measured semi-amplitude
+      // tracks the analytic one across the speed range.
+      max_timestep: 0.005,
+      min_interaction_distance: 0.01,
     });
   } else if (ps === 'Transit Lab' || ps === 'Blended Binary') {
     // HD 209458: the first planet ever caught transiting, in 1999, and still

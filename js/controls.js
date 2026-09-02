@@ -696,7 +696,7 @@ function setupRangeFills() {
   }).observe(document.body, { childList: true, subtree: true });
 }
 
-/** Initialise every control surface this module owns. */
+/** Initialize every control surface this module owns. */
 export function initControls() {
   setupRangeFills();
   initTheme();

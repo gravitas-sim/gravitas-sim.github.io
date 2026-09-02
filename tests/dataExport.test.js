@@ -226,14 +226,14 @@ describe('the trajectory file', () => {
   test('the angle is measured round the primary, not the origin', () => {
     // The whole point of shipping this column is that a student measuring a
     // period never has to work out that atan2 must be taken relative to the
-    // primary. If it were taken about the origin, an off-centre primary would
+    // primary. If it were taken about the origin, an off-center primary would
     // give a period that is quietly wrong.
-    const centre = star({ x: 500, y: 500 });
+    const center = star({ x: 500, y: 500 });
     frames.list = [
       {
         t: 0,
         bodies: [
-          centre,
+          center,
           body({ id: 1, x: 600, y: 500 }),
           body({ id: 2, x: 500, y: 600 }),
           body({ id: 3, x: 400, y: 500 }),
@@ -256,7 +256,7 @@ describe('the trajectory file', () => {
 
   test('a body with no primary gets blanks rather than zeroes', () => {
     // A lone object has nothing to be measured against, and a zero in the r
-    // column would be read as "it is at the centre" rather than "no answer".
+    // column would be read as "it is at the center" rather than "no answer".
     frames.list = [{ t: 0, bodies: [body({ id: 7 })] }];
     const row = rowsOf(trajectoryCsv().csv)[0];
     expect(row.primary).toBe('');

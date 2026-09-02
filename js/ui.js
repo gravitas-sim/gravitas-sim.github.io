@@ -1,5 +1,18 @@
 // UI and event handling functions
 
+import {
+  computeDockPosition,
+  renderDetails,
+  patchDetails,
+  renderEnergy,
+  renderPinnedCard,
+  splitIdentity,
+} from './objectInspector.js';
+import {
+  JUPITER_MASSES_PER_SOLAR_MASS,
+  EARTH_MASSES_PER_JUPITER_MASS,
+} from './constants.js';
+import { HD209458 } from './data/exoplanetSystems.js';
 import { formatNumber, withUnit } from './format.js';
 import {
   screen_to_world,
@@ -14,12 +27,16 @@ import {
   gravity_ripples,
   neutron_stars,
   white_dwarfs,
+  galaxies,
   accretion_disk_particles,
   resetPhysicsObjectCounter,
+  resetTrailTick,
+  barycenterBodies,
   bumpWorldGeneration,
   setPhysicsObjectCounter,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
+  JUPITER_MASS_UNIT,
   Planet,
   GasGiant,
   Asteroid,
@@ -29,6 +46,7 @@ import {
   Debris,
   NeutronStar,
   WhiteDwarf,
+  Galaxy,
   updatePhysicsSettings,
   setStateReference,
   particlePool,
@@ -50,14 +68,31 @@ import {
   earthHTML,
   jupiterHTML,
 } from './utils.js';
+import {
+  WORLD,
+  BARYCENTER,
+  OBJECT,
+  setFrame,
+  resetFrame,
+  frameOriginVelocity,
+  resolveFrameOrigin,
+  frameState,
+  onFrameChange,
+} from './referenceFrame.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
+import { haloEnclosedMass } from './darkMatter.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
 import { TRAPPIST1_STAR, TRAPPIST1_PLANETS } from './data/trappist1.js';
 import { applyPreset, applyPresetLayout } from './scenarios.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
-import { timeUnitSeconds, SIM_UNITS_PER_AU } from './units.js';
+import {
+  timeUnitSeconds,
+  SIM_UNITS_PER_AU,
+  formatSpeed,
+  formatDistance,
+} from './units.js';
 import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
 import {
   buildPayload,
@@ -71,7 +106,10 @@ import {
  * Thin wrapper: the preset table itself lives in scenarios.js.
  */
 const apply_preset = () => {
-  delete SETTINGS.bh_layout;
+  // bh_layout used to be deleted here, because it had no entry in
+  // DEFAULT_SETTINGS and so was the one leaked key anything noticed. It has an
+  // entry now, along with the rest of the scenario-only keys, so the reset
+  // inside applyPreset clears it the same way it clears everything else.
   applyPreset(SETTINGS, DEFAULT_SETTINGS, state);
 };
 import { generateStarfield } from './render.js';
@@ -81,6 +119,7 @@ import {
   updateChart,
   clearChart,
   exportChart,
+  resizeChart,
 } from './energyChartNew.js';
 
 const canvas = document.getElementById('simulationCanvas');
@@ -90,6 +129,10 @@ const starfieldCanvas = document.getElementById('starfieldCanvas');
 const state = {
   zoom: 1.0,
   pan: { x: 0.0, y: 0.0 },
+  // Where the reference frame's origin currently is, in world units. Every
+  // world-to-screen conversion subtracts it, so choosing a frame moves the
+  // picture without touching the user's own pan. Zero is the world frame.
+  frameOffset: { x: 0.0, y: 0.0 },
   paused: false,
   mouse: { x: -1000, y: -1000, down: false }, // Initialize mouse off-screen to prevent accidental object detection
   // Hold-to-add state
@@ -547,6 +590,40 @@ const DEFAULT_SETTINGS = {
   lensing_quality: 'medium',
   trail_colour_mode: 'type',
   disk_doppler: true,
+  // Dark matter. These have to be here, not only in physicsSettings:
+  // applyPreset rebuilds SETTINGS from these defaults on every scenario load,
+  // so a key that is missing from this object is a key no scenario can reset.
+  // Without them the halo stayed switched on after Milky Way Rotation and
+  // quietly changed the force law in every scenario loaded afterwards,
+  // including the Solar System, whose rotation curve is the one measurement the
+  // dark-matter lesson opens by trusting.
+  dark_matter_halo: false,
+  halo_v_flat: 6.0,
+  halo_core_radius: 300,
+  // Scenario-only keys. Each of these is written by one scenario (preset_zoom
+  // by all of them) and read nowhere else, so before they were listed here
+  // there was no value for applyPreset to reset them to: whatever the last
+  // scenario set survived into the next one, exactly as the halo did.
+  // The values are what the app should use when no scenario asks for anything.
+  preset_zoom: 1.5,
+  // 1.0 selects the conservative habitable zone; see
+  // habitableZoneModelFromSettings() in render.js, which switches at 1.3.
+  habitable_zone_optimism: 1.0,
+  // Per-neutron-star masses, the same shape as bh_masses above.
+  use_individual_ns_masses: false,
+  ns_masses: [],
+  // Kessler Cascade's swarm of 0.1 Msun stars. None by default; the mass is
+  // the per-star value, so it stays physical rather than zero when unused.
+  num_micro_stars: 0,
+  micro_star_mass: 0.1,
+  micro_star_high_velocity: false,
+  // Alien Dyson Swarm Collapse draws its stars as satellites.
+  satellites_are_dyson: false,
+  // Geometry applied after the bodies exist, by applyPresetLayout() in
+  // scenarios.js. null means the scenario asked for no special layout.
+  bh_layout: null,
+  // Slingshot Gauntlet fires a single test star past the black holes.
+  test_star_slingshot: false,
   // Performance/architecture toggles
   use_barnes_hut: false,
   barnes_hut_theta: 0.4,
@@ -635,7 +712,7 @@ const getBlackHoleInfo = bh => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(bh.vel.x, bh.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(bh.vel.x, bh.vel.y)),
       },
     ],
     description: `A ${bhType.toLowerCase()} black hole with ${massInSuns > 1e6 ? 'enormous' : massInSuns > 100 ? 'substantial' : massInSuns > 3 ? 'moderate' : 'minimal'} mass. The event horizon has a radius of ${f.rsKm.toFixed(1)} km. ${f.temperature > 1 ? 'This black hole emits Hawking radiation.' : 'This black hole is too massive to emit significant Hawking radiation.'} ${massInSuns > 1e6 ? 'Supermassive black holes like this power active galactic nuclei and quasars.' : massInSuns > 100 ? 'Intermediate black holes are rare and may form from merging stellar-mass black holes.' : massInSuns > 3 ? 'Stellar-mass black holes form from the collapse of massive stars.' : 'Primordial black holes may have formed in the early universe.'}`,
@@ -751,7 +828,7 @@ const getStarInfo = star => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(star.vel.x, star.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(star.vel.x, star.vel.y)),
       },
     ],
     description: `A ${spectralType}-type star with ${massInSuns > 3 ? 'high' : massInSuns > 0.8 ? 'moderate' : 'low'} mass. ${massInSuns > 20 ? 'This massive star will likely end its life as a black hole.' : massInSuns > 8 ? 'This star will become a neutron star or black hole.' : 'This star will become a white dwarf.'}`,
@@ -830,7 +907,7 @@ const getPlanetInfo = planet => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(planet.vel.x, planet.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(planet.vel.x, planet.vel.y)),
       },
     ],
     description: `A ${planetType.toLowerCase()} with ${massInEarths > 10 ? 'substantial' : massInEarths > 1 ? 'moderate' : 'low'} mass. ${densityDescription}. ${planetType === 'Terrestrial' ? 'This rocky world could potentially support life.' : planetType === 'Gas Giant' ? 'This gaseous planet has no solid surface.' : planetType === 'Ice Giant' ? 'This icy world is composed mainly of frozen volatiles.' : 'This small world may be a captured asteroid or dwarf planet.'}`,
@@ -838,8 +915,9 @@ const getPlanetInfo = planet => {
 };
 
 const getGasGiantInfo = gasGiant => {
-  const massInJupiters = gasGiant.massInJupiters || gasGiant.mass / 50.0;
-  const massInEarths = massInJupiters * 317.8; // Convert Jupiter mass to Earth mass (1 Jupiter = 317.8 Earth masses)
+  const massInJupiters =
+    gasGiant.massInJupiters || gasGiant.mass / JUPITER_MASS_UNIT;
+  const massInEarths = massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
   const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
   const radiusInEarths = radiusInJupiters * 11.2; // Convert Jupiter radius to Earth radius (1 Jupiter = 11.2 Earth radii)
   const radiusInKm = radiusInEarths * 6371; // Earth radius in km
@@ -903,7 +981,7 @@ const getGasGiantInfo = gasGiant => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(gasGiant.vel.x, gasGiant.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(gasGiant.vel.x, gasGiant.vel.y)),
       },
     ],
     description: `A ${displayType.toLowerCase()} with ${massInEarths > 3000 ? 'enormous' : massInEarths > 1000 ? 'substantial' : 'moderate'} mass. ${giantType === 'brown_dwarf' ? 'This object is massive enough to fuse deuterium but not hydrogen, making it a failed star.' : giantType === 'super_jupiter' ? 'This massive gas giant has extreme atmospheric pressures and may have formed directly from a protoplanetary disk.' : giantType === 'jupiter_like' ? 'This Jupiter-like planet has a thick hydrogen-helium atmosphere with distinctive banding patterns.' : giantType === 'neptune_like' ? 'This Neptune-like ice giant has a composition rich in water, ammonia, and methane ices.' : 'This mini-Neptune has a substantial atmosphere but is smaller than typical gas giants.'}`,
@@ -960,7 +1038,7 @@ const getAsteroidInfo = asteroid => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(asteroid.vel.x, asteroid.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(asteroid.vel.x, asteroid.vel.y)),
       },
     ],
     description: `A ${asteroidType.toLowerCase()} with ${asteroid.radius > 5 ? 'significant' : asteroid.radius > 2 ? 'moderate' : 'minimal'} mass. ${asteroidType === 'Dwarf Planet' ? 'This object is large enough to be rounded by its own gravity.' : 'This rocky body orbits in the system, potentially as part of a belt or as a rogue object.'}`,
@@ -992,11 +1070,11 @@ const getNeutronStarInfo = neutronStar => {
       { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: withUnit(escapeVelocity, 'units/s'),
+        value: formatSpeed(escapeVelocity),
       },
       {
         label: 'Schwarzschild Radius',
-        value: withUnit(schwarzschildRadius, 'units'),
+        value: formatDistance(schwarzschildRadius),
       },
       { label: 'Type', value: starType },
       { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
@@ -1006,10 +1084,7 @@ const getNeutronStarInfo = neutronStar => {
       },
       {
         label: 'Velocity',
-        value: withUnit(
-          Math.hypot(neutronStar.vel.x, neutronStar.vel.y),
-          'units/s'
-        ),
+        value: formatSpeed(Math.hypot(neutronStar.vel.x, neutronStar.vel.y)),
       },
     ],
     description: `A ${starType.toLowerCase()} with ${massInSuns > 2.0 ? 'extreme' : 'high'} density. ${isPulsar ? 'This pulsar emits regular beams of radiation as it rotates.' : 'This neutron star is the collapsed core of a massive star.'} ${starType === 'Magnetar' ? 'This magnetar has an extremely strong magnetic field, making it one of the most powerful objects in the universe.' : starType === 'Pulsar' ? 'This pulsar rotates rapidly, emitting beams of radiation that sweep across space.' : 'This neutron star is composed almost entirely of neutrons, making it incredibly dense.'}`,
@@ -1037,7 +1112,7 @@ const getWhiteDwarfInfo = whiteDwarf => {
       { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: withUnit(escapeVelocity, 'units/s'),
+        value: formatSpeed(escapeVelocity),
       },
       { label: 'Chandrasekhar Limit', value: solarHTML(chandrasekharLimit) },
       { label: 'Type', value: dwarfType },
@@ -1047,13 +1122,51 @@ const getWhiteDwarfInfo = whiteDwarf => {
       },
       {
         label: 'Velocity',
-        value: withUnit(
-          Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y),
-          'units/s'
-        ),
+        value: formatSpeed(Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y)),
       },
     ],
     description: `A ${dwarfType.toLowerCase()} white dwarf with ${massInSuns > 1.2 ? 'high' : massInSuns > 0.6 ? 'moderate' : 'low'} mass. ${dwarfType === 'Oxygen-Neon' ? 'This massive white dwarf is near the Chandrasekhar limit and may become a neutron star.' : dwarfType === 'Carbon-Oxygen' ? 'This is the most common type of white dwarf, composed of carbon and oxygen.' : 'This low-mass white dwarf is composed primarily of helium.'} ${massInSuns > chandrasekharLimit ? 'This white dwarf exceeds the Chandrasekhar limit and may collapse into a neutron star.' : 'This white dwarf is stable and will slowly cool over billions of years.'}`,
+  };
+};
+
+/**
+ * Inspector contents for a galaxy.
+ *
+ * The mass is reported in solar masses like everything else in the app, and the
+ * scenarios that contain galaxies say plainly that they are scale models. A
+ * real cluster member is around 10^11 solar masses and a real cluster is
+ * megaparsecs across; running those numbers would need the whole unit system
+ * rebuilt for no gain, because what the lesson measures is a ratio of two
+ * masses and a ratio does not care what the units were.
+ *
+ * @param {Object} galaxy - Galaxy object
+ * @returns {Object} Info for the inspector
+ */
+const getGalaxyInfo = galaxy => {
+  const massInSuns = galaxy.mass / SOLAR_MASS_UNIT;
+  const speed = Math.hypot(galaxy.vel.x, galaxy.vel.y);
+  const type = galaxy.galaxyType === 'elliptical' ? 'Elliptical' : 'Spiral';
+
+  return {
+    icon: '🌌',
+    title: galaxy.name || 'Galaxy',
+    stats: [
+      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
+      { label: 'Type', value: type },
+      { label: 'Speed', value: formatSpeed(speed) },
+      {
+        label: 'Position',
+        value: `(${galaxy.pos.x.toFixed(1)}, ${galaxy.pos.y.toFixed(1)})`,
+      },
+      {
+        label: 'Velocity',
+        value: `(${formatSpeed(galaxy.vel.x)}, ${formatSpeed(galaxy.vel.y)})`,
+      },
+    ],
+    description:
+      type === 'Spiral'
+        ? 'A disc of stars, gas and dust with spiral arms, seen here at an angle. Inside it the stars orbit the center; from outside, in a cluster, the whole thing counts as a single moving mass.'
+        : 'A rounded swarm of old stars with little gas left to form new ones. The largest galaxies in a cluster are usually of this kind, sitting near its center.',
   };
 };
 
@@ -1080,9 +1193,9 @@ const getCometInfo = comet => {
       { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
         label: 'Escape Velocity',
-        value: withUnit(escapeVelocity, 'units/s'),
+        value: formatSpeed(escapeVelocity),
       },
-      { label: 'Tail Length', value: withUnit(tailLength, 'units') },
+      { label: 'Tail Length', value: formatDistance(tailLength) },
       { label: 'Type', value: displayType },
       {
         label: 'Position',
@@ -1090,7 +1203,7 @@ const getCometInfo = comet => {
       },
       {
         label: 'Velocity',
-        value: withUnit(Math.hypot(comet.vel.x, comet.vel.y), 'units/s'),
+        value: formatSpeed(Math.hypot(comet.vel.x, comet.vel.y)),
       },
     ],
     description: `A ${displayType.toLowerCase()} comet with ${massInComets > 0.1 ? 'substantial' : massInComets > 0.01 ? 'moderate' : 'small'} mass. ${cometType === 'periodic' ? "This periodic comet returns to the inner solar system regularly, like Halley's Comet." : cometType === 'long_period' ? 'This long-period comet has an orbital period of more than 200 years.' : 'This short-period comet completes its orbit in less than 200 years.'} The comet's tail is ${tailLength > 50 ? 'very long' : tailLength > 30 ? 'moderate' : 'short'} and points away from the sun due to solar radiation pressure.`,
@@ -1254,35 +1367,13 @@ const showObjectInspector = (object, type) => {
       return;
     }
 
-    let info;
-    switch (state.selectedObject.type) {
-      case 'BlackHole':
-        info = getBlackHoleInfo(state.selectedObject.object);
-        break;
-      case 'Star':
-        info = getStarInfo(state.selectedObject.object);
-        break;
-      case 'NeutronStar':
-        info = getNeutronStarInfo(state.selectedObject.object);
-        break;
-      case 'WhiteDwarf':
-        info = getWhiteDwarfInfo(state.selectedObject.object);
-        break;
-      case 'Planet':
-        info = getPlanetInfo(state.selectedObject.object);
-        break;
-      case 'GasGiant':
-        info = getGasGiantInfo(state.selectedObject.object);
-        break;
-      case 'Comet':
-        info = getCometInfo(state.selectedObject.object);
-        break;
-      case 'Asteroid':
-        info = getAsteroidInfo(state.selectedObject.object);
-        break;
-      default:
-        console.error('Unknown object type:', state.selectedObject.type);
-        return;
+    const info = objectInfoFor(
+      state.selectedObject.object,
+      state.selectedObject.type
+    );
+    if (!info) {
+      console.error('Unknown object type:', state.selectedObject.type);
+      return;
     }
 
     const inspectorTitle = document.getElementById('inspectorTitle');
@@ -1318,190 +1409,20 @@ const showObjectInspector = (object, type) => {
 
     if (isNewObject && !isMassUpdate) {
       // Reset energy log when switching to a new object
-      // TODO: REMOVE - Energy log reset to be replaced
       state.energyLog = [];
-      // New object selected - recreate the entire inspector
-      let content = '';
-
-      // Add mass adjustment slider
-      const massSlider = createMassSlider(
+      const view = buildInspectorView(
         state.selectedObject.object,
-        state.selectedObject.type
+        state.selectedObject.type,
+        info
       );
-      content += massSlider;
-
-      // Add tooltip for mass slider
-      content +=
-        '<div class="mass-slider-tooltip" title="Drag to change the object\'s mass. Higher mass = stronger gravity and more influence on other objects. Some objects may transform when mass changes significantly.">💡 Hover for mass adjustment tips</div>';
-
-      // Add separator
-      content += '<div class="stat-separator"></div>';
-
-      info.stats.forEach(stat => {
-        const tooltip = getStatTooltip(stat.label, state.selectedObject.type);
-        content += `
-                    <div class="stat-row" ${tooltip ? `title="${tooltip}"` : ''}>
-                        <span class="stat-label">${stat.label}:</span>
-                        <span class="stat-value">${stat.value}</span>
-                    </div>
-                `;
-      });
-
-      // Star-specific controls: Habitable (Goldilocks) zone visualizer toggle
-      if (state.selectedObject.type === 'Star') {
-        const hzEnabled = !!state.selectedObject.object.showHabitableZone;
-        const hzOptimism =
-          (typeof SETTINGS.habitable_zone_optimism === 'number'
-            ? SETTINGS.habitable_zone_optimism
-            : 1.0) || 1.0;
-
-        content += `
-          <div class="stat-separator"></div>
-          <div class="inspector-hz-block">
-            <div class="inspector-hz-header">
-              <span class="stat-label">Habitable Zone Ring</span>
-              <button
-                id="hzToggleBtn"
-                class="toggle-button"
-                data-state="${hzEnabled ? 'on' : 'off'}"
-                type="button"
-              >
-                ${hzEnabled ? 'On' : 'Off'}
-              </button>
-            </div>
-            <div class="inspector-hz-description">
-              The circumstellar habitable zone is the range of orbital distances where a rocky planet
-              with suitable atmospheric conditions <em>could potentially</em> maintain liquid water on its
-              surface. Being inside it does not establish that a planet has water, is habitable, or is inhabited:
-              it is a first filter for where to look, not a measurement of a world.
-              The edges come from a published prescription (Kopparapu et al. 2013) and depend on the star's
-              luminosity and temperature. The <strong>Habitable Zone Optimism</strong> setting selects between the
-              <strong>conservative</strong> zone, bounded by the runaway and maximum greenhouse limits, and the
-              <strong>optimistic</strong> zone, bounded by the empirical recent-Venus and early-Mars limits.
-              Currently showing the <strong>${hzOptimism >= 1.3 ? 'optimistic' : 'conservative'}</strong> zone.
-            </div>
-          </div>
-        `;
-      }
-
-      // Orbiting-object controls: Kepler's 2nd Law area sweep toggle
-      // Only available in scenarios where stable Keplerian orbits are meaningful
-      const sweepScenarios = [
-        'Solar System',
-        'Earth-Moon System',
-        "Kepler's 2nd Law",
-      ];
-      const orbitingTypes = ['Planet', 'GasGiant', 'Asteroid', 'Comet'];
-      if (
-        orbitingTypes.includes(state.selectedObject.type) &&
-        sweepScenarios.includes(current_scenario_name)
-      ) {
-        const sweepEnabled =
-          state.areaSweepOverlay.active &&
-          state.areaSweepOverlay.objectId === state.selectedObject.object.id;
-
-        content += `
-          <div class="stat-separator"></div>
-          <div class="inspector-sweep-block">
-            <div class="inspector-sweep-header">
-              <span class="stat-label">Kepler's 2nd Law</span>
-              <button
-                id="sweepToggleBtn"
-                class="toggle-button"
-                data-state="${sweepEnabled ? 'on' : 'off'}"
-                type="button"
-              >
-                ${sweepEnabled ? 'On' : 'Off'}
-              </button>
-            </div>
-            <div class="inspector-sweep-description">
-              Visualizes equal areas swept in equal times. Each colored wedge
-              represents the same time interval - near the star, wedges are thin
-              but long (faster motion); far away, they are wide but short
-              (slower motion).
-            </div>
-          </div>
-        `;
-      }
-
-      content += `<div class="object-description">${info.description}</div>`;
-
-      detailsTabContent.innerHTML = content;
+      if (!view) return;
+      paintInspectorHeader(view);
+      detailsTabContent.innerHTML = renderDetails(view);
 
       // Set up mass slider event listeners
       setupMassSliderListeners();
 
-      if (state.selectedObject.type === 'Star') {
-        const hzBtn = document.getElementById('hzToggleBtn');
-        const hzHeader = document.querySelector(
-          '.inspector-hz-block .inspector-hz-header'
-        );
-        if (hzBtn) {
-          const handleHzToggle = event => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (state.selectedObject && state.selectedObject.object) {
-              const obj = state.selectedObject.object;
-              const newState = !obj.showHabitableZone;
-              obj.showHabitableZone = newState;
-              hzBtn.setAttribute('data-state', newState ? 'on' : 'off');
-              hzBtn.textContent = newState ? 'On' : 'Off';
-            }
-          };
-          hzBtn.onclick = handleHzToggle;
-          if (hzHeader) {
-            hzHeader.onclick = e => {
-              if (hzBtn.contains(e.target)) return;
-              handleHzToggle(e);
-            };
-          }
-        }
-      }
-
-      // Area sweep toggle handler for orbiting objects
-      {
-        const sweepBtn = document.getElementById('sweepToggleBtn');
-        const sweepHeader = document.querySelector(
-          '.inspector-sweep-block .inspector-sweep-header'
-        );
-        if (sweepBtn) {
-          const handleSweepToggle = event => {
-            event.preventDefault();
-            event.stopPropagation();
-            const obj = state.selectedObject?.object;
-            if (!obj) return;
-            const isOn =
-              state.areaSweepOverlay.active &&
-              state.areaSweepOverlay.objectId === obj.id;
-            if (isOn) {
-              state.areaSweepOverlay.active = false;
-              state.areaSweepOverlay.wedges = [];
-              state.areaSweepOverlay.orbitPoints = [];
-              sweepBtn.setAttribute('data-state', 'off');
-              sweepBtn.textContent = 'Off';
-            } else {
-              const data = computeAreaSweep(obj);
-              if (data) {
-                state.areaSweepOverlay.active = true;
-                state.areaSweepOverlay.parentId = data.parentId;
-                state.areaSweepOverlay.parent = data.parent;
-                state.areaSweepOverlay.objectId = data.objectId;
-                state.areaSweepOverlay.wedges = data.wedges;
-                state.areaSweepOverlay.orbitPoints = data.orbitPoints;
-                sweepBtn.setAttribute('data-state', 'on');
-                sweepBtn.textContent = 'On';
-              }
-            }
-          };
-          sweepBtn.onclick = handleSweepToggle;
-          if (sweepHeader) {
-            sweepHeader.onclick = e => {
-              if (sweepBtn.contains(e.target)) return;
-              handleSweepToggle(e);
-            };
-          }
-        }
-      }
+      wireInspectorOverlayToggles();
 
       // Store object ID for future reference
       const newMassSlider = document.getElementById('massSlider');
@@ -1515,50 +1436,23 @@ const showObjectInspector = (object, type) => {
         existingMassSlider.value = state.selectedObject.object.mass;
       }
     } else {
-      // Real-time update - only update stats and description, preserve the slider and HZ button
-      const statRows = detailsTabContent.querySelectorAll('.stat-row');
-      const description = detailsTabContent.querySelector(
-        '.object-description'
+      // Ten times a second. Nothing is rebuilt: patchDetails walks the value
+      // cells and writes only the ones whose text actually changed, so an open
+      // "About this object", a focused control and a slider mid-drag all
+      // survive. The old path replaced every row's innerHTML on every tick.
+      const view = buildInspectorView(
+        state.selectedObject.object,
+        state.selectedObject.type,
+        info
       );
-
-      // Update stats
-      info.stats.forEach((stat, index) => {
-        if (statRows[index]) {
-          statRows[index].innerHTML = `
-                        <span class="stat-label">${stat.label}:</span>
-                        <span class="stat-value">${stat.value}</span>
-                    `;
-        }
-      });
-
-      // Update description
-      if (description) {
-        description.innerHTML = info.description;
-      }
-
-      // Update HZ button state to match object state (but don't recreate it)
-      if (state.selectedObject.type === 'Star') {
-        const hzBtn = document.getElementById('hzToggleBtn');
-        if (hzBtn && state.selectedObject.object) {
-          const currentState = state.selectedObject.object.showHabitableZone;
-          const btnState = hzBtn.getAttribute('data-state') === 'on';
-          if (currentState !== btnState) {
-            hzBtn.setAttribute('data-state', currentState ? 'on' : 'off');
-            hzBtn.textContent = currentState ? 'On' : 'Off';
-          }
-        }
-      }
-
-      // Sync sweep button state during real-time updates
-      const sweepBtnLive = document.getElementById('sweepToggleBtn');
-      if (sweepBtnLive && state.selectedObject?.object) {
-        const sweepOn =
-          state.areaSweepOverlay.active &&
-          state.areaSweepOverlay.objectId === state.selectedObject.object.id;
-        const sweepBtnState = sweepBtnLive.getAttribute('data-state') === 'on';
-        if (sweepOn !== sweepBtnState) {
-          sweepBtnLive.setAttribute('data-state', sweepOn ? 'on' : 'off');
-          sweepBtnLive.textContent = sweepOn ? 'On' : 'Off';
+      if (view) {
+        paintInspectorHeader(view);
+        if (!patchDetails(detailsTabContent, view)) {
+          // The property list changed shape, which means the object became
+          // something else. Rebuild rather than mismatch labels to values.
+          detailsTabContent.innerHTML = renderDetails(view);
+          setupMassSliderListeners();
+          wireInspectorOverlayToggles();
         }
       }
     }
@@ -1612,10 +1506,14 @@ const showObjectInspector = (object, type) => {
 
   state.inspector_open = true;
 
-  // Ensure inspector starts in centered position
+  // Clear anything a previous drag left behind, then dock. No transform is
+  // applied at all - the old translate(-50%, -50%) centering is what the drag
+  // code then had to undo on every mousedown.
   objectInspector.style.left = '';
   objectInspector.style.top = '';
-  objectInspector.style.transform = 'translate(-50%, -50%)';
+  objectInspector.style.transform = '';
+  dockInspector(objectInspector);
+  layoutPinnedCards();
 
   // Set up mobile-friendly backdrop click to close
   setupInspectorBackdropClick();
@@ -1636,11 +1534,12 @@ const showObjectInspector = (object, type) => {
     updateCurrentEnergyValues();
   }, 100); // Small delay to ensure DOM elements are ready
 
-  // Update cursor state
-  updateInspectorCursor();
-
   // Set up overlay minimize functionality
   setupOverlayMinimize();
+
+  // The rail's "Selected object" option names the current selection, so it
+  // changes whenever the selection does.
+  paintFrameControls();
 };
 
 const hideObjectInspector = () => {
@@ -1684,6 +1583,7 @@ const hideObjectInspector = () => {
   currentObjectId = null;
 
   state.selectedObject = null;
+  paintFrameControls();
 };
 
 // Add mobile-friendly backdrop click to close functionality
@@ -1782,40 +1682,13 @@ const setupEnergyTab = () => {
   debugLog('Setting up energy tab system');
 
   // Build energy tab HTML structure
-  energyTabContent.innerHTML = `
-        <!-- Current Energy Values Display -->
-        <div class="energy-values-container">
-            <div class="energy-values-grid">
-                <div class="energy-value-box" title="Energy of motion. Depends on the object's mass and velocity. Higher velocity = more kinetic energy.">
-                    <div class="energy-value-label">KINETIC ENERGY</div>
-                    <div class="energy-value-display" id="currentKineticEnergy">0 J</div>
-                </div>
-                <div class="energy-value-box" title="Energy due to gravitational position. More negative = deeper in gravitational well. Closer to massive objects = lower (more negative) potential energy.">
-                    <div class="energy-value-label">POTENTIAL ENERGY</div>
-                    <div class="energy-value-display" id="currentPotentialEnergy">0 J</div>
-                </div>
-                <div class="energy-value-box" title="Sum of kinetic and potential energy. In a closed system, this should remain constant (conservation of energy).">
-                    <div class="energy-value-label">TOTAL ENERGY</div>
-                    <div class="energy-value-display" id="currentTotalEnergy">0 J</div>
-                </div>
-                <div class="energy-value-box" title="Number of energy measurements recorded for this object. More data points = smoother chart and better trend analysis.">
-                    <div class="energy-value-label">DATA POINTS</div>
-                    <div class="energy-value-display" id="currentDataPoints">0</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="energy-chart-container">
-            <canvas id="energyChart" width="500" height="300"></canvas>
-        </div>
-        <div class="energy-controls">
-            <button class="ui-button" id="refreshEnergyChart" title="Refresh Chart Data">🔄 Refresh</button>
-            <button class="ui-button" id="exportEnergyChart" title="Export as PNG">📊 Export Chart</button>
-        </div>
-    `;
+  energyTabContent.innerHTML = renderEnergy();
 
   // Set up tab switching
   energyTab.addEventListener('click', () => {
+    // The chart was built while this tab was hidden, so it measured a
+    // zero-height parent. Now that it is visible, let it size itself.
+    requestAnimationFrame(() => resizeChart());
     debugLog('Energy tab clicked');
     energyTab.classList.add('active');
     detailsTab.classList.remove('active');
@@ -2205,28 +2078,19 @@ const handleExportChart = () => {
   }
 };
 
-// Update cursor based on minimized state
-const updateInspectorCursor = () => {
-  const objectInspector = document.getElementById('objectInspector');
-  const inspectorHeader = objectInspector?.querySelector('.inspector-header');
-
-  if (!objectInspector || !inspectorHeader) return;
-
-  if (objectInspector.classList.contains('minimized')) {
-    inspectorHeader.style.cursor = 'default';
-  } else {
-    inspectorHeader.style.cursor = 'grab';
-  }
-};
+// The inspector once had a minimize button. Nothing has referenced
+// .inspector-minimize in the markup, the script or the stylesheet for some
+// time, so the class checks that used to guard against dragging a collapsed
+// panel guarded against a state that can no longer occur. The cursor is a
+// stylesheet concern now.
+//
+// Note this is only the inspector's dead copy: setOverlayMinimized below still
+// collapses the HUD readout, and that one is reachable.
 
 const startDrag = e => {
   e.preventDefault();
 
   const objectInspector = document.getElementById('objectInspector');
-  // Don't allow dragging when minimized
-  if (objectInspector.classList.contains('minimized')) {
-    return;
-  }
 
   isDragging = true;
   dragStartX = e.clientX;
@@ -2243,14 +2107,25 @@ const startDrag = e => {
 
   objectInspector.classList.add('dragging');
 
-  // Set the position immediately to prevent jumping
-  // We need to set the position BEFORE removing the transform
+  // Pin the panel to where it already is before switching to left/top control.
+  // There is no transform to cancel any more, but the right/bottom anchors from
+  // the stylesheet have to give way or the panel fights the drag.
   objectInspector.style.left = initialLeft + 'px';
   objectInspector.style.top = initialTop + 'px';
-  objectInspector.style.transform = 'none';
+  objectInspector.style.right = 'auto';
+  objectInspector.style.bottom = 'auto';
 };
 
 const startDragTouch = e => {
+  // A touch that landed on one of the header's own buttons is not a drag, and
+  // treating it as one broke every control up there on a phone. Calling
+  // preventDefault() on touchstart cancels the click the browser would have
+  // synthesised, so the close, pin and delete buttons received the tap and did
+  // nothing at all - on desktop the same handler is harmless, because
+  // preventDefault() on mousedown does not cancel a click, which is why this
+  // went unnoticed.
+  if (e.target?.closest?.('button, a, input, select, textarea')) return;
+
   e.preventDefault();
   isDragging = true;
   const touch = e.touches[0];
@@ -2269,11 +2144,13 @@ const startDragTouch = e => {
 
   objectInspector.classList.add('dragging');
 
-  // Set the position immediately to prevent jumping
-  // We need to set the position BEFORE removing the transform
+  // Pin the panel to where it already is before switching to left/top control.
+  // There is no transform to cancel any more, but the right/bottom anchors from
+  // the stylesheet have to give way or the panel fights the drag.
   objectInspector.style.left = initialLeft + 'px';
   objectInspector.style.top = initialTop + 'px';
-  objectInspector.style.transform = 'none';
+  objectInspector.style.right = 'auto';
+  objectInspector.style.bottom = 'auto';
 };
 
 const drag = e => {
@@ -2385,7 +2262,7 @@ const toggleOverlayMinimize = e => {
 /**
  * Apply the minimised/expanded state to the readout panel and its control.
  * The button carries a word as well as a glyph - a bare "−" gave no clue that
- * the panel could be collapsed, and the collapsed state was an unlabelled box.
+ * the panel could be collapsed, and the collapsed state was an unlabeled box.
  * @param {HTMLElement} overlay - The overlay panel
  * @param {HTMLElement} btn - The minimise/expand button
  * @param {boolean} minimized - Target state
@@ -2410,7 +2287,582 @@ const setOverlayMinimized = (overlay, btn, minimized) => {
  * @param {string} type - The type of object
  * @returns {string} HTML string for the mass slider
  */
-const createMassSlider = (object, type) => {
+/**
+ * Measure what is on screen and move the inspector out of its way.
+ *
+ * The decision itself lives in computeDockPosition; this half only gathers the
+ * rectangles. The bottom-sheet layout under 620px is left alone: there the
+ * panel is meant to cover things.
+ *
+ * @param {HTMLElement} panel - The inspector element
+ */
+const dockInspector = panel => {
+  if (window.innerWidth <= 620) return;
+
+  const visible = sel => {
+    const el = document.querySelector(sel);
+    if (!el) return null;
+    const style = getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') return null;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 ? r : null;
+  };
+
+  const { left, top, maxHeight } = computeDockPosition({
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    panelWidth: panel.offsetWidth,
+    panelHeight: panel.offsetHeight,
+    hud: visible('#overlay'),
+    rail: visible('#mainControls'),
+  });
+
+  panel.style.left = `${left}px`;
+  panel.style.top = `${top}px`;
+  panel.style.right = 'auto';
+  panel.style.bottom = 'auto';
+  // Never taller than the stylesheet allows; only shorter, when the position
+  // it was given leaves less room than that.
+  panel.style.maxHeight = `min(72vh, 640px, ${maxHeight}px)`;
+};
+
+// --- Reference-frame switcher -------------------------------------------------
+// The rail control and the inspector row are two doors into the same state, so
+// both are driven from one subscription rather than each trying to keep the
+// other in step.
+
+/**
+ * The name to show for a frame, and what choosing it does.
+ *
+ * @param {{mode: string, objectId: ?number}} frame - The frame
+ * @returns {{value: string, note: string, active: boolean}} What the rail shows
+ */
+const describeFrame = frame => {
+  if (frame.mode === BARYCENTER) {
+    return {
+      value: BARYCENTER,
+      note: 'Positions relative to the system\u2019s center of mass. It does not sit inside the largest body.',
+      active: true,
+    };
+  }
+  if (frame.mode === OBJECT) {
+    const body = barycenterBodies().find(b => b.id === frame.objectId);
+    const name = body?.name || 'the selected object';
+    return {
+      value: OBJECT,
+      note: `Positions and trails as seen from ${name}, which now sits still.`,
+      active: true,
+    };
+  }
+  return {
+    value: WORLD,
+    note: 'Positions as the scenario defines them.',
+    active: false,
+  };
+};
+
+/** Bring the rail control and the inspector row in line with the frame. */
+const paintFrameControls = () => {
+  const frame = frameState();
+  const shown = describeFrame(frame);
+
+  const select = document.getElementById('referenceFrameSelect');
+  if (select) {
+    const objectOption = select.querySelector('option[value="object"]');
+    if (objectOption) {
+      // "Selected object" is only a choice when there is one. Offering it with
+      // nothing selected would set a frame with no origin.
+      const sel = state.selectedObject?.object;
+      objectOption.disabled = !sel;
+      objectOption.textContent = sel
+        ? `Selected: ${sel.name || 'object'}`
+        : 'Selected object';
+    }
+    select.value = shown.value;
+  }
+
+  const note = document.getElementById('referenceFrameNote');
+  if (note) {
+    // Only shown while a frame is active. It is a reminder that every number on
+    // screen is now measured against something other than the scenario's own
+    // coordinates, and in the world frame there is nothing to remind anyone of.
+    note.textContent = shown.note;
+    note.hidden = !shown.active;
+  }
+
+  const btn = document.getElementById('frameToggleBtn');
+  if (btn) {
+    const sel = state.selectedObject?.object;
+    const on = !!sel && frame.mode === OBJECT && frame.objectId === sel.id;
+    btn.setAttribute('data-state', on ? 'on' : 'off');
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    btn.textContent = on ? 'On' : 'Off';
+  }
+};
+
+/** Wire the rail's frame selector. */
+const setupReferenceFrameControl = () => {
+  const select = document.getElementById('referenceFrameSelect');
+  if (select) {
+    select.addEventListener('change', () => {
+      const value = select.value;
+      if (value === OBJECT) {
+        const sel = state.selectedObject?.object;
+        setFrame(sel ? OBJECT : WORLD, sel ? sel.id : null);
+      } else {
+        setFrame(value === BARYCENTER ? BARYCENTER : WORLD);
+      }
+    });
+  }
+  onFrameChange(paintFrameControls);
+  paintFrameControls();
+};
+
+// --- Pinned comparison cards ------------------------------------------------
+// One inspector answers "what is this?". Two answer "how do these differ?",
+// which is the question a student actually has when they are looking at two
+// planets. Pinning takes a copy of the current object's numbers and leaves it
+// on screen while the main inspector moves on to whatever is selected next.
+//
+// The cards are read-only by design: see renderPinnedCard for why a second mass
+// slider would collide with the first.
+const pinnedInspectors = [];
+let pinnedUpdateInterval = null;
+
+/**
+ * Lay the pinned cards out beside the inspector.
+ *
+ * Beside rather than below, because that is the arrangement the comparison
+ * needs: two sets of numbers at the same height, read across. Stacking them
+ * under the panel put the first card's bottom edge 200px past the bottom of
+ * the window.
+ *
+ * Cards fill a column downward from the panel's top edge and start a new column
+ * further left when the next one would not fit, so pinning a fourth card never
+ * pushes anything off screen.
+ */
+const layoutPinnedCards = () => {
+  const host = document.getElementById('pinnedInspectors');
+  const main = document.getElementById('objectInspector');
+  if (!host) return;
+
+  const GAP = 10;
+  const CARD_W = 300;
+  const open = main && getComputedStyle(main).display !== 'none';
+
+  // Under 620px the inspector is a bottom sheet, so there is no "beside" to
+  // work with: the cards take the top of the screen and the sheet keeps the
+  // bottom. Anchoring to the sheet would stack them straight onto it.
+  if (window.innerWidth <= 620) {
+    let y = GAP;
+    for (const pin of pinnedInspectors) {
+      if (pin.placed) continue;
+      pin.el.style.left = `${GAP}px`;
+      pin.el.style.top = `${Math.round(y)}px`;
+      y += pin.el.offsetHeight + GAP;
+    }
+    return;
+  }
+
+  const anchor = open ? main.getBoundingClientRect() : null;
+
+  // With the panel open the cards start to its left; with it closed they take
+  // the space the panel would have occupied.
+  let right = anchor ? anchor.left - GAP : window.innerWidth - GAP;
+  const topStart = anchor ? anchor.top : 96;
+  let top = topStart;
+
+  for (const pin of pinnedInspectors) {
+    if (pin.placed) continue;
+    const h = pin.el.offsetHeight;
+    if (top !== topStart && top + h > window.innerHeight - GAP) {
+      // This column is full: start another one to the left.
+      right -= CARD_W + GAP;
+      top = topStart;
+    }
+    pin.el.style.left = `${Math.round(Math.max(GAP, right - CARD_W))}px`;
+    pin.el.style.top = `${Math.round(
+      Math.max(GAP, Math.min(top, window.innerHeight - h - GAP))
+    )}px`;
+    top += h + GAP;
+  }
+};
+
+/** Remove a pinned card. @param {object} pin - The pin record */
+const unpinInspector = pin => {
+  const i = pinnedInspectors.indexOf(pin);
+  if (i >= 0) pinnedInspectors.splice(i, 1);
+  pin.el.remove();
+  if (!pinnedInspectors.length && pinnedUpdateInterval) {
+    clearInterval(pinnedUpdateInterval);
+    pinnedUpdateInterval = null;
+  }
+  layoutPinnedCards();
+};
+
+/** Pin the object the inspector is currently showing. */
+const pinCurrentObject = () => {
+  const sel = state.selectedObject;
+  if (!sel?.object) return;
+  // Pinning the same body twice would just stack two identical cards.
+  if (pinnedInspectors.some(p => p.object === sel.object)) return;
+
+  const info = objectInfoFor(sel.object, sel.type);
+  const view = buildInspectorView(sel.object, sel.type, info);
+  if (!view) return;
+
+  const el = document.createElement('div');
+  el.className = 'insp-pin';
+  el.innerHTML = renderPinnedCard(view);
+  document.getElementById('pinnedInspectors')?.appendChild(el);
+
+  const pin = { el, object: sel.object, type: sel.type };
+  pinnedInspectors.push(pin);
+  el.querySelector('[data-pin-close]')?.addEventListener('click', () =>
+    unpinInspector(pin)
+  );
+  makePinDraggable(pin);
+  // The main inspector's ticker stops when it closes. A pinned card has to
+  // outlive that, so the cards run their own.
+  if (!pinnedUpdateInterval) {
+    pinnedUpdateInterval = setInterval(updatePinnedInspectors, 100);
+  }
+  layoutPinnedCards();
+};
+
+/**
+ * Let a pinned card be dragged by its header.
+ *
+ * Once dragged it stops taking part in the automatic column layout: the user
+ * has said where they want it, and having it jump back the next time another
+ * card is pinned would undo that.
+ *
+ * @param {object} pin - The pin record
+ */
+const makePinDraggable = pin => {
+  const header = pin.el.querySelector('.insp-pin-header');
+  if (!header) return;
+  header.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    const rect = pin.el.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    pin.placed = true;
+    const move = ev => {
+      pin.el.style.left = `${Math.round(
+        Math.min(
+          Math.max(4, ev.clientX - offsetX),
+          window.innerWidth - rect.width - 4
+        )
+      )}px`;
+      pin.el.style.top = `${Math.round(
+        Math.min(Math.max(4, ev.clientY - offsetY), window.innerHeight - 40)
+      )}px`;
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    e.preventDefault();
+  });
+};
+
+/**
+ * Refresh every pinned card, and drop any whose object has left the world.
+ *
+ * Called from the same tick as the main inspector, so a pinned card is as live
+ * as the panel it was copied from.
+ */
+const updatePinnedInspectors = () => {
+  if (!pinnedInspectors.length) return;
+  for (const pin of [...pinnedInspectors]) {
+    if (!isObjectStillInSimulation(pin.object)) {
+      unpinInspector(pin);
+      continue;
+    }
+    const info = objectInfoFor(pin.object, pin.type);
+    const view = buildInspectorView(pin.object, pin.type, info);
+    if (!view) continue;
+    if (!patchDetails(pin.el, view)) {
+      pin.el.innerHTML = renderPinnedCard(view);
+      pin.el
+        .querySelector('[data-pin-close]')
+        ?.addEventListener('click', () => unpinInspector(pin));
+    }
+  }
+};
+
+/**
+ * The per-type info function, in one place.
+ *
+ * Three separate switch statements used to spell this mapping out character for
+ * character: the live tick, the transformation path and the mass-change path.
+ * Adding a ninth object type meant remembering all three.
+ *
+ * @param {object} object - The body
+ * @param {string} type - Its type name
+ * @returns {object|null} Info for the inspector
+ */
+const objectInfoFor = (object, type) => {
+  switch (type) {
+    case 'BlackHole':
+      return getBlackHoleInfo(object);
+    case 'Star':
+      return getStarInfo(object);
+    case 'NeutronStar':
+      return getNeutronStarInfo(object);
+    case 'WhiteDwarf':
+      return getWhiteDwarfInfo(object);
+    case 'Planet':
+      return getPlanetInfo(object);
+    case 'GasGiant':
+      return getGasGiantInfo(object);
+    case 'Comet':
+      return getCometInfo(object);
+    case 'Asteroid':
+      return getAsteroidInfo(object);
+    case 'Galaxy':
+      return getGalaxyInfo(object);
+    default:
+      return null;
+  }
+};
+
+/**
+ * Attach the overlay toggles after a rebuild.
+ *
+ * Both toggles used to be wired twice over, once in the selection path and
+ * once in the transformation path, each with its own copy of the handler and
+ * an extra click target on a header row that no longer exists. One button, one
+ * handler, one place.
+ */
+const wireInspectorOverlayToggles = () => {
+  const hzBtn = document.getElementById('hzToggleBtn');
+  if (hzBtn) {
+    hzBtn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const obj = state.selectedObject?.object;
+      if (!obj) return;
+      const next = !obj.showHabitableZone;
+      obj.showHabitableZone = next;
+      hzBtn.setAttribute('data-state', next ? 'on' : 'off');
+      hzBtn.setAttribute('aria-checked', next ? 'true' : 'false');
+      hzBtn.textContent = next ? 'On' : 'Off';
+    };
+  }
+
+  const frameBtn = document.getElementById('frameToggleBtn');
+  if (frameBtn) {
+    frameBtn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const obj = state.selectedObject?.object;
+      if (!obj) return;
+      const current = frameState();
+      const isOn = current.mode === OBJECT && current.objectId === obj.id;
+      setFrame(isOn ? WORLD : OBJECT, isOn ? null : obj.id);
+    };
+  }
+
+  const sweepBtn = document.getElementById('sweepToggleBtn');
+  if (sweepBtn) {
+    sweepBtn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const obj = state.selectedObject?.object;
+      if (!obj) return;
+      const isOn =
+        state.areaSweepOverlay.active &&
+        state.areaSweepOverlay.objectId === obj.id;
+      const set = on => {
+        sweepBtn.setAttribute('data-state', on ? 'on' : 'off');
+        sweepBtn.setAttribute('aria-checked', on ? 'true' : 'false');
+        sweepBtn.textContent = on ? 'On' : 'Off';
+      };
+      if (isOn) {
+        state.areaSweepOverlay.active = false;
+        state.areaSweepOverlay.wedges = [];
+        state.areaSweepOverlay.orbitPoints = [];
+        set(false);
+        return;
+      }
+      const data = computeAreaSweep(obj);
+      if (!data) return;
+      state.areaSweepOverlay.active = true;
+      state.areaSweepOverlay.parentId = data.parentId;
+      state.areaSweepOverlay.parent = data.parent;
+      state.areaSweepOverlay.objectId = data.objectId;
+      state.areaSweepOverlay.wedges = data.wedges;
+      state.areaSweepOverlay.orbitPoints = data.orbitPoints;
+      set(true);
+    };
+  }
+};
+
+/**
+ * Resolve everything the inspector needs to draw, for one object.
+ *
+ * The panel used to be built twice from two near-identical blobs of string
+ * concatenation: once when a new object was selected, and again when a mass
+ * change transformed one object type into another. The two had already drifted
+ * apart. This is the one place that decides what the inspector shows.
+ *
+ * @param {object} object - The selected body
+ * @param {string} type - Its type name
+ * @param {object} info - Output of the per-type info function
+ * @returns {object|null} A view model for js/objectInspector.js
+ */
+const buildInspectorView = (object, type, info) => {
+  if (!info) return null;
+  const identity = splitIdentity(info.icon, info.title);
+
+  // Ordinary objects get one ungrouped table; a section heading for four rows
+  // costs more vertical space than it saves. Bodies with a lot to say - black
+  // holes especially - get their extras grouped so the list stays scannable.
+  const rows = info.stats.map((stat, i) => ({
+    key: `s${i}`,
+    label: String(stat.label).replace(/:\s*$/, ''),
+    value: stat.value,
+    tooltip: getStatTooltip(stat.label, type),
+  }));
+
+  // While a frame is active, the world-frame speed above is true but not what
+  // the picture is showing: the view has the origin sitting still. Rather than
+  // silently changing what "Velocity" means, add the relative one beside it and
+  // say in the label what it is relative to.
+  const originVel = frameOriginVelocity(barycenterBodies());
+  const frameOrigin = resolveFrameOrigin(barycenterBodies());
+  const frameLabel = () => {
+    const frame = frameState();
+    return frame.mode === BARYCENTER
+      ? 'barycenter'
+      : barycenterBodies().find(b => b.id === frame.objectId)?.name ||
+          'the frame';
+  };
+
+  // Where the body is in the frame, not in the scenario's coordinates. Without
+  // these two rows the frame is something you can only look at: the picture
+  // shows Mars looping and the numbers beside it still describe a circle round
+  // the Sun. A direction and a distance are also what an observer on the origin
+  // body would actually record, which is what makes them the measurable ones.
+  if (frameOrigin && object !== null && object.pos) {
+    const dx = object.pos.x - frameOrigin.now.x;
+    const dy = object.pos.y - frameOrigin.now.y;
+    const sep = Math.hypot(dx, dy);
+    if (sep > 0) {
+      const against = frameLabel();
+      let bearing = (Math.atan2(dy, dx) * 180) / Math.PI;
+      if (bearing < 0) bearing += 360;
+      rows.push({
+        key: 'frameSeparation',
+        label: `Distance from ${against}`,
+        value: formatDistance(sep),
+        tooltip:
+          'How far this body is from the reference frame\u2019s origin right now.',
+      });
+      rows.push({
+        key: 'frameBearing',
+        label: `Direction from ${against}`,
+        value: `${bearing.toFixed(1)}\u00b0`,
+        tooltip:
+          'Which way this body lies as seen from the frame\u2019s origin, measured anticlockwise from the positive x axis. Watch this number rather than the picture to catch the moment a body reverses direction.',
+      });
+    }
+  }
+
+  if (originVel && object.vel) {
+    const against = frameLabel();
+    const relative = Math.hypot(
+      object.vel.x - originVel.x,
+      object.vel.y - originVel.y
+    );
+    rows.push({
+      key: 'frameRelativeSpeed',
+      label: `Speed vs ${against}`,
+      value: formatSpeed(relative),
+      tooltip:
+        'How fast this body is moving in the reference frame the view is currently in. The velocity above is measured in the scenario\u2019s own coordinates and does not change when the frame does.',
+    });
+  }
+
+  const groups =
+    rows.length > 9
+      ? [{ rows: rows.slice(0, 6) }, { title: 'More', rows: rows.slice(6) }]
+      : [{ rows }];
+
+  const overlays = [];
+  if (type === 'Star') {
+    overlays.push({
+      id: 'hzToggleBtn',
+      label: 'Habitable zone',
+      on: !!object.showHabitableZone,
+      help: 'The range of orbital distances where a rocky planet with a suitable atmosphere could hold liquid water. Inside it is where to look, not a measurement that a world is habitable. Edges follow Kopparapu et al. (2013) from this star\u2019s luminosity and temperature.',
+    });
+  }
+  // Every body can host a frame, so this row is unconditional. It is the one
+  // control that changes what all the other numbers on screen mean, which is
+  // why it says so in its own help text rather than only in the rail.
+  overlays.push({
+    id: 'frameToggleBtn',
+    label: 'Reference frame',
+    on: frameState().mode === OBJECT && frameState().objectId === object.id,
+    help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
+  });
+
+  const sweepScenarios = [
+    'Solar System',
+    'Earth-Moon System',
+    "Kepler's 2nd Law",
+  ];
+  const orbitingTypes = ['Planet', 'GasGiant', 'Asteroid', 'Comet'];
+  if (
+    orbitingTypes.includes(type) &&
+    sweepScenarios.includes(current_scenario_name)
+  ) {
+    overlays.push({
+      id: 'sweepToggleBtn',
+      label: 'Equal-area sweep',
+      on:
+        state.areaSweepOverlay.active &&
+        state.areaSweepOverlay.objectId === object.id,
+      help: 'Kepler\u2019s second law, drawn. Each wedge covers the same amount of time: thin and long near the star where the object moves fast, wide and short far away where it moves slowly. The areas are equal.',
+    });
+  }
+
+  return {
+    icon: identity.icon,
+    name: identity.name,
+    kind: String(type || '')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .toUpperCase(),
+    mass: massControlModel(object, type),
+    groups,
+    overlays,
+    about: info.description || '',
+  };
+};
+
+/**
+ * Write the identity into the header.
+ *
+ * @param {object} view - The view model
+ */
+const paintInspectorHeader = view => {
+  const icon = document.getElementById('inspectorIcon');
+  const title = document.getElementById('inspectorTitle');
+  const kind = document.getElementById('inspectorKind');
+  if (icon && icon.textContent !== view.icon) icon.textContent = view.icon;
+  if (title && title.textContent !== view.name) {
+    title.textContent = view.name;
+    title.title = view.name;
+  }
+  if (kind && kind.textContent !== view.kind) kind.textContent = view.kind;
+};
+
+const massControlModel = (object, type) => {
   debugLog('Creating mass slider for:', type, object);
   let currentMass, minMass, maxMass, massUnit, massLabel;
 
@@ -2451,7 +2903,7 @@ const createMassSlider = (object, type) => {
       massLabel = 'Object Mass';
       break;
     case 'GasGiant':
-      currentMass = object.massInJupiters || object.mass / 50.0;
+      currentMass = object.massInJupiters || object.mass / JUPITER_MASS_UNIT;
       minMass = 0.1;
       maxMass = 100; // Extended to allow transformation to star (threshold is 80 M♃)
       massUnit = 'M<sub class="solar-sub">\u2643</sub>';
@@ -2472,27 +2924,23 @@ const createMassSlider = (object, type) => {
       massLabel = 'Object Mass';
       break;
     default:
-      return '';
+      return null;
   }
 
-  return `
-        <div class="mass-adjustment-section">
-            <div class="mass-slider-container">
-                <label class="mass-slider-label">${massLabel}</label>
-                <div class="mass-slider-control">
-                    <input type="range" 
-                           id="massSlider" 
-                           data-object-id="${object.id || 'unknown'}"
-                           min="${minMass}" 
-                           max="${maxMass}" 
-                           step="${(maxMass - minMass) / 100}" 
-                           value="${currentMass}"
-                           class="mass-slider">
-                    <span class="mass-value-display" id="massValueDisplay">${currentMass.toFixed(3)} ${massUnit}</span>
-                </div>
-            </div>
-        </div>
-    `;
+  // Returns a view model rather than markup: js/objectInspector.js owns the
+  // HTML now, and the ranges and units are the part that belongs here, next to
+  // the object types they describe. massLabel is no longer rendered - the
+  // control is labelled "Mass" in one compact row - but the switch above still
+  // sets it, so it is read here to keep the linter honest about the branch.
+  void massLabel;
+  return {
+    objectId: object.id ?? 'unknown',
+    min: minMass,
+    max: maxMass,
+    step: (maxMass - minMass) / 100,
+    value: currentMass,
+    display: `${formatNumber(currentMass, { sig: 3 })} ${massUnit}`,
+  };
 };
 
 /**
@@ -2569,127 +3017,23 @@ const setupMassSliderListeners = () => {
       // Refresh the inspector with new object type
       const inspectorContent = document.getElementById('inspectorContent');
       if (inspectorContent) {
-        // Create new mass slider for the new object type
-        const massSlider = createMassSlider(
+        // A mass change turned this object into something else. Same builder,
+        // same renderer as a fresh selection: this path used to carry its own
+        // copy of the markup and the two had already drifted apart.
+        const info = objectInfoFor(state.selectedObject.object, newType);
+        if (!info) return;
+
+        const view = buildInspectorView(
           state.selectedObject.object,
-          newType
+          newType,
+          info
         );
-        let content = massSlider + '<div class="stat-separator"></div>';
-
-        // Get info for the new object type
-        let info;
-        switch (newType) {
-          case 'BlackHole':
-            info = getBlackHoleInfo(state.selectedObject.object);
-            break;
-          case 'Star':
-            info = getStarInfo(state.selectedObject.object);
-            break;
-          case 'NeutronStar':
-            info = getNeutronStarInfo(state.selectedObject.object);
-            break;
-          case 'WhiteDwarf':
-            info = getWhiteDwarfInfo(state.selectedObject.object);
-            break;
-          case 'Planet':
-            info = getPlanetInfo(state.selectedObject.object);
-            break;
-          case 'GasGiant':
-            info = getGasGiantInfo(state.selectedObject.object);
-            break;
-          case 'Comet':
-            info = getCometInfo(state.selectedObject.object);
-            break;
-          case 'Asteroid':
-            info = getAsteroidInfo(state.selectedObject.object);
-            break;
-          default:
-            return;
-        }
-
-        // Add stats and description
-        info.stats.forEach(stat => {
-          content += `
-                        <div class="stat-row">
-                            <span class="stat-label">${stat.label}:</span>
-                            <span class="stat-value">${stat.value}</span>
-                        </div>
-                    `;
-        });
-
-        // If the new type is a Star, also include habitable-zone controls
-        if (newType === 'Star') {
-          const hzEnabled = !!state.selectedObject.object.showHabitableZone;
-          const hzOptimism =
-            (typeof SETTINGS.habitable_zone_optimism === 'number'
-              ? SETTINGS.habitable_zone_optimism
-              : 1.0) || 1.0;
-
-          content += `
-            <div class="stat-separator"></div>
-            <div class="inspector-hz-block">
-              <div class="inspector-hz-header">
-                <span class="stat-label">Habitable Zone Ring</span>
-                <button
-                  id="hzToggleBtn"
-                  class="toggle-button"
-                  data-state="${hzEnabled ? 'on' : 'off'}"
-                  type="button"
-                >
-                  ${hzEnabled ? 'On' : 'Off'}
-                </button>
-              </div>
-              <div class="inspector-hz-description">
-                The circumstellar habitable zone is the range of orbital distances where a rocky planet
-                with suitable atmospheric conditions <em>could potentially</em> maintain liquid water on its
-                surface. Being inside it does not establish that a planet has water, is habitable, or is inhabited:
-                it is a first filter for where to look, not a measurement of a world.
-                The edges come from a published prescription (Kopparapu et al. 2013) and depend on the star's
-                luminosity and temperature. The <strong>Habitable Zone Optimism</strong> setting selects between the
-                <strong>conservative</strong> zone, bounded by the runaway and maximum greenhouse limits, and the
-                <strong>optimistic</strong> zone, bounded by the empirical recent-Venus and early-Mars limits.
-                Currently showing the <strong>${hzOptimism >= 1.3 ? 'optimistic' : 'conservative'}</strong> zone.
-              </div>
-            </div>
-          `;
-        }
-
-        content += `<div class="object-description">${info.description}</div>`;
-
-        // Only update the details tab content, not the entire inspector content
         const detailsTabContent = document.getElementById('detailsTab');
-        if (detailsTabContent) {
-          detailsTabContent.innerHTML = content;
-        }
-
-        // Set up new mass slider listeners
-        setupMassSliderListeners();
-
-        if (newType === 'Star') {
-          const hzBtn = document.getElementById('hzToggleBtn');
-          const hzHeader = document.querySelector(
-            '.inspector-hz-block .inspector-hz-header'
-          );
-          if (hzBtn) {
-            const handleHzToggle = event => {
-              event.preventDefault();
-              event.stopPropagation();
-              if (state.selectedObject && state.selectedObject.object) {
-                const obj = state.selectedObject.object;
-                const newState = !obj.showHabitableZone;
-                obj.showHabitableZone = newState;
-                hzBtn.setAttribute('data-state', newState ? 'on' : 'off');
-                hzBtn.textContent = newState ? 'On' : 'Off';
-              }
-            };
-            hzBtn.onclick = handleHzToggle;
-            if (hzHeader) {
-              hzHeader.onclick = e => {
-                if (hzBtn.contains(e.target)) return;
-                handleHzToggle(e);
-              };
-            }
-          }
+        if (view && detailsTabContent) {
+          paintInspectorHeader(view);
+          detailsTabContent.innerHTML = renderDetails(view);
+          setupMassSliderListeners();
+          wireInspectorOverlayToggles();
         }
 
         // Energy tab should still be intact since we only updated details tab
@@ -2738,55 +3082,28 @@ const setupMassSliderListeners = () => {
       // Update the stats display to reflect the new mass
       const inspectorContent = document.getElementById('inspectorContent');
       if (inspectorContent && state.selectedObject) {
-        let info;
-        switch (state.selectedObject.type) {
-          case 'BlackHole':
-            info = getBlackHoleInfo(state.selectedObject.object);
-            break;
-          case 'Star':
-            info = getStarInfo(state.selectedObject.object);
-            break;
-          case 'NeutronStar':
-            info = getNeutronStarInfo(state.selectedObject.object);
-            break;
-          case 'WhiteDwarf':
-            info = getWhiteDwarfInfo(state.selectedObject.object);
-            break;
-          case 'Planet':
-            info = getPlanetInfo(state.selectedObject.object);
-            break;
-          case 'GasGiant':
-            info = getGasGiantInfo(state.selectedObject.object);
-            break;
-          case 'Comet':
-            info = getCometInfo(state.selectedObject.object);
-            break;
-          case 'Asteroid':
-            info = getAsteroidInfo(state.selectedObject.object);
-            break;
-          default:
-            return;
-        }
-
-        // Update only the stats rows, preserve the mass slider
-        const statRows = inspectorContent.querySelectorAll('.stat-row');
-        const description = inspectorContent.querySelector(
-          '.object-description'
+        const info = objectInfoFor(
+          state.selectedObject.object,
+          state.selectedObject.type
         );
+        if (!info) return;
 
-        // Update stats
-        info.stats.forEach((stat, index) => {
-          if (statRows[index]) {
-            statRows[index].innerHTML = `
-                            <span class="stat-label">${stat.label}:</span>
-                            <span class="stat-value">${stat.value}</span>
-                        `;
+        // Values only, through the same patcher the live tick uses. This block
+        // used to write the old .stat-row markup by hand, which stopped
+        // matching the DOM the moment the panel was redesigned.
+        const view = buildInspectorView(
+          state.selectedObject.object,
+          state.selectedObject.type,
+          info
+        );
+        const detailsTabContent = document.getElementById('detailsTab');
+        if (view && detailsTabContent) {
+          paintInspectorHeader(view);
+          if (!patchDetails(detailsTabContent, view)) {
+            detailsTabContent.innerHTML = renderDetails(view);
+            setupMassSliderListeners();
+            wireInspectorOverlayToggles();
           }
-        });
-
-        // Update description
-        if (description) {
-          description.innerHTML = info.description;
         }
       }
     }
@@ -2905,9 +3222,9 @@ const updateObjectMass = (object, type, newMass) => {
       }
       break;
     case 'GasGiant':
-      object.mass = newMass * 50.0; // Convert Jupiter masses to simulation units
+      object.mass = newMass * JUPITER_MASS_UNIT;
       object.massInJupiters = newMass;
-      object.massInEarths = newMass * 317.8;
+      object.massInEarths = newMass * EARTH_MASSES_PER_JUPITER_MASS;
       // Recalculate gas giant radius and type
       object.radius = Math.pow(newMass, 0.2) * GAS_GIANT_RADIUS;
       object.calculateGiantType();
@@ -3058,7 +3375,7 @@ const transformPlanetToGasGiant = object => {
   debugLog('Planet transforming into gas giant!');
   const pos = { x: object.pos.x, y: object.pos.y };
   const vel = { x: object.vel.x, y: object.vel.y };
-  const mass = object.mass / 50.0; // Convert to Jupiter masses
+  const mass = object.mass / JUPITER_MASS_UNIT; // Convert to Jupiter masses
 
   // Clear energy history for the old object before transformation
   if (object && object.id !== undefined && object.id !== null) {
@@ -3096,11 +3413,12 @@ const transformGasGiantToStar = object => {
     clearObjectEnergyHistory(object.id);
   }
 
-  // Convert Jupiter masses to solar masses
-  // The simulation uses 50 units = 1 Jupiter mass, but we need to convert to real solar masses
-  // 1 Jupiter mass = 1/1047 solar masses (correct conversion)
-  const massInJupiters = object.massInJupiters || object.mass / 50.0;
-  const massInSolarMasses = massInJupiters / 1047.0;
+  // Jupiter masses to solar masses. Both conversions run off the shared
+  // constants, so the transformation conserves gravitational mass exactly;
+  // with the old 50-units-per-Jupiter figure it silently shed 98% of it.
+  const massInJupiters =
+    object.massInJupiters || object.mass / JUPITER_MASS_UNIT;
+  const massInSolarMasses = massInJupiters / JUPITER_MASSES_PER_SOLAR_MASS;
 
   // Create star with the converted mass in simulation units
   const star = new StarObject(pos, vel, massInSolarMasses);
@@ -3905,12 +4223,17 @@ const build_simulation = () => {
   comets.length = 0;
   neutron_stars.length = 0;
   white_dwarfs.length = 0;
+  galaxies.length = 0;
   debris.length = 0;
   particles.length = 0;
   gravity_ripples.length = 0;
   accretion_disk_particles.length = 0;
   particlePool.clear(); // Clear particle pool
   resetPhysicsObjectCounter();
+  // Ids restart, so a frame pinned to id 7 would silently follow a different
+  // body in the new world. The trail clock restarts with them.
+  resetFrame();
+  resetTrailTick();
 
   // Clear all energy history when simulation resets
   clearAllEnergyHistory();
@@ -4366,7 +4689,6 @@ const build_simulation = () => {
     ];
 
     // Create planets with realistic properties
-    const SOLAR_SYSTEM_MASS_SCALE = 0.001;
     const DEG2RAD = Math.PI / 180;
 
     for (let i = 0; i < solarSystemData.length; i++) {
@@ -4388,9 +4710,15 @@ const build_simulation = () => {
 
       if (planetData.type === 'gas_giant' || planetData.type === 'ice_giant') {
         // Create new gas giant objects
-        const gasGiant = new GasGiant(pos, vel, planetData.mass / 50.0); // Convert to Jupiter masses
+        // planetData.mass is in Earth masses, so the conversion to the
+        // constructor's Jupiter masses goes through the Earth/Jupiter ratio.
+        // Dividing by 50 here made Jupiter report 6.4 M_J in the inspector.
+        const gasGiant = new GasGiant(
+          pos,
+          vel,
+          planetData.mass / EARTH_MASSES_PER_JUPITER_MASS
+        );
         gasGiant.name = planetData.name;
-        gasGiant.mass = planetData.mass * EARTH_MASS_UNIT;
         gasGiant.diameter = planetData.diameter;
         gasGiant.orbital_period = planetData.orbital_period;
         gasGiant.baseColor = planetData.color;
@@ -4404,11 +4732,9 @@ const build_simulation = () => {
         gasGiant.escape_velocity = planetData.escape_velocity;
         gasGiant.surface_pressure = planetData.surface_pressure;
         gasGiant.isSolarSystemPlanet = true; // Flag for Solar System planets
-        const scaledGasMass = Math.max(
-          planetData.mass * EARTH_MASS_UNIT * SOLAR_SYSTEM_MASS_SCALE,
-          0.0001
-        );
-        gasGiant.mass = scaledGasMass;
+        // Jupiter lands at 0.955 units against a 1000-unit Sun, which is the
+        // real ratio. The floor is here only for the smallest bodies.
+        gasGiant.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
         // Ensure Saturn has visible rings; other giants do not
         if (gasGiant.name === 'Saturn') {
           gasGiant.hasRings = true;
@@ -4439,10 +4765,7 @@ const build_simulation = () => {
         planet.escape_velocity = planetData.escape_velocity;
         planet.surface_pressure = planetData.surface_pressure;
         planet.isSolarSystemPlanet = true; // Flag for Solar System planets
-        planet.mass = Math.max(
-          planetData.mass * EARTH_MASS_UNIT * SOLAR_SYSTEM_MASS_SCALE,
-          0.00005
-        );
+        planet.mass = Math.max(planetData.mass * EARTH_MASS_UNIT, 1e-7);
         planets.push(planet);
       }
     }
@@ -4484,11 +4807,8 @@ const build_simulation = () => {
         const asteroid = new Asteroid(pos, vel);
         asteroid.name = asteroidData.name;
         asteroid.diameter = asteroidData.diameter;
-        // Same scaling the planets use, so relative masses stay true to life
-        asteroid.mass = Math.max(
-          asteroidData.mass * EARTH_MASS_UNIT * SOLAR_SYSTEM_MASS_SCALE,
-          1e-9
-        );
+        // Same unit the planets use, so relative masses stay true to life
+        asteroid.mass = Math.max(asteroidData.mass * EARTH_MASS_UNIT, 1e-12);
         asteroids.push(asteroid);
       }
     }
@@ -4691,6 +5011,10 @@ const build_simulation = () => {
           planets[0].pos = pos;
           planets[0].vel = vel;
           planets[0].mass = kboData.mass * EARTH_MASS_UNIT;
+          // These bodies are recycled from the random generator, which already
+          // put a mass in massInEarths. Without this the stored value and the
+          // simulated mass describe two different objects.
+          planets[0].massInEarths = kboData.mass;
           planets[0].name = kboData.name;
           planets.splice(0, 1);
         }
@@ -4700,6 +5024,9 @@ const build_simulation = () => {
           gas_giants[0].pos = pos;
           gas_giants[0].vel = vel;
           gas_giants[0].mass = kboData.mass * EARTH_MASS_UNIT;
+          gas_giants[0].massInEarths = kboData.mass;
+          gas_giants[0].massInJupiters =
+            kboData.mass / EARTH_MASSES_PER_JUPITER_MASS;
           gas_giants[0].name = kboData.name;
           gas_giants.splice(0, 1);
         }
@@ -4899,18 +5226,38 @@ const build_simulation = () => {
 
     // Create Moon orbiting Earth
     const moonDistance = 35; // Distance from Earth (scaled for better visibility)
-    const moonOrbitalVelocity = Math.sqrt(
-      (SETTINGS.gravitational_constant * earth.mass) / moonDistance
+    const moonMass = 0.0123 * EARTH_MASS_UNIT;
+    // The relative circular speed uses both masses. Using the Earth's alone
+    // understates it by the Moon's 1.2% share, which starts the orbit at an
+    // eccentricity of 0.012 rather than zero.
+    const relativeSpeed = Math.sqrt(
+      (SETTINGS.gravitational_constant * (earth.mass + moonMass)) / moonDistance
     );
     const moonTheta = Math.random() * 2 * Math.PI;
+    const totalMass = earth.mass + moonMass;
+    // Barycentric, and this matters more here than anywhere else in the app:
+    // the Earth-Moon barycenter is the standard example of a barycenter inside
+    // the larger body, and the reference-frame panel exists to show it. Given
+    // the Moon all of the momentum, the pair would circle its barycenter and
+    // drift off the screen at the same time. Split between them, the barycenter
+    // stays put and the Earth visibly wobbles about it.
     const moonPos = {
-      x: moonDistance * Math.cos(moonTheta),
-      y: moonDistance * Math.sin(moonTheta),
+      x: ((moonDistance * earth.mass) / totalMass) * Math.cos(moonTheta),
+      y: ((moonDistance * earth.mass) / totalMass) * Math.sin(moonTheta),
     };
+    const moonSpeed = (relativeSpeed * earth.mass) / totalMass;
     const moonVel = {
-      x: -moonOrbitalVelocity * Math.sin(moonTheta),
-      y: moonOrbitalVelocity * Math.cos(moonTheta),
+      x: -moonSpeed * Math.sin(moonTheta),
+      y: moonSpeed * Math.cos(moonTheta),
     };
+    // Earth takes the balancing share, so the total momentum is zero.
+    earth.pos.x =
+      ((-moonDistance * moonMass) / totalMass) * Math.cos(moonTheta);
+    earth.pos.y =
+      ((-moonDistance * moonMass) / totalMass) * Math.sin(moonTheta);
+    const earthSpeed = (relativeSpeed * moonMass) / totalMass;
+    earth.vel.x = earthSpeed * Math.sin(moonTheta);
+    earth.vel.y = -earthSpeed * Math.cos(moonTheta);
 
     const moon = new Planet(moonPos, moonVel, 0.0123); // Moon is 0.0123 Earth masses
     moon.name = 'Luna';
@@ -5036,10 +5383,6 @@ const build_simulation = () => {
     // largest sum of radii below is 0.26, leaving a clear margin on the
     // tightest pair. The screen-space draw floor keeps them visible anyway.
     const RADIUS_UNITS_PER_EARTH = 0.115;
-    // Gravitationally negligible, so the two-body period of each planet is set
-    // by the star alone and every planet returns the same a^3/P^2. The same
-    // scaling the Solar System uses.
-    const MASS_SCALE = 0.001;
 
     for (let i = 0; i < TRAPPIST1_PLANETS.length; i++) {
       const p = TRAPPIST1_PLANETS[i];
@@ -5051,7 +5394,10 @@ const build_simulation = () => {
       const vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
       const planet = new Planet(pos, vel, p.mass);
       planet.name = `TRAPPIST-1${p.name}`;
-      planet.mass = Math.max(p.mass * EARTH_MASS_UNIT * MASS_SCALE, 1e-4);
+      // Gravitationally negligible against an 0.0898 solar-mass star, so the
+      // two-body period of each planet is set by the star alone and every
+      // planet returns the same a^3/P^2.
+      planet.mass = Math.max(p.mass * EARTH_MASS_UNIT, 1e-7);
       planet.massInEarths = p.mass;
       planet.baseColor = '#6ec6ff';
       planet.radius = p.radius * RADIUS_UNITS_PER_EARTH;
@@ -5140,6 +5486,7 @@ const build_simulation = () => {
         // sizeable fraction of a solar mass, and a label reading "0.3 M☉"
         // beside a planet is a distraction in a lesson about what masses mean.
         planet.mass = orbiters[i].earths * EARTH_MASS_UNIT;
+        planet.massInEarths = orbiters[i].earths;
         planet.pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
         planet.vel = { x: -v * Math.sin(theta), y: v * Math.cos(theta) };
         planet.persistent = true;
@@ -5268,10 +5615,226 @@ const build_simulation = () => {
     // Small enough to leave the Sun and Earth entirely undisturbed, which is
     // true of the real thing as well.
     visitor.mass = 1e-9;
+    visitor.massInEarths = visitor.mass / EARTH_MASS_UNIT;
     visitor.radius = 2.2;
     visitor.baseColor = '#d96a4a';
     visitor.persistent = true;
     planets.push(visitor);
+  }
+
+  // --- Exoplanet Characterization Lab: the same star, now allowed to move ---
+  // --- The dark-matter scenarios ------------------------------------------
+  //
+  // Two discs and a cluster, built by hand because every body's speed has to be
+  // exactly right for the point being made.
+  //
+  // Spiral Galaxy is the prediction: each star is launched at the circular
+  // speed the visible mass alone implies, sqrt(G M(<r) / r), so the rotation
+  // curve falls as r^-1/2 the way the Solar System's does.
+  //
+  // Milky Way Rotation is the observation: each star is launched at the same
+  // speed regardless of radius, which is what telescopes actually see. Those
+  // speeds are far too high for the visible mass to hold, so this scenario
+  // starts with the halo switched on. Switch it off and the disc flies apart,
+  // which is the whole argument in one gesture.
+  if (
+    starting_preset === 'Spiral Galaxy' ||
+    starting_preset === 'Milky Way Rotation'
+  ) {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    galaxies.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const flat = starting_preset === 'Milky Way Rotation';
+
+    // A compact central bulge carrying most of the visible mass. This is what
+    // makes the Keplerian prediction a prediction: outside it, the enclosed
+    // visible mass barely grows, so the expected speed has to fall.
+    const BULGE = 12 * SOLAR_MASS_UNIT;
+    const bulge = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 12);
+    bulge.name = 'Galactic bulge';
+    bulge.isCentralBody = true;
+    bulge.persistent = true;
+    bulge.baseColor = '#ffe9b8';
+    stars.push(bulge);
+
+    // The disc. Radii are spaced evenly in log so the tracers are spread
+    // evenly across the plot's log axis rather than bunched at the outside.
+    const N = 90;
+    const R_IN = 150;
+    const R_OUT = 900;
+    const STAR_MASS = 0.03; // solar masses each; 2.7 M_sun of disc in total
+    const V_FLAT = 11.0;
+
+    for (let i = 0; i < N; i++) {
+      const t = i / (N - 1);
+      const r = R_IN * Math.pow(R_OUT / R_IN, t);
+      const theta = Math.random() * 2 * Math.PI;
+
+      // Enclosed visible mass at this radius: the bulge plus whatever share of
+      // the disc lies inside. Computed rather than assumed, so the launch speed
+      // is the honest circular speed for the mass actually present.
+      const inner = BULGE + N * t * STAR_MASS * SOLAR_MASS_UNIT;
+      const vKepler = Math.sqrt((G * inner) / r);
+      const v = flat ? V_FLAT : vKepler;
+
+      const star = new StarObject(
+        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+        STAR_MASS
+      );
+      star.name = `Disc star ${i + 1}`;
+      star.persistent = true;
+      // Uniform color: these are tracers, and a disc that shaded from red to
+      // blue with radius would suggest the color meant something.
+      star.baseColor = '#cfe0ff';
+      stars.push(star);
+    }
+  }
+
+  // --- Coma Cluster: Zwicky's measurement ---------------------------------
+  //
+  // A cluster of galaxies in virial equilibrium, built so that the member
+  // speeds are what a bound cluster of this total mass would produce. The
+  // lesson measures the dispersion, applies the virial theorem, and compares
+  // the answer with the mass of the galaxies themselves.
+  //
+  // The excess is put in by hand, as a halo, because that is what the
+  // measurement finds: the members move as though there were far more mass
+  // than the members account for.
+  if (starting_preset === 'Coma Cluster') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    galaxies.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const N = 24;
+    const R = 2600;
+    const MEMBER = 4 * SOLAR_MASS_UNIT;
+
+    // The speed scale is set from the total mass the cluster actually has,
+    // members plus halo, so the cluster is bound and stays a cluster for as
+    // long as anyone watches it. A cluster that dispersed while being measured
+    // would not be in equilibrium, and the virial theorem would not apply.
+    const haloMass = haloEnclosedMass(
+      R,
+      { vFlat: SETTINGS.halo_v_flat, coreRadius: SETTINGS.halo_core_radius },
+      G
+    );
+    const totalMass = N * MEMBER + haloMass;
+    const vScale = Math.sqrt((G * totalMass) / R);
+
+    for (let i = 0; i < N; i++) {
+      // Positions drawn from a centrally concentrated distribution rather than
+      // uniformly in the disc: real clusters are densest in the middle, and a
+      // uniform ring would put every member at the same radius and give the
+      // virial radius nothing to be measured from.
+      const r = R * Math.pow(Math.random(), 0.55);
+      const theta = Math.random() * 2 * Math.PI;
+
+      // Random directions, not circular orbits. A cluster is a swarm on
+      // randomly oriented orbits, and its members' speeds are a dispersion
+      // rather than a rotation. Drawing them isotropically is what makes the
+      // dispersion the thing the virial theorem wants.
+      const speed = vScale * (0.55 + Math.random() * 0.5);
+      const phi = Math.random() * 2 * Math.PI;
+
+      const g = new Galaxy(
+        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        { x: speed * Math.cos(phi), y: speed * Math.sin(phi) },
+        MEMBER,
+        i < 6 ? 'elliptical' : 'spiral'
+      );
+      galaxies.push(g);
+    }
+
+    // The cluster as a whole should not be sailing off the screen: any net
+    // drift would add itself to every member's speed and inflate the
+    // dispersion, which is the one number the lesson turns on.
+    zeroNetMomentum();
+  }
+
+  if (starting_preset === 'Exoplanet Characterization Lab') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const sys = HD209458;
+    const AU = SIM_UNITS_PER_AU;
+    const R_SUN = 0.00465047 * AU;
+    const R_JUP_IN_SUNS = 0.102763;
+    const G = SETTINGS.gravitational_constant;
+
+    const starMass = sys.star.massSolar * SOLAR_MASS_UNIT;
+    // Jupiter masses into the simulation's units, through the solar mass so
+    // there is no second conversion constant to keep in step.
+    const JUP_IN_SUNS = 1 / JUPITER_MASSES_PER_SOLAR_MASS;
+    const planetMass = sys.planet.massJupiter * JUP_IN_SUNS * SOLAR_MASS_UNIT;
+    const total = starMass + planetMass;
+    const a = sys.planet.semiMajorAU * AU;
+
+    // Barycentric split. Each body sits on the far side of the center of mass
+    // from the other, at a distance set by the other's share of the mass, and
+    // moves at the speed that keeps the pair circling that fixed point. The
+    // star's share is 1/1700 of the planet's, which is exactly why the wobble
+    // is invisible at true scale and has to be magnified to be taught.
+    const vRel = Math.sqrt((G * total) / a);
+    const rStar = (a * planetMass) / total;
+    const rPlanet = (a * starMass) / total;
+    const vStar = (vRel * planetMass) / total;
+    const vPlanet = (vRel * starMass) / total;
+
+    const star = new StarObject(
+      { x: -rStar, y: 0 },
+      { x: 0, y: -vStar },
+      sys.star.massSolar
+    );
+    star.name = sys.name;
+    star.radiusInSuns = sys.star.radiusSolar;
+    star.radius = sys.star.radiusSolar * R_SUN;
+    star.luminosityInSuns = sys.star.luminositySolar;
+    star.temperature = sys.star.temperatureK;
+    star.spectralType = sys.star.spectralType;
+    star.baseColor = '#fff3df';
+    star.persistent = true;
+    star.distancePc = sys.star.distancePc;
+    stars.push(star);
+
+    const planet = new GasGiant({ x: rPlanet, y: 0 }, { x: 0, y: vPlanet });
+    planet.name = sys.planetName;
+    planet.mass = planetMass;
+    planet.massInJupiters = sys.planet.massJupiter;
+    planet.radiusInSuns = sys.planet.radiusJupiter * R_JUP_IN_SUNS;
+    planet.radius = planet.radiusInSuns * R_SUN;
+    planet.baseColor = '#c9a882';
+    planet.persistent = true;
+    gas_giants.push(planet);
+
+    // The pair was built in the center-of-mass frame, so this should be a
+    // no-op; running it anyway means the scenario cannot start drifting if a
+    // parameter above is ever edited by hand.
+    zeroNetMomentum();
   }
 
   // --- Transit Lab / Blended Binary: HD 209458 at true relative scale ---
@@ -5384,13 +5947,75 @@ const build_simulation = () => {
       1.0
     );
     planet.name = 'HD 209458 b';
-    planet.mass = M_PLANET_JUP * 0.0009546 * SOLAR_MASS_UNIT;
+    planet.mass =
+      (M_PLANET_JUP / JUPITER_MASSES_PER_SOLAR_MASS) * SOLAR_MASS_UNIT;
     planet.massInJupiters = M_PLANET_JUP;
+    // It is a Planet object carrying a gas giant's mass, so the Earth-mass
+    // field it inherited from the constructor is about a different body.
+    planet.massInEarths = M_PLANET_JUP * EARTH_MASSES_PER_JUPITER_MASS;
     planet.radiusInJupiters = R_PLANET_JUP;
     planet.radius = R_PLANET_JUP * R_JUP_IN_SUNS * R_SUN;
     planet.persistent = true;
     planet.baseColor = '#b8875a';
     planets.push(planet);
+  }
+
+  // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
+  if (starting_preset === 'Retrograde Mars') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const AU = SIM_UNITS_PER_AU;
+
+    const sun = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.0);
+    sun.name = 'Sun';
+    sun.mass = SOLAR_MASS_UNIT;
+    sun.massInSuns = 1.0;
+    sun.baseColor = '#FFD86B';
+    sun.radius = 10;
+    stars.push(sun);
+
+    // Circular orbits at the true semi-major axes. Earth's real eccentricity is
+    // 0.017 and Mars's 0.093, and neither changes the shape of the loop: what
+    // draws it is the difference in angular speed, not the shape of either
+    // orbit. Circles keep the measurement clean.
+    const worlds = [
+      { name: 'Earth', aAU: 1.0, earths: 1.0, r: 4, color: '#5B8FF0' },
+      { name: 'Mars', aAU: 1.523, earths: 0.107, r: 3, color: '#D06B4A' },
+    ];
+
+    // Mars starts 95 degrees ahead of Earth. Earth gains on it at 0.46 degrees
+    // a day, so opposition arrives after about 205 days, and that number is
+    // chosen against how long the trail takes to fill rather than against
+    // anything astronomical: 300 samples cover roughly 150 days here, so an
+    // earlier opposition would happen while the trail was still growing and the
+    // loop would be half drawn when it passed. Any later and a student waits.
+    // The next opposition is a synodic period after this one.
+    const startAngle = { Earth: 103, Mars: 198 };
+
+    for (const w of worlds) {
+      const r = w.aAU * AU;
+      const theta = (startAngle[w.name] * Math.PI) / 180;
+      const v = Math.sqrt((G * sun.mass) / r);
+      const planet = new Planet(
+        { x: r * Math.cos(theta), y: r * Math.sin(theta) },
+        { x: -v * Math.sin(theta), y: v * Math.cos(theta) },
+        w.earths
+      );
+      planet.name = w.name;
+      planet.radius = w.r;
+      planet.baseColor = w.color;
+      planet.persistent = true;
+      planets.push(planet);
+    }
   }
 
   // --- Kepler's 2nd Law scenario: star + nearly-circular planet + eccentric planet ---
@@ -5556,7 +6181,7 @@ const setting_items = [
   },
   { label: '--- Visuals ---', type: 'separator' },
   {
-    label: 'Trail Colour',
+    label: 'Trail Color',
     key: 'trail_colour_mode',
     type: 'option',
     options: ['type', 'speed'],
@@ -6503,6 +7128,8 @@ const clearWorld = () => {
   // previous run would be silently attributed to them.
   clearAllEnergyHistory();
   resetPhysicsObjectCounter();
+  resetFrame();
+  resetTrailTick();
 };
 
 /**
@@ -7423,6 +8050,18 @@ const deleteSelectedObject = () => {
 };
 
 document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
+setupReferenceFrameControl();
+const inspectorPinBtn = document.getElementById('inspectorPin');
+if (inspectorPinBtn) inspectorPinBtn.onclick = pinCurrentObject;
+// Cards are positioned in viewport coordinates against the inspector's edge,
+// so a resize has to re-run the layout or they end up off screen.
+window.addEventListener('resize', () => {
+  const panel = document.getElementById('objectInspector');
+  // A window that narrows can push a docked panel over the readout it was
+  // measured to clear, so the measurement has to be redone.
+  if (panel && state.inspector_open) dockInspector(panel);
+  layoutPinnedCards();
+});
 
 document.getElementById('settingsBtn').onclick = () => {
   buildSettingsMenu();
@@ -7699,7 +8338,7 @@ const uiRail = document.querySelector('.ui-container');
 // markup with `mobile*` ids and ~260 lines of duplicated handlers, including a
 // divergent scenario list that skipped the HTML sanitising the desktop one did.
 // The hamburger now opens the rail itself, so there is one set of controls and
-// one set of behaviours at every width.
+// one set of behaviors at every width.
 if (mobileMenuToggle && uiRail) {
   const closeRail = () => {
     mobileMenuToggle.classList.remove('active');
@@ -8279,6 +8918,8 @@ document.addEventListener('DOMContentLoaded', () => {
       accretion_disk_particles.length = 0;
       particlePool.clear && particlePool.clear();
       resetPhysicsObjectCounter && resetPhysicsObjectCounter();
+      resetFrame();
+      resetTrailTick();
 
       // Reset view to default
       state.zoom = 1.0;

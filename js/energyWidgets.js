@@ -177,7 +177,7 @@ function drawEnergyBars(ctx, box, e, colors, opts = {}) {
   // the simulation, whose energies are in the simulation's own units and mean
   // nothing as an absolute figure, so it shows each bar as a share of the
   // depth of the well instead: dimensionless, comparable, and the form in
-  // which the object's own mass has already cancelled out.
+  // which the object's own mass has already canceled out.
   // The launch instrument runs in SI and can honestly print megajoules per
   // kilogram. The live one reads the simulation, whose energies are in the
   // simulation's own units and mean nothing as an absolute figure, so it shows

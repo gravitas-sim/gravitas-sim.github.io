@@ -148,7 +148,7 @@ function niceLength(target) {
 function scaleBar(ctx, x, y, maxPx, metersPerPx) {
   const target = maxPx * metersPerPx;
   // The unit is chosen before the rounding. Round a number of meters and then
-  // convert, and the bar ends up labelled "0.224 AU", which reads as an
+  // convert, and the bar ends up labeled "0.224 AU", which reads as an
   // accident rather than as a scale.
   const unit =
     target >= 0.02 * AU_M ? { m: AU_M, name: 'AU' } : { m: 1000, name: 'km' };

@@ -8,6 +8,10 @@ import {
 } from './ui.js';
 import { watchFor3DView } from './view3dBridge.js';
 import { initLightCurve } from './lightCurve.js';
+import { initRadialVelocity } from './radialVelocity.js';
+import { initRotationCurve } from './rotationCurve.js';
+import { initAstrometry } from './astrometry.js';
+import { initObservationLayout } from './observationLayout.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
 import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
@@ -242,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize with error handling
   try {
     resizeCanvas();
-    // Controls own the theme, so they initialise before anything paints.
+    // Controls own the theme, so they initialize before anything paints.
     initControls();
     initTutorial();
     // Not init3DView(): that reaches three.js, 256KB from a CDN, for a panel
@@ -251,6 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();
+      initRadialVelocity();
+      initRotationCurve();
+      initAstrometry();
+      initObservationLayout();
     } catch (err) {
       console.error('Light curve unavailable:', err);
     }

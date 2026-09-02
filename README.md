@@ -1,5 +1,7 @@
 # Gravitas
 
+[![CI](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/gravitas-sim/gravitas-sim.github.io/actions/workflows/ci.yml)
+
 **An interactive astrophysics sandbox and astronomy teaching tool that runs entirely in the browser.**
 
 [gravitas-sim.online](https://gravitas-sim.online)
@@ -20,16 +22,20 @@ black-hole merger, a star torn apart by tides, and a dense cluster relaxing over
 time. Each is tagged by curriculum concept, so the scenario gallery doubles as an
 index an instructor can scan for the week they are teaching.
 
-**Six guided investigations**, 176 steps between them:
+**Ten guided investigations**, 305 steps between them:
 
 | Investigation | What a student does |
 | --- | --- |
 | Kepler's Laws | Measures the shape, pacing and timing of real orbits, ending in a slope of 3/2 |
+| Why Mars Goes Backwards | Puts the Solar System into Earth's frame and watches a retrograde loop appear |
 | Finding Planets by Their Shadows | Measures a transit, corrects for limb darkening, recovers a planet radius |
 | Bound, Unbound and Escape | Works out what decides whether something comes back |
 | Weighing the Stars | Uses an orbit to measure something that cannot be put on a scale |
 | Black Holes by the Numbers | Builds the Schwarzschild radius from scratch and tests what it does and does not mean |
+| Finding Planets by Their Tug | Recovers a planet mass from a stellar wobble, and meets the sin i degeneracy |
 | The Goldilocks Question | Moves a planet, changes its star, and decides what "habitable" really means |
+| The Missing Mass | Fits a real galaxy's rotation curve, fails to do it with stars alone, and finds the dark matter |
+| Tides | Subtracts one gravitational pull from another and finds what is left over |
 
 Each one asks for a prediction before it shows anything, hands the student an
 instrument to measure with, plots their own readings back to them, saves progress
@@ -46,6 +52,15 @@ what it approximates, and what is only drawn. Worth reading before assigning
 anything: the engine is Newtonian and two-dimensional, mergers are perfectly
 inelastic, the gravitational-wave inspiral is phenomenological, and the jets are
 cosmetic.
+
+**A validation suite.** `npm run validate:physics` prints a PASS/FAIL table of
+135 checks with measured error against a stated tolerance: orbital periods and
+Kepler's laws, conservation of momentum, angular momentum and energy, escape
+velocity, transit depth, radial-velocity semi-amplitude, astrometric signature,
+habitable-zone edges, rotation curves, Schwarzschild-radius relations, and the
+stored parameters for real systems against their published sources. Every
+tolerance carries a written reason. See
+[`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md).
 
 **Data export.** The recorded timeline as CSV, plus the light curve, with a
 companion Colab notebook in [`notebooks/`](notebooks/) that reads it. Every
@@ -75,11 +90,13 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test              # 726 tests across 19 suites
-npm run lint          # eslint
-npm run format:check  # prettier
-npm run build         # bundle + minify into dist/
-npm run preview       # build, then serve dist/ at :8004
+npm test                  # 1513 tests across 35 suites
+npm run validate:physics  # the physics validation table
+npm run e2e               # browser smoke tests, against the sources
+npm run lint              # eslint
+npm run format:check      # prettier
+npm run build             # bundle + minify into dist/
+npm run preview           # build, then serve dist/ at :8004
 ```
 
 `npm run build` writes a self-contained `dist/` that can be published as-is. It
@@ -94,9 +111,11 @@ JS on demand        380.0 KB   12 chunk(s)
 ### Development tools
 
 ```bash
-npm run perf              # frame-time profile across representative scenarios
-npm run thumbnails        # regenerate every scenario thumbnail
-npm run thumbnails:check  # verify the committed set without capturing
+npm run perf                # frame-time profile across representative scenarios
+npm run validate:scenarios  # conservation-law audit of the shipped scenarios
+npm run validate:links      # every internal link and anchor resolves
+npm run thumbnails          # regenerate every scenario thumbnail
+npm run thumbnails:check    # verify the committed set without capturing
 ```
 
 `npm run perf` and `npm run thumbnails` drive the real application in headless
@@ -148,6 +167,111 @@ view and the chart panels.
 
 ---
 
+## Browser tests
+
+`npm test` covers the physics and the data; it cannot tell you whether the
+application still works. That is what the Playwright suite in [`e2e/`](e2e/) is
+for. It drives a real browser through the workflows that matter — loading a
+scenario, inspecting an object, opening the three observing panels and moving the
+shared observer, walking a guided lesson and generating its PDF report, restoring
+a shared link, and a phone layout — and fails on any uncaught exception or
+`console.error` along the way.
+
+```bash
+npx playwright install chromium   # once
+npm run e2e                       # the suite, against the sources
+npm run e2e:headed                # watch it happen
+npm run e2e:ui                    # the Playwright inspector
+npm run e2e:report                # open the last HTML report
+```
+
+Roughly two and a half minutes for seventy tests. Some notes on how it is put
+together, because two of the choices are not obvious:
+
+- **It runs against the unbundled sources by default.** The tests reach into the
+  running application with `import('/js/physics.js')` so they can read the body
+  list, check for NaNs and load a scenario on a fixed seed. That cannot work
+  against `dist/`, where those modules are bundled into hashed chunks.
+- **So the built site gets its own spec.** `e2e/production.spec.js` touches
+  nothing but the DOM and runs against `dist/`, defending what the source suite
+  structurally cannot reach: chunk splitting, deferred imports, and assets the
+  build forgot to copy.
+
+  ```bash
+  npm run build && npm run e2e:dist   # the production spec against dist/
+  npm run e2e:all                     # both targets
+  ```
+
+Chromium runs on every change. Firefox and WebKit are run by CI on pushes to
+`main` and weekly, and can be run locally:
+
+```bash
+npx playwright install firefox webkit
+GRAVITAS_E2E_BROWSERS=firefox,webkit npm run e2e
+```
+
+There are no whole-application screenshot comparisons, deliberately: the output
+is a moving simulation and such a test would fail on every commit for reasons
+nobody could act on.
+
+---
+
+## Continuous integration
+
+Every pull request runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+formatting, lint, the jest suite, the physics validation table, the link checker
+and the thumbnail manifest; a production build; and the browser suite against
+both the sources and the built artifact. Firefox and WebKit are added on pushes
+to `main` and on a weekly schedule.
+
+Two things worth knowing if you are working on CI itself:
+
+- The build job runs `npm run build:ci` rather than `npm run build`. The only
+  difference is the instructor materials, which are normally encrypted with a
+  passphrase that is not in the repository — and a pull request from a fork
+  cannot read repository secrets, so every external contribution would fail.
+  `build:ci` renders every guide and answer key for real, which is where
+  breakage actually happens, and encrypts them with a random throwaway secret.
+  The result is deliberately undecryptable and is never published.
+- Branch protection should require the single `CI` job rather than the
+  individual ones. It aggregates the rest, so the rule does not need editing
+  every time a job or a matrix entry is added.
+
+---
+
+## Validation
+
+The model page says what Gravitas calculates and what it approximates.
+[`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md) says what has been *checked*,
+and against what.
+
+```bash
+npm run validate:physics
+```
+
+135 deterministic checks, about fifteen seconds, printed as a table of measured
+value, expected value, error and tolerance. Four kinds, and the table labels
+each: closed-form arithmetic, quantities measured by running the N-body engine,
+literature values with their sources named, and educational approximations
+validated against the equation they claim to use rather than against reality.
+
+Every tolerance has a written justification, because a tolerance without one is a
+number chosen to make a test pass. The integrated tolerances are derived from the
+integrator's convergence order, which the suite measures rather than assumes; the
+published ones from the precision the reference is quoted to.
+
+The same checks run in `npm test`, so a physics regression fails a pull request.
+`npm run validate:scenarios` extends the conservation audit to all 48 shipped
+scenarios in a real browser, and names, per scenario, which documented departures
+it has switched on — static black holes, one-way gravity and the dark-matter halo
+all conserve less than the full model does, on purpose.
+
+The write-up also records what is *not* validated, and the two physics bugs this
+pass found and fixed: an integrator that advanced bodies one at a time and so
+broke Newton's third law, and a scenario that turned out to have no gravity in it.
+
+---
+
 ## Instructor resources
 
 Instructor guides and answer keys live at
@@ -178,7 +302,9 @@ Issues and pull requests are welcome, particularly:
   That scaffolding is the main obstacle to any language beyond English.
 
 Before opening a PR: `npm test`, `npm run lint`, `npm run format:check` and
-`npm run build` should all pass.
+`npm run build` should all pass, and CI runs all of them plus the browser suite.
+If the change touches physics, run `npm run validate:physics` and say what moved.
+If it touches the interface, run `npm run e2e`.
 
 ---
 

@@ -12,7 +12,7 @@
 //   0.000553 L_sun, that floor is wrong by a factor of eighteen and puts the
 //   zone in the wrong place by a factor of four. Measured luminosity is used
 //   whenever a star carries it, and the mass-luminosity relation is a clearly
-//   labelled fallback for stars a user made up.
+//   labeled fallback for stars a user made up.
 //
 //   The zone edges used to come from an "optimism" slider that widened a band
 //   around 1 AU by an arbitrary multiplier. They now come from a published
@@ -230,7 +230,7 @@ export function habitableZoneStatus(distanceAU, bounds) {
 /**
  * A luminosity for a star that does not carry one.
  *
- * An approximation, and labelled as one. The main-sequence mass-luminosity
+ * An approximation, and labeled as one. The main-sequence mass-luminosity
  * relation is a broken power law rather than a single exponent, so the
  * piecewise form below is used; it is still only good to a factor of order two
  * for the lowest masses, and it says nothing at all about a star that has left

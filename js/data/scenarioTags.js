@@ -7,9 +7,15 @@
 //
 // This is a curriculum index, not an astronomical ontology. It is deliberately
 // short: an instructor planning a week should be able to read the whole list at
-// a glance and find the one topic they are teaching. Twelve concepts is already
-// near the limit of that. Resist adding a thirteenth unless a genuine block of
-// course material has nowhere to sit.
+// a glance and find the one topic they are teaching. Twelve concepts was already
+// near the limit of that, and the rule was to resist a thirteenth unless a
+// genuine block of course material had nowhere to sit.
+//
+// Dark Matter is that thirteenth, added when the rotation-curve instrument and
+// The Missing Mass arrived. It is a standard unit in an introductory course and
+// none of the other twelve covers it: Galaxies & Clusters is about many-body
+// dynamics at large scales, which is a different lecture. Thirteen is now the
+// limit, and the same rule applies to a fourteenth.
 //
 // A tag means "this scenario is useful for discussing this concept". It does
 // not claim the concept is simulated in full fidelity: Gravitas is Newtonian
@@ -78,6 +84,11 @@ export const SCENARIO_TAGS = {
     label: 'Galaxies & Clusters',
     description:
       'Many-body systems at the largest scales Gravitas models: cluster dynamics, galactic centers, and encounters between them.',
+  },
+  'dark-matter': {
+    label: 'Dark Matter',
+    description:
+      'The two measurements that found it: rotation curves that stay flat when they should fall, and clusters whose members move far too fast for the mass that shines.',
   },
 };
 

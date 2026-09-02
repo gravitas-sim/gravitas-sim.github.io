@@ -50,7 +50,11 @@ const chartConfig = {
     ],
   },
   options: {
-    responsive: false,
+    // Responsive, so the chart fills whatever box the inspector gives it and
+    // Chart.js handles the device pixel ratio itself. It was false, which made
+    // the chart read its size from width/height attributes on the canvas - a
+    // hardcoded 500x300 inside a panel that is now 420px wide.
+    responsive: true,
     maintainAspectRatio: false,
     parsing: false,
     animation: {
@@ -275,6 +279,17 @@ export function updateChart(data, updateHz) {
 /**
  * Clear all chart data
  */
+/**
+ * Re-measure the chart against its container.
+ *
+ * The chart is built while the Energy tab is still hidden, so Chart.js reads a
+ * parent of zero height and falls back to its own default. One resize once the
+ * tab is actually on screen is what makes the responsive sizing take.
+ */
+export function resizeChart() {
+  if (chart) chart.resize();
+}
+
 export function clearChart() {
   if (!chart) {
     console.warn('Chart not initialized - cannot clear data');

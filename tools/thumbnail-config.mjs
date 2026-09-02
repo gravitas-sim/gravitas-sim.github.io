@@ -42,6 +42,20 @@ export const DEFAULTS = {
 };
 
 export const CAPTURE = {
+  // --- The dark-matter scenarios ---------------------------------------------
+  // The two discs read best once the trails have drawn most of a turn, which is
+  // what shows that the thing is rotating rather than just a scatter of dots.
+  // The cluster is the opposite: its members are on long, slow, randomly
+  // oriented orbits, so a long trail turns it into a tangle. It gets a short
+  // one and a wider frame.
+  // Retrograde Mars is captured in the world frame: the thumbnail should show
+  // the ordinary picture the lesson starts from, not its punchline.
+  'Retrograde Mars': { settle: 75, speed: 5, trail: 900, autoframe: true },
+
+  'Spiral Galaxy': { settle: 26, speed: 4, trail: 900 },
+  'Milky Way Rotation': { settle: 26, speed: 4, trail: 900 },
+  'Coma Cluster': { settle: 22, speed: 3, trail: 320, boost: 1.35 },
+
   // --- Framed too wide at their own preset zoom -------------------------------
   // These are all small systems whose live framing leaves room to pan around.
   // In a 640x360 card that room is empty starfield and the subject is a speck,
@@ -62,6 +76,11 @@ export const CAPTURE = {
   // Framed on the inner pair rather than on the outermost planet, which sits
   // far enough out to shrink the stars to specks.
   'Binary Star System': { settle: 20, speed: 6, zoom: 1.9, trail: 1400 },
+  // The star's reflex orbit is a ten-thousandth of the planet's, so framing on
+  // the pair means framing on the planet's orbit and letting the star sit at
+  // the centre looking stationary. That is the honest picture: the wobble is
+  // real and invisible, which is the scenario's whole point.
+  'Exoplanet Characterization Lab': { settle: 16, speed: 6, trail: 1400 },
   'Interstellar Visitor': { settle: 14, speed: 2, trail: 900 },
   "Kepler's 2nd Law": { settle: 16 },
   'Black Hole Lab': { settle: 14 },

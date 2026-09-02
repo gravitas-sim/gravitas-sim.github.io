@@ -19,6 +19,7 @@
 // quantity came to be written two ways in one interface.
 // =============================================================================
 
+import { G_SI, C_SI, SOLAR_MASS_KG, EARTH_RADIUS_M } from './constants.js';
 import {
   superscript as formatSuperscript,
   scientific,
@@ -26,20 +27,20 @@ import {
 } from './format.js';
 
 /** Gravitational constant, m³ kg⁻¹ s⁻². */
-export const G_SI = 6.6743e-11;
+export { G_SI };
 /** Speed of light in vacuum, m/s. */
-export const C_SI = 299792458;
+export { C_SI };
 /** Reduced Planck constant, J s. */
 export const HBAR = 1.054571817e-34;
 /** Boltzmann constant, J/K. */
 export const K_B = 1.380649e-23;
 
 /** One solar mass, kg. */
-export const SOLAR_MASS_KG = 1.989e30;
+export { SOLAR_MASS_KG };
 /** One solar radius, m. */
 export const SOLAR_RADIUS_M = 6.957e8;
 /** Earth's equatorial radius, m. */
-export const EARTH_RADIUS_M = 6.371e6;
+export { EARTH_RADIUS_M };
 /** One astronomical unit, m. */
 export const AU_M = 1.496e11;
 /** Seconds in a Julian year. */

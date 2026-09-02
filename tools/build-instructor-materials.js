@@ -23,6 +23,15 @@
 // The passphrase is never written to any file this repository tracks. It comes
 // from GRAVITAS_INSTRUCTOR_PASSWORD, or from a gitignored .instructor-password
 // file, and the script refuses to run without one.
+//
+// Except in CI, where --unpublishable substitutes a random throwaway secret.
+// Continuous integration has to prove this pipeline still runs - it renders
+// every guide and answer key and re-verifies each derived answer against the
+// site's own grading function, which is where breakage actually happens - and it
+// cannot be given the real passphrase, because a pull request from a fork has no
+// access to repository secrets and every external contribution would fail. The
+// ciphertext that comes out is undecryptable by anyone, including us, and the
+// script says so on every line of its output so that nobody publishes it.
 // =============================================================================
 
 import { webcrypto as crypto } from 'node:crypto';
@@ -56,14 +65,26 @@ function versionStamp() {
   return `${d.toLocaleString('en-US', { month: 'long' })} ${d.getFullYear()}`;
 }
 
-/** The shared passphrase, from the environment or a gitignored file. */
-function passphrase() {
+/**
+ * The shared passphrase, from the environment or a gitignored file.
+ *
+ * @param {boolean} unpublishable - Accept a throwaway secret rather than failing
+ * @returns {string} The passphrase to encrypt with
+ */
+function passphrase(unpublishable) {
   const fromEnv = process.env.GRAVITAS_INSTRUCTOR_PASSWORD;
   if (fromEnv && fromEnv.trim()) return fromEnv.trim();
   const file = join(ROOT, '.instructor-password');
   if (existsSync(file)) {
     const value = readFileSync(file, 'utf8').trim();
     if (value) return value;
+  }
+  if (unpublishable) {
+    // 32 random bytes, never printed and never stored. The point is to exercise
+    // the pipeline, not to produce something anyone can open.
+    return Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString(
+      'hex'
+    );
   }
   console.error(
     [
@@ -117,6 +138,14 @@ async function encrypt(plaintext, secret) {
 }
 
 /** A filename safe on every platform a faculty member might unzip on. */
+/** Whether a real passphrase is available, as opposed to a generated one. */
+function hasRealSecret() {
+  const fromEnv = process.env.GRAVITAS_INSTRUCTOR_PASSWORD;
+  if (fromEnv && fromEnv.trim()) return true;
+  const file = join(ROOT, '.instructor-password');
+  return existsSync(file) && readFileSync(file, 'utf8').trim().length > 0;
+}
+
 const slug = title =>
   title
     .replace(/[’']/g, '')
@@ -124,9 +153,27 @@ const slug = title =>
     .replace(/^-|-$/g, '');
 
 async function main() {
-  const secret = passphrase();
+  // CI cannot be handed the real passphrase, so it asks for a build it is not
+  // allowed to publish. Everything else about the run is identical.
+  const unpublishable = process.argv.includes('--unpublishable');
+  const secret = passphrase(unpublishable);
+  const usedThrowaway = unpublishable && !hasRealSecret();
   const version = versionStamp();
   const keepPlain = process.argv.includes('--keep-plaintext');
+
+  if (usedThrowaway) {
+    console.log(
+      [
+        '',
+        '  UNPUBLISHABLE BUILD',
+        '  No passphrase was available, so a random throwaway secret was used.',
+        '  The materials below are real but the ciphertext cannot be opened by',
+        '  anyone. This mode exists so CI can prove the pipeline still runs.',
+        '  Do not publish the output.',
+        '',
+      ].join('\n')
+    );
+  }
 
   // A key that disagrees with the site is worse than no key, so nothing is
   // built until every derived answer has been re-checked against the site's

@@ -196,7 +196,7 @@ describe('where a planet sits', () => {
     expect(habitableZoneStatus(5, b).status).toBe('outer');
   });
 
-  test('the status is described in words, not by colour alone', () => {
+  test('the status is described in words, not by color alone', () => {
     const b = habitableZoneBounds(SUN);
     for (const d of [0.4, 1.0, 5]) {
       expect(habitableZoneStatus(d, b).label.length).toBeGreaterThan(8);
@@ -228,7 +228,7 @@ describe('stellar properties', () => {
     expect(p.luminositySolar).toBeLessThan(0.01);
   });
 
-  test('a star with no measured luminosity gets a labelled estimate', () => {
+  test('a star with no measured luminosity gets a labeled estimate', () => {
     const p = stellarPropertiesFor({ massInSuns: 1 });
     expect(p.luminosityEstimated).toBe(true);
     expect(p.luminositySolar).toBeCloseTo(1, 6);
@@ -525,7 +525,21 @@ describe('the Goldilocks investigation', () => {
     expect(inv).toBeTruthy();
     expect(inv.steps.length).toBeGreaterThanOrEqual(26);
     expect(inv.title).toBe('The Goldilocks Question');
-    expect(INVESTIGATIONS.at(-1).id).toBe('goldilocks-question');
+  });
+
+  test('closes the exoplanet sequence', () => {
+    // What this has always meant to check. It used to be written as "is the
+    // last lesson in the registry", which was the same thing only for as long
+    // as no lesson outside the exoplanet sequence existed.
+    const ids = INVESTIGATIONS.map(i => i.id);
+    const sequence = [
+      'transit-photometry',
+      'radial-velocity',
+      'goldilocks-question',
+    ];
+    const positions = sequence.map(id => ids.indexOf(id));
+    expect(positions).not.toContain(-1);
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
   });
 
   test('every tool it names resolves through the registry', () => {

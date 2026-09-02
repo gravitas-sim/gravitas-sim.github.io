@@ -34,8 +34,43 @@ export default [
     },
   },
   {
+    // The Playwright suite and its config. Node code that also contains browser
+    // code: every page.evaluate() callback is serialized and runs inside the
+    // browser, so these files legitimately need both sets of globals - the same
+    // situation the build tooling above is in.
+    files: ['playwright.config.js', 'e2e/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+        URL: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        getComputedStyle: 'readonly',
+        performance: 'readonly',
+        setTimeout: 'readonly',
+        Touch: 'readonly',
+        TouchEvent: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
     // Web Workers run in a different global scope than the page modules
-    files: ['js/physicsWorker.js', 'js/chartWorker.js'],
+    files: [
+      'js/physicsWorker.js',
+      'js/chartWorker.js',
+      'js/validationWorker.js',
+    ],
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
@@ -59,7 +94,11 @@ export default [
   },
   {
     files: ['js/**/*.js'],
-    ignores: ['js/physicsWorker.js', 'js/chartWorker.js'],
+    ignores: [
+      'js/physicsWorker.js',
+      'js/chartWorker.js',
+      'js/validationWorker.js',
+    ],
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
@@ -134,7 +173,6 @@ export default [
         encodeURI: 'readonly',
         encodeURIComponent: 'readonly',
         Worker: 'readonly',
-        Blob: 'readonly',
         MutationObserver: 'readonly',
         CustomEvent: 'readonly',
         Chart: 'readonly',
@@ -148,7 +186,6 @@ export default [
         Int8Array: 'readonly',
         Float64Array: 'readonly',
         PointerEvent: 'readonly',
-        CustomEvent: 'readonly',
       },
     },
     plugins: {

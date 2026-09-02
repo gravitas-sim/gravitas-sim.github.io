@@ -26,11 +26,11 @@
 // =============================================================================
 
 import { chromium } from 'playwright';
-import { createServer } from 'node:http';
-import { readFile, writeFile, mkdir, stat, readdir } from 'node:fs/promises';
+import { writeFile, mkdir, stat, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { extname, join, resolve, dirname } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { serveStatic } from './static-server.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'images', 'scenarios');
@@ -42,44 +42,6 @@ const HEIGHT = 360;
 const VIEW_W = 1280;
 const VIEW_H = 720;
 const QUALITY = 0.82;
-
-const MIME = {
-  '.html': 'text/html; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8',
-  '.mjs': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.webp': 'image/webp',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.ico': 'image/x-icon',
-  '.svg': 'image/svg+xml',
-};
-
-/** A static server over the repository root, so the app loads as it does live. */
-function serve() {
-  const server = createServer(async (req, res) => {
-    try {
-      const url = new URL(req.url, `http://localhost:${PORT}`);
-      let path = decodeURIComponent(url.pathname);
-      if (path.endsWith('/')) path += 'index.html';
-      const file = join(ROOT, path);
-      if (!file.startsWith(ROOT)) {
-        res.writeHead(403).end();
-        return;
-      }
-      const body = await readFile(file);
-      res.writeHead(200, {
-        'Content-Type': MIME[extname(file)] || 'application/octet-stream',
-        'Cache-Control': 'no-store',
-      });
-      res.end(body);
-    } catch {
-      res.writeHead(404).end('not found');
-    }
-  });
-  return new Promise(resolve => server.listen(PORT, () => resolve(server)));
-}
 
 // --- Reporting ---------------------------------------------------------------
 
@@ -163,7 +125,7 @@ async function main() {
   if (checkOnly) process.exit(await check(all, SCENARIO_INFO));
 
   await mkdir(OUT_DIR, { recursive: true });
-  const server = await serve();
+  const server = await serveStatic({ root: ROOT, port: PORT });
   const browser = await chromium.launch();
   const page = await browser.newPage({
     viewport: { width: VIEW_W, height: VIEW_H },

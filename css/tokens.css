@@ -4,7 +4,7 @@
    Every color, space, radius, shadow and z-index in the UI resolves to one of
    these. Nothing else in the codebase should hardcode a hex value.
 
-   Layer order is declared here and honoured by the other stylesheets:
+   Layer order is declared here and honored by the other stylesheets:
      tokens      - this file
      base        - element defaults and layout primitives
      legacy      - the historical styles.css rules
@@ -274,7 +274,7 @@
     }
   }
 
-  /* Honour reduced-motion globally. Individual components do not need to
+  /* Honor reduced-motion globally. Individual components do not need to
      repeat this. */
   @media (prefers-reduced-motion: reduce) {
     :root {
