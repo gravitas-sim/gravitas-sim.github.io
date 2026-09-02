@@ -921,14 +921,36 @@ test.describe('the control rail', () => {
 });
 
 test.describe('the bottom dock', () => {
+  const read = page =>
+    page.evaluate(() => {
+      const b = document.querySelector('.timeline-bar').getBoundingClientRect();
+      const f = document.querySelector('#attribution').getBoundingClientRect();
+      const r = document
+        .querySelector('#mainControls')
+        ?.getBoundingClientRect();
+      return {
+        offCentre: Math.round((b.left + b.right) / 2 - window.innerWidth / 2),
+        barWidth: Math.round(b.width),
+        footerInset: Math.round(window.innerWidth - f.right),
+        gap: Math.round(f.left - b.right),
+        railOverFooter: r ? r.bottom > f.top && r.left < f.right : false,
+        banded: document.body.classList.contains('dock-banded'),
+      };
+    });
+
   for (const size of [
+    { width: 2560, height: 900 },
     { width: 1999, height: 900 },
+    { width: 1700, height: 900 },
+    { width: 1600, height: 900 },
     { width: 1440, height: 900 },
-    { width: 1280, height: 800 },
-    { width: 1100, height: 800 },
+    { width: 1300, height: 900 },
+    { width: 1200, height: 900 },
+    { width: 1100, height: 900 },
+    { width: 1025, height: 900 },
   ]) {
     for (const locale of ['en', 'es']) {
-      test(`the scrubber never reaches the footer at ${size.width}px in ${locale}`, async ({
+      test(`the scrubber clears the footer at ${size.width}px in ${locale}`, async ({
         page,
         app,
       }) => {
@@ -946,31 +968,89 @@ test.describe('the bottom dock', () => {
         }
         await expect(page.locator('.timeline-bar')).toBeVisible();
         await expect(page.locator('#attribution')).toBeVisible();
-        const boxes = await page.evaluate(() => {
-          const r = s => {
-            const b = document.querySelector(s).getBoundingClientRect();
-            return {
-              left: b.left,
-              right: b.right,
-              top: b.top,
-              bottom: b.bottom,
-            };
-          };
-          return { bar: r('.timeline-bar'), footer: r('#attribution') };
-        });
-        const apart =
-          boxes.bar.right <= boxes.footer.left + 1 ||
-          boxes.bar.left >= boxes.footer.right - 1 ||
-          boxes.bar.bottom <= boxes.footer.top + 1 ||
-          boxes.bar.top >= boxes.footer.bottom - 1;
-        expect(
-          `${size.width} ${locale}: bar ${JSON.stringify(boxes.bar)} footer ${JSON.stringify(boxes.footer)}`
-        ).toBe(
-          apart
-            ? `${size.width} ${locale}: bar ${JSON.stringify(boxes.bar)} footer ${JSON.stringify(boxes.footer)}`
-            : 'they overlap'
+
+        const m = await read(page);
+        // A clear gap, not merely no overlap: the two must not look joined.
+        expect(`${size.width}/${locale} gap=${m.gap}`).toBe(
+          m.gap >= 12
+            ? `${size.width}/${locale} gap=${m.gap}`
+            : `${size.width}/${locale} TOO TIGHT`
         );
+        // And the footer keeps its corner.
+        expect(m.footerInset).toBeLessThanOrEqual(16);
       });
     }
   }
+
+  test('the scrubber is centred on the window when there is room', async ({
+    page,
+    app,
+  }) => {
+    await page.setViewportSize({ width: 1999, height: 900 });
+    await app.boot();
+    const m = await read(page);
+    expect(m.banded).toBe(false);
+    expect(Math.abs(m.offCentre)).toBeLessThanOrEqual(1);
+    expect(m.barWidth).toBe(680);
+  });
+
+  test('it narrows rather than shifting, until narrowing stops paying', async ({
+    page,
+    app,
+  }) => {
+    // Between the width where the full bar no longer fits and the width where
+    // the slider would be too short to use, the bar gives up width and keeps
+    // the centre. Below that it keeps its width and gives up the centre.
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await app.boot();
+    const narrowed = await read(page);
+    expect(narrowed.banded).toBe(false);
+    expect(Math.abs(narrowed.offCentre)).toBeLessThanOrEqual(1);
+    expect(narrowed.barWidth).toBeLessThan(680);
+    expect(narrowed.barWidth).toBeGreaterThanOrEqual(420);
+
+    await page.setViewportSize({ width: 1100, height: 900 });
+    await expect
+      .poll(() =>
+        page.evaluate(() => document.body.classList.contains('dock-banded'))
+      )
+      .toBe(true);
+    const banded = await read(page);
+    expect(Math.abs(banded.offCentre)).toBeGreaterThan(1);
+    expect(banded.gap).toBeGreaterThanOrEqual(12);
+  });
+
+  test('the footer keeps the corner unless the rail comes down into it', async ({
+    page,
+    app,
+  }) => {
+    // The inset that used to be here reserved the rail's full width on every
+    // screen, to avoid a rail that on most of them stops nowhere near the
+    // corner. It is now reserved only when the rail actually arrives.
+    await page.setViewportSize({ width: 1500, height: 1000 });
+    await app.boot();
+    await page.locator('#railTools').click();
+    await expect(page.locator('#railToolsBody')).toBeVisible();
+
+    const tall = await read(page);
+    expect(tall.footerInset).toBeLessThanOrEqual(16);
+    expect(tall.railOverFooter).toBe(false);
+
+    // Short enough that the open section brings the rail's foot to the corner.
+    await page.setViewportSize({ width: 1500, height: 620 });
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          Math.round(
+            window.innerWidth -
+              document.querySelector('#attribution').getBoundingClientRect()
+                .right
+          )
+        )
+      )
+      .toBeGreaterThan(100);
+    const short = await read(page);
+    expect(short.railOverFooter).toBe(false);
+    expect(short.gap).toBeGreaterThanOrEqual(12);
+  });
 });

@@ -362,15 +362,30 @@
      ====================================================================== */
 
   @media (min-width: 1025px) {
+    /* Centred on the window, which is where the eye goes looking for it, and
+       narrowed rather than shifted when the footer would be in the way.
+       --transport-max is the widest it can be and still stop short of the
+       footer; js/bottomDock.js works it out from the footer's measured width. */
     .timeline-bar {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      margin-inline: 0;
+      width: min(680px, var(--transport-max, 680px));
+      max-width: none;
+    }
+
+    /* Unless narrowing has gone too far. Below a usable slider length the bar
+       stops trying to be centred on the window and centres in the room that is
+       actually free, to the left of the footer. A scrubber slightly off-centre
+       is a smaller cost than one too short to scrub with. */
+    body.dock-banded .timeline-bar {
       left: var(--space-4);
-      right: calc(
-        var(--rail-width) + var(--attribution-width, 0px) + 3 * var(--space-4)
-      );
+      right: var(--footer-reserve, 0px);
+      transform: none;
+      margin-inline: auto;
       width: auto;
       max-width: 680px;
-      margin-inline: auto;
-      transform: none;
     }
   }
 
@@ -393,6 +408,17 @@
       margin-inline: auto;
       transform: none;
       bottom: calc(var(--space-3) + var(--attribution-height, 0px));
+    }
+  }
+
+  @media (min-width: 1025px) {
+    /* Into the corner. The inset that used to be here reserved the control
+       rail's full width on every screen, which put the footer a quarter of the
+       way across a wide window to avoid a rail that stops nowhere near it.
+       js/bottomDock.js measures whether the rail actually reaches this corner
+       and reserves the width only when it does. */
+    .attribution {
+      right: calc(var(--space-3) + var(--rail-footer-inset, 0px));
     }
   }
 

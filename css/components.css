@@ -2279,11 +2279,10 @@
      why the documentation links moved to the rail: with seven items this had to
      be lifted above the scrubber, where a footer stops reading as a footer and
      starts reading as a panel someone forgot to close. */
-  @media (min-width: 1025px) {
-    .attribution {
-      right: calc(var(--rail-width) + var(--space-4) + var(--space-3));
-    }
-  }
+  /* The rail's width is no longer reserved here. It was a fixed inset for a
+     rail that only reaches this corner on a short window, and it cost every
+     wide window a quarter of its width; css/chrome.css sets the inset from a
+     measurement of where the rail actually ends. */
 
   /* The transport bar is centered on the viewport while the rail takes the right
      two hundred pixels, so the gap between them closes as the window narrows.
