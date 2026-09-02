@@ -266,7 +266,33 @@ jobs:
       # One engine failing should not hide the other's result.
       fail-fast: false
       matrix:
-        browser: [firefox, webkit]
+        include:
+          - browser: firefox
+            # The repository default: playwright.config.js uses two workers
+            # under CI.
+            workers: 2
+          - browser: webkit
+            # WebKit runs single-file here, and only here.
+            #
+            # The 320x200 embed test intermittently timed out waiting for the
+            # application's own splash-ended signal - not on a slow assertion,
+            # but on start-up never finishing inside the budget. It is stable
+            # on its own (ten consecutive runs) and stable through the whole
+            # suite at one worker; it failed only when two WebKit workers
+            # shared a two-core runner. That is starvation rather than a bug in
+            # the page: WebKit's process model is heavier than the other two
+            # engines', and two of them plus a static server on two cores
+            # leaves a start-up sequence that has to build a world, a starfield
+            # and a canvas without enough CPU to finish it.
+            #
+            # Raising the timeout would be the wrong answer twice over: the
+            # application already reveals itself on a 4.5s backstop, so a
+            # start-up that has not finished in thirty seconds is starved and
+            # not slow, and waiting longer for a starved run only makes the job
+            # slower when it does pass. Halving the parallelism costs this job
+            # some wall-clock and nothing else; the coverage is unchanged and
+            # Firefox and Chromium keep their parallelism.
+            workers: 1
     steps:
       - uses: actions/checkout@v4
 
@@ -303,7 +329,7 @@ jobs:
       - name: Run the suite
         env:
           GRAVITAS_E2E_BROWSERS: ${{ matrix.browser }}
-        run: npm run e2e
+        run: npm run e2e -- --workers=${{ matrix.workers }}
 
       - name: Upload the report
         if: ${{ !cancelled() }}

@@ -98,6 +98,62 @@ function makeApp(page) {
       );
     },
 
+    /**
+     * Install a clipboard that records instead of writing to the system one.
+     *
+     * The real clipboard is not usable across the three engines. Chromium
+     * grants `clipboard-read`/`clipboard-write` through
+     * `context.grantPermissions`; Firefox rejects `clipboard-read` as an
+     * unknown permission and WebKit rejects `clipboard-write`, so a test built
+     * on granting them fails in two engines before it has touched the
+     * application at all. Nor is there anything worth testing in the system
+     * clipboard: what matters is the snippet the application hands to it.
+     *
+     * So `navigator.clipboard.writeText` is replaced, before any application
+     * script runs, with one that resolves and keeps what it was given. The
+     * application takes its ordinary path - the promise resolves, so the
+     * `execCommand` fallback is not reached - and the test reads the argument
+     * back. `readText` is defined alongside it so a caller can read the double
+     * the same way it would read the real thing.
+     *
+     * Installed as an init script, so it survives the navigation to the embed
+     * URL later in the same test.
+     *
+     * @returns {Promise<void>}
+     */
+    async captureClipboard() {
+      await page.addInitScript(() => {
+        const writes = [];
+        window.__clipboardWrites = writes;
+        const stub = {
+          writeText: text => {
+            writes.push(String(text));
+            return Promise.resolve();
+          },
+          readText: () => Promise.resolve(writes[writes.length - 1] ?? ''),
+        };
+        // `navigator.clipboard` is a read-only accessor on the prototype in
+        // some engines and absent entirely in others, so define rather than
+        // assign.
+        Object.defineProperty(window.navigator, 'clipboard', {
+          configurable: true,
+          get: () => stub,
+        });
+      });
+    },
+
+    /**
+     * The most recent text the application put on the clipboard double.
+     *
+     * @returns {Promise<string>} The captured text, or '' if nothing was copied
+     */
+    clipboardText() {
+      return page.evaluate(() => {
+        const w = window.__clipboardWrites || [];
+        return w[w.length - 1] ?? '';
+      });
+    },
+
     /** Dismiss the first-visit front door, if it is showing. */
     async dismissFrontDoor() {
       const screen = page.locator('#welcomeScreen');

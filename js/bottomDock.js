@@ -30,9 +30,12 @@
 // window would squeeze it past usefulness and it should centre in the room to
 // the left of the footer instead.
 //
-// Measured with a ResizeObserver rather than on resize: the footer changes size
-// when the language changes and when a font finishes loading, and the rail
-// changes height when a section is opened, none of which is a window resize.
+// Measured with a ResizeObserver rather than only on resize: the footer changes
+// size when the language changes and when a font finishes loading, and the rail
+// changes height when a section is opened, none of which is a window resize. A
+// resize listener is kept alongside it, because observing the root element is
+// not the same thing as watching the viewport, and a language change measures
+// immediately as well - see initBottomDock for why the frame's delay mattered.
 // =============================================================================
 
 /* global ResizeObserver */
@@ -50,6 +53,8 @@ const GAP = 16;
 const MIN_BAR = 420;
 
 let observer = null;
+/** The pending coalesced measurement, so a burst of triggers costs one. */
+let frame = 0;
 
 /**
  * Measure the footer and the rail, and publish what the layout needs.
@@ -124,30 +129,70 @@ export function initBottomDock() {
   if (!footer) return false;
   const rail = document.getElementById('mainControls');
 
-  const measure = () => publish(footer, rail);
+  /** Measure now. Forces a layout, so it reads text as it currently stands. */
+  const measure = () => {
+    if (frame) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    }
+    publish(footer, rail);
+  };
+
+  /**
+   * Measure on the next frame, at most once however many times this is called.
+   *
+   * The observer path uses this rather than measuring inline: publish() writes
+   * custom properties that move the elements being observed, and doing that
+   * from inside the callback is how a ResizeObserver loop starts.
+   */
+  const schedule = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      publish(footer, rail);
+    });
+  };
+
   measure();
 
   if (typeof ResizeObserver === 'function') {
     observer?.disconnect();
-    observer = new ResizeObserver(measure);
+    observer = new ResizeObserver(schedule);
     observer.observe(footer);
     observer.observe(document.documentElement);
     // The rail changes height when a section opens, which can bring its foot
     // down into the footer's corner.
     if (rail) observer.observe(rail);
-  } else {
-    // No ResizeObserver is a browser old enough that a resize listener is the
-    // best available approximation. It misses a language change, so that is
-    // covered separately below.
-    window.addEventListener('resize', measure);
   }
 
+  // Registered whichever way the footer is being watched, not only as the
+  // fallback for a browser without ResizeObserver. Observing the root element
+  // is a proxy for the window, and it is not an exact one: the root's box does
+  // not always change when the viewport does - a scrollbar appearing or
+  // disappearing, or a resize that leaves the document the same size - and the
+  // layout here is written in terms of window.innerWidth, which changed
+  // regardless. The two paths coalesce into the same frame, so listening to
+  // both costs nothing.
+  window.addEventListener('resize', schedule);
+
   // A language change rewrites every word in the footer, and Spanish is
-  // reliably longer than English. The observer catches it, but only after the
-  // browser has laid the new text out; asking again on the next frame makes the
-  // bar move in the same paint as the words it is moving for.
+  // reliably longer than English.
+  //
+  // This measures immediately rather than waiting for a frame. The translated
+  // text is already in the DOM by the time the event fires, so reading the
+  // footer's rect here forces the layout and returns the *new* width; deferring
+  // it to the next frame left a window in which the interface was visibly
+  // Spanish while the bar was still sized for English. That window was real
+  // rather than theoretical: on WebKit at 1700px the gap between bar and footer
+  // measured 11px in it and 16px immediately after, because the footer had
+  // grown by 20px and nothing had re-run the arithmetic yet.
+  //
+  // The scheduled follow-up stays because the immediate measurement is not
+  // always the last word: a language change can pull in a font that has not
+  // loaded, and the footer settles to its final width a frame or two later.
   window.addEventListener('gravitasLocaleChanged', () => {
-    requestAnimationFrame(measure);
+    measure();
+    schedule();
   });
 
   return true;

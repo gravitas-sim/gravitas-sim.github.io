@@ -12,7 +12,6 @@
 // is a question about layout. All three are checked at real sizes.
 // =============================================================================
 
-/* global navigator */
 import { test, expect } from './fixtures.js';
 
 /** Sizes an embedded figure actually meets in a course page. */
@@ -230,10 +229,11 @@ test.describe('embed mode', () => {
 
   test('Copy embed code produces an iframe that restores the same state', async ({
     page,
-    context,
     app,
   }) => {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    // A recording clipboard rather than the system one: see
+    // app.captureClipboard() for why granting the permissions is not portable.
+    await app.captureClipboard();
     await app.boot();
     await app.loadScenario('Kuiper Belt', 'embed-copy');
     await page.evaluate(async () => {
@@ -249,8 +249,10 @@ test.describe('embed mode', () => {
     await expect(page.locator('#shareEmbedBtn')).toBeVisible();
     await page.locator('#shareEmbedBtn').click();
 
-    const snippet = await page.evaluate(() => navigator.clipboard.readText());
-    expect(snippet).toContain('<iframe');
+    // The copy is asynchronous, so poll for it rather than assuming the click
+    // handler has finished by the time the click promise resolves.
+    await expect.poll(() => app.clipboardText()).toContain('<iframe');
+    const snippet = await app.clipboardText();
     expect(snippet).toContain('loading="lazy"');
     expect(snippet).toContain('allowfullscreen');
     expect(snippet).toMatch(/title="[^"]*Kuiper Belt[^"]*"/);
@@ -266,6 +268,48 @@ test.describe('embed mode', () => {
     await page.waitForFunction(() => window.splashScreenEnded === true);
     await page.waitForTimeout(800);
     expect(await worldState(page)).toEqual(before);
+  });
+
+  test('a refused clipboard falls back to a selectable textarea', async ({
+    page,
+    app,
+  }) => {
+    // The other half of copyEmbed. Outside a secure context, and in some
+    // embedded browsers, writeText rejects; the snippet then goes into a
+    // textarea and is selected, so one keystroke still copies it. Nothing else
+    // exercises that branch, and an instructor on an http:// course server is
+    // exactly who lands in it.
+    await page.addInitScript(() => {
+      Object.defineProperty(window.navigator, 'clipboard', {
+        configurable: true,
+        get: () => ({
+          writeText: () => Promise.reject(new Error('refused')),
+        }),
+      });
+      // Record what the selection held at the moment the copy was asked for:
+      // the application removes the textarea immediately afterwards.
+      window.__execCopies = [];
+      document.execCommand = command => {
+        if (command === 'copy') {
+          window.__execCopies.push(String(window.getSelection() ?? ''));
+        }
+        return true;
+      };
+    });
+    await app.boot();
+    await app.loadScenario('Kuiper Belt', 'embed-fallback');
+
+    await app.railControl('shareBtn');
+    await page.locator('#shareBtn').click();
+    await expect(page.locator('#shareEmbedBtn')).toBeVisible();
+    await page.locator('#shareEmbedBtn').click();
+
+    await expect
+      .poll(() => page.evaluate(() => window.__execCopies))
+      .toHaveLength(1);
+    const selected = await page.evaluate(() => window.__execCopies[0]);
+    expect(selected).toContain('<iframe');
+    expect(selected).toContain('embed=1');
   });
 
   for (const size of LMS_SIZES) {
@@ -969,15 +1013,25 @@ test.describe('the bottom dock', () => {
         await expect(page.locator('.timeline-bar')).toBeVisible();
         await expect(page.locator('#attribution')).toBeVisible();
 
+        // Poll the geometry itself rather than reading it once. A translated
+        // label appearing is not the same event as the layout it belongs to
+        // having settled: setLocale rewrites the footer synchronously, and the
+        // dock re-measures around it. Waiting on the label alone caught the
+        // frame in between - on WebKit that read an 11px gap that was 16px
+        // immediately afterwards. This asserts the real requirement, and gives
+        // the layout the time it takes rather than a fixed delay.
+        await expect
+          .poll(async () => (await read(page)).gap, {
+            message: `bar-to-footer gap at ${size.width}px in ${locale}`,
+          })
+          .toBeGreaterThanOrEqual(12); // A clear gap, not merely no overlap.
+
         const m = await read(page);
-        // A clear gap, not merely no overlap: the two must not look joined.
-        expect(`${size.width}/${locale} gap=${m.gap}`).toBe(
-          m.gap >= 12
-            ? `${size.width}/${locale} gap=${m.gap}`
-            : `${size.width}/${locale} TOO TIGHT`
-        );
         // And the footer keeps its corner.
-        expect(m.footerInset).toBeLessThanOrEqual(16);
+        expect(
+          m.footerInset,
+          `footer inset at ${size.width}px in ${locale}`
+        ).toBeLessThanOrEqual(16);
       });
     }
   }
