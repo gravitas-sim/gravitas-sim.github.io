@@ -96,12 +96,99 @@ change, with correct masses.
 
 ---
 
-## Not done
+## The small bodies
 
-**`Asteroid`, `Comet` and `Debris` carry hardcoded masses** of 0.1, 0.1 and 0.01
-units, set without reference to any unit constant. 0.1 units is 33 Earth masses,
-which is not an asteroid; Ceres is 1.5e-4 Earth masses. These bodies do not use
-`EARTH_MASS_UNIT` and so were outside this pass, but `formatMass` will happily
-print one of them in Earth masses and be wrong by five orders of magnitude.
-Fixing it changes collision and merger behavior across many scenarios, so it
-wants its own change with a scenario sweep behind it.
+**`Asteroid`, `Comet` and `Debris` carried hardcoded masses** of 0.1, 0.1 and
+0.01 units, set without reference to any unit constant. 0.1 units is 33 Earth
+masses, which is not an asteroid; Ceres is 1.5e-4 Earth masses. These bodies did
+not use `EARTH_MASS_UNIT` and so were outside the pass above, but `formatMass`
+would happily print one of them in Earth masses and be wrong by five orders of
+magnitude. That is now fixed, on the same architectural line `GasGiant` has
+always had: a mass in the body's own natural unit, multiplied once by that
+unit's size in simulation units.
+
+Three new anchors in `js/constants.js`, all quoted in kilograms because that is
+how a small body's mass is measured and published - there is no GM ratio against
+the Sun known to ten digits for a comet:
+
+| constant | value | what it is |
+| --- | --- | --- |
+| `CERES_MASS_KG` | 9.3835e20 | Ceres, from Dawn's gravity science |
+| `HALLEY_MASS_KG` | 2.2e14 | comet 1P/Halley |
+| `DEBRIS_FRAGMENT_MASS_KG` | 1.5708e12 | a 1 km sphere of rock at 3000 kg/m^3 |
+
+and three units derived from them in `js/physics.js`, each through the single
+`MASS_UNIT_KG` conversion the solar-mass anchor fixes:
+
+| unit | simulation units | in Earth masses | was |
+| --- | --- | --- | --- |
+| `CERES_MASS_UNIT` | 4.7177e-7 | 1.571e-4 | 0.1 (33 M⊕) |
+| `HALLEY_MASS_UNIT` | 1.1061e-13 | 3.68e-11 | 0.1 (33 M⊕) |
+| `DEBRIS_MASS_UNIT` | 7.8974e-16 | 2.63e-13 | 0.01 (3.3 M⊕) |
+
+`Asteroid` now takes a mass in Ceres masses and defaults to one Ceres. `Comet`
+already counted in Halley masses and said so in a comment; only its multiplier
+was wrong. `Debris` takes a count of kilometre-scale fragments.
+
+Ceres is the largest asteroid rather than a typical one. It is the right end of
+the distribution to anchor to here, because the simulation's asteroids are the
+ones a student is meant to be able to see and click on, and it is the comparison
+this document already used when it named the bug.
+
+### Two thresholds that had to move with them
+
+`Asteroid.tidal_mass_loss` disrupted a body once `this.mass <= 0.1`, and
+`Comet.tidal_mass_loss` once `this.mass <= 0.01`. Both numbers were the class's
+own construction mass written out again as a literal, so both conditions were
+already true on the frame a body entered the tidal radius - which is the
+behaviour the scenarios were built around. Left alone they would have stayed
+true for a reason nobody could read off the line. They are now
+`CERES_MASS_UNIT` and `0.1 * HALLEY_MASS_UNIT`: the same outcome, derived.
+
+Two conversions in `js/ui.js` moved for the same reason. The inspector's mass
+slider multiplied a comet's mass by a second hardcoded `0.1`, and
+`transformCometToAsteroid` assigned `.mass` and left `massInCeres` behind -
+the same "gravitates as one thing, labelled as another" failure this document
+opens with.
+
+### The scenario sweep
+
+Thirty-one of the forty-eight shipped scenarios contain asteroids or comets.
+`tools/small-body-sweep.mjs` runs all of them for thirty seconds of simulated
+time from a fixed seed and records surviving body counts, collision events and
+their timing, peak debris, ejections, and the median fractional change in the
+small bodies' semi-major axes. It was run before and after the change and the
+two runs diffed.
+
+Nothing had to be retuned. Every difference was in the direction the correction
+predicts, and several are outright improvements:
+
+| scenario | before | after | reading |
+| --- | --- | --- | --- |
+| Kuiper Belt | median da 0.0018 | 0.0000 | the belt was 2.9% of the system mass and was perturbing itself; the orbits are now exactly stable, which is what the scenario is for |
+| Pulsar System | median da 0.0003 | 0.0000 | the same, smaller |
+| Stellar Graveyard | 5 asteroids left, 145 debris | 9 left, 112 debris | asteroids no longer fling each other apart |
+| Slingshot | 28 left, 12 impacts | 32 left, 6 impacts | the same |
+| Intermediate Mass BH | 54 peak debris | 16 | far less fragmentation from asteroid-asteroid hits |
+| Supernova Remnant | 155 left, 76 impacts | 165 left, 62 impacts | the same |
+| Supermassive BH | 82 left, 29 impacts | 74 left, 36 impacts | slightly more reach the hole, having stopped scattering each other |
+
+No scenario lost its belt, gained a runaway, or changed its instructional
+outcome. The asteroid and comet counts a scenario opens with are unchanged,
+because those are settings rather than consequences.
+
+The reason the change is this contained is that in most scenarios the small
+bodies were never gravitational sources: they enter `cachedMajorSources` only
+under `mutual_gravity` with `star_only_gravity` off. Where they were sources,
+their combined share of the system mass was under a percent everywhere except
+the Kuiper Belt, and that is the scenario the correction most improves.
+
+### Verified
+
+- **`tests/mass-scale.test.js`** grew the small-body half it was missing: the
+  three units against the anchor, each class's gravitational mass against the
+  mass it reports, linearity, the Ceres-to-Earth ratio this document quotes, and
+  a check that all three masses stay finite and positive rather than underflowing
+  to zero and dropping out of every barycenter.
+- **The sweep above**, before and after, on all thirty-one scenarios.
+- **The full physics validation suite**, unchanged.

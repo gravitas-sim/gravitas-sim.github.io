@@ -67,6 +67,7 @@ test.describe('on a phone', () => {
 
     // The gallery is a full-screen sheet on a phone rather than a modal.
     await page.locator('#mobileMenuToggle').click();
+    await app.railControl('loadScenarioBtn');
     await page.locator('#loadScenarioBtn').click();
 
     const modal = page.locator('#scenarioListModal');

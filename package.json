@@ -24,6 +24,7 @@
     "thumbnails:check": "node tools/generate-scenario-thumbnails.mjs --check",
     "perf": "node tools/perf-probe.mjs",
     "validate:physics": "node tools/validate-physics.mjs",
+    "manifest": "node tools/build-investigation-manifest.js",
     "validate:scenarios": "node tools/scenario-stability.mjs",
     "validation:data": "node tools/build-validation-data.mjs",
     "validate:links": "node tools/check-links.mjs",

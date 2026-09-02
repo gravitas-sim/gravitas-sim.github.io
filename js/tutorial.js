@@ -10,16 +10,18 @@
 // full brightness and remains genuinely readable.
 // =============================================================================
 
+import { t } from './i18n/index.js';
+
 const STEPS = [
   {
-    title: 'Welcome to Gravitas',
+    title: t('tutorial.welcome'),
     body: `A sandbox for gravity. Everything you see is integrated from Newton's
            law in real time: nothing here is on rails or pre-animated.`,
     tip: 'This tour takes about a minute. Use ← and → to move through it.',
     target: null,
   },
   {
-    title: 'Place an object by dragging',
+    title: t('tutorial.place'),
     body: `Click empty space and drag before releasing. The direction and length
            of the drag set the launch velocity, so a short drag drops an object
            almost at rest and a long one flings it away.`,
@@ -27,7 +29,7 @@ const STEPS = [
     target: '#simulationCanvas',
   },
   {
-    title: 'Choose what you are placing',
+    title: t('tutorial.choose'),
     body: `This button cycles the object type: star, planet, gas giant,
            asteroid, comet, neutron star, white dwarf or black hole. Each has
            its own mass range and behavior.`,
@@ -35,7 +37,7 @@ const STEPS = [
     target: '#objectTypeBtn',
   },
   {
-    title: 'Inspect anything',
+    title: t('tutorial.inspect'),
     body: `Click an object to open the inspector: mass, radius, temperature,
            orbital elements and composition. The mass slider is live: push a
            star past 20 M☉ and it will collapse into a black hole in front of
@@ -44,7 +46,7 @@ const STEPS = [
     target: '#simulationCanvas',
   },
   {
-    title: 'Rewind what just happened',
+    title: t('tutorial.rewind'),
     body: `The transport bar records history as the simulation runs. Drag the
            scrubber back to replay a merger or a close encounter you missed,
            then jump back to the present.`,
@@ -52,14 +54,14 @@ const STEPS = [
     target: '#timelineBar',
   },
   {
-    title: 'Start from a real system',
+    title: t('tutorial.scenario'),
     body: `Thirty-seven scenarios, from the Solar System to GW150914: the first
            black hole merger LIGO detected. Search by name or by keyword.`,
     tip: 'Refresh Scenario rebuilds the current one if an experiment gets away from you.',
     target: '#loadScenarioBtn',
   },
   {
-    title: 'Units, themes and the rest',
+    title: t('tutorial.settings'),
     body: `Switch between physical units (AU, M☉, km/s, years) and raw
            simulation units. Themes include Observatory, which uses red chrome
            to preserve night vision, and Daylight for bright rooms.`,
@@ -67,7 +69,7 @@ const STEPS = [
     target: '.ui-container',
   },
   {
-    title: 'You are set',
+    title: t('tutorial.done'),
     body: `Press <kbd>?</kbd> at any time for the full list of keyboard
            shortcuts, or reopen this tour from the <strong>?</strong> button in
            the corner.`,

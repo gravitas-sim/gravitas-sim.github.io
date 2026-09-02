@@ -24,7 +24,10 @@
 // the manifest from an authenticated endpoint instead; nothing else changes.
 // =============================================================================
 
-import { INVESTIGATIONS } from './data/investigations.js';
+// The manifest, not the lessons: this page lists titles, durations and step
+// counts, and pulling in 225KB of lesson text to render a filter and ten cards
+// would be the same mistake the student-facing browser used to make.
+import { MANIFEST as INVESTIGATIONS } from './data/investigations/registry.js';
 import { INSTRUCTOR_CONTENT } from './data/instructorContent.js';
 
 /** Where the encrypted bundle lives. */
@@ -400,7 +403,7 @@ function renderInvestigations() {
       <p class="res-meta">
         <span>${c.topic}</span>
         <span>${inv.duration}</span>
-        <span>${inv.steps.length} steps</span>
+        <span>${inv.stepCount} steps</span>
         <span>${c.difficulty}</span>
       </p>`;
     card.append(meta);

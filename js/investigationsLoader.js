@@ -45,8 +45,15 @@ export function ensureInvestigations() {
 /** @returns {boolean} True once the system has been asked for */
 export const investigationsRequested = () => loading !== null;
 
-/** Lesson id named in the address bar, if there is one. */
-const lessonInHash = () =>
+/**
+ * Whether the address bar names a lesson.
+ *
+ * Exported because share.js has to know: it strips the fragment whenever the
+ * world is rebuilt, and a lesson link is not a description of a world.
+ *
+ * @returns {boolean} True for a `#investigation=<id>` fragment
+ */
+export const lessonInHash = () =>
   /^#investigation=[\w-]+$/.test(window.location.hash || '');
 
 /**

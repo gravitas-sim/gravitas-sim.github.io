@@ -54,13 +54,36 @@ inelastic, the gravitational-wave inspiral is phenomenological, and the jets are
 cosmetic.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table of
-135 checks with measured error against a stated tolerance: orbital periods and
-Kepler's laws, conservation of momentum, angular momentum and energy, escape
-velocity, transit depth, radial-velocity semi-amplitude, astrometric signature,
-habitable-zone edges, rotation curves, Schwarzschild-radius relations, and the
-stored parameters for real systems against their published sources. Every
+147 checks with measured error against a stated tolerance: orbital periods and
+Kepler's laws, conservation of momentum, angular momentum and energy, the
+convergence order of each selectable integrator, escape velocity, transit depth,
+radial-velocity semi-amplitude, astrometric signature, habitable-zone edges,
+rotation curves, Schwarzschild-radius relations, and the stored parameters for
+real systems against their published sources. Every
 tolerance carries a written reason. See
 [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md).
+
+**Instruments in the sandbox.** A draggable ruler that reads distances in AU and
+kilometres, a protractor, and a stopwatch that runs on simulated time and can be
+latched to a body's periapsis passages so a period is timed from closest approach
+rather than by reaction time. A scale bar and an elapsed-time readout are always
+on the canvas. All of it is painted onto the simulation canvas rather than into
+the page, so a screenshot documents its own spatial and temporal scale.
+
+**Force and acceleration arrows.** For the selected body, its velocity, its total
+acceleration, and one arrow per gravitational source acting on it, in colours
+that cannot be mistaken for each other — plus an optional gravitational
+potential-well underlay for the whole scene. The arrows come from the
+acceleration the integrator actually used, not from a second calculation of it.
+Aimed at one misconception in particular: on an eccentric orbit the velocity and
+the force are perpendicular at periapsis and apoapsis and never within forty
+degrees of parallel anywhere.
+
+**A choice of integrator.** Symplectic Euler (the default, and what every
+scenario is tuned against), Velocity Verlet, or RK4, switchable while the
+simulation runs, with live energy and angular-momentum drift readouts beside
+them. Each scheme's convergence order and its bounded-versus-secular energy
+behaviour are measured in the validation suite rather than asserted.
 
 **Data export.** The recorded timeline as CSV, plus the light curve, with a
 companion Colab notebook in [`notebooks/`](notebooks/) that reads it. Every
@@ -113,6 +136,8 @@ JS on demand        380.0 KB   12 chunk(s)
 ```bash
 npm run perf                # frame-time profile across representative scenarios
 npm run validate:scenarios  # conservation-law audit of the shipped scenarios
+node tools/small-body-sweep.mjs   # asteroid/comet behaviour across every
+                            #   scenario that has them, before-and-after diffable
 npm run validate:links      # every internal link and anchor resolves
 npm run thumbnails          # regenerate every scenario thumbnail
 npm run thumbnails:check    # verify the committed set without capturing

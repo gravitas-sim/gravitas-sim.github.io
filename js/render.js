@@ -21,6 +21,9 @@ import {
   trailBudget,
   barycenterBodies,
   SOLAR_MASS_UNIT,
+  minInteractionDistance,
+  getSimulationTime,
+  conservationDrift,
 } from './physics.js';
 import { hexToRgb, debugLog } from './utils.js';
 import {
@@ -42,7 +45,7 @@ import { updateRotationCurve } from './rotationCurve.js';
 import { tickTimeline } from './timeline.js';
 import { readToken, onThemeChange } from './theme.js';
 import { speedTrailColor } from './palette.js';
-import { auToSim } from './units.js';
+import { auToSim, formatTime } from './units.js';
 import { habitableZoneBounds, stellarPropertiesFor } from './habitability.js';
 import {
   resolveFrameOrigin,
@@ -50,6 +53,19 @@ import {
   isWorldFrame,
   resetFrame,
 } from './referenceFrame.js';
+import {
+  drawSandboxTools,
+  drawInstrumentation,
+  tickSandboxTools,
+  stopwatchRows,
+} from './sandboxTools.js';
+import {
+  drawBodyVectors,
+  vectorLegendRows,
+  drawPotentialWell,
+} from './vectorOverlay.js';
+import { isEmbed } from './presentation.js';
+import { t, onLocaleChange } from './i18n/index.js';
 
 /**
  * Translate the legacy "habitable zone optimism" setting into a model name.
@@ -568,6 +584,32 @@ const drawScene = () => {
   state.frameOffset.x = frameOrigin ? frameOrigin.now.x : 0;
   state.frameOffset.y = frameOrigin ? frameOrigin.now.y : 0;
 
+  // The potential well goes down first, under everything else on this canvas.
+  // It is a picture of the field the bodies sit in, so anything drawn over it
+  // is drawn over its own well, which is the right reading.
+  if (SETTINGS.show_potential_well) {
+    try {
+      drawPotentialWell(
+        ctx,
+        canvas,
+        screen_to_world,
+        SETTINGS.gravitational_constant,
+        minInteractionDistance(),
+        [
+          ...bh_list,
+          ...stars,
+          ...neutron_stars,
+          ...white_dwarfs,
+          ...galaxies,
+          ...gas_giants,
+          ...planets,
+        ]
+      );
+    } catch {
+      /* the underlay is never worth losing a frame over */
+    }
+  }
+
   ctx.save();
   ctx.translate(
     canvas.width / 2 + state.pan.x,
@@ -968,6 +1010,22 @@ const drawScene = () => {
 
   ctx.restore();
 
+  // Everything from here down is screen space, and everything from here down
+  // lands in an exported screenshot, because the export composites the
+  // starfield and this canvas and nothing else.
+  //
+  // The vectors go on before the measurement tools: a ruler laid across an
+  // orbit should read over the arrows, not under them.
+  let drawnVectors = null;
+  try {
+    const selected = state.selectedObject && state.selectedObject.object;
+    if (selected) {
+      drawnVectors = drawBodyVectors(ctx, selected, world_to_screen, SETTINGS);
+    }
+  } catch {
+    /* an overlay is never worth losing a frame over */
+  }
+
   // Render orbit preview as dashed screen-space path (green if bound, red if unbound)
   try {
     const orbitPreview = getOrbitPreview && getOrbitPreview();
@@ -1018,7 +1076,7 @@ const drawScene = () => {
         ctx.shadowBlur = 4;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 1;
-        ctx.fillText('Stable Orbit', top.x, top.y - 8);
+        ctx.fillText(t('overlay.stableOrbit'), top.x, top.y - 8);
         ctx.restore();
       }
     }
@@ -1216,11 +1274,7 @@ const drawScene = () => {
         ctx.textBaseline = 'bottom';
         ctx.shadowColor = 'rgba(0,0,0,0.5)';
         ctx.shadowBlur = 4;
-        ctx.fillText(
-          "Kepler's 2nd Law: Equal Areas",
-          sweepTop.x,
-          sweepTop.y - 10
-        );
+        ctx.fillText(t('overlay.equalAreas'), sweepTop.x, sweepTop.y - 10);
         ctx.restore();
       }
     }
@@ -1284,28 +1338,271 @@ const drawScene = () => {
   }
 
   if (SETTINGS.show_dynamic_overlays) {
-    const lines = [
-      `<span class="category-label">Planets:</span> ${planets.length} | <span class="category-label">Gas Giants:</span> ${gas_giants.length} | <span class="category-label">Asteroids:</span> ${asteroids.length}`,
-      `<span class="category-label">Stars:</span> ${stars.length} | <span class="category-label">Neutron Stars:</span> ${neutron_stars.length} | <span class="category-label">White Dwarfs:</span> ${white_dwarfs.length}`,
-      `<span class="category-label">Black Holes:</span> ${bh_list.length} | <span class="category-label">Particles:</span> ${particles.length} | <span class="category-label">Debris:</span> ${debris.length}`,
-      // Only shown when there are any: every other scenario in the app has
-      // none, and a permanent "Galaxies: 0" line would cost every user a row of
-      // the readout to tell them about a thing that is not there.
-      ...(galaxies.length
-        ? [`<span class="category-label">Galaxies:</span> ${galaxies.length}`]
-        : []),
-      `<div class="separator-line"></div>`,
-      `<span class="important-stat"><span class="category-label">Zoom:</span> ${state.zoom.toFixed(2)}\u00d7<br/><span class="category-label">Sim Speed:</span> ${SETTINGS.sim_speed.toFixed(1)}\u00d7</span>`,
-      `<span class="important-stat"><span class="category-label">Status:</span> ${state.paused ? 'Paused' : 'Running'}</span>`,
-      `<div class="separator-line"></div>`,
-      `🖱️ <span class="category-label">Controls:</span> Arrow Keys = Pan<br/>Scroll = Zoom<br/>Space = Pause/Resume`,
-      `Click objects to inspect | ESC closes inspector`,
-    ];
-    overlayDiv.innerHTML = lines.join('<br>');
+    overlayDiv.innerHTML = readoutHtml(drawnVectors);
+    paintReadoutStatus();
   } else {
     overlayDiv.innerHTML = '';
   }
+
+  // Last of all, so nothing paints over a reading.
+  try {
+    drawSandboxTools(ctx);
+    drawInstrumentation(
+      ctx,
+      canvas,
+      instrumentationSettings(),
+      state.zoom,
+      bottomChromeInset(),
+      vectorLegendRows(drawnVectors)
+    );
+  } catch {
+    /* instrumentation is never worth losing a frame over */
+  }
 };
+
+/**
+ * The settings the canvas instrumentation is drawn under.
+ *
+ * The live settings everywhere except in an embed, where the integrator name
+ * and the conservation drift are dropped. Those describe the *engine*; a figure
+ * in a course page is about the scenario, and three rows of numerical-methods
+ * diagnostics in the corner of somebody's reading is application chrome that
+ * happens to be painted on a canvas. The scale bar and the clock stay, because
+ * they describe the figure itself.
+ *
+ * A copy, never a write: presentation mode must not be able to change a setting
+ * that a share link would then carry.
+ *
+ * @returns {Object} SETTINGS, or a shallow override of it
+ */
+// The run state lives in the panel's header rather than in its body: it is the
+// one thing here that is a state and not a measurement, it is what a lecturer
+// points at, and a coloured dot reads across a room in a way a word does not.
+const statusEl = () => document.getElementById('overlayStatus');
+let paintedStatus = null;
+
+function paintReadoutStatus() {
+  const el = statusEl();
+  if (!el) return;
+  const key = state.paused ? 'paused' : 'running';
+  if (key === paintedStatus) return;
+  paintedStatus = key;
+  el.dataset.state = key;
+  const text = el.querySelector('.readout-status-text');
+  if (text) text.textContent = t(`readout.status.${key}`);
+}
+
+// A language change rewrites the word without the run state having moved.
+onLocaleChange(() => {
+  paintedStatus = null;
+  paintReadoutStatus();
+});
+
+/**
+ * The live readout, top left.
+ *
+ * What this panel is for is the handful of numbers that change while the
+ * simulation runs. It used to be three fixed rows of object counts - six of the
+ * nine typically reading zero - followed by a crib of the keyboard controls,
+ * which is neither live nor a number. The counts now appear only for the kinds
+ * of body that are actually present, the crib has gone to the Shortcuts dialog,
+ * and the room that frees is given to the measurements that used to be painted
+ * in a second panel in the opposite corner.
+ *
+ * @param {Object|null} drawn - What the vector overlay drew this frame, so the
+ *   key describes the arrows actually on screen
+ * @returns {string} Markup for #overlayStats
+ */
+function readoutHtml(drawn) {
+  const sections = [];
+
+  // --- What the simulation is doing ---------------------------------------
+  // Three numbers that are always worth having: how much simulated time has
+  // passed, how far in the view is, and how fast it is running. Elapsed time
+  // comes first because it is the one a measurement is quoted against.
+  const metrics = [
+    [t('readout.elapsed'), formatTime(getSimulationTime())],
+    [t('readout.zoom'), `${state.zoom.toFixed(2)}\u00d7`],
+    [t('readout.speed'), `${SETTINGS.sim_speed.toFixed(1)}\u00d7`],
+  ];
+  sections.push(
+    `<dl class="readout-metrics">${metrics
+      .map(
+        ([k, v]) =>
+          `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
+      )
+      .join('')}</dl>`
+  );
+
+  // --- What is in the world ------------------------------------------------
+  // Only the kinds that are there. A scenario with six planets and a black hole
+  // said so on line one and then spent two more lines reporting six zeros; the
+  // zeros are the least informative thing the panel could have been showing.
+  const counts = [
+    ['readout.count.planets', planets.length],
+    ['readout.count.gasGiants', gas_giants.length],
+    ['readout.count.asteroids', asteroids.length],
+    ['readout.count.stars', stars.length],
+    ['readout.count.neutronStars', neutron_stars.length],
+    ['readout.count.whiteDwarfs', white_dwarfs.length],
+    ['readout.count.blackHoles', bh_list.length],
+    ['readout.count.galaxies', galaxies.length],
+    ['readout.count.particles', particles.length],
+    ['readout.count.debris', debris.length],
+  ].filter(([, n]) => n > 0);
+
+  if (counts.length) {
+    sections.push(
+      `<ul class="readout-counts">${counts
+        .map(
+          ([id, n]) =>
+            `<li class="readout-count"><b>${n}</b> <span>${escapeHtml(t(id))}</span></li>`
+        )
+        .join('')}</ul>`
+    );
+  } else {
+    // An empty sandbox is a state worth naming rather than showing a blank gap.
+    sections.push(
+      `<p class="readout-empty">${escapeHtml(t('readout.count.empty'))}</p>`
+    );
+  }
+
+  // --- Measurements in progress -------------------------------------------
+  // The stopwatch and the vector key used to be painted on the canvas in a
+  // panel of their own in the bottom-left corner. They are readings, and this
+  // is where the readings are.
+  const watch = stopwatchRows();
+  if (watch.length) {
+    sections.push(
+      `<dl class="readout-metrics is-measure">${watch
+        .map(
+          r =>
+            `<div class="readout-metric"><dt>${escapeHtml(r.label)}</dt><dd>${escapeHtml(r.value)}</dd></div>`
+        )
+        .join('')}</dl>`
+    );
+  }
+
+  const legend = vectorLegendRows(drawn);
+  if (legend.length) {
+    sections.push(
+      `<ul class="readout-legend">${legend
+        .map(
+          l =>
+            `<li><span class="readout-swatch${l.dash ? ' is-dashed' : ''}"
+               style="--swatch:${escapeHtml(l.color)}" aria-hidden="true"></span>
+             ${escapeHtml(l.label)}</li>`
+        )
+        .join('')}</ul>`
+    );
+  }
+
+  // --- How well the integration is holding up ------------------------------
+  // Off unless asked for, in Settings. It is a statement about the numerical
+  // method rather than about the scenario, which is why it is the last thing
+  // here and nothing at all by default.
+  if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
+    const drift = conservationDrift();
+    if (drift) {
+      const pct = v =>
+        !Number.isFinite(v)
+          ? '\u2014'
+          : `${v >= 0 ? '+' : ''}${v.toPrecision(3)}%`;
+      const rows = [
+        [
+          t('readout.integrator'),
+          t(
+            `settings.option.integrator.${drift.integrator
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')}`
+          ),
+        ],
+        [t('readout.drift.energy'), pct(drift.energyDrift)],
+        [t('readout.drift.angular'), pct(drift.angularDrift)],
+      ];
+      sections.push(
+        `<dl class="readout-metrics is-diagnostics">${rows
+          .map(
+            ([k, v]) =>
+              `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
+          )
+          .join('')}${
+          drift.caveats.length
+            ? `<p class="readout-caveat">${escapeHtml(t(drift.caveats[0]))}</p>`
+            : ''
+        }</dl>`
+      );
+    }
+  }
+
+  return sections.join('');
+}
+
+/** Text into markup. Every value above is a number or a translated string. */
+const escapeHtml = v =>
+  String(v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+function instrumentationSettings() {
+  if (!isEmbed()) return SETTINGS;
+  const override = { ...SETTINGS, show_conservation_diagnostics: false };
+  // A figure 200px tall in a narrow course module has no room for a readout
+  // panel: it would sit in the middle of the simulation rather than under it.
+  // The scale bar stays - one line at the very bottom, and the one piece of
+  // instrumentation a figure cannot do without.
+  if ((canvas.height || 0) < 260) override.show_elapsed_time = false;
+  return override;
+}
+
+// How much of the bottom-left corner the page's own chrome is using.
+//
+// The instrumentation is painted on the canvas and the transport bar and
+// tutorial button are HTML on top of it, so the canvas has to be told where
+// they are or the scale bar ends up behind the scrubber. Measured rather than
+// assumed, because both of them move: the transport bar is centred on the
+// window and hidden entirely on a narrow screen.
+//
+// Re-measured a few times a second rather than every frame. A layout read in
+// the middle of a paint forces the browser to flush pending style work, and
+// doing that sixty times a second for a number that changes when a panel opens
+// is the wrong trade.
+let chromeInset = 0;
+let chromeMeasuredAt = 0;
+const CHROME_MEASURE_MS = 400;
+
+function measureChrome() {
+  const now = performance.now();
+  if (now - chromeMeasuredAt < CHROME_MEASURE_MS) return;
+  chromeMeasuredAt = now;
+  const H = window.innerHeight || canvas.height || 0;
+
+  let inset = 0;
+  // The lecture bar replaces the transport bar in lecture mode and sits in the
+  // same band, so it has to be measured too or the canvas instrumentation is
+  // drawn underneath it.
+  for (const id of ['timelineBar', 'tutorialBtn', 'lectureBar']) {
+    const el = document.getElementById(id);
+    if (!el || el.hidden) continue;
+    const r = el.getBoundingClientRect();
+    // Only chrome that actually sits over the corner the instrumentation uses.
+    if (r.width <= 0 || r.height <= 0) continue;
+    // The lecture bar is centred, so it reaches the corner the instrumentation
+    // uses without starting there; every other piece of chrome measured here
+    // is anchored left.
+    if (r.left > 520 && id !== 'lectureBar') continue;
+    if (r.bottom < H - 160) continue;
+    inset = Math.max(inset, H - r.top + 8);
+  }
+  chromeInset = inset;
+}
+
+function bottomChromeInset() {
+  measureChrome();
+  return chromeInset;
+}
 
 // Render drag aim line based on simple two-body forward Euler integration
 function renderAimLine(preview) {
@@ -1406,7 +1703,7 @@ function renderOrbitPreview(preview) {
       ctx.shadowBlur = 4;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 1;
-      ctx.fillText('Stable Orbit', top.x, top.y - 8);
+      ctx.fillText(t('overlay.stableOrbit'), top.x, top.y - 8);
       ctx.restore();
     }
   }
@@ -1527,6 +1824,11 @@ const gameLoop = timestamp => {
     } else {
       updatePhysics(dt_sim);
     }
+    // The stopwatch runs on simulated time, so it is advanced by what was
+    // actually integrated: a paused frame or a scrubbed one advances it by
+    // nothing, and changing the simulation speed does not change a period the
+    // student measures with it.
+    tickSandboxTools(dt_sim);
   }
 
   // While paused and untouched, the picture cannot change; drop to 10Hz rather

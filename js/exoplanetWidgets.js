@@ -32,6 +32,7 @@ import { HD209458, SUN_JUPITER } from './data/exoplanetSystems.js';
 import { formatNumber, withUnit } from './format.js';
 import { chartColors } from './observationChart.js';
 import { surface, responsiveHeight } from './widgetCanvas.js';
+import { t } from './i18n/index.js';
 
 const TAU = Math.PI * 2;
 
@@ -83,12 +84,18 @@ function drawFrame(ctx, box, labels, t) {
 
 const reflexMotion = {
   id: 'reflex-motion',
-  title: 'Who is actually moving?',
-  note: 'The star and the planet both go round the same point. Turn the magnification up to see the star do it.',
+  get title() {
+    return t('exoW.whoIsActuallyMoving');
+  },
+  get note() {
+    return t('exoW.theStarAndThePlanet');
+  },
   controls: [
     {
       id: 'mp',
-      label: 'Planet mass',
+      get label() {
+        return t('exoW.planetMass');
+      },
       unit: 'M_J',
       min: 0.003,
       max: 12,
@@ -98,7 +105,9 @@ const reflexMotion = {
     },
     {
       id: 'a',
-      label: 'Orbit size',
+      get label() {
+        return t('exoW.orbitSize');
+      },
       unit: 'AU',
       min: 0.02,
       max: 6,
@@ -108,7 +117,9 @@ const reflexMotion = {
     },
     {
       id: 'mag',
-      label: 'Stellar wobble shown',
+      get label() {
+        return t('exoW.stellarWobbleShown');
+      },
       unit: '×',
       min: 1,
       max: 3000,
@@ -124,12 +135,18 @@ const reflexMotion = {
       note: 'A hot Jupiter close in. The star circles a point 2.7 millionths of an AU away, which is why the wobble needs magnifying to see and not to measure.',
     },
     {
-      label: 'Jupiter, at Jupiter’s distance',
+      get label() {
+        return t('exoW.jupiterAtJupiterSDistance');
+      },
       values: { mp: 1, a: 5.2, mag: 60 },
-      note: 'The Sun really does this. Its reflex orbit is about one solar radius across, and it takes twelve years to go round.',
+      get note() {
+        return t('exoW.theSunReallyDoesThis');
+      },
     },
     {
-      label: 'An Earth',
+      get label() {
+        return t('exoW.anEarth');
+      },
       values: { mp: 1 / EARTH_PER_JUPITER, a: 1, mag: 3000 },
       note: 'The same physics, three hundred times smaller. Gravity still gives the planet away, but the signal is thousands of times harder to catch.',
     },
@@ -233,20 +250,28 @@ const reflexMotion = {
     const c = this.compute(v);
     return [
       {
-        label: 'Star’s own orbit',
+        get label() {
+          return t('exoW.starSOwnOrbit');
+        },
         value: withUnit(formatNumber(c.aStar, { sig: 3 }), 'AU'),
         emphasis: true,
       },
       {
-        label: 'Planet’s orbit',
+        get label() {
+          return t('exoW.planetSOrbit');
+        },
         value: withUnit(formatNumber(c.aPlanet, { sig: 3 }), 'AU'),
       },
       {
-        label: 'Planet’s orbit is bigger by',
+        get label() {
+          return t('exoW.planetSOrbitIsBigger');
+        },
         value: `${formatNumber(c.ratio, { sig: 3 })}×`,
       },
       {
-        label: 'Both go round once every',
+        get label() {
+          return t('exoW.bothGoRoundOnceEvery');
+        },
         value: withUnit(formatNumber(c.period, { sig: 3 }), 'days'),
       },
     ];
@@ -259,12 +284,16 @@ const reflexMotion = {
 
 const rvObserver = {
   id: 'rv-observer',
-  title: 'Toward us, away from us',
+  get title() {
+    return t('exoW.towardUsAwayFromUs');
+  },
   note: 'The dot on the ring is the star. The graph is the only part of its motion a spectrograph can see: the part along our line of sight.',
   controls: [
     {
       id: 'mp',
-      label: 'Planet mass',
+      get label() {
+        return t('exoW.planetMass');
+      },
       unit: 'M_J',
       min: 0.01,
       max: 10,
@@ -274,7 +303,9 @@ const rvObserver = {
     },
     {
       id: 'inc',
-      label: 'Inclination',
+      get label() {
+        return t('exoW.inclination');
+      },
       unit: '°',
       min: 0,
       max: 90,
@@ -392,11 +423,15 @@ const rvObserver = {
     const rv = -Math.sin(phase) * c.K;
     return [
       {
-        label: 'Radial velocity now',
+        get label() {
+          return t('exoW.radialVelocityNow');
+        },
         value: `${rv >= 0 ? '+' : '−'}${withUnit(formatNumber(Math.abs(rv)), 'm/s')}`,
       },
       {
-        label: 'Which way',
+        get label() {
+          return t('exoW.whichWay');
+        },
         value:
           Math.abs(rv) < 0.5
             ? 'across our view'
@@ -406,7 +441,9 @@ const rvObserver = {
         emphasis: true,
       },
       {
-        label: 'Semi-amplitude K',
+        get label() {
+          return t('exoW.semiAmplitudeK');
+        },
         value: withUnit(formatNumber(c.K), 'm/s'),
       },
     ];
@@ -419,12 +456,18 @@ const rvObserver = {
 
 const rvMass = {
   id: 'rv-mass',
-  title: 'What makes the wobble bigger?',
-  note: 'One thing changes at a time. The star, the period and the viewing angle are all held still.',
+  get title() {
+    return t('exoW.whatMakesTheWobbleBigger');
+  },
+  get note() {
+    return t('exoW.oneThingChangesAtA');
+  },
   controls: [
     {
       id: 'mp',
-      label: 'Planet mass',
+      get label() {
+        return t('exoW.planetMass');
+      },
       unit: 'M_J',
       min: 0.01,
       max: 10,
@@ -434,10 +477,25 @@ const rvMass = {
     },
   ],
   presets: [
-    { label: 'An Earth', values: { mp: 1 / EARTH_PER_JUPITER } },
-    { label: 'A Neptune', values: { mp: 0.054 } },
+    {
+      get label() {
+        return t('exoW.anEarth');
+      },
+      values: { mp: 1 / EARTH_PER_JUPITER },
+    },
+    {
+      get label() {
+        return t('exoW.aNeptune');
+      },
+      values: { mp: 0.054 },
+    },
     { label: 'HD 209458 b', values: { mp: 0.69 } },
-    { label: 'A heavy Jupiter', values: { mp: 5 } },
+    {
+      get label() {
+        return t('exoW.aHeavyJupiter');
+      },
+      values: { mp: 5 },
+    },
   ],
   compute: v => ({
     K: radialVelocitySemiAmplitude({
@@ -499,16 +557,22 @@ const rvMass = {
     const earths = v.mp * EARTH_PER_JUPITER;
     return [
       {
-        label: 'Planet mass',
+        get label() {
+          return t('exoW.planetMass');
+        },
         value: `${withUnit(formatNumber(v.mp), 'M_J')} (${withUnit(formatNumber(earths, { sig: 2 }), 'M⊕')})`,
       },
       {
-        label: 'Semi-amplitude K',
+        get label() {
+          return t('exoW.semiAmplitudeK');
+        },
         value: withUnit(formatNumber(c.K), 'm/s'),
         emphasis: true,
       },
       {
-        label: 'Double the mass and K',
+        get label() {
+          return t('exoW.doubleTheMassAndK');
+        },
         value: 'doubles too: the line is straight',
       },
     ];
@@ -521,12 +585,18 @@ const rvMass = {
 
 const rvInclination = {
   id: 'rv-inclination',
-  title: 'The same planet, tilted',
-  note: 'The planet does not change. Only our viewing angle does. Watch what happens to the mass radial velocity reports.',
+  get title() {
+    return t('exoW.theSamePlanetTilted');
+  },
+  get note() {
+    return t('exoW.thePlanetDoesNotChange');
+  },
   controls: [
     {
       id: 'inc',
-      label: 'Inclination',
+      get label() {
+        return t('exoW.inclination');
+      },
       unit: '°',
       min: 0,
       max: 90,
@@ -536,7 +606,9 @@ const rvInclination = {
     },
     {
       id: 'mp',
-      label: 'True planet mass',
+      get label() {
+        return t('exoW.truePlanetMass');
+      },
       unit: 'M_J',
       min: 0.05,
       max: 5,
@@ -547,16 +619,24 @@ const rvInclination = {
   ],
   presets: [
     {
-      label: 'Edge-on, 90°',
+      get label() {
+        return t('exoW.edgeOn90');
+      },
       values: { inc: 90 },
-      note: 'A transiting system is close to this, which is what makes its mass a mass rather than a lower limit.',
+      get note() {
+        return t('exoW.aTransitingSystemIsClose');
+      },
     },
     { label: '60°', values: { inc: 60 } },
     { label: '30°', values: { inc: 30 } },
     {
-      label: 'Face-on, 5°',
+      get label() {
+        return t('exoW.faceOn5');
+      },
       values: { inc: 5 },
-      note: 'Almost no radial-velocity signal at all. The planet is still there.',
+      get note() {
+        return t('exoW.almostNoRadialVelocitySignal');
+      },
     },
   ],
   compute: v => {
@@ -623,22 +703,35 @@ const rvInclination = {
   readout(v) {
     const c = this.compute(v);
     return [
-      { label: 'True planet mass', value: withUnit(formatNumber(v.mp), 'M_J') },
       {
-        label: 'K we would measure',
+        get label() {
+          return t('exoW.truePlanetMass');
+        },
+        value: withUnit(formatNumber(v.mp), 'M_J'),
+      },
+      {
+        get label() {
+          return t('exoW.kWeWouldMeasure');
+        },
         value: withUnit(formatNumber(c.K), 'm/s'),
       },
       {
-        label: 'Mass RV alone reports',
+        get label() {
+          return t('exoW.massRvAloneReports');
+        },
         value: withUnit(formatNumber(c.inferred), 'M_J'),
         emphasis: true,
       },
       {
-        label: 'That is the true mass times',
+        get label() {
+          return t('exoW.thatIsTheTrueMass');
+        },
         value: `sin i = ${formatNumber(c.sinI, { sig: 3 })}`,
       },
       {
-        label: 'So radial velocity gives',
+        get label() {
+          return t('exoW.soRadialVelocityGives');
+        },
         value: v.inc > 85 ? 'nearly the true mass' : 'a lower limit only',
       },
     ];
@@ -651,12 +744,18 @@ const rvInclination = {
 
 const astrometrySignature = {
   id: 'astrometry-signature',
-  title: 'The wobble across the sky',
-  note: 'Astrometry measures where the star is, not how fast it is coming at us. Nothing here is a picture of the planet.',
+  get title() {
+    return t('exoW.theWobbleAcrossTheSky');
+  },
+  get note() {
+    return t('exoW.astrometryMeasuresWhereTheStar');
+  },
   controls: [
     {
       id: 'mp',
-      label: 'Planet mass',
+      get label() {
+        return t('exoW.planetMass');
+      },
       unit: 'M_J',
       min: 0.01,
       max: 12,
@@ -666,7 +765,9 @@ const astrometrySignature = {
     },
     {
       id: 'a',
-      label: 'Orbit size',
+      get label() {
+        return t('exoW.orbitSize');
+      },
       unit: 'AU',
       min: 0.02,
       max: 20,
@@ -676,7 +777,9 @@ const astrometrySignature = {
     },
     {
       id: 'd',
-      label: 'Distance',
+      get label() {
+        return t('exoW.distance');
+      },
       unit: 'pc',
       min: 1,
       max: 200,
@@ -686,7 +789,9 @@ const astrometrySignature = {
     },
     {
       id: 'inc',
-      label: 'Inclination',
+      get label() {
+        return t('exoW.inclination');
+      },
       unit: '°',
       min: 0,
       max: 90,
@@ -704,22 +809,32 @@ const astrometrySignature = {
         d: HD209458.star.distancePc,
         inc: 87,
       },
-      note: 'A textbook radial-velocity target and a hopeless astrometric one: close in, and nearly fifty parsecs away.',
+      get note() {
+        return t('exoW.aTextbookRadialVelocityTarget');
+      },
     },
     {
-      label: 'Sun and Jupiter at 10 pc',
+      get label() {
+        return t('exoW.sunAndJupiterAt10');
+      },
       values: {
         mp: 1,
         a: SUN_JUPITER.planet.semiMajorAU,
         d: 10,
         inc: 45,
       },
-      note: 'The same method, a wide orbit and a near system: hundreds of times easier.',
+      get note() {
+        return t('exoW.theSameMethodAWide');
+      },
     },
     {
-      label: 'Twice as far away',
+      get label() {
+        return t('exoW.twiceAsFarAway');
+      },
       values: { mp: 1, a: 5.2, d: 20, inc: 45 },
-      note: 'The star’s orbit has not changed at all. Only the angle it subtends has.',
+      get note() {
+        return t('exoW.theStarSOrbitHas');
+      },
     },
   ],
   compute: v => {
@@ -790,20 +905,28 @@ const astrometrySignature = {
     const c = this.compute(v);
     return [
       {
-        label: 'Star’s reflex orbit',
+        get label() {
+          return t('exoW.starSReflexOrbit');
+        },
         value: withUnit(formatNumber(c.aStar, { sig: 3 }), 'AU'),
       },
       {
-        label: 'Angular signature',
+        get label() {
+          return t('exoW.angularSignature');
+        },
         value: `${formatNumber(c.unit.value, { sig: 3 })} ${c.unit.unit}`,
         emphasis: true,
       },
       {
-        label: 'Orbital period',
+        get label() {
+          return t('exoW.orbitalPeriod');
+        },
         value: withUnit(formatNumber(c.period / 365.25, { sig: 3 }), 'years'),
       },
       {
-        label: 'Distance changes',
+        get label() {
+          return t('exoW.distanceChanges');
+        },
         value: 'the angle only, never the orbit',
       },
     ];
@@ -816,12 +939,18 @@ const astrometrySignature = {
 
 const methodComparison = {
   id: 'method-comparison',
-  title: 'Three methods, one system',
-  note: 'Tilt the same planet and watch which measurements survive. No method wins everywhere.',
+  get title() {
+    return t('exoW.threeMethodsOneSystem');
+  },
+  get note() {
+    return t('exoW.tiltTheSamePlanetAnd');
+  },
   controls: [
     {
       id: 'inc',
-      label: 'Inclination',
+      get label() {
+        return t('exoW.inclination');
+      },
       unit: '°',
       min: 0,
       max: 90,
@@ -855,19 +984,25 @@ const methodComparison = {
     const c = this.compute(v);
     const rows = [
       {
-        name: 'Transit',
+        get name() {
+          return t('exoW.transit');
+        },
         gives: 'radius',
         frac: c.transits ? 1 : 0,
         text: c.transits ? 'transits' : 'no transit',
       },
       {
-        name: 'Radial velocity',
+        get name() {
+          return t('exoW.radialVelocity');
+        },
         gives: 'mass × sin i',
         frac: c.rvFraction,
         text: `${Math.round(c.rvFraction * 100)}% of full`,
       },
       {
-        name: 'Astrometry',
+        get name() {
+          return t('exoW.astrometry');
+        },
         gives: 'mass, and the orbit',
         frac: 1,
         text:
@@ -904,22 +1039,30 @@ const methodComparison = {
     const c = this.compute(v);
     return [
       {
-        label: 'Transit',
+        get label() {
+          return t('exoW.transit');
+        },
         value: c.transits
           ? 'yes: gives radius and pins sin i near 1'
           : 'none at this tilt',
       },
       {
-        label: 'Radial velocity',
+        get label() {
+          return t('exoW.radialVelocity');
+        },
         value: `${formatNumber(c.rvFraction * 100, { sig: 3 })}% of the edge-on signal`,
       },
       {
-        label: 'Astrometry',
+        get label() {
+          return t('exoW.astrometry');
+        },
         value: 'full signal at every tilt, different shape',
         emphasis: true,
       },
       {
-        label: 'Together',
+        get label() {
+          return t('exoW.together');
+        },
         value: 'radius, true mass, and the orbit',
       },
     ];
@@ -932,12 +1075,18 @@ const methodComparison = {
 
 const planetCharacterization = {
   id: 'planet-characterization',
-  title: 'What do we actually know?',
-  note: 'Each row is one observation and what it buys. The last two rows need the ones above them.',
+  get title() {
+    return t('exoW.whatDoWeActuallyKnow');
+  },
+  get note() {
+    return t('exoW.eachRowIsOneObservation');
+  },
   controls: [
     {
       id: 'rp',
-      label: 'Radius, from the transit',
+      get label() {
+        return t('exoW.radiusFromTheTransit');
+      },
       unit: 'R_J',
       min: 0.05,
       max: 2.5,
@@ -947,7 +1096,9 @@ const planetCharacterization = {
     },
     {
       id: 'mp',
-      label: 'Mass, from radial velocity',
+      get label() {
+        return t('exoW.massFromRadialVelocity');
+      },
       unit: 'M_J',
       min: 0.002,
       max: 5,
@@ -957,7 +1108,9 @@ const planetCharacterization = {
     },
     {
       id: 'a',
-      label: 'Orbit size',
+      get label() {
+        return t('exoW.orbitSize');
+      },
       unit: 'AU',
       min: 0.01,
       max: 5,
@@ -967,7 +1120,9 @@ const planetCharacterization = {
     },
     {
       id: 'lum',
-      label: 'Star’s luminosity',
+      get label() {
+        return t('exoW.starSLuminosity');
+      },
       unit: 'L☉',
       min: 0.001,
       max: 10,
@@ -977,7 +1132,9 @@ const planetCharacterization = {
     },
     {
       id: 'teff',
-      label: 'Star’s temperature',
+      get label() {
+        return t('exoW.starSTemperature');
+      },
       unit: 'K',
       min: 2600,
       max: 7200,
@@ -996,22 +1153,32 @@ const planetCharacterization = {
         lum: HD209458.star.luminositySolar,
         teff: HD209458.star.temperatureK,
       },
-      note: 'The planet this lesson measured. Large, light, and far too close to its star for the zone.',
+      get note() {
+        return t('exoW.thePlanetThisLessonMeasured');
+      },
     },
     {
-      label: 'Planet A: a rocky candidate',
+      get label() {
+        return t('exoW.planetAARockyCandidate');
+      },
       values: { rp: 0.0981, mp: 0.0044, a: 1.02, lum: 0.6, teff: 5400 },
       note: 'A little larger than Earth and a little heavier, at a density much like Earth’s, in the modeled zone of a slightly cooler star.',
     },
     {
-      label: 'Planet B: puffy',
+      get label() {
+        return t('exoW.planetBPuffy');
+      },
       values: { rp: 0.223, mp: 0.0189, a: 0.95, lum: 0.6, teff: 5400 },
       note: 'Two and a half Earth radii but only six Earth masses. The same zone, a very different world: too light for its size to be rock.',
     },
     {
-      label: 'Planet C: rocky, too hot',
+      get label() {
+        return t('exoW.planetCRockyTooHot');
+      },
       values: { rp: 0.0937, mp: 0.0041, a: 0.14, lum: 0.6, teff: 5400 },
-      note: 'A rocky density, and far too close to its star for the zone. Composition alone was never the whole question.',
+      get note() {
+        return t('exoW.aRockyDensityAndFar');
+      },
     },
   ],
   compute: v => {
@@ -1094,21 +1261,34 @@ const planetCharacterization = {
           : 'too low for rock: likely dominated by a gas envelope';
     return [
       {
-        label: 'Bulk density',
+        get label() {
+          return t('exoW.bulkDensity');
+        },
         value: `${withUnit(formatNumber(c.density.gramsPerCm3, { sig: 3 }), 'g/cm³')} (${formatNumber(c.density.relativeToEarth, { sig: 2 })}× Earth)`,
         emphasis: true,
       },
-      { label: 'Which means', value: composition },
       {
-        label: 'Starlight received',
+        get label() {
+          return t('exoW.whichMeans');
+        },
+        value: composition,
+      },
+      {
+        get label() {
+          return t('exoW.starlightReceived');
+        },
         value: `${formatNumber(c.flux, { sig: 3 })} × what Earth gets`,
       },
       {
-        label: 'Modeled habitable zone',
+        get label() {
+          return t('exoW.modeledHabitableZone');
+        },
         value: `${formatNumber(c.bounds.innerAU, { sig: 3 })} to ${withUnit(formatNumber(c.bounds.outerAU, { sig: 3 }), 'AU')}`,
       },
       {
-        label: 'This planet is',
+        get label() {
+          return t('exoW.thisPlanetIs');
+        },
         value: c.status.label,
         emphasis: true,
       },

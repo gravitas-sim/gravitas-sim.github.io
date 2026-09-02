@@ -39,6 +39,7 @@ import { mountObserverControls } from './observerControls.js';
 import { chooseAngularUnit } from './exoplanetObservables.js';
 import { formatNumber, withUnit } from './format.js';
 import { observedStar, starIsHeldFixed } from './radialVelocity.js';
+import { t } from './i18n/index.js';
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
@@ -318,7 +319,7 @@ function render() {
         u.unit
       );
     } else {
-      e.signature.textContent = 'Keep observing…';
+      e.signature.textContent = t('astrometry.keepObserving');
     }
   }
   if (e.position) {

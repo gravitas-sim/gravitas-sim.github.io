@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-135 checks, about 15 seconds, and a PASS/FAIL table with measured error against
+147 checks, about 15 seconds, and a PASS/FAIL table with measured error against
 stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -36,6 +36,7 @@ are two front ends onto it.
 | Circular two-body orbit | 6 | 6 integrated |
 | Eccentric Kepler orbit | 5 | 5 integrated |
 | Conservation laws | 6 | 6 integrated |
+| Numerical integrators | 12 | 1 analytic, 11 integrated |
 | Reference frames | 6 | 5 analytic, 1 integrated |
 | Binary stars | 5 | 2 analytic, 2 integrated, 1 published |
 | Escape and binding | 11 | 5 analytic, 2 integrated, 4 published |
@@ -49,7 +50,7 @@ are two front ends onto it.
 | Mergers | 3 | 2 integrated, 1 approximation |
 | Gravitational-wave inspiral | 4 | 4 approximation |
 | Stored parameters for real systems | 11 | 11 published |
-| **Total** | **135** | 74 analytic, 26 integrated, 29 published, 6 approximation |
+| **Total** | **147** | 75 analytic, 37 integrated, 29 published, 6 approximation |
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
 number-out computation, so a failure names a quantity rather than a screenshot.
@@ -97,6 +98,9 @@ Every acceleration in a step is computed from the same snapshot of positions
 before any body moves. That is not an implementation detail — it is what makes
 the conservation laws below hold, and it was not always true. See
 [Bugs this pass found](#bugs-this-pass-found).
+
+Two other schemes are **selectable** from Settings and neither is ever the
+default: see [Selectable integrators](#selectable-integrators) below.
 
 Three properties are measured rather than asserted:
 
@@ -203,6 +207,74 @@ Energy and angular momentum are checked on a resolved two-body orbit, not on the
 chaotic three-body run. A first-order integrator cannot resolve a near-miss, and
 reporting the resulting error as an energy-conservation failure would be blaming
 the scheme for the scenario.
+
+### Selectable integrators
+
+Three schemes can be chosen from Settings. Symplectic Euler is the default, is
+what every shipped scenario was laid out and timed against, and is what an
+unrecognized value in a saved link or scenario file resolves to. The other two
+exist so that a student can watch the choice of scheme change the answer, which
+is a lesson the sandbox could not previously teach.
+
+| | order | symplectic | force evaluations per step |
+| --- | --- | --- | --- |
+| Symplectic Euler | 1 | yes | 1 |
+| Velocity Verlet | 2 | yes | 2 |
+| RK4 | 4 | no | 4 |
+
+Measured on a bound Kepler orbit with `a = 120`, `e = 0.4`, about a 1000-unit
+primary — the problem the application is actually integrating, not a case fitted
+to the implementations:
+
+| Check | Measured | Expected | Tolerance |
+| --- | --- | --- | --- |
+| Symplectic Euler is the default scheme | `Symplectic Euler` | `Symplectic Euler` | exact |
+| An unrecognized scheme falls back to the default | `Symplectic Euler` | `Symplectic Euler` | exact |
+| Symplectic Euler converges at first order | 0.9958 | 1 | 0.15 abs |
+| Velocity Verlet converges at second order | 2.0000 | 2 | 0.15 abs |
+| RK4 converges at fourth order | 4.288 | 4 | 0.6 abs |
+| Velocity Verlet beats symplectic Euler at one timestep | 2.37 decades | 2.4 | 0.5 abs |
+| RK4 beats Velocity Verlet at one timestep | 5.65 decades | 4.8 | 1.2 abs |
+| Symplectic Euler: energy error bounded, 60 orbits vs 6 | ratio 1.0000 | 1 | 5e-2 rel |
+| Velocity Verlet: energy error bounded, 60 orbits vs 6 | ratio 1.0000 | 1 | 5e-2 rel |
+| RK4: energy error accumulates, 60 orbits vs 6 | ratio 10.00 | 10 | 0.25 rel |
+| Velocity Verlet conserves angular momentum | 7.2e-15 | 0 | 1e-11 abs |
+| RK4 conserves angular momentum only approximately | 1.0e-13 | 0 | 1e-8 abs |
+
+Four of these want a word of explanation.
+
+**The order is measured at 1.37 periods, not at a whole number of them.** Sampled
+at the same orbital phase, symplectic Euler is conjugate to leapfrog through a
+half-step shift and reports second order — a true statement about that particular
+sample and not the order of the scheme. Measured off-phase it reports 1.00.
+
+**RK4 is measured at coarser steps than the other two.** At the step counts they
+need, RK4's error is already down at double-precision round-off and the measured
+order becomes a measurement of the floating-point noise. Its order is approached
+from above — 4.29 here — because on an eccentric orbit the higher terms of the
+local error still contribute at the coarse steps it has to be measured at.
+
+**The bounded-versus-secular pair is the point of the whole group.** A symplectic
+scheme's energy error oscillates about a fixed value: ten times the run length
+gives the same worst error, which is why a first-order method is the default and
+not an embarrassment. RK4 is not symplectic, so its energy error grows linearly
+with the number of steps — ten times the run, ten times the error. Over a few
+orbits it is by far the most accurate of the three; over a few thousand it is the
+only one still getting worse.
+
+**Angular momentum separates the two symplectic schemes from RK4 in kind, not in
+size.** Verlet's kicks are each along the line joining the bodies, so the torque
+cancels exactly at any step. RK4 mixes four stages evaluated at four different
+positions, so its cancellation is a truncation error that shrinks with the step
+rather than an identity. The error is tiny either way; the claims are different.
+
+Two things are deliberately outside the selectable schemes. Black holes keep
+their own symplectic-Euler path, because their step carries the phenomenological
+orbit-decay term and running a fourth-order scheme over a first-order damping law
+would report an order it does not have. And the Barnes-Hut worker's cached
+acceleration is a snapshot from a previous frame: correct to reuse once per step
+and wrong to reuse four times inside one, so the multi-stage schemes evaluate the
+direct sum instead.
 
 ### Escape velocity and the bound/unbound boundary
 

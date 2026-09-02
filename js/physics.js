@@ -6,6 +6,9 @@ import {
   JUPITER_MASSES_PER_SOLAR_MASS,
   EARTH_MASSES_PER_JUPITER_MASS,
   EARTH_MASSES_PER_SOLAR_MASS,
+  CERES_MASS_KG,
+  HALLEY_MASS_KG,
+  DEBRIS_FRAGMENT_MASS_KG,
 } from './constants.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { formatNumber, withUnit } from './format.js';
@@ -96,7 +99,47 @@ const GAS_GIANT_TO_STAR_THRESHOLD = 80.0; // Jupiter masses needed to become a s
 // given; the mass it was given was wrong about Jupiter.
 const JUPITER_MASS_UNIT = SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS;
 
-const canvas = document.getElementById('simulationCanvas');
+// Kilograms in one simulation mass unit. The solar mass is the anchor, so this
+// is the one conversion the small-body units below are allowed to go through:
+// a second route from kilograms to simulation units would be a second chance
+// to disagree with the anchor, which is the failure JUPITER_MASS_UNIT and
+// EARTH_MASS_UNIT both had.
+const MASS_UNIT_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
+
+// Simulation mass units per Ceres mass, per Halley mass, and per kilometre-scale
+// rocky fragment.
+//
+// Asteroid, Comet and Debris were built with hardcoded masses of 0.1, 0.1 and
+// 0.01 units, set without reference to any unit constant. 0.1 units is 33 Earth
+// masses. That is not an asteroid by five orders of magnitude, and formatMass
+// would happily print one of them in Earth masses and be wrong by all five.
+// These are the same architectural line GasGiant has always had - a mass in the
+// body's natural unit, multiplied by that unit's size in simulation units - and
+// the natural units here are the ones each class already counted in: the Comet
+// class has always documented "Halley's Comet = 1.0".
+//
+// The numbers are small: one Ceres is 4.7e-7 units and one Halley is 1.1e-13.
+// That is the correct answer and not a rounding failure. A real asteroid is
+// gravitationally irrelevant next to a star, and the point of these bodies in a
+// scenario is that they are traced by gravity rather than sources of it.
+const CERES_MASS_UNIT = CERES_MASS_KG / MASS_UNIT_KG;
+const HALLEY_MASS_UNIT = HALLEY_MASS_KG / MASS_UNIT_KG;
+const DEBRIS_MASS_UNIT = DEBRIS_FRAGMENT_MASS_KG / MASS_UNIT_KG;
+
+// The element, or a zero-sized stand-in for it.
+//
+// The two coordinate transforms below read canvas.width, and there are three
+// situations where the element is not there to read: a page that has not
+// finished parsing, a test running the physics without a DOM, and the headless
+// validation runner. All three used to throw from inside worldToScreen, which
+// is a long way from anything a caller could act on. A zero-sized canvas gives
+// the same transform with its origin in the corner instead of the middle -
+// still exact, still invertible - and is_offscreen already guards for it
+// explicitly, so the rest of the module is expecting it.
+const canvas = document.getElementById('simulationCanvas') || {
+  width: 0,
+  height: 0,
+};
 
 // Global state variables
 let bh_list = [],
@@ -216,6 +259,419 @@ let physicsSettings = {
   dark_matter_halo: false,
   halo_v_flat: 6.0,
   halo_core_radius: 300,
+
+  // The numerical scheme the bodies are advanced with. Symplectic Euler is the
+  // default, and has to stay the default: every shipped scenario was laid out,
+  // timed and tuned against its particular error, and quietly moving them to a
+  // more accurate scheme would change the dynamics of all of them at once.
+  // See INTEGRATORS below for what the other two are for.
+  integrator: 'Symplectic Euler',
+};
+
+// =============================================================================
+// Simulated time, and the accelerations the last step actually used
+// -----------------------------------------------------------------------------
+// Both exist so that something outside the physics can report on it without
+// recomputing it. A readout that recalculated the acceleration on a body would
+// be a second implementation of the force law, free to disagree with the one
+// the integrator used; the point of publishing it is that it cannot.
+// =============================================================================
+
+let simulationTime = 0;
+
+/** @returns {number} Simulated time since the world was built, in sim units */
+const getSimulationTime = () => simulationTime;
+
+/** Put the simulated clock back to zero. Called when a world is built. */
+const resetSimulationTime = () => {
+  simulationTime = 0;
+};
+
+// =============================================================================
+// Live conservation diagnostics
+// -----------------------------------------------------------------------------
+// Energy and angular momentum, against a baseline taken when the world was
+// built, so a student can watch the integrator setting change the answer. The
+// definitions are deliberately the same ones tools/scenario-stability.mjs uses
+// offline: a readout that measured something slightly different from the
+// validation harness would let one of them pass while the other failed and
+// leave nobody able to say which was right.
+//
+// Debris, particles and disk fragments are left out, on the same grounds the
+// barycenter leaves them out: they are culled aggressively once they leave the
+// visible world, and a body vanishing from the sum is a step change in the
+// total that has nothing to do with the integrator.
+// =============================================================================
+
+/**
+ * The bodies the conserved quantities are summed over.
+ * @returns {Array} Live list, rebuilt on each call
+ */
+const conservedBodies = () =>
+  [
+    ...bh_list,
+    ...stars,
+    ...neutron_stars,
+    ...white_dwarfs,
+    ...planets,
+    ...gas_giants,
+    ...asteroids,
+    ...comets,
+    ...galaxies,
+  ].filter(b => b && b.alive !== false && Number.isFinite(b.mass));
+
+/**
+ * Total energy and angular momentum of the current configuration.
+ *
+ * The potential is the full pairwise sum, which is O(N^2); the caller decides
+ * how often to pay for it. Angular momentum is taken about the instantaneous
+ * center of mass, so a system drifting across the screen does not report a
+ * growing L.
+ *
+ * @returns {{energy: number, angular: number, count: number}} The totals
+ */
+const conservedQuantities = () => {
+  const bodies = conservedBodies();
+  const n = bodies.length;
+  const G = physicsSettings.gravitational_constant;
+
+  // Flat arrays, and Math.sqrt rather than Math.hypot in the inner loop. This
+  // is the one O(N^2) sum in the application: a nine-hundred-body scene is
+  // four hundred thousand pairs, and hypot - which guards against intermediate
+  // overflow the simulation's coordinates cannot reach - costs several times
+  // what the square root does. Measured on Galactic Collision, the two changes
+  // together take this from 29ms to 2.8.
+  const px = new Float64Array(n);
+  const py = new Float64Array(n);
+  const mass = new Float64Array(n);
+  let m = 0;
+  let cx = 0;
+  let cy = 0;
+  for (let i = 0; i < n; i++) {
+    const b = bodies[i];
+    px[i] = b.pos.x;
+    py[i] = b.pos.y;
+    mass[i] = b.mass;
+    m += b.mass;
+    cx += b.mass * b.pos.x;
+    cy += b.mass * b.pos.y;
+  }
+  const ox = m > 0 ? cx / m : 0;
+  const oy = m > 0 ? cy / m : 0;
+
+  let energy = 0;
+  let angular = 0;
+  for (let i = 0; i < n; i++) {
+    const b = bodies[i];
+    energy += 0.5 * mass[i] * (b.vel.x * b.vel.x + b.vel.y * b.vel.y);
+    angular += mass[i] * ((px[i] - ox) * b.vel.y - (py[i] - oy) * b.vel.x);
+    const gmi = G * mass[i];
+    let pot = 0;
+    for (let j = i + 1; j < n; j++) {
+      const dx = px[i] - px[j];
+      const dy = py[i] - py[j];
+      const r2 = dx * dx + dy * dy;
+      if (r2 > 0) pot -= mass[j] / Math.sqrt(r2);
+    }
+    energy += gmi * pot;
+  }
+  return { energy, angular, count: n };
+};
+
+let conservationBaseline = null;
+
+/**
+ * Take the reference state the drift is measured against.
+ *
+ * Called when a world is built, and available to the user as a "rebaseline"
+ * so a drift figure can be started from a configuration that has settled
+ * rather than from the instant of construction.
+ *
+ * @returns {object} The new baseline
+ */
+const resetConservationBaseline = () => {
+  invalidateConservationCache();
+  const now = conservedQuantities();
+  conservationBaseline = {
+    energy: now.energy,
+    angular: now.angular,
+    count: now.count,
+    atTime: simulationTime,
+  };
+  return conservationBaseline;
+};
+
+/**
+ * Reasons the configuration is not expected to conserve anything, so a drift
+ * figure can say whether it is measuring the scheme or the model.
+ *
+ * Each of these is a deliberate simplification that is documented elsewhere in
+ * this file, and each of them breaks a conservation law by construction rather
+ * than by numerical error. A diagnostic that reported 40% energy drift without
+ * saying "there is a static black hole in this scene" would be blamed on the
+ * integrator.
+ *
+ * @returns {Array<string>} Short reasons, empty when the system is closed
+ */
+const conservationCaveats = () => {
+  // Message ids rather than sentences: physics.js is the wrong place to hold
+  // prose, and the readout that prints these is drawn on the canvas in the
+  // reader's language. js/sandboxTools.js translates them at the point of use.
+  const out = [];
+  if (bh_list.length > 0 && physicsSettings.bh_behavior !== 'Orbiting') {
+    out.push('caveat.staticBlackHole');
+  }
+  if (
+    physicsSettings.star_only_gravity === true ||
+    physicsSettings.mutual_gravity !== true
+  ) {
+    out.push('caveat.oneWayGravity');
+  }
+  if (physicsSettings.dark_matter_halo === true) {
+    out.push('caveat.halo');
+  }
+  if ((physicsSettings.orbit_decay_rate || 0) > 0 && bh_list.length > 1) {
+    out.push('caveat.orbitDecay');
+  }
+  if (physicsSettings.enable_star_merging === true) {
+    out.push('caveat.merging');
+  }
+  return out;
+};
+
+// The drift readout is repainted every frame and the potential sum inside it is
+// O(N^2): a nine-hundred-body scene is four hundred thousand pairs, which is a
+// few milliseconds, and a few milliseconds sixty times a second is most of a
+// frame budget spent on a number that changes far too slowly to need it.
+//
+// So the expensive half - the two totals - is cached and recomputed a few times
+// a second. The interval scales with the size of the system, because the cost
+// is quadratic in it while the usefulness of a faster update is not: a two-body
+// scenario refreshes ten times a second and a thousand-body one twice.
+//
+// Only the totals are cached. The scheme in force and the reasons the system is
+// not closed are free to compute and can change between two frames, so they are
+// read fresh every time; a readout that named the previous integrator for half
+// a second after the setting changed would look like the setting had not taken.
+let totalsCache = null;
+let totalsCachedAt = -Infinity;
+let totalsCachedGeneration = -1;
+
+// How long to wait before measuring again, from how long the last measurement
+// took. The rule is a budget rather than a schedule: never spend more than one
+// frame in fifty on the readout, whatever the scene turns out to cost. A
+// three-body system refreshes at the floor of ten times a second; a
+// nine-hundred-body one, where the sum is a few milliseconds, backs off to
+// about three times a second on its own and needs no special case.
+const DRIFT_BUDGET = 50;
+const DRIFT_MIN_MS = 100;
+const DRIFT_MAX_MS = 2000;
+let lastDriftCostMs = 0;
+
+const driftIntervalMs = () =>
+  Math.min(
+    DRIFT_MAX_MS,
+    Math.max(DRIFT_MIN_MS, lastDriftCostMs * DRIFT_BUDGET)
+  );
+
+const monotonicMs = () =>
+  typeof performance !== 'undefined' && performance.now
+    ? performance.now()
+    : Date.now();
+
+/** Throw away the cached totals, so the next read measures the world again. */
+const invalidateConservationCache = () => {
+  totalsCache = null;
+  totalsCachedAt = -Infinity;
+};
+
+/**
+ * The conserved totals, measured now or read from the cache.
+ * @param {boolean} fresh - Skip the cache
+ * @returns {{energy: number, angular: number, count: number}} The totals
+ */
+const cachedConservedQuantities = fresh => {
+  const nowMs = monotonicMs();
+  if (
+    !fresh &&
+    totalsCache &&
+    totalsCachedGeneration === worldGeneration &&
+    nowMs - totalsCachedAt < driftIntervalMs()
+  ) {
+    return totalsCache;
+  }
+  totalsCache = conservedQuantities();
+  lastDriftCostMs = monotonicMs() - nowMs;
+  totalsCachedAt = nowMs;
+  totalsCachedGeneration = worldGeneration;
+  return totalsCache;
+};
+
+/**
+ * Drift from the baseline, as percentages.
+ *
+ * @param {boolean} [fresh] - Skip the cache and measure the totals now
+ * @returns {?object} energyDrift, angularDrift, the raw totals, the baseline,
+ *   the caveats, and the body count; null before a baseline exists
+ */
+const conservationDrift = (fresh = false) => {
+  if (!conservationBaseline) return null;
+  const now = cachedConservedQuantities(fresh);
+  const e0 = conservationBaseline.energy;
+  const l0 = conservationBaseline.angular;
+  return {
+    energy: now.energy,
+    angular: now.angular,
+    baselineEnergy: e0,
+    baselineAngular: l0,
+    energyDrift: e0 !== 0 ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
+    angularDrift: l0 !== 0 ? (100 * (now.angular - l0)) / Math.abs(l0) : NaN,
+    count: now.count,
+    baselineCount: conservationBaseline.count,
+    elapsed: simulationTime - conservationBaseline.atTime,
+    integrator: activeIntegrator(),
+    caveats: conservationCaveats(),
+  };
+};
+
+/**
+ * Bring a body's reported mass back into agreement with its actual one.
+ *
+ * Every class carries its mass twice: once as `mass`, in simulation units,
+ * which is what gravity uses, and once in the unit the class is built and
+ * displayed in - Earth masses, Jupiter masses, solar masses, Ceres masses,
+ * Halley masses, fragments. Any code that writes `mass` and leaves the other
+ * one behind produces a body that gravitates as one thing and is labelled as
+ * another, which is the single most repeated bug in this file's history.
+ *
+ * @param {object} obj - The body
+ * @returns {object} The same body
+ */
+const syncReportedMass = obj => {
+  if (!obj || !Number.isFinite(obj.mass)) return obj;
+  if (obj.massInEarths != null) obj.massInEarths = obj.mass / EARTH_MASS_UNIT;
+  if (obj.massInJupiters != null) {
+    obj.massInJupiters = obj.mass / JUPITER_MASS_UNIT;
+  }
+  if (obj.massInSuns != null) obj.massInSuns = obj.mass / SOLAR_MASS_UNIT;
+  if (obj.massInCeres != null) obj.massInCeres = obj.mass / CERES_MASS_UNIT;
+  if (obj.massInComets != null) obj.massInComets = obj.mass / HALLEY_MASS_UNIT;
+  if (obj.massInFragments != null) {
+    obj.massInFragments = obj.mass / DEBRIS_MASS_UNIT;
+  }
+  return obj;
+};
+
+/**
+ * The gravitational sources acting on one body, right now.
+ *
+ * The same list the integrator sums over, filtered the same way, so a drawing
+ * built on it shows the forces that are actually being applied rather than the
+ * ones a second piece of code thinks should be.
+ *
+ * @param {object} body - The body being acted on
+ * @returns {Array} The sources, excluding the body itself
+ */
+const gravitySourcesFor = body => {
+  if (!body) return [];
+  return cachedMajorSources.filter(s => s && s.id !== body.id);
+};
+
+/**
+ * Decompose the acceleration on one body into one term per source.
+ *
+ * `total` is the acceleration the integrator used on the last step, read back
+ * from the body rather than recomputed, so the arrow drawn for it cannot
+ * disagree with the motion. `sources` is the same force law evaluated one
+ * source at a time; their sum is the gravitational part of the total, and the
+ * difference between that sum and the total is whatever else acted - the halo,
+ * or a Barnes-Hut approximation - which is reported rather than hidden.
+ *
+ * @param {object} body - The body
+ * @returns {?object} total, sources, sumOfSources and residual, or null
+ */
+const accelerationBreakdown = body => {
+  if (!body || body.alive === false) return null;
+  const G_val = physicsSettings.gravitational_constant;
+  const min_dist_sq = minInteractionDistance() ** 2;
+  const sources = [];
+  let sx = 0;
+  let sy = 0;
+  for (const s of gravitySourcesFor(body)) {
+    const dx = s.pos.x - body.pos.x;
+    const dy = s.pos.y - body.pos.y;
+    let r_sq = dx * dx + dy * dy;
+    if (!(r_sq >= 0) || !isFinite(s.mass)) continue;
+    if (r_sq < min_dist_sq) r_sq = min_dist_sq;
+    if (r_sq === 0) continue;
+    const a_mag = (G_val * s.mass) / r_sq;
+    const r_inv = 1 / Math.sqrt(r_sq);
+    const ax = a_mag * dx * r_inv;
+    const ay = a_mag * dy * r_inv;
+    sx += ax;
+    sy += ay;
+    sources.push({
+      id: s.id ?? -1,
+      label: s.name || s.obj_type || 'source',
+      type: s.obj_type || s.constructor?.name || 'source',
+      mass: s.mass,
+      ax,
+      ay,
+    });
+  }
+  // Strongest first, so a body with twenty sources draws the ones that matter
+  // on top of the ones that do not.
+  sources.sort((a, b) => Math.hypot(b.ax, b.ay) - Math.hypot(a.ax, a.ay));
+
+  // The halo is a smooth background field rather than a body, so it is not a
+  // source with an arrow of its own; it is reported separately and included in
+  // the total, which is what stops the components from failing to add up in a
+  // scenario that has one switched on.
+  const halo = activeHalo();
+  const field = halo ? haloAcceleration(body.pos, halo) : { ax: 0, ay: 0 };
+
+  // `total` is evaluated at the body's position now, which is where the arrow
+  // is drawn from, so the components add up to it exactly. `stepped` is what
+  // the integrator used on the last step, taken from the position the body was
+  // at before it moved; the two agree to one step's worth of change, and the
+  // difference between them is a statement about the timestep rather than about
+  // either of them being wrong.
+  const total = { ax: sx + field.ax, ay: sy + field.ay };
+  const stepped = body.last_accel
+    ? { ax: body.last_accel.x, ay: body.last_accel.y }
+    : null;
+  return {
+    total,
+    sources,
+    field,
+    stepped,
+    sumOfSources: { ax: sx, ay: sy },
+    residual: { ax: total.ax - sx - field.ax, ay: total.ay - sy - field.ay },
+  };
+};
+
+/**
+ * Record the acceleration each body is about to be stepped with.
+ *
+ * Written onto the body rather than into a side table so it cannot go stale
+ * against a body that has been culled, and mutated in place rather than
+ * replaced so a scenario with three thousand fragments does not allocate three
+ * thousand objects every frame.
+ *
+ * @param {Array} objs - The bodies, in the same index order as stepAx/stepAy
+ * @param {number} count - How many
+ */
+const publishStepAccelerations = (objs, count) => {
+  for (let i = 0; i < count; i++) {
+    const obj = objs[i];
+    if (!obj) continue;
+    if (obj.last_accel) {
+      obj.last_accel.x = stepAx[i];
+      obj.last_accel.y = stepAy[i];
+    } else {
+      obj.last_accel = { x: stepAx[i], y: stepAy[i] };
+    }
+  }
 };
 
 /**
@@ -605,6 +1061,327 @@ const sampleTwoBodyOrbit = ({ r0, v0, mCentral, dt, steps }) => {
 let stepAx = new Float64Array(256);
 let stepAy = new Float64Array(256);
 
+// The extra scratch the multi-stage integrators need: a saved copy of the state
+// at the start of the step, and the stage derivatives. Allocated on the same
+// grow-and-reuse rule as the pair above, and never touched at all while the
+// default scheme is selected, so a user who never opens the setting pays
+// nothing for its existence.
+let intX0 = new Float64Array(256);
+let intY0 = new Float64Array(256);
+let intVx0 = new Float64Array(256);
+let intVy0 = new Float64Array(256);
+let intAx = new Float64Array(256);
+let intAy = new Float64Array(256);
+let intSumVx = new Float64Array(256);
+let intSumVy = new Float64Array(256);
+let intSumAx = new Float64Array(256);
+let intSumAy = new Float64Array(256);
+let intKx = new Float64Array(256);
+let intKy = new Float64Array(256);
+
+// =============================================================================
+// Numerical integrators
+// -----------------------------------------------------------------------------
+// Symplectic Euler is the scheme every shipped scenario was built and tuned
+// against, and it stays the default and the fallback for anything unrecognized.
+// The other two exist so that a student can watch the choice of scheme change
+// the answer, which is a lesson the sandbox could not previously teach.
+//
+// What they share: every acceleration in a stage is evaluated from one frozen
+// snapshot of every body's position, and no body moves until the whole stage is
+// computed. That is the property that makes the forces on a pair equal and
+// opposite, and losing it costs both conservation laws - see the note on
+// PhysicsObject.apply_step for what that looked like on screen.
+//
+// What is deliberately outside them:
+//
+//   Black holes take their own path below. Their step carries the orbit-decay
+//   term, which is a phenomenological inspiral model rather than a force, and
+//   running a fourth-order scheme over a first-order damping law would report
+//   an order it does not have. Within a body's step the holes are frozen, which
+//   is exactly what symplectic Euler already did with them.
+//
+//   The Barnes-Hut worker's cached acceleration is a snapshot from a previous
+//   frame. It is correct to reuse once per step and wrong to reuse four times
+//   inside one: every stage would see the same force and the scheme would
+//   quietly collapse to Euler while still calling itself RK4. The multi-stage
+//   schemes therefore evaluate the direct sum, and say so in the settings help.
+// =============================================================================
+
+/** The schemes, by the label the settings dropdown uses. */
+const INTEGRATORS = ['Symplectic Euler', 'Velocity Verlet', 'RK4'];
+
+/**
+ * The scheme in force, always one of INTEGRATORS.
+ *
+ * Anything unrecognized resolves to symplectic Euler rather than throwing: a
+ * saved link or an old scenario file naming a scheme that no longer exists
+ * should load into the default, not into a broken simulation.
+ *
+ * @returns {string} The active scheme's label
+ */
+const activeIntegrator = () => {
+  const want = physicsSettings.integrator;
+  return INTEGRATORS.includes(want) ? want : 'Symplectic Euler';
+};
+
+/** Grow the multi-stage scratch buffers to hold `n` bodies. */
+const growIntegratorScratch = n => {
+  if (intX0.length >= n) return;
+  const size = Math.max(n, 256);
+  intX0 = new Float64Array(size);
+  intY0 = new Float64Array(size);
+  intVx0 = new Float64Array(size);
+  intVy0 = new Float64Array(size);
+  intAx = new Float64Array(size);
+  intAy = new Float64Array(size);
+  intSumVx = new Float64Array(size);
+  intSumVy = new Float64Array(size);
+  intSumAx = new Float64Array(size);
+  intSumAy = new Float64Array(size);
+  intKx = new Float64Array(size);
+  intKy = new Float64Array(size);
+};
+
+/**
+ * Fill `axOut`/`ayOut` with the acceleration on every body at its current
+ * position.
+ *
+ * The one place gravity is evaluated for the moving bodies, so every scheme
+ * sees the same force law, the same halo, the same softening and the same
+ * source list. Positions are read, never written.
+ *
+ * @param {Array} objs - The bodies, in index order
+ * @param {number} count - How many of them to do
+ * @param {object|null} halo - The dark-matter halo, or null
+ * @param {boolean} allowCache - Whether the Barnes-Hut snapshot may be used
+ * @param {Float64Array} axOut - Acceleration, x
+ * @param {Float64Array} ayOut - Acceleration, y
+ */
+const computeAccelerations = (objs, count, halo, allowCache, axOut, ayOut) => {
+  const mutual = physicsSettings.mutual_gravity;
+  for (let i = 0; i < count; i++) {
+    const obj = objs[i];
+    axOut[i] = 0;
+    ayOut[i] = 0;
+    if (!obj.alive) continue;
+
+    if (halo) {
+      const { ax, ay } = haloAcceleration(obj.pos, halo);
+      axOut[i] += ax;
+      ayOut[i] += ay;
+    }
+
+    if (allowCache && obj.cached_accel) {
+      // Asynchronous gravity from the worker, already computed against one
+      // snapshot of the source positions.
+      axOut[i] += obj.cached_accel.x;
+      ayOut[i] += obj.cached_accel.y;
+    } else {
+      // Direct sum: the N^2 solver, and the first-frame fallback when the
+      // Barnes-Hut worker has not answered yet.
+      let effective_sources = cachedMajorSources;
+      if (mutual) {
+        effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
+      }
+      const { ax, ay } = gravitational_acceleration(obj.pos, effective_sources);
+      axOut[i] += ax;
+      ayOut[i] += ay;
+    }
+  }
+};
+
+/**
+ * Write a body's state, refusing anything non-finite.
+ *
+ * Once a position is NaN it poisons every other body through the gravity sum
+ * and the simulation cannot recover without a reload, so a stage that produced
+ * one leaves the body where it was. Same rule as PhysicsObject.apply_step.
+ *
+ * @param {object} obj - The body
+ * @param {number} px - Position, x
+ * @param {number} py - Position, y
+ * @param {number} vx - Velocity, x
+ * @param {number} vy - Velocity, y
+ */
+const writeState = (obj, px, py, vx, vy) => {
+  if (!isFinite(px) || !isFinite(py) || !isFinite(vx) || !isFinite(vy)) return;
+  obj.pos.x = px;
+  obj.pos.y = py;
+  obj.vel.x = vx;
+  obj.vel.y = vy;
+};
+
+/**
+ * Velocity Verlet: kick a half step, drift a full one, re-evaluate, kick again.
+ *
+ * Second order and symplectic, so like the default it has a bounded rather than
+ * a secular energy error - but the bound is proportional to dt^2 instead of dt,
+ * which at the sandbox's own timestep is roughly a hundredfold smaller. Two
+ * force evaluations per step.
+ *
+ * @param {Array} objs - The bodies
+ * @param {number} count - How many
+ * @param {number} dt - Timestep
+ * @param {object|null} halo - The halo, or null
+ */
+const stepVelocityVerlet = (objs, count, dt, halo) => {
+  growIntegratorScratch(count);
+  const half = dt * 0.5;
+
+  // a(t) is already in stepAx/stepAy: the caller computed it before deciding
+  // which scheme to run, so the first stage of every scheme is shared.
+  for (let i = 0; i < count; i++) {
+    const obj = objs[i];
+    if (!obj.alive) continue;
+    const vxh = obj.vel.x + stepAx[i] * half;
+    const vyh = obj.vel.y + stepAy[i] * half;
+    intVx0[i] = vxh;
+    intVy0[i] = vyh;
+    writeState(obj, obj.pos.x + vxh * dt, obj.pos.y + vyh * dt, vxh, vyh);
+  }
+
+  computeAccelerations(objs, count, halo, false, intAx, intAy);
+
+  for (let i = 0; i < count; i++) {
+    const obj = objs[i];
+    if (!obj.alive) continue;
+    writeState(
+      obj,
+      obj.pos.x,
+      obj.pos.y,
+      intVx0[i] + intAx[i] * half,
+      intVy0[i] + intAy[i] * half
+    );
+  }
+};
+
+/**
+ * Classical fourth-order Runge-Kutta on the first-order system (x' = v,
+ * v' = a(x)).
+ *
+ * Fourth-order accurate and not symplectic, which is the interesting pair of
+ * facts: over a few orbits it is far more accurate than either of the others,
+ * and over a few thousand it loses energy steadily rather than oscillating,
+ * because nothing constrains it to a nearby Hamiltonian. That contrast is the
+ * whole reason the setting exists. Four force evaluations per step.
+ *
+ * The stages are written into the bodies' own positions and then read back,
+ * rather than into a private array, because the sources gravity is summed over
+ * are the same objects: a stage that left the sources behind at their old
+ * positions would be integrating a different problem from the one on screen,
+ * and would not be fourth order in it.
+ *
+ * @param {Array} objs - The bodies
+ * @param {number} count - How many
+ * @param {number} dt - Timestep
+ * @param {object|null} halo - The halo, or null
+ */
+const stepRK4 = (objs, count, dt, halo) => {
+  growIntegratorScratch(count);
+  const half = dt * 0.5;
+  const sixth = dt / 6;
+
+  for (let i = 0; i < count; i++) {
+    const obj = objs[i];
+    intX0[i] = obj.pos.x;
+    intY0[i] = obj.pos.y;
+    intVx0[i] = obj.vel.x;
+    intVy0[i] = obj.vel.y;
+    // k1 = (v0, a(x0)). a(x0) is in stepAx/stepAy: the caller evaluated it
+    // before choosing a scheme, so every scheme shares its first stage.
+    intSumVx[i] = obj.vel.x;
+    intSumVy[i] = obj.vel.y;
+    intSumAx[i] = stepAx[i];
+    intSumAy[i] = stepAy[i];
+    // The position stage 2 is evaluated at.
+    intKx[i] = obj.vel.x;
+    intKy[i] = obj.vel.y;
+  }
+
+  // Three more stages, each the same three moves: put every body at the stage
+  // position, evaluate the force there, and fold the result into the two sums.
+  // The weights are 2, 2, 1 and the step fractions 1/2, 1/2, 1.
+  const weights = [2, 2, 1];
+  const fractions = [half, half, dt];
+  for (let stage = 0; stage < 3; stage++) {
+    const frac = fractions[stage];
+    const w = weights[stage];
+    for (let i = 0; i < count; i++) {
+      const obj = objs[i];
+      if (!obj.alive) continue;
+      const sx = intX0[i] + intKx[i] * frac;
+      const sy = intY0[i] + intKy[i] * frac;
+      // A stage position is written straight onto the body, where the gravity
+      // sum will read it, so the same refusal the final write makes has to be
+      // made here: one non-finite coordinate reaches every other body through
+      // the sum in a single stage and the simulation cannot recover from it.
+      if (!isFinite(sx) || !isFinite(sy)) continue;
+      obj.pos.x = sx;
+      obj.pos.y = sy;
+    }
+    // The velocity half of this stage's slope, built from the *previous*
+    // stage's acceleration, which has to be read before it is overwritten.
+    const prevAx = stage === 0 ? stepAx : intAx;
+    const prevAy = stage === 0 ? stepAy : intAy;
+    for (let i = 0; i < count; i++) {
+      intKx[i] = intVx0[i] + prevAx[i] * frac;
+      intKy[i] = intVy0[i] + prevAy[i] * frac;
+    }
+    computeAccelerations(objs, count, halo, false, intAx, intAy);
+    for (let i = 0; i < count; i++) {
+      intSumVx[i] += w * intKx[i];
+      intSumVy[i] += w * intKy[i];
+      intSumAx[i] += w * intAx[i];
+      intSumAy[i] += w * intAy[i];
+    }
+  }
+
+  for (let i = 0; i < count; i++) {
+    // A body that is not alive was held at its starting position through every
+    // stage and is about to be culled; moving it now would be integrating a
+    // corpse, which is what the default scheme's own early return avoids.
+    if (!objs[i].alive) continue;
+    writeState(
+      objs[i],
+      intX0[i] + sixth * intSumVx[i],
+      intY0[i] + sixth * intSumVy[i],
+      intVx0[i] + sixth * intSumAx[i],
+      intVy0[i] + sixth * intSumAy[i]
+    );
+  }
+};
+
+/**
+ * Advance every body one step under the selected scheme.
+ *
+ * a(t) is expected in stepAx/stepAy already, because the caller needs it for
+ * the default scheme anyway and every other scheme uses it as its first stage.
+ *
+ * @param {Array} objs - The bodies
+ * @param {number} count - How many
+ * @param {number} dt - Timestep
+ * @param {object|null} halo - The halo, or null
+ * @returns {string} The scheme actually used
+ */
+const applyIntegratorStep = (objs, count, dt, halo) => {
+  const scheme = activeIntegrator();
+  if (scheme === 'Velocity Verlet') {
+    stepVelocityVerlet(objs, count, dt, halo);
+  } else if (scheme === 'RK4') {
+    stepRK4(objs, count, dt, halo);
+  } else {
+    // The default, and byte for byte the loop that was here before the setting
+    // existed. Every shipped scenario was tuned against it.
+    for (let i = 0; i < count; i++) {
+      const obj = objs[i];
+      if (!obj.alive) continue;
+      obj.apply_step(dt, stepAx[i], stepAy[i]);
+    }
+  }
+  return scheme;
+};
+
 // Physics optimization: Cache arrays to avoid repeated spread operations
 let cachedMajorSources = [];
 let cachedAllPhysicsObjects = [];
@@ -748,6 +1525,11 @@ const updateCachedArrays = () => {
  */
 const updatePhysics = dt => {
   if (dt <= 0) return;
+  // The clock the elapsed-time readout and the stopwatch both run on. Advanced
+  // here rather than in the render loop so that it counts what was actually
+  // integrated: a scenario that substeps takes several calls per frame, and a
+  // paused or scrubbing frame takes none.
+  simulationTime += dt;
   // If simulation is effectively empty, clear particle pool and exported array
   try {
     const totalObjects =
@@ -956,40 +1738,30 @@ const updatePhysics = dt => {
     stepAy = new Float64Array(stepAx.length);
   }
 
-  for (let i = 0; i < stepCount; i++) {
-    const obj = cachedAllPhysicsObjects[i];
-    stepAx[i] = 0;
-    stepAy[i] = 0;
-    if (!obj.alive) continue;
+  // A multi-stage scheme has to move the bodies to evaluate its later stages,
+  // and the sources it sums over are those same bodies, so it cannot use the
+  // Barnes-Hut worker's snapshot: every stage would see one frozen force and
+  // the scheme would collapse to Euler while still calling itself RK4.
+  const multiStage = activeIntegrator() !== 'Symplectic Euler';
+  computeAccelerations(
+    cachedAllPhysicsObjects,
+    stepCount,
+    halo,
+    useBarnesHut && !multiStage,
+    stepAx,
+    stepAy
+  );
 
-    if (halo) {
-      const { ax, ay } = haloAcceleration(obj.pos, halo);
-      stepAx[i] += ax;
-      stepAy[i] += ay;
-    }
+  // The accelerations the step is about to be taken with, kept for the vector
+  // overlay and the diagnostics so what is drawn is what was integrated rather
+  // than a second calculation that might disagree with it.
+  publishStepAccelerations(cachedAllPhysicsObjects, stepCount);
 
-    if (useBarnesHut && obj.cached_accel) {
-      // Asynchronous gravity from the worker, already computed against one
-      // snapshot of the source positions.
-      stepAx[i] += obj.cached_accel.x;
-      stepAy[i] += obj.cached_accel.y;
-    } else {
-      // Direct sum: the N^2 solver, and the first-frame fallback when the
-      // Barnes-Hut worker has not answered yet.
-      let effective_sources = cachedMajorSources;
-      if (physicsSettings.mutual_gravity) {
-        effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
-      }
-      const { ax, ay } = gravitational_acceleration(obj.pos, effective_sources);
-      stepAx[i] += ax;
-      stepAy[i] += ay;
-    }
-  }
+  applyIntegratorStep(cachedAllPhysicsObjects, stepCount, dt, halo);
 
   for (let i = 0; i < stepCount; i++) {
     const obj = cachedAllPhysicsObjects[i];
     if (!obj.alive) continue;
-    obj.apply_step(dt, stepAx[i], stepAy[i]);
     obj.update_trail();
   }
 
@@ -1935,7 +2707,14 @@ class Planet extends PhysicsObject {
       this.mass -= this.mass * fraction * 0.05 * dt;
       let debris_count = Math.floor(fraction * 20 * dt);
 
-      if (this.mass <= 0.1) {
+      // Expressed against the class's own mass unit rather than as a bare 0.1,
+      // which is what this number always meant: 0.1 was the asteroid's whole
+      // mass back when that was a hardcoded literal, so an asteroid inside the
+      // tidal radius came apart on the frame it arrived. Deriving it keeps that
+      // outcome exactly while surviving the mass correction, which took an
+      // asteroid to 4.7e-7 units and would have left the comparison always true
+      // for a reason nobody could have read off the line.
+      if (this.mass <= CERES_MASS_UNIT) {
         this.intact = false;
         this.alive = false;
         debris_count += 15;
@@ -2293,9 +3072,33 @@ class GasGiant extends PhysicsObject {
 }
 
 // Asteroid class
+/**
+ * A minor planet, massed in Ceres masses.
+ *
+ * The same shape as Planet and GasGiant: the caller gives a mass in the body's
+ * own natural unit and the constructor converts it once. Before this it was a
+ * literal 0.1 simulation units, which is 33 Earth masses - heavier than
+ * Neptune, and 200,000 times Ceres.
+ *
+ * @extends PhysicsObject
+ */
 class Asteroid extends PhysicsObject {
-  constructor(pos, vel) {
-    super(pos, vel, 0.1, ASTEROID_RADIUS, 'Asteroid');
+  /**
+   * @param {Object} pos - Initial position
+   * @param {Object} vel - Initial velocity
+   * @param {number} [massInCeres] - Mass in Ceres masses
+   */
+  constructor(pos, vel, massInCeres = 1.0) {
+    const finalMassInCeres =
+      Number.isFinite(massInCeres) && massInCeres > 0 ? massInCeres : 1.0;
+    super(
+      pos,
+      vel,
+      finalMassInCeres * CERES_MASS_UNIT,
+      ASTEROID_RADIUS,
+      'Asteroid'
+    );
+    this.massInCeres = finalMassInCeres;
     this.name = getRandomName('asteroids');
   }
 
@@ -2309,9 +3112,26 @@ class Asteroid extends PhysicsObject {
 }
 
 // Debris class
+/**
+ * Collision and tidal ejecta, massed in kilometre-scale rocky fragments.
+ *
+ * Was a literal 0.01 simulation units, which is three Earth masses of gravel.
+ *
+ * @extends PhysicsObject
+ */
 class Debris extends PhysicsObject {
-  constructor(pos, vel) {
-    super(pos, vel, 0.01, DEBRIS_RADIUS, 'Debris');
+  /**
+   * @param {Object} pos - Initial position
+   * @param {Object} vel - Initial velocity
+   * @param {number} [massInFragments] - Mass in 1 km rocky fragments
+   */
+  constructor(pos, vel, massInFragments = 1.0) {
+    const finalMass =
+      Number.isFinite(massInFragments) && massInFragments > 0
+        ? massInFragments
+        : 1.0;
+    super(pos, vel, finalMass * DEBRIS_MASS_UNIT, DEBRIS_RADIUS, 'Debris');
+    this.massInFragments = finalMass;
   }
 
   draw(ctx) {
@@ -4059,7 +4879,10 @@ class Comet extends PhysicsObject {
     }
 
     const radius = ASTEROID_RADIUS * Math.pow(finalMassInComets, 0.4) * 0.8; // Comets are smaller than asteroids
-    const mass = finalMassInComets * 0.1; // 0.1 = typical comet mass
+    // The class has always counted in Halley masses and said so in the comment
+    // above; the multiplier was a hardcoded 0.1 simulation units, which is 33
+    // Earth masses rather than the 2.2e14 kg Halley actually weighs.
+    const mass = finalMassInComets * HALLEY_MASS_UNIT;
 
     super(pos, vel, mass, radius, 'Comet');
     this.massInComets = finalMassInComets;
@@ -4180,7 +5003,10 @@ class Comet extends PhysicsObject {
       this.mass -= this.mass * fraction * 0.1 * dt;
       let debris_count = Math.floor(fraction * 25 * dt);
 
-      if (this.mass <= 0.01) {
+      // A tenth of a Halley mass, which is what the old bare 0.01 was: a tenth
+      // of the hardcoded 0.1 units a comet used to weigh. See the note on the
+      // asteroid's threshold above.
+      if (this.mass <= 0.1 * HALLEY_MASS_UNIT) {
         this.intact = false;
         this.alive = false;
         debris_count += 20;
@@ -5621,6 +6447,21 @@ export {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
   JUPITER_MASS_UNIT,
+  MASS_UNIT_KG,
+  INTEGRATORS,
+  activeIntegrator,
+  getSimulationTime,
+  resetSimulationTime,
+  conservedQuantities,
+  conservationDrift,
+  resetConservationBaseline,
+  conservationCaveats,
+  gravitySourcesFor,
+  accelerationBreakdown,
+  syncReportedMass,
+  CERES_MASS_UNIT,
+  HALLEY_MASS_UNIT,
+  DEBRIS_MASS_UNIT,
   ABSORB_BUFFER,
   MIN_INTERACTION_DISTANCE,
   minInteractionDistance,
@@ -5727,7 +6568,8 @@ const MAX_ENERGY_HISTORY_POINTS = 5000; // Maximum data points per object to pre
 // the gravitational constant genuinely shortens the simulated timescale, and
 // the reported energies track that.
 
-const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT; // 1 mass unit -> kg
+// MASS_UNIT_KG, up with the mass anchors, is this same conversion; it is
+// declared there because the small-body mass units are derived from it.
 const DISTANCE_UNIT_TO_M = AU_METERS / 100; // 1 distance unit -> m (0.01 AU)
 
 /**
@@ -5739,7 +6581,7 @@ const getTimeUnitSeconds = () => {
   const G_sim = physicsSettings.gravitational_constant;
   if (!(G_sim > 0)) return 1;
   const L3 = DISTANCE_UNIT_TO_M ** 3;
-  return Math.sqrt((G_sim * L3) / (G_SI * MASS_UNIT_TO_KG));
+  return Math.sqrt((G_sim * L3) / (G_SI * MASS_UNIT_KG));
 };
 
 /**
@@ -5749,7 +6591,7 @@ const getTimeUnitSeconds = () => {
 const getSimEnergyToJoules = () => {
   const T = getTimeUnitSeconds();
   if (!isFinite(T) || T <= 0) return 1;
-  return (MASS_UNIT_TO_KG * DISTANCE_UNIT_TO_M ** 2) / (T * T);
+  return (MASS_UNIT_KG * DISTANCE_UNIT_TO_M ** 2) / (T * T);
 };
 
 // Energy history storage - Map of object ID to energy history array

@@ -24,6 +24,8 @@
 // called insolation or stellar flux, never bare "flux".
 // =============================================================================
 
+import { t } from './i18n/index.js';
+
 /** Earth's insolation is the unit everything is quoted in: 1 at 1 AU from the Sun. */
 export const EARTH_INSOLATION_WM2 = 1361;
 
@@ -89,7 +91,7 @@ export const distanceForInsolation = (luminositySolar, insolation) =>
 // those two come from what the Solar System's own history rules out.
 const BOUNDARIES = {
   recentVenus: {
-    label: 'Recent Venus',
+    label: t('hz.recentVenus'),
     sun: 1.7763,
     a: 1.4335e-4,
     b: 3.3954e-9,
@@ -97,7 +99,7 @@ const BOUNDARIES = {
     d: -1.195e-15,
   },
   runawayGreenhouse: {
-    label: 'Runaway Greenhouse',
+    label: t('hz.runaway'),
     sun: 1.0385,
     a: 1.2456e-4,
     b: 1.4612e-8,
@@ -105,7 +107,7 @@ const BOUNDARIES = {
     d: -1.7511e-15,
   },
   maximumGreenhouse: {
-    label: 'Maximum Greenhouse',
+    label: t('hz.maximum'),
     sun: 0.3507,
     a: 5.9578e-5,
     b: 1.6707e-9,
@@ -113,7 +115,7 @@ const BOUNDARIES = {
     d: -5.1925e-16,
   },
   earlyMars: {
-    label: 'Early Mars',
+    label: t('hz.earlyMars'),
     sun: 0.3207,
     a: 5.4471e-5,
     b: 1.5275e-9,

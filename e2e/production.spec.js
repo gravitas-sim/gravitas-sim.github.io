@@ -66,6 +66,8 @@ test.describe('the built site', () => {
     const failures = watchRequests(page);
     await app.boot();
 
+    await app.railControl('loadScenarioBtn');
+
     await page.locator('#loadScenarioBtn').click();
     await expect(page.locator('#scenarioListModal')).toBeVisible();
 
@@ -84,6 +86,8 @@ test.describe('the built site', () => {
   test('an observing panel opens', async ({ page, app }) => {
     const failures = watchRequests(page);
     await app.boot();
+
+    await app.railControl('toggleLightCurve');
 
     await page.locator('#toggleLightCurve').click();
     await expect(page.locator('#lightCurveContainer')).toBeVisible();

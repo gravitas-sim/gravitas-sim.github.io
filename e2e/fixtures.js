@@ -310,8 +310,35 @@ function makeApp(page) {
     async openPanel(toggleId, containerId) {
       const container = page.locator(`#${containerId}`);
       if (await container.isVisible().catch(() => false)) return;
+      await this.railControl(toggleId);
       await page.locator(`#${toggleId}`).click();
       await expect(container).toBeVisible({ timeout: 15_000 });
+    },
+
+    /**
+     * Reveal a control in the right-hand rail.
+     *
+     * The rail is an accordion: one section is open at a time, so a control in
+     * a shut section is present in the DOM and not clickable. A user opens the
+     * section first, and so does a test. Does nothing on a narrow viewport,
+     * where the rail is a menu rather than a column, or if the control is
+     * already on screen.
+     *
+     * @param {string} id - The control's element id
+     */
+    async railControl(id) {
+      const control = page.locator(`#${id}`);
+      if (await control.isVisible().catch(() => false)) return;
+      const toggleId = await page.evaluate(elementId => {
+        const el = document.getElementById(elementId);
+        const group = el?.closest('.rail-group');
+        const toggle = group?.querySelector('.rail-section-toggle');
+        return toggle && toggle.getAttribute('aria-expanded') === 'false'
+          ? toggle.id
+          : null;
+      }, id);
+      if (toggleId) await page.locator(`#${toggleId}`).click();
+      await expect(control).toBeVisible({ timeout: 10_000 });
     },
 
     /** The shared observer geometry, as the modules see it. */

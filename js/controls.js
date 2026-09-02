@@ -35,7 +35,16 @@ import {
   unitModeLabel,
   formatTime,
 } from './units.js';
-import { initTheme, cycleTheme, getTheme, setTheme, THEMES } from './theme.js';
+import {
+  initTheme,
+  cycleTheme,
+  getTheme,
+  setTheme,
+  THEMES,
+  themeLabel,
+  themeHint,
+} from './theme.js';
+import { t } from './i18n/index.js';
 import {
   initShortcuts,
   registerShortcut,
@@ -91,11 +100,11 @@ export function undoPlacement() {
       window.dispatchEvent(new CustomEvent('gravitasSelectionCleared'));
     }
     refreshUndoButton();
-    toast('Removed last placed object');
+    toast(t('toast.undo.removed'));
     return true;
   }
   refreshUndoButton();
-  toast('Nothing to undo');
+  toast(t('toast.undo.nothing'));
   return false;
 }
 
@@ -247,8 +256,7 @@ function refreshTransport() {
 /** Repaint the dock's swatch and label from the active theme. */
 function syncThemeDock() {
   const name = document.getElementById('themeButtonName');
-  const active = THEMES.find(t => t.id === getTheme());
-  if (name) name.textContent = active?.label ?? 'Theme';
+  if (name) name.textContent = themeLabel(getTheme());
   for (const item of document.querySelectorAll('[data-theme-option]')) {
     const on = item.dataset.themeOption === getTheme();
     item.setAttribute('aria-checked', String(on));
@@ -261,16 +269,23 @@ function setupThemeDock() {
   const menu = document.getElementById('themeMenu');
   if (!btn || !menu) return;
 
-  menu.innerHTML = THEMES.map(
-    t => `<button type="button" role="menuitemradio" aria-checked="false"
-             class="theme-menu-item" data-theme-option="${t.id}">
-             <span class="theme-menu-swatch" data-swatch="${t.id}"></span>
+  // Rebuilt on a language change as well as at start-up: the menu holds
+  // rendered text, so it goes stale the moment the reader switches language.
+  const renderMenu = () => {
+    menu.innerHTML = THEMES.map(
+      theme => `<button type="button" role="menuitemradio" aria-checked="false"
+             class="theme-menu-item" data-theme-option="${theme.id}">
+             <span class="theme-menu-swatch" data-swatch="${theme.id}"></span>
              <span class="theme-menu-text">
-               <span class="theme-menu-label">${t.label}</span>
-               <span class="theme-menu-hint">${t.hint}</span>
+               <span class="theme-menu-label">${themeLabel(theme.id)}</span>
+               <span class="theme-menu-hint">${themeHint(theme.id)}</span>
              </span>
            </button>`
-  ).join('');
+    ).join('');
+    syncThemeDock();
+  };
+  renderMenu();
+  window.addEventListener('gravitasLocaleChanged', renderMenu);
 
   const close = ({ refocus = false } = {}) => {
     if (menu.hidden) return;
@@ -322,49 +337,90 @@ function setupThemeDock() {
 
 const RAIL_SECTIONS_KEY = 'gravitas_rail_sections';
 
-// Shut on a first visit. Learn is reference material rather than controls, and
-// with it open the rail is taller than a laptop screen before the user has done
-// anything. Its header stays visible, so it is folded rather than hidden.
-const DEFAULT_COLLAPSED = ['railLearn'];
+// The rail is an accordion: one section open at a time.
+//
+// Four groups of controls, thirty-odd controls between them, and with all four
+// expanded the rail was taller than a laptop screen before the user had done
+// anything. It scrolled, so it worked, but a column you have to scroll to reach
+// the end of is a column whose end nobody reads - and the answer is not to keep
+// shortening the labels.
+//
+// So opening one shuts the others. The rail is then four headings and one
+// section, which fits any screen the application runs on, and every group is
+// one click away with its name permanently in view. The choice persists, so a
+// user who lives in Tools opens Tools once.
+const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools', 'railLearn'];
 
-function readCollapsedSections() {
+/** The one open on a first visit: loading something is where everyone starts. */
+const DEFAULT_OPEN = 'railScenario';
+
+/**
+ * Which section is open.
+ *
+ * Stored as the list of *shut* sections, which is the shape the older
+ * multi-open rail wrote, so a returning user's saved preference is read rather
+ * than discarded. Whatever it says, exactly one section ends up open.
+ *
+ * @returns {string} A section toggle id
+ */
+function readOpenSection() {
+  let shut = [];
   try {
     const raw = window.localStorage?.getItem(RAIL_SECTIONS_KEY);
-    return new Set(raw ? JSON.parse(raw) : DEFAULT_COLLAPSED);
+    if (raw) shut = JSON.parse(raw);
   } catch {
-    return new Set(DEFAULT_COLLAPSED);
+    /* no stored preference; the default stands */
   }
+  const open = RAIL_SECTIONS.filter(id => !shut.includes(id));
+  // More than one open is a preference from before the rail was an accordion:
+  // the first of them is the one nearest the top, which is the one to keep.
+  return open[0] || DEFAULT_OPEN;
 }
 
 function setupRailSections() {
-  const collapsed = readCollapsedSections();
+  let openId = readOpenSection();
+
+  const toggles = [...document.querySelectorAll('.rail-section-toggle')].filter(
+    toggle => document.getElementById(toggle.getAttribute('aria-controls'))
+  );
+  if (!toggles.length) return;
+  // A stored id for a section that no longer exists must not leave the rail
+  // with nothing open.
+  if (!toggles.some(toggle => toggle.id === openId)) openId = toggles[0].id;
+
   const save = () => {
     try {
       window.localStorage?.setItem(
         RAIL_SECTIONS_KEY,
-        JSON.stringify([...collapsed])
+        JSON.stringify(RAIL_SECTIONS.filter(id => id !== openId))
       );
     } catch {
       /* the rail still works; the preference just will not persist */
     }
   };
 
-  for (const toggle of document.querySelectorAll('.rail-section-toggle')) {
-    const body = document.getElementById(toggle.getAttribute('aria-controls'));
-    if (!body) continue;
+  const apply = () => {
+    for (const toggle of toggles) {
+      const body = document.getElementById(
+        toggle.getAttribute('aria-controls')
+      );
+      const open = toggle.id === openId;
+      toggle.setAttribute('aria-expanded', String(open));
+      body.hidden = !open;
+    }
+  };
+  apply();
 
-    const apply = () => {
-      const shut = collapsed.has(toggle.id);
-      toggle.setAttribute('aria-expanded', String(!shut));
-      body.hidden = shut;
-    };
-    apply();
-
+  for (const toggle of toggles) {
     toggle.addEventListener('click', () => {
-      if (collapsed.has(toggle.id)) collapsed.delete(toggle.id);
-      else collapsed.add(toggle.id);
+      // Clicking the open section shuts it, so the rail can be reduced to four
+      // headings when the simulation itself is what the user wants to see.
+      openId = openId === toggle.id ? '' : toggle.id;
       apply();
       save();
+      // The rail scrolls internally; opening a section further down should not
+      // leave its heading off the top of the visible area.
+      if (openId) toggle.scrollIntoView({ block: 'nearest' });
     });
   }
 }
@@ -388,7 +444,7 @@ function setupViewMenu() {
     unitBtn.addEventListener('click', () => {
       toggleUnitMode();
       sync();
-      toast(`Showing ${unitModeLabel().toLowerCase()}`);
+      toast(t('toast.units.showing', { units: unitModeLabel().toLowerCase() }));
     });
     window.addEventListener('gravitasUnitsChanged', sync);
   }
@@ -412,7 +468,7 @@ function setupShortcuts() {
     keys: 'Space',
     match: ' ',
     group: 'Playback',
-    label: 'Pause / resume',
+    label: t('shortcut.pause'),
     run: () => {
       if (isScrubbing()) resumeLive();
       state.paused = !state.paused;
@@ -423,24 +479,24 @@ function setupShortcuts() {
     keys: ',',
     match: ',',
     group: 'Playback',
-    label: 'Step back one recorded frame',
+    label: t('shortcut.stepBack'),
     run: stepBack,
   });
   registerShortcut({
     keys: '.',
     match: '.',
     group: 'Playback',
-    label: 'Step forward one recorded frame',
+    label: t('shortcut.stepForward'),
     run: stepForward,
   });
   registerShortcut({
     keys: 'L',
     match: 'l',
     group: 'Playback',
-    label: 'Jump back to live',
+    label: t('shortcut.live'),
     run: () => {
       resumeLive();
-      toast('Back to live');
+      toast(t('toast.timeline.live'));
     },
   });
   registerShortcut({
@@ -462,30 +518,30 @@ function setupShortcuts() {
     keys: 'Arrow keys',
     match: '__pan',
     group: 'View',
-    label: 'Pan the view',
+    label: t('shortcut.pan'),
   });
   registerShortcut({
     keys: 'Scroll',
     match: '__zoom',
     group: 'View',
-    label: 'Zoom in and out',
+    label: t('shortcut.zoom'),
   });
   registerShortcut({
     keys: 'R',
     match: 'r',
     group: 'View',
-    label: 'Reset view',
+    label: t('shortcut.resetView'),
     run: () => {
       state.zoom = 1.0;
       state.pan = { x: 0, y: 0 };
-      toast('View reset');
+      toast(t('toast.view.reset'));
     },
   });
   registerShortcut({
     keys: 'I',
     match: 'i',
     group: 'Learn',
-    label: 'Open the guided investigations',
+    label: t('shortcut.investigations'),
     run: () => {
       // Through the loader rather than importing the module directly: it is the
       // one place that guarantees initInvestigations() has run, and the module
@@ -499,7 +555,7 @@ function setupShortcuts() {
     keys: 'K',
     match: 'k',
     group: 'State',
-    label: 'Share a link to this simulation',
+    label: t('shortcut.share'),
     run: () => {
       // Imported lazily: share.js imports this module, so a static import here
       // would close a cycle that only exists for one keystroke.
@@ -510,7 +566,7 @@ function setupShortcuts() {
     keys: 'E',
     match: 'e',
     group: 'State',
-    label: 'Export the recorded data as CSV',
+    label: t('shortcut.export'),
     run: () => {
       // Lazily imported for the same reason as the two above: exportDialog.js
       // imports this module for its toast, so a static import here would close
@@ -522,17 +578,17 @@ function setupShortcuts() {
     keys: 'T',
     match: 't',
     group: 'View',
-    label: 'Cycle theme',
+    label: t('shortcut.theme'),
     run: () => {
       const id = cycleTheme();
-      toast(`Theme: ${THEMES.find(t => t.id === id)?.label ?? id}`);
+      toast(t('toast.theme.changed', { theme: themeLabel(id) }));
     },
   });
   registerShortcut({
     keys: 'U',
     match: 'u',
     group: 'View',
-    label: 'Toggle physical / simulation units',
+    label: t('shortcut.units'),
     run: () => {
       toggleUnitMode();
       toast(`Showing ${unitModeLabel().toLowerCase()}`);
@@ -542,7 +598,7 @@ function setupShortcuts() {
     keys: 'G',
     match: 'g',
     group: 'View',
-    label: 'Toggle trails',
+    label: t('shortcut.trails'),
     run: () => {
       SETTINGS.show_trails = !SETTINGS.show_trails;
       toast(SETTINGS.show_trails ? 'Trails on' : 'Trails off');
@@ -553,33 +609,43 @@ function setupShortcuts() {
     keys: 'Z',
     match: 'z',
     group: 'Editing',
-    label: 'Undo last placed object',
+    label: t('shortcut.undo'),
     run: undoPlacement,
   });
   registerShortcut({
     keys: 'Click',
     match: '__click',
     group: 'Editing',
-    label: 'Inspect an object',
+    label: t('shortcut.inspect'),
   });
   registerShortcut({
     keys: 'Drag',
     match: '__drag',
     group: 'Editing',
-    label: 'Place an object with velocity',
+    label: t('shortcut.place'),
   });
   registerShortcut({
     keys: 'Shift + Drag',
     match: '__shiftdrag',
     group: 'Editing',
-    label: 'Snap to a circular orbit',
+    label: t('shortcut.snap'),
   });
 
+  registerShortcut({
+    keys: 'V',
+    match: 'v',
+    group: 'View',
+    label: t('shortcut.lecture'),
+    run: async () => {
+      const { toggleLecture } = await import('./lecture.js');
+      toggleLecture();
+    },
+  });
   registerShortcut({
     keys: '?',
     match: '?',
     group: 'Help',
-    label: 'Show this list',
+    label: t('shortcut.showList'),
     shift: true,
     run: toggleShortcutHelp,
   });
@@ -587,7 +653,7 @@ function setupShortcuts() {
     keys: 'Esc',
     match: 'escape',
     group: 'Help',
-    label: 'Close the open panel',
+    label: t('shortcut.closePanel'),
     run: () => {
       if (isShortcutHelpOpen()) {
         hideShortcutHelp();
@@ -611,7 +677,7 @@ function adjustSpeed(direction) {
   window.dispatchEvent(
     new CustomEvent('gravitasSpeedChanged', { detail: { speed: next } })
   );
-  toast(`Speed ${next}×`);
+  toast(t('toast.speed.changed', { speed: next }));
 }
 
 // --- Entry point --------------------------------------------------------------
@@ -631,7 +697,15 @@ function setupPlacementHint() {
       el.setAttribute('role', 'status');
       document.body.appendChild(el);
     }
-    el.textContent = `Drag to aim · release to place ${SETTINGS.input_object_type}`;
+    // The option id is built here rather than imported from ui.js: controls.js
+    // is loaded before the simulation and importing ui.js for one label would
+    // close a cycle between them.
+    const type = SETTINGS.input_object_type;
+    el.textContent = t('toast.placement.armed', {
+      object: t(
+        `settings.option.inputObjectType.${String(type).toLowerCase()}`
+      ),
+    });
     el.classList.add('is-visible');
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => el.classList.remove('is-visible'), 1800);

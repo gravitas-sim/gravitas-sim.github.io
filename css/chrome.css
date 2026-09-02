@@ -1,0 +1,562 @@
+/* =============================================================================
+   Chrome: the readout, the control rail, and the bottom dock
+   -----------------------------------------------------------------------------
+   Three pieces of the interface that had each grown past what their original
+   layout could carry:
+
+     - the readout was a sound panel, nine object counts of which most read
+       zero, and a five-line crib of the keyboard controls
+     - the control rail had reached forty rows in one column, most of them in
+       Tools
+     - the transport bar and the footer both live along the bottom edge and had
+       no arrangement between them, so on a wide window the scrubber ran over
+       the copyright line
+
+   Last of the component-layer sheets, so it can restate what styles.css set in
+   the legacy layer for the same elements without reaching for !important.
+   ========================================================================== */
+
+@layer components {
+  /* ==========================================================================
+     1. The readout
+     --------------------------------------------------------------------------
+     A header that says what the simulation is doing, then measurements. The
+     old panel was mostly not measurements: a paragraph about a sound feature
+     that is off by default, three rows of counts written whether or not there
+     was anything to count, and a list of what the arrow keys do. The list has
+     gone to the Shortcuts dialog and the counts are written only for the kinds
+     of body actually present, which is what makes room for the readings that
+     used to be painted in a box in the opposite corner.
+     ====================================================================== */
+
+  #overlay {
+    /* The legacy sheet fixes this at 384px with 10px of padding and a
+       hard-coded near-black background. The panel is a column of label/value
+       rows now, which needs less width and a surface that follows the theme. */
+    width: min(280px, calc(100vw - 2 * var(--space-4)));
+    max-width: none;
+    padding: 0;
+    top: var(--space-4);
+    left: var(--space-4);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--hud-text);
+    text-shadow: none;
+    background: color-mix(in srgb, var(--hud-surface) 84%, transparent);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    border: 1px solid var(--hud-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .readout-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--hud-border);
+  }
+
+  .readout-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    /* The header is a flex row and this is the part that can be long: without
+       a floor of zero it refuses to shrink, and without nowrap a two-word
+       state ("En marcha") breaks one character to a line inside it. */
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.02em;
+    color: var(--hud-text-strong, var(--text-primary));
+  }
+
+  /* Running or paused, as a colour as well as a word. This is the line a
+     lecturer points at from across a room, where a two-letter difference
+     between "Running" and "Paused" does not carry and a green or amber dot
+     does. The word is still there, so the colour is not the only signal. */
+  .readout-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-positive, #4ade80);
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--accent-positive, #4ade80) 22%, transparent);
+  }
+
+  .readout-status[data-state='paused'] .readout-status-dot {
+    background: var(--accent-warning, #fbbf24);
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--accent-warning, #fbbf24) 22%, transparent);
+  }
+
+  .readout-head-actions {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    pointer-events: auto;
+  }
+
+  /* The two controls that belong to the panel itself. Icon-sized, because a
+     sound switch and a minimise switch are not worth a labelled row each in
+     the panel whose whole problem was that it had too many rows. */
+  .readout-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1;
+    color: var(--hud-text);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    pointer-events: auto;
+    transition:
+      background var(--duration) var(--ease),
+      color var(--duration) var(--ease);
+  }
+
+  .readout-icon-btn:hover,
+  .readout-icon-btn:focus-visible {
+    background: var(--surface-2);
+    color: var(--text-primary);
+  }
+
+  .readout-icon-btn[data-state='active'] {
+    color: var(--accent-primary, var(--text-primary));
+  }
+
+  .readout-icon-btn[disabled] {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  /* The legacy sheet positions the minimise button absolutely in the corner of
+     a padded panel. It is a flex child of the header now.
+     
+     It carries a word as well as a chevron, so unlike the sound switch it is
+     sized by its label rather than pinned square - and the word goes when the
+     header runs out of room, which on a phone in Spanish it does. */
+  #overlay .overlay-minimize-btn {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: auto;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 var(--space-2);
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: var(--weight-semibold);
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    text-shadow: none;
+    color: var(--hud-text);
+  }
+
+  #overlay .overlay-minimize-btn:hover {
+    transform: none;
+    background: var(--surface-2);
+    color: var(--text-primary);
+    box-shadow: none;
+  }
+
+  @media (max-width: 620px) {
+    /* Chevron only. The accessible name still says what it does. */
+    #overlay .overlay-toggle-label {
+      display: none;
+    }
+
+    #overlay .overlay-minimize-btn {
+      padding: 0;
+      width: 26px;
+    }
+  }
+
+  .overlay-stats {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .overlay-stats:empty {
+    display: none;
+  }
+
+  /* Label left, value right, on one baseline. Tabular figures and a fixed
+     column mean the decimal point does not move as the numbers change, which
+     is the difference between a readout you can watch and one you have to
+     re-read. */
+  .readout-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--hud-border);
+  }
+
+  .readout-metric {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .readout-metric dt {
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .readout-metric dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    font-weight: var(--weight-medium);
+    color: var(--hud-text-strong, var(--text-primary));
+    white-space: nowrap;
+  }
+
+  .readout-metrics.is-measure .readout-metric dd {
+    color: var(--accent-primary, var(--text-primary));
+  }
+
+  .readout-metrics.is-diagnostics {
+    font-size: var(--text-2xs);
+  }
+
+  .readout-caveat {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-2xs);
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* Counts as chips, and only for the kinds that are there. A scenario with
+     six planets and one black hole used to report six zeros across two further
+     rows; wrapping chips make the list as long as the world is varied and no
+     longer. */
+  .readout-counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px var(--space-2);
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    list-style: none;
+    border-bottom: 1px solid var(--hud-border);
+  }
+
+  .readout-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .readout-count b {
+    font-variant-numeric: tabular-nums;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--hud-text-strong, var(--text-primary));
+  }
+
+  .readout-empty {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--hud-border);
+  }
+
+  /* The vector key. It is also drawn on the canvas, because a screenshot needs
+     it; here it is legible at small sizes and does not compete with the
+     simulation for the corner. */
+  .readout-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    list-style: none;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .readout-legend li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .readout-swatch {
+    flex: none;
+    width: 18px;
+    height: 0;
+    border-top: 3px solid var(--swatch, currentColor);
+  }
+
+  .readout-swatch.is-dashed {
+    border-top-width: 2px;
+    border-top-style: dashed;
+  }
+
+  /* The last section in the panel has nothing under it to be separated from. */
+  .overlay-stats > *:last-child {
+    border-bottom: 0;
+  }
+
+  /* Minimised: the header alone, which still says whether the thing is
+     running. */
+  #overlay.minimized {
+    width: auto;
+    max-width: min(260px, calc(100vw - 2 * var(--space-4)));
+    padding: 0;
+    background: color-mix(in srgb, var(--hud-surface) 84%, transparent);
+  }
+
+  #overlay.minimized .readout-head {
+    border-bottom: 0;
+  }
+
+  #overlay.minimized .overlay-stats {
+    display: none;
+  }
+
+  /* A short window is the case where the readout and the canvas compete. */
+  @media (max-height: 700px) {
+    .readout-legend,
+    .readout-metrics.is-diagnostics {
+      display: none;
+    }
+  }
+
+  /* ==========================================================================
+     2. The bottom dock: transport bar and footer
+     --------------------------------------------------------------------------
+     Both are fixed along the bottom edge, and until now neither knew about the
+     other: the transport bar centred itself in the band left of the rail and
+     the footer sat in the right-hand corner, so whether they collided depended
+     on how wide the footer happened to be. It grew - a theme picker, then a
+     language picker - and on a wide window the scrubber ran across the
+     copyright line.
+
+     The fix is to give the transport bar a right-hand boundary it cannot cross:
+     the footer's own measured width, published as --attribution-width by
+     js/ui.js. Both ends are then pinned and `margin-inline: auto` centres the
+     bar in whatever room is left, so the two can no longer overlap at any
+     window size or in any language - and Spanish is the case that matters,
+     being reliably longer than English.
+     ====================================================================== */
+
+  @media (min-width: 1025px) {
+    .timeline-bar {
+      left: var(--space-4);
+      right: calc(
+        var(--rail-width) + var(--attribution-width, 0px) + 3 * var(--space-4)
+      );
+      width: auto;
+      max-width: 680px;
+      margin-inline: auto;
+      transform: none;
+    }
+  }
+
+  /* Below the rail's breakpoint the rail is a menu rather than a column, so the
+     bar has the full width - and the footer, still anchored bottom-right, now
+     lies under it rather than beside it. The bar moves up by the footer's own
+     height to clear it.
+
+     The lower bound matters. Below 621px the phone layout in components.css
+     owns the bottom edge: the bar is pinned just above the home indicator, the
+     footer wraps into its own row, and a lesson panel covers the screen. Adding
+     the footer's height to the bar's offset there lifts it over the lesson's
+     own Next button, which is a control the student has to be able to press. */
+  @media (min-width: 621px) and (max-width: 1024px) {
+    .timeline-bar {
+      left: var(--space-3);
+      right: var(--space-3);
+      width: auto;
+      max-width: 680px;
+      margin-inline: auto;
+      transform: none;
+      bottom: calc(var(--space-3) + var(--attribution-height, 0px));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .attribution {
+      left: var(--space-3);
+      right: var(--space-3);
+      justify-content: center;
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+  }
+
+  /* ==========================================================================
+     3. The control rail
+     --------------------------------------------------------------------------
+     Forty full-width rows in one column, twenty of them under Tools. The rail
+     scrolled, which meant it worked, but a list you have to scroll to reach
+     the end of is a list nobody reads the end of.
+
+     Three changes, in order of how much height each returns:
+
+       - short controls pair up into two columns
+       - Tools is broken into named sub-groups, so the section is scanned
+         rather than read
+       - the analysis panels become toggle chips, which is what they are: five
+         things that are either open or shut
+     ====================================================================== */
+
+  /* Two columns for the controls whose labels fit in half a rail. Marked in
+     the markup rather than inferred, because which labels fit is a fact about
+     the words and Spanish does not have the same ones. */
+  .rail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  /* Half a rail is 88px, which two short words fit on one line at this size
+     and wrap on at the default. A wrapped label in a two-column grid is worse
+     than the single column it replaced, so the size comes down with it. */
+  .ui-container .rail-grid .ui-button {
+    justify-content: center;
+    padding: 6px var(--space-1);
+    font-size: var(--text-2xs);
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* A sub-heading inside a section. Smaller and quieter than the section
+     header, because the section header is the thing that opens and shuts and
+     these are only signposts within it. */
+  .rail-subhead {
+    margin: var(--space-2) 0 2px;
+    padding: 0 var(--space-3);
+    font-size: 9px;
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.75;
+  }
+
+  .rail-section > .rail-subhead:first-child {
+    margin-top: 0;
+  }
+
+  /* The analysis panels. Each is open or shut, so each is a chip that shows
+     which - not a button that gives no sign of having been pressed. */
+  .rail-chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .ui-container .rail-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 5px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.25;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition:
+      background var(--duration) var(--ease),
+      color var(--duration) var(--ease),
+      border-color var(--duration) var(--ease);
+  }
+
+  .ui-container .rail-chip:hover,
+  .ui-container .rail-chip:focus-visible {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+
+  .ui-container .rail-chip[aria-pressed='true'] {
+    color: var(--text-primary);
+    background: color-mix(
+      in srgb,
+      var(--accent-primary, #38bdf8) 20%,
+      transparent
+    );
+    border-color: color-mix(
+      in srgb,
+      var(--accent-primary, #38bdf8) 55%,
+      transparent
+    );
+  }
+
+  /* Three of a kind, one per row. Three columns fits in 57px each, and
+     "Protractor" does not fit in 57px in either language - the labels came out
+     clipped, which is a worse answer than three tidy rows. */
+  .ui-container .measure-tools {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  /* The stopwatch's own four controls do pair up: they are a glyph and one
+     short word each, and they only appear while the stopwatch is out. */
+  .ui-container #stopwatchControls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ui-container .measure-tools .measure-btn {
+    justify-content: flex-start;
+    padding: 5px var(--space-2);
+    font-size: var(--text-2xs);
+    text-align: left;
+  }
+
+  .ui-container #stopwatchControls .measure-btn {
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* The speed control is a single object - slow, reading, fast - and reads as
+     one when the three parts share a surface. */
+  .ui-container .speed-controls {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2px;
+    margin: var(--space-1) 0;
+    padding: 2px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .ui-container .speed-controls .ui-button {
+    justify-content: center;
+    padding: 4px var(--space-1);
+    font-size: var(--text-2xs);
+  }
+
+  /* Sections are tighter now that there are more of them. */
+  .rail-group > [role='group'] {
+    gap: 2px;
+  }
+}

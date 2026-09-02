@@ -33,6 +33,7 @@ import {
   white_dwarfs,
 } from './physics.js';
 import { toast } from './controls.js';
+import { t } from './i18n/index.js';
 
 let els = {};
 let scope = 'all';
@@ -125,7 +126,7 @@ function download(row) {
   try {
     const built = row.build();
     if (!built.rows) {
-      toast('There is nothing recorded to export yet.');
+      toast(t('export.empty'));
       return;
     }
     // applyPreset resets preset_scenario to the 'None' sentinel once it has
@@ -137,12 +138,12 @@ function download(row) {
     downloadCsv(built.csv, csvFilename(row.key, scenario));
     toast(
       built.truncated
-        ? `Exported the first ${built.rows.toLocaleString('en-US')} rows: the recording was larger than one file.`
-        : `Exported ${plural(built.rows, 'row')}.`
+        ? t('export.truncated', { n: built.rows })
+        : t('export.done', { n: built.rows })
     );
   } catch (err) {
     console.warn('Export failed:', err);
-    toast('Could not build that file.');
+    toast(t('export.failed'));
   }
 }
 
@@ -186,7 +187,7 @@ function render() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ui-button';
-    btn.textContent = 'Download CSV';
+    btn.textContent = t('export.downloadCsv');
     btn.disabled = !row.ready;
     btn.addEventListener('click', () => download(row));
     div.append(text, btn);

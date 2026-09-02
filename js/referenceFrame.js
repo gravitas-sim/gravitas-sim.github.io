@@ -24,6 +24,8 @@
 // used from physics, render and ui without a cycle.
 // =============================================================================
 
+import { t } from './i18n/index.js';
+
 /** Positions as the scenario integrates them. No transform. */
 export const WORLD = 'world';
 /** The mass-weighted center of the whole system. */
@@ -231,7 +233,7 @@ export function resolveFrameOrigin(bodies) {
     return {
       now,
       at: tick => sampleAtTick(barycenterHistory, tick),
-      label: 'Barycenter',
+      label: t('frame.barycenter'),
     };
   }
 

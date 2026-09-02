@@ -3,14 +3,25 @@ import {
   GasGiant,
   Planet,
   StarObject,
+  Asteroid,
+  Comet,
+  Debris,
   SOLAR_MASS_UNIT,
   JUPITER_MASS_UNIT,
   EARTH_MASS_UNIT,
+  MASS_UNIT_KG,
+  CERES_MASS_UNIT,
+  HALLEY_MASS_UNIT,
+  DEBRIS_MASS_UNIT,
 } from '../js/physics.js';
 import {
   JUPITER_MASSES_PER_SOLAR_MASS,
   EARTH_MASSES_PER_JUPITER_MASS,
   EARTH_MASSES_PER_SOLAR_MASS,
+  SOLAR_MASS_KG,
+  CERES_MASS_KG,
+  HALLEY_MASS_KG,
+  DEBRIS_FRAGMENT_MASS_KG,
 } from '../js/constants.js';
 
 // The simulation has one mass anchor: 1000 units is a solar mass. Every other
@@ -162,5 +173,168 @@ describe('a planet and a gas giant reach the same scale', () => {
     const jupiter = new GasGiant(ORIGIN, ORIGIN, 1.0);
     const earths = new Planet(ORIGIN, ORIGIN, EARTH_MASSES_PER_JUPITER_MASS);
     expect(earths.mass / jupiter.mass).toBeCloseTo(1.0, 3);
+  });
+});
+
+// The small bodies were the half of the mass system this suite did not cover,
+// and they were wrong in the crudest possible way: Asteroid and Comet carried a
+// literal 0.1 simulation units and Debris a literal 0.01, none of them derived
+// from any unit constant. 0.1 units is 33 Earth masses, which is heavier than
+// Neptune. The Planet and GasGiant blocks above are what these are modelled on,
+// because the failure they catch is the same one.
+
+describe('small-body mass units', () => {
+  test('one simulation mass unit is a thousandth of a solar mass, in kg', () => {
+    expect(MASS_UNIT_KG).toBeCloseTo(SOLAR_MASS_KG / SOLAR_MASS_UNIT, 6);
+  });
+
+  test('the Ceres unit is Ceres, converted through the anchor', () => {
+    expect(CERES_MASS_UNIT * MASS_UNIT_KG).toBeCloseTo(CERES_MASS_KG, -12);
+    expect(CERES_MASS_UNIT).toBeCloseTo(4.7177e-7, 11);
+  });
+
+  test('the Halley unit is Halley, converted through the anchor', () => {
+    expect(HALLEY_MASS_UNIT * MASS_UNIT_KG).toBeCloseTo(HALLEY_MASS_KG, -8);
+    expect(HALLEY_MASS_UNIT).toBeCloseTo(1.1061e-13, 17);
+  });
+
+  test('the debris unit is the fragment, converted through the anchor', () => {
+    expect(DEBRIS_MASS_UNIT * MASS_UNIT_KG).toBeCloseTo(
+      DEBRIS_FRAGMENT_MASS_KG,
+      -6
+    );
+  });
+
+  test('the fragment mass really is a 1 km rock at 3000 kg/m^3', () => {
+    // Debris is the one small-body anchor that is built rather than quoted, so
+    // the construction is the thing to check.
+    const built = (4 / 3) * Math.PI * 500 ** 3 * 3000;
+    expect(DEBRIS_FRAGMENT_MASS_KG / built).toBeCloseTo(1.0, 4);
+  });
+});
+
+describe('Asteroid mass', () => {
+  test('gravitational mass matches the mass it reports', () => {
+    const a = new Asteroid(ORIGIN, ORIGIN, 1.0);
+    expect(a.massInCeres).toBeCloseTo(1.0, 9);
+    expect(a.mass / CERES_MASS_UNIT).toBeCloseTo(a.massInCeres, 9);
+  });
+
+  test('the default asteroid is one Ceres', () => {
+    const a = new Asteroid(ORIGIN, ORIGIN);
+    expect(a.mass).toBeCloseTo(CERES_MASS_UNIT, 12);
+  });
+
+  test('Ceres is 1.5e-4 Earth masses, as the documentation says', () => {
+    // The number MASS_UNITS.md quoted when it named this bug. The old hardcoded
+    // 0.1 units was 33 Earth masses: wrong by five orders of magnitude, and in
+    // the direction that makes an asteroid outweigh the planet it hits.
+    const a = new Asteroid(ORIGIN, ORIGIN);
+    expect(a.mass / EARTH_MASS_UNIT).toBeCloseTo(1.5707e-4, 8);
+  });
+
+  test('an asteroid is far lighter than an Earth-mass planet', () => {
+    const a = new Asteroid(ORIGIN, ORIGIN);
+    const p = new Planet(ORIGIN, ORIGIN, 1.0);
+    expect(a.mass / p.mass).toBeLessThan(1e-3);
+    // The old value had this ratio at 33: the asteroid was the heavy one.
+    expect(a.mass / p.mass).toBeGreaterThan(0);
+  });
+
+  test('mass is linear in Ceres masses', () => {
+    const one = new Asteroid(ORIGIN, ORIGIN, 1.0);
+    const ten = new Asteroid(ORIGIN, ORIGIN, 10.0);
+    expect(ten.mass / one.mass).toBeCloseTo(10, 9);
+  });
+
+  test('a nonsense mass falls back to one Ceres rather than to zero', () => {
+    // Several call sites construct asteroids positionally with two arguments,
+    // and a zero-mass body would drop out of every barycenter it belongs to.
+    for (const bad of [null, undefined, NaN, 0, -3]) {
+      expect(new Asteroid(ORIGIN, ORIGIN, bad).mass).toBeCloseTo(
+        CERES_MASS_UNIT,
+        12
+      );
+    }
+  });
+});
+
+describe('Comet mass', () => {
+  test('gravitational mass matches the mass it reports', () => {
+    const c = new Comet(ORIGIN, ORIGIN, 1.0);
+    expect(c.massInComets).toBeCloseTo(1.0, 9);
+    expect(c.mass / HALLEY_MASS_UNIT).toBeCloseTo(c.massInComets, 9);
+  });
+
+  test('one comet mass is Halley, which is 2.2e14 kg', () => {
+    const c = new Comet(ORIGIN, ORIGIN, 1.0);
+    expect(c.mass * MASS_UNIT_KG).toBeCloseTo(HALLEY_MASS_KG, -8);
+  });
+
+  test('a comet is lighter than an asteroid by seven orders of magnitude', () => {
+    const c = new Comet(ORIGIN, ORIGIN, 1.0);
+    const a = new Asteroid(ORIGIN, ORIGIN, 1.0);
+    expect(Math.log10(a.mass / c.mass)).toBeGreaterThan(6);
+  });
+
+  test('randomly generated comets stay comet-sized', () => {
+    // The generator draws 0.001 to 0.1 Halley masses. None of them may come out
+    // anywhere near a planet, which is what the hardcoded 0.1 units did: every
+    // comet in the app weighed between 0.03 and 3 Earths.
+    for (let i = 0; i < 200; i++) {
+      const c = new Comet(ORIGIN, ORIGIN);
+      expect(c.mass / EARTH_MASS_UNIT).toBeLessThan(1e-8);
+      expect(c.mass).toBeGreaterThan(0);
+      expect(c.mass / HALLEY_MASS_UNIT).toBeCloseTo(c.massInComets, 9);
+    }
+  });
+});
+
+describe('Debris mass', () => {
+  test('the default fragment is the anchor', () => {
+    const d = new Debris(ORIGIN, ORIGIN);
+    expect(d.mass).toBeCloseTo(DEBRIS_MASS_UNIT, 18);
+    expect(d.massInFragments).toBeCloseTo(1.0, 9);
+  });
+
+  test('mass is linear in fragments', () => {
+    const one = new Debris(ORIGIN, ORIGIN, 1.0);
+    const ten = new Debris(ORIGIN, ORIGIN, 10.0);
+    expect(ten.mass / one.mass).toBeCloseTo(10, 9);
+  });
+
+  test('debris is lighter than the asteroid it came off', () => {
+    expect(new Debris(ORIGIN, ORIGIN).mass).toBeLessThan(
+      new Asteroid(ORIGIN, ORIGIN).mass
+    );
+  });
+
+  test('every small body is finite and positive', () => {
+    // The masses are tiny - 4.7e-7, 1.1e-13, 7.9e-16 units - which is correct
+    // and not a rounding failure, but a body whose mass underflowed to zero
+    // would silently leave every barycenter and every momentum sum.
+    for (const b of [
+      new Asteroid(ORIGIN, ORIGIN),
+      new Comet(ORIGIN, ORIGIN, 1.0),
+      new Debris(ORIGIN, ORIGIN),
+    ]) {
+      expect(Number.isFinite(b.mass)).toBe(true);
+      expect(b.mass).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('the small bodies reach the same scale as the large ones', () => {
+  test('one route from kilograms to simulation units, not four', () => {
+    // The point of the fix: every class converts through the solar-mass anchor,
+    // so a mass in kilograms lands in the same place whichever body carries it.
+    const viaCeres = new Asteroid(ORIGIN, ORIGIN, 1.0).mass * MASS_UNIT_KG;
+    const viaEarth =
+      (new Planet(ORIGIN, ORIGIN, 1.0).mass * MASS_UNIT_KG) / 5.972e24;
+    const viaJupiter =
+      (new GasGiant(ORIGIN, ORIGIN, 1.0).mass * MASS_UNIT_KG) / 1.898e27;
+    expect(viaCeres / CERES_MASS_KG).toBeCloseTo(1.0, 6);
+    expect(viaEarth).toBeCloseTo(1.0, 2);
+    expect(viaJupiter).toBeCloseTo(1.0, 2);
   });
 });

@@ -15,6 +15,7 @@
 
 import { withUnit } from './format.js';
 import { token, surface } from './widgetCanvas.js';
+import { t } from './i18n/index.js';
 
 // Quadratic limb darkening, solar values in the optical (Claret 2000). The same
 // coefficients the live light curve uses, so a shape worked out here matches a
@@ -166,12 +167,18 @@ const ppm = v => `${Math.round(v * 1e6).toLocaleString()} ppm`;
 
 const DEPTH_SIZE = {
   id: 'depth-size',
-  title: 'How big a shadow?',
-  note: 'The silhouette on the left is drawn to scale. The curve on the right is the transit it produces.',
+  get title() {
+    return t('transitW.howBigAShadow');
+  },
+  get note() {
+    return t('transitW.theSilhouetteOnTheLeft');
+  },
   controls: [
     {
       id: 'rp',
-      label: 'Planet radius',
+      get label() {
+        return t('transitW.planetRadius');
+      },
       unit: 'R⊕',
       min: 0.3,
       max: 15,
@@ -181,7 +188,9 @@ const DEPTH_SIZE = {
     },
     {
       id: 'rs',
-      label: 'Star radius',
+      get label() {
+        return t('transitW.starRadius');
+      },
       unit: 'R☉',
       min: 0.1,
       max: 2,
@@ -192,27 +201,37 @@ const DEPTH_SIZE = {
   ],
   presets: [
     {
-      label: 'Earth, Sun',
+      get label() {
+        return t('transitW.earthSun');
+      },
       values: { rp: 1, rs: 1 },
       note: 'The case that took a space telescope to reach. 84 parts per million: to see it from the ground you would have to beat the atmosphere by two orders of magnitude.',
     },
     {
-      label: 'Neptune, Sun',
+      get label() {
+        return t('transitW.neptuneSun');
+      },
       values: { rp: 3.88, rs: 1 },
       note: 'A tenth of a percent. Ground-based surveys can reach this on a bright star, and this is roughly where the great mass of Kepler detections sits.',
     },
     {
-      label: 'Jupiter, Sun',
+      get label() {
+        return t('transitW.jupiterSun');
+      },
       values: { rp: 11.2, rs: 1 },
       note: 'About 1%. Large enough that the first transit detections, in 1999, were made with a 10 cm telescope. Every early transiting planet was a hot Jupiter for exactly this reason.',
     },
     {
-      label: 'Earth, TRAPPIST-1',
+      get label() {
+        return t('transitW.earthTrappist1');
+      },
       values: { rp: 1, rs: 0.1192 },
       note: 'The same planet against a star a tenth the size. Shrinking the star by 8 lifts the depth by 70: this is why small cool stars are where small planets are found.',
     },
     {
-      label: 'Jupiter, red giant',
+      get label() {
+        return t('transitW.jupiterRedGiant');
+      },
       values: { rp: 11.2, rs: 15 },
       note: 'The same planet in front of an evolved star. Its shadow has all but vanished, which is one reason transit surveys avoid giants.',
     },
@@ -225,17 +244,28 @@ const DEPTH_SIZE = {
     const { k, depth } = this.compute(v);
     return [
       {
-        label: 'Radius ratio R<sub>p</sub> / R<sub>★</sub>',
+        get label() {
+          return t('transitW.radiusRatioRSubP');
+        },
         value: k.toFixed(4),
       },
       {
-        label: 'Transit depth (R<sub>p</sub> / R<sub>★</sub>)²',
+        get label() {
+          return t('transitW.transitDepthRSubP');
+        },
         value: pct(depth),
         emphasis: true,
       },
-      { label: 'Same depth in survey units', value: ppm(depth) },
       {
-        label: 'Photometry needed',
+        get label() {
+          return t('transitW.sameDepthInSurveyUnits');
+        },
+        value: ppm(depth),
+      },
+      {
+        get label() {
+          return t('transitW.photometryNeeded');
+        },
         value:
           depth > 0.005
             ? 'a backyard telescope'
@@ -318,12 +348,18 @@ const DEPTH_SIZE = {
 
 const GEOMETRY = {
   id: 'geometry',
-  title: 'The angle you happen to be at',
-  note: 'The chord is the path the planet takes across the disk. Slide the impact parameter until it misses.',
+  get title() {
+    return t('transitW.theAngleYouHappenTo');
+  },
+  get note() {
+    return t('transitW.theChordIsThePath');
+  },
   controls: [
     {
       id: 'b',
-      label: 'Impact parameter b',
+      get label() {
+        return t('transitW.impactParameterB');
+      },
       unit: '',
       min: 0,
       max: 1.4,
@@ -333,7 +369,9 @@ const GEOMETRY = {
     },
     {
       id: 'aOverR',
-      label: 'Orbit size a / R★',
+      get label() {
+        return t('transitW.orbitSizeAR');
+      },
       unit: '',
       min: 3,
       max: 60,
@@ -343,7 +381,9 @@ const GEOMETRY = {
     },
     {
       id: 'k',
-      label: 'Radius ratio Rp / R★',
+      get label() {
+        return t('transitW.radiusRatioRpR');
+      },
       unit: '',
       min: 0.01,
       max: 0.2,
@@ -359,22 +399,30 @@ const GEOMETRY = {
       note: 'The real geometry of the system next door in the simulation: the planet crosses half way up the disk, not through the middle.',
     },
     {
-      label: 'Dead center',
+      get label() {
+        return t('transitW.deadCenter');
+      },
       values: { b: 0, aOverR: 8.8, k: 0.123 },
       note: 'The longest, deepest, flattest transit the system can give. This is what the simulation shows you, because it runs in a plane.',
     },
     {
-      label: 'Grazing',
+      get label() {
+        return t('transitW.grazing');
+      },
       values: { b: 1.05, aOverR: 8.8, k: 0.123 },
       note: 'Only part of the planet ever covers the star. The dip is short and V-shaped, and its depth no longer measures the radius ratio at all: grazing transits are a classic way to get a planet radius badly wrong.',
     },
     {
-      label: 'Missed entirely',
+      get label() {
+        return t('transitW.missedEntirely');
+      },
       values: { b: 1.3, aOverR: 8.8, k: 0.123 },
       note: 'The planet passes above the disk. Nothing happens, forever, however long you watch. This is the fate of most planets from any given vantage point.',
     },
     {
-      label: 'Earth around the Sun',
+      get label() {
+        return t('transitW.earthAroundTheSun');
+      },
       values: { b: 0, aOverR: 215, k: 0.00916 },
       note: 'a / R★ = 215, so the odds of a random observer seeing a transit are about one in 215. Push the impact parameter off zero and the transit is gone almost at once.',
     },
@@ -403,24 +451,34 @@ const GEOMETRY = {
     const c = this.compute(v);
     return [
       {
-        label: 'Orbital inclination i',
+        get label() {
+          return t('transitW.orbitalInclinationI');
+        },
         value: `${c.inclination.toFixed(2)}°`,
       },
       {
-        label: 'Does it transit?',
+        get label() {
+          return t('transitW.doesItTransit');
+        },
         value: c.transits ? (c.grazing ? 'yes, grazing' : 'yes') : 'no',
         emphasis: true,
       },
       {
-        label: 'Depth at mid-transit',
+        get label() {
+          return t('transitW.depthAtMidTransit');
+        },
         value: c.transits ? pct(c.depth) : '-',
       },
       {
-        label: 'Duration, as a fraction of the orbit',
+        get label() {
+          return t('transitW.durationAsAFractionOf');
+        },
         value: c.transits ? `${(c.durationFraction * 100).toFixed(2)}%` : '-',
       },
       {
-        label: 'Chance a random observer sees it',
+        get label() {
+          return t('transitW.chanceARandomObserverSees');
+        },
         value: `${(c.probability * 100).toFixed(2)}%  (about 1 in ${Math.round(1 / c.probability)})`,
       },
     ];
@@ -521,21 +579,46 @@ const BANDS = [
   { l: 1.15, s: 0.06, h: 2.2, name: 'water' },
   { l: 1.4, s: 0.075, h: 3.4, name: 'water' },
   { l: 1.9, s: 0.1, h: 3.0, name: 'water' },
-  { l: 2.35, s: 0.09, h: 2.0, name: 'carbon monoxide' },
+  {
+    l: 2.35,
+    s: 0.09,
+    h: 2.0,
+    get name() {
+      return t('transitW.carbonMonoxide');
+    },
+  },
   { l: 2.7, s: 0.12, h: 2.8, name: 'water' },
   { l: 3.3, s: 0.13, h: 2.4, name: 'methane' },
-  { l: 4.3, s: 0.11, h: 3.6, name: 'carbon dioxide' },
-  { l: 4.6, s: 0.1, h: 2.2, name: 'carbon monoxide' },
+  {
+    l: 4.3,
+    s: 0.11,
+    h: 3.6,
+    get name() {
+      return t('transitW.carbonDioxide');
+    },
+  },
+  {
+    l: 4.6,
+    s: 0.1,
+    h: 2.2,
+    get name() {
+      return t('transitW.carbonMonoxide');
+    },
+  },
 ];
 
 const SPECTRUM = {
   id: 'spectrum',
-  title: 'The planet changes size with color',
+  get title() {
+    return t('transitW.thePlanetChangesSizeWith');
+  },
   note: 'Depth against wavelength for a hot Jupiter like the one in the simulation. Every bump is a molecule making the atmosphere opaque, so the planet blocks a slightly wider disk at that color.',
   controls: [
     {
       id: 'lambda',
-      label: 'Wavelength',
+      get label() {
+        return t('transitW.wavelength');
+      },
       unit: 'μm',
       min: 0.4,
       max: 5,
@@ -545,7 +628,9 @@ const SPECTRUM = {
     },
     {
       id: 'clouds',
-      label: 'Cloud and haze cover',
+      get label() {
+        return t('transitW.cloudAndHazeCover');
+      },
       unit: '',
       min: 0,
       max: 1,
@@ -555,7 +640,9 @@ const SPECTRUM = {
     },
     {
       id: 'H',
-      label: 'Scale height',
+      get label() {
+        return t('transitW.scaleHeight');
+      },
       unit: 'km',
       min: 100,
       max: 900,
@@ -566,22 +653,32 @@ const SPECTRUM = {
   ],
   presets: [
     {
-      label: 'Sodium, 0.589 μm',
+      get label() {
+        return t('transitW.sodium0589M');
+      },
       values: { lambda: 0.589, clouds: 0 },
       note: 'The first exoplanet atmosphere ever detected, in this very system: Charbonneau and colleagues found sodium in HD 209458 b with the Hubble Space Telescope in 2002, as a transit 0.02% deeper in the sodium line than beside it.',
     },
     {
-      label: 'Water, 1.4 μm',
+      get label() {
+        return t('transitW.water14M');
+      },
       values: { lambda: 1.4, clouds: 0 },
-      note: 'The band Hubble’s infrared camera made routine, and the workhorse of atmospheric characterization before JWST.',
+      get note() {
+        return t('transitW.theBandHubbleSInfrared');
+      },
     },
     {
-      label: 'Carbon dioxide, 4.3 μm',
+      get label() {
+        return t('transitW.carbonDioxide43M');
+      },
       values: { lambda: 4.3, clouds: 0 },
       note: 'Out of reach from the ground and beyond Hubble’s reach as well. JWST returned the first unambiguous exoplanet carbon dioxide detection here in 2022.',
     },
     {
-      label: 'A cloudy planet',
+      get label() {
+        return t('transitW.aCloudyPlanet');
+      },
       values: { lambda: 1.4, clouds: 0.85 },
       note: 'High cloud decks sit above the molecular features and flatten the spectrum towards a straight line. Roughly half of all well-observed hot Jupiters look partly like this, which is a result in itself.',
     },
@@ -621,17 +718,37 @@ const SPECTRUM = {
         ? c.here.strongest.name
         : 'no strong absorber here';
     return [
-      { label: 'Wavelength', value: `${v.lambda.toFixed(2)} μm` },
-      { label: 'Transit depth', value: ppm(c.here.depth), emphasis: true },
       {
-        label: 'Depth above the bare-rock continuum',
+        get label() {
+          return t('transitW.wavelength');
+        },
+        value: `${v.lambda.toFixed(2)} μm`,
+      },
+      {
+        get label() {
+          return t('transitW.transitDepth');
+        },
+        value: ppm(c.here.depth),
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('transitW.depthAboveTheBareRock');
+        },
         value: `${Math.round((c.here.depth - c.flat) * 1e6)} ppm`,
       },
       {
-        label: 'Apparent planet radius',
+        get label() {
+          return t('transitW.apparentPlanetRadius');
+        },
         value: withUnit((c.here.Rp / R_JUP_KM).toFixed(4), 'R_J'),
       },
-      { label: 'What is absorbing', value: feature },
+      {
+        get label() {
+          return t('transitW.whatIsAbsorbing');
+        },
+        value: feature,
+      },
     ];
   },
   draw(canvas, v) {
@@ -757,12 +874,16 @@ const SPECTRUM = {
 
 const DILUTION = {
   id: 'dilution',
-  title: 'A star you did not know was there',
+  get title() {
+    return t('transitW.aStarYouDidNot');
+  },
   note: 'Extra light from a neighbor that the survey could not separate fills in the dip. The planet measures smaller than it is, by exactly the square root of the total flux ratio.',
   controls: [
     {
       id: 'dm',
-      label: 'Companion contrast Δm',
+      get label() {
+        return t('transitW.companionContrastM');
+      },
       unit: 'mag',
       min: 0,
       max: 6,
@@ -772,7 +893,9 @@ const DILUTION = {
     },
     {
       id: 'rp',
-      label: 'Radius you measured',
+      get label() {
+        return t('transitW.radiusYouMeasured');
+      },
       unit: 'R⊕',
       min: 0.5,
       max: 15,
@@ -783,22 +906,32 @@ const DILUTION = {
   ],
   presets: [
     {
-      label: 'Equal twin, Δm = 0',
+      get label() {
+        return t('transitW.equalTwinM0');
+      },
       values: { dm: 0 },
       note: 'Two identical stars. Half the light in the aperture is not the star being transited, so every radius derived from the blended curve is too small by a factor of √2.',
     },
     {
-      label: 'The lesson’s binary, Δm = 0.5',
+      get label() {
+        return t('transitW.theLessonSBinaryM');
+      },
       values: { dm: 0.5 },
-      note: 'The companion in the Blended Binary scenario. It supplies 39% of the light and shrinks the measured planet by 22%.',
+      get note() {
+        return t('transitW.theCompanionInTheBlended');
+      },
     },
     {
-      label: 'Robo-AO median, Δm = 3',
+      get label() {
+        return t('transitW.roboAoMedianM3');
+      },
       values: { dm: 3 },
       note: 'A typical detection in the Robo-AO Kepler survey. Individually a 3% correction, which sounds harmless until you apply it to a population sitting right on the rocky-to-gaseous boundary.',
     },
     {
-      label: 'Faint neighbor, Δm = 6',
+      get label() {
+        return t('transitW.faintNeighborM6');
+      },
       values: { dm: 6 },
       note: 'The faint end of what adaptive optics reaches. The correction is a fraction of a percent: below this, blending stops mattering and detection limits are what a survey has to quote.',
     },
@@ -816,24 +949,34 @@ const DILUTION = {
     const c = this.compute(v);
     return [
       {
-        label: 'Flux ratio F<sub>2</sub> / F<sub>1</sub>',
+        get label() {
+          return t('transitW.fluxRatioFSub2');
+        },
         value: c.f.toFixed(4),
       },
       {
-        label: 'Share of the light from the neighbor',
+        get label() {
+          return t('transitW.shareOfTheLightFrom');
+        },
         value: `${(c.companionLight * 100).toFixed(1)}%`,
       },
       {
-        label: 'Radius correction √(1 + F<sub>2</sub>/F<sub>1</sub>)',
+        get label() {
+          return t('transitW.radiusCorrection1FSub');
+        },
         value: `×${c.correction.toFixed(3)}`,
         emphasis: true,
       },
       {
-        label: 'True planet radius',
+        get label() {
+          return t('transitW.truePlanetRadius');
+        },
         value: withUnit(c.truePlanet.toFixed(2), 'R⊕'),
       },
       {
-        label: 'Was it rocky?',
+        get label() {
+          return t('transitW.wasItRocky');
+        },
         value:
           v.rp < 1.6 && c.truePlanet >= 1.6
             ? 'it was, until you corrected it'
@@ -945,13 +1088,19 @@ const FIELD_ARCSEC = 2.8;
 
 const RESOLVE = {
   id: 'resolve',
-  title: 'Why nobody noticed',
+  get title() {
+    return t('transitW.whyNobodyNoticed');
+  },
   note: 'Two stars, imaged at a resolution you choose. The geometry and the brightness ratio are quantitative; the noise and the exact profile are illustrative, not a reconstruction of any real observation.',
   controls: [
     {
       id: 'fwhm',
-      label: 'Image resolution',
-      unit: '″ FWHM',
+      get label() {
+        return t('transitW.imageResolution');
+      },
+      get unit() {
+        return t('transitW.fwhm');
+      },
       min: 0.04,
       max: 1.6,
       step: 0.01,
@@ -960,7 +1109,9 @@ const RESOLVE = {
     },
     {
       id: 'sep',
-      label: 'Companion separation',
+      get label() {
+        return t('transitW.companionSeparation');
+      },
       unit: '″',
       min: 0.05,
       max: 2.4,
@@ -970,7 +1121,9 @@ const RESOLVE = {
     },
     {
       id: 'dm',
-      label: 'Companion contrast Δm',
+      get label() {
+        return t('transitW.companionContrastM');
+      },
       unit: 'mag',
       min: 0,
       max: 6,
@@ -981,22 +1134,30 @@ const RESOLVE = {
   ],
   presets: [
     {
-      label: 'Ordinary seeing',
+      get label() {
+        return t('transitW.ordinarySeeing');
+      },
       values: { fwhm: 1.1 },
       note: 'What a ground telescope delivers without correction: the atmosphere smears every point source to about an arcsecond, and a companion inside that is simply part of the star.',
     },
     {
-      label: 'Robo-AO, Palomar',
+      get label() {
+        return t('transitW.roboAoPalomar');
+      },
       values: { fwhm: 0.15 },
       note: 'Adaptive optics on the 1.5 m telescope at Palomar. A laser measures the atmospheric distortion, a deformable mirror takes it out in real time, and the whole loop runs robotically: which is what made imaging 3,857 Kepler hosts possible at all.',
     },
     {
-      label: 'SOAR speckle, 4.1 m',
+      get label() {
+        return t('transitW.soarSpeckle41M');
+      },
       values: { fwhm: 0.04 },
       note: 'Hundreds of very short exposures freeze the atmosphere, and combining them in Fourier space recovers the telescope’s diffraction limit. This is what the SOAR TESS survey uses, and it reaches separations twenty-five times finer than seeing.',
     },
     {
-      label: 'A hard case',
+      get label() {
+        return t('transitW.aHardCase');
+      },
       values: { fwhm: 0.15, sep: 0.18, dm: 4.5 },
       note: 'Close and faint at once. Separation alone does not decide a detection: every observation carries its own measured contrast curve, and a companion is only claimed if it sits above it.',
     },
@@ -1019,11 +1180,15 @@ const RESOLVE = {
     const c = this.compute(v);
     return [
       {
-        label: 'Separation, in units of the resolution',
+        get label() {
+          return t('transitW.separationInUnitsOfThe');
+        },
         value: `${c.ratio.toFixed(2)} × FWHM`,
       },
       {
-        label: 'How the pair looks',
+        get label() {
+          return t('transitW.howThePairLooks');
+        },
         value:
           c.look === 'blended'
             ? 'one source'
@@ -1033,15 +1198,21 @@ const RESOLVE = {
         emphasis: true,
       },
       {
-        label: 'Light from the companion',
+        get label() {
+          return t('transitW.lightFromTheCompanion');
+        },
         value: `${(c.companionLight * 100).toFixed(1)}%`,
       },
       {
-        label: 'Radius correction it implies',
+        get label() {
+          return t('transitW.radiusCorrectionItImplies');
+        },
         value: `×${c.correction.toFixed(3)}`,
       },
       {
-        label: 'This frame, as a share of one TESS pixel',
+        get label() {
+          return t('transitW.thisFrameAsAShare');
+        },
         value: `${(c.pixelFraction * 100).toFixed(1)}% of its area`,
       },
     ];

@@ -43,6 +43,7 @@ import { mountObserverControls } from './observerControls.js';
 import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
 import { currentTimeDays } from './lightCurve.js';
+import { t } from './i18n/index.js';
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
@@ -268,13 +269,13 @@ function renderReadout() {
       e.direction.textContent = '';
       e.direction.className = 'rv-direction';
     } else if (Math.abs(rv) < 0.5) {
-      e.direction.textContent = 'Crossing zero';
+      e.direction.textContent = t('rv.crossingZero');
       e.direction.className = 'rv-direction is-zero';
     } else if (rv > 0) {
-      e.direction.textContent = 'Moving AWAY FROM US';
+      e.direction.textContent = t('rv.movingAway');
       e.direction.className = 'rv-direction is-receding';
     } else {
-      e.direction.textContent = 'Moving TOWARD US';
+      e.direction.textContent = t('rv.movingToward');
       e.direction.className = 'rv-direction is-approaching';
     }
   }

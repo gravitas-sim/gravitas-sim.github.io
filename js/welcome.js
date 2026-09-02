@@ -26,6 +26,7 @@ import {
   RESOURCE_LINKS,
 } from './data/welcome.js';
 import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
+import { t } from './i18n/index.js';
 
 // Versioned on purpose. Bumping it shows the front door once more to everyone
 // who has already dismissed it, which is right for a genuine redesign and wrong
@@ -177,19 +178,24 @@ export function featuredScenarios() {
 /**
  * A few lesson titles for the investigations block.
  *
- * Takes the registry rather than importing it: the lesson data is loaded
- * lazily, so the only caller already has it in hand by the time it asks.
+ * Takes the catalogue rather than importing it: it is loaded lazily, so the
+ * only caller already has it in hand by the time it asks.
  *
- * @param {Array<Object>} registry - INVESTIGATIONS
+ * Accepts either shape - a manifest entry, which carries a step count, or a
+ * whole lesson, which carries the steps. The front door is given the former and
+ * the tests hand it the latter, and three titles and a number read the same off
+ * both.
+ *
+ * @param {Array<Object>} catalogue - MANIFEST or INVESTIGATIONS
  * @param {number} [n] - How many
  * @returns {Array<Object>} id, title, subtitle and step count for each
  */
-export function previewInvestigations(registry, n = 3) {
-  return registry.slice(0, n).map(inv => ({
+export function previewInvestigations(catalogue, n = 3) {
+  return catalogue.slice(0, n).map(inv => ({
     id: inv.id,
     title: inv.title,
     subtitle: inv.subtitle,
-    steps: inv.steps.length,
+    steps: inv.stepCount ?? inv.steps.length,
   }));
 }
 
@@ -214,11 +220,11 @@ function entryCardsHtml() {
   return ENTRY_CARDS.map(
     c => `
       <div class="wel-door">
-        <p class="wel-door-eyebrow">${escape(c.eyebrow)}</p>
-        <h3 class="wel-door-title">${escape(c.title)}</h3>
-        <p class="wel-door-text">${escape(c.text)}</p>
+        <p class="wel-door-eyebrow">${escape(t(c.eyebrow))}</p>
+        <h3 class="wel-door-title">${escape(t(c.title))}</h3>
+        <p class="wel-door-text">${escape(t(c.text))}</p>
         <button type="button" class="ui-button wel-door-cta" data-action="${escape(c.action)}">
-          ${escape(c.cta)}
+          ${escape(t(c.cta))}
         </button>
       </div>`
   ).join('');
@@ -228,8 +234,8 @@ function audiencesHtml() {
   return AUDIENCES.map(
     a => `
       <div class="wel-audience">
-        <h3>${escape(a.title)}</h3>
-        <p>${escape(a.text)}</p>
+        <h3>${escape(t(a.title))}</h3>
+        <p>${escape(t(a.text))}</p>
       </div>`
   ).join('');
 }
@@ -246,12 +252,13 @@ async function fillLessonPreviews() {
   const list = els.body?.querySelector('.wel-lessons');
   if (!list) return;
   try {
-    // Imported here rather than at the top of the module. The registry carries
-    // every lesson's full text: 225KB, which used to be pulled into the
-    // start-up bundle for the sake of three titles on a page most visitors see
-    // once. Fetching it when the panel is built keeps it off the critical path,
-    // and by the time anyone clicks through to a lesson it is already warm.
-    const { INVESTIGATIONS } = await import('./data/investigations.js');
+    // Imported here rather than at the top of the module, and the manifest
+    // rather than the lessons. Three titles and a step count are card-level
+    // facts, and the manifest is a few kilobytes of exactly those; the lessons
+    // themselves are 225KB and are fetched one at a time when one is opened.
+    const { MANIFEST: INVESTIGATIONS } = await import(
+      './data/investigations/registry.js'
+    );
     const count = els.body?.querySelector('[data-lesson-count]');
     if (count) count.textContent = `${INVESTIGATIONS.length} guided`;
 
@@ -380,12 +387,12 @@ function build() {
       </p>
       <div class="wel-links">
         <a class="wel-link" href="${RESOURCE_LINKS.instructors.href}">
-          <span class="wel-link-label">${escape(RESOURCE_LINKS.instructors.label)}</span>
-          <span class="wel-link-note">${escape(RESOURCE_LINKS.instructors.note)}</span>
+          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.instructors.label))}</span>
+          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.instructors.note))}</span>
         </a>
         <a class="wel-link" href="${RESOURCE_LINKS.model.href}">
-          <span class="wel-link-label">${escape(RESOURCE_LINKS.model.label)}</span>
-          <span class="wel-link-note">${escape(RESOURCE_LINKS.model.note)}</span>
+          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.model.label))}</span>
+          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.model.note))}</span>
         </a>
       </div>
     </section>
@@ -428,7 +435,7 @@ async function runAction(action, key) {
       closeWelcome();
       if (!loaded) {
         const { toast } = await import('./controls.js');
-        toast('That scenario is no longer available.');
+        toast(t('welcome.scenarioGone'));
       }
       break;
     }
@@ -465,7 +472,7 @@ async function runAction(action, key) {
       resetWelcomePreference();
       const btn = els.body?.querySelector('[data-action="reset"]');
       if (btn) {
-        btn.textContent = 'It will be shown again next time';
+        btn.textContent = t('welcome.shownAgain');
         btn.disabled = true;
       }
       break;
@@ -574,7 +581,7 @@ export function openWelcome(opts = {}) {
   if (reset) {
     reset.hidden = auto;
     reset.disabled = false;
-    reset.textContent = 'Show this again on my next visit';
+    reset.textContent = t('welcome.showAgain');
   }
 
   els.screen.scrollTop = 0;

@@ -142,6 +142,8 @@ test.describe('a shared link', () => {
     await app.loadScenario('Binary Pair');
     await app.waitForFrames(10);
 
+    await app.railControl('shareBtn');
+
     await page.locator('#shareBtn').click();
     await expect(page.locator('#shareModal')).toBeVisible();
 
@@ -173,6 +175,7 @@ test.describe('a shared link', () => {
     expect(snap.nonFinite).toBe(0);
 
     // And the interface is still operable.
+    await app.railControl('loadScenarioBtn');
     await page.locator('#loadScenarioBtn').click();
     await expect(page.locator('#scenarioListModal')).toBeVisible();
   });

@@ -54,9 +54,9 @@
     />
     <!-- Fonts: preconnect first so the CSS request starts immediately -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@300;400;600&amp;family=Roboto+Mono:wght@400;700&amp;display=swap"
       rel="stylesheet"
     />
     <script type="importmap">
@@ -70,12 +70,16 @@
     <link rel="stylesheet" href="css/tokens.css?v=3" />
     <link rel="stylesheet" href="css/styles.css?v=3" />
     <link rel="stylesheet" href="css/components.css?v=3" />
+    <link rel="stylesheet" href="css/presentation.css?v=3" />
+    <link rel="stylesheet" href="css/chrome.css?v=3" />
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
   <body>
-    <a class="skip-link" href="#mainControls">Skip to controls</a>
+    <a class="skip-link" href="#mainControls" data-i18n="chrome.text1"
+      >Skip to controls</a
+    >
 
     <!--
       The document's one top-level heading. The splash carries a visible
@@ -84,7 +88,9 @@
       a page whose only heading was whichever panel happened to be open. It is
       visually hidden because the simulation is the page's visual identity.
     -->
-    <h1 class="visually-hidden">Gravitas: interactive astrophysics sandbox</h1>
+    <h1 class="visually-hidden" data-i18n="chrome.text2">
+      Gravitas: interactive astrophysics sandbox
+    </h1>
 
     <div class="simulation-container">
       <canvas
@@ -169,7 +175,7 @@
         </div>
       </div>
 
-      <p id="rvNotice" class="rv-notice" role="status" hidden></p>
+      <p id="rvNotice" class="rv-notice" role="status" hidden=""></p>
 
       <div class="rv-readout">
         <div class="rv-readout-cell">
@@ -244,7 +250,7 @@
         </div>
       </div>
 
-      <p id="astrometryNotice" class="rv-notice" role="status" hidden></p>
+      <p id="astrometryNotice" class="rv-notice" role="status" hidden=""></p>
 
       <div class="astrometry-body">
         <div class="astrometry-stage">
@@ -327,7 +333,7 @@
         </div>
       </div>
 
-      <p id="rotationCurveNotice" class="rv-notice" role="status" hidden></p>
+      <p id="rotationCurveNotice" class="rv-notice" role="status" hidden=""></p>
 
       <div class="rv-readout">
         <div class="rv-readout-cell">
@@ -348,7 +354,7 @@
         </div>
       </div>
 
-      <div id="rotationCurveCluster" class="rc-cluster" hidden>
+      <div id="rotationCurveCluster" class="rc-cluster" hidden="">
         <p class="rc-cluster-title">Cluster measurements</p>
         <div class="rv-readout">
           <div class="rv-readout-cell">
@@ -522,7 +528,7 @@
         </p>
         <p>
           The dip depth is proportional to
-          (R<sub>planet</sub>/R<sub>star</sub>)&sup2;. A Jupiter-sized planet
+          (R<sub>planet</sub>/R<sub>star</sub>)². A Jupiter-sized planet
           produces roughly a 1% dip, while an Earth-sized planet produces about
           0.008%. The rounded U-shaped bottom comes from
           <strong>limb darkening</strong>: stars are brighter at their center
@@ -565,7 +571,7 @@
       It starts `hidden` so it cannot flash before the module runs, and the
       splash covers the whole screen until the moment it is shown.
     -->
-    <div id="welcomeScreen" class="welcome-screen" hidden>
+    <div id="welcomeScreen" class="welcome-screen" hidden="">
       <div
         id="welcomeDialog"
         class="welcome-dialog"
@@ -580,6 +586,8 @@
           class="welcome-close"
           aria-label="Close and enter the sandbox"
           title="Close and enter the sandbox"
+          data-i18n-title="welcome.welcomeClose.hint"
+          data-i18n-aria-label="welcome.welcomeClose.label"
         >
           ✕
         </button>
@@ -587,27 +595,46 @@
       </div>
     </div>
 
+    <!--
+      The live readout. A header row that says what the simulation is doing and
+      carries the two controls that belong to the panel itself, then a body
+      written by js/render.js.
+
+      Nothing about *how to drive the application* is in here any more. A crib
+      of the arrow keys and the mouse wheel is worth one reading, and it was
+      costing five permanent lines of the one panel that shows live numbers;
+      the same list is in the Shortcuts dialog, where somebody who wants it can
+      find it. What is here instead is what changes as the simulation runs.
+    -->
     <div id="overlay">
-      <button
-        id="overlayMinimize"
-        class="overlay-minimize-btn"
-        title="Minimize"
-      >
-        −
-      </button>
-      <div id="sonificationControl" class="sonification-panel">
-        <button
-          id="sonificationToggle"
-          class="sonification-toggle"
-          aria-pressed="false"
-          title="Enable procedural sonification"
-        >
-          🔇 Sound: Off
-        </button>
-        <p class="sonification-description">
-          Translates orbital motion, gravitational-wave frequencies, and
-          collision signatures into live audio. Default preset: Off.
-        </p>
+      <div class="readout-head">
+        <span id="overlayStatus" class="readout-status" aria-live="polite">
+          <span class="readout-status-dot" aria-hidden="true"></span>
+          <span class="readout-status-text" data-i18n="readout.status.running"
+            >Running</span
+          >
+        </span>
+        <div class="readout-head-actions">
+          <button
+            id="sonificationToggle"
+            class="readout-icon-btn sonification-toggle"
+            aria-pressed="false"
+            title="Enable procedural sonification: orbital motion, gravitational-wave frequencies and collision signatures become live audio."
+            data-i18n-title="readout.sonificationToggle.hint"
+            data-i18n-aria-label="readout.sonificationToggle.label"
+            aria-label="Sound"
+          >
+            <span class="readout-icon-glyph" aria-hidden="true">🔇</span>
+          </button>
+          <button
+            id="overlayMinimize"
+            class="readout-icon-btn overlay-minimize-btn"
+            title="Minimize"
+            data-i18n-title="readout.overlayMinimize.hint"
+          >
+            <span aria-hidden="true">−</span>
+          </button>
+        </div>
       </div>
       <div id="overlayStats" class="overlay-stats"></div>
     </div>
@@ -623,8 +650,9 @@
               id="closeScenarioInfo"
               class="scenario-info-close"
               title="Dismiss this scenario description"
+              data-i18n-title="readout.closeScenarioInfo.hint"
             >
-              &times;
+              ×
             </button>
           </div>
         </div>
@@ -638,19 +666,41 @@
     </div>
     <div id="mobileInstructions">
       <div class="mobile-instructions-content">
-        <h3>Touch controls</h3>
-        <p>• <strong>Drag:</strong> pan the view</p>
-        <p>• <strong>Pinch:</strong> zoom in and out</p>
-        <p>• <strong>Tap an object:</strong> open its details</p>
+        <h3 data-i18n="readout.mobileInstructions">Touch controls</h3>
         <p>
-          • <strong>Press and hold, then drag:</strong> place a new object: the
-          drag sets its speed and direction
+          • <strong data-i18n="readout.mobileInstructions.2">Drag:</strong> pan
+          the view
         </p>
-        <p>• <strong>Double tap:</strong> reset the view</p>
+        <p>
+          •
+          <strong data-i18n="readout.mobileInstructions.3">Pinch:</strong> zoom
+          in and out
+        </p>
+        <p>
+          •
+          <strong data-i18n="readout.mobileInstructions.4"
+            >Tap an object:</strong
+          >
+          open its details
+        </p>
+        <p>
+          •
+          <strong data-i18n="readout.mobileInstructions.5"
+            >Press and hold, then drag:</strong
+          >
+          place a new object: the drag sets its speed and direction
+        </p>
+        <p>
+          •
+          <strong data-i18n="readout.mobileInstructions.6">Double tap:</strong>
+          reset the view
+        </p>
         <button
           id="closeMobileInstructions"
           class="ui-button"
           title="Dismiss these touch instructions"
+          data-i18n-title="readout.closeMobileInstructions.hint"
+          data-i18n="readout.closeMobileInstructions"
         >
           Got it!
         </button>
@@ -663,6 +713,7 @@
       role="toolbar"
       aria-label="Simulation controls"
       tabindex="-1"
+      data-i18n-aria-label="rail.mainControls.label"
     >
       <div class="rail-group">
         <button
@@ -672,8 +723,9 @@
           aria-expanded="true"
           aria-controls="railScenarioBody"
           title="Show or hide the scenario controls"
+          data-i18n-title="rail.railScenario.hint"
         >
-          <span>Scenario</span>
+          <span data-i18n="rail.railScenario">Scenario</span>
           <span class="rail-chevron" aria-hidden="true"></span>
         </button>
         <div
@@ -686,6 +738,8 @@
             id="loadScenarioBtn"
             class="ui-button"
             title="Browse the built-in scenarios by image, concept or keyword: from the Solar System to the GW150914 black-hole merger."
+            data-i18n-title="rail.loadScenario.hint"
+            data-i18n="rail.loadScenario"
           >
             Load Scenario
           </button>
@@ -693,6 +747,8 @@
             id="investigationsBtn"
             class="ui-button"
             title="Guided lessons that walk you through a concept step by step, with questions and an optional lab report you can submit"
+            data-i18n-title="rail.investigations.hint"
+            data-i18n="rail.investigations"
           >
             🎓 Investigations
           </button>
@@ -700,6 +756,8 @@
             id="settingsBtn"
             class="ui-button"
             title="Open the full settings panel: object counts, gravity, visuals and performance. Structural changes restart the simulation; the rest apply live."
+            data-i18n-title="rail.settings.hint"
+            data-i18n="rail.settings"
           >
             Settings
           </button>
@@ -707,6 +765,8 @@
             id="refreshScenarioBtn"
             class="ui-button"
             title="Rebuild the current scenario from scratch, discarding anything you have added or changed."
+            data-i18n-title="rail.refreshScenario.hint"
+            data-i18n="rail.refreshScenario"
           >
             Refresh Scenario
           </button>
@@ -714,6 +774,8 @@
             id="resetAllBtn"
             class="ui-button"
             title="Restore every setting to its factory default and load the Binary Black Hole scenario."
+            data-i18n-title="rail.resetAll.hint"
+            data-i18n="rail.resetAll"
           >
             Reset to Default
           </button>
@@ -721,6 +783,8 @@
             id="cleanSimBtn"
             class="ui-button"
             title="Clear the universe to empty space so you can build a system from nothing by clicking and dragging."
+            data-i18n-title="rail.cleanSim.hint"
+            data-i18n="rail.cleanSim"
           >
             Blank Simulation
           </button>
@@ -735,8 +799,9 @@
           aria-expanded="true"
           aria-controls="railStateBody"
           title="Show or hide the state controls"
+          data-i18n-title="rail.railState.hint"
         >
-          <span>State</span>
+          <span data-i18n="rail.railState">State</span>
           <span class="rail-chevron" aria-hidden="true"></span>
         </button>
         <div
@@ -749,6 +814,8 @@
             id="saveBtn"
             class="ui-button"
             title="Save the current objects, settings and view to this browser. Only one save slot; saving again overwrites it."
+            data-i18n-title="rail.save.hint"
+            data-i18n="rail.save"
           >
             Save State
           </button>
@@ -756,14 +823,18 @@
             id="loadBtn"
             class="ui-button"
             title="Restore the simulation you last saved in this browser."
+            data-i18n-title="rail.load.hint"
+            data-i18n="rail.load"
           >
             Load State
           </button>
           <button
             id="undoBtn"
             class="ui-button"
-            disabled
+            disabled=""
             title="Remove the last object you placed (Z)"
+            data-i18n-title="rail.undo.hint"
+            data-i18n="rail.undo"
           >
             Undo Placement
           </button>
@@ -771,6 +842,8 @@
             id="shareBtn"
             class="ui-button"
             title="Create a link that reopens this exact simulation: hand it out as an assignment, or send back what you built (K)"
+            data-i18n-title="rail.share.hint"
+            data-i18n="rail.share"
           >
             🔗 Share Link
           </button>
@@ -778,6 +851,8 @@
             id="exportDataBtn"
             class="ui-button"
             title="Download the recorded simulation as CSV: positions, velocities and energies over time, and the light curve if it is running. Open them in Excel, or in the companion Python notebook (E)"
+            data-i18n-title="rail.exportData.hint"
+            data-i18n="rail.exportData"
           >
             📊 Export Data
           </button>
@@ -792,96 +867,221 @@
           aria-expanded="true"
           aria-controls="railToolsBody"
           title="Show or hide the tools controls"
+          data-i18n-title="rail.railTools.hint"
         >
-          <span>Tools</span>
+          <span data-i18n="rail.railTools">Tools</span>
           <span class="rail-chevron" aria-hidden="true"></span>
         </button>
+        <!--
+          Tools is the section that grew: twenty controls in one flat column,
+          which is a list nobody reads to the end of. It is now four named
+          sub-groups, and within each the controls that are the same shape as
+          each other share a row. The section is the same twenty controls; it
+          is a third of the height and can be scanned instead of read.
+        -->
         <div
           id="railToolsBody"
           class="rail-section"
           role="group"
           aria-labelledby="railTools"
         >
+          <p class="rail-subhead" data-i18n="rail.sub.measure">Measure</p>
+          <div
+            class="measure-tools"
+            role="group"
+            aria-label="Measurement tools"
+            data-i18n-aria-label="rail.railToolsBody.label"
+          >
+            <button
+              id="toggleRuler"
+              class="ui-button secondary measure-btn"
+              aria-pressed="false"
+              title="Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometres, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says."
+              data-i18n-title="rail.toggleRuler.hint"
+              data-i18n="rail.toggleRuler"
+            >
+              📏 Ruler
+            </button>
+            <button
+              id="toggleProtractor"
+              class="ui-button secondary measure-btn"
+              aria-pressed="false"
+              title="Measure an angle. Drag the middle handle onto the corner and the two outer handles along the directions you want the angle between - a velocity and a line to the star, say, which on an eccentric orbit is ninety degrees only at periapsis and apoapsis."
+              data-i18n-title="rail.toggleProtractor.hint"
+              data-i18n="rail.toggleProtractor"
+            >
+              📐 Protractor
+            </button>
+            <button
+              id="toggleStopwatch"
+              class="ui-button secondary measure-btn"
+              aria-pressed="false"
+              title="Time things in simulated time, so pausing pauses the clock and the simulation speed does not change what you measure. With a body selected you can latch it to that body's periapsis passages and read its period off directly."
+              data-i18n-title="rail.toggleStopwatch.hint"
+              data-i18n="rail.toggleStopwatch"
+            >
+              ⏱ Stopwatch
+            </button>
+          </div>
+          <div id="stopwatchControls" class="measure-tools" hidden="">
+            <button
+              id="stopwatchMark"
+              class="ui-button secondary measure-btn"
+              title="Start timing from now"
+              data-i18n-title="rail.stopwatchMark.hint"
+              data-i18n="rail.stopwatchMark"
+            >
+              ⚑ Mark
+            </button>
+            <button
+              id="stopwatchStop"
+              class="ui-button secondary measure-btn"
+              title="Freeze the current reading"
+              data-i18n-title="rail.stopwatchStop.hint"
+              data-i18n="rail.stopwatchStop"
+            >
+              ■ Stop
+            </button>
+            <button
+              id="stopwatchLatch"
+              class="ui-button secondary measure-btn"
+              aria-pressed="false"
+              title="Latch onto the selected body's periapsis passages, so each lap is one orbit measured from closest approach"
+              data-i18n-title="rail.stopwatchLatch.hint"
+              data-i18n="rail.stopwatchLatch"
+            >
+              ⌖ Periapsis
+            </button>
+            <button
+              id="stopwatchReset"
+              class="ui-button secondary measure-btn"
+              title="Back to zero"
+              data-i18n-title="rail.stopwatchReset.hint"
+              data-i18n="rail.stopwatchReset"
+            >
+              ↺ Reset
+            </button>
+          </div>
+
+          <!--
+            Five analysis panels, each of which is either open or shut. As
+            full-width buttons they gave no sign of their own state and took
+            five rows; as chips they take three and say which are on.
+          -->
+          <p class="rail-subhead" data-i18n="rail.sub.instruments">
+            Instruments
+          </p>
+          <div
+            class="rail-chips"
+            role="group"
+            aria-label="Analysis panels"
+            data-i18n-aria-label="rail.sub.instruments.label"
+          >
+            <button
+              id="toggle3DView"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open a 3D view of the gravity well: a rubber-sheet grid that dips around each mass. Drag to orbit, scroll to zoom."
+              data-i18n-title="rail.toggle3DView.hint"
+              data-i18n="rail.toggle3DView"
+            >
+              Spacetime
+            </button>
+            <button
+              id="toggleLightCurve"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction: planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
+              data-i18n-title="rail.toggleLightCurve.hint"
+              data-i18n="rail.toggleLightCurve"
+            >
+              Light Curve
+            </button>
+            <button
+              id="toggleRadialVelocity"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the radial velocity panel: the star's motion toward and away from us, measured the way a spectrograph measures it. A planet pulls its star around their common center of mass, and the size of that wobble is what tells us the planet's mass."
+              data-i18n-title="rail.toggleRadialVelocity.hint"
+              data-i18n="rail.toggleRadialVelocity"
+            >
+              Radial Velocity
+            </button>
+            <button
+              id="toggleRotationCurve"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the rotation curve panel: orbital speed against distance from the center, one point per body, drawn against the speeds the visible mass alone would produce. Switch on the dark-matter halo and watch a falling curve flatten."
+              data-i18n-title="rail.toggleRotationCurve.hint"
+              data-i18n="rail.toggleRotationCurve"
+            >
+              Rotation Curve
+            </button>
+            <button
+              id="toggleAstrometry"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the astrometry panel: the tiny ellipse the star traces across the sky as its planet swings it around their common center of mass. Where radial velocity fails on a face-on orbit, astrometry works best."
+              data-i18n-title="rail.toggleAstrometry.hint"
+              data-i18n="rail.toggleAstrometry"
+            >
+              Astrometry
+            </button>
+          </div>
+
+          <p class="rail-subhead" data-i18n="rail.sub.view">View</p>
           <button
             id="unitToggle"
             class="toggle-button rail-toggle"
             data-state="on"
             title="Switch between physical and simulation units (U)"
+            data-i18n-title="rail.unitToggle.hint"
+            data-i18n="rail.unitToggle"
           >
             Physical units
           </button>
           <div class="rail-field">
-            <label class="rail-field-label" for="referenceFrameSelect">
+            <label
+              class="rail-field-label"
+              for="referenceFrameSelect"
+              data-i18n="rail.railToolsBody"
+            >
               Frame
             </label>
             <select
               id="referenceFrameSelect"
               class="rail-select"
               title="Re-express every position, and every trail, in the frame of the barycenter or of the selected object. Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards."
+              data-i18n-title="rail.referenceFrameSelect.hint"
             >
-              <option value="world">World</option>
-              <option value="barycenter">Barycenter</option>
-              <option value="object" disabled>Selected object</option>
+              <option value="world" data-i18n="rail.referenceFrameSelect">
+                World
+              </option>
+              <option
+                value="barycenter"
+                data-i18n="rail.referenceFrameSelect.2"
+              >
+                Barycenter
+              </option>
+              <option
+                value="object"
+                disabled=""
+                data-i18n="rail.referenceFrameSelect.3"
+              >
+                Selected object
+              </option>
             </select>
           </div>
-          <p class="rail-field-note" id="referenceFrameNote" hidden></p>
-          <button
-            id="screenshotBtn"
-            class="ui-button"
-            title="Take a screenshot (or press P)"
-          >
-            📸 Screenshot
-          </button>
-          <button
-            id="toggle3DView"
-            class="ui-button secondary"
-            aria-pressed="false"
-            title="Open a 3D view of the gravity well: a rubber-sheet grid that dips around each mass. Drag to orbit, scroll to zoom."
-          >
-            Spacetime View
-          </button>
-          <button
-            id="toggleLightCurve"
-            class="ui-button secondary"
-            aria-pressed="false"
-            title="Open the transit photometry panel: a live brightness-vs-time graph of the starlight reaching a chosen observer. Drag the observer handle on the simulation, or use the angle slider, to change viewing direction: planets crossing the star carve dips in the curve, the same way real exoplanets are detected."
-          >
-            Light Curve
-          </button>
-
-          <button
-            id="toggleRadialVelocity"
-            class="ui-button secondary"
-            aria-pressed="false"
-            title="Open the radial velocity panel: the star's motion toward and away from us, measured the way a spectrograph measures it. A planet pulls its star around their common center of mass, and the size of that wobble is what tells us the planet's mass."
-          >
-            Radial Velocity
-          </button>
-
-          <button
-            id="toggleRotationCurve"
-            class="ui-button secondary"
-            aria-pressed="false"
-            title="Open the rotation curve panel: orbital speed against distance from the center, one point per body, drawn against the speeds the visible mass alone would produce. Switch on the dark-matter halo and watch a falling curve flatten."
-          >
-            Rotation Curve
-          </button>
-
-          <button
-            id="toggleAstrometry"
-            class="ui-button secondary"
-            aria-pressed="false"
-            title="Open the astrometry panel: the tiny ellipse the star traces across the sky as its planet swings it around their common center of mass. Where radial velocity fails on a face-on orbit, astrometry works best."
-          >
-            Astrometry
-          </button>
-
+          <p class="rail-field-note" id="referenceFrameNote" hidden=""></p>
           <div class="speed-controls">
             <button
               id="slowDownBtn"
               class="ui-button speed-btn"
               title="Decrease speed by 0.5x"
               aria-label="Decrease speed"
+              data-i18n-title="rail.slowDown.hint"
+              data-i18n-aria-label="rail.slowDown.label"
+              data-i18n="rail.slowDown"
             >
               ⏪ Slow
             </button>
@@ -891,25 +1091,53 @@
               class="ui-button speed-btn"
               title="Increase speed by 0.5x"
               aria-label="Increase speed"
+              data-i18n-title="rail.speedUp.hint"
+              data-i18n-aria-label="rail.speedUp.label"
+              data-i18n="rail.speedUp"
             >
               Fast ⏩
             </button>
           </div>
 
+          <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
           <button
-            id="resetViewBtn"
+            id="screenshotBtn"
             class="ui-button"
-            title="Recenter the camera and return to 1× zoom (R)."
+            title="Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock."
+            data-i18n-title="rail.screenshot.hint"
+            data-i18n="rail.screenshot"
           >
-            Reset View
+            📸 Screenshot
           </button>
           <button
-            id="shortcutsBtn"
+            id="lectureBtn"
             class="ui-button"
-            title="Keyboard shortcuts (?)"
+            data-i18n-title="lecture.action.enter.hint"
+            data-i18n="lecture.action.enter"
+            title="Fill the screen for projection: larger type and controls, the Daylight theme, a spotlight pointer, and arrow keys to step through a prepared sequence of links. Escape leaves."
           >
-            Shortcuts
+            🎦 Lecture Mode
           </button>
+          <div class="rail-grid">
+            <button
+              id="resetViewBtn"
+              class="ui-button"
+              title="Recenter the camera and return to 1× zoom (R)."
+              data-i18n-title="rail.resetView.hint"
+              data-i18n="rail.resetView"
+            >
+              Reset View
+            </button>
+            <button
+              id="shortcutsBtn"
+              class="ui-button"
+              title="Keyboard shortcuts (?)"
+              data-i18n-title="rail.shortcuts.hint"
+              data-i18n="rail.shortcuts"
+            >
+              Shortcuts
+            </button>
+          </div>
         </div>
       </div>
 
@@ -927,8 +1155,9 @@
           aria-expanded="true"
           aria-controls="railLearnBody"
           title="Show or hide the learn controls"
+          data-i18n-title="rail.railLearn.hint"
         >
-          <span>Learn</span>
+          <span data-i18n="rail.railLearn">Learn</span>
           <span class="rail-chevron" aria-hidden="true"></span>
         </button>
         <div
@@ -942,6 +1171,8 @@
             id="aboutGravitasBtn"
             class="rail-link"
             title="What Gravitas is, what you can do here, and where to start"
+            data-i18n-title="rail.aboutGravitas.hint"
+            data-i18n="rail.aboutGravitas"
           >
             About Gravitas
           </button>
@@ -949,12 +1180,16 @@
             class="rail-link"
             href="/model/"
             title="How Gravitas models the universe: what the simulation calculates, approximates and visualizes"
+            data-i18n-title="rail.railLearnBody.hint"
+            data-i18n="rail.railLearnBody"
             >How the model works</a
           >
           <a
             class="rail-link"
             href="/instructors/"
             title="Teaching guides, answer keys and a curriculum map for instructors"
+            data-i18n-title="rail.railLearnBody.hint.2"
+            data-i18n="rail.railLearnBody.2"
             >Instructor resources</a
           >
           <a
@@ -963,6 +1198,8 @@
             target="_blank"
             rel="noopener"
             title="Open the Gravitas user manual (PDF)"
+            data-i18n-title="rail.railLearnBody.hint.3"
+            data-i18n="rail.railLearnBody.3"
             >User manual (PDF)</a
           >
         </div>
@@ -973,6 +1210,9 @@
         class="ui-button is-primary rail-primary"
         title="Click to change what type of object you insert"
         aria-label="Change object insertion type"
+        data-i18n-title="rail.objectType.hint"
+        data-i18n-aria-label="rail.objectType.label"
+        data-i18n="rail.objectType"
       >
         ⭐ Add Stars
       </button>
@@ -984,12 +1224,15 @@
       class="timeline-bar"
       role="group"
       aria-label="Playback and timeline"
+      data-i18n-aria-label="transport.timelineBar.label"
     >
       <button
         id="timelinePlay"
         class="timeline-btn"
         aria-label="Pause simulation"
         title="Pause (Space)"
+        data-i18n-title="transport.timelinePlay.hint"
+        data-i18n-aria-label="transport.timelinePlay.label"
       >
         ❚❚
       </button>
@@ -998,6 +1241,8 @@
         class="timeline-btn"
         aria-label="Step back one frame"
         title="Step back (,)"
+        data-i18n-title="transport.timelineStepBack.hint"
+        data-i18n-aria-label="transport.timelineStepBack.label"
       >
         ⏮
       </button>
@@ -1006,6 +1251,8 @@
         class="timeline-btn"
         aria-label="Step forward one frame"
         title="Step forward (.)"
+        data-i18n-title="transport.timelineStepFwd.hint"
+        data-i18n-aria-label="transport.timelineStepFwd.label"
       >
         ⏭
       </button>
@@ -1018,17 +1265,21 @@
         max="1"
         value="1"
         step="1"
-        disabled
+        disabled=""
         aria-label="Scrub through recorded simulation history"
         title="Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live."
+        data-i18n-title="transport.timelineScrubber.hint"
+        data-i18n-aria-label="transport.timelineScrubber.label"
       />
 
       <span id="timelineTime" class="timeline-time numeric">0 s</span>
       <button
         id="timelineLive"
         class="timeline-btn timeline-live"
-        hidden
+        hidden=""
         title="Return to live (L)"
+        data-i18n-title="transport.timelineLive.hint"
+        data-i18n="transport.timelineLive"
       >
         ● LIVE
       </button>
@@ -1042,6 +1293,8 @@
       aria-controls="mainControls"
       aria-expanded="false"
       title="Show the simulation controls"
+      data-i18n-title="chrome.mobileMenuToggle.hint"
+      data-i18n-aria-label="chrome.mobileMenuToggle.label"
     >
       <span class="hamburger"></span>
       <span class="hamburger"></span>
@@ -1063,15 +1316,21 @@
       >
         <div class="sc-head">
           <div class="sc-head-text">
-            <h3 id="scenarioBrowserTitle">Explore scenarios</h3>
+            <h3
+              id="scenarioBrowserTitle"
+              data-i18n="gallery.scenarioBrowserTitle"
+            >
+              Explore scenarios
+            </h3>
             <p id="scenarioBrowserSubtitle" class="sc-subtitle"></p>
           </div>
           <button
             id="closeScenarioList"
             class="ui-button"
             title="Close the scenario gallery"
+            data-i18n-title="gallery.closeScenarioList.hint"
           >
-            &times;
+            ×
           </button>
         </div>
         <button
@@ -1079,6 +1338,8 @@
           id="scenarioListCloseChip"
           aria-label="Close"
           title="Close the scenario gallery"
+          data-i18n-title="gallery.scenarioListCloseChip.hint"
+          data-i18n-aria-label="gallery.scenarioListCloseChip.label"
         >
           ✕
         </button>
@@ -1092,11 +1353,18 @@
             autocomplete="off"
             aria-label="Search scenarios"
             title='Filter by name, description or concept. Try "neutron", "merger", "tides" or "kepler". Enter loads the first result.'
+            data-i18n-title="gallery.scenarioSearch.hint"
+            data-i18n-aria-label="gallery.scenarioSearch.label"
+            data-i18n-placeholder="gallery.scenarioSearch.placeholder"
           />
         </div>
 
         <div class="sc-concepts">
-          <p class="sc-concepts-label" id="scenarioConceptsLabel">
+          <p
+            class="sc-concepts-label"
+            id="scenarioConceptsLabel"
+            data-i18n="gallery.scenarioConceptsLabel"
+          >
             Browse by concept
           </p>
           <div
@@ -1105,7 +1373,7 @@
             role="group"
             aria-labelledby="scenarioConceptsLabel"
           ></div>
-          <p id="scenarioConceptNote" class="sc-concept-note" hidden></p>
+          <p id="scenarioConceptNote" class="sc-concept-note" hidden=""></p>
         </div>
 
         <p
@@ -1117,9 +1385,9 @@
 
         <div id="scenarioListScroll" class="sc-scroll">
           <div id="scenarioListItems" class="sc-grid"></div>
-          <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden>
+          <p id="scenarioSearchEmpty" class="scenario-search-empty" hidden="">
             No scenarios match that search. Try a different word, or choose
-            <strong>All</strong> above.
+            <strong data-i18n="gallery.scenarioSearchEmpty">All</strong> above.
           </p>
         </div>
       </div>
@@ -1130,9 +1398,11 @@
       above, on purpose - same shell, same borrowed thumbnails, same count line
       - but the cards are wide landscape ones because a lesson is an hour of
       work, not a tile you click on a whim. Every card, the count line and the
-      level note are written by js/investigations.js from the catalog in
-      js/data/investigations.js: no lesson title, duration, step count or total
-      is spelled out here, so nothing in this file can go stale.
+      level note are written by js/investigations.js from the manifest in
+      js/data/investigations/manifest.js: no lesson title, duration, step count
+      or total is spelled out here, so nothing in this file can go stale. The
+      lessons themselves are a file each in that directory, and only the one a
+      student opens is fetched.
     -->
     <div id="investigationBrowser" class="hidden">
       <div
@@ -1160,7 +1430,7 @@
             class="ui-button"
             title="Close the investigation list"
           >
-            &times;
+            ×
           </button>
         </div>
         <button
@@ -1182,7 +1452,7 @@
           <span
             id="investigationBrowserLevel"
             class="inv-count-level"
-            hidden
+            hidden=""
           ></span>
         </p>
 
@@ -1200,7 +1470,7 @@
     <aside
       id="investigationPanel"
       class="investigation-panel"
-      hidden
+      hidden=""
       aria-label="Investigation"
     >
       <header class="inv-header">
@@ -1215,7 +1485,7 @@
           class="ui-button"
           title="Close this lesson. Your progress is saved."
         >
-          &times;
+          ×
         </button>
       </header>
 
@@ -1240,8 +1510,8 @@
 
       <div id="investigationBody" class="inv-body"></div>
 
-      <div id="investigationProbeWrap" class="inv-probe-wrap" hidden>
-        <p class="inv-probe-title">Live readout</p>
+      <div id="investigationProbeWrap" class="inv-probe-wrap" hidden="">
+        <p class="inv-probe-title" data-i18n="inv.probe.title">Live readout</p>
         <div id="investigationProbe" class="inv-probe"></div>
       </div>
 
@@ -1250,6 +1520,8 @@
           id="investigationReset"
           class="ui-button subtle"
           title="Clear every answer and start this lesson again"
+          data-i18n-title="inv.action.restart.hint"
+          data-i18n="inv.action.restart"
         >
           Restart
         </button>
@@ -1258,6 +1530,8 @@
             id="investigationPrev"
             class="ui-button"
             title="Previous step (Shift + Left arrow)"
+            data-i18n-title="inv.action.back.hint"
+            data-i18n="inv.action.back"
           >
             Back
           </button>
@@ -1276,7 +1550,7 @@
     <aside
       id="investigationPlot"
       class="inv-plot-panel"
-      hidden
+      hidden=""
       aria-label="Measurement plot"
     >
       <header class="inv-plot-panel-head">
@@ -1309,7 +1583,7 @@
     <aside
       id="investigationEllipse"
       class="inv-plot-panel"
-      hidden
+      hidden=""
       aria-label="Ellipse explorer"
     >
       <header class="inv-plot-panel-head">
@@ -1318,7 +1592,7 @@
       <canvas id="investigationEllipseCanvas"></canvas>
       <div class="inv-ellipse-key">
         <span class="k-a">a: semi-major axis, the orbit's size</span>
-        <span class="k-c">c = a&times;e: focus offset from center</span>
+        <span class="k-c">c = a×e: focus offset from center</span>
         <span class="k-b">b: semi-minor axis</span>
         <span class="k-star">focus holding the star</span>
         <span class="k-empty">the empty focus</span>
@@ -1343,7 +1617,7 @@
     <aside
       id="investigationTool"
       class="inv-plot-panel inv-tool-panel"
-      hidden
+      hidden=""
       aria-label="Interactive tool"
     >
       <header class="inv-plot-panel-head">
@@ -1353,7 +1627,11 @@
       <p id="investigationToolNote" class="inv-plot-note"></p>
       <div id="investigationToolReadout" class="inv-tool-readout"></div>
       <div id="investigationToolControls" class="inv-tool-controls"></div>
-      <div id="investigationToolActions" class="inv-tool-actions" hidden></div>
+      <div
+        id="investigationToolActions"
+        class="inv-tool-actions"
+        hidden=""
+      ></div>
       <div id="investigationToolPresets" class="inv-presets"></div>
       <p id="investigationToolPresetNote" class="inv-preset-note"></p>
     </aside>
@@ -1367,31 +1645,42 @@
         aria-labelledby="dataExportTitle"
       >
         <div class="inv-finish-header">
-          <h3 id="dataExportTitle">Export data</h3>
-          <button id="dataExportClose" class="ui-button" title="Close">
-            &times;
+          <h3 id="dataExportTitle" data-i18n="export.dataExportTitle">
+            Export data
+          </h3>
+          <button
+            id="dataExportClose"
+            class="ui-button"
+            title="Close"
+            data-i18n-title="export.dataExportClose.hint"
+          >
+            ×
           </button>
         </div>
-        <p class="export-intro">
+        <p class="export-intro" data-i18n="export.dataExportContent">
           Everything the simulation has recorded, as CSV. Open it in a
           spreadsheet, or read it straight into pandas.
         </p>
 
         <fieldset class="export-scope" id="dataExportScope">
-          <legend>Which objects</legend>
+          <legend data-i18n="export.dataExportScope">Which objects</legend>
           <label>
             <input type="radio" name="exportScope" value="selected" />
-            <span id="dataExportSelectedLabel">Selected object only</span>
+            <span
+              id="dataExportSelectedLabel"
+              data-i18n="export.dataExportSelectedLabel"
+              >Selected object only</span
+            >
           </label>
           <label>
-            <input type="radio" name="exportScope" value="all" checked />
-            <span>Every object</span>
+            <input type="radio" name="exportScope" value="all" checked="" />
+            <span data-i18n="export.dataExportScope.2">Every object</span>
           </label>
         </fieldset>
 
         <div class="export-files" id="dataExportFiles"></div>
 
-        <p class="export-fineprint">
+        <p class="export-fineprint" data-i18n="export.dataExportContent.2">
           Columns carry their units in the name: distances in AU, times in days,
           speeds in km/s, energies in joules. Positions are recorded ten times a
           second of real time, and the history holds the last several hundred
@@ -1403,6 +1692,7 @@
             href="https://colab.research.google.com/github/gravitas-sim/gravitas-sim.github.io/blob/main/notebooks/gravitas_analysis.ipynb"
             target="_blank"
             rel="noopener noreferrer"
+            data-i18n="export.dataExportNotebook"
             >Open the companion notebook in Colab</a
           >
           to plot the orbits, fit a period and recover the central mass from
@@ -1426,7 +1716,7 @@
             class="ui-button"
             title="Close without downloading"
           >
-            &times;
+            ×
           </button>
         </div>
         <div id="investigationFinishSummary" class="inv-finish-summary"></div>
@@ -1440,7 +1730,7 @@
             placeholder="e.g. Ada Lovelace"
           />
         </label>
-        <p id="investigationNameError" class="inv-name-error" hidden>
+        <p id="investigationNameError" class="inv-name-error" hidden="">
           Enter a name so the report can be attributed to you.
         </p>
 
@@ -1468,13 +1758,16 @@
         aria-labelledby="shareTitle"
       >
         <div class="share-header">
-          <h3 id="shareTitle">Share this simulation</h3>
+          <h3 id="shareTitle" data-i18n="share.shareTitle">
+            Share this simulation
+          </h3>
           <button
             id="shareCloseBtn"
             class="ui-button"
             title="Close without copying"
+            data-i18n-title="share.shareClose.hint"
           >
-            &times;
+            ×
           </button>
         </div>
         <button
@@ -1482,11 +1775,13 @@
           id="shareCloseChip"
           aria-label="Close"
           title="Close without copying"
+          data-i18n-title="share.shareCloseChip.hint"
+          data-i18n-aria-label="share.shareCloseChip.label"
         >
           ✕
         </button>
 
-        <p class="share-intro">
+        <p class="share-intro" data-i18n="share.shareContent">
           Anyone who opens this link lands on exactly this system: no account,
           no setup, nothing stored on a server.
         </p>
@@ -1495,6 +1790,7 @@
           class="share-kind"
           role="radiogroup"
           aria-label="What the link carries"
+          data-i18n-aria-label="share.shareContent.label"
         >
           <button
             type="button"
@@ -1503,9 +1799,12 @@
             role="radio"
             aria-checked="true"
             title="The scenario, its seed and any settings you changed. Short enough to paste anywhere, and rebuilds the same starting system every time."
+            data-i18n-title="share.shareKindSeeded.hint"
           >
-            <span class="share-kind-name">Starting setup</span>
-            <span class="share-kind-note"
+            <span class="share-kind-name" data-i18n="share.shareKindSeeded"
+              >Starting setup</span
+            >
+            <span class="share-kind-note" data-i18n="share.shareKindSeeded.2"
               >Short link. Rebuilds this system from its seed.</span
             >
           </button>
@@ -1516,25 +1815,35 @@
             role="radio"
             aria-checked="false"
             title="Every object's position, velocity and mass, written out. Use this once the simulation has run, or after you have placed objects by hand."
+            data-i18n-title="share.shareKindFull.hint"
           >
-            <span class="share-kind-name">Exact state now</span>
-            <span class="share-kind-note"
+            <span class="share-kind-name" data-i18n="share.shareKindFull"
+              >Exact state now</span
+            >
+            <span class="share-kind-note" data-i18n="share.shareKindFull.2"
               >Longer link. Carries every object where it stands.</span
             >
           </button>
         </div>
 
         <label class="share-check" for="shareCamera">
-          <input type="checkbox" id="shareCamera" checked />
-          <span>Open at the same zoom and position</span>
+          <input type="checkbox" id="shareCamera" checked="" />
+          <span data-i18n="share.shareContent.2"
+            >Open at the same zoom and position</span
+          >
         </label>
 
         <div class="share-link-row">
-          <label class="visually-hidden" for="shareUrl">Shareable link</label>
+          <label
+            class="visually-hidden"
+            for="shareUrl"
+            data-i18n="share.shareContent.3"
+            >Shareable link</label
+          >
           <input
             type="text"
             id="shareUrl"
-            readonly
+            readonly=""
             spellcheck="false"
             aria-describedby="shareMeta"
           />
@@ -1542,39 +1851,71 @@
             id="shareCopyBtn"
             class="ui-button primary"
             title="Copy the link to the clipboard"
+            data-i18n-title="share.shareCopy.hint"
+            data-i18n="share.shareCopy"
           >
             Copy
           </button>
         </div>
+        <!--
+          Embedding is the same link with one more parameter, so it belongs in
+          the share dialog rather than in a dialog of its own: an instructor who
+          has just built the state they want should not have to go somewhere
+          else to put it in a course page.
+        -->
+        <div class="share-embed-row">
+          <button
+            type="button"
+            id="shareEmbedBtn"
+            class="ui-button secondary"
+            data-i18n-title="share.action.copyEmbed.hint"
+            title="Copy an iframe that shows exactly this simulation"
+          >
+            <span data-i18n="share.action.copyEmbed">Copy embed code</span>
+          </button>
+          <p class="share-embed-note" data-i18n="share.embed.note">
+            Paste into the HTML editor of a course page. The figure stays
+            interactive.
+          </p>
+        </div>
         <p id="shareMeta" class="share-meta" role="status"></p>
-        <p id="shareStale" class="share-note" hidden>
+        <p id="shareStale" class="share-note" hidden="">
           This link opens the system as it started, not as it looks now. Choose
-          <strong>Exact state now</strong> to send what is on screen.
+          <strong data-i18n="share.shareStale">Exact state now</strong> to send
+          what is on screen.
         </p>
-        <p id="shareWarning" class="share-warning" hidden>
+        <p
+          id="shareWarning"
+          class="share-warning"
+          hidden=""
+          data-i18n="share.shareWarning"
+        >
           This link is long enough that some mail clients and course tools will
           break it across lines. Share the starting setup instead where you can,
           or attach the link as a file.
         </p>
 
         <div class="share-seed-row" id="shareSeedRow">
-          <label for="shareSeed">Seed</label>
+          <label for="shareSeed" data-i18n="share.shareSeedRow">Seed</label>
           <input
             type="text"
             id="shareSeed"
             spellcheck="false"
             autocomplete="off"
             title="The number this system was generated from. Type one and press Enter to rebuild: give the same seed to a whole class and everyone sees the same system."
+            data-i18n-title="share.shareSeed.hint"
           />
           <button
             id="shareRerollBtn"
             class="ui-button"
             title="Rebuild this scenario from a new random seed"
+            data-i18n-title="share.shareReroll.hint"
+            data-i18n="share.shareReroll"
           >
             New
           </button>
         </div>
-        <p class="share-hint">
+        <p class="share-hint" data-i18n="share.shareContent.4">
           The seed decides every randomised detail of this scenario. Hand out
           the same seed and everyone gets the same system to measure.
         </p>
@@ -1582,12 +1923,16 @@
     </div>
 
     <div id="settingsPanel" class="hidden">
-      <div class="settings-header">Simulation Settings</div>
+      <div class="settings-header" data-i18n="settings.settingsPanel">
+        Simulation Settings
+      </div>
       <button
         class="floating-close-chip"
         id="settingsCloseChip"
         aria-label="Close"
         title="Close settings without applying changes"
+        data-i18n-title="settings.settingsCloseChip.hint"
+        data-i18n-aria-label="settings.settingsCloseChip.label"
       >
         ✕
       </button>
@@ -1601,13 +1946,17 @@
           id="settingsApply"
           class="ui-button footer-button"
           title="Apply these settings. Changing object counts, placement or scenario rebuilds the simulation; everything else takes effect immediately."
+          data-i18n-title="settings.settingsApply.hint"
+          data-i18n="settings.settingsApply"
         >
-          Apply & Restart
+          Apply &amp; Restart
         </button>
         <button
           id="settingsReset"
           class="ui-button footer-button"
           title="Reset every setting in this panel back to its default value (does not apply until you press Apply)."
+          data-i18n-title="settings.settingsReset.hint"
+          data-i18n="settings.settingsReset"
         >
           Reset to Defaults
         </button>
@@ -1615,6 +1964,8 @@
           id="settingsCancel"
           class="ui-button footer-button"
           title="Discard these changes and close the panel."
+          data-i18n-title="settings.settingsCancel.hint"
+          data-i18n="settings.settingsCancel"
         >
           Cancel
         </button>
@@ -1622,6 +1973,8 @@
           id="demoModeBtn"
           class="ui-button footer-button demo-mode-btn"
           title="Start demo mode - cycles through scenarios automatically"
+          data-i18n-title="settings.demoMode.hint"
+          data-i18n="settings.demoMode"
         >
           🎬 Demo Mode
         </button>
@@ -1637,6 +1990,8 @@
         id="bhMassesCloseChip"
         aria-label="Close"
         title="Close without changing the masses"
+        data-i18n-title="settings.bhMassesCloseChip.hint"
+        data-i18n-aria-label="settings.bhMassesCloseChip.label"
       >
         ✕
       </button>
@@ -1646,6 +2001,8 @@
           id="bhMassesDone"
           class="ui-button"
           title="Confirm these black hole masses and close"
+          data-i18n-title="settings.bhMassesDone.hint"
+          data-i18n="settings.bhMassesDone"
         >
           Done
         </button>
@@ -1667,7 +2024,12 @@
           aria-hidden="true"
         ></span>
         <span class="inspector-identity">
-          <span class="inspector-title" id="inspectorTitle">Object</span>
+          <span
+            class="inspector-title"
+            id="inspectorTitle"
+            data-i18n="inspector.inspectorTitle"
+            >Object</span
+          >
           <span class="inspector-kind" id="inspectorKind"></span>
         </span>
         <span class="inspector-controls">
@@ -1677,6 +2039,8 @@
             type="button"
             aria-label="Pin a copy of this object for comparison"
             title="Pin a copy for comparison"
+            data-i18n-title="inspector.inspectorPin.hint"
+            data-i18n-aria-label="inspector.inspectorPin.label"
           >
             <svg
               width="14"
@@ -1692,7 +2056,7 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 d="M6 1.8h4l-.6 3.3 2.1 2.3H4.5l2.1-2.3zM8 7.4v6.8"
-              />
+              ></path>
             </svg>
           </button>
           <button
@@ -1701,6 +2065,8 @@
             type="button"
             aria-label="Delete this object"
             title="Delete this object"
+            data-i18n-title="inspector.inspectorDelete.hint"
+            data-i18n-aria-label="inspector.inspectorDelete.label"
           >
             <svg
               width="14"
@@ -1715,7 +2081,7 @@
                 stroke-width="1.4"
                 stroke-linecap="round"
                 d="M2.5 4h11M6.5 4V2.6h3V4M4 4l.7 9.4h6.6L12 4M6.6 6.6v4.4M9.4 6.6v4.4"
-              />
+              ></path>
             </svg>
           </button>
           <button
@@ -1724,13 +2090,20 @@
             type="button"
             aria-label="Close the inspector"
             title="Close (Esc)"
+            data-i18n-title="inspector.inspectorClose.hint"
+            data-i18n-aria-label="inspector.inspectorClose.label"
           >
-            &times;
+            ×
           </button>
         </span>
       </div>
 
-      <div class="inspector-tabs" role="tablist" aria-label="Inspector views">
+      <div
+        class="inspector-tabs"
+        role="tablist"
+        aria-label="Inspector views"
+        data-i18n-aria-label="inspector.objectInspector.label"
+      >
         <button
           class="inspector-tab active"
           id="inspectorTabDetails"
@@ -1739,6 +2112,7 @@
           type="button"
           aria-selected="true"
           aria-controls="detailsTab"
+          data-i18n="inspector.inspectorTabDetails"
         >
           Details
         </button>
@@ -1750,6 +2124,7 @@
           type="button"
           aria-selected="false"
           aria-controls="energyTab"
+          data-i18n="inspector.inspectorTabEnergy"
         >
           Energy
         </button>
@@ -1772,13 +2147,18 @@
     </div>
 
     <!-- Pinned comparison cards, one per pinned object -->
-    <div id="pinnedInspectors" aria-label="Pinned objects"></div>
+    <div
+      id="pinnedInspectors"
+      aria-label="Pinned objects"
+      data-i18n-aria-label="inspector.pinnedInspectors.label"
+    ></div>
 
     <!-- Tutorial Button -->
     <button
       id="tutorialBtn"
       class="ui-button tutorial-btn"
       title="Open the guided tour of the simulation controls. Drag the panel to move it."
+      data-i18n-title="chrome.tutorial.hint"
     >
       ?
     </button>
@@ -1792,14 +2172,19 @@
       aria-label="Guided tour"
       aria-hidden="true"
       style="display: none"
+      data-i18n-aria-label="tour.tutorialPopup.label"
     >
       <div class="tutorial-header">
-        <span class="tutorial-eyebrow">Guided tour</span>
+        <span class="tutorial-eyebrow" data-i18n="tour.tutorialPopup"
+          >Guided tour</span
+        >
         <button
           id="tutorialCloseBtn"
           class="tutorial-close"
           aria-label="Close the tour"
           title="Close the tour (Esc)"
+          data-i18n-title="tour.tutorialClose.hint"
+          data-i18n-aria-label="tour.tutorialClose.label"
         >
           ✕
         </button>
@@ -1810,6 +2195,8 @@
           id="tutorialPrevBtn"
           class="ui-button"
           title="Back to the previous step (left arrow)"
+          data-i18n-title="tour.tutorialPrev.hint"
+          data-i18n="tour.tutorialPrev"
         >
           Back
         </button>
@@ -1817,6 +2204,8 @@
           id="tutorialNextBtn"
           class="ui-button is-primary"
           title="On to the next step (right arrow)"
+          data-i18n-title="tour.tutorialNext.hint"
+          data-i18n="tour.tutorialNext"
         >
           Next
         </button>
@@ -1862,6 +2251,135 @@
       the strip between the transport bar and the rail, so it had been pushed up
       above the scrubber where it read as a floating panel rather than a footer.
     -->
+    <!--
+      Lecture Mode's own chrome. Present in the document at all times and shown
+      by CSS on body.presentation-lecture, the same way every other mode in this
+      application is expressed: there is no second layout engine, and nothing
+      here is built at runtime.
+    -->
+    <div
+      id="lectureBar"
+      class="lecture-bar"
+      role="toolbar"
+      aria-label="Lecture"
+      data-i18n-aria-label="lecture.lectureBar.label"
+    >
+      <button
+        type="button"
+        id="lecturePrevBtn"
+        class="lecture-btn"
+        data-i18n-title="lecture.action.previous.hint"
+        data-i18n-aria-label="lecture.action.previous"
+        title="Go to the previous prepared state (Left Arrow)"
+        aria-label="Previous"
+      >
+        <span aria-hidden="true">←</span>
+      </button>
+      <span
+        id="lecturePosition"
+        class="lecture-position"
+        role="status"
+        aria-live="polite"
+        >No sequence loaded</span
+      >
+      <button
+        type="button"
+        id="lectureNextBtn"
+        class="lecture-btn"
+        data-i18n-title="lecture.action.next.hint"
+        data-i18n-aria-label="lecture.action.next"
+        title="Go to the next prepared state (Right Arrow)"
+        aria-label="Next"
+      >
+        <span aria-hidden="true">→</span>
+      </button>
+      <span class="lecture-sep" aria-hidden="true"></span>
+      <button
+        type="button"
+        id="lectureSequenceBtn"
+        class="lecture-btn lecture-btn-wide"
+        data-i18n-title="lecture.action.sequence.hint"
+        title="Prepare or load an ordered list of links"
+      >
+        <span data-i18n="lecture.action.sequence">Sequence</span>
+      </button>
+      <button
+        type="button"
+        id="lectureSpotlightBtn"
+        class="lecture-btn lecture-btn-wide"
+        aria-pressed="false"
+        data-i18n-title="lecture.action.spotlight.hint"
+        title="Dim everything but a circle around the pointer"
+      >
+        <span data-i18n="lecture.action.spotlight">Spotlight</span>
+      </button>
+      <button
+        type="button"
+        id="lectureExitBtn"
+        class="lecture-btn lecture-btn-wide lecture-btn-exit"
+        data-i18n-title="lecture.action.exit.hint"
+        title="Return to the normal interface (Escape)"
+      >
+        <span data-i18n="lecture.action.exit">Exit Lecture Mode</span>
+      </button>
+    </div>
+
+    <div id="lectureSequenceSheet" class="lecture-sheet" hidden="">
+      <div
+        class="lecture-sheet-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lectureSequenceHeading"
+      >
+        <h2 id="lectureSequenceHeading" data-i18n="lecture.sequence.heading">
+          Lecture sequence
+        </h2>
+        <p data-i18n="lecture.sequence.intro">
+          Paste Gravitas share links, one per line, in the order you will
+          present them. The arrow keys step through them without leaving Lecture
+          Mode.
+        </p>
+        <textarea
+          id="lectureSequenceText"
+          class="lecture-sequence-text"
+          rows="8"
+          spellcheck="false"
+          data-i18n-placeholder="lecture.sequence.placeholder"
+          placeholder="https://gravitas-sim.online/#…"
+          data-i18n-aria-label="lecture.sequence.heading"
+          aria-label="Lecture sequence"
+        ></textarea>
+        <div class="lecture-sheet-actions">
+          <button type="button" id="lectureSequenceLoad" class="ui-button">
+            <span data-i18n="lecture.sequence.load">Load sequence</span>
+          </button>
+          <button
+            type="button"
+            id="lectureSequenceClear"
+            class="ui-button secondary"
+          >
+            <span data-i18n="lecture.sequence.clear">Clear</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--
+      Embed mode's single affordance. Everything else in embed mode is removed;
+      this is added, because a figure in a course page has to have a way out to
+      the sandbox for a student who wants to take the simulation apart.
+    -->
+    <a
+      id="embedOpenFull"
+      class="embed-open-full"
+      href="./"
+      data-i18n-title="embed.action.openFull.hint"
+      title="Open this simulation full size in a new tab"
+    >
+      <span data-i18n="embed.action.openFull">Open in Gravitas</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+
     <footer id="attribution" class="attribution attribution-fade">
       <!--
         The theme picker lives here rather than in the rail: it is a preference
@@ -1878,6 +2396,7 @@
           aria-expanded="false"
           aria-controls="themeMenu"
           title="Change the interface color scheme. Observatory uses red chrome to preserve night vision; Daylight suits bright rooms and projectors (T cycles)."
+          data-i18n-title="footer.theme.hint"
         >
           <span class="theme-dock-swatch" aria-hidden="true"></span>
           <span class="theme-dock-name" id="themeButtonName">Theme</span>
@@ -1887,16 +2406,51 @@
           class="theme-menu"
           role="menu"
           aria-labelledby="themeButton"
-          hidden
+          hidden=""
+        ></div>
+      </div>
+      <!--
+        The language picker sits beside the theme picker for the same reason the
+        theme picker is here rather than in the rail: both are preferences for
+        the whole page, not controls on the simulation. Options are written by
+        js/i18n/picker.js from the LOCALES registry, so the list cannot drift
+        from what the build actually ships.
+      -->
+      <div class="theme-dock locale-dock">
+        <button
+          type="button"
+          id="localeButton"
+          class="theme-dock-btn"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="localeMenu"
+          data-i18n-title="locale.picker.hint"
+          title="Change the interface language"
+        >
+          <span
+            class="theme-dock-swatch locale-dock-glyph"
+            id="localeButtonCode"
+            aria-hidden="true"
+            >EN</span
+          >
+          <span class="theme-dock-name" id="localeButtonName">English</span>
+        </button>
+        <div
+          id="localeMenu"
+          class="theme-menu locale-menu"
+          role="menu"
+          aria-labelledby="localeButton"
+          hidden=""
         ></div>
       </div>
       <span class="attribution-sep" aria-hidden="true">·</span>
-      <span>&copy;&nbsp;<span class="attribution-year">2025</span></span>
+      <span>©&nbsp;<span class="attribution-year">2025</span></span>
       <a
         href="https://carlziegler.space/"
         target="_blank"
         rel="noopener"
         title="Carl Ziegler: author of Gravitas"
+        data-i18n-title="footer.attribution.hint"
         >Carl Ziegler</a
       >
       <span class="attribution-sep" aria-hidden="true">·</span>
@@ -1910,6 +2464,8 @@
       <a
         href="/validation/"
         title="What the physics engine has been checked against: 135 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        data-i18n-title="footer.attribution.hint.2"
+        data-i18n="footer.attribution"
         >Validated</a
       >
       <span class="attribution-sep" aria-hidden="true">·</span>
@@ -1918,6 +2474,7 @@
         target="_blank"
         rel="noopener"
         title="Browse or contribute to the source code on GitHub"
+        data-i18n-title="footer.attribution.hint.3"
         >GitHub</a
       >
     </footer>

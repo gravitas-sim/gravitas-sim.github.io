@@ -118,6 +118,7 @@ test.describe('changing a physical property', () => {
 
     // And the interface has to survive it too.
     await expect(page.locator('#inspectorContent')).not.toBeEmpty();
+    await app.railControl('loadScenarioBtn');
     await page.locator('#loadScenarioBtn').click();
     await expect(page.locator('#scenarioListModal')).toBeVisible();
   });
@@ -159,6 +160,8 @@ test.describe('changing a physical property', () => {
     const content = page.locator('#inspectorContent');
     const physical = await content.innerText();
 
+    await app.railControl('unitToggle');
+
     await page.locator('#unitToggle').click();
     await expect
       .poll(async () => (await content.innerText()) !== physical, {
@@ -169,6 +172,8 @@ test.describe('changing a physical property', () => {
     // Neither mode may produce a broken number.
     const text = await content.innerText();
     expect(text).not.toMatch(/NaN|undefined|Infinity/);
+
+    await app.railControl('unitToggle');
 
     await page.locator('#unitToggle').click();
     await expect(content).not.toBeEmpty();

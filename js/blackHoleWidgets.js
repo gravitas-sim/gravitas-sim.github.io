@@ -23,6 +23,8 @@
 
 import { withUnit } from './format.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
+import { scaleBar as drawScaleBar } from './instruments.js';
+import { t } from './i18n/index.js';
 import {
   blackHoleFacts,
   newtonianEscapeSpeed,
@@ -133,44 +135,21 @@ function bar(ctx, x, y, w, h, color, alpha = 1) {
   ctx.restore();
 }
 
-/** A round number near the target, for scale bars: 1, 2, 5, 10, 20, 50, ... */
-function niceLength(target) {
-  const mag = 10 ** Math.floor(Math.log10(target));
-  const n = target / mag;
-  return (n < 1.5 ? 1 : n < 3.5 ? 2 : n < 7.5 ? 5 : 10) * mag;
-}
-
 /**
- * A labeled scale bar. Every panel that draws at its own zoom level carries
- * one, because a picture of a black hole with no scale on it is a picture of
- * a circle.
+ * A labeled scale bar in this file's sky palette.
+ *
+ * Every panel that draws at its own zoom level carries one, because a picture
+ * of a black hole with no scale on it is a picture of a circle. The bar itself
+ * and the rounding that picks its length live in js/instruments.js, which is
+ * also where the sandbox's canvas scale bar comes from: one lesson panel and
+ * one live simulation disagreeing about how long an AU is would be worse than
+ * either of them having no scale at all.
  */
 function scaleBar(ctx, x, y, maxPx, metersPerPx) {
-  const target = maxPx * metersPerPx;
-  // The unit is chosen before the rounding. Round a number of meters and then
-  // convert, and the bar ends up labeled "0.224 AU", which reads as an
-  // accident rather than as a scale.
-  const unit =
-    target >= 0.02 * AU_M ? { m: AU_M, name: 'AU' } : { m: 1000, name: 'km' };
-  const value = niceLength(target / unit.m);
-  const meters = value * unit.m;
-  const px = meters / metersPerPx;
-  const text = `${value >= 1 ? commas(Math.round(value)) : Number(value.toPrecision(2))} ${unit.name}`;
-  ctx.strokeStyle = SKY_MUTED;
-  ctx.lineWidth = 1.2;
-  ctx.beginPath();
-  ctx.moveTo(x, y - 4);
-  ctx.lineTo(x, y + 4);
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + px, y);
-  ctx.moveTo(x + px, y - 4);
-  ctx.lineTo(x + px, y + 4);
-  ctx.stroke();
-  ctx.fillStyle = SKY_MUTED;
-  ctx.font = `10px ${MONO}`;
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  ctx.fillText(text, x + px + 7, y - 5);
+  drawScaleBar(ctx, x, y, maxPx, metersPerPx, {
+    color: SKY_MUTED,
+    font: `10px ${MONO}`,
+  });
 }
 
 // =============================================================================
@@ -178,19 +157,41 @@ function scaleBar(ctx, x, y, maxPx, metersPerPx) {
 // =============================================================================
 
 const REFERENCE_LENGTHS = [
-  { label: 'across the event horizon', m: null, color: HOT },
-  { label: 'a marathon', m: 42195, color: SKY_MUTED },
-  { label: 'Manhattan, end to end', m: 21600, color: SKY_MUTED },
+  {
+    get label() {
+      return t('bhW.acrossTheEventHorizon');
+    },
+    m: null,
+    color: HOT,
+  },
+  {
+    get label() {
+      return t('bhW.aMarathon');
+    },
+    m: 42195,
+    color: SKY_MUTED,
+  },
+  {
+    get label() {
+      return t('bhW.manhattanEndToEnd');
+    },
+    m: 21600,
+    color: SKY_MUTED,
+  },
 ];
 
 const HORIZON = {
   id: 'bh-horizon',
-  title: 'One black hole, drawn to scale',
+  get title() {
+    return t('bhW.oneBlackHoleDrawnTo');
+  },
   note: 'Everything on this panel is drawn at the same scale, and the scale does not change when you move the slider. A bigger picture really is a bigger black hole.',
   controls: [
     {
       id: 'mass',
-      label: 'Mass of the black hole',
+      get label() {
+        return t('bhW.massOfTheBlackHole');
+      },
       unit: 'M☉',
       min: 2,
       max: 25,
@@ -204,24 +205,35 @@ const HORIZON = {
     const want = spec.rows || ['mass', 'radius', 'across'];
     const rows = [];
     if (want.includes('mass')) {
-      rows.push({ label: 'Mass', value: massLabel(f.massInSuns) });
+      rows.push({
+        get label() {
+          return t('bhW.mass');
+        },
+        value: massLabel(f.massInSuns),
+      });
     }
     if (want.includes('radius')) {
       rows.push({
-        label: 'Schwarzschild radius, Rₛ',
+        get label() {
+          return t('bhW.schwarzschildRadiusR');
+        },
         value: withUnit(f.rsKm.toFixed(1), 'km'),
         emphasis: true,
       });
     }
     if (want.includes('across')) {
       rows.push({
-        label: 'Right across the event horizon',
+        get label() {
+          return t('bhW.rightAcrossTheEventHorizon');
+        },
         value: withUnit((2 * f.rsKm).toFixed(1), 'km'),
       });
     }
     if (want.includes('compare')) {
       rows.push({
-        label: 'Compared with the length of Manhattan',
+        get label() {
+          return t('bhW.comparedWithTheLengthOf');
+        },
         value: withUnit((f.rsM / 21600).toFixed(1), 'times'),
       });
     }
@@ -314,12 +326,18 @@ let trials = { session: null, points: [] };
 
 const SCALING = {
   id: 'bh-scaling',
-  title: 'Mass against horizon size',
-  note: 'Set a mass, press Record, and the point lands on the graph. Three or four trials are plenty.',
+  get title() {
+    return t('bhW.massAgainstHorizonSize');
+  },
+  get note() {
+    return t('bhW.setAMassPressRecord');
+  },
   controls: [
     {
       id: 'mass',
-      label: 'Mass of the black hole',
+      get label() {
+        return t('bhW.massOfTheBlackHole');
+      },
       unit: 'M☉',
       min: 2,
       max: 25,
@@ -329,8 +347,18 @@ const SCALING = {
     },
   ],
   actions: [
-    { id: 'record', label: '⊕ Record this trial' },
-    { id: 'clear', label: '↺ Clear trials' },
+    {
+      id: 'record',
+      get label() {
+        return t('bhW.recordThisTrial');
+      },
+    },
+    {
+      id: 'clear',
+      get label() {
+        return t('bhW.clearTrials');
+      },
+    },
   ],
   reset(v, { spec = {} } = {}) {
     // Moving between the steps of one experiment keeps the table; arriving
@@ -360,7 +388,9 @@ const SCALING = {
       value: withUnit(p.rsKm.toFixed(1), 'km'),
     }));
     rows.push({
-      label: 'Slider is at',
+      get label() {
+        return t('bhW.sliderIsAt');
+      },
       value: `${massLabel(f.massInSuns)} → ${f.rsKm.toFixed(1)} km`,
       emphasis: true,
     });
@@ -478,12 +508,16 @@ const SUN_RS_KM = blackHoleFacts(1).rsKm;
 
 const ESCAPE = {
   id: 'bh-escape',
-  title: 'Squeezing the Sun',
+  get title() {
+    return t('bhW.squeezingTheSun');
+  },
   note: 'The Sun keeps all of its mass. Only its size changes. The gauge is the ordinary escape speed from the surface, worked out the way you would for a planet.',
   controls: [
     {
       id: 'logr',
-      label: 'Radius of the squeezed Sun',
+      get label() {
+        return t('bhW.radiusOfTheSqueezedSun');
+      },
       min: Math.log10(SUN_RS_KM),
       max: Math.log10(SUN_RADIUS_KM),
       step: 0.005,
@@ -493,14 +527,22 @@ const ESCAPE = {
   ],
   presets: [
     {
-      label: 'The Sun today',
+      get label() {
+        return t('bhW.theSunToday');
+      },
       values: { logr: Math.log10(SUN_RADIUS_KM) },
-      note: '696,000 km across the radius. Escape speed 618 km/s, which is about two ten-thousandths of the speed of light.',
+      get note() {
+        return t('bhW.696000KmAcrossThe');
+      },
     },
     {
-      label: 'Earth-sized',
+      get label() {
+        return t('bhW.earthSized');
+      },
       values: { logr: Math.log10(6371) },
-      note: 'A whole solar mass packed into a ball the size of the Earth. This is roughly what a white dwarf is.',
+      get note() {
+        return t('bhW.aWholeSolarMassPacked');
+      },
     },
     {
       label: '30 km',
@@ -510,7 +552,9 @@ const ESCAPE = {
     {
       label: '6 km',
       values: { logr: Math.log10(6) },
-      note: 'Twice the Schwarzschild radius. The escape speed is already seven tenths of the speed of light.',
+      get note() {
+        return t('bhW.twiceTheSchwarzschildRadiusThe');
+      },
     },
     {
       label: '3 km',
@@ -531,19 +575,35 @@ const ESCAPE = {
   readout(v) {
     const c = this.compute(v);
     return [
-      { label: 'Mass, unchanged throughout', value: '1 M☉' },
-      { label: 'Radius now', value: lengthLabel(c.radiusM) },
       {
-        label: 'Escape speed from the surface',
+        get label() {
+          return t('bhW.massUnchangedThroughout');
+        },
+        value: '1 M☉',
+      },
+      {
+        get label() {
+          return t('bhW.radiusNow');
+        },
+        value: lengthLabel(c.radiusM),
+      },
+      {
+        get label() {
+          return t('bhW.escapeSpeedFromTheSurface');
+        },
         value: `${commas(Math.round(c.speed / 1000))} km/s`,
       },
       {
-        label: 'As a share of the speed of light',
+        get label() {
+          return t('bhW.asAShareOfThe');
+        },
         value: `${(c.fraction * 100).toFixed(1)}%`,
         emphasis: true,
       },
       {
-        label: 'Radius, in Schwarzschild radii',
+        get label() {
+          return t('bhW.radiusInSchwarzschildRadii');
+        },
         value: `${c.multiple < 10 ? c.multiple.toFixed(2) : commas(Math.round(c.multiple))} × Rₛ`,
       },
     ];
@@ -674,20 +734,44 @@ const ESCAPE = {
 // =============================================================================
 
 const DENSITY_LADDER = [
-  { label: 'Air at sea level', value: 1.2 },
-  { label: 'Water', value: 1000 },
-  { label: 'A white dwarf', value: 1e9 },
-  { label: 'An atomic nucleus', value: 2.3e17 },
+  {
+    get label() {
+      return t('bhW.airAtSeaLevel');
+    },
+    value: 1.2,
+  },
+  {
+    get label() {
+      return t('bhW.water');
+    },
+    value: 1000,
+  },
+  {
+    get label() {
+      return t('bhW.aWhiteDwarf');
+    },
+    value: 1e9,
+  },
+  {
+    get label() {
+      return t('bhW.anAtomicNucleus');
+    },
+    value: 2.3e17,
+  },
 ];
 
 const DENSITY = {
   id: 'bh-density',
-  title: 'Average density, on a ladder',
+  get title() {
+    return t('bhW.averageDensityOnALadder');
+  },
   note: 'This is the black hole’s mass divided by the volume of a sphere the size of its event horizon. It is a comparison number, not a claim about what the inside is made of. Every small tick on the ladder is ten times denser than the one below it.',
   controls: [
     {
       id: 'logm',
-      label: 'Mass of the black hole',
+      get label() {
+        return t('bhW.massOfTheBlackHole');
+      },
       min: 0.5,
       max: 9,
       step: 0.05,
@@ -704,15 +788,29 @@ const DENSITY = {
   readout(v, _ctx, spec = {}) {
     const f = blackHoleFacts(10 ** v.logm);
     const rows = [
-      { label: 'Mass', value: massLabel(f.massInSuns) },
-      { label: 'Horizon radius', value: lengthLabel(f.rsM) },
       {
-        label: 'Average density on this scale',
+        get label() {
+          return t('bhW.mass');
+        },
+        value: massLabel(f.massInSuns),
+      },
+      {
+        get label() {
+          return t('bhW.horizonRadius');
+        },
+        value: lengthLabel(f.rsM),
+      },
+      {
+        get label() {
+          return t('bhW.averageDensityOnThisScale');
+        },
         value: densityLabel(f.density),
         emphasis: true,
       },
       {
-        label: 'Compared with water',
+        get label() {
+          return t('bhW.comparedWithWater');
+        },
         value: `${timesLabel(f.density / 1000)} denser`,
       },
     ];
@@ -827,12 +925,16 @@ const DENSITY = {
 
 const BLOCKS = {
   id: 'bh-blocks',
-  title: 'Counting the zeros',
+  get title() {
+    return t('bhW.countingTheZeros');
+  },
   note: 'Start from a 10 M☉ black hole and multiply its mass. Each bar shows how many zeros that quantity gained, or lost. Radius grows in step with mass, so volume grows three times as fast, and density has to fall.',
   controls: [
     {
       id: 'zeros',
-      label: 'Multiply the mass by',
+      get label() {
+        return t('bhW.multiplyTheMassBy');
+      },
       min: 1,
       max: 8,
       step: 1,
@@ -848,19 +950,38 @@ const BLOCKS = {
   readout(v, _ctx, spec = {}) {
     const { base, f, n } = this.compute(v, spec);
     return [
-      { label: 'Starting black hole', value: massLabel(base.massInSuns) },
-      { label: 'After multiplying', value: massLabel(f.massInSuns) },
       {
-        label: 'Volume gained',
+        get label() {
+          return t('bhW.startingBlackHole');
+        },
+        value: massLabel(base.massInSuns),
+      },
+      {
+        get label() {
+          return t('bhW.afterMultiplying');
+        },
+        value: massLabel(f.massInSuns),
+      },
+      {
+        get label() {
+          return t('bhW.volumeGained');
+        },
         value: `${n} + ${n} + ${n} = ${3 * n} zeros`,
         emphasis: true,
       },
       {
-        label: 'So density lost',
+        get label() {
+          return t('bhW.soDensityLost');
+        },
         value: `${3 * n} − ${n} = ${2 * n} zeros`,
         emphasis: true,
       },
-      { label: 'New average density', value: densityLabel(f.density) },
+      {
+        get label() {
+          return t('bhW.newAverageDensity');
+        },
+        value: densityLabel(f.density),
+      },
     ];
   },
   draw(canvas, v, _ctx, spec = {}) {
@@ -876,10 +997,34 @@ const BLOCKS = {
     ctx.fillText(`10 M☉  →  ${massLabel(f.massInSuns)}`, w / 2, 15);
 
     const rows = [
-      { label: 'Mass', zeros: n, up: true },
-      { label: 'Horizon radius', zeros: n, up: true },
-      { label: 'Volume inside it', zeros: 3 * n, up: true },
-      { label: 'Average density', zeros: 2 * n, up: false },
+      {
+        get label() {
+          return t('bhW.mass');
+        },
+        zeros: n,
+        up: true,
+      },
+      {
+        get label() {
+          return t('bhW.horizonRadius');
+        },
+        zeros: n,
+        up: true,
+      },
+      {
+        get label() {
+          return t('bhW.volumeInsideIt');
+        },
+        zeros: 3 * n,
+        up: true,
+      },
+      {
+        get label() {
+          return t('bhW.averageDensity');
+        },
+        zeros: 2 * n,
+        up: false,
+      },
     ];
     const maxZeros = 3 * n;
     const labelRight = 106;
@@ -934,19 +1079,38 @@ const BLOCKS = {
 // =============================================================================
 
 const TEMPERATURE_LADDER = [
-  { label: "The Sun's surface", value: 5772 },
-  { label: 'The microwave background', value: CMB_TEMPERATURE_K },
-  { label: 'The coldest lab experiment', value: 3.8e-11 },
+  {
+    get label() {
+      return t('bhW.theSunSSurface');
+    },
+    value: 5772,
+  },
+  {
+    get label() {
+      return t('bhW.theMicrowaveBackground');
+    },
+    value: CMB_TEMPERATURE_K,
+  },
+  {
+    get label() {
+      return t('bhW.theColdestLabExperiment');
+    },
+    value: 3.8e-11,
+  },
 ];
 
 const THERMO = {
   id: 'bh-thermo',
-  title: 'How cold is it?',
+  get title() {
+    return t('bhW.howColdIsIt');
+  },
   note: 'Quantum physics predicts that a black hole behaves as though it has a temperature. Every small tick on this thermometer is ten times hotter than the one below it, so a short drop on screen is an enormous drop in temperature.',
   controls: [
     {
       id: 'logm',
-      label: 'Mass of the black hole',
+      get label() {
+        return t('bhW.massOfTheBlackHole');
+      },
       min: 0,
       max: 9,
       step: 0.05,
@@ -958,23 +1122,39 @@ const THERMO = {
     { label: '1 M☉', values: { logm: 0 } },
     { label: '10 M☉', values: { logm: 1 } },
     { label: '1,000 M☉', values: { logm: 3 } },
-    { label: 'Sagittarius A*', values: { logm: Math.log10(4.3e6) } },
+    {
+      get label() {
+        return t('bhW.sagittariusA');
+      },
+      values: { logm: Math.log10(4.3e6) },
+    },
   ],
   readout(v) {
     const f = blackHoleFacts(10 ** v.logm);
     return [
-      { label: 'Mass', value: massLabel(f.massInSuns) },
       {
-        label: 'Hawking temperature',
+        get label() {
+          return t('bhW.mass');
+        },
+        value: massLabel(f.massInSuns),
+      },
+      {
+        get label() {
+          return t('bhW.hawkingTemperature');
+        },
         value: `${sci(f.temperature)} K`,
         emphasis: true,
       },
       {
-        label: 'Colder than the microwave background by',
+        get label() {
+          return t('bhW.colderThanTheMicrowaveBackground');
+        },
         value: timesLabel(f.timesColderThanCMB),
       },
       {
-        label: 'The microwave background, for scale',
+        get label() {
+          return t('bhW.theMicrowaveBackgroundForScale');
+        },
         value: '2.725 K',
       },
     ];
@@ -1075,12 +1255,16 @@ const THERMO = {
 
 const LIFETIME = {
   id: 'bh-lifetime',
-  title: 'How long will it last?',
+  get title() {
+    return t('bhW.howLongWillItLast');
+  },
   note: 'Each bar is as long as the number of zeros in the answer. Thirteen point eight billion years has ten zeros; a black hole’s lifetime has dozens. One extra zero means ten times longer.',
   controls: [
     {
       id: 'logm',
-      label: 'Mass of the black hole',
+      get label() {
+        return t('bhW.massOfTheBlackHole');
+      },
       min: 0,
       max: 9,
       step: 0.05,
@@ -1092,23 +1276,39 @@ const LIFETIME = {
     { label: '1 M☉', values: { logm: 0 } },
     { label: '10 M☉', values: { logm: 1 } },
     { label: '1,000 M☉', values: { logm: 3 } },
-    { label: 'Sagittarius A*', values: { logm: Math.log10(4.3e6) } },
+    {
+      get label() {
+        return t('bhW.sagittariusA');
+      },
+      values: { logm: Math.log10(4.3e6) },
+    },
   ],
   readout(v) {
     const f = blackHoleFacts(10 ** v.logm);
     return [
-      { label: 'Mass', value: massLabel(f.massInSuns) },
       {
-        label: 'Evaporation lifetime',
+        get label() {
+          return t('bhW.mass');
+        },
+        value: massLabel(f.massInSuns),
+      },
+      {
+        get label() {
+          return t('bhW.evaporationLifetime');
+        },
         value: yearsLabel(f.lifetimeYears),
         emphasis: true,
       },
       {
-        label: 'Zeros in that number',
+        get label() {
+          return t('bhW.zerosInThatNumber');
+        },
         value: String(Math.round(Math.log10(f.lifetimeYears))),
       },
       {
-        label: 'Ages of the universe',
+        get label() {
+          return t('bhW.agesOfTheUniverse');
+        },
         value: timesLabel(f.lifetimeInUniverseAges),
       },
     ];
@@ -1121,19 +1321,25 @@ const LIFETIME = {
 
     const rows = [
       {
-        label: 'Age of the universe',
+        get label() {
+          return t('bhW.ageOfTheUniverse');
+        },
         years: AGE_OF_UNIVERSE_YEARS,
         color: SKY_MUTED,
         text: '13.8 billion years',
       },
       {
-        label: 'Until the last stars burn out',
+        get label() {
+          return t('bhW.untilTheLastStarsBurn');
+        },
         years: 1e14,
         color: SKY_MUTED,
         text: '100 trillion years',
       },
       {
-        label: 'This black hole evaporates',
+        get label() {
+          return t('bhW.thisBlackHoleEvaporates');
+        },
         years: f.lifetimeYears,
         color: HOT,
         text: yearsLabel(f.lifetimeYears),
@@ -1202,66 +1408,94 @@ const LIFETIME = {
 const LINEUP = [
   {
     tag: 'A',
-    name: 'Black Hole A',
+    get name() {
+      return t('bhW.blackHoleA');
+    },
     real: 'A stellar-mass black hole',
     mass: 8,
     compare: {
       kind: 'bar',
       m: 21600,
-      label: 'Manhattan, end to end',
+      get label() {
+        return t('bhW.manhattanEndToEnd');
+      },
       color: COOL,
     },
-    note: 'about as far as the length of Manhattan',
+    get note() {
+      return t('bhW.aboutAsFarAsThe');
+    },
   },
   {
     tag: 'B',
-    name: 'Black Hole B',
+    get name() {
+      return t('bhW.blackHoleB');
+    },
     real: 'An intermediate-mass black hole',
     mass: 1000,
     compare: {
       kind: 'disc',
       m: EARTH_RADIUS_M,
-      label: 'the Earth',
+      get label() {
+        return t('bhW.theEarth');
+      },
       color: EARTH_BLUE,
     },
-    note: 'a little under half the radius of the Earth',
+    get note() {
+      return t('bhW.aLittleUnderHalfThe');
+    },
   },
   {
     tag: 'C',
-    name: 'Black Hole C',
+    get name() {
+      return t('bhW.blackHoleC');
+    },
     real: 'An intermediate-mass black hole',
     mass: 150000,
     compare: {
       kind: 'disc',
       m: SOLAR_RADIUS_M,
-      label: 'the Sun',
+      get label() {
+        return t('bhW.theSun');
+      },
       color: SUN_YELLOW,
     },
-    note: 'about two thirds of the radius of the Sun',
+    get note() {
+      return t('bhW.aboutTwoThirdsOfThe');
+    },
   },
   {
     tag: 'D',
-    name: 'Black Hole D',
+    get name() {
+      return t('bhW.blackHoleD');
+    },
     real: 'Sagittarius A*, at the center of our galaxy',
     mass: 4.3e6,
     compare: {
       kind: 'ring',
       m: 0.387 * AU_M,
-      label: "Mercury's orbit",
+      get label() {
+        return t('bhW.mercurySOrbit');
+      },
       color: SKY_MUTED,
     },
-    note: 'about a fifth of the way out to Mercury',
+    get note() {
+      return t('bhW.aboutAFifthOfThe');
+    },
   },
 ];
 
 const LINEUP_WIDGET = {
   id: 'bh-lineup',
-  title: 'Four black holes',
+  get title() {
+    return t('bhW.fourBlackHoles');
+  },
   note: 'Each black hole is drawn at its own scale, and the scale bar underneath tells you which. They cannot share one, because the largest is half a million times wider than the smallest.',
   controls: [
     {
       id: 'which',
-      label: 'Showing',
+      get label() {
+        return t('bhW.showing');
+      },
       min: 0,
       max: 3,
       step: 1,

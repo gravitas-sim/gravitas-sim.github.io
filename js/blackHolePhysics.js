@@ -20,6 +20,7 @@
 // =============================================================================
 
 import { G_SI, C_SI, SOLAR_MASS_KG, EARTH_RADIUS_M } from './constants.js';
+import { t } from './i18n/index.js';
 import {
   superscript as formatSuperscript,
   scientific,
@@ -139,38 +140,138 @@ export function blackHoleCategory(massInSuns) {
 
 /** Familiar things a horizon can be measured against, radius in meters. */
 export const BENCHMARKS = {
-  manhattanLength: { label: 'Manhattan, end to end', m: 21600 },
-  earthRadius: { label: "Earth's radius", m: EARTH_RADIUS_M },
-  sunRadius: { label: "the Sun's radius", m: SOLAR_RADIUS_M },
-  mercuryOrbit: { label: "Mercury's orbit", m: 0.387 * AU_M },
+  manhattanLength: {
+    get label() {
+      return t('bhP.manhattanEndToEnd');
+    },
+    m: 21600,
+  },
+  earthRadius: {
+    get label() {
+      return t('bhP.earthSRadius');
+    },
+    m: EARTH_RADIUS_M,
+  },
+  sunRadius: {
+    get label() {
+      return t('bhP.theSunSRadius');
+    },
+    m: SOLAR_RADIUS_M,
+  },
+  mercuryOrbit: {
+    get label() {
+      return t('bhP.mercurySOrbit');
+    },
+    m: 0.387 * AU_M,
+  },
 };
 
 /** Densities to hang a black hole's average density against, kg/m³. */
 export const DENSITY_MARKS = [
-  { label: 'Air at sea level', value: 1.2 },
-  { label: 'Water', value: 1000 },
-  { label: 'The Sun, on average', value: 1408 },
-  { label: 'Rock', value: 3000 },
-  { label: 'Lead', value: 11340 },
-  { label: 'A white dwarf', value: 1e9 },
-  { label: 'An atomic nucleus', value: 2.3e17 },
+  {
+    get label() {
+      return t('bhP.airAtSeaLevel');
+    },
+    value: 1.2,
+  },
+  {
+    get label() {
+      return t('bhP.water');
+    },
+    value: 1000,
+  },
+  {
+    get label() {
+      return t('bhP.theSunOnAverage');
+    },
+    value: 1408,
+  },
+  {
+    get label() {
+      return t('bhP.rock');
+    },
+    value: 3000,
+  },
+  {
+    get label() {
+      return t('bhP.lead');
+    },
+    value: 11340,
+  },
+  {
+    get label() {
+      return t('bhP.aWhiteDwarf');
+    },
+    value: 1e9,
+  },
+  {
+    get label() {
+      return t('bhP.anAtomicNucleus');
+    },
+    value: 2.3e17,
+  },
 ];
 
 /** Temperatures to hang a Hawking temperature against, K. */
 export const TEMPERATURE_MARKS = [
-  { label: 'The surface of the Sun', value: 5772 },
-  { label: 'Room temperature', value: 293 },
-  { label: 'Liquid nitrogen', value: 77 },
-  { label: 'The microwave background', value: CMB_TEMPERATURE_K },
-  { label: 'The coldest lab experiment', value: 3.8e-11 },
+  {
+    get label() {
+      return t('bhP.theSurfaceOfTheSun');
+    },
+    value: 5772,
+  },
+  {
+    get label() {
+      return t('bhP.roomTemperature');
+    },
+    value: 293,
+  },
+  {
+    get label() {
+      return t('bhP.liquidNitrogen');
+    },
+    value: 77,
+  },
+  {
+    get label() {
+      return t('bhP.theMicrowaveBackground');
+    },
+    value: CMB_TEMPERATURE_K,
+  },
+  {
+    get label() {
+      return t('bhP.theColdestLabExperiment');
+    },
+    value: 3.8e-11,
+  },
 ];
 
 /** Timespans to hang an evaporation lifetime against, years. */
 export const TIME_MARKS = [
-  { label: 'A human lifetime', value: 80 },
-  { label: 'Since the dinosaurs', value: 6.6e7 },
-  { label: 'Age of the universe', value: AGE_OF_UNIVERSE_YEARS },
-  { label: 'The last star burns out', value: 1e14 },
+  {
+    get label() {
+      return t('bhP.aHumanLifetime');
+    },
+    value: 80,
+  },
+  {
+    get label() {
+      return t('bhP.sinceTheDinosaurs');
+    },
+    value: 6.6e7,
+  },
+  {
+    get label() {
+      return t('bhP.ageOfTheUniverse');
+    },
+    value: AGE_OF_UNIVERSE_YEARS,
+  },
+  {
+    get label() {
+      return t('bhP.theLastStarBurnsOut');
+    },
+    value: 1e14,
+  },
 ];
 
 // --- Formatting for people who are not comfortable with 10^67 ----------------

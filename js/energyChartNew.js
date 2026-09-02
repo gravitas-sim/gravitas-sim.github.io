@@ -1,5 +1,6 @@
 import { tickLabel, withUnit } from './format.js';
 import { debugLog } from './utils.js';
+import { t } from './i18n/index.js';
 
 // ===== ENERGY CHART MODULE =====
 // Chart.js-based energy visualization system
@@ -15,7 +16,9 @@ const chartConfig = {
     labels: [],
     datasets: [
       {
-        label: 'Kinetic Energy',
+        get label() {
+          return t('energyChart.kineticEnergy');
+        },
         data: [],
         borderColor: '#00ff88',
         backgroundColor: 'rgba(0, 255, 136, 0.1)',
@@ -26,7 +29,9 @@ const chartConfig = {
         pointHoverRadius: 4,
       },
       {
-        label: 'Potential Energy',
+        get label() {
+          return t('energyChart.potentialEnergy');
+        },
         data: [],
         borderColor: '#ff8800',
         backgroundColor: 'rgba(255, 136, 0, 0.1)',
@@ -37,7 +42,9 @@ const chartConfig = {
         pointHoverRadius: 4,
       },
       {
-        label: 'Total Energy',
+        get label() {
+          return t('energyChart.totalEnergy');
+        },
         data: [],
         borderColor: '#0088ff',
         backgroundColor: 'rgba(0, 136, 255, 0.1)',

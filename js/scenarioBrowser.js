@@ -16,7 +16,14 @@
 // =============================================================================
 
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
-import { SCENARIO_TAGS, TAG_ORDER, tagLabel } from './data/scenarioTags.js';
+import { SCENARIO_TAGS, TAG_ORDER } from './data/scenarioTags.js';
+import {
+  scenarioTitle,
+  scenarioSummary,
+  tagLabelLocalized as tagLabel,
+  tagDescription,
+} from './i18n/scenario.js';
+import { t, onLocaleChange } from './i18n/index.js';
 
 const ALL = 'all';
 
@@ -42,10 +49,14 @@ export function catalogEntries() {
     .filter(([, info]) => info && typeof info === 'object')
     .map(([key, info]) => {
       const tags = Array.isArray(info.tags) ? info.tags : [];
+      // The search index is built from the *displayed* strings, so a Spanish
+      // reader searching Spanish words finds the card they can see. The key and
+      // the tag ids stay in it as well, which keeps "kepler" and "tides"
+      // working in any language.
       const haystack = [
         key,
-        info.title || '',
-        info.summary || '',
+        scenarioTitle(key),
+        scenarioSummary(key),
         ...tags,
         ...tags.map(tagLabel),
       ]
@@ -105,10 +116,20 @@ export function tagCounts() {
  * @returns {string} A sentence
  */
 export function resultSummary(shown, tag, search) {
-  const plural = shown === 1 ? 'scenario' : 'scenarios';
-  const where = tag && tag !== ALL ? ` in ${tagLabel(tag)}` : '';
-  if (search) return `${shown} ${plural}${where} matching “${search}”`;
-  return `${shown} ${plural}${where}`;
+  const concept = tag && tag !== ALL ? tagLabel(tag) : '';
+  // Four messages rather than one assembled from fragments. A sentence built by
+  // concatenating " in " and " matching " cannot be reordered by a translator,
+  // and Spanish wants the concept and the query in the other order from
+  // English in at least one of these forms.
+  if (search && concept)
+    return t('gallery.results.searchInConcept', {
+      n: shown,
+      concept,
+      query: search,
+    });
+  if (search) return t('gallery.results.search', { n: shown, query: search });
+  if (concept) return t('gallery.results.concept', { n: shown, concept });
+  return t('gallery.results.all', { n: shown });
 }
 
 // --- Markup ------------------------------------------------------------------
@@ -174,17 +195,17 @@ export function wireThumbnailFallbacks(root) {
 
 function cardHtml(entry) {
   const { key, info, tags } = entry;
-  const title = info.title || key;
+  const title = scenarioTitle(key) || key;
   // The whole card is the control, so the accessible name has to carry
   // everything a sighted user gets from scanning it.
   const label = `${title}. ${tags.map(tagLabel).join(', ')}.`;
   return `
     <button type="button" class="sc-card" data-scenario="${escape(key)}"
-            aria-label="${escape(label)}" title="${escape(info.summary || title)}">
+            aria-label="${escape(label)}" title="${escape(scenarioSummary(key) || title)}">
       ${scenarioShotHtml(info, title)}
       <span class="sc-card-body">
         <span class="sc-card-title">${escape(title)}</span>
-        <span class="sc-card-summary">${escape(info.summary || '')}</span>
+        <span class="sc-card-summary">${escape(scenarioSummary(key) || '')}</span>
         ${cardTags(tags)}
       </span>
     </button>`;
@@ -198,8 +219,8 @@ function chipsHtml() {
       ${escape(label)}<span class="sc-chip-count">${counts[id] ?? 0}</span>
     </button>`;
   return (
-    chip(ALL, 'All') +
-    TAG_ORDER.map(id => chip(id, SCENARIO_TAGS[id].label)).join('')
+    chip(ALL, t('gallery.chip.all')) +
+    TAG_ORDER.map(id => chip(id, tagLabel(id))).join('')
   );
 }
 
@@ -216,9 +237,9 @@ function renderResults() {
 
   // One line of context for the concept, so the chips read as a curriculum
   // index rather than as filters.
-  const concept = activeTag !== ALL ? SCENARIO_TAGS[activeTag] : null;
+  const concept = activeTag !== ALL ? activeTag : null;
   els.concept.hidden = !concept;
-  if (concept) els.concept.textContent = concept.description;
+  if (concept) els.concept.textContent = tagDescription(concept);
 
   wireThumbnailFallbacks(els.grid);
 }
@@ -307,8 +328,23 @@ export function initScenarioBrowser({ onScenarioSelected } = {}) {
 
   // Never a hardcoded number: the catalog is the only place that knows.
   if (els.subtitle) {
-    els.subtitle.textContent = `${Object.keys(SCENARIO_INFO).length} systems to explore. Search by name or concept, or browse the curriculum topics below.`;
+    els.subtitle.textContent = t('gallery.subtitle', {
+      n: Object.keys(SCENARIO_INFO).length,
+    });
   }
+
+  // The gallery holds rendered text, so it has to be repainted when the
+  // language changes rather than only when the filter does.
+  onLocaleChange(() => {
+    if (!els.grid) return;
+    if (els.subtitle) {
+      els.subtitle.textContent = t('gallery.subtitle', {
+        n: Object.keys(SCENARIO_INFO).length,
+      });
+    }
+    renderChips();
+    renderResults();
+  });
 
   els.chips?.addEventListener('click', e => {
     const chip = e.target.closest('[data-tag]');

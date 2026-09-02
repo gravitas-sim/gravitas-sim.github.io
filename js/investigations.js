@@ -22,12 +22,19 @@
 // =============================================================================
 
 import { tickLabel } from './format.js';
+import { t, onLocaleChange } from './i18n/index.js';
+import { lessonText } from './i18n/lesson.js';
+// The registry, not the barrel. ../data/investigations.js pulls all ten lessons
+// in statically, which is right for a build script and wrong here: the browser
+// draws ten cards from the manifest, and opening one lesson fetches that one.
 import {
-  INVESTIGATIONS,
-  getInvestigation,
+  MANIFEST,
+  investigationMeta,
+  hasInvestigation,
+  loadInvestigation,
   gradedSteps,
   seriesPosition,
-} from './data/investigations.js';
+} from './data/investigations/registry.js';
 // The thumbnail block and its fallback wiring are shared with the scenario
 // gallery and the front door's featured cards, so a borrowed capture lazy-loads
 // and degrades identically wherever it appears.
@@ -178,8 +185,9 @@ function setStudentName(name) {
  * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
 export function progressFor(id) {
-  const inv = getInvestigation(id);
-  const total = inv?.steps.length || 0;
+  // From the manifest: the browser asks this for all ten lessons before any of
+  // them is loaded, and a step count is a number the manifest already carries.
+  const total = investigationMeta(id)?.stepCount || 0;
   const saved = load(id);
   return {
     done: saved ? saved.visited.size : 0,
@@ -329,7 +337,7 @@ function applySetup(setup) {
     applyLocks();
   } catch (err) {
     console.warn('Could not set up investigation step:', err);
-    toast('Could not load this step’s scenario.');
+    toast(t('inv.error.scenario'));
   }
 }
 
@@ -820,11 +828,7 @@ function drawPlot(step, id) {
     ctx.fillStyle = muted;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(
-      'Values you enter appear here',
-      padL + plotW / 2,
-      padT + plotH / 2
-    );
+    ctx.fillText(t('inv.plot.placeholder'), padL + plotW / 2, padT + plotH / 2);
   }
 }
 
@@ -861,8 +865,10 @@ function renderStep() {
   const saved = responses[id];
 
   const parts = [
-    `<p class="inv-step-count">Step ${stepIndex + 1} of ${active.steps.length}
-       <span class="inv-step-kind">${escape(step.type)}</span></p>`,
+    `<p class="inv-step-count">${escape(
+      t('inv.step.counter', { n: stepIndex + 1, total: active.steps.length })
+    )}
+       <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
     `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
     `<div class="inv-step-body"><p>${prose(step.body)}</p></div>`,
   ];
@@ -987,7 +993,7 @@ function renderStep() {
              Write your own answer first.
            </span>
            <div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}>
-             <strong>One good answer:</strong> ${prose(step.because)}
+             <strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}
            </div>
          </div>`
       );
@@ -1001,18 +1007,18 @@ function renderStep() {
     parts.push(
       `<div class="inv-numeric">
          <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${id}"
-                value="${escape(saved ?? '')}" placeholder="Your value" />
+                value="${escape(saved ?? '')}" placeholder="${attr(t('inv.answer.placeholder'))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
-         <button type="button" class="ui-button" data-check-numeric="${id}">Check</button>
+         <button type="button" class="ui-button" data-check-numeric="${id}">${escape(t('inv.answer.check'))}</button>
        </div>`
     );
     if (right === true) {
       parts.push(
-        `<p class="inv-feedback is-right">That matches. ${prose(step.because || '')}</p>`
+        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))} ${prose(step.because || '')}</p>`
       );
     } else if (right === false) {
       parts.push(
-        `<p class="inv-feedback is-wrong">Not yet. Check your working and try again.
+        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}
          ${attempts[id] >= 3 ? `<br /><em>${prose(step.because || '')}</em>` : ''}</p>`
       );
     }
@@ -1024,7 +1030,7 @@ function renderStep() {
       parts.push(
         `<div class="inv-import-row">
            <button type="button" class="inv-import-btn" data-import>
-             ${escape(step.importLabel || 'Use selected object')}
+             ${escape(step.importLabel || t('inv.import.default'))}
            </button>
            <span class="inv-import-hint" data-import-hint></span>
          </div>`
@@ -1091,7 +1097,7 @@ function syncPlotPanel(step) {
   els.plotPanel.hidden = !spec;
   plotCanvas = spec ? els.plotCanvas : null;
   if (!spec) return;
-  els.plotTitle.textContent = spec.title || 'Your measurements';
+  els.plotTitle.textContent = spec.title || t('inv.plot.title');
   els.plotNote.innerHTML = spec.note ? prose(spec.note) : '';
   els.plotNote.hidden = !spec.note;
   if (els.plotToggle) {
@@ -1418,7 +1424,7 @@ function refreshMeasurements() {
   if (slot) {
     const result = validateStep(step, id);
     slot.className = `inv-check${result ? ` is-${result.level}` : ''}`;
-    slot.innerHTML = result ? prose(result.message) : '';
+    slot.innerHTML = result ? prose(lessonText(result.message)) : '';
     slot.hidden = !result;
   }
 
@@ -1429,10 +1435,15 @@ function renderFooter() {
   const step = currentStep();
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
-    stepIndex === active.steps.length - 1 ? 'Finish' : 'Next';
+    stepIndex === active.steps.length - 1
+      ? t('inv.action.finish')
+      : t('inv.action.next');
   const pct = Math.round((visited.size / active.steps.length) * 100);
   els.progressBar.style.width = `${pct}%`;
-  els.progressText.textContent = `${visited.size} of ${active.steps.length} steps`;
+  els.progressText.textContent = t('inv.progress.steps', {
+    done: visited.size,
+    total: active.steps.length,
+  });
   els.probeWrap.hidden = !step?.probe;
 }
 
@@ -1461,13 +1472,13 @@ function renderProbe() {
     rows = step.probe(probeContext());
   } catch (err) {
     console.warn('Probe failed:', err);
-    rows = [{ label: 'Readout unavailable', value: '-' }];
+    rows = [{ label: t('inv.probe.unavailable'), value: '-' }];
   }
   const html = rows
     .map(
       r =>
         `<div class="inv-probe-row${r.emphasis ? ' is-emphasis' : ''}">
-           <span>${escape(r.label)}</span><span>${escape(r.value)}</span></div>`
+           <span>${escape(lessonText(r.label))}</span><span>${escape(lessonText(r.value))}</span></div>`
     )
     .join('');
   // Only touch the DOM when something changed: this runs several times a second
@@ -1492,7 +1503,9 @@ function bindStepInputs() {
       const step = currentStep();
       const right = checkAnswer(step, choice);
       announce(
-        right ? 'Correct.' : `Recorded. ${step.because ? step.because : ''}`
+        right
+          ? t('inv.answer.correct')
+          : `${t('inv.answer.recorded')} ${step.because ? step.because : ''}`
       );
     });
   });
@@ -1521,7 +1534,7 @@ function bindStepInputs() {
       const body = els.body.querySelector('[data-reveal-body]');
       if (body) {
         body.hidden = false;
-        announce('Model answer shown.');
+        announce(t('inv.answer.model'));
       }
     });
   });
@@ -1602,8 +1615,7 @@ function importSelection() {
   }
   const hint = els.body.querySelector('[data-import-hint]');
   if (!values) {
-    if (hint)
-      hint.textContent = 'Select an object with a measurable orbit first.';
+    if (hint) hint.textContent = t('inv.import.needObject');
     return;
   }
 
@@ -1620,7 +1632,7 @@ function importSelection() {
     )
   );
   if (already) {
-    if (hint) hint.textContent = 'You have already recorded that one.';
+    if (hint) hint.textContent = t('inv.import.duplicate');
     return;
   }
 
@@ -1629,8 +1641,7 @@ function importSelection() {
     g.every(fid => String(responses[`${id}:${fid}`] ?? '').trim() === '')
   );
   if (!target) {
-    if (hint)
-      hint.textContent = 'All rows are filled. Clear one to import again.';
+    if (hint) hint.textContent = t('inv.import.full');
     return;
   }
 
@@ -1715,13 +1726,24 @@ function next() {
 
 // --- Opening and closing ------------------------------------------------------
 
+// Bumped by every open and every close. A lesson now arrives over the network,
+// and a student who changes their mind while it is on the way - closes the
+// browser, or picks a different card - must not have the abandoned one open on
+// top of them when it lands.
+let openGeneration = 0;
+
 /**
  * Start or resume an investigation.
  * @param {string} id - Investigation id
+ * @returns {Promise<void>} Resolves once the lesson is open, or abandoned
  */
-export function openInvestigation(id) {
-  const inv = getInvestigation(id);
-  if (!inv) return;
+export async function openInvestigation(id) {
+  const generation = ++openGeneration;
+  // The one await in the panel's life. Everything below it runs against a
+  // lesson that is fully in hand, so no other code path had to learn that a
+  // lesson might not be there yet.
+  const inv = await loadInvestigation(id);
+  if (!inv || generation !== openGeneration) return;
   active = inv;
   const saved = load(id);
   responses = saved?.responses || {};
@@ -1750,11 +1772,13 @@ export function openInvestigation(id) {
   // before, not to the step they are resuming at.
   goToStep(stepIndex, { rebuild: true });
   startProbeLoop();
-  announce(`Investigation started: ${inv.title}`);
+  announce(t('inv.announce.started', { title: inv.title }));
 }
 
 /** Close the investigation panel, keeping progress. */
 export function closeInvestigation() {
+  // Cancels a lesson still on its way, as well as closing one already here.
+  openGeneration++;
   if (!els.panel) return;
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
@@ -1821,8 +1845,8 @@ function durationRange(text) {
  * @param {Array<Object>} list - The catalog
  * @returns {string} A sentence
  */
-export function browserSummary(list = INVESTIGATIONS) {
-  const steps = list.reduce((n, inv) => n + inv.steps.length, 0);
+export function browserSummary(list = MANIFEST) {
+  const steps = list.reduce((n, inv) => n + inv.stepCount, 0);
   const [low, high] = list.reduce(
     ([a, b], inv) => {
       const [l, h] = durationRange(inv.duration);
@@ -1833,21 +1857,23 @@ export function browserSummary(list = INVESTIGATIONS) {
   const hours = (lo, hi) => {
     const l = Math.round(lo / 60);
     const h = Math.round(hi / 60);
-    return l === h ? `about ${h} hours` : `${l}–${h} hours`;
+    return l === h
+      ? t('inv.summary.about', { h })
+      : t('inv.summary.range', { l, h });
   };
 
   const parts = [
-    `${list.length} lesson${list.length === 1 ? '' : 's'}`,
-    `${steps} steps`,
-    `${hours(low, high)} of work`,
+    t('inv.summary.lessons', { n: list.length }),
+    t('inv.summary.steps', { n: steps }),
+    t('inv.summary.work', { hours: hours(low, high) }),
   ];
 
   // Progress, only once there is some: eight "not started" markers say nothing.
   const progress = list.map(inv => progressFor(inv.id));
   const done = progress.filter(p => p.started && p.done >= p.total).length;
   const going = progress.filter(p => p.started && p.done < p.total).length;
-  if (done) parts.push(`${done} complete`);
-  if (going) parts.push(`${going} in progress`);
+  if (done) parts.push(t('inv.summary.complete', { n: done }));
+  if (going) parts.push(t('inv.summary.going', { n: going }));
 
   return parts.join(' · ');
 }
@@ -1867,7 +1893,7 @@ const cardLevel = (inv, shared) =>
   inv.level === shared ? '' : inv.level || '';
 
 /** The one level the whole catalog shares, or null if they differ. */
-function sharedLevel(list = INVESTIGATIONS) {
+function sharedLevel(list = MANIFEST) {
   const levels = new Set(list.map(inv => inv.level).filter(Boolean));
   return levels.size === 1 ? [...levels][0] : null;
 }
@@ -1882,15 +1908,15 @@ function browserCardHtml(inv, index, shared) {
   // What the card's one control promises. A student who left off at step 12 of
   // 35 wants to be told that, not "Start".
   const cta = complete
-    ? 'Review lesson'
+    ? t('inv.card.review')
     : p.started
-      ? `Resume at step ${p.at}`
-      : 'Start lesson';
+      ? t('inv.card.resume', { n: p.at })
+      : t('inv.card.start');
 
   const status = complete
-    ? 'Complete'
+    ? t('inv.card.complete')
     : p.started
-      ? `${p.done} of ${p.total} steps seen`
+      ? t('inv.card.seen', { done: p.done, total: p.total })
       : '';
 
   // The whole card is the control, so its accessible name has to carry
@@ -1898,8 +1924,14 @@ function browserCardHtml(inv, index, shared) {
   const label = [
     inv.title,
     inv.subtitle,
-    series ? `${series.label}, lesson ${series.index} of ${series.of}` : '',
-    `${inv.steps.length} steps`,
+    series
+      ? t('inv.card.series', {
+          label: series.label,
+          index: series.index,
+          of: series.of,
+        })
+      : '',
+    t('inv.summary.steps', { n: inv.stepCount }),
     inv.duration,
     status,
     cta,
@@ -1929,9 +1961,9 @@ function browserCardHtml(inv, index, shared) {
         <span class="inv-card-sub">${escape(inv.subtitle)}</span>
         <span class="inv-card-summary">${escape(inv.summary)}</span>
         <span class="inv-card-meta">
-          <span>${inv.steps.length} steps</span>
-          <span>${inv.objectives?.length || 0} objectives</span>
-          <span>Lab report</span>
+          <span>${escape(t('inv.summary.steps', { n: inv.stepCount }))}</span>
+          <span>${escape(t('inv.card.objectives', { n: inv.objectiveCount }))}</span>
+          <span>${escape(t('inv.card.report'))}</span>
         </span>
         <span class="inv-card-foot">
           ${
@@ -1959,19 +1991,35 @@ function renderBrowser() {
   // repeated eight times.
   if (els.level) {
     els.level.hidden = !shared;
-    if (shared) els.level.textContent = `All at ${shared.toLowerCase()} level.`;
+    if (shared)
+      els.level.textContent = t('inv.summary.level', {
+        level: shared.toLowerCase(),
+      });
   }
 
-  els.list.innerHTML = INVESTIGATIONS.map((inv, i) =>
+  els.list.innerHTML = MANIFEST.map((inv, i) =>
     browserCardHtml(inv, i, shared)
   ).join('');
 
   wireThumbnailFallbacks(els.list);
 
   els.list.querySelectorAll('[data-investigation]').forEach(btn => {
-    btn.addEventListener('click', () =>
+    btn.addEventListener('click', () => {
+      // Opening is a fetch now, so the card says so. On a warm cache this class
+      // is added and removed within a frame and nobody sees it; on a phone on
+      // campus wifi it is the difference between a considered wait and a card
+      // that looks broken.
+      btn.setAttribute('aria-busy', 'true');
+      const cta = btn.querySelector('.inv-card-cta');
+      const wasCta = cta?.textContent;
+      if (cta) cta.textContent = t('inv.card.loading');
       openInvestigation(btn.dataset.investigation)
-    );
+        .catch(() => toast(t('inv.load.failed')))
+        .finally(() => {
+          btn.removeAttribute('aria-busy');
+          if (cta && wasCta) cta.textContent = wasCta;
+        });
+    });
   });
 }
 
@@ -2058,7 +2106,7 @@ async function generateReport() {
   setStudentName(name);
 
   els.downloadBtn.disabled = true;
-  els.downloadBtn.textContent = 'Building…';
+  els.downloadBtn.textContent = t('inv.report.building');
   try {
     // The setup states are turned into real links here rather than at authoring
     // time, so a report always points at the encoding this build produces.
@@ -2104,14 +2152,14 @@ async function generateReport() {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '')}-${active.id}`;
     downloadPdf(bytes, `${slug}.pdf`);
-    toast('Lab report downloaded');
-    announce('Lab report downloaded.');
+    toast(t('inv.report.done'));
+    announce(t('inv.report.done'));
   } catch (err) {
     console.error('Report generation failed:', err);
-    toast('Could not build the report.');
+    toast(t('inv.report.failed'));
   } finally {
     els.downloadBtn.disabled = false;
-    els.downloadBtn.textContent = 'Download lab report (PDF)';
+    els.downloadBtn.textContent = t('inv.report.download');
   }
 }
 
@@ -2128,7 +2176,7 @@ function resetProgress() {
   }
   closeFinish();
   goToStep(0);
-  toast('Progress cleared');
+  toast(t('inv.progress.cleared'));
 }
 
 // --- Wiring -------------------------------------------------------------------
@@ -2176,13 +2224,26 @@ function investigationFromHash() {
 function openInvestigationFromHash() {
   const id = investigationFromHash();
   if (!id) return;
-  if (!getInvestigation(id)) {
-    toast('That investigation link does not match a lesson.');
+  if (!hasInvestigation(id)) {
+    toast(t('inv.link.unknown'));
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id);
+  openInvestigation(id).catch(() => toast(t('inv.load.failed')));
 }
+
+// A language change swaps the manifest the cards are drawn from, and rewrites
+// every word of the panel's own chrome. Both are repainted rather than left to
+// the next open: the browser may be on screen at the time.
+onLocaleChange(() => {
+  if (els?.browser && !els.browser.classList.contains('hidden'))
+    renderBrowser();
+  if (active && els?.panel && !els.panel.hidden) {
+    els.title.textContent = active.title;
+    els.subtitle.textContent = active.subtitle;
+    renderStep();
+  }
+});
 
 export function initInvestigations() {
   els = {
@@ -2276,7 +2337,7 @@ export function initInvestigations() {
     // leave the view. Putting the step's system back is a far more common need
     // than restarting the lesson, so it gets its own control.
     applySetup(setupInForceAt(stepIndex));
-    toast('Scenario reset');
+    toast(t('inv.scenario.reset'));
   });
 
   els.finishClose?.addEventListener('click', closeFinish);

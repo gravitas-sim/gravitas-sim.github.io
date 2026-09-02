@@ -46,6 +46,14 @@ async function buildCss() {
     'css/tokens.css',
     'css/styles.css',
     'css/components.css',
+    // Presentation shells last of the component-layer files: embed and lecture
+    // layer over the normal chrome and have to win on source order within the
+    // layer rather than on !important.
+    'css/presentation.css',
+    // The chrome rework - readout, control rail, bottom dock - is last of the
+    // component-layer files so it can restate what the older sheets set for
+    // the same elements without reaching for !important.
+    'css/chrome.css',
     'css/page.css',
   ]) {
     parts.push(`/* ${f} */`, await readFile(f, 'utf8'));
@@ -155,11 +163,31 @@ function summarizeBundle(metafile) {
 async function buildHtml() {
   let html = await readFile('index.html', 'utf8');
 
-  // Collapse the three stylesheet links into the single built file
-  html = html.replace(
-    /\s*<link rel="stylesheet" href="css\/tokens\.css[^"]*" \/>\s*<link rel="stylesheet" href="css\/styles\.css[^"]*" \/>\s*<link rel="stylesheet" href="css\/components\.css[^"]*" \/>/,
-    '\n    <link rel="stylesheet" href="css/app.css" />'
-  );
+  // Collapse the development stylesheet links into the single built file.
+  //
+  // Matched one at a time rather than as one long sequence: the previous form
+  // required the exact set in the exact order, so adding a fourth stylesheet
+  // left its link in the built page pointing at a file the build does not
+  // emit - a 404 on every production page load. This form cannot go stale.
+  const DEV_STYLESHEETS = [
+    'tokens.css',
+    'styles.css',
+    'components.css',
+    'presentation.css',
+    'chrome.css',
+  ];
+  let replacedFirst = false;
+  for (const name of DEV_STYLESHEETS) {
+    const link = new RegExp(
+      `\\s*<link rel="stylesheet" href="css/${name.replace('.', '\\.')}[^"]*" />`
+    );
+    if (!link.test(html)) continue;
+    html = html.replace(
+      link,
+      replacedFirst ? '' : '\n    <link rel="stylesheet" href="css/app.css" />'
+    );
+    replacedFirst = true;
+  }
 
   // Only main.js is needed once bundled; the other module tags were loading
   // the same graph a second time.

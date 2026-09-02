@@ -66,6 +66,8 @@ test.describe('the scenario gallery', () => {
   }) => {
     await app.boot();
 
+    await app.railControl('loadScenarioBtn');
+
     await page.locator('#loadScenarioBtn').click();
     const modal = page.locator('#scenarioListModal');
     await expect(modal).toBeVisible();
@@ -107,6 +109,7 @@ test.describe('the scenario gallery', () => {
     app,
   }) => {
     await app.boot();
+    await app.railControl('loadScenarioBtn');
     await page.locator('#loadScenarioBtn').click();
     await page.locator('#scenarioSearch').fill('zzzznotathing');
     await expect(page.locator('#scenarioSearchEmpty')).toBeVisible();
@@ -155,10 +158,12 @@ test.describe('the transport controls', () => {
       });
 
     const before = await speedOf();
+    await app.railControl('speedUpBtn');
     await page.locator('#speedUpBtn').click();
     await expect.poll(speedOf, { timeout: 10_000 }).toBeGreaterThan(before);
 
     const faster = await speedOf();
+    await app.railControl('slowDownBtn');
     await page.locator('#slowDownBtn').click();
     await expect.poll(speedOf, { timeout: 10_000 }).toBeLessThan(faster);
 
@@ -178,6 +183,7 @@ test.describe('the transport controls', () => {
 
     // Refresh Scenario rebuilds from the same preset, which is the reset a user
     // reaches for when they have dragged things around.
+    await app.railControl('refreshScenarioBtn');
     await page.locator('#refreshScenarioBtn').click();
     await app.waitForBodies(5);
     await app.waitForFrames(10);

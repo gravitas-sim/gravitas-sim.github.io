@@ -68,6 +68,7 @@ test.describe('the application loads everything it asks for', () => {
     // browser can actually decode it, which a truncated or mislabelled .webp
     // fails while still being a file of the right name and a plausible size.
     await app.boot();
+    await app.railControl('loadScenarioBtn');
     await page.locator('#loadScenarioBtn').click();
     await expect(page.locator('#scenarioListModal')).toBeVisible();
 

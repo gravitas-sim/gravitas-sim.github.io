@@ -23,6 +23,7 @@
 // =============================================================================
 
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
+import { t } from './i18n/index.js';
 import {
   tidalProfile,
   tidalAcceleration,
@@ -180,13 +181,19 @@ const BODY_RADIUS_M = EARTH_RADIUS_M;
 
 const VECTORS = {
   id: 'tide-vectors',
-  title: 'The pull on three points',
+  get title() {
+    return t('tideW.thePullOnThreePoints');
+  },
   note: 'Distances are in units of the Moon’s real distance from the Earth, and masses in units of the Moon’s real mass. Setting both to 1.00 gives the real Earth-Moon system.',
   controls: [
     {
       id: 'dist',
-      label: 'Distance to the companion',
-      unit: '× Moon’s distance',
+      get label() {
+        return t('tideW.distanceToTheCompanion');
+      },
+      get unit() {
+        return t('tideW.moonSDistance');
+      },
       min: 0.2,
       max: 2,
       step: 0.05,
@@ -195,8 +202,12 @@ const VECTORS = {
     },
     {
       id: 'mass',
-      label: 'Mass of the companion',
-      unit: '× Moon’s mass',
+      get label() {
+        return t('tideW.massOfTheCompanion');
+      },
+      get unit() {
+        return t('tideW.moonSMass');
+      },
       min: 0.25,
       max: 4,
       step: 0.25,
@@ -221,24 +232,45 @@ const VECTORS = {
   readout(v, _ctx, spec = {}) {
     const f = VECTORS.compute(v);
     const rows = [
-      { label: 'Pull on the near side', value: accelerationLabel(f.near) },
-      { label: 'Pull on the centre', value: accelerationLabel(f.centre) },
-      { label: 'Pull on the far side', value: accelerationLabel(f.far) },
+      {
+        get label() {
+          return t('tideW.pullOnTheNearSide');
+        },
+        value: accelerationLabel(f.near),
+      },
+      {
+        get label() {
+          return t('tideW.pullOnTheCentre');
+        },
+        value: accelerationLabel(f.centre),
+      },
+      {
+        get label() {
+          return t('tideW.pullOnTheFarSide');
+        },
+        value: accelerationLabel(f.far),
+      },
     ];
     if (spec.residual) {
       rows.push({
-        label: 'Near side, minus the centre',
+        get label() {
+          return t('tideW.nearSideMinusTheCentre');
+        },
         value: `${accelerationLabel(f.nearResidual)} toward`,
         emphasis: true,
       });
       rows.push({
-        label: 'Far side, minus the centre',
+        get label() {
+          return t('tideW.farSideMinusTheCentre');
+        },
         value: `${accelerationLabel(Math.abs(f.farResidual))} away`,
         emphasis: true,
       });
     } else {
       rows.push({
-        label: 'Near side bigger than far side by',
+        get label() {
+          return t('tideW.nearSideBiggerThanFar');
+        },
         value: `${(100 * (f.near / f.far - 1)).toFixed(1)}%`,
         emphasis: true,
       });
@@ -288,7 +320,9 @@ const VECTORS = {
       // true proportion to it, which is the honest picture: at the Moon's real
       // distance the three are within a few percent and look identical.
       scale: Math.min(96, w - cx - r - 60) / f.centre,
-      label: 'toward the companion',
+      get label() {
+        return t('tideW.towardTheCompanion');
+      },
     });
 
     if (!showResidual) {
@@ -343,7 +377,9 @@ const VECTORS = {
       scale: residScale,
       mode: 'bulge',
       labelX: Math.max(38, cx - r - 10 - Math.abs(f.farResidual) * residScale),
-      label: 'what is left over',
+      get label() {
+        return t('tideW.whatIsLeftOver');
+      },
     });
 
     const factor =
@@ -455,13 +491,19 @@ const MOON_TIDE = tidalAcceleration(
 
 const STRENGTH = {
   id: 'tide-strength',
-  title: 'Tidal strength',
+  get title() {
+    return t('tideW.tidalStrength');
+  },
   note: 'The curve is drawn for you; the dot is where your slider is. Everything is measured against the tide the real Moon raises on the real Earth, which is 1.00.',
   controls: [
     {
       id: 'dist',
-      label: 'Distance to the companion',
-      unit: '× Moon’s distance',
+      get label() {
+        return t('tideW.distanceToTheCompanion');
+      },
+      get unit() {
+        return t('tideW.moonSDistance');
+      },
       min: 0.2,
       max: 2,
       step: 0.05,
@@ -470,8 +512,12 @@ const STRENGTH = {
     },
     {
       id: 'mass',
-      label: 'Mass of the companion',
-      unit: '× Moon’s mass',
+      get label() {
+        return t('tideW.massOfTheCompanion');
+      },
+      get unit() {
+        return t('tideW.moonSMass');
+      },
       min: 0.25,
       max: 4,
       step: 0.25,
@@ -497,19 +543,33 @@ const STRENGTH = {
     const rows = [];
     if (spec.axis !== 'mass') {
       rows.push({
-        label: 'Distance',
+        get label() {
+          return t('tideW.distance');
+        },
         value: `${v.dist.toFixed(2)} × the Moon’s`,
       });
     }
     if (spec.axis !== 'distance') {
-      rows.push({ label: 'Mass', value: `${v.mass.toFixed(2)} × the Moon’s` });
+      rows.push({
+        get label() {
+          return t('tideW.mass');
+        },
+        value: `${v.mass.toFixed(2)} × the Moon’s`,
+      });
     }
     rows.push({
-      label: 'Tidal stretch',
+      get label() {
+        return t('tideW.tidalStretch');
+      },
       value: `${f.relative.toFixed(2)} × the real lunar tide`,
       emphasis: true,
     });
-    rows.push({ label: 'In full units', value: accelerationLabel(f.tide) });
+    rows.push({
+      get label() {
+        return t('tideW.inFullUnits');
+      },
+      value: accelerationLabel(f.tide),
+    });
     return rows;
   },
   draw(canvas, v, _ctx, spec = {}) {
@@ -646,12 +706,16 @@ const LINEUP = tidalLineup();
 
 const COMPARE = {
   id: 'tide-compare',
-  title: 'Seven real tides, on one scale',
+  get title() {
+    return t('tideW.sevenRealTidesOnOne');
+  },
   note: 'Each bar is one order of magnitude longer than the last for every factor of ten, because these numbers cannot fit on an ordinary ruler. Move the slider to read one off.',
   controls: [
     {
       id: 'which',
-      label: 'Highlight',
+      get label() {
+        return t('tideW.highlight');
+      },
       unit: '',
       min: 0,
       max: LINEUP.length - 1,
@@ -665,15 +729,29 @@ const COMPARE = {
     const s = LINEUP[Math.round(v.which)] ?? LINEUP[0];
     const moon = LINEUP[0].tidal;
     return [
-      { label: 'Pairing', value: s.label },
-      { label: 'Separation', value: distanceLabel(s.distanceM) },
       {
-        label: 'Tidal stretch',
+        get label() {
+          return t('tideW.pairing');
+        },
+        value: s.label,
+      },
+      {
+        get label() {
+          return t('tideW.separation');
+        },
+        value: distanceLabel(s.distanceM),
+      },
+      {
+        get label() {
+          return t('tideW.tidalStretch');
+        },
         value: accelerationLabel(s.tidal),
         emphasis: true,
       },
       {
-        label: 'Compared with the lunar tide',
+        get label() {
+          return t('tideW.comparedWithTheLunarTide');
+        },
         value: timesLabel(s.tidal / moon),
       },
     ];
@@ -777,31 +855,47 @@ const RUBBLE_RADIUS_M = MOON_RADIUS_M;
 /** Density presets for the stretch-against-grip panel. */
 const BALANCE_PRESETS = [
   {
-    label: 'Comet ice',
+    get label() {
+      return t('tideW.cometIce');
+    },
     values: { density: 600 },
-    note: 'A porous, weakly bound nucleus. Very little grip for its size, so the balance tips a long way out.',
+    get note() {
+      return t('tideW.aPorousWeaklyBoundNucleus');
+    },
   },
   {
-    label: 'The Moon',
+    get label() {
+      return t('tideW.theMoon');
+    },
     values: { density: 3300 },
     note: 'The Moon’s own density, 3 344 kg/m³. This is the real Earth-Moon case, with the Moon moved in from its actual distance of about sixty Earth radii.',
   },
   {
-    label: 'Iron',
+    get label() {
+      return t('tideW.iron');
+    },
     values: { density: 6000 },
-    note: 'A dense metallic body. More grip for its size, so it can come in closer before the balance tips.',
+    get note() {
+      return t('tideW.aDenseMetallicBodyMore');
+    },
   },
 ];
 
 const BALANCE = {
   id: 'tide-balance',
-  title: 'Stretch against grip',
+  get title() {
+    return t('tideW.stretchAgainstGrip');
+  },
   note: 'A body the size of the Moon, brought in far closer to the Earth than the Moon really is. Green is its own gravity holding it together; red is the tide pulling its ends apart. Both are measured at its surface.',
   controls: [
     {
       id: 'dist',
-      label: 'Distance from the Earth’s centre',
-      unit: 'Earth radii',
+      get label() {
+        return t('tideW.distanceFromTheEarthS');
+      },
+      get unit() {
+        return t('tideW.earthRadii');
+      },
       min: 1.2,
       max: 6,
       step: 0.05,
@@ -810,7 +904,9 @@ const BALANCE = {
     },
     {
       id: 'density',
-      label: 'Density of the body',
+      get label() {
+        return t('tideW.densityOfTheBody');
+      },
       unit: 'kg/m³',
       min: 500,
       max: 6000,
@@ -872,24 +968,37 @@ const BALANCE = {
     }[f.regime];
     return [
       {
-        label: 'Its own gravity, at its surface',
+        get label() {
+          return t('tideW.itsOwnGravityAtIts');
+        },
         value: accelerationLabel(f.grip),
       },
       {
-        label: 'Tidal stretch, at its surface',
+        get label() {
+          return t('tideW.tidalStretchAtItsSurface');
+        },
         value: accelerationLabel(f.stretch),
       },
       {
-        label: 'Stretch ÷ grip',
+        get label() {
+          return t('tideW.stretchGrip');
+        },
         value: ratioLabel(f.ratio),
         emphasis: true,
       },
       {
-        label: 'The two are equal at',
+        get label() {
+          return t('tideW.theTwoAreEqualAt');
+        },
         value: `${(f.rigid / EARTH_RADIUS_M).toFixed(2)} Earth radii  (${distanceLabel(f.rigid)})`,
         emphasis: true,
       },
-      { label: 'What that means', value: verdict },
+      {
+        get label() {
+          return t('tideW.whatThatMeans');
+        },
+        value: verdict,
+      },
     ];
   },
   draw(canvas, v) {
@@ -1001,13 +1110,19 @@ const BALANCE = {
 
 const ROCHE = {
   id: 'roche-model',
-  title: 'Bring a moon in toward Saturn',
+  get title() {
+    return t('tideW.bringAMoonInToward');
+  },
   note: 'The two rings on the picture are the two Roche limits: the outer one for a body with no strength at all, the inner one for a body that keeps its shape. Between them is a real gap, not a rounding error.',
   controls: [
     {
       id: 'dist',
-      label: 'Distance from Saturn’s centre',
-      unit: 'Saturn radii',
+      get label() {
+        return t('tideW.distanceFromSaturnSCentre');
+      },
+      get unit() {
+        return t('tideW.saturnRadii');
+      },
       min: 1.1,
       max: 4,
       step: 0.05,
@@ -1016,7 +1131,9 @@ const ROCHE = {
     },
     {
       id: 'density',
-      label: 'Density of the moon',
+      get label() {
+        return t('tideW.densityOfTheMoon');
+      },
       unit: 'kg/m³',
       min: 400,
       max: 6000,
@@ -1027,24 +1144,40 @@ const ROCHE = {
   ],
   presets: [
     {
-      label: 'Porous ice',
+      get label() {
+        return t('tideW.porousIce');
+      },
       values: { density: 600 },
-      note: 'What Saturn’s ring particles actually are: water ice, loosely packed. This is the case the rings themselves test.',
+      get note() {
+        return t('tideW.whatSaturnSRingParticles');
+      },
     },
     {
-      label: 'Solid ice',
+      get label() {
+        return t('tideW.solidIce');
+      },
       values: { density: 900 },
-      note: 'Dense, unfractured ice. The limit moves inward, because a denser body grips itself harder.',
+      get note() {
+        return t('tideW.denseUnfracturedIceTheLimit');
+      },
     },
     {
-      label: 'Rock',
+      get label() {
+        return t('tideW.rock');
+      },
       values: { density: 3000 },
-      note: 'Denser, so it holds together closer in. The Roche limit is not one distance: it depends on what is falling in.',
+      get note() {
+        return t('tideW.denserSoItHoldsTogether');
+      },
     },
     {
-      label: 'Iron',
+      get label() {
+        return t('tideW.iron');
+      },
       values: { density: 6000 },
-      note: 'Denser still, and the limit moves in again. Change what the moon is made of and you change where it breaks.',
+      get note() {
+        return t('tideW.denserStillAndTheLimit');
+      },
     },
   ],
   /**
@@ -1084,25 +1217,40 @@ const ROCHE = {
     }[f.regime];
     return [
       {
-        label: 'Roche limit, body with no strength',
+        get label() {
+          return t('tideW.rocheLimitBodyWithNo');
+        },
         value: `${f.fluidRadii.toFixed(2)} R_Saturn  (${distanceLabel(f.fluid)})`,
         emphasis: true,
       },
       {
-        label: 'Roche limit, body that keeps its shape',
+        get label() {
+          return t('tideW.rocheLimitBodyThatKeeps');
+        },
         value: `${f.rigidRadii.toFixed(2)} R_Saturn  (${distanceLabel(f.rigid)})`,
       },
       {
-        label: 'Stretch ÷ grip where you have put it',
+        get label() {
+          return t('tideW.stretchGripWhereYouHave');
+        },
         value: f.ratio.toFixed(2),
       },
-      { label: 'Verdict', value: verdict },
       {
-        label: 'For comparison, the A ring’s outer edge',
+        get label() {
+          return t('tideW.verdict');
+        },
+        value: verdict,
+      },
+      {
+        get label() {
+          return t('tideW.forComparisonTheARing');
+        },
         value: `${(A_RING_OUTER_M / SATURN_RADIUS_M).toFixed(2)} R_Saturn`,
       },
       {
-        label: 'And Mimas, the innermost round moon',
+        get label() {
+          return t('tideW.andMimasTheInnermostRound');
+        },
         value: `${(MIMAS_DISTANCE_M / SATURN_RADIUS_M).toFixed(2)} R_Saturn`,
       },
     ];
@@ -1265,12 +1413,16 @@ const ROCHE = {
 
 const DISRUPT = {
   id: 'tide-disrupt',
-  title: 'A Sun-like star falling toward a black hole',
+  get title() {
+    return t('tideW.aSunLikeStarFalling');
+  },
   note: 'The slider counts zeros: 1 is ten solar masses, 8 is a hundred million. Both circles are drawn on a scale that counts zeros too, because they differ by a factor of a billion at the left-hand end.',
   controls: [
     {
       id: 'logm',
-      label: 'Black hole mass',
+      get label() {
+        return t('tideW.blackHoleMass');
+      },
       unit: '',
       min: 0.5,
       max: 9,
@@ -1287,17 +1439,23 @@ const DISRUPT = {
   ],
   presets: [
     {
-      label: 'Stellar, 10 M☉',
+      get label() {
+        return t('tideW.stellar10M');
+      },
       values: { logm: 1 },
       note: 'The kind LIGO hears merging. Its tidal radius is tens of thousands of times its horizon, so a star is shredded a long way out.',
     },
     {
-      label: 'Sagittarius A*, 4 million M☉',
+      get label() {
+        return t('tideW.sagittariusA4MillionM');
+      },
       values: { logm: 6.63 },
       note: 'The black hole at the centre of our own galaxy. A star still comes apart outside the horizon here, which is why these flares can be seen at all.',
     },
     {
-      label: 'A giant, 1 billion M☉',
+      get label() {
+        return t('tideW.aGiant1BillionM');
+      },
       values: { logm: 9 },
       note: 'The tidal radius has fallen inside the horizon. A Sun-like star crosses whole, and there is no flare to see from outside.',
     },
@@ -1319,25 +1477,38 @@ const DISRUPT = {
     const f = DISRUPT.compute(v);
     return [
       {
-        label: 'Black hole mass',
+        get label() {
+          return t('tideW.blackHoleMass');
+        },
         value:
           f.massSuns >= 1e6
             ? `${(f.massSuns / 1e6).toPrecision(3)} million M☉`
             : `${Math.round(f.massSuns).toLocaleString('en-US')} M☉`,
       },
       {
-        label: 'Star is torn apart at',
+        get label() {
+          return t('tideW.starIsTornApartAt');
+        },
         value: distanceLabel(f.tidalRadiusM),
         emphasis: true,
       },
-      { label: 'Event horizon at', value: distanceLabel(f.horizonM) },
       {
-        label: 'Tidal radius ÷ horizon',
+        get label() {
+          return t('tideW.eventHorizonAt');
+        },
+        value: distanceLabel(f.horizonM),
+      },
+      {
+        get label() {
+          return t('tideW.tidalRadiusHorizon');
+        },
         value: timesLabel(f.ratio),
         emphasis: true,
       },
       {
-        label: 'What an outside observer sees',
+        get label() {
+          return t('tideW.whatAnOutsideObserverSees');
+        },
         value: f.disruptsOutside
           ? 'The star is shredded outside the horizon: a flare.'
           : 'The star crosses the horizon whole: nothing to see.',

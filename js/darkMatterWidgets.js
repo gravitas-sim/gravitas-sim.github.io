@@ -41,6 +41,7 @@
 
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
 import { scientific, decimal, withUnit } from './format.js';
+import { t } from './i18n/index.js';
 import {
   G_GALACTIC,
   pointMassSpeed,
@@ -304,20 +305,44 @@ const e10 = solar =>
 // same total mass in each, and the curves come out completely different.
 
 const SHAPE_KINDS = [
-  { key: 'point', label: 'All in the middle' },
-  { key: 'sphere', label: 'Uniform ball' },
-  { key: 'disc', label: 'Exponential disc' },
-  { key: 'halo', label: 'Halo (mass keeps growing)' },
+  {
+    key: 'point',
+    get label() {
+      return t('dmW.allInTheMiddle');
+    },
+  },
+  {
+    key: 'sphere',
+    get label() {
+      return t('dmW.uniformBall');
+    },
+  },
+  {
+    key: 'disc',
+    get label() {
+      return t('dmW.exponentialDisc');
+    },
+  },
+  {
+    key: 'halo',
+    get label() {
+      return t('dmW.haloMassKeepsGrowing');
+    },
+  },
 ];
 
 const SHAPES = {
   id: 'dm-shapes',
-  title: 'Where the mass is, and the curve it makes',
+  get title() {
+    return t('dmW.whereTheMassIsAnd');
+  },
   note: 'The same total mass in every case, arranged differently. The picture on the left is where the mass is; the plot on the right is the orbital speed it produces. Only one of these four shapes gives a flat curve.',
   controls: [
     {
       id: 'kind',
-      label: 'Mass distribution',
+      get label() {
+        return t('dmW.massDistribution');
+      },
       min: 0,
       max: 3,
       step: 1,
@@ -327,7 +352,9 @@ const SHAPES = {
     },
     {
       id: 'mass',
-      label: 'Total mass inside 30 kpc',
+      get label() {
+        return t('dmW.totalMassInside30Kpc');
+      },
       unit: '× 10¹⁰ M☉',
       min: 1,
       max: 20,
@@ -337,7 +364,9 @@ const SHAPES = {
     },
     {
       id: 'size',
-      label: 'How spread out it is',
+      get label() {
+        return t('dmW.howSpreadOutItIs');
+      },
       unit: 'kpc',
       min: 1,
       max: 20,
@@ -348,22 +377,32 @@ const SHAPES = {
   ],
   presets: [
     {
-      label: 'Solar System',
+      get label() {
+        return t('dmW.solarSystem');
+      },
       values: { kind: 0, mass: 8, size: 4 },
       note: 'Everything in the middle. This is the Sun and its planets, and it is the case where adding up the light gives the right answer.',
     },
     {
-      label: 'Uniform ball',
+      get label() {
+        return t('dmW.uniformBall');
+      },
       values: { kind: 1, mass: 8, size: 8 },
       note: 'Speed rises inside the ball and falls outside it. The peak is exactly where the mass runs out, which is a useful thing to know how to read.',
     },
     {
-      label: 'Spiral disc',
+      get label() {
+        return t('dmW.spiralDisc');
+      },
       values: { kind: 2, mass: 8, size: 4 },
-      note: 'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
+      get note() {
+        return t('dmW.aRealStellarDiscIt');
+      },
     },
     {
-      label: 'What galaxies do',
+      get label() {
+        return t('dmW.whatGalaxiesDo');
+      },
       values: { kind: 3, mass: 8, size: 2.5 },
       note: 'Flat. The only way to get this shape is for the enclosed mass to keep growing all the way out, long after the light has stopped.',
     },
@@ -434,14 +473,29 @@ const SHAPES = {
             ? 'FLAT'
             : 'rising';
     return [
-      { label: 'Speed at 30 kpc', value: `${f.vAt30.toFixed(0)} km/s` },
       {
-        label: 'Outer slope (v ∝ rⁿ)',
+        get label() {
+          return t('dmW.speedAt30Kpc');
+        },
+        value: `${f.vAt30.toFixed(0)} km/s`,
+      },
+      {
+        get label() {
+          return t('dmW.outerSlopeVR');
+        },
         value: Number.isFinite(f.slope) ? f.slope.toFixed(2) : '—',
       },
-      { label: 'Shape out there', value: shape, emphasis: true },
       {
-        label: 'Mass inside 30 kpc',
+        get label() {
+          return t('dmW.shapeOutThere');
+        },
+        value: shape,
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('dmW.massInside30Kpc');
+        },
         value: e10(f.mass),
       },
     ];
@@ -587,19 +641,38 @@ const SHAPES = {
 // through the origin.
 
 const ENCLOSED_CURVES = [
-  { key: 'kepler', label: 'Falling (all mass in the middle)' },
-  { key: 'flat', label: 'Flat (what galaxies do)' },
-  { key: 'galaxy', label: 'A real galaxy: disc + halo' },
+  {
+    key: 'kepler',
+    get label() {
+      return t('dmW.fallingAllMassInThe');
+    },
+  },
+  {
+    key: 'flat',
+    get label() {
+      return t('dmW.flatWhatGalaxiesDo');
+    },
+  },
+  {
+    key: 'galaxy',
+    get label() {
+      return t('dmW.aRealGalaxyDiscHalo');
+    },
+  },
 ];
 
 const ENCLOSED = {
   id: 'dm-enclosed',
-  title: 'What the speed tells you about the mass',
+  get title() {
+    return t('dmW.whatTheSpeedTellsYou');
+  },
   note: 'Top: orbital speed against radius. Bottom: the mass that must lie inside that radius, which is the same measurement rearranged — M(&lt;r) = v²·r/G. Drag the radius marker and watch both.',
   controls: [
     {
       id: 'shape',
-      label: 'Rotation curve',
+      get label() {
+        return t('dmW.rotationCurve');
+      },
       min: 0,
       max: 2,
       step: 1,
@@ -609,7 +682,9 @@ const ENCLOSED = {
     },
     {
       id: 'radius',
-      label: 'Radius marker',
+      get label() {
+        return t('dmW.radiusMarker');
+      },
       unit: 'kpc',
       min: 2,
       max: 30,
@@ -620,17 +695,25 @@ const ENCLOSED = {
   ],
   presets: [
     {
-      label: 'Falling curve',
+      get label() {
+        return t('dmW.fallingCurve');
+      },
       values: { shape: 0, radius: 10 },
-      note: 'Drag the marker out. The speed drops and the enclosed mass stops growing: everything is already inside.',
+      get note() {
+        return t('dmW.dragTheMarkerOutThe');
+      },
     },
     {
-      label: 'Flat curve',
+      get label() {
+        return t('dmW.flatCurve');
+      },
       values: { shape: 1, radius: 10 },
       note: 'Now drag it out. The speed does not change, so the enclosed mass has to keep climbing — in direct proportion to the radius.',
     },
     {
-      label: 'A real galaxy',
+      get label() {
+        return t('dmW.aRealGalaxy');
+      },
       values: { shape: 2, radius: 20 },
       note: 'The measured curve of a spiral. Compare the orange line, which is all the mass you can see, with the green one that the stars are actually obeying.',
     },
@@ -692,11 +775,18 @@ const ENCLOSED = {
         label: `Speed at ${f.r.toFixed(1)} kpc`,
         value: `${f.speed.toFixed(0)} km/s`,
       },
-      { label: 'Mass that must be inside', value: e10(f.enclosed) },
+      {
+        get label() {
+          return t('dmW.massThatMustBeInside');
+        },
+        value: e10(f.enclosed),
+      },
     ];
     if (Number.isFinite(f.growth)) {
       rows.push({
-        label: 'Go out twice as far, and the enclosed mass',
+        get label() {
+          return t('dmW.goOutTwiceAsFar');
+        },
         value:
           f.growth > 1.6
             ? `roughly doubles (× ${f.growth.toFixed(2)})`
@@ -709,7 +799,9 @@ const ENCLOSED = {
     if (f.visibleMassAt) {
       const vis = f.visibleMassAt(f.r);
       rows.push({
-        label: 'Of which the visible disc could account for',
+        get label() {
+          return t('dmW.ofWhichTheVisibleDisc');
+        },
         value: `${e10(vis)}  (${((100 * vis) / f.enclosed).toFixed(0)}%)`,
       });
     }
@@ -872,22 +964,30 @@ const NGC3198_OBSERVED = [
  */
 const FIT_PRESETS = [
   {
-    label: 'Stars only',
+    get label() {
+      return t('dmW.starsOnly');
+    },
     values: { discMass: 3.3, discScale: 2.6, haloVFlat: 0, haloCore: 6 },
     note: 'The disc alone, at the mass its light implies. It fits the inner curve and then falls away from the data. Try pushing the disc mass up to close the gap.',
   },
   {
-    label: 'Maximum disc',
+    get label() {
+      return t('dmW.maximumDisc');
+    },
     values: { discMass: 11, discScale: 2.6, haloVFlat: 0, haloCore: 6 },
     note: 'The heaviest disc that could be argued for, and still no good: now the inner points are far too fast and the outer ones are still too slow. No single disc mass fits both ends. That is the whole result.',
   },
   {
-    label: 'Wrong scale length',
+    get label() {
+      return t('dmW.wrongScaleLength');
+    },
     values: { discMass: 3.3, discScale: 7, haloVFlat: 0, haloCore: 6 },
     note: 'Spreading the same stars further out flattens the disc curve a little, but not nearly enough, and now the inner curve is wrong too. The shape of the shortfall does not look like a disc.',
   },
   {
-    label: 'Published decomposition',
+    get label() {
+      return t('dmW.publishedDecomposition');
+    },
     needsHalo: true,
     values: { discMass: 3.3, discScale: 2.6, haloVFlat: 150, haloCore: 6 },
     note: 'Disc plus halo. The disc carries the inner curve, the halo carries the outer curve, and between them they fit. There is no version of this without the halo.',
@@ -896,12 +996,16 @@ const FIT_PRESETS = [
 
 const FIT = {
   id: 'dm-fit',
-  title: 'Fit a real galaxy',
+  get title() {
+    return t('dmW.fitARealGalaxy');
+  },
   note: 'The pink points with error bars are the measured rotation curve of a spiral galaxy. Your job is to reproduce them. The disc is what you can see; the halo is what you cannot. Try the disc on its own first.',
   controls: [
     {
       id: 'discMass',
-      label: 'Disc mass (the stars you can see)',
+      get label() {
+        return t('dmW.discMassTheStarsYou');
+      },
       unit: '× 10¹⁰ M☉',
       min: 0,
       max: 16,
@@ -911,7 +1015,9 @@ const FIT = {
     },
     {
       id: 'discScale',
-      label: 'Disc scale length',
+      get label() {
+        return t('dmW.discScaleLength');
+      },
       unit: 'kpc',
       min: 1,
       max: 8,
@@ -921,7 +1027,9 @@ const FIT = {
     },
     {
       id: 'haloVFlat',
-      label: 'Halo strength (its flat speed)',
+      get label() {
+        return t('dmW.haloStrengthItsFlatSpeed');
+      },
       unit: 'km/s',
       min: 0,
       max: 220,
@@ -931,7 +1039,9 @@ const FIT = {
     },
     {
       id: 'haloCore',
-      label: 'Halo core radius',
+      get label() {
+        return t('dmW.haloCoreRadius');
+      },
       unit: 'kpc',
       min: 1,
       max: 20,
@@ -998,26 +1108,48 @@ const FIT = {
             : 'nowhere near';
     const rows = [
       {
-        label: 'Average miss',
+        get label() {
+          return t('dmW.averageMiss');
+        },
         value: `${f.fit.rms.toFixed(1)} km/s  (data is good to ±${f.meanErr.toFixed(0)})`,
       },
-      { label: 'Fit', value: verdict, emphasis: true },
+      {
+        get label() {
+          return t('dmW.fit');
+        },
+        value: verdict,
+        emphasis: true,
+      },
       {
         label: `Worst point, at ${f.fit.worstR.toFixed(0)} kpc`,
         value: `${f.fit.worst > 0 ? 'model too fast by ' : 'model too slow by '}${Math.abs(f.fit.worst).toFixed(0)} km/s`,
       },
-      { label: 'Visible mass', value: e10(f.visibleMass) },
+      {
+        get label() {
+          return t('dmW.visibleMass');
+        },
+        value: e10(f.visibleMass),
+      },
     ];
     if (f.model.haloVFlat > 0) {
-      rows.push({ label: 'Halo mass inside 30 kpc', value: e10(f.haloMass) });
       rows.push({
-        label: 'Dark mass for every unit of visible',
+        get label() {
+          return t('dmW.haloMassInside30Kpc');
+        },
+        value: e10(f.haloMass),
+      });
+      rows.push({
+        get label() {
+          return t('dmW.darkMassForEveryUnit');
+        },
         value: `${f.ratio.toFixed(1)} ×`,
         emphasis: f.good,
       });
     } else {
       rows.push({
-        label: 'Halo mass inside 30 kpc',
+        get label() {
+          return t('dmW.haloMassInside30Kpc');
+        },
         value: 'none — halo switched off',
       });
     }
@@ -1112,13 +1244,17 @@ let flyby = null;
 
 const FLYBY = {
   id: 'dm-flyby',
-  title: 'What the halo is holding',
+  get title() {
+    return t('dmW.whatTheHaloIsHolding');
+  },
   note: 'A star launched on a circular orbit at the speed a real galaxy gives it. The dashed ring is where it started. Switch the halo off while it runs.',
   animated: true,
   controls: [
     {
       id: 'radius',
-      label: 'Launch radius',
+      get label() {
+        return t('dmW.launchRadius');
+      },
       unit: 'kpc',
       min: 6,
       max: 28,
@@ -1128,7 +1264,9 @@ const FLYBY = {
     },
     {
       id: 'halo',
-      label: 'Dark matter halo',
+      get label() {
+        return t('dmW.darkMatterHalo');
+      },
       min: 0,
       max: 1,
       step: 1,
@@ -1138,17 +1276,33 @@ const FLYBY = {
     },
   ],
   actions: [
-    { id: 'run', label: '▶ Run / Pause' },
-    { id: 'reset', label: '↺ Relaunch' },
+    {
+      id: 'run',
+      get label() {
+        return t('dmW.runPause');
+      },
+    },
+    {
+      id: 'reset',
+      get label() {
+        return t('dmW.relaunch');
+      },
+    },
   ],
   presets: [
     {
-      label: 'Halo on',
+      get label() {
+        return t('dmW.haloOn');
+      },
       values: { radius: 20, halo: 1 },
-      note: 'The star holds its orbit. The visible disc could never do this on its own at 20 kpc.',
+      get note() {
+        return t('dmW.theStarHoldsItsOrbit');
+      },
     },
     {
-      label: 'Halo off',
+      get label() {
+        return t('dmW.haloOff');
+      },
       values: { radius: 20, halo: 0 },
       note: 'Same star, same speed, no halo. It is moving far too fast for the mass it can see, so it leaves. This is what a real galaxy would do if the light told the whole story.',
     },
@@ -1238,21 +1392,37 @@ const FLYBY = {
     const f = FLYBY.compute(v);
     const r = flyby ? Math.hypot(flyby.x, flyby.y) : v.radius;
     const rows = [
-      { label: 'Halo', value: f.withHalo ? 'ON' : 'OFF' },
-      { label: 'Launch speed', value: `${f.launchSpeed.toFixed(0)} km/s` },
       {
-        label: 'Speed the visible disc alone could hold',
+        get label() {
+          return t('dmW.halo');
+        },
+        value: f.withHalo ? 'ON' : 'OFF',
+      },
+      {
+        get label() {
+          return t('dmW.launchSpeed');
+        },
+        value: `${f.launchSpeed.toFixed(0)} km/s`,
+      },
+      {
+        get label() {
+          return t('dmW.speedTheVisibleDiscAlone');
+        },
         value: `${f.visibleSpeed.toFixed(0)} km/s`,
       },
       {
-        label: 'Distance now',
+        get label() {
+          return t('dmW.distanceNow');
+        },
         value: `${r.toFixed(1)} kpc  (launched at ${v.radius})`,
         emphasis: true,
       },
     ];
     if (flyby?.escaped) {
       rows.push({
-        label: 'Verdict',
+        get label() {
+          return t('dmW.verdict');
+        },
         value: 'gone — the visible mass could not hold it',
         emphasis: true,
       });
@@ -1369,12 +1539,16 @@ const COMA = {
 
 const VIRIAL = {
   id: 'dm-virial',
-  title: 'Weigh a cluster by how fast it jitters',
+  get title() {
+    return t('dmW.weighAClusterByHow');
+  },
   note: 'A cluster does not rotate, so there is no curve to plot. What there is instead is a spread of speeds, and the virial theorem turns a spread of speeds into a mass: M = (5/3)·R·⟨v²⟩/G.',
   controls: [
     {
       id: 'sigma',
-      label: 'Measured line-of-sight spread σ',
+      get label() {
+        return t('dmW.measuredLineOfSightSpread');
+      },
       unit: 'km/s',
       min: 200,
       max: 1600,
@@ -1384,8 +1558,12 @@ const VIRIAL = {
     },
     {
       id: 'radius',
-      label: 'Cluster radius R',
-      unit: 'Mpc',
+      get label() {
+        return t('dmW.clusterRadiusR');
+      },
+      get unit() {
+        return t('dmW.mpc');
+      },
       min: 0.4,
       max: 3,
       step: 0.1,
@@ -1394,7 +1572,9 @@ const VIRIAL = {
     },
     {
       id: 'dims',
-      label: 'Turn σ into ⟨v²⟩ using',
+      get label() {
+        return t('dmW.turnIntoVUsing');
+      },
       min: 0,
       max: 2,
       step: 1,
@@ -1408,17 +1588,23 @@ const VIRIAL = {
   ],
   presets: [
     {
-      label: 'Coma, done right',
+      get label() {
+        return t('dmW.comaDoneRight');
+      },
       values: { sigma: 1000, radius: 1.4, dims: 1 },
       note: 'A spectrograph gives one velocity component out of three, so ⟨v²⟩ = 3σ². This is the measurement Zwicky made, and it needs about ten times more mass than the galaxies and gas can supply.',
     },
     {
-      label: 'Forget the factor of 3',
+      get label() {
+        return t('dmW.forgetTheFactorOf3');
+      },
       values: { sigma: 1000, radius: 1.4, dims: 2 },
       note: 'Using σ² alone throws away two of the three directions the galaxies are moving in, and the mass comes out three times too small. This is the commonest mistake in the calculation.',
     },
     {
-      label: 'Forget to square it',
+      get label() {
+        return t('dmW.forgetToSquareIt');
+      },
       values: { sigma: 1000, radius: 1.4, dims: 0 },
       note: 'Using σ rather than σ² is not an approximation, it is a different quantity with different units. The answer is out by a factor of a thousand and the discrepancy vanishes — which is how you know something went wrong.',
     },
@@ -1455,14 +1641,28 @@ const VIRIAL = {
         value: withUnit(scientific(f.meanSquare, 3), '(km/s)²'),
       },
       {
-        label: 'Mass the motion needs',
+        get label() {
+          return t('dmW.massTheMotionNeeds');
+        },
         value: massLabel(f.dynamical),
         emphasis: true,
       },
-      { label: 'Mass in galaxies', value: massLabel(f.visible) },
-      { label: 'Plus hot gas between them', value: massLabel(f.baryons) },
       {
-        label: 'Needed ÷ everything you can see',
+        get label() {
+          return t('dmW.massInGalaxies');
+        },
+        value: massLabel(f.visible),
+      },
+      {
+        get label() {
+          return t('dmW.plusHotGasBetweenThem');
+        },
+        value: massLabel(f.baryons),
+      },
+      {
+        get label() {
+          return t('dmW.neededEverythingYouCanSee');
+        },
         // A wrong setting can drive this to a few thousandths, and rounding that
         // to "0.0" hides the very thing it is meant to reveal: the discrepancy
         // has not shrunk, it has been arithmetically destroyed.
@@ -1474,7 +1674,9 @@ const VIRIAL = {
     ];
     if (!f.correct) {
       rows.push({
-        label: 'Warning',
+        get label() {
+          return t('dmW.warning');
+        },
         value:
           f.mode === 0
             ? 'σ is a speed, not a speed squared — check the units'
@@ -1599,20 +1801,40 @@ const VIRIAL = {
 // only lands if you have to keep zooming in to find yourself.
 
 const BUDGET_LAYERS = [
-  { label: 'Everything' },
-  { label: 'Just the matter' },
-  { label: 'Just the ordinary matter' },
-  { label: 'Just the stars' },
+  {
+    get label() {
+      return t('dmW.everything');
+    },
+  },
+  {
+    get label() {
+      return t('dmW.justTheMatter');
+    },
+  },
+  {
+    get label() {
+      return t('dmW.justTheOrdinaryMatter');
+    },
+  },
+  {
+    get label() {
+      return t('dmW.justTheStars');
+    },
+  },
 ];
 
 const BUDGET = {
   id: 'dm-budget',
-  title: 'Where the mass of the universe is',
+  get title() {
+    return t('dmW.whereTheMassOfThe');
+  },
   note: 'Planck 2018 for the split between dark energy, dark matter and ordinary matter; the stellar share of ordinary matter is the usual census figure. Step through the layers.',
   controls: [
     {
       id: 'layer',
-      label: 'Zoom in on',
+      get label() {
+        return t('dmW.zoomInOn');
+      },
       min: 0,
       max: 3,
       step: 1,
@@ -1646,12 +1868,35 @@ const BUDGET = {
     const f = BUDGET.compute(v);
     const pct = x => `${(100 * x).toFixed(x < 0.01 ? 2 : 1)}%`;
     return [
-      { label: 'Dark energy', value: pct(f.darkEnergy) },
-      { label: 'Dark matter', value: pct(f.darkMatter) },
-      { label: 'Ordinary matter, all of it', value: pct(f.baryons) },
-      { label: 'Stars', value: pct(f.stars), emphasis: true },
       {
-        label: 'Dark matter for every unit of ordinary matter',
+        get label() {
+          return t('dmW.darkEnergy');
+        },
+        value: pct(f.darkEnergy),
+      },
+      {
+        get label() {
+          return t('dmW.darkMatter');
+        },
+        value: pct(f.darkMatter),
+      },
+      {
+        get label() {
+          return t('dmW.ordinaryMatterAllOfIt');
+        },
+        value: pct(f.baryons),
+      },
+      {
+        get label() {
+          return t('dmW.stars');
+        },
+        value: pct(f.stars),
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('dmW.darkMatterForEveryUnit');
+        },
         value: `${(f.darkMatter / f.baryons).toFixed(1)} ×`,
       },
     ];
@@ -1700,8 +1945,20 @@ const BUDGET = {
     row(
       'the whole universe',
       [
-        { value: f.darkEnergy, color: '#3d4a6b', label: 'dark energy' },
-        { value: f.darkMatter, color: C_HALO, label: 'dark matter' },
+        {
+          value: f.darkEnergy,
+          color: '#3d4a6b',
+          get label() {
+            return t('dmW.darkEnergy2');
+          },
+        },
+        {
+          value: f.darkMatter,
+          color: C_HALO,
+          get label() {
+            return t('dmW.darkMatter2');
+          },
+        },
         { value: f.baryons, color: C_BULGE, label: 'ordinary' },
       ],
       1
@@ -1711,7 +1968,13 @@ const BUDGET = {
       row(
         'the matter alone',
         [
-          { value: f.darkMatter, color: C_HALO, label: 'dark matter' },
+          {
+            value: f.darkMatter,
+            color: C_HALO,
+            get label() {
+              return t('dmW.darkMatter2');
+            },
+          },
           { value: f.baryons, color: C_BULGE, label: 'ordinary' },
         ],
         f.darkMatter + f.baryons

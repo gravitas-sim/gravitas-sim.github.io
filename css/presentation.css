@@ -1,0 +1,758 @@
+/* =============================================================================
+   Presentation modes: embed and lecture
+   -----------------------------------------------------------------------------
+   Two alternate shells over one simulation. Both are expressed the way every
+   other mode in this application is - a class on <body>, set by
+   js/presentation.js - so there is no second layout engine and no JavaScript
+   that hides elements one at a time.
+
+   Everything here is layered on top of the existing stylesheets rather than
+   replacing them, and nothing in this file changes the canvas, the simulation
+   or the theme. It is loaded after components.css so its rules win on equal
+   specificity without needing !important, except where an inline `showUI` class
+   or an element's own `display` has to be beaten.
+   ============================================================================= */
+
+@layer components {
+  /* ===========================================================================
+     1. Embed mode
+     ---------------------------------------------------------------------------
+     `?embed=1`. The rule is: on screen is what makes this a *figure*; off screen
+     is everything that is about the *application*. A student meets this inside
+     somebody else's page, where every pixel of Gravitas chrome is a pixel of
+     that page's content it has taken.
+     =========================================================================== */
+
+  /* Chrome that belongs to the application, not to the figure. Written as one
+     list rather than as rules on each element so that the decision is legible
+     in one place and a new panel cannot quietly appear inside an embed. */
+  body.presentation-embed #welcomeScreen,
+  body.presentation-embed .ui-container,
+  body.presentation-embed #mobileMenuToggle,
+  body.presentation-embed #attribution,
+  body.presentation-embed #overlay,
+  body.presentation-embed #tutorialBtn,
+  body.presentation-embed #tutorialPopup,
+  body.presentation-embed #scenarioInfoBox,
+  body.presentation-embed #scenarioInfoDisplay,
+  body.presentation-embed #sonificationControl,
+  body.presentation-embed #shareModal,
+  body.presentation-embed #settingsPanel,
+  body.presentation-embed #scenarioListModal,
+  body.presentation-embed #investigationBrowser,
+  body.presentation-embed #dataExport,
+  body.presentation-embed #mobileInstructions,
+  body.presentation-embed .lecture-bar,
+  body.presentation-embed .lecture-sheet {
+    display: none !important;
+  }
+
+  /* The transport bar stays, because a figure a reader cannot pause is a video
+     without a pause button. It loses its floating-panel treatment and sits flat
+     against the bottom edge: inside an iframe there is no page around it for a
+     floating panel to float above, and the drop shadow reads as a rendering
+     artefact. */
+  body.presentation-embed .timeline-bar {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    box-shadow: none;
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  /* The way out to the sandbox: small, in the corner, and the only thing embed
+     mode adds rather than removes. */
+  .embed-open-full {
+    display: none;
+  }
+
+  body.presentation-embed .embed-open-full {
+    position: fixed;
+    top: var(--space-2);
+    right: var(--space-2);
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.3em 0.6em;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--surface-1) 82%, transparent);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: var(--text-2xs);
+    line-height: 1.2;
+    text-decoration: none;
+    /* Fades back once the reader has seen it, so the figure is not permanently
+       wearing a badge, but never disappears: it has to be findable. */
+    opacity: 0.55;
+    transition:
+      opacity 0.15s ease,
+      color 0.15s ease;
+  }
+
+  body.presentation-embed .embed-open-full:hover,
+  body.presentation-embed .embed-open-full:focus-visible {
+    opacity: 1;
+    color: var(--text-primary);
+  }
+
+  /* An iframe is a viewport of somebody else's choosing, and a scrollbar inside
+     one is always a mistake: the host has already decided how much room the
+     figure gets. The canvas is sized to the element, so there is nothing to
+     scroll to. */
+  html.is-embed,
+  html.is-embed body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  /* The object inspector is the one panel that stays: clicking a body and
+     reading its mass is most of what makes the figure interactive. It becomes a
+     sheet against the edge rather than a floating window, because at 320px
+     there is no "beside" for it to float in. */
+  @media (max-width: 560px) {
+    body.presentation-embed #objectInspector {
+      left: 0 !important;
+      right: 0 !important;
+      top: auto !important;
+      bottom: 44px !important;
+      width: auto !important;
+      max-width: none !important;
+      max-height: 52vh;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+  }
+
+  /* Narrow LMS columns. Canvas has a 320px content column in some themes and
+     Blackboard's Ultra content frame is often around 700px; below about 560 the
+     transport bar's labels are what overflow first, so they go and the icons
+     stay. */
+  @media (max-width: 560px) {
+    body.presentation-embed .timeline-bar .timeline-label,
+    body.presentation-embed .timeline-bar .timeline-clock-label {
+      display: none;
+    }
+    body.presentation-embed .timeline-bar {
+      padding: var(--space-1) var(--space-2);
+    }
+    body.presentation-embed .embed-open-full {
+      font-size: 10px;
+      padding: 0.25em 0.45em;
+    }
+  }
+
+  /* Very short frames - a 16:9 embed in a narrow column ends up 180px tall -
+     give the whole vertical budget to the simulation. */
+  @media (max-height: 320px) {
+    body.presentation-embed .timeline-bar {
+      padding: 2px var(--space-2);
+    }
+    body.presentation-embed .embed-open-full {
+      display: none;
+    }
+  }
+
+  /* The smallest module a course theme will give a figure. The scrubber track
+     is what goes: it needs a run of pixels to be draggable at all, and below
+     this width it is a stub that reads as a progress bar nobody can use. Play,
+     step and the clock survive, which is enough to make the figure a figure
+     rather than a picture. */
+  @media (max-width: 400px) {
+    body.presentation-embed .timeline-bar #timelineRange,
+    body.presentation-embed .timeline-bar .timeline-range,
+    body.presentation-embed .timeline-bar input[type='range'] {
+      display: none;
+    }
+    body.presentation-embed .timeline-bar {
+      justify-content: center;
+      gap: var(--space-3);
+      padding: 2px var(--space-2);
+    }
+  }
+
+  /* ===========================================================================
+     2. Lecture mode
+     ---------------------------------------------------------------------------
+     A 1024x768 projector and a student in the back row. The type scale and the
+     spacing scale are redefined here rather than font-size being overridden on
+     each element: every panel in the application is already built out of these
+     tokens, so moving the scale moves the whole interface coherently and a
+     control added next year inherits the projection sizing for free.
+
+     This is not a percentage zoom. What is on screen changes as well as how big
+     it is: the rail, the readout and the footer go, a purpose-built transport
+     bar arrives, and the canvas takes the space they leave.
+     =========================================================================== */
+
+  body.presentation-lecture {
+    /* Roughly 1.6x through the middle of the scale, flattened at the top: a
+       heading that grew by the same factor as body text would eat the canvas,
+       and at projection distance the thing that has to grow most is the
+       smallest text, not the largest. */
+    --text-2xs: 0.9375rem; /* 11 -> 15 */
+    --text-xs: 1rem; /* 12 -> 16 */
+    --text-sm: 1.0625rem; /* 13 -> 17 */
+    --text-base: 1.125rem; /* 14 -> 18 */
+    --text-md: 1.25rem; /* 16 -> 20 */
+    --text-lg: 1.5rem; /* 18 -> 24 */
+    --text-xl: 1.75rem; /* 22 -> 28 */
+    --text-2xl: 2.125rem; /* 28 -> 34 */
+
+    /* Spacing grows less than type. A projected interface needs its controls
+       further apart than a desktop one, but the screen is 768px tall and
+       spacing is what runs out first. */
+    --space-1: 0.3rem;
+    --space-2: 0.6rem;
+    --space-3: 0.9rem;
+    --space-4: 1.15rem;
+    --space-5: 1.4rem;
+    --space-6: 1.7rem;
+
+    /* Lines have to survive a projector's contrast, which is far worse than a
+       monitor's. */
+    --border-subtle: color-mix(in srgb, var(--text-primary) 26%, transparent);
+  }
+
+  body.presentation-lecture #welcomeScreen,
+  body.presentation-lecture .ui-container,
+  body.presentation-lecture #mobileMenuToggle,
+  body.presentation-lecture #attribution,
+  body.presentation-lecture #tutorialBtn,
+  body.presentation-lecture #tutorialPopup,
+  body.presentation-lecture #sonificationControl,
+  body.presentation-lecture .timeline-bar,
+  body.presentation-lecture .embed-open-full,
+  body.presentation-lecture #mobileInstructions {
+    display: none !important;
+  }
+
+  /* The readout stays, enlarged: object counts, zoom and run state are exactly
+     what a lecturer refers to out loud. It moves to the top-left corner at a
+     size that reads from the back of a room. */
+  body.presentation-lecture #overlay {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    max-width: 30ch;
+    padding: var(--space-3) var(--space-4);
+    background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow);
+    /* The readout's colour is a hard-coded light grey with a dark text-shadow,
+       which is right over its usual dark translucent panel and invisible once
+       that panel is the light surface Daylight gives it. Both have to move
+       together, so the token comes with the background. */
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  /* Every descendant, deliberately. The readout's spans carry four different
+     hard-coded light colours between them - a white label, a pale HUD blue for
+     the stats, a muted grey for the hints - all chosen against a dark panel and
+     all of them somewhere between low-contrast and invisible on a light one.
+     Enumerating them here would be a list that goes stale the next time a row
+     is added to the readout; the panel is plain text, so one rule covers it and
+     size and weight continue to carry the hierarchy. */
+  body.presentation-lecture #overlay,
+  body.presentation-lecture #overlay * {
+    color: var(--text-primary);
+    text-shadow: none;
+  }
+
+  /* Except the two that are meant to recede, which get the secondary token
+     rather than losing the distinction altogether. */
+  body.presentation-lecture #overlay .separator-line {
+    background: var(--border-subtle);
+  }
+
+  /* The scenario card is the title of the slide, and at projection distance it
+     is the single most important piece of text on the screen. */
+  /* The card is normally centred in the band between the readout and the rail
+     by a transform built from two custom properties. In lecture mode the rail
+     is gone and the readout is much wider, and the arithmetic that assumes both
+     put the card a third of its width off the left edge of a 1024px screen.
+     Rather than adjust the inputs to a formula that no longer describes the
+     layout, it is pinned outright: anchored to the right, clear of the readout,
+     with no transform for an animation to fight over. */
+  body.presentation-lecture #scenarioInfoBox,
+  body.presentation-lecture .scenario-info-box {
+    left: auto;
+    right: var(--space-4);
+    width: min(44rem, calc(100vw - 22rem - 2 * var(--space-4)));
+    max-width: none;
+    transform: none;
+    font-size: var(--text-lg);
+    line-height: var(--leading-normal);
+  }
+
+  body.presentation-lecture #scenarioInfoBox .scenario-info-content {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  body.presentation-lecture #scenarioInfoBox h2,
+  body.presentation-lecture #scenarioInfoBox h3,
+  body.presentation-lecture .scenario-info-title {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
+  }
+
+  /* The inspector is what a lecturer opens to answer "how heavy is that one?".
+     Wider and larger, and pinned clear of the transport bar. */
+  body.presentation-lecture #objectInspector {
+    font-size: var(--text-base);
+    min-width: 24rem;
+  }
+
+  body.presentation-lecture #objectInspector .stat-value,
+  body.presentation-lecture #objectInspector .inspector-value {
+    font-size: var(--text-md);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Settings and the gallery stay reachable during a lecture - a question from
+     the room is often "what if gravity were stronger?" - and both are dialogs
+     that already size themselves to the viewport, so they need the type scale
+     and nothing else. Their scroll areas get a taller minimum so a 768px screen
+     does not reduce them to a slit. */
+  body.presentation-lecture #settingsPanel .settings-grid,
+  body.presentation-lecture #scenarioListScroll {
+    max-height: min(62vh, 30rem);
+  }
+
+  /* --- The lecture transport bar ------------------------------------------ */
+
+  .lecture-bar {
+    display: none;
+  }
+
+  body.presentation-lecture .lecture-bar {
+    position: fixed;
+    /* Centred by auto margins in a full-width containing block, not by
+       left:50% and a translate. A fixed element positioned from the midpoint
+       has only the right half of the viewport as its available width, so
+       shrink-to-fit capped this bar at 512px on a 1024px projector and wrapped
+       it onto two rows. */
+    left: var(--space-4);
+    right: var(--space-4);
+    margin-inline: auto;
+    width: fit-content;
+    bottom: var(--space-4);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-full);
+    background: color-mix(in srgb, var(--surface-1) 94%, transparent);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .lecture-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    /* 48px minimum. A lecturer operates these while looking at the room, and a
+       32px desktop button is not a target you hit without looking. */
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-2);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition:
+      background 0.12s ease,
+      border-color 0.12s ease;
+  }
+
+  .lecture-btn-wide {
+    padding: 0 var(--space-4);
+  }
+
+  .lecture-btn:hover:not(:disabled) {
+    background: var(--surface-3, var(--surface-2));
+    border-color: var(--accent);
+  }
+
+  .lecture-btn:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Disabled is carried by opacity *and* by the cursor and the aria state, not
+     by colour alone: at the end of a sequence the difference between a live and
+     a dead arrow has to be visible on a washed-out projector. */
+  .lecture-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .lecture-btn[aria-pressed='true'] {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
+  }
+
+  .lecture-btn-exit {
+    background: transparent;
+  }
+
+  .lecture-position {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+    padding: 0 var(--space-2);
+    white-space: nowrap;
+  }
+
+  .lecture-sep {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border-subtle);
+  }
+
+  /* --- The sequence editor ------------------------------------------------- */
+
+  .lecture-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--surface-0) 72%, transparent);
+    padding: var(--space-4);
+  }
+
+  .lecture-sheet[hidden] {
+    display: none;
+  }
+
+  .lecture-sheet-panel {
+    width: min(46rem, 100%);
+    max-height: 86vh;
+    overflow: auto;
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .lecture-sheet-panel h2 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-xl);
+  }
+
+  .lecture-sheet-panel p {
+    margin: 0 0 var(--space-3);
+    color: var(--text-secondary);
+    line-height: var(--leading-normal);
+  }
+
+  .lecture-sequence-text {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-0);
+    color: var(--text-primary);
+    resize: vertical;
+  }
+
+  .lecture-sheet-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  /* --- The spotlight ------------------------------------------------------- */
+
+  /* One element, pointer-events: none, a radial gradient centred on two custom
+     properties the pointer handler writes. It cannot receive a click, it is not
+     on the canvas, and nothing in the physics reads it: the simulation cannot
+     tell whether it is on. */
+  .lecture-spotlight-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    pointer-events: none;
+    --spot-x: 50vw;
+    --spot-y: 50vh;
+    --spot-r: 13rem;
+    background: radial-gradient(
+      circle var(--spot-r) at var(--spot-x) var(--spot-y),
+      transparent 0,
+      transparent 62%,
+      color-mix(in srgb, var(--surface-0) 58%, transparent) 100%
+    );
+  }
+
+  /* On Daylight the dimming is a wash of the light surface, which reads as a
+     vignette rather than as a shadow and keeps the simulation's own colours
+     recognisable inside the circle. */
+  [data-theme='daylight'] .lecture-spotlight-layer {
+    background: radial-gradient(
+      circle var(--spot-r) at var(--spot-x) var(--spot-y),
+      transparent 0,
+      transparent 58%,
+      rgba(15, 23, 42, 0.42) 100%
+    );
+  }
+
+  /* --- 1024x768 ------------------------------------------------------------ */
+
+  /* The target projector. Two things give way at this height: the type scale
+     comes back a step, because 768px cannot hold the full lecture scale and a
+     useful canvas at once, and the transport bar tightens. The canvas keeps
+     everything that is left, which is the point of the mode. */
+  @media (max-height: 800px) {
+    body.presentation-lecture {
+      --text-base: 1.0625rem; /* 17px */
+      --text-md: 1.1875rem; /* 19px */
+      --text-lg: 1.375rem; /* 22px */
+      --text-xl: 1.625rem; /* 26px */
+      --text-2xl: 1.875rem; /* 30px */
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.2rem;
+    }
+
+    body.presentation-lecture .lecture-bar {
+      bottom: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      gap: var(--space-2);
+    }
+
+    body.presentation-lecture #scenarioInfoBox,
+    body.presentation-lecture .scenario-info-box {
+      width: min(36rem, calc(100vw - 20rem - 2 * var(--space-3)));
+      right: var(--space-3);
+    }
+
+    body.presentation-lecture #scenarioInfoBox .scenario-info-content {
+      padding: var(--space-3) var(--space-4);
+    }
+
+    /* The readout is reference rather than headline; it gives up a step before
+       the scenario title does. */
+    body.presentation-lecture #overlay {
+      font-size: var(--text-sm);
+      max-width: 26ch;
+    }
+  }
+
+  /* Narrow projectors and 4:3 in portrait: the bar wraps onto two rows rather
+     than overflowing the viewport, which is why it carries flex-wrap above. */
+  @media (max-width: 720px) {
+    body.presentation-lecture .lecture-bar {
+      width: auto;
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  /* ===========================================================================
+     3. The language picker
+     =========================================================================== */
+
+  .locale-dock-glyph {
+    display: grid;
+    place-items: center;
+    font-size: 0.75em;
+    font-weight: var(--weight-semibold);
+    line-height: 1;
+    background: var(--surface-2);
+    color: var(--text-secondary);
+  }
+
+  /* Two rows of a code and a word. It was three times this wide when each
+     option carried a sentence of coverage text under it. */
+  .locale-menu {
+    min-width: 11rem;
+  }
+
+  .locale-menu-item.is-compact {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .locale-menu-code {
+    display: grid;
+    place-items: center;
+    min-width: 2.25em;
+    padding: 0.15em 0.35em;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-semibold);
+    color: var(--text-secondary);
+  }
+
+  .locale-menu-item.is-compact .theme-menu-label {
+    font-size: var(--text-xs);
+  }
+
+  /* ===========================================================================
+     4. The share dialog's embed row
+     =========================================================================== */
+
+  .share-embed-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-2);
+  }
+
+  .share-embed-note {
+    flex: 1 1 16rem;
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--text-muted, var(--text-secondary));
+    line-height: 1.4;
+  }
+
+  /* ===========================================================================
+     5. The settings grid
+     ---------------------------------------------------------------------------
+     Two columns of label and control on a wide panel; one column on a narrow
+     one. This was set inline in JavaScript as a fixed `1fr 1fr`, which no media
+     query could reach: on a 375px phone the sliders, the selects and the value
+     readouts all ran off the right edge of the panel. Spanish made it more
+     obvious - its labels run about a fifth longer than the English - but the
+     overflow was there in both languages.
+     =========================================================================== */
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px 35px;
+  }
+
+  @media (max-width: 620px) {
+    .settings-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-2) 0;
+    }
+
+    /* Stacked, the label reads as a heading for the control under it rather
+       than as the left half of a row, so it goes left-aligned and loses the
+       right-hand alignment that only made sense in two columns. */
+    .settings-grid .setting-label-container {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: center;
+      gap: var(--space-2);
+      text-align: left;
+    }
+
+    .settings-grid .setting-label-container > * {
+      text-align: left;
+    }
+
+    /* A slider carries its own label as well as the row's, which is invisible
+       in two columns - they sit side by side and read as one heading - and
+       reads as the setting printed twice once they are stacked. The row label
+       is the one that keeps its info button, so the slider's copy goes. */
+    .settings-grid .setting-control label {
+      display: none;
+    }
+
+    /* Controls take the full width they now have, which is what gets the
+       slider's value readout back inside the panel. */
+    .settings-grid .setting-control > select,
+    .settings-grid .setting-control > input[type='color'],
+    .settings-grid .setting-control > .toggle-button {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .settings-grid .setting-control {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  /* ===========================================================================
+     6. The footer on a phone
+     ---------------------------------------------------------------------------
+     The attribution line is `white-space: nowrap` and anchored to the right
+     edge, so on a 375px screen its last link - GitHub - sits past the edge of
+     the viewport and cannot be tapped. It was already off the screen in
+     English; Spanish pushes it eighteen pixels further, because "Validado" is
+     longer than "Validated". Letting it wrap is the whole fix, and the
+     separator dots go with it: a wrapped line broken by centred dots reads as
+     two half-sentences rather than as one list.
+     =========================================================================== */
+
+  @media (max-width: 620px) {
+    .attribution {
+      left: var(--space-2);
+      right: var(--space-2);
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      white-space: normal;
+      row-gap: 2px;
+    }
+
+    .attribution .attribution-sep {
+      display: none;
+    }
+  }
+
+  /* ===========================================================================
+     7. The scenario card below the rail's breakpoint
+     ---------------------------------------------------------------------------
+     A pre-existing bug, fixed here because it lands squarely on the 1024x768
+     projector this pass had to validate against, and because half the card was
+     off the left edge of every laptop between about 740 and 1024 pixels wide.
+
+     Two rules were disagreeing across a cascade layer. css/styles.css, in the
+     `legacy` layer, pins the card with `left: 10px; right: 10px;
+     transform: none` below 1025px. css/components.css, in `components`, gives
+     it `left: 50%` and a transform that centres it in the band between the
+     readout and the rail. Layer order means the component transform wins while
+     the legacy `left` also applies, so the card was translated by half its own
+     width away from an edge it was already flush against.
+
+     Resetting the transform in the same layer as the one that set it is the
+     whole fix; the insets that were always intended then apply.
+     =========================================================================== */
+
+  @media (max-width: 1024px) {
+    #scenarioInfoBox,
+    .scenario-info-box {
+      transform: none;
+      width: auto;
+      max-width: none;
+    }
+  }
+}

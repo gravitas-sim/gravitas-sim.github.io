@@ -24,73 +24,43 @@
 // are documented at /model/ rather than papered over here.
 // =============================================================================
 
-export const SCENARIO_TAGS = {
-  'orbits-kepler': {
-    label: 'Orbits & Kepler',
-    description:
-      "Orbital motion, Kepler's three laws, orbital energy, and the shapes trajectories take.",
-  },
-  'solar-system': {
-    label: 'Solar System',
-    description:
-      'Our own planets, moons, asteroids and comets, at their real relative distances.',
-  },
-  exoplanets: {
-    label: 'Exoplanets',
-    description:
-      'Planets around other stars: architectures, compact systems, and how they compare with ours.',
-  },
-  detection: {
-    label: 'Detection Methods',
-    description:
-      'How planets are actually found: transit photometry, light curves, and what can confound them.',
-  },
-  habitability: {
-    label: 'Habitability',
-    description:
-      'The circumstellar habitable zone, incident starlight, and what being inside a zone does and does not establish.',
-  },
-  'binary-systems': {
-    label: 'Binary Systems',
-    description:
-      'Two or more bodies orbiting a common center of mass, and the dynamics that follow.',
-  },
-  tides: {
-    label: 'Tides & Disruption',
-    description:
-      'Differential gravity: bodies stretched, stripped or torn apart by a close pass.',
-  },
-  chaos: {
-    label: 'Chaos & Encounters',
-    description:
-      'Close passes, slingshots, ejections, and systems whose outcome depends sensitively on where they started.',
-  },
-  'stellar-evolution': {
-    label: 'Stellar Evolution',
-    description:
-      'What stars leave behind: white dwarfs, neutron stars, remnants and the environments that make them.',
-  },
-  'compact-objects': {
-    label: 'Compact Objects',
-    description:
-      'Black holes, neutron stars and white dwarfs, and how gravity behaves close to them.',
-  },
-  relativity: {
-    label: 'Relativity & Gravitational Waves',
-    description:
-      'Inspiralling compact binaries and merger events, in the curriculum sense: the underlying solver stays Newtonian.',
-  },
-  'galaxies-clusters': {
-    label: 'Galaxies & Clusters',
-    description:
-      'Many-body systems at the largest scales Gravitas models: cluster dynamics, galactic centers, and encounters between them.',
-  },
-  'dark-matter': {
-    label: 'Dark Matter',
-    description:
-      'The two measurements that found it: rotation curves that stay flat when they should fall, and clusters whose members move far too fast for the mass that shines.',
-  },
-};
+/**
+ * The controlled vocabulary, assembled from the message catalogue.
+ *
+ * The labels and descriptions moved to js/i18n/en.js with the rest of the
+ * user-facing strings; the ids and their order stay here, because they are the
+ * vocabulary itself rather than words about it. A tag id appears in a scenario's
+ * `tags` array and in nothing a reader ever sees.
+ *
+ * As with SCENARIO_INFO, the strings assembled here are English. The gallery
+ * reads js/i18n/scenario.js's tagLabelLocalized() instead, which answers in the
+ * reader's language.
+ */
+import { EN } from '../i18n/en.js';
+
+export const SCENARIO_TAGS = Object.fromEntries(
+  [
+    'orbits-kepler',
+    'solar-system',
+    'exoplanets',
+    'detection',
+    'habitability',
+    'binary-systems',
+    'tides',
+    'chaos',
+    'stellar-evolution',
+    'compact-objects',
+    'relativity',
+    'galaxies-clusters',
+    'dark-matter',
+  ].map(id => [
+    id,
+    {
+      label: EN[`tag.${id}.label`] ?? id,
+      description: EN[`tag.${id}.description`] ?? '',
+    },
+  ])
+);
 
 /** Tag ids in the order the concept chips should appear. */
 export const TAG_ORDER = Object.keys(SCENARIO_TAGS);

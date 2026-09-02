@@ -19,11 +19,26 @@ import { initExportDialog } from './exportDialog.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
 import { initScenarioBrowser } from './scenarioBrowser.js';
+import { initI18n, getLocale, onLocaleChange } from './i18n/index.js';
+import { initI18nDom } from './i18n/dom.js';
+import { initLocalePicker } from './i18n/picker.js';
+import { initBottomDock } from './bottomDock.js';
+import { setLessonLocale } from './data/investigations/registry.js';
+import { initEmbedMode, initEmbedChrome } from './embed.js';
+import { initLecture } from './lecture.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Language and presentation are settled before the first paint, and before
+  // anything reads them. initI18n only picks the locale; the markup sweep waits
+  // for initI18nDom() below, once the rest of the document is known to exist.
+  initI18n();
+  // Embed mode has to be entered here rather than after the splash: a rail that
+  // appears for one frame and then vanishes reads as a bug in the host page.
+  const embedded = initEmbedMode();
+
   const canvas = document.getElementById('simulationCanvas');
   const starfieldCanvas = document.getElementById('starfieldCanvas');
   const splash = document.getElementById('splash');
@@ -51,7 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Decided once, at boot: a first-time visitor with no deep link in the URL.
   // Reading it here rather than at splash-end means the answer cannot change
   // underneath the start-up sequence.
-  const frontDoorPending = shouldShowWelcome();
+  // An embed is a figure in somebody else's page. The front door is a
+  // first-visit introduction to *this application*, which is not what the
+  // reader came to that page for, and it would cover the figure entirely.
+  const frontDoorPending = !embedded && shouldShowWelcome();
 
   const revealApp = () => {
     if (revealed) return;
@@ -272,6 +290,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initShare();
     initExportDialog();
+    // The markup sweep runs after the dialogs exist but before the interface is
+    // revealed, so nothing is ever seen in the wrong language.
+    initI18nDom();
+    initLocalePicker();
+    initBottomDock();
+    // The lesson registry imports nothing, so it cannot read the locale for
+    // itself; the two are connected here. Lessons are content and are fetched
+    // in the language the interface is in, one lesson at a time.
+    setLessonLocale(getLocale());
+    onLocaleChange(setLessonLocale);
+    initLecture();
+    initEmbedChrome();
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();

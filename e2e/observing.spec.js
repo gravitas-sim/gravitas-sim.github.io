@@ -276,8 +276,10 @@ test.describe('the shared observer geometry', () => {
     await app.loadScenario('Solar System');
     await app.waitForFrames(20);
 
+    // The rail is an accordion, so the Tools section has to be open before the
+    // frame selector is reachable - which is what a user does too.
+    await app.railControl('referenceFrameSelect');
     const select = page.locator('#referenceFrameSelect');
-    await expect(select).toBeVisible();
 
     await select.selectOption('barycenter');
     await expect

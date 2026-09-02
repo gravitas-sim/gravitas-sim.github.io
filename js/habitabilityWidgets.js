@@ -30,6 +30,7 @@ import {
   EARTH_INSOLATION_WM2,
 } from './habitability.js';
 import { TRAPPIST1_STAR, TRAPPIST1_PLANETS } from './data/trappist1.js';
+import { t } from './i18n/index.js';
 
 // A fixed dark palette rather than the theme's: these are pictures of space
 // with bright stars in them, and theme-colored ink over them is unreadable in
@@ -105,12 +106,16 @@ const wm2 = s =>
 
 const INSOLATION = {
   id: 'hz-insolation',
-  title: 'How much starlight reaches the planet?',
+  get title() {
+    return t('hzW.howMuchStarlightReachesThe');
+  },
   note: 'The star never changes. Only the planet moves. Everything is measured against what Earth receives from the Sun, which is one Earth unit.',
   controls: [
     {
       id: 'distance',
-      label: 'Distance from the star',
+      get label() {
+        return t('hzW.distanceFromTheStar');
+      },
       unit: 'AU',
       min: 0.3,
       max: 3,
@@ -123,18 +128,30 @@ const INSOLATION = {
     {
       label: '0.5 AU',
       values: { distance: 0.5 },
-      note: 'Half of Earth’s distance.',
+      get note() {
+        return t('hzW.halfOfEarthSDistance');
+      },
     },
     {
       label: '1 AU',
       values: { distance: 1 },
-      note: 'Earth’s distance from the Sun.',
+      get note() {
+        return t('hzW.earthSDistanceFromThe');
+      },
     },
-    { label: '2 AU', values: { distance: 2 }, note: 'Twice Earth’s distance.' },
+    {
+      label: '2 AU',
+      values: { distance: 2 },
+      get note() {
+        return t('hzW.twiceEarthSDistance');
+      },
+    },
     {
       label: '3 AU',
       values: { distance: 3 },
-      note: 'Three times Earth’s distance.',
+      get note() {
+        return t('hzW.threeTimesEarthSDistance');
+      },
     },
   ],
   compute(v) {
@@ -145,16 +162,30 @@ const INSOLATION = {
     const c = this.compute(v);
     return [
       {
-        label: 'Distance from the star',
+        get label() {
+          return t('hzW.distanceFromTheStar');
+        },
         value: withUnit(c.distanceAU.toFixed(2), 'AU'),
       },
       {
-        label: 'Starlight reaching each square meter',
+        get label() {
+          return t('hzW.starlightReachingEachSquareMeter');
+        },
         value: earthUnits(c.insolation),
         emphasis: true,
       },
-      { label: 'The same thing in physical units', value: wm2(c.insolation) },
-      { label: 'Earth, for comparison', value: '1.00 Earths at 1 AU' },
+      {
+        get label() {
+          return t('hzW.theSameThingInPhysical');
+        },
+        value: wm2(c.insolation),
+      },
+      {
+        get label() {
+          return t('hzW.earthForComparison');
+        },
+        value: '1.00 Earths at 1 AU',
+      },
     ];
   },
   draw(canvas, v) {
@@ -294,12 +325,18 @@ const INSOLATION = {
 
 const SPREADING = {
   id: 'hz-spreading',
-  title: 'The same light, spread further',
-  note: 'The star is not running out of light. Watch the patch of light and the shell it lands on as the distance grows.',
+  get title() {
+    return t('hzW.theSameLightSpreadFurther');
+  },
+  get note() {
+    return t('hzW.theStarIsNotRunning');
+  },
   controls: [
     {
       id: 'shell',
-      label: 'Distance from the star',
+      get label() {
+        return t('hzW.distanceFromTheStar');
+      },
       unit: 'AU',
       min: 1,
       max: 4,
@@ -322,28 +359,59 @@ const SPREADING = {
     // rather than the reference case it is.
     if (c.d === 1) {
       return [
-        { label: 'Distance from the star', value: '1 AU' },
-        { label: 'The shell', value: 'the reference, where Earth sits' },
         {
-          label: 'So each square meter gets',
+          get label() {
+            return t('hzW.distanceFromTheStar');
+          },
+          value: '1 AU',
+        },
+        {
+          get label() {
+            return t('hzW.theShell');
+          },
+          value: 'the reference, where Earth sits',
+        },
+        {
+          get label() {
+            return t('hzW.soEachSquareMeterGets');
+          },
           value: '1.00 Earths, by definition',
           emphasis: true,
         },
-        { label: 'Total energy crossing the shell', value: 'the same, always' },
+        {
+          get label() {
+            return t('hzW.totalEnergyCrossingTheShell');
+          },
+          value: 'the same, always',
+        },
       ];
     }
     return [
-      { label: 'Distance from the star', value: withUnit(c.d, 'AU') },
       {
-        label: 'The shell is this many times bigger',
+        get label() {
+          return t('hzW.distanceFromTheStar');
+        },
+        value: withUnit(c.d, 'AU'),
+      },
+      {
+        get label() {
+          return t('hzW.theShellIsThisMany');
+        },
         value: `${c.d} \u00d7 ${c.d} = ${c.area}\u00d7`,
       },
       {
-        label: 'So each square meter gets',
+        get label() {
+          return t('hzW.soEachSquareMeterGets');
+        },
         value: `1 / ${c.area} = ${c.insolation.toFixed(c.d > 2 ? 3 : 2)} Earths`,
         emphasis: true,
       },
-      { label: 'Total energy crossing the shell', value: 'the same, always' },
+      {
+        get label() {
+          return t('hzW.totalEnergyCrossingTheShell');
+        },
+        value: 'the same, always',
+      },
     ];
   },
   draw(canvas, v) {
@@ -441,42 +509,62 @@ const SPREADING = {
 const STARS = [
   {
     key: 'red',
-    name: 'A dim red dwarf',
+    get name() {
+      return t('hzW.aDimRedDwarf');
+    },
     L: 0.0015,
     teff: 3000,
-    note: 'Like Proxima Centauri, the nearest star to the Sun.',
+    get note() {
+      return t('hzW.likeProximaCentauriTheNearest');
+    },
   },
   {
     key: 'orange',
-    name: 'An orange dwarf',
+    get name() {
+      return t('hzW.anOrangeDwarf');
+    },
     L: 0.34,
     teff: 5200,
-    note: 'Like Alpha Centauri B.',
+    get note() {
+      return t('hzW.likeAlphaCentauriB');
+    },
   },
   {
     key: 'sun',
-    name: 'The Sun',
+    get name() {
+      return t('hzW.theSun');
+    },
     L: 1,
     teff: 5772,
-    note: 'The star we know best.',
+    get note() {
+      return t('hzW.theStarWeKnowBest');
+    },
   },
   {
     key: 'bright',
-    name: 'A hotter, brighter star',
+    get name() {
+      return t('hzW.aHotterBrighterStar');
+    },
     L: 5.1,
     teff: 6600,
-    note: 'Like Procyon A.',
+    get note() {
+      return t('hzW.likeProcyonA');
+    },
   },
 ];
 
 const STAR_WIDGET = {
   id: 'hz-star',
-  title: 'The same planet, a different star',
+  get title() {
+    return t('hzW.theSamePlanetADifferent');
+  },
   note: 'The planet stays where you put it. Only the star changes. Watch both the incoming energy and, once it is shown, the band of distances where liquid water could be possible.',
   controls: [
     {
       id: 'star',
-      label: 'Star',
+      get label() {
+        return t('hzW.star');
+      },
       min: 0,
       max: 3,
       step: 1,
@@ -485,7 +573,9 @@ const STAR_WIDGET = {
     },
     {
       id: 'distance',
-      label: 'Planet’s distance',
+      get label() {
+        return t('hzW.planetSDistance');
+      },
       unit: 'AU',
       min: 0.02,
       max: 3,
@@ -509,25 +599,43 @@ const STAR_WIDGET = {
   readout(v, ctx2, spec = {}) {
     const c = this.compute(v, spec);
     const rows = [
-      { label: 'Star', value: c.star.name },
-      { label: 'Its luminosity', value: `${formatL(c.star.L)} Suns` },
       {
-        label: 'Planet’s distance',
+        get label() {
+          return t('hzW.star');
+        },
+        value: c.star.name,
+      },
+      {
+        get label() {
+          return t('hzW.itsLuminosity');
+        },
+        value: `${formatL(c.star.L)} Suns`,
+      },
+      {
+        get label() {
+          return t('hzW.planetSDistance');
+        },
         value: withUnit(v.distance.toFixed(2), 'AU'),
       },
       {
-        label: 'Starlight the planet receives',
+        get label() {
+          return t('hzW.starlightThePlanetReceives');
+        },
         value: earthUnits(c.insolation),
         emphasis: true,
       },
     ];
     if (spec.showZone) {
       rows.push({
-        label: 'Habitable zone runs from',
+        get label() {
+          return t('hzW.habitableZoneRunsFrom');
+        },
         value: `${fmtAU(c.bounds.innerAU)} to ${fmtAU(c.bounds.outerAU)} AU`,
       });
       rows.push({
-        label: 'This planet is',
+        get label() {
+          return t('hzW.thisPlanetIs');
+        },
         value: c.status.label,
         emphasis: true,
       });
@@ -691,12 +799,16 @@ function axisLabel(au, step) {
 
 const BOUNDARIES_WIDGET = {
   id: 'hz-boundaries',
-  title: 'Where the edges come from',
+  get title() {
+    return t('hzW.whereTheEdgesComeFrom');
+  },
   note: 'Two published definitions of the same zone. They differ in what atmospheric conditions they are willing to assume, not in how optimistic anyone feels.',
   controls: [
     {
       id: 'model',
-      label: 'Definition',
+      get label() {
+        return t('hzW.definition');
+      },
       min: 0,
       max: 1,
       step: 1,
@@ -706,12 +818,16 @@ const BOUNDARIES_WIDGET = {
   ],
   presets: [
     {
-      label: 'Conservative',
+      get label() {
+        return t('hzW.conservative');
+      },
       values: { model: 0 },
       note: 'From a climate model: the inner edge is where a water-rich planet would lose its oceans to space, and the outer edge is the most a carbon-dioxide atmosphere can warm a surface.',
     },
     {
-      label: 'Optimistic',
+      get label() {
+        return t('hzW.optimistic');
+      },
       values: { model: 1 },
       note: 'From the Solar System’s own history: Venus has had no surface water for about a billion years, and Mars appears to have had some early on. Those two facts bracket a wider zone.',
     },
@@ -732,23 +848,36 @@ const BOUNDARIES_WIDGET = {
     const c = this.compute(v);
     return [
       {
-        label: 'Definition shown',
+        get label() {
+          return t('hzW.definitionShown');
+        },
         value: c.model === 'optimistic' ? 'Optimistic' : 'Conservative',
       },
       {
-        label: 'Inner edge',
+        get label() {
+          return t('hzW.innerEdge');
+        },
         value: `${fmtAU(c.bounds.innerAU)} AU · ${c.bounds.innerLabel}`,
       },
       {
-        label: 'Outer edge',
+        get label() {
+          return t('hzW.outerEdge');
+        },
         value: `${fmtAU(c.bounds.outerAU)} AU · ${c.bounds.outerLabel}`,
       },
       {
-        label: 'Width of the zone',
+        get label() {
+          return t('hzW.widthOfTheZone');
+        },
         value: `${fmtAU(c.bounds.outerAU - c.bounds.innerAU)} AU`,
         emphasis: true,
       },
-      { label: 'Earth sits at', value: '1.00 AU' },
+      {
+        get label() {
+          return t('hzW.earthSitsAt');
+        },
+        value: '1.00 AU',
+      },
     ];
   },
   draw(canvas, v) {
@@ -882,13 +1011,17 @@ let orbitState = { key: '', phase: 0, running: true, trail: [] };
 
 const ORBIT = {
   id: 'hz-orbit',
-  title: 'A year on an eccentric orbit',
+  get title() {
+    return t('hzW.aYearOnAnEccentric');
+  },
   note: 'The planet is not moving at a constant speed. It races through the part of its year closest to the star and takes far longer over the cold outer half, exactly as Kepler’s second law requires.',
   animated: true,
   controls: [
     {
       id: 'ecc',
-      label: 'Eccentricity',
+      get label() {
+        return t('hzW.eccentricity');
+      },
       min: 0,
       max: 0.6,
       step: 0.01,
@@ -897,7 +1030,9 @@ const ORBIT = {
     },
     {
       id: 'semi',
-      label: 'Semi-major axis',
+      get label() {
+        return t('hzW.semiMajorAxis');
+      },
       unit: 'AU',
       min: 0.6,
       max: 1.8,
@@ -907,8 +1042,18 @@ const ORBIT = {
     },
   ],
   actions: [
-    { id: 'run', label: '▶ Run / Pause' },
-    { id: 'reset', label: '↺ Reset' },
+    {
+      id: 'run',
+      get label() {
+        return t('hzW.runPause');
+      },
+    },
+    {
+      id: 'reset',
+      get label() {
+        return t('hzW.reset');
+      },
+    },
   ],
   key: (v, spec = {}) => `${v.ecc}|${v.semi}|${spec.model ?? 'c'}`,
   reset(v, { autorun = true, spec = {} } = {}) {
@@ -952,27 +1097,42 @@ const ORBIT = {
     const c = this.compute(v, spec);
     const rows = [
       {
-        label: 'Distance right now',
+        get label() {
+          return t('hzW.distanceRightNow');
+        },
         value: withUnit(c.now.distanceAU.toFixed(3), 'AU'),
       },
       {
-        label: 'Starlight right now',
+        get label() {
+          return t('hzW.starlightRightNow');
+        },
         value: earthUnits(c.now.insolation),
         emphasis: true,
       },
       {
-        label: 'Closest / furthest',
+        get label() {
+          return t('hzW.closestFurthest');
+        },
         value: `${c.extremes.periapsisAU.toFixed(2)} / ${c.extremes.apoapsisAU.toFixed(2)} AU`,
       },
       {
-        label: 'Starlight at closest / furthest',
+        get label() {
+          return t('hzW.starlightAtClosestFurthest');
+        },
         value: `${earthUnits(c.extremes.periapsisInsolation)} / ${earthUnits(c.extremes.apoapsisInsolation)}`,
       },
     ];
     if (spec.showZone) {
-      rows.push({ label: 'Right now the planet is', value: c.status.label });
       rows.push({
-        label: 'Fraction of the year inside the zone',
+        get label() {
+          return t('hzW.rightNowThePlanetIs');
+        },
+        value: c.status.label,
+      });
+      rows.push({
+        get label() {
+          return t('hzW.fractionOfTheYearInside');
+        },
         value: `${Math.round(c.fraction * 100)}%`,
         emphasis: true,
       });
@@ -1142,12 +1302,16 @@ const ORBIT = {
 
 const TRAPPIST = {
   id: 'hz-trappist',
-  title: 'TRAPPIST-1, all seven planets',
+  get title() {
+    return t('hzW.trappist1AllSevenPlanets');
+  },
   note: 'Every planet in this system orbits closer to its star than Mercury does to the Sun. The star is so faint that the habitable zone is in there with them.',
   controls: [
     {
       id: 'model',
-      label: 'Zone definition',
+      get label() {
+        return t('hzW.zoneDefinition');
+      },
       min: 0,
       max: 1,
       step: 1,
@@ -1173,7 +1337,9 @@ const TRAPPIST = {
     const c = this.compute(v, spec);
     const rows = [
       {
-        label: 'Habitable zone',
+        get label() {
+          return t('hzW.habitableZone');
+        },
         value: `${fmtAU(c.bounds.innerAU)} to ${fmtAU(c.bounds.outerAU)} AU`,
         emphasis: true,
       },
@@ -1308,9 +1474,24 @@ const TRAPPIST = {
     ctx.fillText('the same axis, with the Solar System on it', left, sy - 22);
 
     const solar = [
-      { name: 'Mercury', a: 0.387 },
-      { name: 'Venus', a: 0.723 },
-      { name: 'Earth', a: 1.0 },
+      {
+        get name() {
+          return t('hzW.mercury');
+        },
+        a: 0.387,
+      },
+      {
+        get name() {
+          return t('hzW.venus');
+        },
+        a: 0.723,
+      },
+      {
+        get name() {
+          return t('hzW.earth');
+        },
+        a: 1.0,
+      },
     ];
     // All three are far off the right-hand end of this axis, which is the point.
     ctx.font = `10px ${MONO}`;
@@ -1341,7 +1522,9 @@ const TRAPPIST = {
 const CANDIDATES = [
   {
     key: 'A',
-    name: 'Planet A',
+    get name() {
+      return t('hzW.planetA');
+    },
     insolation: 1.05,
     radius: 1.0,
     facts: [
@@ -1355,7 +1538,9 @@ const CANDIDATES = [
   },
   {
     key: 'B',
-    name: 'Planet B',
+    get name() {
+      return t('hzW.planetB');
+    },
     insolation: 0.95,
     radius: 1.1,
     facts: [
@@ -1369,7 +1554,9 @@ const CANDIDATES = [
   },
   {
     key: 'C',
-    name: 'Planet C',
+    get name() {
+      return t('hzW.planetC');
+    },
     insolation: 1.1,
     radius: 1.6,
     facts: [
@@ -1385,12 +1572,16 @@ const CANDIDATES = [
 
 const CANDIDATE_WIDGET = {
   id: 'hz-candidates',
-  title: 'Three planets, similar starlight',
+  get title() {
+    return t('hzW.threePlanetsSimilarStarlight');
+  },
   note: 'All three receive close to what Earth receives, and all three lie inside the modeled habitable zone. That is where the similarity ends.',
   controls: [
     {
       id: 'which',
-      label: 'Showing',
+      get label() {
+        return t('hzW.showing');
+      },
       min: 0,
       max: 2,
       step: 1,

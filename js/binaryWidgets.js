@@ -16,6 +16,7 @@
 
 import { withUnit } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
+import { t } from './i18n/index.js';
 
 /** Simulated years that pass in one second of watching. */
 const YEARS_PER_SECOND = 0.25;
@@ -148,13 +149,19 @@ const activeMasses = (v, spec = {}) =>
 
 const BINARY = {
   id: 'binary',
-  title: 'Two stars, orbiting',
-  note: 'Both stars are moving. Watch them for a few seconds before reading anything off.',
+  get title() {
+    return t('binW.twoStarsOrbiting');
+  },
+  get note() {
+    return t('binW.bothStarsAreMovingWatch');
+  },
   animated: true,
   controls: [
     {
       id: 'm1',
-      label: 'Mass of Star A',
+      get label() {
+        return t('binW.massOfStarA');
+      },
       unit: 'M☉',
       min: 0.5,
       max: 5,
@@ -164,7 +171,9 @@ const BINARY = {
     },
     {
       id: 'm2',
-      label: 'Mass of Star B',
+      get label() {
+        return t('binW.massOfStarB');
+      },
       unit: 'M☉',
       min: 0.5,
       max: 5,
@@ -177,14 +186,44 @@ const BINARY = {
   actions: (spec = {}) =>
     spec.timer
       ? [
-          { id: 'mark', label: '⚑ Mark' },
-          { id: 'stop', label: '■ Stop' },
-          { id: 'run', label: '▶ Run / Pause' },
-          { id: 'reset', label: '↺ Reset' },
+          {
+            id: 'mark',
+            get label() {
+              return t('binW.mark');
+            },
+          },
+          {
+            id: 'stop',
+            get label() {
+              return t('binW.stop');
+            },
+          },
+          {
+            id: 'run',
+            get label() {
+              return t('binW.runPause');
+            },
+          },
+          {
+            id: 'reset',
+            get label() {
+              return t('binW.reset');
+            },
+          },
         ]
       : [
-          { id: 'run', label: '▶ Run / Pause' },
-          { id: 'reset', label: '↺ Reset' },
+          {
+            id: 'run',
+            get label() {
+              return t('binW.runPause');
+            },
+          },
+          {
+            id: 'reset',
+            get label() {
+              return t('binW.reset');
+            },
+          },
         ],
   facts(v, spec) {
     const m = activeMasses(v, spec);
@@ -239,35 +278,47 @@ const BINARY = {
 
     if (has('masses')) {
       rows.push({
-        label: 'Mass of Star A',
+        get label() {
+          return t('binW.massOfStarA');
+        },
         value: withUnit(f.m1.toFixed(1), 'M☉'),
       });
       rows.push({
-        label: 'Mass of Star B',
+        get label() {
+          return t('binW.massOfStarB');
+        },
         value: withUnit(f.m2.toFixed(1), 'M☉'),
       });
     }
     if (has('distances')) {
       rows.push({
-        label: 'Star A, distance from the barycenter',
+        get label() {
+          return t('binW.starADistanceFromThe');
+        },
         value: withUnit(f.r1.toFixed(2), 'AU'),
         emphasis: true,
       });
       rows.push({
-        label: 'Star B, distance from the barycenter',
+        get label() {
+          return t('binW.starBDistanceFromThe');
+        },
         value: withUnit(f.r2.toFixed(2), 'AU'),
         emphasis: true,
       });
     }
     if (has('separation')) {
       rows.push({
-        label: 'Distance between the two stars',
+        get label() {
+          return t('binW.distanceBetweenTheTwoStars');
+        },
         value: withUnit(f.sep.toFixed(1), 'AU'),
       });
     }
     if (has('which')) {
       rows.push({
-        label: 'Which star is closer to the balance point',
+        get label() {
+          return t('binW.whichStarIsCloserTo');
+        },
         value:
           Math.abs(f.m1 - f.m2) < 1e-6
             ? 'neither: they are the same'
@@ -279,7 +330,9 @@ const BINARY = {
     }
     if (has('clock')) {
       rows.push({
-        label: 'Years since you started watching',
+        get label() {
+          return t('binW.yearsSinceYouStartedWatching');
+        },
         value: withUnit(bin.years.toFixed(2), 'yr'),
       });
     }
@@ -289,7 +342,9 @@ const BINARY = {
           ? null
           : (bin.stoppedAt ?? bin.years) - bin.markedAt;
       rows.push({
-        label: 'Stopwatch',
+        get label() {
+          return t('binW.stopwatch');
+        },
         value:
           elapsed === null
             ? 'press Mark when Star A crosses the line'
@@ -305,28 +360,38 @@ const BINARY = {
     }
     if (has('period')) {
       rows.push({
-        label: 'Time for one full orbit',
+        get label() {
+          return t('binW.timeForOneFullOrbit');
+        },
         value: withUnit(f.period.toFixed(2), 'years'),
       });
     }
     if (has('total')) {
       rows.push({
-        label: 'Total mass of the pair',
+        get label() {
+          return t('binW.totalMassOfThePair');
+        },
         value: withUnit(f.total.toFixed(1), 'M☉'),
       });
     }
     if (has('wobble')) {
       rows.push({
-        label: 'How far the planet moves',
+        get label() {
+          return t('binW.howFarThePlanetMoves');
+        },
         value: withUnit(f.r2.toFixed(2), 'AU'),
       });
       rows.push({
-        label: 'How far the star moves',
+        get label() {
+          return t('binW.howFarTheStarMoves');
+        },
         value: withUnit((f.r1 * 1000).toFixed(1), 'thousandths of an AU'),
         emphasis: true,
       });
       rows.push({
-        label: 'The star’s wobble, compared with the planet’s orbit',
+        get label() {
+          return t('binW.theStarSWobbleCompared');
+        },
         value: `about ${Math.round(f.r2 / f.r1)} times smaller`,
       });
     }
@@ -530,19 +595,47 @@ const BINARY = {
 
 let pair = { years: 0, running: true, trails: [[], []] };
 const PAIR_SYSTEMS = [
-  { m1: 0.5, m2: 0.5, sep: 4, label: 'lightweight pair' },
-  { m1: 2, m2: 2, sep: 4, label: 'heavyweight pair' },
+  {
+    m1: 0.5,
+    m2: 0.5,
+    sep: 4,
+    get label() {
+      return t('binW.lightweightPair');
+    },
+  },
+  {
+    m1: 2,
+    m2: 2,
+    sep: 4,
+    get label() {
+      return t('binW.heavyweightPair');
+    },
+  },
 ];
 
 const BINARY_COMPARE = {
   id: 'binary-compare',
-  title: 'Same size orbit, different masses',
-  note: 'Both pairs are exactly the same distance apart. Only the masses differ. Watch which one gets round first.',
+  get title() {
+    return t('binW.sameSizeOrbitDifferentMasses');
+  },
+  get note() {
+    return t('binW.bothPairsAreExactlyThe');
+  },
   animated: true,
   controls: [],
   actions: [
-    { id: 'run', label: '▶ Run / Pause' },
-    { id: 'reset', label: '↺ Reset' },
+    {
+      id: 'run',
+      get label() {
+        return t('binW.runPause');
+      },
+    },
+    {
+      id: 'reset',
+      get label() {
+        return t('binW.reset');
+      },
+    },
   ],
   reset(v, { autorun = true } = {}) {
     pair = { years: 0, running: autorun, trails: [[], []] };
@@ -562,7 +655,12 @@ const BINARY_COMPARE = {
   },
   readout() {
     return [
-      { label: 'Years elapsed', value: withUnit(pair.years.toFixed(2), 'yr') },
+      {
+        get label() {
+          return t('binW.yearsElapsed');
+        },
+        value: withUnit(pair.years.toFixed(2), 'yr'),
+      },
       ...PAIR_SYSTEMS.map(sys => {
         const f = binaryFacts(sys.m1, sys.m2, sys.sep);
         return {
@@ -572,7 +670,9 @@ const BINARY_COMPARE = {
         };
       }),
       {
-        label: 'Separation of each pair',
+        get label() {
+          return t('binW.separationOfEachPair');
+        },
         value: `${PAIR_SYSTEMS[0].sep} AU, both the same`,
       },
     ];
@@ -676,12 +776,18 @@ const BINARY_COMPARE = {
 
 const BALANCE = {
   id: 'balance',
-  title: 'The balance point',
-  note: 'A see-saw balances when the heavier child sits closer to the middle. Two stars do exactly the same thing.',
+  get title() {
+    return t('binW.theBalancePoint');
+  },
+  get note() {
+    return t('binW.aSeeSawBalancesWhen');
+  },
   controls: [
     {
       id: 'd1',
-      label: 'Star A, distance from the middle',
+      get label() {
+        return t('binW.starADistanceFromThe2');
+      },
       unit: 'AU',
       min: 1,
       max: 4,
@@ -691,7 +797,9 @@ const BALANCE = {
     },
     {
       id: 'd2',
-      label: 'Star B, distance from the middle',
+      get label() {
+        return t('binW.starBDistanceFromThe2');
+      },
       unit: 'AU',
       min: 1,
       max: 4,
@@ -702,24 +810,40 @@ const BALANCE = {
   ],
   presets: [
     {
-      label: '1 AU and 2 AU',
+      get label() {
+        return t('binW.1AuAnd2Au');
+      },
       values: { d1: 1, d2: 2 },
-      note: 'Star B is twice as far out, so Star A must be twice as heavy to balance it.',
+      get note() {
+        return t('binW.starBIsTwiceAs');
+      },
     },
     {
-      label: '1 AU and 3 AU',
+      get label() {
+        return t('binW.1AuAnd3Au');
+      },
       values: { d1: 1, d2: 3 },
-      note: 'Star B is three times as far out, so Star A is three times as heavy.',
+      get note() {
+        return t('binW.starBIsThreeTimes');
+      },
     },
     {
-      label: '2 AU and 4 AU',
+      get label() {
+        return t('binW.2AuAnd4Au');
+      },
       values: { d1: 2, d2: 4 },
-      note: 'Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves.',
+      get note() {
+        return t('binW.twiceAsFarAgainSo');
+      },
     },
     {
-      label: 'Equal, 2 AU each',
+      get label() {
+        return t('binW.equal2AuEach');
+      },
       values: { d1: 2, d2: 2 },
-      note: 'Equal distances mean equal masses. This is the case you started the lesson with.',
+      get note() {
+        return t('binW.equalDistancesMeanEqualMasses');
+      },
     },
   ],
   compute(v, spec = {}) {
@@ -739,10 +863,22 @@ const BALANCE = {
     const heavier = c.ratio >= 1 ? 'Star A' : 'Star B';
     const times = c.ratio >= 1 ? c.ratio : 1 / c.ratio;
     const rows = [
-      { label: 'Star A is this far from the middle', value: `${v.d1} AU` },
-      { label: 'Star B is this far from the middle', value: `${v.d2} AU` },
       {
-        label: 'The heavier star, and by how much',
+        get label() {
+          return t('binW.starAIsThisFar');
+        },
+        value: `${v.d1} AU`,
+      },
+      {
+        get label() {
+          return t('binW.starBIsThisFar');
+        },
+        value: `${v.d2} AU`,
+      },
+      {
+        get label() {
+          return t('binW.theHeavierStarAndBy');
+        },
         value:
           c.ratio === 1
             ? 'neither: they weigh the same'
@@ -922,12 +1058,16 @@ function siriusAt(year) {
 
 const VISUAL_BINARY = {
   id: 'visual-binary',
-  title: 'Sirius, watched for a century',
+  get title() {
+    return t('binW.siriusWatchedForACentury');
+  },
   note: 'Each dot is where the faint companion was seen, relative to the bright star. Slide forward through the years and the orbit draws itself.',
   controls: [
     {
       id: 'year',
-      label: 'Observations up to',
+      get label() {
+        return t('binW.observationsUpTo');
+      },
       unit: '',
       min: 1900,
       max: 2000,
@@ -939,22 +1079,32 @@ const VISUAL_BINARY = {
   ],
   presets: [
     {
-      label: 'One decade',
+      get label() {
+        return t('binW.oneDecade');
+      },
       values: { year: 1910 },
-      note: 'Three dots. They are moving, but nobody could tell you the shape of the orbit from this.',
+      get note() {
+        return t('binW.threeDotsTheyAreMoving');
+      },
     },
     {
-      label: 'Half an orbit',
+      get label() {
+        return t('binW.halfAnOrbit');
+      },
       values: { year: 1925 },
       note: 'A curve is appearing. Notice the dots are further apart when the companion is on the near side: it moves faster there, which is Kepler’s second law showing up in real data.',
     },
     {
-      label: 'One full orbit',
+      get label() {
+        return t('binW.oneFullOrbit');
+      },
       values: { year: 1945 },
       note: 'Fifty years of watching gives one complete orbit, and with it the period and the size. That is everything the mass formula needs.',
     },
     {
-      label: 'A century',
+      get label() {
+        return t('binW.aCentury');
+      },
       values: { year: 2000 },
       note: 'Two orbits. The companion returns to the same track, which is how astronomers know they are watching a bound pair rather than two stars passing.',
     },
@@ -972,15 +1122,37 @@ const VISUAL_BINARY = {
   readout(v) {
     const c = this.compute(v);
     return [
-      { label: 'Observations plotted', value: `${c.points.length}` },
-      { label: 'Years of watching', value: `${Math.round(v.year - 1900)}` },
       {
-        label: 'Orbits completed',
+        get label() {
+          return t('binW.observationsPlotted');
+        },
+        value: `${c.points.length}`,
+      },
+      {
+        get label() {
+          return t('binW.yearsOfWatching');
+        },
+        value: `${Math.round(v.year - 1900)}`,
+      },
+      {
+        get label() {
+          return t('binW.orbitsCompleted');
+        },
         value: c.complete.toFixed(2),
         emphasis: true,
       },
-      { label: 'Period, once the orbit closes', value: '50.1 years' },
-      { label: 'Orbit size, once the orbit closes', value: '19.8 AU' },
+      {
+        get label() {
+          return t('binW.periodOnceTheOrbitCloses');
+        },
+        value: '50.1 years',
+      },
+      {
+        get label() {
+          return t('binW.orbitSizeOnceTheOrbit');
+        },
+        value: '19.8 AU',
+      },
     ];
   },
   draw(canvas, v) {

@@ -4,6 +4,11 @@
 // Structured data for the welcome screen, kept apart from its behavior in
 // js/welcome.js.
 //
+// Every string here is a message id rather than the words themselves, resolved
+// by js/welcome.js through the catalogue. That keeps this file free of imports
+// - a test can read it without booting the app - while the front door still
+// speaks the reader's language.
+//
 // The rule this file exists to enforce: the front door never restates anything
 // the app already knows. Scenario titles and summaries come from
 // SCENARIO_INFO, lesson titles from the investigation registry, and the card
@@ -37,43 +42,43 @@ export const FEATURED_SCENARIO_KEYS = [
 export const ENTRY_CARDS = [
   {
     id: 'sandbox',
-    eyebrow: 'Free exploration',
-    title: 'Sandbox',
-    text: 'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
+    eyebrow: 'welcomeCard.sandbox.eyebrow',
+    title: 'welcomeCard.sandbox.title',
+    text: 'welcomeCard.sandbox.text',
     action: 'enter',
-    cta: 'Enter the sandbox',
+    cta: 'welcomeCard.sandbox.cta',
   },
   {
     id: 'investigations',
-    eyebrow: 'Guided lessons',
-    title: 'Investigations',
-    text: 'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
+    eyebrow: 'welcomeCard.investigations.eyebrow',
+    title: 'welcomeCard.investigations.title',
+    text: 'welcomeCard.investigations.text',
     action: 'investigations',
-    cta: 'Browse investigations',
+    cta: 'welcomeCard.investigations.cta',
   },
   {
     id: 'instructors',
-    eyebrow: 'For teaching',
-    title: 'Instructors',
-    text: 'Instructor guides, learning objectives, answer keys and a curriculum map for introductory astronomy courses.',
+    eyebrow: 'welcomeCard.instructors.eyebrow',
+    title: 'welcomeCard.instructors.title',
+    text: 'welcomeCard.instructors.text',
     action: 'instructors',
-    cta: 'Instructor resources',
+    cta: 'welcomeCard.instructors.cta',
   },
 ];
 
 /** What a student, an instructor and a curious visitor each get out of it. */
 export const AUDIENCES = [
   {
-    title: 'For students',
-    text: 'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
+    title: 'welcomeAudience.students.title',
+    text: 'welcomeAudience.students.text',
   },
   {
-    title: 'For instructors',
-    text: 'Six guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+    title: 'welcomeAudience.instructors.title',
+    text: 'welcomeAudience.instructors.text',
   },
   {
-    title: 'For the curious',
-    text: 'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
+    title: 'welcomeAudience.curious.title',
+    text: 'welcomeAudience.curious.text',
   },
 ];
 
@@ -87,12 +92,12 @@ export const AUDIENCES = [
 export const RESOURCE_LINKS = {
   model: {
     href: '/model/',
-    label: 'How Gravitas models the universe',
-    note: 'What is calculated, what is approximated, and what is only drawn.',
+    label: 'welcomeLink.model.label',
+    note: 'welcomeLink.model.note',
   },
   instructors: {
     href: '/instructors/',
-    label: 'Instructor resources',
-    note: 'Guides, answer keys and a curriculum map.',
+    label: 'welcomeCard.instructors.cta',
+    note: 'welcomeLink.instructors.note',
   },
 };

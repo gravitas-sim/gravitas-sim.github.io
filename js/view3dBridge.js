@@ -14,6 +14,8 @@
 // updater is handed over here once the module has loaded.
 // =============================================================================
 
+import { t } from './i18n/index.js';
+
 let loading = null;
 let updater = null;
 
@@ -74,7 +76,7 @@ export function watchFor3DView() {
       btn.textContent = previous;
       btn.disabled = false;
       const { toast } = await import('./controls.js');
-      toast('The spacetime view could not be loaded. Check your connection.');
+      toast(t('view3d.loadFailed'));
     }
   };
 

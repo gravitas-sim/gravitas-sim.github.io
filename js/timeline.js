@@ -28,6 +28,7 @@ import {
   NeutronStar,
   WhiteDwarf,
   setPhysicsObjectCounter,
+  syncReportedMass,
 } from './physics.js';
 import { state } from './ui.js';
 import { debugLog } from './utils.js';
@@ -240,6 +241,11 @@ function restore(offset) {
     obj.vel.x = row[b + F_VX];
     obj.vel.y = row[b + F_VY];
     obj.mass = row[b + F_MASS];
+    // A scrub writes the recorded mass straight onto the body, so the mass the
+    // class reports has to be recomputed from it. Without this, rewinding past
+    // a merger or a collision left the inspector describing the body's mass
+    // before the event and gravity using the mass after it.
+    syncReportedMass(obj);
     obj.radius = row[b + F_RADIUS];
     obj.alive = row[b + F_ALIVE] !== 0;
     if (typeof obj.updateRadius === 'function' && kind === 'BlackHole') {

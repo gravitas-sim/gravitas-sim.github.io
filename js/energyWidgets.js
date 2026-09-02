@@ -15,25 +15,44 @@
 
 import { withUnit } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
+import { t } from './i18n/index.js';
 
 const G = 6.674e-11;
 
 /** Real bodies, so the escape speeds a student reads are the real ones. */
 const BODIES = {
   moon: {
-    label: 'the Moon',
+    get label() {
+      return t('energyW.theMoon');
+    },
     mass: 7.346e22,
     radius: 1.7374e6,
     color: '#b9bdc6',
   },
-  earth: { label: 'Earth', mass: 5.972e24, radius: 6.371e6, color: '#5b9bd5' },
+  earth: {
+    get label() {
+      return t('energyW.earth');
+    },
+    mass: 5.972e24,
+    radius: 6.371e6,
+    color: '#5b9bd5',
+  },
   jupiter: {
-    label: 'Jupiter',
+    get label() {
+      return t('energyW.jupiter');
+    },
     mass: 1.898e27,
     radius: 7.1492e7,
     color: '#c9a37a',
   },
-  sun: { label: 'the Sun', mass: 1.989e30, radius: 6.957e8, color: '#ffd34d' },
+  sun: {
+    get label() {
+      return t('energyW.theSun');
+    },
+    mass: 1.989e30,
+    radius: 6.957e8,
+    color: '#ffd34d',
+  },
 };
 const BODY_ORDER = ['moon', 'earth', 'jupiter', 'sun'];
 
@@ -199,7 +218,13 @@ function drawEnergyBars(ctx, box, e, colors, opts = {}) {
   const bars = [
     { label: 'motion', value: e.kinetic, color: good },
     { label: 'position', value: e.potential, color: accent },
-    { label: 'TOTAL', value: e.total, color: e.total < 0 ? warn : '#ff6b6b' },
+    {
+      get label() {
+        return t('energyW.total');
+      },
+      value: e.total,
+      color: e.total < 0 ? warn : '#ff6b6b',
+    },
   ];
   const maxUp = Math.max(0, ...bars.map(b => b.value));
   const maxDown = Math.max(0, ...bars.map(b => -b.value));
@@ -306,13 +331,17 @@ let shot = { key: '', path: null, head: 0, running: false, view: 1 };
 
 const LAUNCH = {
   id: 'launch',
-  title: 'Does it come back?',
+  get title() {
+    return t('energyW.doesItComeBack');
+  },
   note: 'Fired sideways off a tower 320 km high, the way Newton imagined firing a cannonball off a very tall mountain. Move the speed and it re-runs. The bars are energies, in megajoules per kilogram.',
   animated: true,
   controls: [
     {
       id: 'v',
-      label: 'Launch speed',
+      get label() {
+        return t('energyW.launchSpeed');
+      },
       unit: 'km/s',
       min: 3,
       max: 16,
@@ -323,29 +352,49 @@ const LAUNCH = {
   ],
   presets: [
     {
-      label: 'Slow: 6 km/s',
+      get label() {
+        return t('energyW.slow6KmS');
+      },
       values: { v: 6 },
       note: 'Not fast enough. It arcs a long way over the horizon and falls back to the ground, which is what every cannonball in history has done.',
     },
     {
-      label: 'Orbit: 7.8 km/s',
+      get label() {
+        return t('energyW.orbit78KmS');
+      },
       values: { v: 7.8 },
       note: 'Now it falls all the way round. Nothing has changed except the speed: an orbit is what happens when you fall fast enough sideways that the ground curves away underneath you as fast as you drop.',
     },
     {
-      label: 'Boundary: 10.9 km/s',
+      get label() {
+        return t('energyW.boundary109KmS');
+      },
       values: { v: 10.9 },
       note: 'The dividing line from up here. It leaves and never comes back, but only just: it is still slowing down the whole way out, and only stops once it is infinitely far away.',
     },
     {
-      label: 'Fast: 14 km/s',
+      get label() {
+        return t('energyW.fast14KmS');
+      },
       values: { v: 14 },
-      note: 'Clearly gone. It leaves along an open path and still has speed to spare when it is far away.',
+      get note() {
+        return t('energyW.clearlyGoneItLeavesAlong');
+      },
     },
   ],
   actions: [
-    { id: 'run', label: '▶ Run' },
-    { id: 'reset', label: '↺ Reset' },
+    {
+      id: 'run',
+      get label() {
+        return t('energyW.run');
+      },
+    },
+    {
+      id: 'reset',
+      get label() {
+        return t('energyW.reset');
+      },
+    },
   ],
   compute(v) {
     const body = BODIES.earth;
@@ -414,20 +463,28 @@ const LAUNCH = {
           : 'no: it leaves for good';
     return [
       {
-        label: 'Does it come back?',
+        get label() {
+          return t('energyW.doesItComeBack');
+        },
         value: verdict,
         emphasis: true,
       },
       {
-        label: 'Total energy',
+        get label() {
+          return t('energyW.totalEnergy');
+        },
         value: `${MJ(c.total) >= 0 ? '+' : ''}${withUnit(MJ(c.total).toFixed(1), 'MJ per kg')}, ${c.total < 0 ? 'below zero' : 'above zero'}`,
       },
       {
-        label: 'Escape speed from here',
+        get label() {
+          return t('energyW.escapeSpeedFromHere');
+        },
         value: withUnit(kms(c.escape).toFixed(2), 'km/s'),
       },
       {
-        label: 'Furthest it gets',
+        get label() {
+          return t('energyW.furthestItGets');
+        },
         value: !p
           ? '…'
           : p.impact
@@ -611,7 +668,9 @@ let history = { ke: [], pe: [], total: [], id: null, scale: 1, first: null };
 
 const LIVE_ENERGY = {
   id: 'live-energy',
-  title: 'Energy around one orbit',
+  get title() {
+    return t('energyW.energyAroundOneOrbit');
+  },
   note: 'The bars are right now. The plot underneath is the last minute or so: watch the two colored lines trade places while the white one stays where it is.',
   animated: true,
   live: true,
@@ -647,32 +706,52 @@ const LIVE_ENERGY = {
   readout(v, ctx) {
     const body = ctx?.selected;
     if (!body) {
-      return [{ label: 'Click a planet in the simulation', value: '…' }];
+      return [
+        {
+          get label() {
+            return t('energyW.clickAPlanetInThe');
+          },
+          value: '…',
+        },
+      ];
     }
     const e = ctx.energy(body);
     const el = ctx.elements(body);
     if (!e) return [{ label: body.name || 'Body', value: 'no primary found' }];
     const share = v2 => (e.potential ? v2 / Math.abs(e.potential) : 0);
     return [
-      { label: 'Watching', value: body.name || 'Body' },
       {
-        label: 'Energy of motion',
+        get label() {
+          return t('energyW.watching');
+        },
+        value: body.name || 'Body',
+      },
+      {
+        get label() {
+          return t('energyW.energyOfMotion');
+        },
         value: `${(share(e.kinetic) * 100).toFixed(0)}% of the depth`,
       },
       {
-        label: 'Total energy',
+        get label() {
+          return t('energyW.totalEnergy');
+        },
         value: e.total < 0 ? 'below zero: bound' : 'above zero: unbound',
         emphasis: true,
       },
       {
-        label: 'How much the total has moved',
+        get label() {
+          return t('energyW.howMuchTheTotalHas');
+        },
         value:
           history.first === null
             ? 'watching…'
             : `${((Math.abs(e.total - history.first) / (Math.abs(e.potential) || 1)) * 100).toFixed(2)}% of the depth`,
       },
       {
-        label: 'Where it is',
+        get label() {
+          return t('energyW.whereItIs');
+        },
         value: el
           ? el.r < (el.periapsis + el.apoapsis) / 2
             ? 'on the close, fast part'
@@ -756,13 +835,21 @@ const LIVE_ENERGY = {
 
 const ESCAPE_COMPARE = {
   id: 'escape-compare',
-  title: 'What makes escape hard?',
-  note: 'Escape speed from four real bodies. Move the slider to start further out and watch every bar fall.',
+  get title() {
+    return t('energyW.whatMakesEscapeHard');
+  },
+  get note() {
+    return t('energyW.escapeSpeedFromFourReal');
+  },
   controls: [
     {
       id: 'dist',
-      label: 'Start distance',
-      unit: '× body radius',
+      get label() {
+        return t('energyW.startDistance');
+      },
+      get unit() {
+        return t('energyW.bodyRadius');
+      },
       min: 1,
       max: 20,
       step: 0.5,
@@ -772,17 +859,23 @@ const ESCAPE_COMPARE = {
   ],
   presets: [
     {
-      label: 'At the surface',
+      get label() {
+        return t('energyW.atTheSurface');
+      },
       values: { dist: 1 },
       note: 'Standing on each one. This is the number quoted when people say "escape velocity": 11.2 km/s from Earth, and five times that from Jupiter.',
     },
     {
-      label: 'Twice as far out',
+      get label() {
+        return t('energyW.twiceAsFarOut');
+      },
       values: { dist: 2 },
       note: 'Doubling the distance does not halve the escape speed. It divides it by the square root of two, about 1.41: the pull weakens quickly, but the speed you need weakens more slowly.',
     },
     {
-      label: 'Ten radii out',
+      get label() {
+        return t('energyW.tenRadiiOut');
+      },
       values: { dist: 10 },
       note: 'From here escaping Earth needs only 3.5 km/s. Nothing about Earth changed. You simply started most of the way out of its gravity already.',
     },
@@ -813,7 +906,9 @@ const ESCAPE_COMPARE = {
         emphasis: r.key === 'earth',
       })),
       {
-        label: 'Starting distance',
+        get label() {
+          return t('energyW.startingDistance');
+        },
         value: `${v.dist.toFixed(1)} × the body's own radius`,
       },
     ];
@@ -890,12 +985,18 @@ const ESCAPE_COMPARE = {
 
 const SHAPES = {
   id: 'shapes',
-  title: 'One law, three shapes',
-  note: 'The same planet, the same launch point, the same law of gravity. Only the speed is different.',
+  get title() {
+    return t('energyW.oneLawThreeShapes');
+  },
+  get note() {
+    return t('energyW.theSamePlanetTheSame');
+  },
   controls: [
     {
       id: 'k',
-      label: 'Speed, as a fraction of escape speed',
+      get label() {
+        return t('energyW.speedAsAFractionOf');
+      },
       unit: '×',
       // Below about 0.71 the orbit shrinks back towards the planet and there is
       // nothing to see; everything interesting happens between there and the
@@ -909,17 +1010,23 @@ const SHAPES = {
   ],
   presets: [
     {
-      label: 'Below escape',
+      get label() {
+        return t('energyW.belowEscape');
+      },
       values: { k: 0.82 },
       note: 'A closed loop, an ellipse. Total energy below zero: it can only ever reach a certain distance before gravity turns it round.',
     },
     {
-      label: 'Exactly escape',
+      get label() {
+        return t('energyW.exactlyEscape');
+      },
       values: { k: 1 },
       note: 'A parabola, the knife edge. Total energy exactly zero. It never turns round, but it also never gets anywhere with speed left over: it slows towards a dead stop that it only reaches infinitely far away.',
     },
     {
-      label: 'Above escape',
+      get label() {
+        return t('energyW.aboveEscape');
+      },
       values: { k: 1.25 },
       note: 'A hyperbola, an open path. Total energy above zero: it leaves and is still moving when it is far away. This is the shape of an interstellar visitor.',
     },
@@ -948,15 +1055,35 @@ const SHAPES = {
   readout(v) {
     const c = this.compute(v);
     return [
-      { label: 'Shape of the path', value: c.shape, emphasis: true },
-      { label: 'Total energy', value: c.sign },
       {
-        label: 'Does it come back?',
+        get label() {
+          return t('energyW.shapeOfThePath');
+        },
+        value: c.shape,
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('energyW.totalEnergy');
+        },
+        value: c.sign,
+      },
+      {
+        get label() {
+          return t('energyW.doesItComeBack');
+        },
         value: c.shape === 'ellipse' ? 'yes' : 'no',
       },
-      { label: 'Launch speed', value: withUnit(kms(c.v0).toFixed(2), 'km/s') },
       {
-        label: 'Escape speed here',
+        get label() {
+          return t('energyW.launchSpeed');
+        },
+        value: withUnit(kms(c.v0).toFixed(2), 'km/s'),
+      },
+      {
+        get label() {
+          return t('energyW.escapeSpeedHere');
+        },
         value: withUnit(kms(c.vEsc).toFixed(2), 'km/s'),
       },
     ];
@@ -976,9 +1103,27 @@ const SHAPES = {
     // Fixed colors, not theme ones: these are drawn on the sky inside the
     // picture, where the light theme's accent is nearly invisible.
     const reference = [
-      { k: 0.82, color: '#8de08a', label: 'below escape: ellipse' },
-      { k: 1.0, color: '#5ec8f5', label: 'escape exactly: parabola' },
-      { k: 1.25, color: '#ff6b6b', label: 'above escape: hyperbola' },
+      {
+        k: 0.82,
+        color: '#8de08a',
+        get label() {
+          return t('energyW.belowEscapeEllipse');
+        },
+      },
+      {
+        k: 1.0,
+        color: '#5ec8f5',
+        get label() {
+          return t('energyW.escapeExactlyParabola');
+        },
+      },
+      {
+        k: 1.25,
+        color: '#ff6b6b',
+        get label() {
+          return t('energyW.aboveEscapeHyperbola');
+        },
+      },
     ];
     const paths = reference.map(r => ({
       ...r,

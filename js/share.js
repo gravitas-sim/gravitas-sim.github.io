@@ -22,10 +22,17 @@ import {
 } from './shareState.js';
 import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './controls.js';
+import { embedSnippet } from './embed.js';
+import { lessonInHash } from './investigationsLoader.js';
+import { t } from './i18n/index.js';
 
 let els = {};
 let kind = 'auto';
 let lastUrl = '';
+// The scenario the current link describes, for the embed snippet's title. Read
+// from the payload rather than from the live simulation so the title always
+// names what the iframe will actually show.
+let lastScenario = '';
 
 // True only while a link is being applied. The rebuild a link performs fires
 // the same reset event as a user changing scenario, and the two have to be
@@ -71,12 +78,12 @@ export async function applySharedLinkFromUrl() {
     }
 
     announce(
-      `Opened a shared simulation: ${result.scenario}, ${result.bodies} objects.`
+      t('share.link.opened', { scenario: result.scenario, n: result.bodies })
     );
     return true;
   } catch (err) {
     console.warn('Could not open shared link:', err);
-    toast(err.message || 'That link could not be opened.');
+    toast(err.message || t('share.link.failed'));
     return false;
   }
 }
@@ -94,6 +101,12 @@ function watchForDivergence() {
     // away from it. Stripping the fragment here would leave a student who
     // opened an assignment unable to reload, bookmark or re-copy it.
     if (applyingLink) return;
+    // A lesson link names a lesson, not a world. Every step of a lesson sets up
+    // its own scenario and so fires this event, and stripping the fragment on
+    // the first of them would leave a student who opened an assignment link
+    // unable to reload or bookmark their way back to it - and, when start-up
+    // loses the race, on the sandbox instead of on the lesson.
+    if (lessonInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }
@@ -114,6 +127,7 @@ async function refresh() {
 
   const fragment = await encodePayload(payload);
   lastUrl = shareUrl(fragment);
+  lastScenario = payload.s || '';
   els.url.value = lastUrl;
   // Show the front of the link. Setting .value leaves the caret at the end, so
   // the field opens on a meaningless tail of base64 rather than the domain: // which makes a correct link look like a corrupted one.
@@ -154,7 +168,7 @@ async function copyLink() {
   if (!lastUrl) return;
   try {
     await navigator.clipboard.writeText(lastUrl);
-    toast('Link copied');
+    toast(t('share.link.copied'));
   } catch {
     // Clipboard access is refused outside a secure context and in some
     // embedded browsers. Selecting the text at least leaves one keystroke.
@@ -166,7 +180,46 @@ async function copyLink() {
     } catch {
       copied = false;
     }
-    toast(copied ? 'Link copied' : 'Press Ctrl/Cmd + C to copy the link');
+    toast(copied ? t('share.link.copied') : t('share.link.copyFailed'));
+  }
+}
+
+/**
+ * Put an iframe for the current state on the clipboard.
+ *
+ * The snippet is built from `lastUrl` - the very link the dialog is showing -
+ * with `embed=1` added to its query string. That is the whole of the
+ * composition: the payload stays in the fragment untouched, so what an
+ * instructor pastes into a course page restores exactly the state they were
+ * looking at, and the same URL without the parameter is the ordinary share
+ * link. There is no second encoding.
+ */
+async function copyEmbed() {
+  if (!lastUrl) return;
+  const snippet = embedSnippet({ url: lastUrl, scenario: lastScenario });
+  try {
+    await navigator.clipboard.writeText(snippet);
+    toast(t('share.embed.copied'));
+    announce(t('share.embed.copied'));
+  } catch {
+    // Same fallback as the link: put the text somewhere a keystroke can reach.
+    // A textarea rather than the URL field, because the snippet is multi-line
+    // and an <input> would collapse it to one.
+    const holder = document.createElement('textarea');
+    holder.value = snippet;
+    holder.setAttribute('readonly', '');
+    holder.style.position = 'fixed';
+    holder.style.opacity = '0';
+    document.body.appendChild(holder);
+    holder.select();
+    let copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch {
+      copied = false;
+    }
+    holder.remove();
+    toast(copied ? t('share.embed.copied') : t('share.embed.copyFailed'));
   }
 }
 
@@ -227,6 +280,7 @@ export function initShare() {
     seed: document.getElementById('shareSeed'),
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
+    embed: document.getElementById('shareEmbedBtn'),
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };
@@ -236,6 +290,7 @@ export function initShare() {
     isShareDialogOpen() ? closeShareDialog() : openShareDialog();
   });
   els.copy?.addEventListener('click', copyLink);
+  els.embed?.addEventListener('click', copyEmbed);
   els.close?.addEventListener('click', closeShareDialog);
   els.chip?.addEventListener('click', closeShareDialog);
   els.seeded?.addEventListener('click', () => setKind('seeded'));

@@ -38,6 +38,7 @@ import {
   C_SI,
 } from './constants.js';
 import { scientific, withUnit } from './format.js';
+import { t } from './i18n/index.js';
 
 export { G_SI, SOLAR_MASS_KG, SOLAR_RADIUS_M, EARTH_MASS_KG, EARTH_RADIUS_M };
 export { JUPITER_MASS_KG, JUPITER_RADIUS_M, AU_METERS, C_SI };
@@ -372,7 +373,9 @@ export function swallowWholeMassSuns(starMassSuns = 1, starRadiusSolar = 1) {
 export const TIDAL_SYSTEMS = [
   {
     id: 'moon-earth',
-    label: 'the Moon, on the Earth',
+    get label() {
+      return t('tideP.moonOnEarth');
+    },
     short: 'Moon → Earth',
     massKg: MOON_MASS_KG,
     distanceM: MOON_DISTANCE_M,
@@ -381,7 +384,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'sun-earth',
-    label: 'the Sun, on the Earth',
+    get label() {
+      return t('tideP.sunOnEarth');
+    },
     short: 'Sun → Earth',
     massKg: SOLAR_MASS_KG,
     distanceM: AU_METERS,
@@ -390,7 +395,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'earth-moon',
-    label: 'the Earth, on the Moon',
+    get label() {
+      return t('tideP.earthOnMoon');
+    },
     short: 'Earth → Moon',
     massKg: EARTH_MASS_KG,
     distanceM: MOON_DISTANCE_M,
@@ -399,7 +406,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'jupiter-io',
-    label: 'Jupiter, on Io',
+    get label() {
+      return t('tideP.jupiterOnIo');
+    },
     short: 'Jupiter → Io',
     massKg: JUPITER_MASS_KG,
     distanceM: IO_DISTANCE_M,
@@ -408,7 +417,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'star-hotjupiter',
-    label: 'a Sun-like star, on a hot Jupiter at 0.05 AU',
+    get label() {
+      return t('tideP.starOnHotJupiter');
+    },
     short: 'star → hot Jupiter',
     massKg: SOLAR_MASS_KG,
     distanceM: 0.05 * AU_METERS,
@@ -417,7 +428,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'bh-star',
-    label: 'a 10 M☉ black hole, on the Sun at one AU',
+    get label() {
+      return t('tideP.bhOnSunFar');
+    },
     short: 'black hole → Sun',
     massKg: 10 * SOLAR_MASS_KG,
     distanceM: AU_METERS,
@@ -426,7 +439,9 @@ export const TIDAL_SYSTEMS = [
   },
   {
     id: 'bh-star-close',
-    label: 'the same black hole, on the Sun at three million km',
+    get label() {
+      return t('tideP.bhOnSunNear');
+    },
     short: 'black hole → Sun, close',
     massKg: 10 * SOLAR_MASS_KG,
     distanceM: 3e9,

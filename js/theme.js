@@ -6,22 +6,38 @@
 // than carrying its own copy of the palette.
 // =============================================================================
 
+import { t } from './i18n/index.js';
+
 const STORAGE_KEY = 'gravitas_theme';
 
+/**
+ * The themes, in the order the picker lists them.
+ *
+ * Ids only. The names and the one-line descriptions are user-facing text and
+ * live in the message catalogue with the rest of it; themeLabel() and
+ * themeHint() below read them back, so a Spanish reader gets "Luz de día"
+ * without this registry knowing that Spanish exists.
+ */
 export const THEMES = [
-  {
-    id: 'midnight',
-    label: 'Midnight',
-    hint: 'Default. Near-black, high contrast.',
-  },
-  { id: 'deep', label: 'Deep Space', hint: 'Softer blue, lifted surfaces.' },
-  {
-    id: 'observatory',
-    label: 'Observatory',
-    hint: 'Red chrome: preserves night vision.',
-  },
-  { id: 'daylight', label: 'Daylight', hint: 'Light UI for bright rooms.' },
+  { id: 'midnight' },
+  { id: 'deep' },
+  { id: 'observatory' },
+  { id: 'daylight' },
 ];
+
+/**
+ * A theme's display name.
+ * @param {string} id - Theme id
+ * @returns {string} The name, in the reader's language
+ */
+export const themeLabel = id => t(`theme.${id}.label`);
+
+/**
+ * A theme's one-line description.
+ * @param {string} id - Theme id
+ * @returns {string} The description, in the reader's language
+ */
+export const themeHint = id => t(`theme.${id}.hint`);
 
 let current = 'midnight';
 const listeners = new Set();

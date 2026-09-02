@@ -42,6 +42,9 @@ import {
 import { state } from './ui.js';
 import { getSimClock } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
+// Aliased: `t` is already the chart palette in this module, and a translator
+// called on a colour object is a crash rather than a wrong word.
+import { t as translate } from './i18n/index.js';
 
 let enabled = false;
 // The observer used to live here. It now lives in js/observerGeometry.js,
@@ -166,7 +169,7 @@ async function buildChart(chartCanvas) {
       labels: timeLabels,
       datasets: [
         {
-          label: 'Relative Brightness',
+          label: translate('lightCurve.relativeBrightness'),
           data: brightnessValues,
           borderColor: t.accent,
           backgroundColor: t.accentSoft,

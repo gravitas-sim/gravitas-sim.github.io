@@ -320,25 +320,15 @@
     transform: scale(0.95);
   }
 
-  /* Minimized overlay state */
+  /* Minimized overlay state.
+     
+     Sized and coloured in css/chrome.css now, along with the rest of the
+     readout. The `!important` that used to be on every declaration here could
+     not be overridden from a later layer at all - an important declaration in
+     an earlier layer wins - so a 200px box with 8px of padding was still being
+     forced onto a panel that had been rebuilt around a header row. */
   #overlay.minimized {
-    width: auto !important;
-    max-width: 200px !important;
-    height: auto !important;
-    padding: 8px 12px !important;
-    pointer-events: auto !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-  }
-
-  #overlay.minimized .overlay-minimize-btn {
-    /* No rotation: the control now carries a text label, and flipping it made
-       the label render upside-down and mirrored. The glyph swaps instead. */
-  }
-
-  #overlay.minimized .category-label,
-  #overlay.minimized .important-stat,
-  #overlay.minimized .separator-line {
-    display: none !important;
+    pointer-events: auto;
   }
 
   /* Data panel styling improvements */
@@ -437,6 +427,13 @@
     .speed-controls {
       gap: 6px;
       padding: 6px 8px;
+    }
+    .measure-tools {
+      gap: 4px;
+    }
+    .measure-btn {
+      padding: 5px 8px;
+      font-size: 11px;
     }
     .speed-btn {
       padding: 5px 10px;
@@ -885,6 +882,36 @@
     padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid rgba(0, 170, 255, 0.3);
+  }
+
+  /* The measurement tools. A wrapping row rather than one button per line:
+     three short labels stacked would push the rest of the Tools section below
+     the fold on a laptop, and they belong together as a set. */
+  .measure-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .measure-btn {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* The stopwatch's four transport buttons carry one- and two-character
+     labels, so they pair up two to a row rather than costing four rows of a
+     rail that is already long. */
+  #stopwatchControls .measure-btn {
+    flex: 1 1 calc(50% - 3px);
+  }
+
+  .measure-btn[aria-pressed='true'] {
+    background: rgba(0, 170, 255, 0.28);
+    border-color: rgba(0, 170, 255, 0.75);
+    color: #eaf6ff;
   }
 
   .speed-btn {

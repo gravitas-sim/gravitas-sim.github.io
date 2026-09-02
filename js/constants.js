@@ -75,6 +75,40 @@ export const JUPITER_MASSES_PER_SOLAR_MASS = 1047.348644;
 export const EARTH_MASSES_PER_JUPITER_MASS = 317.828;
 
 /**
+ * Ceres, kg. JPL SBDB, from the Dawn mission's gravity science.
+ *
+ * The anchor for the small rocky bodies, and quoted in kilograms rather than as
+ * a ratio because that is how a minor planet's mass is measured and published:
+ * there is no GM ratio against the Sun known to ten digits for a body like this
+ * one. Ceres is a third of the mass of the entire asteroid belt, which makes it
+ * the largest asteroid rather than the typical one - the simulation's asteroids
+ * are the ones a student is meant to be able to see and click on, so the
+ * largest is the right end of the distribution to anchor to, and it is the
+ * comparison MASS_UNITS.md already used when it named this bug.
+ */
+export const CERES_MASS_KG = 9.3835e20;
+
+/**
+ * Comet 1P/Halley, kg. From its measured volume and a bulk density near
+ * 0.6 g/cm^3, which is the usual quoted figure.
+ *
+ * The Comet class already counts its mass in Halley masses and says so; it was
+ * multiplying them by a hardcoded 0.1 simulation units, which is a hundred and
+ * eighty billion times too heavy.
+ */
+export const HALLEY_MASS_KG = 2.2e14;
+
+/**
+ * A kilometre-scale rocky fragment, kg.
+ *
+ * Debris is collision and tidal ejecta, and there is no catalogued object to
+ * anchor it to, so it is built rather than quoted: a sphere one kilometre
+ * across at 3000 kg/m^3, the bulk density of ordinary stony rock. That is
+ * (4/3) * pi * (500 m)^3 * 3000 kg/m^3.
+ */
+export const DEBRIS_FRAGMENT_MASS_KG = 1.5708e12;
+
+/**
  * Earth masses in one solar mass.
  *
  * Quoted for the same reason as JUPITER_MASSES_PER_SOLAR_MASS above: the ratio

@@ -36,6 +36,12 @@ import {
   setPhysicsObjectCounter,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
+  CERES_MASS_UNIT,
+  HALLEY_MASS_UNIT,
+  syncReportedMass,
+  INTEGRATORS,
+  resetSimulationTime,
+  resetConservationBaseline,
   JUPITER_MASS_UNIT,
   Planet,
   GasGiant,
@@ -85,6 +91,22 @@ import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
 import { TRAPPIST1_STAR, TRAPPIST1_PLANETS } from './data/trappist1.js';
 import { applyPreset, applyPresetLayout } from './scenarios.js';
+import { t, hasMessage, onLocaleChange } from './i18n/index.js';
+import { EN } from './i18n/en.js';
+import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
+import { resetPotentialCache } from './vectorOverlay.js';
+import { toast } from './controls.js';
+import {
+  toggleTool,
+  isToolActive,
+  toolsPointerDown,
+  toolsPointerMove,
+  toolsPointerUp,
+  latchStopwatchTo,
+  stopwatch,
+  stopwatchTarget,
+  setCaptureMode,
+} from './sandboxTools.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
 import {
@@ -563,6 +585,23 @@ const DEFAULT_SETTINGS = {
   show_trails: true,
   sim_speed: 1.0,
   show_velocity_vectors: false,
+  // The acceleration overlay and the potential underlay are the two halves of
+  // the "velocity is not force" demonstration. Off by default, like the
+  // velocity arrows: they are an instrument a student switches on, and a
+  // scenario that opened covered in arrows would be teaching before it was
+  // asked to.
+  show_acceleration_vectors: false,
+  show_potential_well: false,
+  // The always-on canvas instrumentation. On by default, because a picture of
+  // a simulation with no scale and no clock on it cannot be cited, and these
+  // are the two facts a screenshot most often has to carry.
+  show_scale_bar: true,
+  show_elapsed_time: true,
+  // The conservation readout. On, and quiet: three short lines in the corner.
+  show_conservation_diagnostics: true,
+  // The numerical scheme. Symplectic Euler is the default and must stay it:
+  // every scenario in the catalog was laid out and timed against its error.
+  integrator: 'Symplectic Euler',
   interactive_add: true,
   trail_length: 15,
   trail_style: 'Glow',
@@ -671,47 +710,47 @@ const getBlackHoleInfo = bh => {
     title: bh.name || 'Black Hole',
     stats: [
       {
-        label: 'Mass',
+        label: t('inspector.stat.mass'),
         value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(f.massKg, 'kg')})`,
       },
       {
-        label: 'Schwarzschild Radius',
+        label: t('inspector.stat.schwarzschildRadius'),
         value: `${withUnit(f.rsKm, 'km')} (${withUnit(f.rsAU, 'AU')})`,
       },
       {
-        label: 'Escape Velocity at Rs',
+        label: t('inspector.stat.escapeVelocityAtRs'),
         value: '100.0% of light speed',
       },
       {
-        label: 'Average Density',
+        label: t('inspector.stat.averageDensity'),
         value: withUnit(f.density, 'kg/m\u00b3'),
       },
       {
-        label: 'Hawking Temperature',
+        label: t('inspector.stat.hawkingTemperature'),
         value: withUnit(f.temperature, 'K'),
       },
       {
         // toFixed() gives up above 1e21 and returns the raw float, so this row
         // used to read "2.0973585980140657e+61 billion years".
-        label: 'Hawking Lifetime',
+        label: t('inspector.stat.hawkingLifetime'),
         value: yearsLabel(f.lifetimeYears),
       },
       {
         // A stellar-mass hole's innermost stable orbit takes milliseconds, and
         // rounding that to "0.0 hours" hid the most striking thing about it.
-        label: 'ISCO Period',
+        label: t('inspector.stat.iscoPeriod'),
         value:
           f.iscoPeriodSeconds < 60
             ? withUnit(f.iscoPeriodSeconds, 's')
             : withUnit(f.iscoPeriodHours, 'hours'),
       },
-      { label: 'Type', value: bhType },
+      { label: t('inspector.stat.type'), value: bhType },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${bh.pos.x.toFixed(1)}, ${bh.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(bh.vel.x, bh.vel.y)),
       },
     ],
@@ -799,35 +838,44 @@ const getStarInfo = star => {
     title: star.name || 'Star',
     stats: [
       {
-        label: 'Mass',
+        label: t('inspector.stat.mass'),
         value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(massInKg, 'kg')})`,
       },
       {
-        label: 'Radius',
+        label: t('inspector.stat.radius'),
         value: `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`,
       },
       {
-        label: 'Surface Temperature',
+        label: t('inspector.stat.surfaceTemperature'),
         value: withUnit(surfaceTemperature, 'K'),
       },
-      { label: 'Luminosity', value: solarHTML(formatNumber(luminosity), 'L') },
-      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.luminosity'),
+        value: solarHTML(formatNumber(luminosity), 'L'),
+      },
+      {
+        label: t('inspector.stat.surfaceGravity'),
+        value: withUnit(surfaceGravity, 'm/s²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
-      { label: 'Spectral Type', value: spectralType },
-      { label: 'Lifespan', value: withUnit(age, 'billion years') },
+      { label: t('inspector.stat.spectralType'), value: spectralType },
       {
-        label: 'Orbital Period',
+        label: t('inspector.stat.lifespan'),
+        value: withUnit(age, 'billion years'),
+      },
+      {
+        label: t('inspector.stat.orbitalPeriod'),
         value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(star.vel.x, star.vel.y)),
       },
     ],
@@ -836,7 +884,10 @@ const getStarInfo = star => {
 };
 
 const getPlanetInfo = planet => {
-  const massInEarths = planet.massInEarths || planet.mass / 1.0;
+  // The fallback divides by the Earth unit, not by 1. Dividing by 1 reports the
+  // raw simulation mass as though it were a number of Earth masses, which is
+  // wrong by a factor of 333 and is the same failure MASS_UNITS.md documents.
+  const massInEarths = planet.massInEarths ?? planet.mass / EARTH_MASS_UNIT;
   const radiusInEarths = planet.radius / PLANET_RADIUS;
   const radiusInKm = radiusInEarths * 6371; // Earth radius in km
   const massInKg = massInEarths * 5.972e24; // Earth mass in kg
@@ -883,30 +934,33 @@ const getPlanetInfo = planet => {
     title: planet.name || 'Planet',
     stats: [
       {
-        label: 'Mass',
+        label: t('inspector.stat.mass'),
         value: `${earthHTML(formatNumber(massInEarths))} (${withUnit(massInKg, 'kg')})`,
       },
       {
-        label: 'Radius',
+        label: t('inspector.stat.radius'),
         value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
-      { label: 'Density', value: withUnit(density, 'kg/m³') },
-      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
+      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.surfaceGravity'),
+        value: withUnit(surfaceGravity, 'm/s²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
       {
-        label: 'Orbital Period',
+        label: t('inspector.stat.orbitalPeriod'),
         value: formatOrbitalPeriod(orbitalPeriodDays),
       },
-      { label: 'Type', value: planetType },
+      { label: t('inspector.stat.type'), value: planetType },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${planet.pos.x.toFixed(1)}, ${planet.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(planet.vel.x, planet.vel.y)),
       },
     ],
@@ -957,30 +1011,33 @@ const getGasGiantInfo = gasGiant => {
     title: gasGiant.name || 'Gas Giant',
     stats: [
       {
-        label: 'Mass',
+        label: t('inspector.stat.mass'),
         value: `${jupiterHTML(formatNumber(massInJupiters))} · ${earthHTML(formatNumber(massInEarths))}`,
       },
       {
-        label: 'Radius',
+        label: t('inspector.stat.radius'),
         value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
-      { label: 'Density', value: withUnit(density, 'kg/m³') },
-      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
+      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.surfaceGravity'),
+        value: withUnit(surfaceGravity, 'm/s²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
       {
-        label: 'Orbital Period',
+        label: t('inspector.stat.orbitalPeriod'),
         value: formatOrbitalPeriod(orbitalPeriodDays),
       },
-      { label: 'Type', value: displayType },
+      { label: t('inspector.stat.type'), value: displayType },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(gasGiant.vel.x, gasGiant.vel.y)),
       },
     ],
@@ -988,7 +1045,10 @@ const getGasGiantInfo = gasGiant => {
   };
 };
 const getAsteroidInfo = asteroid => {
-  const massInEarths = asteroid.mass / 1.0;
+  // Divided by the Earth unit rather than by a literal 1: this row is what the
+  // inspector shows next to a mass slider that works in Earth masses, and the
+  // two have to be the same number.
+  const massInEarths = asteroid.mass / EARTH_MASS_UNIT;
   const massInKg = massInEarths * 5.972e24;
   const radiusInKm = asteroid.radius * 1000; // Rough conversion
   const radiusInM = radiusInKm * 1000;
@@ -1017,27 +1077,30 @@ const getAsteroidInfo = asteroid => {
     title: asteroid.name || 'Asteroid',
     stats: [
       {
-        label: 'Mass',
+        label: t('inspector.stat.mass'),
         value: `${earthHTML(formatNumber(massInEarths, { sig: 4 }))} (${withUnit(massInKg, 'kg')})`,
       },
-      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
-      { label: 'Density', value: withUnit(density, 'kg/m³') },
-      { label: 'Surface Gravity', value: withUnit(surfaceGravity, 'm/s²') },
+      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
+      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.surfaceGravity'),
+        value: withUnit(surfaceGravity, 'm/s²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: withUnit(escapeVelocity / 1000, 'km/s'),
       },
       {
-        label: 'Orbital Period',
+        label: t('inspector.stat.orbitalPeriod'),
         value: formatOrbitalPeriod(orbitalPeriodDays),
       },
-      { label: 'Type', value: asteroidType },
+      { label: t('inspector.stat.type'), value: asteroidType },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${asteroid.pos.x.toFixed(1)}, ${asteroid.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(asteroid.vel.x, asteroid.vel.y)),
       },
     ],
@@ -1065,25 +1128,31 @@ const getNeutronStarInfo = neutronStar => {
     icon: isPulsar ? '⚡' : '⭐',
     title: neutronStar.name || starType,
     stats: [
-      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
-      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
-      { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.mass'),
+        value: solarHTML(formatNumber(massInSuns)),
+      },
+      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
+      {
+        label: t('inspector.stat.density'),
+        value: withUnit(density, 'mass/unit²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: formatSpeed(escapeVelocity),
       },
       {
-        label: 'Schwarzschild Radius',
+        label: t('inspector.stat.schwarzschildRadius'),
         value: formatDistance(schwarzschildRadius),
       },
-      { label: 'Type', value: starType },
-      { label: 'Pulsar', value: isPulsar ? 'Yes' : 'No' },
+      { label: t('inspector.stat.type'), value: starType },
+      { label: t('inspector.stat.pulsar'), value: isPulsar ? 'Yes' : 'No' },
       {
-        label: 'Position',
+        label: t('inspector.stat.position'),
         value: `(${neutronStar.pos.x.toFixed(1)}, ${neutronStar.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(neutronStar.vel.x, neutronStar.vel.y)),
       },
     ],
@@ -1107,21 +1176,33 @@ const getWhiteDwarfInfo = whiteDwarf => {
     icon: '⭐',
     title: whiteDwarf.name || 'White Dwarf',
     stats: [
-      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
-      { label: 'Radius', value: withUnit(radiusInEarths, 'R⊕') },
-      { label: 'Density', value: withUnit(density, 'mass/unit²') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.mass'),
+        value: solarHTML(formatNumber(massInSuns)),
+      },
+      {
+        label: t('inspector.stat.radius'),
+        value: withUnit(radiusInEarths, 'R⊕'),
+      },
+      {
+        label: t('inspector.stat.density'),
+        value: withUnit(density, 'mass/unit²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: formatSpeed(escapeVelocity),
       },
-      { label: 'Chandrasekhar Limit', value: solarHTML(chandrasekharLimit) },
-      { label: 'Type', value: dwarfType },
       {
-        label: 'Position',
+        label: t('inspector.stat.chandrasekharLimit'),
+        value: solarHTML(chandrasekharLimit),
+      },
+      { label: t('inspector.stat.type'), value: dwarfType },
+      {
+        label: t('inspector.stat.position'),
         value: `(${whiteDwarf.pos.x.toFixed(1)}, ${whiteDwarf.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(whiteDwarf.vel.x, whiteDwarf.vel.y)),
       },
     ],
@@ -1151,15 +1232,18 @@ const getGalaxyInfo = galaxy => {
     icon: '🌌',
     title: galaxy.name || 'Galaxy',
     stats: [
-      { label: 'Mass', value: solarHTML(formatNumber(massInSuns)) },
-      { label: 'Type', value: type },
-      { label: 'Speed', value: formatSpeed(speed) },
       {
-        label: 'Position',
+        label: t('inspector.stat.mass'),
+        value: solarHTML(formatNumber(massInSuns)),
+      },
+      { label: t('inspector.stat.type'), value: type },
+      { label: t('inspector.stat.speed'), value: formatSpeed(speed) },
+      {
+        label: t('inspector.stat.position'),
         value: `(${galaxy.pos.x.toFixed(1)}, ${galaxy.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: `(${formatSpeed(galaxy.vel.x)}, ${formatSpeed(galaxy.vel.y)})`,
       },
     ],
@@ -1171,7 +1255,9 @@ const getGalaxyInfo = galaxy => {
 };
 
 const getCometInfo = comet => {
-  const massInComets = comet.massInComets || comet.mass / 0.1;
+  // Halley masses. The 0.1 that was here was a third copy of the constant the
+  // Comet constructor had wrong.
+  const massInComets = comet.massInComets ?? comet.mass / HALLEY_MASS_UNIT;
   const radiusInKm = comet.radius * 1000; // Rough conversion to km
   const density = comet.mass / (Math.PI * comet.radius * comet.radius);
   const escapeVelocity = Math.sqrt(
@@ -1188,21 +1274,27 @@ const getCometInfo = comet => {
     icon: '☄️',
     title: comet.name || 'Comet',
     stats: [
-      { label: 'Mass', value: withUnit(massInComets, 'C') },
-      { label: 'Radius', value: withUnit(radiusInKm, 'km') },
-      { label: 'Density', value: withUnit(density, 'mass/unit²') },
+      { label: t('inspector.stat.mass'), value: withUnit(massInComets, 'C') },
+      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
       {
-        label: 'Escape Velocity',
+        label: t('inspector.stat.density'),
+        value: withUnit(density, 'mass/unit²'),
+      },
+      {
+        label: t('inspector.stat.escapeVelocity'),
         value: formatSpeed(escapeVelocity),
       },
-      { label: 'Tail Length', value: formatDistance(tailLength) },
-      { label: 'Type', value: displayType },
       {
-        label: 'Position',
+        label: t('inspector.stat.tailLength'),
+        value: formatDistance(tailLength),
+      },
+      { label: t('inspector.stat.type'), value: displayType },
+      {
+        label: t('inspector.stat.position'),
         value: `(${comet.pos.x.toFixed(1)}, ${comet.pos.y.toFixed(1)})`,
       },
       {
-        label: 'Velocity',
+        label: t('inspector.stat.velocity'),
         value: formatSpeed(Math.hypot(comet.vel.x, comet.vel.y)),
       },
     ],
@@ -2001,7 +2093,7 @@ const startAutoRefresh = () => {
   // Update refresh button to show auto-refresh is active
   const refreshButton = document.getElementById('refreshEnergyChart');
   if (refreshButton) {
-    refreshButton.title = 'Auto-refresh active - Click to refresh now';
+    refreshButton.title = t('chart.autoRefresh');
     refreshButton.classList.add('auto-refresh-active');
   }
 
@@ -2019,7 +2111,7 @@ const stopAutoRefresh = () => {
     // Update refresh button to show auto-refresh is inactive
     const refreshButton = document.getElementById('refreshEnergyChart');
     if (refreshButton) {
-      refreshButton.title = 'Refresh Chart Data';
+      refreshButton.title = t('chart.refresh');
       refreshButton.classList.remove('auto-refresh-active');
     }
 
@@ -2269,16 +2361,18 @@ const toggleOverlayMinimize = e => {
  */
 const setOverlayMinimized = (overlay, btn, minimized) => {
   overlay.classList.toggle('minimized', minimized);
-  btn.innerHTML = minimized
-    ? '<span aria-hidden="true">▸</span><span class="overlay-toggle-label">Show readout</span>'
-    : '<span aria-hidden="true">▾</span><span class="overlay-toggle-label">Hide</span>';
+  const glyph = minimized ? '▸' : '▾';
+  const label = minimized ? t('readout.toggle.show') : t('readout.toggle.hide');
+  btn.innerHTML =
+    `<span aria-hidden="true">${glyph}</span>` +
+    `<span class="overlay-toggle-label">${label}</span>`;
   btn.title = minimized
-    ? 'Show the simulation readout: object counts, zoom, speed and controls'
-    : 'Collapse the readout panel';
+    ? t('readout.toggle.show.hint')
+    : t('readout.toggle.hide.hint');
   btn.setAttribute('aria-expanded', String(!minimized));
   btn.setAttribute(
     'aria-label',
-    minimized ? 'Show the simulation readout' : 'Collapse the readout panel'
+    minimized ? t('readout.toggle.show.label') : t('readout.toggle.hide.hint')
   );
 };
 /**
@@ -2797,7 +2891,7 @@ const buildInspectorView = (object, type, info) => {
   if (type === 'Star') {
     overlays.push({
       id: 'hzToggleBtn',
-      label: 'Habitable zone',
+      label: t('overlay.habitableZone'),
       on: !!object.showHabitableZone,
       help: 'The range of orbital distances where a rocky planet with a suitable atmosphere could hold liquid water. Inside it is where to look, not a measurement that a world is habitable. Edges follow Kopparapu et al. (2013) from this star\u2019s luminosity and temperature.',
     });
@@ -2807,7 +2901,7 @@ const buildInspectorView = (object, type, info) => {
   // why it says so in its own help text rather than only in the rail.
   overlays.push({
     id: 'frameToggleBtn',
-    label: 'Reference frame',
+    label: t('overlay.referenceFrame'),
     on: frameState().mode === OBJECT && frameState().objectId === object.id,
     help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
   });
@@ -2824,7 +2918,7 @@ const buildInspectorView = (object, type, info) => {
   ) {
     overlays.push({
       id: 'sweepToggleBtn',
-      label: 'Equal-area sweep',
+      label: t('overlay.equalAreaSweep'),
       on:
         state.areaSweepOverlay.active &&
         state.areaSweepOverlay.objectId === object.id,
@@ -2917,7 +3011,7 @@ const massControlModel = (object, type) => {
       massLabel = 'Object Mass';
       break;
     case 'Comet':
-      currentMass = object.massInComets || object.mass / 0.1;
+      currentMass = object.massInComets ?? object.mass / HALLEY_MASS_UNIT;
       minMass = 0.001;
       maxMass = 1.0;
       massUnit = 'C';
@@ -3238,6 +3332,10 @@ const updateObjectMass = (object, type, newMass) => {
       break;
     case 'Asteroid':
       object.mass = newMass * EARTH_MASS_UNIT;
+      // The slider works in Earth masses, so the Ceres count the class carries
+      // has to be recomputed from it. Leaving it behind is how a body ends up
+      // gravitating as one thing and being labelled as another.
+      object.massInCeres = object.mass / CERES_MASS_UNIT;
       // Asteroid radius scales with mass
       object.radius = Math.pow(newMass * 1000, 0.33) * ASTEROID_RADIUS;
 
@@ -3249,7 +3347,9 @@ const updateObjectMass = (object, type, newMass) => {
       }
       break;
     case 'Comet':
-      object.mass = newMass * 0.1; // Convert comet units to simulation units
+      // Halley masses to simulation units. This was a second hardcoded copy of
+      // the same wrong 0.1 the Comet constructor carried.
+      object.mass = newMass * HALLEY_MASS_UNIT;
       object.massInComets = newMass;
       // Comet radius scales with mass
       object.radius = Math.pow(newMass * 10, 0.33) * 2;
@@ -3486,9 +3586,11 @@ const transformCometToAsteroid = object => {
     clearObjectEnergyHistory(object.id);
   }
 
-  const asteroid = new Asteroid(pos, vel);
+  // Built at the mass it already had, in the unit the class counts in, rather
+  // than built at the default and then overwritten: assigning .mass afterwards
+  // left massInCeres describing a different object from the one gravity saw.
+  const asteroid = new Asteroid(pos, vel, object.mass / CERES_MASS_UNIT);
   asteroid.name = object.name || 'Transformed Asteroid';
-  asteroid.mass = object.mass;
 
   const cometIndex = comets.indexOf(object);
   if (cometIndex !== -1) {
@@ -3555,12 +3657,11 @@ const show_scenario_info = () => {
 
   const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
   if (current_scenario_name && SCENARIO_INFO[current_scenario_name]) {
-    const info = SCENARIO_INFO[current_scenario_name];
     const mergingNote =
       SETTINGS.enable_star_merging === false
-        ? '<p style="color:#f5a623;font-size:12px;margin-top:4px;">⚠ Object merging is disabled</p>'
+        ? `<p style="color:#f5a623;font-size:12px;margin-top:4px;">⚠ ${t('scenarioCard.notice.mergingDisabled')}</p>`
         : '';
-    scenarioInfoDiv.innerHTML = `<h4>${info.title}</h4><p>${info.summary}</p>${mergingNote}`;
+    scenarioInfoDiv.innerHTML = `<h4>${scenarioTitle(current_scenario_name)}</h4><p>${scenarioSummary(current_scenario_name)}</p>${mergingNote}`;
     scenarioInfoDiv.classList.add('visible');
     setTimeout(() => scenarioInfoDiv.classList.remove('visible'), 6000);
   } else {
@@ -3580,7 +3681,6 @@ const show_enhanced_scenario_info = scenarioName => {
   // the card is redundant as well as in the way.
   if (document.body.classList.contains('investigation-open')) return;
 
-  const info = SCENARIO_INFO[scenarioName];
   const infoBox = document.getElementById('scenarioInfoBox');
   const title = document.getElementById('scenarioInfoTitle');
   const summary = document.getElementById('scenarioInfoSummary');
@@ -3590,16 +3690,19 @@ const show_enhanced_scenario_info = scenarioName => {
   // initialize_simulation and leave the app half-built.
   if (!infoBox || !title || !summary || !features) return;
 
-  // Set the title and summary
-  title.textContent = info.title;
-  summary.textContent = info.summary;
+  // Set the title and summary. The key is kept on the element because the card
+  // outlives the call that wrote it: a language arriving late has to be able to
+  // ask which scenario is on screen.
+  infoBox.dataset.scenarioKey = scenarioName;
+  title.textContent = scenarioTitle(scenarioName);
+  summary.textContent = scenarioSummary(scenarioName);
 
   // Populate features with relevant notices
   features.innerHTML = '';
   if (SETTINGS.enable_star_merging === false) {
     const li = document.createElement('li');
     li.className = 'merging-disabled-notice';
-    li.textContent = 'Object merging is disabled for this scenario';
+    li.textContent = t('scenarioCard.notice.mergingDisabledLong');
     features.appendChild(li);
   }
 
@@ -3640,28 +3743,39 @@ const show_enhanced_scenario_info = scenarioName => {
   }
 };
 
+// The sound control is an icon button in the readout's header rather than the
+// panel-with-a-paragraph it used to be. The paragraph explained a feature that
+// is off by default and stays off for almost everybody, and it was the first
+// third of the one panel that shows live numbers. The explanation now lives in
+// the button's tooltip, where an explanation of a control belongs.
 const refreshSonificationToggle = () => {
   const toggle = document.getElementById('sonificationToggle');
   if (!toggle) {
     return;
   }
+  const glyph = toggle.querySelector('.readout-icon-glyph') || toggle;
 
   const { muted, supported } = getSonificationState();
   if (!supported) {
-    toggle.textContent = 'Audio N/A';
+    glyph.textContent = '🔇';
     toggle.disabled = true;
     toggle.dataset.state = 'disabled';
-    toggle.title = 'Web Audio is not available in this browser';
+    toggle.title = t('readout.sonification.unavailable');
+    toggle.setAttribute('aria-label', t('readout.sonification.unavailable'));
     toggle.setAttribute('aria-pressed', 'false');
     return;
   }
 
   toggle.disabled = false;
-  toggle.textContent = muted ? '🔇 Sound Off' : '🔊 Sound On';
+  glyph.textContent = muted ? '🔇' : '🔊';
   toggle.dataset.state = muted ? 'muted' : 'active';
   toggle.title = muted
-    ? 'Enable procedural sonification'
-    : 'Mute simulation sonification';
+    ? t('readout.sonification.off.hint')
+    : t('readout.sonification.on.hint');
+  toggle.setAttribute(
+    'aria-label',
+    muted ? t('readout.sonification.off') : t('readout.sonification.on')
+  );
   toggle.setAttribute('aria-pressed', (!muted).toString());
 };
 
@@ -4123,6 +4237,13 @@ const initialize_simulation = (options = {}) => {
   // The object lists have just been repopulated; the physics caches hold the
   // previous set and must not be reused.
   bumpWorldGeneration();
+  // The clock and the conservation baseline belong to the world that was just
+  // torn down, not to this one. The baseline is taken after the caches are
+  // bumped, so it is measured over the bodies that now exist rather than over
+  // whatever the previous scenario left in the cached lists.
+  resetSimulationTime();
+  resetConservationBaseline();
+  resetPotentialCache();
   worldTouched = false;
   // A preset sets its own speed, so the readout is stale until it is told.
   updateSpeedDisplay();
@@ -4809,6 +4930,11 @@ const build_simulation = () => {
         asteroid.diameter = asteroidData.diameter;
         // Same unit the planets use, so relative masses stay true to life
         asteroid.mass = Math.max(asteroidData.mass * EARTH_MASS_UNIT, 1e-12);
+        // These are real asteroids with real, individual masses, so the Ceres
+        // count the class carries has to follow the mass rather than keep the
+        // constructor's default of one. Vesta is a quarter of a Ceres and the
+        // inspector has to say so.
+        syncReportedMass(asteroid);
         asteroids.push(asteroid);
       }
     }
@@ -6120,9 +6246,81 @@ const build_simulation = () => {
 };
 
 // Settings functions
+/**
+ * The label an option menu shows for one of its values.
+ *
+ * The scenario preset list is the exception: its values are scenario keys, and
+ * those already have titles in the catalogue under their own ids, so it defers
+ * to those rather than carrying a second copy. Everything else looks up
+ * `settings.option.<key>.<value>` and falls back to the raw value, which is
+ * always English and always readable.
+ *
+ * @param {string} key - The setting's key
+ * @param {string} value - The stored option value
+ * @returns {string} A label for a reader
+ */
+// The settings panel and the inspector both render text into the DOM rather
+// than carrying data-i18n attributes, so the sweep in js/i18n/dom.js cannot
+// reach them. They are rebuilt instead, from the same functions that built them
+// in the first place: a language change is a repaint, never a rebuild of the
+// world.
+onLocaleChange(() => {
+  try {
+    if (
+      !document.getElementById('settingsPanel')?.classList.contains('hidden')
+    ) {
+      buildSettingsMenu();
+    }
+  } catch {
+    /* the panel is optional chrome */
+  }
+  try {
+    if (state.inspector_open && state.selectedObject) {
+      showObjectInspector(
+        state.selectedObject.object,
+        state.selectedObject.type
+      );
+    }
+  } catch {
+    /* likewise */
+  }
+  // The scenario card is written once, when the world is built. On a Spanish
+  // first load that happens before the Spanish catalogue has arrived - it is a
+  // dynamic import - so the card is drawn in English and then never touched
+  // again. Rewriting it here is what makes the very first card a reader sees
+  // be in their own language.
+  try {
+    const card = document.getElementById('scenarioInfoBox');
+    const title = document.getElementById('scenarioInfoTitle');
+    const summary = document.getElementById('scenarioInfoSummary');
+    const key = card?.dataset.scenarioKey;
+    if (card && title && summary && key && SCENARIO_INFO[key]) {
+      title.textContent = scenarioTitle(key);
+      summary.textContent = scenarioSummary(key);
+    }
+  } catch {
+    /* the card is optional chrome */
+  }
+});
+
+const settingOptionLabel = (key, value) => {
+  if (key === 'preset_scenario') {
+    return value === 'None'
+      ? t('settings.option.presetScenario.none')
+      : scenarioTitle(value);
+  }
+  const camel = key.replace(/_([a-z0-9])/g, (_, c) => c.toUpperCase());
+  const slug = String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  const id = `settings.option.${camel}.${slug}`;
+  return hasMessage(id) || EN[id] ? t(id) : value;
+};
+
 const setting_items = [
   {
-    label: 'Preset Scenario',
+    labelId: 'settings.label.presetScenario',
     key: 'preset_scenario',
     type: 'option',
     // Derived, never listed: this used to be a hand-written copy of all
@@ -6130,18 +6328,22 @@ const setting_items = [
     // drifts the first time someone adds a scenario and forgets this list.
     options: ['None', ...Object.keys(SCENARIO_INFO)],
   },
-  { label: '--- Simulation ---', type: 'separator' },
+  { labelId: 'settings.section.simulation', type: 'separator' },
   {
-    label: 'Gravitational Constant',
+    labelId: 'settings.label.gravitationalConstant',
     key: 'gravitational_constant',
     type: 'float',
     min: 0.1,
     max: 20.0,
     step: 0.1,
   },
-  { label: 'Mutual Gravity (All)', key: 'mutual_gravity', type: 'bool' },
   {
-    label: 'Simulation Speed',
+    labelId: 'settings.label.mutualGravity',
+    key: 'mutual_gravity',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.simSpeed',
     key: 'sim_speed',
     type: 'float',
     min: 0.0,
@@ -6149,25 +6351,36 @@ const setting_items = [
     step: 0.1,
   },
   {
-    label: 'Simulation Size',
+    labelId: 'settings.label.simSize',
     key: 'sim_size',
     type: 'option',
     options: ['Small', 'Medium', 'Large', 'Huge'],
   },
   {
-    label: 'Placement',
+    labelId: 'settings.label.placement',
     key: 'placement',
     type: 'option',
     options: ['Circular', 'Multi-Ring', 'Random', 'Grid', 'Empty'],
   },
-  { label: '--- Performance ---', type: 'separator' },
   {
-    label: 'Approximate Gravity (Barnes-Hut)',
+    labelId: 'settings.label.integrator',
+    key: 'integrator',
+    type: 'option',
+    options: INTEGRATORS,
+  },
+  {
+    labelId: 'settings.label.showConservationDiagnostics',
+    key: 'show_conservation_diagnostics',
+    type: 'bool',
+  },
+  { labelId: 'settings.section.performance', type: 'separator' },
+  {
+    labelId: 'settings.label.useBarnesHut',
     key: 'use_barnes_hut',
     type: 'bool',
   },
   {
-    label: 'Barnes-Hut Accuracy (theta)',
+    labelId: 'settings.label.barnesHutTheta',
     key: 'barnes_hut_theta',
     type: 'float',
     min: 0.2,
@@ -6175,36 +6388,36 @@ const setting_items = [
     step: 0.05,
   },
   {
-    label: 'Adaptive Detail',
+    labelId: 'settings.label.adaptiveDetail',
     key: 'adaptive_detail',
     type: 'bool',
   },
-  { label: '--- Visuals ---', type: 'separator' },
+  { labelId: 'settings.section.visuals', type: 'separator' },
   {
-    label: 'Trail Color',
+    labelId: 'settings.label.trailColourMode',
     key: 'trail_colour_mode',
     type: 'option',
     options: ['type', 'speed'],
   },
   {
-    label: 'Gravitational Lensing',
+    labelId: 'settings.label.showObjectLensing',
     key: 'show_object_lensing',
     type: 'bool',
   },
   {
-    label: 'Lensing Quality',
+    labelId: 'settings.label.lensingQuality',
     key: 'lensing_quality',
     type: 'option',
     options: ['off', 'low', 'medium', 'high'],
   },
   {
-    label: 'Accretion Disk Doppler Beaming',
+    labelId: 'settings.label.diskDoppler',
     key: 'disk_doppler',
     type: 'bool',
   },
-  { label: '--- Black Holes ---', type: 'separator' },
+  { labelId: 'settings.section.black-holes', type: 'separator' },
   {
-    label: 'Number of Black Holes',
+    labelId: 'settings.label.numBlackHoles',
     key: 'num_black_holes',
     type: 'int',
     min: 0,
@@ -6212,7 +6425,7 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Default BH Mass (M\u2609)',
+    labelId: 'settings.label.bhMass',
     key: 'bh_mass',
     type: 'float',
     min: 0.1,
@@ -6220,18 +6433,18 @@ const setting_items = [
     step: 0.5,
   },
   {
-    label: 'Use Individual BH Masses',
+    labelId: 'settings.label.useIndividualBhMasses',
     key: 'use_individual_bh_masses',
     type: 'bool',
   },
   {
-    label: 'BH Behavior',
+    labelId: 'settings.label.bhBehavior',
     key: 'bh_behavior',
     type: 'option',
     options: ['Static', 'Orbiting'],
   },
   {
-    label: 'Orbit Decay Rate',
+    labelId: 'settings.label.orbitDecayRate',
     key: 'orbit_decay_rate',
     type: 'float',
     min: 0.0,
@@ -6239,9 +6452,9 @@ const setting_items = [
     step: 0.001,
     precision: 3,
   },
-  { label: '--- Compact Objects ---', type: 'separator' },
+  { labelId: 'settings.section.compact-objects', type: 'separator' },
   {
-    label: 'Number of Neutron Stars',
+    labelId: 'settings.label.numNeutronStars',
     key: 'num_neutron_stars',
     type: 'int',
     min: 0,
@@ -6249,7 +6462,7 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Number of White Dwarfs',
+    labelId: 'settings.label.numWhiteDwarfs',
     key: 'num_white_dwarfs',
     type: 'int',
     min: 0,
@@ -6257,16 +6470,16 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Number of Stars',
+    labelId: 'settings.label.numStars',
     key: 'num_stars',
     type: 'int',
     min: 0,
     max: 20,
     step: 1,
   },
-  { label: '--- Objects ---', type: 'separator' },
+  { labelId: 'settings.section.objects', type: 'separator' },
   {
-    label: 'Number of Planets',
+    labelId: 'settings.label.numPlanets',
     key: 'num_planets',
     type: 'int',
     min: 0,
@@ -6274,16 +6487,20 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Number of Gas Giants',
+    labelId: 'settings.label.numGasGiants',
     key: 'num_gas_giants',
     type: 'int',
     min: 0,
     max: 50,
     step: 1,
   },
-  { label: 'Enable Asteroids', key: 'enable_asteroids', type: 'bool' },
   {
-    label: 'Number of Asteroids',
+    labelId: 'settings.label.enableAsteroids',
+    key: 'enable_asteroids',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.numAsteroids',
     key: 'num_asteroids',
     type: 'int',
     min: 0,
@@ -6291,7 +6508,7 @@ const setting_items = [
     step: 5,
   },
   {
-    label: 'Number of Comets',
+    labelId: 'settings.label.numComets',
     key: 'num_comets',
     type: 'int',
     min: 0,
@@ -6299,7 +6516,7 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Initial Velocity',
+    labelId: 'settings.label.initVelocity',
     key: 'init_velocity',
     type: 'float',
     min: 0,
@@ -6307,7 +6524,7 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Velocity StdDev',
+    labelId: 'settings.label.velocityStddev',
     key: 'velocity_stddev',
     type: 'float',
     min: 0,
@@ -6315,7 +6532,7 @@ const setting_items = [
     step: 1,
   },
   {
-    label: 'Input Object Type',
+    labelId: 'settings.label.inputObjectType',
     key: 'input_object_type',
     type: 'option',
     options: [
@@ -6328,16 +6545,16 @@ const setting_items = [
       'WhiteDwarf',
     ],
   },
-  { label: '--- Visuals ---', type: 'separator' },
-  { label: 'Show Trails', key: 'show_trails', type: 'bool' },
+  { labelId: 'settings.section.visuals', type: 'separator' },
+  { labelId: 'settings.label.showTrails', key: 'show_trails', type: 'bool' },
   {
-    label: 'Trail Style',
+    labelId: 'settings.label.trailStyle',
     key: 'trail_style',
     type: 'option',
     options: ['Cloud', 'Simple', 'Glow'],
   },
   {
-    label: 'Trail Length',
+    labelId: 'settings.label.trailLength',
     key: 'trail_length',
     type: 'int',
     min: 5,
@@ -6345,38 +6562,78 @@ const setting_items = [
     step: 5,
   },
   {
-    label: 'Show Velocity Vectors',
+    labelId: 'settings.label.showVelocityVectors',
     key: 'show_velocity_vectors',
     type: 'bool',
   },
-  { label: 'Show BH Glow', key: 'show_bh_glow', type: 'bool' },
-  { label: 'Show Accretion Disk', key: 'show_accretion_disk', type: 'bool' },
   {
-    label: 'Realistic Disk Physics',
+    labelId: 'settings.label.showAccelerationVectors',
+    key: 'show_acceleration_vectors',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.showPotentialWell',
+    key: 'show_potential_well',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.showScaleBar',
+    key: 'show_scale_bar',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.showElapsedTime',
+    key: 'show_elapsed_time',
+    type: 'bool',
+  },
+  { labelId: 'settings.label.showBhGlow', key: 'show_bh_glow', type: 'bool' },
+  {
+    labelId: 'settings.label.showAccretionDisk',
+    key: 'show_accretion_disk',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.realisticDiskPhysics',
     key: 'realistic_disk_physics',
     type: 'bool',
   },
-  { label: 'Show BH Jets', key: 'show_bh_jets', type: 'bool' },
+  { labelId: 'settings.label.showBhJets', key: 'show_bh_jets', type: 'bool' },
   {
-    label: 'Star Field Density',
+    labelId: 'settings.label.starDensity',
     key: 'star_density',
     type: 'int',
     min: 0,
     max: 30000,
     step: 100,
   },
-  { label: 'Ambient Lighting', key: 'show_ambient_lighting', type: 'bool' },
   {
-    label: 'Dynamic Object Colors',
+    labelId: 'settings.label.showAmbientLighting',
+    key: 'show_ambient_lighting',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.dynamicObjectProperties',
     key: 'dynamic_object_properties',
     type: 'bool',
   },
-  { label: 'Planet Base Color', key: 'planet_base_color', type: 'color' },
-  { label: 'Star Base Color', key: 'star_base_color', type: 'color' },
-  { label: '--- UI & Control ---', type: 'separator' },
-  { label: 'Interactive Add', key: 'interactive_add', type: 'bool' },
   {
-    label: 'Follow Mode',
+    labelId: 'settings.label.planetBaseColor',
+    key: 'planet_base_color',
+    type: 'color',
+  },
+  {
+    labelId: 'settings.label.starBaseColor',
+    key: 'star_base_color',
+    type: 'color',
+  },
+  { labelId: 'settings.section.ui-control', type: 'separator' },
+  {
+    labelId: 'settings.label.interactiveAdd',
+    key: 'interactive_add',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.followMode',
     key: 'follow_mode',
     type: 'option',
     options: [
@@ -6391,16 +6648,24 @@ const setting_items = [
       'WhiteDwarf',
     ],
   },
-  { label: 'Show Overlays', key: 'show_dynamic_overlays', type: 'bool' },
-  { label: 'Record Simulation', key: 'record_simulation', type: 'bool' },
   {
-    label: 'Show Gravitational Waves',
+    labelId: 'settings.label.showDynamicOverlays',
+    key: 'show_dynamic_overlays',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.recordSimulation',
+    key: 'record_simulation',
+    type: 'bool',
+  },
+  {
+    labelId: 'settings.label.showGravitationalWaves',
     key: 'show_gravitational_waves',
     type: 'bool',
   },
-  { label: '--- Educational ---', type: 'separator' },
+  { labelId: 'settings.section.educational', type: 'separator' },
   {
-    label: 'Habitable Zone Model',
+    labelId: 'settings.label.habitableZoneOptimism',
     key: 'habitable_zone_optimism',
     type: 'float',
     min: 0.5,
@@ -6444,7 +6709,7 @@ class TooltipManager {
     // Add close button
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
-    closeButton.title = 'Dismiss this tip';
+    closeButton.title = t('tip.dismiss');
     closeButton.setAttribute('aria-label', 'Dismiss this tip');
     closeButton.innerHTML = '×';
     closeButton.style.cssText = `
@@ -6523,7 +6788,7 @@ class TooltipManager {
     // Re-add close button
     const closeButton = document.createElement('button');
     closeButton.className = 'tooltip-close';
-    closeButton.title = 'Dismiss this tip';
+    closeButton.title = t('tip.dismiss');
     closeButton.setAttribute('aria-label', 'Dismiss this tip');
     closeButton.innerHTML = '×';
     closeButton.style.cssText = `
@@ -6791,7 +7056,10 @@ const getSettingTooltip = (key, label) => {
       'Which published habitable-zone definition the ring shows. Below 1.3 draws the conservative zone, bounded by the runaway and maximum greenhouse limits. 1.3 and above draws the optimistic zone, bounded by the empirical recent-Venus and early-Mars limits. The edges also depend on the star, not just this setting.',
   };
 
-  return tooltips[key] || `This setting controls ${label.toLowerCase()}.`;
+  return (
+    tooltips[key] ||
+    t('settings.tooltip.generic', { label: label.toLowerCase() })
+  );
 };
 
 const buildSettingsMenu = () => {
@@ -6808,7 +7076,7 @@ const buildSettingsMenu = () => {
       return;
     }
     box.style.display = 'block';
-    box.innerHTML = `<h4>${info.title}</h4>${info.summary}`;
+    box.innerHTML = `<h4>${scenarioTitle(presetName)}</h4>${scenarioSummary(presetName)}`;
   }
 
   // Group settings into sections
@@ -6826,7 +7094,7 @@ const buildSettingsMenu = () => {
         });
       }
       // Start new section
-      currentSection = item.label.replace(/^---\s*|\s*---$/g, '').trim();
+      currentSection = t(item.labelId);
       currentSectionItems = [];
     } else {
       currentSectionItems.push(item);
@@ -6868,9 +7136,11 @@ const buildSettingsMenu = () => {
     // Create grid for this section
     const sectionGrid = document.createElement('div');
     sectionGrid.className = 'settings-grid';
-    sectionGrid.style.display = 'grid';
-    sectionGrid.style.gridTemplateColumns = '1fr 1fr';
-    sectionGrid.style.gap = '25px 35px';
+    // The two-column label/control split and the gap are set in CSS rather than
+    // here, so a narrow screen can stack them. Inline styles cannot be beaten by
+    // a media query, and on a 375px phone a fixed 1fr 1fr grid put the sliders
+    // and the value readouts off the right edge of the panel - in English, and
+    // further off in Spanish, where the labels are about a fifth longer.
     sectionGrid.style.alignItems = 'center';
 
     // Add items to this section
@@ -6881,20 +7151,23 @@ const buildSettingsMenu = () => {
 
       const label = document.createElement('div');
       label.className = 'setting-label';
-      label.textContent = item.label;
+      label.textContent = t(item.labelId);
 
       // Create info icon
       const infoIcon = document.createElement('button');
       infoIcon.className = 'setting-info-icon';
       infoIcon.textContent = 'ⓘ';
-      infoIcon.setAttribute('aria-label', `Information about ${item.label}`);
+      infoIcon.setAttribute(
+        'aria-label',
+        t('settings.info.about', { label: t(item.labelId) })
+      );
 
       // Add click handler for tooltip using the new tooltip system
       infoIcon.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
 
-        const tooltipText = getSettingTooltip(item.key, item.label);
+        const tooltipText = getSettingTooltip(item.key, t(item.labelId));
         tooltipManager.show(tooltipText, infoIcon, { position: 'bottom' });
       });
 
@@ -6916,7 +7189,7 @@ const buildSettingsMenu = () => {
 
         // Label above slider
         const sliderLabel = document.createElement('label');
-        sliderLabel.textContent = item.label;
+        sliderLabel.textContent = t(item.labelId);
         sliderLabel.style.fontWeight = '500';
         sliderLabel.style.marginBottom = '2px';
         sliderLabel.style.fontSize = '15px';
@@ -6966,7 +7239,9 @@ const buildSettingsMenu = () => {
       } else if (item.type === 'bool') {
         const button = document.createElement('button');
         button.className = 'toggle-button';
-        button.textContent = value ? 'On' : 'Off';
+        button.textContent = value
+          ? t('settings.toggle.on')
+          : t('settings.toggle.off');
         button.setAttribute('data-state', value ? 'on' : 'off');
         button.onclick = () => {
           localSettings[item.key] = !localSettings[item.key];
@@ -6981,7 +7256,13 @@ const buildSettingsMenu = () => {
         const select = document.createElement('select');
         item.options.forEach(opt => {
           const option = document.createElement('option');
-          option.value = option.textContent = opt;
+          // The value stored is always the English token - it is the key the
+          // physics engine, the scenario presets and every saved share link
+          // use - and only the label a reader sees is translated. A locale that
+          // changed the stored value would produce links that only open in that
+          // language.
+          option.value = opt;
+          option.textContent = settingOptionLabel(item.key, opt);
           if (opt === value) option.selected = true;
           select.appendChild(option);
         });
@@ -7402,35 +7683,48 @@ const adjustSimSpeed = (current, direction) => {
  * Combines the starfield and simulation canvases into a single image
  */
 const takeScreenshot = () => {
-  try {
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
+  // Ask for the provenance line - the simulated clock, the stopwatch, the
+  // vector key - to be painted on the canvas, then let one frame be drawn
+  // before reading the pixels back. Live, those readings are in the readout
+  // panel and painting them over the simulation as well would say the same
+  // thing twice; a saved image has no readout panel, so it needs them.
+  setCaptureMode(true);
+  const capture = () => {
+    try {
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
 
-    tempCtx.drawImage(starfieldCanvas, 0, 0);
-    tempCtx.drawImage(canvas, 0, 0);
+      tempCtx.drawImage(starfieldCanvas, 0, 0);
+      tempCtx.drawImage(canvas, 0, 0);
 
-    const link = document.createElement('a');
-    link.download = `gravitas-screenshot-${Date.now()}.png`;
-    link.href = tempCanvas.toDataURL();
-    link.click();
-  } catch (error) {
-    console.error('Screenshot failed:', error);
-    alert('Screenshot failed. Please try again.');
-  }
+      const link = document.createElement('a');
+      link.download = `gravitas-screenshot-${Date.now()}.png`;
+      link.href = tempCanvas.toDataURL();
+      link.click();
+    } catch (error) {
+      console.error('Screenshot failed:', error);
+      alert('Screenshot failed. Please try again.');
+    } finally {
+      setCaptureMode(false);
+    }
+  };
+  // Two frames: the first is the one that repaints with the flag set, the
+  // second is where it is certainly on the canvas.
+  requestAnimationFrame(() => requestAnimationFrame(capture));
 };
 
 // Object type cycling functionality
 const objectTypes = [
-  { type: 'Star', emoji: '⭐', label: 'Add Stars' },
-  { type: 'Planet', emoji: '🌍', label: 'Add Rocky Planets' },
-  { type: 'GasGiant', emoji: '🪐', label: 'Add Gas Giants' },
-  { type: 'Asteroid', emoji: '☄️', label: 'Add Asteroids' },
-  { type: 'Comet', emoji: '☄️', label: 'Add Comets' },
-  { type: 'WhiteDwarf', emoji: '💎', label: 'Add White Dwarfs' },
-  { type: 'NeutronStar', emoji: '⚡', label: 'Add Neutron Stars' },
-  { type: 'BlackHole', emoji: '⚫', label: 'Add Black Holes' },
+  { type: 'Star', emoji: '⭐', label: 'objectType.stars' },
+  { type: 'Planet', emoji: '🌍', label: 'objectType.rockyPlanets' },
+  { type: 'GasGiant', emoji: '🪐', label: 'objectType.gasGiants' },
+  { type: 'Asteroid', emoji: '☄️', label: 'objectType.asteroids' },
+  { type: 'Comet', emoji: '☄️', label: 'objectType.comets' },
+  { type: 'WhiteDwarf', emoji: '💎', label: 'objectType.whiteDwarfs' },
+  { type: 'NeutronStar', emoji: '⚡', label: 'objectType.neutronStars' },
+  { type: 'BlackHole', emoji: '⚫', label: 'objectType.blackHoles' },
 ];
 
 let currentTypeIndex = 0;
@@ -7466,7 +7760,7 @@ const updateObjectTypeButton = () => {
   const btn = document.getElementById('objectTypeBtn');
   if (!btn) return; // Guard against missing button
   const currentType = objectTypes[currentTypeIndex];
-  btn.innerHTML = `${currentType.emoji} ${currentType.label}`;
+  btn.innerHTML = `${currentType.emoji} ${t(currentType.label)}`;
   btn.title = `Click to change what type of object you insert (currently: ${currentType.type})`;
   SETTINGS.input_object_type = currentType.type;
 };
@@ -7490,6 +7784,17 @@ canvas.addEventListener('mousedown', e => {
     e.clientY >= uiRect.top - bufferZone &&
     e.clientY <= uiRect.bottom + bufferZone
   ) {
+    return;
+  }
+
+  // The measurement tools get first refusal on the press. A ruler end sitting
+  // over a planet has to be grabbable, and without this the click would select
+  // the planet underneath it instead - or, on empty space, start dragging a new
+  // body into existence out of the handle the user meant to move.
+  if (toolsPointerDown({ x: e.clientX, y: e.clientY })) {
+    state.isHolding = false;
+    state.adding_mass = false;
+    state.isDragging = false;
     return;
   }
 
@@ -7548,6 +7853,7 @@ canvas.addEventListener('mousedown', e => {
 window.addEventListener('mousemove', e => {
   state.mouse.x = e.clientX;
   state.mouse.y = e.clientY;
+  if (toolsPointerMove({ x: e.clientX, y: e.clientY })) return;
   if (state.mouse.down && !state.adding_mass) {
     state.pan.x += e.movementX;
     state.pan.y += e.movementY;
@@ -7563,6 +7869,10 @@ window.addEventListener('mousemove', e => {
 
 window.addEventListener('mouseup', e => {
   if (e.button !== 0) return;
+  if (toolsPointerUp()) {
+    state.mouse.down = false;
+    return;
+  }
   state.mouse.down = false;
   if (state.adding_mass) {
     state.adding_mass = false;
@@ -8312,6 +8622,81 @@ document.getElementById('resetViewBtn').onclick = () => {
 
 // Screenshot functionality
 document.getElementById('screenshotBtn').onclick = takeScreenshot;
+
+// --- Measurement tools --------------------------------------------------------
+//
+// The buttons only toggle state; every tool draws itself from the render loop
+// and reads the world through the same transform the bodies are drawn with. See
+// js/sandboxTools.js for why the handles are stored in world coordinates.
+
+const stopwatchControls = document.getElementById('stopwatchControls');
+const stopwatchLatchBtn = document.getElementById('stopwatchLatch');
+
+/** Push the tools' state back onto their buttons. */
+const syncToolButtons = () => {
+  const pairs = [
+    ['toggleRuler', 'ruler'],
+    ['toggleProtractor', 'protractor'],
+    ['toggleStopwatch', 'stopwatch'],
+  ];
+  for (const [id, name] of pairs) {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('aria-pressed', String(isToolActive(name)));
+  }
+  if (stopwatchControls) stopwatchControls.hidden = !isToolActive('stopwatch');
+  if (stopwatchLatchBtn) {
+    stopwatchLatchBtn.setAttribute('aria-pressed', String(!!stopwatchTarget()));
+  }
+};
+
+const wireToolToggle = (id, name) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.onclick = () => {
+    toggleTool(name, canvas);
+    syncToolButtons();
+  };
+};
+wireToolToggle('toggleRuler', 'ruler');
+wireToolToggle('toggleProtractor', 'protractor');
+wireToolToggle('toggleStopwatch', 'stopwatch');
+
+const wireStopwatch = (id, fn) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.onclick = () => {
+      fn();
+      syncToolButtons();
+    };
+  }
+};
+wireStopwatch('stopwatchMark', () => {
+  // A manual mark takes the clock off the latch: the two would otherwise both
+  // be resetting the same interval and the reading would be whichever fired
+  // last, which is not a measurement of anything.
+  latchStopwatchTo(null);
+  stopwatch().mark();
+});
+wireStopwatch('stopwatchStop', () => stopwatch().stop());
+wireStopwatch('stopwatchReset', () => {
+  latchStopwatchTo(null);
+  stopwatch().reset();
+});
+wireStopwatch('stopwatchLatch', () => {
+  if (stopwatchTarget()) {
+    latchStopwatchTo(null);
+    stopwatch().reset();
+    return;
+  }
+  const selected = state.selectedObject && state.selectedObject.object;
+  if (!selected) {
+    toast(t('stopwatch.needBody'));
+    return;
+  }
+  stopwatch().reset();
+  latchStopwatchTo(selected);
+});
+syncToolButtons();
 
 // Object type cycling functionality
 document.getElementById('objectTypeBtn').onclick = () => {

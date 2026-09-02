@@ -415,3 +415,113 @@ test.describe('the student report', () => {
     expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
   });
 });
+
+// =============================================================================
+// Loading one lesson at a time
+// -----------------------------------------------------------------------------
+// The ten lessons used to be one 8,460-line module, so opening any of them
+// parsed all ten. They are now a file each behind a registry, and what these
+// tests hold onto is the property that made the split worth doing: the network
+// tab has to show one lesson arriving, not ten.
+// =============================================================================
+
+/** Lesson modules the page has actually fetched, by filename. */
+const lessonsFetched = page =>
+  page.evaluate(() =>
+    performance
+      .getEntriesByType('resource')
+      .map(r => r.name)
+      .filter(n => /\/data\/investigations\/[a-z-]+\.js/.test(n))
+      .map(n => n.split('/').pop())
+      .filter(n => !['registry.js', 'manifest.js', 'catalogue.js'].includes(n))
+  );
+
+test.describe('lesson loading', () => {
+  test('the browser lists ten lessons without loading any of them', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.locator('#investigationsBtn').click();
+    await expect(page.locator('#investigationBrowser')).toBeVisible();
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(10);
+
+    // Every card carries a step count and a duration, and all of it came out of
+    // the manifest: the cards are drawn, and no lesson has been fetched.
+    await expect(page.locator('#investigationBrowserCount')).toContainText(
+      /\d+ lessons · \d+ steps/
+    );
+    expect(await lessonsFetched(page)).toEqual([]);
+  });
+
+  test('opening a lesson fetches that lesson and no other', async ({
+    page,
+    app,
+  }) => {
+    await openLesson(page, app, 'tides');
+    await expect(page.locator('#investigationTitle')).toHaveText('Tides');
+    expect(await lessonsFetched(page)).toEqual(['tides.js']);
+
+    // A second lesson adds itself and nothing else. Eight of the ten are still
+    // untouched at this point, which is the whole point.
+    await page.locator('#investigationClose').click();
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation="black-holes"]').click();
+    await expect(page.locator('#investigationTitle')).toHaveText(
+      'Black Holes by the Numbers'
+    );
+    expect((await lessonsFetched(page)).sort()).toEqual([
+      'black-holes.js',
+      'tides.js',
+    ]);
+  });
+
+  test('a lesson link loads only the lesson it names', async ({
+    page,
+    app,
+  }) => {
+    // An assignment link. Start-up reads the hash and opens the lesson, which
+    // is now a fetch rather than a lookup.
+    await app.boot({ url: '/#investigation=weighing-stars' });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('#investigationTitle')).toHaveText(
+      'Weighing the Stars'
+    );
+    expect(await lessonsFetched(page)).toEqual(['weighing-stars.js']);
+  });
+
+  test('a card opened twice in a row fetches once', async ({ page, app }) => {
+    await openLesson(page, app, 'orbital-energy');
+    await page.locator('#investigationClose').click();
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation="orbital-energy"]').click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+
+    const fetched = await page.evaluate(
+      () =>
+        performance
+          .getEntriesByType('resource')
+          .map(r => r.name)
+          .filter(n => n.endsWith('/orbital-energy.js')).length
+    );
+    expect(fetched).toBe(1);
+  });
+
+  test('closing while a lesson is still arriving does not reopen it', async ({
+    page,
+    app,
+  }) => {
+    // The race the split introduced: a student clicks a card, thinks better of
+    // it, and closes the browser before the lesson lands. The abandoned lesson
+    // must not appear on top of them a moment later.
+    await app.boot();
+    await page.evaluate(async () => {
+      const mod = await import('/js/investigations.js');
+      const opening = mod.openInvestigation('goldilocks-question');
+      mod.closeInvestigation();
+      await opening;
+    });
+    await expect(page.locator('#investigationPanel')).toBeHidden();
+    await expect(page.locator('body')).not.toHaveClass(/investigation-open/);
+  });
+});
