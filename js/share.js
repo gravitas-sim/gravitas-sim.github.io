@@ -77,6 +77,20 @@ export async function applySharedLinkFromUrl() {
       /* the card is optional; the simulation is not */
     }
 
+    // A link that carries an A/B setup opens the bench on it. Lazily, and
+    // failure here is not failure of the link: the world is already built and
+    // correct, and the experiment is an extra.
+    if (payload.xp) {
+      try {
+        const { adoptExperimentFromLink } = await import(
+          './experimentsBridge.js'
+        );
+        await adoptExperimentFromLink(payload);
+      } catch (err) {
+        console.warn('Could not open the experiment in this link:', err);
+      }
+    }
+
     announce(
       t('share.link.opened', { scenario: result.scenario, n: result.bodies })
     );
@@ -113,16 +127,44 @@ function watchForDivergence() {
   });
 }
 
+/**
+ * The experiment block for the link, if the bench is loaded and has one.
+ *
+ * Reaches into the bench only when it has already been imported. Opening the
+ * share dialog must not pull in the experiment chunk for the great majority of
+ * users who have never opened the bench.
+ *
+ * @returns {Promise<Object|null>} The `xp` block, or null
+ */
+async function benchLinkBlock() {
+  try {
+    const bridge = await import('./experimentsBridge.js');
+    if (!bridge.benchIsLoaded?.()) return null;
+    const { bench } = await bridge.ensureBench();
+    return bench.linkBlock();
+  } catch {
+    return null;
+  }
+}
+
 // --- The dialog --------------------------------------------------------------
 
 /** Recompute the link and repaint everything that depends on it. */
 async function refresh() {
   if (!els.modal) return;
 
+  // If the bench has an experiment open, the link carries its setup - what was
+  // measured and which one variable differed between the runs - so the
+  // recipient can repeat it. The recorded samples stay out: see
+  // js/experiments/shareExperiment.js.
+  const experiment = await benchLinkBlock();
+
   const payload = captureShareState({
     kind,
     includeCamera: els.camera.checked,
     elapsed: getSimClock(),
+    forExperiment: Boolean(experiment),
+    experiment,
   });
 
   const fragment = await encodePayload(payload);

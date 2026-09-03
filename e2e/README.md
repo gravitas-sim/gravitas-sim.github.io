@@ -72,22 +72,23 @@ was not worth it.
 
 ## What is here
 
-| Spec                       | Covers                                                                                                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `sandbox.spec.js`          | Booting from a clean browser, the first-visit front door, the scenario gallery, pause / speed / reset                                      |
-| `inspector.spec.js`        | Selecting an object, the inspector readout, changing mass and settings, switching units                                                    |
-| `observing.spec.js`        | Light curve, radial velocity, astrometry, the shared observer geometry, reference frames                                                   |
-| `instruments.spec.js`      | Ruler, protractor, stopwatch, the canvas instrumentation, the vector overlay, the screenshot download                                      |
-| `spacetime.spec.js`        | The 3-D view: that it opens into the window, stacks with the other instruments, and actually renders at any scene scale                    |
-| `capture.spec.js`          | Screenshots and clip recording: the burnt-in provenance, the recording indicator, the size cap, the saved files                            |
-| `presentation.spec.js`     | Embed mode, lecture mode, the control rail accordion and the bottom dock across window widths                                              |
-| `investigations.spec.js`   | Opening a lesson, every representative step type, grading, persistence across a reload, the PDF report                                     |
-| `sharing.spec.js`          | Encoding and restoring a shared-state URL, seeded determinism, a corrupt link                                                              |
-| `robustness.spec.js`       | The heaviest scenarios, a NaN sweep over all 48, scenario churn                                                                            |
-| `scenarioContract.spec.js` | That a scenario named after specific objects contains them: names, classifications, masses, ordering, survival, and seeded reproducibility |
-| `assets.spec.js`           | Failed requests, deferred chunks, thumbnails decoding, the document pages                                                                  |
-| `mobile.spec.js`           | A Pixel 7 profile: layout, overflow, the menu, a lesson on a phone                                                                         |
-| `production.spec.js`       | The built `dist/` — DOM only, the only spec that runs against a bundle                                                                     |
+| Spec                       | Covers                                                                                                                                                                                                               |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sandbox.spec.js`          | Booting from a clean browser, the first-visit front door, the scenario gallery, pause / speed / reset                                                                                                                |
+| `inspector.spec.js`        | Selecting an object, the inspector readout, changing mass and settings, switching units                                                                                                                              |
+| `observing.spec.js`        | Light curve, radial velocity, astrometry, the shared observer geometry, reference frames                                                                                                                             |
+| `instruments.spec.js`      | Ruler, protractor, stopwatch, the canvas instrumentation, the vector overlay, the screenshot download                                                                                                                |
+| `spacetime.spec.js`        | The 3-D view: that it opens into the window, stacks with the other instruments, and actually renders at any scene scale                                                                                              |
+| `experiments.spec.js`      | The A/B bench: capturing a start, recording two runs, returning to the identical start, changing one variable, comparing, exporting both files, reopening from a manifest, and reproducing a setup from a share link |
+| `capture.spec.js`          | Screenshots and clip recording: the burnt-in provenance, the recording indicator, the size cap, the saved files                                                                                                      |
+| `presentation.spec.js`     | Embed mode, lecture mode, the control rail accordion and the bottom dock across window widths                                                                                                                        |
+| `investigations.spec.js`   | Opening a lesson, every representative step type, grading, persistence across a reload, the PDF report                                                                                                               |
+| `sharing.spec.js`          | Encoding and restoring a shared-state URL, seeded determinism, a corrupt link                                                                                                                                        |
+| `robustness.spec.js`       | The heaviest scenarios, a NaN sweep over all 48, scenario churn                                                                                                                                                      |
+| `scenarioContract.spec.js` | That a scenario named after specific objects contains them: names, classifications, masses, ordering, survival, and seeded reproducibility                                                                           |
+| `assets.spec.js`           | Failed requests, deferred chunks, thumbnails decoding, the document pages                                                                                                                                            |
+| `mobile.spec.js`           | A Pixel 7 profile: layout, overflow, the menu, a lesson on a phone                                                                                                                                                   |
+| `production.spec.js`       | The built `dist/` — DOM only, the only spec that runs against a bundle                                                                                                                                               |
 
 `fixtures.js` holds the shared machinery: the error trap and the `app` helper.
 

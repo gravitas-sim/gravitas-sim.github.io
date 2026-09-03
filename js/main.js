@@ -7,6 +7,7 @@ import {
   updateObjectTypeButton,
 } from './ui.js';
 import { watchFor3DView } from './view3dBridge.js';
+import { watchForBench } from './experimentsBridge.js';
 import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
@@ -270,6 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Not init3DView(): that reaches three.js, 256KB from a CDN, for a panel
     // that starts closed. The bridge holds the button until it is pressed.
     watchFor3DView();
+    // The bench is a button until somebody presses it; see experimentsBridge.js.
+    watchForBench();
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();

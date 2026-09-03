@@ -104,6 +104,14 @@ transit, radial-velocity and astrometry investigations are done, and they are th
 place a student meets the inclination degeneracy as an observation rather than as
 a caveat in a textbook.
 
+**An A/B experiment bench.** Capture a starting state, record a baseline run,
+return to exactly that start — same seed, same clock, same object identities,
+same integrator and frame — change one variable, record a second run, and
+compare the two on a shared simulated-time axis. It names the parameter that
+differed, warns when more than one did, exports a combined CSV and a JSON
+provenance manifest, and puts the setup (never the recorded results) in a share
+link. See [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md).
+
 **Reference frames.** Re-express every position and every trail as a chosen body
 would see them. Unlike following the camera, this redraws the recorded paths, so
 putting the Solar System into Earth's frame makes Mars trace the retrograde loop
@@ -135,7 +143,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->1386<!--/fact--> strings, and
+of <!--fact:uiStrings-->1465<!--/fact--> strings, and
 all <!--fact:investigations-->10<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -408,18 +416,19 @@ its counts come from the same source as this page's.
 Topic documents, each about one part of the application and written when that
 part was built:
 
-| Document                                                           | What it covers                                                                        |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance               |
-| [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording |
-| [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer            |
-| [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                       |
-| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                       |
-| [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                         |
-| [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                        |
-| [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                    |
-| [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                      |
-| [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                               |
+| Document                                                           | What it covers                                                                                                   |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| [`PHYSICS_VALIDATION.md`](PHYSICS_VALIDATION.md)                   | Every validated claim, its tolerance, and the reason for that tolerance                                          |
+| [`SANDBOX_INSTRUMENTS.md`](SANDBOX_INSTRUMENTS.md)                 | Ruler, protractor, stopwatch, the always-on scale bar, screenshots and clip recording                            |
+| [`AB_EXPERIMENT_BENCH.md`](AB_EXPERIMENT_BENCH.md)                 | Controlled A/B experiments: the canonical captured state, why runs are sequential, alignment, storage and export |
+| [`EXOPLANET_OBSERVING.md`](EXOPLANET_OBSERVING.md)                 | The transit, radial-velocity and astrometry panels and the shared observer                                       |
+| [`REFERENCE_FRAMES.md`](REFERENCE_FRAMES.md)                       | Re-expressing the scene in another body's frame                                                                  |
+| [`DARK_MATTER.md`](DARK_MATTER.md)                                 | The halo, the rotation-curve panel and the lesson built on them                                                  |
+| [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md)                       | The per-body readout and its orbital elements                                                                    |
+| [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                   |
+| [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                               |
+| [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                 |
+| [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                          |
 
 Three documents are records of finished work rather than descriptions of the
 application, and are labelled as such at the top:

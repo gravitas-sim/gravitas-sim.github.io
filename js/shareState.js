@@ -227,14 +227,26 @@ const BODY_FIELDS = [
 
 /**
  * Reduce a body's saved state to the parts worth transmitting.
+ *
+ * `id` is carried only when asked for. A share link does not need it - the
+ * bodies are rebuilt in order and nothing downstream refers to them by number
+ * - and it is four wasted characters per body in a payload that pays for every
+ * one. The A/B bench does need it: a measurement that names "body 7" has to
+ * mean the same body after the state is restored, or Run B measures something
+ * else and says nothing about it. set_state() honours an incoming id, so
+ * carrying it here is the whole of identity preservation.
+ *
  * @param {Object} s - Result of a body's get_state()
+ * @param {Object} [opts]
+ * @param {boolean} [opts.withId] - Carry the object's stable id
  * @returns {Object} Trimmed state
  */
-export function packBody(s) {
+export function packBody(s, { withId = false } = {}) {
   const out = {};
   for (const f of BODY_FIELDS) {
     if (s[f] !== undefined && s[f] !== null) out[f] = trim(s[f]);
   }
+  if (withId && Number.isFinite(s.id)) out.id = s.id;
   return out;
 }
 
@@ -282,6 +294,8 @@ export function diffSettings(from, to) {
  * @param {Object} [opts.camera] - {zoom, pan:{x,y}}; omitted if not wanted
  * @param {Array}  [opts.bodies] - Packed bodies; omitted for a seeded link
  * @param {boolean} [opts.paused] - Whether to open paused
+ * @param {Object} [opts.extras] - Experiment extras; see experiments/canonicalState.js
+ * @param {Object} [opts.experiment] - An A/B setup to reproduce; see below
  * @returns {Object} Payload
  */
 export function buildPayload({
@@ -293,6 +307,8 @@ export function buildPayload({
   camera,
   bodies,
   paused,
+  extras,
+  experiment,
 }) {
   const payload = { v: VERSION, s: scenario, seed: formatSeed(seed) };
   const atBuild = generationSettings || settings;
@@ -311,6 +327,16 @@ export function buildPayload({
   }
   if (bodies && bodies.length) payload.b = bodies;
   if (paused) payload.p = 1;
+  // The clock, the frame, the observer and the tools an experiment has to
+  // restore. Written by experiments/canonicalState.js:withExtras(), which owns
+  // the shape; this only carries it. A reader that does not know the key
+  // ignores it, which is what keeps older builds able to open a newer link.
+  if (extras && Object.keys(extras).length) payload.x = extras;
+  // An A/B experiment's *definition*: what was measured and what one variable
+  // was changed between the runs. Deliberately not the recorded samples - a
+  // link is for reproducing the setup, and two runs of numbers belong in the
+  // CSV, not in an address bar.
+  if (experiment && Object.keys(experiment).length) payload.xp = experiment;
   return payload;
 }
 

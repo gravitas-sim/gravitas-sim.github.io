@@ -28,6 +28,10 @@ const PANEL_IDS = [
   // and the moment a user moves it, it drops out of the stack (see isStacked).
   // Until then it is an instrument like the rest and queues with them.
   'threeViewportContainer',
+  // The A/B bench. Built by js/experiments/panel.js when it is first opened,
+  // so it is absent from the DOM until then; the layout skips ids it cannot
+  // find, which is what lets a lazily-built panel join a static list.
+  'experimentPanel',
 ];
 
 // Clear of the transport bar along the bottom.
@@ -172,6 +176,8 @@ export function initObservationLayout() {
     const panel = event.target.closest?.(
       '.obs-panel, .light-curve-container, .three-view-container'
     );
+    // A control inside the bench is not a request to un-collapse the bench.
+    if (event.target.closest?.('.experiment-body')) return;
     if (!panel || !panel.id) return;
     if (event.target.closest('button, input, label')) return;
     noteObservationPanelUsed(panel.id);

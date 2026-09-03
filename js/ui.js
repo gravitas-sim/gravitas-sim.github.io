@@ -40,7 +40,9 @@ import {
   HALLEY_MASS_UNIT,
   syncReportedMass,
   INTEGRATORS,
+  getSimulationTime,
   resetSimulationTime,
+  setSimulationTime,
   resetAbsorptionAccounting,
   resetConservationBaseline,
   JUPITER_MASS_UNIT,
@@ -86,6 +88,13 @@ import {
   frameState,
   onFrameChange,
 } from './referenceFrame.js';
+import {
+  getPositionAngle,
+  getInclination,
+  setPositionAngle,
+  setInclination,
+} from './observerGeometry.js';
+import { withExtras, readExtras } from './experiments/canonicalState.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { haloEnclosedMass } from './darkMatter.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
@@ -7574,9 +7583,28 @@ const captureShareState = ({
   kind = 'auto',
   includeCamera = true,
   elapsed = 0,
+  // The A/B bench asks for these. A share link does not need them and pays for
+  // every character, so they are opt-in rather than always carried.
+  forExperiment = false,
+  experiment = null,
 } = {}) => {
   const resolved =
     kind === 'auto' ? chooseKind({ touched: worldTouched, elapsed }) : kind;
+
+  const extras = forExperiment
+    ? withExtras(
+        {},
+        {
+          clock: getSimulationTime(),
+          frame: frameState(),
+          observer: {
+            positionAngle: getPositionAngle(),
+            inclination: getInclination(),
+          },
+          tools: activeToolIds(),
+        }
+      ).x
+    : null;
 
   return buildPayload({
     // current_scenario_name, not SETTINGS.preset_scenario: applyPreset leaves
@@ -7592,11 +7620,31 @@ const captureShareState = ({
       resolved === 'full'
         ? allBodies()
             .filter(o => o && o.alive !== false)
-            .map(o => packBody(o.get_state()))
+            .map(o => packBody(o.get_state(), { withId: forExperiment }))
         : null,
     paused: state.paused,
+    extras,
+    experiment,
   });
 };
+
+/**
+ * Which measurement tools are out, for an experiment's initial state.
+ *
+ * Only the fact that a tool is active, not where its handles are: restoring a
+ * ruler to the pixel is not what makes two runs comparable, and the handles are
+ * stored in world coordinates that a rebuilt world may not have.
+ *
+ * @returns {Array<string>} Active tool ids
+ */
+const activeToolIds = () =>
+  ['ruler', 'protractor', 'stopwatch'].filter(id => {
+    try {
+      return isToolActive(id);
+    } catch {
+      return false;
+    }
+  });
 
 /**
  * Rebuild the simulation described by a decoded payload.
@@ -7645,6 +7693,27 @@ const applyShareState = payload => {
 
   state.paused = payload.p === 1;
   current_scenario_name = scenario;
+
+  // Everything an experiment needs restored that a link never carried. A
+  // payload without an `x` block yields the defaults - clock at zero, world
+  // frame, edge-on observer - which is exactly what an ordinary share link
+  // means, so this path is safe for every link ever made.
+  const extras = readExtras(payload);
+  setSimulationTime(extras.clock);
+  try {
+    if (extras.frame.mode && extras.frame.mode !== 'world') {
+      setFrame(extras.frame.mode, extras.frame.objectId);
+    } else {
+      resetFrame();
+    }
+  } catch (err) {
+    // A frame naming a body that this world does not contain is a bad link,
+    // not a reason to fail the whole restore.
+    console.warn('Could not restore the reference frame:', err);
+  }
+  setPositionAngle(extras.observer.positionAngle);
+  setInclination(extras.observer.inclination);
+
   updateSpeedDisplay();
   updateObjectTypeButton();
 
@@ -7652,6 +7721,7 @@ const applyShareState = payload => {
     scenario,
     kind: payload.b ? 'full' : 'seeded',
     bodies: allBodies().length,
+    extras,
   };
 };
 

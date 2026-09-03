@@ -25,6 +25,7 @@ import { lightCurveSeries, transitAnalysis } from './lightCurve.js';
 import { timeUnitSeconds } from './units.js';
 import { SOLAR_MASS_UNIT } from './physics.js';
 import { G_SI, SOLAR_MASS_KG, AU_M } from './blackHolePhysics.js';
+import { csvField, num, toCsv } from './csv.js';
 
 /** Seconds in a Julian day. */
 const SECONDS_PER_DAY = 86400;
@@ -59,41 +60,11 @@ const KIND_LABELS = {
   WhiteDwarf: 'white dwarf',
 };
 
-/**
- * Quote a CSV field only when it needs it.
- * @param {*} v - Field value
- * @returns {string} A safe CSV field
- */
-export function csvField(v) {
-  if (v === null || v === undefined) return '';
-  const s = String(v);
-  // A leading =, +, - or @ makes a spreadsheet treat text as a formula, which
-  // is a real hazard for a file named after whatever a student typed.
-  const risky = /^[=+\-@\t\r]/.test(s) && Number.isNaN(Number(s));
-  const needsQuote = risky || /[",\n\r]/.test(s);
-  return needsQuote ? `"${s.replace(/"/g, '""')}"` : s;
-}
-
-/**
- * A number written for a file rather than a screen: enough digits to fit a
- * curve to, none of the noise beyond that, and never an empty cell for a
- * value that exists.
- * @param {number} v - The value
- * @param {number} [sig] - Significant digits
- * @returns {string} Formatted number, or '' when there is no value
- */
-export function num(v, sig = 8) {
-  if (!Number.isFinite(v)) return '';
-  if (v === 0) return '0';
-  const out = Number(v.toPrecision(sig));
-  // toPrecision on a large number gives exponent form, which every reader
-  // parses; what matters is that we never emit '1.0000000e+2' style noise.
-  return String(out);
-}
-
-/** Assemble rows into a CSV document with CRLF line endings. */
-const toCsv = rows =>
-  `${rows.map(r => r.map(csvField).join(',')).join('\r\n')}\r\n`;
+// The CSV primitives live in js/csv.js, a leaf module with no imports, so the
+// experiment bench can share them without pulling the timeline and the light
+// curve in behind them. Re-exported here because this file has been their
+// public home since before there was a second caller.
+export { csvField, num, toCsv };
 
 // --- Trajectories -------------------------------------------------------------
 

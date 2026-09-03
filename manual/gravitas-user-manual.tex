@@ -343,6 +343,79 @@ to.
 \input{investigations.tex}
 
 % =============================================================================
+\section{Running a controlled experiment}
+
+The \ui{A/B Bench}, in \ui{Tools}, is for the question a sandbox cannot
+otherwise answer: \emph{what does changing this one thing actually do?}
+
+Watching a simulation twice does not answer it, because the second run never
+starts quite where the first did. The bench makes it start there exactly.
+
+\begin{enumerate}
+  \item \textbf{Capture start.} The world as it stands becomes the
+  experiment's origin --- its seed, its clock, its bodies and their identities,
+  the integrator, the reference frame and the observer.
+  \item \textbf{Name it, and choose what to measure.} Bodies as chips,
+  quantities as checkboxes. A quantity needing two bodies stays greyed out
+  until two are chosen.
+  \item \textbf{Record Run A.}
+  \item \textbf{Return to start}, exactly. The simulation holds there.
+  \item \textbf{Change one thing.}
+  \item \textbf{Record Run B.}
+  \item \textbf{Compare.} The two runs are drawn on one simulated-time axis,
+  with a table of absolute and fractional differences.
+\end{enumerate}
+
+What can be measured: position and trajectory, separation between two bodies,
+speed and velocity, distance from a chosen primary, orbital period, closest
+approach, total energy, angular momentum, and the numerical drift in the last
+two.
+
+\subsection{What the bench will tell you off for}
+
+The bench names the parameter that differed between the runs, and it says so
+when more than one did --- a comparison with two independent variables cannot
+say which one caused the difference. You can confirm that you meant it, because
+a deliberate multivariable comparison is a legitimate thing to run.
+
+It does not count elapsed time, the camera, the theme or a trail length as
+variables. It \emph{does} count the simulation speed, because the speed
+control scales the integration step and therefore changes the numerical error a
+run reports, and it counts the seed and the scenario, because either one makes
+it a different world.
+
+\subsection{Honest sampling}
+
+Two runs are never sampled at the same instants: an animation frame takes as
+long as it takes, and a scenario that substeps advances its clock several times
+inside one frame. So the bench records each sample with its own simulated time
+and aligns the two runs on that, interpolating between samples and refusing to
+extrapolate past the end of either. Where the runs do not overlap in simulated
+time it says there is no comparison, rather than drawing one.
+
+The recording indicator shows both the number of samples and the simulated
+seconds they cover, because those two are not interchangeable.
+
+\subsection{Keeping and sharing an experiment}
+
+Experiments can be renamed, duplicated, deleted, saved in the browser and
+reopened. Saved experiments are bounded --- if one is too large, or the store
+is full, the bench says which and points you at the export, rather than
+failing quietly.
+
+Exporting gives two files: a \textbf{CSV} of both runs, one row per sample,
+with the run named in a column and the unit in every column heading; and a
+\textbf{JSON manifest} carrying the experiment's definition and its
+provenance --- scenario, seed, integrator, timestep, units, a hash of the
+initial state, what was measured and what changed. The manifest is the file to
+paste into a lab report, and reopening it restores the experiment's setup so
+somebody else can run it themselves.
+
+\ui{Share setup} puts the same thing in a link. The link carries the starting
+state and the A/B difference; it never carries the recorded runs, so what
+arrives is an experiment to perform rather than somebody's results.
+
+% =============================================================================
 \section{Capturing, exporting and sharing}
 
 \subsection{Screenshots and clips}

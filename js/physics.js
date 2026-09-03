@@ -287,6 +287,21 @@ const resetSimulationTime = () => {
   simulationTime = 0;
 };
 
+/**
+ * Set the simulated clock, for a state that is being restored rather than built.
+ *
+ * The A/B bench needs this: Run B has to resume from the same point on the
+ * clock Run A started from, or the two runs cannot be put on one time axis
+ * without a fudge factor. Nothing in the integrator reads the clock - it is a
+ * readout, and the conservation baseline's own timestamp - so setting it moves
+ * the reported time and nothing else.
+ *
+ * @param {number} t - Simulated seconds
+ */
+const setSimulationTime = t => {
+  simulationTime = Number.isFinite(t) && t >= 0 ? t : 0;
+};
+
 // =============================================================================
 // Absorption by a black hole
 // -----------------------------------------------------------------------------
@@ -4327,7 +4342,11 @@ class BlackHole {
   }
 
   set_state(s) {
-    this.id = s.id || PhysicsObject_id_counter++;
+    // `??`, not `||`: the very first object built in a world has id 0, and a
+    // falsy check hands it a brand-new id on every restore. Nothing noticed
+    // while ids were only used for energy bookkeeping; the A/B bench compares
+    // "body 0" across a restore and would have measured a different object.
+    this.id = s.id ?? PhysicsObject_id_counter++;
     this.pos = s.pos;
     this.vel = s.vel;
     this.mass = s.mass;
@@ -6690,6 +6709,7 @@ export {
   activeIntegrator,
   getSimulationTime,
   resetSimulationTime,
+  setSimulationTime,
   absorb_into_black_hole,
   getAbsorbedSpinAngularMomentum,
   getDiscardedAbsorptionMomentum,

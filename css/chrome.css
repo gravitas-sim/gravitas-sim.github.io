@@ -658,6 +658,267 @@
     }
   }
 
+  /* ==========================================================================
+     The A/B experiment bench
+     --------------------------------------------------------------------------
+     A member of the bottom-left instrument stack, so it borrows .obs-panel for
+     its frame and only describes what is different: a form rather than a
+     chart, and therefore rows of controls that have to stay legible when the
+     stack squeezes the panel's height.
+     ======================================================================== */
+  .experiment-panel {
+    width: 420px;
+    max-width: calc(100vw - 40px);
+    /* The other instruments are a chart of a fixed height; this one is a form
+       whose length depends on how many bodies are on screen. Left unbounded it
+       grows out of the top of the window and its own controls become
+       unreachable, so it takes at most two thirds of the viewport and scrolls
+       its body instead. The stack's own max-height, applied when several
+       panels are open, tightens this further and never loosens it. */
+    max-height: min(68vh, 640px);
+  }
+
+  .experiment-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) var(--space-3);
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .experiment-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .experiment-actions {
+    flex-wrap: wrap;
+  }
+
+  .experiment-label {
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .experiment-input {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 8px;
+    font: inherit;
+    font-size: var(--text-2xs);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .experiment-note,
+  .experiment-hint {
+    margin: 0;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .experiment-note {
+    font-family: var(--font-mono, ui-monospace, monospace);
+  }
+
+  .experiment-section > summary {
+    cursor: pointer;
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+    padding: 2px 0;
+  }
+
+  .experiment-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: var(--space-1) 0;
+  }
+
+  .experiment-chip {
+    padding: 3px 8px;
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  /* Selected is a fill *and* a border weight, never colour alone: the chips
+     are the one place a student's selection has to be unambiguous. */
+  .experiment-chip[aria-pressed='true'] {
+    color: var(--text-primary);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .experiment-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2px 10px;
+  }
+
+  .experiment-metric {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+  }
+
+  .experiment-metric.is-unavailable {
+    opacity: 0.5;
+  }
+
+  .experiment-runs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .experiment-run {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 4px 6px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .experiment-run-label {
+    font-weight: 600;
+    font-size: var(--text-2xs);
+  }
+
+  .experiment-run-state {
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .experiment-warning {
+    margin: 0;
+    padding: 6px 8px;
+    font-size: var(--text-2xs);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--border);
+  }
+
+  .experiment-warning.is-warn {
+    color: var(--text-primary);
+    background: rgba(226, 114, 91, 0.12);
+    border-left-color: var(--danger);
+  }
+
+  .experiment-warning.is-info {
+    color: var(--text-secondary);
+    background: var(--surface-2);
+    border-left-color: var(--info);
+  }
+
+  .experiment-diff {
+    font-size: var(--text-2xs);
+    padding: 6px 8px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .experiment-diff-list {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+
+  .experiment-diff-incidental {
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .experiment-chart {
+    position: relative;
+    min-height: 170px;
+  }
+
+  .experiment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-2xs);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .experiment-table th,
+  .experiment-table td {
+    padding: 3px 6px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .experiment-table th[scope='row'],
+  .experiment-table thead th:first-child {
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .experiment-saved-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .experiment-saved-open {
+    flex: 1;
+    text-align: left;
+    padding: 3px 6px;
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .experiment-saved-open:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+
+  .experiment-saved-delete {
+    padding: 2px 6px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .experiment-file {
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* A phone gets the full width and a shorter chart: the panel is a form, and
+     a form squeezed into 320px with a 170px chart above it is all chart. */
+  @media (max-width: 768px) {
+    .experiment-panel {
+      width: auto;
+      /* A phone has the transport bar and the keyboard to clear as well. */
+      max-height: 60vh;
+    }
+
+    .experiment-chart {
+      min-height: 130px;
+    }
+
+    .experiment-metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* The button says what it will do next, and looks like what it is doing. */
   .ui-container #recordBtn[aria-pressed='true'] {
     background: rgba(120, 26, 34, 0.75);
