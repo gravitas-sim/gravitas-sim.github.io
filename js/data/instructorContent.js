@@ -1678,6 +1678,138 @@ export const INSTRUCTOR_CONTENT = {
       34: 'All three candidates receive close to one Earth of starlight and all three are inside the zone. The differences are atmosphere, size and stellar activity.',
     },
   },
+  'butterfly-effect': {
+    topic: 'Deterministic chaos and the limits of prediction',
+    difficulty: 'Introductory',
+    placement:
+      'After Newtonian gravity and orbits, and after students have run at least one two-body scenario. It needs no calculus and no differential equations, only logarithms. It works particularly well immediately after a unit on the two-body problem, because the whole lesson is built on the contrast: the one problem that is solved exactly, against the one next door that is not.',
+    overview:
+      'The lesson is four measurements in a fixed order, and the order is the argument. First, two identical runs, which come out identical to the last decimal and establish that the engine is deterministic - so nothing later can be blamed on randomness. Second, a two-body system given a tiny nudge, which comes apart steadily in proportion to time; the instrument refuses to call this chaos and says why, which is the single most transferable idea in the lesson. Third, the same nudge in a three-body system, which comes apart exponentially, and the students measure the e-folding time. Fourth, the same comparison repeated with a smaller timestep and a different integrator, which is what turns the result from a property of the software into a property of the physics. It closes on the claim that "three bodies means chaos", which is false, and on the difference between a classroom estimate and a Lyapunov exponent.',
+    priorKnowledge: [
+      'Newtonian gravity and orbital motion at a qualitative level',
+      'What a logarithm is, and that a straight line on a log axis means exponential growth',
+      'That a simulation advances time in discrete steps',
+      'Helpful but not required: having seen the Binary Pair scenario before',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Deterministic is not the same as predictable',
+        body: 'The equations fix the future completely from the present, which is why two runs from identical numbers are identical. Prediction additionally requires knowing the present, and knowledge of the present is always approximate. In a chaotic system that approximation grows exponentially, so a perfectly deterministic system becomes unpredictable in practice. Students who miss this distinction usually think the computer is adding noise; the reproducibility control at step 4 is there to close that door before it opens.',
+      },
+      {
+        heading: 'Exponential growth, not merely growth',
+        body: 'Two nearly identical two-body orbits also separate, because a small change alters the period slightly and the two runs drift out of phase. That separation grows in proportion to time. Chaos means the separation grows by a fixed factor per unit time, which is a different function and looks different on a log axis. The lesson measures both cases with the same instrument so the comparison is direct.',
+      },
+      {
+        heading: 'An e-folding time, and what it buys',
+        body: 'The fitted slope of log(separation) against time gives a timescale tau on which errors grow by a factor of e. Its practical meaning is the cruel one: improving the initial measurement by a factor f buys only ln(f) extra e-folding times. A thousandfold better measurement buys about seven. This is why long-range prediction of a chaotic system is impossible rather than merely difficult.',
+      },
+      {
+        heading: 'Numerical refinement as evidence',
+        body: 'A computed divergence is only physical if it survives being computed better. The lesson requires the comparison to be repeated at a smaller timestep and with a different integrator, and the widget reports the spread. If the answers disagree, the correct report is "numerically unresolved" and no number at all - not the average, and not the value from the fanciest integrator.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1–5',
+        text: 'The three-star lab, introduced, then the reproducibility control: two runs changing nothing, which come out identical. Establishes determinism before anything diverges. Ends by asking what exactly zero proves, and the answer is narrower than most students expect.',
+      },
+      {
+        steps: '6–10',
+        text: 'The two-body control. The Binary Pair scenario given a 1,500 km nudge separates steadily and linearly; the instrument declines to report an e-folding time and says the growth is proportional to time. This is the section to protect if time is short.',
+      },
+      {
+        steps: '11–17',
+        text: 'The three-body case. Lagrange\u2019s equilateral solution, Gascheau\u2019s stability criterion, and why three equal masses make it unstable. Students measure the e-folding time from the shaded log-linear interval and work out the predictability horizon and what improving the measurement buys.',
+      },
+      {
+        steps: '18–21',
+        text: 'The numerical control. Repeat at half the simulation speed and with a different integrator, record each, and read the refinement verdict. Includes the hypothetical of an unresolved result and what to report about it.',
+      },
+      {
+        steps: '22–28',
+        text: 'What chaos is not: the Trojan asteroids and the figure-eight orbit as stable three-body configurations, a sorting question, a short-answer synthesis, a free exploration of perturbation size, then the real-world reach of the result, the sources, and the summary.',
+      },
+    ],
+    features: [
+      {
+        name: 'The divergence instrument (steps 4, 8, 13, 20, 25)',
+        text: 'Reads the two runs out of the A/B Bench, computes the separation between them at each moment of simulated time, and plots it on linear and logarithmic axes. It classifies the behaviour - identical, bounded, linear, exponential - and quotes an e-folding time only when the log-linear fit clears its thresholds: at least three e-folds of range, at least ten points, r-squared of at least 0.98, and a window spanning at least two e-folding times. The fitted interval is shaded on the plot, so the estimate is never shown without the data it came from. It also always reports how well a straight line fits, which is what separates drift from chaos.',
+      },
+      {
+        name: 'The A/B Bench',
+        text: 'Provides the capture, the exact restore and the paired recording. The perturbation is applied to the captured state rather than to the live simulation, so it is stored with the experiment, printed in the report and carried in a share link. Students who have not met the bench before will need a few minutes on steps 3 and 4.',
+      },
+      {
+        name: 'The Three-Body Sensitivity Lab scenario',
+        text: 'Three six-solar-mass stars on Lagrange\u2019s equilateral solution, circumradius 0.5 AU, rotating once per 26.7 simulated seconds. Star merging is off and the bodies never come within eight times the sum of their drawn radii, so nothing is removed mid-experiment and the divergence measure keeps all three identities for the whole run.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Chaos means the simulation is adding randomness.',
+        response:
+          'Step 4 settles this before the argument starts: two runs from identical starts are identical to every decimal place. If a student still says this later, send them back to that measurement rather than arguing.',
+      },
+      {
+        claim: 'Any two runs that come apart show chaos.',
+        response:
+          'The two-body control at step 8 comes apart by a factor of about a hundred and is not chaotic. The distinguishing feature is the shape - proportional to time versus a fixed factor per unit time - which is why the instrument reports the straight-line fit alongside the exponential one.',
+      },
+      {
+        claim: 'The divergence is just accumulated rounding error.',
+        response:
+          'A fair objection, and the reason steps 18 to 21 exist. The answer is refinement: the e-folding time is unchanged when the timestep is halved and when the integrator is swapped. Worth noting that the objection is right about some systems - two of the configurations considered for this lab failed exactly this test and were rejected.',
+      },
+      {
+        claim: 'Every three-body system is chaotic.',
+        response:
+          'Step 22. Jupiter\u2019s Trojans sit at a stable equilateral configuration and have for billions of years, and the Chenciner-Montgomery figure-eight orbit is a stable three-body solution with equal masses. Chaos is a property of a configuration, not of a body count.',
+      },
+      {
+        claim: 'A bigger perturbation makes the system more chaotic.',
+        response:
+          'Step 25 is the experiment that settles it. Changing the perturbation size moves the horizon - when the runs become visibly different - and leaves the growth rate alone. The rate belongs to the system.',
+      },
+      {
+        claim: 'The measured number is the Lyapunov exponent.',
+        response:
+          'It is an estimate of a local growth rate over a finite window from one perturbation in one direction. The true exponent is an infinite-time limit averaged over the attractor. Step 26 says this explicitly; it is worth repeating aloud, because the distinction is exactly the kind that gets lost between the lab and the write-up.',
+      },
+    ],
+    teachingNotes: [
+      'Steps 4 and 8 are the lesson. If the room is short of time, cut from steps 22 to 25, never from the reproducibility control or the two-body case: without them the three-body result is a light show rather than an argument.',
+      'Budget generously for step 3. Most students meet the A/B Bench here for the first time, and the capture-record-restore cycle takes a couple of attempts to become automatic. Demonstrating it once on the projector saves fifteen minutes across a class.',
+      'Runs of about forty seconds are enough. Longer runs do not improve the measurement - the separation saturates once the stars have rearranged - and the instrument will simply exclude the flat tail from the fit.',
+      'A common failure at step 13 is recording two runs of very different lengths, which shrinks the overlap the instrument can compare. The widget reports the overlap it used; point students at that line rather than at their result.',
+      'At step 20, insist that only one thing changes at a time. A student who halves the speed and switches integrator together has run a valid experiment about neither.',
+      'The theoretical e-folding time for this configuration is sqrt(2)/n = 6.0 simulated seconds. Measured values come out around 6.9. That 15% gap is honest and worth discussing: the fit covers a finite window, the perturbation is finite rather than infinitesimal, and the unstable eigenvalue has an oscillatory part the fit averages over.',
+      'If a class is comfortable with logarithms, step 17 is the place to slow down. The result that error reduction buys time only logarithmically is the single most useful thing in the lesson for anyone who will later meet weather models, ephemerides or orbit determination.',
+    ],
+    expectations: {
+      4: 'The separation should read exactly zero for the whole run and the instrument should report "the two runs are identical". Any nonzero value means a setting changed between the runs; the bench\u2019s own parameter-difference line will name it. This is also the moment to point out that the run is being compared on simulated time, not wall-clock time.',
+      8: 'A growth factor of order 100 over four or five orbits, a straight-line fit around r-squared 0.99, and no e-folding time. The instrument should say the separation is growing in proportion to time. Students often read the refusal as an error; it is the result.',
+      13: 'An e-folding time between about 6 and 8 simulated seconds, r-squared above 0.98, and total growth of six or seven orders of magnitude. The shaded band on the log plot marks the interval that was fitted, which typically starts around t = 6 and ends around t = 110.',
+      14: 'Expect tau near 6.9 s, r-squared near 0.99 and growth near 2 x 10^7. Values of tau outside 5 to 9 usually mean mismatched run lengths rather than a physics error. The field validation warns rather than blocks, so a student can record an unexpected number and discuss it.',
+      20: 'The three e-folding times should agree to within about twenty per cent and the verdict should read as resolved. Measured across three integrators and three timesteps this configuration gives 6.8 to 7.6 simulated seconds. If a student sees wild disagreement, check they changed only one numerical setting per repeat.',
+      25: 'The e-folding time should be essentially unchanged by a smaller or larger perturbation; what moves is the time at which the two runs become visibly different, and it moves by ln(factor) times tau. A perturbation ten times smaller buys about sixteen extra seconds and no more.',
+    },
+    discussion: [
+      'The simulation is exactly reproducible and its long-term behaviour cannot be predicted. Where exactly does the unpredictability live, if not in the equations?',
+      'Weather forecasts are useful for about a week. What would have to be true for them to be useful for a month, and is it achievable in principle?',
+      'If improving your measurement by a factor of a thousand buys seven e-folding times, what does that say about the value of ever more precise initial data for a chaotic system?',
+      'The two-body problem is exactly solvable and the three-body problem is not. Is that a fact about the universe or a fact about mathematics?',
+      'Jupiter\u2019s Trojan asteroids sit in a three-body configuration that has been stable for billions of years. What distinguishes their situation from the one measured in this lesson?',
+    ],
+    extensions: [
+      'Have students estimate the Lyapunov time of the inner Solar System from published values (a few million years) and work out the corresponding predictability horizon for planetary positions. Compare with the age of the Solar System.',
+      'Ask students to design a configuration they predict will not be chaotic, build it in the sandbox, and test it with the same paired-run method. A hierarchical triple with a distant third body is the usual attempt, and it is a productive near-miss.',
+      'Repeat the three-body measurement with unequal masses - one star much heavier than the other two - and see whether Gascheau\u2019s inequality predicts the outcome correctly.',
+      'For a class that has met numerical methods: compare the energy drift reported in the readout across the three integrators over the same run, and connect it to why symplectic integrators are preferred for long orbital integrations even though RK4 is locally more accurate.',
+    ],
+    modelNotes:
+      'The scenario is Lagrange\u2019s equilateral solution of the three-body problem with three equal masses of 6 solar masses at a circumradius of 0.5 AU, rotating at the exact rate omega = sqrt(G*3m/L^3) = 0.2354 rad per simulated second. It is linearly unstable by Gascheau\u2019s criterion, and the theoretical e-folding time of the unstable mode is sqrt(2)/omega = 6.0 simulated seconds. The divergence measure is the configuration-space separation between the two runs, sqrt(sum over bodies of |r_A - r_B|^2), with bodies matched by their stable object identities and samples aligned by simulated time; a normalised phase-space version including velocities gives the same growth rate to better than one per cent. The fit thresholds are in js/chaos/divergence.js and are deliberately strict, because a confidently wrong Lyapunov number is worse than none. Two other classic configurations were tested against this engine and rejected: the Pythagorean (Burrau) problem, whose close approaches trigger a merger and remove a body, and a near-figure-eight triple, whose e-folding time moved by orders of magnitude between integrators. Both rejections are recorded in the comment above the scenario in js/ui.js.',
+  },
   tides: {
     topic: 'Gravity and tides',
     difficulty: 'Introductory',

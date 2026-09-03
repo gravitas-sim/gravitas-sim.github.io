@@ -58,6 +58,7 @@ import RADIAL_VELOCITY from './investigations/radial-velocity.js';
 import GOLDILOCKS from './investigations/goldilocks-question.js';
 import DARK_MATTER from './investigations/missing-mass.js';
 import TIDES from './investigations/tides.js';
+import BUTTERFLY from './investigations/butterfly-effect.js';
 
 import { gradedSteps, positionIn } from './investigations/catalogue.js';
 
@@ -86,6 +87,7 @@ export const INVESTIGATIONS = [
   GOLDILOCKS,
   DARK_MATTER,
   TIDES,
+  BUTTERFLY,
 ];
 
 /**

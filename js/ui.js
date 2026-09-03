@@ -6129,6 +6129,93 @@ const build_simulation = () => {
     planets.push(planet);
   }
 
+  // --- Three-Body Sensitivity Lab: Lagrange's equilateral solution ----------
+  //
+  // Three equal stars at the corners of an equilateral triangle, rotating
+  // rigidly about their common centre. This is an exact solution of the
+  // three-body problem, found by Lagrange in 1772, and it is here because of
+  // what Gascheau proved about it in 1843: the equilateral solution is stable
+  // only when 27(m1m2 + m2m3 + m3m1) < (m1 + m2 + m3)^2. For three equal
+  // masses that reads 81m^2 < 9m^2, which is false by a factor of nine, so this
+  // configuration is linearly unstable.
+  //
+  // That is exactly what the lesson needs, and it is why this configuration was
+  // chosen over the two more famous candidates:
+  //
+  //   The Pythagorean (Burrau) problem is the classic chaotic three-body
+  //   system, and in Gravitas it merges. Its close approaches pass inside the
+  //   collision radius, the engine removes a body, and an experiment whose
+  //   divergence measure matches bodies by identity has nothing left to
+  //   measure. Measured: a merger every time, under all three integrators.
+  //
+  //   The Chenciner-Montgomery figure eight is a three-body system that is not
+  //   chaotic - which makes it a fine counterexample and a poor subject. Its
+  //   separation grows by a factor of 230 over thirteen orbits and no more,
+  //   the same under every integrator.
+  //
+  // The equilateral solution starts perfectly regular, stays clear of every
+  // collision radius, and departs exponentially. Measured over nine
+  // combinations of integrator and timestep, the e-folding time comes out at
+  // 6.8 to 7.6 simulated seconds with r^2 >= 0.98, which is the numerical
+  // resolution the lesson's conclusion rests on.
+  //
+  // The geometry, all of it derived rather than tuned:
+  //
+  //   circumradius  50 units = 0.5 AU
+  //   side          50*sqrt(3) = 86.6 units = 0.866 AU
+  //   mass          6000 units = 6 solar masses each
+  //   omega         sqrt(G * 3m / L^3) = 0.2354 rad per simulated second
+  //   period        2*pi/omega = 26.7 simulated seconds
+  //
+  // Theory predicts an e-folding time of sqrt(2)/omega = 6.0 s for the unstable
+  // eigenvalue; the measured 6.9 s is 15% longer, which is what a finite
+  // perturbation measured over a finite window gives and is worth a question in
+  // the lesson rather than a fudge here.
+  if (starting_preset === 'Three-Body Sensitivity Lab') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const R = 50;
+    const MASS = 6 * SOLAR_MASS_UNIT;
+    const side = R * Math.sqrt(3);
+    const omega = Math.sqrt((G * 3 * MASS) / (side * side * side));
+
+    // Named rather than numbered, because the lesson asks the student to
+    // perturb one of them by name and the answer key has to be able to say
+    // which. Fixed names, not generated ones: a randomly named star would
+    // change what the lesson text has to say from one load to the next.
+    const names = ['Alpha', 'Beta', 'Gamma'];
+    const colors = ['#FFD86B', '#7FB2F0', '#F08A6B'];
+    for (let i = 0; i < 3; i++) {
+      const theta = (i * 2 * Math.PI) / 3;
+      const x = R * Math.cos(theta);
+      const y = R * Math.sin(theta);
+      const star = new StarObject(
+        { x, y },
+        // Rigid rotation: v = omega x r.
+        { x: -omega * y, y: omega * x },
+        1
+      );
+      star.mass = MASS;
+      star.massInSuns = 6;
+      star.name = names[i];
+      star.radius = 8;
+      star.baseColor = colors[i];
+      // Never culled and never randomly re-typed: the experiment depends on
+      // these three objects keeping their identities for the whole run.
+      star.persistent = true;
+      stars.push(star);
+    }
+  }
+
   // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
   if (starting_preset === 'Retrograde Mars') {
     stars.length = 0;

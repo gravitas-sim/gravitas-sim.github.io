@@ -104,6 +104,7 @@ import {
   importManifest,
 } from './exports.js';
 import { experimentBlock } from './shareExperiment.js';
+import { perturb } from './perturbation.js';
 
 /** How often to take a sample, in simulated seconds. */
 const SAMPLE_INTERVAL_HINT = 0.05;
@@ -156,9 +157,21 @@ let host = null;
  * @param {Function} api.getScenario - Returns the current scenario name
  * @param {Function} api.getState - Returns the live view state
  * @param {Function} api.getDefaults - Returns DEFAULT_SETTINGS
+ * @param {Function} api.setFixedStep - Drive the loop deterministically
  */
 export function initBench(api) {
   host = api;
+  // A window handle, so a lesson widget can read the active experiment without
+  // importing this module and dragging the bench into its chunk. Deliberately
+  // read-only in practice: the only consumer is the chaos lesson's divergence
+  // widget, which calls activeExperiment() and nothing else.
+  if (typeof window !== 'undefined') {
+    window.__gravitasBench = {
+      activeExperiment,
+      isRecording,
+      sampleCount,
+    };
+  }
 }
 
 /**
@@ -242,8 +255,128 @@ export function captureExperiment(name) {
     },
     diff: { variables: [], incidental: [], context: [], multivariable: false },
     multivariableConfirmed: false,
+    // Set by the chaos lesson. A perturbation is not a settings change, so the
+    // parameter diff cannot see it: it is a change to one coordinate of one
+    // body inside the captured state, and it is recorded here so the widget,
+    // the report and the exported manifest can all name it.
+    perturbation: null,
+    // Repeats of the same comparison under a smaller timestep or a different
+    // integrator, each {label, tau, behaviour}. What turns "these runs
+    // diverged" into "these runs diverged for physical reasons".
+    numericalControls: [],
+    recordBodies: false,
   };
   return current;
+}
+
+/**
+ * Replace the experiment's captured start with a perturbed one.
+ *
+ * The perturbed payload becomes the state Run B is restored to, and the
+ * description of what changed is kept beside it. Both runs still start from a
+ * canonical captured state; they simply start from two of them, differing in
+ * one number.
+ *
+ * @param {Object} payload - The perturbed initial state
+ * @param {Object} applied - From perturbation.js:perturb()
+ * @returns {Object|null} The experiment
+ */
+export function setPerturbedState(payload, applied) {
+  if (!current) return null;
+  current.initialState = payload;
+  current.perturbation = applied;
+  current.provenance.initialStateHash = hashState(payload);
+
+  // Put the world into the perturbed state now, rather than leaving it for the
+  // next run to pick up. Two reasons, and the second one is a bug this fixes:
+  // the student should be able to see the start they are about to run from,
+  // and startRun() only restores when the clock has moved off the captured
+  // value - so a perturbation applied straight after a restore would have been
+  // silently ignored, and Run B would have repeated Run A exactly.
+  restoreInitialState({ keepSettings: true });
+  return current;
+}
+
+/**
+ * Apply a perturbation to the captured start, in kilometres.
+ *
+ * The student types a distance in kilometres because that is a distance they
+ * can picture; the conversion to simulation units happens here, once, and the
+ * applied change is stored in both.
+ *
+ * @param {Object} spec
+ * @param {number} spec.bodyId - Which body
+ * @param {'x'|'y'|'vx'|'vy'} spec.axis - Which coordinate
+ * @param {number} spec.km - How much, in kilometres (or km/s for a velocity)
+ * @returns {{ok:boolean, reason:string, applied:Object|null}} The outcome
+ */
+export function applyPerturbation({ bodyId, axis, km }) {
+  if (!current?.initialState) {
+    return { ok: false, reason: 'noExperiment', applied: null };
+  }
+  // 1 simulation length unit is 0.01 AU. A velocity in km/s converts through
+  // the same length unit and the simulated second.
+  const UNIT_KM = 1.495978707e6;
+  const delta = km / UNIT_KM;
+  const result = perturb(current.initialState, { bodyId, axis, delta });
+  if (!result.ok) return { ok: false, reason: result.reason, applied: null };
+  setPerturbedState(result.payload, { ...result.applied, km });
+  return { ok: true, reason: '', applied: result.applied };
+}
+
+/**
+ * Repeat the current comparison and file the answer as a numerical control.
+ *
+ * The label is built from the numerics in force, so two repeats under the same
+ * settings replace each other rather than accumulating - a student who runs the
+ * same control twice has one control, not two agreeing ones.
+ *
+ * @returns {Promise<{ok:boolean, label:string}>} The outcome
+ */
+export async function recordNumericalControl() {
+  if (!current?.runs?.A || !current?.runs?.B) return { ok: false, label: '' };
+  const { separationSeries, analyseDivergence } = await import(
+    '../chaos/divergence.js'
+  );
+  const shape = run =>
+    (run.samples || [])
+      .filter(s => Array.isArray(s.__bodies))
+      .map(s => ({ t: s.t, bodies: s.__bodies }));
+  const a = shape(current.runs.A);
+  const b = shape(current.runs.B);
+  if (!a.length || !b.length) return { ok: false, label: '' };
+  const { series } = separationSeries(a, b);
+  const verdict = analyseDivergence(series);
+  const settings = host.getSettings();
+  const label = `${settings.integrator}, speed ${settings.sim_speed}`;
+  addNumericalControl({
+    label,
+    tau: verdict.tau,
+    behaviour: verdict.behaviour,
+  });
+  return { ok: true, label };
+}
+
+/**
+ * Record the outcome of running the comparison again under different numerics.
+ * @param {{label:string, tau:number|null, behaviour:string}} result - The repeat
+ * @returns {Array} Every control recorded so far
+ */
+export function addNumericalControl(result) {
+  if (!current) return [];
+  current.numericalControls = [
+    ...(current.numericalControls || []).filter(c => c.label !== result.label),
+    result,
+  ];
+  return current.numericalControls;
+}
+
+/**
+ * Ask the recorder to keep every body's position, for a divergence measurement.
+ * @param {boolean} on - Whether to record them
+ */
+export function setRecordBodies(on) {
+  if (current) current.recordBodies = Boolean(on);
 }
 
 /** @returns {Object|null} The experiment being worked on */
@@ -340,17 +473,33 @@ function takeSample() {
       m === METRICS.ANGULAR_DRIFT
   );
 
-  buffer.push(
-    sampleFrame({
-      t: clock,
-      bodies,
-      primary,
-      conserved: needsConserved ? conservedQuantities() : null,
-      drift: needsConserved ? conservationDrift() : null,
-      secondsPerUnit: timeUnitSeconds(),
-      metrics: current.metrics,
-    })
-  );
+  const sample = sampleFrame({
+    t: clock,
+    bodies,
+    primary,
+    conserved: needsConserved ? conservedQuantities() : null,
+    drift: needsConserved ? conservationDrift() : null,
+    secondsPerUnit: timeUnitSeconds(),
+    metrics: current.metrics,
+  });
+
+  // Every body's position and velocity, when the experiment says it needs them.
+  // The chaos lesson measures the separation between two whole configurations
+  // rather than between two selected bodies, and it matches them by identity,
+  // so it needs the ids too. Off by default: this is four numbers per body per
+  // sample, which for a long run of a crowded scenario is the difference
+  // between a stored experiment and a quota failure.
+  if (current.recordBodies) {
+    sample.__bodies = selectableBodies().map(b => ({
+      id: b.id,
+      x: b.pos.x,
+      y: b.pos.y,
+      vx: b.vel.x,
+      vy: b.vel.y,
+    }));
+  }
+
+  buffer.push(sample);
 }
 
 function loop() {
@@ -391,6 +540,13 @@ export function startRun(label) {
   // captured start, and a student who presses Record means "go".
   const state = host.getState?.();
   if (state) state.paused = false;
+
+  // A fixed step per frame for the duration of the recording. Without it the
+  // two runs take different sequences of timesteps - because frames take
+  // different amounts of real time - and are therefore not the same
+  // calculation. See setFixedStep() in js/render.js.
+  host.setFixedStep?.(1 / 60);
+
   recordingLabel = label;
   buffer = [];
   lastSampleAt = -Infinity;
@@ -406,6 +562,7 @@ export function startRun(label) {
 export function stopRun() {
   if (phase !== 'recording') return null;
   phase = 'idle';
+  host.setFixedStep?.(0);
   if (sampler) cancelAnimationFrame(sampler);
   sampler = 0;
 

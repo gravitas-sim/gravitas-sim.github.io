@@ -273,6 +273,59 @@ export const EN = {
   'rail.toggleLightCurve': 'Light Curve',
   'rail.toggleRadialVelocity': 'Radial Velocity',
   'rail.toggleRotationCurve': 'Rotation Curve',
+  // --- The divergence instrument ---------------------------------------------
+  'chaosW.title': 'How far apart the two runs are',
+  'chaosW.note':
+    'The distance between Run A and Run B, added up over every body and matched by identity, at each moment of simulated time. The same data on two axes: linear above, logarithmic below. A straight line on the lower plot is exponential growth.',
+  'chaosW.plot.linear': 'separation, linear scale',
+  'chaosW.plot.log': 'separation, logarithmic scale',
+  'chaosW.plot.empty': 'not enough overlapping samples',
+  'chaosW.axis.separation': 'separation',
+  'chaosW.axis.logSeparation': 'log₁₀ separation',
+  'chaosW.axis.time': 'simulated time →',
+  'chaosW.empty.no-runs':
+    'Record Run A and Run B in the A/B Bench, then come back.',
+  'chaosW.empty.no-overlap':
+    'The two runs do not overlap in simulated time. Record them for similar lengths.',
+  'chaosW.row.status': 'Status',
+  'chaosW.row.perturbation': 'Perturbation',
+  'chaosW.row.start': 'Separation at the start',
+  'chaosW.row.end': 'Separation at the end',
+  'chaosW.row.growth': 'Grew by',
+  'chaosW.row.behaviour': 'Behaviour',
+  'chaosW.row.window': 'Fitted over',
+  'chaosW.row.noEstimate': 'No e-folding time because',
+  'chaosW.row.straightLine': 'A straight line fits',
+  'chaosW.row.refinement': 'Under refinement',
+  'chaosW.value.perturbation': '{body}, {axis}, {km}',
+  'chaosW.value.window': 't = {from} to {to} s  ({efolds} e-folds)',
+  'chaosW.value.resolved': 'resolved — the e-folding times agree to {spread}%',
+  'chaosW.verdict.none': 'nothing measured yet',
+  'chaosW.verdict.identical':
+    'the two runs are identical — the simulation is deterministic',
+  'chaosW.verdict.bounded': 'bounded: the two runs stay close',
+  'chaosW.verdict.linear':
+    'growing in proportion to time — that is drift, not chaos',
+  'chaosW.verdict.saturated':
+    'saturated: the runs are as far apart as this system allows',
+  'chaosW.verdict.exponential':
+    'exponential, e-folding time {tau} s  (r² = {r2})',
+  'chaosW.reject.too-few-points': 'too few usable samples to fit anything',
+  'chaosW.reject.too-little-range':
+    'the separation did not grow through enough e-folds. Under three, a straight line can imitate an exponential.',
+  'chaosW.reject.too-short':
+    'the fitted interval is shorter than two e-folding times',
+  'chaosW.reject.poor-fit':
+    'an exponential does not fit this well enough to quote a timescale',
+  'chaosW.reject.not-growing': 'the separation is not growing',
+  'chaosW.reject.no-window': 'no interval of the run is usable for a fit',
+  'chaosW.reject.insufficient': 'not enough data',
+  'chaosW.unresolved.need-two-estimates':
+    'record the comparison again with a smaller timestep or another integrator',
+  'chaosW.unresolved.behaviour-changed':
+    'NOT RESOLVED — the behaviour itself changed with the numerics',
+  'chaosW.unresolved.timescale-moved':
+    'NOT RESOLVED — the e-folding time moved with the timestep, so it is a property of the integrator',
   // --- A/B experiment bench --------------------------------------------------
   'rail.toggleExperiments': 'A/B Bench',
   'rail.toggleExperiments.hint':
@@ -308,6 +361,30 @@ export const EN = {
   'bench.action.import': 'Open a file',
   'bench.action.delete': 'Delete this experiment',
   'bench.action.confirmMultivariable': 'Yes, I changed these on purpose',
+  'bench.section.perturb': 'Perturb the start',
+  'bench.hint.perturb':
+    'Change one coordinate of one body in the captured start by a very small amount. Run B is then restored to that perturbed state, so the two runs differ by exactly this and nothing else.',
+  'bench.field.amount': 'Amount (km, or km/s)',
+  'bench.axis.x': 'x position',
+  'bench.axis.y': 'y position',
+  'bench.axis.vx': 'x velocity',
+  'bench.axis.vy': 'y velocity',
+  'bench.action.perturb': 'Apply',
+  'bench.action.asControl': 'Record as numerical control',
+  'bench.perturb.applied':
+    'Perturbed: {body}, {axis}, {km} km — one part in {fraction} of the system',
+  'bench.perturb.done': 'The captured start is perturbed',
+  'bench.perturb.needAmount': 'Type a perturbation that is not zero.',
+  'bench.perturb.noExperiment': 'Capture a start first.',
+  'bench.perturb.no-bodies':
+    'This captured start has no bodies to perturb. Capture with the full state.',
+  'bench.perturb.no-such-body': 'That body is not in the captured start.',
+  'bench.perturb.bad-axis': 'That is not a coordinate.',
+  'bench.perturb.bad-delta': 'Type a perturbation that is not zero.',
+  'bench.control.row': '{label}: {behaviour}, e-folding {tau} s',
+  'bench.control.recorded': 'Recorded as a control: {label}',
+  'bench.control.failed':
+    'Record both runs first, with positions among the measurements.',
   'bench.run.a': 'Run A',
   'bench.run.b': 'Run B',
   'bench.run.empty': 'not recorded',
@@ -765,6 +842,10 @@ export const EN = {
   'scenario.TRAPPIST-1 System.title': 'TRAPPIST-1 System',
   'scenario.TRAPPIST-1 System.summary':
     'A compact planetary system with seven Earth-sized worlds orbiting a cool red dwarf star just 40 light-years away. All planets are packed close to their tiny sun, with several in the habitable zone. Can you keep this delicate system stable?',
+  'scenario.Three-Body Sensitivity Lab.title':
+    'Three-Body Sensitivity Lab: the same start, twice',
+  'scenario.Three-Body Sensitivity Lab.summary':
+    'Three six-solar-mass stars at the corners of an equilateral triangle, rotating rigidly about their common centre. This is an exact solution of the three-body problem, found by Lagrange in 1772, and for three equal masses it is unstable: the triangle holds for a few turns and then comes apart. Built for one experiment - run it twice from starts that differ by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, and watch how long the two runs stay together.',
   'scenario.Binary Pair.title': 'Binary Pair: two stars, one balance point',
   'scenario.Binary Pair.summary':
     'Two stars of two solar masses each, four AU apart, circling their common center of mass once every four years. Neither one is stationary and neither one is orbiting the other: both go round the same point in between them. Watch the trails and the balance point gives itself away.',

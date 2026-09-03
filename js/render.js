@@ -1792,13 +1792,43 @@ if (typeof window !== 'undefined') {
   }
 }
 
+// Fixed-step recording, for a controlled experiment.
+//
+// The loop normally derives its step from how long the last frame actually
+// took, which is right for a sandbox: the simulation then runs at the same
+// apparent speed on a fast machine and a slow one. It is fatal for an A/B
+// experiment. Two runs of the same world get different sequences of frame
+// times, so they take different sequences of steps, so they are not the same
+// calculation - and in a chaotic system that difference grows exponentially
+// like any other. The reproducibility control at the start of the chaos
+// investigation would fail, and it would fail for a reason that has nothing to
+// do with the physics being taught.
+//
+// While the Experiment Bench is recording, every frame therefore advances the
+// clock by the same amount. The simulation then runs slightly fast or slow in
+// wall-clock terms depending on the machine, which nobody can see, and two runs
+// of the same length become bit-identical, which is the whole point.
+let fixedStepSeconds = 0;
+
+/**
+ * Drive the simulation at a fixed step per frame, or stop doing so.
+ * @param {number} seconds - Wall-clock seconds to pretend each frame took, or 0
+ */
+export function setFixedStep(seconds) {
+  fixedStepSeconds = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
+}
+
+/** @returns {boolean} Whether the loop is stepping deterministically */
+export const isFixedStep = () => fixedStepSeconds > 0;
+
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
   const frameStart = performance.now();
 
   if (!state.last_time) state.last_time = timestamp;
-  const dt_seconds = (timestamp - state.last_time) / 1000.0;
+  const measured = (timestamp - state.last_time) / 1000.0;
   state.last_time = timestamp;
+  const dt_seconds = fixedStepSeconds || measured;
   const dt_sim = Math.min(dt_seconds, 0.05) * SETTINGS.sim_speed * 50 * DT;
   // While scrubbing, tickTimeline holds the restored frame and physics is
   // skipped so the recorded state is what gets drawn.

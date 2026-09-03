@@ -231,6 +231,63 @@ export const ES = {
   'rail.toggleLightCurve': 'Curva de luz',
   'rail.toggleRadialVelocity': 'Velocidad radial',
   'rail.toggleRotationCurve': 'Curva de rotación',
+  // --- Instrumento de divergencia ---------------------------------------------
+  'chaosW.title': 'Cuán separadas están las dos ejecuciones',
+  'chaosW.note':
+    'La distancia entre la ejecución A y la B, sumada sobre todos los cuerpos y emparejada por identidad, en cada instante de tiempo simulado. Los mismos datos en dos ejes: lineal arriba, logarítmico abajo. Una recta en la gráfica inferior es crecimiento exponencial.',
+  'chaosW.plot.linear': 'separación, escala lineal',
+  'chaosW.plot.log': 'separación, escala logarítmica',
+  'chaosW.plot.empty': 'no hay suficientes muestras solapadas',
+  'chaosW.axis.separation': 'separación',
+  'chaosW.axis.logSeparation': 'log₁₀ separación',
+  'chaosW.axis.time': 'tiempo simulado →',
+  'chaosW.empty.no-runs':
+    'Graba la ejecución A y la B en el Banco A/B y vuelve aquí.',
+  'chaosW.empty.no-overlap':
+    'Las dos ejecuciones no se solapan en tiempo simulado. Grábalas con duraciones parecidas.',
+  'chaosW.row.status': 'Estado',
+  'chaosW.row.perturbation': 'Perturbación',
+  'chaosW.row.start': 'Separación al principio',
+  'chaosW.row.end': 'Separación al final',
+  'chaosW.row.growth': 'Creció',
+  'chaosW.row.behaviour': 'Comportamiento',
+  'chaosW.row.window': 'Ajustado en',
+  'chaosW.row.noEstimate': 'Sin tiempo de crecimiento porque',
+  'chaosW.row.straightLine': 'Una recta ajusta con',
+  'chaosW.row.refinement': 'Bajo refinamiento',
+  'chaosW.value.perturbation': '{body}, {axis}, {km}',
+  'chaosW.value.window': 't = {from} a {to} s  ({efolds} factores e)',
+  'chaosW.value.resolved':
+    'resuelto: los tiempos de crecimiento coinciden dentro del {spread}%',
+  'chaosW.verdict.none': 'todavía no se ha medido nada',
+  'chaosW.verdict.identical':
+    'las dos ejecuciones son idénticas: la simulación es determinista',
+  'chaosW.verdict.bounded':
+    'acotada: las dos ejecuciones se mantienen próximas',
+  'chaosW.verdict.linear':
+    'crece en proporción al tiempo: eso es deriva, no caos',
+  'chaosW.verdict.saturated':
+    'saturada: las ejecuciones están tan separadas como permite este sistema',
+  'chaosW.verdict.exponential':
+    'exponencial, tiempo de crecimiento {tau} s  (r² = {r2})',
+  'chaosW.reject.too-few-points':
+    'hay muy pocas muestras utilizables para ajustar nada',
+  'chaosW.reject.too-little-range':
+    'la separación no creció los suficientes factores e. Por debajo de tres, una recta puede imitar una exponencial.',
+  'chaosW.reject.too-short':
+    'el intervalo ajustado es más corto que dos tiempos de crecimiento',
+  'chaosW.reject.poor-fit':
+    'una exponencial no ajusta lo bastante bien como para citar una escala temporal',
+  'chaosW.reject.not-growing': 'la separación no está creciendo',
+  'chaosW.reject.no-window':
+    'ningún intervalo de la ejecución sirve para un ajuste',
+  'chaosW.reject.insufficient': 'no hay datos suficientes',
+  'chaosW.unresolved.need-two-estimates':
+    'vuelve a grabar la comparación con un paso temporal menor u otro integrador',
+  'chaosW.unresolved.behaviour-changed':
+    'NO RESUELTO: el comportamiento mismo cambió con la numérica',
+  'chaosW.unresolved.timescale-moved':
+    'NO RESUELTO: el tiempo de crecimiento se movió con el paso temporal, así que es una propiedad del integrador',
   // --- Banco de experimentos A/B ---------------------------------------------
   'rail.toggleExperiments': 'Banco A/B',
   'rail.toggleExperiments.hint':
@@ -266,6 +323,30 @@ export const ES = {
   'bench.action.import': 'Abrir un archivo',
   'bench.action.delete': 'Eliminar este experimento',
   'bench.action.confirmMultivariable': 'Sí, los cambié a propósito',
+  'bench.section.perturb': 'Perturbar el inicio',
+  'bench.hint.perturb':
+    'Cambia una coordenada de un cuerpo en el inicio capturado en una cantidad muy pequeña. La ejecución B se restaura entonces a ese estado perturbado, de modo que las dos ejecuciones difieren exactamente en eso y en nada más.',
+  'bench.field.amount': 'Cantidad (km, o km/s)',
+  'bench.axis.x': 'posición x',
+  'bench.axis.y': 'posición y',
+  'bench.axis.vx': 'velocidad x',
+  'bench.axis.vy': 'velocidad y',
+  'bench.action.perturb': 'Aplicar',
+  'bench.action.asControl': 'Registrar como control numérico',
+  'bench.perturb.applied':
+    'Perturbado: {body}, {axis}, {km} km — una parte en {fraction} del sistema',
+  'bench.perturb.done': 'El inicio capturado está perturbado',
+  'bench.perturb.needAmount': 'Escribe una perturbación distinta de cero.',
+  'bench.perturb.noExperiment': 'Captura primero un inicio.',
+  'bench.perturb.no-bodies':
+    'Este inicio capturado no tiene cuerpos que perturbar. Captura con el estado completo.',
+  'bench.perturb.no-such-body': 'Ese cuerpo no está en el inicio capturado.',
+  'bench.perturb.bad-axis': 'Eso no es una coordenada.',
+  'bench.perturb.bad-delta': 'Escribe una perturbación distinta de cero.',
+  'bench.control.row': '{label}: {behaviour}, crecimiento {tau} s',
+  'bench.control.recorded': 'Registrado como control: {label}',
+  'bench.control.failed':
+    'Graba primero ambas ejecuciones, con las posiciones entre las medidas.',
   'bench.run.a': 'Ejecución A',
   'bench.run.b': 'Ejecución B',
   'bench.run.empty': 'sin grabar',
@@ -790,6 +871,10 @@ export const ES = {
   'scenario.TRAPPIST-1 System.title': 'Sistema TRAPPIST-1',
   'scenario.TRAPPIST-1 System.summary':
     'Un sistema planetario compacto con siete mundos del tamaño de la Tierra alrededor de una enana roja fría situada a solo 40 años luz. Todos los planetas se apiñan cerca de su diminuto sol, y varios caen en la zona habitable. ¿Se puede mantener estable un sistema tan delicado?',
+  'scenario.Three-Body Sensitivity Lab.title':
+    'Laboratorio de sensibilidad de tres cuerpos: el mismo inicio, dos veces',
+  'scenario.Three-Body Sensitivity Lab.summary':
+    'Tres estrellas de seis masas solares en los vértices de un triángulo equilátero, girando rígidamente en torno a su centro común. Es una solución exacta del problema de los tres cuerpos, hallada por Lagrange en 1772, y con tres masas iguales es inestable: el triángulo aguanta unas cuantas vueltas y luego se deshace. Está construido para un único experimento: ejecútalo dos veces desde inicios que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, y observa cuánto tiempo permanecen juntas las dos ejecuciones.',
   'scenario.Binary Pair.title':
     'Par binario: dos estrellas, un punto de equilibrio',
   'scenario.Binary Pair.summary':

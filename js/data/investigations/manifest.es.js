@@ -152,4 +152,18 @@ export const MANIFEST = [
     gradedCount: 16,
     objectiveCount: 5,
   },
+  {
+    id: 'butterfly-effect',
+    title: 'El efecto mariposa en el espacio',
+    subtitle:
+      'Ejecuta el mismo sistema dos veces y descubre cuánto dura la respuesta',
+    duration: '55-70 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Dos ejecuciones de las mismas tres estrellas, partiendo de posiciones que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, acaban en sitios completamente distintos. Entremedias no ocurre nada aleatorio: la simulación es determinista, y ejecutarla dos veces con exactamente los mismos números da exactamente el mismo resultado. Por el camino medirás un caso que parece caos y no lo es, pondrás un número a la rapidez con la que falla la predicción, y comprobarás que ese número es una propiedad de la física y no del ordenador.',
+    thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
+    stepCount: 28,
+    gradedCount: 13,
+    objectiveCount: 5,
+  },
 ];

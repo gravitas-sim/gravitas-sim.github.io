@@ -44,6 +44,10 @@ const SCENARIO_STRUCTURE = {
     tags: ['exoplanets', 'habitability', 'orbits-kepler'],
     thumbnail: 'images/scenarios/trappist-1-system.webp',
   },
+  'Three-Body Sensitivity Lab': {
+    tags: ['chaos', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
+  },
   'Binary Pair': {
     tags: ['binary-systems', 'orbits-kepler'],
     thumbnail: 'images/scenarios/binary-pair.webp',

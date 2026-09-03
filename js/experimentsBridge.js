@@ -27,11 +27,12 @@ let loading = null;
 export function ensureBench() {
   if (!loading) {
     loading = (async () => {
-      const [bench, panel, ui, share] = await Promise.all([
+      const [bench, panel, ui, share, render] = await Promise.all([
         import('./experiments/bench.js'),
         import('./experiments/panel.js'),
         import('./ui.js'),
         import('./share.js'),
+        import('./render.js'),
       ]);
       bench.initBench({
         captureShareState: ui.captureShareState,
@@ -40,6 +41,7 @@ export function ensureBench() {
         getScenario: () => ui.current_scenario_name,
         getState: () => ui.state,
         getDefaults: () => ui.DEFAULT_SETTINGS,
+        setFixedStep: render.setFixedStep,
       });
       panel.setShareHandler(() => share.openShareDialog());
       return { bench, panel };

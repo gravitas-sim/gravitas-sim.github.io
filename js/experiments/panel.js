@@ -24,6 +24,7 @@ import * as bench from './bench.js';
 import { OFFERED_METRICS } from './bench.js';
 import { METRIC_ARITY, SCALAR_METRICS } from './metrics.js';
 import { describeDiff } from './canonicalState.js';
+import { describePerturbation, systemExtent } from './perturbation.js';
 
 const PANEL_ID = 'experimentPanel';
 
@@ -86,6 +87,27 @@ export function ensurePanel() {
         <div id="benchMetrics" class="experiment-metrics"></div>
       </details>
 
+      <details id="benchPerturbSection" class="experiment-section">
+        <summary>${esc(t('bench.section.perturb'))}</summary>
+        <p class="experiment-hint">${esc(t('bench.hint.perturb'))}</p>
+        <div class="experiment-row">
+          <select id="benchPerturbBody" class="experiment-input"></select>
+          <select id="benchPerturbAxis" class="experiment-input">
+            <option value="x">${esc(t('bench.axis.x'))}</option>
+            <option value="y">${esc(t('bench.axis.y'))}</option>
+            <option value="vx">${esc(t('bench.axis.vx'))}</option>
+            <option value="vy">${esc(t('bench.axis.vy'))}</option>
+          </select>
+        </div>
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchPerturbAmount">${esc(t('bench.field.amount'))}</label>
+          <input id="benchPerturbAmount" class="experiment-input" type="number"
+                 value="1500" step="any" />
+          <button id="benchPerturbApply" class="ui-button">${esc(t('bench.action.perturb'))}</button>
+        </div>
+        <p id="benchPerturbState" class="experiment-note" hidden></p>
+      </details>
+
       <div class="experiment-runs">
         <div class="experiment-run" data-run="A">
           <span class="experiment-run-label">${esc(t('bench.run.a'))}</span>
@@ -111,6 +133,11 @@ export function ensurePanel() {
       </div>
 
       <div id="benchResults" class="experiment-results"></div>
+
+      <div class="experiment-row experiment-actions">
+        <button id="benchControl" class="ui-button" disabled>${esc(t('bench.action.asControl'))}</button>
+      </div>
+      <div id="benchControls" class="experiment-controls-list"></div>
 
       <div class="experiment-row experiment-actions">
         <button id="benchExportCsv" class="ui-button" disabled>${esc(t('bench.action.csv'))}</button>
@@ -226,6 +253,8 @@ export function render() {
 
   renderBodies(exp);
   renderMetrics(exp);
+  renderPerturbation(exp);
+  renderControls(exp);
   renderRuns(exp, recording);
   renderComparison(exp);
   renderSaved();
@@ -310,6 +339,71 @@ function renderMetrics(exp) {
       label.classList.add('is-unavailable');
     }
     wrap.appendChild(label);
+  }
+}
+
+/**
+ * The perturbation controls.
+ *
+ * A perturbation is not a settings change, so the bench's parameter diff
+ * cannot see it: it is one number inside the captured state. Applying it here
+ * rewrites the captured start, so Run B is restored to a state that differs
+ * from Run A's by exactly that number and by nothing else - which is what the
+ * chaos investigation needs and what makes the change reportable afterwards.
+ */
+function renderPerturbation(exp) {
+  const section = $('benchPerturbSection');
+  if (!section) return;
+  const bodySelect = $('benchPerturbBody');
+  const stateLine = $('benchPerturbState');
+  const bodies = exp?.initialState?.b || [];
+
+  if (bodySelect.options.length !== bodies.length) {
+    bodySelect.innerHTML = '';
+    for (const b of bodies) {
+      const opt = document.createElement('option');
+      opt.value = String(b.id);
+      opt.textContent = b.name || `#${b.id}`;
+      bodySelect.appendChild(opt);
+    }
+  }
+  $('benchPerturbApply').disabled = !exp || !bodies.length;
+
+  if (exp?.perturbation) {
+    const applied = exp.perturbation;
+    const described = describePerturbation(
+      applied,
+      systemExtent(exp.initialState)
+    );
+    stateLine.hidden = false;
+    stateLine.textContent = t('bench.perturb.applied', {
+      body: applied.bodyName,
+      axis: described.axisLabel,
+      km: Math.abs(described.km).toPrecision(4),
+      fraction: described.fraction ? described.fraction.toExponential(1) : '—',
+    });
+  } else {
+    stateLine.hidden = true;
+  }
+}
+
+/** The numerical controls recorded so far. */
+function renderControls(exp) {
+  const wrap = $('benchControls');
+  const button = $('benchControl');
+  if (!wrap || !button) return;
+  const ready = Boolean(exp?.runs?.A && exp?.runs?.B);
+  button.disabled = !ready;
+  wrap.innerHTML = '';
+  for (const c of exp?.numericalControls || []) {
+    const row = document.createElement('div');
+    row.className = 'experiment-note';
+    row.textContent = t('bench.control.row', {
+      label: c.label,
+      tau: Number.isFinite(c.tau) ? c.tau.toFixed(1) : '—',
+      behaviour: c.behaviour,
+    });
+    wrap.appendChild(row);
   }
 }
 
@@ -653,6 +747,35 @@ function wire() {
   $('benchDuplicate').onclick = () => {
     const exp = bench.activeExperiment();
     bench.duplicate(t('bench.copyOf', { name: exp?.name || '' }));
+    render();
+  };
+
+  $('benchPerturbApply').onclick = () => {
+    const exp = bench.activeExperiment();
+    if (!exp) return;
+    const km = Number($('benchPerturbAmount').value);
+    if (!Number.isFinite(km) || km === 0) {
+      bench.say(t('bench.perturb.needAmount'));
+      return;
+    }
+    const result = bench.applyPerturbation({
+      bodyId: Number($('benchPerturbBody').value),
+      axis: $('benchPerturbAxis').value,
+      km,
+    });
+    bench.say(
+      result.ok ? t('bench.perturb.done') : t(`bench.perturb.${result.reason}`)
+    );
+    render();
+  };
+
+  $('benchControl').onclick = async () => {
+    const result = await bench.recordNumericalControl();
+    bench.say(
+      result.ok
+        ? t('bench.control.recorded', { label: result.label })
+        : t('bench.control.failed')
+    );
     render();
   };
 

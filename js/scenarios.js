@@ -822,6 +822,59 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       preset_zoom: 1.6,
       max_timestep: 0.1,
     });
+  } else if (ps === 'Three-Body Sensitivity Lab') {
+    // Three equal stars on Lagrange's equilateral solution. The bodies are
+    // placed by build_simulation in ui.js, which is the only place exact
+    // initial conditions can be written; everything here is the environment
+    // they need.
+    //
+    // Every setting in this block is part of the experiment rather than a
+    // matter of taste, because the lesson's whole claim is that two runs
+    // differing in one coordinate diverge for physical reasons. Anything that
+    // could inject a second difference - a random asteroid, a merger rule
+    // firing, a body being culled for leaving the view - has to be off.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 3,
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      enable_asteroids: false,
+      placement: 'Empty',
+      // All three stars pull on each other. This is the three-body problem;
+      // there is no central body to privilege.
+      mutual_gravity: true,
+      star_only_gravity: false,
+      // A merger would end the experiment by removing a body, and the
+      // divergence measure matches bodies by identity. The configuration never
+      // brings two stars closer than about eight times the sum of their drawn
+      // radii, so this is a guard rather than a crutch: the contract test in
+      // e2e/scenarioContract.spec.js checks that no merger happens with it on
+      // or off.
+      enable_star_merging: false,
+      dynamic_object_properties: false,
+      // The default. Named here because the lesson quotes a rotation period
+      // computed from it, and a scenario that silently inherited a different G
+      // would make that number wrong.
+      gravitational_constant: 2.0,
+      // One rotation of the triangle takes about 27 simulated seconds, which
+      // is a little over five seconds of wall clock here. A student sees seven
+      // or eight rotations in a forty-second run, which is where the
+      // divergence becomes visible.
+      sim_speed: 1.0,
+      show_trails: true,
+      trail_length: 60,
+      trail_style: 'Glow',
+      // The readout is how the student sees that the two runs started
+      // identically, so the conservation rows earn their place here.
+      show_conservation_diagnostics: true,
+      show_scale_bar: true,
+      show_elapsed_time: true,
+    });
+    state.zoom = 2.4;
   } else if (ps === 'Binary Pair') {
     // Two stars of two solar masses each, four AU apart, going round their
     // common center once every four years. The numbers are chosen so that the

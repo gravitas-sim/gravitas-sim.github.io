@@ -293,6 +293,21 @@ function probeContext() {
           .toLowerCase()
           .includes(String(name).toLowerCase())
       ),
+    /**
+     * The Experiment Bench's active experiment, if the bench has been opened.
+     *
+     * A getter rather than a value, and null rather than an import, because the
+     * bench is lazily loaded: a lesson that never touches it must not pull its
+     * chunk in, and a widget that reads it has to cope with it not being there
+     * yet. The chaos lesson's divergence widget is the only consumer.
+     */
+    experiment: () => {
+      try {
+        return window.__gravitasBench?.activeExperiment?.() ?? null;
+      } catch {
+        return null;
+      }
+    },
   };
 }
 

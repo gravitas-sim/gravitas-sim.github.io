@@ -181,3 +181,158 @@ test.describe('Kuiper Belt scenario contract', () => {
     expect(shape(first)).toHaveLength(KUIPER_OBJECTS.length);
   });
 });
+
+// =============================================================================
+// The Three-Body Sensitivity Lab
+// -----------------------------------------------------------------------------
+// The chaos investigation asks a student to draw a physical conclusion from
+// this scenario, so what it builds has to be exactly what the lesson describes.
+// The physics of the divergence is checked in tools/physics-checks.mjs; what is
+// checked here is the thing only a real browser can see - that the scenario, as
+// the application actually builds it, is the configuration the lesson names.
+// =============================================================================
+
+test.describe('Three-Body Sensitivity Lab scenario contract', () => {
+  test.beforeEach(async ({ app }) => {
+    await app.boot();
+    await app.dismissFrontDoor();
+    // Paused: these are assertions about the configuration the scenario
+    // *builds*, and a running world has already left it by the time the test
+    // reads the numbers.
+    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+      run: false,
+    });
+    await app.waitForBodies(3);
+  });
+
+  test('three equal stars, and nothing else', async ({ page }) => {
+    const world = await page.evaluate(async () => {
+      const P = await import('/js/physics.js');
+      const counts = {
+        stars: P.stars.length,
+        planets: P.planets.length,
+        holes: P.bh_list.length,
+        asteroids: P.asteroids.length,
+        comets: P.comets.length,
+      };
+      return {
+        counts,
+        names: P.stars.map(s => s.name).sort(),
+        masses: P.stars.map(s => s.mass),
+      };
+    });
+    expect(world.counts).toEqual({
+      stars: 3,
+      planets: 0,
+      holes: 0,
+      asteroids: 0,
+      comets: 0,
+    });
+    expect(world.names).toEqual(['Alpha', 'Beta', 'Gamma']);
+    // Equal masses is not decoration: Gascheau's criterion makes the
+    // equilateral solution unstable only when the masses are comparable, and
+    // the lesson's whole argument rests on that.
+    expect(new Set(world.masses).size).toBe(1);
+    expect(world.masses[0]).toBeCloseTo(6000, 6);
+  });
+
+  test('the triangle is equilateral and rotating at the Lagrange rate', async ({
+    page,
+  }) => {
+    const geometry = await page.evaluate(async () => {
+      const P = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const s = P.stars;
+      const side = (a, b) => Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+      const sides = [side(s[0], s[1]), side(s[1], s[2]), side(s[2], s[0])];
+      const radii = s.map(b => Math.hypot(b.pos.x, b.pos.y));
+      // Rigid rotation means v = omega x r for every body, with one omega.
+      const omegas = s.map(
+        b =>
+          (b.pos.x * b.vel.y - b.pos.y * b.vel.x) /
+          (b.pos.x ** 2 + b.pos.y ** 2)
+      );
+      return { sides, radii, omegas, G: ui.SETTINGS.gravitational_constant };
+    });
+
+    const L = geometry.sides[0];
+    for (const side of geometry.sides) expect(side).toBeCloseTo(L, 4);
+    for (const r of geometry.radii) expect(r).toBeCloseTo(50, 4);
+    expect(L).toBeCloseTo(50 * Math.sqrt(3), 4);
+
+    // omega^2 = G * M_total / L^3 is what makes the triangle an exact solution
+    // rather than three stars that happen to be arranged in one.
+    const expected = Math.sqrt((geometry.G * 3 * 6000) / L ** 3);
+    for (const w of geometry.omegas) expect(w).toBeCloseTo(expected, 6);
+  });
+
+  test('the same seed builds the identical configuration twice', async ({
+    page,
+    app,
+  }) => {
+    const snapshot = () =>
+      page.evaluate(async () => {
+        const P = await import('/js/physics.js');
+        return P.stars.map(s => [s.id, s.pos.x, s.pos.y, s.vel.x, s.vel.y]);
+      });
+    const first = await snapshot();
+    await app.loadScenario('Three-Body Sensitivity Lab', 'chaos-lab', {
+      run: false,
+    });
+    await app.waitForBodies(3);
+    expect(await snapshot()).toEqual(first);
+  });
+
+  test('no star is lost during a run the length of the lesson', async ({
+    page,
+  }) => {
+    // The divergence measure matches bodies by identity, so a merger part-way
+    // through would change what is being compared without saying so.
+    const outcome = await page.evaluate(async () => {
+      const P = await import('/js/physics.js');
+      const start = P.stars.length;
+      const t0 = P.getSimulationTime();
+      let closest = Infinity;
+      while (P.getSimulationTime() - t0 < 200) {
+        P.updatePhysics(0.1);
+        const alive = P.stars.filter(s => s.alive !== false);
+        for (let i = 0; i < alive.length; i++) {
+          for (let j = i + 1; j < alive.length; j++) {
+            closest = Math.min(
+              closest,
+              Math.hypot(
+                alive[i].pos.x - alive[j].pos.x,
+                alive[i].pos.y - alive[j].pos.y
+              )
+            );
+          }
+        }
+      }
+      return {
+        start,
+        end: P.stars.filter(s => s.alive !== false).length,
+        closest,
+      };
+    });
+    expect(outcome.end).toBe(outcome.start);
+    // Two stars of drawn radius 8 collide inside 16 units.
+    expect(outcome.closest).toBeGreaterThan(40);
+  });
+
+  test('the lesson names a scenario the catalog actually has', async ({
+    page,
+  }) => {
+    const known = await page.evaluate(async () => {
+      const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
+      const lesson = await import(
+        '/js/data/investigations/butterfly-effect.js'
+      );
+      const wanted = lesson.default.steps
+        .map(s => s.setup?.scenario)
+        .filter(Boolean);
+      return wanted.map(name => [name, Boolean(SCENARIO_INFO[name])]);
+    });
+    expect(known.length).toBeGreaterThan(0);
+    for (const [, exists] of known) expect(exists).toBe(true);
+  });
+});

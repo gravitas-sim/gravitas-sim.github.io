@@ -148,4 +148,18 @@ export const MANIFEST = [
     gradedCount: 16,
     objectiveCount: 5,
   },
+  {
+    id: 'butterfly-effect',
+    title: 'The Butterfly Effect in Space',
+    subtitle:
+      'Run the same system twice and find out how long the answer lasts',
+    duration: '55-70 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Two runs of the same three stars, started from positions differing by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, end up somewhere completely different. Nothing random happens in between: the simulation is deterministic, and running it twice from exactly the same numbers gives exactly the same answer both times. Along the way you will measure a case that looks like chaos and is not, put a number on how fast prediction fails, and check that the number is a property of the physics rather than of the computer.',
+    thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
+    stepCount: 28,
+    gradedCount: 13,
+    objectiveCount: 5,
+  },
 ];

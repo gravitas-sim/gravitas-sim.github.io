@@ -74,6 +74,7 @@ const LOADERS = {
   'goldilocks-question': () => import('./goldilocks-question.js'),
   'missing-mass': () => import('./missing-mass.js'),
   tides: () => import('./tides.js'),
+  'butterfly-effect': () => import('./butterfly-effect.js'),
 };
 
 /**
@@ -98,6 +99,7 @@ const TRANSLATIONS = {
     'goldilocks-question': () => import('./es/goldilocks-question.js'),
     'missing-mass': () => import('./es/missing-mass.js'),
     tides: () => import('./es/tides.js'),
+    'butterfly-effect': () => import('./es/butterfly-effect.js'),
   },
 };
 

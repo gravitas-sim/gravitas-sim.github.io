@@ -2553,6 +2553,12 @@ class PhysicsObject {
       mass: this.mass,
       radius: this.radius,
       alive: this.alive,
+      // A body's name is part of its identity, not decoration. Restoring a
+      // saved state without it renamed every star, so a full share link
+      // reopened as a different cast of characters and an experiment that
+      // measured "Alpha" could not say which star that had been. BlackHole
+      // already carried it; everything else inherits it here.
+      name: this.name,
     };
   }
 

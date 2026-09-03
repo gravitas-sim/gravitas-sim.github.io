@@ -437,14 +437,22 @@ const lessonsFetched = page =>
   );
 
 test.describe('lesson loading', () => {
-  test('the browser lists ten lessons without loading any of them', async ({
+  test('the browser lists every lesson without loading any of them', async ({
     page,
     app,
   }) => {
     await app.boot();
     await page.locator('#investigationsBtn').click();
     await expect(page.locator('#investigationBrowser')).toBeVisible();
-    await expect(page.locator('#investigationList .inv-card')).toHaveCount(10);
+    // From the manifest rather than a literal: the catalogue grows, and a test
+    // that hard-codes its size fails for the one reason nobody needs telling.
+    const expected = await page.evaluate(async () => {
+      const { MANIFEST } = await import('/js/data/investigations/manifest.js');
+      return MANIFEST.length;
+    });
+    await expect(page.locator('#investigationList .inv-card')).toHaveCount(
+      expected
+    );
 
     // Every card carries a step count and a duration, and all of it came out of
     // the manifest: the cards are drawn, and no lesson has been fetched.

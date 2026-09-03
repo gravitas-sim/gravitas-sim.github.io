@@ -72,6 +72,10 @@ export const CAPTURE = {
   // Two stars four AU apart take about eight hundred sim units to go round.
   // At the scenario's own speed that is a minute and a half of capture for one
   // lap, and the trail arc is the whole point of the picture.
+  // Two turns of the triangle, which is long enough for the trails to draw the
+  // rotation and short enough that the configuration is still a triangle. Any
+  // later and the thumbnail shows the aftermath rather than the experiment.
+  'Three-Body Sensitivity Lab': { settle: 48, trail: 150, zoom: 3.4 },
   'Binary Pair': { settle: 20, speed: 12, zoom: 1.3, trail: 1400 },
   // Framed on the inner pair rather than on the outermost planet, which sits
   // far enough out to shrink the stars to specks.
