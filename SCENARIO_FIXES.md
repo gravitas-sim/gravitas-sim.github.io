@@ -1,5 +1,11 @@
 # Fixing the scenarios the audit caught
 
+> **Historical record.** This is the report of one fixing pass, made when the
+> catalog held 43 scenarios, with the before-and-after measurements taken then.
+> Its counts are the counts of that moment and are deliberately not updated;
+> the catalog now holds <!--fact:scenarios-->48<!--/fact--> scenarios, and the
+> current conservation audit is `npm run validate:scenarios`.
+
 The thumbnail pass ran every scenario and wrote down five things that were
 wrong with them. This is what each one turned out to be and what was done.
 
@@ -36,8 +42,13 @@ list of what to position read:
 
 ```js
 const all_objects = [
-  ...bh_list, ...planets, ...gas_giants,
-  ...asteroids, ...comets, ...neutron_stars, ...white_dwarfs,
+  ...bh_list,
+  ...planets,
+  ...gas_giants,
+  ...asteroids,
+  ...comets,
+  ...neutron_stars,
+  ...white_dwarfs,
 ];
 ```
 
@@ -79,7 +90,7 @@ dominates, objects now get a circular orbit about it with the random component
 as a perturbation.
 
 That last change is the only one with a judgment call in it, because an
-isotropic spread of random velocities is the *right* starting condition for a
+isotropic spread of random velocities is the _right_ starting condition for a
 self-gravitating cluster, and a disk would be a fiction. The threshold is a mass
 ratio of 3, taken from the catalog rather than picked out of the air: of the
 scenarios that place randomly, the ones this helps sit at ratios of 12, 20, 110,
@@ -133,11 +144,11 @@ now starts with the camera inside a horizon.
 ### 2. Binary Star System carried a net center-of-mass velocity
 
 **Was.** Two stars of 1.2 and 0.8 solar masses given equal and opposite
-*speeds*:
+_speeds_:
 
 ```js
 new StarObject({ x: -60, y: 0 }, { x: 0, y: 12 }, 1.2);
-new StarObject({ x:  60, y: 0 }, { x: 0, y: -12 }, 0.8);
+new StarObject({ x: 60, y: 0 }, { x: 0, y: -12 }, 0.8);
 ```
 
 Equal and opposite speed is not equal and opposite momentum. 1.2 × 12 against
@@ -192,14 +203,14 @@ apart.
 **Now.** With placement fixed they keep their populations and each shows its own
 structure:
 
-| Scenario | Bodies surviving 4s, before → after |
-| --- | --- |
-| Quasar Cannon | 1% → 99% |
-| Supernova Remnant | 0% → 69% |
-| Tidal Arm Tango | 2% → 67% |
-| The Pinwheel Galaxy Core | 0% → 45% |
-| Black Hole Billiards | 9% → 47% |
-| Tidal Disruption Event | rebuilt, see above |
+| Scenario                 | Bodies surviving 4s, before → after |
+| ------------------------ | ----------------------------------- |
+| Quasar Cannon            | 1% → 99%                            |
+| Supernova Remnant        | 0% → 69%                            |
+| Tidal Arm Tango          | 2% → 67%                            |
+| The Pinwheel Galaxy Core | 0% → 45%                            |
+| Black Hole Billiards     | 9% → 47%                            |
+| Tidal Disruption Event   | rebuilt, see above                  |
 
 `Circular` was also changed. Every object went on one ring at exactly 0.7 of the
 bounds, which put The Pinwheel Galaxy Core's 200 stars about nine units apart -
@@ -223,7 +234,9 @@ speed of 50 sim units per time unit:
 ```js
 const velocity_factor = Math.min(1, obj.trail[i].velocity / 50);
 const intensity = age_factor * velocity_factor;
-if (intensity > 0.05) { /* draw */ }
+if (intensity > 0.05) {
+  /* draw */
+}
 ```
 
 Binary Pair is two solar masses at four AU. It orbits at 1.58 units per time

@@ -1,5 +1,13 @@
 # Performance Optimizations Summary
 
+> **Historical record.** This documents a round of rendering and memory work,
+> with the measurements taken at that time. It is not a description of the
+> application as it stands, and its numbers are not updated; the current
+> profile comes from `npm run perf`, and
+> [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) says how
+> to take one. Items in "Future Optimizations" that have since been done are
+> marked there.
+
 ## Overview
 This document summarizes the performance optimizations implemented in the Gravitas black hole simulation to improve frame rate, reduce memory usage, and enhance overall user experience.
 
@@ -172,11 +180,23 @@ particlePool.getParticle(pos, vel, lifetime);
 ## Future Optimizations
 
 ### Potential Improvements
-1. **WebGL Rendering**: Move from Canvas 2D to WebGL for better performance
-2. **Web Workers**: Move physics calculations to background thread
-3. **Spatial Partitioning**: Implement quadtree for collision detection
-4. **Level of Detail**: Reduce complexity for distant objects
-5. **Instanced Rendering**: Batch similar objects in single draw calls
+
+*As recorded at the time. Two have since been done and are marked; the rest
+remain open.*
+
+1. **WebGL Rendering**: Move from Canvas 2D to WebGL for better performance —
+   still open for the main simulation. The spacetime view is WebGL, through
+   Three.js.
+2. ~~**Web Workers**: Move physics calculations to background thread~~ —
+   **done**: `js/physicsWorker.js` runs Barnes–Hut tree gravity off the main
+   thread, and `js/physics.js` hands work to it when the body count justifies
+   it.
+3. ~~**Spatial Partitioning**: Implement quadtree for collision detection~~ —
+   **done**: `js/spatialHash.js` is a uniform spatial hash used for broad-phase
+   collision detection, and the Barnes–Hut tree covers the gravity side.
+4. **Level of Detail**: Reduce complexity for distant objects — still open.
+5. **Instanced Rendering**: Batch similar objects in single draw calls — still
+   open.
 
 ### Monitoring and Maintenance
 - **Regular Profiling**: Profile with each major feature addition

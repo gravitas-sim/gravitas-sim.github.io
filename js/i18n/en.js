@@ -16,10 +16,11 @@
 //
 // What is deliberately NOT here
 // -----------------------------------------------------------------------------
-//   The ten investigations, and the chrome that belongs to them. A lesson is
+//   The investigations, and the chrome that belongs to them. A lesson is
 //   continuous writing and a half-translated one is worse than an English one,
-//   so the boundary is structural: there is nothing here to fall back from, and
-//   the language picker states the limit in words. See locale.coverage.es.
+//   so the boundary is structural: a lesson is translated as a whole file under
+//   js/data/investigations/<locale>/, laid over the English by
+//   mergeTranslation(), and there is nothing here to fall back from.
 //
 //   The observing panels' internals - light curve, radial velocity, astrometry,
 //   rotation curve, the 3D view. The rail buttons that open them are chrome and
@@ -33,11 +34,11 @@ export const EN = {
   // --- Locale and the language picker ---------------------------------------
   'locale.picker.label': 'Language',
   'locale.picker.hint': 'Change the interface language',
-  // Shown under the picker for a locale whose coverage is partial. It has to be
-  // specific about *what* is not translated: "partially translated" would leave
-  // a student wondering whether the lesson they are reading lost something.
-  'locale.coverage.es':
-    'Spanish interface. The investigations remain in English for now.',
+  // Describes how much of a locale is translated, for a picker that wants to
+  // say so. It has to be specific about *what* is and is not translated:
+  // "partially translated" would leave a student wondering whether the lesson
+  // they are reading lost something.
+  'locale.coverage.es': 'Spanish interface and investigations.',
   'locale.coverage.complete': 'Fully translated.',
 
   // --- Presentation: embed ---------------------------------------------------

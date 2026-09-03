@@ -16,11 +16,14 @@
 //   half-sentence. The id itself is the last resort, which is loud enough to be
 //   noticed in review and quiet enough not to break a layout.
 //
-//   The investigations are deliberately *absent* from the catalogue rather than
-//   present and untranslated. A lesson is a piece of continuous writing and a
-//   half-translated one is worse than an English one, so the boundary is
-//   structural: there is nothing to fall back from, and the language picker
-//   says so in words. See LOCALES[].coverage.
+//   The investigations are deliberately *absent* from this catalogue rather
+//   than present and untranslated. A lesson is a piece of continuous writing
+//   and a half-translated one is worse than an English one, so the boundary is
+//   structural: a locale's lessons are whole files under
+//   js/data/investigations/<locale>/, merged over the English lesson by
+//   mergeTranslation(), and carry words only - never a scenario name, a seed,
+//   a widget id or a numeric answer. LOCALES[].coverage says in one sentence,
+//   in that language, how far a translation reaches.
 //
 // This module touches no DOM beyond localStorage and the custom event it fires.
 // The markup sweep lives in js/i18n/dom.js.
@@ -55,8 +58,7 @@ export const LOCALES = [
     label: 'Spanish',
     endonym: 'Español',
     load: () => import('./es.js').then(m => m.ES),
-    coverage:
-      'Interfaz en español. Las investigaciones siguen en inglés por ahora.',
+    coverage: 'Interfaz e investigaciones en español.',
   },
 ];
 

@@ -88,8 +88,9 @@ alignment is the whole point.
 **Lesson widgets keep their own decimal counts.** A transit depth shown to four
 decimals is a pedagogical choice tied to the lesson text and to what a student is
 asked to type in. Converting those to significant figures would change displayed
-values in six investigations to fix a typographic problem they do not have. Their
-*units* were made consistent; their precision was not touched.
+values in every investigation that has a widget in it, to fix a typographic
+problem they do not have. Their *units* were made consistent; their precision was
+not touched.
 
 **Positional coordinates keep one decimal place.** A position in simulation units
 is a location on a grid, not a measurement, and a coordinate pair reads better

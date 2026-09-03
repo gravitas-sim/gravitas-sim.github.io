@@ -46,3 +46,12 @@ coverage/
 /test-results/
 /blob-report/
 /playwright/.cache/
+
+# LaTeX build products. manual/*.tex and the PDF at the repository root are
+# committed; the compiler's intermediates are not.
+manual/*.log
+manual/*.aux
+manual/*.out
+manual/*.toc
+manual/*.xdv
+manual/gravitas-user-manual.pdf

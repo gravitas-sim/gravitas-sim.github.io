@@ -30,11 +30,11 @@ do that.
 
 Measured on the running app:
 
-| scenario | fitted exponent | shape | visible mass |
-| --- | --- | --- | --- |
-| Solar System | **−0.500** | Keplerian | 1.0 M☉ |
-| Spiral Galaxy | −0.447 | Keplerian | 14.7 M☉ |
-| Milky Way Rotation | **+0.018** | Flat | 14.7 M☉ |
+| scenario           | fitted exponent | shape     | visible mass |
+| ------------------ | --------------- | --------- | ------------ |
+| Solar System       | **−0.500**      | Keplerian | 1.0 M☉       |
+| Spiral Galaxy      | −0.447          | Keplerian | 14.7 M☉      |
+| Milky Way Rotation | **+0.018**      | Flat      | 14.7 M☉      |
 
 The first row is the check that the instrument works. The Sun holds 99.8% of the
 Solar System's mass, so the enclosed total stops growing outside Mercury and the
@@ -103,12 +103,12 @@ target produces thirty numbers and no way to tell a mistake from a moment.
 
 The panel reports three things and refuses to report a fourth:
 
-| measurement | value |
-| --- | --- |
-| members | 24 |
-| speed spread σ | 20.46 simulation units per time |
-| cluster radius R | 2516 simulation units |
-| visible mass | 96 M☉ |
+| measurement      | value                           |
+| ---------------- | ------------------------------- |
+| members          | 24                              |
+| speed spread σ   | 20.46 simulation units per time |
+| cluster radius R | 2516 simulation units           |
+| visible mass     | 96 M☉                           |
 
 It does not report the virial mass, because working that out is the exercise:
 
@@ -178,9 +178,10 @@ conclusion survived his distance scale being wrong.
 
 ## The lesson
 
-**The Missing Mass**, 15 steps, 25 to 35 minutes. It is the shortest lesson in
-Gravitas by a factor of two, because it makes one argument and the argument is
-short.
+**The Missing Mass**, <!--fact:steps:missing-mass-->29<!--/fact-->
+steps, <!--fact:duration:missing-mass-->45-60 min<!--/fact-->. It makes one
+argument, and every step in it is either a measurement of that argument or a
+check that the student has not been handed the conclusion.
 
 The order is historical and pedagogical at once. The Solar System first, because
 it is the case where the two ways of weighing agree and so it establishes the
@@ -190,9 +191,10 @@ lands harder once a student has already watched one system misbehave.
 
 Nothing in it asks a student to believe in dark matter. It asks them to make two
 measurements and notice that they disagree, which is all the evidence itself
-does. Step 14 is a short-answer question that asks explicitly what the
-measurements establish and what they do not, and the rubric gives credit for
-naming faint ordinary matter or modified gravity as alternatives.
+does. Near the end, "What have you actually shown?" is a short-answer question
+that asks explicitly what the measurements establish and what they do not, and
+its rubric gives credit for naming faint ordinary matter or modified gravity as
+alternatives.
 
 ---
 

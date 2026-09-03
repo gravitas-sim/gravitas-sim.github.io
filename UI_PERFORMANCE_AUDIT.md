@@ -1,5 +1,11 @@
 # Gravitas: UI, performance and quality audit
 
+> **Historical record.** This is the report of one audit, with the measurements
+> taken at that time on that machine. The numbers are the record and are not
+> updated as the application changes; for what the build produces today, run
+> `npm run build`, and for frame times, `npm run perf`. Recommendations that
+> have since been carried out are marked below.
+
 A finishing pass over the whole application: what was measured, what changed,
 and what was deliberately left alone.
 
@@ -253,14 +259,22 @@ what was a 703.1 KB bundle.
 
 ## Recommended future work
 
-- **Split the lesson data per lesson.** `js/data/investigations.js` is a single
-  225 KB module holding all six lessons; opening one loads all six. Splitting it
-  would need care, because the answer-key generator and the instructor materials
-  both consume the registry whole.
-- **Retire the dead scenario-browser CSS** in `styles.css` as part of a
-  deliberate legacy pass.
-- **Extract the object inspector from `ui.js`**, once the energy-chart and drag
-  couplings are understood.
-- **Measure the compositor**, not just the main thread. Nothing here can
-  distinguish a saving in rasterisation from one in JavaScript, which is why the
-  page-filter removal is reported as dead-code removal rather than a speed-up.
+_As recorded at the time of the audit. Three of the four have since been done;
+they are struck through rather than deleted, because what was recommended and
+whether it happened are both part of the record._
+
+- ~~**Split the lesson data per lesson.** `js/data/investigations.js` is a single
+  225 KB module holding all six lessons; opening one loads all six.~~
+  **Done.** Lessons are one module each under `js/data/investigations/`, loaded
+  on demand, with a generated `manifest.js` carrying the card-level fields so
+  the browser can draw the grid without loading any lesson text. There are now
+  <!--fact:investigations-->10<!--/fact--> of them.
+- ~~**Retire the dead scenario-browser CSS** in `styles.css`.~~ **Done.** No
+  `scenario-browser` rules remain in the stylesheets.
+- ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag
+  couplings are understood.~~ **Done.** It is `js/objectInspector.js`; see
+  [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
+- **Measure the compositor**, not just the main thread. Still open. Nothing here
+  can distinguish a saving in rasterisation from one in JavaScript, which is why
+  the page-filter removal is reported as dead-code removal rather than a
+  speed-up.

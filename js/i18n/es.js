@@ -30,8 +30,7 @@ export const ES = {
   // --- Locale and the language picker ---------------------------------------
   'locale.picker.label': 'Idioma',
   'locale.picker.hint': 'Cambiar el idioma de la interfaz',
-  'locale.coverage.es':
-    'Interfaz en español. Las investigaciones siguen en inglés por ahora.',
+  'locale.coverage.es': 'Interfaz e investigaciones en español.',
   'locale.coverage.complete': 'Traducción completa.',
 
   // --- Presentation: embed ---------------------------------------------------

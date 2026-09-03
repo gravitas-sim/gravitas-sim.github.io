@@ -10,8 +10,9 @@
 # -----------------------------------------------------------------------------
 #   checks       Everything that needs no browser: lint, formatting, the jest
 #                suite, the physics validation table, the link checker, the
-#                thumbnail manifest. Under two minutes, and it is the job that
-#                catches most mistakes, so it runs first and independently.
+#                thumbnail manifest, and the documentation-drift check. Under
+#                two minutes, and it is the job that catches most mistakes, so
+#                it runs first and independently.
 #
 #   build        Produces dist/ and uploads it. Runs in parallel with checks
 #                rather than after it: a broken build and a lint error are
@@ -103,6 +104,17 @@ jobs:
 
       - name: Scenario thumbnail manifest
         run: npm run thumbnails:check
+
+      # Every count the documentation cites is generated from the catalog, the
+      # lesson manifest or the test output. This is the job that notices when
+      # one of them has drifted - a README that says 43 scenarios over a catalog
+      # of 48 is the kind of error a reader catches and an author never does.
+      - name: Documentation counts and links
+        run: npm run docs:check
+
+      # And the shipped PDF, which carries the same counts in its metadata.
+      - name: User manual matches the application
+        run: npm run manual:check
 
   build:
     name: Production build

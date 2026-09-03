@@ -1,5 +1,13 @@
 # Scenario gallery: what changed
 
+> **Historical record.** This describes one change, made when the catalog held
+> 43 scenarios and 12 concept tags. The counts in the narrative below are the
+> counts at that time and are left as they were written; the catalog now holds
+>
+> <!--fact:scenarios-->48<!--/fact--> scenarios and 13 tags. The design it
+>
+> describes is still the design in use.
+
 The Load Scenario browser was a vertical list of title-and-paragraph cards. At 43
 scenarios that is a wall of text you scroll past rather than read, and it answers
 only "what exists?". It is now a thumbnail gallery indexed by curriculum concept,
@@ -24,14 +32,15 @@ was nothing left in them to tell apart.
 `js/data/scenarioInfo.js` is now the single authoritative catalog. Every entry
 gained two fields:
 
-- `tags` — 1 to 4 concept ids, assigned by hand for all 43 scenarios. Not derived
-  from title keywords: Black Hole Lab is about orbits far from a hole rather than
-  relativity, and Pulsar System earns Exoplanets because the first exoplanets
-  found orbited a pulsar.
+- `tags` — one to three concept ids per scenario, assigned by hand for every one
+  of them. Not derived from title keywords: Black Hole Lab is about orbits far
+  from a hole rather than relativity, and Pulsar System earns Exoplanets because
+  the first exoplanets found orbited a pulsar.
 - `thumbnail` — the path to its capture.
 
-`js/data/scenarioTags.js` is new: 12 curriculum concepts, each with a label and a
-one-line description, and the only place a concept's display name is written.
+`js/data/scenarioTags.js` is new: a registry of curriculum concepts, each with a
+label and a one-line description, and the only place a concept's display name is
+written. It held 12 when this was written and holds 13 now.
 
 ## Removed duplication
 

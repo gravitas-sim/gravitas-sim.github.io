@@ -61,7 +61,7 @@ center of the Sun, against a true value of about 0.005 AU and a solar radius of
 
 ---
 
-## Verified
+## Verified: the planet-mass fix
 
 - **Every scenario in the catalog** loaded and run for six seconds, comparing
   each planet's two masses. Four disagreements found, all fixed, none remaining.
@@ -183,12 +183,14 @@ under `mutual_gravity` with `star_only_gravity` off. Where they were sources,
 their combined share of the system mass was under a percent everywhere except
 the Kuiper Belt, and that is the scenario the correction most improves.
 
-### Verified
+### Verified: the small-body fix
 
 - **`tests/mass-scale.test.js`** grew the small-body half it was missing: the
   three units against the anchor, each class's gravitational mass against the
   mass it reports, linearity, the Ceres-to-Earth ratio this document quotes, and
   a check that all three masses stay finite and positive rather than underflowing
   to zero and dropping out of every barycenter.
-- **The sweep above**, before and after, on all thirty-one scenarios.
+- **The sweep above**, before and after, on every scenario that had a small
+  body in it — thirty-one of them at the time of the fix. `node
+  tools/small-body-sweep.mjs` re-runs it against the catalog as it stands.
 - **The full physics validation suite**, unchanged.

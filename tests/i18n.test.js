@@ -196,18 +196,44 @@ describe('choosing a language', () => {
     expect(localeInfo('es').endonym).toBe('Español');
   });
 
-  test('a partial locale says so, in its own language', async () => {
-    // The picker's whole job beyond switching: telling a Spanish reader that
-    // the lessons are still English, in Spanish.
-    // Carried on the registry rather than in the catalogue, so the picker can
-    // show it for a language that has not been fetched yet.
+  test('a locale states its own coverage, in its own language', async () => {
+    // Carried on the registry rather than in the catalogue, so it can be shown
+    // for a language that has not been fetched yet.
+    //
+    // This sentence used to say the investigations were still English. They are
+    // not: all ten have Spanish translations under
+    // js/data/investigations/es/. A promise about coverage is exactly the kind
+    // of sentence that goes quietly out of date, so the next assertion ties it
+    // to the files rather than to anyone's memory.
     const es = LOCALES.find(l => l.id === 'es');
     expect(es.coverage).toMatch(/español/i);
-    expect(es.coverage).toMatch(/inglés/i);
     expect(es.coverage).toMatch(/investigaciones/i);
+    expect(es.coverage).not.toMatch(/inglés/i);
     // And the same sentence is in the catalogue, so a translator meets it with
     // everything else.
     expect(ES['locale.coverage.es']).toBe(es.coverage);
+  });
+
+  test('the Spanish coverage sentence matches the lessons that exist', async () => {
+    // Every lesson the registry can load in Spanish is one the coverage
+    // sentence is entitled to claim. If a lesson is added without a
+    // translation, this fails and the sentence has to be rewritten - which is
+    // the point.
+    const { MANIFEST } = await import('../js/data/investigations/manifest.js');
+    const translated = await Promise.all(
+      MANIFEST.map(l =>
+        import(`../js/data/investigations/es/${l.id}.js`).then(
+          () => true,
+          () => false
+        )
+      )
+    );
+    const all = translated.every(Boolean);
+    const es = LOCALES.find(l => l.id === 'es');
+    // The claim and the files have to agree in both directions.
+    expect(
+      /investigaciones en español|e investigaciones/i.test(es.coverage)
+    ).toBe(all);
   });
 
   test('coverage is measured against English, not asserted', async () => {

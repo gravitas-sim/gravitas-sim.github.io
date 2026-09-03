@@ -1,0 +1,492 @@
+% =============================================================================
+% Gravitas User Manual
+% -----------------------------------------------------------------------------
+% Build with:  npm run manual        (tools/build-manual.mjs, engine: Tectonic)
+%
+% Three files included below are GENERATED and must not be hand-edited:
+%   facts.tex           counts, from the catalog / manifest / test output
+%   scenarios.tex       the scenario catalog, from js/data/scenarioInfo.js
+%   investigations.tex  the lesson table, from the investigation manifest
+%
+% Regenerate them with `npm run docs:sync` and `npm run manual`. Every number
+% in this document that could go stale comes from one of them; if you find
+% yourself typing a count, stop and add a macro instead.
+%
+% On accessibility: this file sets a document language, embeds ToUnicode maps
+% so the text extracts and searches correctly, builds a bookmark outline from
+% the section structure, uses no images and therefore needs no alternative
+% text, and colours links dark enough to pass contrast against white. It is
+% not a tagged PDF: the LaTeX in Tectonic's package bundle predates the
+% tagging support that would be needed, and that limitation is stated in the
+% Accessibility section rather than hidden.
+% =============================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{lmroman10-regular.otf}[
+  BoldFont       = lmroman10-bold.otf,
+  ItalicFont     = lmroman10-italic.otf,
+  BoldItalicFont = lmroman10-bolditalic.otf]
+\setsansfont{lmsans10-regular.otf}[
+  BoldFont   = lmsans10-bold.otf,
+  ItalicFont = lmsans10-oblique.otf]
+\setmonofont{lmmono10-regular.otf}[
+  BoldFont   = lmmonolt10-bold.otf,
+  ItalicFont = lmmono10-italic.otf,
+  Scale      = 0.94]
+
+\usepackage[margin=2.4cm,bottom=2.8cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\input{facts.tex}
+
+\definecolor{linkink}{RGB}{16,58,120}
+
+\usepackage[
+  colorlinks=true,
+  linkcolor=linkink,
+  urlcolor=linkink,
+  citecolor=linkink,
+  bookmarks=true,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  unicode=true,
+  pdflang=en-US,
+  pdftitle={Gravitas User Manual},
+  pdfauthor={Carl Ziegler},
+  pdfsubject={User manual for Gravitas, an interactive astrophysics sandbox and
+    astronomy teaching tool},
+  pdfdisplaydoctitle=true
+]{hyperref}
+
+% The facts, in the document's own metadata. tools/build-manual.mjs reads this
+% line back out of the finished PDF, which is how `npm run manual:check` can
+% tell that the shipped manual still describes the shipped application without
+% having to parse typeset text.
+\hypersetup{pdfkeywords={scenarios=\GravScenarios; investigations=\GravInvestigations;
+  steps=\GravInvestigationSteps; locales=\GravLocales}}
+
+\urlstyle{same}
+\setlist{itemsep=2pt,topsep=4pt,parsep=0pt}
+\titleformat{\section}{\Large\bfseries\sffamily}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\large\bfseries\sffamily}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily Gravitas User Manual}
+\fancyhead[R]{\small\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\ui}[1]{\textsf{#1}}
+\newcommand{\key}[1]{\texttt{#1}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{4cm}
+{\Huge\bfseries\sffamily Gravitas\par}
+\vspace{0.6cm}
+{\LARGE\sffamily User Manual\par}
+\vspace{1.4cm}
+{\large An interactive astrophysics sandbox and astronomy teaching tool
+that runs entirely in the browser\par}
+\vspace{2cm}
+{\large\url{https://gravitas-sim.online}\par}
+\vspace{0.4cm}
+{\large \GravScenarios{} scenarios \quad\textbullet\quad
+\GravInvestigations{} guided investigations \quad\textbullet\quad
+\GravInvestigationSteps{} steps\par}
+\vfill
+{\large Carl Ziegler\par}
+\vspace{0.3cm}
+{\small Released under the MIT licence. This manual is generated from the
+application's own catalog; see \texttt{manual/} in the repository.\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =============================================================================
+\section{What Gravitas is}
+
+Gravitas is a gravity simulation you can teach with. It runs in a browser, needs
+no account and no installation, and is served as static files: nothing you do in
+it reaches a server, and nothing about you is recorded by it.
+
+It is two things at once. It is a \emph{sandbox} --- place stars, planets and
+black holes, give them velocities, and watch what Newtonian gravity does with
+them --- and it is a set of \emph{guided investigations} that use that sandbox to
+take a student from a prediction, through a measurement, to a number they can
+defend.
+
+\subsection{What it models, and what it only draws}
+
+This distinction matters more than any other in this manual, and the application
+states it in public at \url{https://gravitas-sim.online/model/}.
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[Calculated] Newtonian gravitation between every pair of bodies, in two
+  dimensions, integrated with a scheme you choose. Orbits, energies, angular
+  momenta, transit depths, radial-velocity curves, astrometric wobble, tidal
+  differentials and rotation curves all come out of that integration.
+  \item[Approximated] Mergers are perfectly inelastic. The gravitational-wave
+  inspiral is a phenomenological energy loss, not a solution of general
+  relativity. The dark-matter halo is an added force term with an adjustable
+  flat rotation speed.
+  \item[Drawn only] Accretion-disc glow, relativistic jets, gravitational-lensing
+  distortion and the bloom around bright objects are pictures. They influence
+  nothing.
+\end{description}
+
+Every claim the simulation makes about a measurable quantity is checked by a
+validation suite of \GravPhysicsChecks{} deterministic tests, each with a stated
+tolerance and a written reason for that tolerance. The results, and the list of
+things that are deliberately \emph{not} validated, are published with the
+project.
+
+% =============================================================================
+\section{Getting started}
+
+Open \url{https://gravitas-sim.online}. The simulation starts immediately; a
+first visit also shows a short front door offering three ways in, which you can
+dismiss and never see again.
+
+\subsection{The screen}
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[The simulation] fills the window. Scroll to zoom, drag to pan, click a
+  body to select it.
+  \item[The readout, top left] carries the live numbers: elapsed simulated time,
+  the zoom, the simulation speed, how many bodies of each kind are present, and
+  --- if you ask for them in Settings --- the integrator in use and how far
+  energy and angular momentum have drifted since the run began.
+  \item[The control rail, right] is an accordion: \ui{Scenario}, \ui{State},
+  \ui{Tools}, \ui{View}, \ui{Capture} and \ui{Learn}. One section is open at a
+  time.
+  \item[The transport bar, bottom] pauses, steps and scrubs. The simulation
+  records its own history, so the scrubber rewinds through what has already
+  happened and holds on the frame you land on until you return to live.
+  \item[The scale bar, bottom left] is always on the canvas, not in the page. It
+  is drawn onto the simulation itself so that a screenshot carries its own
+  scale.
+\end{description}
+
+\subsection{Keyboard}
+
+\begin{longtable}{@{}ll@{}}
+\toprule
+\textbf{Key} & \textbf{What it does} \\
+\midrule
+\endhead
+\key{Space} & Pause and resume \\
+\key{R} & Recentre the camera and return to 1$\times$ zoom \\
+\key{P} & Take a screenshot \\
+\key{E} & Export the recorded run as CSV \\
+\key{?} & The full shortcut list \\
+\key{Esc} & Leave lecture mode, or close the open dialog \\
+\bottomrule
+\end{longtable}
+
+The complete list is in the \ui{Shortcuts} dialog, which is the authoritative
+copy; this table is the handful you will use in a first session.
+
+% =============================================================================
+\section{The instruments}
+
+Gravitas is a measuring instrument before it is a display. Everything in this
+section is in the \ui{Tools} section of the rail.
+
+\subsection{Ruler, protractor, stopwatch}
+
+The \textbf{ruler} is dragged across the scene and reads a distance in AU and in
+kilometres. The \textbf{protractor} has a vertex and two arms and reads the angle
+between them. Both store their handles in \emph{world} coordinates, so panning or
+zooming does not change what they say --- a ruler pinned to two bodies keeps
+measuring those two bodies.
+
+The \textbf{stopwatch} runs on simulated time, so pausing pauses it and changing
+the simulation speed does not change what it measures. With a body selected it
+can be latched to that body's periapsis passages: each lap is then one orbit,
+timed from closest approach rather than by your reaction time, and the panel
+reports the mean of the laps.
+
+\subsection{The object inspector}
+
+Select a body and the inspector gives its mass, radius, speed, the orbital
+elements of its path about whatever it is actually orbiting --- semi-major axis,
+eccentricity, period, periapsis and apoapsis --- and its kinetic, potential and
+total energy.
+
+\subsection{Vectors and the potential well}
+
+For the selected body, Gravitas can draw its velocity, its total acceleration,
+and one arrow per gravitational source acting on it, each in a colour that cannot
+be confused with the others. The arrows are the acceleration the integrator
+actually used, not a second calculation that might disagree with it.
+
+They exist for one misconception in particular: on an eccentric orbit velocity
+and force are perpendicular at periapsis and apoapsis and never come within forty
+degrees of parallel anywhere. An optional potential-well underlay shades the
+whole scene by gravitational potential.
+
+\subsection{Reference frames}
+
+The \ui{Frame} selector re-expresses every position and every trail as a chosen
+body would see them. This is not the same as following a body with the camera:
+the recorded paths are redrawn. Put the Solar System into Earth's frame and Mars
+traces the retrograde loop that the geocentric model was built to explain.
+
+% =============================================================================
+\section{The observing panels}
+
+Three panels turn the simulation into an observation, and all three are driven by
+the same viewing geometry. Drag the observer handle on the canvas, or use the
+angle controls, and every open panel re-measures from the new direction.
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[Transit light curve] Brightness against time for the starlight reaching
+  the observer. A planet crossing its star carves a dip; the depth gives the
+  planet's radius, and limb darkening is included, so the dip is not flat.
+  \item[Radial velocity] The star's motion toward and away from the observer, as
+  a spectrograph measures it. The wobble gives a planet mass --- times the sine
+  of the inclination, which is where the $\sin i$ degeneracy stops being a
+  footnote and becomes something a student can see by tilting the system.
+  \item[Astrometry] The star's position on the sky over time, and the
+  astrometric signature at an assumed distance.
+  \item[Rotation curve] Orbital speed against distance from the centre, one point
+  per body, drawn against the curve the visible mass alone would produce.
+\end{description}
+
+Open panels stack in the bottom-left corner rather than covering each other. The
+spacetime view --- an optional 3-D rendering of the scene as a rubber sheet
+dipping around each mass --- joins the same stack, and can be dragged out of it.
+
+% =============================================================================
+\section{Choosing the physics}
+
+\subsection{Integrators}
+
+Three schemes, switchable while the simulation runs, with live energy and
+angular-momentum drift beside them:
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[Symplectic Euler] The default, and what every scenario in the catalog is
+  tuned against. First order, and its energy error is bounded rather than
+  growing without limit.
+  \item[Velocity Verlet] Second order, also symplectic. The best general choice
+  when accuracy matters more than matching the shipped scenarios exactly.
+  \item[RK4] Fourth order and not symplectic: locally the most accurate of the
+  three and the only one whose energy error grows steadily over many orbits.
+\end{description}
+
+Each scheme's convergence order is \emph{measured} by the validation suite, not
+asserted, and the tolerances of the integrated checks are derived from it.
+
+\subsection{Dark matter}
+
+An optional halo adds a force term with an adjustable flat rotation speed. It
+changes the force law rather than the picture: switch it on with the rotation
+curve open and a falling curve flattens. It stays on until you switch it off, so
+a scenario loaded afterwards is running with modified gravity --- the rotation
+curve panel says so.
+
+\subsection{Tides}
+
+Tidal stress is computed as the difference between the pull on a body's near side
+and the pull on its centre. Where that difference exceeds the body's own gravity,
+the body comes apart --- which is what happens in the Tidal Disruption Event
+scenario, and what the Roche limit marks.
+
+% =============================================================================
+\section{Scenarios}
+
+\GravScenarios{} scenarios ship with Gravitas. Open the gallery from
+\ui{Scenario} in the rail; each is tagged by curriculum concept, so the gallery
+can be scanned for the week you are teaching rather than read end to end.
+
+Loading a scenario rebuilds the world from a seed, so the same scenario opens the
+same way every time, and a share link carries the seed with it.
+
+\input{scenarios.tex}
+
+% =============================================================================
+\section{Guided investigations}
+
+\GravInvestigations{} investigations, \GravInvestigationSteps{} steps between
+them, \GravGradedSteps{} of those graded, against \GravObjectives{} stated
+learning objectives. Open them from \ui{Learn} in the rail.
+
+Every investigation follows the same discipline:
+
+\begin{enumerate}
+  \item It asks for a \textbf{prediction} before it shows anything.
+  \item It hands over an \textbf{instrument} and asks for a measurement.
+  \item It \textbf{plots the student's own readings} back to them.
+  \item It \textbf{saves progress} in the browser, so a session can be left and
+  resumed.
+  \item It \textbf{exports a lab report} as a PDF, which the student submits
+  through whatever system the course already uses.
+\end{enumerate}
+
+Nothing is submitted anywhere by Gravitas itself. There is no server to submit
+to.
+
+\input{investigations.tex}
+
+% =============================================================================
+\section{Capturing, exporting and sharing}
+
+\subsection{Screenshots and clips}
+
+\ui{Capture} $\rightarrow$ \ui{Screenshot} (or \key{P}) saves a PNG with the
+scenario's name, the scale bar and the elapsed simulated time drawn into the
+image itself, so a figure in a lab report documents its own scale and its own
+clock without a caption having to supply them.
+
+\ui{Record Clip} records a stretch of the run to a video file: H.264 in MP4 where
+the browser can encode it, WebM where it cannot. The same three facts are burned
+into every frame. A recording indicator shows the elapsed time and the size, and
+a take stops itself at three minutes or 80\,MB, whichever comes first.
+
+\subsection{Data}
+
+\ui{Export CSV} (or \key{E}) writes the recorded timeline: positions, velocities
+and energies over time, plus the light curve if it is running. Every column names
+its own unit --- \texttt{t\_days}, \texttt{x\_au}, \texttt{vx\_kms},
+\texttt{r\_au}, \texttt{E\_kin\_J} --- and each row records what the body is
+orbiting, so a period can be fitted without first having to work out what the
+numbers mean. A companion notebook that reads the file ships with the project.
+
+\subsection{Share links}
+
+Any configuration encodes into the URL. Hand out
+\texttt{gravitas-sim.online/\#\dots} as an assignment and every student opens the
+identical system, down to the seed; a student can send one back as an answer.
+Nothing touches a server.
+
+\subsection{Embed mode and lecture mode}
+
+Adding \texttt{?embed=1} to a link produces a chrome-free figure sized to its
+frame, which drops into a course page or a learning-management system in an
+iframe. It keeps its scale bar and its clock, and drops the panels that would not
+fit.
+
+\ui{Lecture Mode} fills the screen for projection: larger type and controls, the
+Daylight theme, a spotlight pointer, and arrow keys that step through a prepared
+sequence of links. \key{Esc} leaves.
+
+% =============================================================================
+\section{Languages}
+
+The interface ships in \GravLocales{} languages --- \GravLocaleNames{} --- from a
+catalog of \GravUiStrings{} strings, and all \GravInvestigations{} investigations
+are translated.
+
+A translation carries words and nothing else. No scenario name, seed, widget
+identifier, numeric answer or measurement probe can be reached from a locale
+file, so a mistranslation can change what a student reads but never what the
+simulation measures or what counts as a correct answer.
+
+% =============================================================================
+\section{For instructors}
+
+Instructor guides and answer keys for all \GravInvestigations{} investigations,
+an adopter's guide and a curriculum map are published at
+\url{https://gravitas-sim.online/instructors/}. They are generated from the
+lessons themselves at build time, so an answer key cannot disagree with the
+lesson it answers.
+
+They sit behind a passphrase, and the honest description of what that means is on
+the page itself: the site is static, with no server to check a credential
+against, so the materials are AES-GCM encrypted at build time and decrypted in
+the browser. That is real protection against casual discovery and against a
+student who finds the URL. It is not protection against a determined attacker who
+has the ciphertext. Instructors can request the passphrase through the contact
+link on that page.
+
+\subsection{Citing Gravitas}
+
+If you use Gravitas in teaching or research, please cite it. The repository
+carries a \texttt{CITATION.cff}, which GitHub renders as a ready-made citation,
+and a Zenodo record.
+
+% =============================================================================
+\section{Limitations}
+
+Stated plainly, because a teaching tool that hides these is a teaching tool that
+will embarrass someone in front of a class:
+
+\begin{itemize}
+  \item The engine is \textbf{two-dimensional}. Inclination exists for the
+  observing panels as a viewing geometry, not as a third spatial dimension the
+  bodies move in.
+  \item It is \textbf{Newtonian}. There is no general relativity; the
+  gravitational-wave inspiral is a fitted energy loss and the innermost stable
+  circular orbit is drawn, not derived.
+  \item \textbf{Collisions are perfectly inelastic.} Two bodies that touch
+  become one, conserving mass and momentum but not shape, spin or debris except
+  where a scenario models debris deliberately.
+  \item \textbf{Long runs drift.} Any integrator accumulates error. The readout
+  reports that drift live rather than hiding it, and the validation suite
+  measures how fast each scheme accumulates it.
+  \item \textbf{Some scenarios switch off part of the model on purpose} ---
+  static black holes, one-way gravity, the dark-matter halo. Those conserve less
+  than the full model does, and the scenario audit names which ones and why.
+\end{itemize}
+
+% =============================================================================
+\section{Accessibility}
+
+Of the application:
+
+\begin{itemize}
+  \item The controls are real focusable elements, and the actions you need
+  during a run --- pause, reset the view, screenshot, export, the shortcut list
+  --- have keys of their own.
+  \item The simulation canvas carries a text description, and state that only
+  the picture would otherwise show is announced through a live region.
+  \item Where colour carries meaning it is not carrying it alone: the run-state
+  indicator shows a coloured dot \emph{and} the word, and every arrow in the
+  vector overlay is named in the key beside it.
+  \item Four themes, of which the default is near-black and high contrast and
+  Daylight is its light counterpart. Windows high-contrast mode is honoured
+  rather than overridden.
+  \item Animation respects the operating system's reduced-motion setting.
+\end{itemize}
+
+Of this document: it declares its language, its text extracts and searches
+correctly, its structure is a real heading hierarchy with a bookmark outline, it
+contains no images and therefore nothing that needs alternative text, and its
+links are coloured dark enough to hold contrast against the page.
+
+It is \emph{not} a tagged PDF. The LaTeX distribution used to build it predates
+the tagging support that PDF/UA requires. A reader who needs tagged structure is
+better served by the web documentation, which is HTML.
+
+% =============================================================================
+\section{Where to find more}
+
+\begin{description}[style=nextline,leftmargin=1em]
+  \item[The application] \url{https://gravitas-sim.online}
+  \item[What the model does and does not claim]
+  \url{https://gravitas-sim.online/model/}
+  \item[Instructor materials] \url{https://gravitas-sim.online/instructors/}
+  \item[Source, issues and the technical documentation]
+  \url{https://github.com/gravitas-sim/gravitas-sim.github.io}
+\end{description}
+
+\vspace{1em}
+\noindent\small This manual was generated from the application's own scenario
+catalog and investigation manifest. If a count in it disagrees with what you see
+on screen, that is a bug: please report it.
+
+\end{document}
