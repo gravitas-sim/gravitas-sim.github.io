@@ -310,4 +310,90 @@ test.describe('the chaos investigation', () => {
     await download.saveAs(path);
     expect(statSync(path).size).toBeGreaterThan(2000);
   });
+
+  // The bench's own home is the bottom left, which during a lesson is the
+  // lesson panel's column. Step 3 tells the student to open the bench and keep
+  // reading, so a bench on top of the step is the lesson telling them to do
+  // something they can no longer see.
+  test('the bench never covers the lesson it is opened from', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(300_000);
+
+    // A wide screen, one narrow enough that the bench and the lesson compete
+    // for the same strip, and a phone, where the lesson is a bottom sheet.
+    const sizes = [
+      { width: 1440, height: 900 },
+      { width: 1024, height: 820 },
+      { width: 390, height: 780 },
+    ];
+
+    await page
+      .locator('#mobileMenuToggle')
+      .click()
+      .catch(() => {});
+    await app.railControl('investigationsBtn');
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation="butterfly-effect"]').click();
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await openBench(page, app);
+
+    // Step 4 carries the divergence instrument as well, so the panel it has to
+    // stay clear of is the lesson *and* the tool docked above it.
+    const stepNow = () =>
+      page.evaluate(() => {
+        const m = /(\d+)/.exec(
+          document.getElementById('investigationProgressText')?.textContent ||
+            ''
+        );
+        return m ? Number(m[1]) : 0;
+      });
+
+    for (const step of [1, 4]) {
+      // Forward only, one step at a time, answering whatever a step asks for:
+      // there is no public way to jump the lesson to a step.
+      while ((await stepNow()) < step) {
+        const options = page.locator('#investigationBody .inv-option');
+        if (await options.count()) await options.first().click();
+        const at = await stepNow();
+        await page.locator('#investigationNext').click();
+        await expect.poll(stepNow, { timeout: 30_000 }).toBeGreaterThan(at);
+      }
+      for (const size of sizes) {
+        await page.setViewportSize(size);
+        // The stack lays out on a frame, so let one pass.
+        await page.waitForTimeout(300);
+        const boxes = await page.evaluate(() => {
+          const rect = id => {
+            const el = document.getElementById(id);
+            if (!el || getComputedStyle(el).display === 'none' || el.hidden) {
+              return null;
+            }
+            const r = el.getBoundingClientRect();
+            return r.width && r.height ? r : null;
+          };
+          return {
+            bench: rect('experimentPanel'),
+            lesson: rect('investigationPanel'),
+            tool: rect('investigationTool'),
+          };
+        });
+        expect(boxes.bench).not.toBeNull();
+        expect(boxes.lesson).not.toBeNull();
+        const overlaps = (a, b) =>
+          a.left < b.right &&
+          b.left < a.right &&
+          a.top < b.bottom &&
+          b.top < a.bottom;
+        const where = `step ${step} at ${size.width}x${size.height}`;
+        expect(overlaps(boxes.bench, boxes.lesson), where).toBe(false);
+        if (boxes.tool) {
+          expect(overlaps(boxes.bench, boxes.tool), where).toBe(false);
+        }
+      }
+    }
+  });
 });

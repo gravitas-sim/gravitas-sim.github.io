@@ -13,10 +13,6 @@ build/
 .idea/
 *.swp
 *.swo
-# Claude Code's per-project config: a local dev-server launch profile,
-# not part of the site.
-.claude/
-
 # OS
 .DS_Store
 Thumbs.db

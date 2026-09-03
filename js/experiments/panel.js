@@ -203,6 +203,10 @@ export function isOpen() {
 export function openPanel() {
   ensurePanel();
   root.style.display = 'flex';
+  // The lesson stylesheet needs to know the bench is up: during an
+  // investigation it shares a column with the step's own tool panel, and the
+  // two only fit if the one above gives up some height.
+  document.body.classList.add('bench-open');
   noteObservationPanelUsed(PANEL_ID);
   requestObservationLayout();
   render();
@@ -212,6 +216,7 @@ export function openPanel() {
 export function closePanel() {
   if (!root) return;
   root.style.display = 'none';
+  document.body.classList.remove('bench-open');
   requestObservationLayout();
 }
 

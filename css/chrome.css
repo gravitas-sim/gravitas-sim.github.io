@@ -926,3 +926,111 @@
     color: #ffe6e6;
   }
 }
+
+/* ==========================================================================
+   The A/B bench during an investigation
+   --------------------------------------------------------------------------
+   The bench's home is the bottom left, which is where the lesson panel lives:
+   the butterfly-effect investigation asks students to open the bench on step 3,
+   and it landed on top of the step they were reading. It takes the strip beside
+   the lesson instead - the same one the light curve moves to. The stack in
+   js/observationLayout.js only ever writes `bottom`, so which column a panel
+   stacks in is whatever `left` says here.
+
+   That strip is also where a lesson step's own tool or plot panel docks, so
+   when both are up they share it: the tool keeps the top, the bench the bottom,
+   and `--bench-reserve` is the height the tool has to give back. js/experiments/
+   panel.js puts `bench-open` on the body so this can be asked at all.
+   ======================================================================== */
+@layer overrides {
+  body.investigation-open .experiment-panel {
+    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    /* Clear of the control rail on the right, which is content-sized and
+       measures 208px; 240 leaves it a margin. The bench keeps its own 420px
+       where the strip is wide enough and narrows rather than sliding under the
+       rail where it is not. */
+    max-width: calc(100vw - min(396px, 40vw) - var(--space-3) * 2 - 240px);
+  }
+
+  /* --- Sharing the strip with a step's tool or plot ----------------------- */
+  body.investigation-open.bench-open {
+    --bench-reserve: calc(min(46vh, 420px) + var(--space-3));
+  }
+
+  body.investigation-open.bench-open .experiment-panel {
+    max-height: min(46vh, 420px);
+  }
+
+  body.investigation-open.bench-open .inv-plot-panel {
+    /* 120px is the stack's own base offset, which is where the bench starts. */
+    max-height: calc(100vh - var(--space-3) - 120px - var(--bench-reserve));
+  }
+
+  /* A step carrying an instrument and a plot at once already splits the column
+     0.62/0.38; with the bench open it is the same split of a shorter column. */
+  body.investigation-split.bench-open #investigationTool {
+    max-height: calc(
+      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.62
+    );
+  }
+  body.investigation-split.bench-open #investigationPlot {
+    top: calc(
+      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.62 +
+        var(--space-3) * 2
+    );
+    max-height: calc(
+      (100vh - var(--space-3) - 120px - var(--bench-reserve)) * 0.38 -
+        var(--space-3)
+    );
+  }
+
+  @media (max-width: 1100px) {
+    body.investigation-open .experiment-panel {
+      left: calc(min(396px, 40vw) + var(--space-2) * 2);
+      max-width: calc(100vw - min(396px, 40vw) - var(--space-2) * 2 - 240px);
+    }
+  }
+
+  /* --- Below 900px the lesson is a sheet across the bottom ---------------- */
+  /* No strip beside it, so the bench returns to the left edge and sits above
+     the sheet. `bottom` needs !important because the stack writes it inline and
+     cannot know the sheet is there. */
+  @media (max-width: 900px) {
+    body.investigation-open {
+      --lesson-sheet: min(52vh, 420px);
+    }
+    /* A step with a tool panel shortens the sheet; the bench follows it up. */
+    body.investigation-open.investigation-aux,
+    body.investigation-open.investigation-split {
+      --lesson-sheet: min(38vh, 300px);
+    }
+
+    body.investigation-open .experiment-panel {
+      left: var(--space-2);
+      right: var(--space-2);
+      width: auto;
+      max-width: none;
+      bottom: calc(76px + var(--lesson-sheet) + var(--space-2)) !important;
+      max-height: calc(
+        100vh - 76px - var(--lesson-sheet) - var(--space-2) * 3
+      ) !important;
+    }
+
+    /* Three panels do not fit one above another on a phone, so on a tool step
+       the bench takes a third of the space above the sheet and the tool keeps
+       the rest rather than the two overlapping. */
+    body.investigation-open.bench-open .experiment-panel {
+      max-height: min(30vh, 260px) !important;
+    }
+    body.investigation-open.bench-open .inv-plot-panel {
+      max-height: calc(
+        100vh - 76px - var(--lesson-sheet) - min(30vh, 260px) - var(--space-2) *
+          4
+      );
+    }
+    body.investigation-split.bench-open #investigationTool,
+    body.investigation-split.bench-open #investigationPlot {
+      max-height: none;
+    }
+  }
+}
