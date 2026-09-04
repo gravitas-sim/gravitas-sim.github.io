@@ -994,7 +994,13 @@
   /* --- Below 900px the lesson is a sheet across the bottom ---------------- */
   /* No strip beside it, so the bench returns to the left edge and sits above
      the sheet. `bottom` needs !important because the stack writes it inline and
-     cannot know the sheet is there. */
+     cannot know the sheet is there.
+     The transport bar's height is measured rather than assumed, for the reason
+     given on .investigation-panel: it is 48px on one row and 62px on two, and
+     this block used to carry its own copy of the 76px guess. When the lesson
+     sheet started clearing the bar by its measured height and the bench did
+     not, the sheet's top rose ten pixels into the bench and the two overlapped
+     at 390px wide. One source of truth, or they drift apart again. */
   @media (max-width: 900px) {
     body.investigation-open {
       --lesson-sheet: min(52vh, 420px);
@@ -1010,9 +1016,12 @@
       right: var(--space-2);
       width: auto;
       max-width: none;
-      bottom: calc(76px + var(--lesson-sheet) + var(--space-2)) !important;
+      bottom: calc(
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
+      ) !important;
       max-height: calc(
-        100vh - 76px - var(--lesson-sheet) - var(--space-2) * 3
+        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          var(--space-2) * 3
       ) !important;
     }
 
@@ -1024,8 +1033,8 @@
     }
     body.investigation-open.bench-open .inv-plot-panel {
       max-height: calc(
-        100vh - 76px - var(--lesson-sheet) - min(30vh, 260px) - var(--space-2) *
-          4
+        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          min(30vh, 260px) - var(--space-2) * 4
       );
     }
     body.investigation-split.bench-open #investigationTool,

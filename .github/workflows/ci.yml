@@ -26,12 +26,49 @@
 #                structurally cannot reach: chunk splitting, deferred imports,
 #                assets the build forgot to copy.
 #
-#   cross-browser  Firefox and WebKit. Not on pull requests: they roughly triple
+#   cross-browser  Firefox and WebKit, running the @cross-browser profile and
+#                  not the full suite. Not on pull requests: they roughly triple
 #                  the wall clock and what they find in a canvas application is
-#                  overwhelmingly engine timing rather than a product regression.
-#                  They run on pushes to main and once a week, which is often
-#                  enough to catch a real engine problem and rare enough that
-#                  nobody waits for them.
+#                  overwhelmingly engine timing rather than a product
+#                  regression. They run on pushes to main and once a week.
+#
+#                  What this job is and is not
+#                  ---------------------------
+#                  It answers one question: does Gravitas work in this engine.
+#                  It does not re-check numerical results. A chaos divergence
+#                  measurement or a resonance libration amplitude is arithmetic
+#                  over doubles; it comes out the same in every engine, and
+#                  running it three times buys nothing but wall clock. Those
+#                  live in the Chromium job, which runs the whole suite.
+#
+#                  This was not always so. The job used to run all 177 tests
+#                  serially in WebKit and hit the thirty-minute ceiling, and
+#                  the two things that pushed it over were both the wrong tests
+#                  to be running here:
+#
+#                    The video-capture tests waited for #recordBtn, which
+#                    Gravitas hides when capture.canRecord() is false. WebKit
+#                    has no usable MediaRecorder + captureStream + codec
+#                    combination, so hiding it is correct and the test was
+#                    asserting a promise the application does not make. The
+#                    tests that actually encode now skip on the detected
+#                    capability and will run themselves the day WebKit gains
+#                    it; a fast contract test checks the button matches
+#                    canRecord() in every engine.
+#
+#                    The long chaos tests wait for 3,200 simulated seconds of
+#                    recorded evolution. The bench advances a fixed step per
+#                    animation frame, so that span is a function of frame
+#                    throughput, and WebKit on a two-core runner cannot reach
+#                    it inside the wait - then spends another five minutes
+#                    retrying. The profile carries a short chaos test that
+#                    proves the bench records and samples; the scientific
+#                    result stays in Chromium and in the pure-analysis jest
+#                    tests.
+#
+#                  If this profile ever outgrows the budget again, shard it
+#                  across jobs with one worker each. Do not raise the ceiling
+#                  and do not add workers.
 #
 # On the instructor materials
 # -----------------------------------------------------------------------------
@@ -269,42 +306,18 @@ jobs:
           if-no-files-found: ignore
 
   cross-browser:
-    name: Browser smoke tests (${{ matrix.browser }})
+    name: Engine compatibility (${{ matrix.browser }})
     # Not on pull requests. See the header for why.
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    # Thirty minutes is the budget, and the profile is sized to fit inside it
+    # rather than the budget being raised to fit the profile. See the header.
     timeout-minutes: 30
     strategy:
       # One engine failing should not hide the other's result.
       fail-fast: false
       matrix:
-        include:
-          - browser: firefox
-            # The repository default: playwright.config.js uses two workers
-            # under CI.
-            workers: 2
-          - browser: webkit
-            # WebKit runs single-file here, and only here.
-            #
-            # The 320x200 embed test intermittently timed out waiting for the
-            # application's own splash-ended signal - not on a slow assertion,
-            # but on start-up never finishing inside the budget. It is stable
-            # on its own (ten consecutive runs) and stable through the whole
-            # suite at one worker; it failed only when two WebKit workers
-            # shared a two-core runner. That is starvation rather than a bug in
-            # the page: WebKit's process model is heavier than the other two
-            # engines', and two of them plus a static server on two cores
-            # leaves a start-up sequence that has to build a world, a starfield
-            # and a canvas without enough CPU to finish it.
-            #
-            # Raising the timeout would be the wrong answer twice over: the
-            # application already reveals itself on a 4.5s backstop, so a
-            # start-up that has not finished in thirty seconds is starved and
-            # not slow, and waiting longer for a starved run only makes the job
-            # slower when it does pass. Halving the parallelism costs this job
-            # some wall-clock and nothing else; the coverage is unchanged and
-            # Firefox and Chromium keep their parallelism.
-            workers: 1
+        browser: [firefox, webkit]
     steps:
       - uses: actions/checkout@v4
 
@@ -338,10 +351,15 @@ jobs:
         if: steps.browsers.outputs.cache-hit == 'true'
         run: npx playwright install-deps ${{ matrix.browser }}
 
-      - name: Run the suite
+      # The @cross-browser profile, not the full suite. One worker for both
+      # engines: a GitHub runner has two cores, and a second WebKit worker
+      # starves the application's own start-up sequence rather than speeding
+      # anything up. Firefox is single-worker too, so the two jobs are
+      # comparable and neither depends on how the runner happens to be loaded.
+      - name: Run the engine-compatibility profile
         env:
           GRAVITAS_E2E_BROWSERS: ${{ matrix.browser }}
-        run: npm run e2e -- --workers=${{ matrix.workers }}
+        run: npm run e2e:cross-browser -- --workers=1
 
       - name: Upload the report
         if: ${{ !cancelled() }}

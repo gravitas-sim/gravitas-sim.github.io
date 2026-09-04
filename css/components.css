@@ -2624,7 +2624,9 @@
     .tutorial-btn {
       left: auto;
       right: calc(var(--space-2) + env(safe-area-inset-right, 0px));
-      bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(
+        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px)
+      );
       width: 44px;
       height: 44px;
       min-height: 44px;
@@ -2634,7 +2636,9 @@
       left: var(--space-2);
       right: var(--space-2);
       width: auto;
-      bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(
+        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px)
+      );
       max-height: 62vh;
     }
 
@@ -2642,7 +2646,9 @@
     .attribution {
       left: calc(var(--space-2) + env(safe-area-inset-left, 0px));
       right: auto;
-      bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(
+        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px)
+      );
       font-size: 10px;
       padding: 3px var(--space-2);
       max-width: calc(100vw - 76px);
@@ -4661,7 +4667,7 @@
     body.investigation-open .light-curve-container {
       left: calc(min(396px, 40vw) + var(--space-2) * 2);
       right: var(--space-2);
-      bottom: 76px;
+      bottom: var(--transport-reserve, 76px);
       height: 240px;
     }
   }
@@ -4671,7 +4677,9 @@
     body.investigation-open .light-curve-container {
       left: var(--space-2);
       right: var(--space-2);
-      bottom: calc(76px + min(52vh, 420px) + var(--space-2));
+      bottom: calc(
+        var(--transport-reserve, 76px) + min(52vh, 420px) + var(--space-2)
+      );
       height: min(30vh, 210px);
     }
   }
