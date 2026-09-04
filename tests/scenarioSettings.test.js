@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { applyPreset } from '../js/scenarios.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 
@@ -83,16 +83,20 @@ describe('the defaults object itself', () => {
 // Empty, and meant to stay that way. It held ten keys when this suite was
 // written - preset_zoom, habitable_zone_optimism, the neutron-star masses, the
 // Kessler micro-stars, satellites_are_dyson, bh_layout and test_star_slingshot
-// - each a latent version of the halo bug. All ten now have an entry in
-// DEFAULT_SETTINGS, so applyPreset resets them like everything else.
+// - each a latent version of the halo bug. Nine now have an entry in
+// DEFAULT_SETTINGS, so applyPreset resets them like everything else; the tenth,
+// satellites_are_dyson, turned out to be a cosmetic flag that nothing read and
+// was removed rather than given a default.
 //
 // A new name here means someone taught a scenario to write a setting that no
 // other scenario can undo. Give the key a default in js/ui.js instead.
 const KNOWN_ORPHANS = new Set([]);
 
-// The ten that used to be on that list. Named here so the tests below can show
-// that each one is now reset rather than inherited - the property the pinned
-// list was standing in for.
+// The nine that used to be on that list and still exist. Named here so the
+// tests below can show that each one is now reset rather than inherited - the
+// property the pinned list was standing in for. satellites_are_dyson was the
+// tenth; it set a "draw these as satellites" flag that no renderer read, the
+// scenario that wrote it works without it, and it is gone.
 const FORMER_ORPHANS = [
   'preset_zoom',
   'habitable_zone_optimism',
@@ -101,7 +105,6 @@ const FORMER_ORPHANS = [
   'num_micro_stars',
   'micro_star_mass',
   'micro_star_high_velocity',
-  'satellites_are_dyson',
   'bh_layout',
   'test_star_slingshot',
 ];
@@ -111,6 +114,81 @@ const fresh = () => JSON.parse(JSON.stringify(DEFAULTS));
 
 /** A throwaway camera, so probing a preset cannot move a real one. @returns {Object} View state */
 const view = () => ({ zoom: 1, pan: { x: 0, y: 0 } });
+
+describe('every setting is actually read by something', () => {
+  // The other half of the contract the suite above checks. That one says a
+  // setting a scenario writes must exist in DEFAULT_SETTINGS so the next
+  // scenario can reset it. This one says a setting that exists must be
+  // mentioned somewhere else, because a setting nothing reads is a promise the
+  // application does not keep.
+  //
+  // Kessler Cascade is why. Its preset set num_micro_stars, micro_star_mass and
+  // micro_star_high_velocity, all three were in DEFAULT_SETTINGS, and a comment
+  // beside them said they were "handled in initialization". Nothing read them.
+  // The card promised "hundreds of micro-stars orbiting chaotically, colliding
+  // and ejecting like a debris cloud" and the scenario built a single black
+  // hole in an empty sky - which is what its committed thumbnail showed, for as
+  // long as it shipped.
+  //
+  // The test is deliberately blunt: does the key appear anywhere in the source
+  // other than the declaration itself and js/scenarios.js, which only assigns?
+  // Excluding the presets is the point - a key mentioned nowhere but the
+  // declaration and the preset that writes it is exactly the dead setting this
+  // is looking for, and including scenarios.js would have let the original
+  // failure through. A
+  // key can be read through `SETTINGS.x`, through the physics module's own
+  // settings object, through a destructure, through the settings-panel
+  // descriptor list or through a share-link codec, and enumerating those forms
+  // in regexes produced more false alarms than findings. Mere mention is a weak
+  // condition, and it is still strong enough to catch a setting that is written
+  // and then forgotten - which is the whole failure mode.
+  const sourceText = (() => {
+    const root = new URL('../', import.meta.url);
+    const seen = [];
+    const walk = dir => {
+      for (const entry of readdirSync(new URL(dir, root), {
+        withFileTypes: true,
+      })) {
+        if (entry.name === 'node_modules' || entry.name.startsWith('.'))
+          continue;
+        const next = dir + entry.name + (entry.isDirectory() ? '/' : '');
+        if (entry.isDirectory()) walk(next);
+        // scenarios.js is where the presets assign; a mention there is a write
+        // and proves nothing about anyone reading it.
+        else if (next === 'js/scenarios.js') continue;
+        else if (/\.(js|mjs|html)$/.test(entry.name)) {
+          seen.push(readFileSync(new URL(next, root), 'utf8'));
+        }
+      }
+    };
+    walk('js/');
+    seen.push(readFileSync(new URL('index.html', root), 'utf8'));
+    // Remove the declaration itself, so a key that appears only there is not
+    // counted as being used by it.
+    return seen.join('\n').split(literal).join('\n');
+  })();
+
+  test('no setting is declared and then never mentioned again', () => {
+    const dead = [...defaults].filter(
+      key => !new RegExp('\\b' + key + '\\b').test(sourceText)
+    );
+    expect(dead).toEqual([]);
+  });
+
+  test('the scan can actually tell, or it proves nothing', () => {
+    // A key nothing could possibly mention must be reported, otherwise the
+    // test above would pass even with the detection broken.
+    expect(
+      new RegExp('\\b' + 'setting_that_does_not_exist_anywhere' + '\\b').test(
+        sourceText
+      )
+    ).toBe(false);
+    // ...and a key that plainly is used must not be.
+    expect(new RegExp('\\bgravitational_constant\\b').test(sourceText)).toBe(
+      true
+    );
+  });
+});
 
 describe('scenario settings can all be reset', () => {
   test.each(scenarioNames)('%s writes no new orphan settings', name => {
@@ -190,7 +268,6 @@ describe('scenario settings can all be reset', () => {
     expect(DEFAULTS.ns_masses).toEqual([]);
     expect(DEFAULTS.num_micro_stars).toBe(0);
     expect(DEFAULTS.micro_star_high_velocity).toBe(false);
-    expect(DEFAULTS.satellites_are_dyson).toBe(false);
     expect(DEFAULTS.bh_layout).not.toBe('parabolic-flyby'); // applyPresetLayout
     expect(DEFAULTS.test_star_slingshot).toBe(false);
   });

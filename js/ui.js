@@ -128,6 +128,13 @@ import {
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
 import {
+  galileanBodies,
+  plutoBodies,
+  trojanBodies,
+  balance,
+  GALILEAN,
+} from './resonance/systems.js';
+import {
   timeUnitSeconds,
   SIM_UNITS_PER_AU,
   formatSpeed,
@@ -675,7 +682,6 @@ const DEFAULT_SETTINGS = {
   micro_star_mass: 0.1,
   micro_star_high_velocity: false,
   // Alien Dyson Swarm Collapse draws its stars as satellites.
-  satellites_are_dyson: false,
   // Geometry applied after the bodies exist, by applyPresetLayout() in
   // scenarios.js. null means the scenario asked for no special layout.
   bh_layout: null,
@@ -3980,10 +3986,25 @@ const apply_placement = () => {
 
     case 'Multi-Ring': {
       const G = SETTINGS.gravitational_constant;
+      // The keep-out floor has to move the whole ring stack outwards, not clamp
+      // each ring to it. atLeastKeepOut() is a Math.max, and a central black
+      // hole heavy enough to push the floor past the inner rings collapsed them
+      // onto a single circle: with twenty objects per ring the angles repeat, so
+      // object i and object i+20 landed on exactly the same point. Four
+      // scenarios shipped with twenty perfectly superimposed pairs each -
+      // Sagittarius A*, Galactic Center, Galactic Collision and Tidal Arm Tango
+      // - and the contact test in physics.js skips a pair at zero separation,
+      // so they stayed stacked and drew as one body forever.
+      //
+      // Spacing the rings from whichever is larger of the first ring and the
+      // floor keeps every ring distinct. It is identical to the old arithmetic
+      // whenever the floor sits inside the first ring, which is every scenario
+      // that was already correct.
+      const innerRing = Math.max(spread * 0.3, keepOut);
       all_objects.forEach((obj, i) => {
         const ring = Math.floor(i / 20); // 20 objects per ring
         const angle = ((i % 20) / 20) * 2 * Math.PI;
-        const radius = atLeastKeepOut(spread * (0.3 + ring * 0.2));
+        const radius = innerRing + ring * spread * 0.2;
         obj.pos.x = Math.cos(angle) * radius;
         obj.pos.y = Math.sin(angle) * radius;
 
@@ -4007,11 +4028,27 @@ const apply_placement = () => {
     case 'Grid': {
       const grid_size = Math.ceil(Math.sqrt(all_objects.length));
       const spacing = (spread * 2) / grid_size;
+      // A quarter-cell nudge, because one cell of a grid centred on the origin
+      // lands exactly on it - and the origin is where the central body is
+      // pinned. Slingshot Gauntlet shipped with an asteroid at (0, 0) sitting
+      // inside its own black hole; the contact test in physics.js skips a pair
+      // at zero separation, so the two stayed superimposed and drew as one.
+      // (col - grid_size / 2) * spacing is always a multiple of half a cell, so
+      // a quarter cell can never sum to zero whatever the grid size.
+      const nudge = spacing * 0.25;
       all_objects.forEach((obj, i) => {
         const row = Math.floor(i / grid_size);
         const col = i % grid_size;
-        obj.pos.x = (col - grid_size / 2) * spacing;
-        obj.pos.y = (row - grid_size / 2) * spacing;
+        obj.pos.x = (col - grid_size / 2) * spacing + nudge;
+        obj.pos.y = (row - grid_size / 2) * spacing + nudge;
+        // And nothing inside the central body, the same rule the other three
+        // placements follow through atLeastKeepOut.
+        const r = Math.hypot(obj.pos.x, obj.pos.y);
+        if (keepOut > 0 && r < keepOut) {
+          const scale = keepOut / r;
+          obj.pos.x *= scale;
+          obj.pos.y *= scale;
+        }
 
         // Small random velocity
         const vel_mag = SETTINGS.init_velocity * 0.3;
@@ -4483,6 +4520,117 @@ const build_simulation = () => {
 
   // Apply placement patterns to position objects
   apply_placement();
+
+  // The micro-star cloud.
+  //
+  // `num_micro_stars`, `micro_star_mass` and `micro_star_high_velocity` have
+  // been in DEFAULT_SETTINGS and set by the Kessler Cascade preset all along,
+  // with a comment promising they were "handled in initialization". Nothing
+  // read them. The scenario's card promises "hundreds of micro-stars orbiting
+  // chaotically, colliding and ejecting like a debris cloud" and what it built
+  // was a single black hole in an empty sky - which is what its committed
+  // thumbnail shows.
+  //
+  // Keyed on the setting rather than on the scenario name, because that is what
+  // the setting already claimed to mean, and generated after apply_placement so
+  // the cloud is positioned by this block rather than scattered by the generic
+  // one.
+  if (SETTINGS.num_micro_stars > 0) {
+    const G = SETTINGS.gravitational_constant;
+    const gravitating = [
+      ...bh_list,
+      ...stars,
+      ...neutron_stars,
+      ...white_dwarfs,
+    ];
+    const central = gravitating.length ? getMostMassiveBody(gravitating) : null;
+    // Clear of the central body's drawn radius, using the same 2.5x keep-out
+    // factor apply_placement works to, and four times that deep so the swarm
+    // reads as a cloud rather than a ring.
+    const inner = Math.max(40, (central?.radius || 0) * 2.5);
+    const outer = inner * 4;
+    const count = Math.min(600, Math.floor(SETTINGS.num_micro_stars));
+
+    for (let i = 0; i < count; i++) {
+      // A filled annulus: sqrt on the radius so the area density is even
+      // rather than piling everything against the inner edge.
+      const r = Math.sqrt(
+        inner * inner + Math.random() * (outer * outer - inner * inner)
+      );
+      const theta = Math.random() * 2 * Math.PI;
+      const pos = { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+
+      const vCirc = central ? Math.sqrt((G * central.mass) / r) : 0;
+      // The cascade needs orbits that cross. A pure circular disc never
+      // collides; scattering the speed is what makes this a debris cloud
+      // rather than a ring, and the setting says so by name.
+      const scatter = SETTINGS.micro_star_high_velocity ? 0.3 : 0.12;
+      const speed = vCirc * (1 + (Math.random() - 0.5) * 2 * scatter);
+      const drift = (Math.random() - 0.5) * 2 * scatter * vCirc;
+      const vel = {
+        x: (-pos.y / r) * speed + (pos.x / r) * drift,
+        y: (pos.x / r) * speed + (pos.y / r) * drift,
+      };
+
+      const micro = new StarObject(pos, vel, SETTINGS.micro_star_mass);
+      micro.mass = SETTINGS.micro_star_mass * SOLAR_MASS_UNIT;
+      micro.massInSuns = SETTINGS.micro_star_mass;
+      micro.radius = 1.2;
+      stars.push(micro);
+    }
+  }
+
+  // The slingshot test star.
+  //
+  // Slingshot Gauntlet sets init_velocity and velocity_stddev to zero and asks
+  // for one star, so every body in it - the star, fifteen planets, two gas
+  // giants and ten asteroids - was placed at rest and fell straight into the
+  // nearest of the five holes. Its card promises "a fast-moving star fired
+  // through a black hole obstacle course"; what it built was a scenario in
+  // which nothing was fired and nothing slingshotted.
+  //
+  // `test_star_slingshot` has been in DEFAULT_SETTINGS and set by that preset
+  // all along, next to a comment saying it was "handled in initialization".
+  // This is that handling.
+  if (SETTINGS.test_star_slingshot && stars.length > 0) {
+    const holes = [...bh_list, ...neutron_stars, ...white_dwarfs];
+    const totalMass = holes.reduce((sum, h) => sum + (h.mass || 0), 0);
+    const field = Math.max(
+      120,
+      ...holes.map(h => Math.hypot(h.pos.x, h.pos.y) + (h.radius || 0))
+    );
+    // Enter from beyond the field, aimed across it and offset from dead centre
+    // so the first hole deflects rather than swallows.
+    const entry = field * 1.5;
+    const star = stars[0];
+    star.pos.x = -entry;
+    // Offset from dead centre so the holes deflect it rather than eat it.
+    star.pos.y = field * 0.35;
+    // Fast enough to cross rather than fall in, slow enough to be turned hard.
+    // Measured against the engine over a grid of speeds and impact parameters:
+    // at 1.15x the circular speed of the whole cluster the star is swallowed on
+    // the first pass, and at 2.8x it barely bends, turning nine to twenty-one
+    // degrees. 1.6x threads it - closest approach 49 units, a 95 degree
+    // deflection, and it leaves the field after about seventy-five simulated
+    // seconds.
+    const v =
+      totalMass > 0
+        ? 1.6 * Math.sqrt((SETTINGS.gravitational_constant * totalMass) / field)
+        : 20;
+    star.vel.x = v;
+    star.vel.y = 0;
+    // Nothing else in the scene is meant to be stationary either: a field of
+    // motionless targets is not an obstacle course, it is a queue.
+    for (const body of [...planets, ...gas_giants, ...asteroids]) {
+      const r = Math.hypot(body.pos.x, body.pos.y);
+      if (!(r > 0) || totalMass <= 0) continue;
+      const vCirc = Math.sqrt(
+        (SETTINGS.gravitational_constant * totalMass) / r
+      );
+      body.vel.x = (-body.pos.y / r) * vCirc;
+      body.vel.y = (body.pos.x / r) * vCirc;
+    }
+  }
 
   // --- Fix for GW150914 scenario: two black holes in close inspiral ---
   if (starting_preset === 'GW150914' && bh_list.length >= 2) {
@@ -6216,6 +6364,109 @@ const build_simulation = () => {
     }
   }
 
+  // --- The three resonance scenarios ----------------------------------------
+  //
+  // All three are built from js/resonance/systems.js, which holds the published
+  // elements and the paper each came from. Nothing numeric is written here: the
+  // scenario, the validation suite in tools/physics-checks.mjs and the unit
+  // tests all read the same table, so they cannot quote different values for
+  // the same moon.
+  //
+  // What this function contributes is the part only it can: turning a plain
+  // {name, mass, radius, pos, vel} into a live engine object with a stable
+  // identity, a fixed name and the persistence flag that keeps it out of the
+  // cull. The lesson perturbs bodies by name and matches them across runs by
+  // id, so a randomly generated or recycled body would break it.
+  const installResonanceSystem = spec => {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    for (const d of [spec.primary, ...spec.bodies]) {
+      let body;
+      if (d.kind === 'star') {
+        body = new StarObject(
+          { ...d.pos },
+          { ...d.vel },
+          d.mass / SOLAR_MASS_UNIT
+        );
+        body.massInSuns = d.mass / SOLAR_MASS_UNIT;
+        body.intact = true;
+        stars.push(body);
+      } else if (d.kind === 'gasGiant') {
+        body = new GasGiant({ ...d.pos }, { ...d.vel }, 1);
+        gas_giants.push(body);
+      } else {
+        body = new Planet({ ...d.pos }, { ...d.vel }, 1);
+        planets.push(body);
+      }
+      body.mass = d.mass;
+      // The constructors derive their display masses from the mass they were
+      // handed, and every one of these bodies has its mass overwritten
+      // afterwards. Without this the inspector reports Ganymede as one Earth
+      // mass, which it inherited from the Planet constructor's default rather
+      // than from anything true.
+      body.mass = d.mass;
+      body.massInSuns = d.mass / SOLAR_MASS_UNIT;
+      body.massInEarths = d.mass / EARTH_MASS_UNIT;
+      body.massInJupiters = d.mass / JUPITER_MASS_UNIT;
+      body.name = d.name;
+      body.radius = d.radius;
+      body.baseColor = d.color;
+      // Never culled, never re-typed, never merged: every measurement in the
+      // lesson matches bodies between samples by identity.
+      body.persistent = true;
+    }
+  };
+
+  // Io, Europa, Ganymede and Callisto. The only scale model of the three, and
+  // the reason is arithmetic rather than taste: Io orbits 0.28 length units
+  // from Jupiter at true scale, which is smaller than the softening floor and a
+  // twentieth of the radius Jupiter would be drawn at. Distances are multiplied
+  // by GALILEAN.scale, which under Newtonian gravity is exactly equivalent to
+  // dividing every duration by scale^1.5, and leaves every ratio alone.
+  if (starting_preset === 'Galilean Resonance') {
+    const spec = galileanBodies(SETTINGS.gravitational_constant);
+    balance([spec.primary, ...spec.bodies]);
+    installResonanceSystem(spec);
+  }
+
+  // The same four moons with Europa moved out by one percent. Everything else
+  // is identical, which is the point: one number changes and the Laplace
+  // argument stops librating and starts going round, once every forty-six Io
+  // orbits. The resonance's half-width in Europa's semi-major axis is between
+  // one and two parts in a thousand, so a percent is well outside it.
+  if (starting_preset === 'Broken Laplace Resonance') {
+    const spec = galileanBodies(SETTINGS.gravitational_constant, {
+      detune: GALILEAN.detune,
+    });
+    balance([spec.primary, ...spec.bodies]);
+    installResonanceSystem(spec);
+  }
+
+  // Pluto, Neptune and a body on a Pluto-like orbit that is not in the 3:2.
+  // True scale, so every distance and period the interface reports is the real
+  // one.
+  if (starting_preset === 'Pluto and Neptune') {
+    const spec = plutoBodies(SETTINGS.gravitational_constant);
+    balance([spec.primary, ...spec.bodies]);
+    installResonanceSystem(spec);
+  }
+
+  // The Sun, Jupiter and four test bodies on Jupiter's orbit. Built in the
+  // circular restricted frame - both massive bodies turning about a barycentre
+  // at the origin - because the triangular points are only exact in that frame.
+  // Already balanced by construction, so no balance() call.
+  if (starting_preset === 'Jupiter Trojans') {
+    installResonanceSystem(trojanBodies(SETTINGS.gravitational_constant));
+  }
+
   // --- Retrograde Mars: the Sun, Earth and Mars, and nothing else -----------
   if (starting_preset === 'Retrograde Mars') {
     stars.length = 0;
@@ -7339,7 +7590,16 @@ const buildSettingsMenu = () => {
         slider.type = 'range';
         slider.id = `${item.key}-slider`;
         slider.min = item.min;
-        slider.max = item.max;
+        // A scenario may set a value above the range the slider was designed
+        // for, and three of them do: the resonance scenarios run between 150
+        // and 7,500 times the default speed, because a single libration of
+        // Pluto's resonant angle takes twenty thousand years. With a fixed
+        // maximum of 5 the slider would show as pinned, and the first touch
+        // would drop the scenario to a speed at which nothing it is trying to
+        // show can be seen - with no way back except reloading. Widening the
+        // track to whatever is actually in force costs the ordinary case
+        // nothing and keeps the control honest.
+        slider.max = Math.max(Number(item.max), Number(value) || 0);
         slider.step = item.step;
         slider.value = value;
         slider.style.flex = '1 1 auto';
@@ -7412,6 +7672,43 @@ const buildSettingsMenu = () => {
           localSettings[item.key] = colorInput.value;
         };
         controlContainer.appendChild(colorInput);
+      }
+
+      // Every control in this panel gets the setting's own name.
+      //
+      // The visible label is a <div class="setting-label"> sitting in a sibling
+      // cell of the grid, which a sighted reader pairs with the control by
+      // position and a screen reader cannot pair with it at all. The two
+      // sliders build their own <label for> inside their container and were
+      // fine; the selects, the on/off buttons and the two colour pickers were
+      // not. The colour pickers had no accessible name of any kind - a reader
+      // heard "colour picker" twice with nothing to say which was the star and
+      // which the planet.
+      //
+      // Applied here, after the branch, so it covers every control type at once
+      // and a type added later inherits it.
+      const control = controlContainer.querySelector(
+        'input, select, textarea, button'
+      );
+      if (
+        control &&
+        !control.getAttribute('aria-label') &&
+        !control.getAttribute('aria-labelledby')
+      ) {
+        control.setAttribute('aria-label', t(item.labelId));
+      }
+      // A toggle whose name is now the setting reports its state through
+      // aria-pressed instead of through the word inside it.
+      if (item.type === 'bool' && control) {
+        control.setAttribute('aria-pressed', String(Boolean(value)));
+        const previous = control.onclick;
+        control.onclick = event => {
+          previous?.call(control, event);
+          control.setAttribute(
+            'aria-pressed',
+            String(control.getAttribute('data-state') === 'on')
+          );
+        };
       }
 
       sectionGrid.append(labelContainer, controlContainer);

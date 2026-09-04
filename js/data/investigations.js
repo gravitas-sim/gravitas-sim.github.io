@@ -59,6 +59,7 @@ import GOLDILOCKS from './investigations/goldilocks-question.js';
 import DARK_MATTER from './investigations/missing-mass.js';
 import TIDES from './investigations/tides.js';
 import BUTTERFLY from './investigations/butterfly-effect.js';
+import RESONANCE from './investigations/when-orbits-lock.js';
 
 import { gradedSteps, positionIn } from './investigations/catalogue.js';
 
@@ -88,6 +89,7 @@ export const INVESTIGATIONS = [
   DARK_MATTER,
   TIDES,
   BUTTERFLY,
+  RESONANCE,
 ];
 
 /**

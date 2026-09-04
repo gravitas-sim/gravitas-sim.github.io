@@ -3,7 +3,7 @@
 > **Historical record.** This is the report of one fixing pass, made when the
 > catalog held 43 scenarios, with the before-and-after measurements taken then.
 > Its counts are the counts of that moment and are deliberately not updated;
-> the catalog now holds <!--fact:scenarios-->49<!--/fact--> scenarios, and the
+> the catalog now holds <!--fact:scenarios-->53<!--/fact--> scenarios, and the
 > current conservation audit is `npm run validate:scenarios`.
 
 The thumbnail pass ran every scenario and wrote down five things that were

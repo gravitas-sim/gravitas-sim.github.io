@@ -4,7 +4,7 @@
 > 43 scenarios and 12 concept tags. The counts in the narrative below are the
 > counts at that time and are left as they were written; the catalog now holds
 >
-> <!--fact:scenarios-->49<!--/fact--> scenarios and 13 tags. The design it
+> <!--fact:scenarios-->53<!--/fact--> scenarios and 13 tags. The design it
 >
 > describes is still the design in use.
 

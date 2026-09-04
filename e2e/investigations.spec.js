@@ -93,6 +93,55 @@ test.describe('opening a lesson', () => {
     );
   });
 
+  test('the browser opens on its heading, not scrolled past it', async ({
+    page,
+    app,
+  }) => {
+    // openBrowser focuses the first lesson card so a keyboard user lands on the
+    // list rather than the close button, which is right. What it did not do was
+    // stop the browser scrolling that card into view: the card sits below the
+    // panel's heading and its intro, so the native focus scroll dragged both
+    // off the top. At 320x568 the panel opened 137 pixels down and the first
+    // thing on screen was the second half of a sentence.
+    for (const [width, height] of [
+      [320, 568],
+      [375, 667],
+      [1280, 720],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await app.boot();
+      // Dispatched rather than clicked through Playwright. At 320px the rail
+      // sits behind the mobile menu, and getting to it is a different test from
+      // this one, which is about where openBrowser leaves the scroll position.
+      await page.evaluate(() =>
+        document.getElementById('investigationsBtn').click()
+      );
+      await expect(page.locator('#investigationBrowser')).toBeVisible();
+      // Let the deferred focus land before measuring.
+      await page.waitForTimeout(300);
+
+      const state = await page.evaluate(() => {
+        const title = document
+          .getElementById('investigationBrowserTitle')
+          .getBoundingClientRect();
+        return {
+          titleTop: title.top,
+          scrollTop:
+            document.getElementById('investigationBrowserContent')?.scrollTop ??
+            0,
+          focusedCard: Boolean(document.activeElement?.closest?.('.inv-card')),
+        };
+      });
+
+      expect(state.scrollTop).toBe(0);
+      expect(state.titleTop).toBeGreaterThanOrEqual(0);
+      // ...and the keyboard affordance the focus call exists for is intact.
+      expect(state.focusedCard).toBe(true);
+
+      await page.keyboard.press('Escape');
+    }
+  });
+
   test('a lesson sets up its own scenario and keeps the sim alive', async ({
     page,
     app,

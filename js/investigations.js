@@ -59,6 +59,7 @@ import {
   comets,
   neutron_stars,
   white_dwarfs,
+  getSimulationTime,
 } from './physics.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
 import {
@@ -248,6 +249,12 @@ function probeContext() {
     speed: formatSpeed,
     time: formatTime,
     mass: formatMass,
+    // The simulated clock itself, in simulated seconds. An instrument that
+    // measures anything over time - a period, a resonant angle, a libration -
+    // needs the engine's own clock rather than wall time, because the two are
+    // not proportional: the frame rate varies and the scenarios run at speeds
+    // from one to seven and a half thousand.
+    clock: () => getSimulationTime(),
     // Plain numbers, for steps that need to compute rather than display.
     years: simTime => (simTime * timeUnitSeconds()) / 3.15576e7,
     au: simDistance => simDistance * 0.01,
@@ -2049,12 +2056,25 @@ export function openBrowser() {
   browserLastFocus = document.activeElement;
   renderBrowser();
   els.browser.classList.remove('hidden');
+  // Both of them. #investigationBrowserScroll is the list, but the element that
+  // actually scrolls is #investigationBrowserContent, and resetting only the
+  // former left the panel wherever it had been.
   if (els.browserScroll) els.browserScroll.scrollTop = 0;
+  if (els.browserContent) els.browserContent.scrollTop = 0;
   // The first lesson, not the close button: the point of arriving here is to
   // choose one, and it puts the keyboard user at the top of the same list a
   // sighted user is reading. Deferred because a display change has to land
   // before the element can take focus.
-  setTimeout(() => els.list?.querySelector('.inv-card')?.focus(), 60);
+  //
+  // preventScroll, because the first card sits below the panel's heading and
+  // its intro paragraph. Without it the browser scrolls the newly focused card
+  // into view and drags the heading off the top: at 320x568 the panel opened
+  // 137px down, so the first thing a reader saw was the second half of a
+  // sentence and no title at all.
+  setTimeout(() => {
+    els.list?.querySelector('.inv-card')?.focus({ preventScroll: true });
+    if (els.browserContent) els.browserContent.scrollTop = 0;
+  }, 60);
 }
 
 /**
@@ -2265,6 +2285,7 @@ export function initInvestigations() {
     browser: document.getElementById('investigationBrowser'),
     list: document.getElementById('investigationList'),
     browserScroll: document.getElementById('investigationBrowserScroll'),
+    browserContent: document.getElementById('investigationBrowserContent'),
     count: document.getElementById('investigationBrowserCount'),
     level: document.getElementById('investigationBrowserLevel'),
     browserClose: document.getElementById('investigationBrowserClose'),

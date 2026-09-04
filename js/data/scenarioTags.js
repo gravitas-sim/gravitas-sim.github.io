@@ -11,11 +11,20 @@
 // near the limit of that, and the rule was to resist a thirteenth unless a
 // genuine block of course material had nowhere to sit.
 //
-// Dark Matter is that thirteenth, added when the rotation-curve instrument and
+// Dark Matter was the thirteenth, added when the rotation-curve instrument and
 // The Missing Mass arrived. It is a standard unit in an introductory course and
 // none of the other twelve covers it: Galaxies & Clusters is about many-body
-// dynamics at large scales, which is a different lecture. Thirteen is now the
-// limit, and the same rule applies to a fourteenth.
+// dynamics at large scales, which is a different lecture.
+//
+// Resonance is the fourteenth, added with When Orbits Lock, and it is here on
+// the same test rather than by relaxing it. Mean-motion resonance is its own
+// chapter in the standard reference (Murray & Dermott, Solar System Dynamics,
+// chapter 8) and its own lecture in most planetary courses, and none of the
+// thirteen holds it. Orbits & Kepler is about the two-body problem, which is
+// exactly what resonance is not; Chaos & Encounters is about outcomes that
+// depend sensitively on where a system started, and a resonance is the opposite
+// - a configuration that returns to itself and resists being moved. Fourteen is
+// now the limit, and a fifteenth needs the same argument made in full.
 //
 // A tag means "this scenario is useful for discussing this concept". It does
 // not claim the concept is simulated in full fidelity: Gravitas is Newtonian
@@ -53,6 +62,7 @@ export const SCENARIO_TAGS = Object.fromEntries(
     'relativity',
     'galaxies-clusters',
     'dark-matter',
+    'resonance',
   ].map(id => [
     id,
     {

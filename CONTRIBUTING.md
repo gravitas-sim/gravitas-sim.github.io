@@ -196,7 +196,7 @@ every scenario, because each one was laid out against its error behaviour.
 **Counts are generated.** Anything of the form
 
 ```markdown
-**<!--fact:scenarios-->49<!--/fact--> built-in scenarios**
+**<!--fact:scenarios-->53<!--/fact--> built-in scenarios**
 ```
 
 is written by `npm run docs:sync` from the catalog, the lesson manifest, the

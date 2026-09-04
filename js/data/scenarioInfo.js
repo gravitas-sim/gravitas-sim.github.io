@@ -48,6 +48,22 @@ const SCENARIO_STRUCTURE = {
     tags: ['chaos', 'orbits-kepler'],
     thumbnail: 'images/scenarios/three-body-sensitivity-lab.webp',
   },
+  'Galilean Resonance': {
+    tags: ['resonance', 'solar-system', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/galilean-resonance.webp',
+  },
+  'Broken Laplace Resonance': {
+    tags: ['resonance', 'solar-system'],
+    thumbnail: 'images/scenarios/broken-laplace-resonance.webp',
+  },
+  'Pluto and Neptune': {
+    tags: ['resonance', 'solar-system', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/pluto-and-neptune.webp',
+  },
+  'Jupiter Trojans': {
+    tags: ['resonance', 'solar-system'],
+    thumbnail: 'images/scenarios/jupiter-trojans.webp',
+  },
   'Binary Pair': {
     tags: ['binary-systems', 'orbits-kepler'],
     thumbnail: 'images/scenarios/binary-pair.webp',

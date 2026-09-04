@@ -1999,6 +1999,170 @@ export const INSTRUCTOR_CONTENT = {
       28: 'At ten solar masses the tidal radius is about 1.9 million km against a 29.5 km horizon, a ratio of 6.4 × 10⁴. At Sagittarius A* the ratio is about 11. The two meet near 1.6 × 10⁸ solar masses, and the billion-solar-mass preset reads SWALLOWED WHOLE.',
     },
   },
+  'when-orbits-lock': {
+    topic: 'Mean-motion resonance, and what counts as evidence for it',
+    difficulty: 'Introductory',
+    placement:
+      'After Kepler’s laws and after students are comfortable with the idea that an orbit has a period and a shape. It sits naturally beside a unit on the Solar System’s architecture, and it is the obvious companion to any treatment of planetary migration or the asteroid belt. No calculus, no differential equations; the only new mathematical object is an angle built as an integer combination of other angles, and the lesson derives it rather than asserting it.',
+    overview:
+      'The lesson takes away the definition students will already have met - "the periods are in a small whole-number ratio" - and makes them find a replacement. It does this with a counter-example from the same system: Callisto’s period ratio with Ganymede is 0.03% from 7:3, ten times closer to a small ratio than Pluto’s is to 3:2, and Callisto is in no resonance at all. From there it builds the resonant angle, shows what libration and circulation look like, and applies the test to three real systems: the Galilean Laplace resonance, Pluto’s 3:2 with Neptune, and Jupiter’s Trojans as a 1:1 co-orbital. Each has a control alongside it that fails the test, so every positive result is paired with a negative one measured by the same instrument in the same run.',
+    priorKnowledge: [
+      'That an orbit has a period, and that the period depends on the size of the orbit',
+      'That the planets and moons all go round in more or less the same plane and the same direction',
+      'Comfort with degrees and with the idea of an angle wrapping round at 360',
+      'Helpful but not required: having met the phrase "orbital resonance" before, correctly or otherwise',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Small-integer ratios are cheap',
+        body: 'There are about thirty fractions with denominator ten or less in any unit interval, so an arbitrary period ratio lands within a percent or two of one by accident. The lesson makes this quantitative rather than rhetorical: the instrument reports how much closer than chance each measured ratio is, and the largest figure in the whole investigation - twenty-five times closer than chance - belongs to Callisto, which is not resonant. Students should leave unable to accept a near-rational ratio as evidence on its own.',
+      },
+      {
+        heading: 'A resonant angle, and why it is built the way it is',
+        body: 'The physical question is whether conjunctions keep happening in the same place relative to the orbits. A combination like 3λ_outer − 2λ_inner − ϖ_outer answers it: if the periods are in a 3:2 ratio the two fast terms advance at the same rate and cancel, leaving a slow angle that tracks the conjunction geometry. The coefficients must sum to zero, which is not a convention but a requirement - a combination that does not sum to zero changes value when you rotate your coordinate axes, and would be measuring the frame rather than the orbits.',
+      },
+      {
+        heading: 'Libration versus circulation',
+        body: 'A resonant angle does one of two things. Circulation means it runs through all 360 degrees, the conjunctions take up every geometry in turn, and the perturbations average away. Libration means it swings about a fixed value and never completes a circuit, the conjunctions repeat, and the perturbations accumulate in the same sense. That is the lock, and it is the only evidence for one.',
+      },
+      {
+        heading: 'The third answer, and why an instrument needs one',
+        body: 'A short record of a slowly circulating angle and a short record of a slowly librating one are indistinguishable. The instrument therefore reports libration, circulation or inconclusive, and it is willing to stay inconclusive for the whole of a lesson-length run. When it does, it reports the bound it has established - "any circulation would take more than a thousand conjunction cycles" - which is a real result. Students often read the refusal as a malfunction; it is the most transferable idea in the lesson.',
+      },
+      {
+        heading: 'The rotating frame',
+        body: 'Nothing about the Trojans is visible from outside. In the inertial frame a Trojan traces the same orbit Jupiter does, and the fact that it stays 60 degrees ahead is invisible. Rotate with Jupiter and the tadpole draws itself. This is worth naming as a general move rather than a trick for this one case: choosing the frame in which the interesting quantity stands still is most of what makes a dynamical problem tractable.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1–7',
+        text: 'The four Galilean moons. Students predict the Io–Europa ratio, measure all four periods, and meet the counter-example: the tidiest ratio in the system belongs to the moon that is not resonant. Ends on why small-integer ratios are dense enough to be worthless as evidence.',
+      },
+      {
+        steps: '8–10',
+        text: 'Conjunctions. A prediction most students get wrong - that line-ups cluster in a fixed direction in the sky - followed by the measurement showing they drift, and the explanation: the orbits themselves precess, so a direction in the sky is the wrong thing to measure.',
+      },
+      {
+        steps: '11–16',
+        text: 'The resonant angle, built from mean longitudes and longitudes of periapsis, then applied to the Laplace argument. The instrument moves through three verdicts as the run lengthens; students are told to start it and read on. Closes with the algebra showing that 180 degrees means the three moons are never all in conjunction.',
+      },
+      {
+        steps: '17–21',
+        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty-seven Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
+      },
+      {
+        steps: '22–26',
+        text: 'Pluto and Neptune. The crossing orbits, the 3:2, the libration measured in ninety seconds, the conjunctions clustered at Pluto’s aphelion, and the one line of algebra that connects the two. A third body on nearly the same orbit but outside the resonance circulates and is scattered.',
+      },
+      {
+        steps: '27–31',
+        text: 'The Trojans in the rotating frame: an exact equilibrium, a real tadpole libration, an unstable equilibrium that departs, and a non-co-orbital body whose ratio is closer to 7:5 than Pluto’s is to 3:2. The distinction between an equilibrium and a stable equilibrium is the target here.',
+      },
+      {
+        steps: '32–33',
+        text: 'The four cases sorted two ways - by how good the ratio is, and by whether they are resonant - which give different orders. Then a referee-style question about a paper that overclaims, and the closing survey: Kirkwood gaps, plutinos, Io’s volcanism, and resonant chains as evidence for migration.',
+      },
+    ],
+    features: [
+      {
+        name: 'Measured periods and the ratios between them (steps 3, 4)',
+        text: 'Measures each body’s period from its own orbit and averages over the whole record, so the numbers settle within a few orbits and are quoted to five figures. For each adjacent pair it reports the ratio, the nearest ratio of small whole numbers found by continued fractions, the percentage offset, and - the figure that matters - how much closer than chance that offset is. The continued-fraction search will find a ratio for any number at all, which is the trap the lesson springs.',
+      },
+      {
+        name: 'The resonant angle (steps 14, 18, 20, 23, 31)',
+        text: 'Plots the argument twice: wrapped into a single turn, where a circulating angle visibly visits every value, and unwrapped, where a circulation is a ramp and a libration is a wave. It classifies the record as libration, circulation or inconclusive, reports the centre, amplitude and period when it can, and reports the circulation period it has ruled out when it cannot. Short-period ripple is averaged over one conjunction cycle before the classification is made, because without that averaging a slowly drifting angle with a wobble reads as a tidy libration.',
+      },
+      {
+        name: 'Conjunctions (steps 9, 25)',
+        text: 'Every line-up in the run, plotted twice: by direction in the sky and by where the outer body was on its own orbit. Circular statistics, so the mean of 1 and 359 degrees is 0. The length of the arrow is how tightly the events cluster. For Pluto the second dial clusters at a true anomaly of 180 degrees, which is aphelion, and that is the protection mechanism seen directly.',
+      },
+      {
+        name: 'The rotating frame (steps 28, 29)',
+        text: 'The system as seen from a frame turning with the secondary, normalised so the secondary is at unit distance and L4 and L5 are exactly the corners of the equilateral triangles. Each body’s track is rebuilt from the record every frame rather than accumulated, so it is always drawn in the frame as it stands now.',
+      },
+      {
+        name: 'The four scenarios',
+        text: 'Galilean Resonance and Broken Laplace Resonance are a matched pair differing in one number. Pluto and Neptune and Jupiter Trojans are at true scale, so every distance and period the interface reports for them is the real one. The Jovian pair is a scale model - distances a hundred times life size, clock a thousand times faster - because Io’s orbit at true scale is smaller than Jupiter is drawn; the scenario summary says so, and every ratio, eccentricity and angle is untouched by it.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'The periods being in a small whole-number ratio is what a resonance is.',
+        response:
+          'Callisto, at step 5. Its ratio with Ganymede is 0.03% from 7:3 and it is in no resonance; Ganymede’s ratio with Io is 1.1% from 4:1 and the two are locked as tightly as anything in the Solar System. Sorting the four cases by ratio quality and by resonance gives different orders, which is step 32.',
+      },
+      {
+        claim: 'The periods in a resonance are exactly commensurate.',
+        response:
+          'The measurement at step 3 gives 2.0075, not 2. A resonance holds a system near a commensurability, in a band of finite width; the width for Europa is about a part in a thousand, which the broken control at step 18 demonstrates by stepping ten times outside it.',
+      },
+      {
+        claim:
+          'A resonance means the bodies keep meeting, so they are in danger.',
+        response:
+          'Exactly backwards for Pluto, and this is the lesson’s best surprise. The resonance is what stops Pluto and Neptune meeting: it fixes where the conjunctions happen, and 180 degrees puts them at Pluto’s aphelion. Worth pairing with the Kirkwood gaps at step 33, where the same mechanism removes asteroids instead of protecting them - the difference is the geometry the libration holds.',
+      },
+      {
+        claim:
+          'The instrument saying "inconclusive" means something is broken.',
+        response:
+          'Step 15 exists for this and is worth reading aloud. Over a short record a slow circulation and a long-period libration are the same picture, and an instrument that picked one anyway would be producing a number rather than a measurement. The refusal comes with a quantitative bound, which is a genuine result.',
+      },
+      {
+        claim: 'L4 is stable because it is a point where the forces balance.',
+        response:
+          'So is L3, and the probe placed one degree from it is gone within thirty Jupiter years. Equilibrium and stability are different properties: the marble at the bottom of the bowl and the marble on top of the dome are both at equilibrium. Step 30.',
+      },
+      {
+        claim: 'A Trojan sits at the Lagrange point.',
+        response:
+          'Real Trojans librate about it, on tadpole orbits tens of degrees wide. The scenario includes one body placed exactly at L4, which does sit still, precisely so that the contrast with Patroclus is visible in the same frame.',
+      },
+    ],
+    teachingNotes: [
+      'Steps 5 and 21 are the lesson. If time is short, cut the Trojans before cutting Callisto: the Trojan section is the most enjoyable and the Callisto section is the argument.',
+      'The Laplace argument takes about three and a half minutes of running before the instrument will call it a libration, and the lesson deliberately tells students to start it and read on. Start it on the projector at the beginning of the Galilean section and leave it running; by the time the class reaches step 16 it will have got there.',
+      'Pluto and the Trojans both reach a verdict in about ninety seconds, so they are the better choices for a short demonstration. If you only have time to show one resonance being established, show Pluto.',
+      'The scenarios run at speeds between 150 and 7,500 times the usual. That is deliberate - a single Pluto libration is twenty thousand years - but a student who drags the speed slider will not get it back to the right value by eye. Reloading the step restores it.',
+      'The Galilean scenario is a scale model and the app’s own distance and time readouts are wrong for it by factors of 100 and 1,000. The resonance instrument converts correctly and the lesson never asks for a reading from anywhere else, but a student exploring with the object inspector will notice, and it is worth pre-empting.',
+      'The libration amplitude of the model Laplace argument is 26 degrees where the real one is 0.064. The libration period, which is the physically meaningful quantity, comes out at about 2,100 days against a measured 2,071. Say this if a student looks it up; the amplitude is a property of where the model was started, and the period is a property of the resonance.',
+      'Step 30 rewards a demonstration. Ask the class to predict what the L3 probe will do before running it, and again after the L4 probe has been sitting motionless for a minute. Most will expect symmetry.',
+    ],
+    expectations: {
+      3: 'Periods of about 1.769, 3.552, 7.155 and 16.69 days and ratios of 2.007, 2.014 and 2.333, settling within about thirty Io orbits. The figures to draw attention to are the "closer than chance" numbers, which come out around 2, 1 and 25 depending on how long the run has been going.',
+      4: 'The field validation warns rather than blocks. A student who enters exactly 2 gets a note that the instrument does not report exactly 2, which is the point of the step. Expect about 2.008, 2.014 and 2.333; the last figure of each moves a little with the length of the run.',
+      8: 'The sky dial should be a broad arc rather than a tight clump, and the arrow short. Most students predicted clustering at step 7, so this is the moment the lesson turns; do not rescue it too quickly.',
+      12: 'Three verdicts in order over about three and a half minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
+      14: 'A centre within a degree or two of 180, an amplitude near 26 degrees and a libration period near 2,100 days. A much shorter period usually means the instrument is still quoting a provisional value from a single swing; leave it running.',
+      17: 'CIRCULATION within about ten seconds, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
+      19: 'Never LIBRATION. The verdict passes through confined, then either "the centre is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
+      22: 'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and 19,670. This is the closest agreement with a published measurement anywhere in the investigation, and it takes about ninety seconds.',
+      23: 'The same three numbers, recorded. The validation accepts a centre within 15 degrees of 180 and a period between 12,000 and 30,000 years; a value near zero for the centre means the sign of the argument was read backwards, and the note says so.',
+      24: 'The sky dial is a broad smear; the orbit dial clusters near 180 degrees with a spread of about 38. The instrument’s own summary line reads that every line-up happens near the outer body’s aphelion.',
+      27: 'Four different behaviours: the L4 probe reported as an equilibrium with an amplitude of 0, Patroclus librating about 296 degrees with an amplitude near 24 and a period near 13 Jupiter years, the L3 probe more than 150 degrees from where it started, and the wide probe circulating. The instrument needs about twenty Jupiter years - roughly forty-five seconds - before it will commit to any of them.',
+      28: 'A centre near 296 degrees, an amplitude near 24 and a period near 13 Jupiter years against a linearised prediction of 12.47. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
+      30: 'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. Ask the class to compare that offset with Pluto’s 0.30% before revealing the verdict.',
+    },
+    discussion: [
+      'Callisto’s period ratio with Ganymede is closer to a small whole-number ratio than Pluto’s is to 3:2. What would you need to see before you believed either of them was resonant?',
+      'The resonance protects Pluto from Neptune, and the same mechanism clears the Kirkwood gaps in the asteroid belt. What is different about the two situations?',
+      'A referee receives a paper claiming a new resonance on the strength of a period ratio and a forty-cycle integration. What should the referee ask for?',
+      'Why can circulation be established in one circuit while libration takes several times as long to establish? Is there any way round that asymmetry?',
+      'Ten thousand asteroids sit at L4 and L5 and none at L3, although all three are equilibrium points. What does that tell you about how the Solar System selects what survives?',
+      'Io is the most volcanically active body known and the energy comes from the resonance holding its orbit eccentric. Would Io be geologically dead without Europa and Ganymede?',
+    ],
+    extensions: [
+      'Load the TRAPPIST-1 System scenario and have students measure the seven periods and look for the resonant chain. The ratios are close to 8:5, 5:3, 3:2, 3:2, 4:3 and 3:2; ask what further measurement would be needed to establish that the chain is real, and note that the answer is the same one this lesson gives.',
+      'Have students compute the location of the 3:1 and 2:1 Kirkwood gaps from Jupiter’s period and Kepler’s third law, then compare with a published plot of asteroid semi-major axes.',
+      'Set the Trojan libration period against the linearised prediction P / sqrt(27μ/4) for a range of secondary masses, by editing the scenario, and check whether the square-root dependence holds.',
+      'For a class that has met migration: ask why a resonant chain is hard to build in place and easy to build by moving planets slowly inward, and connect it to the plutinos as a fossil of Neptune’s outward migration.',
+      'Ask students to work out, from the libration amplitude of 80 degrees and Pluto’s orbital elements, the range of true anomalies at which Pluto–Neptune conjunctions can occur, and check it against what the conjunction instrument reports.',
+    ],
+    modelNotes:
+      'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modelled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-six checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

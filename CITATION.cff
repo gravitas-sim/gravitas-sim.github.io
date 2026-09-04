@@ -12,8 +12,8 @@ repository-code: "https://github.com/gravitas-sim/gravitas-sim.github.io"
 url: "https://gravitas-sim.online"
 abstract: >-
   Gravitas is a browser-based N-body gravity sandbox and astronomy teaching
-  tool. It ships 43 configurable scenarios drawn from real and idealized
-  systems, six guided investigations in which undergraduate students predict,
+  tool. It ships 53 configurable scenarios drawn from real and idealized
+  systems, 12 guided investigations in which undergraduate students predict,
   measure and plot their own data, instructor materials with answer keys, and
   a public account of what the underlying model does and does not represent.
   It runs entirely client-side as a static site, requires no account or

@@ -611,7 +611,15 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   } else if (ps === 'Kessler Cascade') {
     Object.assign(SETTINGS, {
       num_black_holes: 1,
-      bh_mass: 5,
+      // Five solar masses was the shipped value and it cannot hold a swarm:
+      // three hundred micro-stars of a tenth of a solar mass each weigh thirty
+      // between them, six times the hole, so the "cloud" was a self-gravitating
+      // cluster that collapsed into a couple of bodies within two seconds of
+      // wall clock. An intermediate-mass hole makes the swarm a test population
+      // and turns the collapse into the cascade the scenario is named for:
+      // measured against the engine, 300 bodies become 208 after thirty
+      // simulated seconds, 158 after sixty and 55 after three hundred.
+      bh_mass: 500,
       num_stars: 0,
       num_planets: 0,
       num_gas_giants: 0,
@@ -625,9 +633,13 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_trails: true,
       trail_length: 20,
       enable_star_merging: true,
-      // 300 micro-stars as 0.1 Msun stars (handled in initialization)
-      preset_zoom: 1.5,
+      // The swarm sits between 150 and 600 units out, so this frames all of it.
+      preset_zoom: 0.5,
     });
+    // Read by build_simulation in js/ui.js, which generates the swarm after
+    // apply_placement. These three settings existed and were set here for a
+    // long time with nothing reading them, and the scenario built a lone black
+    // hole in an empty sky.
     SETTINGS.num_micro_stars = 300;
     SETTINGS.micro_star_mass = 0.1;
     SETTINGS.micro_star_high_velocity = true;
@@ -646,10 +658,8 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_trails: true,
       trail_length: 18,
       enable_star_merging: false,
-      // Visual: satellites, slight orbital decay (handled in initialization)
       preset_zoom: 1.5,
     });
-    SETTINGS.satellites_are_dyson = true;
   } else if (ps === 'Tidal Arm Tango') {
     Object.assign(SETTINGS, {
       num_black_holes: 2,
@@ -709,9 +719,12 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_trails: true,
       trail_length: 25,
       enable_star_merging: false,
-      // Special: test star shot at 1000 km/s (handled in initialization)
       preset_zoom: 1.5,
     });
+    // Read by build_simulation in js/ui.js, which fires the star across the
+    // field. Without it every body in this scenario starts at rest and drops
+    // straight into the nearest hole - there is no gauntlet and nothing is
+    // slung.
     SETTINGS.test_star_slingshot = true;
   } else if (ps === 'Black Hole Billiards') {
     // The central hole used to be a million solar masses, which gives it a
@@ -875,6 +888,150 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       show_elapsed_time: true,
     });
     state.zoom = 2.4;
+  } else if (ps === 'Galilean Resonance' || ps === 'Broken Laplace Resonance') {
+    Object.assign(SETTINGS, {
+      // Io, Europa, Ganymede and Callisto about Jupiter. The bodies are placed by
+      // build_simulation in ui.js from js/resonance/systems.js; everything here is
+      // the environment they need.
+      //
+      // Two settings are load-bearing rather than decorative, and both were
+      // chosen against measurements rather than by eye:
+      //
+      //   integrator          Velocity Verlet, not the default symplectic Euler.
+      //                       A resonant angle is a secular quantity accumulated
+      //                       over hundreds of orbits, and first-order phase
+      //                       error accumulates straight into it. Measured over
+      //                       1,400 Io orbits, symplectic Euler at a step of 2
+      //                       reports a libration amplitude of 9 degrees and a
+      //                       period of 273 Io orbits; at 4 it reports 54 degrees
+      //                       and 458. Both are artefacts. Velocity Verlet at a
+      //                       step of 2 gives 23 degrees and 1,249, within 3% of
+      //                       what RK4 gives.
+      //
+      //   max_timestep        1.0, which is the substep the render loop is held
+      //                       to however fast the scenario is run. That is 680
+      //                       steps per Io orbit; at 0.5 and 0.25 the answer
+      //                       moves by under 4%.
+      //
+      // The rest follows from the experiment: nothing may enter, leave, merge or
+      // be re-typed, because every measurement matches bodies by identity across
+      // hundreds of samples.
+      num_black_holes: 0,
+      num_stars: 1,
+      num_planets: 4,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      enable_asteroids: false,
+      placement: 'Empty',
+      mutual_gravity: true,
+      star_only_gravity: false,
+      enable_star_merging: false,
+      dynamic_object_properties: false,
+      gravitational_constant: 2.0,
+      integrator: 'Velocity Verlet',
+      max_timestep: 1.0,
+      // The moons pass no closer than 17 length units to each other and 28 to
+      // Jupiter, so the default softening floor of 5 would be a percent-level
+      // error in the force at exactly the separations that matter. This is two
+      // orders of magnitude below the closest approach, which puts it out of
+      // reach of the force law entirely.
+      min_interaction_distance: 0.05,
+      // The fastest this scenario can honestly be run: at sixty frames a
+      // second it works out at exactly the sixty-four substeps the render loop
+      // allows, each of them the 1.0 the answer is converged at. Io goes round
+      // in 681 simulated seconds, so that is five and a half Io orbits a
+      // second - and the Laplace argument, which takes 1,179 of them to swing
+      // back and forth once, turns back for the first time after about ninety
+      // seconds and a second time after two minutes. Below this speed the
+      // lesson cannot reach a libration verdict at all; above it the substep
+      // grows and the amplitude it reports starts to be the integrator's.
+      sim_speed: 750,
+      show_trails: true,
+      trail_length: 400,
+      trail_style: 'Simple',
+      show_scale_bar: true,
+      show_elapsed_time: true,
+      preset_zoom: 2.8,
+    });
+  } else if (ps === 'Pluto and Neptune') {
+    Object.assign(SETTINGS, {
+      // True scale: Neptune at 3007 length units is 30.07 AU, and every distance
+      // and period the interface reports for this scenario is the real one.
+      //
+      // The speed is the striking number and it is not arbitrary. Pluto's
+      // resonant argument takes about 19,700 years to swing back and forth once,
+      // and a lesson cannot be twenty thousand years long. At this setting one
+      // second of wall clock is about 270 years, so a libration and a half - two
+      // turning points, which is what it takes to measure a centre and an
+      // amplitude - passes in under two minutes.
+      num_black_holes: 0,
+      num_stars: 1,
+      num_planets: 3,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      enable_asteroids: false,
+      placement: 'Empty',
+      mutual_gravity: true,
+      star_only_gravity: false,
+      enable_star_merging: false,
+      dynamic_object_properties: false,
+      gravitational_constant: 2.0,
+      integrator: 'Velocity Verlet',
+      // 60 simulated seconds, which is 390 steps per Neptune orbit. Halving and
+      // doubling it moves the measured libration period by under 0.4%.
+      max_timestep: 60,
+      min_interaction_distance: 1,
+      sim_speed: 7500,
+      show_trails: true,
+      trail_length: 900,
+      trail_style: 'Simple',
+      sim_size: 'Large',
+      show_scale_bar: true,
+      show_elapsed_time: true,
+      // Pluto reaches 4,920 units and the unbound comparison a little beyond
+      // that, so this frames the whole of both orbits.
+      preset_zoom: 0.085,
+    });
+  } else if (ps === 'Jupiter Trojans') {
+    Object.assign(SETTINGS, {
+      // The Sun, Jupiter and four test bodies, at true scale. Jupiter's orbit is
+      // circularised: its real eccentricity is 0.0489, and the triangular points
+      // are exact equilibria only for a circular secondary. The lesson says so,
+      // and it is the same idealisation every textbook treatment makes.
+      num_black_holes: 0,
+      num_stars: 1,
+      num_planets: 4,
+      num_gas_giants: 1,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      enable_asteroids: false,
+      placement: 'Empty',
+      mutual_gravity: true,
+      star_only_gravity: false,
+      enable_star_merging: false,
+      dynamic_object_properties: false,
+      gravitational_constant: 2.0,
+      integrator: 'Velocity Verlet',
+      max_timestep: 4,
+      min_interaction_distance: 0.5,
+      // A Jupiter year takes about two and a quarter seconds, so one tadpole
+      // libration - twelve and a half of them - takes half a minute.
+      sim_speed: 150,
+      show_trails: true,
+      trail_length: 700,
+      trail_style: 'Simple',
+      show_scale_bar: true,
+      show_elapsed_time: true,
+      preset_zoom: 0.6,
+    });
   } else if (ps === 'Binary Pair') {
     // Two stars of two solar masses each, four AU apart, going round their
     // common center once every four years. The numbers are chosen so that the

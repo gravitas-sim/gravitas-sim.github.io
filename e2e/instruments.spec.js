@@ -383,14 +383,34 @@ test.describe('the integrator setting', () => {
     expect(chosen.active).toBe('Symplectic Euler');
   });
 
-  test('every shipped scenario loads under the default scheme', async ({
+  // The four scenarios allowed to choose their own integrator, and why.
+  //
+  // The rule this list is an exception to is worth keeping: the catalog was
+  // laid out and timed against symplectic Euler's error, and a scenario that
+  // quietly switched scheme would change what every other check measures. So
+  // the exceptions are named here rather than inferred, and adding a fifth
+  // means editing this list and saying why.
+  //
+  // These four measure resonant angles, which are secular quantities
+  // accumulated over hundreds of orbits, and first-order phase error
+  // accumulates straight into them. Measured over 1,400 Io orbits, symplectic
+  // Euler at the substep these scenarios can afford reports a Laplace
+  // libration amplitude of 9 degrees and a period of 273 Io orbits; Velocity
+  // Verlet reports 23 and 1,249, within 3% of what RK4 gives. The full table
+  // is in RESONANCE_INVESTIGATION.md.
+  const NON_DEFAULT_INTEGRATOR = {
+    'Galilean Resonance': 'Velocity Verlet',
+    'Broken Laplace Resonance': 'Velocity Verlet',
+    'Pluto and Neptune': 'Velocity Verlet',
+    'Jupiter Trojans': 'Velocity Verlet',
+  };
+
+  test('every shipped scenario loads under the scheme it declares', async ({
     page,
     app,
   }) => {
-    // The setting is a live knob, so a scenario must not be able to change it:
-    // the catalog was laid out and timed against symplectic Euler's error.
     await app.boot();
-    const seen = await page.evaluate(async () => {
+    const seen = await page.evaluate(async expected => {
       const ui = await import('/js/ui.js');
       const P = await import('/js/physics.js');
       const info = await import('/js/data/scenarioInfo.js');
@@ -398,11 +418,39 @@ test.describe('the integrator setting', () => {
       for (const key of Object.keys(info.SCENARIO_INFO)) {
         ui.SETTINGS.preset_scenario = key;
         ui.initialize_simulation({ seed: 'integrator-default' });
-        if (P.activeIntegrator() !== 'Symplectic Euler') out.push(key);
+        const want = expected[key] || 'Symplectic Euler';
+        const got = P.activeIntegrator();
+        if (got !== want) out.push(`${key}: ${got}, expected ${want}`);
       }
       return out;
-    });
+    }, NON_DEFAULT_INTEGRATOR);
     expect(seen).toEqual([]);
+  });
+
+  test('a scenario that changes the scheme does not leave it changed', async ({
+    page,
+    app,
+  }) => {
+    // The other half of the guard, and the part that would actually hurt: the
+    // setting is global, so a scenario that raised it and did not put it back
+    // would silently re-time every scenario loaded after it.
+    await app.boot();
+    const after = await page.evaluate(async keys => {
+      const ui = await import('/js/ui.js');
+      const P = await import('/js/physics.js');
+      const out = [];
+      for (const key of keys) {
+        ui.SETTINGS.preset_scenario = key;
+        ui.initialize_simulation({ seed: 'integrator-default' });
+        ui.SETTINGS.preset_scenario = 'Solar System';
+        ui.initialize_simulation({ seed: 'integrator-default' });
+        if (P.activeIntegrator() !== 'Symplectic Euler') {
+          out.push(`${key} left ${P.activeIntegrator()} in force`);
+        }
+      }
+      return out;
+    }, Object.keys(NON_DEFAULT_INTEGRATOR));
+    expect(after).toEqual([]);
   });
 
   test('can be changed while the simulation runs, without breaking it', async ({

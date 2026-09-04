@@ -232,6 +232,102 @@ export const ES = {
   'rail.toggleRadialVelocity': 'Velocidad radial',
   'rail.toggleRotationCurve': 'Curva de rotación',
   // --- Instrumento de divergencia ---------------------------------------------
+  // --- Los instrumentos de resonancia (js/resonanceWidgets.js) ---------------
+  'resW.periods.title': 'Periodos medidos y las razones entre ellos',
+  'resW.periods.note':
+    'Los periodos se miden de las propias órbitas y se promedian sobre toda la ejecución; no se leen de una tabla. La razón de enteros pequeños más cercana se halla por fracciones continuas, que encuentran una para cualquier número: por eso importa más la última cifra de cada fila —cuánto más cerca está la razón de lo que daría el azar— que la razón misma.',
+  'resW.periods.axis': 'periodo orbital, logarítmico',
+  'resW.periods.scaled': 'modelo a escala: distancias ×100, reloj ×1000',
+  'resW.periods.true': 'escala real',
+  'resW.angle.title': 'El ángulo resonante',
+  'resW.angle.note':
+    'Arriba: el ángulo plegado en una vuelta. Si recorre todos los valores, los cuerpos adoptan sucesivamente todas las geometrías relativas y no hay resonancia. Abajo: el mismo ángulo desplegado, donde una circulación es una rampa y una libración es una onda. El veredicto sale del gráfico inferior, y puede legítimamente ser «aún no se puede saber».',
+  'resW.conj.title': 'Dónde se alinean los dos cuerpos',
+  'resW.conj.note':
+    'Cada conjunción de la ejecución, trazada dos veces: dónde ocurrió en el cielo y dónde estaba el cuerpo exterior en su propia órbita en ese momento. Una resonancia aparece como un cúmulo en el segundo disco; y si ese cúmulo está en 180°, toda alineación ocurre en el afelio del cuerpo exterior.',
+  'resW.conj.sky': 'longitud en el cielo',
+  'resW.conj.orbit': 'posición en la órbita exterior',
+  'resW.frame.title': 'El marco rotante',
+  'resW.frame.note':
+    'El mismo sistema visto desde un marco que gira con el secundario, fijo a la derecha y a una unidad de distancia. L4 y L5 son los dos puntos triangulares de equilibrio. En este marco un cuerpo coorbital dibuja un lazo cerrado alrededor de uno de ellos; uno que no lo sea da la vuelta entera.',
+  'resW.plot.wrapped': 'ángulo, plegado en 0–360°',
+  'resW.plot.unwrapped': 'el mismo ángulo, desplegado',
+  'resW.empty.no-world': 'no hay ningún sistema cargado',
+  'resW.empty.warming-up': 'observando: deja correr la simulación',
+  'resW.empty.no-argument':
+    'este sistema no tiene un par para el argumento solicitado',
+  'resW.empty.no-pair': 'los cuerpos indicados no están ambos aquí',
+  'resW.empty.no-secondary':
+    'no hay cuerpo secundario sobre el que construir un marco rotante',
+  'resW.empty.no-conjunctions': 'aún no ha ocurrido ninguna alineación',
+  'resW.row.status': 'Estado',
+  'resW.row.argument': 'Argumento',
+  'resW.row.ratio': 'P({a}) / P({b})',
+  'resW.row.watched': 'Observado durante',
+  'resW.row.verdict': 'Veredicto',
+  'resW.row.centre': 'Centro de libración',
+  'resW.row.amplitude': 'Amplitud',
+  'resW.row.libration': 'Periodo de libración',
+  'resW.row.circulation': 'Periodo de circulación',
+  'resW.row.needed': 'Qué falta',
+  'resW.row.sampling': 'Muestreo',
+  'resW.row.pair': 'Par',
+  'resW.row.count': 'Conjunciones vistas',
+  'resW.row.skySpread': 'Dispersión en el cielo',
+  'resW.row.orbitSpread': 'Dispersión en la órbita exterior',
+  'resW.row.where': 'Lo que significa',
+  'resW.row.frame': 'El marco gira con',
+  'resW.value.periodDays': '{days} días',
+  'resW.value.periodYears': '{years} años',
+  'resW.value.ratio':
+    '{ratio} — la más cercana es {p}:{q}, desviada un {off}% ({chance}× más cerca que el azar)',
+  'resW.value.watched': '{cycles} ciclos de conjunción ({days} días)',
+  'resW.value.amplitudeBound': 'al menos ±{amp}°: todavía no ha dado la vuelta',
+  'resW.value.librationPeriod':
+    '{days} días = {cycles} ciclos de conjunción ({certainty})',
+  'resW.value.measured': 'medido',
+  'resW.value.provisional': 'de una sola oscilación, provisional',
+  'resW.value.librationUnresolved':
+    'más largo que esta ejecución: cualquier circulación tardaría más de {cycles} ciclos de conjunción',
+  'resW.value.circulationPeriod': '{days} días = {cycles} ciclos de conjunción',
+  'resW.value.needed':
+    'el ángulo se ha movido {drift}° hasta ahora; eso es una libración de al menos esa anchura o una circulación de {cycles} ciclos de conjunción, y nada aquí las distingue',
+  'resW.value.sampling': '{n} muestras, una cada {every} días',
+  'resW.value.spread': 'centrado en {mean}°, dispersión ±{spread}°',
+  'resW.value.tadpole': '{kind} en torno a {centre}°, amplitud ±{amp}°',
+  'resW.verdict.none': 'aún no se ha medido nada',
+  'resW.verdict.circulation':
+    'CIRCULACIÓN: el ángulo recorre todos los valores, así que no hay resonancia',
+  'resW.verdict.libration':
+    'LIBRACIÓN: el ángulo se da la vuelta en lugar de completar el giro; los cuerpos están enganchados',
+  'resW.verdict.stationary':
+    'EQUILIBRIO: el ángulo no se ha movido en absoluto; este cuerpo está en un punto de Lagrange',
+  'resW.verdict.librationProvisional':
+    'LIBRACIÓN: el ángulo se dio la vuelta y regresó a donde empezó; una inversión más confirmará el periodo',
+  'resW.inconclusive.one-reversal':
+    'NO CONCLUYENTE: se ha dado la vuelta una vez, cosa que también hace un ángulo que circula despacio con una oscilación encima',
+  'resW.inconclusive.drifting-centre':
+    'NO CONCLUYENTE: oscila, pero cada oscilación termina más allá que la anterior, así que el centro se desplaza',
+  'resW.inconclusive.confined':
+    'NO CONCLUYENTE: confinado hasta ahora, pero aún no se ha dado la vuelta, y una circulación suficientemente lenta se vería igual',
+  'resW.inconclusive.ambiguous-drift':
+    'NO CONCLUYENTE: esta ejecución no distingue una libración amplia de una circulación lenta',
+  'resW.inconclusive.too-few-samples':
+    'NO CONCLUYENTE: aún no hay muestras suficientes',
+  'resW.inconclusive.too-short':
+    'NO CONCLUYENTE: la ejecución es más corta que veinte ciclos de conjunción',
+  'resW.inconclusive.undersampled':
+    'NO CONCLUYENTE: el ángulo se mueve demasiado deprisa entre muestras para seguirlo',
+  'resW.inconclusive.no-window': 'NO CONCLUYENTE: no ha transcurrido tiempo',
+  'resW.where.aphelion':
+    'toda alineación ocurre cerca del afelio del cuerpo exterior, en su punto más lejano',
+  'resW.where.perihelion':
+    'toda alineación ocurre cerca del perihelio del cuerpo exterior, en su punto más cercano',
+  'resW.where.side': 'las alineaciones se agrupan, pero lejos de ambos ápsides',
+  'resW.where.scattered':
+    'las alineaciones están repartidas por toda la órbita',
+  'resW.kind.tadpole': 'renacuajo',
+  'resW.kind.horseshoe': 'herradura',
   'chaosW.title': 'Cuán separadas están las dos ejecuciones',
   'chaosW.note':
     'La distancia entre la ejecución A y la B, sumada sobre todos los cuerpos y emparejada por identidad, en cada instante de tiempo simulado. Los mismos datos en dos ejes: lineal arriba, logarítmico abajo. Una recta en la gráfica inferior es crecimiento exponencial.',
@@ -838,6 +934,9 @@ export const ES = {
   'tag.chaos.label': 'Caos y encuentros',
   'tag.chaos.description':
     'Pasos cercanos, asistencias gravitatorias, expulsiones y sistemas cuyo desenlace depende con extrema sensibilidad de dónde partieron.',
+  'tag.resonance.label': 'Resonancia orbital',
+  'tag.resonance.description':
+    'Cuerpos cuyos periodos se enganchan en una razón de números enteros pequeños, y el ángulo librante que demuestra que el enganche es real.',
   'tag.stellar-evolution.label': 'Evolución estelar',
   'tag.stellar-evolution.description':
     'Lo que dejan atrás las estrellas: enanas blancas, estrellas de neutrones, remanentes y los entornos que los producen.',
@@ -864,7 +963,7 @@ export const ES = {
   'scenario.Retrograde Mars.title':
     'Marte retrógrado: el bucle que exigió epiciclos',
   'scenario.Retrograde Mars.summary':
-    'El Sol, la Tierra y Marte a sus distancias y períodos reales, y nada más. Vistos desde fuera, ambos planetas giran alrededor del Sol en el mismo sentido y nunca retroceden. Al cambiar el sistema de referencia a la Tierra, en Herramientas, Marte deja de describir un círculo y empieza a dibujar un bucle que se repliega sobre sí mismo. La física no ha cambiado en nada; solo lo ha hecho el sistema de referencia. Ese bucle es la observación que Ptolomeo reprodujo con epiciclos y que Copérnico explicó, y aquí se enciende y se apaga con un solo control.',
+    'El Sol, la Tierra y Marte a sus distancias y períodos reales, y nada más. Vistos desde fuera, ambos planetas giran alrededor del Sol en el mismo sentido y nunca retroceden. Al cambiar el sistema de referencia a la Tierra, en Herramientas, Marte deja de describir un círculo y dibuja un bucle que se repliega sobre sí mismo. La física no cambia; solo el sistema de referencia. Ese bucle es la observación que Ptolomeo reprodujo con epiciclos, y aquí se enciende y se apaga con un control.',
   'scenario.Earth-Moon System.title': 'Sistema Tierra-Luna',
   'scenario.Earth-Moon System.summary':
     'Una simulación detallada del sistema Tierra-Luna con masas precisas, mecánica orbital y aspecto realista. Presenta la Tierra con sus océanos azules y sus continentes verdes, y la Luna con su característica superficie gris y sus cráteres. Ideal para estudiar la dinámica orbital y los efectos de marea.',
@@ -874,7 +973,23 @@ export const ES = {
   'scenario.Three-Body Sensitivity Lab.title':
     'Laboratorio de sensibilidad de tres cuerpos: el mismo inicio, dos veces',
   'scenario.Three-Body Sensitivity Lab.summary':
-    'Tres estrellas de seis masas solares en los vértices de un triángulo equilátero, girando rígidamente en torno a su centro común. Es una solución exacta del problema de los tres cuerpos, hallada por Lagrange en 1772, y con tres masas iguales es inestable: el triángulo aguanta unas cuantas vueltas y luego se deshace. Está construido para un único experimento: ejecútalo dos veces desde inicios que difieren en mil quinientos kilómetros dentro de un sistema de ciento treinta millones de kilómetros, y observa cuánto tiempo permanecen juntas las dos ejecuciones.',
+    'Tres estrellas de seis masas solares en los vértices de un triángulo equilátero, girando rígidamente en torno a su centro común. Es una solución exacta del problema de los tres cuerpos, hallada por Lagrange en 1772, y con masas iguales es inestable: el triángulo aguanta unas vueltas y se deshace. Está hecho para un solo experimento: ejecútalo dos veces desde inicios que difieren en mil quinientos kilómetros, y observa cuánto duran juntas.',
+  'scenario.Galilean Resonance.title':
+    'Resonancia galileana: el bloqueo de Laplace',
+  'scenario.Galilean Resonance.summary':
+    'Ío, Europa y Ganímedes en la cadena 4:2:1 que Laplace explicó en 1805, con Calisto fuera como contraste. Los periodos no son exactamente 4:2:1 — Europa tarda un 0,37 % más que dos años de Ío — y ese casi acierto es la cuestión: lo que los une es el argumento de Laplace, que se queda cerca de 180 grados en vez de recorrer todos los valores, así que las tres nunca coinciden en conjunción. Calisto queda a un 0,03 % de 7:3 con Ganímedes y no resuena con nada. Modelo a escala, 100 veces mayor.',
+  'scenario.Broken Laplace Resonance.title':
+    'Resonancia de Laplace rota: un uno por ciento fuera',
+  'scenario.Broken Laplace Resonance.summary':
+    'Las mismas cuatro lunas con un solo número cambiado: Europa parte un uno por ciento más lejos de Júpiter. Eso es cien veces más de lo que la resonancia puede sostener, y el bloqueo falla: el argumento de Laplace deja de oscilar en torno a 180 grados y empieza a dar vueltas completas, una cada cuarenta y seis órbitas de Ío. Ejecútalo junto a Resonancia galileana y la diferencia entre un sistema bloqueado y otro que solo tiene periodos convenientes aparece en pantalla en menos de un minuto.',
+  'scenario.Pluto and Neptune.title':
+    'Plutón y Neptuno: la resonancia 3:2 que protege',
+  'scenario.Pluto and Neptune.summary':
+    'La órbita de Plutón cruza la de Neptuno, y jamás se han acercado. La resonancia 3:2 es la razón: Plutón da dos vueltas por cada tres años neptunianos, y el argumento resonante libra en torno a 180 grados en vez de circular, así que toda conjunción ocurre cerca del afelio de Plutón, muy lejos del alcance de Neptuno. Un tercer cuerpo recorre casi la misma órbita desde fuera de la resonancia; observa qué le ocurre. Escala real; un segundo son unos 270 años.',
+  'scenario.Jupiter Trojans.title':
+    'Troyanos de Júpiter: la resonancia coorbital 1:1',
+  'scenario.Jupiter Trojans.summary':
+    'Dos de los cinco puntos de Lagrange son lugares donde un cuerpo puede quedarse quieto respecto a Júpiter para siempre, y miles de asteroides lo hacen. Una sonda colocada exactamente en L4 no se mueve en el marco rotante de Júpiter; el troyano 617 Patroclo rodea L5 una vez cada doce años y medio jovianos. Una tercera parte a un grado de L3 —equilibrio también, e inestable— y se marcha. La cuarta recorre una órbita corriente más ancha y no resuena con nada.',
   'scenario.Binary Pair.title':
     'Par binario: dos estrellas, un punto de equilibrio',
   'scenario.Binary Pair.summary':
@@ -898,14 +1013,14 @@ export const ES = {
   'scenario.Exoplanet Characterization Lab.title':
     'Laboratorio de caracterización de exoplanetas',
   'scenario.Exoplanet Characterization Lab.summary':
-    'HD 209458 otra vez, pero con la estrella libre de moverse. En el laboratorio de tránsitos la estrella está fijada para que la curva de luz quede centrada; aquí ambos cuerpos orbitan su centro de masas común, que es lo que los instrumentos de velocidad radial y astrometría necesitan para poder medir algo. La estrella describe un círculo alrededor de un punto situado a 2,7 millonésimas de AU, a 84 metros por segundo: demasiado pequeño para verlo y de sobra suficiente para detectarlo. Al abrir Velocidad radial se ve el bamboleo que descubrió este planeta un año antes de que nadie lo viera transitar.',
+    'HD 209458 otra vez, pero con la estrella libre de moverse. En el laboratorio de tránsitos está fijada para centrar la curva de luz; aquí ambos cuerpos orbitan su centro de masas común, que es lo que necesitan los instrumentos de velocidad radial y astrometría para medir algo. La estrella rodea un punto a 2,7 millonésimas de AU, a 84 metros por segundo: demasiado poco para verlo y de sobra para detectarlo. Abre Velocidad radial y observa el bamboleo que descubrió el planeta.',
   'scenario.Blended Binary.title': 'Binaria mezclada: una compañera oculta',
   'scenario.Blended Binary.summary':
-    'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, de modo que el tránsito se mide menos profundo y el planeta parece más pequeño de lo que es. Corregir exactamente este efecto es para lo que sirven los sondeos de imagen de alta resolución de estrellas con planetas.',
+    'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, así que el tránsito se mide menos profundo y el planeta parece más pequeño. Corregir este efecto es para lo que sirven los sondeos de imagen de alta resolución.',
   'scenario.Black Hole Lab.title':
     'Laboratorio de agujeros negros: diez masas solares y cuatro cuerpos alrededor',
   'scenario.Black Hole Lab.summary':
-    'Un único agujero negro de masa estelar con cuatro cuerpos en órbitas circulares estables a su alrededor. Nada está cayendo dentro. La gravedad lejos de un agujero negro es la misma gravedad que en cualquier otro sitio, y un objeto con movimiento transversal gira a su alrededor exactamente igual que giraría alrededor de una estrella de la misma masa. Al seleccionar el agujero negro se leen su radio de Schwarzschild, su densidad media a esa escala, su temperatura de Hawking y cuánto le queda de vida.',
+    'Un único agujero negro de masa estelar con cuatro cuerpos en órbitas circulares estables a su alrededor. Nada está cayendo dentro. La gravedad lejos de un agujero negro es la de cualquier otro sitio, y un objeto con movimiento transversal lo rodea igual que rodearía a una estrella de la misma masa. Al seleccionar el agujero negro se leen su radio de Schwarzschild, su densidad media a esa escala, su temperatura de Hawking y cuánto le queda de vida.',
   'scenario.Habitable Zone Lab.title':
     'Laboratorio de zona habitable: el sistema solar interior, con la zona dibujada',
   'scenario.Habitable Zone Lab.summary':
@@ -1788,6 +1903,8 @@ export const ES = {
   'inv.step.kind.explore': 'exploración',
   'inv.step.kind.measure': 'medida',
   'inv.step.kind.question': 'pregunta',
+  'inv.step.kind.ellipse': 'exploración',
+  'inv.step.kind.wedges': 'exploración',
   'inv.action.restart': 'Reiniciar',
   'inv.action.restart.hint':
     'Borrar todas las respuestas y volver a empezar esta lección',

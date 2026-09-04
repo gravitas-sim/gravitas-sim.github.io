@@ -135,6 +135,39 @@ describe('the lesson catalog', () => {
     expect(bad).toEqual([]);
   });
 
+  test('an estimate question is not graded to a precision it never asked for', () => {
+    // `tolerance` in js/answerCheck.js is an absolute distance from the answer,
+    // not a fraction of it, and the two look identical in a lesson file. Two
+    // steps shipped with a fraction written where an absolute belonged: "on
+    // that behaviour, roughly how far apart would the two runs be, in km?"
+    // answered 1,000,000 with a tolerance of 0.5, which is half a kilometre;
+    // and "using your tau, roughly how long is that?" answered 79 with 0.35,
+    // while the lesson's own rubric puts tau anywhere in a band that spans 69
+    // to 92. A student following the instructions exactly would fail both.
+    //
+    // The rule: a prompt that asks for an estimate has to accept one. Five
+    // percent is the default this codebase already applies when a step names no
+    // tolerance at all, so it is the floor a hedged question cannot go under.
+    const HEDGED =
+      /\b(roughly|about|approximately|around|order of|estimate)\b/i;
+    const tooTight = [];
+    for (const { lesson, n, step } of EVERY_STEP) {
+      if (step.kind !== 'numeric') continue;
+      if (!HEDGED.test(step.prompt || '')) continue;
+      const tolerance = step.tolerance ?? Math.abs(step.answer) * 0.05;
+      const fraction = step.answer
+        ? tolerance / Math.abs(step.answer)
+        : Infinity;
+      if (fraction < 0.05 - 1e-9) {
+        tooTight.push(
+          `${lesson} step ${n} ("${step.title}"): answer ${step.answer}, ` +
+            `tolerance ${step.tolerance} is ${(fraction * 100).toFixed(3)}% of it`
+        );
+      }
+    }
+    expect(tooTight).toEqual([]);
+  });
+
   test('every measure step asks for fields with unique, usable ids', () => {
     const bad = [];
     for (const s of EVERY_STEP) {

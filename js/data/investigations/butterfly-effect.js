@@ -294,7 +294,14 @@ const BUTTERFLY_EFFECT = {
         'On that behaviour, roughly how far apart would the two runs be after forty orbits, in km?',
       unit: 'km',
       answer: 1000000,
-      tolerance: 0.5,
+      // Absolute, in kilometres - `tolerance` in js/answerCheck.js is a
+      // distance from the answer, not a fraction of it. This was 0.5, written
+      // as though it meant fifty percent, and it meant half a kilometre: a
+      // question that asks "roughly how far apart" demanded a million to within
+      // a half. 150,000 is fifteen percent, which accepts a student who carries
+      // the initial 1,500 km through the arithmetic and gets 986,500, and still
+      // rejects anyone out by a factor of two.
+      tolerance: 150000,
       because: `About a million kilometres — ten times as long gives about ten
                 times the separation, because the growth is proportional to
                 time. Hold on to that number. In the three-body case you are
@@ -464,7 +471,14 @@ const BUTTERFLY_EFFECT = {
       prompt: 'Using your τ, roughly how long is that, in simulated seconds?',
       unit: 'simulated seconds',
       answer: 79,
-      tolerance: 0.35,
+      // Absolute, in simulated seconds, and sized to the measurement it is
+      // built on. The step says "using your tau", and the lesson's own rubric
+      // puts tau anywhere between 6 and 8 seconds; 11.5 tau is therefore
+      // anywhere between 69 and 92. This was 0.35 - written as though it were
+      // thirty-five percent - which accepted 78.65 to 79.35 and failed almost
+      // every student who did exactly what the step asked. Thirteen covers the
+      // whole of the stated band, 11.5 x 6 = 69 through 11.5 x 8 = 92.
+      tolerance: 13,
       because: `About 11.5 τ, so with τ ≈ 6.9 s that is roughly 80 simulated
                 seconds — three rotations of the triangle. Everything you knew
                 about where the stars would be is gone in three turns, from a

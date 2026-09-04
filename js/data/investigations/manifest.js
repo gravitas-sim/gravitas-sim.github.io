@@ -162,4 +162,17 @@ export const MANIFEST = [
     gradedCount: 13,
     objectiveCount: 5,
   },
+  {
+    id: 'when-orbits-lock',
+    title: 'When Orbits Lock',
+    subtitle: 'A ratio is a hint. Find out what counts as proof',
+    duration: '55-70 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Three of Jupiter’s moons keep time with each other, Pluto crosses Neptune’s orbit and has never come near it, and thousands of asteroids sit sixty degrees ahead of Jupiter and stay there. All three are the same phenomenon, and none of them is explained by the thing everybody quotes: the ratio of the periods. You will measure the ratios, find that the tidiest one in the system belongs to a moon in no resonance at all, and then measure the quantity that actually settles it — an angle that either swings or goes round.',
+    thumbnail: 'images/scenarios/galilean-resonance.webp',
+    stepCount: 33,
+    gradedCount: 16,
+    objectiveCount: 6,
+  },
 ];

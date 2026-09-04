@@ -359,6 +359,57 @@ async function checkMarkerPlacement(files) {
  *
  * @returns {Promise<Array<string>>} Human-readable problems
  */
+/**
+ * The counts in the citation metadata.
+ *
+ * CITATION.cff and .zenodo.json each carry a prose abstract that states how
+ * many scenarios and investigations Gravitas ships. Neither is markdown, so
+ * neither can carry a `<!--fact:-->` marker, and for that reason neither was
+ * checked by anything: both sat at "43 configurable scenarios" and "six guided
+ * investigations" while the real figures reached 53 and 12.
+ *
+ * These two files are the ones a citation is minted from, so a stale number in
+ * them outlives the repository. Rather than invent a marker syntax for YAML and
+ * JSON, this reads the two counts straight out of the prose and compares them.
+ * The abstracts must therefore write both as digits; a spelled-out number is
+ * reported as missing, which is the failure a reader would want.
+ *
+ * @param {Object} facts - The computed facts
+ * @returns {Promise<Array<string>>} Problems, empty when the metadata agrees
+ */
+async function checkCitationMetadata(facts) {
+  const problems = [];
+  const wanted = [
+    ['scenarios', /(\d+)\s+configurable scenarios/, 'configurable scenarios'],
+    [
+      'investigations',
+      /(\d+)\s+guided investigations/,
+      'guided investigations',
+    ],
+  ];
+  for (const file of ['CITATION.cff', '.zenodo.json']) {
+    const path = join(REPO, file);
+    if (!existsSync(path)) continue;
+    // Newline-insensitive: the CFF abstract is a folded block and wraps.
+    const text = (await readFile(path, 'utf8')).replace(/\s+/g, ' ');
+    for (const [key, pattern, label] of wanted) {
+      const found = pattern.exec(text);
+      if (!found) {
+        problems.push(
+          `${file}: no "<n> ${label}" count found; write the number as digits so it can be checked`
+        );
+        continue;
+      }
+      if (Number(found[1]) !== Number(facts[key])) {
+        problems.push(
+          `${file}: "${label}" says ${found[1]}, the source says ${facts[key]}`
+        );
+      }
+    }
+  }
+  return problems;
+}
+
 async function checkSpecIndex() {
   const readme = join(REPO, 'e2e', 'README.md');
   if (!existsSync(readme)) return [];
@@ -500,6 +551,7 @@ async function main() {
     ...(await checkReferences(present)),
     ...(await checkMarkerPlacement(present)),
     ...(await checkSpecIndex()),
+    ...(await checkCitationMetadata(facts)),
   ];
   const stale = results.flatMap(r => r.stale.map(s => ({ ...s, doc: r.path })));
   const unknown = results.flatMap(r =>

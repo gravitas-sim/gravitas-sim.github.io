@@ -158,6 +158,7 @@ const TRANSLITERATE = new Map(
     '∫': 'integral',
     θ: 'theta',
     λ: 'lambda',
+    ϖ: 'varpi',
     σ: 'sigma',
     ω: 'omega',
     Ω: 'Omega',

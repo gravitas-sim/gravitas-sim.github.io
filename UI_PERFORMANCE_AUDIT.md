@@ -268,7 +268,7 @@ whether it happened are both part of the record._
   **Done.** Lessons are one module each under `js/data/investigations/`, loaded
   on demand, with a generated `manifest.js` carrying the card-level fields so
   the browser can draw the grid without loading any lesson text. There are now
-  <!--fact:investigations-->11<!--/fact--> of them.
+  <!--fact:investigations-->12<!--/fact--> of them.
 - ~~**Retire the dead scenario-browser CSS** in `styles.css`.~~ **Done.** No
   `scenario-browser` rules remain in the stylesheets.
 - ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag

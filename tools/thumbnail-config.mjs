@@ -75,6 +75,28 @@ export const CAPTURE = {
   // Two turns of the triangle, which is long enough for the trails to draw the
   // rotation and short enough that the configuration is still a triangle. Any
   // later and the thumbnail shows the aftermath rather than the experiment.
+  // The four resonance scenarios. Each runs at a speed chosen for the lesson
+  // rather than for a still frame, so each overrides it: what a thumbnail needs
+  // is enough trail to show the shape of the orbits and not so much that the
+  // picture is a solid disc of track.
+  //
+  // The Jovian pair is framed on Callisto, the outermost of the four moons; the
+  // detuned version is deliberately the same picture, because the difference
+  // between them is a resonant angle and not anything you can see.
+  'Galilean Resonance': { settle: 22, speed: 60, zoom: 2.8, trail: 700 },
+  'Broken Laplace Resonance': {
+    settle: 22,
+    speed: 60,
+    zoom: 2.8,
+    trail: 700,
+  },
+  // Long enough for Pluto's eccentric orbit to draw most of a lap and cross
+  // Neptune's circle, which is the whole picture.
+  'Pluto and Neptune': { settle: 40, speed: 2000, zoom: 0.085, trail: 1400 },
+  // Two Jupiter years. The Trojans barely move relative to Jupiter, so the
+  // trails are one shared circle with the bodies spaced round it - which is
+  // exactly what the scenario is about.
+  'Jupiter Trojans': { settle: 30, speed: 40, zoom: 0.55, trail: 900 },
   'Three-Body Sensitivity Lab': { settle: 48, trail: 150, zoom: 3.4 },
   'Binary Pair': { settle: 20, speed: 12, zoom: 1.3, trail: 1400 },
   // Framed on the inner pair rather than on the outermost planet, which sits

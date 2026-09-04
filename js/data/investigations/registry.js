@@ -75,6 +75,7 @@ const LOADERS = {
   'missing-mass': () => import('./missing-mass.js'),
   tides: () => import('./tides.js'),
   'butterfly-effect': () => import('./butterfly-effect.js'),
+  'when-orbits-lock': () => import('./when-orbits-lock.js'),
 };
 
 /**
@@ -100,6 +101,7 @@ const TRANSLATIONS = {
     'missing-mass': () => import('./es/missing-mass.js'),
     tides: () => import('./es/tides.js'),
     'butterfly-effect': () => import('./es/butterfly-effect.js'),
+    'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
   },
 };
 

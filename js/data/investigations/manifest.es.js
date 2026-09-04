@@ -166,4 +166,17 @@ export const MANIFEST = [
     gradedCount: 13,
     objectiveCount: 5,
   },
+  {
+    id: 'when-orbits-lock',
+    title: 'Cuando las órbitas se enganchan',
+    subtitle: 'Una razón es una pista. Descubre qué cuenta como prueba',
+    duration: '55-70 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
+    thumbnail: 'images/scenarios/galilean-resonance.webp',
+    stepCount: 33,
+    gradedCount: 16,
+    objectiveCount: 6,
+  },
 ];

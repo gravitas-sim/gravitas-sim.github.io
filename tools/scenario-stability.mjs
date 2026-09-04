@@ -68,6 +68,14 @@ const DEFAULT_SCENARIOS = [
   'Star Cluster',
   'GW150914',
   'Kuiper Belt',
+  // The three resonance scenarios. They belong here more than most: each one
+  // asks a student to conclude something from an angle measured over hundreds
+  // of orbits, so a slow drift in a semi-major axis that no other scenario
+  // would notice is exactly what would spoil them. The fourth, Broken Laplace
+  // Resonance, is deliberately unstable and is left out.
+  'Galilean Resonance',
+  'Pluto and Neptune',
+  'Jupiter Trojans',
 ];
 
 const pad = (s, n) => String(s).padEnd(n);

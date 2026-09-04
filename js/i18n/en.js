@@ -274,6 +274,99 @@ export const EN = {
   'rail.toggleRadialVelocity': 'Radial Velocity',
   'rail.toggleRotationCurve': 'Rotation Curve',
   // --- The divergence instrument ---------------------------------------------
+  // --- The resonance instruments (js/resonanceWidgets.js) --------------------
+  'resW.periods.title': 'Measured periods and the ratios between them',
+  'resW.periods.note':
+    'Periods are measured from the orbits themselves and averaged over the whole run, not read from a table. The nearest small-integer ratio is found by continued fractions, which will find one for any number at all — so the last figure on each row, how much closer than chance the ratio is, matters more than the ratio.',
+  'resW.periods.axis': 'orbital period, logarithmic',
+  'resW.periods.scaled': 'scale model: distances ×100, clock ×1000',
+  'resW.periods.true': 'true scale',
+  'resW.angle.title': 'The resonant angle',
+  'resW.angle.note':
+    'Top: the angle wrapped into one turn. If it visits every value the bodies take up every relative geometry in turn and there is no resonance. Bottom: the same angle unwrapped, where a circulation is a ramp and a libration is a wave. The verdict is made from the lower plot, and it is allowed to be "cannot tell yet".',
+  'resW.conj.title': 'Where the two bodies line up',
+  'resW.conj.note':
+    'Every conjunction in the run, plotted twice: where it happened in the sky, and where the outer body was on its own orbit at the time. A resonance shows up as a clump in the second dial — and if that clump sits at 180°, every line-up happens at the outer body’s aphelion.',
+  'resW.conj.sky': 'longitude in the sky',
+  'resW.conj.orbit': 'position on the outer orbit',
+  'resW.frame.title': 'The rotating frame',
+  'resW.frame.note':
+    'The same system seen from a frame turning with the secondary, which is fixed at the right and one unit out. L4 and L5 are the two triangular equilibrium points. In this frame a co-orbital body draws a closed loop around one of them; a body that is not co-orbital goes right round.',
+  'resW.plot.wrapped': 'angle, wrapped into 0–360°',
+  'resW.plot.unwrapped': 'the same angle, unwrapped',
+  'resW.empty.no-world': 'no system loaded',
+  'resW.empty.warming-up': 'watching — let the simulation run',
+  'resW.empty.no-argument':
+    'this system has no pair for the requested argument',
+  'resW.empty.no-pair': 'the named bodies are not both here',
+  'resW.empty.no-secondary': 'no secondary body to build a rotating frame on',
+  'resW.empty.no-conjunctions': 'no line-up has happened yet',
+  'resW.row.status': 'Status',
+  'resW.row.argument': 'Argument',
+  'resW.row.ratio': 'P({a}) / P({b})',
+  'resW.row.watched': 'Watched for',
+  'resW.row.verdict': 'Verdict',
+  'resW.row.centre': 'Libration centre',
+  'resW.row.amplitude': 'Amplitude',
+  'resW.row.libration': 'Libration period',
+  'resW.row.circulation': 'Circulation period',
+  'resW.row.needed': 'What is missing',
+  'resW.row.sampling': 'Sampling',
+  'resW.row.pair': 'Pair',
+  'resW.row.count': 'Conjunctions seen',
+  'resW.row.skySpread': 'Spread in the sky',
+  'resW.row.orbitSpread': 'Spread on the outer orbit',
+  'resW.row.where': 'Which means',
+  'resW.row.frame': 'Frame turns with',
+  'resW.value.periodDays': '{days} days',
+  'resW.value.periodYears': '{years} years',
+  'resW.value.ratio':
+    '{ratio} — nearest {p}:{q}, off by {off}% ({chance}× closer than chance)',
+  'resW.value.watched': '{cycles} conjunction cycles ({days} days)',
+  'resW.value.amplitudeBound': 'at least ±{amp}° — it has not turned back yet',
+  'resW.value.librationPeriod':
+    '{days} days = {cycles} conjunction cycles ({certainty})',
+  'resW.value.measured': 'measured',
+  'resW.value.provisional': 'from one swing, provisional',
+  'resW.value.librationUnresolved':
+    'longer than this run — any circulation would take over {cycles} conjunction cycles',
+  'resW.value.circulationPeriod': '{days} days = {cycles} conjunction cycles',
+  'resW.value.needed':
+    'the angle has moved {drift}° so far; that is a libration of at least that width or a circulation taking {cycles} conjunction cycles, and nothing here separates them',
+  'resW.value.sampling': '{n} samples, one every {every} days',
+  'resW.value.spread': 'centred on {mean}°, spread ±{spread}°',
+  'resW.value.tadpole': '{kind} about {centre}°, amplitude ±{amp}°',
+  'resW.verdict.none': 'nothing measured yet',
+  'resW.verdict.circulation':
+    'CIRCULATION — the angle runs through every value, so there is no resonance',
+  'resW.verdict.libration':
+    'LIBRATION — the angle turns back rather than going round: the bodies are locked',
+  'resW.verdict.stationary':
+    'EQUILIBRIUM — the angle has not moved at all: this body is sitting at a Lagrange point',
+  'resW.verdict.librationProvisional':
+    'LIBRATION — the angle turned back and returned to where it began; one more reversal will confirm the period',
+  'resW.inconclusive.one-reversal':
+    'INCONCLUSIVE — it has turned back once, which a slowly circulating angle with a wobble on it also does',
+  'resW.inconclusive.drifting-centre':
+    'INCONCLUSIVE — it swings, but each swing ends further on than the last, so the centre is moving',
+  'resW.inconclusive.confined':
+    'INCONCLUSIVE — confined so far, but it has not turned back yet, and a slow enough circulation would look the same',
+  'resW.inconclusive.ambiguous-drift':
+    'INCONCLUSIVE — this run cannot tell a wide libration from a slow circulation',
+  'resW.inconclusive.too-few-samples': 'INCONCLUSIVE — not enough samples yet',
+  'resW.inconclusive.too-short':
+    'INCONCLUSIVE — the run is shorter than twenty conjunction cycles',
+  'resW.inconclusive.undersampled':
+    'INCONCLUSIVE — the angle is moving too fast between samples to follow',
+  'resW.inconclusive.no-window': 'INCONCLUSIVE — no time has passed',
+  'resW.where.aphelion':
+    'every line-up happens near the outer body’s aphelion, at its furthest',
+  'resW.where.perihelion':
+    'every line-up happens near the outer body’s perihelion, at its closest',
+  'resW.where.side': 'the line-ups cluster, but away from either apse',
+  'resW.where.scattered': 'the line-ups are spread all round the orbit',
+  'resW.kind.tadpole': 'tadpole',
+  'resW.kind.horseshoe': 'horseshoe',
   'chaosW.title': 'How far apart the two runs are',
   'chaosW.note':
     'The distance between Run A and Run B, added up over every body and matched by identity, at each moment of simulated time. The same data on two axes: linear above, logarithmic below. A straight line on the lower plot is exponential growth.',
@@ -846,6 +939,21 @@ export const EN = {
     'Three-Body Sensitivity Lab: the same start, twice',
   'scenario.Three-Body Sensitivity Lab.summary':
     'Three six-solar-mass stars at the corners of an equilateral triangle, rotating rigidly about their common centre. This is an exact solution of the three-body problem, found by Lagrange in 1772, and for three equal masses it is unstable: the triangle holds for a few turns and then comes apart. Built for one experiment - run it twice from starts that differ by fifteen hundred kilometres in a system a hundred and thirty million kilometres across, and watch how long the two runs stay together.',
+  'scenario.Galilean Resonance.title': 'Galilean Resonance: the Laplace lock',
+  'scenario.Galilean Resonance.summary':
+    'Io, Europa and Ganymede on the 4:2:1 chain Laplace explained in 1805, with Callisto outside it for contrast. The periods are not exactly 4:2:1 — Europa takes 0.37% longer than two Io years — and that near miss is the point: what holds them is the Laplace argument, which stays near 180 degrees instead of running through every value, so the three are never all in conjunction. Callisto sits within 0.03% of 7:3 with Ganymede and is in no resonance at all. A scale model, 100 times life size.',
+  'scenario.Broken Laplace Resonance.title':
+    'Broken Laplace Resonance: one percent out',
+  'scenario.Broken Laplace Resonance.summary':
+    'The same four moons with one number changed: Europa starts one percent further from Jupiter. That is a hundred times wider than the resonance can hold, and the lock fails — the Laplace argument stops swinging about 180 degrees and starts going all the way round, once every forty-six Io orbits. Run it beside Galilean Resonance and the difference between a system that is locked and one that merely has convenient periods is on screen in under a minute.',
+  'scenario.Pluto and Neptune.title':
+    'Pluto and Neptune: the 3:2 that protects',
+  'scenario.Pluto and Neptune.summary':
+    "Pluto's orbit crosses Neptune's, and they have never come close. The 3:2 resonance is why: Pluto goes round twice for every three Neptune years, and the resonant argument librates about 180 degrees rather than circulating — so every conjunction happens near Pluto's aphelion, far outside Neptune's reach. A third body runs almost the same orbit from outside the resonance; watch what becomes of it. True scale; one second is about 270 years.",
+  'scenario.Jupiter Trojans.title':
+    'Jupiter Trojans: the 1:1 co-orbital resonance',
+  'scenario.Jupiter Trojans.summary':
+    "Two of the five Lagrange points are places a body can sit still relative to Jupiter forever, and thousands of asteroids do. A probe placed exactly at L4 does not move in Jupiter's rotating frame; the Trojan 617 Patroclus loops around L5 once every twelve and a half Jupiter years. A third probe starts one degree from L3 — an equilibrium too, and unstable — and leaves. The fourth runs a wider ordinary orbit and is in no resonance at all.",
   'scenario.Binary Pair.title': 'Binary Pair: two stars, one balance point',
   'scenario.Binary Pair.summary':
     'Two stars of two solar masses each, four AU apart, circling their common center of mass once every four years. Neither one is stationary and neither one is orbiting the other: both go round the same point in between them. Watch the trails and the balance point gives itself away.',
@@ -868,7 +976,7 @@ export const EN = {
   'scenario.Exoplanet Characterization Lab.title':
     'Exoplanet Characterization Lab',
   'scenario.Exoplanet Characterization Lab.summary':
-    'HD 209458 again, but with the star free to move. In the Transit Lab the star is pinned so the light curve stays centered; here both bodies orbit their common center of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 metres per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet a year before anyone saw it transit.',
+    'HD 209458 again, but with the star free to move. In the Transit Lab it is pinned so the light curve stays centred; here both bodies orbit their common centre of mass, which is what the radial-velocity and astrometry instruments need in order to measure anything. The star circles a point 2.7 millionths of an AU away at 84 metres per second: far too small to see and easily large enough to detect. Open Radial Velocity and watch the wobble that found this planet.',
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
@@ -1008,6 +1116,9 @@ export const EN = {
   'tag.chaos.label': 'Chaos & Encounters',
   'tag.chaos.description':
     'Close passes, slingshots, ejections, and systems whose outcome depends sensitively on where they started.',
+  'tag.resonance.label': 'Orbital Resonance',
+  'tag.resonance.description':
+    'Bodies whose periods lock into a small whole-number ratio, and the librating angle that shows the lock is real.',
   'tag.stellar-evolution.label': 'Stellar Evolution',
   'tag.stellar-evolution.description':
     'What stars leave behind: white dwarfs, neutron stars, remnants and the environments that make them.',
@@ -1770,6 +1881,14 @@ export const EN = {
   'inv.step.kind.explore': 'explore',
   'inv.step.kind.measure': 'measure',
   'inv.step.kind.question': 'question',
+  // Kepler's Laws steps 5 and 10 are their own step types - an ellipse the
+  // student reshapes and a set of swept-area wedges - and neither had a badge,
+  // so the first lesson in the catalogue printed the literal text
+  // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
+  // so they take the word the other hands-on screens already use rather than
+  // introducing two more for a reader to learn.
+  'inv.step.kind.ellipse': 'explore',
+  'inv.step.kind.wedges': 'explore',
   'inv.action.restart': 'Restart',
   'inv.action.restart.hint': 'Clear every answer and start this lesson again',
   'inv.action.back': 'Back',

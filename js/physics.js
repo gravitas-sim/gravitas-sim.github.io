@@ -85,6 +85,23 @@ const NEUTRON_STAR_RADIUS = 3;
 const WHITE_DWARF_RADIUS = 8;
 const DEBRIS_RADIUS = 2;
 const MAX_STAR_MASS_BEFORE_BH = 20.0;
+
+/**
+ * The mass at which a star collapses to a black hole, in solar masses.
+ *
+ * A setting rather than the bare constant, because `max_star_mass_before_bh`
+ * has been in DEFAULT_SETTINGS and written by two scenarios since before this
+ * function existed, and nothing read it: the threshold was always the literal
+ * above, whatever a scenario asked for. Both scenarios happen to ask for 20,
+ * which is why nobody noticed, and which is also why wiring it up changes no
+ * present behaviour.
+ *
+ * @returns {number} The threshold in force
+ */
+const maxStarMassBeforeBH = () => {
+  const v = physicsSettings.max_star_mass_before_bh;
+  return Number.isFinite(v) && v > 0 ? v : MAX_STAR_MASS_BEFORE_BH;
+};
 // Disk speed that maps to beta ~ 1 for Doppler beaming. Chosen so a typical
 // inner-disk particle lands around beta 0.3-0.5, matching the asymmetry seen
 // in real images without needing physical velocity units.
@@ -6024,7 +6041,7 @@ const handle_star_merging = stars_list => {
             }
           } else if (has_regular_star) {
             // Regular star merging
-            if (new_mass_in_suns > MAX_STAR_MASS_BEFORE_BH) {
+            if (new_mass_in_suns > maxStarMassBeforeBH()) {
               // Exceeds maximum star mass -> black hole
               new_object = new BlackHole(new_pos, new_mass, new_vel, true);
               bh_list.push(new_object);
@@ -6371,7 +6388,7 @@ const check_stellar_collapse = () => {
     if (!star.alive) continue;
 
     const massInSuns = star.mass / SOLAR_MASS_UNIT;
-    if (massInSuns > MAX_STAR_MASS_BEFORE_BH) {
+    if (massInSuns > maxStarMassBeforeBH()) {
       // Convert star to black hole - mark as newly created for proper accretion disk initialization
       const new_bh = new BlackHole(star.pos, star.mass, star.vel, true);
       bh_list.push(new_bh);

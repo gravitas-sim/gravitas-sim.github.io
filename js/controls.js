@@ -669,10 +669,20 @@ function setupShortcuts() {
 function adjustSpeed(direction) {
   const steps = [0.1, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 5, 8];
   const current = SETTINGS.sim_speed || 1;
-  let i = steps.findIndex(s => Math.abs(s - current) < 1e-6);
-  if (i === -1) i = steps.findIndex(s => s > current);
-  if (i === -1) i = steps.length - 1;
-  const next = steps[Math.max(0, Math.min(steps.length - 1, i + direction))];
+  let next;
+  if (current > steps[steps.length - 1]) {
+    // Above the table. Three scenarios live up here - the resonance ones run
+    // between 150 and 7,500 - and snapping them to 8 because that is the last
+    // entry would take a system whose point is that it advances twenty
+    // thousand years a minute and stop it dead. Scale instead, so the keys
+    // still mean "faster" and "slower" rather than "abandon this scenario".
+    next = direction > 0 ? current * 2 : Math.max(steps[0], current / 2);
+  } else {
+    let i = steps.findIndex(s => Math.abs(s - current) < 1e-6);
+    if (i === -1) i = steps.findIndex(s => s > current);
+    if (i === -1) i = steps.length - 1;
+    next = steps[Math.max(0, Math.min(steps.length - 1, i + direction))];
+  }
   SETTINGS.sim_speed = next;
   window.dispatchEvent(
     new CustomEvent('gravitasSpeedChanged', { detail: { speed: next } })

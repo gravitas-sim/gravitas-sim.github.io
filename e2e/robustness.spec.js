@@ -70,10 +70,123 @@ test.describe('heavy scenarios stay finite', () => {
     expect(after.count).toBeLessThanOrEqual(before.count);
   });
 
-  test('the simulation survives every scenario in the catalog booting', async ({
+  test('no scenario places two bodies at exactly the same point', async ({
+    page,
+    app,
+  }, testInfo) => {
+    // Two bodies at identical coordinates are not merely ugly. The contact test
+    // in js/physics.js skips a pair whose separation is zero, so nothing ever
+    // pushes them apart: they stay superimposed for the life of the scenario
+    // and draw as a single body.
+    //
+    // Two placement modes shipped with this. Multi-Ring clamped every ring to
+    // the central body's keep-out radius with a Math.max, collapsing the inner
+    // rings onto one circle - and since it lays twenty objects per ring at
+    // repeating angles, object i and object i+20 coincided exactly. Four
+    // scenarios carried twenty superimposed pairs each. Grid centred itself on
+    // the origin, which is precisely where the central body is pinned, so one
+    // cell always landed inside it.
+    await app.boot();
+    const keys = await page.evaluate(async () => {
+      const info = await import('/js/data/scenarioInfo.js');
+      return Object.keys(info.SCENARIO_INFO);
+    });
+    testInfo.setTimeout(Math.max(90_000, keys.length * 4_000));
+
+    const offenders = [];
+    for (const key of keys) {
+      const found = await page.evaluate(async k => {
+        const ui = await import('/js/ui.js');
+        const p = await import('/js/physics.js');
+        ui.SETTINGS.preset_scenario = k;
+        ui.initialize_simulation({ seed: 'coincident-sweep' });
+        const lists = [
+          'bh_list',
+          'stars',
+          'planets',
+          'gas_giants',
+          'asteroids',
+          'comets',
+          'neutron_stars',
+          'white_dwarfs',
+          'galaxies',
+        ];
+        const bodies = lists
+          .flatMap(x => p[x] || [])
+          .filter(b => b && b.alive !== false);
+        const seen = new Map();
+        const dups = [];
+        for (const b of bodies) {
+          // Exact equality, not proximity: a crowded scenario is allowed to
+          // start with bodies touching, and several deliberately do. What no
+          // scenario may do is start two of them at the same point.
+          const at = `${b.pos.x},${b.pos.y}`;
+          if (seen.has(at)) dups.push(`${seen.get(at)} == ${b.name}`);
+          else seen.set(at, b.name);
+        }
+        return dups.slice(0, 3);
+      }, key);
+      if (found.length) offenders.push(`${key}: ${found.join('; ')}`);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  test('a scenario that promises a population builds one', async ({
     page,
     app,
   }) => {
+    // Kessler Cascade's card promised "hundreds of micro-stars orbiting
+    // chaotically" and built a single black hole in an empty sky, because the
+    // three settings its preset wrote were read by nothing. Slingshot Gauntlet
+    // promised "a fast-moving star fired through a black hole obstacle course"
+    // and placed every body at rest. Neither failed loudly; both simply were
+    // not what the gallery said they were.
+    //
+    // Body counts and starting speeds are the cheapest observable that would
+    // have caught either.
+    await app.boot();
+    const got = await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const p = await import('/js/physics.js');
+      const read = key => {
+        ui.SETTINGS.preset_scenario = key;
+        ui.initialize_simulation({ seed: 'promise-check' });
+        const lists = [
+          'bh_list',
+          'stars',
+          'planets',
+          'gas_giants',
+          'asteroids',
+        ];
+        const bodies = lists
+          .flatMap(x => p[x] || [])
+          .filter(b => b && b.alive !== false);
+        const movers = bodies.filter(b => !p.bh_list.includes(b));
+        return {
+          bodies: bodies.length,
+          fastest: Math.max(
+            0,
+            ...movers.map(b => Math.hypot(b.vel.x, b.vel.y))
+          ),
+        };
+      };
+      return {
+        kessler: read('Kessler Cascade'),
+        slingshot: read('Slingshot Gauntlet'),
+      };
+    });
+
+    // Hundreds, as advertised - not one black hole.
+    expect(got.kessler.bodies).toBeGreaterThan(200);
+    expect(got.kessler.fastest).toBeGreaterThan(0);
+    // Something is actually fired.
+    expect(got.slingshot.fastest).toBeGreaterThan(1);
+  });
+
+  test('the simulation survives every scenario in the catalog booting', async ({
+    page,
+    app,
+  }, testInfo) => {
     // Not a deep run: each scenario is built, stepped briefly and checked for
     // non-finite state. That is enough to catch a scenario whose initial
     // conditions are broken, which is a whole class of bug that otherwise only
@@ -85,6 +198,13 @@ test.describe('heavy scenarios stay finite', () => {
       return Object.keys(info.SCENARIO_INFO);
     });
     expect(keys.length).toBeGreaterThan(30);
+
+    // The budget grows with the catalogue rather than being a fixed number,
+    // because the work does: one build, one round trip and 120 steps per
+    // scenario. At a fixed 90 seconds this test passed at 49 scenarios and
+    // began timing out intermittently at 53, which is a slow failure to
+    // diagnose and tells you nothing about the scenarios.
+    testInfo.setTimeout(Math.max(90_000, keys.length * 4_000));
 
     const broken = [];
     for (const key of keys) {

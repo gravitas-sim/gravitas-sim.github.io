@@ -15,6 +15,7 @@ import {
 } from '../js/i18n/index.js';
 import { EN } from '../js/i18n/en.js';
 import { ES } from '../js/i18n/es.js';
+import { INVESTIGATIONS } from '../js/data/investigations.js';
 import {
   scenarioTitle,
   scenarioSummary,
@@ -292,6 +293,60 @@ describe('scenario prose', () => {
       expect(SCENARIO_TAGS[id].description.length).toBeGreaterThan(10);
       expect(Object.keys(ES)).toContain(`tag.${id}.label`);
     }
+  });
+
+  test('every step type a lesson uses has a badge in every language', () => {
+    // js/investigations.js renders each step's kind with
+    // t(`inv.step.kind.${step.type}`), and t() falls back to printing the key
+    // itself. Two step types unique to Kepler's Laws - the reshapeable ellipse
+    // and the swept-area wedges - had no entry, so the first lesson in the
+    // catalogue displayed the literal text "inv.step.kind.ellipse" as a badge
+    // and logged an i18n warning to every reader's console.
+    const types = [
+      ...new Set(INVESTIGATIONS.flatMap(inv => inv.steps.map(s => s.type))),
+    ];
+    expect(types.length).toBeGreaterThan(4);
+    const missing = [];
+    for (const [locale, catalogue] of [
+      ['en', EN],
+      ['es', ES],
+    ]) {
+      for (const type of types) {
+        if (!(`inv.step.kind.${type}` in catalogue)) {
+          missing.push(`${locale}: inv.step.kind.${type}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  test('no scenario card overflows its limits in any language', () => {
+    // js/ui.js validates the catalogue at start-up against a 500-character
+    // summary and a 100-character title, and warns to the console when a
+    // scenario breaks either. It validates SCENARIO_INFO, which is English, so
+    // the limits were only ever enforced in one language: five Spanish
+    // summaries were over, the longest by a hundred characters, and the cards
+    // that carry them are the same size whatever the reader's language.
+    //
+    // English was breaking it too - Exoplanet Characterization Lab shipped at
+    // 506 characters, so every visitor's console carried a validation warning
+    // on every load.
+    const problems = [];
+    for (const [locale, catalogue] of [
+      ['en', EN],
+      ['es', ES],
+    ]) {
+      for (const [key, value] of Object.entries(catalogue)) {
+        if (typeof value !== 'string') continue;
+        if (/^scenario\..*\.summary$/.test(key) && value.length > 500) {
+          problems.push(`${locale} ${key}: ${value.length} chars (max 500)`);
+        }
+        if (/^scenario\..*\.title$/.test(key) && value.length > 100) {
+          problems.push(`${locale} ${key}: ${value.length} chars (max 100)`);
+        }
+      }
+    }
+    expect(problems).toEqual([]);
   });
 
   test('a Spanish title is not simply the English one copied over', async () => {

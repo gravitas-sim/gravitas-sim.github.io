@@ -32,6 +32,7 @@ import { EXOPLANET_WIDGETS } from './exoplanetWidgets.js';
 import { TIDAL_WIDGETS } from './tidalWidgets.js';
 import { DARK_MATTER_WIDGETS } from './darkMatterWidgets.js';
 import { CHAOS_WIDGETS } from './chaosWidgets.js';
+import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
 
 const WIDGETS = [
   ...TRANSIT_WIDGETS,
@@ -43,6 +44,7 @@ const WIDGETS = [
   ...TIDAL_WIDGETS,
   ...DARK_MATTER_WIDGETS,
   ...CHAOS_WIDGETS,
+  ...RESONANCE_WIDGETS,
 ];
 
 /**
