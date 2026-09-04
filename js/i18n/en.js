@@ -226,12 +226,13 @@ export const EN = {
   'rail.railLearnBody.hint.2':
     'Teaching guides, answer keys and a curriculum map for instructors',
   'rail.railLearnBody.hint.3': 'Open the Gravitas user manual (PDF)',
-  'rail.objectType.hint': 'Click to change what type of object you insert',
+  'rail.objectType.hint':
+    'Choose what to add, then click the canvas to place it',
   'rail.mainControls.label': 'Simulation controls',
   'rail.railToolsBody.label': 'Measurement tools',
   'rail.slowDown.label': 'Decrease speed',
   'rail.speedUp.label': 'Increase speed',
-  'rail.objectType.label': 'Change object insertion type',
+  'rail.objectType.label': 'Choose an object to add',
   'rail.railScenario': 'Scenario',
   'rail.loadScenario': 'Load Scenario',
   'rail.investigations': '🎓 Investigations',
@@ -546,7 +547,10 @@ export const EN = {
   'rail.railLearnBody': 'How the model works',
   'rail.railLearnBody.2': 'Instructor resources',
   'rail.railLearnBody.3': 'User manual (PDF)',
-  'rail.objectType': '⭐ Add Stars',
+  'rail.objectType': '⭐ Add object',
+  'rail.objectType.choose': 'Add object',
+  'rail.objectType.placing': 'Click to place · Esc',
+  'rail.objectType.stop': 'Stop adding',
 
   // --- readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimize',
@@ -840,7 +844,184 @@ export const EN = {
   'settings.label.lensingQuality': 'Lensing Quality',
   'settings.label.diskDoppler': 'Accretion Disk Doppler Beaming',
   'settings.label.numBlackHoles': 'Number of Black Holes',
-  'settings.label.bhMass': 'Default BH Mass (M\\u2609)',
+  // --- Galaxy gravity: the halo, MOND, and being careful about both ----------
+  // --- dm-mond: the same curve, two explanations -----------------------------
+  'dmW.mondTitle': 'The same curve, two explanations',
+  'dmW.mondNote':
+    'The halo fit and MOND, scored against the same measurements. Switch between them, and adjust the disc until each one matches. Watch what each of them needed to be told.',
+  'dmW.mondModel': 'Explanation',
+  'dmW.mondHaloOption': 'Dark matter halo',
+  'dmW.mondMondOption': 'MOND',
+  'dmW.mondPresetHalo': 'Best halo fit',
+  'dmW.mondPresetMond': 'Best MOND fit',
+  'dmW.mondPresetHaloNote':
+    'The decomposition that generated this curve: a 3.3e10 disc and a halo whose flat speed and core radius were both adjusted until it matched. Three fitted numbers, and an exact match.',
+  'dmW.mondPresetMondNote':
+    'MOND with the disc it prefers: 2.1e10, about two thirds the halo fit’s stars, and no halo at all. One fitted number, and a match inside the error bars.',
+  'dmW.mondShowing': 'Showing',
+  'dmW.mondHaloRow': 'Halo fit',
+  'dmW.mondMondRow': 'MOND fit',
+  'dmW.mondThreeFitted': '3 fitted numbers',
+  'dmW.mondOneFitted': '1 fitted number',
+  'dmW.mondPredictedRow': 'MOND’s flat speed from this disc',
+  'dmW.mondVerdict': 'What this shows',
+  'dmW.mondInsideErrors': 'inside the error bars',
+  'dmW.mondClose': 'close',
+  'dmW.mondOff': 'off',
+  'dmW.mondBothFit':
+    'This explanation reproduces the measurements. So does the other one — at its own disc mass, and with a different number of fitted parameters. The curve alone does not decide between them.',
+  'dmW.mondKeepAdjusting':
+    'Not matching yet. Adjust the disc until this explanation reproduces the points, then try the other one.',
+  'dmW.mondSynthetic': 'synthetic curve, NGC 3198 parameters',
+  // --- The guided tour -------------------------------------------------------
+  // Sixteen steps. Each is here because a reader who has not been told will not
+  // guess it; anything discoverable by looking has been left out.
+  'tutorial.stepCount': 'Step {n} of {total}',
+  'tutorial.next': 'Next',
+  'tutorial.finish': 'Finish',
+
+  'tutorial.welcome.title': 'Welcome to Gravitas',
+  'tutorial.welcome.body':
+    "A sandbox for gravity, and a set of instruments for measuring it. Every body on screen is integrated from Newton's law of gravitation in real time: nothing here is on rails, pre-animated or scripted. If two stars merge, it is because their orbits actually brought them together.",
+  'tutorial.welcome.tip':
+    'This tour is sixteen steps and takes about three minutes. Use ← and → to move through it, or Escape to leave at any point.',
+
+  'tutorial.choose.title': 'Choose what to add',
+  'tutorial.choose.body':
+    'This button opens a list of the eight kinds of object you can place: star, rocky planet, gas giant, asteroid, comet, white dwarf, neutron star and black hole. Each has its own mass range and its own behaviour. Choosing one <strong>arms</strong> the canvas — the button lights up and the cursor becomes a crosshair.',
+  'tutorial.choose.tip':
+    'Nothing is placed until you arm it, which is what stops a misjudged click on empty sky from adding a star you did not want. Press Escape, or the button again, to disarm.',
+
+  'tutorial.place.title': 'Place it by dragging',
+  'tutorial.place.body':
+    'With a type chosen, press on empty space and drag before releasing. The direction and length of the drag set the launch velocity, so a short drag drops an object nearly at rest and a long one flings it away. A dashed line previews the path it will take.',
+  'tutorial.place.tip':
+    'Hold Shift while dragging to snap to a circular orbit around the nearest dominant mass. On a touch screen, press and hold first — a plain drag pans the view.',
+
+  'tutorial.inspect.title': 'Inspect anything',
+  'tutorial.inspect.body':
+    'Click any object to open its inspector: mass, radius, temperature, orbital elements and composition, all computed from its actual state rather than looked up. The mass slider is live — push a star past about 20 solar masses and it will collapse into a black hole while you watch.',
+  'tutorial.inspect.tip':
+    'The Energy tab plots kinetic, potential and total energy against time. A flat total means a stable orbit; a drifting one means the orbit is decaying, the body is escaping, or the timestep is too coarse.',
+
+  'tutorial.transport.title': 'Pause, step and speed up',
+  'tutorial.transport.body':
+    'The bar along the bottom controls time. Pause to study a configuration, step one frame at a time through a close encounter, or run fast to watch a system evolve over thousands of orbits.',
+  'tutorial.transport.tip':
+    'Space pauses and resumes. The comma and full stop keys step a single frame while paused, which is the only way to see what actually happens during a collision.',
+
+  'tutorial.rewind.title': 'Rewind what just happened',
+  'tutorial.rewind.body':
+    'The same bar records history as the simulation runs. Drag the scrubber backwards to replay a merger or a slingshot you missed, then return to the present and carry on from where you were.',
+  'tutorial.rewind.tip':
+    'Press L to jump back to live. Rewinding does not undo anything — it is a replay of what happened, not a branch.',
+
+  'tutorial.scenario.title': 'Start from a real system',
+  'tutorial.scenario.body':
+    'Fifty-three scenarios, from the Solar System and TRAPPIST-1 to GW150914, the first black-hole merger LIGO detected. Several are scale models and say so on their card. Search by name, or filter by concept.',
+  'tutorial.scenario.tip':
+    'Refresh Scenario rebuilds the current one from scratch if an experiment gets away from you. Every scenario is built from a seed, so the same seed gives the same world.',
+
+  'tutorial.investigations.title': 'Guided investigations',
+  'tutorial.investigations.body':
+    'Twelve structured lessons that use the simulation as evidence rather than illustration. You measure something, predict what follows, and are told whether the prediction held. They cover Kepler’s laws, tides, black holes, exoplanet transits, chaos, orbital resonance and the case for dark matter.',
+  'tutorial.investigations.tip':
+    'Each one ends with a report you can export as a PDF, including your own measurements and answers. Progress is kept if you close the lesson and come back.',
+
+  'tutorial.measure.title': 'Measure it yourself',
+  'tutorial.measure.body':
+    'A ruler, a protractor and a stopwatch that latches onto a body and times its orbit. These draw on the canvas itself, so a screenshot carries its own scale and its own clock.',
+  'tutorial.measure.tip':
+    'The scale bar and the elapsed simulated time are burned into every screenshot and every recorded clip, which is what makes an image taken here usable as a figure.',
+
+  'tutorial.instruments.title': 'The instruments',
+  'tutorial.instruments.body':
+    'Five analysis panels that watch the running simulation: a transit light curve, a radial-velocity trace, an astrometric wobble plot, a rotation curve, and a three-dimensional view. They measure the bodies that are actually there — none of them is a canned animation.',
+  'tutorial.instruments.tip':
+    'The light curve, radial velocity and astrometry panels together are how every exoplanet you have heard of was found. Open all three on the same system and compare what each one can see.',
+
+  'tutorial.rotation.title': 'Rotation curves, and two explanations',
+  'tutorial.rotation.body':
+    'The rotation-curve panel plots orbital speed against radius for every body, live, against what the visible mass alone predicts. In the galaxy scenarios you can choose which law governs the outskirts: visible matter only, visible matter plus a dark-matter halo, or MOND. They are mutually exclusive, and the panel labels which parameters were fitted and which are fixed.',
+  'tutorial.rotation.tip':
+    'Both the halo and MOND can be made to match the same curve. That is the point of the comparison, and the lesson says plainly that fitting a rotation curve does not establish which explanation is right.',
+
+  'tutorial.bench.title': 'Compare two runs properly',
+  'tutorial.bench.body':
+    'The experiment bench captures a starting state, runs it, returns to exactly that state, lets you change one thing, and runs it again. It then compares the two and warns you if more than one variable moved between them.',
+  'tutorial.bench.tip':
+    'This is the difference between an experiment and a demonstration. Both runs can be exported, and a comparison can be shared as a link that reproduces the setup.',
+
+  'tutorial.units.title': 'Units and themes',
+  'tutorial.units.body':
+    'Switch between physical units — astronomical units, solar masses, kilometres per second, years — and the raw simulation units the integrator works in. Four themes are available, including Observatory, which uses red chrome to preserve night vision, and Daylight for bright rooms.',
+  'tutorial.units.tip':
+    'Some scenarios are scale models rather than the real thing, and where that matters the panel says which physical scale it is reading through.',
+
+  'tutorial.settings.title': 'Everything else',
+  'tutorial.settings.body':
+    'Sixty-three settings: the gravitational constant, the integrator, object counts, placement patterns, trail styles, visual effects and performance options. Structural changes rebuild the simulation; the rest take effect immediately.',
+  'tutorial.settings.tip':
+    'The search box at the top of the panel filters by name, so you do not have to remember which of the nine sections a setting lives in.',
+
+  'tutorial.share.title': 'Take it with you',
+  'tutorial.share.body':
+    'Share a link that reproduces exactly what is on your screen — the scenario, the settings, the camera and the seed. Or take a screenshot, record a clip, or export the numbers behind any instrument as CSV.',
+  'tutorial.share.tip':
+    'A shared link can be opened in embed mode for a slide or a course page, and lecture mode strips the interface down for projection.',
+
+  'tutorial.done.title': 'You are set',
+  'tutorial.done.body':
+    'Press <kbd>?</kbd> at any time for the full list of keyboard shortcuts, or reopen this tour from the <strong>?</strong> button in the corner. Nothing you do here can break anything — Reset restores the scenario as it shipped.',
+  'tutorial.done.tip':
+    'A good first experiment: load the Solar System, open the rotation curve, and see that it falls exactly as Kepler says. Then load Milky Way Rotation and see that it does not.',
+  'rotation.mode.label': 'Gravity in the outskirts',
+  'rotation.mode.newtonian': 'Visible only',
+  'rotation.mode.newtonian.hint':
+    'Newtonian gravity from the visible matter only. This is the prediction the flat curve contradicts.',
+  'rotation.mode.halo': 'Halo',
+  'rotation.mode.halo.hint':
+    'Newtonian gravity plus a dark-matter halo. Two parameters, fitted to this galaxy.',
+  'rotation.mode.mond': 'MOND',
+  'rotation.mode.mond.hint':
+    "Milgrom's law applied to the visible matter. No parameter is fitted to this galaxy.",
+  'rotation.mond.hint':
+    "Milgrom's law applied to the visible matter. No parameter is fitted to this galaxy.",
+  'rotation.mond.unavailable':
+    'MOND applies to galaxies. This scenario has not declared a galactic scale, so it is not offered here.',
+  'rotation.mond.limits': 'What MOND does not explain',
+  'rotation.mond.predicted': 'MOND predicts (from visible mass)',
+  'rotation.mond.predicted.hint':
+    'In simulation units, with the physical value implied by this scenario\u2019s declared galaxy scale beside it.',
+  'rotation.param.fitted': 'Fitted',
+  'rotation.param.fixed': 'Fixed',
+  'rotation.param.haloTwo':
+    'two parameters per galaxy: the flat speed and the core radius, both adjusted until the curve matches.',
+  'rotation.param.mondNone':
+    'no parameter is fitted here. a₀ is a constant of the proposed law, the same for every galaxy.',
+  'rotation.param.newtonNone':
+    'nothing is fitted. The curve is whatever the visible mass implies.',
+  'caveat.mond':
+    'MOND is in the force law, so gravity is not Newtonian and the usual conservation bookkeeping does not apply.',
+  // --- What MOND does not do. Quoted by the model page and the lesson. -------
+  'mond.limitation.clusters':
+    'Galaxy clusters. MOND reduces the missing mass in clusters but does not remove it: a residual factor of about two remains, so clusters still need unseen matter of some kind.',
+  'mond.limitation.bullet':
+    'The Bullet Cluster. After a collision the lensing mass is displaced from the visible gas, which is what a collisionless dark component looks like and is hard for a theory in which gravity simply follows the visible matter.',
+  'mond.limitation.cmb':
+    'The cosmic microwave background. The relative heights of the acoustic peaks are fitted well by cold dark matter and are not reproduced by MOND without adding a dark component anyway.',
+  'mond.limitation.relativistic':
+    'It is not a relativistic theory. Relativistic completions exist (TeVeS and its successors) but they are more complicated than general relativity and several have been ruled out by the speed of gravitational waves.',
+  'mond.limitation.interpolation':
+    'The interpolating function is chosen, not derived. The theory fixes only the two limits; the shape of the transition between them is put in by hand.',
+  'mond.limitation.external':
+    'The external field effect. In MOND a system is affected by the gravitational field it sits in even when that field is uniform, which breaks the strong equivalence principle and makes isolated predictions harder to state.',
+  'settings.filter.label': 'Search settings',
+  'settings.filter.placeholder': 'Search settings',
+  'settings.filter.hint':
+    'Show only the settings whose name matches what you type.',
+  'settings.filter.empty': 'No setting matches that.',
+  'settings.label.bhMass': 'Default BH Mass (M☉)',
   'settings.label.useIndividualBhMasses': 'Use Individual BH Masses',
   'settings.label.bhBehavior': 'BH Behavior',
   'settings.label.orbitDecayRate': 'Orbit Decay Rate',
@@ -887,8 +1068,8 @@ export const EN = {
   'settings.option.placement.random': 'Random',
   'settings.option.placement.grid': 'Grid',
   'settings.option.placement.empty': 'Empty',
-  'settings.option.trailColourMode.type': 'type',
-  'settings.option.trailColourMode.speed': 'speed',
+  'settings.option.trailColourMode.type': 'By type',
+  'settings.option.trailColourMode.speed': 'By speed',
   'settings.option.lensingQuality.off': 'off',
   'settings.option.lensingQuality.low': 'low',
   'settings.option.lensingQuality.medium': 'medium',

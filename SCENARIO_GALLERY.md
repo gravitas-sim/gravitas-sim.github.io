@@ -63,16 +63,24 @@ markup after the fact, which is what lets search and concept filtering combine.
 It does not load scenarios: it calls back into `loadScenarioByKey()` in `ui.js`,
 which the front door's featured cards already used.
 
-## Left alone
+## The old browser's rules, since removed
 
-`css/styles.css` still carries the old browser's `.scenario-list-item` rules,
-about two hundred lines across five media queries, with hardcoded `#1a1a2e` and
-`#4facfe` values. Nothing renders that class any more, so the rules are inert;
-because `components` is declared after `legacy` in the layer order, the new
-gallery wins without `!important`. They are dead rather than harmful, and
-unpicking them by hand across those media queries is a bigger risk than the
-bytes are worth. Worth deleting alongside the next deliberate pass over that
-file.
+`css/styles.css` used to carry the old browser's `.scenario-list-item` rules -
+444 lines across five media queries, with hardcoded `#1a1a2e` and `#4facfe`
+values. Nothing rendered those classes any more, and because `components` is
+declared after `legacy` in the layer order the new gallery won without
+`!important`, so they were inert rather than harmful.
+
+They were deleted in the modularization pass, on three pieces of evidence
+rather than one: the class names appear nowhere in `js/`, `index.html` or any
+generated markup; the modern `sc-grid`/`sc-scroll` replacements were observed
+rendering in their place; and a DOM probe across four themes, three viewports
+and ten page sweeps never saw one of them enter the document. Eleven masked
+screenshots were pixel-identical before and after.
+
+Browser CSS coverage, which would be the obvious tool here, cannot help: the
+whole file is wrapped in `@layer legacy`, and Chromium reports a layer as a
+single used range, so it marks 99% of the file live regardless.
 
 ## Filtering
 

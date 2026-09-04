@@ -1034,3 +1034,124 @@
     }
   }
 }
+
+/* ==========================================================================
+   Adding an object: the picker, and the armed state
+   --------------------------------------------------------------------------
+   The button used to cycle through eight types one click at a time and
+   placement was always live, so a near miss on a small body added a star
+   instead of opening an inspector. It now opens this picker, and only a type
+   chosen here arms the canvas.
+   ====================================================================== */
+@layer components {
+  .object-add {
+    position: relative;
+  }
+
+  /* Armed. The rail is dark and the button is already the primary one, so the
+     signal is a ring and a brighter face rather than another colour. */
+  #objectTypeBtn.is-armed {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  /* And the canvas says so too, for the whole time it is armed: a cursor is
+     the one piece of feedback that is where the reader is looking. */
+  body.is-adding #simulationCanvas {
+    cursor: crosshair;
+  }
+
+  .object-picker {
+    position: absolute;
+    left: 0;
+    /* Wider than the rail button it hangs off. Constrained to the viewport as
+       well, because the rail is near the left edge on a phone and a popover
+       sized purely to its content would run off the right of a 320px screen. */
+    right: auto;
+    width: max-content;
+    /* `min-width: 100%` would win outright - a min always beats a max - and on
+       a tablet the rail is the full width of the window, which gave a 712px
+       popover holding eight short rows. Capped against the trigger instead, so
+       it still lines up with a narrow rail without inheriting a wide one. */
+    min-width: min(100%, 240px);
+    max-width: min(260px, calc(100vw - var(--space-6)));
+    bottom: calc(100% + var(--space-2));
+    /* Above the rail it belongs to, below a modal. */
+    z-index: var(--z-inspector);
+    padding: var(--space-2);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* One column. Two columns of half a rail left every name ellipsised to
+     "Add …", which is no more use than the cycling button it replaced. */
+  .object-picker-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .object-picker-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    min-width: 0;
+    padding: var(--space-2);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: var(--text-2xs);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .object-picker-item:hover,
+  .object-picker-item:focus-visible {
+    background: var(--surface-3);
+    border-color: var(--border);
+  }
+
+  .object-picker-item[aria-checked='true'] {
+    border-color: var(--accent);
+  }
+
+  .object-picker-emoji {
+    flex: none;
+    font-size: var(--text-base);
+  }
+
+  /* The name is the part that can overrun: Spanish "Añadir enanas blancas" is
+     half again the English. It ellipsises rather than widening the popover. */
+  .object-picker-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .object-picker-stop {
+    width: 100%;
+    margin-top: var(--space-2);
+    padding: var(--space-2);
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font: inherit;
+    font-size: var(--text-2xs);
+    cursor: pointer;
+  }
+
+  .object-picker-stop:hover,
+  .object-picker-stop:focus-visible {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+}

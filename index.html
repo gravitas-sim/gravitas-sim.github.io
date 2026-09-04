@@ -416,9 +416,83 @@
         <span class="rc-key rc-key-points"></span> measured bodies
         <span class="rc-key rc-key-visible"></span> visible mass only
         <span class="rc-key rc-key-total"></span> with halo
+        <span class="rc-key rc-key-mond"></span> MOND
       </p>
 
       <div class="obs-controls rc-controls">
+        <!-- Which law governs the outskirts. Three radio-like buttons rather
+             than two switches, because the halo and MOND are competing
+             explanations for the same measurement: an interface that let a
+             reader select both would be proposing physics nobody holds. -->
+        <div
+          class="rc-mode-row"
+          role="group"
+          aria-labelledby="rotationCurveModeLabel"
+        >
+          <span id="rotationCurveModeLabel" data-i18n="rotation.mode.label"
+            >Gravity in the outskirts</span
+          >
+          <div class="rc-mode-buttons">
+            <button
+              type="button"
+              id="rotationCurveModeNewtonian"
+              class="rc-mode"
+              aria-pressed="true"
+              data-i18n="rotation.mode.newtonian"
+              data-i18n-title="rotation.mode.newtonian.hint"
+              title="Newtonian gravity from the visible matter only."
+            >
+              Visible only
+            </button>
+            <button
+              type="button"
+              id="rotationCurveModeHalo"
+              class="rc-mode"
+              aria-pressed="false"
+              data-i18n="rotation.mode.halo"
+              data-i18n-title="rotation.mode.halo.hint"
+              title="Newtonian gravity plus a dark-matter halo, with two parameters fitted to this galaxy."
+            >
+              Halo
+            </button>
+            <button
+              type="button"
+              id="rotationCurveModeMond"
+              class="rc-mode"
+              aria-pressed="false"
+              data-i18n="rotation.mode.mond"
+              data-i18n-title="rotation.mode.mond.hint"
+              title="Milgrom's law applied to the visible matter, with no parameter fitted to this galaxy."
+            >
+              MOND
+            </button>
+          </div>
+        </div>
+        <p id="rotationCurveParams" class="rc-params"></p>
+        <p id="rotationCurveA0" class="rc-a0" hidden></p>
+        <!-- The honest half. MOND fits rotation curves well, which is the one
+             thing a rotation-curve panel can show, so the panel is exactly
+             where the rest of the picture has to be available. Collapsed by
+             default: one line until a reader wants it. -->
+        <details id="rotationCurveMondLimits" class="rc-limits" hidden>
+          <summary data-i18n="rotation.mond.limits">
+            What MOND does not explain
+          </summary>
+          <ul id="rotationCurveMondLimitList"></ul>
+        </details>
+        <div class="rc-toggle-row" id="rotationCurveMondPredictedRow">
+          <span data-i18n="rotation.mond.predicted"
+            >MOND predicts (from visible mass)</span
+          >
+          <output id="rotationCurveMondPredicted" hidden></output>
+        </div>
+
+        <!-- The halo's own controls. Shown only while the halo is the selected
+             explanation: its two fitted parameters mean nothing under MOND or
+             under plain Newtonian gravity, and leaving them visible beside a
+             MOND readout invites exactly the misreading the mode selector
+             exists to prevent. -->
+        <div id="rotationCurveHaloControls">
         <div class="rc-toggle-row">
           <span id="rotationCurveHaloLabel">Dark matter halo</span>
           <button
@@ -482,6 +556,7 @@
             Inside this radius the halo's pull rises with distance; outside it,
             the halo's contribution levels off.
           </p>
+        </div>
         </div>
       </div>
 
@@ -1253,17 +1328,28 @@
         </div>
       </div>
 
-      <button
-        id="objectTypeBtn"
-        class="ui-button is-primary rail-primary"
-        title="Click to change what type of object you insert"
-        aria-label="Change object insertion type"
-        data-i18n-title="rail.objectType.hint"
-        data-i18n-aria-label="rail.objectType.label"
-        data-i18n="rail.objectType"
-      >
-        ⭐ Add Stars
-      </button>
+      <div class="object-add" id="objectAdd">
+        <button
+          id="objectTypeBtn"
+          class="ui-button is-primary rail-primary"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="objectTypePicker"
+          title="Choose what to add, then click the canvas to place it"
+          aria-label="Choose an object to add"
+          data-i18n-title="rail.objectType.hint"
+          data-i18n-aria-label="rail.objectType.label"
+        >
+          ⭐ Add object
+        </button>
+        <div
+          id="objectTypePicker"
+          class="object-picker"
+          role="menu"
+          aria-labelledby="objectTypeBtn"
+          hidden
+        ></div>
+      </div>
     </div>
 
     <!-- Transport bar: playback and timeline scrubbing -->
@@ -1985,6 +2071,33 @@
         ✕
       </button>
       <div class="settings-content">
+        <div class="settings-filter">
+          <label
+            class="visually-hidden"
+            for="settingsFilter"
+            data-i18n="settings.filter.label"
+            >Search settings</label
+          >
+          <input
+            id="settingsFilter"
+            type="search"
+            class="settings-filter-input"
+            autocomplete="off"
+            placeholder="Search settings"
+            data-i18n-placeholder="settings.filter.placeholder"
+            title="Show only the settings whose name matches what you type."
+            data-i18n-title="settings.filter.hint"
+          />
+          <p
+            id="settingsFilterEmpty"
+            class="settings-filter-empty"
+            hidden
+            data-i18n="settings.filter.empty"
+          >
+            No setting matches that.
+          </p>
+        </div>
+
         <div id="presetInfo" class="preset-info"></div>
 
         <div id="settingsGrid" class="settings-grid"></div>

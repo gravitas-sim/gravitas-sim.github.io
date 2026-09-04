@@ -193,3 +193,95 @@ test.describe('the transport controls', () => {
     expect(after.nonFinite).toBe(0);
   });
 });
+
+// =============================================================================
+// Adding an object has to be meant
+// -----------------------------------------------------------------------------
+// The rail button used to cycle through eight object types, one click at a
+// time, and a left-click anywhere on empty canvas placed one immediately.
+// Aiming at a small planet to open its inspector and missing by a few pixels
+// therefore created a star, and an unwanted mass perturbs everything already
+// in the system - there is no undo for the trajectories it has already bent.
+//
+// Placement is now armed: a type is chosen from a picker, and only then does a
+// click on empty space place anything. Touch already worked this way, needing a
+// long press, because a single finger had to stay free for panning.
+// =============================================================================
+test.describe('placing an object is deliberate', () => {
+  /** Every body in the world, however it is classified. */
+  const bodyCount = page =>
+    page.evaluate(async () => {
+      const p = await import('/js/physics.js');
+      return (
+        p.bh_list.length +
+        p.stars.length +
+        p.planets.length +
+        p.gas_giants.length +
+        p.asteroids.length +
+        p.comets.length +
+        p.neutron_stars.length +
+        p.white_dwarfs.length
+      );
+    });
+
+  test('a click on empty space adds nothing until a type is chosen', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.waitForTimeout(500);
+
+    const before = await bodyCount(page);
+    expect(before).toBeGreaterThan(0);
+
+    // Three clicks on empty sky, which under the old behaviour was three stars.
+    await page.mouse.click(1000, 620);
+    await page.mouse.click(1040, 660);
+    await page.mouse.click(980, 700);
+    await page.waitForTimeout(400);
+    expect(await bodyCount(page), 'an unarmed click created a body').toBe(
+      before
+    );
+  });
+
+  test('choosing a type arms placement, and Escape disarms it', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.waitForTimeout(500);
+
+    await page.click('#objectTypeBtn');
+    await expect(page.locator('#objectTypePicker')).toBeVisible();
+    // Every type reachable in one click, which was the other half of the
+    // complaint: eight types behind up to seven presses of a cycling button.
+    expect(await page.locator('.object-picker-item').count()).toBe(8);
+
+    await page.click('.object-picker-item[data-object-type="GasGiant"]');
+    await expect(page.locator('#objectTypePicker')).toBeHidden();
+    await expect(page.locator('body')).toHaveClass(/is-adding/);
+    expect(
+      await page.evaluate(
+        async () => (await import('/js/ui.js')).SETTINGS.input_object_type
+      )
+    ).toBe('GasGiant');
+
+    const armed = await bodyCount(page);
+    await page.mouse.click(1000, 620);
+    await page.waitForTimeout(400);
+    expect(
+      await bodyCount(page),
+      'an armed click placed nothing'
+    ).toBeGreaterThan(armed);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('body')).not.toHaveClass(/is-adding/);
+
+    const disarmed = await bodyCount(page);
+    await page.mouse.click(1040, 660);
+    await page.waitForTimeout(400);
+    expect(await bodyCount(page), 'a click after Escape created a body').toBe(
+      disarmed
+    );
+  });
+});

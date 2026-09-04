@@ -55,6 +55,12 @@ import {
   virialMass,
   losToMeanSquare,
 } from './darkMatter.js';
+import {
+  mondCurveAt,
+  mondResidual,
+  asymptoticSpeed,
+  A0_GALACTIC,
+} from './mond.js';
 
 // The same fixed dark palette the black hole and tidal panels use, and for the
 // same reason: these are pictures of space and plots over it, and theme-coloured
@@ -2005,6 +2011,265 @@ const BUDGET = {
   },
 };
 
+// =============================================================================
+// dm-mond: the same curve, two explanations
+// -----------------------------------------------------------------------------
+// The compact comparison the lesson ends on, and the point of it is not that
+// one model wins.
+//
+// The halo decomposition generated this curve, so it reproduces it exactly with
+// three fitted numbers: the disc mass, the halo's flat speed and its core
+// radius. MOND has no halo and so no halo parameters; its only freedom is the
+// same disc mass, and with one number it lands inside the error bars.
+//
+// The two want different discs - MOND prefers about two thirds the stellar mass
+// the halo fit assigned - and that disagreement is not a defect of the exercise.
+// A rotation curve does not measure a stellar mass-to-light ratio, so "how heavy
+// is the disc" is free in both pictures. It is the disc-halo degeneracy, it is
+// real, and it is why the curve alone cannot decide.
+//
+// The instrument therefore refuses to declare a winner. It reports both
+// residuals, both parameter counts, and a verdict that says what has actually
+// been shown.
+// =============================================================================
+const MOND_FIT = {
+  id: 'dm-mond',
+  get title() {
+    return t('dmW.mondTitle');
+  },
+  get note() {
+    return t('dmW.mondNote');
+  },
+  controls: [
+    {
+      id: 'model',
+      get label() {
+        return t('dmW.mondModel');
+      },
+      // A two-position control. The widget kit draws sliders, and a slider with
+      // two stops reads as a switch; the readout names the selected model in
+      // words on every frame, so the position is never the only cue.
+      min: 0,
+      max: 1,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v =>
+        v < 0.5 ? t('dmW.mondHaloOption') : t('dmW.mondMondOption'),
+    },
+    {
+      id: 'discMass',
+      get label() {
+        return t('dmW.discMassTheStarsYou');
+      },
+      unit: '× 10¹⁰ M☉',
+      min: 1,
+      max: 4.5,
+      step: 0.1,
+      value: 3.3,
+      decimals: 1,
+    },
+    {
+      id: 'haloVFlat',
+      get label() {
+        return t('dmW.haloStrengthItsFlatSpeed');
+      },
+      unit: 'km/s',
+      min: 0,
+      max: 220,
+      step: 2,
+      value: 150,
+      decimals: 0,
+    },
+  ],
+  presets: [
+    {
+      id: 'halo-best',
+      get label() {
+        return t('dmW.mondPresetHalo');
+      },
+      get note() {
+        return t('dmW.mondPresetHaloNote');
+      },
+      values: { model: 0, discMass: 3.3, haloVFlat: 150 },
+    },
+    {
+      id: 'mond-best',
+      get label() {
+        return t('dmW.mondPresetMond');
+      },
+      get note() {
+        return t('dmW.mondPresetMondNote');
+      },
+      values: { model: 1, discMass: 2.1, haloVFlat: 0 },
+    },
+  ],
+  /**
+   * Both models scored against the same points, the same way.
+   *
+   * @param {object} v - Control values
+   * @returns {object} Everything the readout and the drawing need
+   */
+  compute(v) {
+    const usingMond = v.model >= 0.5;
+    const visible = {
+      bulgeMass: NGC3198.bulgeMass,
+      discMass: v.discMass * 1e10,
+      discScale: NGC3198.discScale,
+    };
+    const haloModel = {
+      ...visible,
+      haloVFlat: v.haloVFlat,
+      haloCore: NGC3198.haloCore,
+    };
+
+    const haloFit = curveResidual(NGC3198_OBSERVED, haloModel);
+    const mondFit = mondResidual(NGC3198_OBSERVED, visible);
+    const meanErr =
+      NGC3198_OBSERVED.reduce((s, p) => s + p.err, 0) / NGC3198_OBSERVED.length;
+
+    return {
+      usingMond,
+      visible,
+      haloModel,
+      haloFit,
+      mondFit,
+      meanErr,
+      fit: usingMond ? mondFit : haloFit,
+      // What each explanation had to be told, as opposed to what it predicted.
+      // The number that matters and the one a residual on its own hides.
+      fitted: usingMond ? 1 : 3,
+      predicted: asymptoticSpeed(
+        NGC3198.bulgeMass + v.discMass * 1e10,
+        A0_GALACTIC,
+        G_GALACTIC
+      ),
+    };
+  },
+  readout(v) {
+    const f = MOND_FIT.compute(v);
+    const quality = r =>
+      r.rms <= f.meanErr
+        ? t('dmW.mondInsideErrors')
+        : r.rms < 2 * f.meanErr
+          ? t('dmW.mondClose')
+          : t('dmW.mondOff');
+
+    return [
+      {
+        get label() {
+          return t('dmW.mondShowing');
+        },
+        value: f.usingMond ? t('dmW.mondMondOption') : t('dmW.mondHaloOption'),
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('dmW.mondHaloRow');
+        },
+        value: `${f.haloFit.rms.toFixed(1)} km/s — ${quality(f.haloFit)} · ${t('dmW.mondThreeFitted')}`,
+      },
+      {
+        get label() {
+          return t('dmW.mondMondRow');
+        },
+        value: `${f.mondFit.rms.toFixed(1)} km/s — ${quality(f.mondFit)} · ${t('dmW.mondOneFitted')}`,
+      },
+      {
+        get label() {
+          return t('dmW.mondPredictedRow');
+        },
+        value: `${f.predicted.toFixed(0)} km/s`,
+      },
+      {
+        get label() {
+          return t('dmW.mondVerdict');
+        },
+        // Keyed on the selected explanation, not on both at once.
+        //
+        // Requiring both to be inside the error bars simultaneously was the
+        // first version and it set an impossible goal: the two want different
+        // disc masses - MOND about two thirds the halo fit's - so there is no
+        // setting at which both rows read "inside the error bars". A student
+        // following that verdict would adjust for ever.
+        //
+        // That they cannot match at the same disc mass is the finding, not an
+        // obstacle to it. So the verdict reports whether the explanation
+        // currently selected reproduces the data, and once it does, says what
+        // that means - which is never "MOND wins" or "dark matter wins".
+        value:
+          f.fit.rms <= f.meanErr
+            ? t('dmW.mondBothFit')
+            : t('dmW.mondKeepAdjusting'),
+        emphasis: true,
+      },
+    ];
+  },
+  draw(canvas, v) {
+    const H = responsiveHeight(300, 250);
+    const { ctx, w } = surface(canvas, H);
+    const f = MOND_FIT.compute(v);
+
+    const box = { x: 46, y: 26, w: w - 62, h: H - 74 };
+    const tr = frame(ctx, box, {
+      xMax: 32,
+      yMax: 220,
+      xLabel: t('dmW.radiusKpc'),
+      yLabel: t('dmW.speedKms'),
+    });
+
+    const R_MIN = 0.5;
+    // The visible matter, always drawn, always dashed: it is what both
+    // explanations are trying to account for.
+    curve(ctx, tr, 32, r => galaxyCurveAt(r, f.visible).visible, C_VISIBLE, {
+      dash: [4, 4],
+      rMin: R_MIN,
+      width: 1.5,
+    });
+
+    // The selected explanation, solid and in its own colour. Only one is drawn:
+    // they are alternatives, and two solid curves would invite a reader to add
+    // them together.
+    if (f.usingMond) {
+      curve(ctx, tr, 32, r => mondCurveAt(r, f.visible).total, C_TOTAL, {
+        rMin: R_MIN,
+        width: 2.5,
+      });
+    } else {
+      curve(ctx, tr, 32, r => galaxyCurveAt(r, f.haloModel).halo, C_HALO, {
+        dash: [2, 3],
+        rMin: R_MIN,
+        width: 1.5,
+      });
+      curve(ctx, tr, 32, r => galaxyCurveAt(r, f.haloModel).total, C_TOTAL, {
+        rMin: R_MIN,
+        width: 2.5,
+      });
+    }
+
+    // The measurement, on top of everything.
+    ctx.strokeStyle = C_DATA;
+    ctx.fillStyle = C_DATA;
+    ctx.lineWidth = 1.25;
+    for (const p of NGC3198_OBSERVED) {
+      const px = tr.X(p.r);
+      ctx.beginPath();
+      ctx.moveTo(px, tr.Y(p.v - p.err));
+      ctx.lineTo(px, tr.Y(p.v + p.err));
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(px, tr.Y(p.v), 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.font = `10px ${MONO}`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = MUTED;
+    ctx.fillText(t('dmW.mondSynthetic'), box.x + 4, box.y + 4);
+  },
+};
+
 /** Every instrument "The Missing Mass" hands out. */
 export const DARK_MATTER_WIDGETS = [
   SHAPES,
@@ -2013,6 +2278,7 @@ export const DARK_MATTER_WIDGETS = [
   FLYBY,
   VIRIAL,
   BUDGET,
+  MOND_FIT,
 ];
 
 /** Exported for the tests: the synthetic curve and the model behind it. */

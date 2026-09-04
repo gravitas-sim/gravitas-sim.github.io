@@ -87,6 +87,8 @@ was not worth it.
 | `investigations.spec.js`   | Opening a lesson, every representative step type, grading, persistence across a reload, the PDF report                                                                                                               |
 | `sharing.spec.js`          | Encoding and restoring a shared-state URL, seeded determinism, a corrupt link                                                                                                                                        |
 | `robustness.spec.js`       | The heaviest scenarios, a NaN sweep over all 48, scenario churn                                                                                                                                                      |
+| `galaxyGravity.spec.js`    | The three galaxy-gravity modes: that they are mutually exclusive, that MOND is refused where no galactic scale is declared, that a mode does not leak across a scenario change, and that it survives a shared link and registers with the A/B bench                            |
+| `worldConstruction.spec.js` | A characterization golden: every scenario in the catalogue built from one fixed seed, digested body by body in list order, so a refactor of the world builder has to prove it changed nothing                            |
 | `scenarioContract.spec.js` | That a scenario named after specific objects contains them: names, classifications, masses, ordering, survival, and seeded reproducibility                                                                           |
 | `assets.spec.js`           | Failed requests, deferred chunks, thumbnails decoding, the document pages                                                                                                                                            |
 | `mobile.spec.js`           | A Pixel 7 profile: layout, overflow, the menu, a lesson on a phone                                                                                                                                                   |
@@ -139,6 +141,21 @@ rather than duplicating the map, and anything else you add should do the same.
 
 **No whole-application screenshots.** The output is a moving simulation. A
 snapshot of it would fail on every commit for reasons nobody could act on.
+
+**One golden file, and it is not a screenshot.**
+`worldConstruction.spec.js` compares against
+`e2e/golden/world-construction.json`, which records a digest of every body in
+every scenario at t=0 - id, name, mass, radius, position, velocity, in list
+order. Construction is arithmetic on a fixed seed, so this is reproducible in a
+way a rendered frame is not.
+
+A diff in that file means world construction changed. Regenerate it only when
+that change was intended, and say what moved in the same commit:
+
+```
+GRAVITAS_UPDATE_WORLD_GOLDEN=1 GRAVITAS_E2E_PORT=4199 \
+  npx playwright test worldConstruction --project=chromium
+```
 
 ### Known failures
 

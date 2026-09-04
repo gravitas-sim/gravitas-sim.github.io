@@ -319,6 +319,36 @@ export default {
         'Alrededor de dieciocho. Las galaxias que puedes ver dan cuenta de aproximadamente una vigésima parte de la masa necesaria para mantener unido el cúmulo a las velocidades a las que sus miembros se mueven de verdad. La cifra del propio Zwicky para Coma fue todavía mayor, en parte porque la escala de distancias del universo estaba equivocada en 1933 y en parte porque no tenía manera de contar el gas caliente entre las galaxias, que resulta llevar varias veces más masa que las galaxias. La cifra moderna para Coma ronda un factor diez una vez incluido ese gas, que es el número que informa el instrumento de dos pasos atrás.',
     },
     {
+      title: 'Otra manera de leer la misma curva',
+      body: 'Todo lo anterior ha supuesto que la ley de la gravedad de Newton es correcta y ha preguntado qué masa tendría que haber. Hay otra manera de leer una curva de rotación plana, y está sobre la mesa desde 1983.\n\nMordehai Milgrom se dio cuenta de que las curvas dejan de caer a una <em>aceleración</em> determinada, y no a un radio o a un brillo determinados. Por debajo de unos a₀ = 1,2 × 10⁻¹⁰ m/s² —más o menos una cienmilmillonésima de la gravedad en la superficie de la Tierra— las galaxias se comportan como si la gravedad fuera más intensa de lo que dice Newton. Por encima no cambia nada, y por eso ningún laboratorio ni ninguna órbita planetaria ha visto jamás esto.\n\nSi eso es lo que ocurre, entonces lejos de una galaxia la atracción gravitatoria cae como 1/r en lugar de 1/r², y una órbita circular allí cumple\n\n<strong>v⁴ = G M a₀</strong>\n\ncon M la masa que puedes ver. No ajustada. Predicha, a partir de una constante que debe ser la misma para todas las galaxias.',
+      tip: 'El instrumento muestra el ajuste con halo que acabas de construir. El selector de arriba pone MOND sobre las mismas medidas.',
+    },
+    {
+      title: 'Ajústala de las dos maneras',
+      body: 'Las dos explicaciones, las mismas doce medidas, evaluadas de la misma forma. Prueba cada una, y usa los dos preajustes cuando quieras ver dónde acaba cada cual.\n\nFíjate en lo que hubo que decirle a cada explicación. El halo necesita tres números elegidos para encajar con esta galaxia: cuánto pesa el disco, a qué velocidad se aplana la curva del halo y cómo de grande es su núcleo. MOND necesita uno —el disco— porque a₀ no es ajustable y es el mismo número para todas las galaxias del universo.',
+      checklist: [
+        'Carga el mejor ajuste con halo y lee su residuo',
+        'Cambia a MOND, dejando el disco donde está',
+        'Baja el disco hasta que MOND también coincida',
+        'Compara cuántos números necesitó cada explicación',
+      ],
+      tip: 'MOND quiere un disco más ligero que el ajuste con halo, unas dos terceras partes. Una curva de rotación no puede medir directamente la masa de las estrellas, así que cuánto pesa el disco nunca quedó fijado por los datos en ninguna de las dos imágenes.',
+    },
+    {
+      title: 'La predicción que hace MOND',
+      body: 'La relación v⁴ = G M a₀ convierte una masa visible directamente en una velocidad plana, sin ajustar nada. Usa el disco que muestra el instrumento —2,1 × 10¹⁰ masas solares, más el pequeño bulbo de 0,05 × 10¹⁰— y el valor de a₀ de antes.\n\nEn las unidades en las que trabaja el instrumento, G a₀ = 0,0159 (km/s)⁴ por masa solar.',
+      prompt: 'La velocidad plana que MOND predice para esta galaxia',
+      unit: 'km/s',
+      because:
+        'Unos 136 km/s. Multiplica 2,15 × 10¹⁰ por 0,0159 para obtener 3,4 × 10⁸ y saca la raíz cuarta. El instrumento informa el mismo número en su propia fila.\n\nEsto es la relación de Tully-Fisher bariónica, y conviene tener claro que es una regularidad observada y no un resultado de MOND: las galaxias reales sí se sitúan sobre M ∝ v⁴, con una dispersión notablemente pequeña, sea lo que sea lo que la cause. MOND la predice. Un halo de materia oscura tiene que arreglárselas para producirla, porque no hay una razón evidente para que las propiedades de un halo sigan tan de cerca a la masa visible, y explicar esa estrechez es un problema abierto en formación de galaxias.',
+    },
+    {
+      title: '¿Decide la curva?',
+      body: 'Has ajustado ya la misma curva de rotación dos veces, con dos ideas incompatibles sobre lo que ocurre, y las dos funcionan.\n\nEso no es un fallo del ejercicio. Es el estado real de esta pieza concreta de evidencia, y saber qué no puede zanjar una medida forma parte de usarla tanto como saber qué sí.',
+      prompt:
+        'En dos o tres frases: ¿ajustar esta curva de rotación establece cuál explicación es correcta? ¿Qué tipo de evidencia haría falta en su lugar?',
+    },
+    {
       title: '¿Qué has demostrado en realidad?',
       body: 'Has hecho ya tres medidas, en dos clases de sistema, usando dos métodos distintos: ajustaste la curva de rotación de una galaxia y descubriste que ninguna disposición de sus estrellas servía, y pesaste un cúmulo por su movimiento y encontraste cinco veces más masa que luz. Ambas cosas dicen lo mismo.\n\nTen cuidado con lo que se sigue de ahí.',
       prompt:

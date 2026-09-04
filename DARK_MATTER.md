@@ -176,9 +176,100 @@ conclusion survived his distance scale being wrong.
 
 ---
 
+## The other explanation: MOND
+
+A flat rotation curve is evidence of a discrepancy between the mass that shines
+and the mass that pulls. It is not, on its own, evidence that the missing mass
+exists. The other reading is that gravity is what is missing, and Gravitas
+offers it as a selectable alternative rather than a footnote.
+
+**The law.** Milgrom (1983) observed that rotation curves stop falling at a
+characteristic *acceleration* rather than at a characteristic radius or
+brightness, and proposed that below a₀ ≈ 1.2 × 10⁻¹⁰ m/s² the relation between
+gravity and motion departs from Newton's. Gravitas applies it algebraically to
+the summed Newtonian field of the visible matter,
+
+    g = ν(g_N / a₀) g_N
+
+using the "simple" interpolating function μ(x) = x/(1+x) of Famaey & Binney
+(2005), whose inverse is closed form. The limits are g → g_N where the field is
+strong and g → √(g_N a₀) where it is weak, and the second gives v⁴ = G M a₀ far
+from a galaxy: a flat curve, and a fixed relation between baryonic mass and
+asymptotic speed with nothing fitted per galaxy.
+
+**One constant, converted once.** a₀ is written in SI in `js/mond.js` and
+converted from there — to (km/s)²/kpc for the rotation-curve work, and into
+simulation units through each scenario's declared scale. There is one number in
+the codebase to check against a paper.
+
+**Three modes, and they exclude each other.** The force law carries one setting,
+`galaxy_gravity`, with the values `newtonian`, `halo` and `mond`. It is an enum
+rather than two switches because the halo and MOND are competing explanations
+for the same observation, and a world running both would be physics nobody
+holds. The older `dark_matter_halo` boolean is kept as a mirror so that saved
+games and shared links from before this existed still load.
+
+**MOND is confined to galaxies.** It is offered only in the three galaxy
+scenarios, which declare what one simulation unit represents in kiloparsecs and
+solar masses; everywhere else the control is disabled and says why. There is no
+defensible way to apply a galactic acceleration scale to a planetary system, and
+applying one silently would be worse than refusing.
+
+**On the scale mapping.** The galaxy scenarios are scale models, so a₀ has to be
+carried in through a declared mapping: one length unit is 1/30 kpc, so the
+900-unit disc is 30 kpc, and one mass unit is 9.6 × 10⁵ M☉, so the visible mass
+is 1.4 × 10¹⁰ M☉. The mass scale was chosen so that the model galaxy is a real
+one — that mass with a flat curve near 122 km/s sits on the observed baryonic
+Tully-Fisher relation, and the validation suite checks it does. Under that
+mapping MOND reproduces the scenario's flat curve from the visible mass alone.
+**That agreement is a consequence of having built a realistic galaxy, not
+evidence gathered by this simulation**, and the scenario source says so where the
+mapping is declared.
+
+**What the lesson does with it.** Four steps near the end of *The Missing Mass*,
+not a second investigation. Students put both explanations on the same twelve
+measurements and find that the halo matches exactly with three fitted numbers
+and MOND matches inside the error bars with one — and that the two disagree
+about how heavy the stellar disc is, MOND preferring about two thirds. That
+disagreement is the disc-halo degeneracy and it is real: a rotation curve does
+not measure a stellar mass-to-light ratio, so the disc mass is free in both
+pictures. The instrument does not declare a winner. The point of the sequence is
+that this measurement underdetermines the explanation.
+
+**Where MOND does badly.** It fits galaxy rotation curves well and this is not
+in dispute. Outside them:
+
+- **Clusters.** It reduces the missing mass but leaves a residual factor of
+  about two, so clusters still need unseen matter of some kind.
+- **The Bullet Cluster.** After a collision the lensing mass is displaced from
+  the visible gas, which is what a collisionless dark component looks like.
+- **The cosmic microwave background.** The relative heights of the acoustic
+  peaks are fitted by cold dark matter and are not reproduced by MOND without
+  adding a dark component anyway.
+- **Relativity.** There is no settled relativistic form. TeVeS and its
+  successors exist, are more complicated than general relativity, and several
+  were ruled out by the measured speed of gravitational waves.
+- **The interpolating function.** It is chosen, not derived. The theory fixes
+  only the two limits.
+- **The external field effect.** A system is affected by the uniform field it
+  sits in, which breaks the strong equivalence principle.
+
+The symmetric point, which the lesson also makes: dark matter owes an
+explanation of why halo properties track the visible mass as tightly as the
+Tully-Fisher relation says they do. Neither picture is finished, and **nothing
+in Gravitas establishes either one**.
+
+**A note on conservation.** Because the modification is applied to the total
+field rather than pair by pair, the force between two bodies is no longer
+derived from a potential in the usual way and momentum is not conserved for an
+isolated pair. The conservation readout reports this as a caveat whenever MOND
+is running.
+
+---
+
 ## The lesson
 
-**The Missing Mass**, <!--fact:steps:missing-mass-->29<!--/fact-->
+**The Missing Mass**, <!--fact:steps:missing-mass-->33<!--/fact-->
 steps, <!--fact:duration:missing-mass-->45-60 min<!--/fact-->. It makes one
 argument, and every step in it is either a measurement of that argument or a
 check that the student has not been handed the conclusion.

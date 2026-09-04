@@ -49,6 +49,7 @@ import {
   getAreaSweepWedges,
   showAreaSweepFor,
   setAreaSweepSuppressed,
+  syncPlacementAvailability,
 } from './ui.js';
 import {
   bh_list,
@@ -383,6 +384,11 @@ function applyLocks() {
   } else {
     SETTINGS.interactive_add = true;
   }
+  // The rail button may be lit and the cursor a crosshair from before the
+  // lesson opened. Placement is already refused, but the interface should not
+  // keep offering it - and on a narrow window the picker would open over the
+  // lesson panel itself.
+  syncPlacementAvailability();
   // A step can hand the object card back for one screen, which is how the
   // TRAPPIST-1 step lets students click a planet and read its period off the
   // live system.
@@ -403,6 +409,7 @@ function releaseLocks() {
   } else {
     SETTINGS.interactive_add = true;
   }
+  syncPlacementAvailability();
 }
 
 // --- Step helpers -------------------------------------------------------------

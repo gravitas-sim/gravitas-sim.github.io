@@ -359,3 +359,22 @@ describe('scenario prose', () => {
     expect(identical.length).toBeLessThan(keys.length * 0.1);
   });
 });
+
+// An escape sequence that survived into the rendered string is not a typo the
+// eye catches in a catalogue of two thousand entries: `'M\\u2609'` in a
+// single-quoted JS string is the seven characters backslash-u-2-6-0-9, and the
+// settings panel drew "Default BH Mass (M☉)" on every load in English.
+// Spanish had the character itself, which is how the two came to disagree.
+describe('catalogue strings are text, not source', () => {
+  const LOCALES = { en: EN, es: ES };
+  const ESCAPE = /\\u[0-9a-fA-F]{4}|\\x[0-9a-fA-F]{2}/;
+
+  for (const [locale, catalogue] of Object.entries(LOCALES)) {
+    test(`no ${locale} message carries a literal escape sequence`, () => {
+      const offenders = Object.entries(catalogue)
+        .filter(([, value]) => typeof value === 'string' && ESCAPE.test(value))
+        .map(([key, value]) => `${key}: ${value}`);
+      expect(offenders).toEqual([]);
+    });
+  }
+});

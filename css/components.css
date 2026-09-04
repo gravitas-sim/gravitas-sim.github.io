@@ -3484,8 +3484,14 @@
     left: var(--space-3);
     /* Clears the transport bar, which is fixed to the bottom at a higher
        z-index: overlapping it would put the Next button underneath the
-       scrubber. 88px is the bar's 48px plus its 16px offset plus a gap. */
-    bottom: 88px;
+       scrubber - and the bar wins the hit test, so the button stops working
+       rather than merely looking wrong.
+       This was 88px, written as "the bar's 48px plus its 16px offset plus a
+       gap". The bar is only 48px tall while it fits on one row; between about
+       640px and 1000px of window it wraps to 62px and 88px was short.
+       js/bottomDock.js measures it and publishes the answer. The constant
+       remains as the fallback for the frame before the first measurement. */
+    bottom: var(--transport-reserve, 88px);
     z-index: var(--z-panel);
     display: flex;
     flex-direction: column;
@@ -4134,11 +4140,12 @@
       /* A sheet across the bottom rather than a side panel: on a phone the
          canvas is already the smaller dimension, and a full-height panel down
          one side would leave the simulation a strip. Still above the transport
-         bar, which occupies the very bottom. */
+         bar, which occupies the very bottom - measured rather than assumed,
+         for the reason given on the base rule above. */
       top: auto;
       left: var(--space-2);
       right: var(--space-2);
-      bottom: 76px;
+      bottom: var(--transport-reserve, 76px);
       width: auto;
       max-height: min(52vh, 420px);
     }
@@ -4414,7 +4421,10 @@
       top: var(--space-2);
       left: var(--space-2);
       right: var(--space-2);
-      max-height: calc(100vh - 76px - min(38vh, 300px) - var(--space-2) * 3);
+      max-height: calc(
+        100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+          var(--space-2) * 3
+      );
     }
     body.investigation-aux .investigation-panel {
       max-height: min(38vh, 300px);
@@ -4635,7 +4645,10 @@
     /* No room to stack two panels above a bottom sheet. The instrument keeps
        the space and the plot scrolls with the lesson underneath it. */
     body.investigation-split #investigationTool {
-      max-height: calc(100vh - 76px - min(38vh, 300px) - var(--space-2) * 3);
+      max-height: calc(
+        100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+          var(--space-2) * 3
+      );
     }
     body.investigation-split #investigationPlot {
       position: static;
@@ -6462,4 +6475,141 @@
 
 .rc-cluster-note {
   margin: var(--space-1) 0 0;
+}
+
+/* ==========================================================================
+   Rotation curve: choosing which law governs the outskirts
+   --------------------------------------------------------------------------
+   Three mutually exclusive choices, so they are drawn as one segmented control
+   rather than as three switches. A reader must not be able to form the idea
+   that a halo and MOND could both be running: they are competing explanations
+   for the same measurement and applying both would be physics nobody holds.
+   ====================================================================== */
+@layer components {
+  .rc-mode-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-2);
+  }
+
+  .rc-mode-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+    padding: 2px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .rc-mode {
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: calc(var(--radius-sm) - 1px);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: var(--text-2xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+
+  .rc-mode:hover:not(:disabled),
+  .rc-mode:focus-visible {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+
+  /* The selected law. Marked by weight and a filled ground as well as colour,
+     because which model is on the plot is the single most important piece of
+     state in this panel. */
+  .rc-mode[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* MOND is offered only where a galactic scale has been declared. Disabled
+     rather than hidden, so that a reader in the Solar System can see the option
+     exists and read why it does not apply here. */
+  .rc-mode:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Fitted versus fixed. The distinction the panel exists to make legible: two
+     curves of similar quality mean very different things when one of them spent
+     two free parameters getting there. */
+  .rc-params {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .rc-param {
+    display: inline-block;
+    margin-right: var(--space-1);
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-xs, 3px);
+    font-weight: var(--weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .rc-param.is-fitted {
+    background: color-mix(in srgb, var(--danger) 22%, transparent);
+    color: var(--danger);
+  }
+
+  .rc-param.is-fixed {
+    background: color-mix(in srgb, var(--success) 22%, transparent);
+    color: var(--success);
+  }
+
+  .rc-a0 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  /* The MOND curve's legend key, matching the long dash it is drawn with. */
+  .rc-key-mond {
+    background: repeating-linear-gradient(
+      90deg,
+      var(--success) 0 9px,
+      transparent 9px 12px
+    );
+  }
+}
+
+@layer components {
+  /* The limitations disclosure in the rotation-curve panel. MOND fits rotation
+     curves well, which is the one thing this panel can demonstrate; the rest of
+     the picture belongs beside it rather than only in the documentation. */
+  .rc-limits {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+
+  .rc-limits > summary {
+    cursor: pointer;
+    color: var(--text-secondary);
+  }
+
+  .rc-limits ul {
+    margin: var(--space-2) 0 0;
+    padding-left: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    line-height: 1.4;
+  }
 }

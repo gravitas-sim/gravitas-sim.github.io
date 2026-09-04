@@ -582,3 +582,128 @@ test.describe('lesson loading', () => {
     await expect(page.locator('body')).not.toHaveClass(/investigation-open/);
   });
 });
+
+// =============================================================================
+// The bottom edge, when a lesson is open
+// -----------------------------------------------------------------------------
+// The transport bar is fixed to the bottom at a higher z-index than the lesson
+// panel, and the panel used to clear it by a constant: 88px as a side column,
+// 76px as a bottom sheet, each written as the bar's 48px plus its offset plus a
+// gap. The bar is only 48px tall while it fits on one row. Between about 640px
+// and 1000px of window it wraps to 62px, and both constants were then short by
+// enough that the bar crossed the panel's footer.
+//
+// Overlapping would be a cosmetic complaint on its own. The bar wins the hit
+// test, so what actually happened is that Back and Next stopped responding:
+// between 640px and 800px a student could not leave the step they were on, and
+// no amount of clicking helped. That is the failure this guards.
+// =============================================================================
+test.describe('a lesson can be driven at any window width', () => {
+  const WIDTHS = [375, 640, 673, 700, 760, 800, 860, 900, 1000, 1280, 1440];
+
+  test('Next is clickable and nothing covers the lesson panel', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(Math.max(120_000, WIDTHS.length * 12_000));
+
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: Math.max(700, width) });
+      await app.boot({ url: '/#investigation=when-orbits-lock' });
+      await page.waitForTimeout(600);
+
+      const stepNow = () =>
+        page.evaluate(
+          () => +(document.body.innerText.match(/STEP\s+(\d+)/i)?.[1] || 0)
+        );
+      const before = await stepNow();
+
+      // A real click, not a forced one: the point is that the button receives
+      // the event, which is exactly what a forced click would paper over.
+      await page
+        .locator('#investigationNext')
+        .click({ timeout: 6000 })
+        .catch(err => {
+          throw new Error(
+            `Next was not clickable at ${width}px: ${String(err.message).split('\n')[0]}`
+          );
+        });
+      await page.waitForTimeout(500);
+      expect(await stepNow(), `step did not advance at ${width}px`).toBe(
+        before + 1
+      );
+
+      // And the instrument, when a step carries one, must not sit on top of the
+      // lesson it belongs to.
+      const overlap = await page.evaluate(() => {
+        const box = sel => {
+          const el = document.querySelector(sel);
+          if (!el || el.hidden) return null;
+          const r = el.getBoundingClientRect();
+          return r.width && r.height ? r : null;
+        };
+        const panel = box('.investigation-panel');
+        const areaWith = other => {
+          const b = box(other);
+          if (!panel || !b) return 0;
+          return (
+            Math.max(
+              0,
+              Math.min(panel.right, b.right) - Math.max(panel.left, b.left)
+            ) *
+            Math.max(
+              0,
+              Math.min(panel.bottom, b.bottom) - Math.max(panel.top, b.top)
+            )
+          );
+        };
+        return {
+          tool: Math.round(areaWith('#investigationTool')),
+          bar: Math.round(areaWith('#timelineBar')),
+        };
+      });
+      expect(
+        overlap.bar,
+        `the transport bar covers the lesson at ${width}px`
+      ).toBe(0);
+      expect(
+        overlap.tool,
+        `the instrument covers the lesson at ${width}px`
+      ).toBe(0);
+    }
+  });
+});
+
+// A lesson that locks the world already refused placement, but the rail button
+// went on looking live: it lit up, set a crosshair, and opened its picker over
+// the lesson panel itself on any window narrow enough for the panel to be a
+// bottom sheet. Refusing the click and still offering the control is the worst
+// of both.
+test.describe('a lesson that locks placement says so', () => {
+  test('the add control is disabled and its picker cannot cover the lesson', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.waitForTimeout(400);
+
+    // Armed before the lesson opens, which is the case that used to persist.
+    await page.click('#objectTypeBtn');
+    await page.click('.object-picker-item[data-object-type="Star"]');
+    await expect(page.locator('body')).toHaveClass(/is-adding/);
+
+    await page.evaluate(() => {
+      window.location.hash = '#investigation=keplers-laws';
+    });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.waitForTimeout(800);
+
+    await expect(page.locator('body')).not.toHaveClass(/is-adding/);
+    await expect(page.locator('#objectTypeBtn')).toBeDisabled();
+
+    // And the picker stays shut, so it cannot land on the lesson panel.
+    await page.locator('#objectTypeBtn').click({ force: true });
+    await page.waitForTimeout(300);
+    await expect(page.locator('#objectTypePicker')).toBeHidden();
+  });
+});

@@ -816,6 +816,61 @@
               </td>
             </tr>
             <tr>
+              <td>MOND</td>
+              <td>
+                An alternative to the halo, selectable in its place and never
+                alongside it. Milgrom&nbsp;(1983) proposed that below a
+                characteristic acceleration
+                <em>a</em><sub>0</sub>&nbsp;=&nbsp;1.2&nbsp;&times;&nbsp;10<sup>&minus;10</sup>&nbsp;m/s&sup2;
+                the relation between gravity and motion departs from Newton's.
+                Gravitas applies it algebraically to the summed Newtonian field
+                of the visible matter, <em>g</em>&nbsp;=&nbsp;&nu;(<em>g</em
+                ><sub>N</sub>/<em>a</em><sub>0</sub>)&nbsp;<em>g</em
+                ><sub>N</sub>, using the "simple" interpolating function
+                &mu;(<em>x</em>)&nbsp;=&nbsp;<em>x</em>/(1&nbsp;+&nbsp;<em>x</em>)
+                of Famaey&nbsp;&amp;&nbsp;Binney&nbsp;(2005), whose inverse is
+                closed form. The two limits are
+                <em>g</em>&nbsp;&rarr;&nbsp;<em>g</em><sub>N</sub> where the
+                field is strong and
+                <em>g</em>&nbsp;&rarr;&nbsp;&radic;(<em>g</em><sub>N</sub><em
+                  >a</em
+                ><sub>0</sub>) where it is weak, which gives
+                <em>v</em><sup>4</sup>&nbsp;=&nbsp;<em>GMa</em><sub>0</sub> far
+                from a galaxy.
+              </td>
+              <td>
+                Off by default, and offered only in the three galaxy scenarios,
+                which declare what one simulation unit represents in kiloparsecs
+                and solar masses. Elsewhere the control is disabled: there is no
+                defensible way to apply a galactic acceleration scale to a
+                planetary system, and doing it silently would be worse than
+                refusing. <em>a</em><sub>0</sub> is fixed and not adjustable,
+                because it is proposed as a constant of nature rather than a
+                property of one galaxy; the halo's two parameters are fitted per
+                galaxy, and the panel labels the difference.
+                <br /><br />
+                MOND fits galaxy rotation curves well, and Gravitas does not
+                treat that as settling anything. It reduces the missing mass in
+                galaxy clusters but leaves a residual factor of about two, so
+                clusters still need unseen matter. The Bullet Cluster shows
+                lensing mass displaced from the visible gas. The acoustic peak
+                heights in the cosmic microwave background are fitted by cold
+                dark matter and are not reproduced without adding a dark
+                component anyway. It has no settled relativistic form, and
+                several proposed completions were ruled out by the measured
+                speed of gravitational waves. The interpolating function is
+                chosen rather than derived. Neither MOND nor dark matter is
+                established by anything in this simulation, and the lesson that
+                compares them says so explicitly.
+                <br /><br />
+                Because the modification is applied to the total field rather
+                than pair by pair, the force between two bodies is no longer
+                derived from a potential in the usual way and momentum is not
+                conserved for an isolated pair. The conservation readout reports
+                this as a caveat whenever MOND is running.
+              </td>
+            </tr>
+            <tr>
               <td>Rotation-curve decomposition</td>
               <td>
                 A separate model, used only by the fitting instrument in "The

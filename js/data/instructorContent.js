@@ -1182,7 +1182,7 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Dark matter',
     difficulty: 'Introductory, with one genuinely open-ended fitting exercise',
     placement:
-      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: twenty-nine screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the lesson that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these lessons comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
+      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-three screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the lesson that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these lessons comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
     overview: `Students weigh systems twice over, once by adding up the mass that is visible and once
       by watching how things move, and discover that the two answers agree for the Solar System and
       disagree badly for anything larger. The lesson opens by making a rotation curve into a tool
@@ -1216,6 +1216,10 @@ export const INSTRUCTOR_CONTENT = {
       {
         heading: 'The rotation curve',
         body: 'Orbital speed plotted against distance from the center. Its shape is a direct readout of where the mass is: a system with its mass concentrated in the middle gives a curve falling as the inverse square root of radius, and any departure from that means mass is still being enclosed further out. The Gravitas panel plots one point per body from live positions and velocities, with nothing fitted or smoothed.',
+      },
+      {
+        heading: 'The other reading: MOND',
+        body: 'Milgrom (1983) observed that rotation curves stop falling at a characteristic acceleration a\u2080 \u2248 1.2 \u00d7 10\u207b\u00b9\u2070 m/s\u00b2 rather than at a characteristic size or brightness, and proposed that below it gravity departs from Newton\u2019s law. Far from a galaxy this gives v\u2074 = G M a\u2080 - a flat curve and a fixed relation between baryonic mass and asymptotic speed, with no parameter fitted per galaxy. That relation is observed independently: it is the baryonic Tully-Fisher relation, and its scatter is small. \n\nMOND is very good at galaxy rotation curves and this is not in dispute. It is much less good elsewhere, and a lesson that presents it as an equal contender across the board would be misleading. In clusters it reduces the missing mass but leaves a residual factor of about two, so clusters still need unseen matter. The Bullet Cluster shows lensing mass displaced from the visible gas after a collision, which is what a collisionless dark component looks like. The relative heights of the acoustic peaks in the cosmic microwave background are fitted by cold dark matter and are not reproduced by MOND without adding a dark component anyway. And MOND has no settled relativistic form: TeVeS and its successors exist, are more complicated than general relativity, and several were ruled out by the measured speed of gravitational waves. \n\nThe symmetric point, which students should also hear: dark matter owes an explanation of why halo properties track the visible mass as tightly as the Tully-Fisher relation says they do, and that is a live problem. Neither picture is finished.',
       },
       {
         heading: 'Why the Keplerian exponent is -0.5',
@@ -1280,11 +1284,27 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Zwicky and the Coma Cluster. The history is introduced, then students work the virial theorem on the real Coma Cluster in an instrument where both classic arithmetic mistakes are selectable, and only then switch to simulation units and record the member count, speed spread and radius of the simulated cluster by hand.',
       },
       {
-        steps: '25-29',
-        text: 'The calculation and its meaning. Two numeric steps take students from the virial theorem to a dynamical mass and then to its ratio against the visible mass. A short-answer step asks what has and has not been established, the mass-budget instrument puts the result in cosmological context, and the lesson closes on where the evidence stands and what remains unknown.',
+        steps: '25-26',
+        text: 'The cluster calculation. Two numeric steps take students from the virial theorem to a dynamical mass and then to its ratio against the visible mass.',
+      },
+      {
+        steps: '27-30',
+        text: 'The other explanation, in four screens. MOND is introduced as what it is - an empirical observation that rotation curves stop falling at a particular acceleration, turned into a law - and then put on the same twelve measurements the halo was fitted to. Students discover that both reproduce the curve inside its error bars, that the halo spent three fitted numbers doing it and MOND spent one, and that the two disagree about how heavy the stellar disc is. A numeric step has them apply v⁴ = G M a₀ by hand, and a short-answer step asks what the curve can and cannot settle. Expect the question "so which one is right?" here; the honest answer is that this measurement does not say, and the step exists to make that a finding rather than a dodge. Nothing in the lesson asserts that either explanation is correct, and the answer key credits students who reach for evidence outside rotation curves.',
+      },
+      {
+        steps: '31-33',
+        text: 'What it all establishes. A short-answer step asks what has and has not been shown, the mass-budget instrument puts the result in cosmological context, and the lesson closes on where the evidence stands and what remains unknown.',
       },
     ],
     features: [
+      {
+        name: 'The same curve, two explanations (steps 27-30)',
+        text: 'The MOND comparison. It scores a dark-matter halo and Milgrom\u2019s modified law against the same twelve synthetic measurements, in the same units, and reports both residuals side by side along with how many numbers each explanation had to be given. The halo generated this curve, so it matches exactly with three fitted numbers; MOND has no halo and only the disc mass to adjust, and with one fitted number it lands about 2 km/s from the data, inside the error bars. a\u2080 is displayed and not adjustable, because it is meant to be a constant of nature rather than a property of this galaxy. \n\nThe two want different discs - MOND prefers about two thirds the stellar mass - and that is worth drawing out rather than glossing: a rotation curve does not measure a stellar mass-to-light ratio, so "how heavy is the disc" was never pinned down by the data in either picture. This is the disc-halo degeneracy and it is real. \n\nThe instrument will not declare a winner, and neither should the discussion. What it demonstrates is that this measurement underdetermines the explanation.',
+      },
+      {
+        name: 'Galaxy gravity modes in the live panel',
+        text: 'The Rotation Curve panel now offers three mutually exclusive laws for the outskirts: visible matter only, visible matter plus the halo, and MOND applied to the visible matter. They are one setting with three values rather than separate switches, so a student cannot construct a world running both a halo and MOND. \n\nMOND is offered only in the three galaxy scenarios, which declare what one simulation unit represents in kiloparsecs and solar masses; everywhere else the button is disabled and says why. There is no defensible way to apply a galactic acceleration scale to a planetary system, and applying one silently would be worse than refusing. The panel labels the halo\u2019s parameters as fitted and MOND\u2019s a\u2080 as fixed, which is the distinction the whole comparison turns on.',
+      },
       {
         name: 'Where the mass is (steps 2-3)',
         text: 'A lesson instrument, not the live panel. It holds a total mass fixed and lets a student arrange it four ways — all in the middle, a uniform ball, an exponential disc, and a halo whose mass keeps growing — showing the mass distribution beside the curve it produces. Every arrangement contains the same mass inside 30 kpc, so the comparison is about shape alone. It reports the outer slope, and names the shape in words using bands that are deliberately comparative: a pseudo-isothermal halo still climbs slightly over any finite range, so "flat" means near zero rather than exactly zero.',

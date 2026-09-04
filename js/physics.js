@@ -26,6 +26,7 @@ import {
 } from './utils.js';
 import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
 import { haloAcceleration } from './darkMatter.js';
+import { a0InSimUnits, mondVector } from './mond.js';
 
 // Import the getRandomName function from ui.js
 // import { getRandomName } from './ui.js';
@@ -273,9 +274,30 @@ let physicsSettings = {
   // The halo is a field, not a body. It has no position of its own to
   // integrate, it never merges or is captured, and it does not appear in the
   // object counts, because nothing about it is visible. That is the point.
+  // Which law governs a galaxy's outskirts. One setting with three values
+  // rather than two booleans, because the halo and MOND are competing
+  // explanations for the same observation and applying both at once would be
+  // physically meaningless. An enum cannot express that mistake.
+  //
+  //   'newtonian'  visible matter only, and the curve falls
+  //   'halo'       Newtonian gravity plus the pseudo-isothermal halo
+  //   'mond'       Milgrom's law applied to the visible matter's own field
+  //
+  // `dark_matter_halo` is kept alongside it as a mirror, not as a second source
+  // of truth: scenarios, saved games and shared links written before this
+  // existed all set the boolean, and normaliseGalaxyGravity() below keeps the
+  // two in step whichever one a caller writes.
+  galaxy_gravity: 'newtonian',
   dark_matter_halo: false,
   halo_v_flat: 6.0,
   halo_core_radius: 300,
+  // What one simulation unit represents, for the scenarios that are scale
+  // models of a galaxy. Zero means "this is not a galaxy", and MOND refuses to
+  // run: there is no defensible acceleration scale for a planetary system or a
+  // black-hole encounter, and applying one silently would be worse than
+  // refusing. See js/mond.js.
+  galaxy_kpc_per_unit: 0,
+  galaxy_msun_per_unit: 0,
 
   // The numerical scheme the bodies are advanced with. Symplectic Euler is the
   // default, and has to stay the default: every shipped scenario was laid out,
@@ -654,8 +676,11 @@ const conservationCaveats = () => {
   ) {
     out.push('caveat.oneWayGravity');
   }
-  if (physicsSettings.dark_matter_halo === true) {
+  if (physicsSettings.galaxy_gravity === 'halo') {
     out.push('caveat.halo');
+  }
+  if (physicsSettings.galaxy_gravity === 'mond') {
+    out.push('caveat.mond');
   }
   if ((physicsSettings.orbit_decay_rate || 0) > 0 && bh_list.length > 1) {
     out.push('caveat.orbitDecay');
@@ -864,13 +889,24 @@ const accelerationBreakdown = body => {
   const halo = activeHalo();
   const field = halo ? haloAcceleration(body.pos, halo) : { ax: 0, ay: 0 };
 
+  // Under MOND there is no extra field to draw: the same sources act, harder.
+  // So the breakdown reports the boost and scales the total, and the arrows for
+  // the individual sources stay Newtonian - which is honest, because that is
+  // what they are. The residual line below then shows the difference the law
+  // makes, rather than hiding it in a component that does not exist.
+  const mondA0 = activeMondA0();
+  const boosted =
+    mondA0 > 0 ? mondVector(sx + field.ax, sy + field.ay, mondA0) : null;
+
   // `total` is evaluated at the body's position now, which is where the arrow
   // is drawn from, so the components add up to it exactly. `stepped` is what
   // the integrator used on the last step, taken from the position the body was
   // at before it moved; the two agree to one step's worth of change, and the
   // difference between them is a statement about the timestep rather than about
   // either of them being wrong.
-  const total = { ax: sx + field.ax, ay: sy + field.ay };
+  const total = boosted
+    ? { ax: boosted.ax, ay: boosted.ay }
+    : { ax: sx + field.ax, ay: sy + field.ay };
   const stepped = body.last_accel
     ? { ax: body.last_accel.x, ay: body.last_accel.y }
     : null;
@@ -880,6 +916,7 @@ const accelerationBreakdown = body => {
     field,
     stepped,
     sumOfSources: { ax: sx, ay: sy },
+    mondBoost: boosted ? boosted.boost : 1,
     residual: { ax: total.ax - sx - field.ax, ay: total.ay - sy - field.ay },
   };
 };
@@ -917,12 +954,33 @@ const publishStepAccelerations = (objs, count) => {
  * @returns {?{vFlat: number, coreRadius: number}} Halo parameters
  */
 const activeHalo = () =>
-  physicsSettings.dark_matter_halo
+  physicsSettings.galaxy_gravity === 'halo'
     ? {
         vFlat: physicsSettings.halo_v_flat,
         coreRadius: physicsSettings.halo_core_radius,
       }
     : null;
+
+/**
+ * Milgrom's constant in simulation units, or 0 when MOND is not running.
+ *
+ * Zero rather than null so the hot loop can test one number. The conversion
+ * itself lives in js/mond.js and depends on the scenario's declared scale, so a
+ * scenario that has not declared one gets 0 here and is left Newtonian - which
+ * is the guard that keeps MOND out of the Solar System.
+ *
+ * @returns {number} a0 in simulation acceleration units
+ */
+const activeMondA0 = () => {
+  if (physicsSettings.galaxy_gravity !== 'mond') return 0;
+  return a0InSimUnits(
+    {
+      kpcPerUnit: physicsSettings.galaxy_kpc_per_unit,
+      solarMassPerUnit: physicsSettings.galaxy_msun_per_unit,
+    },
+    physicsSettings.gravitational_constant
+  );
+};
 
 /**
  * Whether the Barnes-Hut worker path is currently driving gravity.
@@ -1014,7 +1072,71 @@ const CLICK_MIN_RADIUS = {
 
 // Function to update physics settings
 const updatePhysicsSettings = settings => {
-  physicsSettings = { ...physicsSettings, ...settings };
+  physicsSettings = normaliseGalaxyGravity(
+    {
+      ...physicsSettings,
+      ...settings,
+    },
+    settings
+  );
+};
+
+/**
+ * Keep the galaxy-gravity mode and the legacy halo boolean in step.
+ *
+ * There is one rule and it is enforced here rather than at every call site:
+ * the halo and MOND are alternatives, so at most one of them can be in the
+ * force law. Expressing the mode as an enum makes "both at once" unsayable;
+ * this function is what stops the old boolean from saying it anyway.
+ *
+ * Which one wins when a caller writes both is decided by what the caller
+ * actually asked for in this patch, not by what was already there - so
+ * `updatePhysicsSettings({ galaxy_gravity: 'mond' })` turns the halo off, and
+ * a saved game that only knows about `dark_matter_halo` still works.
+ *
+ * @param {object} next - The merged settings
+ * @param {object} patch - Only the keys this call supplied
+ * @returns {object} The merged settings, made self-consistent
+ */
+const normaliseGalaxyGravity = (next, patch = {}) => {
+  const wroteMode = Object.hasOwn(patch, 'galaxy_gravity');
+  const wroteHalo = Object.hasOwn(patch, 'dark_matter_halo');
+
+  let mode = next.galaxy_gravity;
+
+  // Both named in one patch, and disagreeing. This happens when a caller merges
+  // a baseline that says 'newtonian' with an override that says the halo is on
+  // - which is exactly what the validation harness does, and it silently
+  // switched the halo off until this branch existed.
+  //
+  // Resolved toward the positive assertion: `dark_matter_halo: true` is
+  // somebody asking for something, where 'newtonian' is usually a baseline with
+  // no opinion. The state that comes out is consistent either way; this only
+  // decides which of two contradictory requests is honoured.
+  if (wroteHalo && wroteMode && patch.dark_matter_halo === true) {
+    mode = 'halo';
+  } else if (wroteHalo && !wroteMode) {
+    // A caller that only knows the boolean. Turning the halo on means the halo;
+    // turning it off means plain Newtonian - but not if MOND is what is
+    // running, because then the boolean was already false and saying so again
+    // should not silently switch the mode.
+    if (patch.dark_matter_halo === true) mode = 'halo';
+    else if (mode === 'halo') mode = 'newtonian';
+  }
+  if (mode !== 'halo' && mode !== 'mond') mode = 'newtonian';
+
+  // MOND needs a scale to convert a0 into. Without one it is not applied, and
+  // the mode falls back rather than pretending.
+  if (
+    mode === 'mond' &&
+    !(next.galaxy_kpc_per_unit > 0 && next.galaxy_msun_per_unit > 0)
+  ) {
+    mode = 'newtonian';
+  }
+
+  next.galaxy_gravity = mode;
+  next.dark_matter_halo = mode === 'halo';
+  return next;
 };
 
 /**
@@ -1394,6 +1516,9 @@ const growIntegratorScratch = n => {
  */
 const computeAccelerations = (objs, count, halo, allowCache, axOut, ayOut) => {
   const mutual = physicsSettings.mutual_gravity;
+  // Read once per call rather than per body: it involves a unit conversion and
+  // cannot change while a single step is being evaluated.
+  const mondA0 = activeMondA0();
   for (let i = 0; i < count; i++) {
     const obj = objs[i];
     axOut[i] = 0;
@@ -1421,6 +1546,23 @@ const computeAccelerations = (objs, count, halo, allowCache, axOut, ayOut) => {
       const { ax, ay } = gravitational_acceleration(obj.pos, effective_sources);
       axOut[i] += ax;
       ayOut[i] += ay;
+    }
+
+    // MOND, if this scenario is running it.
+    //
+    // Applied last, and to the summed field rather than to each source, because
+    // that is what the law says: the modification is a function of the total
+    // Newtonian acceleration a body feels, not of any one contribution to it.
+    // Summing modified pair terms would be a different and wrong theory, and it
+    // would not even be well defined - nu is nonlinear, so the answer would
+    // depend on the order the sources happened to be listed in.
+    //
+    // The halo branch above cannot have run: the two are exclusive by
+    // construction, and a0 is only non-zero in the 'mond' mode.
+    if (mondA0 > 0) {
+      const m = mondVector(axOut[i], ayOut[i], mondA0);
+      axOut[i] = m.ax;
+      ayOut[i] = m.ay;
     }
   }
 };
@@ -3845,9 +3987,17 @@ class BlackHole {
     // static black hole that quietly accumulated halo velocity would leap the
     // moment anything set it moving.
     const halo = activeHalo();
-    if (!halo) return { ax, ay };
-    const h = haloAcceleration(this.pos, halo);
-    return { ax: ax + h.ax, ay: ay + h.ay };
+    const mondA0 = activeMondA0();
+    if (!halo && !(mondA0 > 0)) return { ax, ay };
+    if (halo) {
+      const h = haloAcceleration(this.pos, halo);
+      return { ax: ax + h.ax, ay: ay + h.ay };
+    }
+    // MOND instead: the same rescaling of the summed field the other bodies
+    // get, so a hole in a galaxy scenario does not quietly stay Newtonian while
+    // everything around it is not.
+    const m = mondVector(ax, ay, mondA0);
+    return { ax: m.ax, ay: m.ay };
   }
 
   /**

@@ -1212,9 +1212,34 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // answer. A student measures the members' speeds and the cluster's size
       // and works out how much mass is needed; the panel never tells them how
       // much halo is there.
-      dark_matter_halo: ps !== 'Spiral Galaxy',
+      galaxy_gravity: ps === 'Spiral Galaxy' ? 'newtonian' : 'halo',
       halo_v_flat: cluster ? 27 : 12,
       halo_core_radius: cluster ? 400 : 150,
+      // What one simulation unit stands for, so that MOND's acceleration scale
+      // can be carried in. Declared only by these three scenarios: js/mond.js
+      // refuses to run without it, which is what keeps a galactic constant out
+      // of the Solar System and the black-hole scenarios.
+      //
+      // The discs span 900 units and represent a 30 kpc galaxy, so one unit is
+      // 1/30 kpc. The mass scale then follows from choosing a real galaxy to be
+      // a model of: 14,700 mass units of visible matter at 9.604e5 solar masses
+      // each is 1.41e10 solar masses, which with a flat curve near 122 km/s
+      // sits on the observed baryonic Tully-Fisher relation.
+      //
+      // That choice matters and is worth being plain about. The flat speed
+      // these scenarios show was picked by hand long before MOND was in the
+      // project, so the mass scale was chosen to make the model galaxy a
+      // realistic one rather than an arbitrary toy. MOND then reproduces the
+      // flat curve from the visible mass alone - but that agreement is a
+      // property of having built a realistic galaxy, not evidence gathered by
+      // this simulation. See MOND_LIMITATIONS in js/mond.js and the lesson,
+      // both of which say so.
+      //
+      // The cluster keeps the same scale because it is built from the same
+      // units, but nothing in the lesson asks MOND to explain a cluster - which
+      // is exactly where MOND is known to fail.
+      galaxy_kpc_per_unit: 1 / 30,
+      galaxy_msun_per_unit: 9.604e5,
     });
   } else if (ps === 'Exoplanet Characterization Lab') {
     // The transit scenarios pin the star at rest, which was harmless while

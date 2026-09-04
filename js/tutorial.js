@@ -1,82 +1,65 @@
 // =============================================================================
 // Guided tour
 // -----------------------------------------------------------------------------
-// A step-through introduction that teaches the things the interface cannot say
-// for itself: that dragging sets velocity, that Shift snaps to a circular
-// orbit, that the energy plot is diagnostic, that history can be rewound.
+// A step-through introduction to the things the interface cannot say for
+// itself. Not a feature list: each step is here because a reader who has not
+// been told will not guess it, and the ones that earn their place are the
+// gestures (drag sets velocity, Shift snaps a circular orbit), the modes
+// (placement has to be armed) and the instruments that look like decoration
+// until you know they are measuring something.
 //
 // Each step names a real element to spotlight. The spotlight is a four-panel
 // scrim rather than a translucent sheet, so the highlighted control stays at
 // full brightness and remains genuinely readable.
+//
+// Every string is a translation key resolved at render time rather than at
+// module load. The old version called t() while building the array, which ran
+// before the Spanish catalogue had finished arriving - it is a dynamic import -
+// so a Spanish reader got English titles until they reloaded. The bodies were
+// not translatable at all.
+//
+// Targets are verified by tests/tutorial.test.js against index.html, because a
+// tour that spotlights an element which no longer exists silently degrades into
+// a tour with no spotlight and nobody notices.
 // =============================================================================
 
 import { t } from './i18n/index.js';
 
+/**
+ * The tour.
+ *
+ * `id` keys the three strings in the catalogues: `tutorial.<id>.title`,
+ * `.body` and `.tip`. `target` is a selector to spotlight, or null for a step
+ * that is about the whole application rather than one control.
+ */
 const STEPS = [
-  {
-    title: t('tutorial.welcome'),
-    body: `A sandbox for gravity. Everything you see is integrated from Newton's
-           law in real time: nothing here is on rails or pre-animated.`,
-    tip: 'This tour takes about a minute. Use ← and → to move through it.',
-    target: null,
-  },
-  {
-    title: t('tutorial.place'),
-    body: `Click empty space and drag before releasing. The direction and length
-           of the drag set the launch velocity, so a short drag drops an object
-           almost at rest and a long one flings it away.`,
-    tip: 'Hold Shift while dragging to snap to a circular orbit. On a touch screen, press and hold first: a plain drag pans the view.',
-    target: '#simulationCanvas',
-  },
-  {
-    title: t('tutorial.choose'),
-    body: `This button cycles the object type: star, planet, gas giant,
-           asteroid, comet, neutron star, white dwarf or black hole. Each has
-           its own mass range and behavior.`,
-    tip: 'Placed something you did not mean to? Press Z, or use Undo Placement.',
-    target: '#objectTypeBtn',
-  },
-  {
-    title: t('tutorial.inspect'),
-    body: `Click an object to open the inspector: mass, radius, temperature,
-           orbital elements and composition. The mass slider is live: push a
-           star past 20 M☉ and it will collapse into a black hole in front of
-           you.`,
-    tip: 'The Energy tab plots kinetic, potential and total energy. A flat total means a stable orbit; a rising one means the orbit is decaying or the object is escaping.',
-    target: '#simulationCanvas',
-  },
-  {
-    title: t('tutorial.rewind'),
-    body: `The transport bar records history as the simulation runs. Drag the
-           scrubber back to replay a merger or a close encounter you missed,
-           then jump back to the present.`,
-    tip: 'Space pauses, "," and "." step one frame, and L returns to live.',
-    target: '#timelineBar',
-  },
-  {
-    title: t('tutorial.scenario'),
-    body: `Thirty-seven scenarios, from the Solar System to GW150914: the first
-           black hole merger LIGO detected. Search by name or by keyword.`,
-    tip: 'Refresh Scenario rebuilds the current one if an experiment gets away from you.',
-    target: '#loadScenarioBtn',
-  },
-  {
-    title: t('tutorial.settings'),
-    body: `Switch between physical units (AU, M☉, km/s, years) and raw
-           simulation units. Themes include Observatory, which uses red chrome
-           to preserve night vision, and Daylight for bright rooms.`,
-    tip: 'Settings holds gravity, object counts, trail styles and performance options.',
-    target: '.ui-container',
-  },
-  {
-    title: t('tutorial.done'),
-    body: `Press <kbd>?</kbd> at any time for the full list of keyboard
-           shortcuts, or reopen this tour from the <strong>?</strong> button in
-           the corner.`,
-    tip: 'Try loading "Hungry Hungry Holes" and watching the energy plot of a planet as it gets eaten.',
-    target: null,
-  },
+  { id: 'welcome', target: null },
+  { id: 'choose', target: '#objectTypeBtn' },
+  { id: 'place', target: '#simulationCanvas' },
+  { id: 'inspect', target: '#simulationCanvas' },
+  { id: 'transport', target: '#timelineBar' },
+  { id: 'rewind', target: '#timelineBar' },
+  { id: 'scenario', target: '#loadScenarioBtn' },
+  { id: 'investigations', target: '#investigationsBtn' },
+  { id: 'measure', target: '#toggleRuler' },
+  { id: 'instruments', target: '#toggleLightCurve' },
+  { id: 'rotation', target: '#toggleRotationCurve' },
+  { id: 'bench', target: '#toggleExperiments' },
+  { id: 'units', target: '#unitToggle' },
+  { id: 'settings', target: '#settingsBtn' },
+  { id: 'share', target: '#shareBtn' },
+  { id: 'done', target: null },
 ];
+
+/** The three strings for a step, resolved now rather than at import. */
+const textOf = s => ({
+  title: t(`tutorial.${s.id}.title`),
+  body: t(`tutorial.${s.id}.body`),
+  tip: t(`tutorial.${s.id}.tip`),
+});
+
+/** Exported for the tests: the step ids and their targets, in order. */
+export const TUTORIAL_STEPS = STEPS;
 
 let step = 0;
 let open = false;
@@ -95,17 +78,61 @@ function clearSpotlight() {
 }
 
 /**
+ * Open whatever the target is folded inside, so there is something to light.
+ *
+ * The control rail is an accordion with one section open at a time, so most of
+ * the controls the tour talks about are inside a collapsed section when it
+ * runs. A collapsed section's children measure zero by zero, spotlight() gave
+ * up on them, and six of the sixteen steps described a control while
+ * highlighting nothing at all.
+ *
+ * Opening the section is also the more useful behaviour: the reader is told
+ * where the control lives and then shown it, rather than being shown a heading
+ * and left to find it.
+ *
+ * @param {HTMLElement} el - The step's target
+ * @returns {boolean} True if something was opened, so the caller can re-measure
+ */
+function revealTarget(el) {
+  const section = el.closest('.rail-section');
+  if (!section?.id) return false;
+  const toggle = document.querySelector(
+    `.rail-section-toggle[aria-controls="${section.id}"]`
+  );
+  if (!toggle || toggle.getAttribute('aria-expanded') === 'true') return false;
+  toggle.click();
+  return true;
+}
+
+/**
  * Spotlight an element by dimming everything except its rectangle.
  * @param {string|null} selector - Element to highlight, or null for none
+ * @param {number} [attempt] - Internal: how many times re-measuring has retried
  */
-function spotlight(selector) {
+function spotlight(selector, attempt = 0) {
   clearSpotlight();
   if (!selector) return;
   const el = document.querySelector(selector);
   if (!el) return;
 
-  const r = el.getBoundingClientRect();
-  if (r.width === 0 || r.height === 0) return;
+  if (attempt === 0) revealTarget(el);
+
+  let r = el.getBoundingClientRect();
+  if (r.width === 0 || r.height === 0) {
+    // The section opens on a max-height transition, so the first measurement
+    // after clicking is still zero. Re-measure on the next few frames rather
+    // than guessing a duration; it settles in two or three and gives up after
+    // that rather than spinning against a control that is genuinely hidden.
+    if (attempt < 30 && open) {
+      requestAnimationFrame(() => {
+        if (open && STEPS[step].target === selector) {
+          spotlight(selector, attempt + 1);
+        }
+      });
+    }
+    return;
+  }
+  r = el.getBoundingClientRect();
   const pad = 6;
   const box = {
     left: Math.max(0, r.left - pad),
@@ -166,16 +193,20 @@ function reposition() {
 /** Render the current step into the popup. */
 function render() {
   const s = STEPS[step];
+  const text = textOf(s);
   els.body.innerHTML = `
-    <p class="tutorial-step-count">Step ${step + 1} of ${STEPS.length}</p>
-    <h3 class="tutorial-title">${s.title}</h3>
-    <p class="tutorial-text">${s.body}</p>
-    ${s.tip ? `<p class="tutorial-tip"><span aria-hidden="true">💡</span> ${s.tip}</p>` : ''}
+    <p class="tutorial-step-count">${t('tutorial.stepCount')
+      .replace('{n}', String(step + 1))
+      .replace('{total}', String(STEPS.length))}</p>
+    <h3 class="tutorial-title">${text.title}</h3>
+    <p class="tutorial-text">${text.body}</p>
+    ${text.tip ? `<p class="tutorial-tip"><span aria-hidden="true">💡</span> ${text.tip}</p>` : ''}
     <div class="tutorial-dots" role="presentation">
       ${STEPS.map((_, i) => `<span class="${i === step ? 'is-current' : i < step ? 'is-done' : ''}"></span>`).join('')}
     </div>`;
   els.prev.disabled = step === 0;
-  els.next.textContent = step === STEPS.length - 1 ? 'Finish' : 'Next';
+  els.next.textContent =
+    step === STEPS.length - 1 ? t('tutorial.finish') : t('tutorial.next');
   spotlight(s.target);
 }
 

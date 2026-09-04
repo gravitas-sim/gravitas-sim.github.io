@@ -134,8 +134,8 @@ export const MANIFEST = [
     summary:
       'Hay dos maneras de pesar un sistema en el espacio: sumar la luz, u observar cómo se mueven las cosas. Para el Sistema Solar coinciden. Para una galaxia no, y para un cúmulo de galaxias difieren en más de un factor diez. Los estudiantes reparten masa y observan la curva de rotación que produce, convierten una velocidad medida en una masa encerrada, y después toman la curva de una galaxia real e intentan ajustarla solo con estrellas —y fracasan, exactamente como fracasó el campo durante una década— antes de añadir un halo y acertar. Cierra con el cúmulo de Zwicky y el presupuesto de masa del universo. Así se encontró la materia oscura, y es una medida, no una teoría.',
     thumbnail: 'images/scenarios/milky-way-rotation.webp',
-    stepCount: 29,
-    gradedCount: 15,
+    stepCount: 33,
+    gradedCount: 17,
     objectiveCount: 8,
   },
   {

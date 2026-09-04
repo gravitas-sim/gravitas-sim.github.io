@@ -656,6 +656,123 @@
     gap: 25px 35px;
   }
 
+  /* --- The outer container and the rows inside a section are not the same
+     thing, and used to be told they were --------------------------------------
+
+     `#settingsGrid` and every per-section grid both carry `.settings-grid`, so
+     the rule above gave both of them two columns of half the *panel*. The
+     sections are laid out two-up, so a section is about 345px wide, and inside
+     it the rows were still being sized for 728px: the row's own content came
+     out 387px wide in a 313px box. Fourteen elements were clipped and the
+     sliders' value readouts sat outside the panel entirely.
+
+     So the two are separated. The id sizes the sections; the descendant rule
+     sizes the rows within one, in tracks that are allowed to shrink -
+     `minmax(0, …)` rather than the default `auto`, which is the whole reason a
+     grid child overflows its track instead of narrowing. */
+  /* --- The filter -----------------------------------------------------------
+     Sixty-three settings in nine collapsible sections. The box is the first
+     thing in the panel because it is the fastest route to any of them. */
+  .settings-filter {
+    margin-bottom: var(--space-4);
+  }
+
+  .settings-filter-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: var(--text-base);
+  }
+
+  .settings-filter-empty {
+    margin: var(--space-3) 0 0;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+
+  #settingsGrid {
+    /* `min(100%, 380px)` rather than a bare 380px: a bare floor is a floor even
+       when the container is narrower than it, which on a 320px phone made the
+       track wider than the panel and pushed every row out through its right
+       edge. The `min()` lets the single column collapse to whatever there is.
+       380px is the width at which a label column and a slider with its readout
+       both still fit; below it the rows stack instead. */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .settings-section .settings-grid {
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    gap: var(--space-3) var(--space-4);
+    align-items: center;
+  }
+
+  /* A section narrow enough that a label column would leave the control no
+     room stacks instead. Container queries would say this better, but the
+     section's width comes from the panel and the panel's from the window, so a
+     width query on the window is the same answer. */
+  @media (max-width: 900px) {
+    .settings-section .settings-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-1) 0;
+    }
+  }
+
+  /* Nothing in a row may refuse to shrink. */
+  .settings-grid .setting-label-container,
+  .settings-grid .setting-control,
+  .setting-slider {
+    min-width: 0;
+  }
+
+  .setting-slider {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .setting-slider-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .setting-slider-row input[type='range'] {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* The readout is the last thing on the row, so it is what falls off the edge
+     when anything upstream refuses to give way. Fixed width and tabular figures
+     also stop the slider twitching sideways as the digits change. */
+  .settings-grid .setting-control .value-display {
+    flex: none;
+    width: 4.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Selects and colour wells fill the track they are given rather than sizing
+     themselves from their longest option, which on `preset_scenario` is a
+     scenario title and far wider than the column. */
+  .settings-grid .setting-control > select,
+  .settings-grid .setting-control > .toggle-button {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .settings-grid .setting-control > select {
+    text-overflow: ellipsis;
+  }
+
   @media (max-width: 620px) {
     .settings-grid {
       grid-template-columns: 1fr;

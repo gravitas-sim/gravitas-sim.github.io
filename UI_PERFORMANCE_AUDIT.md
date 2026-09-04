@@ -213,16 +213,20 @@ readout wants. No leak, no duplication found.
 **The physics integrator.** Untouched. No scientific calculation, scenario
 outcome or educational result was changed anywhere in this pass.
 
-**Legacy `styles.css`.** Still 4,300 lines with historical hard-coded colours.
-The scenario browser's dead `.scenario-list-item` rules are inert (nothing
-renders that class, and `components` wins on layer order), and unpicking them by
-hand across five media queries is more risk than the bytes are worth. Worth a
-deliberate pass of its own.
+**Legacy `styles.css`.** Was 3,262 lines with historical hard-coded colours.
+The scenario browser's dead `.scenario-list-item` rules were inert (nothing
+rendered that class, and `components` wins on layer order) and this audit left
+them for a deliberate pass of its own. That pass has since happened: 54 rule
+blocks, 444 lines, were removed and the file is now 2,818 lines. The remaining
+hard-coded colours are untouched.
 
-**`ui.js`.** Still 8,000 lines. The scenario browser and the front door have
-already been extracted; the object inspector is the obvious next boundary, but
-it is entangled with the energy chart and the drag behaviour, and this was not
-the pass to attempt it.
+**`ui.js`.** Was 8,000 lines at the time of this audit. The scenario browser
+and the front door had already been extracted; the object inspector was named
+here as the obvious next boundary, but it is entangled with the energy chart and
+the drag behaviour and this was not the pass to attempt it. A later pass took
+the other candidate instead - world construction, now `js/world/build.js` - on
+the grounds that it closed over only fourteen bindings where the inspector
+closes over most of the module. The inspector remains unextracted.
 
 ---
 

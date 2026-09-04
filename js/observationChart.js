@@ -38,6 +38,12 @@ export function chartColors() {
     // none at all for a screen reader.
     warm: token('--danger', '#e2725b'),
     cool: token('--info', '#5b9bd5'),
+    // A third model curve, for the rotation-curve panel: the halo and MOND are
+    // alternatives and are never drawn at the same time, so a reader comparing
+    // them is comparing across a switch and the hue is what carries which is
+    // which. Distinguished by dash pattern as well, for the same reason the
+    // pair above is always backed by words.
+    alt: token('--success', '#3fb950'),
     neutral: token('--text-muted', '#888'),
   };
 }

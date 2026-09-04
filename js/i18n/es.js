@@ -179,12 +179,12 @@ export const ES = {
     'Guías docentes, soluciones y un mapa curricular para el profesorado',
   'rail.railLearnBody.hint.3': 'Abrir el manual de usuario de Gravitas (PDF)',
   'rail.objectType.hint':
-    'Pulsar para cambiar el tipo de objeto que se inserta',
+    'Elige qué añadir y luego haz clic en el lienzo para colocarlo',
   'rail.mainControls.label': 'Controles de la simulación',
   'rail.railToolsBody.label': 'Herramientas de medida',
   'rail.slowDown.label': 'Reducir la velocidad',
   'rail.speedUp.label': 'Aumentar la velocidad',
-  'rail.objectType.label': 'Cambiar el tipo de objeto que se inserta',
+  'rail.objectType.label': 'Elegir un objeto para añadir',
 
   // --- Rail: labels ----------------------------------------------------------
   // The emoji stay: they are part of the button's shape rather than of its
@@ -513,7 +513,10 @@ export const ES = {
   'rail.railLearnBody': 'Cómo funciona el modelo',
   'rail.railLearnBody.2': 'Recursos para el profesorado',
   'rail.railLearnBody.3': 'Manual de usuario (PDF)',
-  'rail.objectType': '⭐ Añadir estrellas',
+  'rail.objectType': '⭐ Añadir objeto',
+  'rail.objectType.choose': 'Añadir objeto',
+  'rail.objectType.placing': 'Haz clic para colocar · Esc',
+  'rail.objectType.stop': 'Dejar de añadir',
 
   // --- Readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimizar',
@@ -610,6 +613,181 @@ export const ES = {
   'settings.label.lensingQuality': 'Calidad de la lente',
   'settings.label.diskDoppler': 'Efecto Doppler en el disco de acreción',
   'settings.label.numBlackHoles': 'Número de agujeros negros',
+  // --- Gravedad galactica: el halo, MOND, y cuidado con ambos ----------------
+  // --- dm-mond: la misma curva, dos explicaciones ----------------------------
+  'dmW.mondTitle': 'La misma curva, dos explicaciones',
+  'dmW.mondNote':
+    'El ajuste con halo y MOND, evaluados con las mismas medidas. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fijate en lo que hubo que decirle a cada uno.',
+  'dmW.mondModel': 'Explicacion',
+  'dmW.mondHaloOption': 'Halo de materia oscura',
+  'dmW.mondMondOption': 'MOND',
+  'dmW.mondPresetHalo': 'Mejor ajuste con halo',
+  'dmW.mondPresetMond': 'Mejor ajuste MOND',
+  'dmW.mondPresetHaloNote':
+    'La descomposicion que genero esta curva: un disco de 3,3e10 y un halo cuya velocidad plana y radio de nucleo se ajustaron hasta coincidir. Tres numeros ajustados y una coincidencia exacta.',
+  'dmW.mondPresetMondNote':
+    'MOND con el disco que prefiere: 2,1e10, unas dos terceras partes de las estrellas del ajuste con halo, y ningun halo. Un numero ajustado y una coincidencia dentro de las barras de error.',
+  'dmW.mondShowing': 'Mostrando',
+  'dmW.mondHaloRow': 'Ajuste con halo',
+  'dmW.mondMondRow': 'Ajuste MOND',
+  'dmW.mondThreeFitted': '3 numeros ajustados',
+  'dmW.mondOneFitted': '1 numero ajustado',
+  'dmW.mondPredictedRow': 'Velocidad plana de MOND para este disco',
+  'dmW.mondVerdict': 'Que muestra esto',
+  'dmW.mondInsideErrors': 'dentro de las barras de error',
+  'dmW.mondClose': 'cerca',
+  'dmW.mondOff': 'lejos',
+  'dmW.mondBothFit':
+    'Esta explicacion reproduce las medidas. La otra tambien lo hace, con su propia masa de disco y con un numero distinto de parametros ajustados. La curva por si sola no decide entre ellas.',
+  'dmW.mondKeepAdjusting':
+    'Todavia no coincide. Ajusta el disco hasta que esta explicacion reproduzca los puntos, y luego prueba la otra.',
+  'dmW.mondSynthetic': 'curva sintetica, parametros de NGC 3198',
+  // --- La visita guiada ------------------------------------------------------
+  'tutorial.stepCount': 'Paso {n} de {total}',
+  'tutorial.next': 'Siguiente',
+  'tutorial.finish': 'Terminar',
+
+  'tutorial.welcome.title': 'Bienvenido a Gravitas',
+  'tutorial.welcome.body':
+    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Cada cuerpo en pantalla se integra en tiempo real a partir de la ley de gravitación de Newton: aquí nada va sobre raíles ni está animado de antemano. Si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad.',
+  'tutorial.welcome.tip':
+    'Esta visita tiene dieciséis pasos y dura unos tres minutos. Usa ← y → para avanzar, o Escape para salir en cualquier momento.',
+
+  'tutorial.choose.title': 'Elige qué añadir',
+  'tutorial.choose.body':
+    'Este botón abre la lista de los ocho tipos de objeto que puedes colocar: estrella, planeta rocoso, gigante gaseoso, asteroide, cometa, enana blanca, estrella de neutrones y agujero negro. Cada uno tiene su rango de masas y su comportamiento. Elegir uno <strong>arma</strong> el lienzo: el botón se ilumina y el cursor pasa a ser una cruz.',
+  'tutorial.choose.tip':
+    'No se coloca nada hasta que lo armas, y eso es lo que evita que un clic mal calculado en el cielo vacío añada una estrella que no querías. Pulsa Escape, o el botón de nuevo, para desarmarlo.',
+
+  'tutorial.place.title': 'Colócalo arrastrando',
+  'tutorial.place.body':
+    'Con un tipo elegido, pulsa en espacio vacío y arrastra antes de soltar. La dirección y la longitud del arrastre fijan la velocidad de lanzamiento: un arrastre corto deja el objeto casi en reposo y uno largo lo lanza lejos. Una línea discontinua previsualiza la trayectoria.',
+  'tutorial.place.tip':
+    'Mantén Mayúsculas mientras arrastras para ajustar a una órbita circular alrededor de la masa dominante más cercana. En pantalla táctil, mantén pulsado primero: un arrastre simple desplaza la vista.',
+
+  'tutorial.inspect.title': 'Inspecciona cualquier cosa',
+  'tutorial.inspect.body':
+    'Haz clic en cualquier objeto para abrir su inspector: masa, radio, temperatura, elementos orbitales y composición, todo calculado a partir de su estado real y no consultado en una tabla. El deslizador de masa está vivo: lleva una estrella por encima de unas 20 masas solares y colapsará en un agujero negro delante de ti.',
+  'tutorial.inspect.tip':
+    'La pestaña de Energía representa la energía cinética, potencial y total frente al tiempo. Un total plano indica una órbita estable; uno que deriva indica que la órbita decae, que el cuerpo escapa o que el paso de tiempo es demasiado grueso.',
+
+  'tutorial.transport.title': 'Pausa, avanza y acelera',
+  'tutorial.transport.body':
+    'La barra inferior controla el tiempo. Pausa para estudiar una configuración, avanza fotograma a fotograma durante un encuentro cercano, o corre rápido para ver evolucionar un sistema a lo largo de miles de órbitas.',
+  'tutorial.transport.tip':
+    'La barra espaciadora pausa y reanuda. Las teclas coma y punto avanzan un solo fotograma en pausa, que es la única manera de ver qué ocurre realmente durante una colisión.',
+
+  'tutorial.rewind.title': 'Rebobina lo que acaba de pasar',
+  'tutorial.rewind.body':
+    'La misma barra graba el historial mientras la simulación corre. Arrastra el cursor hacia atrás para volver a ver una fusión o una asistencia gravitatoria que te perdiste, y luego vuelve al presente y continúa donde estabas.',
+  'tutorial.rewind.tip':
+    'Pulsa L para volver al presente. Rebobinar no deshace nada: es una reproducción de lo ocurrido, no una rama alternativa.',
+
+  'tutorial.scenario.title': 'Empieza desde un sistema real',
+  'tutorial.scenario.body':
+    'Cincuenta y tres escenarios, desde el Sistema Solar y TRAPPIST-1 hasta GW150914, la primera fusión de agujeros negros detectada por LIGO. Varios son modelos a escala y lo indican en su ficha. Busca por nombre o filtra por concepto.',
+  'tutorial.scenario.tip':
+    'Reiniciar escenario lo reconstruye desde cero si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
+
+  'tutorial.investigations.title': 'Investigaciones guiadas',
+  'tutorial.investigations.body':
+    'Doce lecciones estructuradas que usan la simulación como evidencia y no como ilustración. Mides algo, predices qué se sigue y se te dice si la predicción se cumplió. Cubren las leyes de Kepler, las mareas, los agujeros negros, los tránsitos de exoplanetas, el caos, la resonancia orbital y el caso de la materia oscura.',
+  'tutorial.investigations.tip':
+    'Cada una termina con un informe que puedes exportar en PDF, con tus propias medidas y respuestas. El progreso se guarda si cierras la lección y vuelves.',
+
+  'tutorial.measure.title': 'Mídelo tú mismo',
+  'tutorial.measure.body':
+    'Una regla, un transportador y un cronómetro que se engancha a un cuerpo y mide su órbita. Se dibujan sobre el propio lienzo, así que una captura lleva consigo su escala y su reloj.',
+  'tutorial.measure.tip':
+    'La barra de escala y el tiempo simulado transcurrido se graban en cada captura y en cada clip, que es lo que hace que una imagen tomada aquí sirva como figura.',
+
+  'tutorial.instruments.title': 'Los instrumentos',
+  'tutorial.instruments.body':
+    'Cinco paneles de análisis que observan la simulación en marcha: una curva de luz de tránsito, una traza de velocidad radial, un diagrama de bamboleo astrométrico, una curva de rotación y una vista tridimensional. Miden los cuerpos que realmente están ahí: ninguno es una animación enlatada.',
+  'tutorial.instruments.tip':
+    'La curva de luz, la velocidad radial y la astrometría juntas son como se ha encontrado todo exoplaneta del que hayas oído hablar. Abre los tres sobre el mismo sistema y compara qué ve cada uno.',
+
+  'tutorial.rotation.title': 'Curvas de rotación y dos explicaciones',
+  'tutorial.rotation.body':
+    'El panel de curva de rotación representa en vivo la velocidad orbital frente al radio para cada cuerpo, frente a lo que predice la masa visible por sí sola. En los escenarios de galaxia puedes elegir qué ley gobierna las afueras: solo materia visible, materia visible más un halo de materia oscura, o MOND. Son mutuamente excluyentes, y el panel indica qué parámetros se ajustaron y cuáles son fijos.',
+  'tutorial.rotation.tip':
+    'Tanto el halo como MOND pueden hacerse coincidir con la misma curva. Ese es el sentido de la comparación, y la lección dice con claridad que ajustar una curva de rotación no establece cuál explicación es correcta.',
+
+  'tutorial.bench.title': 'Compara dos ejecuciones como es debido',
+  'tutorial.bench.body':
+    'El banco de experimentos captura un estado inicial, lo ejecuta, vuelve exactamente a ese estado, te deja cambiar una sola cosa y lo ejecuta otra vez. Después compara ambas y te avisa si se movió más de una variable entre ellas.',
+  'tutorial.bench.tip':
+    'Esta es la diferencia entre un experimento y una demostración. Ambas ejecuciones se pueden exportar, y una comparación se puede compartir como enlace que reproduce el montaje.',
+
+  'tutorial.units.title': 'Unidades y temas',
+  'tutorial.units.body':
+    'Cambia entre unidades físicas —unidades astronómicas, masas solares, kilómetros por segundo, años— y las unidades de simulación con las que trabaja el integrador. Hay cuatro temas, entre ellos Observatorio, que usa tonos rojos para conservar la visión nocturna, y Luz de día para salas iluminadas.',
+  'tutorial.units.tip':
+    'Algunos escenarios son modelos a escala y no la cosa real, y cuando eso importa el panel indica a través de qué escala física está leyendo.',
+
+  'tutorial.settings.title': 'Todo lo demás',
+  'tutorial.settings.body':
+    'Sesenta y tres ajustes: la constante gravitatoria, el integrador, el número de objetos, los patrones de colocación, los estilos de estela, los efectos visuales y las opciones de rendimiento. Los cambios estructurales reconstruyen la simulación; el resto se aplican al momento.',
+  'tutorial.settings.tip':
+    'El buscador en la parte superior del panel filtra por nombre, así no tienes que recordar en cuál de las nueve secciones vive un ajuste.',
+
+  'tutorial.share.title': 'Llévatelo contigo',
+  'tutorial.share.body':
+    'Comparte un enlace que reproduce exactamente lo que hay en tu pantalla: el escenario, los ajustes, la cámara y la semilla. O haz una captura, graba un clip, o exporta en CSV los números que hay detrás de cualquier instrumento.',
+  'tutorial.share.tip':
+    'Un enlace compartido puede abrirse en modo incrustado para una diapositiva o una página de curso, y el modo conferencia reduce la interfaz para proyectarla.',
+
+  'tutorial.done.title': 'Ya está',
+  'tutorial.done.body':
+    'Pulsa <kbd>?</kbd> en cualquier momento para ver la lista completa de atajos de teclado, o vuelve a abrir esta visita desde el botón <strong>?</strong> de la esquina. Nada de lo que hagas aquí puede romper nada: Reiniciar deja el escenario como venía.',
+  'tutorial.done.tip':
+    'Un buen primer experimento: carga el Sistema Solar, abre la curva de rotación y comprueba que cae exactamente como dice Kepler. Después carga Rotación de la Vía Láctea y comprueba que no.',
+  'rotation.mode.label': 'Gravedad en las afueras',
+  'rotation.mode.newtonian': 'Solo visible',
+  'rotation.mode.newtonian.hint':
+    'Gravedad newtoniana solo de la materia visible. Es la prediccion que la curva plana contradice.',
+  'rotation.mode.halo': 'Halo',
+  'rotation.mode.halo.hint':
+    'Gravedad newtoniana mas un halo de materia oscura. Dos parametros, ajustados a esta galaxia.',
+  'rotation.mode.mond': 'MOND',
+  'rotation.mode.mond.hint':
+    'La ley de Milgrom aplicada a la materia visible. Aqui no se ajusta ningun parametro a esta galaxia.',
+  'rotation.mond.hint':
+    'La ley de Milgrom aplicada a la materia visible. Aqui no se ajusta ningun parametro a esta galaxia.',
+  'rotation.mond.unavailable':
+    'MOND se aplica a galaxias. Este escenario no declara una escala galactica, asi que no se ofrece aqui.',
+  'rotation.mond.limits': 'Lo que MOND no explica',
+  'rotation.mond.predicted': 'MOND predice (a partir de la masa visible)',
+  'rotation.mond.predicted.hint':
+    'En unidades de simulacion, con el valor fisico que implica la escala galactica declarada de este escenario al lado.',
+  'rotation.param.fitted': 'Ajustado',
+  'rotation.param.fixed': 'Fijo',
+  'rotation.param.haloTwo':
+    'dos parametros por galaxia: la velocidad plana y el radio del nucleo, ambos ajustados hasta que la curva coincide.',
+  'rotation.param.mondNone':
+    'aqui no se ajusta ningun parametro. a₀ es una constante de la ley propuesta, la misma para todas las galaxias.',
+  'rotation.param.newtonNone':
+    'no se ajusta nada. La curva es la que implica la masa visible.',
+  'caveat.mond':
+    'MOND esta en la ley de fuerzas, asi que la gravedad no es newtoniana y la contabilidad habitual de conservacion no se aplica.',
+  // --- Lo que MOND no consigue. Citado por la pagina del modelo y la leccion.
+  'mond.limitation.clusters':
+    'Cumulos de galaxias. MOND reduce la masa faltante en los cumulos pero no la elimina: queda un factor residual de unas dos veces, asi que los cumulos siguen necesitando materia no vista de algun tipo.',
+  'mond.limitation.bullet':
+    'El Cumulo Bala. Tras una colision la masa deducida por lentes esta desplazada del gas visible, que es el aspecto de una componente oscura sin colisiones y es dificil para una teoria en la que la gravedad sigue a la materia visible.',
+  'mond.limitation.cmb':
+    'El fondo cosmico de microondas. Las alturas relativas de los picos acusticos se ajustan bien con materia oscura fria y MOND no las reproduce sin anadir de todos modos una componente oscura.',
+  'mond.limitation.relativistic':
+    'No es una teoria relativista. Existen completaciones relativistas (TeVeS y sus sucesoras) pero son mas complicadas que la relatividad general y varias han quedado descartadas por la velocidad de las ondas gravitacionales.',
+  'mond.limitation.interpolation':
+    'La funcion de interpolacion se elige, no se deduce. La teoria fija solo los dos limites; la forma de la transicion entre ellos se pone a mano.',
+  'mond.limitation.external':
+    'El efecto de campo externo. En MOND un sistema se ve afectado por el campo gravitatorio en el que esta inmerso incluso cuando ese campo es uniforme, lo que rompe el principio de equivalencia fuerte y dificulta enunciar predicciones aisladas.',
+  'settings.filter.label': 'Buscar ajustes',
+  'settings.filter.placeholder': 'Buscar ajustes',
+  'settings.filter.hint':
+    'Muestra solo los ajustes cuyo nombre coincide con lo que escribes.',
+  'settings.filter.empty': 'Ningún ajuste coincide.',
   'settings.label.bhMass': 'Masa por defecto (M☉)',
   'settings.label.useIndividualBhMasses': 'Masas individuales',
   'settings.label.bhBehavior': 'Comportamiento',
@@ -661,8 +839,8 @@ export const ES = {
   'settings.option.placement.random': 'Aleatoria',
   'settings.option.placement.grid': 'Cuadrícula',
   'settings.option.placement.empty': 'Vacía',
-  'settings.option.trailColourMode.type': 'tipo',
-  'settings.option.trailColourMode.speed': 'velocidad',
+  'settings.option.trailColourMode.type': 'Por tipo',
+  'settings.option.trailColourMode.speed': 'Por velocidad',
   'settings.option.lensingQuality.off': 'desactivada',
   'settings.option.lensingQuality.low': 'baja',
   'settings.option.lensingQuality.medium': 'media',

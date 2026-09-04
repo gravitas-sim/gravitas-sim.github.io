@@ -1,0 +1,1504 @@
+{
+  "Solar System": {
+    "error": null,
+    "count": 35,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 4,
+      "GasGiant": 4,
+      "Asteroid": 16,
+      "Comet": 10
+    },
+    "totalMass": 1001.3412903,
+    "momentum": {
+      "x": 0.961936556294,
+      "y": -1.14053850008
+    },
+    "scenarioName": "Solar System",
+    "presetSentinel": "None",
+    "zoom": 0.25,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "bfde791ef9bd5cee",
+    "settings": "a8b9412505432d07",
+    "head": [
+      "stars|0|StarObject|69|Sol|1000|15|0|0|0|0||",
+      "planets|0|Planet|70|Mercury|0.000165191928887|2.09449250779|38.7|0|0|5.08328567775||",
+      "planets|1|Planet|71|Venus|0.00244784403714|4.70237529379|51.1238202798|51.1238202798|-2.62975841519|2.62975841519||"
+    ]
+  },
+  "Retrograde Mars": {
+    "error": null,
+    "count": 3,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 2
+    },
+    "totalMass": 1000.00332486,
+    "momentum": {
+      "x": -0.00899996501069,
+      "y": -0.00291974391872
+    },
+    "scenarioName": "Retrograde Mars",
+    "presetSentinel": "None",
+    "zoom": 1.6,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "52d3f1d64f3c33e2",
+    "settings": "93809acf3c8b508f",
+    "head": [
+      "stars|0|StarObject|3|Sun|1000|10|0|0|0|0||",
+      "planets|0|Planet|4|Earth|0.00300348961612|4|-22.4951054344|97.4370064785|-3.08122868861|-0.711357693783|P|",
+      "planets|1|Planet|5|Mars|0.000321373388925|3|-144.845907432|-47.0632882433|0.79183083981|-2.43700473991|P|"
+    ]
+  },
+  "Earth-Moon System": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "Planet": 2
+    },
+    "totalMass": 0.0030404325384,
+    "momentum": {
+      "x": 0,
+      "y": 0
+    },
+    "scenarioName": "Earth-Moon System",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "85d0687a75dc8666",
+    "settings": "dfb73e4456b07cd6",
+    "head": [
+      "planets|0|Planet|1|Earth|0.00300348961612|12|-0.405435549689|0.12835847514|-0.00324273473202|-0.0102425643272||",
+      "planets|1|Planet|2|Luna|0.0000369429222783|3|32.9622398121|-10.4356483854|0.263636970083|0.832728807092||"
+    ]
+  },
+  "TRAPPIST-1 System": {
+    "error": null,
+    "count": 8,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 7
+    },
+    "totalMass": 89.819366501,
+    "momentum": {
+      "x": -0.0089853873241,
+      "y": 0.027786294572
+    },
+    "scenarioName": "TRAPPIST-1 System",
+    "presetSentinel": "None",
+    "zoom": 55,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "593904710ce74aa1",
+    "settings": "74bed7de13dfba6a",
+    "head": [
+      "stars|0|StarObject|0|TRAPPIST-1|89.8|0.4|0|0|0|0||",
+      "planets|0|Planet|8|TRAPPIST-1b|0.00412679473255|0.12834|1.15|0|0|8.83668243866||",
+      "planets|1|Planet|9|TRAPPIST-1c|0.00392856441789|0.126155|0.985113886937|1.2352937423|-5.89417165107|4.70044504124||"
+    ]
+  },
+  "Three-Body Sensitivity Lab": {
+    "error": null,
+    "count": 3,
+    "byType": {
+      "StarObject": 3
+    },
+    "totalMass": 18000,
+    "momentum": {
+      "x": -2.91038304567e-11,
+      "y": -1.45519152284e-11
+    },
+    "scenarioName": "Three-Body Sensitivity Lab",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "6854e5e39fe61491",
+    "settings": "a3ffb404e2d98ed2",
+    "head": [
+      "stars|0|StarObject|3|Alpha|6000|8|50|0|0|11.7713238255|P|",
+      "stars|1|StarObject|4|Beta|6000|8|-25|43.3012701892|-10.1942654691|-5.88566191277|P|",
+      "stars|2|StarObject|5|Gamma|6000|8|-25|-43.3012701892|10.1942654691|-5.88566191277|P|"
+    ]
+  },
+  "Galilean Resonance": {
+    "error": null,
+    "count": 5,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 4
+    },
+    "totalMass": 0.954989618547,
+    "momentum": {
+      "x": 0,
+      "y": -1.23746219638e-21
+    },
+    "scenarioName": "Galilean Resonance",
+    "presetSentinel": "None",
+    "zoom": 2.8,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "5e59f1f9de16f0fb",
+    "settings": "cd5b4cd306a170b3",
+    "head": [
+      "stars|0|StarObject|5|Jupiter|0.954791938424|4.77894502545|-0.00566937787777|-0.00713183857476|0.00000697795748911|-0.0000197380321322|P|",
+      "planets|0|Planet|6|Io|0.0000449134127835|2.43532878038|28.0743171911|-0.00713183857476|0.00000697795748911|0.261298438845|P|",
+      "planets|1|Planet|7|Europa|0.0000241371402034|2.08666071609|-44.4500754592|-0.00713183857476|0.00000697795748909|-0.208275945711|P|"
+    ]
+  },
+  "Broken Laplace Resonance": {
+    "error": null,
+    "count": 5,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 4
+    },
+    "totalMass": 0.954989618547,
+    "momentum": {
+      "x": 0,
+      "y": -6.51818322692e-21
+    },
+    "scenarioName": "Broken Laplace Resonance",
+    "presetSentinel": "None",
+    "zoom": 2.8,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "33df6b706944da5c",
+    "settings": "cd5b4cd306a170b3",
+    "head": [
+      "stars|0|StarObject|5|Jupiter|0.954791938424|4.77894502545|-0.00565814465764|-0.00713183857476|0.00000697795748911|-0.0000197641545125|P|",
+      "planets|0|Planet|6|Io|0.0000449134127835|2.43532878038|28.0743284243|-0.00713183857476|0.00000697795748911|0.261298412723|P|",
+      "planets|1|Planet|7|Europa|0.0000241371402034|2.08666071609|-44.8945082868|-0.00713183857476|0.00000697795748909|-0.207242435887|P|"
+    ]
+  },
+  "Pluto and Neptune": {
+    "error": null,
+    "count": 4,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 3
+    },
+    "totalMass": 1000.05152763,
+    "momentum": {
+      "x": -8.47032947254e-22,
+      "y": 6.31632468768e-18
+    },
+    "scenarioName": "Pluto and Neptune",
+    "presetSentinel": "None",
+    "zoom": 0.085,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "180a7979b2b1d2c1",
+    "settings": "fcdbc41115301307",
+    "head": [
+      "stars|0|StarObject|4|Sun|1000|110|-0.153590499804|-0.0000348266442621|7.71427280963e-9|-0.0000423818715808|P|",
+      "planets|0|Planet|5|Neptune|0.0515145270966|60|2981.0063654|-0.0000348266442621|7.71427280963e-9|0.822561724674|P|",
+      "planets|1|Planet|6|Pluto|0.0000065512|5|1898.06401593|2606.0513933|-0.594571338112|0.616047849904|P|"
+    ]
+  },
+  "Jupiter Trojans": {
+    "error": null,
+    "count": 6,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 4,
+      "GasGiant": 1
+    },
+    "totalMass": 1000.95479194,
+    "momentum": {
+      "x": -1.29185502926e-9,
+      "y": -4.03945765726e-11
+    },
+    "scenarioName": "Jupiter Trojans",
+    "presetSentinel": "None",
+    "zoom": 0.6,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "6f73c05b5b8f3d7d",
+    "settings": "fc6d354441242972",
+    "head": [
+      "stars|0|StarObject|6|Sun|1000|20|-0.496437921508|0|0|-0.00187081643152|P|",
+      "planets|0|Planet|8|L4 probe|1e-9|4|259.723562078|450.714261146|-1.69850772703|0.978763076991|P|",
+      "planets|1|Planet|9|Patroclus|1e-9|4|17.6666561423|-520.122962014|1.9600730355|0.0665764422282|P|"
+    ]
+  },
+  "Binary Pair": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "StarObject": 2
+    },
+    "totalMass": 4000,
+    "momentum": {
+      "x": 0,
+      "y": 0
+    },
+    "scenarioName": "Binary Pair",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "b9df2a68520c386e",
+    "settings": "63cc6c1d80ccb195",
+    "head": [
+      "stars|0|StarObject|0|Star A|2000|9|-200|0|0|-1.58113883008|P|",
+      "stars|1|StarObject|1|Star B|2000|9|200|0|0|1.58113883008|P|"
+    ]
+  },
+  "Interstellar Visitor": {
+    "error": null,
+    "count": 3,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 2
+    },
+    "totalMass": 1000.00300349,
+    "momentum": {
+      "x": -0.00949786517202,
+      "y": 2.0454e-9
+    },
+    "scenarioName": "Interstellar Visitor",
+    "presetSentinel": "None",
+    "zoom": 1.1,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "9415df1936a20263",
+    "settings": "8ac1c95c7a1dc1b2",
+    "head": [
+      "stars|0|StarObject|0|Sun|1000|9|0|0|0|0|P|",
+      "planets|0|Planet|3|Earth|0.00300348961612|3|0|100|-3.16227766017|0|P|",
+      "planets|1|Planet|4|1I/'Oumuamua|1e-9|2.2|-286.14|-279.48|2.9436|2.0454|P|"
+    ]
+  },
+  "Transit Lab": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 1
+    },
+    "totalMass": 1148.65880641,
+    "momentum": {
+      "x": 10.2451694107,
+      "y": 6.27335696276e-16
+    },
+    "scenarioName": "Transit Lab",
+    "presetSentinel": "None",
+    "zoom": 60,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "d5b52d79561cfb55",
+    "settings": "be4a5203ea82ff53",
+    "head": [
+      "stars|0|StarObject|0|HD 209458|1148|0.537129285|0|0|0|0|P|",
+      "planets|0|Planet|2|HD 209458 b|0.658806409836|0.0659496823082|2.90669917778e-16|-4.747|15.5511076664|9.52230711344e-16|P|"
+    ]
+  },
+  "Spiral Galaxy": {
+    "error": null,
+    "count": 91,
+    "byType": {
+      "StarObject": 91
+    },
+    "totalMass": 14700,
+    "momentum": {
+      "x": 1059.12917653,
+      "y": 391.000316751
+    },
+    "scenarioName": "Spiral Galaxy",
+    "presetSentinel": "None",
+    "zoom": 0.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "edfc384663eec1fe",
+    "settings": "011cd832f2354344",
+    "head": [
+      "stars|0|StarObject|0|Galactic bulge|12000|82.6616479452|0|0|0|0|P|",
+      "stars|1|StarObject|1|Disc star 1|30|0.507636763456|113.412321379|98.1715099168|-5.85381785674|6.76260426908|P|",
+      "stars|2|StarObject|2|Disc star 2|30|0.507636763456|145.91247991|-46.1950202433|2.67597629832|8.45239023194|P|"
+    ]
+  },
+  "Milky Way Rotation": {
+    "error": null,
+    "count": 91,
+    "byType": {
+      "StarObject": 91
+    },
+    "totalMass": 14700,
+    "momentum": {
+      "x": 2241.18896253,
+      "y": -130.909045247
+    },
+    "scenarioName": "Milky Way Rotation",
+    "presetSentinel": "None",
+    "zoom": 0.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "16aa5a03deaa9903",
+    "settings": "f6e2e165d7f0b089",
+    "head": [
+      "stars|0|StarObject|0|Galactic bulge|12000|82.6616479452|0|0|0|0|P|",
+      "stars|1|StarObject|1|Disc star 1|30|0.507636763456|113.412321379|98.1715099168|-7.19924406056|8.31690356782|P|",
+      "stars|2|StarObject|2|Disc star 2|30|0.507636763456|145.91247991|-46.1950202433|3.32011644188|10.4869836851|P|"
+    ]
+  },
+  "Coma Cluster": {
+    "error": null,
+    "count": 24,
+    "byType": {
+      "Galaxy": 24
+    },
+    "totalMass": 96000,
+    "momentum": {
+      "x": 19619.2207851,
+      "y": -124763.954182
+    },
+    "scenarioName": "Coma Cluster",
+    "presetSentinel": "None",
+    "zoom": 0.16,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "32ae8ba3dbfc8b81",
+    "settings": "3f914e3f46e0354f",
+    "head": [
+      "galaxies|0|Galaxy|0|NGC 4911|4000|150|885.612976926|766.600684029|23.9587289826|-7.58519059533|P|",
+      "galaxies|1|Galaxy|1|NGC 4874|4000|150|-925.573512629|868.320139133|22.3133101125|-10.0235663206|P|",
+      "galaxies|2|Galaxy|2|NGC 4860|4000|150|2371.9033327|-840.058982144|2.68676858242|-21.5483235343|P|"
+    ]
+  },
+  "Exoplanet Characterization Lab": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "StarObject": 1,
+      "GasGiant": 1
+    },
+    "totalMass": 1148.65880641,
+    "momentum": {
+      "x": 0,
+      "y": 1.7763568394e-15
+    },
+    "scenarioName": "Exoplanet Characterization Lab",
+    "presetSentinel": "None",
+    "zoom": 55,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "e94d43609db4d65c",
+    "settings": "d7376f9eaf7cfe6e",
+    "head": [
+      "stars|0|StarObject|2|HD 209458|1148|0.537129285|-0.00272261354724|0|0|-0.00892180397332|P|",
+      "gas_giants|0|GasGiant|3|HD 209458 b|0.658806409836|0.0659496823082|4.74427738645|0|0|15.5466474042|P|"
+    ]
+  },
+  "Blended Binary": {
+    "error": null,
+    "count": 3,
+    "byType": {
+      "StarObject": 2,
+      "Planet": 1
+    },
+    "totalMass": 2148.65880641,
+    "momentum": {
+      "x": 10.2451694107,
+      "y": -267.581763205
+    },
+    "scenarioName": "Blended Binary",
+    "presetSentinel": "None",
+    "zoom": 60,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "fe8463d0b1ff4ee6",
+    "settings": "0e0f4748899e4e3c",
+    "head": [
+      "stars|0|StarObject|0|HD 209458|1148|0.537129285|0|0|0|0|P|",
+      "stars|1|StarObject|1|HD 209458 B (companion)|1000|0.44179465|30000|0|0|-0.267581763205|P|",
+      "planets|0|Planet|3|HD 209458 b|0.658806409836|0.0659496823082|2.90669917778e-16|-4.747|15.5511076664|9.52230711344e-16|P|"
+    ]
+  },
+  "Black Hole Lab": {
+    "error": null,
+    "count": 5,
+    "byType": {
+      "BlackHole": 1,
+      "Planet": 4
+    },
+    "totalMass": 10000.0375436,
+    "momentum": {
+      "x": 0.0695163663502,
+      "y": 0.0469293642476
+    },
+    "scenarioName": "Black Hole Lab",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "8eb2544450af06b6",
+    "settings": "3a05e7f66c7d1fb8",
+    "head": [
+      "bh_list|0|BlackHole|0|Black Hole|10000|15.9620985198|0|0|0|0|P|",
+      "planets|0|Planet|51|Inner Orbiter|0.00300348961612|4.58222245599|64.0465356675|19.8119151439|-3.60925480323|11.6677395804|P|",
+      "planets|1|Planet|52|Second Orbiter|0.00901046884837|3.48178622584|-30.1895849812|97.5947210172|-9.45194934465|-2.92383056177|P|"
+    ]
+  },
+  "Habitable Zone Lab": {
+    "error": null,
+    "count": 5,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 4
+    },
+    "totalMass": 1000.01201396,
+    "momentum": {
+      "x": -0.0048456666424,
+      "y": 0.00172565649236
+    },
+    "scenarioName": "Habitable Zone Lab",
+    "presetSentinel": "None",
+    "zoom": 1.9,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "c704f6c6d0fb09fc",
+    "settings": "0158c4413027999d",
+    "head": [
+      "stars|0|StarObject|0|Sun|1000|6|0|0|0|0|P|",
+      "planets|0|Planet|1|Venus|0.00300348961612|4.6|66.5927098664|28.1549461489|-1.44826239822|3.42546269436|P|",
+      "planets|1|Planet|2|Earth|0.00300348961612|4.8|-38.9418342309|92.1060994003|-2.91265060499|-1.23144892434|P|"
+    ]
+  },
+  "Kepler's 2nd Law": {
+    "error": null,
+    "count": 3,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 2
+    },
+    "totalMass": 1000.00390454,
+    "momentum": {
+      "x": -0.00492278291896,
+      "y": 0.00376279240171
+    },
+    "scenarioName": "Kepler's 2nd Law",
+    "presetSentinel": "None",
+    "zoom": 0.9,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "0c374e5849396548",
+    "settings": "a26d0e658dfbb765",
+    "head": [
+      "stars|0|StarObject|3|Kepler Star|1000|14|0|0|0|0||",
+      "planets|0|Planet|4|Circular Orbiter|0.00300348961612|7|320|0|0|1.78535710714||",
+      "planets|1|Planet|5|Eccentric Orbiter|0.000901046884837|6|-15.4508497187|47.5528258148|-5.46340373826|-1.77516748303||"
+    ]
+  },
+  "GW150914": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "BlackHole": 2
+    },
+    "totalMass": 65000,
+    "momentum": {
+      "x": 0,
+      "y": 0
+    },
+    "scenarioName": "GW150914",
+    "presetSentinel": "None",
+    "zoom": 1.7,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "9f6d4f700856880c",
+    "settings": "6f43d8fd1c9cc3a5",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|36000|23.4412484127|-40.1538461538|0|0|15.5999386367||",
+      "bh_list|1|BlackHole|1|Quantum Abyss|29000|21.9689543469|49.8461538462|0|0|-19.3654410663||"
+    ]
+  },
+  "Binary BH": {
+    "error": null,
+    "count": 44,
+    "byType": {
+      "BlackHole": 2,
+      "Planet": 10,
+      "GasGiant": 2,
+      "Asteroid": 30
+    },
+    "totalMass": 25003.660635,
+    "momentum": {
+      "x": 3.02219830921e-15,
+      "y": -2.10230385545e-11
+    },
+    "scenarioName": "Binary BH",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "6e10d3d816285410",
+    "settings": "ac44c267a7f79361",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|15000|18.0267470467|-48|0|-0.000975872497817|7.75809609969||",
+      "bh_list|1|BlackHole|61|Dark Nexus Prime|10000|15.9620985198|72|0|-0.000975872497817|-11.6336976973||",
+      "planets|0|Planet|112|Cosmic Refuge|0.00338445426155|5.18237408195|60.0829676846|-169.676271158|15.7097899755|5.56461632945||"
+    ]
+  },
+  "Triple BH System": {
+    "error": null,
+    "count": 65,
+    "byType": {
+      "BlackHole": 3,
+      "Planet": 20,
+      "GasGiant": 2,
+      "Asteroid": 40
+    },
+    "totalMass": 45004.672781,
+    "momentum": {
+      "x": -1.15489900893e-10,
+      "y": 2.72712304534e-10
+    },
+    "scenarioName": "Triple BH System",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "2448badfb0efe187",
+    "settings": "ae6be5c46b7e60b6",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|20000|19.6516484179|150|0|1.44351358577|12.5009927412||",
+      "bh_list|1|BlackHole|61|Dark Nexus Prime|15000|18.0267470467|-75|129.903810568|-11.546867471|-9.99900725881||",
+      "bh_list|2|BlackHole|122|The Anomaly|10000|15.9620985198|-75|-129.903810568|14.4338946425|-9.99900725881||"
+    ]
+  },
+  "Supermassive BH": {
+    "error": null,
+    "count": 156,
+    "byType": {
+      "BlackHole": 1,
+      "Planet": 50,
+      "GasGiant": 5,
+      "Asteroid": 100
+    },
+    "totalMass": 80025.6099416,
+    "momentum": {
+      "x": 6.60986012696e-13,
+      "y": -2.21524499421e-12
+    },
+    "scenarioName": "Supermassive BH",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "b8ec3aae8097c806",
+    "settings": "f089ac0a9419b128",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|80000|29.7863290662|0|0|-0.00204453285898|0.00616915815263||",
+      "planets|0|Planet|61|Stellar Oasis|0.00471571990351|5.72461869341|-104.150252845|78.6580334662|-22.3925422161|-24.6766390844||",
+      "planets|1|Planet|62|New Genesis|0.00389821920515|5.40682161011|-310.163061392|30.0715390722|-2.6304884541|-20.3443205774||"
+    ]
+  },
+  "Star Cluster": {
+    "error": null,
+    "count": 255,
+    "byType": {
+      "Planet": 80,
+      "GasGiant": 15,
+      "Asteroid": 150,
+      "NeutronStar": 2,
+      "WhiteDwarf": 8
+    },
+    "totalMass": 9157.1022161,
+    "momentum": {
+      "x": -4.54747350886e-13,
+      "y": 9.09494701773e-13
+    },
+    "scenarioName": "Star Cluster",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "41c66d0297789866",
+    "settings": "de2fa79d0c7a10b7",
+    "head": [
+      "planets|0|Planet|10|Planet Hope|0.00347704895102|5.22450808212|-149.800480213|121.327486748|3.67293897616|3.75756328213||",
+      "planets|1|Planet|11|Terra Magna|0.00408390450959|5.48283072119|-141.34129123|76.8466415534|-4.46323797519|0.946638523989||",
+      "planets|2|Planet|12|Cosmic Haven|0.0036774776197|5.31309003419|29.5034169278|-176.970974459|0.289870079109|2.09056313544||"
+    ]
+  },
+  "Kuiper Belt": {
+    "error": null,
+    "count": 309,
+    "byType": {
+      "StarObject": 1,
+      "Planet": 8,
+      "Asteroid": 300
+    },
+    "totalMass": 1000.00016156,
+    "momentum": {
+      "x": -7.70180589159e-18,
+      "y": 8.57726738213e-19
+    },
+    "scenarioName": "Kuiper Belt",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "0a01eb66349167b0",
+    "settings": "a2c01257b6d92211",
+    "head": [
+      "stars|0|StarObject|0|Sol|1000|10|0|0|5.6527402943e-9|-3.48710949581e-8||",
+      "planets|0|Planet|309|Orcus|3.18369899309e-7|0.32104193469|-39.4239260561|-196.075888508|2.29914297362|-0.46227287955||",
+      "planets|1|Planet|310|Pluto|0.00000654760736315|0.795255996313|218.066615805|-29.1024238025|0.295744824814|2.21643079687||"
+    ]
+  },
+  "Sagittarius A*": {
+    "error": null,
+    "count": 336,
+    "byType": {
+      "BlackHole": 1,
+      "Planet": 100,
+      "GasGiant": 5,
+      "Asteroid": 200,
+      "NeutronStar": 10,
+      "WhiteDwarf": 20
+    },
+    "totalMass": 4032995.08466,
+    "momentum": {
+      "x": 3.49245965481e-10,
+      "y": 2.36286723521e-9
+    },
+    "scenarioName": "Sagittarius A*",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "525159d7709b0695",
+    "settings": "59cf5482e4729874",
+    "head": [
+      "bh_list|0|BlackHole|0|Sagittarius A*|4000000|96.3181171695|0|0|0.0290242854286|0.181627418441||",
+      "planets|0|Planet|91|Terra Magna|0.00242385652574|4.68850341494|240.795292924|0|0.0290242854286|182.454063071||",
+      "planets|1|Planet|92|New Arcadia|0.00236733998401|4.65543592789|229.009932428|74.4098376789|-56.2962559373|173.533015087||"
+    ]
+  },
+  "Binary Star System": {
+    "error": null,
+    "count": 29,
+    "byType": {
+      "StarObject": 2,
+      "Planet": 5,
+      "GasGiant": 2,
+      "Asteroid": 20
+    },
+    "totalMass": 2010.58688799,
+    "momentum": {
+      "x": 3.15292569499e-15,
+      "y": -8.88040336389e-14
+    },
+    "scenarioName": "Binary Star System",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "0649d3cc489a47c0",
+    "settings": "9bcd0b1250d23a56",
+    "head": [
+      "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00312629577623|1.77614077073||",
+      "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00312629577623|-2.69599518427||",
+      "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-147.076285327|-29.4714488013|0.78277900559|-3.93474788666||"
+    ]
+  },
+  "Slingshot": {
+    "error": null,
+    "count": 72,
+    "byType": {
+      "BlackHole": 2,
+      "Planet": 25,
+      "GasGiant": 5,
+      "Asteroid": 40
+    },
+    "totalMass": 63012.9006958,
+    "momentum": {
+      "x": -1.32031531704e-14,
+      "y": -1.73752121818e-11
+    },
+    "scenarioName": "Slingshot",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "750c96488d8df47c",
+    "settings": "540538d8f9c7b454",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|60000|27.323439139|-4.7619047619|0|0.000176044462556|1.35899466765||",
+      "bh_list|1|BlackHole|61|Dark Nexus Prime|3000|11.1231133625|95.2380952381|0|0.000176044462556|-27.2151194918||",
+      "planets|0|Planet|98|Stellar Oasis|0.000771561502351|3.32577855734|-33.4454996443|123.656743268|-26.0799059723|-7.03389903911||"
+    ]
+  },
+  "Rogue Encounter": {
+    "error": null,
+    "count": 98,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 1,
+      "Planet": 12,
+      "GasGiant": 4,
+      "Asteroid": 80
+    },
+    "totalMass": 31012.161991,
+    "momentum": {
+      "x": 599981.540771,
+      "y": -149995.754486
+    },
+    "scenarioName": "Rogue Encounter",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "9175734f09d4c0ad",
+    "settings": "f41dd482a3e287b8",
+    "head": [
+      "bh_list|0|BlackHole|1|Stellar Grave|30000|22.1935289174|-800|200|20|-5||",
+      "stars|0|StarObject|0|Stellar Dynamo|1000|10|0|0|0|0||",
+      "planets|0|Planet|62|Gaia Magnificent|0.000467952714528|2.86248193908|-34.6517332843|-36.0452130025|3.94855525031|-3.79590719529||"
+    ]
+  },
+  "Neutron Star Collision": {
+    "error": null,
+    "count": 28,
+    "byType": {
+      "Planet": 5,
+      "GasGiant": 1,
+      "Asteroid": 20,
+      "NeutronStar": 2
+    },
+    "totalMass": 2800000.68144,
+    "momentum": {
+      "x": -7.1054273576e-15,
+      "y": 0
+    },
+    "scenarioName": "Neutron Star Collision",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "dcd48a57b0278089",
+    "settings": "1f94cd580c3c985a",
+    "head": [
+      "planets|0|Planet|2|Eden Glorious|0.00405781532398|5.47229935983|131.53613888|0|-0.0000133105577184|126.353428162||",
+      "planets|1|Planet|3|World Eta|0.00187581069494|4.34149061146|-111.314636903|101.973325798|-79.6700515071|-86.9682681772||",
+      "planets|2|Planet|4|Eden Glorious|0.000721529364605|3.25955540211|14.3672472614|-163.707372231|112.609841187|9.88281783718||"
+    ]
+  },
+  "Pulsar System": {
+    "error": null,
+    "count": 19,
+    "byType": {
+      "Planet": 3,
+      "Asteroid": 15,
+      "NeutronStar": 1
+    },
+    "totalMass": 1540.78139326,
+    "momentum": {
+      "x": -3.46944695195e-18,
+      "y": 6.93889390391e-18
+    },
+    "scenarioName": "Pulsar System",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "b224b3f45bc2a60a",
+    "settings": "46eaaa5d7df78fb3",
+    "head": [
+      "planets|0|Planet|1|PSR B1257+12 b|0.000858458917484|3.43398203493|210|0|0.00000793764031104|3.08836857943||",
+      "planets|1|Planet|2|PSR B1257+12 c|0.00395358460467|5.42974551135|197.335450365|71.8242300984|-1.05628159215|2.90211623588||",
+      "planets|2|Planet|3|PSR B1257+12 d|0.00405781532398|5.47229935983|160.869333055|134.985398034|-1.98516701547|2.36582398668||"
+    ]
+  },
+  "White Dwarf Binary": {
+    "error": null,
+    "count": 82,
+    "byType": {
+      "Asteroid": 80,
+      "WhiteDwarf": 2
+    },
+    "totalMass": 1227.96006466,
+    "momentum": {
+      "x": -2.11758236814e-22,
+      "y": -1.81898940355e-12
+    },
+    "scenarioName": "White Dwarf Binary",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "1308113d9ec7767d",
+    "settings": "ab3aeb490bc50ed1",
+    "head": [
+      "asteroids|0|Asteroid|2|Space Swarm|4.71769733534e-7|2|120.320646926|0|4.40074927893e-10|1.85777488996||",
+      "asteroids|1|Asteroid|3|Space Pebble|4.71769733534e-7|2|-96.9906551528|88.8513851582|-1.76405663597|-2.79840216236||",
+      "asteroids|2|Asteroid|4|Cosmic Shower|4.71769733534e-7|2|12.1747322707|-138.724794763|2.52836505407|-0.650854576958||"
+    ]
+  },
+  "Stellar Graveyard": {
+    "error": null,
+    "count": 229,
+    "byType": {
+      "BlackHole": 3,
+      "Planet": 10,
+      "GasGiant": 3,
+      "Asteroid": 200,
+      "NeutronStar": 5,
+      "WhiteDwarf": 8
+    },
+    "totalMass": 43864.3059931,
+    "momentum": {
+      "x": -6.11635186942e-11,
+      "y": -1.04591890704e-11
+    },
+    "scenarioName": "Stellar Graveyard",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "559410f777ebf94f",
+    "settings": "e15ddf531d89741f",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|10000|15.9620985198|0|0|3.14901512392|-0.50859518154||",
+      "bh_list|1|BlackHole|51|Shadow Realm|10000|15.9620985198|-290.479982777|-86.7889769753|-1.41466866389|-3.09568631583||",
+      "bh_list|2|BlackHole|102|Cosmic Vacuum|10000|15.9620985198|-28.1646766886|-247.653858697|-5.82608546172|1.07234619807||"
+    ]
+  },
+  "Galactic Center": {
+    "error": null,
+    "count": 162,
+    "byType": {
+      "BlackHole": 1,
+      "Planet": 30,
+      "GasGiant": 8,
+      "Asteroid": 100,
+      "NeutronStar": 8,
+      "WhiteDwarf": 15
+    },
+    "totalMass": 4026286.80974,
+    "momentum": {
+      "x": 5.22710763562e-11,
+      "y": 0
+    },
+    "scenarioName": "Galactic Center",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "901690b15a6f63cb",
+    "settings": "6c0923b9cd593737",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|4000000|96.3181171695|0|0|0.0251173947917|-0.174325214296||",
+      "planets|0|Planet|84|Kepler-16b|0.00034936085117|2.62219167953|240.795292924|0|0.0251173947917|172.744490184||",
+      "planets|1|Planet|85|Kepler-34b|0.000429338255839|2.78947221683|229.009932428|74.4098376789|-53.4097352105|164.281240961||"
+    ]
+  },
+  "Supernova Remnant": {
+    "error": null,
+    "count": 208,
+    "byType": {
+      "Planet": 5,
+      "GasGiant": 2,
+      "Asteroid": 200,
+      "NeutronStar": 1
+    },
+    "totalMass": 1550.62869824,
+    "momentum": {
+      "x": -2.84217094304e-14,
+      "y": -7.1054273576e-15
+    },
+    "scenarioName": "Supernova Remnant",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "2a00e9faf564011a",
+    "settings": "f494090b56effd07",
+    "head": [
+      "planets|0|Planet|1|World Theta|0.000858458917484|3.43398203493|-124.745962222|60.6636670814|-0.584976218773|-3.32875252308||",
+      "planets|1|Planet|2|Gaia Minor|0.00395358460467|5.42974551135|75.5892667181|-72.8220222538|1.23724627254|3.41470377119||",
+      "planets|2|Planet|3|Eden Glorious|0.00405781532398|5.47229935983|222.895223465|-97.6830785417|3.14813304871|-1.25991461685||"
+    ]
+  },
+  "Compact Object Zoo": {
+    "error": null,
+    "count": 66,
+    "byType": {
+      "BlackHole": 3,
+      "Planet": 10,
+      "GasGiant": 3,
+      "Asteroid": 40,
+      "NeutronStar": 4,
+      "WhiteDwarf": 6
+    },
+    "totalMass": 41776.093777,
+    "momentum": {
+      "x": -3.18323145621e-12,
+      "y": -1.46656020661e-11
+    },
+    "scenarioName": "Compact Object Zoo",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "71784b673be2c2cd",
+    "settings": "9b574919977a4add",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|10000|15.9620985198|0|0|-2.29807312255|-1.25652629545||",
+      "bh_list|1|BlackHole|51|Shadow Realm|10000|15.9620985198|-59.3313609422|74.3184808256|-2.68322945564|-4.36366136644||",
+      "bh_list|2|BlackHole|102|Cosmic Vacuum|10000|15.9620985198|-234.217741887|105.988052174|7.23353610476|4.99427790279||"
+    ]
+  },
+  "Millisecond Pulsar": {
+    "error": null,
+    "count": 29,
+    "byType": {
+      "Planet": 2,
+      "Asteroid": 25,
+      "NeutronStar": 1,
+      "WhiteDwarf": 1
+    },
+    "totalMass": 2268.82515251,
+    "momentum": {
+      "x": 4.54747350886e-13,
+      "y": 0
+    },
+    "scenarioName": "Millisecond Pulsar",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "52f6f8be990d1978",
+    "settings": "3bd8e5fa9002140c",
+    "head": [
+      "planets|0|Planet|2|Eden Glorious|0.00405781532398|5.47229935983|131.057971086|0|0.79607757119|4.39012563032||",
+      "planets|1|Planet|3|World Eta|0.00187581069494|4.34149061146|-110.703939951|101.413877364|-1.76435448328|-2.46182370796||",
+      "asteroids|0|Asteroid|4|Orbit Voyager|4.71769733534e-7|2|14.2737703047|-162.642250523|4.41698532177|0.650935084909||"
+    ]
+  },
+  "Tidal Disruption Event": {
+    "error": null,
+    "count": 2,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 1
+    },
+    "totalMass": 2001000,
+    "momentum": {
+      "x": -82620.4760784,
+      "y": 71157.5096299
+    },
+    "scenarioName": "Tidal Disruption Event",
+    "presetSentinel": "None",
+    "zoom": 0.7,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "c7859762200bbdf4",
+    "settings": "d292a0aa2d0836de",
+    "head": [
+      "bh_list|0|BlackHole|1|Quantum Abyss|2000000|78.2346214834|0|0|0|0||",
+      "stars|0|StarObject|62|Doomed star|1000|10|405|0|-82.6204760784|71.1575096299||"
+    ]
+  },
+  "Intermediate Mass BH": {
+    "error": null,
+    "count": 106,
+    "byType": {
+      "BlackHole": 1,
+      "Planet": 30,
+      "GasGiant": 5,
+      "Asteroid": 60,
+      "NeutronStar": 2,
+      "WhiteDwarf": 8
+    },
+    "totalMass": 409664.674718,
+    "momentum": {
+      "x": -1.81898940355e-11,
+      "y": 1.34605215862e-10
+    },
+    "scenarioName": "Intermediate Mass BH",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "f04ffcebf7c89c15",
+    "settings": "c6fd608ebe2d1438",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|400000|48.2734106924|0|0|-0.332053123946|-0.502230280392||",
+      "planets|0|Planet|71|Eden Eternal|0.000330672838003|2.57929918382|120.683526731|0|-0.332053123946|74.5615547926||",
+      "planets|1|Planet|72|Terra Nova|0.000436175824648|2.80272599218|114.776854507|37.293260701|-23.5280383736|70.887671651||"
+    ]
+  },
+  "Galactic Collision": {
+    "error": null,
+    "count": 972,
+    "byType": {
+      "BlackHole": 2,
+      "Planet": 300,
+      "GasGiant": 30,
+      "Asteroid": 600,
+      "NeutronStar": 15,
+      "WhiteDwarf": 25
+    },
+    "totalMass": 2245677.21054,
+    "momentum": {
+      "x": -5.06936714828e-10,
+      "y": -0.00000174086744664
+    },
+    "scenarioName": "Galactic Collision",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "09380aa5bc887353",
+    "settings": "60b36b3421809bf8",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|1200000|67.1188274409|0|0|-0.0213012737844|-51.9504435434||",
+      "bh_list|1|BlackHole|61|Dark Nexus Prime|1000000|63.5462587779|167.797068602|0|-0.0213012737844|64.6164542659||",
+      "planets|0|Planet|162|Terra Mystica|0.0012657318101|3.85819942831|159.584495509|51.8521458044|-36.0424536784|58.9112642025||"
+    ]
+  },
+  "Micro BH Swarm": {
+    "error": null,
+    "count": 220,
+    "byType": {
+      "BlackHole": 12,
+      "Planet": 50,
+      "GasGiant": 8,
+      "Asteroid": 150
+    },
+    "totalMass": 13926.3926689,
+    "momentum": {
+      "x": 3.75444948983e-11,
+      "y": 7.57991368824e-11
+    },
+    "scenarioName": "Micro BH Swarm",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "d2cba5d84a8289d4",
+    "settings": "18f794af8bdef07b",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|800|7.48198758258|-27.3339135616|-20.1793672652|9.03881802491|5.29287365819||",
+      "bh_list|1|BlackHole|32|Shadow Vortex|1100|8.23204607537|-154.858287502|-210.626699784|-4.24355010734|2.90710276663||",
+      "bh_list|2|BlackHole|65|Graviton Sink|900|7.75108928958|27.1436880696|109.530939299|-0.273697845958|-3.00185106371||"
+    ]
+  },
+  "Exoplanet Lab": {
+    "error": null,
+    "count": 448,
+    "byType": {
+      "Planet": 120,
+      "GasGiant": 25,
+      "Asteroid": 300,
+      "NeutronStar": 1,
+      "WhiteDwarf": 2
+    },
+    "totalMass": 3445.32248032,
+    "momentum": {
+      "x": -1.02318153949e-12,
+      "y": -2.27373675443e-13
+    },
+    "scenarioName": "Exoplanet Lab",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "181e742795db1e41",
+    "settings": "7a255e58227c7d2e",
+    "head": [
+      "planets|0|Planet|3|Eden Glorious|0.000721529364605|3.25955540211|90|0|0.599513902486|4.81444077165||",
+      "planets|1|Planet|4|Stellar Paradise|0.00298322795144|4.98985695419|85.5950864666|27.8115294937|-0.858299864005|4.58354575414||",
+      "planets|2|Planet|5|World Theta|0.000358147797557|2.64180555672|72.8115294937|52.9006727063|-2.17341266185|3.91346231469||"
+    ]
+  },
+  "Quasar Cannon": {
+    "error": null,
+    "count": 78,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 50,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 1000000112230,
+    "momentum": {
+      "x": -7.10088238348e-8,
+      "y": 2.05804262557e-8
+    },
+    "scenarioName": "Quasar Cannon",
+    "presetSentinel": "None",
+    "zoom": 0.05,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "3f5d21e7c640957f",
+    "settings": "a46ca31e74e458f8",
+    "head": [
+      "bh_list|0|BlackHole|50|Space Ripper|1000000000000|4009.49786902|0|0|0.000105622825909|-0.00015198795493||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|1940.08495993|11468.6432442|-12922.3868193|2177.23520017||",
+      "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|-12265.8018969|-9873.90042637|7079.21033558|-8766.26159693||"
+    ]
+  },
+  "The Pinwheel Galaxy Core": {
+    "error": null,
+    "count": 229,
+    "byType": {
+      "BlackHole": 2,
+      "StarObject": 200,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 200355198.783,
+    "momentum": {
+      "x": -6.94674746074e-9,
+      "y": -0.0000418075755376
+    },
+    "scenarioName": "The Pinwheel Galaxy Core",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "6b4742cf40278995",
+    "settings": "8baa6efdd1d49afd",
+    "head": [
+      "bh_list|0|BlackHole|200|Gravity Storm|100000000|252.982212813|0|0|0.0122273515425|-280.692062719||",
+      "bh_list|1|BlackHole|261|The Anomaly|100000000|252.982212813|632.455532034|0|0.0122273515425|281.649262471||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-214.056016483|-595.130256169|529.166167769|-471.017766072||"
+    ]
+  },
+  "Star Frisbee": {
+    "error": null,
+    "count": 58,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 30,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 75002.0330793,
+    "momentum": {
+      "x": -3.8240944572e-12,
+      "y": 2.52377927508e-11
+    },
+    "scenarioName": "Star Frisbee",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "114fc10ee8db3fd2",
+    "settings": "09467c851f581af3",
+    "head": [
+      "bh_list|0|BlackHole|30|Dark Energy Core|10000|15.9620985198|0|0|-0.385719413322|0.340233464872||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-92.8265234824|221.804232347|-8.79891012777|-3.18074193381||",
+      "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|-82.2052602202|-228.551565039|8.15306305697|-2.73098958632||"
+    ]
+  },
+  "Kessler Cascade": {
+    "error": null,
+    "count": 301,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 300
+    },
+    "totalMass": 530000,
+    "momentum": {
+      "x": 2.77395884041e-11,
+      "y": -1.77351466846e-11
+    },
+    "scenarioName": "Kessler Cascade",
+    "presetSentinel": "None",
+    "zoom": 0.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "ad819de2e73a8954",
+    "settings": "0a8c56074f553901",
+    "head": [
+      "bh_list|0|BlackHole|0|Gravity Beast|500000|51.6156009719|0|0|0.275267261506|0.126760795876||",
+      "stars|0|StarObject|61|Stellar Sovereign|100|1.2|274.816145882|435.940703109|-45.3672740698|31.526032883||",
+      "stars|1|StarObject|62|Stellar Phoenix|100|1.2|-122.590391594|-155.143639983|49.374959793|-65.4777657581||"
+    ]
+  },
+  "Alien Dyson Swarm Collapse": {
+    "error": null,
+    "count": 128,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 100,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 193963.521423,
+    "momentum": {
+      "x": 1.30837346648e-11,
+      "y": 8.63426489657e-11
+    },
+    "scenarioName": "Alien Dyson Swarm Collapse",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "7a26d3f60567c560",
+    "settings": "ae2818015f64f5e3",
+    "head": [
+      "bh_list|0|BlackHole|100|The Devourer|1000|8|118.719248345|0|0.506103018906|9.52211582736||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-44.5347141177|-123.817850377|9.67855230857|-4.03929148455||",
+      "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|117.424391758|61.7149693548|-4.0104932445|7.85352629911||"
+    ]
+  },
+  "Tidal Arm Tango": {
+    "error": null,
+    "count": 329,
+    "byType": {
+      "BlackHole": 2,
+      "StarObject": 300,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 2000527357.13,
+    "momentum": {
+      "x": 5.07537318488e-9,
+      "y": -3.68057640656e-7
+    },
+    "scenarioName": "Tidal Arm Tango",
+    "presetSentinel": "None",
+    "zoom": 0.3,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "acc1ecd5d39e0f91",
+    "settings": "7bb52bab3a8d8b39",
+    "head": [
+      "bh_list|0|BlackHole|300|Neutron Crusher|1000000000|504.765875584|-700|0|-0.00288549959057|120.173114134||",
+      "bh_list|1|BlackHole|361|Singularity Alpha|1000000000|504.765875584|700|0|-0.00288549959057|-119.826885866||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|-1347.60176604|979.089993845|-644.073768159|-1515.59997778||"
+    ]
+  },
+  "Hungry Hungry Holes": {
+    "error": null,
+    "count": 81,
+    "byType": {
+      "BlackHole": 4,
+      "StarObject": 50,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 312219.312039,
+    "momentum": {
+      "x": 1.88375507355e-10,
+      "y": -1.37037488535e-10
+    },
+    "scenarioName": "Hungry Hungry Holes",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "b9632afc38b7ff9c",
+    "settings": "f9fb1bb6bf660290",
+    "head": [
+      "bh_list|0|BlackHole|50|Space Ripper|50000|25.8690802631|0|0|-1.31450684164|-0.716286203116||",
+      "bh_list|1|BlackHole|51|Warp Core|50000|25.8690802631|335.164568815|95.9387812355|4.23974870265|-0.469229109872||",
+      "bh_list|2|BlackHole|52|Infinity Gate|50000|25.8690802631|-47.2028240885|-308.721063626|4.55468141534|3.92315080346||"
+    ]
+  },
+  "Slingshot Gauntlet": {
+    "error": null,
+    "count": 33,
+    "byType": {
+      "BlackHole": 5,
+      "StarObject": 1,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 150467.240823,
+    "momentum": {
+      "x": 2.145104534e-11,
+      "y": -7.46446561652e-13
+    },
+    "scenarioName": "Slingshot Gauntlet",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "6af09845308044a7",
+    "settings": "8de52247da6ce01b",
+    "head": [
+      "bh_list|0|BlackHole|1|Quantum Abyss|30000|22.1935289174|0|0|-0.127088088758|0.00642340955384||",
+      "bh_list|1|BlackHole|2|Event Horizon|30000|22.1935289174|-275|-275|-0.127088088758|0.00642340955384||",
+      "bh_list|2|BlackHole|3|Neutron Crusher|30000|22.1935289174|-175|-275|-0.127088088758|0.00642340955384||"
+    ]
+  },
+  "Black Hole Billiards": {
+    "error": null,
+    "count": 45,
+    "byType": {
+      "BlackHole": 4,
+      "StarObject": 14,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 2101457.41471,
+    "momentum": {
+      "x": -5.98979234918e-10,
+      "y": -5.80094119712e-10
+    },
+    "scenarioName": "Black Hole Billiards",
+    "presetSentinel": "None",
+    "zoom": 0.85,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "72afbb26666fcacc",
+    "settings": "5af6f6392fbbb3c5",
+    "head": [
+      "bh_list|0|BlackHole|14|Stellar Phantom|2000000|78.2346214834|0|0|-0.41604678068|-0.601566112701||",
+      "bh_list|1|BlackHole|75|Gravity Storm|25000|21.0122224352|250.350788747|0|-0.41604678068|125.800890262||",
+      "bh_list|2|BlackHole|136|Quantum Void|25000|21.0122224352|-199.498284783|345.541165267|-87.1274164879|-50.6643987549||"
+    ]
+  },
+  "Stellar Nursery": {
+    "error": null,
+    "count": 128,
+    "byType": {
+      "BlackHole": 1,
+      "StarObject": 100,
+      "Planet": 15,
+      "GasGiant": 2,
+      "Asteroid": 10
+    },
+    "totalMass": 193963.521423,
+    "momentum": {
+      "x": 4.64254835304e-13,
+      "y": 2.14641804173e-11
+    },
+    "scenarioName": "Stellar Nursery",
+    "presetSentinel": "None",
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "bodies": "3550326e59105c16",
+    "settings": "44649e7dc48fc563",
+    "head": [
+      "bh_list|0|BlackHole|100|The Devourer|1000|8|198.818202186|-235.689412287|3.81917613287|-0.24368450172||",
+      "stars|0|StarObject|0|Plasma Heart|448.674400106|5.05989607756|190.063093805|238.130226304|0.284113013008|0.585726819845||",
+      "stars|1|StarObject|1|Plasma Overlord|5133.35819187|40.164404646|158.835790768|-80.0992401152|2.24534814324|2.09700038844||"
+    ]
+  }
+}

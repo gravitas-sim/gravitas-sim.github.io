@@ -48,8 +48,18 @@ import {
   enclosedVisibleMass,
   velocityDispersion,
 } from './darkMatter.js';
+import {
+  a0InSimUnits,
+  simSpeedToKmS,
+  mondCircularSpeed,
+  asymptoticSpeed,
+  A0_SI,
+  DEFAULT_INTERPOLATION,
+  MOND_LIMITATIONS,
+} from './mond.js';
 import { chartColors } from './observationChart.js';
 import { formatNumber } from './format.js';
+import { t } from './i18n/index.js';
 import { solarHTML } from './utils.js';
 import { formatSpeed, formatDistance, SIM_UNITS_PER_AU } from './units.js';
 import {
@@ -76,6 +86,16 @@ function cacheElements() {
     visible: document.getElementById('rotationCurveVisible'),
     haloBtn: document.getElementById('rotationCurveHalo'),
     haloState: document.getElementById('rotationCurveHaloState'),
+    modeNewtonian: document.getElementById('rotationCurveModeNewtonian'),
+    modeHalo: document.getElementById('rotationCurveModeHalo'),
+    modeMond: document.getElementById('rotationCurveModeMond'),
+    haloControls: document.getElementById('rotationCurveHaloControls'),
+    params: document.getElementById('rotationCurveParams'),
+    a0: document.getElementById('rotationCurveA0'),
+    mondPredicted: document.getElementById('rotationCurveMondPredicted'),
+    mondPredictedRow: document.getElementById('rotationCurveMondPredictedRow'),
+    mondLimits: document.getElementById('rotationCurveMondLimits'),
+    mondLimitList: document.getElementById('rotationCurveMondLimitList'),
     vFlat: document.getElementById('rotationCurveVFlat'),
     vFlatValue: document.getElementById('rotationCurveVFlatValue'),
     core: document.getElementById('rotationCurveCore'),
@@ -115,12 +135,40 @@ export function curveBodies() {
 
 /** @returns {?{vFlat: number, coreRadius: number}} Halo parameters, or null */
 function halo() {
-  return getPhysicsSetting('dark_matter_halo')
+  return getPhysicsSetting('galaxy_gravity') === 'halo'
     ? {
         vFlat: getPhysicsSetting('halo_v_flat'),
         coreRadius: getPhysicsSetting('halo_core_radius'),
       }
     : null;
+}
+
+/** @returns {string} Which law is in the force law: newtonian, halo or mond */
+export function galaxyGravityMode() {
+  return getPhysicsSetting('galaxy_gravity') || 'newtonian';
+}
+
+/**
+ * Milgrom's constant in this scenario's units, or 0 when MOND cannot run here.
+ *
+ * Zero for every scenario that has not declared what a simulation unit
+ * represents, which is every scenario except the three galaxy scale models.
+ *
+ * @returns {number} a0 in simulation acceleration units
+ */
+function mondA0() {
+  return a0InSimUnits(
+    {
+      kpcPerUnit: getPhysicsSetting('galaxy_kpc_per_unit'),
+      solarMassPerUnit: getPhysicsSetting('galaxy_msun_per_unit'),
+    },
+    getPhysicsSetting('gravitational_constant')
+  );
+}
+
+/** @returns {boolean} Whether this scenario is one MOND may be applied to */
+export function mondAvailable() {
+  return mondA0() > 0;
 }
 
 /**
@@ -169,6 +217,8 @@ export function rotationCurveState() {
     points,
     G,
     halo: halo(),
+    mode: galaxyGravityMode(),
+    a0: mondA0(),
     rFitMin,
     fit: fit || lastFit,
     visibleMass: center.mass,
@@ -308,11 +358,25 @@ function draw(snap) {
   const logMax = Math.log10(Math.max(rMax, rMin * 1.5));
 
   const samples = 96;
+  // Three quantities at every radius, and the plot always draws the first two
+  // so the comparison never disappears:
+  //
+  //   vb  what the visible matter alone predicts - the hypothesis under test
+  //   vt  what the selected model predicts
+  //
+  // Under 'newtonian' the two coincide, and the panel says so rather than
+  // drawing one line on top of another and letting a reader wonder which is
+  // which.
   const modelAt = r => {
     const vb = keplerianSpeed(snap.bodies, snap.center, r, snap.G);
-    if (!snap.halo) return { vb, vt: vb };
-    const vh = haloCircularSpeed(r, snap.halo.vFlat, snap.halo.coreRadius);
-    return { vb, vt: Math.hypot(vb, vh) };
+    if (snap.mode === 'halo' && snap.halo) {
+      const vh = haloCircularSpeed(r, snap.halo.vFlat, snap.halo.coreRadius);
+      return { vb, vt: Math.hypot(vb, vh) };
+    }
+    if (snap.mode === 'mond' && snap.a0 > 0) {
+      return { vb, vt: mondCircularSpeed(r, vb, snap.a0) };
+    }
+    return { vb, vt: vb };
   };
 
   // The vertical scale comes from the measured points and from the model over
@@ -397,8 +461,20 @@ function draw(snap) {
     ctx.restore();
   };
 
+  // Visible matter first and always, dashed and warm: it is the prediction the
+  // measurement is being compared against, and it has to stay legible under
+  // whichever model is drawn over it.
+  //
+  // The selected model is a solid line in a different hue, and the two models
+  // are given different hues from each other as well as from the data, because
+  // a reader switching between halo and MOND is comparing two curves they
+  // cannot see at the same time and the colour is the only thing carrying
+  // which is which.
   drawModel(m => m.vb, t.warm, [5, 4]);
-  if (snap.halo) drawModel(m => m.vt, t.cool, []);
+  if (snap.mode === 'halo' && snap.halo) drawModel(m => m.vt, t.cool, []);
+  if (snap.mode === 'mond' && snap.a0 > 0) {
+    drawModel(m => m.vt, t.alt, [9, 3]);
+  }
 
   // The measured bodies. Larger dots for more massive bodies, so a reader can
   // tell the central mass from the tracers without a legend entry for each.
@@ -449,13 +525,142 @@ function renderReadout(snap) {
     e.haloBtn.setAttribute('data-state', snap.halo ? 'on' : 'off');
     e.haloBtn.setAttribute('aria-checked', snap.halo ? 'true' : 'false');
   }
+
+  // --- Which law, and which of its numbers were fitted ------------------------
+  //
+  // The distinction the panel exists to make legible. The halo's two numbers
+  // are adjusted until the curve matches: they are fitted, per galaxy, and the
+  // sliders that set them are right there. MOND's one number is not adjustable
+  // here at all, because a0 is a constant of the proposed law and the same for
+  // every galaxy - so it is displayed rather than offered, and labelled fixed.
+  //
+  // Saying this in the panel matters because the two models can produce curves
+  // of similar quality, and a reader who does not know that one of them spent
+  // two free parameters to do it has not been told the most important thing
+  // about the comparison.
+  for (const [mode, btn] of [
+    ['newtonian', e.modeNewtonian],
+    ['halo', e.modeHalo],
+    ['mond', e.modeMond],
+  ]) {
+    if (!btn) continue;
+    const on = snap.mode === mode;
+    btn.setAttribute('aria-pressed', String(on));
+    btn.classList.toggle('is-active', on);
+    // MOND is offered only where a physical scale has been declared, which is
+    // only the galaxy scale models. Elsewhere the control says why.
+    if (mode === 'mond') {
+      const usable = snap.a0 > 0;
+      btn.disabled = !usable;
+      btn.title = usable
+        ? t('rotation.mond.hint')
+        : t('rotation.mond.unavailable');
+    }
+  }
+
+  if (e.params) {
+    if (snap.mode === 'halo') {
+      e.params.innerHTML = `<span class="rc-param is-fitted">${t('rotation.param.fitted')}</span> ${t('rotation.param.haloTwo')}`;
+    } else if (snap.mode === 'mond') {
+      e.params.innerHTML = `<span class="rc-param is-fixed">${t('rotation.param.fixed')}</span> ${t('rotation.param.mondNone')}`;
+    } else {
+      e.params.innerHTML = `<span class="rc-param is-fixed">${t('rotation.param.fixed')}</span> ${t('rotation.param.newtonNone')}`;
+    }
+    e.params.hidden = false;
+  }
+
+  if (e.a0) {
+    // a0 is quoted in SI, which is how it is published, with the simulation's
+    // own value beside it so a reader can see the conversion has happened
+    // rather than taking it on trust.
+    e.a0.hidden = snap.mode !== 'mond';
+    if (snap.mode === 'mond') {
+      e.a0.textContent = `a₀ = ${A0_SI.toExponential(1)} m/s² (${DEFAULT_INTERPOLATION} μ) = ${formatNumber(snap.a0, 3)} sim`;
+    }
+  }
+
+  // The limitations, rebuilt rather than cached: the list is short and the
+  // language can change under it.
+  if (e.mondLimits) {
+    e.mondLimits.hidden = snap.mode !== 'mond';
+    if (snap.mode === 'mond' && e.mondLimitList) {
+      const wanted = MOND_LIMITATIONS.map(key => t(key)).join('\u0000');
+      if (e.mondLimitList.dataset.rendered !== wanted) {
+        e.mondLimitList.innerHTML = '';
+        for (const key of MOND_LIMITATIONS) {
+          const li = document.createElement('li');
+          li.textContent = t(key);
+          e.mondLimitList.appendChild(li);
+        }
+        e.mondLimitList.dataset.rendered = wanted;
+      }
+    }
+  }
+
+  if (e.mondPredicted) {
+    // The one number MOND predicts rather than fits: the asymptotic speed,
+    // from the visible mass alone.
+    const show = snap.mode === 'mond' && snap.a0 > 0 && snap.visibleMass > 0;
+    e.mondPredicted.hidden = !show;
+    // The label sits in its own row, so hiding only the value left a heading
+    // with nothing after it on every non-MOND mode.
+    if (e.mondPredictedRow) e.mondPredictedRow.hidden = !show;
+    if (show) {
+      const vSim = asymptoticSpeed(snap.visibleMass, snap.a0, snap.G);
+      // Simulation units first, because that is what the plot's own axis is
+      // in and a reader is comparing the two by eye.
+      //
+      // The physical value beside it comes from the *scenario's declared
+      // galaxy scale*, not from formatSpeed. formatSpeed reads a velocity unit
+      // through the simulation's own astronomical-unit anchoring and would say
+      // 104 km/s here; the galaxy this scenario is a scale model of rotates at
+      // 122. Both numbers are correct about different objects, and quoting the
+      // wrong one in a galactic panel would be wrong by a fifth and silently.
+      const kms = simSpeedToKmS(
+        {
+          kpcPerUnit: getPhysicsSetting('galaxy_kpc_per_unit'),
+          solarMassPerUnit: getPhysicsSetting('galaxy_msun_per_unit'),
+        },
+        snap.G
+      );
+      e.mondPredicted.textContent = kms
+        ? `${formatNumber(vSim, 3)} (${formatNumber(vSim * kms, 3)} km/s)`
+        : formatNumber(vSim, 3);
+      e.mondPredicted.title = t('rotation.mond.predicted.hint');
+    }
+  }
+  // The halo's parameters belong to the halo. Under MOND or plain Newtonian
+  // gravity they are not part of the model on the plot, and showing them there
+  // undercuts the exclusivity the mode selector exists to express.
+  if (e.haloControls) e.haloControls.hidden = snap.mode !== 'halo';
+
+  // Read through the scenario's declared galaxy scale where there is one, for
+  // the same reason MOND's predicted speed is: this panel would otherwise print
+  // the halo's flat speed as 113 km/s through the simulation's own
+  // astronomical-unit anchoring, directly beneath a MOND prediction of 122 km/s
+  // read through the galaxy scale. Two conversions of the same kind of quantity
+  // on adjacent rows, differing by a fifth, is a worse failure than either
+  // number being unfamiliar.
+  const kms = simSpeedToKmS(
+    {
+      kpcPerUnit: getPhysicsSetting('galaxy_kpc_per_unit'),
+      solarMassPerUnit: getPhysicsSetting('galaxy_msun_per_unit'),
+    },
+    snap.G
+  );
+  const kpcPerUnit = getPhysicsSetting('galaxy_kpc_per_unit');
   if (e.vFlatValue) {
-    e.vFlatValue.textContent = formatSpeed(getPhysicsSetting('halo_v_flat'));
+    const vFlat = getPhysicsSetting('halo_v_flat');
+    e.vFlatValue.textContent = kms
+      ? `${formatNumber(vFlat * kms, 3)} km/s`
+      : formatSpeed(vFlat);
   }
   if (e.coreValue) {
-    e.coreValue.textContent = formatDistance(
-      getPhysicsSetting('halo_core_radius')
-    );
+    const core = getPhysicsSetting('halo_core_radius');
+    e.coreValue.textContent =
+      kpcPerUnit > 0
+        ? `${formatNumber(core * kpcPerUnit, 3)} kpc`
+        : formatDistance(core);
   }
   // A cluster gets its own three numbers, and only when there is a cluster.
   const cl = clusterState();
@@ -543,16 +748,47 @@ function syncControls() {
  * @param {boolean} on - Whether the halo is part of the force law
  */
 export function setDarkMatterHalo(on) {
-  updatePhysicsSettings({ dark_matter_halo: Boolean(on) });
+  setGalaxyGravity(on ? 'halo' : 'newtonian');
+}
+
+/**
+ * Choose which law governs the outskirts.
+ *
+ * The single entry point, so that the panel's buttons, the lesson's steps and a
+ * restored shared link all go through the same mutual exclusion. Refuses MOND
+ * where no physical scale has been declared rather than falling back silently,
+ * because a control that appears to work and does not is worse than one that
+ * says no.
+ *
+ * @param {string} mode - 'newtonian', 'halo' or 'mond'
+ * @returns {string} The mode actually in force afterwards
+ */
+export function setGalaxyGravity(mode) {
+  const wanted = ['newtonian', 'halo', 'mond'].includes(mode)
+    ? mode
+    : 'newtonian';
+  updatePhysicsSettings({ galaxy_gravity: wanted });
+  const actual = galaxyGravityMode();
+
+  // Kept for the listeners written before there were three modes. They only
+  // ever cared whether the halo was in the force law.
   window.dispatchEvent(
-    new CustomEvent('gravitasHaloChanged', { detail: { on: Boolean(on) } })
+    new CustomEvent('gravitasHaloChanged', {
+      detail: { on: actual === 'halo' },
+    })
+  );
+  window.dispatchEvent(
+    new CustomEvent('gravitasGalaxyGravityChanged', {
+      detail: { mode: actual, requested: wanted },
+    })
   );
   updateRotationCurve();
+  return actual;
 }
 
 /** @returns {boolean} Whether the halo is currently in the force law */
 export const darkMatterHaloOn = () =>
-  Boolean(getPhysicsSetting('dark_matter_halo'));
+  getPhysicsSetting('galaxy_gravity') === 'halo';
 
 /** Wire the panel up. Called once at start-up. */
 export function initRotationCurve() {
@@ -560,8 +796,13 @@ export function initRotationCurve() {
   e.toggle?.addEventListener('click', () => setRotationCurveEnabled(!enabled));
   e.close?.addEventListener('click', () => setRotationCurveEnabled(false));
   e.haloBtn?.addEventListener('click', () =>
-    setDarkMatterHalo(!getPhysicsSetting('dark_matter_halo'))
+    setDarkMatterHalo(getPhysicsSetting('galaxy_gravity') !== 'halo')
   );
+  e.modeNewtonian?.addEventListener('click', () =>
+    setGalaxyGravity('newtonian')
+  );
+  e.modeHalo?.addEventListener('click', () => setGalaxyGravity('halo'));
+  e.modeMond?.addEventListener('click', () => setGalaxyGravity('mond'));
 
   e.vFlat?.addEventListener('input', () => {
     updatePhysicsSettings({ halo_v_flat: Number(e.vFlat.value) });

@@ -25,6 +25,8 @@
 //                          clear the control rail, which is usually not at all
 //   --transport-max        the widest a window-centred bar may be and still
 //                          stop short of the footer
+//   --transport-reserve    how much of the bottom edge the bar actually
+//                          occupies, for the panels that must stop short of it
 //
 // and the body class `dock-banded`, which says that centring the bar on the
 // window would squeeze it past usefulness and it should centre in the room to
@@ -61,10 +63,33 @@ let frame = 0;
  *
  * @param {HTMLElement} footer - The attribution line
  * @param {HTMLElement|null} rail - The control rail, if this page has one
+ * @param {HTMLElement|null} bar - The transport bar, whose height is not fixed
  */
-function publish(footer, rail) {
+function publish(footer, rail, bar) {
   const root = document.documentElement;
   const set = (name, value) => root.style.setProperty(name, value);
+
+  // --- How much of the bottom edge does the transport bar occupy? ----------
+  // Two panels have to stop short of it: the investigation panel as a side
+  // column, and the same panel as a bottom sheet on a narrow window. Both used
+  // to carry the answer as a constant - 88px in one, 76px in the other, each
+  // written as "the bar's 48px plus its offset plus a gap".
+  //
+  // The bar is not always 48px. Between roughly 640px and 1000px of window it
+  // wraps onto a second row and stands 62px tall, and at that point both
+  // constants are short: the bar crossed the sheet's footer and, having the
+  // higher z-index, swallowed the clicks. Back and Next stopped working, which
+  // on a lesson means the student cannot get past the step they are on.
+  //
+  // So it is measured, like everything else here. The bar is laid out even
+  // while it is still faded out, so this reads the same before and after it
+  // appears and no panel jumps when it does.
+  const barRect = bar?.getBoundingClientRect();
+  const barReserve =
+    barRect && barRect.height > 0
+      ? Math.ceil(window.innerHeight - barRect.top) + GAP
+      : 0;
+  set('--transport-reserve', `${barReserve}px`);
 
   const first = footer.getBoundingClientRect();
   // A hidden footer reserves nothing. It fades in after the splash, and until
@@ -128,6 +153,7 @@ export function initBottomDock() {
   const footer = document.getElementById('attribution');
   if (!footer) return false;
   const rail = document.getElementById('mainControls');
+  const bar = document.getElementById('timelineBar');
 
   /** Measure now. Forces a layout, so it reads text as it currently stands. */
   const measure = () => {
@@ -135,7 +161,7 @@ export function initBottomDock() {
       cancelAnimationFrame(frame);
       frame = 0;
     }
-    publish(footer, rail);
+    publish(footer, rail, bar);
   };
 
   /**
@@ -149,7 +175,7 @@ export function initBottomDock() {
     if (frame) return;
     frame = requestAnimationFrame(() => {
       frame = 0;
-      publish(footer, rail);
+      publish(footer, rail, bar);
     });
   };
 
@@ -163,6 +189,9 @@ export function initBottomDock() {
     // The rail changes height when a section opens, which can bring its foot
     // down into the footer's corner.
     if (rail) observer.observe(rail);
+    // The bar wraps onto a second row at some widths, which changes how much of
+    // the bottom edge it occupies without any window resize having happened.
+    if (bar) observer.observe(bar);
   }
 
   // Registered whichever way the footer is being watched, not only as the

@@ -274,7 +274,13 @@ describe('scenario settings can all be reset', () => {
 
   test('the halo keys in particular are resettable', () => {
     // The specific escape this suite was written for.
-    for (const key of ['dark_matter_halo', 'halo_v_flat', 'halo_core_radius']) {
+    for (const key of [
+      'galaxy_gravity',
+      'halo_v_flat',
+      'halo_core_radius',
+      'galaxy_kpc_per_unit',
+      'galaxy_msun_per_unit',
+    ]) {
       expect(defaults.has(key)).toBe(true);
     }
   });
@@ -282,12 +288,13 @@ describe('scenario settings can all be reset', () => {
   test('a scenario that does not mention the halo leaves it alone', () => {
     // Which, given the defaults are reapplied first, means off.
     const written = keysWrittenBy('Solar System');
-    expect(written).not.toContain('dark_matter_halo');
+    expect(written).not.toContain('galaxy_gravity');
   });
 
-  test('the three dark-matter scenarios each state the halo explicitly', () => {
+  test('the three dark-matter scenarios each state their gravity explicitly', () => {
     // These must not rely on whatever the previous scenario happened to leave
-    // behind: two of them need it on and one needs it off, and each says so.
+    // behind: two of them need the halo and one must not have it, and each
+    // says so.
     for (const name of [
       'Spiral Galaxy',
       'Milky Way Rotation',
@@ -295,20 +302,44 @@ describe('scenario settings can all be reset', () => {
     ]) {
       const settings = { preset_scenario: name };
       applyPreset(settings, {}, { zoom: 1, pan: { x: 0, y: 0 } });
-      expect(typeof settings.dark_matter_halo).toBe('boolean');
+      expect(['newtonian', 'halo', 'mond']).toContain(settings.galaxy_gravity);
       expect(settings.halo_v_flat).toBeGreaterThan(0);
       expect(settings.halo_core_radius).toBeGreaterThan(0);
     }
   });
 
   test('only Spiral Galaxy runs without a halo, since it is the prediction', () => {
-    const halo = name => {
+    const mode = name => {
       const s = { preset_scenario: name };
       applyPreset(s, {}, { zoom: 1, pan: { x: 0, y: 0 } });
-      return s.dark_matter_halo;
+      return s.galaxy_gravity;
     };
-    expect(halo('Spiral Galaxy')).toBe(false);
-    expect(halo('Milky Way Rotation')).toBe(true);
-    expect(halo('Coma Cluster')).toBe(true);
+    expect(mode('Spiral Galaxy')).toBe('newtonian');
+    expect(mode('Milky Way Rotation')).toBe('halo');
+    expect(mode('Coma Cluster')).toBe('halo');
+  });
+
+  // MOND needs a declared physical scale to convert its acceleration constant
+  // into simulation units, and only the galaxy scale models declare one. This
+  // is the guard that keeps a galactic constant out of the Solar System.
+  test('only the galaxy scale models declare a physical scale', () => {
+    const scaled = [];
+    for (const name of Object.keys(SCENARIO_INFO)) {
+      if (name === 'None') continue;
+      const s = { preset_scenario: name };
+      applyPreset(s, {}, { zoom: 1, pan: { x: 0, y: 0 } });
+      if (s.galaxy_kpc_per_unit > 0 || s.galaxy_msun_per_unit > 0) {
+        scaled.push(name);
+        // A half-declared scale would convert to a garbage a0, so both halves
+        // are required together.
+        expect(s.galaxy_kpc_per_unit).toBeGreaterThan(0);
+        expect(s.galaxy_msun_per_unit).toBeGreaterThan(0);
+      }
+    }
+    expect(scaled.sort()).toEqual([
+      'Coma Cluster',
+      'Milky Way Rotation',
+      'Spiral Galaxy',
+    ]);
   });
 });
