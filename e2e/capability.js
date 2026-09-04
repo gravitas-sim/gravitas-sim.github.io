@@ -22,6 +22,8 @@
 // start running by themselves when the capability appears.
 // =============================================================================
 
+/* global HTMLCanvasElement */
+
 /**
  * What this browser can actually do about video, according to the application.
  *

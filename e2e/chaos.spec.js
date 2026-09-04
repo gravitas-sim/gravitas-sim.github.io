@@ -43,13 +43,66 @@ async function record(page, label, { samples = 45, span = 60 } = {}) {
   // for a minute of simulated time, twice per test, and under a loaded CI
   // machine sharing cores with other workers the frame rate - and therefore
   // the rate the simulated clock advances - drops a long way.
-  await page.waitForFunction(
-    ([n, s]) =>
-      window.__bench.sampleCount() >= n && window.__bench.recordingSpan() >= s,
-    [samples, span],
-    { timeout: 300_000 }
-  );
+  try {
+    await page.waitForFunction(
+      ([n, s]) =>
+        window.__bench.sampleCount() >= n &&
+        window.__bench.recordingSpan() >= s,
+      [samples, span],
+      { timeout: 300_000 }
+    );
+  } catch (err) {
+    // A bare "waitForFunction timed out" says nothing about which half of the
+    // condition was unmet, and the two have completely different causes: too
+    // few samples means the bench is not sampling, too short a span means the
+    // simulation is not advancing. Both are worth telling apart, because the
+    // span is a function of frame throughput - the bench advances a fixed step
+    // per animation frame - and a slow engine on a shared runner can miss it
+    // while everything is working correctly.
+    const state = await progressReport(page).catch(() => null);
+    throw new Error(
+      `Recording ${label} never reached ${samples} samples over ${span} ` +
+        `simulated seconds.\n` +
+        (state
+          ? `  samples          ${state.samples} of ${samples}\n` +
+            `  simulated span   ${state.span} of ${span}\n` +
+            `  simulation clock ${state.clock}\n` +
+            `  frames rendered  ${state.frames}\n` +
+            `  state            ${state.paused ? 'paused' : 'running'}` +
+            `, bench ${state.recording ? 'recording' : 'idle'}\n` +
+            (state.span < span && state.samples >= samples
+              ? '  The bench is sampling but the clock is not keeping up: this ' +
+                'is frame throughput, not a broken bench.'
+              : state.samples < samples && state.frames > 0
+                ? '  Frames are rendering but samples are not accumulating: ' +
+                  'look at the bench, not the frame rate.'
+                : '  No frames are rendering at all: the loop has stopped.')
+          : '  (the page could not be read for a progress report)') +
+        `\n\nOriginal: ${err.message.split('\n')[0]}`
+    );
+  }
   await button.click();
+}
+
+/**
+ * Everything worth knowing about why a recording is not progressing.
+ *
+ * @param {import('@playwright/test').Page} page - The page under test
+ * @returns {Promise<object>} Sample count, span, clock, frames and run state
+ */
+function progressReport(page) {
+  return page.evaluate(async () => {
+    const physics = await import('/js/physics.js');
+    const ui = await import('/js/ui.js');
+    return {
+      samples: window.__bench?.sampleCount?.() ?? 'unavailable',
+      span: window.__bench?.recordingSpan?.() ?? 'unavailable',
+      clock: physics.getSimulationTime?.() ?? 'unavailable',
+      frames: ui.state?.frame_count ?? 'unavailable',
+      paused: Boolean(ui.state?.paused),
+      recording: Boolean(window.__bench?.isRecording?.()),
+    };
+  });
 }
 
 /** The divergence verdict for the two recorded runs. */
@@ -396,4 +449,92 @@ test.describe('the chaos investigation', () => {
       }
     }
   });
+});
+
+// =============================================================================
+// Engine compatibility for the bench
+// -----------------------------------------------------------------------------
+// The scientific chaos tests above are Chromium-only, deliberately. They wait
+// for 3,200 simulated seconds of recorded evolution, and the bench advances a
+// fixed step per animation frame while recording, so that span is a function of
+// frame throughput rather than of anything the engine gets right or wrong. On a
+// two-core CI runner WebKit cannot reach it inside the wait, and then spends
+// another five minutes retrying. What it would prove if it did finish - that a
+// divergence exponent comes out the same - is arithmetic over doubles and is
+// already covered by the full Chromium suite and by the pure-analysis jest
+// tests in tests/chaos.test.js.
+//
+// What is worth checking in every engine is that the machinery works: that the
+// bench opens, that recording starts, that samples accumulate and the simulated
+// clock advances, and that the UI reports it. That is this test, and it asks
+// for a handful of samples over a couple of simulated seconds rather than sixty
+// over 3,200.
+// =============================================================================
+test.describe('the experiment bench works in this engine', () => {
+  test(
+    'opens, records, and accumulates samples over a short span',
+    { tag: '@cross-browser' },
+    async ({ page, app }, testInfo) => {
+      testInfo.setTimeout(120_000);
+
+      await app.boot();
+      await app.loadScenario('Three-Body Sensitivity Lab');
+      await app.waitForFrames(10);
+      await openBench(page, app);
+      // The bench will not record until a start state has been captured: that
+      // is what makes two runs comparable, and Record stays disabled without
+      // it. Same preparation the scientific tests do.
+      await prepare(page, 'Engine compatibility');
+
+      const button = page.locator('#benchRecordA');
+      await expect(button).toBeVisible();
+      await expect(button).toBeEnabled();
+      await button.click();
+
+      // Small numbers on purpose. Eight samples over two simulated seconds is
+      // reached in a few hundred frames in any engine, and it is enough to
+      // show that sampling is wired to the clock rather than to a timer.
+      const SAMPLES = 8;
+      const SPAN = 2;
+      try {
+        await page.waitForFunction(
+          ([n, s]) =>
+            window.__bench.sampleCount() >= n &&
+            window.__bench.recordingSpan() >= s,
+          [SAMPLES, SPAN],
+          { timeout: 60_000 }
+        );
+      } catch (err) {
+        const state = await progressReport(page).catch(() => null);
+        throw new Error(
+          `The bench did not reach ${SAMPLES} samples over ${SPAN} simulated ` +
+            `seconds in this engine.\n` +
+            (state
+              ? `  samples ${state.samples}, span ${state.span}, clock ` +
+                `${state.clock}, frames ${state.frames}, ` +
+                `${state.paused ? 'paused' : 'running'}, bench ` +
+                `${state.recording ? 'recording' : 'idle'}`
+              : '  (the page could not be read)') +
+            `\n\nOriginal: ${err.message.split('\n')[0]}`
+        );
+      }
+
+      await button.click();
+
+      // The run is on the bench and the interface says so. No assertion about
+      // what the numbers mean: that is the Chromium suite's job.
+      const after = await page.evaluate(() => {
+        const exp = window.__bench.activeExperiment();
+        return {
+          runs: Object.keys(exp?.runs || {}).length,
+          samples: (exp?.runs?.A?.samples || []).length,
+          recording: window.__bench.isRecording(),
+        };
+      });
+      expect(after.recording).toBe(false);
+      expect(after.samples).toBeGreaterThanOrEqual(SAMPLES);
+      expect(after.runs).toBeGreaterThanOrEqual(1);
+      await expect(page.locator('#experimentPanel')).toBeVisible();
+    }
+  );
 });

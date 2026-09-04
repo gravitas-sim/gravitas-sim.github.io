@@ -147,39 +147,40 @@ async function enterLecture(page) {
 
 // =============================================================================
 test.describe('embed mode', () => {
-  test('?embed=1 alone opens a figure with no application chrome', async ({
-    page,
-    app,
-  }) => {
-    await app.boot({ url: '/?embed=1' });
-    await app.waitForFrames(5);
+  test(
+    '?embed=1 alone opens a figure with no application chrome',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot({ url: '/?embed=1' });
+      await app.waitForFrames(5);
 
-    const shell = await page.evaluate(() => {
-      const display = sel => {
-        const el = document.querySelector(sel);
-        return el ? getComputedStyle(el).display : 'missing';
-      };
-      return {
-        mode: document.body.getAttribute('data-presentation'),
-        rail: display('.ui-container'),
-        footer: display('#attribution'),
-        welcome: display('#welcomeScreen'),
-        readout: display('#overlay'),
-        tutorial: display('#tutorialBtn'),
-        transport: display('#timelineBar'),
-        openFull: display('#embedOpenFull'),
-      };
-    });
+      const shell = await page.evaluate(() => {
+        const display = sel => {
+          const el = document.querySelector(sel);
+          return el ? getComputedStyle(el).display : 'missing';
+        };
+        return {
+          mode: document.body.getAttribute('data-presentation'),
+          rail: display('.ui-container'),
+          footer: display('#attribution'),
+          welcome: display('#welcomeScreen'),
+          readout: display('#overlay'),
+          tutorial: display('#tutorialBtn'),
+          transport: display('#timelineBar'),
+          openFull: display('#embedOpenFull'),
+        };
+      });
 
-    expect(shell.mode).toBe('embed');
-    // Gone: everything that is about the application rather than the figure.
-    for (const part of ['rail', 'footer', 'welcome', 'readout', 'tutorial']) {
-      expect(shell[part], part).toBe('none');
+      expect(shell.mode).toBe('embed');
+      // Gone: everything that is about the application rather than the figure.
+      for (const part of ['rail', 'footer', 'welcome', 'readout', 'tutorial']) {
+        expect(shell[part], part).toBe('none');
+      }
+      // Kept: the controls the figure needs to be a figure, and one way out.
+      expect(shell.transport).not.toBe('none');
+      expect(shell.openFull).not.toBe('none');
     }
-    // Kept: the controls the figure needs to be a figure, and one way out.
-    expect(shell.transport).not.toBe('none');
-    expect(shell.openFull).not.toBe('none');
-  });
+  );
 
   test('the front door never appears inside an embed', async ({
     page,
@@ -644,27 +645,30 @@ test.describe('language', () => {
     await expect(page.locator('#localeButtonCode')).toHaveText('EN');
   });
 
-  test('choosing Spanish translates the chrome and survives a reload', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    await page.locator('#localeButton').click();
-    await page.locator('[data-locale-option="es"]').click();
-    await page.waitForTimeout(300);
+  test(
+    'choosing Spanish translates the chrome and survives a reload',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await page.locator('#localeButton').click();
+      await page.locator('[data-locale-option="es"]').click();
+      await page.waitForTimeout(300);
 
-    await expect(page.locator('#loadScenarioBtn')).toContainText(
-      'Cargar escenario'
-    );
-    await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
-    expect(await page.evaluate(() => document.documentElement.lang)).toBe('es');
+      await expect(page.locator('#loadScenarioBtn')).toContainText(
+        'Cargar escenario'
+      );
+      await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
+      expect(await page.evaluate(() => document.documentElement.lang)).toBe(
+        'es'
+      );
 
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.splashScreenEnded === true);
-    await page.waitForTimeout(500);
-    expect(await localeOf(page)).toBe('es');
-    await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
-  });
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => window.splashScreenEnded === true);
+      await page.waitForTimeout(500);
+      expect(await localeOf(page)).toBe('es');
+      await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
+    }
+  );
 
   test('Settings, the gallery and the inspector are all translated', async ({
     page,
@@ -733,37 +737,40 @@ test.describe('language', () => {
     expect(text).not.toMatch(/investigación guiada|paso a paso/i);
   });
 
-  test('Spanish does not overflow at any width this pass targets', async ({
-    page,
-    app,
-  }) => {
-    for (const size of [
-      { width: 1440, height: 900 },
-      { width: 1024, height: 768 },
-      { width: 375, height: 812 },
-    ]) {
-      await page.setViewportSize(size);
-      await app.boot();
-      await page.evaluate(async () =>
-        (await import('/js/i18n/index.js')).setLocale('es')
-      );
-      // Wait for the language to have landed in the markup, and for the
-      // settings panel to have been rebuilt in it, rather than sleeping: three
-      // boots in one test is enough work that a fixed delay becomes a race.
-      await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
-      await page.evaluate(() => document.getElementById('settingsBtn').click());
-      await expect(page.locator('#settingsPanel')).toBeVisible();
-      await expect(page.locator('#settingsPanel')).toContainText(
-        'Constante gravitatoria'
-      );
+  test(
+    'Spanish does not overflow at any width this pass targets',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      for (const size of [
+        { width: 1440, height: 900 },
+        { width: 1024, height: 768 },
+        { width: 375, height: 812 },
+      ]) {
+        await page.setViewportSize(size);
+        await app.boot();
+        await page.evaluate(async () =>
+          (await import('/js/i18n/index.js')).setLocale('es')
+        );
+        // Wait for the language to have landed in the markup, and for the
+        // settings panel to have been rebuilt in it, rather than sleeping: three
+        // boots in one test is enough work that a fixed delay becomes a race.
+        await expect(page.locator('#settingsBtn')).toContainText('Ajustes');
+        await page.evaluate(() =>
+          document.getElementById('settingsBtn').click()
+        );
+        await expect(page.locator('#settingsPanel')).toBeVisible();
+        await expect(page.locator('#settingsPanel')).toContainText(
+          'Constante gravitatoria'
+        );
 
-      const r = await settle(page).then(() => overflows(page));
-      expect(r.scrollX, `${size.width}x${size.height} scrolls sideways`).toBe(
-        false
-      );
-      expect(r.elements, `${size.width}x${size.height}`).toEqual([]);
+        const r = await settle(page).then(() => overflows(page));
+        expect(r.scrollX, `${size.width}x${size.height} scrolls sideways`).toBe(
+          false
+        );
+        expect(r.elements, `${size.width}x${size.height}`).toEqual([]);
+      }
     }
-  });
+  );
 
   test('Embed and Lecture Mode speak the chosen language too', async ({
     page,

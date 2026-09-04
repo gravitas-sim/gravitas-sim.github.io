@@ -9,20 +9,24 @@
 import { test, expect, STORAGE_KEYS } from './fixtures.js';
 
 test.describe('loading from a clean browser', () => {
-  test('boots, runs, and shows a simulation', async ({ page, app }) => {
-    await app.boot({ firstVisit: true });
+  test(
+    'boots, runs, and shows a simulation',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot({ firstVisit: true });
 
-    // The two canvases the whole application draws into.
-    await expect(page.locator('#simulationCanvas')).toBeVisible();
-    await expect(page.locator('#starfieldCanvas')).toBeVisible();
+      // The two canvases the whole application draws into.
+      await expect(page.locator('#simulationCanvas')).toBeVisible();
+      await expect(page.locator('#starfieldCanvas')).toBeVisible();
 
-    // The splash removed itself rather than being left on top of everything.
-    await expect(page.locator('#splash')).toHaveCount(0);
+      // The splash removed itself rather than being left on top of everything.
+      await expect(page.locator('#splash')).toHaveCount(0);
 
-    // A default world exists and the loop is turning it.
-    await app.waitForBodies(1);
-    await app.waitForFrames(5);
-  });
+      // A default world exists and the loop is turning it.
+      await app.waitForBodies(1);
+      await app.waitForFrames(5);
+    }
+  );
 
   test('the first-visit front door appears, and can be dismissed', async ({
     page,
@@ -60,49 +64,50 @@ test.describe('loading from a clean browser', () => {
 });
 
 test.describe('the scenario gallery', () => {
-  test('opens, filters, and loads a scenario by clicking it', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
+  test(
+    'opens, filters, and loads a scenario by clicking it',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
 
-    await app.railControl('loadScenarioBtn');
+      await app.railControl('loadScenarioBtn');
 
-    await page.locator('#loadScenarioBtn').click();
-    const modal = page.locator('#scenarioListModal');
-    await expect(modal).toBeVisible();
+      await page.locator('#loadScenarioBtn').click();
+      const modal = page.locator('#scenarioListModal');
+      await expect(modal).toBeVisible();
 
-    // The gallery is populated from the catalog rather than from markup.
-    const cards = page.locator('#scenarioListItems [data-scenario]');
-    const total = await cards.count();
-    expect(total).toBeGreaterThan(20);
+      // The gallery is populated from the catalog rather than from markup.
+      const cards = page.locator('#scenarioListItems [data-scenario]');
+      const total = await cards.count();
+      expect(total).toBeGreaterThan(20);
 
-    // Search narrows it, and the count line agrees with what is on screen.
-    await page.locator('#scenarioSearch').fill('trappist');
-    await expect
-      .poll(async () => cards.count(), { timeout: 10_000 })
-      .toBeLessThan(total);
-    const narrowed = await cards.count();
-    expect(narrowed).toBeGreaterThan(0);
-    await expect(page.locator('#scenarioResultCount')).toContainText(
-      String(narrowed)
-    );
+      // Search narrows it, and the count line agrees with what is on screen.
+      await page.locator('#scenarioSearch').fill('trappist');
+      await expect
+        .poll(async () => cards.count(), { timeout: 10_000 })
+        .toBeLessThan(total);
+      const narrowed = await cards.count();
+      expect(narrowed).toBeGreaterThan(0);
+      await expect(page.locator('#scenarioResultCount')).toContainText(
+        String(narrowed)
+      );
 
-    // Clicking the card is the workflow: it should close the gallery and build
-    // the world.
-    await cards.first().click();
-    await expect(modal).toBeHidden();
-    await app.waitForBodies(2);
+      // Clicking the card is the workflow: it should close the gallery and build
+      // the world.
+      await cards.first().click();
+      await expect(modal).toBeHidden();
+      await app.waitForBodies(2);
 
-    // current_scenario_name, not SETTINGS.preset_scenario: the latter is a
-    // sentinel that apply_preset resets to 'None' once it has consumed it, so
-    // reading it after a build tells you nothing about what is loaded.
-    const loaded = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      return ui.current_scenario_name;
-    });
-    expect(loaded).toMatch(/TRAPPIST/i);
-  });
+      // current_scenario_name, not SETTINGS.preset_scenario: the latter is a
+      // sentinel that apply_preset resets to 'None' once it has consumed it, so
+      // reading it after a build tells you nothing about what is loaded.
+      const loaded = await page.evaluate(async () => {
+        const ui = await import('/js/ui.js');
+        return ui.current_scenario_name;
+      });
+      expect(loaded).toMatch(/TRAPPIST/i);
+    }
+  );
 
   test('an empty search says so rather than showing everything', async ({
     page,
@@ -120,29 +125,30 @@ test.describe('the scenario gallery', () => {
 });
 
 test.describe('the transport controls', () => {
-  test('pause stops the clock and resume starts it again', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    await app.loadScenario('Binary Pair');
-    await app.waitForFrames(5);
+  test(
+    'pause stops the clock and resume starts it again',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await app.loadScenario('Binary Pair');
+      await app.waitForFrames(5);
 
-    const play = page.locator('#timelinePlay');
-    await expect(play).toBeVisible();
+      const play = page.locator('#timelinePlay');
+      await expect(play).toBeVisible();
 
-    await play.click();
-    await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(true);
+      await play.click();
+      await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(true);
 
-    // Paused means paused: the frame counter must not move.
-    const at = await app.frameCount();
-    await page.waitForTimeout(600);
-    expect(await app.frameCount()).toBe(at);
+      // Paused means paused: the frame counter must not move.
+      const at = await app.frameCount();
+      await page.waitForTimeout(600);
+      expect(await app.frameCount()).toBe(at);
 
-    await play.click();
-    await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(false);
-    await app.waitForFrames(5);
-  });
+      await play.click();
+      await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(false);
+      await app.waitForFrames(5);
+    }
+  );
 
   test('the speed controls change the simulation rate', async ({
     page,
@@ -170,28 +176,29 @@ test.describe('the transport controls', () => {
     await expect(page.locator('#speedDisplay')).not.toBeEmpty();
   });
 
-  test('reset rebuilds the world and keeps it running', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    await app.loadScenario('Solar System');
-    await app.waitForFrames(30);
+  test(
+    'reset rebuilds the world and keeps it running',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await app.loadScenario('Solar System');
+      await app.waitForFrames(30);
 
-    const before = await app.bodySnapshot();
-    expect(before.count).toBeGreaterThan(5);
+      const before = await app.bodySnapshot();
+      expect(before.count).toBeGreaterThan(5);
 
-    // Refresh Scenario rebuilds from the same preset, which is the reset a user
-    // reaches for when they have dragged things around.
-    await app.railControl('refreshScenarioBtn');
-    await page.locator('#refreshScenarioBtn').click();
-    await app.waitForBodies(5);
-    await app.waitForFrames(10);
+      // Refresh Scenario rebuilds from the same preset, which is the reset a user
+      // reaches for when they have dragged things around.
+      await app.railControl('refreshScenarioBtn');
+      await page.locator('#refreshScenarioBtn').click();
+      await app.waitForBodies(5);
+      await app.waitForFrames(10);
 
-    const after = await app.bodySnapshot();
-    expect(after.count).toBeGreaterThan(5);
-    expect(after.nonFinite).toBe(0);
-  });
+      const after = await app.bodySnapshot();
+      expect(after.count).toBeGreaterThan(5);
+      expect(after.nonFinite).toBe(0);
+    }
+  );
 });
 
 // =============================================================================

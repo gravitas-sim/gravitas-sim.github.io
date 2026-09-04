@@ -14,45 +14,49 @@
 import { test, expect } from './fixtures.js';
 
 test.describe('a shared link', () => {
-  test('round-trips a scenario through the URL', async ({ page, app }) => {
-    await app.boot();
-    await app.loadScenario('TRAPPIST-1 System');
-    await app.waitForFrames(20);
+  test(
+    'round-trips a scenario through the URL',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await app.loadScenario('TRAPPIST-1 System');
+      await app.waitForFrames(20);
 
-    const before = await app.bodySnapshot();
-    expect(before.count).toBeGreaterThan(5);
+      const before = await app.bodySnapshot();
+      expect(before.count).toBeGreaterThan(5);
 
-    // Capture and encode through the application's own codec.
-    const fragment = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      const share = await import('/js/shareState.js');
-      const payload = ui.captureShareState({ kind: 'full' });
-      return share.encodePayload(payload);
-    });
-    expect(typeof fragment).toBe('string');
-    expect(fragment.length).toBeGreaterThan(10);
+      // Capture and encode through the application's own codec.
+      const fragment = await page.evaluate(async () => {
+        const ui = await import('/js/ui.js');
+        const share = await import('/js/shareState.js');
+        const payload = ui.captureShareState({ kind: 'full' });
+        return share.encodePayload(payload);
+      });
+      expect(typeof fragment).toBe('string');
+      expect(fragment.length).toBeGreaterThan(10);
 
-    // Open it in a genuinely fresh page, the way a student receiving the link
-    // would: new context, nothing in storage, no prior world.
-    const url = fragment.startsWith('#') ? fragment : `#${fragment}`;
-    await app.boot({ url: `/${url}` });
+      // Open it in a genuinely fresh page, the way a student receiving the link
+      // would: new context, nothing in storage, no prior world.
+      const url = fragment.startsWith('#') ? fragment : `#${fragment}`;
+      await app.boot({ url: `/${url}` });
 
-    // The link is applied asynchronously after boot, so wait for a world.
-    await app.waitForBodies(5);
-    await app.waitForFrames(20);
+      // The link is applied asynchronously after boot, so wait for a world.
+      await app.waitForBodies(5);
+      await app.waitForFrames(20);
 
-    const after = await app.bodySnapshot();
-    expect(after.nonFinite).toBe(0);
-    // The same system, not merely some system.
-    expect(after.count).toBe(before.count);
-    expect(after.totalMass).toBeCloseTo(before.totalMass, 3);
+      const after = await app.bodySnapshot();
+      expect(after.nonFinite).toBe(0);
+      // The same system, not merely some system.
+      expect(after.count).toBe(before.count);
+      expect(after.totalMass).toBeCloseTo(before.totalMass, 3);
 
-    const scenario = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
-      return ui.current_scenario_name;
-    });
-    expect(scenario).toMatch(/TRAPPIST/i);
-  });
+      const scenario = await page.evaluate(async () => {
+        const ui = await import('/js/ui.js');
+        return ui.current_scenario_name;
+      });
+      expect(scenario).toMatch(/TRAPPIST/i);
+    }
+  );
 
   test('a seeded link carries its seed and scenario intact', async ({
     page,

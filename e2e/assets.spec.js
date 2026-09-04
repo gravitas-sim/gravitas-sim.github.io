@@ -33,12 +33,16 @@ function watchRequests(page) {
 }
 
 test.describe('the application loads everything it asks for', () => {
-  test('booting issues no failed requests', async ({ page, app }) => {
-    const failures = watchRequests(page);
-    await app.boot();
-    await app.waitForFrames(20);
-    expect(failures).toEqual([]);
-  });
+  test(
+    'booting issues no failed requests',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      const failures = watchRequests(page);
+      await app.boot();
+      await app.waitForFrames(20);
+      expect(failures).toEqual([]);
+    }
+  );
 
   test('the deferred lesson code loads on demand', async ({ page, app }) => {
     // Half the application by weight is behind a dynamic import. A chunk that
@@ -51,17 +55,18 @@ test.describe('the application loads everything it asks for', () => {
     expect(failures).toEqual([]);
   });
 
-  test('the chart panels load their deferred dependency', async ({
-    page,
-    app,
-  }) => {
-    const failures = watchRequests(page);
-    await app.boot();
-    await app.loadScenario('Transit Lab');
-    await app.openPanel('toggleLightCurve', 'lightCurveContainer');
-    await app.waitForFrames(30);
-    expect(failures).toEqual([]);
-  });
+  test(
+    'the chart panels load their deferred dependency',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      const failures = watchRequests(page);
+      await app.boot();
+      await app.loadScenario('Transit Lab');
+      await app.openPanel('toggleLightCurve', 'lightCurveContainer');
+      await app.waitForFrames(30);
+      expect(failures).toEqual([]);
+    }
+  );
 
   test('every scenario thumbnail decodes', async ({ page, app }) => {
     // The file existing is checked by npm run thumbnails:check. This checks the
@@ -107,37 +112,45 @@ test.describe('the document pages', () => {
     ['the model page', '/model/'],
     ['the instructor area', '/instructors/'],
   ]) {
-    test(`${name} loads and is styled`, async ({ page }) => {
-      const failures = watchRequests(page);
-      const errors = [];
-      page.on('pageerror', e => errors.push(e.message));
+    test(
+      `${name} loads and is styled`,
+      { tag: '@cross-browser' },
+      async ({ page }) => {
+        const failures = watchRequests(page);
+        const errors = [];
+        page.on('pageerror', e => errors.push(e.message));
 
-      const response = await page.goto(path, { waitUntil: 'load' });
-      expect(response.status()).toBe(200);
+        const response = await page.goto(path, { waitUntil: 'load' });
+        expect(response.status()).toBe(200);
 
-      // A stylesheet that 404s leaves a readable but unstyled page, which is the
-      // kind of break that survives review.
-      const styled = await page.evaluate(
-        () => getComputedStyle(document.body).backgroundColor
-      );
-      expect(styled).not.toBe('');
-      expect(styled).not.toBe('rgba(0, 0, 0, 0)');
+        // A stylesheet that 404s leaves a readable but unstyled page, which is the
+        // kind of break that survives review.
+        const styled = await page.evaluate(
+          () => getComputedStyle(document.body).backgroundColor
+        );
+        expect(styled).not.toBe('');
+        expect(styled).not.toBe('rgba(0, 0, 0, 0)');
 
-      await expect(page.locator('h1').first()).not.toBeEmpty();
-      expect(failures).toEqual([]);
-      expect(errors).toEqual([]);
-    });
+        await expect(page.locator('h1').first()).not.toBeEmpty();
+        expect(failures).toEqual([]);
+        expect(errors).toEqual([]);
+      }
+    );
   }
 
-  test('the model page anchors all resolve', async ({ page }) => {
-    // Its table of contents is the navigation for a long document; a dead anchor
-    // silently does nothing when clicked.
-    await page.goto('/model/', { waitUntil: 'load' });
-    const dead = await page.evaluate(() =>
-      [...document.querySelectorAll('a[href^="#"]')]
-        .map(a => a.getAttribute('href').slice(1))
-        .filter(id => id && !document.getElementById(id))
-    );
-    expect(dead).toEqual([]);
-  });
+  test(
+    'the model page anchors all resolve',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      // Its table of contents is the navigation for a long document; a dead anchor
+      // silently does nothing when clicked.
+      await page.goto('/model/', { waitUntil: 'load' });
+      const dead = await page.evaluate(() =>
+        [...document.querySelectorAll('a[href^="#"]')]
+          .map(a => a.getAttribute('href').slice(1))
+          .filter(id => id && !document.getElementById(id))
+      );
+      expect(dead).toEqual([]);
+    }
+  );
 });

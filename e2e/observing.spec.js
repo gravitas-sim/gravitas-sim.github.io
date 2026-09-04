@@ -24,34 +24,38 @@ async function openObservatory(page, app) {
 }
 
 test.describe('the light curve', () => {
-  test('opens, plots, and reports a status', async ({ page, app }) => {
-    await app.boot();
-    await app.loadScenario('Transit Lab');
-    await app.openPanel('toggleLightCurve', 'lightCurveContainer');
+  test(
+    'opens, plots, and reports a status',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await app.loadScenario('Transit Lab');
+      await app.openPanel('toggleLightCurve', 'lightCurveContainer');
 
-    await expect(page.locator('#lightCurveCanvas')).toBeVisible();
-    await expect(page.locator('#lightCurveStatus')).not.toBeEmpty();
+      await expect(page.locator('#lightCurveCanvas')).toBeVisible();
+      await expect(page.locator('#lightCurveStatus')).not.toBeEmpty();
 
-    // It has to actually accumulate samples, not merely appear. A panel that
-    // opens and then records nothing is the failure a DOM assertion misses.
-    await expect
-      .poll(
-        () =>
-          page.evaluate(async () => {
-            const lc = await import('/js/lightCurve.js');
-            return lc.lightCurveSeries().flux.length;
-          }),
-        { timeout: 20_000 }
-      )
-      .toBeGreaterThan(5);
+      // It has to actually accumulate samples, not merely appear. A panel that
+      // opens and then records nothing is the failure a DOM assertion misses.
+      await expect
+        .poll(
+          () =>
+            page.evaluate(async () => {
+              const lc = await import('/js/lightCurve.js');
+              return lc.lightCurveSeries().flux.length;
+            }),
+          { timeout: 20_000 }
+        )
+        .toBeGreaterThan(5);
 
-    // And the brightness it records has to be a number.
-    const brightness = await page.evaluate(async () => {
-      const lc = await import('/js/lightCurve.js');
-      return lc.currentBrightness();
-    });
-    expect(Number.isFinite(brightness)).toBe(true);
-  });
+      // And the brightness it records has to be a number.
+      const brightness = await page.evaluate(async () => {
+        const lc = await import('/js/lightCurve.js');
+        return lc.currentBrightness();
+      });
+      expect(Number.isFinite(brightness)).toBe(true);
+    }
+  );
 
   test('closes without leaving the toggle inconsistent', async ({
     page,

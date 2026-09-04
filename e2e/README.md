@@ -59,16 +59,92 @@ thing.
 
 ## Other browsers
 
+Chromium runs everything. Firefox and WebKit run a deliberate subset.
+
 ```bash
 npx playwright install firefox webkit
-GRAVITAS_E2E_BROWSERS=firefox,webkit npm run e2e
+
+# The engine-compatibility profile: the tests tagged @cross-browser.
+GRAVITAS_E2E_BROWSERS=webkit npm run e2e:cross-browser -- --workers=1
+GRAVITAS_E2E_BROWSERS=firefox npm run e2e:cross-browser -- --workers=1
+
+# Everything, in another engine. Slow, and mostly redundant. See below.
 GRAVITAS_E2E_BROWSERS=all npm run e2e
 ```
 
-Chromium runs on every change; CI adds Firefox and WebKit on pushes to `main` and
-weekly. They roughly triple the wall clock and what they find in a canvas
-application is mostly engine timing, so making every contributor wait for them
-was not worth it.
+### Why the other engines do not run everything
+
+They used to, and it did not fit. The serial WebKit job reached GitHub's
+thirty-minute ceiling at 177 tests; Firefox took about twenty-three minutes and
+WebKit is slower. Raising the ceiling would have bought another few minutes
+before the same thing happened again, so the question was which of those 177
+tests were testing WebKit at all.
+
+Most of them were not. A chaos divergence exponent, a resonance libration
+amplitude, a conservation drift: these are arithmetic over IEEE-754 doubles.
+They come out the same in every engine because they are the same additions in
+the same order. Running them three times checks the same arithmetic three times
+and charges twenty minutes for the second and third.
+
+Two of them were worse than redundant:
+
+- **The video-capture tests** waited for `#recordBtn` to be visible. Gravitas
+  hides that button when `capture.canRecord()` is false, which is correct - there
+  is nothing behind it in a browser that cannot encode - and on the Linux CI
+  runner Playwright's WebKit has no usable combination of `MediaRecorder`,
+  `HTMLCanvasElement.captureStream` and an accepted MIME type. The test was
+  asserting a promise the application does not make, and it cost two failures
+  and two retries.
+
+- **The long chaos tests** wait for 3,200 simulated seconds of recorded
+  evolution. The bench advances a fixed simulation step per animation frame
+  while recording, so that span is a function of frame throughput. WebKit on a
+  two-core runner cannot reach it inside the 300-second wait, and then spends
+  another five minutes retrying.
+
+Neither was a product regression, and neither would have been fixed by a longer
+timeout.
+
+### What the profile contains
+
+Tests tagged `@cross-browser`, chosen because each exercises a **browser API or
+layout behaviour that genuinely differs between engines**: booting and asset
+loading, canvas animation, the scenario gallery, pause/resume/reset, downloads,
+`MediaRecorder` availability, history and share-link restoration, a lesson
+advancing, the deferred chart chunk, the inspector, the A/B bench recording,
+WebGL, embed mode, language switching and Spanish layout, and the document
+pages.
+
+It also carries one short chaos test that opens the Three-Body Sensitivity Lab,
+starts the bench, and collects eight samples over two simulated seconds. That
+proves the bench records and that sampling is wired to the simulated clock. It
+asserts nothing about the numerical outcome; that stays in Chromium.
+
+Adding a test to the profile is one word:
+
+```js
+test('...', { tag: '@cross-browser' }, async ({ page, app }) => {
+```
+
+A tag rather than a title-text filter, because a grep over titles silently loses
+a test the day somebody rewords it.
+
+### Capability-based video testing
+
+`e2e/capability.js` asks the application its own `capture.canRecord()` and
+collects the three sub-capabilities so a skip can name the missing one. Nothing
+names a browser. Two tests actually encode and download a clip, and they call
+`test.skip()` when the capability is absent - so they will begin running by
+themselves the day an engine gains support, with no change here.
+
+The contract itself runs everywhere: when `canRecord()` is true the button is
+visible and enabled, when it is false the button is hidden and screenshot
+capture still works. A companion test removes `MediaRecorder` before the
+application loads and checks the degraded path, because on macOS all three
+engines can record and the branch that matters would otherwise never be
+exercised where people develop.
+
+The screenshot test runs in every browser: it needs no codec.
 
 ## What is here
 
@@ -88,6 +164,7 @@ was not worth it.
 | `sharing.spec.js`          | Encoding and restoring a shared-state URL, seeded determinism, a corrupt link                                                                                                                                        |
 | `robustness.spec.js`       | The heaviest scenarios, a NaN sweep over all 48, scenario churn                                                                                                                                                      |
 | `galaxyGravity.spec.js`    | The three galaxy-gravity modes: that they are mutually exclusive, that MOND is refused where no galactic scale is declared, that a mode does not leak across a scenario change, and that it survives a shared link and registers with the A/B bench                            |
+| `capability.js`            | Not a spec: asks the application what this engine can actually do, so the video tests can skip on the capability rather than on a browser name                                                                       |
 | `worldConstruction.spec.js` | A characterization golden: every scenario in the catalogue built from one fixed seed, digested body by body in list order, so a refactor of the world builder has to prove it changed nothing                            |
 | `scenarioContract.spec.js` | That a scenario named after specific objects contains them: names, classifications, masses, ordering, survival, and seeded reproducibility                                                                           |
 | `assets.spec.js`           | Failed requests, deferred chunks, thumbnails decoding, the document pages                                                                                                                                            |

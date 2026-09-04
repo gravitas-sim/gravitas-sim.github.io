@@ -139,22 +139,26 @@ test.describe('the spacetime view', () => {
     expect(three.bottom).toBeLessThanOrEqual(curve.top);
   });
 
-  test('draws the scene, at any scale', async ({ page, app }) => {
-    // A compact scenario and a wide one. The wide one is the regression: the
-    // camera's far plane was pinned at 6000 world units, and the Solar System
-    // with its comets is 20,000 across, so the whole scene sat behind it and
-    // the panel rendered nothing but its background.
-    await app.loadScenario('Binary BH');
-    await openSpacetimeView(page, app);
-    expect(await drawnPercent(page)).toBeGreaterThan(2);
+  test(
+    'draws the scene, at any scale',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      // A compact scenario and a wide one. The wide one is the regression: the
+      // camera's far plane was pinned at 6000 world units, and the Solar System
+      // with its comets is 20,000 across, so the whole scene sat behind it and
+      // the panel rendered nothing but its background.
+      await app.loadScenario('Binary BH');
+      await openSpacetimeView(page, app);
+      expect(await drawnPercent(page)).toBeGreaterThan(2);
 
-    // No Reset click: loading a world re-frames the view on its own, which is
-    // what stops a scenario change from leaving the panel pointed at empty
-    // space where the last scenario used to be.
-    await app.loadScenario('Solar System');
-    await page.waitForTimeout(2000);
-    expect(await drawnPercent(page)).toBeGreaterThan(2);
-  });
+      // No Reset click: loading a world re-frames the view on its own, which is
+      // what stops a scenario change from leaving the panel pointed at empty
+      // space where the last scenario used to be.
+      await app.loadScenario('Solar System');
+      await page.waitForTimeout(2000);
+      expect(await drawnPercent(page)).toBeGreaterThan(2);
+    }
+  );
 
   test('closes cleanly and gives the corner back', async ({ page, app }) => {
     await app.loadScenario('Binary BH');

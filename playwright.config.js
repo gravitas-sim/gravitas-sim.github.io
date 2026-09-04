@@ -32,15 +32,40 @@
 //   npm run e2e:headed     watch it happen, chromium only
 //   npm run e2e:ui         the Playwright inspector
 //
-// Browser coverage
+// Browser coverage, and what each engine is actually for
 // -----------------------------------------------------------------------------
-// Chromium always. Firefox and WebKit only when asked, because they roughly
-// triple the wall-clock and the failures they find in a canvas application are
-// overwhelmingly engine timing rather than product regressions. CI runs the full
-// set on pushes to main and on a schedule, and chromium alone on pull requests,
-// which keeps the signal a contributor waits for under a few minutes.
+// Chromium runs everything: the behaviour, the layout, and the scientific
+// results - chaos divergence, resonance libration, conservation, the whole
+// suite. It is the engine the project is tested in.
 //
-//   GRAVITAS_E2E_BROWSERS=all npm run e2e
+// Firefox and WebKit run the `@cross-browser` profile and nothing else. This
+// used to say that CI ran "the full set" in every engine, and that was both
+// inaccurate and a bad idea:
+//
+//   It did not fit. The serial WebKit job reached GitHub's thirty-minute
+//   ceiling at 177 tests. Firefox took about twenty-three minutes and WebKit is
+//   slower.
+//
+//   Most of it was not testing the engine. A divergence exponent measured over
+//   3,200 simulated seconds is arithmetic over doubles. Running it in three
+//   engines does not check three engines; it checks the same IEEE-754 three
+//   times and charges twenty minutes for the second and third.
+//
+//   Two of the tests were actively wrong there. The video-capture tests waited
+//   for a button Gravitas deliberately hides when capture.canRecord() is false,
+//   which in Playwright's WebKit it is. The long chaos tests wait for a
+//   simulated span the bench reaches at a fixed step per animation frame, so on
+//   a two-core runner WebKit cannot get there inside the wait and then spends
+//   another five minutes retrying.
+//
+// So the profile carries what differs between engines - boot, canvas, downloads,
+// history, storage, WebGL, layout, i18n - and one short chaos test that proves
+// the bench records and samples without asserting a numerical outcome. Anything
+// whose result depends only on shared JavaScript arithmetic stays Chromium-only.
+//
+//   npm run e2e                      chromium, everything
+//   GRAVITAS_E2E_BROWSERS=all npm run e2e            all three, everything
+//   GRAVITAS_E2E_BROWSERS=webkit npm run e2e:cross-browser   the profile
 // =============================================================================
 
 import { defineConfig, devices } from '@playwright/test';
@@ -80,6 +105,30 @@ if (!engines.length) {
 
 const PORT = Number(process.env.GRAVITAS_E2E_PORT || 4173);
 
+/**
+ * Which profile to run: everything, or the engine-compatibility subset.
+ *
+ * `GRAVITAS_E2E_PROFILE=cross-browser` narrows the run to tests tagged
+ * `@cross-browser`. A Playwright tag rather than a title-text filter, because a
+ * grep over titles silently loses a test the day somebody rewords it, and
+ * silently gains one the day somebody uses the same word for something else.
+ *
+ * What belongs in the profile is one question: does this exercise a browser
+ * API? Booting, canvas animation, downloads, MediaRecorder, history and
+ * navigation, IndexedDB, WebGL, fonts and layout all differ between engines and
+ * are worth running three times. A chaos divergence exponent or a resonance
+ * libration amplitude is arithmetic over doubles - it comes out the same in
+ * every engine, and running it three times buys nothing but wall clock. Those
+ * stay in the Chromium job, which runs everything.
+ */
+const PROFILE = process.env.GRAVITAS_E2E_PROFILE || 'full';
+const CROSS_BROWSER_TAG = /@cross-browser/;
+if (PROFILE !== 'full' && PROFILE !== 'cross-browser') {
+  throw new Error(
+    `GRAVITAS_E2E_PROFILE="${PROFILE}" is not a profile. Use "full" or "cross-browser".`
+  );
+}
+
 // The mobile spec belongs to the phone project alone: it opens the menu toggle
 // and asserts on layout that only exists below the breakpoint, so running it in
 // a 1440px window fails for reasons that are not bugs.
@@ -111,6 +160,7 @@ export default defineConfig({
   ...(target === 'dist'
     ? { testMatch: PRODUCTION_SPEC }
     : { testIgnore: PRODUCTION_SPEC }),
+  ...(PROFILE === 'cross-browser' ? { grep: CROSS_BROWSER_TAG } : {}),
   // Every spec here drives a live simulation, so they are slower than a typical
   // DOM test and the default 30s is too tight for the heavy-scenario one.
   timeout: 90_000,

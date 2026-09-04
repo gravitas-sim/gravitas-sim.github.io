@@ -12,6 +12,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { captureCapability, whyNoRecording } from './capability.js';
 import { mkdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -28,58 +29,170 @@ test.describe('capture', () => {
     await app.waitForFrames(5);
   });
 
-  test('a screenshot is a PNG that documents its own run', async ({
-    page,
-    app,
-  }) => {
-    await app.railControl('screenshotBtn');
-    const download = page.waitForEvent('download');
-    await page.locator('#screenshotBtn').click();
-    const file = await download;
-    expect(file.suggestedFilename()).toMatch(/^gravitas-screenshot-\d+\.png$/);
+  // The contract, and the one capture test besides the screenshot that runs in
+  // every engine.
+  //
+  // Gravitas hides the Record Clip button when capture.canRecord() is false,
+  // which is correct: there is nothing behind it in a browser that cannot
+  // encode. The suite used to assert the button was visible unconditionally,
+  // which made a deliberate behaviour look like a WebKit bug and cost that job
+  // two failures and two retries before it timed out.
+  //
+  // So the assertion is the branch itself, checked against the application's
+  // own answer rather than against a browser name.
+  test(
+    'the recording button matches what the engine can actually do',
+    { tag: '@cross-browser' },
+    async ({ page }) => {
+      const cap = await captureCapability(page);
+      const button = page.locator('#recordBtn');
 
-    const path = join(OUT, 'screenshot.png');
-    await file.saveAs(path);
-    // A PNG header, and enough bytes to be a picture of something rather than
-    // an empty canvas.
-    expect(statSync(path).size).toBeGreaterThan(20_000);
+      // Open the rail section the button lives in, without asserting that the
+      // button appears - which is the very thing under test. app.railControl()
+      // cannot be used here because it ends in a visibility assertion, and in
+      // an engine that cannot record the correct outcome is that the button
+      // stays hidden with its section open.
+      const toggleId = await page.evaluate(() => {
+        const el = document.getElementById('recordBtn');
+        const group = el?.closest('.rail-group');
+        const toggle = group?.querySelector('.rail-section-toggle');
+        return toggle?.getAttribute('aria-expanded') === 'false'
+          ? toggle.id
+          : null;
+      });
+      if (toggleId) await page.locator(`#${toggleId}`).click();
 
-    // The three facts the image has to carry are drawn for the captured frame
-    // and not otherwise, so the way to check them is to ask what the capture
-    // frame contained.
-    const burned = await page.evaluate(async () => {
-      const tools = await import('/js/sandboxTools.js');
-      const ui = await import('/js/ui.js');
-      const canvas = document.getElementById('simulationCanvas');
-      const drawn = [];
-      const ctx = canvas.getContext('2d');
-      const realFillText = ctx.fillText.bind(ctx);
-      ctx.fillText = (s, x, y) => {
-        drawn.push(String(s));
-        realFillText(s, x, y);
-      };
-      ui.takeScreenshot();
-      await new Promise(r =>
-        window.requestAnimationFrame(() => window.requestAnimationFrame(r))
+      if (cap.canRecord) {
+        await expect(button).toBeVisible();
+        await expect(button).toBeEnabled();
+      } else {
+        await expect(button).toBeHidden();
+      }
+
+      // Either way the still is available: a screenshot needs no codec, and an
+      // engine that cannot record must not also lose the export that works.
+      await expect(page.locator('#screenshotBtn')).toBeVisible();
+
+      // Recorded as an annotation so the report says what this engine could do
+      // rather than only that the test passed.
+      test.info().annotations.push({
+        type: 'capture capability',
+        description: cap.canRecord
+          ? `records as ${cap.mimeType}`
+          : `cannot record: ${cap.missing.join(', ')} unavailable`,
+      });
+    }
+  );
+
+  // The other half of the contract, and the reason it is a separate test.
+  //
+  // Which branch the test above takes depends on the machine: on macOS all
+  // three Playwright engines can record, and on the Linux CI runner WebKit
+  // cannot. So on any given run one branch goes unexercised, and the branch
+  // that matters - the degradation - is the one that goes unexercised where
+  // people develop.
+  //
+  // This removes MediaRecorder before the application loads. That is not a
+  // polyfill or a fake; it is the absence of a capability, which is exactly the
+  // configuration the Linux runner presents, and it lets the hidden-button
+  // behaviour be verified on a machine where the capability exists.
+  test(
+    'without MediaRecorder the button is hidden and the still survives',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await page.addInitScript(() => {
+        delete window.MediaRecorder;
+      });
+      await app.boot();
+      await app.dismissFrontDoor();
+
+      const cap = await captureCapability(page);
+      expect(cap.canRecord).toBe(false);
+      expect(cap.missing).toContain('MediaRecorder');
+
+      const toggleId = await page.evaluate(() => {
+        const el = document.getElementById('recordBtn');
+        const toggle = el
+          ?.closest('.rail-group')
+          ?.querySelector('.rail-section-toggle');
+        return toggle?.getAttribute('aria-expanded') === 'false'
+          ? toggle.id
+          : null;
+      });
+      if (toggleId) await page.locator(`#${toggleId}`).click();
+
+      await expect(page.locator('#recordBtn')).toBeHidden();
+      // The export that needs no codec is untouched.
+      await expect(page.locator('#screenshotBtn')).toBeVisible();
+      await expect(page.locator('#screenshotBtn')).toBeEnabled();
+
+      // And the reason a skip would print names the missing piece rather than
+      // saying "unsupported".
+      expect(whyNoRecording(cap)).toContain('MediaRecorder');
+    }
+  );
+
+  test(
+    'a screenshot is a PNG that documents its own run',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.railControl('screenshotBtn');
+      const download = page.waitForEvent('download');
+      await page.locator('#screenshotBtn').click();
+      const file = await download;
+      expect(file.suggestedFilename()).toMatch(
+        /^gravitas-screenshot-\d+\.png$/
       );
-      await new Promise(r => setTimeout(r, 50));
-      ctx.fillText = realFillText;
-      return { drawn, capturing: tools.isCapturing() };
-    });
-    // The scenario name, a distance with a unit on it, and a clock.
-    expect(burned.drawn.join(' | ')).toContain('Solar System');
-    expect(burned.drawn.some(s => /\b(AU|km|m|ly|pc)\b/.test(s))).toBe(true);
-    expect(burned.drawn.some(s => /\d/.test(s))).toBe(true);
-    // And it is a frame, not a mode: the live view goes back to normal.
-    expect(burned.capturing).toBe(false);
-    await app.waitForFrames(3);
-  });
+
+      const path = join(OUT, 'screenshot.png');
+      await file.saveAs(path);
+      // A PNG header, and enough bytes to be a picture of something rather than
+      // an empty canvas.
+      expect(statSync(path).size).toBeGreaterThan(20_000);
+
+      // The three facts the image has to carry are drawn for the captured frame
+      // and not otherwise, so the way to check them is to ask what the capture
+      // frame contained.
+      const burned = await page.evaluate(async () => {
+        const tools = await import('/js/sandboxTools.js');
+        const ui = await import('/js/ui.js');
+        const canvas = document.getElementById('simulationCanvas');
+        const drawn = [];
+        const ctx = canvas.getContext('2d');
+        const realFillText = ctx.fillText.bind(ctx);
+        ctx.fillText = (s, x, y) => {
+          drawn.push(String(s));
+          realFillText(s, x, y);
+        };
+        ui.takeScreenshot();
+        await new Promise(r =>
+          window.requestAnimationFrame(() => window.requestAnimationFrame(r))
+        );
+        await new Promise(r => setTimeout(r, 50));
+        ctx.fillText = realFillText;
+        return { drawn, capturing: tools.isCapturing() };
+      });
+      // The scenario name, a distance with a unit on it, and a clock.
+      expect(burned.drawn.join(' | ')).toContain('Solar System');
+      expect(burned.drawn.some(s => /\b(AU|km|m|ly|pc)\b/.test(s))).toBe(true);
+      expect(burned.drawn.some(s => /\d/.test(s))).toBe(true);
+      // And it is a frame, not a mode: the live view goes back to normal.
+      expect(burned.capturing).toBe(false);
+      await app.waitForFrames(3);
+    }
+  );
 
   test('a clip records, announces itself, and saves a playable file', async ({
     page,
     app,
   }, testInfo) => {
     testInfo.setTimeout(120_000);
+    // Skipped where the engine cannot encode, on the detected capability rather
+    // than on the browser's name, so this starts running by itself the day the
+    // engine gains support.
+    const capability = await captureCapability(page);
+    test.skip(!capability.canRecord, whyNoRecording(capability));
+
     await app.railControl('recordBtn');
     const button = page.locator('#recordBtn');
     const badge = page.locator('#recordingBadge');
@@ -146,6 +259,10 @@ test.describe('capture', () => {
     app,
   }, testInfo) => {
     testInfo.setTimeout(90_000);
+    // The other test that genuinely encodes, gated the same way.
+    const capability = await captureCapability(page);
+    test.skip(!capability.canRecord, whyNoRecording(capability));
+
     await app.railControl('recordBtn');
     const button = page.locator('#recordBtn');
     await button.click();

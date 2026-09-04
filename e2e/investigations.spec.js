@@ -154,58 +154,59 @@ test.describe('opening a lesson', () => {
 });
 
 test.describe('advancing through representative step types', () => {
-  test('walks the first several steps, meeting an instrument on the way', async ({
-    page,
-    app,
-  }) => {
-    await openLesson(page, app);
-    expect(await stepNumber(page)).toBe(1);
+  test(
+    'walks the first several steps, meeting an instrument on the way',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await openLesson(page, app);
+      expect(await stepNumber(page)).toBe(1);
 
-    // Step 2 of this lesson is an explore step with a docked instrument, which
-    // is the step type most likely to break: it renders a canvas, sliders,
-    // presets and a readout from the widget registry.
-    await answerAndAdvance(page);
-    expect(await stepNumber(page)).toBe(2);
+      // Step 2 of this lesson is an explore step with a docked instrument, which
+      // is the step type most likely to break: it renders a canvas, sliders,
+      // presets and a readout from the widget registry.
+      await answerAndAdvance(page);
+      expect(await stepNumber(page)).toBe(2);
 
-    const tool = page.locator('#investigationToolCanvas');
-    await expect(tool).toBeVisible();
-    await expect(page.locator('#investigationToolTitle')).not.toBeEmpty();
-    await expect(
-      page.locator('#investigationToolControls [data-tool]').first()
-    ).toBeVisible();
-    await expect(
-      page.locator('#investigationToolReadout .inv-tool-row').first()
-    ).toBeVisible();
+      const tool = page.locator('#investigationToolCanvas');
+      await expect(tool).toBeVisible();
+      await expect(page.locator('#investigationToolTitle')).not.toBeEmpty();
+      await expect(
+        page.locator('#investigationToolControls [data-tool]').first()
+      ).toBeVisible();
+      await expect(
+        page.locator('#investigationToolReadout .inv-tool-row').first()
+      ).toBeVisible();
 
-    // The canvas is actually painted rather than merely present.
-    const painted = await tool.evaluate(canvas => {
-      const ctx = canvas.getContext('2d');
-      const { width, height } = canvas;
-      if (!width || !height) return 0;
-      const data = ctx.getImageData(0, 0, width, height).data;
-      const seen = new Set();
-      for (let i = 0; i < data.length; i += 4 * 97) {
-        seen.add(`${data[i]},${data[i + 1]},${data[i + 2]}`);
+      // The canvas is actually painted rather than merely present.
+      const painted = await tool.evaluate(canvas => {
+        const ctx = canvas.getContext('2d');
+        const { width, height } = canvas;
+        if (!width || !height) return 0;
+        const data = ctx.getImageData(0, 0, width, height).data;
+        const seen = new Set();
+        for (let i = 0; i < data.length; i += 4 * 97) {
+          seen.add(`${data[i]},${data[i + 1]},${data[i + 2]}`);
+        }
+        return seen.size;
+      });
+      expect(painted).toBeGreaterThan(3);
+
+      // A preset changes the readout, which is the whole interaction.
+      const readout = page.locator('#investigationToolReadout');
+      const first = await readout.innerText();
+      const presets = page.locator(
+        '#investigationToolPresets [data-tool-preset]'
+      );
+      if (await presets.count()) {
+        await presets.last().click();
+        await expect
+          .poll(async () => (await readout.innerText()) !== first, {
+            timeout: 10_000,
+          })
+          .toBe(true);
       }
-      return seen.size;
-    });
-    expect(painted).toBeGreaterThan(3);
-
-    // A preset changes the readout, which is the whole interaction.
-    const readout = page.locator('#investigationToolReadout');
-    const first = await readout.innerText();
-    const presets = page.locator(
-      '#investigationToolPresets [data-tool-preset]'
-    );
-    if (await presets.count()) {
-      await presets.last().click();
-      await expect
-        .poll(async () => (await readout.innerText()) !== first, {
-          timeout: 10_000,
-        })
-        .toBe(true);
     }
-  });
+  );
 
   test('a graded choice marks a right answer right', async ({ page, app }) => {
     await openLesson(page, app);

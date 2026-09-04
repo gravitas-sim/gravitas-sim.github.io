@@ -10,25 +10,29 @@
 import { test, expect } from './fixtures.js';
 
 test.describe('the object inspector', () => {
-  test('opens on a selected object and reports it', async ({ page, app }) => {
-    await app.boot();
-    await app.loadScenario('Solar System');
-    await app.waitForFrames(10);
+  test(
+    'opens on a selected object and reports it',
+    { tag: '@cross-browser' },
+    async ({ page, app }) => {
+      await app.boot();
+      await app.loadScenario('Solar System');
+      await app.waitForFrames(10);
 
-    const picked = await app.selectFirstObject('StarObject');
-    // The constructor is StarObject; the inspector calls it a Star.
-    expect(picked.constructor).toBe('StarObject');
-    expect(picked.type).toBe('Star');
+      const picked = await app.selectFirstObject('StarObject');
+      // The constructor is StarObject; the inspector calls it a Star.
+      expect(picked.constructor).toBe('StarObject');
+      expect(picked.type).toBe('Star');
 
-    const inspector = page.locator('#objectInspector');
-    await expect(inspector).toBeVisible();
-    await expect(page.locator('#inspectorTitle')).not.toBeEmpty();
-    await expect(page.locator('#inspectorContent')).not.toBeEmpty();
+      const inspector = page.locator('#objectInspector');
+      await expect(inspector).toBeVisible();
+      await expect(page.locator('#inspectorTitle')).not.toBeEmpty();
+      await expect(page.locator('#inspectorContent')).not.toBeEmpty();
 
-    // The application agrees with itself about what is selected.
-    const sel = await app.selection();
-    expect(sel.id).toBe(picked.id);
-  });
+      // The application agrees with itself about what is selected.
+      const sel = await app.selection();
+      expect(sel.id).toBe(picked.id);
+    }
+  );
 
   test('the readout keeps up with a moving body', async ({ page, app }) => {
     await app.boot();
