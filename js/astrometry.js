@@ -28,6 +28,7 @@
 // =============================================================================
 
 import { stars, gas_giants, planets } from './physics.js';
+import { state } from './appState.js';
 import { SIM_UNITS_PER_AU } from './units.js';
 import {
   projectPositionToSky,
@@ -36,10 +37,18 @@ import {
 } from './observerGeometry.js';
 import { chartColors } from './observationChart.js';
 import { mountObserverControls } from './observerControls.js';
-import { chooseAngularUnit } from './exoplanetObservables.js';
+import { chooseAngularUnit, maxOffsetOfPath } from './exoplanetObservables.js';
 import { formatNumber, withUnit } from './format.js';
 import { observedStar, starIsHeldFixed } from './radialVelocity.js';
 import { t } from './i18n/index.js';
+import {
+  decideSampling,
+  dropInvalidatedSamples,
+  sessionChange,
+  sessionKey,
+} from './observingSession.js';
+import { isScrubbing } from './timeline.js';
+import { currentTimeDays } from './lightCurve.js';
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
@@ -52,10 +61,30 @@ const MAX_SAMPLES = 1200;
 // standard reference distance in astronomy, and a round number to reason from.
 const DEFAULT_DISTANCE_PC = 10;
 
+/** Fewest recorded points before a maximum offset is worth quoting. */
+const MIN_POINTS_FOR_OFFSET = 8;
+
 let enabled = false;
 let els = null;
 let trail = [];
 let lastSampleAt = 0;
+
+/**
+ * What the recorded path is a path *of*: one star, from one direction. See
+ * js/observingSession.js - a path that concatenates two targets, or two
+ * observing directions, is not a measurement of either.
+ */
+let recordedSession = null;
+let lastSampleTime = null;
+let sessionNotice = null;
+/**
+ * Whether the distance was chosen rather than inherited from the scenario.
+ *
+ * Set by setAssumedDistance(), which is what the input box and a restoring
+ * share link both call. Cleared when a new world arrives, because the old
+ * reader's assumption is not about the new system.
+ */
+let distanceIsExplicit = false;
 let unsubscribeObserver = null;
 let teardownControls = null;
 let distancePc = DEFAULT_DISTANCE_PC;
@@ -111,18 +140,39 @@ export function currentAstrometricOffset() {
 }
 
 /**
- * The largest reflex offset seen so far, which approximates the semi-major axis.
+ * The largest offset from the barycenter observed so far.
  *
- * Measured from the recorded path rather than assumed: the panel should report
- * what it has actually observed.
+ * What this is, and what it is not
+ * -----------------------------------------------------------------------------
+ * This is the maximum projected separation between the star and the barycenter
+ * over the samples taken. It used to be described as approximating the
+ * semi-major axis of the reflex orbit, and it does not:
  *
- * @returns {{au: number, arcsec: number}|null} The signature
+ *   eccentricity   the barycenter sits at a *focus* of the star's orbit, so the
+ *                  largest offset is the apoapsis distance a(1 + e), not a. For
+ *                  a = 1 AU and e = 0.5 that is 1.5 AU - fifty per cent high,
+ *                  and reported as a measured semi-major axis it is simply
+ *                  wrong.
+ *   inclination    the path on the sky is the true orbit projected. For a
+ *                  circular orbit the projected ellipse keeps its semi-major
+ *                  axis, so the maximum offset is still a_star; for an
+ *                  eccentric one the projection depends on where periastron
+ *                  falls relative to the line of nodes.
+ *   coverage       it is a maximum over what has been seen, so a partial arc
+ *                  gives a lower bound.
+ *
+ * The astrometric signature in the literature is alpha = a_star / d, with
+ * a_star the semi-major axis of the star's orbit about the barycenter. Deriving
+ * that from a path requires fitting an ellipse and locating its focus, which
+ * this panel does not do. So it reports the maximum offset it has actually
+ * measured, labelled as that, and leaves alpha to the model widget in the
+ * lesson, where the orbital elements are known rather than inferred.
+ *
+ * @returns {{au: number, arcsec: number}|null} The maximum observed offset
  */
-export function measuredSignature() {
-  if (trail.length < 8) return null;
-  let maxAu = 0;
-  for (const p of trail) maxAu = Math.max(maxAu, Math.hypot(p.x, p.y));
-  return { au: maxAu, arcsec: maxAu / distancePc };
+export function maxObservedOffset() {
+  const au = maxOffsetOfPath(trail, { minPoints: MIN_POINTS_FOR_OFFSET });
+  return au === null ? null : { au, arcsec: au / distancePc };
 }
 
 /** @returns {Array<{x: number, y: number}>} The recorded sky path, in AU */
@@ -141,6 +191,7 @@ export const getAssumedDistance = () => distancePc;
  */
 export function setAssumedDistance(pc) {
   const next = Math.max(0.1, Number(pc) || DEFAULT_DISTANCE_PC);
+  distanceIsExplicit = true;
   if (next === distancePc) return;
   distancePc = next;
   render();
@@ -150,6 +201,14 @@ export function setAssumedDistance(pc) {
 export function clearAstrometry() {
   trail = [];
   lastSampleAt = 0;
+  // A deliberate clear starts a fresh session and carries no explanation.
+  lastSampleTime = null;
+  sessionNotice = null;
+  const star = observedStar();
+  recordedSession = sessionKey({
+    starId: star ? star.id : null,
+    geometry: observerGeometry(),
+  });
   render();
 }
 
@@ -184,7 +243,16 @@ function cacheElements() {
  * not, and inventing one would be worse than saying so: the panel falls back to
  * a stated assumption and labels it as an assumption.
  */
-function adoptScenarioDistance() {
+function adoptScenarioDistance({ force = false } = {}) {
+  // A distance that was set deliberately - typed into the box, or carried by a
+  // share link - is the reader's assumption and outranks the scenario's. Opening
+  // the panel used to overwrite it unconditionally, so a link that specified a
+  // distance lost it the moment anyone looked at the panel it applied to.
+  if (distanceIsExplicit && !force) {
+    const el = cacheElements();
+    if (el.distance) el.distance.value = String(distancePc);
+    return;
+  }
   const star = observedStar();
   const measured = star?.distancePc;
   if (Number.isFinite(measured) && measured > 0) {
@@ -298,14 +366,20 @@ function render() {
   if (e.target) e.target.textContent = star ? star.name || 'Star' : 'No star';
 
   if (e.notice) {
-    e.notice.hidden = !pinned;
+    // A pinned star means nothing can be measured at all, which outranks a
+    // restarted session, which only means something else is being measured.
     if (pinned) {
-      e.notice.textContent =
-        'This scenario holds its star still, so it traces no path on the sky. That is a simplification in the scenario, not a fact about planets. Load the Exoplanet Characterization Lab to see a star that moves.';
+      e.notice.hidden = false;
+      e.notice.textContent = t('astrometry.starHeldFixed');
+    } else if (sessionNotice) {
+      e.notice.hidden = false;
+      e.notice.textContent = sessionNotice;
+    } else {
+      e.notice.hidden = true;
     }
   }
 
-  const sig = measuredSignature();
+  const sig = maxObservedOffset();
   if (e.reflex) {
     e.reflex.textContent = sig
       ? withUnit(formatNumber(sig.au, { sig: 3 }), 'AU')
@@ -359,12 +433,89 @@ export function updateAstrometry() {
     return;
   }
 
+  const star = observedStar();
+  const current = sessionKey({
+    starId: star ? star.id : null,
+    geometry: observerGeometry(),
+  });
+  const simTime = currentTimeDays();
+
+  const decision = decideSampling({
+    recordedSession,
+    currentSession: current,
+    lastSampleTime,
+    simTime,
+    paused: Boolean(state?.paused),
+    scrubbing: isScrubbing(),
+  });
+
+  switch (decision.action) {
+    case 'hold':
+      render();
+      return;
+
+    case 'restart':
+      startNewSession(current, decision.reason, star);
+      break;
+
+    case 'truncate': {
+      const before = trail.length;
+      trail = dropInvalidatedSamples(trail, simTime, p => p.t);
+      const dropped = before - trail.length;
+      lastSampleTime = trail.length ? trail[trail.length - 1].t : null;
+      recordedSession = current;
+      if (dropped > 0) {
+        sessionNotice = t('observing.session.rewound', {
+          n: dropped,
+          time: formatNumber(simTime, { sig: 3 }),
+        });
+      }
+      break;
+    }
+
+    default:
+      break;
+  }
+
   const cur = currentAstrometricOffset();
   if (cur) {
-    trail.push({ x: cur.skyX, y: cur.skyY });
+    // The simulation time travels with the sample. Without it a path is a bag
+    // of positions with no way to tell which came first, which is what made a
+    // rewind impossible to clean up and made the panel unable to say anything
+    // about when the star was where.
+    trail.push({ x: cur.skyX, y: cur.skyY, t: simTime });
     if (trail.length > MAX_SAMPLES) trail.shift();
+    recordedSession = current;
+    lastSampleTime = simTime;
   }
   render();
+}
+
+/**
+ * Abandon the recorded path and begin another, saying what moved.
+ *
+ * @param {object} session - The conditions now in force
+ * @param {?string} reason - 'target' or 'geometry'
+ * @param {?object} star - The star now being observed, for the message
+ */
+function startNewSession(session, reason, star) {
+  // Nothing recorded means nothing lost, so nothing to announce. This is the
+  // ordinary case at the start of a run: a scenario load clears the recording
+  // while the world is still being rebuilt, so the session is captured with no
+  // star at all, and acquiring one a moment later reads as a target change. It
+  // is one - but there is no measurement it invalidated, and telling a reader
+  // their recording was restarted before they had one is noise.
+  const discarded = trail.length;
+  trail = [];
+  lastSampleTime = null;
+  recordedSession = session;
+  sessionNotice = !discarded
+    ? null
+    : reason === 'target'
+      ? t('observing.session.newTarget', {
+          name: star?.name || t('observing.session.unnamedStar'),
+        })
+      : t('observing.session.newGeometry');
 }
 
 /**
@@ -383,12 +534,38 @@ export function setAstrometryEnabled(on) {
 
   if (enabled) {
     adoptScenarioDistance();
+    // A path survives the panel closing, but only if nothing moved meanwhile.
+    // The observer subscription is released on close, so a geometry change made
+    // with the panel hidden was never noticed; the target never was at all.
+    {
+      const star = observedStar();
+      const current = sessionKey({
+        starId: star ? star.id : null,
+        geometry: observerGeometry(),
+      });
+      const changed = recordedSession
+        ? sessionChange(recordedSession, current)
+        : null;
+      if (changed) startNewSession(current, changed, star);
+      else recordedSession = recordedSession ?? current;
+    }
     if (e.controls && !teardownControls) {
       teardownControls = mountObserverControls(e.controls);
     }
     if (!unsubscribeObserver) {
       // A path recorded from one viewing geometry is not a path in another.
-      unsubscribeObserver = onObserverChange(() => clearAstrometry());
+      unsubscribeObserver = onObserverChange(() => {
+        const now = observedStar();
+        startNewSession(
+          sessionKey({
+            starId: now ? now.id : null,
+            geometry: observerGeometry(),
+          }),
+          'geometry',
+          now
+        );
+        render();
+      });
     }
     render();
   } else {
@@ -415,7 +592,12 @@ export function initAstrometry() {
 
   window.addEventListener('gravitasSimulationReset', () => {
     clearAstrometry();
-    if (enabled) adoptScenarioDistance();
+    // A new world, so the previous reader's assumed distance is an assumption
+    // about a system that is no longer loaded. Forced past the explicit flag
+    // for that reason - and note this event does not fire when a share link is
+    // restored, which is what keeps a link's own distance from being undone.
+    distanceIsExplicit = false;
+    if (enabled) adoptScenarioDistance({ force: true });
   });
 
   if (e.container) e.container.style.display = 'none';

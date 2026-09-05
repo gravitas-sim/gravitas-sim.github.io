@@ -88,6 +88,10 @@ import {
   setInclination,
 } from './observerGeometry.js';
 import { withExtras, readExtras } from './experiments/canonicalState.js';
+// Both are already on the start-up path via js/main.js, so naming them here
+// adds nothing to the initial download.
+import { observedStarId, setObservedStar } from './radialVelocity.js';
+import { getAssumedDistance, setAssumedDistance } from './astrometry.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
@@ -5177,20 +5181,57 @@ const captureShareState = ({
   const resolved =
     kind === 'auto' ? chooseKind({ touched: worldTouched, elapsed }) : kind;
 
-  const extras = forExperiment
-    ? withExtras(
-        {},
-        {
-          clock: getSimulationTime(),
-          frame: frameState(),
-          observer: {
-            positionAngle: getPositionAngle(),
-            inclination: getInclination(),
-          },
-          tools: activeToolIds(),
-        }
-      ).x
-    : null;
+  // The observing context, on every link.
+  //
+  // These used to be carried only for the A/B bench, on the reasoning that a
+  // share link pays for every character. But an inclination of 30 degrees, a
+  // rotating frame centred on Jupiter and an assumed distance of 480 parsecs
+  // are not incidental settings - they are what the sender is demonstrating,
+  // and a link that drops them reopens on a different measurement while
+  // looking like the same one. The codec omits every field still at its
+  // default, so a link from a reader who never touched an observing control is
+  // the same length it always was.
+  //
+  // Written through withExtras(), the one codec, rather than a second
+  // serializer alongside it: readExtras() already supplies defaults for links
+  // that predate any of this.
+  const frame = frameState();
+  const starId = observedStarId();
+  const extras = withExtras(
+    {},
+    {
+      // Clock and tools stay opt-in. The clock in particular would change what
+      // a seeded link means - "the world as generated" rather than "the world
+      // at this moment" - which is the distinction the two kinds exist to draw.
+      ...(forExperiment
+        ? { clock: getSimulationTime(), tools: activeToolIds() }
+        : {}),
+      frame,
+      observer: {
+        positionAngle: getPositionAngle(),
+        inclination: getInclination(),
+      },
+      observedStarId: starId,
+      distancePc: getAssumedDistance(),
+    }
+  ).x;
+
+  // Nothing but the version number means nothing was worth carrying, so the
+  // block is dropped and a link from a reader who touched no observing control
+  // is byte-for-byte what it was before any of this existed. readExtras()
+  // yields the same defaults either way. Kept for the bench regardless, which
+  // compares payloads and should see a consistent shape.
+  const trimmedExtras =
+    !forExperiment && Object.keys(extras).length === 1 ? null : extras;
+
+  // Whether anything in the restored context names a body. Both references are
+  // stable ids, which survive a seeded rebuild - generation from a seed assigns
+  // them in the same order every time - and survive a full restore only if the
+  // ids travel with the bodies, because set_state() takes the id from the
+  // packed state when one is there and mints a fresh one when it is not.
+  const referencesABody =
+    (extras.frame?.o !== undefined && extras.frame?.o !== null) ||
+    extras.star !== undefined;
 
   return buildPayload({
     // current_scenario_name, not SETTINGS.preset_scenario: applyPreset leaves
@@ -5206,10 +5247,17 @@ const captureShareState = ({
       resolved === 'full'
         ? allBodies()
             .filter(o => o && o.alive !== false)
-            .map(o => packBody(o.get_state(), { withId: forExperiment }))
+            // Ids cost characters, so they are carried when something needs
+            // them: the bench always, and an ordinary link only when its
+            // restored context points at a particular body.
+            .map(o =>
+              packBody(o.get_state(), {
+                withId: forExperiment || referencesABody,
+              })
+            )
         : null,
     paused: state.paused,
-    extras,
+    extras: trimmedExtras,
     experiment,
   });
 };
@@ -5299,6 +5347,25 @@ const applyShareState = payload => {
   }
   setPositionAngle(extras.observer.positionAngle);
   setInclination(extras.observer.inclination);
+
+  // Restored after the world exists, because both of these name things in it:
+  // a star by id, and a distance the astrometry panel reads against whichever
+  // star is being observed. Everything above has already rebuilt or
+  // regenerated the bodies, so an id resolves here and would not have earlier.
+  if (extras.observedStarId !== null) {
+    const found = setObservedStar(extras.observedStarId);
+    if (!found) {
+      // A link whose star is not in this world: the panels fall back to their
+      // own choice rather than to nothing. Worth saying, because the reader is
+      // now looking at a different star than the sender was.
+      console.warn(
+        `Share link names star ${extras.observedStarId}, which this world does not contain; observing the default instead.`
+      );
+    }
+  } else {
+    setObservedStar(null);
+  }
+  if (extras.distancePc !== null) setAssumedDistance(extras.distancePc);
 
   updateSpeedDisplay();
   updateObjectTypeButton();

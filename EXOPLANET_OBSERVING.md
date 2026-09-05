@@ -64,14 +64,28 @@ near 85–86° matches the real geometry of HD 209458.
 ## The instruments
 
 **Radial Velocity** projects the observed star's actual simulated velocity onto
-the shared line of sight and plots it against time. Measured live, it recovers
-**K = 84.0 m/s against an analytic 83.9** for HD 209458 b. It reports the
-semi-amplitude, not the peak-to-peak range, because conflating those is the
-commonest factor-of-two error in the subject.
+the shared line of sight and plots it against time. It reports the **half-range**
+of the samples taken, ½(max − min), not the peak-to-peak range — conflating
+those is the commonest factor-of-two error in the subject. For HD 209458 b, a
+circular single-planet system observed over a full cycle, that half-range is the
+semi-amplitude: **84.0 m/s against an analytic 83.9**.
 
-**Astrometry** plots the star's path on the sky about the barycenter. It keeps the
-physical reflex orbit in AU and the angle it subtends visibly separate, because
-distance changes the second and never the first.
+The panel says "half-range observed so far" until it has watched the curve turn
+around at both extremes and cross its own midline twice, because until then the
+number is a lower bound. It keeps saying "half-range" afterwards, because the
+half-range equals K only for a single planet on a circular orbit: an eccentric
+orbit's velocity curve is not a sinusoid, and two planets give a superposition.
+
+**Astrometry** plots the star's path on the sky about the barycenter. It reports
+the **largest star–barycenter separation observed**, in AU and as an angle,
+keeping the two visibly separate because distance changes the second and never
+the first. That maximum is not in general the semi-major axis of the reflex
+orbit: the barycenter sits at a *focus*, so on an eccentric orbit the largest
+offset is the apoapsis distance a(1 + e). The astrometric signature α = a_star/d
+quoted in the literature uses a_star, and recovering that from a path needs an
+orbit fit the panel does not attempt — the lesson's model widget computes α from
+known elements instead, which is a different kind of claim and is labelled as
+one.
 
 Both take one sample every 60 ms rather than every frame, hold bounded arrays, and
 do no work at all when closed.
@@ -80,20 +94,24 @@ do no work at all when closed.
 
 Measured across an inclination sweep with both panels open:
 
-| inclination | RV semi-amplitude | 84 × sin i | astrometric signature | sky path |
+| inclination | RV half-range | 84 × sin i | max angular offset | sky path |
 | --- | --- | --- | --- | --- |
 | 90° | 84.0 m/s | 84.0 | 0.566 µas | line |
 | 60° | 72.8 m/s | 72.7 | 0.566 µas | ellipse |
 | 30° | 42.0 m/s | 42.0 | 0.566 µas | ellipse |
 | 0° | **0.0 m/s** | 0.0 | **0.566 µas** | circle |
 
+HD 209458 b is on a circular orbit, so for this system the RV half-range is K
+and the maximum offset is a_star; the columns can be read as those quantities
+here, and could not be on an eccentric system.
+
 The last row is the scientific point the lesson turns on, and the one most often
-got wrong: **the astrometric signature does not vanish face-on.** Only its
+got wrong: **the astrometric signal does not vanish face-on.** Only its
 projected shape changes. Radial velocity dies there and astrometry does not, which
 is why the two methods are complementary rather than redundant.
 
 Distance behaves correctly too: 48.3 pc → 483 pc shrinks the angle exactly ten
-times, from 0.566 to 0.0566 µas, while the physical reflex orbit stays at
+times, from 0.566 to 0.0566 µas, while the physical offset stays at
 2.73 × 10⁻⁵ AU.
 
 ---

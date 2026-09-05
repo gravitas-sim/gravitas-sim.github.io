@@ -1421,9 +1421,48 @@ export const EN = {
   'hz.runaway': 'Runaway Greenhouse',
   'hz.maximum': 'Maximum Greenhouse',
   'hz.earlyMars': 'Early Mars',
+  'rv.keepObserving': 'Keep observing…',
+  'rv.halfRange': 'Half-range ½(max − min)',
+  'rv.halfRangeSoFar': 'Half-range observed so far',
+  'rv.halfRange.hint':
+    'Half the range of the observed curve. A full cycle has been sampled, so this is the half-range of the whole curve. It equals the orbital semi-amplitude K only for a single planet on a circular orbit; for an eccentric orbit the curve is not a sinusoid, and for two planets it is a superposition of two.',
+  'rv.halfRangeSoFar.hint':
+    'Half the range of the samples taken so far, and a lower bound on the range of the whole curve. The extremes have not both been observed with the curve turning around at each, so this is provisional.',
+  'observing.session.newTarget':
+    'Started a new recording: the instrument is now on {name}. The earlier samples were of a different star and are not part of this curve.',
+  'observing.session.newGeometry':
+    'Started a new recording: the observer moved. The earlier samples were taken from a different direction and do not belong with these.',
+  'observing.session.rewound':
+    'Rewound to day {time}. Discarded {n} samples recorded after that point: they described a future this run has not reached.',
+  'observing.session.unnamedStar': 'this star',
+  'rv.starHeldFixed':
+    'This scenario holds its star still, so there is no wobble to measure. That is a simplification in the scenario, not a fact about planets. Load the Exoplanet Characterization Lab to see a star that moves.',
+  'astrometry.starHeldFixed':
+    'This scenario holds its star still, so it traces no path on the sky. That is a simplification in the scenario, not a fact about planets. Load the Exoplanet Characterization Lab to see a star that moves.',
   'rv.crossingZero': 'Crossing zero',
   'rv.movingAway': 'Moving AWAY FROM US',
   'rv.movingToward': 'Moving TOWARD US',
+
+  // --- The synthetic observing run --------------------------------------------
+  'rv.survey.enable': 'Synthetic observing run',
+  'rv.survey.hint':
+    'Keep only the measurements a stated schedule would actually have produced, each with an uncertainty. Nothing is recorded between them.',
+  'rv.survey.cadence': 'Cadence',
+  'rv.survey.baseline': 'Baseline',
+  'rv.survey.sigma': 'Uncertainty',
+  'rv.survey.seed': 'Noise seed',
+  'rv.survey.ideal': 'Show the ideal signal (teaching overlay)',
+  'rv.survey.restart': 'Restart run',
+  'rv.survey.restart.hint':
+    'Discard the measurements and begin the schedule again',
+  'rv.survey.velocityLabel': 'Radial velocity',
+  'rv.survey.idealLabel': 'Ideal signal (teaching overlay, not data)',
+  'rv.survey.measurementsLabel': 'Measurements',
+  'rv.survey.progress': '{taken} of {planned} measurements taken.',
+  'rv.survey.complete': 'The schedule is finished.',
+  'rv.survey.waiting': 'Waiting for the simulation clock to advance.',
+  'rv.survey.coarse':
+    'The simulation is running too fast for this cadence: some measurements were read between widely spaced frames and their extremes may be flattened. Reduce the speed and restart the run.',
   'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',
@@ -1838,6 +1877,40 @@ export const EN = {
   'exoW.starlightReceived': 'Starlight received',
   'exoW.modeledHabitableZone': 'Modeled habitable zone',
   'exoW.thisPlanetIs': 'This planet is',
+  // --- Can You Detect This Planet? -------------------------------------------
+  'exoW.whatYourScheduleSees': 'What your schedule sees',
+  'exoW.theDashedCurveIsTheTruth':
+    'The dashed curve is the planet as the simulation knows it, drawn here to teach. A real survey has only the points.',
+  'exoW.daysBetweenMeasurements': 'Days between measurements',
+  'exoW.numberOfMeasurements': 'Number of measurements',
+  'exoW.measurementUncertainty': 'Measurement uncertainty',
+  'exoW.noiseSeed': 'Noise seed',
+  'exoW.scheduleAIntensive': 'Schedule A: one cycle',
+  'exoW.scheduleAIntensive.note':
+    'Twelve measurements spread across a single orbit. Every part of the cycle is looked at once.',
+  'exoW.scheduleBPatient': 'Schedule B: one cycle apart',
+  'exoW.scheduleBPatient.note':
+    'The same twelve measurements over eleven times the baseline, one taken every 3.52 days. The planet completes almost exactly one orbit between them.',
+  'exoW.aSmallerPlanet': 'A smaller planet',
+  'exoW.aBetterSpectrograph': 'A better spectrograph',
+  'exoW.aSmallerPlanet.note':
+    'A Neptune instead of a Jupiter, on the good schedule. The signal is now comparable to the error bars.',
+  'exoW.aBetterSpectrograph.note':
+    'The same Neptune, measured eight times more precisely. Nothing about the planet or the schedule changed.',
+  'exoW.daysAxis': 'Days',
+  'exoW.phaseAxis': 'Phase',
+  'exoW.idealSignalOverlay': 'dashed: ideal signal (teaching overlay)',
+  'exoW.foldedOnTheTruePeriod': 'folded on the true period',
+  'exoW.measurementsTaken': 'Measurements',
+  'exoW.phaseCoverage': 'Phase coverage',
+  'exoW.binsOfTheCycle': 'bins of the cycle',
+  'exoW.scatterOfTheMeasurements': 'Scatter of the measurements',
+  'exoW.scatterExpectedFromNoise': 'Scatter expected from noise alone',
+  'exoW.scatterVsConstantVelocity': 'Against a constant velocity',
+  'exoW.needsAnErrorBar': 'needs an uncertainty to compare against',
+  'exoW.whatThatDoesNotSay': 'What that does not say',
+  'exoW.excessScatterIsNotAPlanet':
+    'Extra scatter means the velocity is not constant. It does not identify a planet, a period or a mass.',
   'binW.twoStarsOrbiting': 'Two stars, orbiting',
   'binW.bothStarsAreMovingWatch':
     'Both stars are moving. Watch them for a few seconds before reading anything off.',
@@ -2139,6 +2212,45 @@ export const EN = {
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Lesson step',
+  'inv.save.saved': 'Progress saved on this device',
+  'inv.save.full':
+    'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+  'inv.save.unavailable':
+    'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+  'inv.save.authoring':
+    'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
+  'inv.backup.download': 'Download progress backup',
+  'inv.backup.download.hint':
+    'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
+  'inv.backup.restore': 'Restore progress backup',
+  'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
+  'inv.backup.downloaded': 'Progress backup downloaded.',
+  'inv.backup.restored': 'Progress restored.',
+  'inv.backup.restoredMoved':
+    'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
+  'inv.backup.restoredPartly':
+    'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
+  'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
+  'inv.backup.notJson': 'That file is not readable as JSON.',
+  'inv.backup.failed': 'That backup could not be read.',
+  'inv.backup.invalid.notAnObject': 'That file is not a progress backup.',
+  'inv.backup.invalid.notABackup':
+    'That is a JSON file, but not a Gravitas progress backup.',
+  'inv.backup.invalid.noVersion':
+    'That backup has no version and cannot be read safely.',
+  'inv.backup.invalid.tooNew':
+    'That backup was made by a newer version of Gravitas than this one.',
+  'inv.backup.invalid.noLesson':
+    'That backup does not say which investigation it belongs to.',
+  'inv.backup.invalid.noProgress': 'That backup contains no progress.',
+  'inv.backup.invalid.badResponses':
+    'That backup\u2019s answers are not in a readable form.',
+  'inv.backup.invalid.badVisited':
+    'That backup\u2019s step history is not in a readable form.',
+  'inv.backup.wrongLesson':
+    'That backup is for \u201c{backup}\u201d, and \u201c{open}\u201d is open. Open that investigation first.',
+  'inv.backup.confirmReplace':
+    'Replace your current answers with the backup? You have {n} answers recorded, and this cannot be undone.',
   'inv.probe.title': 'Live readout',
   'objectType.stars': 'Add Stars',
 

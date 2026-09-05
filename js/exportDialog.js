@@ -17,6 +17,7 @@ import {
   trajectoryCsv,
   lightCurveCsv,
   transitTableCsv,
+  radialVelocityCsv,
   exportSummary,
   downloadCsv,
   csvFilename,
@@ -110,6 +111,20 @@ function files() {
       build: lightCurveCsv,
     },
     {
+      key: 'radialvelocity',
+      name: 'Radial velocity measurements',
+      // Only offered when a run exists. The continuous curve the panel draws
+      // when no schedule is set is not a set of measurements and exporting it
+      // as one would teach the opposite of what the observing mode is for.
+      detail: s.rvMeasurements
+        ? `${plural(s.rvMeasurements, 'measurement')} of ${plural(s.rvPlanned, 'planned')}, with uncertainties and the observing schedule.`
+        : s.rvRunning
+          ? 'The run has not taken a measurement yet. Let the simulation reach the first epoch.'
+          : 'No observing run. Open the Radial Velocity tool and switch on the synthetic observing run.',
+      ready: s.rvMeasurements > 0,
+      build: radialVelocityCsv,
+    },
+    {
       key: 'transits',
       name: 'Transit measurements',
       detail: s.transits
@@ -175,6 +190,8 @@ function render() {
   for (const row of files()) {
     const div = document.createElement('div');
     div.className = `export-file${row.ready ? '' : ' is-empty'}`;
+    // Named, so a test can address one file row without matching on prose.
+    div.dataset.export = row.key;
     const text = document.createElement('div');
     text.className = 'export-file-text';
     const title = document.createElement('span');

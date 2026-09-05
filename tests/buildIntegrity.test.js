@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const read = f => readFileSync(path.join(ROOT, f), 'utf8');
@@ -121,16 +122,19 @@ describe('the service worker manifest is current', () => {
       paths.filter(p => /^images\/scenarios\/.*\.webp$/.test(p))
     ).toHaveLength(53);
 
-    // All twelve English lesson bodies. The reasoning is in the generator's
-    // header; what matters here is that the decision cannot rot silently when a
-    // thirteenth lesson is added.
+    // Every English lesson body. The reasoning is in the generator's header;
+    // what matters here is that the decision cannot rot silently - a lesson
+    // added to the catalogue and left out of the precache would be a lesson
+    // that could not be opened offline, which is exactly the failure the
+    // count guards against. Compared against the manifest rather than a
+    // literal, so adding a lesson does not require editing this file.
     const lessons = paths.filter(p =>
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
     const bodies = lessons.filter(
       p => !/\/(manifest|manifest\.es|registry|i18n|catalogue)\.js$/.test(p)
     );
-    expect(bodies.length).toBe(12);
+    expect(bodies.length).toBe(MANIFEST.length);
   });
 
   test('it does not precache the Spanish shadows, which are warmed on demand', async () => {
@@ -144,7 +148,7 @@ describe('the service worker manifest is current', () => {
     expect(manifest).toContain('__GRAVITAS_LOCALE_WARM');
     expect(
       (manifest.match(/investigations\/es\/[a-z0-9-]+\.js/g) || []).length
-    ).toBe(12);
+    ).toBe(MANIFEST.length);
   });
 
   test('it leaves out the downloads and the document pages', async () => {

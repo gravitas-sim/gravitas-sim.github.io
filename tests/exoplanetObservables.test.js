@@ -13,6 +13,8 @@ import {
   planetSemimajorAxisAboutBarycenter,
   astrometricSignature,
   chooseAngularUnit,
+  halfRangeOfSeries,
+  maxOffsetOfPath,
   planetBulkDensity,
   minimumPlanetMass,
   dopplerShiftNm,
@@ -348,5 +350,133 @@ describe('Doppler shift', () => {
     // 84 m/s on a 500 nm line is under a thousandth of a nanometre. Worth
     // asserting, because the lesson must not draw a star turning blue.
     expect(Math.abs(dopplerShiftNm(84, 500))).toBeLessThan(1e-3);
+  });
+});
+
+// =============================================================================
+// What a live run has actually measured
+// -----------------------------------------------------------------------------
+// The two panels used to overstate what they had measured, in the same way and
+// for the same reason: each reported a derived orbital element when what it
+// held was a property of the samples.
+//
+// Radial velocity called (max - min) / 2 the semi-amplitude K and declared the
+// run complete as soon as the samples included both a positive and a negative
+// velocity. Astrometry called the largest offset from the barycenter the
+// semi-major axis of the reflex orbit.
+//
+// These tests pin the three cases that separate the honest reading from the
+// overstated one.
+// =============================================================================
+
+describe('the radial-velocity half-range and its coverage test', () => {
+  /** A sinusoid, sampled over `cycles` periods starting at `phase`. */
+  const sine = (n, { cycles = 1, phase = 0, K = 50, gamma = 0 } = {}) =>
+    Array.from({ length: n }, (_, i) => ({
+      x: i,
+      y: gamma + K * Math.sin(phase + (2 * Math.PI * cycles * i) / (n - 1)),
+    }));
+
+  test('a short run through a zero crossing is not complete', () => {
+    // The case the old test got wrong. Three per cent of a cycle centred on the
+    // ascending node: the samples straddle zero, so "has visited both signs"
+    // was satisfied, and the reported K was a twentieth of the truth.
+    const run = sine(40, { cycles: 0.03, phase: -0.03 * Math.PI, K: 50 });
+    const measured = halfRangeOfSeries(run);
+
+    const sawBothSigns = measured.min < 0 && measured.max > 0;
+    expect(sawBothSigns).toBe(true);
+
+    expect(measured.complete).toBe(false);
+    // And the number it does report is a small fraction of the real K, which is
+    // exactly why calling it complete mattered.
+    expect(measured.halfRange).toBeLessThan(50 * 0.1);
+  });
+
+  test('a fully sampled circular orbit is complete, and its half-range is K', () => {
+    const run = sine(200, { cycles: 1, K: 84 });
+    const measured = halfRangeOfSeries(run);
+
+    expect(measured.complete).toBe(true);
+    expect(measured.halfRange).toBeCloseTo(84, 1);
+  });
+
+  test('three quarters of a cycle covering both extremes is complete', () => {
+    // Coverage is about having seen both extremes turn around, not about having
+    // watched a whole period. This run starts below the maximum, rises over it,
+    // falls through the minimum and climbs away again - less than a full cycle,
+    // and enough to establish the range. It is also the case an earlier
+    // "two midline crossings" rule rejected.
+    const run = sine(120, { cycles: 0.75, phase: Math.PI / 2 - 0.5, K: 84 });
+    const measured = halfRangeOfSeries(run);
+
+    expect(measured.complete).toBe(true);
+    expect(measured.halfRange).toBeCloseTo(84, 0);
+  });
+
+  test('a curve that never changes sign can still be complete', () => {
+    // A system receding at 30 km/s never produces a negative radial velocity.
+    // Under the old test its run could never be complete however long it was
+    // watched; the sign of a radial velocity is a fact about the systemic
+    // velocity, not about phase coverage.
+    const run = sine(200, { cycles: 1, K: 84, gamma: 30000 });
+    const measured = halfRangeOfSeries(run);
+
+    expect(measured.min).toBeGreaterThan(0);
+    expect(measured.complete).toBe(true);
+    expect(measured.halfRange).toBeCloseTo(84, 1);
+  });
+
+  test('a monotonic arc is never complete, however many samples it has', () => {
+    const climbing = Array.from({ length: 500 }, (_, i) => ({ x: i, y: i }));
+    expect(halfRangeOfSeries(climbing).complete).toBe(false);
+  });
+
+  test('too few samples produce no reading at all', () => {
+    expect(halfRangeOfSeries(sine(5))).toBeNull();
+    expect(halfRangeOfSeries([])).toBeNull();
+  });
+});
+
+describe('the astrometric maximum offset is not a semi-major axis', () => {
+  /**
+   * A star's path about the barycenter, which sits at a focus.
+   *
+   * Face-on, so the sky path is the true orbit: r = a(1 - e²)/(1 + e cos θ).
+   */
+  const focalOrbit = (a, e, n = 360) =>
+    Array.from({ length: n }, (_, i) => {
+      const theta = (2 * Math.PI * i) / n;
+      const r = (a * (1 - e * e)) / (1 + e * Math.cos(theta));
+      return { x: r * Math.cos(theta), y: r * Math.sin(theta) };
+    });
+
+  test('a face-on eccentric orbit with a = 1 AU and e = 0.5 reports 1.5, not 1', () => {
+    // The measurement is the apoapsis distance a(1 + e). That is the correct
+    // value for what the panel measures, and the reason the panel must not call
+    // it a semi-major axis: presented as one it would claim a = 1.5 AU for an
+    // orbit whose semi-major axis is 1.
+    const path = focalOrbit(1, 0.5);
+    const maxOffset = maxOffsetOfPath(path);
+
+    expect(maxOffset).toBeCloseTo(1.5, 3);
+    expect(maxOffset).not.toBeCloseTo(1.0, 1);
+
+    // What a semi-major axis actually is, for contrast: half the long diameter,
+    // which is the mean of periapsis and apoapsis.
+    const distances = path.map(p => Math.hypot(p.x, p.y));
+    const periapsis = Math.min(...distances);
+    const semiMajor = (periapsis + maxOffset) / 2;
+    expect(semiMajor).toBeCloseTo(1.0, 3);
+  });
+
+  test('a circular orbit is the case where the two coincide', () => {
+    const path = focalOrbit(1, 0);
+    expect(maxOffsetOfPath(path)).toBeCloseTo(1.0, 6);
+  });
+
+  test('too few points produce no reading at all', () => {
+    expect(maxOffsetOfPath([{ x: 1, y: 0 }])).toBeNull();
+    expect(maxOffsetOfPath([])).toBeNull();
   });
 });

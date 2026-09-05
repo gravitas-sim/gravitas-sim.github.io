@@ -1421,9 +1421,48 @@ export const ES = {
   'hz.runaway': 'Efecto invernadero desbocado',
   'hz.maximum': 'Invernadero máximo',
   'hz.earlyMars': 'Marte Temprano',
+  'rv.keepObserving': 'Sigue observando…',
+  'rv.halfRange': 'Semirrango ½(máx − mín)',
+  'rv.halfRangeSoFar': 'Semirrango observado hasta ahora',
+  'rv.halfRange.hint':
+    'La mitad del rango de la curva observada. Se ha muestreado un ciclo completo, así que es el semirrango de la curva entera. Solo equivale a la semiamplitud orbital K si hay un único planeta en órbita circular; en una órbita excéntrica la curva no es una sinusoide, y con dos planetas es la superposición de dos.',
+  'rv.halfRangeSoFar.hint':
+    'La mitad del rango de las muestras tomadas hasta ahora, y una cota inferior del rango de la curva completa. No se han observado ambos extremos con la curva girando en cada uno, así que es provisional.',
+  'observing.session.newTarget':
+    'Se inició una grabación nueva: el instrumento apunta ahora a {name}. Las muestras anteriores eran de otra estrella y no forman parte de esta curva.',
+  'observing.session.newGeometry':
+    'Se inició una grabación nueva: el observador se movió. Las muestras anteriores se tomaron desde otra dirección y no van con estas.',
+  'observing.session.rewound':
+    'Rebobinado al día {time}. Se descartaron {n} muestras posteriores a ese punto: describían un futuro al que esta ejecución no ha llegado.',
+  'observing.session.unnamedStar': 'esta estrella',
+  'rv.starHeldFixed':
+    'Este escenario mantiene su estrella fija, así que no hay bamboleo que medir. Es una simplificación del escenario, no un hecho sobre los planetas. Carga el Laboratorio de Caracterización de Exoplanetas para ver una estrella que se mueve.',
+  'astrometry.starHeldFixed':
+    'Este escenario mantiene su estrella fija, así que no traza ningún camino en el cielo. Es una simplificación del escenario, no un hecho sobre los planetas. Carga el Laboratorio de Caracterización de Exoplanetas para ver una estrella que se mueve.',
   'rv.crossingZero': 'Cruzando el cero',
   'rv.movingAway': 'ALEJÁNDOSE DE NOSOTROS',
   'rv.movingToward': 'ACERCÁNDOSE A NOSOTROS',
+
+  // --- La campaña de observación sintética ------------------------------------
+  'rv.survey.enable': 'Campaña de observación sintética',
+  'rv.survey.hint':
+    'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
+  'rv.survey.cadence': 'Cadencia',
+  'rv.survey.baseline': 'Intervalo total',
+  'rv.survey.sigma': 'Incertidumbre',
+  'rv.survey.seed': 'Semilla del ruido',
+  'rv.survey.ideal': 'Mostrar la señal ideal (capa didáctica)',
+  'rv.survey.restart': 'Reiniciar campaña',
+  'rv.survey.restart.hint':
+    'Descarta las medidas y empieza el calendario de nuevo',
+  'rv.survey.velocityLabel': 'Velocidad radial',
+  'rv.survey.idealLabel': 'Señal ideal (capa didáctica, no son datos)',
+  'rv.survey.measurementsLabel': 'Medidas',
+  'rv.survey.progress': '{taken} de {planned} medidas tomadas.',
+  'rv.survey.complete': 'El calendario ha terminado.',
+  'rv.survey.waiting': 'Esperando a que avance el reloj de la simulación.',
+  'rv.survey.coarse':
+    'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
   'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
   'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
   'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
@@ -1843,6 +1882,40 @@ export const ES = {
   'exoW.starlightReceived': 'Luz estelar recibida',
   'exoW.modeledHabitableZone': 'Zona habitable modelada',
   'exoW.thisPlanetIs': 'Este planeta está',
+  // --- ¿Puedes detectar este planeta? ----------------------------------------
+  'exoW.whatYourScheduleSees': 'Lo que ve tu calendario',
+  'exoW.theDashedCurveIsTheTruth':
+    'La curva discontinua es el planeta tal como lo conoce la simulación, dibujada aquí para enseñar. Un sondeo real solo tiene los puntos.',
+  'exoW.daysBetweenMeasurements': 'Días entre medidas',
+  'exoW.numberOfMeasurements': 'Número de medidas',
+  'exoW.measurementUncertainty': 'Incertidumbre de medida',
+  'exoW.noiseSeed': 'Semilla del ruido',
+  'exoW.scheduleAIntensive': 'Calendario A: un ciclo',
+  'exoW.scheduleAIntensive.note':
+    'Doce medidas repartidas a lo largo de una sola órbita. Cada parte del ciclo se observa una vez.',
+  'exoW.scheduleBPatient': 'Calendario B: un ciclo de separación',
+  'exoW.scheduleBPatient.note':
+    'Las mismas doce medidas a lo largo de once veces el intervalo total, una cada 3,52 días. El planeta completa casi exactamente una órbita entre una y otra.',
+  'exoW.aSmallerPlanet': 'Un planeta más pequeño',
+  'exoW.aBetterSpectrograph': 'Un espectrógrafo mejor',
+  'exoW.aSmallerPlanet.note':
+    'Un Neptuno en lugar de un Júpiter, con el calendario bueno. La señal ya es comparable a las barras de error.',
+  'exoW.aBetterSpectrograph.note':
+    'El mismo Neptuno, medido ocho veces con más precisión. Nada cambió en el planeta ni en el calendario.',
+  'exoW.daysAxis': 'Días',
+  'exoW.phaseAxis': 'Fase',
+  'exoW.idealSignalOverlay': 'discontinua: señal ideal (capa didáctica)',
+  'exoW.foldedOnTheTruePeriod': 'plegada con el periodo verdadero',
+  'exoW.measurementsTaken': 'Medidas',
+  'exoW.phaseCoverage': 'Cobertura en fase',
+  'exoW.binsOfTheCycle': 'intervalos del ciclo',
+  'exoW.scatterOfTheMeasurements': 'Dispersión de las medidas',
+  'exoW.scatterExpectedFromNoise': 'Dispersión esperada solo por el ruido',
+  'exoW.scatterVsConstantVelocity': 'Frente a una velocidad constante',
+  'exoW.needsAnErrorBar': 'hace falta una incertidumbre con la que comparar',
+  'exoW.whatThatDoesNotSay': 'Lo que eso no dice',
+  'exoW.excessScatterIsNotAPlanet':
+    'Una dispersión mayor significa que la velocidad no es constante. No identifica un planeta, ni un periodo, ni una masa.',
   'binW.twoStarsOrbiting': 'Dos estrellas, orbitando',
   'binW.bothStarsAreMovingWatch':
     'Las dos estrellas se mueven. Obsérvalas unos segundos antes de leer nada.',
@@ -2153,6 +2226,48 @@ export const ES = {
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la lección',
+  'inv.save.saved': 'Progreso guardado en este dispositivo',
+  'inv.save.full':
+    'No se pudo guardar el progreso: el almacenamiento de este navegador est\u00e1 lleno. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+  'inv.save.unavailable':
+    'No se puede guardar el progreso en este navegador; la navegaci\u00f3n privada suele impedirlo. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+  'inv.save.authoring':
+    'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
+  'inv.backup.download': 'Descargar copia del progreso',
+  'inv.backup.download.hint':
+    'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
+  'inv.backup.restore': 'Restaurar copia del progreso',
+  'inv.backup.restore.hint':
+    'Carga respuestas desde un archivo que guardaste antes.',
+  'inv.backup.downloaded': 'Copia del progreso descargada.',
+  'inv.backup.restored': 'Progreso restaurado.',
+  'inv.backup.restoredMoved':
+    'Progreso restaurado. {moved} respuestas se asociaron a pasos que han cambiado de sitio desde la copia.',
+  'inv.backup.restoredPartly':
+    'Progreso restaurado, pero {dropped} pasos de la copia ya no est\u00e1n en esta investigaci\u00f3n y sus respuestas se omitieron.',
+  'inv.backup.tooLarge':
+    'Ese archivo es demasiado grande para ser una copia del progreso.',
+  'inv.backup.notJson': 'Ese archivo no se puede leer como JSON.',
+  'inv.backup.failed': 'No se pudo leer esa copia de seguridad.',
+  'inv.backup.invalid.notAnObject': 'Ese archivo no es una copia del progreso.',
+  'inv.backup.invalid.notABackup':
+    'Es un archivo JSON, pero no una copia de progreso de Gravitas.',
+  'inv.backup.invalid.noVersion':
+    'Esa copia no tiene versi\u00f3n y no se puede leer con seguridad.',
+  'inv.backup.invalid.tooNew':
+    'Esa copia se hizo con una versi\u00f3n de Gravitas m\u00e1s reciente que esta.',
+  'inv.backup.invalid.noLesson':
+    'Esa copia no indica a qu\u00e9 investigaci\u00f3n pertenece.',
+  'inv.backup.invalid.noProgress':
+    'Esa copia no contiene ning\u00fan progreso.',
+  'inv.backup.invalid.badResponses':
+    'Las respuestas de esa copia no tienen un formato legible.',
+  'inv.backup.invalid.badVisited':
+    'El historial de pasos de esa copia no tiene un formato legible.',
+  'inv.backup.wrongLesson':
+    'Esa copia es de \u201c{backup}\u201d y est\u00e1 abierta \u201c{open}\u201d. Abre esa investigaci\u00f3n primero.',
+  'inv.backup.confirmReplace':
+    '\u00bfReemplazar tus respuestas actuales con la copia? Tienes {n} respuestas registradas y esto no se puede deshacer.',
   'inv.probe.title': 'Lectura en vivo',
   'objectType.stars': 'Añadir estrellas',
 

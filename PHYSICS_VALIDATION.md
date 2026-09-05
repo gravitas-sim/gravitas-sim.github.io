@@ -711,7 +711,7 @@ actually assembles them — real presets, real settings, real substepping:
 
 ```bash
 npm run validate:scenarios              # a representative set
-node tools/scenario-stability.mjs --all # all 48
+node tools/scenario-stability.mjs --all # every scenario in the catalog
 ```
 
 It needs Playwright and a browser, so it is a development tool rather than part
@@ -719,7 +719,8 @@ of `npm test`. For each scenario it reports the drift in linear momentum, total
 energy and angular momentum over a simulated run at the scenario's own
 `sim_speed`, and flags every documented departure that scenario has switched on.
 
-Across all 48 scenarios: every scenario whose settings claim momentum
+Across all <!--fact:scenarios-->53<!--/fact--> scenarios: every scenario
+whose settings claim momentum
 conservation conserves it to round-off (`≤ 2.0e-15`), and every resolved few-body
 scenario holds its energy and angular momentum within 5%. Representative rows:
 

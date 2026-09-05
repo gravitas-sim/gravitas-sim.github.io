@@ -175,4 +175,18 @@ export const MANIFEST = [
     gradedCount: 16,
     objectiveCount: 6,
   },
+  {
+    id: 'detect-this-planet',
+    title: 'Can You Detect This Planet?',
+    subtitle: 'Same planet, same twelve nights, two different answers',
+    duration: '15-20 min',
+    level: 'Introductory astronomy',
+    summary:
+      'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two observing runs of the same star with the same instrument and the same number of nights, and discover that one of them finds a Jupiter and the other cannot tell you anything at all.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    series: 'Detecting exoplanets',
+    stepCount: 15,
+    gradedCount: 8,
+    objectiveCount: 4,
+  },
 ];

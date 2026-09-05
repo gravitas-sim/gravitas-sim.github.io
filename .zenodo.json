@@ -1,8 +1,8 @@
 {
   "title": "Gravitas: an interactive astrophysics sandbox for teaching",
-  "description": "<p>Gravitas is a browser-based N-body gravity sandbox and astronomy teaching tool. It ships 53 configurable scenarios drawn from real and idealized systems, 12 guided investigations in which undergraduate students predict, measure and plot their own data, instructor materials with answer keys, and a public account of what the underlying model does and does not represent.</p><p>It runs entirely client-side as a static site, requires no account or installation, and encodes any simulation state into a shareable URL.</p><p>Live at <a href=\"https://gravitas-sim.online\">gravitas-sim.online</a>.</p>",
+  "description": "<p>Gravitas is a browser-based N-body gravity sandbox and astronomy teaching tool. It ships 53 configurable scenarios drawn from real and idealized systems, 13 guided investigations in which undergraduate students predict, measure and plot their own data, instructor materials with answer keys, and a public account of what the underlying model does and does not represent.</p><p>It runs entirely client-side as a static site, requires no account or installation, and encodes any simulation state into a shareable URL.</p><p>Live at <a href=\"https://gravitas-sim.online\">gravitas-sim.online</a>.</p>",
   "upload_type": "software",
-  "license": "MIT",
+  "license": "mit",
   "access_right": "open",
   "creators": [
     {
@@ -23,6 +23,11 @@
   "related_identifiers": [
     {
       "identifier": "https://gravitas-sim.online",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/gravitas-sim/gravitas-sim.github.io",
       "relation": "isSupplementTo",
       "scheme": "url"
     }

@@ -41,6 +41,13 @@ import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 
+import {
+  BLOCK_MARKER,
+  citationCff,
+  generatedBlocks,
+  zenodoJson,
+} from './generated-blocks.mjs';
+
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
 
@@ -65,11 +72,107 @@ const DOCS = [
   'manual/README.md',
   'e2e/README.md',
   'tools/README-thumbnails.md',
+  // The standalone document pages. The marker is an HTML comment, so it works
+  // in HTML exactly as it does in Markdown - these were simply never listed,
+  // which is why /model/ was still claiming 135 physics checks and 48
+  // scenarios long after both numbers had moved.
+  'index.html',
+  'model/index.html',
+  'validation/index.html',
+  'instructors/index.html',
+  'CHANGELOG.md',
+  'RELEASING.md',
+  'ACCESSIBILITY.md',
+  'OFFLINE_AND_LOW_END.md',
 ];
 
 const MARKER = /<!--fact:([a-zA-Z0-9_:.-]+)-->([\s\S]*?)<!--\/fact-->/g;
 
+/**
+ * Counts that live somewhere a marker cannot go.
+ *
+ * An HTML comment is invalid inside an attribute value, so the numbers in a
+ * page's <meta name="description"> and its Open Graph tags cannot be wrapped
+ * the way body text can. They are still copies of a fact and still go stale -
+ * the validation page's description advertised 135 physics checks to search
+ * engines and social cards long after the suite had grown to 218.
+ *
+ * Each rule names the file, a pattern whose second group is the number, and the
+ * fact it must equal. Deliberately explicit rather than a general "find numbers
+ * near the word checks" sweep: a rule that guesses would eventually rewrite a
+ * number that was not a count.
+ */
+const ATTRIBUTE_FACTS = [
+  {
+    file: 'validation/index.html',
+    key: 'physicsChecks',
+    pattern: /(Gravitas: )(\d+)( checks of the physics engine)/,
+  },
+  {
+    file: 'validation/index.html',
+    key: 'physicsChecks',
+    pattern: /(content=")(\d+)( physics checks with measured error)/,
+  },
+  {
+    file: 'index.html',
+    key: 'physicsChecks',
+    pattern: /(has been checked against: )(\d+)( checks with measured error)/,
+  },
+];
+
 // --- gathering ---------------------------------------------------------------
+
+/**
+ * How many scenarios tools/scenario-stability.mjs audits.
+ *
+ * Counted from its DEFAULT_SCENARIOS list by reading the source, because
+ * importing the module would start a browser.
+ *
+ * @returns {number} The number of scenarios in the audit's list
+ */
+function stabilityScenarioCount() {
+  const path = join(REPO, 'tools', 'scenario-stability.mjs');
+  if (!existsSync(path)) return 0;
+  const text = readFileSync(path, 'utf8');
+  const start = text.indexOf('const DEFAULT_SCENARIOS = [');
+  if (start < 0) return 0;
+  const body = text.slice(start, text.indexOf('];', start));
+  return (body.match(/^\s*'[^']+',/gm) || []).length;
+}
+
+/**
+ * How many scenarios carry small bodies.
+ *
+ * @returns {Promise<number>} Scenarios whose preset asks for asteroids or comets
+ */
+async function smallBodyScenarioCount() {
+  const { SCENARIO_INFO } = await import(
+    new URL('../js/data/scenarioInfo.js', import.meta.url)
+  );
+  const { applyPreset } = await import(
+    new URL('../js/scenarios.js', import.meta.url)
+  );
+  const { DEFAULT_SETTINGS } = await import(
+    new URL('../js/appState.js', import.meta.url)
+  );
+  let count = 0;
+  for (const name of Object.keys(SCENARIO_INFO)) {
+    const settings = {
+      ...JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+      preset_scenario: name,
+    };
+    try {
+      applyPreset(settings, DEFAULT_SETTINGS, {});
+    } catch {
+      continue;
+    }
+    const asteroids =
+      settings.enable_asteroids !== false && (settings.num_asteroids || 0) > 0;
+    const comets = (settings.num_comets || 0) > 0;
+    if (asteroids || comets) count++;
+  }
+  return count;
+}
 
 /** Facts that come from importing the application's own modules. */
 async function cheapFacts() {
@@ -101,6 +204,16 @@ async function cheapFacts() {
     locales: LOCALES.length,
     localeNames: LOCALES.map(l => l.endonym).join(', '),
     uiStrings: Object.keys(EN).length,
+    // How many scenarios the stability audit actually covers. Read out of the
+    // tool's own list rather than assumed to be all of them: /model/ claimed
+    // the audit ran over "all 48 shipped scenarios" when it runs over twelve
+    // chosen ones, which overstated the evidence rather than merely
+    // miscounting it.
+    stabilityScenarios: stabilityScenarioCount(),
+    // Scenarios whose preset asks for asteroids or comets. Derived by applying
+    // each preset to a fresh settings object, which is what the world builder
+    // does, so the number cannot drift from the catalogue.
+    smallBodyScenarios: await smallBodyScenarioCount(),
   };
 
   // Per-lesson step counts and durations, for the topic documents that name a
@@ -228,6 +341,27 @@ const DEFERRED_KEYS = [
   'buildInitialDownload',
 ];
 
+/**
+ * The generated regions, from the same modules the application uses.
+ *
+ * Separate from gatherFacts() because a block is a rendered fragment rather
+ * than a value, and because only the sync/check path needs them.
+ *
+ * @returns {Promise<Object<string, string>>} Marker name -> replacement text
+ */
+export async function gatherBlocks() {
+  const { MANIFEST } = await import(
+    new URL('../js/data/investigations/manifest.js', import.meta.url)
+  );
+  const { INSTRUCTOR_CONTENT } = await import(
+    new URL('../js/data/instructorContent.js', import.meta.url)
+  );
+  return generatedBlocks({
+    manifest: MANIFEST,
+    instructor: INSTRUCTOR_CONTENT,
+  });
+}
+
 /** Everything, according to the flags. */
 export async function gatherFacts({ full = false } = {}) {
   const notes = [];
@@ -245,11 +379,11 @@ export async function gatherFacts({ full = false } = {}) {
  * @returns {{path: string, stale: Array, unknown: Array, skipped: Array,
  *   text: string}} Outcome
  */
-function applyToText(path, text, facts) {
+function applyToText(path, text, facts, blocks = {}) {
   const stale = [];
   const unknown = [];
   const skipped = [];
-  const next = text.replace(MARKER, (whole, key, current) => {
+  let next = text.replace(MARKER, (whole, key, current) => {
     if (!(key in facts)) {
       if (DEFERRED_KEYS.includes(key)) skipped.push(key);
       else unknown.push(key);
@@ -259,6 +393,46 @@ function applyToText(path, text, facts) {
     if (current !== wanted) stale.push({ key, current, wanted });
     return `<!--fact:${key}-->${wanted}<!--/fact-->`;
   });
+
+  // Generated regions, the block-level form. Same idea, but the replacement is
+  // many lines rather than a number - a table generated from the lessons, for
+  // instance. Reported as one stale entry rather than a diff: the point is
+  // that it is out of date, and `npm run docs:sync` is the fix either way.
+  next = next.replace(BLOCK_MARKER, (whole, name, current) => {
+    if (!(name in blocks)) {
+      unknown.push(`block:${name}`);
+      return whole;
+    }
+    const wanted = blocks[name];
+    if (current !== wanted) {
+      stale.push({
+        key: `block:${name}`,
+        current: `${current.trim().split('\n').length} line(s)`,
+        wanted: `${wanted.trim().split('\n').length} line(s), regenerated`,
+      });
+    }
+    return `<!--fact-block:${name}-->${wanted}<!--/fact-block-->`;
+  });
+
+  for (const rule of ATTRIBUTE_FACTS) {
+    if (rule.file !== path) continue;
+    if (!(rule.key in facts)) {
+      if (DEFERRED_KEYS.includes(rule.key)) skipped.push(rule.key);
+      else unknown.push(rule.key);
+      continue;
+    }
+    const wanted = String(facts[rule.key]);
+    const found = rule.pattern.exec(next);
+    if (!found) {
+      unknown.push(`attribute:${rule.key}`);
+      continue;
+    }
+    if (found[2] !== wanted) {
+      stale.push({ key: `${rule.key} (attribute)`, current: found[2], wanted });
+    }
+    next = next.replace(rule.pattern, `$1${wanted}$3`);
+  }
+
   return { path, stale, unknown, skipped, text: next };
 }
 
@@ -410,6 +584,99 @@ async function checkCitationMetadata(facts) {
   return problems;
 }
 
+/**
+ * Claims about the physics suite made inside the lesson metadata.
+ *
+ * `modelNotes` is authoritative prose - it is printed in the instructor guide
+ * and, since this pass, generated into /model/ as well - so a number in it
+ * reaches two documents. One of them said "Thirty-six checks in the Orbital
+ * resonance group" over a group of thirty-two, which is the kind of claim that
+ * is only ever checked by someone who already doubts it.
+ *
+ * Spelled-out numbers are read as well as digits, because that is how the
+ * prose is written and rewriting it as digits to make it checkable would be
+ * letting the tool dictate the prose.
+ *
+ * @returns {Promise<string[]>} Problems
+ */
+async function checkModelNoteClaims() {
+  const problems = [];
+  const checksPath = join(REPO, 'tools', 'physics-checks.mjs');
+  if (!existsSync(checksPath)) return problems;
+
+  const source = readFileSync(checksPath, 'utf8');
+  const groups = new Map();
+  for (const m of source.matchAll(/group:\s*'([^']+)'/g)) {
+    groups.set(m[1], (groups.get(m[1]) || 0) + 1);
+  }
+
+  const WORDS = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10,
+    eleven: 11,
+    twelve: 12,
+    thirteen: 13,
+    fourteen: 14,
+    fifteen: 15,
+    sixteen: 16,
+    seventeen: 17,
+    eighteen: 18,
+    nineteen: 19,
+    twenty: 20,
+    'twenty-one': 21,
+    'twenty-two': 22,
+    'twenty-three': 23,
+    'twenty-four': 24,
+    'twenty-five': 25,
+    'twenty-six': 26,
+    'twenty-seven': 27,
+    'twenty-eight': 28,
+    'twenty-nine': 29,
+    thirty: 30,
+    'thirty-one': 31,
+    'thirty-two': 32,
+    'thirty-three': 33,
+    'thirty-four': 34,
+    'thirty-five': 35,
+    'thirty-six': 36,
+    forty: 40,
+  };
+
+  const { INSTRUCTOR_CONTENT } = await import(
+    new URL('../js/data/instructorContent.js', import.meta.url)
+  );
+  for (const [id, content] of Object.entries(INSTRUCTOR_CONTENT)) {
+    const notes = content.modelNotes || '';
+    const claim =
+      /([A-Za-z-]+|\d+)\s+checks?\s+in\s+the\s+.?([^.'"\u201c\u201d]+?).?\s+group/gi;
+    for (const m of notes.matchAll(claim)) {
+      const raw = m[1].toLowerCase();
+      const claimed = raw in WORDS ? WORDS[raw] : Number(raw);
+      if (!Number.isFinite(claimed)) continue;
+      const group = m[2].replace(/['"\u201c\u201d]/g, '').trim();
+      const actual = groups.get(group);
+      if (actual === undefined) {
+        problems.push(
+          `js/data/instructorContent.js (${id}): modelNotes names a physics-check group "${group}" that does not exist`
+        );
+      } else if (actual !== claimed) {
+        problems.push(
+          `js/data/instructorContent.js (${id}): modelNotes says ${m[1]} checks in "${group}", the suite has ${actual}`
+        );
+      }
+    }
+  }
+  return problems;
+}
+
 async function checkSpecIndex() {
   const readme = join(REPO, 'e2e', 'README.md');
   if (!existsSync(readme)) return [];
@@ -526,14 +793,32 @@ async function main() {
     return 0;
   }
 
+  const blocks = await gatherBlocks();
   const present = DOCS.filter(d => existsSync(join(REPO, d)));
   const results = [];
   for (const doc of present) {
     const text = await readFile(join(REPO, doc), 'utf8');
-    const outcome = applyToText(doc, text, facts);
+    const outcome = applyToText(doc, text, facts, blocks);
     results.push(outcome);
     if (mode === 'sync' && outcome.text !== text) {
       await writeFile(join(REPO, doc), outcome.text);
+    }
+  }
+
+  // The citation pair, generated together from tools/project-metadata.mjs so
+  // they cannot disagree. Zenodo prefers .zenodo.json when both are present,
+  // which is precisely why a stale one is dangerous rather than merely untidy.
+  const generatedFiles = [
+    ['CITATION.cff', citationCff(facts)],
+    ['.zenodo.json', zenodoJson(facts)],
+  ];
+  const generatedStale = [];
+  for (const [name, wanted] of generatedFiles) {
+    const path = join(REPO, name);
+    const current = existsSync(path) ? readFileSync(path, 'utf8') : '';
+    if (current !== wanted) {
+      generatedStale.push(name);
+      if (mode === 'sync') await writeFile(path, wanted);
     }
   }
 
@@ -552,6 +837,7 @@ async function main() {
     ...(await checkMarkerPlacement(present)),
     ...(await checkSpecIndex()),
     ...(await checkCitationMetadata(facts)),
+    ...(await checkModelNoteClaims()),
   ];
   const stale = results.flatMap(r => r.stale.map(s => ({ ...s, doc: r.path })));
   const unknown = results.flatMap(r =>
@@ -566,7 +852,10 @@ async function main() {
       );
     }
     if (texStale) process.stdout.write('manual/facts.tex: regenerated\n');
-    if (!changed.length && !texStale) {
+    for (const name of generatedStale) {
+      process.stdout.write(`${name}: regenerated\n`);
+    }
+    if (!changed.length && !texStale && !generatedStale.length) {
       process.stdout.write(
         'Every documented count already matches the source.\n'
       );
@@ -588,6 +877,11 @@ async function main() {
     process.stderr.write(`${u.doc}: unknown fact "${u.key}"\n`);
   }
   if (texStale) process.stderr.write('manual/facts.tex is out of date\n');
+  for (const name of generatedStale) {
+    process.stderr.write(
+      `${name} is out of date; it is generated from tools/project-metadata.mjs\n`
+    );
+  }
   for (const b of broken) process.stderr.write(`${b}\n`);
   for (const note of notes) process.stdout.write(`note: ${note}\n`);
   const skipped = [...new Set(results.flatMap(r => r.skipped))];
@@ -598,7 +892,11 @@ async function main() {
   }
 
   const bad =
-    stale.length + unknown.length + broken.length + (texStale ? 1 : 0);
+    stale.length +
+    unknown.length +
+    broken.length +
+    (texStale ? 1 : 0) +
+    generatedStale.length;
   if (bad) {
     process.stderr.write(
       `\n${bad} documentation problem(s). Run \`npm run docs:sync\`.\n`

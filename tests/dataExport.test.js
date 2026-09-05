@@ -20,12 +20,36 @@ jest.unstable_mockModule('../js/timeline.js', () => ({
 jest.unstable_mockModule('../js/lightCurve.js', () => ({
   lightCurveSeries: () => ({ days: [...curve.days], flux: [...curve.flux] }),
   transitAnalysis: () => ({ log: photometry.log.map(t => ({ ...t })) }),
+  currentTimeDays: () => 0,
+}));
+
+// The radial-velocity exporter reads the panel's current observing run. Mocked
+// like the other two live modules, so a test can state what was observed rather
+// than having to drive a chart to observe it.
+const observing = { run: null };
+jest.unstable_mockModule('../js/radialVelocity.js', () => ({
+  radialVelocitySurvey: () =>
+    observing.run ?? {
+      running: false,
+      config: {
+        cadenceDays: 0.32,
+        baselineDays: 3.52,
+        sigmaMs: 8,
+        seed: 'survey-1',
+      },
+      target: null,
+      inclinationDeg: 90,
+      measurements: [],
+      planned: 12,
+      stats: null,
+    },
 }));
 
 const {
   trajectoryCsv,
   lightCurveCsv,
   transitTableCsv,
+  radialVelocityCsv,
   exportSummary,
   choosePrimaries,
   csvField,
@@ -33,6 +57,7 @@ const {
   csvFilename,
   TRAJECTORY_COLUMNS,
   LIGHT_CURVE_COLUMNS,
+  RADIAL_VELOCITY_COLUMNS,
 } = await import('../js/dataExport.js');
 const { timeUnitSeconds } = await import('../js/units.js');
 const { G_SI, SOLAR_MASS_KG, AU_M } = await import('../js/blackHolePhysics.js');
@@ -88,6 +113,7 @@ beforeEach(() => {
   curve.days = [];
   curve.flux = [];
   photometry.log = [];
+  observing.run = null;
 });
 
 describe('CSV field writing', () => {
@@ -443,5 +469,133 @@ describe('the summary the dialog describes itself with', () => {
   test('is all zeroes on a fresh page rather than throwing', () => {
     const s = exportSummary();
     expect(s).toMatchObject({ frames: 0, bodies: 0, samples: 0, transits: 0 });
+  });
+});
+
+describe('the radial-velocity export', () => {
+  /** A run in the shape radialVelocitySurvey() hands out. */
+  const runOf = (measurements, over = {}) => ({
+    running: true,
+    config: {
+      cadenceDays: 0.32,
+      baselineDays: 3.52,
+      sigmaMs: 8,
+      seed: 'lesson-a',
+      seedValue: 1,
+    },
+    target: { id: 3, name: 'HD 209458' },
+    inclinationDeg: 90,
+    planned: 12,
+    stats: null,
+    measurements,
+    ...over,
+  });
+
+  // CRLF, because the writer produces the line endings Excel expects.
+  const rows = csv =>
+    csv
+      .trim()
+      .split(/\r?\n/)
+      .map(line => line.split(','));
+
+  test('writes one row per measurement and nothing between', () => {
+    // The property that makes the file worth having. A schedule with a
+    // fortnight between measurements must export two rows, not fourteen.
+    observing.run = runOf([
+      { index: 0, day: 0, rv: -80.2, sigma: 8, truth: -84 },
+      { index: 1, day: 14, rv: 71.5, sigma: 8, truth: 78 },
+    ]);
+    const out = radialVelocityCsv();
+    expect(out.rows).toBe(2);
+    const body = rows(out.csv).slice(1);
+    expect(body.map(r => r[0])).toEqual(['0', '14']);
+  });
+
+  test('the uncertainty travels with the value it belongs to', () => {
+    observing.run = runOf([{ index: 0, day: 1, rv: 12.5, sigma: 3.5 }]);
+    const [header, row] = rows(radialVelocityCsv().csv);
+    expect(header).toEqual(RADIAL_VELOCITY_COLUMNS);
+    expect(row[header.indexOf('rv_ms')]).toBe('12.5');
+    expect(row[header.indexOf('rv_err_ms')]).toBe('3.5');
+  });
+
+  test('every row carries the target and the observing configuration', () => {
+    // Repeated per row rather than put in a header comment: a constant column
+    // is read by every tool, and a comment header needs an argument half a
+    // class will not pass.
+    observing.run = runOf([
+      { index: 0, day: 0, rv: 1, sigma: 8 },
+      { index: 1, day: 0.32, rv: 2, sigma: 8 },
+    ]);
+    const [header, ...body] = rows(radialVelocityCsv().csv);
+    const col = name => header.indexOf(name);
+    for (const row of body) {
+      expect(row[col('target')]).toBe('HD 209458');
+      expect(row[col('target_id')]).toBe('3');
+      expect(row[col('inclination_deg')]).toBe('90');
+      expect(row[col('cadence_days')]).toBe('0.32');
+      expect(row[col('baseline_days')]).toBe('3.52');
+      expect(row[col('sigma_ms')]).toBe('8');
+      expect(row[col('noise_seed')]).toBe('lesson-a');
+    }
+  });
+
+  test('the same run exports the same file twice', () => {
+    // Reproducibility has to survive the serializer, not just the generator:
+    // an assignment that says "compare your file with your partner's" fails on
+    // a writer that reorders or reformats.
+    observing.run = runOf([
+      { index: 0, day: 0, rv: -80.213456, sigma: 8 },
+      { index: 1, day: 0.32, rv: 33.9, sigma: 8 },
+    ]);
+    expect(radialVelocityCsv().csv).toBe(radialVelocityCsv().csv);
+  });
+
+  test('a run with no measurements writes a header and no rows', () => {
+    observing.run = runOf([]);
+    const out = radialVelocityCsv();
+    expect(out.rows).toBe(0);
+    expect(rows(out.csv)).toHaveLength(1);
+  });
+
+  test('a nameless target leaves the column empty rather than guessing', () => {
+    observing.run = runOf([{ index: 0, day: 0, rv: 1, sigma: 2 }], {
+      target: null,
+    });
+    const [header, row] = rows(radialVelocityCsv().csv);
+    expect(row[header.indexOf('target')]).toBe('');
+    expect(row[header.indexOf('target_id')]).toBe('');
+  });
+
+  test('a noiseless run exports zero uncertainties, not blanks', () => {
+    observing.run = runOf([{ index: 0, day: 0, rv: -84, sigma: 0 }], {
+      config: {
+        cadenceDays: 0.32,
+        baselineDays: 3.52,
+        sigmaMs: 0,
+        seed: 'quiet',
+      },
+    });
+    const [header, row] = rows(radialVelocityCsv().csv);
+    expect(row[header.indexOf('rv_err_ms')]).toBe('0');
+    expect(row[header.indexOf('sigma_ms')]).toBe('0');
+  });
+
+  test('the summary reports the run so the dialog can describe it', () => {
+    observing.run = runOf([
+      { index: 0, day: 0, rv: 1, sigma: 8 },
+      { index: 1, day: 0.32, rv: 2, sigma: 8 },
+    ]);
+    const s = exportSummary();
+    expect(s.rvMeasurements).toBe(2);
+    expect(s.rvPlanned).toBe(12);
+    expect(s.rvRunning).toBe(true);
+  });
+
+  test('with no run there is nothing to offer', () => {
+    const s = exportSummary();
+    expect(s.rvMeasurements).toBe(0);
+    expect(s.rvRunning).toBe(false);
+    expect(radialVelocityCsv().rows).toBe(0);
   });
 });

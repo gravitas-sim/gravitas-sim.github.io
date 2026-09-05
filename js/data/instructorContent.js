@@ -16,6 +16,210 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'detect-this-planet': {
+    topic: 'Observational design and the limits of a measurement',
+    difficulty: 'Introductory, written for non-science majors',
+    placement:
+      'A short lesson, 15 to 20 minutes, meant to sit immediately after Finding Planets by Their Tug, which is where students learn to read a radial-velocity curve. It works as a standalone lab-period opener and as the bridge from "here is a signal, what does it mean" to "here is a telescope allocation, what will you get". It is also the only exoplanet lesson that is about the observer rather than the system, so it doubles as an introduction to experimental design in any course that needs one.',
+    overview: `Students plan two radial-velocity observing runs of the same star, with the same
+      instrument and the same twelve measurements, and find that one of them detects a hot
+      Jupiter unambiguously while the other - eleven times the baseline, not one measurement
+      fewer - returns a result nobody could publish either way. The planet is identical in both.
+      What differs is the cadence: Schedule B samples every 3.52 days against a 3.5247-day
+      period, so every measurement lands at the same orbital phase.
+      \n\nThe lesson then separates the three things a run can get wrong - cadence, baseline and
+      precision - by holding two fixed and moving the third, and closes on two questions about
+      what the evidence supports: what a marginal chi-square excess actually licenses you to
+      say, and what a completely flat dataset does and does not rule out. It deliberately never
+      offers a detection verdict; the readouts report scatter against a constant-velocity model
+      and say in as many words that this is not the same as finding a planet.`,
+    priorKnowledge: [
+      'That a planet makes its star move, and that radial velocity measures the part of that motion along the line of sight',
+      'Reading a point with an error bar off a plot',
+      'Helpful but not required: Finding Planets by Their Tug, for the shape of a radial-velocity curve and the meaning of K',
+      'No statistics beyond the idea that a measurement has an uncertainty. Chi-square is introduced in words at step 5 as "how surprising is this much scatter if nothing was changing"',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A schedule is part of the experiment',
+        body: 'When measurements are taken is a decision, made before any data exist, and it constrains the conclusions as firmly as the instrument does. Students routinely believe that data quality is a property of the instrument and quantity a property of effort; a schedule is neither, and it can make both irrelevant.',
+      },
+      {
+        heading: 'Cadence, baseline and precision are independent',
+        body: 'Baseline sets the longest period that could be seen at all. Cadence sets which phases of a given period get looked at, and can destroy a signal at any baseline. Precision sets how small a signal survives the noise. A run can be ruined by any one of the three while the other two are excellent, and the lesson demonstrates each failure separately.',
+      },
+      {
+        heading: 'Aliasing',
+        body: 'A cadence close to the period - or to a simple fraction or multiple of it - returns the star to nearly the same phase at every visit. The signal is fully present and completely unsampled. The classic real-world case is a one-day cadence forced by the rotation of the Earth acting on a planet with a period near a whole number of days.',
+      },
+      {
+        heading: 'Phase coverage',
+        body: 'The fraction of the orbital cycle a schedule actually visited. It is the statistic that separates the two runs here, and it is the one students are least likely to think of on their own, because it cannot be read off a time series - only off a folded one.',
+      },
+      {
+        heading: 'What excess scatter licenses',
+        body: 'A chi-square excess over the measurement errors says the velocity is not constant. It does not identify a planet, a period or a mass, and it does not exclude a companion star, stellar activity, spots, pulsation, or an underestimated error bar. Turning variability into a planet requires a repeating period and the elimination of the alternatives.',
+      },
+      {
+        heading:
+          'A nondetection is a statement about a region, not about a star',
+        body: 'A flat dataset excludes planets above a mass that depends on period, inclination and the schedule itself. It never excludes "a planet". Published radial-velocity nondetections are always presented as sensitivity curves for this reason.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-2',
+        text: 'The framing: twelve nights, one star, and the question of whether the schedule would find a planet rather than whether one is there. Students commit to which of four choices matters most before seeing any data.',
+      },
+      {
+        steps: '3-5',
+        text: 'Schedule A - twelve measurements across one orbit - in the survey-schedule instrument. Students read phase coverage, scatter and chi-square, then face the key question: the most this establishes is that the velocity is not constant.',
+      },
+      {
+        steps: '6-9',
+        text: 'Schedule B, the same twelve measurements at 3.52-day intervals. Students predict, observe the folded panel collapse into two bins, record the numbers, and work out that the cadence is one orbital period.',
+      },
+      {
+        steps: '10-11',
+        text: 'Precision isolated: a Neptune on the good schedule is invisible at 8 m/s and obvious at 1 m/s. Then the ambiguous-evidence question, which is the lesson’s hardest and the one most worth discussing aloud.',
+      },
+      {
+        steps: '12-13',
+        text: 'The synthetic observing run in the live Radial Velocity panel, against the simulated star, followed by the CSV export. Schedule A completes in about thirteen seconds of wall clock.',
+      },
+      {
+        steps: '14-15',
+        text: 'A written question on the limits of a nondetection, then the closing statement that the outcome was decided by a cadence written down months before the observations.',
+      },
+    ],
+    features: [
+      {
+        name: 'survey-schedule instrument (steps 3-11)',
+        text: 'An analytic planner: it computes the radial-velocity curve for a chosen planet mass, samples it on a chosen cadence, adds Gaussian noise from a seeded generator, and reports phase coverage, scatter and chi-square against a constant velocity. Analytic rather than integrated so a student can compare two schedules in seconds; the four presets are the four cases the lesson uses.',
+      },
+      {
+        name: 'Ideal-signal overlay',
+        text: 'The dashed curve on both panels is the noiseless signal, drawn to teach and labelled as such on the plot itself. It has no counterpart in a real observing run and the lesson says so at step 3. It can be switched off in the live panel, which is worth doing with a class.',
+      },
+      {
+        name: 'Synthetic observing run (step 12)',
+        text: 'An opt-in mode in the live Radial Velocity panel. It keeps only the measurements a stated cadence and baseline would have produced, each with a Gaussian uncertainty, and records nothing between them. Measurements are scheduled in simulated days and read by interpolating between render frames, so the result does not depend on the frame rate; a run whose frames are too coarse for its cadence says so rather than reporting flattened extremes.',
+      },
+      {
+        name: 'Seeded noise',
+        text: 'The scatter comes from a generator dedicated to observing, seeded by name. Two students with the same seed get identical measurements and can compare answers; the world’s own random number stream and the dynamics are untouched, so observing a star does not change it.',
+      },
+      {
+        name: 'CSV export (step 13)',
+        text: 'Export data → Radial velocity measurements. One row per measurement - time, velocity, uncertainty, target and the full observing configuration - and nothing between them, so the gaps in the file are the gaps in the run. Suitable for a follow-up fitting exercise in Python or a spreadsheet.',
+      },
+      {
+        name: 'Exoplanet Characterization Lab scenario (steps 1, 12)',
+        text: 'HD 209458 with the star free to move, the same scenario the other radial-velocity lesson uses. One orbit takes about thirteen seconds of wall clock, so Schedule A completes live in about that time.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'More data is always better, so a longer run beats a shorter one.',
+        response:
+          'Schedule B is the counterexample and it is the point of the lesson. Collect the step 6 prediction before revealing it - in most classes a clear majority chooses the longer baseline.',
+      },
+      {
+        claim:
+          'The number of measurements is what determines whether you find a planet.',
+        response:
+          'Both schedules take exactly twelve. Say the number out loud when the second one fails; students often do not notice that it was held fixed.',
+      },
+      {
+        claim:
+          'If the signal is bigger than the error bars, that is a detection.',
+        response:
+          'Step 11, option four. An amplitude-to-noise ratio ignores the number of points, their distribution in phase, and the number of periods implicitly searched. The instrument never prints such a ratio, deliberately.',
+      },
+      {
+        claim: 'A flat result means there is no planet.',
+        response:
+          'Step 14. A flat result excludes a region of the mass-period-inclination space that depends on the schedule. Students who write "there is no planet" should be asked what period they are ruling it out at.',
+      },
+      {
+        claim: 'The dashed curve is the data.',
+        response:
+          'It is labelled on the plot and called out at step 3, and it is still worth switching off in the live panel with a class watching. What remains is what an observer actually has.',
+      },
+      {
+        claim: 'Aliasing is a defect of the instrument or of the simulation.',
+        response:
+          'It is a property of the sampling, and it applies identically to a perfect instrument. Setting the uncertainty to zero on Schedule B is the demonstration: the points still pile up in two phase bins.',
+      },
+    ],
+    teachingNotes: [
+      'Take the step 2 prediction as a show of hands before anyone opens the instrument, and write the tally on the board. Coming back to it after step 8 is the strongest moment in the lesson.',
+      'The chi-square readout is introduced in words, not symbols: "how surprising is this much scatter if the velocity never changed". Classes without statistics can work entirely from phase coverage and the comparison of scatter against the error bar, and the numbers still separate cleanly.',
+      'Step 5 is the question students most often get wrong for a good reason: they know there is a planet because the lesson told them. Ask what they would have concluded from the twelve numbers alone.',
+      'On Schedule B, have someone set the uncertainty to zero. The measurements become perfect and the run still fails, which decouples "noisy" from "uninformative" better than any explanation.',
+      'The seed field is worth using deliberately: give different groups different seeds on Schedule B and collect their chi-square values. The spread across groups is itself the argument against reading too much into a single marginal result.',
+      'Step 14 is a written answer and takes most of the time in a 20-minute run. If time is short it can be set as the exit ticket instead.',
+      'Step 5 has one instructive wrong answer: choosing "a planet orbits this star" rather than "the velocity is not constant". It is the exact overreach the step tests for, and students make it because the lesson has already told them there is a planet. Ask what they would have concluded from the twelve numbers alone.',
+      'Step 9 is the arithmetic: 3.52 / 3.5247 = 0.9987 orbits, accepted within 0.06. A student answering near 0.28 has divided the wrong way round.',
+      'Step 11 is the hardest question in the lesson and the one most worth reading aloud. The fourth option - "the amplitude is twice the noise, so the detection is significant" - attracts students who have correctly seen the excess and incorrectly turned it into a significance. Both it and the first option deserve a sentence.',
+      'Step 14 answers that say "there is no planet" should be handed back with the question "at what period, and above what mass?". Answers that say "we learned nothing" should be told that a nondetection with a stated sensitivity is publishable, and is how upper limits appear in the literature.',
+      'If the class has done Finding Planets by Their Tug, connect step 9 back to the period they measured there: the planet was easy to find because the observing was continuous, which no real programme is.',
+    ],
+    discussion: [
+      'Schedule B produced an honest paper reporting nothing conclusive. Was that a mistake, given that the planet was there? What would have had to be different for it not to be?',
+      'Telescope time is awarded by committee, months ahead, on the basis of a written plan. What should a committee ask about a proposed cadence?',
+      'The first exoplanet surveys found overwhelmingly hot Jupiters on short periods. How much of that is about planetary systems and how much is about schedules?',
+      'If you had a thirteenth night to add to Schedule B, when would you use it, and what would you be able to say afterwards that you cannot say now?',
+      'Every measurement in this lesson has the same uncertainty. Real ones do not - weather, airmass and exposure time all vary. Does a run with mixed precision help or hurt?',
+    ],
+    extensions: [
+      'Export a Schedule A run and a Schedule B run and hand both files to students without saying which is which. Ask them to decide, from the data alone, whether the star has a planet.',
+      'Have students design a twelve-night schedule that would detect a planet with a period near 1.0 days, and explain why an observer at a single site cannot simply observe nightly.',
+      'Look up a published radial-velocity nondetection and find its sensitivity curve: the plot of the smallest planet mass excluded as a function of period. Ask which part of that curve is set by the baseline and which by the cadence.',
+      'Set the uncertainty to zero and find, by hand, the shortest baseline that still gives full phase coverage for the 3.5247-day planet. Then ask how the answer would change if the period were unknown.',
+    ],
+    modelNotes: `The star and planet are integrated as a Newtonian two-body system in a plane, and the
+      radial velocity the live panel reports is the projection of the star's actual simulated
+      velocity onto the line of sight, relative to the system barycenter. The survey-schedule
+      instrument at steps 3 to 11 is analytic rather than integrated: it evaluates a circular
+      single-planet velocity curve from js/exoplanetObservables.js, which is exact for the
+      near-circular orbit of HD 209458 b and would not be for an eccentric one. Real
+      radial-velocity curves of eccentric planets are not sinusoids, and the phase-coverage
+      argument the lesson makes is unchanged by that but the shape of the curve is not.
+      \n\nThe noise is Gaussian, identically distributed, and independent between measurements.
+      Real radial-velocity errors are none of the three: they include correlated systematics from
+      the instrument and the atmosphere, and stellar jitter from spots and granulation that is
+      correlated on the star's rotation period and is often the dominant term for an active star.
+      The lesson names underestimated error bars at step 11 as the leading alternative explanation
+      for a marginal excess, which is the honest version of this simplification, but a class that
+      goes on to real data should be told that jitter is why a 1 m/s spectrograph does not deliver
+      1 m/s planet sensitivity.
+      \n\nThe schedule itself is idealized in the other direction: measurements arrive exactly on
+      time, with no weather, no target visibility window and no lost nights. That makes the two
+      schedules cleanly comparable and understates how much worse a real cadence is. Nothing in
+      the model prevents a measurement from being scheduled while the target would be below the
+      horizon, because the simulation has no horizon.
+      \n\nOne numerical caveat is surfaced in the interface rather than hidden here: measurements
+      are read by interpolating the simulated velocity between render frames, and at high
+      simulation speeds consecutive frames can be an appreciable fraction of an orbit apart. The
+      panel detects this and says so, because a straight line drawn across a quarter of a cycle
+      flattens the extremes. At the default speed the frames are far finer than the cadence and
+      the interpolation is exact to well under a metre per second.`,
+    // Keyed to the steps where a student is looking at something: the three
+    // explore screens, the two measure screens and the live run. Guidance on
+    // the graded questions is in teachingNotes, because an expectation on a
+    // pure-question screen is a mistake the tests catch.
+    expectations: {
+      3: 'Schedule A, seed 1, 8 m/s. The left panel shows twelve points tracing one full sine cycle; the right panel has at least one point in every phase bin. The readout gives phase coverage 10 of 10, scatter about 55.8 m/s against an expected 8, and chi-square per degree of freedom about 48.7. With the uncertainty dragged to zero the points sit exactly on the dashed curve, which is worth doing once with the class.',
+      4: 'Coverage 10 of 10, scatter about 55.8 m/s, chi-square per degree of freedom about 48.7. A student reporting coverage below 10 has not loaded the preset; one reporting a chi-square near 1 has left the uncertainty far too high. The field check warns below 5.',
+      7: 'Schedule B. The left panel spans 38.7 days and looks almost flat; the folded panel shows all twelve points stacked in two adjacent bins. Coverage drops to 2 of 10 and chi-square per degree of freedom to about 1.9. Moving the cadence to 3.0 or 4.2 restores most of the coverage immediately, which is the cleanest way to show that the failure is the cadence and nothing else.',
+      8: 'Coverage 2 of 10, scatter about 11 m/s, chi-square per degree of freedom about 1.9. The scatter being close to the 8 m/s error bar is the whole result. Setting the uncertainty to zero here is worth doing: the run still fails, which separates "noisy" from "uninformative".',
+      10: 'The Neptune preset at 8 m/s gives K near 7.3 m/s, full phase coverage and chi-square per degree of freedom near 1.7 - a perfect schedule that still fails. Switching to 1 m/s leaves the planet and the schedule untouched and takes chi-square per degree of freedom to about 22.8.',
+      12: 'The live panel completes Schedule A in about thirteen seconds of wall clock at normal speed, laying down twelve points on the dashed overlay. Untick the overlay and what is left is what an observer has. If a student runs the simulation fast, the panel warns that the frames are too coarse for the cadence and the extremes may be flattened; that warning is real and the answer is to slow down and restart.',
+    },
+  },
+
   'keplers-laws': {
     topic: 'Orbital motion',
     difficulty: 'Introductory',
@@ -2181,7 +2385,7 @@ export const INSTRUCTOR_CONTENT = {
       'Ask students to work out, from the libration amplitude of 80 degrees and Pluto’s orbital elements, the range of true anomalies at which Pluto–Neptune conjunctions can occur, and check it against what the conjunction instrument reports.',
     ],
     modelNotes:
-      'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modelled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-six checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
+      'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modelled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
   },
 };
 

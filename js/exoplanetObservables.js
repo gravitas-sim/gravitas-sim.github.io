@@ -246,3 +246,154 @@ export function dopplerShiftNm(velocityMs, restWavelengthNm) {
 
 /** Arcseconds per radian, exported for callers that need the raw conversion. */
 export { ARCSEC_PER_RADIAN };
+
+// --- What a live run has actually measured ------------------------------------
+//
+// The two functions above compute observables from known orbital elements. The
+// two below do the opposite job: they describe a recorded series without
+// assuming what produced it. Keeping them here, pure and beside the formulas
+// they must not be confused with, is the point - the panels used to blur
+// exactly that line.
+
+/**
+ * Half the range of a recorded radial-velocity series, and whether the run has
+ * covered enough of the curve for that to describe the whole curve.
+ *
+ * The returned `halfRange` is (max - min) / 2 over the samples given. It equals
+ * the orbital semi-amplitude K only for a single planet on a circular orbit
+ * observed over at least a full cycle. An eccentric orbit's velocity curve is
+ * K[cos(nu + omega) + e cos omega] + gamma, which is not a sinusoid and whose
+ * range depends on e and omega; two planets give a superposition whose range is
+ * neither planet's K.
+ *
+ * `complete` is evidence that both extremes have actually been observed, which
+ * is what the half-range needs and is a weaker requirement than a full cycle: a
+ * run from just before a maximum to just after the following minimum has seen
+ * the whole range. The test is that the curve *turned around* at each extreme -
+ * that on both sides of the maximum there are samples meaningfully below it,
+ * and on both sides of the minimum samples meaningfully above it. A monotonic
+ * arc fails because its extremes are its endpoints, with nothing beyond them.
+ *
+ * "Meaningfully" is a small fraction of the observed range, so that a single
+ * noisy sample just inside the end of a rising run does not read as a turning
+ * point.
+ *
+ * An earlier version of this also demanded two crossings of the midline, which
+ * sounds stricter and is simply wrong: a sinusoid sampled over exactly one
+ * period beginning at the midline crosses it once in the interior and twice at
+ * the endpoints, so the most complete run imaginable was reported as partial.
+ *
+ * The test it replaces was "the samples include both signs", which is not a
+ * statement about coverage at all: a few minutes either side of a zero crossing
+ * satisfies it while sampling a few per cent of the amplitude, and a system
+ * with a systemic velocity large enough that the curve never changes sign can
+ * never satisfy it however long it is watched.
+ *
+ * @param {Array<{y: number}>} series - Samples, in order
+ * @param {object} [options]
+ * @param {number} [options.minSamples] - Fewest samples worth quoting
+ * @returns {{halfRange: number, complete: boolean, min: number, max: number,
+ *   midlineCrossings: number}|null} The estimate, or null when too short
+ */
+/**
+ * How far the curve must retreat from an extreme, as a fraction of the observed
+ * range, before that extreme counts as a turning point rather than the end of a
+ * rising run with a noisy last sample.
+ */
+const TURNAROUND_FRACTION = 0.05;
+
+export function halfRangeOfSeries(series, { minSamples = 12 } = {}) {
+  if (!Array.isArray(series) || series.length < minSamples) return null;
+
+  let lo = Infinity;
+  let hi = -Infinity;
+  let loAt = 0;
+  let hiAt = 0;
+  series.forEach((point, i) => {
+    const y = Number(point?.y);
+    if (!Number.isFinite(y)) return;
+    if (y < lo) {
+      lo = y;
+      loAt = i;
+    }
+    if (y > hi) {
+      hi = y;
+      hiAt = i;
+    }
+  });
+  if (!Number.isFinite(lo) || !Number.isFinite(hi)) return null;
+
+  const range = hi - lo;
+  const margin = range * TURNAROUND_FRACTION;
+
+  /** Whether the curve retreats from an extreme on both sides of it. */
+  const turnedAround = (at, isMax) => {
+    let before = false;
+    let after = false;
+    for (let i = 0; i < series.length; i++) {
+      const y = Number(series[i]?.y);
+      if (!Number.isFinite(y)) continue;
+      const retreated = isMax ? y <= hi - margin : y >= lo + margin;
+      if (!retreated) continue;
+      if (i < at) before = true;
+      else if (i > at) after = true;
+      if (before && after) return true;
+    }
+    return false;
+  };
+
+  // Reported for diagnostics rather than used as a gate; see the note above.
+  const mid = (hi + lo) / 2;
+  let midlineCrossings = 0;
+  for (let i = 1; i < series.length; i++) {
+    const before = Number(series[i - 1]?.y) - mid;
+    const after = Number(series[i]?.y) - mid;
+    if (!Number.isFinite(before) || !Number.isFinite(after)) continue;
+    if (before === 0) continue;
+    if ((before < 0 && after > 0) || (before > 0 && after < 0)) {
+      midlineCrossings++;
+    }
+  }
+
+  const complete =
+    range > 0 && turnedAround(hiAt, true) && turnedAround(loAt, false);
+
+  return {
+    halfRange: (hi - lo) / 2,
+    complete,
+    min: lo,
+    max: hi,
+    midlineCrossings,
+  };
+}
+
+/**
+ * The largest offset from the origin in a recorded sky path.
+ *
+ * This is a maximum projected separation, not a semi-major axis. The barycenter
+ * is at a *focus* of the star's orbit, so on an eccentric orbit the largest
+ * offset is the apoapsis distance a(1 + e): for a = 1 AU and e = 0.5 it is
+ * 1.5 AU, and calling that a measured semi-major axis is wrong by half the
+ * eccentricity. The two coincide only for a circular orbit.
+ *
+ * Recovering a_star - and with it the astrometric signature a_star / d - means
+ * fitting an ellipse to the path and locating its focus. That is a different
+ * operation and is not what this does.
+ *
+ * @param {Array<{x: number, y: number}>} path - Points, in any order
+ * @param {object} [options]
+ * @param {number} [options.minPoints] - Fewest points worth quoting
+ * @returns {number|null} The largest offset, in the path's own units
+ */
+export function maxOffsetOfPath(path, { minPoints = 8 } = {}) {
+  if (!Array.isArray(path) || path.length < minPoints) return null;
+  let max = 0;
+  let seen = false;
+  for (const point of path) {
+    const r = Math.hypot(Number(point?.x), Number(point?.y));
+    if (!Number.isFinite(r)) continue;
+    seen = true;
+    if (r > max) max = r;
+  }
+  return seen ? max : null;
+}

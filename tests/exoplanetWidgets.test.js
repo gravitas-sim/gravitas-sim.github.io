@@ -19,6 +19,7 @@ const IDS = [
   'astrometry-signature',
   'method-comparison',
   'planet-characterization',
+  'survey-schedule',
 ];
 
 describe('the exoplanet instruments are registered and well formed', () => {
@@ -243,5 +244,120 @@ describe('every registered widget still works', () => {
       const v = widgetDefaults(w);
       expect(() => w.readout(v, undefined, {})).not.toThrow();
     }
+  });
+});
+
+describe('the observing-schedule planner', () => {
+  const W = () => getWidget('survey-schedule');
+  const values = over => ({ ...widgetDefaults(W()), ...over });
+
+  /** The lesson's two schedules, which its questions have answers for. */
+  const SCHEDULE_A = { cadence: 0.32, n: 12, sigma: 8, mp: 0.69, seed: 1 };
+  const SCHEDULE_B = { cadence: 3.52, n: 12, sigma: 8, mp: 0.69, seed: 1 };
+
+  test('it takes the number of measurements it is asked for', () => {
+    for (const n of [4, 12, 30]) {
+      expect(W().compute(values({ n })).points).toHaveLength(n);
+    }
+  });
+
+  test('the measurements fall on the cadence and nowhere else', () => {
+    const c = W().compute(values({ cadence: 2.5, n: 5 }));
+    expect(c.points.map(p => p.day)).toEqual([0, 2.5, 5, 7.5, 10]);
+  });
+
+  test('with no uncertainty the points are the signal exactly', () => {
+    const c = W().compute(values({ sigma: 0, n: 8 }));
+    for (const p of c.points) expect(p.rv - p.truth).toBe(0);
+    expect(c.stats.chi).toBeNull();
+  });
+
+  test('the same seed gives the same measurements', () => {
+    const a = W()
+      .compute(values(SCHEDULE_A))
+      .points.map(p => p.rv);
+    const b = W()
+      .compute(values(SCHEDULE_A))
+      .points.map(p => p.rv);
+    expect(a).toEqual(b);
+    const other = W()
+      .compute(values({ ...SCHEDULE_A, seed: 2 }))
+      .points.map(p => p.rv);
+    expect(other).not.toEqual(a);
+  });
+
+  test('the amplitude is the real one for the planet on the sliders', () => {
+    const c = W().compute(values({ mp: 0.69 }));
+    expect(c.K).toBeCloseTo(
+      radialVelocitySemiAmplitude({
+        starMassSolar: HD209458.star.massSolar,
+        planetMassJupiter: 0.69,
+        periodDays: HD209458.planet.periodDays,
+      }),
+      6
+    );
+  });
+
+  describe("the lesson's comparison holds", () => {
+    // These numbers are quoted in the lesson body, in its measure-step hints
+    // and in the instructor guide's expectations. If they move, the questions
+    // stop having answers.
+    test('Schedule A: full phase coverage and a landslide chi-square', () => {
+      const c = W().compute(values(SCHEDULE_A));
+      expect(c.points).toHaveLength(12);
+      expect(c.coverage.covered).toBe(10);
+      expect(c.stats.rms).toBeCloseTo(55.8, 0);
+      expect(c.stats.chi.reduced).toBeGreaterThan(40);
+    });
+
+    test('Schedule B: the same twelve, eleven times the baseline, two bins', () => {
+      const c = W().compute(values(SCHEDULE_B));
+      expect(c.points).toHaveLength(12);
+      expect(c.baseline).toBeCloseTo(38.72, 2);
+      expect(c.coverage.covered).toBe(2);
+      // Ambiguous rather than negative: the outcome the lesson is built on.
+      expect(c.stats.chi.reduced).toBeGreaterThan(1);
+      expect(c.stats.chi.reduced).toBeLessThan(3);
+    });
+
+    test('the aliasing is the cadence, not the noise', () => {
+      // With the uncertainty at zero Schedule B still sees nothing, which is
+      // what separates "noisy" from "uninformative".
+      const c = W().compute(values({ ...SCHEDULE_B, sigma: 0 }));
+      expect(c.coverage.covered).toBe(2);
+      expect(c.stats.halfRange).toBeLessThan(5);
+    });
+
+    test('precision alone turns a Neptune from invisible to obvious', () => {
+      const dim = W().compute(values({ ...SCHEDULE_A, mp: 0.06 }));
+      const sharp = W().compute(values({ ...SCHEDULE_A, mp: 0.06, sigma: 1 }));
+      // Same planet, same schedule, same phase coverage.
+      expect(sharp.K).toBeCloseTo(dim.K, 9);
+      expect(sharp.coverage.covered).toBe(dim.coverage.covered);
+      expect(dim.stats.chi.reduced).toBeLessThan(3);
+      expect(sharp.stats.chi.reduced).toBeGreaterThan(10);
+    });
+  });
+
+  test('the readout describes the run without claiming a detection', () => {
+    const rows = W().readout(values(SCHEDULE_A));
+    const text = JSON.stringify(
+      rows.map(r => [r.label, r.value])
+    ).toLowerCase();
+    // The words it must not reach for. An amplitude-to-noise ratio is not a
+    // significance and the panel is not allowed to imply that it is.
+    for (const word of ['detected', 'detection', 'significant', 'confirmed']) {
+      expect(text).not.toContain(word);
+    }
+    // And the disclaimer is a row, not a footnote somewhere else.
+    expect(text).toContain('does not identify a planet');
+  });
+
+  test('it reports coverage and scatter, which is what the lesson reads', () => {
+    const labels = W()
+      .readout(values(SCHEDULE_A))
+      .map(r => r.label.toLowerCase());
+    expect(labels.some(l => l.includes('phase coverage'))).toBe(true);
+    expect(labels.some(l => l.includes('scatter'))).toBe(true);
   });
 });

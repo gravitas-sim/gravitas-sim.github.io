@@ -238,8 +238,15 @@
           <span id="rvCurrent" class="rv-readout-value numeric">—</span>
           <span id="rvDirection" class="rv-direction"></span>
         </div>
-        <div class="rv-readout-cell">
-          <span class="rv-readout-label">Semi-amplitude K</span>
+        <!-- Half-range, not "semi-amplitude K". The panel measures
+             (max - min) / 2 of the samples it has taken, which is K only for a
+             single planet on a circular orbit observed over a whole cycle. The
+             label is written by js/radialVelocity.js and says which of those
+             two things the current reading is. -->
+        <div class="rv-readout-cell" id="rvAmplitudeCell">
+          <span class="rv-readout-label" id="rvAmplitudeLabel"
+            >Half-range observed so far</span
+          >
           <span id="rvAmplitude" class="rv-readout-value numeric"
             >Keep observing…</span
           >
@@ -264,6 +271,87 @@
       </div>
 
       <div id="rvObserverControls" class="obs-controls"></div>
+
+      <!-- Synthetic observing run. Off by default: the panel's ordinary job is
+           to show what the star is doing, and this replaces that with what a
+           telescope schedule would have caught of it. Opt-in, so nobody meets
+           error bars before they have seen the curve. -->
+      <div class="rv-survey">
+        <label class="rv-survey-toggle">
+          <input type="checkbox" id="rvSurveyEnabled" />
+          <span data-i18n="rv.survey.enable">Synthetic observing run</span>
+        </label>
+        <div id="rvSurveyFields" class="rv-survey-fields" hidden="">
+          <p class="rv-survey-hint" data-i18n="rv.survey.hint">
+            Keep only the measurements a stated schedule would actually have
+            produced, each with an uncertainty. Nothing is recorded between
+            them.
+          </p>
+          <div class="rv-survey-grid">
+            <label class="rv-survey-field">
+              <span data-i18n="rv.survey.cadence">Cadence</span>
+              <input
+                type="number"
+                id="rvSurveyCadence"
+                min="0.01"
+                max="500"
+                step="0.01"
+                value="0.32"
+                inputmode="decimal"
+              />
+              <span class="rv-survey-unit">d</span>
+            </label>
+            <label class="rv-survey-field">
+              <span data-i18n="rv.survey.baseline">Baseline</span>
+              <input
+                type="number"
+                id="rvSurveyBaseline"
+                min="0"
+                max="100000"
+                step="0.01"
+                value="3.52"
+                inputmode="decimal"
+              />
+              <span class="rv-survey-unit">d</span>
+            </label>
+            <label class="rv-survey-field">
+              <span data-i18n="rv.survey.sigma">Uncertainty</span>
+              <input
+                type="number"
+                id="rvSurveySigma"
+                min="0"
+                max="10000"
+                step="0.1"
+                value="8"
+                inputmode="decimal"
+              />
+              <span class="rv-survey-unit">m/s</span>
+            </label>
+            <label class="rv-survey-field">
+              <span data-i18n="rv.survey.seed">Noise seed</span>
+              <input type="text" id="rvSurveySeed" value="survey-1" size="8" />
+            </label>
+          </div>
+          <div class="rv-survey-actions">
+            <label class="rv-survey-toggle">
+              <input type="checkbox" id="rvSurveyIdeal" checked="" />
+              <span data-i18n="rv.survey.ideal"
+                >Show the ideal signal (teaching overlay)</span
+              >
+            </label>
+            <button
+              id="rvSurveyRestart"
+              class="obs-panel-btn"
+              data-i18n="rv.survey.restart"
+              title="Discard the measurements and begin the schedule again"
+              data-i18n-title="rv.survey.restart.hint"
+            >
+              Restart run
+            </button>
+          </div>
+          <p id="rvSurveyStatus" class="rv-survey-status" role="status"></p>
+        </div>
+      </div>
 
       <p class="obs-panel-hint">
         Measured relative to the system's own center of mass. A real spectrum
@@ -316,14 +404,28 @@
             <span class="rv-readout-label">Observing</span>
             <span id="astrometryTarget" class="rv-readout-value">—</span>
           </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label">Reflex orbit</span>
+          <!-- "Max offset observed", not "Reflex orbit". The panel measures the
+               largest separation between the star and the barycenter that it
+               has seen. The barycenter is at a focus of the star's orbit, so on
+               an eccentric orbit that is the apoapsis distance a(1 + e), not
+               the semi-major axis - and the astrometric signature alpha is
+               a_star / d, which needs an orbit fit this panel does not do. -->
+          <div
+            class="rv-readout-cell"
+            id="astrometryReflexCell"
+            title="The largest star–barycenter separation observed so far. On an eccentric orbit this is the apoapsis distance a(1 + e), not the semi-major axis."
+          >
+            <span class="rv-readout-label">Max offset observed</span>
             <span id="astrometryReflex" class="rv-readout-value numeric"
               >—</span
             >
           </div>
-          <div class="rv-readout-cell">
-            <span class="rv-readout-label">Angular signature</span>
+          <div
+            class="rv-readout-cell"
+            id="astrometrySignatureCell"
+            title="The same maximum offset expressed as an angle at the assumed distance. The astrometric signature quoted in the literature is a_star / d, which uses the semi-major axis rather than the largest offset; the two agree only for a circular orbit."
+          >
+            <span class="rv-readout-label">Max angular offset</span>
             <span id="astrometrySignature" class="rv-readout-value numeric"
               >Keep observing…</span
             >
@@ -1739,6 +1841,47 @@
         <div id="investigationProbe" class="inv-probe"></div>
       </div>
 
+      <!-- Progress safety. The save status is a standing statement rather than
+           a toast: a storage failure needs a message that persists until it is
+           resolved, and a toast on every keystroke would be unusable. The two
+           buttons are recovery, not submission - the PDF report is still what
+           gets handed in. -->
+      <div class="inv-progress-safety">
+        <p
+          id="investigationSaveStatus"
+          class="inv-save-status"
+          role="status"
+          aria-live="off"
+          hidden=""
+        ></p>
+        <div class="inv-backup-actions">
+          <button
+            id="investigationBackupDownload"
+            class="ui-button subtle"
+            title="Save a copy of your answers to a file you keep"
+            data-i18n-title="inv.backup.download.hint"
+            data-i18n="inv.backup.download"
+          >
+            Download progress backup
+          </button>
+          <button
+            id="investigationBackupRestore"
+            class="ui-button subtle"
+            title="Load answers back from a file you saved earlier"
+            data-i18n-title="inv.backup.restore.hint"
+            data-i18n="inv.backup.restore"
+          >
+            Restore progress backup
+          </button>
+          <input
+            id="investigationBackupFile"
+            type="file"
+            accept="application/json,.json"
+            hidden=""
+          />
+        </div>
+      </div>
+
       <footer class="inv-footer">
         <button
           id="investigationReset"
@@ -2736,7 +2879,7 @@
       -->
       <a
         href="/validation/"
-        title="What the physics engine has been checked against: 135 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
+        title="What the physics engine has been checked against: 218 checks with measured error, stated tolerance, and a reason for every tolerance. Runs live in your browser."
         data-i18n-title="footer.attribution.hint.2"
         data-i18n="footer.attribution"
         >Validated</a

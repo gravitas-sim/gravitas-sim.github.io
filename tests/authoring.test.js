@@ -2,6 +2,7 @@ import { describe, test, expect, beforeAll } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 
 import { loadAuthoringInputs } from '../tools/authoring/inputs.mjs';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 import {
   checkCatalogue,
   RULE_INDEX,
@@ -67,9 +68,16 @@ describe('the catalogue as it stands', () => {
   });
 
   test('the whole catalogue is covered', () => {
-    expect(inputs.investigations).toHaveLength(12);
+    // Bounds rather than exact figures: the point is that the checker was
+    // handed every lesson and every step, not that the catalogue is a
+    // particular size, and a lesson added next term should not fail this.
+    // The manifest is the authority on the counts, and
+    // tests/investigationRegistry.test.js is what holds it to them.
+    expect(inputs.investigations.length).toBeGreaterThanOrEqual(12);
+    expect(inputs.investigations.length).toBe(MANIFEST.length);
     const steps = inputs.investigations.reduce((n, i) => n + i.steps.length, 0);
-    expect(steps).toBe(370);
+    expect(steps).toBe(MANIFEST.reduce((n, l) => n + l.stepCount, 0));
+    expect(steps).toBeGreaterThan(300);
   });
 
   test('every rule the index describes is a rule the engine can raise', () => {

@@ -22,6 +22,7 @@
 
 import { forEachRecordedFrame, recordedExtent } from './timeline.js';
 import { lightCurveSeries, transitAnalysis } from './lightCurve.js';
+import { radialVelocitySurvey } from './radialVelocity.js';
 import { timeUnitSeconds } from './units.js';
 import { SOLAR_MASS_UNIT } from './physics.js';
 import { G_SI, SOLAR_MASS_KG, AU_M } from './blackHolePhysics.js';
@@ -316,6 +317,67 @@ export function transitTableCsv() {
   return { csv: toCsv(rows), rows: rows.length - 1 };
 }
 
+// --- Radial velocity ----------------------------------------------------------
+
+export const RADIAL_VELOCITY_COLUMNS = [
+  't_days',
+  'rv_ms',
+  'rv_err_ms',
+  'target',
+  'target_id',
+  'inclination_deg',
+  'cadence_days',
+  'baseline_days',
+  'sigma_ms',
+  'noise_seed',
+];
+
+/**
+ * A synthetic observing run, as CSV.
+ *
+ * One row per measurement and nothing between them, which is the property that
+ * makes the file worth exporting: a student who plots it in Python sees the
+ * same gaps the panel showed, and a student who fits it has to decide what to
+ * do about them.
+ *
+ * The observing configuration is repeated on every row rather than written into
+ * a header. A comment header is the tidier document and the worse data file -
+ * `pandas.read_csv` needs an argument to skip it, and half a class will not
+ * pass that argument - whereas a constant column is understood by everything
+ * and disappears into a `groupby` when it is not wanted. The cost is a few
+ * hundred duplicated bytes across a dozen rows.
+ *
+ * The uncertainty travels beside the value it belongs to for the same reason:
+ * an exported velocity with the error bar left behind in a note is a number
+ * that will be plotted without one.
+ *
+ * @returns {{csv: string, rows: number, target: ?string}} The document and what went into it
+ */
+export function radialVelocityCsv() {
+  const run = radialVelocitySurvey();
+  const rows = [RADIAL_VELOCITY_COLUMNS.slice()];
+  const cfg = run.config;
+  const name = run.target?.name || '';
+  const id = run.target?.id;
+
+  for (const m of run.measurements) {
+    rows.push([
+      num(m.day),
+      num(m.rv),
+      num(m.sigma),
+      csvField(name),
+      id === undefined || id === null ? '' : String(id),
+      num(run.inclinationDeg, 4),
+      num(cfg.cadenceDays),
+      num(cfg.baselineDays),
+      num(cfg.sigmaMs),
+      csvField(cfg.seed),
+    ]);
+  }
+
+  return { csv: toCsv(rows), rows: rows.length - 1, target: name || null };
+}
+
 // --- What there is to export --------------------------------------------------
 
 /**
@@ -326,12 +388,16 @@ export function exportSummary() {
   const extent = recordedExtent();
   const curve = lightCurveSeries();
   const { log } = transitAnalysis();
+  const run = radialVelocitySurvey();
   return {
     frames: extent.frames,
     bodies: extent.bodies,
     days: (extent.simTime * timeUnitSeconds()) / SECONDS_PER_DAY,
     samples: curve.days.length,
     transits: log.length,
+    rvMeasurements: run.measurements.length,
+    rvPlanned: run.planned,
+    rvRunning: run.running,
   };
 }
 

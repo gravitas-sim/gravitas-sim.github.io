@@ -197,9 +197,15 @@ export function withExtras(payload, extras = {}) {
     x.clock = Number(extras.clock.toPrecision(12));
   }
   if (extras.frame && extras.frame.mode && extras.frame.mode !== 'world') {
-    x.frame = extras.frame.objectId
-      ? { m: extras.frame.mode, o: extras.frame.objectId }
-      : { m: extras.frame.mode };
+    // Tested against null rather than for truthiness: body ids start at zero,
+    // so `objectId ? ...` dropped the target of a frame centred on the first
+    // body in the world. It went unnoticed while only the A/B bench carried
+    // frames, because the bench's own state names the body separately.
+    const target = extras.frame.objectId;
+    x.frame =
+      target === null || target === undefined
+        ? { m: extras.frame.mode }
+        : { m: extras.frame.mode, o: target };
   }
   if (extras.observer) {
     const { positionAngle, inclination } = extras.observer;
@@ -215,6 +221,20 @@ export function withExtras(payload, extras = {}) {
   if (Array.isArray(extras.tools) && extras.tools.length) {
     x.tools = [...extras.tools].sort();
   }
+  // Which star the observing panels are pointed at. Only when it has been
+  // pinned to something specific: with no star recorded the panels fall back to
+  // the most luminous, which is what an older link means and what a reader who
+  // never chose gets anyway.
+  if (extras.observedStarId !== undefined && extras.observedStarId !== null) {
+    x.star = extras.observedStarId;
+  }
+  // The distance the angular scale is computed from. Carried because it is an
+  // assumption of the reader's, not a property of the system: two people
+  // looking at the same simulation can honestly disagree about it, and a link
+  // that dropped it would silently substitute the scenario's own value.
+  if (Number.isFinite(extras.distancePc) && extras.distancePc > 0) {
+    x.dpc = Number(extras.distancePc.toPrecision(9));
+  }
   return { ...payload, x };
 }
 
@@ -227,7 +247,8 @@ export function withExtras(payload, extras = {}) {
  *
  * @param {Object} payload - A decoded share payload
  * @returns {{version:number, clock:number, frame:{mode:string,objectId:*},
- *   observer:{positionAngle:number, inclination:number}, tools:Array<string>}}
+ *   observer:{positionAngle:number, inclination:number}, tools:Array<string>,
+ *   observedStarId:?number, distancePc:?number}}
  *   The extras
  */
 export function readExtras(payload) {
@@ -244,6 +265,13 @@ export function readExtras(payload) {
       inclination: Number.isFinite(x.inc) ? x.inc : 90,
     },
     tools: Array.isArray(x.tools) ? [...x.tools] : [],
+    // null rather than a default: "no star recorded" and "this star" are
+    // different instructions, and only the first may fall back to the panel's
+    // own choice.
+    observedStarId: x.star ?? null,
+    // null means "use whatever the scenario says", which is what every link
+    // made before this field existed means.
+    distancePc: Number.isFinite(x.dpc) ? x.dpc : null,
   };
 }
 

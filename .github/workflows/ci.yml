@@ -172,6 +172,13 @@ jobs:
       - name: Vendored libraries and fonts are current
         run: npm run vendor:check
 
+      # CITATION.cff and .zenodo.json are generated from one source and must
+      # stay valid and mutually consistent. Zenodo prefers .zenodo.json when
+      # both are present, so a disagreement is not cosmetic: it decides what a
+      # DOI records.
+      - name: Citation metadata
+        run: node tools/validate-citation.mjs
+
       # No advisories, and none in the production dependency tree in
       # particular. Not `audit fix`: this reports, and a fix is a reviewed
       # change like any other.

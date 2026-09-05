@@ -40,6 +40,7 @@
     "vendor:check": "node tools/vendor-deps.mjs --check",
     "budget": "node tools/bundle-budget.mjs",
     "budget:check": "node tools/bundle-budget.mjs --check",
+    "release:check": "node tools/release-check.mjs",
     "a11y": "playwright test e2e/accessibility.spec.js e2e/accessibilityManual.spec.js --project=chromium",
     "a11y:axe": "playwright test e2e/accessibility.spec.js --project=chromium",
     "a11y:manual": "playwright test e2e/accessibilityManual.spec.js --project=chromium",
@@ -87,6 +88,7 @@
     "eslint-plugin-prettier": "^5.5.1",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.0.4",
+    "js-yaml": "4.3.2",
     "playwright": "1.62.1",
     "prettier": "^3.6.2"
   },

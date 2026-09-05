@@ -165,6 +165,7 @@ const TRANSLITERATE = new Map(
     φ: 'phi',
     ρ: 'rho',
     γ: 'gamma',
+    χ: 'chi',
     '≈': '~',
     '≤': '<=',
     '≥': '>=',

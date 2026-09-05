@@ -243,6 +243,11 @@ test.describe('the simulation is described in words', () => {
     await app.loadScenario('Solar System');
     await app.waitForFrames(40);
 
+    // Polled for the scenario name rather than for any text at all. The
+    // description carries the *previous* scenario until it refreshes, so a
+    // poll that only waited for non-empty text passed immediately on the stale
+    // sentence and then failed the assertion below - which is a test racing the
+    // application, not a defect in it.
     await expect
       .poll(
         () =>
@@ -253,7 +258,7 @@ test.describe('the simulation is described in words', () => {
           }),
         { timeout: 20_000 }
       )
-      .not.toBe('');
+      .toContain('Solar System');
 
     const described = await page.evaluate(() => {
       const canvas = document.getElementById('simulationCanvas');

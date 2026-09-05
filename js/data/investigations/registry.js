@@ -1,12 +1,12 @@
 // =============================================================================
 // The investigation registry
 // -----------------------------------------------------------------------------
-// Ten lessons, each in its own file, loaded one at a time.
+// Twelve lessons, each in its own file, loaded one at a time.
 //
 // The lessons are the heaviest content in the application: 8,460 lines and
 // 225KB between them, and a student who opens one opens exactly one. Holding
 // them in a single module meant that reading Kepler's Laws also parsed the
-// other nine, including every widget hook and probe closure in them.
+// other eleven, including every widget hook and probe closure in them.
 //
 // So there are two ways in, and which one a caller wants depends on whether it
 // is showing a lesson or reasoning about all of them:
@@ -76,6 +76,7 @@ const LOADERS = {
   tides: () => import('./tides.js'),
   'butterfly-effect': () => import('./butterfly-effect.js'),
   'when-orbits-lock': () => import('./when-orbits-lock.js'),
+  'detect-this-planet': () => import('./detect-this-planet.js'),
 };
 
 /**
@@ -102,6 +103,7 @@ const TRANSLATIONS = {
     tides: () => import('./es/tides.js'),
     'butterfly-effect': () => import('./es/butterfly-effect.js'),
     'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
+    'detect-this-planet': () => import('./es/detect-this-planet.js'),
   },
 };
 

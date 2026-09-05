@@ -253,7 +253,9 @@ catalog was laid out, timed and tuned against its particular error, and several
 of them cap their timestep because of it. Quietly promoting a more accurate
 scheme would change the dynamics of the whole catalog at once. Two checks in the
 validation suite exist only to notice if that ever happens, and an e2e test loads
-all forty-eight scenarios and confirms each one comes up under the default.
+every scenario in the catalog &mdash; <!--fact:scenarios-->53<!--/fact--> of
+them &mdash; and confirms each one comes up under the default. The test reads
+the catalog rather than a list, so it does not need updating when one is added.
 
 Switching is live and safe: the schemes share the same state — positions and
 velocities — and each reads it fresh, so changing the setting mid-orbit changes

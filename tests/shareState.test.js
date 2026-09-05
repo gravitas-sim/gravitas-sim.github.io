@@ -12,6 +12,7 @@ import {
   shareUrl,
   COMFORTABLE_URL_LENGTH,
 } from '../js/shareState.js';
+import { withExtras, readExtras } from '../js/experiments/canonicalState.js';
 
 // A stand-in for DEFAULT_SETTINGS: only the keys these tests touch, so the
 // suite does not have to track every setting the simulation grows.
@@ -429,5 +430,125 @@ describe('shareUrl', () => {
 
   test('exposes a sane length threshold', () => {
     expect(COMFORTABLE_URL_LENGTH).toBeGreaterThan(2000);
+  });
+});
+
+// =============================================================================
+// The observing context travels with an ordinary link
+// -----------------------------------------------------------------------------
+// Inclination, position angle, reference frame, observed star and assumed
+// distance used to be carried only for the A/B bench. They are not incidental
+// settings: they are what a sender is demonstrating, and a link that dropped
+// them reopened on a different measurement while looking like the same one.
+//
+// One codec carries them - withExtras()/readExtras() - so these tests are about
+// that codec surviving an encode, a decode, and a reader whose build predates
+// the fields entirely.
+// =============================================================================
+
+const basePayload = () =>
+  buildPayload({
+    scenario: 'Binary Star System',
+    seed: 12345,
+    settings: {},
+    DEFAULT_SETTINGS: {},
+    camera: null,
+    bodies: null,
+    paused: false,
+  });
+
+const roundTrip = async extras =>
+  readExtras(
+    await decodePayload(await encodePayload(withExtras(basePayload(), extras)))
+  );
+
+describe('the observing context survives a share link', () => {
+  const context = {
+    frame: { mode: 'body', objectId: 42 },
+    observer: { positionAngle: 137.5, inclination: 31.25 },
+    observedStarId: 7,
+    distancePc: 480.5,
+  };
+
+  test('a non-default inclination, position angle and distance come back', async () => {
+    const back = await roundTrip(context);
+    expect(back.observer.inclination).toBeCloseTo(31.25, 6);
+    expect(back.observer.positionAngle).toBeCloseTo(137.5, 6);
+    expect(back.distancePc).toBeCloseTo(480.5, 6);
+  });
+
+  test('a body-centred reference frame comes back with its target', async () => {
+    const back = await roundTrip(context);
+    expect(back.frame.mode).toBe('body');
+    expect(back.frame.objectId).toBe(42);
+  });
+
+  test('the observed star comes back', async () => {
+    expect((await roundTrip(context)).observedStarId).toBe(7);
+  });
+
+  test('a star id of zero is carried, not swallowed as falsy', async () => {
+    // Body ids start at zero, so `if (id)` would silently drop the first body
+    // in the world - which in a two-star scenario is half the cases.
+    const back = await roundTrip({ ...context, observedStarId: 0 });
+    expect(back.observedStarId).toBe(0);
+  });
+
+  test('a frame target of zero survives too', async () => {
+    const back = await roundTrip({
+      ...context,
+      frame: { mode: 'body', objectId: 0 },
+    });
+    expect(back.frame.objectId).toBe(0);
+  });
+
+  test('defaults are omitted from the encoding rather than written out', () => {
+    // The reason it is safe to put this on every link: a reader who never
+    // touched an observing control pays nothing for the feature.
+    const payload = withExtras(
+      {},
+      {
+        frame: { mode: 'world', objectId: null },
+        observer: { positionAngle: 0, inclination: 90 },
+        observedStarId: null,
+        distancePc: null,
+      }
+    );
+    expect(Object.keys(payload.x)).toEqual(['v']);
+  });
+
+  test('a link from before these fields existed reads as the defaults', async () => {
+    // Not an error: no `x` block describes a world in the world frame with an
+    // edge-on observer and no particular star, which is exactly what those
+    // links meant.
+    const back = readExtras(
+      await decodePayload(await encodePayload(basePayload()))
+    );
+    expect(back.observer).toEqual({ positionAngle: 0, inclination: 90 });
+    expect(back.frame).toEqual({ mode: 'world', objectId: null });
+    expect(back.observedStarId).toBeNull();
+    expect(back.distancePc).toBeNull();
+  });
+
+  test('an x block carrying only some fields keeps defaults for the rest', () => {
+    const back = readExtras({ x: { v: 1, inc: 12 } });
+    expect(back.observer.inclination).toBe(12);
+    expect(back.observer.positionAngle).toBe(0);
+    expect(back.distancePc).toBeNull();
+    expect(back.observedStarId).toBeNull();
+  });
+});
+
+describe('body ids travel when the restored context points at a body', () => {
+  test('packBody carries the id when asked and omits it when not', () => {
+    const state = {
+      type: 'StarObject',
+      pos: { x: 1, y: 2 },
+      vel: { x: 0, y: 0 },
+      mass: 1000,
+      id: 29,
+    };
+    expect(packBody(state, { withId: true }).id).toBe(29);
+    expect(packBody(state).id).toBeUndefined();
   });
 });

@@ -28,6 +28,7 @@ import {
   habitableZoneBounds,
   habitableZoneStatus,
 } from './habitability.js';
+import { gaussianAt, phaseCoverage, surveyStats } from './rvSurvey.js';
 import { HD209458, SUN_JUPITER } from './data/exoplanetSystems.js';
 import { formatNumber, withUnit } from './format.js';
 import { chartColors } from './observationChart.js';
@@ -1303,6 +1304,374 @@ const planetCharacterization = {
   },
 };
 
+// =============================================================================
+// 8. What a schedule can and cannot see
+// =============================================================================
+// The instrument "Can You Detect This Planet?" is built around. Everything
+// above draws the signal; this one draws what a programme with a finite number
+// of nights actually comes home with.
+//
+// It is analytic rather than integrated, for the same reason the other widgets
+// here are: a student comparing two schedules has to be able to change one and
+// see the answer, and waiting forty simulated days for the second run is not
+// comparing. The noise comes from js/rvSurvey.js, so the scatter on this plot
+// and the scatter in the live panel are drawn from the same generator and a
+// seed means the same thing in both places.
+//
+// What it must not do is announce a detection. The readout reports what was
+// observed and how surprising the scatter is if the star's velocity never
+// changed - which is a statement about constancy, not about planets - and says
+// so in as many words.
+
+/** Ten phase bins is the resolution the coverage readout quotes. */
+const PHASE_BINS = 10;
+
+/**
+ * The measurements one schedule would produce from one planet.
+ *
+ * @param {object} v - Control values
+ * @returns {object} The signal, the schedule and the points
+ */
+function sampleSchedule(v) {
+  const period = HD209458.planet.periodDays;
+  const K = radialVelocitySemiAmplitude({
+    starMassSolar: HD209458.star.massSolar,
+    planetMassJupiter: v.mp,
+    periodDays: period,
+  });
+  const n = Math.max(2, Math.round(v.n));
+  const cadence = Math.max(0.01, v.cadence);
+  const sigma = Math.max(0, v.sigma);
+
+  const points = [];
+  for (let i = 0; i < n; i++) {
+    const day = i * cadence;
+    const truth = -K * Math.sin((TAU * day) / period);
+    points.push({
+      index: i,
+      day,
+      truth,
+      rv: truth + (sigma > 0 ? sigma * gaussianAt(v.seed ?? 1, i) : 0),
+      sigma,
+    });
+  }
+  return { period, K, cadence, sigma, n, points };
+}
+
+const surveySchedule = {
+  id: 'survey-schedule',
+  get title() {
+    return t('exoW.whatYourScheduleSees');
+  },
+  get note() {
+    return t('exoW.theDashedCurveIsTheTruth');
+  },
+  controls: [
+    {
+      id: 'cadence',
+      get label() {
+        return t('exoW.daysBetweenMeasurements');
+      },
+      unit: 'd',
+      min: 0.05,
+      max: 8,
+      step: 0.01,
+      value: 0.32,
+      decimals: 2,
+    },
+    {
+      id: 'n',
+      get label() {
+        return t('exoW.numberOfMeasurements');
+      },
+      unit: '',
+      min: 4,
+      max: 40,
+      step: 1,
+      value: 12,
+      decimals: 0,
+    },
+    {
+      id: 'sigma',
+      get label() {
+        return t('exoW.measurementUncertainty');
+      },
+      unit: 'm/s',
+      min: 0,
+      max: 40,
+      step: 0.5,
+      value: 8,
+      decimals: 1,
+    },
+    {
+      id: 'mp',
+      get label() {
+        return t('exoW.planetMass');
+      },
+      unit: 'M_J',
+      min: 0.01,
+      max: 3,
+      step: 0.01,
+      value: 0.69,
+      decimals: 2,
+    },
+    {
+      id: 'seed',
+      get label() {
+        return t('exoW.noiseSeed');
+      },
+      unit: '',
+      min: 1,
+      max: 40,
+      step: 1,
+      value: 1,
+      decimals: 0,
+    },
+  ],
+  presets: [
+    {
+      get label() {
+        return t('exoW.scheduleAIntensive');
+      },
+      values: { cadence: 0.32, n: 12, sigma: 8, mp: 0.69 },
+      get note() {
+        return t('exoW.scheduleAIntensive.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.scheduleBPatient');
+      },
+      values: { cadence: 3.52, n: 12, sigma: 8, mp: 0.69 },
+      get note() {
+        return t('exoW.scheduleBPatient.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.aSmallerPlanet');
+      },
+      values: { cadence: 0.32, n: 12, sigma: 8, mp: 0.06 },
+      get note() {
+        return t('exoW.aSmallerPlanet.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.aBetterSpectrograph');
+      },
+      values: { cadence: 0.32, n: 12, sigma: 1, mp: 0.06 },
+      get note() {
+        return t('exoW.aBetterSpectrograph.note');
+      },
+    },
+  ],
+  compute(v) {
+    const s = sampleSchedule(v);
+    const stats = surveyStats(s.points, { periodDays: s.period });
+    const coverage = phaseCoverage(
+      s.points.map(p => p.day),
+      s.period,
+      PHASE_BINS
+    );
+    return { ...s, stats, coverage, baseline: (s.n - 1) * s.cadence };
+  },
+  draw(canvas, v) {
+    const { ctx, w, h } = surface(canvas, responsiveHeight(250, 170));
+    const th = chartColors();
+    const c = this.compute(v);
+
+    // The vertical scale is the planet's own amplitude plus a few error bars,
+    // so a run that sees nothing looks like a run that sees nothing rather
+    // than being auto-scaled up into a convincing wiggle. That auto-scaling is
+    // the single most misleading thing a plot of a nondetection can do.
+    const span = Math.max(c.K * 1.25, c.sigma * 3, 1);
+
+    const gap = 26;
+    const boxW = (w - 78 - gap) / 2;
+    const left = { x: 52, y: 16, w: boxW, h: h - 66 };
+    const right = { x: 52 + boxW + gap, y: 16, w: boxW, h: h - 66 };
+
+    const yOf = (box, rv) => box.y + box.h / 2 - (rv / span) * (box.h / 2 - 6);
+
+    /** Zero, where the systemic velocity sits. */
+    const zeroLine = box => {
+      ctx.strokeStyle = th.grid;
+      ctx.beginPath();
+      ctx.moveTo(box.x, yOf(box, 0));
+      ctx.lineTo(box.x + box.w, yOf(box, 0));
+      ctx.stroke();
+    };
+
+    /** One measurement, with its error bar. Points, never a joining line. */
+    const drawPoint = (box, x, rv, sigma) => {
+      const y = yOf(box, rv);
+      if (sigma > 0) {
+        const half = (sigma / span) * (box.h / 2 - 6);
+        ctx.strokeStyle = th.accent;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y - half);
+        ctx.lineTo(x, y + half);
+        ctx.moveTo(x - 2.5, y - half);
+        ctx.lineTo(x + 2.5, y - half);
+        ctx.moveTo(x - 2.5, y + half);
+        ctx.lineTo(x + 2.5, y + half);
+        ctx.stroke();
+      }
+      ctx.fillStyle = th.accent;
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, TAU);
+      ctx.fill();
+    };
+
+    // --- Left: the run as it happened, against the clock ---------------------
+    drawFrame(ctx, left, { x: t('exoW.daysAxis'), y: 'RV (m/s)' }, th);
+    zeroLine(left);
+
+    const totalDays = Math.max(c.baseline, c.cadence);
+    const xTime = day => left.x + (day / Math.max(totalDays, 1e-6)) * left.w;
+
+    // The truth, dashed and labelled. It is drawn only across the span the
+    // programme actually covered: extending it past the last night would be
+    // showing a curve nobody observed.
+    ctx.save();
+    ctx.strokeStyle = th.label;
+    ctx.globalAlpha = 0.55;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    const steps = 400;
+    for (let i = 0; i <= steps; i++) {
+      const day = (i / steps) * totalDays;
+      const rv = -c.K * Math.sin((TAU * day) / c.period);
+      const x = xTime(day);
+      const y = yOf(left, rv);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    for (const p of c.points) drawPoint(left, xTime(p.day), p.rv, p.sigma);
+
+    // --- Right: the same points folded on the period -------------------------
+    drawFrame(ctx, right, { x: t('exoW.phaseAxis'), y: '' }, th);
+    zeroLine(right);
+
+    // The phase bins the coverage number counts, so the reader can see which
+    // ones are empty rather than taking "2 of 10" on trust.
+    ctx.strokeStyle = th.grid;
+    ctx.globalAlpha = 0.5;
+    for (let i = 1; i < PHASE_BINS; i++) {
+      const x = right.x + (i / PHASE_BINS) * right.w;
+      ctx.beginPath();
+      ctx.moveTo(x, right.y);
+      ctx.lineTo(x, right.y + right.h);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.save();
+    ctx.strokeStyle = th.label;
+    ctx.globalAlpha = 0.55;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const phase = i / steps;
+      const rv = -c.K * Math.sin(TAU * phase);
+      const x = right.x + phase * right.w;
+      const y = yOf(right, rv);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    for (const p of c.points) {
+      let phase = (p.day / c.period) % 1;
+      if (phase < 0) phase += 1;
+      drawPoint(right, right.x + phase * right.w, p.rv, p.sigma);
+    }
+
+    // The overlay has to be labelled wherever it is drawn. A dashed line a
+    // student takes for data is worse than no line.
+    //
+    // Each caption is shrunk to fit the panel it belongs to rather than being
+    // set at a fixed size: the Spanish strings are half again as long as the
+    // English, and at 10px they ran into each other and read as one sentence.
+    ctx.fillStyle = th.label;
+    ctx.textAlign = 'center';
+    const caption = (text, box) => {
+      for (let size = 10; size >= 7; size--) {
+        ctx.font = `${size}px system-ui, sans-serif`;
+        if (ctx.measureText(text).width <= box.w || size === 7) break;
+      }
+      ctx.fillText(text, box.x + box.w / 2, h - 8);
+    };
+    caption(t('exoW.idealSignalOverlay'), left);
+    caption(t('exoW.foldedOnTheTruePeriod'), right);
+    ctx.textAlign = 'left';
+  },
+  readout(v) {
+    const c = this.compute(v);
+    const st = c.stats;
+    const rows = [
+      {
+        get label() {
+          return t('exoW.measurementsTaken');
+        },
+        value: `${c.n} over ${withUnit(formatNumber(c.baseline, { sig: 3 }), 'd')}`,
+      },
+      {
+        get label() {
+          return t('exoW.phaseCoverage');
+        },
+        value: `${c.coverage.covered} / ${c.coverage.bins} ${t('exoW.binsOfTheCycle')}`,
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('exoW.scatterOfTheMeasurements');
+        },
+        value: withUnit(formatNumber(st.rms, { sig: 3 }), 'm/s'),
+      },
+      {
+        get label() {
+          return t('exoW.scatterExpectedFromNoise');
+        },
+        value: withUnit(formatNumber(c.sigma, { sig: 3 }), 'm/s'),
+      },
+    ];
+
+    // Chi-square needs error bars. A noiseless run has none, and saying so is
+    // better than dividing by zero and reporting infinity.
+    rows.push(
+      st.chi
+        ? {
+            get label() {
+              return t('exoW.scatterVsConstantVelocity');
+            },
+            value: `χ²/dof = ${formatNumber(st.chi.reduced, { sig: 3 })}`,
+            emphasis: true,
+          }
+        : {
+            get label() {
+              return t('exoW.scatterVsConstantVelocity');
+            },
+            value: t('exoW.needsAnErrorBar'),
+          }
+    );
+
+    rows.push({
+      get label() {
+        return t('exoW.whatThatDoesNotSay');
+      },
+      value: t('exoW.excessScatterIsNotAPlanet'),
+    });
+    return rows;
+  },
+};
+
 /** Every instrument this lesson uses. */
 export const EXOPLANET_WIDGETS = [
   reflexMotion,
@@ -1312,4 +1681,5 @@ export const EXOPLANET_WIDGETS = [
   astrometrySignature,
   methodComparison,
   planetCharacterization,
+  surveySchedule,
 ];

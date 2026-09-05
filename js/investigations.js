@@ -134,11 +134,66 @@ export const isAuthoringPreview = () => authoring !== null;
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
 
+/**
+ * Whether the last write reached the disk, and what went wrong if not.
+ *
+ * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'
+ *
+ * This used to be swallowed entirely - the comment said progress was "not worth
+ * an alert", which is true of a toast and false of the reader's forty minutes
+ * of work. A student in a private window, or on a machine whose disk is full,
+ * was told nothing at all and found out when they closed the tab.
+ */
+let saveState = { status: 'idle', at: null };
+
+/** @returns {{status: string, at: ?number}} The last write's outcome */
+export const progressSaveState = () => ({ ...saveState });
+
+function setSaveState(status) {
+  if (saveState.status === status) {
+    // Same outcome as last time: refresh the timestamp for a success so the
+    // reader sees it is still saving, but do not re-render a standing warning
+    // on every keystroke.
+    if (status === 'saved') saveState.at = Date.now();
+    else return;
+  } else {
+    saveState = { status, at: Date.now() };
+  }
+  renderSaveStatus();
+}
+
+/**
+ * Tell a failed write apart from a refused one.
+ *
+ * A quota error is recoverable by the reader - they can free space, or take a
+ * backup and clear old lessons. A SecurityError in a private window is not, and
+ * saying "storage is full" there would send them looking for space they have
+ * plenty of.
+ *
+ * @param {*} err - Whatever setItem threw
+ * @returns {'full'|'unavailable'} Which kind
+ */
+function classifyStorageError(err) {
+  const name = err?.name || '';
+  if (
+    name === 'QuotaExceededError' ||
+    name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    err?.code === 22 ||
+    err?.code === 1014
+  ) {
+    return 'full';
+  }
+  return 'unavailable';
+}
+
 function save() {
   if (!active) return;
   // An author looking at step 30 of Tides must not overwrite the progress of
   // whoever is working through Tides on this machine.
-  if (authoring) return;
+  if (authoring) {
+    setSaveState('authoring');
+    return;
+  }
   try {
     localStorage.setItem(
       storageKey(active.id),
@@ -150,8 +205,153 @@ function save() {
         startedAt,
       })
     );
+    setSaveState('saved');
+  } catch (err) {
+    // The answers stay in memory and the lesson keeps working; what changes is
+    // that the reader is told, once, and given a way to take the work with
+    // them.
+    setSaveState(classifyStorageError(err));
+  }
+}
+
+/**
+ * Show whether the work is safe, without shouting about it.
+ *
+ * A polite live region, not a toast: a toast for a storage failure would fire
+ * on every keystroke, and the one thing a reader needs here is a message that
+ * *stays* until the situation changes. Successes announce nothing - the text is
+ * there to be looked at, and a screen reader being told "saved" forty times
+ * while typing an answer is worse than silence.
+ */
+function renderSaveStatus() {
+  const el = els?.saveStatus;
+  if (!el) return;
+  const { status } = saveState;
+
+  const text = {
+    saved: t('inv.save.saved'),
+    full: t('inv.save.full'),
+    unavailable: t('inv.save.unavailable'),
+    authoring: t('inv.save.authoring'),
+    idle: '',
+  }[status];
+
+  el.textContent = text || '';
+  el.hidden = !text;
+  el.dataset.state = status;
+  // Only a problem interrupts. aria-live is set rather than removed so the
+  // element keeps its identity across renders.
+  el.setAttribute(
+    'aria-live',
+    status === 'full' || status === 'unavailable' ? 'polite' : 'off'
+  );
+}
+
+/**
+ * Write the active lesson's progress to a file the reader keeps.
+ *
+ * Lazily imported: the backup format, its validator and the remapping logic are
+ * only needed by a reader who asks for them, and the lesson engine is already
+ * the heaviest thing in the application.
+ */
+async function downloadProgressBackup() {
+  if (!active) return;
+  const backup = await import('./investigations/progressBackup.js');
+  const payload = backup.buildBackup({
+    lesson: active,
+    responses,
+    attempts,
+    visited,
+    stepIndex,
+    startedAt,
+    studentName: getStudentName(),
+  });
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: 'application/json',
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = backup.backupFilename(active);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  announce(t('inv.backup.downloaded'));
+}
+
+/**
+ * Read a backup file and, with the reader's agreement, become it.
+ *
+ * Everything about this is deliberately cautious: a restore replaces work, and
+ * a reader who picked the wrong file should not discover that afterwards.
+ *
+ * @param {File} file - The chosen file
+ */
+async function restoreProgressBackup(file) {
+  if (!active || !file) return;
+  const backup = await import('./investigations/progressBackup.js');
+
+  if (file.size > backup.MAX_BACKUP_BYTES) {
+    toast(t('inv.backup.tooLarge'));
+    return;
+  }
+
+  let data;
+  try {
+    data = JSON.parse(await file.text());
   } catch {
-    /* private mode, or the quota is full; progress is not worth an alert */
+    toast(t('inv.backup.notJson'));
+    return;
+  }
+
+  const verdict = backup.validateBackup(data);
+  if (!verdict.ok) {
+    toast(t(`inv.backup.invalid.${verdict.reason}`));
+    return;
+  }
+
+  if (data.lesson.id !== active.id) {
+    toast(
+      t('inv.backup.wrongLesson', {
+        backup: data.lesson.title || data.lesson.id,
+        open: active.title,
+      })
+    );
+    return;
+  }
+
+  // The explicit choice. Anything already answered is work, and replacing it
+  // is the reader's decision to make rather than a consequence of choosing a
+  // file.
+  const answered = Object.keys(responses).length;
+  if (answered > 0) {
+    const ok = window.confirm(t('inv.backup.confirmReplace', { n: answered }));
+    if (!ok) return;
+  }
+
+  const restored = backup.restoreProgress(data, active);
+  responses = restored.responses;
+  attempts = restored.attempts;
+  visited = restored.visited;
+  startedAt = restored.startedAt || new Date().toISOString();
+  save();
+  goToStep(restored.stepIndex, { rebuild: true });
+
+  // What could not be carried across, said plainly. A lesson that has changed
+  // since the backup was taken is the ordinary case over a term, not an error.
+  if (restored.dropped.length || restored.discardedKeys) {
+    toast(
+      t('inv.backup.restoredPartly', {
+        dropped: restored.dropped.length,
+        moved: restored.moved.length,
+      })
+    );
+  } else if (restored.moved.length) {
+    toast(t('inv.backup.restoredMoved', { moved: restored.moved.length }));
+  } else {
+    toast(t('inv.backup.restored'));
   }
 }
 
@@ -1476,6 +1676,13 @@ function refreshMeasurements() {
 function renderFooter() {
   const step = currentStep();
   if (authoring?.render) authoring.render(active, stepIndex);
+  renderSaveStatus();
+  // An authoring preview has no progress to back up and must not write any, so
+  // the controls that do both are not offered. The status line still shows,
+  // saying why nothing is being saved.
+  const safety = els.backupDownload?.closest('.inv-progress-safety');
+  const actions = safety?.querySelector('.inv-backup-actions');
+  if (actions) actions.hidden = Boolean(authoring);
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
     stepIndex === active.steps.length - 1
@@ -2352,6 +2559,10 @@ export function initInvestigations() {
     close: document.getElementById('investigationClose'),
     progressBar: document.getElementById('investigationProgressBar'),
     progressText: document.getElementById('investigationProgressText'),
+    saveStatus: document.getElementById('investigationSaveStatus'),
+    backupDownload: document.getElementById('investigationBackupDownload'),
+    backupRestore: document.getElementById('investigationBackupRestore'),
+    backupFile: document.getElementById('investigationBackupFile'),
     finish: document.getElementById('investigationFinish'),
     finishSummary: document.getElementById('investigationFinishSummary'),
     nameInput: document.getElementById('investigationName'),
@@ -2459,6 +2670,22 @@ export function initInvestigations() {
   // That is what makes an investigation assignable, and what the instructor
   // resources link to. Shared simulation links use a different hash shape
   // (digits followed by z or r), so the two cannot be confused.
+  els.backupDownload?.addEventListener('click', () => {
+    downloadProgressBackup().catch(() => toast(t('inv.backup.failed')));
+  });
+  // The button opens the picker; the input does the work. A bare file input in
+  // the footer would be a permanent piece of browser chrome in a teaching
+  // panel, and it cannot be styled to match.
+  els.backupRestore?.addEventListener('click', () => els.backupFile?.click());
+  els.backupFile?.addEventListener('change', event => {
+    const file = event.target.files?.[0];
+    // Reset first, so choosing the same file twice fires again.
+    event.target.value = '';
+    if (file) {
+      restoreProgressBackup(file).catch(() => toast(t('inv.backup.failed')));
+    }
+  });
+
   openInvestigationFromHash();
   window.addEventListener('hashchange', openInvestigationFromHash);
 

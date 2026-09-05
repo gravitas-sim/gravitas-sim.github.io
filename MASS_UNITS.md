@@ -153,7 +153,7 @@ opens with.
 
 ### The scenario sweep
 
-Thirty-one of the forty-eight shipped scenarios contain asteroids or comets.
+Of the <!--fact:scenarios-->53<!--/fact--> shipped scenarios, <!--fact:smallBodyScenarios-->31<!--/fact--> contain asteroids or comets.
 `tools/small-body-sweep.mjs` runs all of them for thirty seconds of simulated
 time from a fixed seed and records surviving body counts, collision events and
 their timing, peak debris, ejections, and the median fractional change in the
