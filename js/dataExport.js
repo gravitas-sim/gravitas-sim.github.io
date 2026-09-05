@@ -323,6 +323,12 @@ export const RADIAL_VELOCITY_COLUMNS = [
   't_days',
   'rv_ms',
   'rv_err_ms',
+  // How the value was arrived at: ok, degraded, or missed. A row is written for
+  // a missed epoch too, with an empty velocity - omitting it would say the
+  // programme was shorter than it was, and the gaps in a schedule are the thing
+  // this file exists to preserve.
+  'quality',
+  'interp_err_ms',
   'target',
   'target_id',
   'inclination_deg',
@@ -363,8 +369,12 @@ export function radialVelocityCsv() {
   for (const m of run.measurements) {
     rows.push([
       num(m.day),
-      num(m.rv),
-      num(m.sigma),
+      // Empty rather than zero: a missed epoch has no velocity, and a zero
+      // would be averaged in by anything that read the column naively.
+      m.rv === null || m.rv === undefined ? '' : num(m.rv),
+      m.sigma === null || m.sigma === undefined ? '' : num(m.sigma),
+      csvField(m.quality || 'ok'),
+      num(m.interpolationError || 0, 4),
       csvField(name),
       id === undefined || id === null ? '' : String(id),
       num(run.inclinationDeg, 4),
@@ -375,7 +385,17 @@ export function radialVelocityCsv() {
     ]);
   }
 
-  return { csv: toCsv(rows), rows: rows.length - 1, target: name || null };
+  const missed = run.measurements.filter(m => m.missed).length;
+  const degraded = run.measurements.filter(
+    m => m.quality === 'degraded'
+  ).length;
+  return {
+    csv: toCsv(rows),
+    rows: rows.length - 1,
+    target: name || null,
+    missed,
+    degraded,
+  };
 }
 
 // --- What there is to export --------------------------------------------------
@@ -396,6 +416,11 @@ export function exportSummary() {
     samples: curve.days.length,
     transits: log.length,
     rvMeasurements: run.measurements.length,
+    rvUsable: run.measurements.filter(
+      m => !m.missed && m.quality !== 'degraded'
+    ).length,
+    rvMissed: run.measurements.filter(m => m.missed).length,
+    rvDegraded: run.measurements.filter(m => m.quality === 'degraded').length,
     rvPlanned: run.planned,
     rvRunning: run.running,
   };

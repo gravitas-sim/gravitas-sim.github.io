@@ -579,9 +579,6 @@ export function starIsHeldFixed() {
  */
 export function updateRadialVelocity() {
   if (!enabled) return;
-  const now = performance.now();
-  if (now - lastSampleAt < SAMPLE_INTERVAL_MS) return;
-  lastSampleAt = now;
 
   const star = observedStar();
   const current = currentSessionKey();
@@ -641,6 +638,30 @@ export function updateRadialVelocity() {
     return;
   }
 
+  // --- Scientific sampling, every frame ---------------------------------------
+  // The schedule decides which instants are measurements, and it is given the
+  // simulation clock. It must see every frame: the value at a scheduled epoch
+  // is interpolated between the readings either side of it, so thinning the
+  // readings for the sake of drawing would coarsen the measurements. Render
+  // throttling is a decision about a picture and has no business here.
+  if (survey) {
+    const added = survey.observe(simTime, rv);
+    if (added.length) {
+      if (chart) chart.data.datasets[1].data = surveyChartPoints();
+      renderSurveyStatus();
+    }
+  }
+
+  // --- The drawn curve, throttled ----------------------------------------------
+  // Sixty samples a second is a slower chart and not a better one, and this
+  // series is a picture of the signal rather than a measurement of it.
+  const now = performance.now();
+  if (now - lastSampleAt < SAMPLE_INTERVAL_MS) {
+    renderReadout();
+    return;
+  }
+  lastSampleAt = now;
+
   series.push({ x: simTime, y: rv });
   if (series.length > MAX_SAMPLES) {
     // With a run in progress the continuous curve is the overlay behind the
@@ -654,17 +675,6 @@ export function updateRadialVelocity() {
   recordedSession = current;
   lastSampleTime = simTime;
   targetStarId = current.starId;
-
-  // The schedule decides which of these instants was a measurement. It is given
-  // the simulation clock rather than the wall clock, so what it records does
-  // not depend on how fast this browser is drawing.
-  if (survey) {
-    const added = survey.observe(simTime, rv);
-    if (added.length) {
-      if (chart) chart.data.datasets[1].data = surveyChartPoints();
-      renderSurveyStatus();
-    }
-  }
 
   if (chart) {
     chart.data.datasets[0].data = series;
@@ -970,6 +980,11 @@ export function setRadialVelocityEnabled(on) {
     }
     renderReadout();
   } else {
+    // A run does not end when the panel is hidden, but observing stops. Epochs
+    // that fall due before it reopens are recorded as missed rather than
+    // reconstructed from the two readings either side of the gap.
+    survey?.suspend(currentTimeDays());
+
     // Closed means closed: listeners released, so an unopened panel costs
     // nothing and reopening does not stack a second subscription.
     unsubscribeObserver?.();

@@ -67,18 +67,38 @@ const MIN_CADENCE_DAYS = 1e-3;
 const MAX_EPOCHS = 2000;
 
 /**
- * A measurement whose bracketing frames are further apart than this fraction
- * of the cadence is flagged.
+ * How much interpolation error a measurement may carry and still be `ok`.
  *
- * The value read at an epoch comes from interpolating between two render
- * frames. That is exact for a signal the frames resolve and meaningless for one
- * they do not: at 60x speed with a 3.5-day period, consecutive frames can be a
- * quarter of a cycle apart, and a straight line between them cuts the corner
- * off every peak. The measurement is still recorded - it is what the simulation
- * can say - and it is marked, so the panel can tell the reader to slow down
- * rather than quietly handing them flattened extremes.
+ * In metres per second, because that is the unit the number is in and the unit
+ * a reader judges it in: 0.5 m/s is below the precision of every instrument the
+ * lesson talks about, so a measurement inside this tolerance is limited by the
+ * stated uncertainty rather than by how the simulation was sampled.
+ *
+ * This replaces a threshold on the *frame gap as a fraction of the cadence*,
+ * which could not establish accuracy and did not try to. Whether a straight
+ * line between two frames reproduces the curve between them depends on how
+ * sharply the curve bends there - on the orbital period and the eccentricity -
+ * and not at all on how often the observer intended to look. A run with a
+ * ten-day cadence and frames a day apart passed that test while cutting the
+ * corner off every peak; a run with an hourly cadence and frames a minute apart
+ * failed it while being exact.
  */
-const GAP_WARN_FRACTION = 0.5;
+export const INTERPOLATION_TOLERANCE_MS = 0.5;
+
+/**
+ * How the value at a scheduled epoch was arrived at.
+ *
+ *   ok        interpolated between frames that resolve the curve
+ *   degraded  interpolated, but the frames were too coarse to trust to the
+ *             tolerance above; the value is reported and flagged
+ *   missed    nobody was observing when this epoch came due, so there is no
+ *             value at all
+ */
+export const QUALITY = Object.freeze({
+  OK: 'ok',
+  DEGRADED: 'degraded',
+  MISSED: 'missed',
+});
 
 /**
  * Turn whatever a control or a lesson supplied into a usable configuration.
@@ -187,6 +207,28 @@ export function gaussianAt(seed, index) {
  * @param {object} [config] - Partial configuration; see normalizeSurveyConfig
  * @returns {object} The run
  */
+/**
+ * One entry in a run, whether or not it holds a value.
+ *
+ * A missed epoch is still an entry: the schedule wanted a measurement then, and
+ * a file that simply omits the row says the programme was shorter than it was.
+ *
+ * @returns {object} The measurement
+ */
+function record(index, day, rv, truth, quality, gapDays, sigma, error = 0) {
+  return {
+    index,
+    day,
+    rv,
+    truth,
+    sigma: rv === null ? null : sigma,
+    quality,
+    gapDays,
+    interpolationError: error,
+    missed: quality === QUALITY.MISSED,
+  };
+}
+
 export function createSurvey(config = {}) {
   const cfg = normalizeSurveyConfig(config);
   const total = epochCount(cfg);
@@ -197,11 +239,68 @@ export function createSurvey(config = {}) {
   let next = 0;
   /** When the run started, in simulated days. Set by the first observation. */
   let startDay = null;
-  /** The previous continuous reading, for interpolating onto an epoch. */
-  let previous = null;
+  /**
+   * The last three readings, newest last.
+   *
+   * Three rather than one, because two points can only ever say what a straight
+   * line between them says. With three, a quadratic through them gives a second
+   * opinion, and the gap between the two is an estimate of how much the linear
+   * interpolation is missing - which is the only thing that can decide whether
+   * a measurement is accurate.
+   */
+  let history = [];
+  /**
+   * Simulation time at which observing stopped, or null while it is running.
+   *
+   * Set by suspend(). Epochs that came due while this was set are marked missed
+   * rather than reconstructed: the panel was closed or the run was stopped, so
+   * nobody was watching, and inventing values across the gap would be
+   * fabricating the observations the lesson is about not fabricating.
+   */
+  let suspendedAt = null;
 
   /** @param {number} k - Epoch index @returns {number} Its scheduled time */
   const epochTime = k => startDay + k * cfg.cadenceDays;
+
+  /**
+   * The value at `when`, and how much the straight line is likely to be wrong.
+   *
+   * Linear between the two bracketing readings, as before. The error estimate
+   * is the difference from a quadratic through the last three, evaluated at the
+   * same instant: where the curve is locally straight the two agree and the
+   * estimate is near zero, and where it bends they diverge by roughly the
+   * amount the straight line is cutting off.
+   *
+   * @param {number} when - The scheduled epoch
+   * @param {object} left - The reading before it
+   * @param {object} right - The reading after it
+   * @returns {{value: number, error: number}} The reading and its error estimate
+   */
+  const interpolate = (when, left, right) => {
+    const span = right.day - left.day;
+    const f = span > 0 ? (when - left.day) / span : 0;
+    const value = left.rv + (right.rv - left.rv) * f;
+
+    // A third point, from before the bracket, turns the straight line into a
+    // parabola. Without one - the first epoch of a run - there is nothing to
+    // compare against and the estimate is honestly unknown, reported as zero
+    // and paired with a `degraded` mark only if the gap is also implausible.
+    const third = history.length >= 3 ? history[history.length - 3] : null;
+    if (!third || third.day === left.day || third.day === right.day) {
+      return { value, error: 0 };
+    }
+    const pts = [third, left, right];
+    let quad = 0;
+    for (let i = 0; i < 3; i++) {
+      let term = pts[i].rv;
+      for (let j = 0; j < 3; j++) {
+        if (i === j) continue;
+        term *= (when - pts[j].day) / (pts[i].day - pts[j].day);
+      }
+      quad += term;
+    }
+    return { value, error: Math.abs(quad - value) };
+  };
 
   return {
     config: cfg,
@@ -211,7 +310,24 @@ export function createSurvey(config = {}) {
     },
 
     /**
+     * Stop observing, without ending the run.
+     *
+     * Called when the panel closes or the instrument is switched off. Epochs
+     * that fall due before observing resumes are recorded as missed.
+     *
+     * @param {number} simDay - The clock when observing stopped
+     */
+    suspend(simDay) {
+      if (Number.isFinite(simDay) && suspendedAt === null) suspendedAt = simDay;
+      history = [];
+    },
+
+    /**
      * Offer the run a continuous reading of the signal.
+     *
+     * Must be called from the simulation's own loop, on every frame, not from
+     * anything throttled for the sake of drawing. The schedule decides which
+     * instants are measurements; the render rate must not.
      *
      * @param {number} simDay - The simulation clock, in days
      * @param {number} trueRv - The star's radial velocity now, in m/s
@@ -221,45 +337,74 @@ export function createSurvey(config = {}) {
       if (!Number.isFinite(simDay) || !Number.isFinite(trueRv)) return [];
 
       if (startDay === null) startDay = simDay;
+      const previous = history.length ? history[history.length - 1] : null;
+      const resuming = suspendedAt !== null;
+      suspendedAt = null;
 
+      const reading = { day: simDay, rv: trueRv };
       const added = [];
+
       while (next < total) {
         const when = epochTime(next);
         // Not yet. The reading is kept as the left bracket for whenever the
         // epoch does arrive.
         if (when > simDay) break;
 
-        // Where the signal was at `when`. With no earlier reading - the first
-        // epoch, which falls on the first call - there is nothing to
-        // interpolate and the reading is the value.
-        let truth = trueRv;
-        let gapDays = 0;
-        if (previous && previous.day < when) {
-          const span = simDay - previous.day;
-          gapDays = span;
-          const f = span > 0 ? (when - previous.day) / span : 0;
-          truth = previous.rv + (trueRv - previous.rv) * f;
+        const gapDays = previous ? simDay - previous.day : 0;
+
+        // Nobody was watching. Either observing was explicitly suspended over
+        // this epoch, or the readings either side of it are more than a whole
+        // cadence apart, which means the loop was not running - a closed panel,
+        // a backgrounded tab. Both are the same fact and neither is a licence
+        // to invent a value.
+        //
+        // Checked before the first-reading case below, because suspend() clears
+        // the history: without this ordering the first epoch after a resume
+        // looked like the first epoch of a run and was recorded as a clean
+        // measurement of an instant nobody observed.
+        if (resuming || (previous && gapDays > cfg.cadenceDays)) {
+          taken.push(
+            record(next, when, null, null, QUALITY.MISSED, gapDays, cfg.sigmaMs)
+          );
+          added.push(taken[taken.length - 1]);
+          next++;
+          continue;
         }
 
+        // The first epoch of a run falls on the first reading: there is nothing
+        // to interpolate and the reading is the value.
+        if (!previous || previous.day >= when) {
+          taken.push(
+            record(next, when, trueRv, trueRv, QUALITY.OK, 0, cfg.sigmaMs)
+          );
+          added.push(taken[taken.length - 1]);
+          next++;
+          continue;
+        }
+
+        const { value, error } = interpolate(when, previous, reading);
+        const quality =
+          error <= INTERPOLATION_TOLERANCE_MS ? QUALITY.OK : QUALITY.DEGRADED;
         const noise =
           cfg.sigmaMs > 0 ? cfg.sigmaMs * gaussianAt(cfg.seedValue, next) : 0;
-        const m = {
-          index: next,
-          day: when,
-          rv: truth + noise,
-          sigma: cfg.sigmaMs,
-          truth,
-          gapDays,
-          // A measurement the frames could not resolve. Recorded and marked,
-          // not silently dropped and not silently trusted.
-          coarse: gapDays > cfg.cadenceDays * GAP_WARN_FRACTION,
-        };
-        taken.push(m);
-        added.push(m);
+        taken.push(
+          record(
+            next,
+            when,
+            value + noise,
+            value,
+            quality,
+            gapDays,
+            cfg.sigmaMs,
+            error
+          )
+        );
+        added.push(taken[taken.length - 1]);
         next++;
       }
 
-      previous = { day: simDay, rv: trueRv };
+      history.push(reading);
+      if (history.length > 3) history.shift();
       return added;
     },
 
@@ -273,15 +418,33 @@ export function createSurvey(config = {}) {
     startedAt: () => startDay,
     /** @returns {?number} When the last scheduled measurement falls due */
     endsAt: () => (startDay === null ? null : epochTime(total - 1)),
-    /** @returns {boolean} Whether any measurement outran the frame rate */
-    anyCoarse: () => taken.some(m => m.coarse),
+    /**
+     * How the run went, in the terms a reader needs before trusting it.
+     *
+     * @returns {{ok: number, degraded: number, missed: number,
+     *   worstError: number}} The tally
+     */
+    quality: () => ({
+      ok: taken.filter(m => m.quality === QUALITY.OK).length,
+      degraded: taken.filter(m => m.quality === QUALITY.DEGRADED).length,
+      missed: taken.filter(m => m.quality === QUALITY.MISSED).length,
+      worstError: taken.reduce(
+        (w, m) => Math.max(w, m.interpolationError || 0),
+        0
+      ),
+    }),
+
+    /** @returns {boolean} Whether any measurement is less than trustworthy */
+    anyCoarse: () =>
+      taken.some(m => m.quality === QUALITY.DEGRADED || m.missed),
 
     /** Throw the run away and wait for a new first reading. */
     reset() {
       taken = [];
       next = 0;
       startDay = null;
-      previous = null;
+      history = [];
+      suspendedAt = null;
     },
   };
 }
@@ -362,7 +525,20 @@ export function phaseCoverage(days, periodDays, bins = 10) {
  * @returns {?object} The description, or null with nothing to describe
  */
 export function surveyStats(points, opts = {}) {
-  const usable = points.filter(p => Number.isFinite(p.rv));
+  // Only measurements that are measurements, unless a caller asks otherwise.
+  // A missed epoch has no value to average, and a degraded one is a reading of
+  // the simulation's frame rate as much as of the star; letting either into a
+  // scatter or a chi-square reports a number about the software as though it
+  // were a number about the sky.
+  const { includeDegraded = false } = opts;
+  const all = Array.isArray(points) ? points : [];
+  const usable = all.filter(
+    p =>
+      Number.isFinite(p.rv) &&
+      !p.missed &&
+      (includeDegraded || p.quality === undefined || p.quality === QUALITY.OK)
+  );
+  const excluded = all.length - usable.length;
   if (!usable.length) return null;
 
   const values = usable.map(p => p.rv);
@@ -383,6 +559,12 @@ export function surveyStats(points, opts = {}) {
 
   return {
     n: usable.length,
+    // Said out loud, because "twelve measurements" and "twelve measurements of
+    // which four were missed" support very different claims.
+    excluded,
+    planned: all.length,
+    missed: all.filter(p => p.missed).length,
+    degraded: all.filter(p => p.quality === QUALITY.DEGRADED).length,
     firstDay: Math.min(...days),
     lastDay: Math.max(...days),
     baselineDays: Math.max(...days) - Math.min(...days),
@@ -394,6 +576,6 @@ export function surveyStats(points, opts = {}) {
     sigma,
     chi: constantVelocityChiSquare(usable),
     coverage: phaseCoverage(days, opts.periodDays),
-    coarse: usable.some(p => p.coarse),
+    coarse: all.some(p => p.quality === QUALITY.DEGRADED),
   };
 }

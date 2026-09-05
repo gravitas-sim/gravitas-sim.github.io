@@ -9,8 +9,9 @@
 // The spine is one comparison. Twelve measurements of the same star, at the
 // same precision, taken on two different schedules: one spread across a single
 // orbit, one taken at intervals of almost exactly one orbit. The first is
-// unambiguous. The second - eleven times the baseline, the same number of
-// nights, the same instrument - is a shrug. Nothing about the planet changed.
+// unambiguous about the star's velocity varying. The second - eleven times the
+// baseline, the same number of nights, the same instrument - cannot establish
+// even that, though it is not empty either. Nothing about the planet changed.
 //
 // Everything the student needs to see that lives in two places: the
 // `survey-schedule` widget in js/exoplanetWidgets.js, which is analytic so the
@@ -448,16 +449,23 @@ const DETECT_THIS_PLANET = {
       title: 'What you decided before you looked',
       body: `Twelve measurements. One instrument. One planet, which was there the
              whole time.
-             \n\nSchedule A found it beyond argument. Schedule B, with eleven
-             times the baseline and not one measurement fewer, came home with a
-             shrug - and a student handed only Schedule B's data, with no
-             knowledge of the answer, would have written an honest paper saying
-             they had found nothing conclusive.
-             \n\nThat is not a failure of the data. It is a decision that was
-             made months earlier, when someone wrote down a cadence. The
-             observing schedule is part of the experiment, and like the rest of
-             the experiment it can be designed well or badly before a single
-             photon arrives.`,
+             \n\nSchedule A established beyond reasonable argument that this
+             star's velocity is not constant, over a cycle it sampled from end to
+             end. That is not the same as having detected a planet — it is the
+             evidence on which a planet becomes much the best explanation, once
+             the variation is shown to repeat on a definite period and the other
+             causes are ruled out.
+             \n\nSchedule B, with eleven times the baseline and not one
+             measurement fewer, could not establish even that. It is not empty:
+             it bounds how large a velocity swing the star can have had at the
+             two phases it happened to visit, and that is a real if narrow
+             constraint. What it cannot do is say anything about the other eight
+             tenths of the cycle, which is where this planet lives.
+             \n\nNeither outcome is a failure of the data. Both were decided
+             months earlier, when someone wrote down a cadence. The observing
+             schedule is part of the experiment, and like the rest of the
+             experiment it can be designed well or badly before a single photon
+             arrives.`,
       tip: 'Real surveys defend against this by deliberately irregular spacing, by observing from several longitudes, and by checking any candidate period against the cadence that found it.',
     },
   ],

@@ -117,7 +117,10 @@ function files() {
       // when no schedule is set is not a set of measurements and exporting it
       // as one would teach the opposite of what the observing mode is for.
       detail: s.rvMeasurements
-        ? `${plural(s.rvMeasurements, 'measurement')} of ${plural(s.rvPlanned, 'planned')}, with uncertainties and the observing schedule.`
+        ? `${plural(s.rvMeasurements, 'measurement')} of ${plural(s.rvPlanned, 'planned')}, with uncertainties and the observing schedule.` +
+          (s.rvMissed || s.rvDegraded
+            ? ` ${plural(s.rvUsable, 'usable reading')}; ${s.rvMissed} missed, ${s.rvDegraded} below the resolution tolerance. Every epoch is a row, flagged.`
+            : '')
         : s.rvRunning
           ? 'The run has not taken a measurement yet. Let the simulation reach the first epoch.'
           : 'No observing run. Open the Radial Velocity tool and switch on the synthetic observing run.',

@@ -1,5 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import {
+  INTERPOLATION_TOLERANCE_MS,
+  QUALITY,
   SURVEY_DEFAULTS,
   constantVelocityChiSquare,
   createSurvey,
@@ -356,5 +358,192 @@ describe("the lesson's two schedules", () => {
     // And it badly underestimates the spread, so a student who reads the plot
     // gets a planet several times too light.
     expect(b.halfRange).toBeLessThan(40);
+  });
+});
+
+describe('the measured velocities do not depend on the render rate', () => {
+  // The previous frame-rate test compared epoch times and noise draws. Both are
+  // computed from the schedule and the seed, so they agree by construction
+  // whatever the frame rate does - the test could not have failed. What has to
+  // agree is the *measurement*: the value read off the simulation at each
+  // scheduled instant.
+
+  /** A strongly curved signal: a high-eccentricity reflex curve. */
+  const eccentric = (t, { P = 3.5247, K = 84, e = 0.7, omega = 1.1 } = {}) => {
+    const M = (2 * Math.PI * t) / P;
+    let E = M;
+    for (let k = 0; k < 60; k++) {
+      E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    }
+    const nu =
+      2 *
+      Math.atan2(
+        Math.sqrt(1 + e) * Math.sin(E / 2),
+        Math.sqrt(1 - e) * Math.cos(E / 2)
+      );
+    return K * (Math.cos(nu + omega) + e * Math.cos(omega));
+  };
+
+  /** Drive a run from the same initial state at a given frame interval. */
+  const runAt = (dt, cfg, signal) => {
+    const survey = createSurvey(cfg);
+    for (let t = 0; t <= cfg.baselineDays + dt; t += dt) {
+      survey.observe(t, signal(t));
+    }
+    return survey;
+  };
+
+  const CFG = {
+    cadenceDays: 0.32,
+    baselineDays: 3.52,
+    sigmaMs: 4,
+    seed: 'framerate',
+  };
+
+  test.each([
+    ['a sinusoid', t => -84 * Math.sin((2 * Math.PI * t) / 3.5247)],
+    ['a strongly eccentric curve', t => eccentric(t)],
+  ])(
+    '%s gives the same measurements at 15, 60 and 240 fps',
+    (_what, signal) => {
+      // Frame intervals in simulated days for a 3.52-day orbit at three plausible
+      // render rates.
+      const runs = [0.02, 0.005, 0.00125].map(dt => runAt(dt, CFG, signal));
+
+      for (const run of runs) expect(run.count()).toBe(12);
+
+      const reference = runs[1].measurements();
+      for (const run of runs) {
+        run.measurements().forEach((m, i) => {
+          expect(m.day).toBeCloseTo(reference[i].day, 9);
+          // The measurement itself, not the schedule and not the noise.
+          expect(m.rv).toBeCloseTo(reference[i].rv, 1);
+          expect(m.quality).toBe(reference[i].quality);
+        });
+      }
+    }
+  );
+
+  test('with no noise at all the agreement is the interpolation alone', () => {
+    // Noise is identical by construction, so a low-noise run is where a
+    // sampling difference has nowhere to hide.
+    const cfg = { ...CFG, sigmaMs: 0 };
+    const fine = runAt(0.001, cfg, t => eccentric(t)).measurements();
+    const coarse = runAt(0.02, cfg, t => eccentric(t)).measurements();
+
+    coarse.forEach((m, i) => {
+      expect(m.rv).toBeCloseTo(fine[i].rv, 1);
+      // And each is close to the signal it claims to have measured.
+      expect(m.rv).toBeCloseTo(eccentric(m.day), 1);
+    });
+  });
+
+  test('a run at a coarse frame rate is flagged, not silently wrong', () => {
+    // Frames a quarter of a period apart cannot resolve this curve. The values
+    // are still reported - it is what the simulation can say - and they carry
+    // an error estimate that exceeds the tolerance.
+    const cfg = { ...CFG, sigmaMs: 0 };
+    const coarse = runAt(0.9, cfg, t => eccentric(t));
+    const marks = coarse.measurements();
+
+    expect(marks.some(m => m.quality === QUALITY.DEGRADED || m.missed)).toBe(
+      true
+    );
+    expect(coarse.anyCoarse()).toBe(true);
+  });
+
+  test('the tolerance is about the signal, not about the cadence', () => {
+    // A long cadence with well-resolved frames is accurate and must pass; a
+    // short cadence with coarse frames is not and must fail. The old
+    // gap-as-a-fraction-of-cadence rule got both of these backwards.
+    const wellResolved = runAt(
+      0.002,
+      { cadenceDays: 2, baselineDays: 20, sigmaMs: 0, seed: 'x' },
+      t => eccentric(t)
+    );
+    expect(wellResolved.quality().degraded).toBe(0);
+    expect(wellResolved.quality().worstError).toBeLessThan(
+      INTERPOLATION_TOLERANCE_MS
+    );
+
+    const poorlyResolved = runAt(
+      0.4,
+      { cadenceDays: 0.5, baselineDays: 5, sigmaMs: 0, seed: 'x' },
+      t => eccentric(t)
+    );
+    expect(poorlyResolved.quality().degraded).toBeGreaterThan(0);
+  });
+});
+
+describe('epochs nobody observed are missed, not invented', () => {
+  const signal = t => -84 * Math.sin((2 * Math.PI * t) / 3.5247);
+  const CFG = {
+    cadenceDays: 0.32,
+    baselineDays: 3.52,
+    sigmaMs: 0,
+    seed: 'gaps',
+  };
+
+  test('suspending marks every epoch that fell due while it was closed', () => {
+    const survey = createSurvey(CFG);
+    // Observe the first three epochs properly.
+    for (let t = 0; t <= 0.7; t += 0.005) survey.observe(t, signal(t));
+    const before = survey.count();
+    expect(before).toBeGreaterThanOrEqual(3);
+
+    // The panel closes. Time passes. It reopens.
+    survey.suspend(0.7);
+    for (let t = 2.0; t <= 3.6; t += 0.005) survey.observe(t, signal(t));
+
+    const all = survey.measurements();
+    const missed = all.filter(m => m.missed);
+    expect(missed.length).toBeGreaterThan(0);
+    // A missed epoch has no velocity at all, rather than a plausible one.
+    for (const m of missed) {
+      expect(m.rv).toBeNull();
+      expect(m.quality).toBe(QUALITY.MISSED);
+    }
+    // The schedule still ran its course: every epoch is accounted for.
+    expect(all).toHaveLength(survey.plannedCount);
+  });
+
+  test('a long jump with no suspend is treated the same way', () => {
+    // A backgrounded tab does not get to call suspend. Readings more than a
+    // whole cadence apart mean nobody was watching, whatever the reason.
+    const survey = createSurvey(CFG);
+    survey.observe(0, signal(0));
+    survey.observe(2.0, signal(2.0));
+    const missed = survey.measurements().filter(m => m.missed);
+    expect(missed.length).toBeGreaterThan(0);
+  });
+
+  test('missed epochs stay out of the statistics by default', () => {
+    const survey = createSurvey(CFG);
+    for (let t = 0; t <= 0.7; t += 0.005) survey.observe(t, signal(t));
+    survey.suspend(0.7);
+    for (let t = 2.0; t <= 3.6; t += 0.005) survey.observe(t, signal(t));
+
+    const stats = surveyStats(survey.measurements());
+    expect(stats.n).toBeLessThan(survey.plannedCount);
+    expect(stats.missed).toBeGreaterThan(0);
+    expect(stats.planned).toBe(survey.plannedCount);
+    // Nothing null reached the arithmetic.
+    expect(Number.isFinite(stats.mean)).toBe(true);
+    expect(Number.isFinite(stats.rms)).toBe(true);
+  });
+
+  test('degraded readings are excluded unless asked for', () => {
+    const points = [
+      { day: 0, rv: 10, sigma: 1, quality: QUALITY.OK },
+      { day: 1, rv: 90, sigma: 1, quality: QUALITY.DEGRADED },
+      { day: 2, rv: 12, sigma: 1, quality: QUALITY.OK },
+    ];
+    expect(surveyStats(points).n).toBe(2);
+    expect(surveyStats(points).degraded).toBe(1);
+    expect(surveyStats(points, { includeDegraded: true }).n).toBe(3);
+    // And the excluded one really was distorting it.
+    expect(surveyStats(points).halfRange).toBeLessThan(
+      surveyStats(points, { includeDegraded: true }).halfRange
+    );
   });
 });

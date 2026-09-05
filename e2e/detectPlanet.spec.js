@@ -189,45 +189,129 @@ test.describe('the synthetic observing run', () => {
     expect(after.count).toBeLessThanOrEqual(1);
   });
 
-  test('the measurements do not depend on the frame rate', async ({
+  test('the measurements do not depend on the render rate', async ({
     page,
     app,
   }) => {
-    // The claim the whole design rests on. Run the same seeded schedule twice
-    // against the same seeded world at two simulation speeds, and the twelve
-    // numbers have to agree.
-    const collect = async speed => {
+    // The claim the design rests on, and the previous version of this test did
+    // not check it: it compared epoch times and noise draws, both of which are
+    // computed from the schedule and the seed and therefore agree whatever the
+    // frame rate does. What has to agree is the measured velocity.
+    //
+    // A genuine render-rate difference, via CPU throttling. Changing
+    // `sim_speed` would not do: that changes how much simulated time each frame
+    // covers, which is a change in resolution rather than in render rate, and
+    // the panel is supposed to notice and flag it - as the missed-epoch test
+    // below relies on.
+    const client = await page.context().newCDPSession(page);
+
+    const collect = async rate => {
       await openRv(page, app);
-      await page.evaluate(async s => {
-        const { SETTINGS } = await import('/js/appState.js');
-        SETTINGS.sim_speed = s;
-      }, speed);
+      await client.send('Emulation.setCPUThrottlingRate', { rate });
       await startSurvey(page, {
-        cadence: 0.4,
-        baseline: 2,
-        sigma: 6,
-        seed: 'framerate',
+        cadence: 0.15,
+        baseline: 0.75,
+        sigma: 0,
+        seed: 'render-rate',
       });
       await expect
-        .poll(async () => (await runState(page)).count, { timeout: 90_000 })
+        .poll(async () => (await runState(page)).count, { timeout: 120_000 })
         .toBe(6);
-      return page.evaluate(async () => {
+      const out = await page.evaluate(async () => {
         const rv = await import('/js/radialVelocity.js');
-        return rv
-          .radialVelocitySurvey()
-          .measurements.map(m => ({ day: m.day, noise: m.rv - m.truth }));
+        return rv.radialVelocitySurvey().measurements.map(m => ({
+          day: m.day,
+          rv: m.rv,
+          quality: m.quality,
+          interpolationError: m.interpolationError,
+        }));
       });
+      await client.send('Emulation.setCPUThrottlingRate', { rate: 1 });
+      return out;
     };
 
-    const slow = await collect(1);
-    const fast = await collect(3);
+    // Six times fewer frames per second in the throttled run.
+    //
+    // What this can and cannot compare. The two runs start whenever the panel
+    // is ready, so their first epochs fall at different points of a 3.5-day
+    // orbit - the velocities differ because the star really is somewhere else,
+    // not because the sampling did anything wrong. Comparing the numbers across
+    // runs therefore needs identical initial states, which only the unit tests
+    // can guarantee; tests/rvSurvey.test.js drives the same signal from t = 0
+    // at three frame intervals and compares every measured velocity.
+    //
+    // What this test owns is the integration: that throttling the renderer six
+    // times over does not coarsen the science. Every epoch must still be
+    // resolved within the documented tolerance, in both runs.
+    const fast = await collect(1);
+    const slow = await collect(6);
 
     expect(fast).toHaveLength(slow.length);
+    for (const run of [fast, slow]) {
+      for (const m of run) {
+        expect(m.quality).toBe('ok');
+        expect(m.interpolationError).toBeLessThanOrEqual(0.5);
+      }
+    }
+    // And the schedule itself is identical, which is the part that must not
+    // move with the frame rate.
     fast.forEach((m, i) => {
-      // The epoch is the schedule's, and the noise belongs to the epoch.
       expect(m.day - fast[0].day).toBeCloseTo(slow[i].day - slow[0].day, 6);
-      expect(m.noise).toBeCloseTo(slow[i].noise, 6);
     });
+  });
+
+  test('epochs that fall due while the panel is closed are marked missed', async ({
+    page,
+    app,
+  }) => {
+    // Not reconstructed from the readings either side of the gap: nobody was
+    // observing, and a plausible value there is a fabricated observation.
+    await openRv(page, app);
+    await startSurvey(page, {
+      cadence: 0.1,
+      baseline: 3,
+      sigma: 2,
+      seed: 'closed-gap',
+    });
+    await expect
+      .poll(async () => (await runState(page)).count, { timeout: 60_000 })
+      .toBeGreaterThan(2);
+
+    await page.locator('#rvClose').click();
+    await expect(page.locator('#rvContainer')).toBeHidden();
+    // Let the simulation run on past several scheduled epochs. Wall-clock,
+    // because the point is that the world kept turning while nobody watched.
+    await page.waitForTimeout(4000);
+    await page.locator('#toggleRadialVelocity').click();
+    await expect(page.locator('#rvContainer')).toBeVisible();
+
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async () => {
+            const rv = await import('/js/radialVelocity.js');
+            return rv.radialVelocitySurvey().measurements.filter(m => m.missed)
+              .length;
+          }),
+        { timeout: 60_000 }
+      )
+      .toBeGreaterThan(0);
+
+    const all = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      return rv.radialVelocitySurvey().measurements;
+    });
+    for (const m of all.filter(x => x.missed)) {
+      expect(m.rv).toBeNull();
+      expect(m.quality).toBe('missed');
+    }
+    // And they are excluded from what the panel reports about the run.
+    const stats = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      return rv.radialVelocitySurvey().stats;
+    });
+    expect(stats.missed).toBeGreaterThan(0);
+    expect(stats.n).toBeLessThan(stats.planned);
   });
 });
 
@@ -271,6 +355,8 @@ test.describe('the export', () => {
       't_days',
       'rv_ms',
       'rv_err_ms',
+      'quality',
+      'interp_err_ms',
       'target',
       'target_id',
       'inclination_deg',
@@ -283,9 +369,14 @@ test.describe('the export', () => {
     expect(lines).toHaveLength(5);
     for (const line of lines.slice(1)) {
       const cells = line.split(',');
-      expect(Number(cells[2])).toBe(7.5);
-      expect(cells[6]).toBe('0.4');
-      expect(cells[9]).toBe('export-test');
+      const header = lines[0].split(',');
+      expect(Number(cells[header.indexOf('rv_err_ms')])).toBe(7.5);
+      expect(cells[header.indexOf('cadence_days')]).toBe('0.4');
+      expect(cells[header.indexOf('noise_seed')]).toBe('export-test');
+      // Every epoch carries how it was arrived at.
+      expect(['ok', 'degraded', 'missed']).toContain(
+        cells[header.indexOf('quality')]
+      );
     }
   });
 

@@ -41,16 +41,24 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 800,
+    limit: 830,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
       'authoring rules, the offline and quality-tier code. Self-hosting the ' +
       'fonts added the @font-face block to the stylesheet (+2.8 KB), and the ' +
       'accessibility pass added the canvas description module, the focus trap ' +
-      'and their strings (+5.8 KB), for 780 KB. Neither three.js nor Chart.js ' +
-      'is in here; both are deferred. The ceiling is 800 KB: about 2.5% of ' +
-      'headroom, which is a change or two, not a year.',
+      'and their strings (+5.8 KB), for 780 KB. The observing lesson took it ' +
+      'to 799.5 KB, at which point the note here said the remaining headroom ' +
+      'was a change or two and not a year. It was one change: the correctness ' +
+      'pass over lesson progress and observing sessions added stable step ids ' +
+      'and their versioned migration, the session store, the separation of ' +
+      'invalidation from sampling permission, quality flags on measurements, ' +
+      'and about forty strings in each locale - all of it in modules that load ' +
+      'at start-up. Raised to 830 KB, which is where it stays until something ' +
+      'is taken *out*: the next feature that wants room here should be looking ' +
+      'for a module to defer rather than for another thirty kilobytes. ' +
+      'Neither three.js nor Chart.js is in here; both are deferred.',
   },
   {
     id: 'deferred',
