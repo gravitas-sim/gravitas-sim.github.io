@@ -514,15 +514,22 @@ let capturing = false;
 // module that owns no physics should not start reaching for application state.
 let captureCaption = '';
 
+// A student's own words about the moment, when the frame was reached by a
+// pause-at-event stop. Optional, and drawn under the caption so an exported
+// figure carries the observation as well as the scenario: "what did you notice"
+// is the part of a lab report a picture cannot otherwise hold.
+let captureNote = '';
+
 /**
  * Draw the provenance line on the next frame, for a screenshot.
  * @param {boolean} on - True while a capture is in flight
- * @param {object} [meta] - {caption} - the scenario title to burn in
+ * @param {object} [meta] - {caption, note} - the scenario title, and a
+ *   student's annotation of the moment if there is one
  */
 export const setCaptureMode = (on, meta = {}) => {
   capturing = Boolean(on);
-  if (capturing) captureCaption = String(meta.caption || '');
-  else captureCaption = '';
+  captureCaption = capturing ? String(meta.caption || '') : '';
+  captureNote = capturing ? String(meta.note || '').slice(0, 280) : '';
 };
 
 /** @returns {boolean} True while a frame is being prepared for export */
@@ -530,6 +537,9 @@ export const isCapturing = () => capturing;
 
 /** @returns {string} The caption that would be burned into a captured frame */
 export const captionText = () => captureCaption;
+
+/** @returns {string} The annotation that would accompany it, if any */
+export const captureNoteText = () => captureNote;
 
 /**
  * The always-on instrumentation, drawn along the bottom-left edge: a scale bar,
@@ -622,6 +632,42 @@ export function drawInstrumentation(
     ctx.fillRect(pad - 4, pad - 2, Math.min(tw + 16, W - 2 * pad + 8), 24);
     ctx.fillStyle = 'rgba(232, 240, 252, 0.98)';
     ctx.fillText(captureCaption, pad + 4, pad + 10);
+    ctx.restore();
+  }
+
+  // The student's note, under the title. Wrapped rather than clipped: a
+  // sentence cut off mid-word in an exported figure is worse than two lines.
+  if (capturing && captureNote) {
+    ctx.save();
+    ctx.font = `${narrow ? 11 : 12}px ${INSTRUMENT_MONO}`;
+    const maxWidth = Math.min(W - 2 * pad - 8, narrow ? 260 : 420);
+    const lines = [];
+    let line = '';
+    for (const word of captureNote.split(/\s+/)) {
+      const candidate = line ? `${line} ${word}` : word;
+      if (ctx.measureText(candidate).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = candidate;
+      }
+      if (lines.length >= 3) break;
+    }
+    if (line && lines.length < 3) lines.push(line);
+
+    const lineHeight = narrow ? 14 : 16;
+    const top = pad + 24;
+    ctx.fillStyle = 'rgba(6, 10, 20, 0.55)';
+    ctx.fillRect(
+      pad - 4,
+      top - 3,
+      Math.min(maxWidth + 16, W - 2 * pad + 8),
+      lines.length * lineHeight + 6
+    );
+    ctx.fillStyle = 'rgba(210, 224, 245, 0.95)';
+    lines.forEach((text, i) => {
+      ctx.fillText(text, pad + 4, top + 8 + i * lineHeight);
+    });
     ctx.restore();
   }
 

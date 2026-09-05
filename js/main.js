@@ -12,6 +12,7 @@ import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
+import { initPauseAtEvent } from './pauseAtEventPanel.js';
 import { initObservationLayout } from './observationLayout.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
@@ -279,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
       initRadialVelocity();
       initRotationCurve();
       initAstrometry();
+      initPauseAtEvent();
       initObservationLayout();
     } catch (err) {
       console.error('Light curve unavailable:', err);

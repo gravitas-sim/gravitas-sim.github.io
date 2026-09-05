@@ -24,6 +24,10 @@ const PANEL_IDS = [
   'rvContainer',
   'astrometryContainer',
   'rotationCurveContainer',
+  // Pause at event is a form rather than a chart, but it is opened from the
+  // same Tools list and sits over the same corner, so it queues with the rest.
+  // Left out of this list it simply overlapped whatever was already there.
+  'pauseEventContainer',
   // The spacetime view is the odd one out - it is draggable and resizable,
   // and the moment a user moves it, it drops out of the stack (see isStacked).
   // Until then it is an instrument like the rest and queues with them.

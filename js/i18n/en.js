@@ -1401,6 +1401,7 @@ export const EN = {
   'shortcut.place': 'Place an object with velocity',
   'shortcut.snap': 'Snap to a circular orbit',
   'shortcut.lecture': 'Lecture Mode (projection)',
+  'shortcut.pauseAtEvent': 'Pause at event',
   'shortcut.showList': 'Show this list',
   'shortcut.closePanel': 'Close the open panel',
   'chart.autoRefresh': 'Auto-refresh active - Click to refresh now',
@@ -1448,6 +1449,52 @@ export const EN = {
   'rv.crossingZero': 'Crossing zero',
   'rv.movingAway': 'Moving AWAY FROM US',
   'rv.movingToward': 'Moving TOWARD US',
+
+  // --- Pause at event ---------------------------------------------------------
+  'rail.togglePauseAtEvent': 'Pause at Event',
+  'rail.togglePauseAtEvent.hint':
+    'Open Pause at Event: stop the simulation the moment a chosen thing happens — the next periapsis or apoapsis of a body about its primary, a crossing of a stated separation, or the next transit midpoint. The event is found from the integration steps, not the frames, so the panel can tell you how precisely it was located.',
+  'pauseEvent.close.hint': 'Hide the pause-at-event panel',
+  'pauseEvent.kind': 'Event',
+  'pauseEvent.kind.periapsis': 'Next periapsis',
+  'pauseEvent.kind.apoapsis': 'Next apoapsis',
+  'pauseEvent.kind.separationInward': 'Crossing inward through…',
+  'pauseEvent.kind.separationOutward': 'Crossing outward through…',
+  'pauseEvent.kind.transit': 'Next transit midpoint',
+  'pauseEvent.body': 'Body',
+  'pauseEvent.primary': 'Around',
+  'pauseEvent.separation': 'Separation',
+  'pauseEvent.arm': 'Arm',
+  'pauseEvent.disarm': 'Disarm',
+  'pauseEvent.armed': 'Watching. The simulation will stop at the event.',
+  'pauseEvent.fired': 'Stopped at the event.',
+  'pauseEvent.status.idle': 'Not armed',
+  'pauseEvent.status.armed': 'Watching',
+  'pauseEvent.status.fired': 'Stopped at the event',
+  'pauseEvent.eventTime': 'Event at',
+  'pauseEvent.precision': 'Located to within',
+  'pauseEvent.overshoot': 'Paused after it by',
+  'pauseEvent.exact': 'exact',
+  'pauseEvent.marker': '{kind} at {time} d',
+  'pauseEvent.note': 'Your note',
+  'pauseEvent.note.placeholder': 'What did you notice?',
+  'pauseEvent.hint':
+    'Events are found from the integration steps, so the precision above is the interval the event was localised to. The simulation stops just after the event rather than winding back onto it, which would leave the recordings and the timeline describing a moment that never happened.',
+  'pauseEvent.refused.circular':
+    'This orbit is circular (e = {e}), so it has no periapsis or apoapsis to stop at — the separation is the same all the way round. Try a crossing of a stated separation instead.',
+  'pauseEvent.refused.unbound':
+    'This orbit is not bound, so there is no apoapsis: the body is leaving and will not come back.',
+  'pauseEvent.refused.outsideOrbit':
+    'This orbit never reaches that separation. It runs between {min} and {max} AU.',
+  'pauseEvent.refused.badSeparation': 'Enter a separation greater than zero.',
+  'pauseEvent.refused.noTarget': 'Choose a body and something for it to orbit.',
+  'pauseEvent.refused.samePrimary':
+    'A body cannot orbit itself. Choose a different primary.',
+  'pauseEvent.refused.noOrbit':
+    'These two are not on an orbit this can measure.',
+  'pauseEvent.refused.targetGone':
+    'Stopped watching: the body is no longer in the simulation.',
+  'pauseEvent.refused.unknown': 'That event cannot be watched for.',
 
   // --- The synthetic observing run --------------------------------------------
   'rv.survey.enable': 'Synthetic observing run',

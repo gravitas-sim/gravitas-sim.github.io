@@ -101,6 +101,7 @@ import {
   resetAssumedDistance,
   setAssumedDistance,
 } from './astrometry.js';
+import { lastEvent } from './pauseAtEvent.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
@@ -5488,7 +5489,13 @@ const takeScreenshot = () => {
   // before reading the pixels back. Live, those readings are in the readout
   // panel and painting them over the simulation as well would say the same
   // thing twice; a saved image has no readout panel, so it needs them.
-  setCaptureMode(true, { caption: captureCaption() });
+  // A pause-at-event stop can carry the reader's own note, and an exported
+  // figure is exactly where that belongs: the picture shows the moment, the
+  // note says what they were looking at.
+  setCaptureMode(true, {
+    caption: captureCaption(),
+    note: lastEvent()?.note || '',
+  });
   const capture = () => {
     try {
       const tempCanvas = document.createElement('canvas');

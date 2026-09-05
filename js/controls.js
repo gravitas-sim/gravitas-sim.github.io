@@ -17,6 +17,7 @@ import {
   clearObjectEnergyHistory,
 } from './physics.js';
 import { state, SETTINGS } from './appState.js';
+import { renderEventMarker } from './pauseAtEventPanel.js';
 import { toast, announce } from './notify.js';
 export { toast, announce };
 import {
@@ -191,6 +192,9 @@ function onTimelineChange({ frameCount, offset, scrubbing, simClock }) {
   const bar = document.getElementById('timelineBar');
   bar?.classList.toggle('is-scrubbing', scrubbing);
   if (liveBtn) liveBtn.hidden = !scrubbing;
+  // The event marker rides the same track, so it is repositioned whenever the
+  // track changes. It draws nothing unless an event has fired.
+  renderEventMarker({ frameCount, simClock });
   refreshTransport();
 }
 
@@ -601,6 +605,21 @@ function setupShortcuts() {
     run: async () => {
       const { toggleLecture } = await import('./lecture.js');
       toggleLecture();
+    },
+  });
+  registerShortcut({
+    keys: 'N',
+    match: 'n',
+    group: 'Tools',
+    label: t('shortcut.pauseAtEvent'),
+    run: () => {
+      const toggle = document.getElementById('togglePauseAtEvent');
+      toggle?.click();
+      // Focus the panel's first control, so the whole tool is reachable without
+      // a mouse: choose an event, tab to Arm, press it.
+      if (toggle?.getAttribute('aria-pressed') === 'true') {
+        document.getElementById('pauseEventKind')?.focus();
+      }
     },
   });
   registerShortcut({

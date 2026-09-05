@@ -2629,7 +2629,49 @@ const updatePhysics = dt => {
   if (state && state.frame_count % ENERGY_SAMPLE_RATE === 0) {
     updateEnergyHistory();
   }
+
+  // Anything watching the integration itself, after the step is complete. The
+  // set is empty unless something armed a watch, so the ordinary cost is one
+  // size check per step. See onPhysicsStep().
+  if (stepListeners.size) {
+    for (const listen of stepListeners) {
+      try {
+        listen(dt, simulationTime);
+      } catch (err) {
+        // A listener must never be able to stop the integrator.
+        console.warn('A physics-step listener threw:', err);
+      }
+    }
+  }
 };
+
+/**
+ * Things to run after every integration step.
+ *
+ * Not after every frame: a scenario that substeps takes several of these per
+ * frame, and a paused or scrubbing frame takes none. Anything that has to see
+ * the states the integrator actually produced - event detection, in particular,
+ * which has to be able to say how finely it localised something - belongs here
+ * and not in the render loop.
+ *
+ * Inverted deliberately. physics.js is the bottom of the module graph and must
+ * not import the things that care about it, so they subscribe instead.
+ *
+ * @type {Set<Function>}
+ */
+const stepListeners = new Set();
+
+/**
+ * Subscribe to integration steps.
+ *
+ * @param {Function} fn - Called with (dt, simulationTime) after each step
+ * @returns {Function} Unsubscribe
+ */
+export function onPhysicsStep(fn) {
+  if (typeof fn !== 'function') return () => {};
+  stepListeners.add(fn);
+  return () => stepListeners.delete(fn);
+}
 
 // Base PhysicsObject class
 /**

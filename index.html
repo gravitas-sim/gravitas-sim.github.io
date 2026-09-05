@@ -368,6 +368,152 @@
       </p>
     </div>
 
+    <!-- ⏱ Pause at event -->
+    <div
+      id="pauseEventContainer"
+      class="obs-panel pause-event-container"
+      style="display: none"
+      role="region"
+      aria-labelledby="pauseEventTitle"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title" id="pauseEventTitle"
+            >Pause at Event</span
+          >
+          <span id="pauseEventStatus" class="obs-panel-status">Not armed</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="pauseEventClose"
+            class="obs-panel-btn"
+            title="Hide the pause-at-event panel"
+            data-i18n-title="pauseEvent.close.hint"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-form">
+        <label class="pause-event-field">
+          <span data-i18n="pauseEvent.kind">Event</span>
+          <select id="pauseEventKind">
+            <option value="periapsis" data-i18n="pauseEvent.kind.periapsis">
+              Next periapsis
+            </option>
+            <option value="apoapsis" data-i18n="pauseEvent.kind.apoapsis">
+              Next apoapsis
+            </option>
+            <option
+              value="separationInward"
+              data-i18n="pauseEvent.kind.separationInward"
+            >
+              Crossing inward through…
+            </option>
+            <option
+              value="separationOutward"
+              data-i18n="pauseEvent.kind.separationOutward"
+            >
+              Crossing outward through…
+            </option>
+            <option value="transit" data-i18n="pauseEvent.kind.transit">
+              Next transit midpoint
+            </option>
+          </select>
+        </label>
+
+        <label class="pause-event-field" id="pauseEventBodyField">
+          <span data-i18n="pauseEvent.body">Body</span>
+          <select id="pauseEventBody"></select>
+        </label>
+
+        <label class="pause-event-field" id="pauseEventPrimaryField">
+          <span data-i18n="pauseEvent.primary">Around</span>
+          <select id="pauseEventPrimary"></select>
+        </label>
+
+        <label
+          class="pause-event-field"
+          id="pauseEventSeparationField"
+          hidden=""
+        >
+          <span data-i18n="pauseEvent.separation">Separation</span>
+          <input
+            type="number"
+            id="pauseEventSeparation"
+            min="0"
+            step="0.01"
+            inputmode="decimal"
+          />
+          <span class="pause-event-unit">AU</span>
+        </label>
+
+        <div class="pause-event-actions">
+          <button id="pauseEventArm" class="ui-button primary">
+            <span data-i18n="pauseEvent.arm">Arm</span>
+          </button>
+          <button id="pauseEventDisarm" class="ui-button subtle" disabled="">
+            <span data-i18n="pauseEvent.disarm">Disarm</span>
+          </button>
+        </div>
+      </div>
+
+      <p
+        id="pauseEventMessage"
+        class="pause-event-message"
+        role="status"
+        hidden=""
+      ></p>
+
+      <!-- What fired, and how precisely it was located. The simulation is not
+           rewound onto the event, so the overshoot is shown rather than hidden:
+           see the header of js/pauseAtEvent.js. -->
+      <div id="pauseEventResult" class="pause-event-result" hidden="">
+        <div class="pause-event-readout">
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="pauseEvent.eventTime"
+              >Event at</span
+            >
+            <span id="pauseEventTime" class="rv-readout-value numeric">—</span>
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="pauseEvent.precision"
+              >Located to within</span
+            >
+            <span id="pauseEventPrecision" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="pauseEvent.overshoot"
+              >Paused after it by</span
+            >
+            <span id="pauseEventOvershoot" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+        </div>
+        <label class="pause-event-note">
+          <span data-i18n="pauseEvent.note">Your note</span>
+          <input
+            type="text"
+            id="pauseEventNote"
+            maxlength="280"
+            placeholder="What did you notice?"
+            data-i18n-placeholder="pauseEvent.note.placeholder"
+          />
+        </label>
+      </div>
+
+      <p class="obs-panel-hint" data-i18n="pauseEvent.hint">
+        Events are found from the integration steps, so the precision above is
+        the interval the event was localised to. The simulation stops just after
+        the event rather than winding back onto it, which would leave the
+        recordings and the timeline describing a moment that never happened.
+      </p>
+    </div>
+
     <!-- 🎯 Astrometry panel -->
     <div
       id="astrometryContainer"
@@ -1295,6 +1441,16 @@
               Astrometry
             </button>
             <button
+              id="togglePauseAtEvent"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open Pause at Event: stop the simulation the moment a chosen thing happens - the next periapsis or apoapsis of a body about its primary, a crossing of a stated separation, or the next transit midpoint. The event is found from the integration steps, not the frames, so the panel can tell you how precisely it was located."
+              data-i18n-title="rail.togglePauseAtEvent.hint"
+              data-i18n="rail.togglePauseAtEvent"
+            >
+              Pause at Event
+            </button>
+            <button
               id="toggleExperiments"
               class="rail-chip"
               aria-pressed="false"
@@ -1563,20 +1719,33 @@
         ⏭
       </button>
 
-      <input
-        id="timelineScrubber"
-        class="timeline-scrubber"
-        type="range"
-        min="0"
-        max="1"
-        value="1"
-        step="1"
-        disabled=""
-        aria-label="Scrub through recorded simulation history"
-        title="Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live."
-        data-i18n-title="transport.timelineScrubber.hint"
-        data-i18n-aria-label="transport.timelineScrubber.label"
-      />
+      <!-- The scrubber and anything drawn over its track share a positioning
+           context, so a marker placed at a percentage lands on the right part
+           of the track rather than of the whole bar. -->
+      <span class="timeline-track">
+        <input
+          id="timelineScrubber"
+          class="timeline-scrubber"
+          type="range"
+          min="0"
+          max="1"
+          value="1"
+          step="1"
+          disabled=""
+          aria-label="Scrub through recorded simulation history"
+          title="Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live."
+          data-i18n-title="transport.timelineScrubber.hint"
+          data-i18n-aria-label="transport.timelineScrubber.label"
+        />
+        <!-- Where a pause-at-event stop happened. Positioned by
+             js/pauseAtEventPanel.js from the recorded span. -->
+        <span
+          id="timelineEventMarker"
+          class="timeline-event-marker"
+          hidden=""
+          aria-hidden="true"
+        ></span>
+      </span>
 
       <span id="timelineTime" class="timeline-time numeric">0 s</span>
       <button

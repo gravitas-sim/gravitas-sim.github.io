@@ -1399,6 +1399,7 @@ export const ES = {
   'shortcut.place': 'Colocar un objeto con velocidad',
   'shortcut.snap': 'Ajustar a una órbita circular',
   'shortcut.lecture': 'Modo presentación (proyección)',
+  'shortcut.pauseAtEvent': 'Pausar en un evento',
   'shortcut.showList': 'Mostrar esta lista',
   'shortcut.closePanel': 'Cerrar el panel abierto',
   'chart.autoRefresh':
@@ -1448,6 +1449,54 @@ export const ES = {
   'rv.crossingZero': 'Cruzando el cero',
   'rv.movingAway': 'ALEJÁNDOSE DE NOSOTROS',
   'rv.movingToward': 'ACERCÁNDOSE A NOSOTROS',
+
+  // --- Pausar en un evento ----------------------------------------------------
+  'rail.togglePauseAtEvent': 'Pausar en evento',
+  'rail.togglePauseAtEvent.hint':
+    'Abre Pausar en evento: detiene la simulación en el momento en que ocurre algo elegido — el siguiente periastro o apoastro de un cuerpo respecto a su primario, un cruce de una separación indicada, o el siguiente punto medio de tránsito. El evento se localiza a partir de los pasos de integración, no de los fotogramas, así que el panel puede decirte con qué precisión lo encontró.',
+  'pauseEvent.close.hint': 'Ocultar el panel de pausar en evento',
+  'pauseEvent.kind': 'Evento',
+  'pauseEvent.kind.periapsis': 'Siguiente periastro',
+  'pauseEvent.kind.apoapsis': 'Siguiente apoastro',
+  'pauseEvent.kind.separationInward': 'Cruce hacia dentro por…',
+  'pauseEvent.kind.separationOutward': 'Cruce hacia fuera por…',
+  'pauseEvent.kind.transit': 'Siguiente punto medio de tránsito',
+  'pauseEvent.body': 'Cuerpo',
+  'pauseEvent.primary': 'Alrededor de',
+  'pauseEvent.separation': 'Separación',
+  'pauseEvent.arm': 'Activar',
+  'pauseEvent.disarm': 'Desactivar',
+  'pauseEvent.armed': 'Vigilando. La simulación se detendrá en el evento.',
+  'pauseEvent.fired': 'Detenida en el evento.',
+  'pauseEvent.status.idle': 'Sin activar',
+  'pauseEvent.status.armed': 'Vigilando',
+  'pauseEvent.status.fired': 'Detenida en el evento',
+  'pauseEvent.eventTime': 'Evento en',
+  'pauseEvent.precision': 'Localizado con un margen de',
+  'pauseEvent.overshoot': 'Pausada después de él por',
+  'pauseEvent.exact': 'exacto',
+  'pauseEvent.marker': '{kind} en {time} d',
+  'pauseEvent.note': 'Tu nota',
+  'pauseEvent.note.placeholder': '¿Qué has observado?',
+  'pauseEvent.hint':
+    'Los eventos se localizan a partir de los pasos de integración, así que la precisión de arriba es el intervalo al que se acotó el evento. La simulación se detiene justo después del evento en lugar de rebobinar hasta él, lo que dejaría a las grabaciones y a la línea de tiempo describiendo un momento que nunca existió.',
+  'pauseEvent.refused.circular':
+    'Esta órbita es circular (e = {e}), así que no tiene periastro ni apoastro donde detenerse: la separación es la misma en todo el recorrido. Prueba con un cruce de una separación indicada.',
+  'pauseEvent.refused.unbound':
+    'Esta órbita no está ligada, así que no hay apoastro: el cuerpo se marcha y no volverá.',
+  'pauseEvent.refused.outsideOrbit':
+    'Esta órbita nunca alcanza esa separación. Va entre {min} y {max} UA.',
+  'pauseEvent.refused.badSeparation':
+    'Introduce una separación mayor que cero.',
+  'pauseEvent.refused.noTarget':
+    'Elige un cuerpo y algo alrededor de lo que orbite.',
+  'pauseEvent.refused.samePrimary':
+    'Un cuerpo no puede orbitarse a sí mismo. Elige otro primario.',
+  'pauseEvent.refused.noOrbit':
+    'Estos dos no están en una órbita que esto pueda medir.',
+  'pauseEvent.refused.targetGone':
+    'Se dejó de vigilar: el cuerpo ya no está en la simulación.',
+  'pauseEvent.refused.unknown': 'No se puede vigilar ese evento.',
 
   // --- La campaña de observación sintética ------------------------------------
   'rv.survey.enable': 'Campaña de observación sintética',
