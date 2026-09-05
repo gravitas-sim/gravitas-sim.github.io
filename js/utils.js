@@ -21,97 +21,6 @@ export const hexToRgb = hex => {
 };
 
 /**
- * Convert RGB object to hex string
- * @param {Object} rgb - RGB object with r, g, b properties
- * @returns {string} Hex color string
- */
-export const rgbToHex = rgb => {
-  const componentToHex = c => {
-    const hex = Math.round(Math.max(0, Math.min(255, c))).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  };
-  return (
-    '#' + componentToHex(rgb.r) + componentToHex(rgb.g) + componentToHex(rgb.b)
-  );
-};
-
-/**
- * Convert RGB to HSL
- * @param {Object} rgb - RGB object with r, g, b properties (0-255)
- * @returns {Object} HSL object with h, s, l properties
- */
-export const rgbToHsl = rgb => {
-  const r = rgb.r / 255;
-  const g = rgb.g / 255;
-  const b = rgb.b / 255;
-
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h,
-    s,
-    l = (max + min) / 2;
-
-  if (max === min) {
-    h = s = 0; // achromatic
-  } else {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
-    }
-    h /= 6;
-  }
-
-  return { h: h * 360, s: s * 100, l: l * 100 };
-};
-
-/**
- * Convert HSL to RGB
- * @param {Object} hsl - HSL object with h, s, l properties
- * @returns {Object} RGB object with r, g, b properties
- */
-export const hslToRgb = hsl => {
-  const h = hsl.h / 360;
-  const s = hsl.s / 100;
-  const l = hsl.l / 100;
-
-  const hue2rgb = (p, q, t) => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
-
-  let r, g, b;
-
-  if (s === 0) {
-    r = g = b = l; // achromatic
-  } else {
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    const p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1 / 3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1 / 3);
-  }
-
-  return {
-    r: Math.round(r * 255),
-    g: Math.round(g * 255),
-    b: Math.round(b * 255),
-  };
-};
-
-/**
  * Interpolate between two colors
  * @param {Object} color1 - First RGB color
  * @param {Object} color2 - Second RGB color
@@ -150,22 +59,6 @@ export const getStarColor = massInSuns => {
     b = lerp(sunColor.b, highMassColor.b, t);
   }
   return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
-};
-
-/**
- * Get star color based on mass (stellar classification - alternative method)
- * @param {number} massInSuns - Mass in solar masses
- * @returns {string} Hex color string
- */
-export const getStarColorClassification = massInSuns => {
-  if (massInSuns < 0.08) return '#8B0000'; // Brown dwarf
-  if (massInSuns < 0.45) return '#FF6600'; // M-class (red dwarf)
-  if (massInSuns < 0.8) return '#FF9900'; // K-class (orange dwarf)
-  if (massInSuns < 1.04) return '#FFFF00'; // G-class (yellow dwarf, like Sun)
-  if (massInSuns < 1.4) return '#FFFF99'; // F-class (yellow-white)
-  if (massInSuns < 2.1) return '#FFFFFF'; // A-class (white)
-  if (massInSuns < 16) return '#AAAAFF'; // B-class (blue-white)
-  return '#6666FF'; // O-class (blue giant)
 };
 
 /**
@@ -232,19 +125,6 @@ export const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 export const lerp = (a, b, t) => a + (b - a) * clamp(t, 0, 1);
 
 /**
- * Map a value from one range to another
- * @param {number} value - Value to map
- * @param {number} inMin - Input range minimum
- * @param {number} inMax - Input range maximum
- * @param {number} outMin - Output range minimum
- * @param {number} outMax - Output range maximum
- * @returns {number} Mapped value
- */
-export const mapRange = (value, inMin, inMax, outMin, outMax) => {
-  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-};
-
-/**
  * Calculate distance between two points
  * @param {Object} p1 - First point with x, y properties
  * @param {Object} p2 - Second point with x, y properties
@@ -257,85 +137,12 @@ export const distance = (p1, p2) => {
 };
 
 /**
- * Calculate squared distance between two points (faster than distance)
- * @param {Object} p1 - First point with x, y properties
- * @param {Object} p2 - Second point with x, y properties
- * @returns {number} Squared distance
- */
-export const distanceSquared = (p1, p2) => {
-  const dx = p2.x - p1.x;
-  const dy = p2.y - p1.y;
-  return dx * dx + dy * dy;
-};
-
-/**
- * Calculate angle between two points
- * @param {Object} p1 - First point with x, y properties
- * @param {Object} p2 - Second point with x, y properties
- * @returns {number} Angle in radians
- */
-export const angleBetween = (p1, p2) => {
-  return Math.atan2(p2.y - p1.y, p2.x - p1.x);
-};
-
-/**
- * Normalize an angle to 0-2π range
- * @param {number} angle - Angle in radians
- * @returns {number} Normalized angle
- */
-export const normalizeAngle = angle => {
-  const twoPi = 2 * Math.PI;
-  angle = angle % twoPi;
-  return angle < 0 ? angle + twoPi : angle;
-};
-
-/**
- * Convert degrees to radians
- * @param {number} degrees - Angle in degrees
- * @returns {number} Angle in radians
- */
-export const degreesToRadians = degrees => (degrees * Math.PI) / 180;
-
-/**
- * Convert radians to degrees
- * @param {number} radians - Angle in radians
- * @returns {number} Angle in degrees
- */
-export const radiansToDegrees = radians => (radians * 180) / Math.PI;
-
-/**
  * Calculate vector magnitude
  * @param {Object} vector - Vector with x, y properties
  * @returns {number} Magnitude
  */
 export const vectorMagnitude = vector =>
   Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-
-/**
- * Normalize a vector
- * @param {Object} vector - Vector with x, y properties
- * @returns {Object} Normalized vector
- */
-export const normalizeVector = vector => {
-  const mag = vectorMagnitude(vector);
-  return mag > 0 ? { x: vector.x / mag, y: vector.y / mag } : { x: 0, y: 0 };
-};
-
-/**
- * Dot product of two vectors
- * @param {Object} v1 - First vector with x, y properties
- * @param {Object} v2 - Second vector with x, y properties
- * @returns {number} Dot product
- */
-export const dotProduct = (v1, v2) => v1.x * v2.x + v1.y * v2.y;
-
-/**
- * Cross product of two 2D vectors (returns scalar)
- * @param {Object} v1 - First vector with x, y properties
- * @param {Object} v2 - Second vector with x, y properties
- * @returns {number} Cross product
- */
-export const crossProduct = (v1, v2) => v1.x * v2.y - v1.y * v2.x;
 
 // =============================================================================
 // RANDOM UTILITIES
@@ -350,78 +157,10 @@ export const crossProduct = (v1, v2) => v1.x * v2.y - v1.y * v2.x;
 export const randomRange = (min, max) => Math.random() * (max - min) + min;
 
 /**
- * Generate random integer between min and max (inclusive)
- * @param {number} min - Minimum value
- * @param {number} max - Maximum value
- * @returns {number} Random integer
- */
-export const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
-
-/**
- * Generate random boolean
- * @param {number} probability - Probability of true (0-1)
- * @returns {boolean} Random boolean
- */
-export const randomBool = (probability = 0.5) => Math.random() < probability;
-
-/**
- * Choose random element from array
- * @param {Array} array - Array to choose from
- * @returns {*} Random element
- */
-export const randomChoice = array =>
-  array[Math.floor(Math.random() * array.length)];
-
-/**
- * Generate random point in circle
- * @param {number} radius - Circle radius
- * @param {Object} center - Center point with x, y properties
- * @returns {Object} Random point with x, y properties
- */
-export const randomPointInCircle = (radius, center = { x: 0, y: 0 }) => {
-  const angle = Math.random() * 2 * Math.PI;
-  const r = Math.sqrt(Math.random()) * radius;
-  return {
-    x: center.x + r * Math.cos(angle),
-    y: center.y + r * Math.sin(angle),
-  };
-};
-
-/**
- * Generate random point on circle
- * @param {number} radius - Circle radius
- * @param {Object} center - Center point with x, y properties
- * @returns {Object} Random point with x, y properties
- */
-export const randomPointOnCircle = (radius, center = { x: 0, y: 0 }) => {
-  const angle = Math.random() * 2 * Math.PI;
-  return {
-    x: center.x + radius * Math.cos(angle),
-    y: center.y + radius * Math.sin(angle),
-  };
-};
-
-/**
  * Generate random angle in radians
  * @returns {number} Random angle (0 to 2π)
  */
 export const randomAngle = () => Math.random() * 2 * Math.PI;
-
-/**
- * Generate random velocity vector
- * @param {number} minSpeed - Minimum speed
- * @param {number} maxSpeed - Maximum speed
- * @returns {Object} Random velocity with x, y properties
- */
-export const randomVelocity = (minSpeed, maxSpeed) => {
-  const angle = randomAngle();
-  const speed = randomRange(minSpeed, maxSpeed);
-  return {
-    x: speed * Math.cos(angle),
-    y: speed * Math.sin(angle),
-  };
-};
 
 /**
  * Generate Gaussian (normal) distributed random number
@@ -437,51 +176,6 @@ export const randomGaussian = (mean = 0, stdDev = 1) => {
   while (v === 0) v = Math.random();
   const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
   return z * stdDev + mean;
-};
-
-/**
- * Generate random mass using log-normal distribution
- * @param {number} logMean - Mean of log values
- * @param {number} logStdDev - Standard deviation of log values
- * @param {number} minMass - Minimum mass
- * @param {number} maxMass - Maximum mass
- * @returns {number} Random mass
- */
-export const randomLogNormalMass = (logMean, logStdDev, minMass, maxMass) => {
-  const logMass = randomGaussian(logMean, logStdDev);
-  const mass = Math.pow(10, logMass);
-  return clamp(mass, minMass, maxMass);
-};
-
-/**
- * Generate random stellar mass using skewed distribution (original method)
- * Favors smaller, more common stars. Range ~0.2 to 3.2 Msun.
- * @returns {number} Random stellar mass in solar masses
- */
-export const randomStellarMass = () => {
-  return Math.pow(10, Math.random() * 1.5 - 0.7);
-};
-
-/**
- * Calculate stellar radius based on mass (mass-radius relation)
- * @param {number} massInSuns - Mass in solar masses
- * @param {number} baseStellarRadius - Base stellar radius constant
- * @returns {number} Stellar radius
- */
-export const stellarRadius = (massInSuns, baseStellarRadius = 10) => {
-  return baseStellarRadius * Math.pow(massInSuns, 0.75); // R ~ M^0.75
-};
-
-/**
- * Calculate black hole radius based on mass
- * @param {number} mass - Black hole mass
- * @param {number} baseMass - Base mass for scaling
- * @param {number} baseRadius - Base radius constant
- * @returns {number} Black hole radius
- */
-export const blackHoleRadius = (mass, baseMass, baseRadius = 15) => {
-  const mass_scale = Math.max(1.0, mass / baseMass);
-  return baseRadius * Math.pow(mass_scale, 0.5);
 };
 
 // =============================================================================
@@ -525,44 +219,6 @@ export const screenToWorld = (screenPos, state, canvas) => {
 };
 
 /**
- * Check if a world position is visible on screen
- * @param {Object} worldPos - World position with x, y properties
- * @param {Object} state - State object with zoom, pan properties
- * @param {Object} canvas - Canvas object with width, height properties
- * @param {number} margin - Margin around screen edges
- * @returns {boolean} True if position is visible
- */
-export const isOnScreen = (worldPos, state, canvas, margin = 0) => {
-  const screenPos = worldToScreen(worldPos, state, canvas);
-  return (
-    screenPos.x >= -margin &&
-    screenPos.x <= canvas.width + margin &&
-    screenPos.y >= -margin &&
-    screenPos.y <= canvas.height + margin
-  );
-};
-
-/**
- * Simple world to screen conversion (original method - identity transform)
- * Used when canvas context handles the transformation
- * @param {Object} pos - World position with x, y properties
- * @returns {Object} Screen position (same as input)
- */
-export const worldToScreenSimple = pos => ({ x: pos.x, y: pos.y });
-
-/**
- * Simple screen to world conversion (original method)
- * @param {Object} spos - Screen position with x, y properties
- * @param {Object} state - State object with zoom, pan properties
- * @param {Object} canvas - Canvas object with width, height properties
- * @returns {Object} World position with x, y properties
- */
-export const screenToWorldSimple = (spos, state, canvas) => ({
-  x: (spos.x - canvas.width / 2 - state.pan.x) / state.zoom,
-  y: -(spos.y - canvas.height / 2 - state.pan.y) / state.zoom,
-});
-
-/**
  * Check if position is offscreen (original method)
  * @param {Object} pos - World position with x, y properties
  * @param {Object} state - State object with zoom, pan properties
@@ -581,32 +237,6 @@ export const isOffscreen = (pos, state, canvas, buffer_factor = 1.5) => {
     pos.y < world_center_y - half_height_world ||
     pos.y > world_center_y + half_height_world
   );
-};
-
-// =============================================================================
-// PHYSICS UTILITIES
-// =============================================================================
-
-/**
- * Calculate gravitational force between two objects
- * @param {Object} obj1 - First object with mass, pos properties
- * @param {Object} obj2 - Second object with mass, pos properties
- * @param {number} G - Gravitational constant
- * @returns {Object} Force vector with x, y properties
- */
-export const gravitationalForce = (obj1, obj2, G) => {
-  const dx = obj2.pos.x - obj1.pos.x;
-  const dy = obj2.pos.y - obj1.pos.y;
-  const distSq = dx * dx + dy * dy;
-  const dist = Math.sqrt(distSq);
-
-  if (dist === 0) return { x: 0, y: 0 };
-
-  const force = (G * obj1.mass * obj2.mass) / distSq;
-  const forceX = (force * dx) / dist;
-  const forceY = (force * dy) / dist;
-
-  return { x: forceX, y: forceY };
 };
 
 /**
@@ -746,51 +376,6 @@ export const potentialEnergyPair = (body1, body2) => {
   );
 };
 
-/**
- * Calculate total system energy (kinetic + potential)
- * @param {Array} bodies - Array of all bodies in the simulation
- * @returns {number} Total system energy
- */
-export const totalSystemEnergy = bodies => {
-  let totalEnergy = 0;
-
-  // Add kinetic energy of all bodies
-  for (let i = 0; i < bodies.length; i++) {
-    totalEnergy += kineticEnergy(bodies[i]);
-  }
-
-  // Add potential energy between all pairs (each pair counted once)
-  for (let i = 0; i < bodies.length; i++) {
-    for (let j = i + 1; j < bodies.length; j++) {
-      totalEnergy += potentialEnergyPair(bodies[i], bodies[j]);
-    }
-  }
-
-  return totalEnergy;
-};
-
-/**
- * Calculate the total energy for a single body relative to all other bodies.
- * This returns an object with ke, pe and total properties.
- * Potential energy is assigned half of each pair's potential to avoid double-counting.
- * @param {Object} body - The body whose energy to compute
- * @param {Array} bodies - All bodies in the simulation
- * @returns {{ke: number, pe: number, total: number}}
- */
-export const totalEnergyForBody = (body, bodies) => {
-  // Kinetic energy of the selected body
-  const ke = kineticEnergy(body);
-  let pe = 0;
-  // Sum the potential energy contributions from all other bodies
-  for (let i = 0; i < bodies.length; i++) {
-    const other = bodies[i];
-    if (other === body) continue;
-    // Divide by 2 so that summing energies of all bodies yields the system's potential energy
-    pe += potentialEnergyPair(body, other) / 2;
-  }
-  return { ke, pe, total: ke + pe };
-};
-
 // =============================================================================
 // CONSTANTS
 // =============================================================================
@@ -893,15 +478,6 @@ export const earthHTML = (value, base = 'M') =>
  */
 export const jupiterHTML = (value, base = 'M') =>
   solarHTML(value, base, JUPITER_SYMBOL);
-
-/**
- * Plain-text solar-unit label, for tooltips, exports and aria labels where
- * markup is not available.
- * @param {number|string} value - The numeric part, already formatted
- * @param {string} [base] - Quantity letter
- * @returns {string} e.g. "1.40 M⊙"
- */
-export const solarText = (value, base = 'M') => `${value} ${base}${SUN_SYMBOL}`;
 
 /**
  * Draw a solar-unit label on a canvas with a true subscript.

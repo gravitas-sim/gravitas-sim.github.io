@@ -65,6 +65,34 @@ export default [
     },
   },
   {
+    // The service worker: a third global scope again, with the Cache and Fetch
+    // APIs and none of the page's DOM. Linted rather than ignored, because it
+    // is the one file whose bugs are invisible until a classroom is offline.
+    files: ['sw.js'],
+    languageOptions: {
+      ecmaVersion: 2021,
+      sourceType: 'script',
+      globals: {
+        self: 'readonly',
+        caches: 'readonly',
+        clients: 'readonly',
+        importScripts: 'readonly',
+        fetch: 'readonly',
+        Request: 'readonly',
+        Response: 'readonly',
+        URL: 'readonly',
+        Promise: 'readonly',
+        console: 'readonly',
+      },
+    },
+    plugins: { prettier },
+    rules: {
+      ...prettierConfig.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': 'error',
+    },
+  },
+  {
     // Web Workers run in a different global scope than the page modules
     files: [
       'js/physicsWorker.js',
@@ -118,6 +146,7 @@ export default [
         clearInterval: 'readonly',
         localStorage: 'readonly',
         sessionStorage: 'readonly',
+        MessageChannel: 'readonly',
         fetch: 'readonly',
         URL: 'readonly',
         URLSearchParams: 'readonly',

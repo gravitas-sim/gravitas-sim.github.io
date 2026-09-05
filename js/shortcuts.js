@@ -49,7 +49,20 @@ function isTypingTarget(target) {
 function handleKey(e) {
   if (!enabled) return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (isTypingTarget(e.target)) return;
+  // Escape is exempt from the typing guard, and it is the only key that is.
+  //
+  // A dialog has to be dismissable from wherever focus happens to be, and in
+  // several of them focus lands in a text field: the share dialog opens with
+  // the URL selected, and the gallery has a search box. With the guard applied
+  // to Escape, a keyboard reader who reached either one could not get out of
+  // the dialog with the key everyone tries first - which is the shape of a
+  // keyboard trap even though the Tab loop is intact.
+  //
+  // A field that wants Escape for itself takes it by calling
+  // stopPropagation(), which the settings filter already does to clear its
+  // text before the panel closes. That is the right way round: the field
+  // decides, and silence means the dialog gets it.
+  if (e.key !== 'Escape' && isTypingTarget(e.target)) return;
 
   const key = e.key.toLowerCase();
   for (const s of registry) {

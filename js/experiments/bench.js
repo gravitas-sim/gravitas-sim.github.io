@@ -335,9 +335,8 @@ export function applyPerturbation({ bodyId, axis, km }) {
  */
 export async function recordNumericalControl() {
   if (!current?.runs?.A || !current?.runs?.B) return { ok: false, label: '' };
-  const { separationSeries, analyseDivergence } = await import(
-    '../chaos/divergence.js'
-  );
+  const { separationSeries, analyseDivergence } =
+    await import('../chaos/divergence.js');
   const shape = run =>
     (run.samples || [])
       .filter(s => Array.isArray(s.__bodies))

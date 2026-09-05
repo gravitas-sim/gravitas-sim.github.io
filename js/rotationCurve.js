@@ -770,13 +770,6 @@ export function setGalaxyGravity(mode) {
   updatePhysicsSettings({ galaxy_gravity: wanted });
   const actual = galaxyGravityMode();
 
-  // Kept for the listeners written before there were three modes. They only
-  // ever cared whether the halo was in the force law.
-  window.dispatchEvent(
-    new CustomEvent('gravitasHaloChanged', {
-      detail: { on: actual === 'halo' },
-    })
-  );
   window.dispatchEvent(
     new CustomEvent('gravitasGalaxyGravityChanged', {
       detail: { mode: actual, requested: wanted },

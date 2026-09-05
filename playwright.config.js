@@ -81,6 +81,17 @@ const serveRoot = target === 'dist' ? 'dist' : '.';
 const PRODUCTION_SPEC = /production\.spec\.js/;
 
 /**
+ * Specs that run against both targets.
+ *
+ * e2e/selfContained.spec.js asserts that the application reaches no origin but
+ * its own, and that has to hold for the sources and for the bundle: the two
+ * resolve three.js, Chart.js and the fonts by the same relative paths, and the
+ * whole point is that neither can quietly differ. Written DOM-only for the same
+ * reason production.spec.js is - there is no /js/ui.js to import in dist/.
+ */
+const BOTH_TARGETS = /selfContained\.spec\.js/;
+
+/**
  * Which engines to run.
  *
  * 'chromium' by default; 'all' for the full set; or an explicit comma-separated
@@ -158,7 +169,11 @@ const desktop = engines.map(name => ({
 export default defineConfig({
   testDir: './e2e',
   ...(target === 'dist'
-    ? { testMatch: PRODUCTION_SPEC }
+    ? {
+        testMatch: new RegExp(
+          `${PRODUCTION_SPEC.source}|${BOTH_TARGETS.source}`
+        ),
+      }
     : { testIgnore: PRODUCTION_SPEC }),
   ...(PROFILE === 'cross-browser' ? { grep: CROSS_BROWSER_TAG } : {}),
   // Every spec here drives a live simulation, so they are slower than a typical
@@ -190,6 +205,16 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: isCI ? 'retain-on-failure' : 'off',
+    // Service workers are blocked by default, and e2e/offline.spec.js opts back
+    // in for itself.
+    //
+    // Not because they are a problem, but because they are a *variable*. Once
+    // sw.js is registered it answers requests from a cache, so a test that
+    // failed would leave the next one wondering whether it saw the application
+    // or a copy of it, and a change to a module would be invisible to any test
+    // whose context had already cached it. The offline behaviour deserves tests
+    // that mean something; the other 200 deserve to be testing the application.
+    serviceWorkers: 'block',
     // The simulation animates constantly, so there is no "network idle" and no
     // settled DOM to wait for. Actions wait on the element, not the page.
     actionTimeout: 15_000,

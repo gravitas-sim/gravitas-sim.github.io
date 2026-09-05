@@ -324,9 +324,8 @@ test.describe('Three-Body Sensitivity Lab scenario contract', () => {
   }) => {
     const known = await page.evaluate(async () => {
       const { SCENARIO_INFO } = await import('/js/data/scenarioInfo.js');
-      const lesson = await import(
-        '/js/data/investigations/butterfly-effect.js'
-      );
+      const lesson =
+        await import('/js/data/investigations/butterfly-effect.js');
       const wanted = lesson.default.steps
         .map(s => s.setup?.scenario)
         .filter(Boolean);

@@ -15,6 +15,7 @@
 // callback and calls it; ui.js owns the one authoritative loadScenarioByKey().
 // =============================================================================
 
+import { trapFocus } from './focusTrap.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS, TAG_ORDER } from './data/scenarioTags.js';
 import {
@@ -31,6 +32,9 @@ let els = {};
 let onSelect = null;
 let activeTag = ALL;
 let query = '';
+/** Releases the focus trap; set while the gallery is open. */
+let releaseFocus = null;
+
 let lastFocus = null;
 
 // --- The catalog, as the gallery sees it -------------------------------------
@@ -283,8 +287,16 @@ export function openScenarioBrowser() {
   renderResults();
   els.modal.classList.remove('hidden');
   if (els.scroller) els.scroller.scrollTop = 0;
+  // aria-modal="true" was a promise the gallery did not keep: Tab left it for
+  // the rail behind. The trap also marks the background inert for assistive
+  // technology and restores focus when it is released.
+  //
   // The search field is the fastest way in for anyone who already knows what
   // they want, and focusing it does not stop the chips being tabbed to.
+  releaseFocus = trapFocus(document.getElementById('scenarioListContent'), {
+    initialFocus: els.search,
+    returnFocusTo: lastFocus,
+  });
   setTimeout(() => els.search?.focus(), 60);
 }
 
@@ -292,6 +304,11 @@ export function openScenarioBrowser() {
 export function closeScenarioBrowser() {
   if (!els.modal) return;
   els.modal.classList.add('hidden');
+  if (releaseFocus) {
+    releaseFocus();
+    releaseFocus = null;
+    return;
+  }
   if (
     lastFocus &&
     document.contains(lastFocus) &&

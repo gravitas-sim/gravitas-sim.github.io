@@ -142,6 +142,44 @@ jobs:
       - name: Scenario thumbnail manifest
         run: npm run thumbnails:check
 
+      # A stale precache manifest is the worst kind of stale: the cache name
+      # never changes, so a returning browser keeps serving last week's
+      # JavaScript out of its own cache and nothing anywhere reports an error.
+      - name: Service worker manifest is current
+        run: npm run sw:check
+
+      # Import cycles and layer violations. The graph had eleven cycles before
+      # the state was pulled out of ui.js and every one of them ran through a
+      # coordinator, which meant the renderer's dependencies included the
+      # settings panel. This job is what stops that coming back: it fails on any
+      # new cycle, on a low-level module importing a coordinator, and - so the
+      # baseline can only shrink - on an exemption that no longer applies.
+      - name: Module architecture
+        run: npm run check:architecture
+
+      # Every investigation and every step, against the widget registry, the
+      # scenario catalog, the grader, the translations, the instructor guide and
+      # the manifests. A lesson is data spread over six files and a broken
+      # reference between them is invisible until a class hits it.
+      - name: Investigations validate
+        run: npm run author:check
+
+      # vendor/ carries three.js, Chart.js and the nine self-hosted font faces,
+      # generated from the pinned packages and committed because GitHub Pages
+      # serves the repository root. This fails if a lockfile bump moved one of
+      # them without `npm run vendor` being run - which would mean the site
+      # keeps serving the old copy while package.json claims the new one.
+      - name: Vendored libraries and fonts are current
+        run: npm run vendor:check
+
+      # No advisories, and none in the production dependency tree in
+      # particular. Not `audit fix`: this reports, and a fix is a reviewed
+      # change like any other.
+      - name: Dependency audit
+        run: |
+          npm audit --audit-level=moderate
+          npm audit --omit=dev
+
       # Every count the documentation cites is generated from the catalog, the
       # lesson manifest or the test output. This is the job that notices when
       # one of them has drifted - a README that says 43 scenarios over a catalog
@@ -171,6 +209,12 @@ jobs:
       # instructor passphrase. See the header.
       - name: Build
         run: npm run build:ci
+
+      # What a first-time visitor waits for, against a written ceiling. Growth
+      # is allowed; unexplained growth is not - raising a limit means editing
+      # tools/bundle-budget.mjs and saying why in the same commit.
+      - name: Bundle budget
+        run: npm run budget
 
       - name: Check the built site's internal links
         run: node tools/check-links.mjs --root dist
@@ -241,6 +285,71 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-sources
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  accessibility:
+    name: Accessibility (axe + keyboard)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Its own job rather than a line inside the browser suite. An accessibility
+    # regression should be legible as one on the pull request rather than as
+    # "e2e failed", and this runs in parallel so it costs no wall-clock. The
+    # same specs also run inside `npm run e2e`; that is the safety net if this
+    # job is ever removed.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Playwright's browsers are ~400MB and unpack slowly, so they are cached
+      # separately from npm and keyed on the pinned version: a browser build and
+      # the client that drives it have to match.
+      - name: Resolve the Playwright version
+        id: pw
+        run: |
+          version=$(node -p "require('./package.json').devDependencies['@playwright/test']")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Cache browsers
+        uses: actions/cache@v4
+        id: browsers
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}-chromium
+
+      - name: Install Chromium
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      # The system libraries the browser links against are not in the cache, so
+      # they are installed even on a hit. This is a few seconds.
+      - name: Install browser dependencies
+        if: steps.browsers.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: axe-core over every surface, both languages, both themes
+        run: npm run a11y:axe
+
+      # Focus order, focus traps, Escape, focus restoration, heading order,
+      # landmarks, reflow at 200% and 400%, reduced motion, and the textual
+      # description of the canvas. The half axe cannot see.
+      - name: Keyboard, focus and the canvas description
+        run: npm run a11y:manual
+
+      - name: Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-accessibility
           path: |
             playwright-report
             test-results
@@ -380,13 +489,14 @@ jobs:
     name: CI
     if: ${{ always() }}
     runs-on: ubuntu-latest
-    needs: [checks, build, e2e, e2e-build, cross-browser]
+    needs: [checks, build, e2e, accessibility, e2e-build, cross-browser]
     steps:
       - name: Report
         run: |
           echo "checks:        ${{ needs.checks.result }}"
           echo "build:         ${{ needs.build.result }}"
           echo "e2e:           ${{ needs.e2e.result }}"
+          echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
           failed=0
@@ -394,6 +504,7 @@ jobs:
             "${{ needs.checks.result }}" \
             "${{ needs.build.result }}" \
             "${{ needs.e2e.result }}" \
+            "${{ needs.accessibility.result }}" \
             "${{ needs.e2e-build.result }}" \
             "${{ needs.cross-browser.result }}"
           do

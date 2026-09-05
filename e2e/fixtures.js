@@ -68,9 +68,10 @@ function makeApp(page) {
      * @param {object} [options]
      * @param {boolean} [options.firstVisit] - Leave the front door in place
      * @param {string} [options.url] - A share link or hash to open instead of /
+     * @param {string} [options.qualityTier] - 'full' (default), 'low' or 'auto'
      * @returns {Promise<void>}
      */
-    async boot({ firstVisit = false, url = '/' } = {}) {
+    async boot({ firstVisit = false, url = '/', qualityTier = 'full' } = {}) {
       // The flag has to be written before any application script runs, which
       // means before the first navigation rather than after it.
       await page.addInitScript(
@@ -96,6 +97,38 @@ function makeApp(page) {
           timeout: 30_000,
         }
       );
+
+      // Pin the quality tier, because on 'auto' it is a measurement of the
+      // machine running the test rather than a property of the application.
+      //
+      // This is not a workaround for a slow runner. The low tier deliberately
+      // renders the canvas at 0.7 of native, so a demotion changes the size of
+      // the backing store - and a CI box running six workers demotes. That
+      // turned five embed-mode tests, which assert the canvas fills its frame,
+      // into a report on how loaded the runner was: 320 became 224, 960 became
+      // 672, and the same run passed at 750 and failed at 700. The instruments
+      // pixel-diff test failed the same way, comparing two captures taken at
+      // different resolutions.
+      //
+      // Pinned through SETTINGS rather than a test-only hook: this is the
+      // reader's own control, and js/render.js pushes it into the sampler on
+      // the next frame. Tests that are about the tier pass 'auto' and take the
+      // measurement back.
+      // Source target only. Against dist/ there is no /js/ui.js to import -
+      // esbuild has bundled it into a hashed chunk - which is the whole reason
+      // production.spec.js touches nothing but the DOM. Reaching for the module
+      // here made all six of its tests fail on a dynamic import that cannot
+      // resolve. The production spec asserts nothing about resolution, so it
+      // does not need the pin.
+      if (qualityTier && process.env.GRAVITAS_E2E_TARGET !== 'dist') {
+        await page.evaluate(async tier => {
+          const ui = await import('/js/ui.js');
+          ui.SETTINGS.quality_tier = tier;
+        }, qualityTier);
+        await page.evaluate(
+          () => new Promise(r => window.requestAnimationFrame(() => r()))
+        );
+      }
     },
 
     /**

@@ -21,10 +21,14 @@ import {
   COMFORTABLE_URL_LENGTH,
 } from './shareState.js';
 import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
-import { toast, announce } from './controls.js';
+import { toast, announce } from './notify.js';
+import { trapFocus } from './focusTrap.js';
 import { embedSnippet } from './embed.js';
 import { lessonInHash } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
+
+/** Releases the focus trap; set while the dialog is open. */
+let releaseFocus = null;
 
 let els = {};
 let kind = 'auto';
@@ -82,9 +86,8 @@ export async function applySharedLinkFromUrl() {
     // correct, and the experiment is an extra.
     if (payload.xp) {
       try {
-        const { adoptExperimentFromLink } = await import(
-          './experimentsBridge.js'
-        );
+        const { adoptExperimentFromLink } =
+          await import('./experimentsBridge.js');
         await adoptExperimentFromLink(payload);
       } catch (err) {
         console.warn('Could not open the experiment in this link:', err);
@@ -293,14 +296,29 @@ export function openShareDialog() {
   if (!els.modal) return;
   kind = 'auto';
   els.modal.classList.remove('hidden');
-  refresh().then(() => els.url.focus());
+  // The dialog declares aria-modal="true" and, until this, did not behave like
+  // one: Tab walked straight out of it into the control rail behind. The trap
+  // also marks the rest of the page inert, which is what stops a screen reader
+  // browsing the page underneath, and remembers where focus came from.
+  releaseFocus = trapFocus(document.getElementById('shareContent'), {
+    initialFocus: els.url,
+    returnFocusTo: document.getElementById('shareBtn'),
+  });
+  refresh().then(() => els.url?.focus());
 }
 
 /** Hide the dialog. */
 export function closeShareDialog() {
   if (!els.modal) return;
   els.modal.classList.add('hidden');
-  document.getElementById('shareBtn')?.focus();
+  // Releasing restores focus to the button that opened it, so this no longer
+  // has to do it by hand.
+  if (releaseFocus) {
+    releaseFocus();
+    releaseFocus = null;
+  } else {
+    document.getElementById('shareBtn')?.focus();
+  }
 }
 
 /** @returns {boolean} True while the dialog is showing */

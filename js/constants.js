@@ -116,3 +116,15 @@ export const DEBRIS_FRAGMENT_MASS_KG = 1.5708e12;
  * student will find quoted.
  */
 export const EARTH_MASSES_PER_SOLAR_MASS = 332946.0487;
+
+// --- Simulation mass anchors --------------------------------------------------
+// These were declared in js/physics.js, which meant js/units.js - a foundation
+// module whose entire job is converting simulation numbers into physical ones -
+// had to import the engine to find out what a solar mass is. They are two
+// constants; they belong here.
+
+/** Simulation mass units in one solar mass. */
+export const SOLAR_MASS_UNIT = 1000;
+
+/** Simulation mass units in one Earth mass. */
+export const EARTH_MASS_UNIT = SOLAR_MASS_UNIT / EARTH_MASSES_PER_SOLAR_MASS;

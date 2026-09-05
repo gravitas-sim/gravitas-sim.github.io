@@ -1,5 +1,10 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// Bundled into vendor/ from the pinned npm package by tools/vendor-deps.mjs,
+// and imported by a real relative path so that source mode and the production
+// bundle load exactly the same code. It used to be a bare `three` resolved by
+// an import map pointing at jsdelivr, which meant the 3-D view could not open
+// without a third-party request and could not be cached offline.
+import * as THREE from '../vendor/three/three.module.js';
+import { OrbitControls } from '../vendor/three/three.module.js';
 
 import {
   bh_list,

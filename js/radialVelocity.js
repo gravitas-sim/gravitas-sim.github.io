@@ -334,7 +334,7 @@ function renderReadout() {
 export function starIsHeldFixed() {
   return Boolean(
     getPhysicsSetting('star_only_gravity') ||
-      !getPhysicsSetting('mutual_gravity')
+    !getPhysicsSetting('mutual_gravity')
   );
 }
 

@@ -51,3 +51,4 @@ manual/*.out
 manual/*.toc
 manual/*.xdv
 manual/gravitas-user-manual.pdf
+.build-report.json

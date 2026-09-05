@@ -179,8 +179,18 @@ const RETROGRADE = {
       body: `A period is awkward to compare directly. Turn each one into an
              angular speed instead: a full lap is 360°, so a planet covers
              360 ÷ P degrees every day.
-             \n\nUse the two periods you just measured.`,
+             \n\nCopy across the two periods you measured a moment ago; the
+             three speeds work themselves out.`,
       fields: [
+        // The two periods are typed again here rather than read back from the
+        // step they were measured on. A computed field is evaluated against
+        // *this* step's responses only - see fieldValues() in
+        // js/investigations.js - so a compute that reached into an earlier step
+        // silently produced NaN and left all three boxes blank. The checker
+        // catches that now (ref/field), and the fix is to give the arithmetic
+        // its inputs.
+        { id: 'earth_P', label: 'Earth: orbital period', unit: 'days' },
+        { id: 'mars_P', label: 'Mars: orbital period', unit: 'days' },
         {
           id: 'earth_w',
           label: 'Earth: degrees per day',

@@ -150,7 +150,13 @@ async function digestCatalogue(page) {
       // Settings are digested rather than stored: the object carries ~90 keys
       // and the golden would be unreadable. Sorted so key order cannot matter.
       const settings = ui.SETTINGS || {};
+      // quality_tier is excluded because it is a property of the machine
+      // running the test, not of the world being built. It is pinned to 'full'
+      // by the boot fixture, so construction here is measured at a known tier;
+      // digesting the pin as well would bake a test-harness choice into the
+      // golden and make every scenario's hash change if that choice ever did.
       const settingsRows = Object.keys(settings)
+        .filter(k => k !== 'quality_tier')
         .sort()
         .map(k => `${k}=${JSON.stringify(settings[k])}`);
 

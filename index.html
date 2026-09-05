@@ -52,21 +52,26 @@
       name="twitter:image"
       content="https://gravitas-sim.online/social-card.png"
     />
-    <!-- Fonts: preconnect first so the CSS request starts immediately -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <!-- Fonts, self-hosted. Generated with the faces by tools/vendor-deps.mjs;
+         this used to be two preconnects and a stylesheet from Google, which is
+         a third-party request on every visit and nothing at all offline. The
+         two faces the first screen actually needs are preloaded so the swap
+         happens before the splash clears rather than after it. -->
+    <link rel="stylesheet" href="css/fonts.css?v=3" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@300;400;600&amp;family=Roboto+Mono:wght@400;700&amp;display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="vendor/fonts/poppins-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
     />
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-        }
-      }
-    </script>
+    <link
+      rel="preload"
+      href="vendor/fonts/inter-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin=""
+    />
     <link rel="stylesheet" href="css/tokens.css?v=3" />
     <link rel="stylesheet" href="css/styles.css?v=3" />
     <link rel="stylesheet" href="css/components.css?v=3" />
@@ -88,11 +93,14 @@
       a page whose only heading was whichever panel happened to be open. It is
       visually hidden because the simulation is the page's visual identity.
     -->
+
+    <!-- <main>, not a <div>: this is the page's main content, and without a
+         landmark every element outside a dialog was reported as being outside
+         one. A block-level swap, so nothing about the layout changes. -->
+    <main id="mainContent" class="simulation-container">
     <h1 class="visually-hidden" data-i18n="chrome.text2">
       Gravitas: interactive astrophysics sandbox
     </h1>
-
-    <div class="simulation-container">
       <canvas
         id="starfieldCanvas"
         class="sim-canvas"
@@ -102,9 +110,21 @@
         id="simulationCanvas"
         class="sim-canvas"
         role="img"
-        aria-label="Gravitational simulation viewport. Object counts and status are announced in the readout panel."
+        aria-label="Gravitational simulation"
+        data-i18n-aria-label="chrome.canvas.label"
+        aria-describedby="canvasSummary"
       ></canvas>
-    </div>
+      <!-- The textual equivalent of the canvas: which scenario is loaded,
+           whether it is running, what is in it and what is selected. Kept
+           up to date by js/canvasSummary.js.
+
+           Deliberately not a live region. The simulation changes sixty times a
+           second and announcing that would be unusable; this is a description,
+           read when a reader moves to the canvas. Discrete events - a scenario
+           loading, a pause, a selection - go to #srStatus instead, which is
+           polite and only written when something actually happened. -->
+      <p id="canvasSummary" class="visually-hidden"></p>
+    </main>
 
     <!--
       The recording indicator. Not in the rail, because the rail can be
@@ -138,12 +158,18 @@
     <div
       id="threeViewportContainer"
       class="three-view-container"
-      aria-hidden="true"
+      role="region"
+      aria-labelledby="threeViewTitle"
       style="display: none"
     >
+      <!-- This carried aria-hidden="true", which hid a panel containing two
+           real buttons. They stayed in the tab order, so a keyboard reader
+           could focus the close button and be told nothing about it at all.
+           The panel is hidden from everyone by display:none when it is shut,
+           which is the correct mechanism and the only one needed. -->
       <div class="three-view-toolbar">
         <div class="three-view-meta">
-          <span class="three-view-title">Spacetime View</span>
+          <span class="three-view-title" id="threeViewTitle">Spacetime View</span>
           <span id="threeViewStatus" class="three-view-status">Hidden</span>
         </div>
         <div class="three-toolbar-actions">
@@ -158,8 +184,10 @@
             id="close3DViewBtn"
             class="three-toolbar-btn"
             title="Hide the spacetime viewport"
+            aria-label="Close the spacetime view"
+            data-i18n-aria-label="view3d.close.label"
           >
-            ✕
+            <span aria-hidden="true">✕</span>
           </button>
         </div>
       </div>
@@ -171,10 +199,13 @@
     </div>
 
     <!-- 🔭 Radial Velocity panel -->
-    <div id="rvContainer" class="obs-panel rv-container" style="display: none">
+    <div id="rvContainer" class="obs-panel rv-container" style="display: none"
+      role="region"
+      aria-labelledby="rvPanelTitle"
+    >
       <div class="obs-panel-toolbar">
         <div class="obs-panel-meta">
-          <span class="obs-panel-title">Radial Velocity</span>
+          <span class="obs-panel-title" id="rvPanelTitle">Radial Velocity</span>
           <span id="rvStatus" class="obs-panel-status">0 samples</span>
         </div>
         <div class="obs-panel-actions">
@@ -246,10 +277,13 @@
       id="astrometryContainer"
       class="obs-panel astrometry-container"
       style="display: none"
+    
+      role="region"
+      aria-labelledby="astrometryPanelTitle"
     >
       <div class="obs-panel-toolbar">
         <div class="obs-panel-meta">
-          <span class="obs-panel-title">Astrometry</span>
+          <span class="obs-panel-title" id="astrometryPanelTitle">Astrometry</span>
           <span id="astrometryStatus" class="obs-panel-status">0 points</span>
         </div>
         <div class="obs-panel-actions">
@@ -334,10 +368,13 @@
       id="rotationCurveContainer"
       class="obs-panel rotation-curve-container"
       style="display: none"
+    
+      role="region"
+      aria-labelledby="rotationCurvePanelTitle"
     >
       <div class="obs-panel-toolbar">
         <div class="obs-panel-meta">
-          <span class="obs-panel-title">Rotation Curve</span>
+          <span class="obs-panel-title" id="rotationCurvePanelTitle">Rotation Curve</span>
           <span id="rotationCurveStatus" class="obs-panel-status"
             >0 bodies</span
           >
@@ -572,10 +609,13 @@
       id="lightCurveContainer"
       class="light-curve-container"
       style="display: none"
+    
+      role="region"
+      aria-labelledby="lightCurvePanelTitle"
     >
       <div class="light-curve-toolbar">
         <div class="light-curve-meta">
-          <span class="light-curve-title">Transit Light Curve</span>
+          <span class="light-curve-title" id="lightCurvePanelTitle">Transit Light Curve</span>
           <span id="lightCurveStatus" class="light-curve-status">Hidden</span>
         </div>
         <div class="light-curve-actions">
@@ -654,7 +694,11 @@
 
     <!-- ✨ Splash screen -->
     <div id="splash">
-      <h1>GRAVITAS</h1>
+      <!-- A <p>, not an <h1>. The page already has its heading in <main>, and
+           a transient splash wordmark announcing itself as a second level-one
+           heading put two competing top-level headings in the outline. It is
+           still read; it is just not structure. -->
+      <p class="splash-wordmark">GRAVITAS</p>
     </div>
 
     <!--
@@ -701,7 +745,12 @@
       the same list is in the Shortcuts dialog, where somebody who wants it can
       find it. What is here instead is what changes as the simulation runs.
     -->
-    <div id="overlay">
+    <div
+      id="overlay"
+      role="region"
+      aria-label="Simulation readout"
+      data-i18n-aria-label="chrome.readout.label"
+    >
       <div class="readout-head">
         <span id="overlayStatus" class="readout-status" aria-live="polite">
           <span class="readout-status-dot" aria-hidden="true"></span>
@@ -736,7 +785,13 @@
     <div id="scenarioInfoDisplay"></div>
 
     <!-- Enhanced Scenario Info Box -->
-    <div id="scenarioInfoBox" class="scenario-info-box">
+    <div
+      id="scenarioInfoBox"
+      class="scenario-info-box"
+      role="region"
+      aria-label="Scenario information"
+      data-i18n-aria-label="chrome.scenarioInfo.label"
+    >
       <div class="scenario-info-content">
         <div class="scenario-info-header">
           <h2 id="scenarioInfoTitle">Scenario Loaded</h2>
@@ -802,10 +857,14 @@
       </div>
     </div>
 
+    <!-- role="region", not "toolbar". A toolbar promises a single tab stop and
+         arrow-key navigation between its controls; this rail has neither, so
+         the role described behaviour that was not implemented. A named region
+         is a landmark, which is also what the skip link above needs it to be. -->
     <div
       id="mainControls"
       class="ui-container"
-      role="toolbar"
+      role="region"
       aria-label="Simulation controls"
       tabindex="-1"
       data-i18n-aria-label="rail.mainControls.label"
@@ -1356,7 +1415,7 @@
     <div
       id="timelineBar"
       class="timeline-bar"
-      role="group"
+      role="region"
       aria-label="Playback and timeline"
       data-i18n-aria-label="transport.timelineBar.label"
     >
@@ -1642,7 +1701,38 @@
         </button>
       </div>
 
-      <div id="investigationBody" class="inv-body"></div>
+      <!-- Authoring preview only: hidden unless ?author= put the panel in it.
+           See js/authoring/preview.js. -->
+      <div id="investigationAuthorBar" class="inv-author-bar" hidden="">
+        <div class="inv-author-jump">
+          <span class="inv-author-badge">AUTHORING</span>
+          <label for="investigationAuthorStep">Step</label>
+          <input
+            id="investigationAuthorStep"
+            type="number"
+            min="1"
+            step="1"
+            aria-label="Jump to step"
+          />
+          <span id="investigationAuthorOf"></span>
+          <button id="investigationAuthorPrev" class="ui-button subtle" title="Previous step">◀</button>
+          <button id="investigationAuthorNext" class="ui-button subtle" title="Next step">▶</button>
+        </div>
+        <div id="investigationAuthorDiag" class="inv-author-diag"></div>
+      </div>
+
+      <!-- tabindex="0" because this scrolls. A lesson step is often longer
+           than the panel, and a keyboard reader with no pointer had no way to
+           scroll it: the panel's own controls are above and below it, so Tab
+           went straight past the text. -->
+      <div
+        id="investigationBody"
+        class="inv-body"
+        tabindex="0"
+        role="region"
+        aria-label="Lesson step"
+        data-i18n-aria-label="inv.body.label"
+      ></div>
 
       <div id="investigationProbeWrap" class="inv-probe-wrap" hidden="">
         <p class="inv-probe-title" data-i18n="inv.probe.title">Live readout</p>
@@ -2056,8 +2146,18 @@
       </div>
     </div>
 
-    <div id="settingsPanel" class="hidden">
-      <div class="settings-header" data-i18n="settings.settingsPanel">
+    <div
+      id="settingsPanel"
+      class="hidden"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="settingsPanelHeading"
+    >
+      <div
+        class="settings-header"
+        id="settingsPanelHeading"
+        data-i18n="settings.settingsPanel"
+      >
         Simulation Settings
       </div>
       <button
@@ -2142,8 +2242,14 @@
       </div>
     </div>
 
-    <div id="bhMassesModal" class="hidden">
-      <div class="bh-masses-header">
+    <div
+      id="bhMassesModal"
+      class="hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bhMassesHeading"
+    >
+      <div class="bh-masses-header" id="bhMassesHeading">
         Set Individual Black Hole Masses (M<sub class="solar-sub">☉</sub>)
       </div>
       <button
@@ -2310,6 +2416,7 @@
     <!-- Pinned comparison cards, one per pinned object -->
     <div
       id="pinnedInspectors"
+      role="region"
       aria-label="Pinned objects"
       data-i18n-aria-label="inspector.pinnedInspectors.label"
     ></div>
@@ -2418,10 +2525,15 @@
       application is expressed: there is no second layout engine, and nothing
       here is built at runtime.
     -->
+    <!-- role="region", not "toolbar", for the same reason as the control rail:
+         a toolbar promises that the arrow keys move focus between its buttons,
+         and in Lecture Mode the arrow keys step the sequence instead. Claiming
+         the role would have told a screen-reader user to expect the one
+         behaviour the mode deliberately does not have. -->
     <div
       id="lectureBar"
       class="lecture-bar"
-      role="toolbar"
+      role="region"
       aria-label="Lecture"
       data-i18n-aria-label="lecture.lectureBar.label"
     >

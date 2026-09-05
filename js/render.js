@@ -1,4 +1,14 @@
 import {
+  sampleFrame,
+  renderScale,
+  renderOverrides,
+  onTierChange,
+  setTier,
+} from './quality.js';
+
+/** The last value of SETTINGS.quality_tier pushed into js/quality.js. */
+let lastRequestedTier = null;
+import {
   bh_list,
   planets,
   stars,
@@ -26,13 +36,13 @@ import {
   conservationDrift,
 } from './physics.js';
 import { hexToRgb, debugLog } from './utils.js';
+import { state, SETTINGS } from './appState.js';
+import { updateCanvasSummary } from './canvasSummary.js';
 import {
-  SETTINGS,
-  state,
   getDragPreview,
   getOrbitPreview,
   checkAreaSweepValidity,
-} from './ui.js';
+} from './preview.js';
 import { updateSonification } from './audio.js';
 // Through the bridge, not the module: view3d.js pulls in three.js, and the
 // render loop importing it would put 256KB on the start-up path for a panel
@@ -198,7 +208,7 @@ const createAmbientGradient = () => {
 function generateStarfield() {
   starfieldStars.length = 0;
 
-  const totalStars = SETTINGS.star_density || 300; // Lower default density
+  const totalStars = q('star_density') || 300; // Lower default density
   const W = starfieldCanvas.width;
   const H = starfieldCanvas.height;
 
@@ -249,9 +259,9 @@ const STAR_TWINKLE_MS = 1000 / 20;
 
 /** Does anything on the starfield move by itself right now? */
 function starfieldHasMotion() {
-  if (SETTINGS.show_gravitational_waves && gravity_ripples.length) return true;
-  if (SETTINGS.show_object_lensing === false) return false;
-  if (SETTINGS.lensing_quality === 'off') return false;
+  if (q('show_gravitational_waves') && gravity_ripples.length) return true;
+  if (q('show_object_lensing') === false) return false;
+  if (q('lensing_quality') === 'off') return false;
   return (
     bh_list.length > 0 || neutron_stars.length > 0 || white_dwarfs.length > 0
   );
@@ -297,7 +307,7 @@ function drawStarfield() {
   const c = 0.18; // Speed of light in world units per ms (tweak for simulation scale)
   // --- Gravitational wave ripples (placeholder effect) ---
   // (Removed: drawing of visible colored ripple arcs. Only lensing effect remains.)
-  if (SETTINGS.show_gravitational_waves) {
+  if (q('show_gravitational_waves')) {
     const now = performance.now();
     const FADE_OUT_MS = 1000; // 1 second fade-out
     for (let i = gravity_ripples.length - 1; i >= 0; i--) {
@@ -328,7 +338,7 @@ function drawStarfield() {
     let sx = st.x - state.pan.x * 0.02 * parallax;
     let sy = st.y - state.pan.y * 0.02 * parallax;
     // Apply lensing distortion if within any active ripple
-    if (SETTINGS.show_gravitational_waves) {
+    if (q('show_gravitational_waves')) {
       for (let i = 0; i < gravity_ripples.length; i++) {
         const ripple = gravity_ripples[i];
         const now = performance.now();
@@ -455,10 +465,9 @@ function drawStarfield() {
     }
     // Black holes
     const enableObjectLensing =
-      SETTINGS.show_object_lensing !== false &&
-      SETTINGS.lensing_quality !== 'off';
+      q('show_object_lensing') !== false && q('lensing_quality') !== 'off';
     if (enableObjectLensing) {
-      const quality = SETTINGS.lensing_quality || 'medium';
+      const quality = q('lensing_quality') || 'medium';
       const qScale = quality === 'high' ? 1.6 : quality === 'low' ? 0.7 : 1;
       for (const bh of bh_list) {
         // Einstein radius grows as sqrt(M), so a supermassive hole bends a much
@@ -706,7 +715,7 @@ const drawScene = () => {
             ctx.moveTo(trail[0].x, trail[0].y);
 
             for (let i = 1; i < trail.length; i++) {
-              const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
+              const age_factor = 1 - trail[i].age / q('trail_length');
               const velocity_factor = Math.max(
                 TRAIL_MIN_INTENSITY,
                 Math.min(1, trail[i].velocity / speedScale)
@@ -736,7 +745,7 @@ const drawScene = () => {
           ctx.moveTo(trail[0].x, trail[0].y);
 
           for (let i = 1; i < trail.length; i++) {
-            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
+            const age_factor = 1 - trail[i].age / q('trail_length');
             ctx.globalAlpha = age_factor * 0.9;
             ctx.lineTo(trail[i].x, trail[i].y);
           }
@@ -750,7 +759,7 @@ const drawScene = () => {
           const sprite = getGlowSprite(rgb.r, rgb.g, rgb.b);
           const prevAlpha = ctx.globalAlpha;
           for (let i = 0; i < trail.length; i++) {
-            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
+            const age_factor = 1 - trail[i].age / q('trail_length');
             const velocity_factor = Math.max(
               TRAIL_MIN_INTENSITY,
               Math.min(1, trail[i].velocity / speedScale)
@@ -781,7 +790,7 @@ const drawScene = () => {
           ctx.moveTo(trail[0].x, trail[0].y);
 
           for (let i = 1; i < trail.length; i++) {
-            const age_factor = 1 - trail[i].age / SETTINGS.trail_length;
+            const age_factor = 1 - trail[i].age / q('trail_length');
             ctx.globalAlpha = age_factor * 0.8;
             ctx.lineTo(trail[i].x, trail[i].y);
           }
@@ -1344,6 +1353,16 @@ const drawScene = () => {
     overlayDiv.innerHTML = '';
   }
 
+  // The same facts as text, for the description the canvas points at. Called
+  // every frame and does nothing on almost all of them: it rewrites at most
+  // once every 1.5 seconds, and only when the sentence has actually changed.
+  //
+  // Outside the show_dynamic_overlays branch on purpose. That setting hides a
+  // visual panel; it must not also remove the only textual account of what is
+  // on screen, which would make turning off an overlay an accessibility
+  // regression for somebody who never saw it.
+  updateCanvasSummary();
+
   // Last of all, so nothing paints over a reading.
   try {
     drawSandboxTools(ctx);
@@ -1521,16 +1540,20 @@ function readoutHtml(drawn) {
         [t('readout.drift.angular'), pct(drift.angularDrift)],
       ];
       sections.push(
+        // The caveat is a sibling of the list, not a child of it. A <dl> may
+        // only contain dt, dd and div, and a stray <p> inside one makes the
+        // whole list unparseable to a screen reader that walks it as a
+        // definition list - which is exactly what it is being used as.
         `<dl class="readout-metrics is-diagnostics">${rows
           .map(
             ([k, v]) =>
               `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
           )
-          .join('')}${
+          .join('')}</dl>${
           drift.caveats.length
             ? `<p class="readout-caveat">${escapeHtml(t(drift.caveats[0]))}</p>`
             : ''
-        }</dl>`
+        }`
       );
     }
   }
@@ -1915,6 +1938,20 @@ const gameLoop = timestamp => {
     }
   });
 
+  // The quality tier measures the interval between frames, which is what the
+  // reader experiences; the adaptive-detail block below measures the work done
+  // inside one, which is a different question. Both are wanted: a machine can
+  // finish its work in 8ms and still present at 20fps.
+  //
+  // The reader's choice is pushed in from here rather than watched for with an
+  // event, because a string comparison per frame is cheaper than an event
+  // listener is to keep correct across the several paths that write SETTINGS.
+  if (SETTINGS.quality_tier !== lastRequestedTier) {
+    lastRequestedTier = SETTINGS.quality_tier;
+    setTier(lastRequestedTier || 'auto');
+  }
+  sampleFrame(timestamp);
+
   // Performance monitoring
   const frameTime = performance.now() - frameStart;
   frameTimeSum += frameTime;
@@ -1953,13 +1990,38 @@ const gameLoop = timestamp => {
   requestAnimationFrame(gameLoop);
 };
 
+/**
+ * A setting, as the current quality tier wants it.
+ *
+ * The tier's overrides are applied at the point of reading rather than written
+ * into SETTINGS. Writing them would be a one-way door: the reader's own choice
+ * of lensing quality would be destroyed the first time a machine dipped below
+ * the threshold, and restored to whatever the tier happened to say rather than
+ * to what they picked.
+ *
+ * @param {string} key - A settings key
+ * @returns {any} The effective value
+ */
+function q(key) {
+  const overrides = renderOverrides();
+  return overrides && key in overrides ? overrides[key] : SETTINGS[key];
+}
+
 // Original resizeCanvas function from index.html
 function resizeCanvas() {
   // Never fall to zero: a 0x0 canvas makes every drawing and culling
   // calculation degenerate. Browsers can report 0 for a page that is not
   // being presented yet (background tab, hidden container).
-  const W = Math.max(1, window.innerWidth || 0);
-  const H = Math.max(1, window.innerHeight || 0);
+  // The backing store, which at the low quality tier is deliberately smaller
+  // than the CSS box the compositor stretches it over. The canvas has never
+  // applied devicePixelRatio, so on the machines that tier is for this is the
+  // only pixel budget there is to give back - and at 0.7 it is half of them.
+  //
+  // js/ui.js converts pointer events through the same ratio, which is what
+  // keeps a click landing on the body underneath it.
+  const scale = renderScale();
+  const W = Math.max(1, Math.round((window.innerWidth || 0) * scale));
+  const H = Math.max(1, Math.round((window.innerHeight || 0) * scale));
   if (canvas.width === W && canvas.height === H) return;
   canvas.width = W;
   canvas.height = H; // sim layer
@@ -1979,6 +2041,19 @@ window.addEventListener('resize', () => {
   requestAnimationFrame(() => {
     resizePending = false;
     resizeCanvas();
+  });
+});
+
+// Changing tier changes the size of the backing store, and resizeCanvas returns
+// early when the size it computes matches what is already there - so the tier
+// has to say when its answer has changed. Scheduled rather than immediate: the
+// change arrives from inside sampleFrame, which is called from the render loop,
+// and reallocating three canvases mid-frame is how a frame gets dropped at
+// exactly the moment the machine has proved it cannot afford one.
+onTierChange(() => {
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    starfieldDirty = true;
   });
 });
 

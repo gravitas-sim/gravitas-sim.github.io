@@ -6621,3 +6621,167 @@
     line-height: 1.4;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * The authoring preview bar
+ * ---------------------------------------------------------------------------
+ * Only ever visible when ?author= put the panel in preview mode, and styled to
+ * be unmistakable: an author who has forgotten which mode they are in must not
+ * confuse a preview with what a class sees.
+ * ------------------------------------------------------------------------- */
+@layer components {
+  .inv-author-bar {
+    border-bottom: 1px solid var(--border, #2a2f3a);
+    background: color-mix(in srgb, var(--accent, #4dd0e1) 8%, transparent);
+    padding: var(--space-2, 8px) var(--space-3, 12px);
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 8px);
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+
+  .inv-author-bar[hidden] {
+    display: none !important;
+  }
+
+  .inv-author-jump {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+    flex-wrap: wrap;
+  }
+
+  .inv-author-badge {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--accent, #4dd0e1);
+    color: var(--bg, #10131a);
+  }
+
+  .inv-author-jump input {
+    width: 4.5em;
+    font: inherit;
+    padding: 2px 4px;
+  }
+
+  .inv-author-facts {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px var(--space-2, 8px);
+    align-items: baseline;
+  }
+
+  .inv-author-fact {
+    display: contents;
+  }
+
+  .inv-author-fact > span {
+    opacity: 0.65;
+    text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
+
+  .inv-author-fact > code {
+    font-size: 11px;
+    word-break: break-word;
+  }
+
+  .inv-author-findings {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .inv-author-findings.is-clean {
+    opacity: 0.55;
+    font-style: italic;
+  }
+
+  .inv-author-finding {
+    padding: 4px 6px;
+    border-radius: 3px;
+    border-left: 3px solid transparent;
+    background: color-mix(in srgb, currentcolor 6%, transparent);
+  }
+
+  .inv-author-finding.is-error {
+    border-left-color: var(--danger, #ef5350);
+  }
+
+  .inv-author-finding.is-warn {
+    border-left-color: var(--warning, #ffb74d);
+  }
+
+  .inv-author-level {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 9px;
+    margin-right: 6px;
+  }
+
+  .inv-author-rule {
+    opacity: 0.55;
+    margin-left: 6px;
+    font-size: 9px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Target size (WCAG 2.2 AA, 2.5.8)
+ * ---------------------------------------------------------------------------
+ * Every pointer target has to be at least 24 by 24 CSS pixels unless it is
+ * inline in a sentence. Three kinds of control here were not.
+ *
+ * The sliders were the worst: the input's box is seven pixels tall, so the
+ * whole width of a settings slider was a seven-pixel-high target. The fix
+ * keeps the thin track - it is a deliberate part of the design and a fat one
+ * would crowd the panel - by growing the element and painting its background
+ * only inside the content box. The track looks identical; the element that
+ * receives the pointer is twenty-four pixels tall.
+ * ------------------------------------------------------------------------- */
+@layer components {
+  input[type='range'] {
+    /* box-sizing is content-box for the padding to add to the height rather
+       than eat into it, and background-clip keeps the painted track thin. */
+    box-sizing: content-box;
+    padding-block: 8px;
+    background-clip: content-box;
+    min-height: 8px;
+  }
+
+  /* The thumb is the target a pointer usually goes for, so it gets there too.
+     18px was under the minimum on its own. */
+  input[type='range']::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* The inspector's help affordances were 16px circles. */
+  .insp-help {
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    font-size: 11px;
+  }
+
+  /* A bare checkbox is 13-15px in every engine. The label beside it is part of
+     the same target, but the box itself is what a finger aims at. */
+  .share-check input[type='checkbox'],
+  .settings-panel input[type='checkbox'],
+  input[type='checkbox'].ui-checkbox {
+    width: 24px;
+    height: 24px;
+    accent-color: var(--accent);
+  }
+}

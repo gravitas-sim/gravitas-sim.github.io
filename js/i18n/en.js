@@ -103,6 +103,8 @@ export const EN = {
   // ===========================================================================
 
   // --- chrome ----------------------------------------------------------------
+  'chrome.readout.label': 'Simulation readout',
+  'chrome.scenarioInfo.label': 'Scenario information',
   'chrome.mobileMenuToggle.hint': 'Show the simulation controls',
   'chrome.tutorial.hint':
     'Open the guided tour of the simulation controls. Drag the panel to move it.',
@@ -1016,6 +1018,12 @@ export const EN = {
     'The interpolating function is chosen, not derived. The theory fixes only the two limits; the shape of the transition between them is put in by hand.',
   'mond.limitation.external':
     'The external field effect. In MOND a system is affected by the gravitational field it sits in even when that field is uniform, which breaks the strong equivalence principle and makes isolated predictions harder to state.',
+  'settings.label.qualityTier': 'Quality',
+  'settings.option.qualityTier.auto': 'Automatic',
+  'settings.option.qualityTier.full': 'Full',
+  'settings.option.qualityTier.low': 'Low',
+  'settings.tooltip.qualityTier':
+    'Automatic measures the frame rate this machine is actually achieving and drops to the low tier below about 32fps: fewer pixels, fewer generated bodies, and the full-screen effects switched off. Hand-built systems keep every body, because there the count is the physics.',
   'settings.filter.label': 'Search settings',
   'settings.filter.placeholder': 'Search settings',
   'settings.filter.hint':
@@ -1423,6 +1431,62 @@ export const EN = {
   'export.downloadCsv': 'Download CSV',
   'lightCurve.relativeBrightness': 'Relative Brightness',
   'frame.barycenter': 'Barycenter',
+  'chrome.canvas.label': 'Gravitational simulation',
+  'summary.scenario': 'Scenario: {name}.',
+  'summary.scenario.custom': 'A system you have built yourself.',
+  'summary.running': 'Running.',
+  'summary.paused': 'Paused.',
+  'summary.empty': 'The view is empty.',
+  'summary.contains': '{total} bodies: {list}.',
+  'summary.listSeparator': ', ',
+  'summary.count.stars': {
+    one: '{n} star',
+    other: '{n} stars',
+  },
+  'summary.count.planets': {
+    one: '{n} planet',
+    other: '{n} planets',
+  },
+  'summary.count.gasGiants': {
+    one: '{n} gas giant',
+    other: '{n} gas giants',
+  },
+  'summary.count.moons': {
+    one: '{n} moon',
+    other: '{n} moons',
+  },
+  'summary.count.asteroids': {
+    one: '{n} asteroid',
+    other: '{n} asteroids',
+  },
+  'summary.count.comets': {
+    one: '{n} comet',
+    other: '{n} comets',
+  },
+  'summary.count.neutronStars': {
+    one: '{n} neutron star',
+    other: '{n} neutron stars',
+  },
+  'summary.count.whiteDwarfs': {
+    one: '{n} white dwarf',
+    other: '{n} white dwarfs',
+  },
+  'summary.count.blackHoles': {
+    one: '{n} black hole',
+    other: '{n} black holes',
+  },
+  'summary.count.galaxies': {
+    one: '{n} galaxy',
+    other: '{n} galaxies',
+  },
+  'summary.selected': '{name} is selected.',
+  'summary.noSelection': 'Nothing is selected.',
+  'summary.unnamedBody': 'an unnamed body',
+  'summary.readoutPointer':
+    'Measurements are in the simulation readout region.',
+  'summary.announce.scenario': 'Loaded {name}.',
+  'summary.announce.selected': 'Selected {name}.',
+  'view3d.close.label': 'Close the spacetime view',
   'view3d.loadFailed':
     'The spacetime view could not be loaded. Check your connection.',
   'tutorial.welcome': 'Welcome to Gravitas',
@@ -2074,6 +2138,7 @@ export const EN = {
   'inv.action.restart.hint': 'Clear every answer and start this lesson again',
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
+  'inv.body.label': 'Lesson step',
   'inv.probe.title': 'Live readout',
   'objectType.stars': 'Add Stars',
 

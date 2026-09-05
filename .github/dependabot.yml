@@ -1,0 +1,108 @@
+# =============================================================================
+# Automated dependency updates
+# -----------------------------------------------------------------------------
+# Conservative on purpose. Gravitas is a teaching tool with a small maintenance
+# budget, and a stream of individual pull requests is a stream nobody reads. The
+# grouping below is meant to produce a handful of reviewable PRs a month rather
+# than thirty ignorable ones.
+#
+# Three rules shape it:
+#
+#   Grouped by what breaks together. A jest bump and a jest-environment-jsdom
+#   bump have to land in the same commit or the suite does not run, so they are
+#   one PR. The same is true of eslint and its plugins, and of the two Playwright
+#   packages, whose versions must match or the runner and the driver disagree.
+#
+#   Majors are opened separately and never grouped. A major is a decision, not
+#   an update: it gets its own PR so that its own test run is unambiguous.
+#
+#   The two runtime libraries are not on this schedule at all. three.js and
+#   chart.js are pinned exactly, vendored into vendor/ by tools/vendor-deps.mjs
+#   and committed, so a version bump is not just a lockfile change - it needs
+#   `npm run vendor` and a review of the regenerated bundles. `npm run
+#   vendor:check` fails CI if the two ever drift, which is what makes ignoring
+#   them here safe rather than negligent.
+# =============================================================================
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+      day: monday
+      time: '06:00'
+    open-pull-requests-limit: 4
+    versioning-strategy: increase-if-necessary
+    labels:
+      - dependencies
+    commit-message:
+      prefix: deps
+      include: scope
+    groups:
+      # The test runner and its environment move together or not at all.
+      jest:
+        applies-to: version-updates
+        patterns:
+          - 'jest'
+          - 'jest-*'
+          - '@jest/*'
+        update-types:
+          - minor
+          - patch
+      # eslint, its config package and the prettier bridge. A plugin built
+      # against an older eslint core fails at load, so these are one unit.
+      lint-and-format:
+        applies-to: version-updates
+        patterns:
+          - 'eslint'
+          - '@eslint/*'
+          - 'eslint-*'
+          - 'prettier'
+        update-types:
+          - minor
+          - patch
+      # @playwright/test and playwright must be the same version: the browsers
+      # are installed per version, and a skew means the runner drives a driver
+      # it was not built for.
+      playwright:
+        applies-to: version-updates
+        patterns:
+          - 'playwright'
+          - '@playwright/test'
+        update-types:
+          - minor
+          - patch
+      # Everything else that is only a patch. Individually dull, collectively
+      # worth taking, and safe to review as one diff.
+      patch-updates:
+        applies-to: version-updates
+        patterns:
+          - '*'
+        update-types:
+          - patch
+    ignore:
+      # Vendored and committed; see the header. A bump needs `npm run vendor`.
+      - dependency-name: three
+      - dependency-name: chart.js
+      # Same: the faces in vendor/fonts/ are generated from these.
+      - dependency-name: '@fontsource/*'
+      # Majors are a decision. Dependabot still opens them one at a time,
+      # ungrouped, because they are excluded from every group above.
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 2
+    labels:
+      - dependencies
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - '*'

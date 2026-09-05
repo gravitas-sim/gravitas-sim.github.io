@@ -21,7 +21,7 @@ import {
   downloadCsv,
   csvFilename,
 } from './dataExport.js';
-import { state, SETTINGS, current_scenario_name } from './ui.js';
+import { state, SETTINGS, current_scenario_name } from './appState.js';
 import {
   bh_list,
   stars,
@@ -32,7 +32,7 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { toast } from './controls.js';
+import { toast } from './notify.js';
 import { t } from './i18n/index.js';
 
 let els = {};

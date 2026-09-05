@@ -162,7 +162,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->1713<!--/fact--> strings, and
+of <!--fact:uiStrings-->1746<!--/fact--> strings, and
 all <!--fact:investigations-->12<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -196,7 +196,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->2213<!--/fact--> tests across <!--fact:jestSuites-->55<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->2294<!--/fact--> tests across <!--fact:jestSuites-->57<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -212,10 +212,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->188<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->574<!--/fact--> KB           | <!--fact:buildStartupFiles-->18<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->1343<!--/fact--> KB         | <!--fact:buildDeferredChunks-->48<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->763<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->194<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->586<!--/fact--> KB           | <!--fact:buildStartupFiles-->34<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->2107<!--/fact--> KB         | <!--fact:buildDeferredChunks-->52<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->780<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -313,8 +313,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->201<!--/fact--> tests
-in <!--fact:e2eFiles-->19<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->294<!--/fact--> tests
+in <!--fact:e2eFiles-->24<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -449,6 +449,7 @@ part was built:
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the twelve lessons, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

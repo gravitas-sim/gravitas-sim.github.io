@@ -1,15 +1,19 @@
 // =============================================================================
 // Loading Chart.js on demand
 // -----------------------------------------------------------------------------
-// Chart.js is 70KB from a CDN, and it was loaded by a plain script tag on every
-// visit. Two panels use it - the light curve and the energy chart in the object
-// inspector - and both start closed.
+// Two panels use it - the light curve and the energy chart in the object
+// inspector - and both start closed, so it is loaded the first time one opens.
 //
-// Both consumers already read the global `Chart`, so nothing about how they use
-// it changes: they await this first, and the global is there when they do.
+// It used to be a <script> tag injected at that moment, pointing at jsdelivr.
+// That made a third-party request during ordinary use, could not be pinned by
+// the lockfile, and could not be served offline. It is now a dynamic import of
+// vendor/chartjs/chart.auto.js, bundled from the pinned package by
+// tools/vendor-deps.mjs - so esbuild puts it in its own deferred chunk and the
+// service worker can precache it.
+//
+// Both consumers read the global `Chart`, so it is still published there and
+// nothing about how they use it changes.
 // =============================================================================
-
-const SRC = 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js';
 
 let loading = null;
 
@@ -17,7 +21,7 @@ let loading = null;
  * Ensure Chart.js is available.
  *
  * @returns {Promise<Function|null>} The Chart constructor, or null if the
- *   script could not be fetched. Callers degrade rather than throw: a panel
+ *   chunk could not be fetched. Callers degrade rather than throw: a panel
  *   without its chart is a worse panel, not a broken application.
  */
 export function ensureChartJs() {
@@ -25,20 +29,19 @@ export function ensureChartJs() {
   if (window.Chart) return Promise.resolve(window.Chart);
 
   if (!loading) {
-    loading = new Promise(resolve => {
-      const el = document.createElement('script');
-      el.src = SRC;
-      el.async = true;
-      el.onload = () => resolve(window.Chart ?? null);
-      el.onerror = () => {
-        console.error('Chart.js could not be loaded from the CDN.');
-        // Not cached as a failure: a visitor who regains their connection and
-        // opens the panel again should get another attempt.
+    loading = import('../vendor/chartjs/chart.auto.js')
+      .then(mod => {
+        const Chart = mod.Chart ?? mod.default ?? null;
+        if (Chart) window.Chart = Chart;
+        return Chart;
+      })
+      .catch(err => {
+        console.error('Chart.js could not be loaded.', err);
+        // Not cached as a failure: a visitor whose connection came back should
+        // get another attempt the next time they open the panel.
         loading = null;
-        resolve(null);
-      };
-      document.head.appendChild(el);
-    });
+        return null;
+      });
   }
   return loading;
 }

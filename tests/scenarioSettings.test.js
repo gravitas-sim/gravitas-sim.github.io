@@ -20,12 +20,12 @@ import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 /**
  * Slice an object literal out of a source file, braces matched.
  *
- * Reads the source rather than importing it because ui.js needs a browser and
- * does not export DEFAULT_SETTINGS. Brace-matched rather than line-matched, so
+ * Reads the source rather than importing it because the module graph above
+ * js/appState.js needs a browser. Brace-matched rather than line-matched, so
  * the slice ends at the literal's own closing brace.
  *
  * @param {string} source - File contents
- * @param {string} declaration - e.g. 'const DEFAULT_SETTINGS = {'
+ * @param {string} declaration - e.g. 'export const DEFAULT_SETTINGS = {'
  * @returns {string} The literal, from its opening brace to its closing one
  */
 function objectLiteral(source, declaration) {
@@ -45,8 +45,8 @@ function objectLiteral(source, declaration) {
 }
 
 const literal = objectLiteral(
-  readFileSync(new URL('../js/ui.js', import.meta.url), 'utf8'),
-  'const DEFAULT_SETTINGS = {'
+  readFileSync(new URL('../js/appState.js', import.meta.url), 'utf8'),
+  'export const DEFAULT_SETTINGS = {'
 );
 
 // Evaluated, not regex-scraped, so the tests below can check the values a
@@ -89,7 +89,7 @@ describe('the defaults object itself', () => {
 // was removed rather than given a default.
 //
 // A new name here means someone taught a scenario to write a setting that no
-// other scenario can undo. Give the key a default in js/ui.js instead.
+// other scenario can undo. Give the key a default in js/appState.js instead.
 const KNOWN_ORPHANS = new Set([]);
 
 // The nine that used to be on that list and still exist. Named here so the

@@ -256,9 +256,8 @@ async function fillLessonPreviews() {
     // rather than the lessons. Three titles and a step count are card-level
     // facts, and the manifest is a few kilobytes of exactly those; the lessons
     // themselves are 225KB and are fetched one at a time when one is opened.
-    const { MANIFEST: INVESTIGATIONS } = await import(
-      './data/investigations/registry.js'
-    );
+    const { MANIFEST: INVESTIGATIONS } =
+      await import('./data/investigations/registry.js');
     const count = els.body?.querySelector('[data-lesson-count]');
     if (count) count.textContent = `${INVESTIGATIONS.length} guided`;
 
@@ -306,7 +305,7 @@ function build() {
       </div>
     </header>
 
-    <section class="wel-section wel-what" aria-labeledby="welWhat">
+    <section class="wel-section wel-what" aria-labelledby="welWhat">
       <h2 id="welWhat" class="wel-h2">What Gravitas is</h2>
       <p class="wel-say">
         A gravity simulation you can steer, paired with guided astronomy lessons
@@ -341,12 +340,12 @@ function build() {
       </div>
     </section>
 
-    <section class="wel-section" aria-labeledby="welDoors">
+    <section class="wel-section" aria-labelledby="welDoors">
       <h2 id="welDoors" class="wel-h2">Three ways in</h2>
       <div class="wel-doors">${entryCardsHtml()}</div>
     </section>
 
-    <section class="wel-section" aria-labeledby="welScenarios">
+    <section class="wel-section" aria-labelledby="welScenarios">
       <div class="wel-section-head">
         <h2 id="welScenarios" class="wel-h2">Featured scenarios</h2>
         <button type="button" class="wel-quiet" data-action="scenarios">
@@ -356,7 +355,7 @@ function build() {
       <div class="wel-scenarios">${scenarioCardsHtml()}</div>
     </section>
 
-    <section class="wel-section wel-lessons-block" aria-labeledby="welLessons">
+    <section class="wel-section wel-lessons-block" aria-labelledby="welLessons">
       <h2 id="welLessons" class="wel-h2">Guided investigations</h2>
       <p class="wel-say">
         Structured undergraduate astronomy activities built into the simulation
@@ -371,12 +370,12 @@ function build() {
       </button>
     </section>
 
-    <section class="wel-section" aria-labeledby="welWho">
+    <section class="wel-section" aria-labelledby="welWho">
       <h2 id="welWho" class="wel-h2">Who it is for</h2>
       <div class="wel-audiences">${audiencesHtml()}</div>
     </section>
 
-    <section class="wel-section wel-teaching" aria-labeledby="welTeaching">
+    <section class="wel-section wel-teaching" aria-labelledby="welTeaching">
       <h2 id="welTeaching" class="wel-h2">Teaching with Gravitas</h2>
       <p class="wel-say">
         Written for introductory undergraduate astronomy, including
@@ -450,9 +449,8 @@ async function runAction(action, key) {
 
     case 'investigations': {
       closeWelcome();
-      const { ensureInvestigations } = await import(
-        './investigationsLoader.js'
-      );
+      const { ensureInvestigations } =
+        await import('./investigationsLoader.js');
       (await ensureInvestigations()).openBrowser();
       break;
     }

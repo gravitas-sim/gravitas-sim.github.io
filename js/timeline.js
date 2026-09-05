@@ -30,7 +30,7 @@ import {
   setPhysicsObjectCounter,
   syncReportedMass,
 } from './physics.js';
-import { state } from './ui.js';
+import { state } from './appState.js';
 import { debugLog } from './utils.js';
 
 // --- Layout of one object row -------------------------------------------------

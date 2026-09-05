@@ -330,6 +330,18 @@ document.addEventListener('DOMContentLoaded', () => {
       initialize_simulation();
     }
     requestAnimationFrame(gameLoop);
+
+    // Offline support, after the first frame rather than during boot: the
+    // install fetches 5.5MB and there is no reason for that to compete with
+    // building the first world. The case it exists for is the second half of a
+    // lesson, not the first second of one.
+    requestAnimationFrame(() => {
+      import('./offline.js')
+        .then(m => m.initOffline())
+        .catch(() => {
+          /* offline support is an enhancement; its absence is not an error */
+        });
+    });
   } catch (error) {
     console.error('Initialization failed:', error);
     alert('Failed to initialize simulation. Please refresh the page.');

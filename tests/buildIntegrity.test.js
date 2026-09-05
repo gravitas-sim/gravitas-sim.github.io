@@ -30,11 +30,17 @@ describe('the published surface carries nothing it did not mean to', () => {
     // The build, the linter, jest and playwright each keep a config here and
     // are meant to. Anything else is something that escaped a tools/ or tests/
     // directory, and it will be served to the public if it stays.
+    //
+    // sw.js and sw-manifest.js are the exception that has to be here: a service
+    // worker's scope is the directory it is served from, and a worker under
+    // tools/ could not control the application. They are published on purpose.
     const allowed = new Set([
       'build.js',
       'eslint.config.js',
       'jest.config.js',
       'playwright.config.js',
+      'sw.js',
+      'sw-manifest.js',
     ]);
     const stray = rootFiles.filter(
       f => /\.(js|mjs|cjs)$/.test(f) && !allowed.has(f)
@@ -70,5 +76,87 @@ describe('the production build preserves what the physics reads', () => {
     // are not interchangeable: a transformed body carries the obj_type of what
     // it became and the class of what it was.
     expect(physics).toContain('.constructor.name');
+  });
+});
+
+// =============================================================================
+// The offline cache
+// -----------------------------------------------------------------------------
+// The precache list and the cache version are generated from the tree by
+// tools/build-service-worker.mjs. A checked-in manifest that is out of date is
+// the worst kind of stale: a returning browser keeps serving last week's
+// JavaScript from a cache whose name never changed, and no error appears
+// anywhere. So the generator is the source of truth and this asserts the file
+// on disk is what it would write today.
+// =============================================================================
+describe('the service worker manifest is current', () => {
+  test('sw-manifest.js is what the generator would write', async () => {
+    const { expectedFile } = await import('../tools/build-service-worker.mjs');
+    const wanted = await expectedFile();
+    const actual = read('sw-manifest.js');
+    // Compared as text rather than by re-deriving the hash, so a change to the
+    // rendering is caught as well as a change to the contents.
+    expect(actual).toBe(wanted);
+  });
+
+  test('the version is a content hash, not a timestamp or a counter', async () => {
+    const { buildManifest } = await import('../tools/build-service-worker.mjs');
+    const a = await buildManifest();
+    const b = await buildManifest();
+    // Twice over an unchanged tree gives the same answer: a rebuild must not
+    // evict a cache that is still correct.
+    expect(a.version).toBe(b.version);
+    expect(a.version).toMatch(/^[0-9a-f]{12}$/);
+  });
+
+  test('it precaches the shell, the thumbnails and the English lessons', async () => {
+    const { buildManifest } = await import('../tools/build-service-worker.mjs');
+    const { paths } = await buildManifest();
+
+    expect(paths).toContain('index.html');
+    expect(paths.filter(p => p.endsWith('.css')).length).toBeGreaterThanOrEqual(
+      6
+    );
+    expect(
+      paths.filter(p => /^images\/scenarios\/.*\.webp$/.test(p))
+    ).toHaveLength(53);
+
+    // All twelve English lesson bodies. The reasoning is in the generator's
+    // header; what matters here is that the decision cannot rot silently when a
+    // thirteenth lesson is added.
+    const lessons = paths.filter(p =>
+      /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
+    );
+    const bodies = lessons.filter(
+      p => !/\/(manifest|manifest\.es|registry|i18n|catalogue)\.js$/.test(p)
+    );
+    expect(bodies.length).toBe(12);
+  });
+
+  test('it does not precache the Spanish shadows, which are warmed on demand', async () => {
+    const { buildManifest } = await import('../tools/build-service-worker.mjs');
+    const { paths } = await buildManifest();
+    expect(paths.filter(p => p.includes('/investigations/es/'))).toEqual([]);
+
+    // But the worker has to know about them, or switching to Spanish offline
+    // would find nothing.
+    const manifest = read('sw-manifest.js');
+    expect(manifest).toContain('__GRAVITAS_LOCALE_WARM');
+    expect(
+      (manifest.match(/investigations\/es\/[a-z0-9-]+\.js/g) || []).length
+    ).toBe(12);
+  });
+
+  test('it leaves out the downloads and the document pages', async () => {
+    const { buildManifest } = await import('../tools/build-service-worker.mjs');
+    const { paths } = await buildManifest();
+    for (const unwanted of [
+      'Gravitas_User_Manual.pdf',
+      'social-card.png',
+      'model/index.html',
+      'instructors/index.html',
+    ]) {
+      expect(paths).not.toContain(unwanted);
+    }
   });
 });

@@ -57,6 +57,20 @@ export const lessonInHash = () =>
   /^#investigation=[\w-]+$/.test(window.location.hash || '');
 
 /**
+ * Whether the address bar is asking for the authoring preview.
+ *
+ * `?author=<lesson>` is a lesson link like any other as far as loading goes:
+ * the system is wanted immediately, and js/investigations.js decides what to do
+ * with it. Kept here rather than in the preview module because this is the file
+ * that stays resident, and it is a regular-expression test rather than an
+ * import.
+ *
+ * @returns {boolean} True for an authoring request in the query or the hash
+ */
+export const authoringInUrl = () =>
+  /[?&#]author=[\w-]+/.test(window.location.href || '');
+
+/**
  * Watch for the first sign that a lesson is wanted.
  *
  * Called once from start-up. Nothing here reaches the lesson data: a button
@@ -82,9 +96,15 @@ export function watchForInvestigations() {
   // initInvestigations() reads the hash itself and opens the right lesson.
   if (lessonInHash()) ensureInvestigations();
 
+  // An authoring preview needs the system for the same reason and by the same
+  // route. Without this the lesson engine is never imported on a fresh
+  // ?author= load, so initInvestigations() never runs and the preview silently
+  // does nothing - which is exactly what happened the first time.
+  if (authoringInUrl()) ensureInvestigations();
+
   // Pasting a lesson link into an already-open tab changes only the fragment,
   // which navigates nothing.
   window.addEventListener('hashchange', () => {
-    if (lessonInHash()) ensureInvestigations();
+    if (lessonInHash() || authoringInUrl()) ensureInvestigations();
   });
 }

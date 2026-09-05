@@ -17,7 +17,19 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   const ps = SETTINGS.preset_scenario;
   if (ps === 'None') return;
   const fresh_defaults = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-  Object.assign(SETTINGS, fresh_defaults, { preset_scenario: ps });
+  // Reset to the defaults, then put back the keys that are the reader's rather
+  // than the scenario's.
+  //
+  // quality_tier is a property of the machine, not of the system being
+  // modelled. It lives in DEFAULT_SETTINGS so that it round-trips through save
+  // and share like everything else, and that placement meant this reset threw
+  // it away: somebody on a slow laptop who chose the low tier got it silently
+  // undone by their next scenario load, and the tier then re-derived itself
+  // from a frame rate measured during a world build.
+  Object.assign(SETTINGS, fresh_defaults, {
+    preset_scenario: ps,
+    quality_tier: SETTINGS.quality_tier ?? fresh_defaults.quality_tier,
+  });
 
   if (ps === 'Binary BH') {
     Object.assign(SETTINGS, {

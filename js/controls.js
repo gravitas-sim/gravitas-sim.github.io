@@ -16,7 +16,9 @@ import {
   white_dwarfs,
   clearObjectEnergyHistory,
 } from './physics.js';
-import { state, SETTINGS } from './ui.js';
+import { state, SETTINGS } from './appState.js';
+import { toast, announce } from './notify.js';
+export { toast, announce };
 import {
   tickTimeline,
   scrubTo,
@@ -117,46 +119,6 @@ export function clearPlacementHistory() {
 function refreshUndoButton() {
   const btn = document.getElementById('undoBtn');
   if (btn) btn.disabled = placementStack.length === 0;
-}
-
-// --- Screen-reader announcements ---------------------------------------------
-// The canvas is opaque to assistive technology, so anything that only shows up
-// visually gets mirrored into a polite live region.
-let lastAnnouncement = '';
-
-/**
- * Announce a state change to screen readers.
- * @param {string} message - Text to announce
- */
-export function announce(message) {
-  if (message === lastAnnouncement) return;
-  lastAnnouncement = message;
-  const el = document.getElementById('srStatus');
-  if (el) el.textContent = message;
-}
-
-// --- Toasts -------------------------------------------------------------------
-let toastTimer = null;
-
-/**
- * Show a brief status message.
- * @param {string} message - Text to display
- */
-export function toast(message) {
-  let el = document.getElementById('gravitasToast');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'gravitasToast';
-    el.className = 'toast';
-    el.setAttribute('role', 'status');
-    el.setAttribute('aria-live', 'polite');
-    document.body.appendChild(el);
-  }
-  el.textContent = message;
-  el.classList.add('is-visible');
-  announce(message);
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2200);
 }
 
 // --- Transport bar ------------------------------------------------------------

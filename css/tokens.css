@@ -31,7 +31,10 @@
 
     --text-primary: #f4f7ff;
     --text-secondary: #a8b2c9;
-    --text-muted: #6a7490;
+    /* 4.5:1 or better against every surface this theme paints it on. It
+       was #6a7490, which measured 3.64 on a scenario card and 4.05 in the
+       settings rail - the single cause of every contrast failure axe found. */
+    --text-muted: #828ca8;
     --text-inverse: #0b0e18;
 
     --accent: #22d3ee;
@@ -201,7 +204,8 @@
     --surface-3: #331d18;
     --text-primary: #ffe4dc;
     --text-secondary: #c99a8d;
-    --text-muted: #8f6a60;
+    /* Was #8f6a60: 3.31 on --surface-3. See the note on the default. */
+    --text-muted: #ad867b;
     --accent: #fb7185;
     --accent-strong: #f43f5e;
     --accent-deep: #9f1239;
@@ -226,10 +230,15 @@
 
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-muted: #7c8798;
+    /* Was #7c8798: 2.98 on --surface-3, the worst pair in any theme. */
+    --text-muted: #5b6673;
     --text-inverse: #ffffff;
 
-    --accent: #0284c7;
+    /* Darkened from #0284c7, which put white text on it at 4.10:1 - the
+       Apply button in the settings panel and the active filter chip in the
+       gallery, both of which are white-on-accent. 5.23:1 now, and still 4.66:1
+       or better when the accent itself is used as text on the light surfaces. */
+    --accent: #0272ad;
     --accent-strong: #0369a1;
     --accent-deep: #075985;
     --accent-soft: rgba(2, 132, 199, 0.1);
@@ -254,7 +263,11 @@
 
     /* Status colors need to darken for a light surface: the dark-theme
        greens and ambers fall well below 4.5:1 against near-white. */
-    --success: #047857;
+    /* Darkened from #047857. The token itself measured 4.65:1, but the "on"
+       toggle draws it at less than full opacity over a tinted background and
+       the text actually rendered at 4.04:1 - a reminder that a token passing
+       in isolation is not the same as the pixels passing. */
+    --success: #046445;
     --success-strong: #065f46;
     --warning: #b45309;
     --danger: #b91c1c;

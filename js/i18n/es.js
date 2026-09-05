@@ -88,6 +88,8 @@ export const ES = {
   'lecture.sequence.failed': 'No se pudo abrir ese estado',
 
   // --- Application chrome ----------------------------------------------------
+  'chrome.readout.label': 'Lectura de la simulación',
+  'chrome.scenarioInfo.label': 'Información del escenario',
   'chrome.mobileMenuToggle.hint': 'Mostrar los controles de la simulación',
   'chrome.mobileMenuToggle.label': 'Abrir el menú de controles',
   'chrome.tutorial.hint':
@@ -783,6 +785,12 @@ export const ES = {
     'La funcion de interpolacion se elige, no se deduce. La teoria fija solo los dos limites; la forma de la transicion entre ellos se pone a mano.',
   'mond.limitation.external':
     'El efecto de campo externo. En MOND un sistema se ve afectado por el campo gravitatorio en el que esta inmerso incluso cuando ese campo es uniforme, lo que rompe el principio de equivalencia fuerte y dificulta enunciar predicciones aisladas.',
+  'settings.label.qualityTier': 'Calidad',
+  'settings.option.qualityTier.auto': 'Automatica',
+  'settings.option.qualityTier.full': 'Completa',
+  'settings.option.qualityTier.low': 'Baja',
+  'settings.tooltip.qualityTier':
+    'La opcion automatica mide los fotogramas por segundo que esta maquina consigue de verdad y baja al nivel bajo por debajo de unos 32: menos pixeles, menos cuerpos generados y los efectos a pantalla completa desactivados. Los sistemas construidos a mano conservan todos sus cuerpos, porque ahi el numero es la fisica.',
   'settings.filter.label': 'Buscar ajustes',
   'settings.filter.placeholder': 'Buscar ajustes',
   'settings.filter.hint':
@@ -1423,6 +1431,62 @@ export const ES = {
   'export.downloadCsv': 'Descargar CSV',
   'lightCurve.relativeBrightness': 'Brillo relativo',
   'frame.barycenter': 'Baricentro',
+  'chrome.canvas.label': 'Simulación gravitatoria',
+  'summary.scenario': 'Escenario: {name}.',
+  'summary.scenario.custom': 'Un sistema construido por ti.',
+  'summary.running': 'En marcha.',
+  'summary.paused': 'En pausa.',
+  'summary.empty': 'La vista está vacía.',
+  'summary.contains': '{total} cuerpos: {list}.',
+  'summary.listSeparator': ', ',
+  'summary.count.stars': {
+    one: '{n} estrella',
+    other: '{n} estrellas',
+  },
+  'summary.count.planets': {
+    one: '{n} planeta',
+    other: '{n} planetas',
+  },
+  'summary.count.gasGiants': {
+    one: '{n} gigante gaseoso',
+    other: '{n} gigantes gaseosos',
+  },
+  'summary.count.moons': {
+    one: '{n} luna',
+    other: '{n} lunas',
+  },
+  'summary.count.asteroids': {
+    one: '{n} asteroide',
+    other: '{n} asteroides',
+  },
+  'summary.count.comets': {
+    one: '{n} cometa',
+    other: '{n} cometas',
+  },
+  'summary.count.neutronStars': {
+    one: '{n} estrella de neutrones',
+    other: '{n} estrellas de neutrones',
+  },
+  'summary.count.whiteDwarfs': {
+    one: '{n} enana blanca',
+    other: '{n} enanas blancas',
+  },
+  'summary.count.blackHoles': {
+    one: '{n} agujero negro',
+    other: '{n} agujeros negros',
+  },
+  'summary.count.galaxies': {
+    one: '{n} galaxia',
+    other: '{n} galaxias',
+  },
+  'summary.selected': '{name} está seleccionado.',
+  'summary.noSelection': 'No hay nada seleccionado.',
+  'summary.unnamedBody': 'un cuerpo sin nombre',
+  'summary.readoutPointer':
+    'Las medidas están en la región de lectura de la simulación.',
+  'summary.announce.scenario': '{name} cargado.',
+  'summary.announce.selected': '{name} seleccionado.',
+  'view3d.close.label': 'Cerrar la vista del espacio-tiempo',
   'view3d.loadFailed':
     'No se pudo cargar la vista del espacio-tiempo. Comprueba tu conexión.',
   'tutorial.welcome': 'Bienvenido a Gravitas',
@@ -2088,6 +2152,7 @@ export const ES = {
     'Borrar todas las respuestas y volver a empezar esta lección',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
+  'inv.body.label': 'Paso de la lección',
   'inv.probe.title': 'Lectura en vivo',
   'objectType.stars': 'Añadir estrellas',
 

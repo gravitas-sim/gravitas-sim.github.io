@@ -39,7 +39,7 @@ import {
   asteroids,
   world_to_screen,
 } from './physics.js';
-import { state } from './ui.js';
+import { state } from './appState.js';
 import { getSimClock } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
 // Aliased: `t` is already the chart palette in this module, and a translator

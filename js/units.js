@@ -17,11 +17,30 @@ import {
   SECONDS_PER_YEAR,
 } from './constants.js';
 import { formatNumber, withUnit } from './format.js';
-import {
-  SOLAR_MASS_UNIT,
-  EARTH_MASS_UNIT,
-  getPhysicsSetting,
-} from './physics.js';
+import { SOLAR_MASS_UNIT, EARTH_MASS_UNIT } from './constants.js';
+
+// The simulation's gravitational constant, pushed down from js/physics.js
+// rather than read back out of it.
+//
+// This module is foundation: it turns simulation numbers into physical ones and
+// nothing depends on it that it depends on in turn. Reading the live setting
+// meant importing the engine, which made the lowest layer in the application
+// depend on one of the highest. The value now arrives through
+// setSimGravitationalConstant(), which js/physics.js calls from the single
+// place its settings are written.
+//
+// The initial 1 is what getPhysicsSetting('gravitational_constant') returned
+// before any settings had been applied, so start-up behaviour is unchanged.
+let simGravitationalConstant = 1;
+
+/**
+ * Record the simulation's gravitational constant.
+ *
+ * @param {number} value - G in simulation units
+ */
+export function setSimGravitationalConstant(value) {
+  simGravitationalConstant = value || 1;
+}
 
 const MASS_UNIT_TO_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
 
@@ -99,7 +118,7 @@ export function initUnits() {
 
 /** @returns {number} Seconds represented by one simulation time unit */
 export function timeUnitSeconds() {
-  const G_sim = getPhysicsSetting('gravitational_constant') || 1;
+  const G_sim = simGravitationalConstant;
   return Math.sqrt(
     (G_sim * DISTANCE_UNIT_TO_M ** 3) / (G_SI * MASS_UNIT_TO_KG)
   );

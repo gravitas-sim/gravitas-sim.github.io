@@ -98,8 +98,15 @@
           </p>
         </div>
 
-        <aside class="portal-aside">
-          <h2>How this is protected</h2>
+        <!-- A <section> rather than an <aside>. This is supplementary to the
+             login form beside it, not to the page, and a complementary
+             landmark nested inside <main> is reported as misplaced - correctly,
+             because a screen reader's landmark list would then offer a
+             "complementary" region that is really a paragraph of explanation.
+             It keeps its heading, so it is still reachable by heading
+             navigation. -->
+        <section class="portal-aside" aria-labelledby="portalProtection">
+          <h2 id="portalProtection">How this is protected</h2>
           <p>
             Gravitas is a static site with no server, so there is nowhere to
             check a password. Instead the materials are
@@ -119,7 +126,7 @@
             <a href="/model/">How Gravitas Models the Universe</a> is public and
             needs no passphrase. Share it with students freely.
           </p>
-        </aside>
+        </section>
       </section>
 
       <!-- Dashboard -->

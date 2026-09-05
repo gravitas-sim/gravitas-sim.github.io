@@ -5,11 +5,13 @@ import {
   G_SI,
   JUPITER_MASSES_PER_SOLAR_MASS,
   EARTH_MASSES_PER_JUPITER_MASS,
-  EARTH_MASSES_PER_SOLAR_MASS,
   CERES_MASS_KG,
   HALLEY_MASS_KG,
   DEBRIS_FRAGMENT_MASS_KG,
+  SOLAR_MASS_UNIT,
+  EARTH_MASS_UNIT,
 } from './constants.js';
+import { setSimGravitationalConstant } from './units.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { formatNumber, withUnit } from './format.js';
 import { forEachCandidatePair } from './spatialHash.js';
@@ -51,17 +53,20 @@ const getRandomName = type => {
 
 // Physics constants and utilities
 const DT = 0.1;
-const SOLAR_MASS_UNIT = 1000;
-// Simulation mass units per Earth mass. Derived from the solar mass for the
-// same reason JUPITER_MASS_UNIT is, and it had the same failure: this was a
-// literal 3, which is 1000x too heavy. A body built as "1 Earth mass" weighed a
-// thousandth of the Sun, and formatMass divided by the same 3 to print "1 M_E"
-// back, so the number on screen agreed with itself and disagreed with physics.
+// SOLAR_MASS_UNIT and EARTH_MASS_UNIT are imported from js/constants.js and
+// re-exported below, so that everything that used to read them from here still
+// can. They moved because js/units.js needed them and had to import the whole
+// engine to get at two numbers.
+//
+// EARTH_MASS_UNIT is derived from the solar mass for the same reason
+// JUPITER_MASS_UNIT is, and it had the same failure: it was a literal 3, which
+// is 1000x too heavy. A body built as "1 Earth mass" weighed a thousandth of
+// the Sun, and formatMass divided by the same 3 to print "1 M_E" back, so the
+// number on screen agreed with itself and disagreed with physics.
 //
 // Two scenarios had already noticed and patched around it locally with a
 // SOLAR_SYSTEM_MASS_SCALE of 0.001, which is exactly the error. Those patches
 // are gone; the constant is right instead.
-const EARTH_MASS_UNIT = SOLAR_MASS_UNIT / EARTH_MASSES_PER_SOLAR_MASS;
 const ABSORB_BUFFER = 6;
 // Softening floor on the gravity calculation, to keep a near-miss from
 // producing a singular force. Five units is right for scenarios laid out at
@@ -238,7 +243,23 @@ const setStateReference = stateRef => {
   state = stateRef;
 };
 
-// Physics settings that can be updated from UI
+// Physics settings that can be updated from UI.
+//
+// Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
+// js/appState.js, and two of them disagree with it: gravitational_constant is
+// 2.0 there and 1.0 here, trail_length is 15 there and 100 here. That is not a
+// bug, but it is a trap, so it is written down.
+//
+// These are bootstrap values only. Every path that runs the simulation calls
+// updatePhysicsSettings(SETTINGS) first - js/world/build.js does it on every
+// world build - which merges the real settings over the top. Nothing integrates
+// an orbit at G = 1. The values here are what the module answers with in the
+// window before any world exists, and js/units.js is seeded from the same 1 so
+// that its conversions agree with whatever this object says at the time.
+//
+// They are deliberately not imported from js/appState.js: that would make the
+// engine depend on the interface's state module, which is the dependency this
+// file has spent this pass getting rid of.
 let physicsSettings = {
   gravitational_constant: 1.0,
   mutual_gravity: false,
@@ -1079,6 +1100,11 @@ const updatePhysicsSettings = settings => {
     },
     settings
   );
+  // js/units.js derives the length of a time unit from G, and used to import
+  // getPhysicsSetting to read it - which made the foundation layer depend on
+  // the engine. It is pushed from here instead, which is the one place
+  // physicsSettings is ever written.
+  setSimGravitationalConstant(physicsSettings.gravitational_constant);
 };
 
 /**

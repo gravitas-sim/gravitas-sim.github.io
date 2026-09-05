@@ -980,7 +980,14 @@ const methodComparison = {
   },
   draw(canvas, v) {
     const { ctx, w, h } = surface(canvas, responsiveHeight(230, 150));
-    const t = chartColors();
+    // Named `colors` rather than `t`, which is the translation function this
+    // module imports. It used to be called `t`, shadowing the import inside
+    // this one method - so every t('exoW....') below called the colour
+    // palette as a function, draw() threw on its first row, and the engine
+    // logged a warning and left the canvas blank. The widget had never
+    // drawn. Found by the investigation walker, which checks that a canvas
+    // a step names has more than one colour in it.
+    const colors = chartColors();
     const c = this.compute(v);
     const rows = [
       {
@@ -1019,18 +1026,18 @@ const methodComparison = {
     const bw = w - bx - 118;
     rows.forEach((row, i) => {
       const y = 24 + i * ((h - 44) / 3);
-      ctx.fillStyle = t.label;
+      ctx.fillStyle = colors.label;
       ctx.font = '11px system-ui, sans-serif';
       ctx.fillText(row.name, 8, y + 12);
-      ctx.fillStyle = t.tick;
+      ctx.fillStyle = colors.tick;
       ctx.font = '9px system-ui, sans-serif';
       ctx.fillText(`→ ${row.gives}`, 8, y + 24);
 
-      ctx.fillStyle = t.grid;
+      ctx.fillStyle = colors.grid;
       ctx.fillRect(bx, y, bw, 15);
-      ctx.fillStyle = row.frac > 0.02 ? t.accent : t.warm;
+      ctx.fillStyle = row.frac > 0.02 ? colors.accent : colors.warm;
       ctx.fillRect(bx, y, Math.max(2, bw * row.frac), 15);
-      ctx.fillStyle = t.tick;
+      ctx.fillStyle = colors.tick;
       ctx.font = '9px system-ui, sans-serif';
       ctx.fillText(row.text, bx + bw + 6, y + 12);
     });

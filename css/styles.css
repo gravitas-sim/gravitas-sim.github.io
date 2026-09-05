@@ -87,7 +87,7 @@
     pointer-events: auto;
     animation: scenarioInfoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  #splash h1 {
+  #splash .splash-wordmark {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -515,7 +515,6 @@
       padding: 5px;
       line-height: 1.4;
     }
-
   }
   #scenarioInfoDisplay.visible {
     opacity: 1;
@@ -2817,6 +2816,56 @@
       bottom: 80px;
       width: auto;
       height: 260px;
+    }
+  }
+
+  /* ==========================================================================
+     Reduced motion
+     --------------------------------------------------------------------------
+     css/tokens.css collapses --duration-* to 1ms, which covers everything in
+     components.css because that sheet uses the tokens. This sheet predates them
+     and animates with literal durations, including four that never stop: the
+     demo pulse, the sparkle, the generic pulse and the loading spinner. An
+     animation that repeats indefinitely is the kind most likely to cause harm,
+     and the kind WCAG 2.2.2 asks to be stoppable.
+
+     The simulation itself is deliberately untouched. Orbital motion is the
+     content - a planetarium that will not move is not an accessible
+     planetarium, it is a picture - and a reader who needs it still can pause
+     it from the transport bar, which is a real control rather than a media
+     query. That trade-off is written down in ACCESSIBILITY.md.
+     ======================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    /* The decorative loops stop. */
+    .demo-pulse,
+    [class*='sparkle'],
+    .pulse,
+    .spinner,
+    .loading-spinner {
+      animation: none !important;
+    }
+
+    /* Entrances become instant rather than being removed: the element still
+       has to end up at its final opacity, and cancelling the animation that
+       sets it would leave it invisible. */
+    #splash,
+    #splash .splash-wordmark,
+    #overlay,
+    #scenarioInfoBox,
+    #scenarioInfoDisplay,
+    .simulation-container,
+    .scenario-menu {
+      animation-duration: 1ms !important;
+      animation-delay: 0ms !important;
+    }
+
+    /* Anything left that repeats forever runs once and stops. */
+    *,
+    *::before,
+    *::after {
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }

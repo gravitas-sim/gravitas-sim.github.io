@@ -71,7 +71,6 @@ import {
   white_dwarfs,
 } from '../physics.js';
 import { resetFrame } from '../referenceFrame.js';
-import { generateStarfield } from '../render.js';
 import {
   GALILEAN,
   balance,
@@ -80,6 +79,7 @@ import {
   trojanBodies,
 } from '../resonance/systems.js';
 import { applyPresetLayout } from '../scenarios.js';
+import { populationCaps } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
 /**
@@ -561,6 +561,7 @@ export const buildWorld = ctx => {
     updateObjectTypeButton,
     computeAreaSweep,
     isAreaSweepSuppressed,
+    regenerateStarfield,
   } = ctx;
 
   // Set the state reference in physics.js to ensure single source of truth
@@ -578,6 +579,44 @@ export const buildWorld = ctx => {
   }
 
   setScenarioName(starting_preset);
+
+  // The low quality tier's population caps, applied here because this is the
+  // only moment the counts mean anything: they are read once, while the world
+  // is generated, and never again.
+  //
+  // Only the generic populations, and only for scenarios that use the generic
+  // generator at all. A scenario with placement 'Empty' places every body by
+  // hand - the resonance systems, TRAPPIST-1, the galaxy discs - and there the
+  // body count is the physics. A Laplace resonance missing one of its three
+  // moons is not a cheaper version of the lesson, it is a wrong one, so those
+  // are left at full population and pay for it in frame rate instead.
+  //
+  // Applied as a read-time override, never written back.
+  //
+  // The first version of this assigned the caps into the live SETTINGS, on the
+  // reasoning that the generator reads these keys in many places. It reads them
+  // in nineteen, and the write was actively harmful: SETTINGS is the reader's
+  // own document. It is what a share link serialises, what a saved state
+  // restores and what the A/B bench hashes to decide whether two runs differ.
+  // Writing a cap into it meant a teacher on a slow laptop silently exported
+  // num_asteroids: 40 to a class on faster machines, and meant the bench could
+  // report a difference between two runs that differed only in frame rate.
+  //
+  // The tier may spend fewer pixels and draw fewer bodies. It may not edit the
+  // document.
+  const caps = populationCaps();
+  const capped = caps && SETTINGS.placement !== 'Empty' ? caps : null;
+
+  /**
+   * A generic population count, reduced to fit the current quality tier.
+   *
+   * @param {string} key - A num_* settings key
+   * @returns {number} The count to actually build
+   */
+  const pop = key =>
+    capped && typeof SETTINGS[key] === 'number' && SETTINGS[key] > capped[key]
+      ? capped[key]
+      : SETTINGS[key];
 
   // Reset insertion object type to scenario default (or 'Star') and update button
   SETTINGS.input_object_type = SETTINGS.input_object_type || 'Star';
@@ -636,8 +675,8 @@ export const buildWorld = ctx => {
   // that same star. They used to get two - one anchored at the center and one
   // randomly generated - and the spare was dropped into the belt it was
   // supposed to be lighting.
-  if (SETTINGS.num_stars) {
-    for (let i = stars.length; i < SETTINGS.num_stars; i++) {
+  if (pop('num_stars')) {
+    for (let i = stars.length; i < pop('num_stars'); i++) {
       stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
@@ -687,25 +726,25 @@ export const buildWorld = ctx => {
   }
 
   // Add planets
-  for (let i = 0; i < SETTINGS.num_planets; i++) {
+  for (let i = 0; i < pop('num_planets'); i++) {
     planets.push(new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }));
   }
 
   // Add gas giants
-  for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
+  for (let i = 0; i < pop('num_gas_giants'); i++) {
     gas_giants.push(new GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }));
   }
 
   // Add asteroids
   if (SETTINGS.enable_asteroids) {
-    for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+    for (let i = 0; i < pop('num_asteroids'); i++) {
       asteroids.push(new Asteroid({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
 
   // Add comets
-  if (SETTINGS.num_comets) {
-    for (let i = 0; i < SETTINGS.num_comets; i++) {
+  if (pop('num_comets')) {
+    for (let i = 0; i < pop('num_comets'); i++) {
       comets.push(new Comet({ x: 0, y: 0 }, { x: 0, y: 0 }));
     }
   }
@@ -727,7 +766,7 @@ export const buildWorld = ctx => {
   // the setting already claimed to mean, and generated after apply_placement so
   // the cloud is positioned by this block rather than scattered by the generic
   // one.
-  if (SETTINGS.num_micro_stars > 0) {
+  if (pop('num_micro_stars') > 0) {
     const G = SETTINGS.gravitational_constant;
     const gravitating = [
       ...bh_list,
@@ -741,7 +780,7 @@ export const buildWorld = ctx => {
     // reads as a cloud rather than a ring.
     const inner = Math.max(40, (central?.radius || 0) * 2.5);
     const outer = inner * 4;
-    const count = Math.min(600, Math.floor(SETTINGS.num_micro_stars));
+    const count = Math.min(600, Math.floor(pop('num_micro_stars')));
 
     for (let i = 0; i < count; i++) {
       // A filled annulus: sqrt on the radius so the area density is even
@@ -882,7 +921,7 @@ export const buildWorld = ctx => {
 
     // Add planets orbiting the binary system
     const centralMass = star1.mass + star2.mass;
-    for (let i = 0; i < SETTINGS.num_planets; i++) {
+    for (let i = 0; i < pop('num_planets'); i++) {
       const r = 150 + i * 30; // Orbital radius around binary center
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
@@ -893,7 +932,7 @@ export const buildWorld = ctx => {
     }
 
     // Add gas giants
-    for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
+    for (let i = 0; i < pop('num_gas_giants'); i++) {
       const r = 300 + i * 50;
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
@@ -905,7 +944,7 @@ export const buildWorld = ctx => {
 
     // Add asteroids
     if (SETTINGS.enable_asteroids) {
-      for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+      for (let i = 0; i < pop('num_asteroids'); i++) {
         const r = 400 + Math.random() * 100;
         const theta = Math.random() * 2 * Math.PI;
         const v = Math.sqrt(
@@ -1281,7 +1320,7 @@ export const buildWorld = ctx => {
 
       for (
         let i = 0;
-        i < Math.min(SETTINGS.num_asteroids, realAsteroids.length);
+        i < Math.min(pop('num_asteroids'), realAsteroids.length);
         i++
       ) {
         const asteroidData = realAsteroids[i];
@@ -1307,7 +1346,7 @@ export const buildWorld = ctx => {
     }
 
     // Add famous comets in distant orbits with real properties
-    if (SETTINGS.num_comets) {
+    if (pop('num_comets')) {
       const famousComets = [
         {
           name: 'Halley',
@@ -1397,7 +1436,7 @@ export const buildWorld = ctx => {
 
       for (
         let i = 0;
-        i < Math.min(SETTINGS.num_comets, famousComets.length);
+        i < Math.min(pop('num_comets'), famousComets.length);
         i++
       ) {
         const cometData = famousComets[i];
@@ -1426,7 +1465,7 @@ export const buildWorld = ctx => {
     const centralMass = centralStar.mass;
 
     // Position planets around the central star
-    for (let i = 0; i < SETTINGS.num_planets; i++) {
+    for (let i = 0; i < pop('num_planets'); i++) {
       const r = 50 + i * 25;
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
@@ -1437,7 +1476,7 @@ export const buildWorld = ctx => {
     }
 
     // Position gas giants
-    for (let i = 0; i < SETTINGS.num_gas_giants; i++) {
+    for (let i = 0; i < pop('num_gas_giants'); i++) {
       const r = 200 + i * 50;
       const theta = Math.random() * 2 * Math.PI;
       const v = Math.sqrt((SETTINGS.gravitational_constant * centralMass) / r);
@@ -1449,7 +1488,7 @@ export const buildWorld = ctx => {
 
     // Position asteroids
     if (SETTINGS.enable_asteroids) {
-      for (let i = 0; i < SETTINGS.num_asteroids; i++) {
+      for (let i = 0; i < pop('num_asteroids'); i++) {
         const r = 350 + Math.random() * 100;
         const theta = Math.random() * 2 * Math.PI;
         const v = Math.sqrt(
@@ -1558,7 +1597,7 @@ export const buildWorld = ctx => {
       // the scenario by an order of magnitude.
       for (
         let i = 0;
-        i < Math.min(SETTINGS.num_asteroids, smallKBOs.length);
+        i < Math.min(pop('num_asteroids'), smallKBOs.length);
         i++
       ) {
         const r =
@@ -2815,5 +2854,10 @@ export const buildWorld = ctx => {
     zeroNetMomentum();
   }
 
-  generateStarfield();
+  // Handed in rather than imported. The starfield is a backdrop the renderer
+  // draws, and importing it here made the world builder - which is engine -
+  // depend on js/render.js, which is a feature. That single edge closed five
+  // of the eleven import cycles the architecture check reported, because
+  // js/render.js imports js/ui.js and js/ui.js imports this module.
+  regenerateStarfield();
 };

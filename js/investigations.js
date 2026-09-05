@@ -93,6 +93,7 @@ import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer } from './answerCheck.js';
+import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
 
 export { checkAnswer };
@@ -120,12 +121,24 @@ let appliedSetup = null;
 // Settings the lesson overrides while it runs, so they can be handed back.
 let lockedSettings = null;
 
+// --- Authoring preview --------------------------------------------------------
+// Set by js/authoring/preview.js when ?author= is in the URL. While it is on,
+// the lesson is a preview: nothing is read from a student's saved progress and
+// nothing is written back to it.
+let authoring = null;
+
+/** @returns {boolean} True while the panel is an authoring preview */
+export const isAuthoringPreview = () => authoring !== null;
+
 // --- Persistence --------------------------------------------------------------
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
 
 function save() {
   if (!active) return;
+  // An author looking at step 30 of Tides must not overwrite the progress of
+  // whoever is working through Tides on this machine.
+  if (authoring) return;
   try {
     localStorage.setItem(
       storageKey(active.id),
@@ -1462,6 +1475,7 @@ function refreshMeasurements() {
 
 function renderFooter() {
   const step = currentStep();
+  if (authoring?.render) authoring.render(active, stepIndex);
   els.prev.disabled = stepIndex === 0;
   els.next.textContent =
     stepIndex === active.steps.length - 1
@@ -1774,12 +1788,18 @@ export async function openInvestigation(id) {
   const inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
   active = inv;
-  const saved = load(id);
+  // In an authoring preview the saved progress is not read at all: an author is
+  // shown a clean lesson rather than somebody's half-finished one, and reading
+  // it would also mean the position they asked for could be silently overridden.
+  const saved = authoring ? null : load(id);
   responses = saved?.responses || {};
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
   stepIndex = saved?.stepIndex || 0;
+  if (authoring?.step) {
+    stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
+  }
 
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
@@ -2055,6 +2075,9 @@ function renderBrowser() {
 // Where focus was when the browser opened. The panel is an aria-modal dialog,
 // so leaving focus behind it would let a keyboard user tab through the rail
 // underneath, and closing it would drop them at the top of the document.
+/** Releases the browser's focus trap while it is open. */
+let releaseBrowserFocus = null;
+
 let browserLastFocus = null;
 
 /** Show the list of available investigations. */
@@ -2068,6 +2091,14 @@ export function openBrowser() {
   // former left the panel wherever it had been.
   if (els.browserScroll) els.browserScroll.scrollTop = 0;
   if (els.browserContent) els.browserContent.scrollTop = 0;
+  // The browser declares aria-modal="true"; without a trap, Tab left it for
+  // the rail behind and a screen reader could browse the whole page under it.
+  // The trap also marks the background inert and restores focus on release.
+  releaseBrowserFocus = trapFocus(els.browserContent, {
+    returnFocusTo: browserLastFocus,
+    // Focus is placed on the first card below, after the panel has laid out.
+    initialFocus: null,
+  });
   // The first lesson, not the close button: the point of arriving here is to
   // choose one, and it puts the keyboard user at the top of the same list a
   // sighted user is reading. Deferred because a display change has to land
@@ -2093,6 +2124,19 @@ export function openBrowser() {
  */
 export function closeBrowser({ restoreFocus = true } = {}) {
   els.browser?.classList.add('hidden');
+  if (releaseBrowserFocus) {
+    const release = releaseBrowserFocus;
+    releaseBrowserFocus = null;
+    // The trap restores focus itself, so it is only released that way when the
+    // caller wants focus back; otherwise the background is un-inerted without
+    // moving focus, which is what opening a lesson from a card needs.
+    if (restoreFocus) {
+      release();
+      browserLastFocus = null;
+      return;
+    }
+    release();
+  }
   if (
     restoreFocus &&
     browserLastFocus &&
@@ -2212,7 +2256,7 @@ function resetProgress() {
   visited = new Set();
   startedAt = new Date().toISOString();
   try {
-    localStorage.removeItem(storageKey(active.id));
+    if (!authoring) localStorage.removeItem(storageKey(active.id));
   } catch {
     /* ignore */
   }
@@ -2417,6 +2461,36 @@ export function initInvestigations() {
   // (digits followed by z or r), so the two cannot be confused.
   openInvestigationFromHash();
   window.addEventListener('hashchange', openInvestigationFromHash);
+
+  // The authoring preview: ?author=<lesson>&step=<n>.
+  //
+  // Imported dynamically, and only when the URL asks for it, so that neither
+  // this module nor the rule engine it pulls in reaches a student's download.
+  // Everything in it - the bar, the diagnostics, the rules - is authoring
+  // machinery, and the lazy boundary the lessons already use is the right
+  // place for it.
+  if (/[?&#]author=/.test(window.location.href)) {
+    import('./authoring/preview.js')
+      .then(preview => {
+        const request = preview.authoringRequest();
+        if (!request) return;
+        if (!hasInvestigation(request.lesson)) {
+          toast(t('inv.link.unknown'));
+          return;
+        }
+        authoring = {
+          step: request.step,
+          render: (inv, index) => preview.renderAuthorBar(inv, index),
+        };
+        preview.mountAuthorBar(index => goToStep(index));
+        openInvestigation(request.lesson).catch(() =>
+          toast(t('inv.load.failed'))
+        );
+      })
+      .catch(() => {
+        /* the preview is a development aid; its absence is not a student's problem */
+      });
+  }
 
   // The plot reads its colors from the theme tokens, so it has to be redrawn
   // when the theme changes rather than keeping the old palette.

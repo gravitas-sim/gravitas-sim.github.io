@@ -61,8 +61,6 @@ import {
   clearAllEnergyHistory,
   getObjectEnergyStats,
   // Orbit preview helpers
-  getMostMassiveBody,
-  gravitational_acceleration,
 } from './physics.js';
 
 import {
@@ -99,7 +97,7 @@ import { t, hasMessage, onLocaleChange } from './i18n/index.js';
 import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { resetPotentialCache } from './vectorOverlay.js';
-import { toast } from './controls.js';
+import { toast } from './notify.js';
 import {
   toggleTool,
   isToolActive,
@@ -154,59 +152,21 @@ import {
 const canvas = document.getElementById('simulationCanvas');
 const starfieldCanvas = document.getElementById('starfieldCanvas');
 
-// Global state object
-const state = {
-  zoom: 1.0,
-  pan: { x: 0.0, y: 0.0 },
-  // Where the reference frame's origin currently is, in world units. Every
-  // world-to-screen conversion subtracts it, so choosing a frame moves the
-  // picture without touching the user's own pan. Zero is the world frame.
-  frameOffset: { x: 0.0, y: 0.0 },
-  paused: false,
-  mouse: { x: -1000, y: -1000, down: false }, // Initialize mouse off-screen to prevent accidental object detection
-  // Hold-to-add state
-  isHolding: false,
-  holdStart: null, // {x,y} in world coords
-  holdCurrent: null, // {x,y} in world coords
-  adding_mass: false,
-  add_start_screen: { x: 0, y: 0 },
-  add_start_world: { x: 0, y: 0 },
-  inspector_open: false,
-  touch_active: false,
-  touch_id: null,
-  last_time: 0,
-  frame_count: 0,
-  user_has_interacted: false, // Track if user has actually interacted with the page
-  // Orbit helper state
-  orbit_helper: {
-    enabled: true,
-    preview: null, // { center:{x,y}, radius:number, points:[{x,y}], vel:{x,y} }
-  },
-  // New drag preview state
-  isDragging: false,
-  dragStart: { x: 0, y: 0 },
-  dragCurrent: { x: 0, y: 0 },
-  // Sticky orbit snapping state for preview and spawn
-  stickyOrbit: {
-    active: false,
-    centralId: null,
-    snappedVel: null,
-  },
-  // Overlay for showing stable orbit when inspector is open
-  inspectorOrbitOverlay: {
-    active: false,
-    points: [],
-  },
-  // Kepler's 2nd Law area sweep overlay
-  areaSweepOverlay: {
-    active: false,
-    parentId: null,
-    objectId: null,
-    wedges: [],
-    orbitPoints: [],
-    parent: null,
-  },
-};
+// The shared state, which used to be declared here. See js/appState.js for why
+// it moved: eleven modules imported this one, and four of them wanted nothing
+// from it but these objects, so every such import closed a cycle.
+// Re-exported below, so that the module's public surface is unchanged by the
+// move to js/preview.js.
+import { checkAreaSweepValidity } from './preview.js';
+import {
+  state,
+  SETTINGS,
+  DEFAULT_SETTINGS,
+  setSettings,
+  current_scenario_name,
+  setScenarioName as setCurrentScenarioName,
+} from './appState.js';
+
 // No global annotation helpers in clean state
 // Return attractors sorted by gravitational influence m/r^2
 function getDominantAttractors(startPos, limit = 1) {
@@ -246,50 +206,6 @@ const setAreaSweepWedges = n => {
 
 /** @returns {number} Current wedge count */
 const getAreaSweepWedges = () => areaSweepWedges;
-
-// How far the orbit may drift before the drawn wedges stop describing it.
-// Generous enough to survive ordinary integrator wobble, tight enough that a
-// collision, a mass change or a slingshot retires the overlay immediately.
-const SWEEP_STALE_FRACTION = 0.06;
-
-/**
- * Retire the equal-area overlay once it no longer matches the real orbit.
- *
- * The overlay is a snapshot of one particular ellipse. If the body is absorbed,
- * flung onto a different orbit, or has its mass changed, the wedges become a
- * picture of an orbit nothing is on, which is worse than showing nothing.
- *
- * @returns {boolean} True if the overlay is still valid
- */
-const checkAreaSweepValidity = () => {
-  const ov = state.areaSweepOverlay;
-  if (!ov.active) return false;
-
-  const body = [...planets, ...asteroids, ...comets, ...gas_giants].find(
-    o => o.id === ov.objectId
-  );
-  const parent = ov.parent;
-  if (!body || body.alive === false || !parent || parent.alive === false) {
-    ov.active = false;
-    return false;
-  }
-  if (ov.a === undefined) return true; // built before this data was recorded
-
-  const el = orbitalElements(body, parent, SETTINGS.gravitational_constant);
-  if (!el || !el.bound) {
-    ov.active = false;
-    return false;
-  }
-  const dA = Math.abs(el.a - ov.a) / Math.max(ov.a, 1e-9);
-  const dE = Math.abs(el.e - ov.e);
-  if (dA > SWEEP_STALE_FRACTION || dE > SWEEP_STALE_FRACTION) {
-    ov.active = false;
-    ov.wedges = [];
-    ov.orbitPoints = [];
-    return false;
-  }
-  return true;
-};
 
 /**
  * Draw the equal-area wedges for a given body.
@@ -565,137 +481,7 @@ const SAVE_KEY = 'gravitas_simulation_save';
 // Hold this long on empty canvas to arm object placement on touch devices.
 const LONG_PRESS_MS = 380;
 
-const DEFAULT_SETTINGS = {
-  preset_scenario: 'Binary BH',
-  gravitational_constant: 2.0,
-  follow_mode: 'None',
-  num_planets: 15,
-  num_gas_giants: 2,
-  num_neutron_stars: 0,
-  num_white_dwarfs: 0,
-  num_stars: 0,
-  init_velocity: 20,
-  velocity_stddev: 5,
-  bh_mass: 10,
-  num_black_holes: 1,
-  bh_behavior: 'Static',
-  use_individual_bh_masses: false,
-  bh_masses: [],
-  orbit_decay_rate: 0.005,
-  // 0 = integrate at whatever step the frame gives. A scenario that needs its
-  // orbits to hold their shape sets a cap; see the substep loop in render.js.
-  max_timestep: 0,
-  // 0 = use the physics default. A compact scenario lowers it; see physics.js.
-  min_interaction_distance: 0,
-  placement: 'Random',
-  mutual_gravity: false,
-  show_trails: true,
-  sim_speed: 1.0,
-  show_velocity_vectors: false,
-  // The acceleration overlay and the potential underlay are the two halves of
-  // the "velocity is not force" demonstration. Off by default, like the
-  // velocity arrows: they are an instrument a student switches on, and a
-  // scenario that opened covered in arrows would be teaching before it was
-  // asked to.
-  show_acceleration_vectors: false,
-  show_potential_well: false,
-  // The always-on canvas instrumentation. On by default, because a picture of
-  // a simulation with no scale and no clock on it cannot be cited, and these
-  // are the two facts a screenshot most often has to carry.
-  show_scale_bar: true,
-  show_elapsed_time: true,
-  // The conservation readout. On, and quiet: three short lines in the corner.
-  show_conservation_diagnostics: true,
-  // The numerical scheme. Symplectic Euler is the default and must stay it:
-  // every scenario in the catalog was laid out and timed against its error.
-  integrator: 'Symplectic Euler',
-  interactive_add: true,
-  trail_length: 15,
-  trail_style: 'Glow',
-  sim_size: 'Large',
-  star_density: 10000,
-  input_object_type: 'Star',
-  show_bh_glow: true,
-  show_accretion_disk: true,
-  realistic_disk_physics: true,
-  show_bh_jets: false,
-  show_dynamic_overlays: true,
-  enable_asteroids: true,
-  num_asteroids: 10,
-  num_comets: 0,
-  dynamic_object_properties: true,
-  record_simulation: false,
-  show_ambient_lighting: true,
-  planet_base_color: '#6495ed',
-  star_base_color: '#ffff00',
-  enable_star_merging: true,
-  max_star_mass_before_bh: 20.0,
-  show_gravitational_waves: true, // Enable GW visualization by default
-  // Visual fidelity
-  show_object_lensing: true,
-  lensing_quality: 'medium',
-  trail_colour_mode: 'type',
-  disk_doppler: true,
-  // Dark matter. These have to be here, not only in physicsSettings:
-  // applyPreset rebuilds SETTINGS from these defaults on every scenario load,
-  // so a key that is missing from this object is a key no scenario can reset.
-  // Without them the halo stayed switched on after Milky Way Rotation and
-  // quietly changed the force law in every scenario loaded afterwards,
-  // including the Solar System, whose rotation curve is the one measurement the
-  // dark-matter lesson opens by trusting.
-  // Which law governs a galaxy's outskirts: 'newtonian', 'halo' or 'mond'.
-  // One setting rather than two flags, so that the halo and MOND - competing
-  // explanations for the same observation - cannot both be switched on. The
-  // older `dark_matter_halo` boolean is still accepted on the way in, so
-  // shared links and saved games from before this existed still load; see
-  // normaliseGalaxyGravity in js/physics.js.
-  galaxy_gravity: 'newtonian',
-  halo_v_flat: 6.0,
-  halo_core_radius: 300,
-  // What one simulation unit represents, for the galaxy scale models. Zero
-  // everywhere else, which is what refuses MOND outside them.
-  galaxy_kpc_per_unit: 0,
-  galaxy_msun_per_unit: 0,
-  // Scenario-only keys. Each of these is written by one scenario (preset_zoom
-  // by all of them) and read nowhere else, so before they were listed here
-  // there was no value for applyPreset to reset them to: whatever the last
-  // scenario set survived into the next one, exactly as the halo did.
-  // The values are what the app should use when no scenario asks for anything.
-  preset_zoom: 1.5,
-  // 1.0 selects the conservative habitable zone; see
-  // habitableZoneModelFromSettings() in render.js, which switches at 1.3.
-  habitable_zone_optimism: 1.0,
-  // Per-neutron-star masses, the same shape as bh_masses above.
-  use_individual_ns_masses: false,
-  ns_masses: [],
-  // Kessler Cascade's swarm of 0.1 Msun stars. None by default; the mass is
-  // the per-star value, so it stays physical rather than zero when unused.
-  num_micro_stars: 0,
-  micro_star_mass: 0.1,
-  micro_star_high_velocity: false,
-  // Alien Dyson Swarm Collapse draws its stars as satellites.
-  // Geometry applied after the bodies exist, by applyPresetLayout() in
-  // scenarios.js. null means the scenario asked for no special layout.
-  bh_layout: null,
-  // Slingshot Gauntlet fires a single test star past the black holes.
-  test_star_slingshot: false,
-  // Performance/architecture toggles
-  use_barnes_hut: false,
-  barnes_hut_theta: 0.4,
-  adaptive_detail: true,
-  target_fps: 60,
-  chart_update_hz: 8,
-  star_only_gravity: false,
-  // Sticky-orbit and preview defaults
-  sticky_dir_only_angle_deg: 15,
-  snap_min_speed: 2.0,
-  preview_gravity_boost: 4.0,
-};
-
-let SETTINGS = { ...DEFAULT_SETTINGS };
 let localSettings = {};
-
-let current_scenario_name = null;
 
 // Space Object Name Database
 if (typeof window !== 'undefined') {
@@ -3949,13 +3735,14 @@ const build_simulation = () =>
       return pending;
     },
     setScenarioName: name => {
-      current_scenario_name = name;
+      setCurrentScenarioName(name);
     },
     hideObjectInspector,
     showScenarioInfo: show_enhanced_scenario_info,
     updateObjectTypeButton,
     computeAreaSweep,
     isAreaSweepSuppressed,
+    regenerateStarfield: generateStarfield,
   });
 
 // Settings functions
@@ -4112,6 +3899,12 @@ const setting_items = [
     labelId: 'settings.label.adaptiveDetail',
     key: 'adaptive_detail',
     type: 'bool',
+  },
+  {
+    labelId: 'settings.label.qualityTier',
+    key: 'quality_tier',
+    type: 'option',
+    options: ['auto', 'full', 'low'],
   },
   { labelId: 'settings.section.visuals', type: 'separator' },
   {
@@ -5012,7 +4805,7 @@ const buildSettingsMenu = () => {
           localSettings[item.key] = e.target.value;
           if (item.key === 'preset_scenario') {
             updatePresetInfo(e.target.value);
-            current_scenario_name = e.target.value;
+            setCurrentScenarioName(e.target.value);
           }
         };
         controlContainer.appendChild(select);
@@ -5338,7 +5131,7 @@ const load_simulation_state = () => {
   }
   try {
     const loadedState = JSON.parse(savedJSON);
-    SETTINGS = loadedState.settings || { ...DEFAULT_SETTINGS };
+    setSettings(loadedState.settings || { ...DEFAULT_SETTINGS });
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
@@ -5485,7 +5278,7 @@ const applyShareState = payload => {
   }
 
   state.paused = payload.p === 1;
-  current_scenario_name = scenario;
+  setCurrentScenarioName(scenario);
 
   // Everything an experiment needs restored that a link never carried. A
   // payload without an `x` block yields the defaults - clock at zero, world
@@ -5700,6 +5493,51 @@ const updateObjectTypeButton = () => {
   SETTINGS.input_object_type = currentType.type;
 };
 
+// --- Pointer input, and the one place CSS pixels become canvas pixels ---------
+//
+// The simulation canvas is laid out at 100% of the window by CSS and its
+// backing store is set in js/render.js. Those were the same number until the
+// low quality tier started rendering below native resolution and letting the
+// compositor upscale, and from that moment a pointer event - which arrives in
+// CSS pixels - stopped being a canvas coordinate.
+//
+// Everything downstream of here works in canvas pixels: screen_to_world reads
+// canvas.width, state.mouse is drawn straight into the context, and state.pan
+// is added to a world-to-screen result. So the conversion happens once, at the
+// boundary, and nothing inside has to know the tier exists.
+//
+// getBoundingClientRect rather than innerWidth: the canvas is the thing being
+// scaled, and asking it is both correct and robust to a future layout that does
+// not have it filling the window.
+/**
+ * A pointer event in canvas coordinates.
+ *
+ * @param {{clientX: number, clientY: number}} e - A mouse or touch point
+ * @returns {{x: number, y: number}} The same point in canvas pixels
+ */
+const canvasPoint = e => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = rect.width > 0 ? canvas.width / rect.width : 1;
+  const sy = rect.height > 0 ? canvas.height / rect.height : 1;
+  return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+};
+
+/**
+ * A pointer *movement* in canvas pixels.
+ *
+ * movementX/Y are CSS pixels, and state.pan is in canvas pixels, so a drag at
+ * the low tier would move the view more slowly than the cursor without this.
+ *
+ * @param {{movementX: number, movementY: number}} e - A mouse move
+ * @returns {{x: number, y: number}} The movement in canvas pixels
+ */
+const canvasMovement = e => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = rect.width > 0 ? canvas.width / rect.width : 1;
+  const sy = rect.height > 0 ? canvas.height / rect.height : 1;
+  return { x: e.movementX * sx, y: e.movementY * sy };
+};
+
 // Event handlers
 canvas.addEventListener('mousedown', e => {
   if (e.button !== 0) return;
@@ -5726,14 +5564,15 @@ canvas.addEventListener('mousedown', e => {
   // over a planet has to be grabbable, and without this the click would select
   // the planet underneath it instead - or, on empty space, start dragging a new
   // body into existence out of the handle the user meant to move.
-  if (toolsPointerDown({ x: e.clientX, y: e.clientY })) {
+  const pointer = canvasPoint(e);
+  if (toolsPointerDown(pointer)) {
     state.isHolding = false;
     state.adding_mass = false;
     state.isDragging = false;
     return;
   }
 
-  const worldPos = screen_to_world({ x: e.clientX, y: e.clientY });
+  const worldPos = screen_to_world(pointer);
   const clickedObject = findObjectAtPosition(worldPos);
 
   if (clickedObject) {
@@ -5791,7 +5630,7 @@ canvas.addEventListener('mousedown', e => {
   }
 
   state.adding_mass = true;
-  state.add_start_screen = { x: e.clientX, y: e.clientY };
+  state.add_start_screen = { ...pointer };
   state.add_start_world = worldPos;
   // Start drag preview
   state.isDragging = true;
@@ -5800,17 +5639,19 @@ canvas.addEventListener('mousedown', e => {
 });
 
 window.addEventListener('mousemove', e => {
-  state.mouse.x = e.clientX;
-  state.mouse.y = e.clientY;
-  if (toolsPointerMove({ x: e.clientX, y: e.clientY })) return;
+  const moved = canvasPoint(e);
+  state.mouse.x = moved.x;
+  state.mouse.y = moved.y;
+  if (toolsPointerMove(moved)) return;
   if (state.mouse.down && !state.adding_mass) {
-    state.pan.x += e.movementX;
-    state.pan.y += e.movementY;
+    const delta = canvasMovement(e);
+    state.pan.x += delta.x;
+    state.pan.y += delta.y;
   }
   if (state.adding_mass) {
     updateOrbitHelper(e.shiftKey);
     // Update drag preview current
-    const worldPos = screen_to_world({ x: e.clientX, y: e.clientY });
+    const worldPos = screen_to_world(moved);
     state.dragCurrent = worldPos;
     if (state.isHolding) state.holdCurrent = { ...worldPos };
   }
@@ -5826,7 +5667,7 @@ window.addEventListener('mouseup', e => {
   if (state.adding_mass) {
     state.adding_mass = false;
     state.isDragging = false;
-    const add_end_world = screen_to_world({ x: e.clientX, y: e.clientY });
+    const add_end_world = screen_to_world(canvasPoint(e));
 
     // Validate both start and end world coordinates
     if (
@@ -5911,280 +5752,6 @@ window.addEventListener('mouseup', e => {
   }
 });
 
-// Expose drag preview for rendering: returns { position, velocity } or null
-export function getDragPreview() {
-  if (!state.isDragging) return null;
-  const position = { ...state.dragStart };
-  // Use same scaling as placement velocity: factor 3 from delta world
-  const velocity = {
-    x: (state.dragCurrent.x - state.dragStart.x) * 3,
-    y: (state.dragCurrent.y - state.dragStart.y) * 3,
-  };
-  return { position, velocity };
-}
-
-// Compute an orbit preview from current hold/drag state
-export function getOrbitPreview() {
-  if (!state.isHolding || !state.holdStart || !state.holdCurrent) return null;
-
-  // Build array of all gravitating sources (alive only)
-  const sources = [
-    ...bh_list,
-    ...stars,
-    ...neutron_stars,
-    ...white_dwarfs,
-    ...gas_giants,
-    ...planets,
-    ...asteroids,
-    ...comets,
-  ].filter(b => b && b.alive !== false && b.pos && typeof b.mass === 'number');
-  if (sources.length === 0) return null;
-
-  // Initial position and velocity in world frame
-  const pos = { x: state.holdStart.x, y: state.holdStart.y };
-  let vel = {
-    x: (state.holdCurrent.x - state.holdStart.x) * 3,
-    y: (state.holdCurrent.y - state.holdStart.y) * 3,
-  };
-
-  // Integrate forward using symplectic Euler under many-body gravity
-  const dt = 0.02; // sim seconds per step
-  // Extend grey path length by 1.5x for a given insertion speed
-  const steps = Math.floor(160 * 1.5);
-  const gravityBoost =
-    (typeof SETTINGS !== 'undefined' && SETTINGS.preview_gravity_boost) || 4.0;
-  const points = [{ x: pos.x, y: pos.y }];
-  let collisionInfo = null;
-  for (let i = 0; i < steps; i++) {
-    const a = gravitational_acceleration(pos, sources);
-    // Exaggerate bending by boosting gravity for preview path only
-    vel.x += a.ax * gravityBoost * dt;
-    vel.y += a.ay * gravityBoost * dt;
-    pos.x += vel.x * dt;
-    pos.y += vel.y * dt;
-    points.push({ x: pos.x, y: pos.y });
-
-    // Predict collision with any source: stop early and mark collision
-    if (!collisionInfo) {
-      for (let sIdx = 0; sIdx < sources.length; sIdx++) {
-        const s = sources[sIdx];
-        if (!s || !s.pos || typeof s.radius !== 'number') continue;
-        const dx = pos.x - s.pos.x;
-        const dy = pos.y - s.pos.y;
-        const distSq = dx * dx + dy * dy;
-        // Use a reduced effective radius for black holes to avoid overly eager preview collisions
-        const bhFactor =
-          (typeof SETTINGS !== 'undefined' &&
-            SETTINGS.preview_collision_bh_factor) ||
-          0.6;
-        const r =
-          s.obj_type === 'BlackHole'
-            ? Math.max(0, s.radius * bhFactor)
-            : Math.max(0, s.radius);
-        // Require inward radial motion for collision (reduces skim false positives)
-        const radialDot = dx * vel.x + dy * vel.y; // < 0 means moving inward
-        if (distSq <= r * r && radialDot < 0) {
-          collisionInfo = {
-            x: pos.x,
-            y: pos.y,
-            withId: s.id ?? null,
-            withType: s.obj_type ?? null,
-          };
-          break;
-        }
-      }
-      if (collisionInfo) break;
-    }
-  }
-
-  // Attempt stable orbit detection around most massive body
-  const primary = getMostMassiveBody(sources);
-  if (primary && primary.pos && typeof primary.mass === 'number') {
-    const last = points[points.length - 1];
-    if (last) {
-      // Relative initial state around primary (start of preview)
-      const r0 = {
-        x: points[0].x - primary.pos.x,
-        y: points[0].y - primary.pos.y,
-      };
-      const v0 = {
-        x: (state.holdCurrent.x - state.holdStart.x) * 3,
-        y: (state.holdCurrent.y - state.holdStart.y) * 3,
-      };
-      // Specific energy sign test (using normal G, not boosted)
-      const Gval =
-        (typeof SETTINGS !== 'undefined' && SETTINGS.gravitational_constant) ||
-        1.0;
-      const rMag = Math.hypot(r0.x, r0.y);
-      const vMag = Math.hypot(v0.x, v0.y);
-      // Minimal drag/speed gate, but we will override this if direction-only condition is met
-      const minSnapSpeed =
-        (typeof SETTINGS !== 'undefined' && SETTINGS.snap_min_speed) || 2.0;
-      // const E =
-      //   0.5 * vMag * vMag - (Gval * primary.mass) / Math.max(rMag, 1e-9);
-
-      // Sticky snapping: if velocity is roughly compatible with circular, snap
-      // Compute ideal circular speed and allow both CCW and CW tangential directions
-      const vCirc = Math.sqrt((Gval * primary.mass) / Math.max(rMag, 1e-9));
-      const baseAngle = Math.atan2(r0.y, r0.x);
-      const dirCCW = baseAngle + Math.PI / 2;
-      const dirCW = baseAngle - Math.PI / 2;
-      const vIdealCCW = {
-        x: vCirc * Math.cos(dirCCW),
-        y: vCirc * Math.sin(dirCCW),
-      };
-      const vIdealCW = {
-        x: vCirc * Math.cos(dirCW),
-        y: vCirc * Math.sin(dirCW),
-      };
-      // const dvx = v0.x - vIdeal.x;
-      // const dvy = v0.y - vIdeal.y;
-      // const velError = Math.hypot(dvx, dvy);
-      // Dial down stickiness: require closer match to ideal
-      // const baseTol =
-      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_orbit_tolerance) ||
-      //   5.0;
-      // const speedScale = Math.max(1, vMag * 0.1);
-      const denom = Math.max(1e-9, vMag * vCirc);
-      const dotCCW = v0.x * vIdealCCW.x + v0.y * vIdealCCW.y;
-      const cosCCW = Math.max(-1, Math.min(1, dotCCW / denom));
-      const angErrCCW = Math.acos(cosCCW);
-      const dotCW = v0.x * vIdealCW.x + v0.y * vIdealCW.y;
-      const cosCW = Math.max(-1, Math.min(1, dotCW / denom));
-      const angErrCW = Math.acos(cosCW);
-      const angErr = Math.min(angErrCCW, angErrCW);
-      // General angle tolerance removed in direction-only logic
-      // Direction-only snap: if within this narrower angle, snap regardless of speed
-      const dirOnlyDeg =
-        (typeof SETTINGS !== 'undefined' &&
-          SETTINGS.sticky_dir_only_angle_deg) ||
-        15;
-      const angleOkDirOnly = angErr <= (dirOnlyDeg * Math.PI) / 180;
-      // Speed factor band removed in direction-only logic
-
-      // If user hasn't dragged fast enough yet and not within direction-only band, show grey preview
-      if (vMag < minSnapSpeed && !angleOkDirOnly) {
-        return { points, snapped: false, collision: collisionInfo };
-      }
-
-      // Snap strictly by direction-only cone for seamless switching
-      if (angleOkDirOnly) {
-        const chosenIdeal = angErrCCW <= angErrCW ? vIdealCCW : vIdealCW;
-        // Activate snap and store snapped velocity
-        state.stickyOrbit.active = true;
-        state.stickyOrbit.centralId = primary.id ?? null;
-        state.stickyOrbit.snappedVel = { ...chosenIdeal };
-
-        // Use snapped velocity only for the loop preview, keep live arrow responsive
-
-        // Build a closed circular path (one full loop) for clear orbit outline
-        const r = Math.max(1e-9, Math.hypot(r0.x, r0.y));
-        const theta0 = Math.atan2(r0.y, r0.x);
-        const samples = 240;
-        const orbitPts = [];
-        for (let i = 0; i <= samples; i++) {
-          const t = i / samples;
-          const theta = theta0 + 2 * Math.PI * t;
-          orbitPts.push({
-            x: primary.pos.x + r * Math.cos(theta),
-            y: primary.pos.y + r * Math.sin(theta),
-          });
-        }
-
-        // Prepend starting segment from current hold point back to the first orbit point
-        // So the dashed path appears continuous from drop to orbit
-        const fullPoints = [];
-        // When snapped, show only the closed orbit (no connector)
-        // Then the full orbit
-        fullPoints.push(...orbitPts);
-
-        return { points: fullPoints, snapped: true };
-      }
-    }
-  }
-
-  // If previously in sticky mode, require a large deviation and angle change to break snap
-  if (state.stickyOrbit.active) {
-    const central = [...sources].find(
-      s => s.id === state.stickyOrbit.centralId
-    );
-    if (central) {
-      const r0 = {
-        x: state.holdStart.x - central.pos.x,
-        y: state.holdStart.y - central.pos.y,
-      };
-      const Gval =
-        (typeof SETTINGS !== 'undefined' && SETTINGS.gravitational_constant) ||
-        1.0;
-      const rMag = Math.hypot(r0.x, r0.y);
-      const vCirc = Math.sqrt((Gval * central.mass) / Math.max(rMag, 1e-9));
-      const baseAngle2 = Math.atan2(r0.y, r0.x);
-      const dirCCW2 = baseAngle2 + Math.PI / 2;
-      const dirCW2 = baseAngle2 - Math.PI / 2;
-      const vIdealCCW2 = {
-        x: vCirc * Math.cos(dirCCW2),
-        y: vCirc * Math.sin(dirCCW2),
-      };
-      const vIdealCW2 = {
-        x: vCirc * Math.cos(dirCW2),
-        y: vCirc * Math.sin(dirCW2),
-      };
-      // Choose ideal direction that is closest to current drag direction
-      const denom2 = Math.max(1e-9, Math.hypot(vel.x, vel.y) * vCirc);
-      const cosCCW2 = Math.max(
-        -1,
-        Math.min(1, (vel.x * vIdealCCW2.x + vel.y * vIdealCCW2.y) / denom2)
-      );
-      const cosCW2 = Math.max(
-        -1,
-        Math.min(1, (vel.x * vIdealCW2.x + vel.y * vIdealCW2.y) / denom2)
-      );
-      const angErrCCW2 = Math.acos(cosCCW2);
-      const angErrCW2 = Math.acos(cosCW2);
-      const useCCW2 = angErrCCW2 <= angErrCW2;
-      const vIdeal = useCCW2 ? vIdealCCW2 : vIdealCW2;
-      // deviation thresholds no longer used in direction-only maintain logic
-      const dot2 = vel.x * vIdeal.x + vel.y * vIdeal.y;
-      const cosTheta2 = Math.max(-1, Math.min(1, dot2 / denom2));
-      const angErr2 = Math.acos(cosTheta2);
-      // const breakAngleDeg =
-      //   (typeof SETTINGS !== 'undefined' && SETTINGS.sticky_break_angle_deg) ||
-      //   20;
-      // const breakAngle = (breakAngleDeg * Math.PI) / 180;
-      // Maintain snap only while within the direction-only cone
-      const dirOnlyDeg2 =
-        (typeof SETTINGS !== 'undefined' &&
-          SETTINGS.sticky_dir_only_angle_deg) ||
-        15;
-      if (angErr2 <= (dirOnlyDeg2 * Math.PI) / 180) {
-        // Stay snapped: show a simple closed circular orbit in blue (one full loop)
-        const r = Math.max(1e-9, Math.hypot(r0.x, r0.y));
-        const theta0 = Math.atan2(r0.y, r0.x);
-        const samples = 240;
-        const orbitPts = [];
-        for (let i = 0; i <= samples; i++) {
-          const t = i / samples;
-          const theta = theta0 + 2 * Math.PI * t;
-          orbitPts.push({
-            x: central.pos.x + r * Math.cos(theta),
-            y: central.pos.y + r * Math.sin(theta),
-          });
-        }
-        const fullPoints = [];
-        // When snapped, show only the closed orbit (no connector)
-        fullPoints.push(...orbitPts);
-        return { points: fullPoints, snapped: true };
-      }
-    }
-    // Break sticky if central not found or deviation too large
-    state.stickyOrbit.active = false;
-    state.stickyOrbit.centralId = null;
-    state.stickyOrbit.snappedVel = null;
-  }
-
-  return { points, snapped: false, collision: collisionInfo };
-}
-
 // Merge toast removed per request
 
 window.addEventListener(
@@ -6200,7 +5767,8 @@ window.addEventListener(
     newZoom = Math.max(0.01, Math.min(newZoom, 100));
 
     // Get the world position at the mouse cursor (using current zoom and pan)
-    const worldPos = screen_to_world({ x: e.clientX, y: e.clientY });
+    const anchor = canvasPoint(e);
+    const worldPos = screen_to_world(anchor);
 
     // Update zoom
     state.zoom = newZoom;
@@ -6208,9 +5776,10 @@ window.addEventListener(
     // Calculate where that world position should be on screen with the new zoom
     const newScreenPos = worldToScreen(worldPos, state, canvas);
 
-    // Calculate the difference and adjust pan to keep the mouse position fixed
-    const deltaX = newScreenPos.x - e.clientX;
-    const deltaY = newScreenPos.y - e.clientY;
+    // Both in canvas pixels. Mixing the world-to-screen result with a raw
+    // clientX here would anchor the zoom to the wrong point at the low tier.
+    const deltaX = newScreenPos.x - anchor.x;
+    const deltaY = newScreenPos.y - anchor.y;
 
     state.pan.x -= deltaX;
     state.pan.y -= deltaY;
@@ -6338,7 +5907,7 @@ document.getElementById('refreshScenarioBtn').onclick = () => {
 };
 document.getElementById('resetAllBtn').onclick = () => {
   // Reset to default settings and ensure Binary BH scenario
-  SETTINGS = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  setSettings(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
   SETTINGS.preset_scenario = 'Binary BH'; // Ensure default scenario
   initialize_simulation();
   state.paused = false;
@@ -6388,7 +5957,7 @@ document.getElementById('settingsApply').onclick = () => {
     next.star_density !== SETTINGS.star_density ||
     next.show_ambient_lighting !== SETTINGS.show_ambient_lighting;
 
-  SETTINGS = next;
+  setSettings(next);
   document.getElementById('settingsPanel').classList.add('hidden');
 
   if (needsRebuild.length > 0) {
@@ -7131,7 +6700,7 @@ canvas.addEventListener(
 
     if (touchCount === 1) {
       const touch = e.touches[0];
-      const touchStartPos = { x: touch.clientX, y: touch.clientY };
+      const touchStartPos = canvasPoint(touch);
 
       // Was: a bounding-box test against .ui-container. On mobile that element
       // is the closed menu - still laid out, just visibility:hidden - so its
@@ -7207,7 +6776,7 @@ canvas.addEventListener(
 
     if (touchCount === 1 && state.touch_active) {
       const touch = e.touches[0];
-      const currentPos = { x: touch.clientX, y: touch.clientY };
+      const currentPos = canvasPoint(touch);
 
       // Moving means this is a drag, not a hold: cancel the pending arm.
       if (state.touchHoldTimer && !state.adding_mass) {
@@ -7535,7 +7104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Set scenario to 'None' and update settings
       SETTINGS.preset_scenario = 'None';
-      current_scenario_name = 'None';
+      setCurrentScenarioName('None');
 
       // Unpause simulation and set normal speed
       state.paused = false;
