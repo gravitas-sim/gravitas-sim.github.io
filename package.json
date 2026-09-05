@@ -73,7 +73,7 @@
   },
   "homepage": "https://github.com/gravitas-sim/gravitas-sim.github.io#readme",
   "devDependencies": {
-    "@axe-core/playwright": "4.11.2",
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "^9.31.0",
     "@fontsource/inter": "5.3.0",
     "@fontsource/poppins": "5.3.0",
