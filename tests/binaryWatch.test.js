@@ -36,6 +36,7 @@ function harness({
     alive: true,
   };
   let present = true;
+  let planetSlot = planet;
   const listeners = new Set();
   const summary = startBinaryWatch(
     {
@@ -52,7 +53,7 @@ function harness({
         listeners.add(fn);
         return () => listeners.delete(fn);
       },
-      bodies: () => (present ? { star1, star2, planet } : null),
+      bodies: () => (present ? { star1, star2, planet: planetSlot } : null),
       G: 1,
       onFinish: s => {
         finished.push(s);
@@ -72,6 +73,14 @@ function harness({
     finished,
     remove: () => {
       present = false;
+    },
+    swap: () => {
+      planetSlot = {
+        mass: 0.003,
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        alive: true,
+      };
     },
     listeners,
   };
@@ -226,7 +235,7 @@ describe('boundness', () => {
 });
 
 describe('endings', () => {
-  test('an absorbed planet is a collision, and the body stays put', () => {
+  test('an absorbed planet is a collision', () => {
     const h = harness({ periods: 100 });
     h.tick(1, 5);
     h.planet.alive = false;
@@ -235,6 +244,33 @@ describe('endings', () => {
     expect(run.merged).toBe(true);
     expect(run.alive).toBe(true);
     expect(classifyRun(run).outcome).toBe(OUTCOME.COLLIDED);
+  });
+
+  test('a collision is still a collision when the engine also drops the body', () => {
+    // What actually happens: js/physics.js sets alive = false and prunes the
+    // dead body from `planets`, both inside one integration step. Checking the
+    // array before the flag reported every collision in the real application
+    // as an unexplained disappearance, while this suite passed - because the
+    // test above sets the flag without removing the body, which the engine
+    // never does.
+    const h = harness({ periods: 100 });
+    h.tick(1, 5);
+    h.planet.alive = false;
+    h.remove();
+    h.tick();
+    const run = currentRun();
+    expect(run.merged).toBe(true);
+    expect(classifyRun(run).outcome).toBe(OUTCOME.COLLIDED);
+  });
+
+  test('a different planet under the same index is not the one being watched', () => {
+    // A scenario change mid-run leaves `planets[0]` populated by something
+    // else entirely, and the watcher would happily go on recording it.
+    const h = harness({ periods: 100 });
+    h.tick(1, 5);
+    h.swap();
+    h.tick();
+    expect(classifyRun(currentRun()).reason).toBe('vanished');
   });
 
   test('a planet that leaves the array is not a physical result', () => {

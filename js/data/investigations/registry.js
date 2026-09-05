@@ -77,6 +77,7 @@ const LOADERS = {
   'butterfly-effect': () => import('./butterfly-effect.js'),
   'when-orbits-lock': () => import('./when-orbits-lock.js'),
   'detect-this-planet': () => import('./detect-this-planet.js'),
+  'binary-star-planets': () => import('./binary-star-planets.js'),
 };
 
 /**
@@ -104,6 +105,7 @@ const TRANSLATIONS = {
     'butterfly-effect': () => import('./es/butterfly-effect.js'),
     'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
     'detect-this-planet': () => import('./es/detect-this-planet.js'),
+    'binary-star-planets': () => import('./es/binary-star-planets.js'),
   },
 };
 

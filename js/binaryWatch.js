@@ -163,20 +163,27 @@ function step(w, dt) {
 
   const { star1, star2, planet, G } = w;
 
-  // The planet leaving the array is not the same event as the planet being
-  // absorbed, and the difference decides whether the run means anything. An
-  // absorption sets alive = false and leaves the body in place, which is a
-  // physical outcome. Disappearing from the array is the engine's housekeeping
-  // - a cull, a reset, a scenario change under the run - and there is no
-  // physical claim to make about it.
-  const parts = w.bodies();
-  if (!parts || !parts.planet) {
-    w.lost = true;
+  // The planet being absorbed is not the same event as the planet ceasing to
+  // be tracked, and the difference decides whether the run means anything.
+  //
+  // The order of these two checks is the whole of it, and getting it wrong is
+  // silent. A star absorbing a planet sets alive = false, and the engine then
+  // drops dead bodies from the array - both inside the same integration step,
+  // so by the time this runs the planet is gone from `planets` and looking
+  // there first reports every collision as an unexplained disappearance. The
+  // captured reference outlives the array, so ask it first: alive === false is
+  // an absorption and a physical outcome, and only a planet that is still
+  // alive but no longer tracked is the engine's housekeeping - a cull, a
+  // reset, a scenario change under the run - about which there is nothing
+  // physical to say.
+  if (!planet.alive) {
+    w.merged = true;
     finish(w);
     return;
   }
-  if (!planet.alive) {
-    w.merged = true;
+  const parts = w.bodies();
+  if (!parts || !parts.planet || parts.planet !== planet) {
+    w.lost = true;
     finish(w);
     return;
   }

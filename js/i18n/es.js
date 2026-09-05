@@ -1460,6 +1460,55 @@ export const ES = {
 
   // --- Pausar en un evento ----------------------------------------------------
   'rail.togglePauseAtEvent': 'Pausar en evento',
+  // --- El panel de ejecución en binaria ----------------------------------------
+  'rail.toggleBinaryRun': 'Ejecución en binaria',
+  'rail.toggleBinaryRun.hint':
+    'Abre el panel de ejecución del planeta en binaria: fija dónde empieza el planeta y cuántos periodos binarios integrar, y luego lee qué le pasó y hasta qué punto se puede confiar en la ejecución. Solo sirve en los dos escenarios de laboratorio de planetas en binarias.',
+  'binaryRun.close.hint': 'Ocultar el panel de ejecución en binaria',
+  'binaryRun.planetA': 'Inicio del planeta (a / a_binaria)',
+  'binaryRun.periods': 'Periodos binarios a integrar',
+  'binaryRun.timestep': 'Paso de integración',
+  'binaryRun.start': 'Ejecutar',
+  'binaryRun.halve': 'Repetir con la mitad del paso',
+  'binaryRun.progress': 'Integrado',
+  'binaryRun.progress.value':
+    '{done} de {asked} periodos binarios, {steps} pasos',
+  'binaryRun.drift': 'Deriva de energía',
+  'binaryRun.step': 'Paso realmente usado',
+  'binaryRun.step.varied': '{mean} de media, {max} el mayor',
+  'binaryRun.encounters': 'Encuentros cercanos',
+  'binaryRun.closest': 'Máximo acercamiento a la otra estrella',
+  'binaryRun.farthest': 'Distancia máxima alcanzada',
+  'binaryRun.status.idle': 'Sin empezar',
+  'binaryRun.status.running': 'En marcha',
+  'binaryRun.status.finished': 'Terminada',
+  'binaryRun.outcome.notStarted':
+    'Fija un radio inicial y un número de periodos binarios, y ejecuta.',
+  'binaryRun.outcome.running':
+    'En marcha: {periods} de {asked} periodos binarios.',
+  'binaryRun.outcome.survived':
+    'El planeta sobrevivió a esta integración de {periods} periodos binarios. Eso dice algo sobre esta ejecución y no sobre el futuro: aquí la inestabilidad suele ser lenta, y el estudio publicado con el que se compara integró diez mil periodos binarios.',
+  'binaryRun.outcome.ejected':
+    'El planeta fue expulsado tras {periods} periodos binarios. Acabó desligado de ambas estrellas y a más de diez separaciones binarias, así que se está marchando y no está en una órbita ancha.',
+  'binaryRun.outcome.collided':
+    'El planeta chocó con una estrella tras {periods} periodos binarios. Aquí las estrellas se dibujan unas diez veces más grandes de lo real y la distancia de colisión es la dibujada, así que léelo como "pasó a menos de unas 0,06 AU de una estrella" y no como un impacto medido.',
+  'binaryRun.outcome.unreliable':
+    'Esta ejecución no es creíble. La energía cambió un {drift}%, por encima del filtro del {limit}%, lo que significa que el paso dejó de resolver algo de lo que depende el resultado: casi siempre un acercamiento. Lo que le pasó al planeta a partir de ahí es cosa de la aritmética. Repítela con la mitad del paso.',
+  'binaryRun.outcome.vanished':
+    'El planeta salió de la simulación sin quedar registrado como colisión. No hay ninguna afirmación física que hacer sobre eso; vuelve a empezar la ejecución.',
+  'binaryRun.boundary.inside':
+    'Holman y Wiegert sitúan el radio crítico para esta razón de masas y esta excentricidad en {critical} separaciones binarias; este planeta empezó en {a}, del lado que sobrevive.',
+  'binaryRun.boundary.outside':
+    'Holman y Wiegert sitúan el radio crítico para esta razón de masas y esta excentricidad en {critical} separaciones binarias; este planeta empezó en {a}, del lado que se desestabiliza.',
+  'binaryRun.boundary.tooClose':
+    'Este planeta empezó en {a} separaciones binarias y Holman y Wiegert sitúan el radio crítico en {critical}. Eso cae dentro de la propia incertidumbre del ajuste, así que no predice nada en ningún sentido.',
+  'binaryRun.boundary.extrapolated':
+    'Estos valores quedan fuera del rango sobre el que se hizo el ajuste, así que esa cifra es una extrapolación.',
+  'binaryRun.boundary.source':
+    'Fuente: Holman y Wiegert 1999, AJ 117, 621. El ajuste supone un planeta sin masa, coplanario y prógrado con la binaria, que empieza en órbita circular, y define la supervivencia como durar 10\u2074 periodos binarios. Es un ajuste a dónde está la transición la mayor parte de las veces, y el artículo describe islas de inestabilidad por dentro y de estabilidad por fuera.',
+  'binaryRun.hint':
+    'Un resultado de aquí describe esta integración y nada más. En estos sistemas la inestabilidad suele ser lenta: un planeta puede girar tranquilo durante cientos de periodos binarios antes de que su órbita se vaya del sistema, así que "sobrevivió" habla de la ejecución que hiciste, no del futuro. La deriva de energía es un filtro y no un certificado: la prueba que zanja un resultado es repetir la ejecución con la mitad del paso y obtener la misma respuesta.',
+
   'rail.togglePauseAtEvent.hint':
     'Abre Pausar en evento: detiene la simulación en el momento en que ocurre algo elegido — el siguiente periastro o apoastro de un cuerpo respecto a su primario, un cruce de una separación indicada, o el siguiente punto medio de tránsito. El evento se localiza a partir de los pasos de integración, no de los fotogramas, así que el panel puede decirte con qué precisión lo encontró.',
   'pauseEvent.close.hint': 'Ocultar el panel de pausar en evento',

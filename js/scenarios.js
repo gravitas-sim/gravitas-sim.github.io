@@ -13,9 +13,54 @@
  * @param {Object} DEFAULT_SETTINGS - Baseline the preset builds on
  * @param {Object} state - View state (a few presets set an initial zoom)
  */
+/**
+ * The last preset this function set up.
+ *
+ * Kept so that re-running a scenario can be told apart from switching into it.
+ * Every rebuild goes through applyPreset - initialize_simulation restores
+ * preset_scenario from the loaded scenario's name precisely so that it does -
+ * which means a scenario's settings block is re-stamped on every Refresh. That
+ * is right for a scenario's identity and wrong for a value the reader chose,
+ * and without this there is no way to tell the two situations apart.
+ *
+ * Module state rather than a parameter because scenarios.js is engine-layer
+ * and may not reach up to js/appState.js for current_scenario_name.
+ */
+let lastPresetApplied = null;
+
+/**
+ * Settings the Binary Planet Lab scenarios hand over to the reader.
+ *
+ * These are the investigation's independent variables: where the planet
+ * starts, how long to integrate, and how finely. The scenario supplies an
+ * opening value for each, and after that they belong to whoever is running the
+ * experiment - changing one and rebuilding IS the experiment, so a rebuild
+ * that quietly restored the scenario's number would make it impossible.
+ *
+ * Carried only when re-entering the same lab scenario. Switching between the
+ * circumstellar and circumbinary labs resets them, because 0.15 separations is
+ * a sensible circumstellar orbit and a position inside both stars.
+ */
+const BINARY_LAB_SETTINGS = [
+  'binary_lab_planet_a',
+  'binary_lab_periods',
+  'max_timestep',
+];
+
+const isBinaryLab = ps =>
+  ps === 'Binary Planet Lab' || ps === 'Circumbinary Planet Lab';
+
 const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   const ps = SETTINGS.preset_scenario;
   if (ps === 'None') return;
+
+  // Read before the reset below wipes them, applied after the scenario's own
+  // block has had its say.
+  const carried = {};
+  if (isBinaryLab(ps) && lastPresetApplied === ps) {
+    for (const key of BINARY_LAB_SETTINGS) carried[key] = SETTINGS[key];
+  }
+  lastPresetApplied = ps;
   const fresh_defaults = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   // Reset to the defaults, then put back the keys that are the reader's rather
   // than the scenario's.
@@ -1328,9 +1373,21 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // close pass: that would change the system mid-experiment.
       enable_star_merging: false,
       show_trails: true,
-      // Long enough to see the shape of the planet's orbit change, short
-      // enough that a hundred orbits do not paint the screen solid.
-      trail_length: 300,
+      // Trails are the instrument here, and the two scenarios need very
+      // different ones because their planets are forty times apart in period.
+      //
+      // The circumstellar planet takes 365 time units to go round and the
+      // render loop advances 62.5 per frame, so it completes an orbit every six
+      // frames - roughly six orbits a second, which is a blur and is not a
+      // defect: 20 binary periods IS 280 planet orbits, and no arrangement of
+      // this system makes it fewer. 40 frames of trail draws about seven
+      // orbits, which shows the band the planet occupies and whether that band
+      // is holding its shape, without painting the screen solid. A student who
+      // wants to see one orbit turns the speed down.
+      //
+      // The circumbinary planet takes 41,000 units and the loop advances 125,
+      // so one orbit is 330 frames. 400 draws slightly more than a full ring.
+      trail_length: circumbinary ? 400 : 40,
       show_conservation_diagnostics: true,
       // Velocity Verlet rather than the catalog default. This is the one
       // scenario family whose entire subject is whether an outcome is real,
@@ -1362,7 +1419,10 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       // planet's excursions, without following anything - a follow mode would
       // hide an ejection by keeping the planet centered while everything else
       // slid off screen.
-      preset_zoom: circumbinary ? 0.14 : 0.6,
+      // Framed to hold everything the run can reach, with the far edge kept
+      // clear of the control rail: the circumstellar planet wanders out to
+      // 0.62 separations and the circumbinary one sits at four.
+      preset_zoom: circumbinary ? 0.11 : 0.6,
       follow_mode: 'None',
       binary_lab_planet_a: circumbinary ? 4.0 : 0.15,
       binary_lab_periods: circumbinary ? 40 : 20,
@@ -1489,8 +1549,15 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   }
 
+  Object.assign(SETTINGS, carried);
+
   SETTINGS.preset_scenario = 'None';
 };
+
+/** Forget which scenario was last set up. For tests and for a full reset. */
+export function resetPresetMemory() {
+  lastPresetApplied = null;
+}
 
 export { applyPreset };
 

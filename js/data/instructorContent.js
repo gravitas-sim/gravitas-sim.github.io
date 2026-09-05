@@ -16,6 +16,260 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'binary-star-planets': {
+    topic:
+      'Orbital stability in binaries, and the difference between a physical result and a numerical one',
+    difficulty:
+      'Introductory, but the second half is a genuine numerical-methods lesson and works in a computational course as well as an astronomy one',
+    placement:
+      'A long lesson, 40 to 50 minutes, that needs a full lab period. It has no prerequisites beyond knowing that gravity holds orbits together, and it sits naturally after any lesson that has established Kepler orbits. In a computational physics or scientific-computing course it can be run for its second half alone: steps 13 to 20 are a self-contained convergence study that happens to be about planets.',
+    overview: `Students run a controlled three-body system - two stars of stated mass on a stated
+      orbit, plus one Earth-mass planet - and find the distance at which the planet stops
+      surviving. They do it twice: once for a planet orbiting one star of the pair, once for a
+      planet orbiting both. Both boundaries are compared against the published Holman & Wiegert
+      (1999) fits, which the panel prints along with the assumptions behind them.
+      \n\nThe second half is the part that makes this more than a stability lesson. At 0.25 binary
+      separations the planet survives twenty binary periods at one timestep and is ejected at a
+      quarter of that step, with energy conserved to better than a part in a million in both
+      runs. Students meet the case, are caught by it, and are led to the rule that actually
+      licenses a claim: an outcome counts when halving the step leaves it unchanged. Energy
+      conservation is shown to be a screen that catches disasters and cannot certify a result.
+      \n\nNothing in the lesson is ever called stable. Every finished run is reported as having
+      "survived this integration" for a stated number of binary periods, and steps 27 and 28
+      make that distinction do real work: two circumbinary configurations that the published fit
+      calls unstable survive forty periods here, while being flung fourteen and twenty-five
+      separations out and back.`,
+    priorKnowledge: [
+      'That gravity holds a planet in orbit, and that a closer or heavier body pulls harder',
+      'Reading a number off a panel and comparing it with another number',
+      'Substituting values into a polynomial - steps 11 and 25 ask for arithmetic, not algebra',
+      'No numerical methods required. Timesteps, energy drift and convergence are all introduced from scratch in steps 13 to 20',
+    ],
+    keyConcepts: [
+      {
+        heading: 'The stable zone is much smaller than it looks',
+        body: 'Students consistently guess that a planet can live anywhere inside the binary. For this pair the circumstellar boundary is at 0.177 separations - under a fifth - and the circumbinary one is at 3.6 separations, so a band more than three times the stars’ separation wide is excluded on both sides. The step 3 prediction is worth collecting as a show of hands.',
+      },
+      {
+        heading: 'Two different geometries, two opposite rules',
+        body: 'For a planet around one star the boundary is a ceiling: inside is safe. For a planet around both it is a floor: outside is safe. The reason is the same in both cases - a planet is safe where one gravitational source dominates and unsafe where it can resolve two - but the direction reverses, and students who learned the first rule apply it to the second.',
+      },
+      {
+        heading: 'Two distinct ways to lose a planet',
+        body: 'The circumstellar planet at 0.30 separations is thrown out by a single close pass with the companion. The circumbinary planet at 2.0 separations is driven out over several periods without ever coming within two separations of a star: resonant forcing, where the changing pull arrives at nearly the same orbital phase each time and the small kicks accumulate. The encounter counter separates the two mechanisms, and step 25 turns that into the question.',
+      },
+      {
+        heading: 'A numerical failure is not an outcome',
+        body: 'A badly resolved close approach hands the planet the wrong energy, after which it leaves or stays for reasons that have nothing to do with the binary. From the outside this is indistinguishable from physics. The panel refuses to name an outcome when the energy drift exceeds a tenth of a per cent, and says so rather than guessing.',
+      },
+      {
+        heading: 'Convergence, not conservation, is the test',
+        body: 'This is the lesson’s hardest idea and its most transferable. Energy conservation is necessary and nowhere near sufficient: energy is one number and a three-body encounter can be resolved badly in ways that do not disturb it. The only test that licenses an outcome is repeating the run at half the step and getting the same answer. Step 16 is where students meet a case that passes the energy screen at both steps and gives two different answers.',
+      },
+      {
+        heading: '"Survived this integration" is not "stable"',
+        body: 'Instability in these systems is often slow: eccentricity is pumped a little on each pass and a planet can circle quietly for hundreds of periods before leaving. Holman & Wiegert integrated for 10⁴ binary periods; this lesson integrates for 20 or 40. Steps 27 and 28 show two configurations the fit calls unstable surviving the run, with maximum excursions of 14 and 25 separations that make clear they are on their way out.',
+      },
+      {
+        heading: 'An empirical fit is a fit',
+        body: 'The Holman & Wiegert formulae are polynomial fits to where a transition mostly sat across a grid of integrations. They carry assumptions - massless planet, coplanar, prograde, initially circular - a validity range in mass ratio and eccentricity, and a coefficient uncertainty of about 0.02 separations. The paper itself reports islands of instability inside the boundary and of stability outside it. The panel declines to predict at all within the fit’s own uncertainty, which is worth pointing at.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-4',
+        text: 'The system and the vocabulary. Two stars of 1.0 and 0.5 solar masses, 10 AU apart at e = 0.4, every parameter stated rather than generated. Students commit to a prediction for the stable radius, and are told before measuring anything that a finished run will be reported as "survived this integration" and why that is not "stable".',
+      },
+      {
+        steps: '5-7',
+        text: 'The quiet run: the planet at 0.15 separations for twenty binary periods, about half a minute of wall clock. Students record four numbers and answer why the companion barely matters at that radius - proximity, not mass.',
+      },
+      {
+        steps: '8-11',
+        text: 'The planet moved to 0.30. It is ejected within about three binary periods after one close pass. Students predict first, then measure when it left, then work out why positive energy alone is not enough to call something an ejection.',
+      },
+      {
+        steps: '12-13',
+        text: 'The published boundary. Students compute a_c = 0.177 separations from the fit and find their two runs on either side of it, then answer which of four departures from the fit’s assumptions would most clearly put a real system outside its scope. (Inclination, because the fit is two-dimensional and Kozai-Lidov is not in it.)',
+      },
+      {
+        steps: '14-15',
+        text: 'The turn. What a timestep is, why a close approach is where it fails, and the energy screen - demonstrated by running 0.50 separations, which starts the planet almost on top of the companion and produces a refusal rather than a result.',
+      },
+      {
+        steps: '16-20',
+        text: 'The case the lesson is built around. 0.25 separations, run at steps of 1.0, 0.5 and 0.25. The outcome changes; the energy drift stays under a part in a million throughout. Students record all three, choose what to report, meet the convergence rule, and write two or three sentences reporting the configuration honestly. This is the longest stretch and should not be rushed.',
+      },
+      {
+        steps: '21-25',
+        text: 'Circumbinary planets. Kepler-16b as the real example, a prediction about which direction the danger lies, then one explore covering 4.0 separations (survives) and 2.0 (ejected in about 3.4 periods with no close encounter at all), a measurement of both, and the question about what drove it out.',
+      },
+      {
+        steps: '26-28',
+        text: 'The circumbinary boundary at 3.6 separations, then the deliberate disagreement: 3.0 and 2.5 both survive forty periods although the fit excludes them, with excursions to 14 and 25 separations. Students are asked who is wrong, and the answer is neither - forty periods is four thousandths of what the fit was calibrated on.',
+      },
+      {
+        steps: '29-30',
+        text: 'The strongest claim the work supports, written out in full so students can see how long an honest one is, and a closing summary of every result together with the three things the model leaves out: it is flat, the planet is a test particle, and the stars are points drawn ten times life size.',
+      },
+    ],
+    features: [
+      {
+        name: 'Binary Planet Lab and Circumbinary Planet Lab scenarios',
+        text: 'Two scenarios built from closed-form orbital elements rather than from the world generator: identical stars in both, differing only in where the planet starts and how long the run is. Nothing is seeded because nothing is sampled, so two loads produce the same three bodies to the last bit and the experiment bench can restore a run by rebuilding it. The randomized "Binary Star System" scenario next to them in the gallery is not usable for this and step 2 says why.',
+      },
+      {
+        name: 'Binary Planet Run panel',
+        text: 'Set the planet’s starting radius, the number of binary periods and the integration step; read back the periods integrated, the energy drift, the step actually used, the encounter count, the closest approach to the perturbing star and the farthest excursion. Everything is measured on integration steps rather than frames, so a grazing pass that lasts three steps is not missed. Distances are reported in binary separations, which is the unit the published fit is written in.',
+      },
+      {
+        name: '"Repeat at half the step"',
+        text: 'One button, and it is the pedagogical core of the second half. It halves the integration step and rebuilds the identical starting state, so the two runs differ in exactly one thing. Steps 15 and 16 both depend on it.',
+      },
+      {
+        name: 'The energy-drift screen',
+        text: 'Past a tenth of a per cent the panel declines to report an outcome at all. The threshold was measured rather than chosen: across the configurations this lesson uses, every run that drifted more than that gave an outcome that changed when the step was halved. It is presented to students as a screen and not a certificate, which is the honest description.',
+      },
+      {
+        name: 'The published boundary readout',
+        text: 'The panel prints the Holman & Wiegert critical radius for whatever configuration was run, which side of it the planet started on, and the paper’s assumptions and validity range. Within 0.02 separations of the line - the fit’s own coefficient uncertainty - it declines to predict either way and says so.',
+      },
+      {
+        name: 'Step size actually used',
+        text: 'Not the step requested. The render loop sizes its substeps from the frame time, so a machine under load silently integrates coarser than the scenario asked for. In a lesson about whether a result is numerical, that could not be left unsaid; the panel reports the mean and the largest step the run was actually given.',
+      },
+      {
+        name: 'The A/B experiment bench',
+        text: 'Not required by the lesson, but the natural next tool: it will record two runs on the same simulated-time axis and difference them, which turns "0.15 survives and 0.30 does not" into a chart. Worth offering to students who finish early.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A planet can orbit anywhere inside the binary.',
+        response:
+          'The step 3 prediction, collected before anything is run. Most classes choose "roughly half" or more; the answer is under a fifth. The two runs at 0.15 and 0.30 settle it in about a minute of wall clock each.',
+      },
+      {
+        claim: 'The companion matters because of its mass.',
+        response:
+          'Step 7. At 1.5 AU from a 1.0 solar-mass star the planet feels about eighteen times more pull from its own star than from a 0.5 solar-mass companion six AU away. Distance dominates, which is why the boundary is a distance.',
+      },
+      {
+        claim: 'The rule for a circumbinary planet is the same rule.',
+        response:
+          'Step 22. Students who have internalised "close is safe" apply it outside the binary and predict that bringing the planet in is safe. The direction reverses because what makes a region safe is one source dominating, and outside the pair that means being far enough away to see them as one.',
+      },
+      {
+        claim:
+          'A planet leaves because something hits it or passes very close.',
+        response:
+          'The circumbinary run at 2.0 separations records zero close encounters and a closest approach of 0.22 separations, and the planet is gone in 3.4 periods. Resonant forcing does not need a close pass, and step 25 is where that becomes explicit.',
+      },
+      {
+        claim: 'If energy is conserved, the run is right.',
+        response:
+          'This is the big one and the whole reason for steps 16 to 20. At 0.25 separations both the coarse and the fine run conserve energy to better than a part in a million and they disagree about whether the planet survives. Energy is one number; a three-body encounter can go wrong in ways that do not show up in it.',
+      },
+      {
+        claim:
+          'The finer timestep is more accurate, so the fine answer is the answer.',
+        response:
+          'The most interesting wrong answer in the lesson, and the one to draw out at step 18. It is more accurate, and that is not the same as converged: the next halving might move it again. What a changing answer establishes is that the answer is still moving. Students who make this error have understood the numerics and drawn the wrong conclusion, which is worth more class time than students who have not.',
+      },
+      {
+        claim: 'A run that gives no answer is a failed run.',
+        response:
+          '"This configuration is not resolved at these steps" is a result, and a reportable one. Point at the 0.30 run, which agreed at every step tried, and ask what is different about it.',
+      },
+      {
+        claim:
+          'The published fit is the right answer and the simulation is wrong.',
+        response:
+          'Steps 27 and 28. Two configurations the fit excludes survive forty periods here, and neither the fit nor the simulation is wrong: the fit was calibrated at 10⁴ periods and this run is 40. The maximum-excursion figures - 14 and 25 separations - show the planets already being pumped out. Neither is a fit a wall: the paper reports islands of instability inside its own boundary.',
+      },
+      {
+        claim: 'The planet hitting a star is a measured collision.',
+        response:
+          'The stars are drawn ten times life size so they are visible at all at a 10 AU separation, and js/physics.js collides on the drawn radius. A "collision" here means the planet came within about 0.06 AU - roughly thirteen solar radii - of a star’s centre. A pass that close destroys a planet in reality too, so the outcome is not fiction, but the split between collided and ejected among the disrupted configurations is partly set by a drawing decision. The split between disrupted and survived is not: surviving configurations keep the planet seventy times that distance away.',
+      },
+    ],
+    teachingNotes: [
+      'Budget the time backwards from step 16. Steps 1 to 13 are a brisk stability lesson and can be done in twenty minutes; steps 14 to 20 are the part that is hard to teach anywhere else and need at least as long again.',
+      'Take the step 3 prediction as a show of hands and write the tally on the board before anyone runs anything. Coming back to it after step 12 - when they have computed 0.177 - is the strongest moment in the first half.',
+      'Each run is about half a minute of wall clock at the scenario’s own speed. Halving the step doubles it, so the third run at step 0.25 takes roughly two minutes. Warn students, and consider having different groups run different steps and pool the results rather than each doing all three.',
+      'At step 15, the 0.50 configuration starts the planet almost on top of the companion star, which is why it fails so spectacularly. That is deliberate: it is the easiest possible demonstration of the energy screen, and it is not subtle. The subtle case is step 16.',
+      'Step 16 is the one to run at the front of the room if you run anything yourself. Watching the encounter counter climb into the dozens while the drift readout sits at 0.0002% makes the point better than the text does.',
+      'Step 18 has one instructive wrong answer - "ejected, since the finer step is always more accurate" - and it deserves discussion rather than correction. Ask what would have to be true for that reasoning to be safe. The answer is that you would have to already know the run had converged.',
+      'Step 20 is a written answer and takes most of the remaining time. Its rubric has four parts and the fourth - offering no verdict - is the one to mark hardest. If time is short, set it as the exit ticket.',
+      'The circumbinary half is faster than it looks because the two disruption cases resolve in three or four binary periods. Steps 21 to 28 fit in fifteen minutes if the first half has run long.',
+      'Step 27 asks students to run configurations the fit says should fail, and they do not fail. Some students will assume they have made a mistake. Tell them in advance that this is the intended result and the question is why.',
+      'Everything in steps 14 to 20 transfers to any N-body work. If any of your students go on to a computational project, this is the lesson they will use again, and it is worth saying so.',
+    ],
+    discussion: [
+      'A run that gives different answers at different timesteps has told you something. What, exactly, and how would you write it in a paper?',
+      'Holman & Wiegert integrated 10⁴ binary periods per configuration across a grid in mass ratio and eccentricity. What would that cost today, and what would you do with the result that a formula does not already give you?',
+      'The formula in this lesson assumes a coplanar, prograde, initially circular, massless planet. Which of those four is most likely to be violated by a real system, and what would you do about it?',
+      'Alpha Centauri A and B are 23.5 AU apart at e = 0.52. Work out the circumstellar boundary for that pair. What does the answer say about the prospects for a habitable-zone planet around either star?',
+      'This lesson calls nothing stable. Is that excessive caution, or is "stable" a word that should not be used about a numerical result at all?',
+      'Two thirds of Sun-like stars have companions, and the excluded band here is wide. What does that imply about how many planetary systems could exist, and does the exoplanet census bear it out?',
+    ],
+    extensions: [
+      'Bisect the circumstellar boundary. Run 0.18, 0.20 and 0.22 at two timesteps each and see how narrow an interval can be established before the answers stop converging. The honest result is likely to be a wider interval than students expect.',
+      'Change the binary eccentricity in the settings from 0.4 to 0.2 and recompute the fit. The boundary moves outward to 0.254 separations - run 0.20 and 0.30 again and see whether the simulation agrees.',
+      'Take a real system - Alpha Centauri, or Kepler-16 - work out its critical radius from the appropriate formula, and compare with the actual or proposed planet. Kepler-16b at 0.7048 AU against a critical radius of about 0.65 AU is famously marginal.',
+      'Use the A/B experiment bench to record 0.15 and 0.30 as two arms of one experiment and chart the distance to the primary against simulated time. The divergence is visible long before the ejection.',
+      'For a computational course: reproduce the convergence study at 0.25 separations in a language of your choice, with your own integrator, and see whether the step at which the answer settles is the same. It should not be, and why not is the exercise.',
+    ],
+    expectations: {
+      5: 'The planet at 0.15 separations, twenty binary periods, about half a minute of wall clock. The trail band holds its shape throughout - it widens and narrows slightly as the stars swing through periapsis, and it never stops being a ring. Energy drift settles around 0.00017% and stays there. If a machine is struggling, the "Step actually used" row will report a mean larger than 1.0; that is worth pointing out rather than ignoring, because it is the same effect the second half of the lesson is about.',
+      6: 'Twenty periods completed, farthest out about 0.62 separations, zero close encounters, energy drift about 0.00017%. A student reporting fewer than twenty periods has the starting radius wrong - the panel prints the value it actually used. A farthest-out figure above 2 usually means they have read the row in AU rather than in separations.',
+      9: 'The planet at 0.30 separations is ejected after about 2.5 binary periods, following one close pass with the companion. Energy drift around 0.0005%, comfortably inside the screen, so this is a physical result and not a numerical one. The run ends itself once the planet is unbound and past ten separations. Exact timing varies with the step: at 1.0 it leaves around 2.5 periods and at 0.25 nearer 5, which is expected in a chaotic system and is the subject of step 19 - the runs must agree on whether, not on when.',
+      10: 'About 2.5 binary periods and one close encounter. Any answer of twenty periods means the planet did not leave; check the starting radius. The encounter count is the interesting number here, because the circumbinary case at step 24 records zero and loses its planet anyway.',
+      15: 'At 0.50 separations the planet starts about 1 AU from the companion, which is not really an orbit at all. Energy drift goes to roughly 0.2%, past the 0.1% screen, and the panel refuses to name an outcome. Halving the step drops the drift by about two orders of magnitude. This is the blunt demonstration; the subtle one is next.',
+      16: 'This is the run to do at the front of the room. At 0.25 separations with a step of 1.0 the planet survives all twenty periods while the encounter counter climbs into the dozens - around seventy by the end - and the drift readout sits at about 0.00018%. At a step of 0.25 the same configuration is ejected, after roughly thirteen periods, with drift near 0.0000034%. Both runs pass the energy screen and they disagree. Wall clock is about half a minute, one minute and two minutes for the three steps; consider splitting them across groups.',
+      17: 'Drift about 0.00018% at step 1.0 and about 0.0000034% at step 0.25 - both several orders of magnitude inside the screen. The third field has no single right answer and is meant to be uncomfortable: students who ran all three steps will usually find two agreeing and one not, and the point is that "two out of three" is not how convergence works. Take the count they report and ask what it would take to make it three.',
+      23: 'At 4.0 separations the planet holds its ring for all forty binary periods, with a farthest-out figure of about 4.03 and zero encounters. At 2.0 it is ejected after about 3.4 periods, still with zero encounters and a closest approach of about 0.22 separations - it never comes near either star. Energy drift is around 0.0007% in both, so neither result is numerical. Each run is about half a minute.',
+      24: 'About 3.4 binary periods, zero close encounters, drift about 0.0007%. The zero is the point of the step. A student reporting a nonzero encounter count has the radius smaller than 2.0.',
+      27: 'Both should report that the planet survived the integration, which is not what the fit predicts. What separates them from the genuine survivor at 4.0 is the farthest-out figure: about 14 separations from the run at 3.0 and about 25 from the run at 2.5, against 4.03 for the 4.0 run. Those excursions are the answer to step 28 - the planets are being pumped outward and forty periods is not long enough to see where it ends. Expect some students to assume they have made a mistake; tell them in advance that this is the intended result.',
+    },
+    modelNotes: `The three bodies are integrated as a Newtonian point-mass system in a plane, with
+      Velocity Verlet rather than the catalogue's default symplectic Euler. That choice is part of
+      the lesson's subject matter: symplectic Euler's O(dt) phase error puts a spurious
+      eccentricity on the planet within a few orbits, which a student would then read as the
+      binary perturbing it. Verlet's error is O(dt²) and bounded, so a quiet run holds energy to
+      about a part in a million and the drift readout rises only when something real is
+      unresolved.
+      \n\nThe two Holman & Wiegert fits are transcribed from the paper - equation (1) with Table 3
+      for the circumstellar case, equation (3) with Table 7 for the circumbinary one - and are
+      checked in the test suite against values published outside the fit: the familiar 0.27 and
+      2.4 separations for an equal-mass circular binary, Alpha Centauri A's quoted stable zone of
+      close to 3 AU, and Kepler-16b sitting just outside its critical radius of about 0.65 AU. A
+      transcription error in a coefficient is invisible on a plot, so it is checked against
+      systems rather than against itself.
+      \n\nThe planet is one Earth mass, three parts in a million of the lighter star. Not zero,
+      because a massless body drops out of the barycentre and out of the energy bookkeeping the
+      diagnostics depend on, and small enough that the test-particle assumption behind the fit is
+      not violated by the thing being measured. A Jupiter-mass planet in this lab would be outside
+      what the fit describes.
+      \n\nEverything is coplanar, and both the simulation and the fit are two-dimensional. This is
+      the model's largest simplification and step 13 makes it explicit. A planet inclined out of
+      the binary's plane can exchange inclination for eccentricity through the Kozai-Lidov
+      mechanism, which destabilises orbits that are safe in the plane; no part of this lesson
+      can show that.
+      \n\nThe stars are drawn ten times their main-sequence radii, because at a 10 AU separation a
+      true solar radius is about a third of a pixel. js/physics.js collides on the drawn radius,
+      so the exaggeration sets the collision threshold at roughly 0.06 AU. This is stated in the
+      lesson's closing screen and in the panel's own wording, and it affects the split between
+      recorded collisions and recorded ejections among the disrupted configurations. It does not
+      affect the split between disrupted and survived: every surviving configuration in this
+      lesson keeps the planet at least 400 simulation units from the perturbing star, about
+      seventy times the threshold.
+      \n\nOne further limit worth naming to a class that asks. The runs here are 20 and 40 binary
+      periods. That is short enough that the lesson's own results and the published fit disagree
+      in two places, which the lesson uses rather than hides - but it also means every "survived"
+      in this lesson is a much weaker claim than the ones in the paper, and no claim at all about
+      the real systems the paper's readers care about.`,
+  },
   'detect-this-planet': {
     topic: 'Observational design and the limits of a measurement',
     difficulty: 'Introductory, written for non-science majors',

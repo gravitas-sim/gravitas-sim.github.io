@@ -5996,6 +5996,20 @@ document.getElementById('settingsBtn').onclick = () => {
   document.getElementById('settingsPanel').classList.remove('hidden');
   state.paused = true;
 };
+// A feature module that needs the world rebuilt asks for it here rather than
+// reaching for initialize_simulation. js/ui.js is the coordinator: it may
+// import anything and nothing may import it, so a panel that wants a rebuild -
+// the binary planet lab does, because changing where a planet starts means
+// starting over rather than teleporting it mid-flight - has to be able to say
+// so without acquiring an edge back up to this module.
+window.addEventListener('gravitasRequestRebuild', () => {
+  SETTINGS.preset_scenario = current_scenario_name || SETTINGS.preset_scenario;
+  initialize_simulation();
+  state.paused = false;
+  show_scenario_info();
+  updateSpeedDisplay();
+});
+
 document.getElementById('refreshScenarioBtn').onclick = () => {
   // Preserve current scenario name and restart it
   const currentScenario = current_scenario_name || 'Binary BH';

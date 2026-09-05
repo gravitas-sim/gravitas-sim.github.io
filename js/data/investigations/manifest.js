@@ -189,4 +189,17 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 4,
   },
+  {
+    id: 'binary-star-planets',
+    title: 'Planets in Binary Stars',
+    subtitle: 'What survives around two stars, and how you would know',
+    duration: '40-50 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',
+    thumbnail: 'images/scenarios/binary-planet-lab.webp',
+    stepCount: 30,
+    gradedCount: 17,
+    objectiveCount: 5,
+  },
 ];

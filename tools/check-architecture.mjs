@@ -74,6 +74,8 @@ const LAYERS = [
       /^js\/habitability\.js$/,
       /^js\/exoplanetObservables\.js$/,
       /^js\/observerGeometry\.js$/,
+      /^js\/binaryOrbits\.js$/,
+      /^js\/binaryStability\.js$/,
       /^js\/chaos\//,
       /^js\/experiments\/align\.js$/,
       /^js\/resonance\//,

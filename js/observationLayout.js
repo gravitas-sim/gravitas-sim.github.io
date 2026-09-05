@@ -28,6 +28,9 @@ const PANEL_IDS = [
   // same Tools list and sits over the same corner, so it queues with the rest.
   // Left out of this list it simply overlapped whatever was already there.
   'pauseEventContainer',
+  // Same reasoning as pause-at-event: a form rather than a chart, opened from
+  // the Tools list, and it lands in the same corner.
+  'binaryRunContainer',
   // The spacetime view is the odd one out - it is draggable and resizable,
   // and the moment a user moves it, it drops out of the stack (see isStacked).
   // Until then it is an instrument like the rest and queues with them.

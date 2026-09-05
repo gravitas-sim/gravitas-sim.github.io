@@ -107,6 +107,16 @@ export const CAPTURE = {
   // the centre looking stationary. That is the honest picture: the wobble is
   // real and invisible, which is the scenario's whole point.
   'Exoplanet Characterization Lab': { settle: 16, speed: 6, trail: 1400 },
+
+  // The binary labs run at very high sim speeds so a student can watch twenty
+  // binary periods in half a minute, which is far too fast for a still: at
+  // their own speed the capture lands after a hundred orbits with the trail
+  // painted into a solid disc. Slowed right down and given a long trail, the
+  // circumstellar one shows a small ring beside a big one, and the
+  // circumbinary one shows the pair whirling inside a single wide orbit -
+  // which is the difference between the two scenarios, in one frame each.
+  'Binary Planet Lab': { settle: 20, speed: 40, trail: 1200 },
+  'Circumbinary Planet Lab': { settle: 24, speed: 200, trail: 1600 },
   'Interstellar Visitor': { settle: 14, speed: 2, trail: 900 },
   "Kepler's 2nd Law": { settle: 16 },
   'Black Hole Lab': { settle: 14 },

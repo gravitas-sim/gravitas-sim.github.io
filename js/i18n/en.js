@@ -1460,6 +1460,53 @@ export const EN = {
 
   // --- Pause at event ---------------------------------------------------------
   'rail.togglePauseAtEvent': 'Pause at Event',
+  // --- The binary planet run panel --------------------------------------------
+  'rail.toggleBinaryRun': 'Binary Planet Run',
+  'rail.toggleBinaryRun.hint':
+    'Open the binary planet run panel: set where the planet starts and how many binary periods to integrate, then read what happened to it and how far the run can be trusted. Only useful in the two Binary Planet Lab scenarios.',
+  'binaryRun.close.hint': 'Hide the binary run panel',
+  'binaryRun.planetA': 'Planet start (a / a_binary)',
+  'binaryRun.periods': 'Binary periods to run',
+  'binaryRun.timestep': 'Integration step',
+  'binaryRun.start': 'Run',
+  'binaryRun.halve': 'Repeat at half the step',
+  'binaryRun.progress': 'Integrated',
+  'binaryRun.progress.value': '{done} of {asked} binary periods, {steps} steps',
+  'binaryRun.drift': 'Energy drift',
+  'binaryRun.step': 'Step actually used',
+  'binaryRun.step.varied': '{mean} mean, {max} largest',
+  'binaryRun.encounters': 'Close encounters',
+  'binaryRun.closest': 'Closest to the other star',
+  'binaryRun.farthest': 'Farthest out',
+  'binaryRun.status.idle': 'Not started',
+  'binaryRun.status.running': 'Running',
+  'binaryRun.status.finished': 'Finished',
+  'binaryRun.outcome.notStarted':
+    'Set a starting radius and a number of binary periods, then run.',
+  'binaryRun.outcome.running': 'Running: {periods} of {asked} binary periods.',
+  'binaryRun.outcome.survived':
+    'The planet survived this integration of {periods} binary periods. That is a statement about this run and not about the future: instability here is often slow, and the published study this is compared against ran for ten thousand binary periods.',
+  'binaryRun.outcome.ejected':
+    'The planet was ejected after {periods} binary periods. It ended up unbound from both stars and more than ten binary separations out, so it is leaving rather than on a wide orbit.',
+  'binaryRun.outcome.collided':
+    'The planet hit a star after {periods} binary periods. The stars here are drawn about ten times life size and the collision distance is the drawn size, so read this as "it passed within about 0.06 AU of a star" rather than as a measured impact.',
+  'binaryRun.outcome.unreliable':
+    'This run cannot be believed. Energy changed by {drift}%, past the {limit}% screen, which means the step stopped resolving something the outcome depends on — almost always a close approach. What happened to the planet after that is about the arithmetic. Repeat it at half the step.',
+  'binaryRun.outcome.vanished':
+    'The planet left the simulation without being recorded as a collision. There is no physical claim to make about that; start the run again.',
+  'binaryRun.boundary.inside':
+    'Holman & Wiegert put the critical radius for this mass ratio and eccentricity at {critical} binary separations; this planet started at {a}, on the surviving side.',
+  'binaryRun.boundary.outside':
+    'Holman & Wiegert put the critical radius for this mass ratio and eccentricity at {critical} binary separations; this planet started at {a}, on the disrupted side.',
+  'binaryRun.boundary.tooClose':
+    'This planet started at {a} binary separations and Holman & Wiegert put the critical radius at {critical}. That is inside the fit\u2019s own uncertainty, so it does not predict either way.',
+  'binaryRun.boundary.extrapolated':
+    'These values are outside the range the fit was made over, so that figure is an extrapolation.',
+  'binaryRun.boundary.source':
+    'Source: Holman & Wiegert 1999, AJ 117, 621. The fit assumes a massless planet, coplanar and prograde with the binary, starting on a circular orbit, and defines survival as lasting 10\u2074 binary periods. It is a fit to where the transition mostly sits, and the paper reports islands of instability inside it and of stability outside it.',
+  'binaryRun.hint':
+    'An outcome here describes this integration and no more. Instability in these systems is often slow: a planet can circle quietly for hundreds of binary periods before its orbit is walked out of the system, so "survived" is a statement about the run you did, not about the future. Energy drift is a screen and not a certificate \u2014 the test that settles an outcome is repeating the run at half the step and getting the same answer.',
+
   'rail.togglePauseAtEvent.hint':
     'Open Pause at Event: stop the simulation the moment a chosen thing happens — the next periapsis or apoapsis of a body about its primary, a crossing of a stated separation, or the next transit midpoint. The event is found from the integration steps, not the frames, so the panel can tell you how precisely it was located.',
   'pauseEvent.close.hint': 'Hide the pause-at-event panel',

@@ -514,6 +514,129 @@
       </p>
     </div>
 
+    <!-- 🪐 Binary planet run -->
+    <div
+      id="binaryRunContainer"
+      class="obs-panel binary-run-container"
+      style="display: none"
+      role="region"
+      aria-labelledby="binaryRunTitle"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title" id="binaryRunTitle"
+            >Binary Planet Run</span
+          >
+          <span id="binaryRunStatus" class="obs-panel-status">Not started</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="binaryRunClose"
+            class="obs-panel-btn"
+            title="Hide the binary run panel"
+            data-i18n-title="binaryRun.close.hint"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-form">
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.planetA">Planet start (a / a_binary)</span>
+          <input
+            type="number"
+            id="binaryRunPlanetA"
+            step="0.01"
+            min="0.02"
+            max="12"
+          />
+        </label>
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.periods">Binary periods to run</span>
+          <input
+            type="number"
+            id="binaryRunPeriods"
+            step="1"
+            min="1"
+            max="400"
+          />
+        </label>
+        <label class="pause-event-field">
+          <span data-i18n="binaryRun.timestep">Integration step</span>
+          <input
+            type="number"
+            id="binaryRunTimestep"
+            step="0.05"
+            min="0.05"
+            max="8"
+          />
+        </label>
+        <div class="pause-event-actions">
+          <button id="binaryRunStart" class="obs-panel-btn" type="button">
+            <span data-i18n="binaryRun.start">Run</span>
+          </button>
+          <button id="binaryRunHalve" class="obs-panel-btn" type="button">
+            <span data-i18n="binaryRun.halve">Repeat at half the step</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.progress"
+            >Integrated</span
+          >
+          <span id="binaryRunProgress" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.drift"
+            >Energy drift</span
+          >
+          <span id="binaryRunDrift" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.step"
+            >Step actually used</span
+          >
+          <span id="binaryRunStep" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.encounters"
+            >Close encounters</span
+          >
+          <span id="binaryRunEncounters" class="rv-readout-value numeric"
+            >—</span
+          >
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.closest"
+            >Closest to the other star</span
+          >
+          <span id="binaryRunClosest" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="binaryRun.farthest"
+            >Farthest out</span
+          >
+          <span id="binaryRunFarthest" class="rv-readout-value numeric">—</span>
+        </div>
+      </div>
+
+      <p id="binaryRunOutcome" class="binary-run-outcome" role="status">—</p>
+      <p id="binaryRunBoundary" class="binary-run-boundary"></p>
+
+      <p class="obs-panel-hint" data-i18n="binaryRun.hint">
+        An outcome here describes this integration and no more. Instability in
+        these systems is often slow: a planet can circle quietly for hundreds of
+        binary periods before its orbit is walked out of the system, so
+        "survived" is a statement about the run you did, not about the future.
+        Energy drift is a screen and not a certificate — the test that settles
+        an outcome is repeating the run at half the step and getting the same
+        answer.
+      </p>
+    </div>
+
     <!-- 🎯 Astrometry panel -->
     <div
       id="astrometryContainer"
@@ -1449,6 +1572,16 @@
               data-i18n="rail.togglePauseAtEvent"
             >
               Pause at Event
+            </button>
+            <button
+              id="toggleBinaryRun"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the binary planet run panel: set where the planet starts and how many binary periods to integrate, then read what happened to it and how far the run can be trusted. Only useful in the two Binary Planet Lab scenarios."
+              data-i18n-title="rail.toggleBinaryRun.hint"
+              data-i18n="rail.toggleBinaryRun"
+            >
+              Binary Planet Run
             </button>
             <button
               id="toggleExperiments"
