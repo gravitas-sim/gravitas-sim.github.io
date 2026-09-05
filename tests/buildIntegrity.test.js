@@ -118,9 +118,15 @@ describe('the service worker manifest is current', () => {
     expect(paths.filter(p => p.endsWith('.css')).length).toBeGreaterThanOrEqual(
       6
     );
+    // Derived from the catalogue rather than written down. A magic number here
+    // says only "the count did not change", which is the wrong thing to check
+    // and has to be edited every time a scenario is added; against
+    // SCENARIO_INFO it says "every scenario's thumbnail is precached", which
+    // also catches one that was added to the catalogue and never captured.
+    const { SCENARIO_INFO } = await import('../js/data/scenarioInfo.js');
     expect(
       paths.filter(p => /^images\/scenarios\/.*\.webp$/.test(p))
-    ).toHaveLength(53);
+    ).toHaveLength(Object.keys(SCENARIO_INFO).length);
 
     // Every English lesson body. The reasoning is in the generator's header;
     // what matters here is that the decision cannot rot silently - a lesson

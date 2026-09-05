@@ -17,14 +17,14 @@ No account, no install, no server. It is a static site.
 
 ## What is in it
 
-**<!--fact:scenarios-->53<!--/fact--> built-in scenarios**, from the Solar
+**<!--fact:scenarios-->55<!--/fact--> built-in scenarios**, from the Solar
 System and TRAPPIST-1 to the GW150914 black-hole merger, a star torn apart by
 tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:investigations-->13<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->385<!--/fact--> steps between
+**<!--fact:investigations-->14<!--/fact--> guided
+investigations**, <!--fact:investigationSteps-->415<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -46,7 +46,7 @@ locally, and exports a lab report as a PDF that they submit through whatever LMS
 the course already uses.
 
 **Instructor materials.** A guide and a generated answer key for each of
-the <!--fact:investigations-->13<!--/fact--> investigations — learning
+the <!--fact:investigations-->14<!--/fact--> investigations — learning
 objectives, expected observations, the numbers a student should get and the
 common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the lessons themselves on every release so a key cannot disagree with the
@@ -162,8 +162,8 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->1905<!--/fact--> strings, and
-all <!--fact:investigations-->13<!--/fact--> investigations are translated. A
+of <!--fact:uiStrings-->1941<!--/fact--> strings, and
+all <!--fact:investigations-->14<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
 change what a lesson measures.
@@ -395,7 +395,7 @@ published ones from the precision the reference is quoted to.
 
 The same checks run in `npm test`, so a physics regression fails a pull request.
 `npm run validate:scenarios` extends the conservation audit to
-all <!--fact:scenarios-->53<!--/fact--> shipped scenarios in a real browser, and
+all <!--fact:scenarios-->55<!--/fact--> shipped scenarios in a real browser, and
 names, per scenario, which documented departures it has switched on — static
 black holes, one-way gravity and the dark-matter halo all conserve less than the
 full model does, on purpose.
@@ -408,8 +408,8 @@ broke Newton's third law, and a scenario that turned out to have no gravity in i
 
 ## Instructor resources
 
-There are <!--fact:investigations-->13<!--/fact--> instructor
-guides, <!--fact:investigations-->13<!--/fact--> answer keys, an adopter's guide
+There are <!--fact:investigations-->14<!--/fact--> instructor
+guides, <!--fact:investigations-->14<!--/fact--> answer keys, an adopter's guide
 and a curriculum map — 22 PDFs, generated from the lessons at build time — live
 at [gravitas-sim.online/instructors/](https://gravitas-sim.online/instructors/).
 
