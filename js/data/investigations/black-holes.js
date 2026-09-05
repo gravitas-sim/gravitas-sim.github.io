@@ -46,6 +46,7 @@ const BLACK_HOLES = {
   ],
   steps: [
     {
+      sid: 'not-a-hole-and-not',
       type: 'read',
       title: 'Not a hole, and not a vacuum cleaner',
       body: `On screen is a black hole of ten solar masses, and four objects
@@ -67,6 +68,7 @@ const BLACK_HOLES = {
       setup: BH_LAB,
     },
     {
+      sid: 'what-could-size-even-mean',
       type: 'question',
       title: 'What could "size" even mean?',
       kind: 'choice',
@@ -88,6 +90,7 @@ const BLACK_HOLES = {
         'It is the boundary. Not a surface, not an object, not a wall you could touch: a place in space where the situation changes. Outside it, light can still get away. Inside it, nothing can. That boundary is called the event horizon, and how far out it sits is what astronomers mean by the size of a black hole. The second answer is a good guess and a common one, but gravity has no edge; it just gets weaker with distance, and it does that around a black hole exactly as it does around a star.',
     },
     {
+      sid: 'the-event-horizon',
       type: 'read',
       title: 'The event horizon',
       body: `The picture beside this one is a black hole drawn on its own. The
@@ -118,6 +121,7 @@ const BLACK_HOLES = {
       tip: 'Every black hole in this lesson is treated as a simple one: not spinning and not electrically charged. Real black holes generally do spin, which changes the shape of the horizon, but not the trends you are about to find.',
     },
     {
+      sid: 'thirty-kilometers-is-not-very',
       type: 'read',
       title: 'Thirty kilometers is not very much',
       body: `A ten solar mass black hole has a Schwarzschild radius of about
@@ -141,6 +145,7 @@ const BLACK_HOLES = {
       tip: 'For scale in the other direction: to make a black hole the size of the Earth you would need about two thousand solar masses, and to make one the size of the Sun, about two hundred and thirty thousand.',
     },
     {
+      sid: 'now-make-it-heavier',
       type: 'predict',
       title: 'Now make it heavier',
       body: `You are about to be handed a mass slider. Before you touch it,
@@ -160,6 +165,7 @@ const BLACK_HOLES = {
         'It doubles. If you picked the last option you are in good company: more mass does mean stronger gravity, and it is very natural to expect a heavier black hole to be a more tightly squeezed one. That is not what happens, and the next few screens are about watching it not happen.',
     },
     {
+      sid: 'three-measurements',
       type: 'explore',
       title: 'Three measurements',
       body: `Here is the experiment. The slider sets the mass. The panel works
@@ -186,6 +192,7 @@ const BLACK_HOLES = {
       tip: 'If you record the same mass twice it replaces the old value rather than adding a second point, so you cannot clutter the graph by mistake.',
     },
     {
+      sid: 'what-did-doubling-do',
       type: 'question',
       title: 'What did doubling do?',
       kind: 'choice',
@@ -210,6 +217,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'read-the-graph',
       type: 'question',
       title: 'Read the graph',
       kind: 'choice',
@@ -234,6 +242,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'the-rule-you-just-found',
       type: 'read',
       title: 'The rule you just found',
       body: `What you measured has a shorthand:
@@ -254,6 +263,7 @@ const BLACK_HOLES = {
       tip: 'Schwarzschild found this radius in the first few months after Einstein published general relativity, and Einstein did not believe anything real could ever be that compact. It took another fifty years for astronomers to start finding them.',
     },
     {
+      sid: 'squeezing-and-getting-away',
       type: 'predict',
       title: 'Squeezing, and getting away',
       body: `Change of subject, briefly. Why is there a horizon at all?
@@ -275,6 +285,7 @@ const BLACK_HOLES = {
         'Higher, and dramatically so. Escape speed depends on two things: how much mass is pulling, and how close to it you are standing. Squeezing an object does not change the mass, but it lets you get far closer to the middle of it, and being closer is what makes escaping hard.',
     },
     {
+      sid: 'squeeze-the-sun',
       type: 'explore',
       title: 'Squeeze the Sun',
       body: `The panel takes the Sun and squeezes it. Its mass never changes:
@@ -300,6 +311,7 @@ const BLACK_HOLES = {
       tip: 'The 30 km setting is roughly a real object: a neutron star. A solar mass or so of material in a ball the width of a city, and escaping from its surface really does take about a third of the speed of light.',
     },
     {
+      sid: 'the-last-squeeze',
       type: 'question',
       title: 'The last squeeze',
       kind: 'choice',
@@ -323,6 +335,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'the-right-answer-for-the',
       type: 'question',
       title: 'The right answer for the wrong reason',
       kind: 'choice',
@@ -354,6 +367,7 @@ const BLACK_HOLES = {
         'A boundary, and nothing more solid than that. Two things to be clear about while you are here. There is nothing to hit: an astronaut crossing the horizon of a large black hole would notice nothing at all happening at that moment. And gravity does not switch on there. Gravity was already acting outside, which is why the four objects at the start of this lesson were in orbit, and it goes on acting inside; the horizon is simply where getting back out stops being possible.',
     },
     {
+      sid: 'which-one-is-denser',
       type: 'predict',
       title: 'Which one is denser?',
       body: `Back to the mass slider, and to a question that catches out almost
@@ -376,6 +390,7 @@ const BLACK_HOLES = {
         'The small one, by an enormous margin. Most people pick the big one, and the reasoning behind that choice is perfectly sensible: a bigger black hole has more mass, and more mass in the same space would mean higher density. The catch is in those last four words. It is not the same space. The next few screens are about why.',
     },
     {
+      sid: 'mass-divided-by-volume',
       type: 'explore',
       title: 'Mass divided by volume',
       body: `First, what is being measured. Density is mass divided by volume:
@@ -407,6 +422,7 @@ const BLACK_HOLES = {
       tip: 'Drag the slider slowly rather than jumping between the buttons and the marker slides smoothly down the ladder, which makes the direction of travel unmistakable.',
     },
     {
+      sid: 'which-way-did-it-go',
       type: 'question',
       title: 'Which way did it go?',
       kind: 'choice',
@@ -431,6 +447,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'where-the-room-comes-from',
       type: 'question',
       title: 'Where the room comes from',
       kind: 'numeric',
@@ -461,6 +478,7 @@ const BLACK_HOLES = {
       tip: 'The chain in one line: more mass, larger horizon, very much larger volume, lower average density.',
     },
     {
+      sid: 'which-one-is-hotter',
       type: 'predict',
       title: 'Which one is hotter?',
       body: `A third property, and a third chance to be surprised.
@@ -482,6 +500,7 @@ const BLACK_HOLES = {
         'The small one, and by a very long way. The larger black hole is the natural guess: bigger usually means more of everything. This is one of the cases where it does not, and you are about to watch how far it goes the other way.',
     },
     {
+      sid: 'what-hawking-radiation-is-and',
       type: 'read',
       title: 'What Hawking radiation is, and what to be careful about',
       body: `Keep this modest, because the honest version is quite technical.
@@ -502,6 +521,7 @@ const BLACK_HOLES = {
       tip: 'Hawking regarded this as his most important result, and asked for the equation for a black hole’s entropy, which comes from the same work, to be carved on his memorial stone in Westminster Abbey.',
     },
     {
+      sid: 'the-thermometer',
       type: 'explore',
       title: 'The thermometer',
       body: `The panel is a thermometer, with familiar temperatures marked on
@@ -528,6 +548,7 @@ const BLACK_HOLES = {
       tip: 'The row that says how much colder than the microwave background is the one to watch. It is the difference between a number that is small and a number that is unimaginable.',
     },
     {
+      sid: 'colder-not-hotter',
       type: 'question',
       title: 'Colder, not hotter',
       kind: 'choice',
@@ -551,6 +572,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'then-what-happens-to-it',
       type: 'predict',
       title: 'Then what happens to it?',
       body: `Follow the logic. If a black hole radiates, then it is losing
@@ -572,6 +594,7 @@ const BLACK_HOLES = {
         'The small one, on both counts: it is hotter, so it radiates faster, and it has less to lose. Both effects point the same way, which is why the difference between a small black hole and a large one turns out to be so extreme.',
     },
     {
+      sid: 'a-timeline-that-will-not',
       type: 'explore',
       title: 'A timeline that will not fit on a page',
       body: `The numbers here get out of hand, so the panel counts zeros instead
@@ -597,6 +620,7 @@ const BLACK_HOLES = {
       tip: 'A black hole with the mass of a mountain, rather than a star, would be small enough and hot enough to have evaporated by now. Nobody has ever found one, and whether any were made in the Big Bang is still an open question.',
     },
     {
+      sid: 'longer-and-then-much-longer',
       type: 'question',
       title: 'Longer, and then much longer',
       kind: 'choice',
@@ -622,6 +646,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'from-city-sized-to-solar',
       type: 'read',
       title: 'From city-sized to solar-system-sized',
       body: `One relationship, R<sub>s</sub> ∝ M, running across an enormous
@@ -650,6 +675,7 @@ const BLACK_HOLES = {
       tip: 'One astronomical unit, 1 AU, is the distance from the Earth to the Sun: about 150 million kilometers.',
     },
     {
+      sid: 'sorting-them-out',
       type: 'question',
       title: 'Sorting them out',
       kind: 'choice',
@@ -673,6 +699,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'a-mystery-black-hole-size',
       type: 'question',
       title: 'A mystery black hole: size and density',
       kind: 'choice',
@@ -699,6 +726,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'a-mystery-black-hole-temperature',
       type: 'question',
       title: 'A mystery black hole: temperature and lifetime',
       kind: 'choice',
@@ -722,6 +750,7 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'it-has-a-name',
       type: 'read',
       title: 'It has a name',
       body: `Black hole D is <strong>Sagittarius A*</strong>, and it is 26,000

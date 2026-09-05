@@ -128,6 +128,10 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
  */
 export const STRUCTURAL = new Set([
   'id',
+  // A step's stable identity, minted once and never translated: it is what
+  // student progress is keyed by, so a Spanish shadow supplying one would
+  // orphan every answer the moment the language changed.
+  'sid',
   'type',
   'kind',
   'scenario',

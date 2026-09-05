@@ -2233,6 +2233,14 @@ export const ES = {
     'No se puede guardar el progreso en este navegador; la navegaci\u00f3n privada suele impedirlo. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
   'inv.save.authoring':
     'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
+  'inv.save.foreign':
+    'Se encontró progreso guardado por una versión más reciente de Gravitas y se ha dejado intacto. Tus respuestas funcionan aquí, pero no se están guardando.',
+  'inv.progress.migrated':
+    'Se han recuperado {n} respuestas guardadas de un formato anterior, emparejadas por posición. Si esta lección ha cambiado desde la última vez que la abriste, comprueba que cada respuesta esté en la pregunta que pretendías.',
+  'inv.progress.removedSteps':
+    'Se descartaron {n} respuestas guardadas de pasos que esta lección ya no tiene.',
+  'inv.progress.foreign':
+    'Tu progreso guardado de esta lección lo escribió una versión más reciente de Gravitas y no se ha podido leer. Se ha dejado tal cual en lugar de sobrescribirlo.',
   'inv.backup.download': 'Descargar copia del progreso',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
@@ -2245,6 +2253,8 @@ export const ES = {
     'Progreso restaurado. {moved} respuestas se asociaron a pasos que han cambiado de sitio desde la copia.',
   'inv.backup.restoredPartly':
     'Progreso restaurado, pero {dropped} pasos de la copia ya no est\u00e1n en esta investigaci\u00f3n y sus respuestas se omitieron.',
+  'inv.backup.restoredUncertain':
+    'Se restauraron {applied} respuestas. {n} no se pudieron ubicar porque sus pasos han cambiado desde que se hizo la copia; siguen estando en el archivo que restauraste.',
   'inv.backup.tooLarge':
     'Ese archivo es demasiado grande para ser una copia del progreso.',
   'inv.backup.notJson': 'Ese archivo no se puede leer como JSON.',

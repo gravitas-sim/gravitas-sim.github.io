@@ -29,6 +29,7 @@
 
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
+import { isValidSid } from '../investigations/progressSchema.js';
 import {
   mergeTranslation,
   translationCoverage,
@@ -87,7 +88,7 @@ const MANIFEST_MIRRORED = [
 export const RULE_INDEX = {
   'id/lesson': 'Lesson ids exist, are kebab-case, and are unique',
   'id/file': 'A lesson lives in a file named after its id',
-  'id/step': 'Derived step ids are unique within a lesson',
+  'id/step': 'Every step has a stable sid, unique within the lesson',
   'id/field': 'Response field ids are unique within a step and usable as keys',
   'content/lesson': 'Title, subtitle, duration, level, summary and thumbnail',
   'content/objectives': 'Objectives exist and say something',
@@ -318,6 +319,7 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
       );
     }
 
+    const sidsSeen = new Set();
     steps.forEach((step, i) => {
       const at = i;
       const E = (rule, m) => err(rule, at, m);
@@ -328,6 +330,23 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
         E('content/step', `unknown step type "${step.type}"`);
         return;
       }
+      // --- Stable identity ---------------------------------------------------
+      // Student progress is keyed by `sid`, so a step without one has nowhere
+      // to store an answer, and two steps sharing one share a student's work.
+      // See js/investigations/progressSchema.js.
+      if (!isValidSid(step.sid)) {
+        E(
+          'id/step',
+          step.sid === undefined
+            ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be a non-numeric string with no colon`
+        );
+      } else if (sidsSeen.has(step.sid)) {
+        E('id/step', `sid "${step.sid}" is already used by another step`);
+      } else {
+        sidsSeen.add(step.sid);
+      }
+
       if (!isNonEmptyString(step.title)) E('content/step', 'step has no title');
       if (!isNonEmptyString(step.body)) E('content/step', 'step has no body');
 

@@ -79,6 +79,7 @@ const ENERGY = {
   ],
   steps: [
     {
+      sid: 'how-hard-would-you-have',
       type: 'read',
       title: 'How hard would you have to throw it?',
       body: `Throw a ball and it comes down. Throw it harder and it comes down
@@ -101,6 +102,7 @@ const ENERGY = {
       setup: ENERGY_LAB,
     },
     {
+      sid: 'load-it-lightly',
       type: 'predict',
       title: 'Load it lightly',
       body: `The first shot leaves the mountaintop sideways at
@@ -119,6 +121,7 @@ const ENERGY = {
         'It comes back down. Six kilometers a second sounds enormous, and it is, but it is not enough: the ball rises, slows, turns over and falls. Every projectile ever fired on Earth has done this.',
     },
     {
+      sid: 'fire-it',
       type: 'explore',
       title: 'Fire it',
       body: `There is the shot. The green path is the cannonball, launched
@@ -136,6 +139,7 @@ const ENERGY = {
       tip: 'The cannon is 320 km up, which is roughly where the space station flies and safely above the air. From there, the lowest speed that gets all the way round without touching the ground is about 7.7 km/s. That is why rockets tip over and fly sideways rather than straight up: getting high is the easy part, going fast enough sideways is the hard part.',
     },
     {
+      sid: 'load-it-heavily',
       type: 'predict',
       title: 'Load it heavily',
       body: `Now double the powder. This time the cannonball leaves at
@@ -152,6 +156,7 @@ const ENERGY = {
         'It leaves for good. The path is no longer a closed loop: it opens out, and the ball is still moving away when it is far past everything on the screen. Nothing brings it back.',
     },
     {
+      sid: 'fire-it-again',
       type: 'explore',
       title: 'Fire it again',
       body: `The path has changed character. It is not a very big loop, it is
@@ -167,6 +172,7 @@ const ENERGY = {
       ],
     },
     {
+      sid: 'find-the-dividing-line',
       type: 'explore',
       title: 'Find the dividing line',
       body: `Somewhere between 9 and 12 km/s the answer flips from
@@ -184,6 +190,7 @@ const ENERGY = {
       tip: 'At 10.9 km/s the ball goes out past 350 Earth radii, further than the Moon, and still comes home. At 10.92 it never turns round at all. The two look identical for the first stretch of the flight, which is exactly why astronomers want a number rather than a picture.',
     },
     {
+      sid: 'where-is-the-line',
       type: 'question',
       title: 'Where is the line?',
       kind: 'choice',
@@ -196,6 +203,7 @@ const ENERGY = {
         'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about forty times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
     },
     {
+      sid: 'what-is-actually-deciding-this',
       type: 'read',
       title: 'What is actually deciding this?',
       body: `You could stop here with a rule of thumb: above 11.2 km/s it leaves,
@@ -220,6 +228,7 @@ const ENERGY = {
       tip: 'The energies are shown per kilogram, which is why the panel never asks how heavy the cannonball is. It turns out not to matter, and you will see why shortly.',
     },
     {
+      sid: 'watch-the-total',
       type: 'explore',
       title: 'Watch the total',
       body: `The three bars at the bottom of the panel are those energies, with
@@ -240,6 +249,7 @@ const ENERGY = {
       tip: 'The speed where the total energy crosses zero is exactly the speed where the path stops closing. That is not a coincidence. It is the same fact told two different ways.',
     },
     {
+      sid: 'reading-the-sign',
       type: 'question',
       title: 'Reading the sign',
       kind: 'choice',
@@ -257,6 +267,7 @@ const ENERGY = {
         'Below zero means bound. To get infinitely far away, an object would need a total of at least zero, because that is what the energy of position becomes out there and the energy of motion cannot be negative to make up the difference. Below zero it simply cannot reach, so gravity always wins in the end and turns it round.',
     },
     {
+      sid: 'around-a-real-orbit',
       type: 'explore',
       title: 'Around a real orbit',
       body: `That was a launch. Now watch a whole orbit.
@@ -278,6 +289,7 @@ const ENERGY = {
       tip: 'This is the trade. Falling inwards converts energy of position into energy of motion, and climbing back out converts it straight back. Nothing is gained or lost, which is why the orbit repeats forever.',
     },
     {
+      sid: 'what-stays-put',
       type: 'question',
       title: 'What stays put',
       kind: 'choice',
@@ -295,6 +307,7 @@ const ENERGY = {
         'The total. The other two traded back and forth by large amounts and their sum did not move, which is what allowed you to read off a single number and know the orbit was closed. An orbit cannot decide to become unbound on its own: something would have to come along and add energy to it.',
     },
     {
+      sid: 'escape-speed',
       type: 'read',
       title: 'Escape speed',
       body: `The dividing speed has a name: <strong>escape speed</strong>. It is
@@ -318,6 +331,7 @@ const ENERGY = {
       tip: 'The square root is why doubling your distance does not halve the speed you need. It divides it by about 1.4 instead.',
     },
     {
+      sid: 'a-common-misunderstanding',
       type: 'question',
       title: 'A common misunderstanding',
       kind: 'choice',
@@ -336,6 +350,7 @@ const ENERGY = {
         'Still pulling, and still slowing it. Escaping does not switch gravity off, and there is no distance at which gravity stops. What escaping means is that the spacecraft has enough energy that the slowing never quite brings it to a halt: it keeps losing speed forever and never runs out. Below escape speed, the same slowing does bring it to a halt, and then everything happens in reverse.',
     },
     {
+      sid: 'somewhere-else-entirely',
       type: 'predict',
       title: 'Somewhere else entirely',
       body: `Everything so far has been about leaving Earth. Escape speed depends
@@ -348,6 +363,7 @@ const ENERGY = {
         'The Sun, by a long way: about 618 km/s from its surface, more than fifty times the Earth’s. The Sun is a third of a million times the Earth’s mass, and although its surface is also much further from its center, the mass wins.',
     },
     {
+      sid: 'more-mass-harder-to-leave',
       type: 'explore',
       title: 'More mass, harder to leave',
       body: `Here are four real bodies with their real escape speeds, all
@@ -365,6 +381,7 @@ const ENERGY = {
       tip: 'The Moon’s 2.4 km/s is why the Apollo lunar module could be a flimsy foil-covered box with one small engine, while getting the same astronauts off Earth took a 110 meter rocket.',
     },
     {
+      sid: 'further-out-easier-to-leave',
       type: 'explore',
       title: 'Further out, easier to leave',
       body: `Now keep the bodies the same and change where you start from.
@@ -382,6 +399,7 @@ const ENERGY = {
       tip: 'Nothing about Earth changes when you move the slider. The only thing that changed is how much of the climb you have already done.',
     },
     {
+      sid: 'starting-further-out',
       type: 'question',
       title: 'Starting further out',
       kind: 'choice',
@@ -400,6 +418,7 @@ const ENERGY = {
         'Less. Escape speed is not a property of a planet on its own, it is a property of a planet and a place. The higher you start, the less of the climb is left, so the less speed you need to finish it. This is one reason interplanetary missions are often assembled in orbit rather than launched in one go.',
     },
     {
+      sid: 'three-shapes-one-law',
       type: 'explore',
       title: 'Three shapes, one law',
       body: `One last thing to look at before applying all this.
@@ -425,6 +444,7 @@ const ENERGY = {
       tip: 'Astronomers read this backwards. Measure enough of an object’s path to work out its shape, and you have learned whether it is bound without ever needing to watch it for a whole orbit.',
     },
     {
+      sid: 'something-that-came-from-outside',
       type: 'read',
       title: 'Something that came from outside',
       body: `On 19 October 2017, a survey telescope in Hawaii picked up a faint
@@ -448,6 +468,7 @@ const ENERGY = {
       tip: 'It was found on its way out, already past the Sun and fading. Nobody has seen it since 2018, and nobody ever will again.',
     },
     {
+      sid: 'check-it-yourself',
       type: 'explore',
       title: 'Check it yourself',
       body: `Do not take anyone's word for it. You have a test now.
@@ -463,6 +484,7 @@ const ENERGY = {
       tip: 'Its path is a hyperbola with an eccentricity of 1.20. Every comet ever recorded before this one had an eccentricity below 1, which is another way of saying every one of them was bound to the Sun.',
     },
     {
+      sid: 'will-it-be-back',
       type: 'question',
       title: 'Will it be back?',
       kind: 'short',
@@ -474,6 +496,7 @@ const ENERGY = {
         'No. Its total energy is above zero, so it is unbound: the Sun’s pull keeps slowing it but can never bring it to a halt, and it will still be moving away when it is arbitrarily far off. Credit for noting that its path is open rather than a closed loop, or that its eccentricity is greater than 1. A common wrong answer is that gravity stops acting on it once it is far enough away, which is worth correcting: gravity keeps pulling forever, and the object escapes anyway.',
     },
     {
+      sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
       body: `You started by firing a cannon and asking a question a child could

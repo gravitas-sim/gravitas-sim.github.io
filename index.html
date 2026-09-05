@@ -1877,6 +1877,18 @@
           aria-live="off"
           hidden=""
         ></p>
+        <!-- What reading the saved progress had to say: a migration from the
+             pre-sid format, answers for steps that no longer exist, or a
+             payload a newer build wrote. All three mean an answer may not be
+             where the reader left it, so this stays on screen rather than
+             passing as a toast. -->
+        <p
+          id="investigationProgressNotice"
+          class="inv-progress-notice"
+          role="status"
+          aria-live="polite"
+          hidden=""
+        ></p>
         <div class="inv-backup-actions">
           <button
             id="investigationBackupDownload"

@@ -48,6 +48,7 @@ const TIDES = {
   ],
   steps: [
     {
+      sid: 'twice-a-day-everywhere',
       type: 'read',
       title: 'Twice a day, everywhere',
       body: `Stand on almost any coast and the sea comes in and goes out roughly
@@ -81,6 +82,7 @@ const TIDES = {
     },
 
     {
+      sid: 'is-the-pull-the-same',
       type: 'predict',
       title: 'Is the pull the same everywhere?',
       body: `The Earth is not a point. It is a ball 12,742 km across, and the
@@ -101,6 +103,7 @@ const TIDES = {
     },
 
     {
+      sid: 'three-points-three-pulls',
       type: 'read',
       title: 'Three points, three pulls',
       body: `The panel shows the Earth with an arrow leaving three places on it:
@@ -125,6 +128,7 @@ const TIDES = {
     },
 
     {
+      sid: 'how-different-are-they',
       type: 'question',
       title: 'How different are they?',
       kind: 'choice',
@@ -153,6 +157,7 @@ const TIDES = {
     },
 
     {
+      sid: 'so-why-two-bulges',
       type: 'predict',
       title: 'So why two bulges?',
       body: `Everything you have seen so far points one way: toward the Moon.
@@ -175,6 +180,7 @@ const TIDES = {
     },
 
     {
+      sid: 'take-the-centre-away',
       type: 'read',
       title: 'Take the centre away',
       body: `Here is the move that makes tides make sense.
@@ -207,6 +213,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-the-far-side-arrow',
       type: 'question',
       title: 'What the far-side arrow means',
       kind: 'choice',
@@ -234,6 +241,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-a-tide-actually-is',
       type: 'read',
       title: 'What a tide actually is',
       body: `A definition worth memorising, because it is short and it is the
@@ -260,6 +268,7 @@ const TIDES = {
     },
 
     {
+      sid: 'bring-the-companion-closer',
       type: 'predict',
       title: 'Bring the companion closer',
       body: `You are about to be handed a distance slider, and a graph that
@@ -279,6 +288,7 @@ const TIDES = {
     },
 
     {
+      sid: 'four-distances',
       type: 'measure',
       title: 'Four distances',
       body: `The panel reports the tidal stretch as a multiple of the real lunar
@@ -383,6 +393,7 @@ const TIDES = {
     },
 
     {
+      sid: 'how-steeply-does-it-fall',
       type: 'question',
       title: 'How steeply does it fall?',
       kind: 'numeric',
@@ -408,6 +419,7 @@ const TIDES = {
     },
 
     {
+      sid: 'the-relationship-written-down',
       type: 'read',
       title: 'The relationship, written down',
       body: `You have measured it, so here it is in symbols. You are not being
@@ -434,6 +446,7 @@ const TIDES = {
     },
 
     {
+      sid: 'now-change-the-companion',
       type: 'predict',
       title: 'Now change the companion',
       body: `Put the distance back where it started and change the other thing
@@ -453,6 +466,7 @@ const TIDES = {
     },
 
     {
+      sid: 'three-masses',
       type: 'measure',
       title: 'Three masses',
       body: `The distance is now held at the Moon’s real distance and the mass
@@ -537,6 +551,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-the-mass-graph-says',
       type: 'question',
       title: 'What the mass graph says',
       kind: 'choice',
@@ -556,6 +571,7 @@ const TIDES = {
     },
 
     {
+      sid: 'the-sun-against-the-moon',
       type: 'predict',
       title: 'The Sun against the Moon',
       body: `Two bodies raise measurable tides on the Earth, and they are wildly
@@ -577,6 +593,7 @@ const TIDES = {
     },
 
     {
+      sid: 'seven-real-tides-on-one',
       type: 'read',
       title: 'Seven real tides on one scale',
       body: `The panel lists seven real pairings, with the tide the first body
@@ -609,6 +626,7 @@ const TIDES = {
     },
 
     {
+      sid: 'locking-and-what-this-simulation',
       type: 'read',
       title: 'Locking, and what this simulation does not do',
       body: `You always see the same face of the Moon. That is not a
@@ -637,6 +655,7 @@ const TIDES = {
     },
 
     {
+      sid: 'say-it-in-your-own',
       type: 'question',
       title: 'Say it in your own words',
       kind: 'short',
@@ -650,6 +669,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-holds-a-moon-together',
       type: 'predict',
       title: 'What holds a moon together?',
       body: `Everything so far has been about stretching. Nothing has broken.
@@ -673,6 +693,7 @@ const TIDES = {
     },
 
     {
+      sid: 'stretch-against-grip',
       type: 'explore',
       title: 'Stretch against grip',
       body: `The panel takes a body the size of the Moon and lets you walk it in
@@ -705,6 +726,7 @@ const TIDES = {
     },
 
     {
+      sid: 'where-the-balance-tips',
       type: 'question',
       title: 'Where the balance tips',
       kind: 'numeric',
@@ -728,6 +750,7 @@ const TIDES = {
     },
 
     {
+      sid: 'the-roche-limit-and-why',
       type: 'read',
       title: 'The Roche limit, and why there are two of them',
       body: `The picture moves to Saturn, which is where this idea earns its
@@ -758,6 +781,7 @@ const TIDES = {
     },
 
     {
+      sid: 'change-what-the-moon-is',
       type: 'explore',
       title: 'Change what the moon is made of',
       body: `Leave the distance alone for a moment and change the material
@@ -789,6 +813,7 @@ const TIDES = {
     },
 
     {
+      sid: 'not-one-distance',
       type: 'question',
       title: 'Not one distance',
       kind: 'choice',
@@ -807,6 +832,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-a-roche-limit-does',
       type: 'read',
       title: 'What a Roche limit does not tell you',
       body: `Four qualifications, because this is the idea in the lesson most
@@ -836,6 +862,7 @@ const TIDES = {
     },
 
     {
+      sid: 'the-extreme-case-running-live',
       type: 'explore',
       title: 'The extreme case, running live',
       body: `The simulation has switched to a scenario built around a
@@ -878,6 +905,7 @@ const TIDES = {
     },
 
     {
+      sid: 'a-star-and-a-black',
       type: 'read',
       title: 'A star, and a black hole that is too big',
       body: `Finish with the extreme case, done properly with numbers instead of
@@ -919,6 +947,7 @@ const TIDES = {
     },
 
     {
+      sid: 'the-whole-lesson-in-three',
       type: 'question',
       title: 'The whole lesson in three sentences',
       kind: 'short',
@@ -931,6 +960,7 @@ const TIDES = {
     },
 
     {
+      sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
       body: `<strong>A tide is a difference.</strong> Not a pull. Take the pull

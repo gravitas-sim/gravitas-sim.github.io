@@ -189,11 +189,14 @@ test.describe('the backup file', () => {
     // The format the reader is trusting: enough to identify the lesson, to
     // recognise its steps after an edit, and to reconstruct the answers.
     expect(backup.kind).toBe('gravitas.investigation.progress');
-    expect(backup.version).toBe(1);
+    expect(backup.version).toBe(2);
     expect(backup.lesson.id).toBe(LESSON);
     expect(backup.steps.length).toBeGreaterThan(0);
     expect(Object.keys(backup.progress.responses).length).toBeGreaterThan(0);
-    expect(backup.progress.stepIndex).toBe(reached - 1);
+    // A stable id, not a position: where the reader was has to survive a
+    // reorder of the lesson too.
+    expect(backup.progress.stepSid).toBeTruthy();
+    expect(backup.steps[reached - 1].sid).toBe(backup.progress.stepSid);
     expect(backup.progress.startedAt).toBeTruthy();
 
     // Now lose everything, the way a cleared browser would.

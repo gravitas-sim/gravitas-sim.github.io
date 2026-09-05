@@ -72,6 +72,12 @@ import {
 } from './units.js';
 import { getWidget, widgetDefaults } from './widgets.js';
 import {
+  indexOfSid,
+  readProgress,
+  stepKey,
+  writeProgress,
+} from './investigations/progressSchema.js';
+import {
   rotationCurveState,
   clusterState,
   darkMatterHaloOn,
@@ -106,6 +112,15 @@ let stepIndex = 0;
 let responses = {}; // stepId -> value
 let attempts = {}; // stepId -> number of tries
 let visited = new Set();
+/**
+ * What reading the saved progress had to say for itself.
+ *
+ * Populated by progressSchema.readProgress: a migration from the pre-sid
+ * format, keys for steps the lesson no longer has, a payload from a newer
+ * build. Surfaced once when the lesson opens rather than swallowed, because
+ * each of them means an answer may not be where the reader left it.
+ */
+let progressNotes = [];
 let startedAt = null;
 let probeTimer = null;
 let els = {};
@@ -188,6 +203,13 @@ function classifyStorageError(err) {
 
 function save() {
   if (!active) return;
+  // A payload from a newer build was left unread; overwriting it would destroy
+  // progress this version does not understand. The reader is told, and their
+  // answers stay usable in memory for the rest of the session.
+  if (progressNotes.some(n => n.code === 'schemaTooNew')) {
+    setSaveState('foreign');
+    return;
+  }
   // An author looking at step 30 of Tides must not overwrite the progress of
   // whoever is working through Tides on this machine.
   if (authoring) {
@@ -197,13 +219,16 @@ function save() {
   try {
     localStorage.setItem(
       storageKey(active.id),
-      JSON.stringify({
-        stepIndex,
-        responses,
-        attempts,
-        visited: [...visited],
-        startedAt,
-      })
+      JSON.stringify(
+        writeProgress({
+          lesson: active,
+          responses,
+          attempts,
+          visited,
+          stepSid: active.steps[stepIndex]?.sid ?? null,
+          startedAt,
+        })
+      )
     );
     setSaveState('saved');
   } catch (err) {
@@ -223,6 +248,33 @@ function save() {
  * there to be looked at, and a screen reader being told "saved" forty times
  * while typing an answer is worse than silence.
  */
+/**
+ * Say what reading the saved progress turned up, once, when the lesson opens.
+ *
+ * Only three things reach here and all three mean the reader's answers may not
+ * be where they left them, so none of them is a toast: a migration from the
+ * pre-sid format, which was necessarily done by position; answers for steps the
+ * lesson no longer has; and a payload from a newer build, which was not read.
+ */
+function renderProgressNotice() {
+  const el = els?.progressNotice;
+  if (!el) return;
+
+  const lines = [];
+  for (const note of progressNotes || []) {
+    if (note.code === 'migratedByPosition') {
+      lines.push(t('inv.progress.migrated', { n: note.carried }));
+    } else if (note.code === 'removedSteps') {
+      lines.push(t('inv.progress.removedSteps', { n: note.dropped }));
+    } else if (note.code === 'schemaTooNew') {
+      lines.push(t('inv.progress.foreign'));
+    }
+  }
+
+  el.textContent = lines.join(' ');
+  el.hidden = lines.length === 0;
+}
+
 function renderSaveStatus() {
   const el = els?.saveStatus;
   if (!el) return;
@@ -233,6 +285,7 @@ function renderSaveStatus() {
     full: t('inv.save.full'),
     unavailable: t('inv.save.unavailable'),
     authoring: t('inv.save.authoring'),
+    foreign: t('inv.save.foreign'),
     idle: '',
   }[status];
 
@@ -243,7 +296,9 @@ function renderSaveStatus() {
   // element keeps its identity across renders.
   el.setAttribute(
     'aria-live',
-    status === 'full' || status === 'unavailable' ? 'polite' : 'off'
+    status === 'full' || status === 'unavailable' || status === 'foreign'
+      ? 'polite'
+      : 'off'
   );
 }
 
@@ -262,7 +317,7 @@ async function downloadProgressBackup() {
     responses,
     attempts,
     visited,
-    stepIndex,
+    stepSid: active.steps[stepIndex]?.sid ?? null,
     startedAt,
     studentName: getStudentName(),
   });
@@ -331,6 +386,7 @@ async function restoreProgressBackup(file) {
     if (!ok) return;
   }
 
+  progressNotes = [];
   const restored = backup.restoreProgress(data, active);
   responses = restored.responses;
   attempts = restored.attempts;
@@ -341,7 +397,17 @@ async function restoreProgressBackup(file) {
 
   // What could not be carried across, said plainly. A lesson that has changed
   // since the backup was taken is the ordinary case over a term, not an error.
-  if (restored.dropped.length || restored.discardedKeys) {
+  if (restored.uncertain > 0) {
+    // Answers that were not applied because the step they belong to has
+    // changed under them. They are still in the file the reader restored from,
+    // which is why this says "set aside" rather than "lost".
+    toast(
+      t('inv.backup.restoredUncertain', {
+        n: restored.uncertain,
+        applied: Object.keys(restored.responses).length,
+      })
+    );
+  } else if (restored.dropped.length || restored.discardedKeys) {
     toast(
       t('inv.backup.restoredPartly', {
         dropped: restored.dropped.length,
@@ -355,21 +421,55 @@ async function restoreProgressBackup(file) {
   }
 }
 
-function load(id) {
+/** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
+const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
+
+/**
+ * Read a lesson's saved progress, migrating an older save if that is what is
+ * there.
+ *
+ * Needs the lesson, because a stable id is only meaningful against the step
+ * list that defines it, and a v1 payload can only be re-keyed against the
+ * current order. Callers that have no lesson in hand - the browser cards - get
+ * the counts they need from `progressFor` instead.
+ *
+ * @param {string} id - Lesson id
+ * @param {?object} lesson - The merged lesson, when the caller has it
+ * @returns {?object} The progress, or null when there is none
+ */
+function load(id, lesson = null) {
+  let data;
   try {
     const raw = localStorage.getItem(storageKey(id));
     if (!raw) return null;
-    const data = JSON.parse(raw);
-    return {
-      stepIndex: Number(data.stepIndex) || 0,
-      responses: data.responses || {},
-      attempts: data.attempts || {},
-      visited: new Set(data.visited || []),
-      startedAt: data.startedAt || null,
-    };
+    data = JSON.parse(raw);
   } catch {
     return null;
   }
+
+  // Without the lesson only the counts are readable, which is all the card
+  // wants. A v1 payload's `visited` is indices and a v2's is sids; either way
+  // the size is the number of steps seen.
+  if (!lesson) {
+    const visited = Array.isArray(data?.visited) ? data.visited : [];
+    return { countsOnly: true, visited: new Set(visited), data };
+  }
+
+  const isLegacy = !Number.isFinite(Number(data?.schema));
+  const progress = readProgress(data, lesson);
+
+  // Keep the original. A positional migration is right whenever the lesson has
+  // not been reordered since the save and there is no way to tell from the
+  // payload, so the thing it replaced is worth keeping until the reader has
+  // looked at their answers.
+  if (isLegacy && progress.migrated) {
+    try {
+      localStorage.setItem(legacyKey(id), JSON.stringify(data));
+    } catch {
+      /* the migration still stands; only the safety copy is lost */
+    }
+  }
+  return progress;
 }
 
 /** @returns {string} The student's saved name, if they have given one */
@@ -404,11 +504,15 @@ export function progressFor(id) {
   // them is loaded, and a step count is a number the manifest already carries.
   const total = investigationMeta(id)?.stepCount || 0;
   const saved = load(id);
+  // `at` is a 1-based screen number for the card. A v2 payload stores a sid
+  // rather than an index and the card has no lesson to resolve it against, so
+  // it reports how far the reader got rather than exactly where they stopped.
+  const done = saved ? saved.visited.size : 0;
   return {
-    done: saved ? saved.visited.size : 0,
+    done,
     total,
     started: Boolean(saved),
-    at: saved ? saved.stepIndex + 1 : 1,
+    at: done > 0 ? Math.min(done, total || done) : 1,
   };
 }
 
@@ -632,7 +736,15 @@ function releaseLocks() {
 // correct terse answer is not held hostage.
 const SHORT_ANSWER_MIN = 40;
 
-const stepId = index => `${active.id}:${index}`;
+/**
+ * The response-key prefix for a step, by position.
+ *
+ * Keyed by the step's stable `sid` rather than its index, so an answer stays
+ * attached to its question when a lesson is reordered. See
+ * ./investigations/progressSchema.js for why neither position nor a structural
+ * fingerprint was enough.
+ */
+const stepId = index => stepKey(active.id, active.steps[index]?.sid);
 const currentStep = () => active?.steps[stepIndex] ?? null;
 
 // --- Measured values ----------------------------------------------------------
@@ -1677,6 +1789,7 @@ function renderFooter() {
   const step = currentStep();
   if (authoring?.render) authoring.render(active, stepIndex);
   renderSaveStatus();
+  renderProgressNotice();
   // An authoring preview has no progress to back up and must not write any, so
   // the controls that do both are not offered. The status line still shows,
   // saying why nothing is being saved.
@@ -1934,7 +2047,8 @@ function setupInForceAt(index) {
 function goToStep(index, { rebuild = false } = {}) {
   if (!active) return;
   stepIndex = Math.max(0, Math.min(active.steps.length - 1, index));
-  visited.add(stepIndex);
+  const sid = active.steps[stepIndex]?.sid;
+  if (sid) visited.add(sid);
 
   // Reload when the scenario the step belongs to is not the one on screen, and
   // only then, so work a student has done: objects placed, mass changed,
@@ -1998,12 +2112,13 @@ export async function openInvestigation(id) {
   // In an authoring preview the saved progress is not read at all: an author is
   // shown a clean lesson rather than somebody's half-finished one, and reading
   // it would also mean the position they asked for could be silently overridden.
-  const saved = authoring ? null : load(id);
+  const saved = authoring ? null : load(id, inv);
   responses = saved?.responses || {};
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
-  stepIndex = saved?.stepIndex || 0;
+  stepIndex = saved?.stepSid ? Math.max(0, indexOfSid(inv, saved.stepSid)) : 0;
+  progressNotes = saved?.notes || [];
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
   }
@@ -2560,6 +2675,7 @@ export function initInvestigations() {
     progressBar: document.getElementById('investigationProgressBar'),
     progressText: document.getElementById('investigationProgressText'),
     saveStatus: document.getElementById('investigationSaveStatus'),
+    progressNotice: document.getElementById('investigationProgressNotice'),
     backupDownload: document.getElementById('investigationBackupDownload'),
     backupRestore: document.getElementById('investigationBackupRestore'),
     backupFile: document.getElementById('investigationBackupFile'),

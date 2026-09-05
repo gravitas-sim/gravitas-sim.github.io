@@ -47,6 +47,7 @@ const BUTTERFLY_EFFECT = {
   steps: [
     // --- Act 1: determinism ------------------------------------------------
     {
+      sid: 'a-word-that-has-been',
       type: 'read',
       title: 'A word that has been worn smooth',
       setup: {
@@ -78,6 +79,7 @@ const BUTTERFLY_EFFECT = {
       tip: 'The simulation is paused. Nothing will move until you let it.',
     },
     {
+      sid: 'the-same-numbers-twice',
       type: 'predict',
       title: 'The same numbers, twice',
       body: `Before anything else, the most basic question there is about a
@@ -104,6 +106,7 @@ const BUTTERFLY_EFFECT = {
                 mean anything.`,
     },
     {
+      sid: 'how-to-run-the-same',
       type: 'read',
       title: 'How to run the same thing twice',
       body: `Doing this by hand is impossible — you cannot put three stars back
@@ -125,6 +128,7 @@ const BUTTERFLY_EFFECT = {
       tip: 'The bench keeps the two runs on the same simulated-time axis, which is what makes them comparable at all.',
     },
     {
+      sid: 'the-reproducibility-control',
       type: 'explore',
       title: 'The reproducibility control',
       tool: { id: 'chaos-divergence' },
@@ -155,6 +159,7 @@ const BUTTERFLY_EFFECT = {
                "what changed between the runs" line will say so.`,
     },
     {
+      sid: 'what-zero-proves',
       type: 'question',
       title: 'What zero proves',
       kind: 'choice',
@@ -176,6 +181,7 @@ const BUTTERFLY_EFFECT = {
     },
     // --- Act 2: the two-body control ---------------------------------------
     {
+      sid: 'a-control-before-the-interesting',
       type: 'read',
       title: 'A control, before the interesting case',
       setup: {
@@ -212,6 +218,7 @@ const BUTTERFLY_EFFECT = {
              them is unaffected.`,
     },
     {
+      sid: 'nudge-one-star-in-a',
       type: 'predict',
       title: 'Nudge one star in a binary',
       body: `Capture the start, record Run A, return to the start, apply the
@@ -233,6 +240,7 @@ const BUTTERFLY_EFFECT = {
                 most common thing mistaken for chaos.`,
     },
     {
+      sid: 'measure-the-binary',
       type: 'explore',
       title: 'Measure the binary',
       tool: { id: 'chaos-divergence' },
@@ -262,6 +270,7 @@ const BUTTERFLY_EFFECT = {
                malfunction.`,
     },
     {
+      sid: 'the-instrument-refused',
       type: 'question',
       title: 'The instrument refused',
       kind: 'choice',
@@ -285,6 +294,7 @@ const BUTTERFLY_EFFECT = {
                 anything.`,
     },
     {
+      sid: 'linear-in-numbers',
       type: 'question',
       title: 'Linear, in numbers',
       kind: 'numeric',
@@ -310,6 +320,7 @@ const BUTTERFLY_EFFECT = {
     },
     // --- Act 3: the three-body case ----------------------------------------
     {
+      sid: 'back-to-the-triangle',
       type: 'read',
       title: 'Back to the triangle',
       setup: {
@@ -340,6 +351,7 @@ const BUTTERFLY_EFFECT = {
              we can measure.`,
     },
     {
+      sid: 'the-same-nudge-three-bodies',
       type: 'predict',
       title: 'The same nudge, three bodies',
       body: `The same experiment as the binary: capture, Run A, return, nudge one
@@ -359,6 +371,7 @@ const BUTTERFLY_EFFECT = {
                 until you have seen the number.`,
     },
     {
+      sid: 'measure-the-triple',
       type: 'explore',
       title: 'Measure the triple',
       tool: { id: 'chaos-divergence' },
@@ -385,6 +398,7 @@ const BUTTERFLY_EFFECT = {
                actually used.`,
     },
     {
+      sid: 'write-down-what-you-measured',
       type: 'measure',
       title: 'Write down what you measured',
       tool: { id: 'chaos-divergence' },
@@ -435,6 +449,7 @@ const BUTTERFLY_EFFECT = {
       },
     },
     {
+      sid: 'what-an-e-folding-time',
       type: 'read',
       title: 'What an e-folding time is',
       body: `The instrument fitted a straight line to the logarithm of the
@@ -459,6 +474,7 @@ const BUTTERFLY_EFFECT = {
              real one.`,
     },
     {
+      sid: 'how-long-does-a-prediction',
       type: 'question',
       title: 'How long does a prediction last?',
       kind: 'numeric',
@@ -485,6 +501,7 @@ const BUTTERFLY_EFFECT = {
                 starting error the width of a country.`,
     },
     {
+      sid: 'buying-more-time',
       type: 'question',
       title: 'Buying more time',
       kind: 'choice',
@@ -510,6 +527,7 @@ const BUTTERFLY_EFFECT = {
     },
     // --- Act 4: is it the computer? ----------------------------------------
     {
+      sid: 'the-objection-you-should-have',
       type: 'read',
       title: 'The objection you should have',
       body: `Here is the objection any careful person should raise at this point.
@@ -530,6 +548,7 @@ const BUTTERFLY_EFFECT = {
              property of the software.`,
     },
     {
+      sid: 'before-you-refine',
       type: 'predict',
       title: 'Before you refine',
       body: `You are about to repeat the three-body comparison with the timestep
@@ -550,6 +569,7 @@ const BUTTERFLY_EFFECT = {
                 unresolved".`,
     },
     {
+      sid: 'the-numerical-control',
       type: 'explore',
       title: 'The numerical control',
       tool: { id: 'chaos-divergence' },
@@ -583,6 +603,7 @@ const BUTTERFLY_EFFECT = {
                diff will name it.`,
     },
     {
+      sid: 'reading-the-verdict',
       type: 'question',
       title: 'Reading the verdict',
       kind: 'choice',
@@ -608,6 +629,7 @@ const BUTTERFLY_EFFECT = {
     },
     // --- Act 5: what chaos is not ------------------------------------------
     {
+      sid: 'not-every-three-body-system',
       type: 'read',
       title: 'Not every three-body system',
       body: `It is very often said that the three-body problem <em>is</em>
@@ -631,6 +653,7 @@ const BUTTERFLY_EFFECT = {
              the way to find out is the measurement you just did.`,
     },
     {
+      sid: 'which-of-these-is-chaos',
       type: 'question',
       title: 'Which of these is chaos?',
       kind: 'choice',
@@ -655,6 +678,7 @@ const BUTTERFLY_EFFECT = {
                 about the physics.`,
     },
     {
+      sid: 'deterministic-and-unpredictable',
       type: 'question',
       title: 'Deterministic and unpredictable',
       kind: 'short',
@@ -676,6 +700,7 @@ const BUTTERFLY_EFFECT = {
                break down" (the rules never change).`,
     },
     {
+      sid: 'move-the-horizon',
       type: 'explore',
       title: 'Move the horizon',
       tool: { id: 'chaos-divergence' },
@@ -704,6 +729,7 @@ const BUTTERFLY_EFFECT = {
                logarithmically with how well you know the start.`,
     },
     {
+      sid: 'what-this-is-a-model',
       type: 'read',
       title: 'What this is a model of',
       body: `The three stars are a laboratory, not an observation. No real
@@ -735,6 +761,7 @@ const BUTTERFLY_EFFECT = {
              carries the name, and reporting it as one would be overclaiming.`,
     },
     {
+      sid: 'where-these-results-come-from',
       type: 'read',
       title: 'Where these results come from',
       body: `The claims in this investigation, and where to check them:
@@ -774,6 +801,7 @@ const BUTTERFLY_EFFECT = {
              time, and what it means for predicting it.`,
     },
     {
+      sid: 'what-you-established',
       type: 'read',
       title: 'What you established',
       body: `In order, and each one measured rather than asserted:

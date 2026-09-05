@@ -14,21 +14,43 @@
 //
 // Stable step identity
 // -----------------------------------------------------------------------------
-// Responses are keyed by position - `tides:7`, `tides:7:d1` - because that is
-// what the panel has always used. Position is not identity: insert a step at
-// the top of a lesson and every answer below it now belongs to the wrong
-// question, silently and plausibly.
+// Version 2 of this format keys progress by a step's `sid` - the stable id
+// written into the lesson, minted by tools/add-step-ids.mjs and protected from
+// translation by STRUCTURAL. A sid survives reordering, rewording and a change
+// of language, because it is derived from none of them.
 //
-// A backup therefore records a *fingerprint* of each step alongside its index,
-// and restoring matches on the fingerprint first. The fingerprint is built only
-// from fields js/data/investigations/i18n.js lists as STRUCTURAL - type, kind,
-// widget id, field ids, scenario - so it is identical whether the lesson was
-// last opened in English or in Spanish. A title would have been more
-// discriminating and would have broken the moment a reader switched language.
+// Version 1 keyed by *position* and carried a structural fingerprint per step
+// so a reordered lesson could be recovered. Both of those are wrong, in
+// different ways:
+//
+//   Position is not identity. Insert a step at the top and every answer below
+//   it belongs to the question above the one it answers.
+//
+//   A structural fingerprint is not identity either. It is built from type,
+//   kind, widget id, scenario and field ids, so two four-option predict steps
+//   produce the same string. `detect-this-planet` has three such pairs; swapping
+//   steps 1 and 5 moved one answer onto the other's question and reported that
+//   nothing had moved, which is worse than refusing.
+//
+// So a v1 backup is now restored *by position*, which is the only mapping its
+// contents actually support, and the fingerprints are used as a **check**
+// rather than as a matcher: where the fingerprint at a position disagrees with
+// the step now there, the restore says so instead of quietly hunting for a
+// better-looking home for the answer. Reporting uncertainty is the whole
+// improvement; guessing plausibly is what went wrong before.
 // =============================================================================
 
-/** Bumped when the shape below changes in a way a reader must notice. */
-export const BACKUP_VERSION = 1;
+/**
+ * Bumped when the shape below changes in a way a reader must notice.
+ *
+ * 1: keyed by step index, with a structural fingerprint per step.
+ * 2: keyed by step sid, with the fingerprint kept only as a cross-check and
+ *    an option count so a reordered answer list can be caught.
+ */
+export const BACKUP_VERSION = 2;
+
+/** The oldest format this build can still read. */
+export const MIN_BACKUP_VERSION = 1;
 
 /** What this file is, so a stray JSON file is not mistaken for one. */
 export const BACKUP_KIND = 'gravitas.investigation.progress';
@@ -81,7 +103,7 @@ export function buildBackup({
   responses,
   attempts,
   visited,
-  stepIndex,
+  stepSid,
   startedAt,
   studentName = null,
 }) {
@@ -97,16 +119,21 @@ export function buildBackup({
     },
     student: studentName || null,
     progress: {
-      stepIndex: Number(stepIndex) || 0,
+      // A sid, not an index: where the reader was has to survive a reorder too.
+      stepSid: stepSid ?? null,
       startedAt: startedAt || null,
       visited: [...(visited || [])],
       responses: { ...(responses || {}) },
       attempts: { ...(attempts || {}) },
     },
-    // The map that makes a reordered lesson recoverable.
+    // Identity first; the fingerprint is retained only so a restore can say
+    // when a step has been rewritten under its own id, and the option count so
+    // a reordered answer list can be caught rather than silently mis-scored.
     steps: steps.map((step, index) => ({
       index,
+      sid: step?.sid ?? null,
       fingerprint: stepFingerprint(step),
+      optionCount: Array.isArray(step?.options) ? step.options.length : null,
     })),
   };
 }
@@ -145,126 +172,158 @@ export function validateBackup(data) {
   return { ok: true };
 }
 
-/** Split a response key into its step index and whatever follows it. */
-function splitKey(key, lessonId) {
+/**
+ * Split a response key into the step it names and whatever hangs off it.
+ *
+ * @param {string} key - e.g. `tides:twelve-nights:d1`
+ * @param {string} lessonId - The lesson the key should belong to
+ * @returns {?{head: string, suffix: string}} The parts, or null if foreign
+ */
+function splitStepKey(key, lessonId) {
   const prefix = `${lessonId}:`;
-  if (!key.startsWith(prefix)) return null;
+  if (typeof key !== 'string' || !key.startsWith(prefix)) return null;
   const rest = key.slice(prefix.length);
   const cut = rest.indexOf(':');
-  const indexPart = cut === -1 ? rest : rest.slice(0, cut);
-  const index = Number(indexPart);
-  if (!Number.isInteger(index)) return null;
-  return { index, suffix: cut === -1 ? '' : rest.slice(cut) };
-}
-
-/**
- * Work out where each backed-up step lives in the lesson as it stands now.
- *
- * Three outcomes per step, and the caller reports all three:
- *
- *   same place   the fingerprint at that index still matches
- *   moved        the fingerprint matches a step at a different index
- *   gone         no step in the lesson has that fingerprint
- *
- * Matching is greedy and left to right, so two identical steps that swapped
- * places keep one answer each rather than both collapsing onto the first.
- *
- * @param {Array<{index: number, fingerprint: string}>} backupSteps - From the file
- * @param {Array<object>} lessonSteps - The lesson now
- * @returns {{map: Map<number, number>, moved: number[], dropped: number[]}} The plan
- */
-export function remapSteps(backupSteps, lessonSteps) {
-  const map = new Map();
-  const moved = [];
-  const dropped = [];
-  const now = (lessonSteps || []).map(stepFingerprint);
-  const taken = new Set();
-
-  for (const entry of backupSteps || []) {
-    const from = Number(entry?.index);
-    if (!Number.isInteger(from)) continue;
-    const want = entry.fingerprint;
-
-    if (now[from] === want && !taken.has(from)) {
-      map.set(from, from);
-      taken.add(from);
-      continue;
-    }
-    const to = now.findIndex((f, i) => f === want && !taken.has(i));
-    if (to === -1) {
-      dropped.push(from);
-      continue;
-    }
-    map.set(from, to);
-    taken.add(to);
-    if (to !== from) moved.push(from);
-  }
-  return { map, moved, dropped };
+  return {
+    head: cut === -1 ? rest : rest.slice(0, cut),
+    suffix: cut === -1 ? '' : rest.slice(cut),
+  };
 }
 
 /**
  * Turn a validated backup into progress for the lesson as it stands now.
  *
- * A backup with no step map - hand-written, or from a future build that stopped
- * emitting one - falls back to positional restore, which is what the format did
- * before fingerprints existed and is still better than refusing the file.
+ * Two paths, because the two formats support different things.
+ *
+ * **v2** keys by sid, so the mapping is exact: an answer goes to the step whose
+ * id it names, wherever that step now sits, and an answer whose step has been
+ * deleted is dropped. Nothing is inferred.
+ *
+ * **v1** keys by index. Position is the only mapping its contents support, so
+ * position is what is used - and the fingerprints it carries are used to *check*
+ * that, not to search with. Where the fingerprint recorded at a position
+ * disagrees with the step now at that position, the lesson demonstrably changed
+ * there and the answer is set aside rather than applied: it is returned in
+ * `quarantined` so nothing is destroyed, and counted in `uncertain` so the
+ * reader is told. The previous version searched for a matching fingerprint
+ * instead, which found a confident wrong answer whenever two steps had the same
+ * shape.
+ *
+ * An answer to a choice step whose option list has changed length is also
+ * quarantined: the stored value is an index into a list that no longer exists.
  *
  * @param {object} backup - A validated backup
  * @param {object} lesson - The merged lesson to restore into
- * @returns {{responses: object, attempts: object, visited: Set<number>,
- *   stepIndex: number, startedAt: ?string, moved: number[], dropped: number[],
- *   discardedKeys: number}} The progress, and what had to be changed
+ * @returns {{responses: object, attempts: object, visited: Set<string>,
+ *   stepIndex: number, startedAt: ?string, moved: string[], dropped: string[],
+ *   quarantined: object, uncertain: number, discardedKeys: number,
+ *   byPosition: boolean}} The progress, and everything that was not certain
  */
 export function restoreProgress(backup, lesson) {
   const lessonId = lesson?.id;
   const lessonSteps = Array.isArray(lesson?.steps) ? lesson.steps : [];
   const source = backup.progress || {};
-  const hasMap = Array.isArray(backup.steps) && backup.steps.length > 0;
+  const backupSteps = Array.isArray(backup.steps) ? backup.steps : [];
+  const fromId = backup.lesson?.id;
 
-  const { map, moved, dropped } = hasMap
-    ? remapSteps(backup.steps, lessonSteps)
-    : {
-        map: new Map(lessonSteps.map((_, i) => [i, i])),
-        moved: [],
-        dropped: [],
-      };
+  const sids = lessonSteps.map(step => step?.sid);
+  const indexBySid = new Map(sids.map((sid, i) => [sid, i]));
+  const optionCountNow = lessonSteps.map(step =>
+    Array.isArray(step?.options) ? step.options.length : null
+  );
+
+  const version = Number(backup.version) || 1;
+  const byPosition = version < 2 || !backupSteps.some(entry => entry?.sid);
 
   const responses = {};
   const attempts = {};
+  const quarantined = {};
+  const moved = [];
+  const dropped = [];
   let discardedKeys = 0;
+  let uncertain = 0;
 
-  const rekey = (from, table, out) => {
+  // What each key's step-head resolves to now: an index, or null to drop it.
+  // Built once so responses and attempts cannot disagree.
+  const resolve = new Map();
+  const quarantineHeads = new Set();
+
+  if (byPosition) {
+    const fingerprintAt = new Map(
+      backupSteps
+        .filter(e => Number.isInteger(Number(e?.index)))
+        .map(e => [Number(e.index), e.fingerprint])
+    );
+    lessonSteps.forEach((step, i) => {
+      const head = String(i);
+      if (i >= (backup.lesson?.stepCount ?? lessonSteps.length)) return;
+      const recorded = fingerprintAt.get(i);
+      if (recorded !== undefined && recorded !== stepFingerprint(step)) {
+        // The lesson changed at this position. The answer is recoverable and
+        // is not applied.
+        quarantineHeads.add(head);
+        return;
+      }
+      resolve.set(head, i);
+    });
+  } else {
+    for (const entry of backupSteps) {
+      const sid = entry?.sid;
+      if (!sid) continue;
+      const to = indexBySid.get(sid);
+      if (to === undefined) {
+        dropped.push(sid);
+        continue;
+      }
+      // An option list that changed length invalidates a stored choice index.
+      const was = entry.optionCount ?? null;
+      const now = optionCountNow[to];
+      if (was !== null && now !== null && was !== now) {
+        quarantineHeads.add(sid);
+        continue;
+      }
+      resolve.set(sid, to);
+      if (Number(entry.index) !== to) moved.push(sid);
+    }
+  }
+
+  const rekey = (table, out) => {
     for (const [key, value] of Object.entries(table || {})) {
-      const parsed = splitKey(key, backup.lesson.id);
+      const parsed = splitStepKey(key, fromId);
       if (!parsed) {
         discardedKeys++;
         continue;
       }
-      const to = from.get(parsed.index);
+      if (quarantineHeads.has(parsed.head)) {
+        quarantined[key] = value;
+        uncertain++;
+        continue;
+      }
+      const to = resolve.get(parsed.head);
       if (to === undefined || to >= lessonSteps.length) {
         discardedKeys++;
         continue;
       }
-      out[`${lessonId}:${to}${parsed.suffix}`] = value;
+      out[`${lessonId}:${sids[to]}${parsed.suffix}`] = value;
     }
   };
-  rekey(map, source.responses, responses);
-  rekey(map, source.attempts, attempts);
+  rekey(source.responses, responses);
+  rekey(source.attempts, attempts);
 
   const visited = new Set();
-  for (const index of source.visited || []) {
-    const to = map.get(Number(index));
-    if (to !== undefined && to < lessonSteps.length) visited.add(to);
+  for (const entry of source.visited || []) {
+    const to = resolve.get(String(entry));
+    if (to !== undefined && to < lessonSteps.length) visited.add(sids[to]);
   }
 
   // Where the reader was, moved with its step and clamped into the lesson.
-  const wanted = map.get(Number(source.stepIndex));
+  const wantedHead = byPosition
+    ? String(Number(source.stepIndex) || 0)
+    : (source.stepSid ?? '');
+  const wanted = resolve.get(wantedHead);
   const stepIndex = Math.max(
     0,
-    Math.min(
-      lessonSteps.length - 1,
-      wanted === undefined ? Number(source.stepIndex) || 0 : wanted
-    )
+    Math.min(lessonSteps.length - 1, wanted === undefined ? 0 : wanted)
   );
 
   return {
@@ -275,7 +334,10 @@ export function restoreProgress(backup, lesson) {
     startedAt: source.startedAt || null,
     moved,
     dropped,
+    quarantined,
+    uncertain,
     discardedKeys,
+    byPosition,
   };
 }
 

@@ -2219,6 +2219,14 @@ export const EN = {
     'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
   'inv.save.authoring':
     'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
+  'inv.save.foreign':
+    'Saved progress from a newer version of Gravitas was found and left untouched. Your answers work here but are not being saved.',
+  'inv.progress.migrated':
+    'Carried {n} saved answers over from an older format, matched by position. If this lesson has changed since you last opened it, check that each answer is on the question you meant.',
+  'inv.progress.removedSteps':
+    'Discarded {n} saved answers for steps this lesson no longer has.',
+  'inv.progress.foreign':
+    'Your saved progress for this lesson was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
   'inv.backup.download': 'Download progress backup',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
@@ -2230,6 +2238,8 @@ export const EN = {
     'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
   'inv.backup.restoredPartly':
     'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
+  'inv.backup.restoredUncertain':
+    'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
   'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
   'inv.backup.notJson': 'That file is not readable as JSON.',
   'inv.backup.failed': 'That backup could not be read.',

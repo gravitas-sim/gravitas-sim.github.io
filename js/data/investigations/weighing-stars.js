@@ -41,6 +41,7 @@ const WEIGHING = {
   ],
   steps: [
     {
+      sid: 'you-cannot-put-a-star',
       type: 'read',
       title: 'You cannot put a star on a scale',
       body: `A bathroom scale works by pushing back. Stand on it, and it measures
@@ -62,6 +63,7 @@ const WEIGHING = {
       setup: BINARY_LAB,
     },
     {
+      sid: 'how-would-you-do-it',
       type: 'question',
       title: 'How would you do it?',
       kind: 'choice',
@@ -80,6 +82,7 @@ const WEIGHING = {
         'Gravity is the only one of these that depends on mass. Brightness and size are related to mass for ordinary stars, but only loosely, and only because somebody first measured masses another way. Watching how a star pulls something else is the direct measurement, and everything else is calibrated against it.',
     },
     {
+      sid: 'two-stars-side-by-side',
       type: 'predict',
       title: 'Two stars, side by side',
       body: `On screen are two stars of about the same size, close enough
@@ -99,6 +102,7 @@ const WEIGHING = {
         'Neither. This trips almost everybody up the first time, because every diagram of the Solar System has the Sun nailed to the middle of the page. It is not: the Sun moves too, just not by much. With two stars of similar size, both of them move by a lot, and it is obvious.',
     },
     {
+      sid: 'watch-them',
       type: 'explore',
       title: 'Watch them',
       body: `Here they are, with a trail behind each one so you can see where it
@@ -124,6 +128,7 @@ const WEIGHING = {
       tip: 'The Run / Pause and Reset buttons are underneath the picture. Pausing is often the easiest way to look at something carefully.',
     },
     {
+      sid: 'what-moved',
       type: 'question',
       title: 'What moved?',
       kind: 'choice',
@@ -141,6 +146,7 @@ const WEIGHING = {
         'Both moved, and each traced its own circle. Notice something else about those two trails: the stars were always on opposite sides. When one was on the left, the other was on the right. They are not chasing each other round; they are swinging round something in the middle.',
     },
     {
+      sid: 'what-are-they-going-round',
       type: 'read',
       title: 'What are they going round?',
       body: `If both stars are moving, and they are always on opposite sides of
@@ -165,6 +171,7 @@ const WEIGHING = {
       tip: 'Every orbiting pair in the universe has one of these, including the Earth and the Moon. The Earth-Moon barycenter is inside the Earth, about a thousand miles below the surface, and the Earth swings round it once a month.',
     },
     {
+      sid: 'where-does-it-sit',
       type: 'question',
       title: 'Where does it sit?',
       kind: 'choice',
@@ -182,6 +189,7 @@ const WEIGHING = {
         'Exactly halfway. Both stars are two AU from it, which is what you would expect from a see-saw with two children of the same weight: to balance, they sit the same distance from the middle.',
     },
     {
+      sid: 'make-one-of-them-heavier',
       type: 'predict',
       title: 'Make one of them heavier',
       body: `Now for the interesting part. In the next step you will be able to
@@ -201,6 +209,7 @@ const WEIGHING = {
         'It moves towards the heavier star. On a see-saw, a heavy child has to sit closer to the middle to balance a light one further out. Two stars do exactly the same thing, and for exactly the same reason.',
     },
     {
+      sid: 'try-it',
       type: 'explore',
       title: 'Try it',
       body: `Both mass sliders are unlocked. Start with them equal, then drag
@@ -226,6 +235,7 @@ const WEIGHING = {
       tip: 'The heavier star does not sit still. It still moves. It just moves in a much smaller circle, and it moves more slowly, because it has less far to go in the same amount of time.',
     },
     {
+      sid: 'the-rule',
       type: 'question',
       title: 'The rule',
       kind: 'choice',
@@ -243,6 +253,7 @@ const WEIGHING = {
         'The heavier star stays closer to the balance point. Say it as a pair of arrows and it is easy to hold on to: MORE MASS → closer in, smaller circle. LESS MASS → further out, bigger circle. That single fact is going to let you compare the masses of two stars without knowing either of them.',
     },
     {
+      sid: 'put-them-on-a-see',
       type: 'explore',
       title: 'Put them on a see-saw',
       body: `Here is the same idea drawn as an actual see-saw, with the balance
@@ -260,6 +271,7 @@ const WEIGHING = {
       tip: 'Only the ratio of the two distances matters. 2 AU against 4 AU tells you the same thing as 1 AU against 2 AU, because in both cases one star is twice as far out as the other.',
     },
     {
+      sid: 'reading-the-see-saw',
       type: 'question',
       title: 'Reading the see-saw',
       kind: 'choice',
@@ -277,6 +289,7 @@ const WEIGHING = {
         'Star A, by about twice. Star B has to travel twice as far from the balance point, so Star A must be twice as heavy to hold the other end down. The star that stays closer is the heavier one, and the ratio of the distances is the ratio of the masses, the other way up.',
     },
     {
+      sid: 'writing-it-down',
       type: 'read',
       title: 'Writing it down',
       body: `That is the whole of the first idea, and it can be written on one
@@ -294,6 +307,7 @@ const WEIGHING = {
       tip: 'This is why a see-saw works at all. A small child sits at the end, a large adult sits near the middle, and mass times distance comes out the same on both sides.',
     },
     {
+      sid: 'one-more-to-be-sure',
       type: 'question',
       title: 'One more, to be sure',
       kind: 'choice',
@@ -311,6 +325,7 @@ const WEIGHING = {
         'Star A is twice as heavy. It is the same answer as 1 AU against 2 AU, because the ratio is the same. Notice what this measurement does and does not give you: it tells you how the mass is <em>split</em> between the two stars, but not how much there is in total. That is the next thing to find.',
     },
     {
+      sid: 'what-kepler-found-and-what',
       type: 'read',
       title: 'What Kepler found, and what Newton added',
       body: `In the Kepler investigation you measured the orbits of planets and
@@ -331,6 +346,7 @@ const WEIGHING = {
              into a scale.`,
     },
     {
+      sid: 'which-pair-is-quicker',
       type: 'predict',
       title: 'Which pair is quicker?',
       body: `Next you will see two binary systems side by side. The two stars in
@@ -350,6 +366,7 @@ const WEIGHING = {
         'The heavy pair, and by a clear margin. More mass means a stronger pull, so the stars are hauled round the same-sized orbit more quickly. This is exactly the effect Kepler could not see, because he only ever had one Sun to work with.',
     },
     {
+      sid: 'run-them-together',
       type: 'explore',
       title: 'Run them together',
       body: `Both systems start at the same moment. The counter under each one
@@ -365,6 +382,7 @@ const WEIGHING = {
       tip: 'Four times the mass turns out to give exactly half the period. You do not need to know why that particular factor comes out; the point is only that more mass means a quicker orbit.',
     },
     {
+      sid: 'why-the-heavy-pair-wins',
       type: 'question',
       title: 'Why the heavy pair wins',
       kind: 'choice',
@@ -381,6 +399,7 @@ const WEIGHING = {
         'More mass, stronger pull, quicker lap. And here is why that matters so much: it works backwards. If you can see how big an orbit is and time how long it takes, then the only thing left that could explain the timing is the mass. The orbit tells you what the stars weigh.',
     },
     {
+      sid: 'newton-s-version-and-what',
       type: 'read',
       title: 'Newton’s version, and what it is for',
       body: `Here is the relationship Newton found, written the way an astronomer
@@ -405,6 +424,7 @@ const WEIGHING = {
       tip: 'If you take only one star’s distance from the barycenter by mistake, you will get a mass several times too small. Measuring star to star is the fix, and it is easier to do anyway.',
     },
     {
+      sid: 'a-practice-run',
       type: 'measure',
       title: 'A practice run',
       body: `Try the formula once on numbers chosen to be kind, before using it
@@ -457,6 +477,7 @@ const WEIGHING = {
       tip: 'The little raised numbers just mean "multiply it by itself that many times". a³ is a × a × a. P² is P × P. If you would rather use a calculator, nothing here is against the rules.',
     },
     {
+      sid: 'the-mystery-pair',
       type: 'read',
       title: 'The mystery pair',
       body: `Now the real thing.
@@ -470,6 +491,7 @@ const WEIGHING = {
       tip: 'There is no trick and no hidden difficulty. The numbers have been chosen to come out cleanly, so if your answer is not close to a whole number, check the measurement rather than the arithmetic.',
     },
     {
+      sid: 'what-do-you-need-to',
       type: 'question',
       title: 'What do you need to measure?',
       kind: 'choice',
@@ -487,6 +509,7 @@ const WEIGHING = {
         'Orbit size and period. Those are the only two things in the formula, and both of them are things you can watch happen. Everything else about the stars, however interesting, is beside the point here.',
     },
     {
+      sid: 'measurement-one-how-big-is',
       type: 'explore',
       title: 'Measurement one: how big is the orbit?',
       body: `The picture now has rings drawn on it, one every astronomical unit,
@@ -517,6 +540,7 @@ const WEIGHING = {
       tip: 'Star A is on the 1 AU ring and Star B is on the 3 AU ring, so the two stars are 4 AU apart. Write that down: a = 4 AU.',
     },
     {
+      sid: 'measurement-two-how-long-does',
       type: 'explore',
       title: 'Measurement two: how long does a lap take?',
       body: `Now time it. There is a stopwatch under the picture, and a clock in
@@ -547,6 +571,7 @@ const WEIGHING = {
       tip: 'It does not have to be perfect. Anything between about 3.5 and 4.5 years will get you to the right answer, because the answer is a whole number.',
     },
     {
+      sid: 'weigh-the-pair',
       type: 'measure',
       title: 'Weigh the pair',
       body: `Put your two measurements in. The arithmetic is done for you, line
@@ -627,6 +652,7 @@ const WEIGHING = {
       tip: 'If you measured a = 4 and P = 4, then a³ = 4 × 4 × 4 = 64 and P² = 4 × 4 = 16.',
     },
     {
+      sid: 'stop-and-look-at-what',
       type: 'read',
       title: 'Stop and look at what you just did',
       body: `You have the combined mass of two stars that nobody has ever been
@@ -642,6 +668,7 @@ const WEIGHING = {
              this lesson.`,
     },
     {
+      sid: 'back-to-the-balance-point',
       type: 'explore',
       title: 'Back to the balance point',
       body: `The rings are back. This time read them the other way: not to add
@@ -667,6 +694,7 @@ const WEIGHING = {
       tip: 'Star A is on the 1 AU ring. Star B is on the 3 AU ring. Star B travels three times as far.',
     },
     {
+      sid: 'splitting-them-up',
       type: 'question',
       title: 'Splitting them up',
       kind: 'choice',
@@ -684,6 +712,7 @@ const WEIGHING = {
         'Star A is three times as heavy. It is the see-saw again: Star B is three times further out, so Star A must be three times heavier to balance it. You now know the total mass and the ratio, which is enough to pin down both stars.',
     },
     {
+      sid: 'now-weigh-each-one',
       type: 'measure',
       title: 'Now weigh each one',
       body: `You have four solar masses to share out, and you know the split has
@@ -751,6 +780,7 @@ const WEIGHING = {
       },
     },
     {
+      sid: 'the-answer',
       type: 'read',
       title: 'The answer',
       body: `The masses that were hidden all along:
@@ -766,6 +796,7 @@ const WEIGHING = {
       tip: 'Getting 3.9 or 4.2 solar masses instead of exactly 4 would be a perfectly good result. Real measurements of real binaries carry uncertainties of a few percent, and they are still the most trustworthy stellar masses we have.',
     },
     {
+      sid: 'somebody-really-did-this',
       type: 'explore',
       title: 'Somebody really did this',
       body: `Sirius is the brightest star in the night sky. In 1844 Friedrich
@@ -788,6 +819,7 @@ const WEIGHING = {
       tip: 'That orbit is 50.1 years round and 19.8 AU across. Put those into your formula: 19.8 cubed is 7,762, and 50.1 squared is 2,510. Divide, and the pair weighs 3.1 solar masses. The accepted value, from a century of careful work, is 3.06.',
     },
     {
+      sid: 'and-stars-are-not-the',
       type: 'read',
       title: 'And stars are not the only things that do it',
       body: `One last thought, because it connects to something you may have met
@@ -817,6 +849,7 @@ const WEIGHING = {
       tip: 'That is a different investigation. This one has done its job if you can say why the star moves at all.',
     },
     {
+      sid: 'one-on-your-own',
       type: 'measure',
       title: 'One on your own',
       body: `A new pair, not one you have seen. The two stars are
@@ -865,6 +898,7 @@ const WEIGHING = {
       },
     },
     {
+      sid: 'and-which-one-is-heavier',
       type: 'question',
       title: 'And which one is heavier?',
       kind: 'choice',
@@ -882,6 +916,7 @@ const WEIGHING = {
         'The heavier one. Together with the previous step, that is both halves of the method: the size and timing of the orbit give you the total mass, and the distances from the balance point tell you how to split it.',
     },
     {
+      sid: 'what-you-can-now-say',
       type: 'read',
       title: 'What you can now say',
       body: `In ordinary words, with nothing memorised:

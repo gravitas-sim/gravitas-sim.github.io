@@ -5,7 +5,6 @@ import {
   MAX_BACKUP_BYTES,
   backupFilename,
   buildBackup,
-  remapSteps,
   restoreProgress,
   stepFingerprint,
   validateBackup,
@@ -24,65 +23,76 @@ import {
 // identity.
 // =============================================================================
 
-/** A lesson whose steps are distinguishable by structure alone. */
+/** A lesson whose steps carry the stable ids identity now depends on. */
 const lesson = (...steps) => ({
   id: 'tides',
   title: 'Tides',
-  steps,
+  steps: steps.map((s, i) => ({ sid: s.sid ?? `s${i}`, ...s })),
 });
 
-const read = title => ({ type: 'read', title });
-const choice = (title, options = 4) => ({
+const read = (title, sid) => ({ sid, type: 'read', title });
+const choice = (title, options = 4, sid) => ({
+  sid,
   type: 'question',
   kind: 'choice',
   title,
   options: Array.from({ length: options }, (_, i) => `option ${i}`),
 });
-const measure = (title, ids) => ({
+const measure = (title, ids, sid) => ({
+  sid,
   type: 'measure',
   title,
   fields: ids.map(id => ({ id })),
 });
-const explore = (title, toolId) => ({
+const explore = (title, toolId, sid) => ({
+  sid,
   type: 'explore',
   title,
   tool: { id: toolId },
 });
 
 const LESSON = lesson(
-  read('Opening'),
-  measure('Four distances', ['d1', 't1']),
-  choice('Which one', 3),
-  explore('Stretch against grip', 'tide-balance')
+  read('Opening', 'opening'),
+  measure('Four distances', ['d1', 't1'], 'four-distances'),
+  choice('Which one', 3, 'which-one'),
+  explore('Stretch against grip', 'tide-balance', 'stretch')
 );
 
 const progressFor = () => ({
   responses: {
-    'tides:1:d1': '2',
-    'tides:1:t1': '0.13',
-    'tides:2': 1,
-    'tides:3:shown': true,
+    'tides:four-distances:d1': '2',
+    'tides:four-distances:t1': '0.13',
+    'tides:which-one': 1,
+    'tides:stretch:shown': true,
   },
-  attempts: { 'tides:2': 2 },
-  visited: [0, 1, 2, 3],
-  stepIndex: 2,
+  attempts: { 'tides:which-one': 2 },
+  visited: ['opening', 'four-distances', 'which-one', 'stretch'],
+  stepSid: 'which-one',
   startedAt: '2026-09-01T10:00:00.000Z',
 });
 
 const backupOf = (les = LESSON) =>
   buildBackup({ lesson: les, ...progressFor(), studentName: 'A Student' });
 
-describe('the fingerprint is what makes a step identifiable', () => {
+describe('the fingerprint is now a cross-check, not an identity', () => {
+  // Identity is the step's `sid`. The fingerprint survives only so a restore
+  // from a pre-sid backup can notice that the lesson changed under a position,
+  // and say so, instead of hunting for a step that merely looks the same.
+  // tests/progressIdentity.test.js covers that behaviour end to end.
+
   test('it ignores the title, so it survives a translation', () => {
-    // The merged lesson carries translated prose. A fingerprint built from the
-    // title would change the moment a reader switched to Spanish, and every
-    // answer would be orphaned by a language toggle.
     const english = measure('Four distances', ['d1', 't1']);
     const spanish = measure('Cuatro distancias', ['d1', 't1']);
     expect(stepFingerprint(spanish)).toBe(stepFingerprint(english));
   });
 
-  test('it tells different steps apart', () => {
+  test('it cannot tell two same-shaped questions apart, which is why it is not an identity', () => {
+    expect(stepFingerprint(choice('Which one', 4))).toBe(
+      stepFingerprint(choice('A different question entirely', 4))
+    );
+  });
+
+  test('it does notice a change of shape', () => {
     expect(stepFingerprint(LESSON.steps[1])).not.toBe(
       stepFingerprint(LESSON.steps[2])
     );
@@ -101,7 +111,12 @@ describe('a round trip through an unchanged lesson', () => {
     const restored = restoreProgress(backupOf(), LESSON);
     expect(restored.responses).toEqual(progressFor().responses);
     expect(restored.attempts).toEqual(progressFor().attempts);
-    expect([...restored.visited].sort()).toEqual([0, 1, 2, 3]);
+    expect([...restored.visited].sort()).toEqual([
+      'four-distances',
+      'opening',
+      'stretch',
+      'which-one',
+    ]);
     expect(restored.stepIndex).toBe(2);
     expect(restored.startedAt).toBe('2026-09-01T10:00:00.000Z');
     expect(restored.moved).toEqual([]);
@@ -114,6 +129,13 @@ describe('a round trip through an unchanged lesson', () => {
     expect(b.version).toBe(BACKUP_VERSION);
     expect(b.lesson.id).toBe('tides');
     expect(b.steps).toHaveLength(4);
+    // Identity travels with the map, which is what makes a reorder recoverable.
+    expect(b.steps.map(x => x.sid)).toEqual([
+      'opening',
+      'four-distances',
+      'which-one',
+      'stretch',
+    ]);
     expect(b.savedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   });
 
@@ -124,85 +146,29 @@ describe('a round trip through an unchanged lesson', () => {
   });
 });
 
-describe('a lesson that has changed since the backup', () => {
-  test('a step inserted at the top moves every answer down with its step', () => {
-    // The defect this whole mechanism exists to prevent. Positionally, every
-    // answer would now belong to the question above the one it answers.
-    const backup = backupOf();
-    const updated = lesson(read('A new opening'), ...LESSON.steps);
-
-    const restored = restoreProgress(backup, updated);
-    expect(restored.responses['tides:2:d1']).toBe('2');
-    expect(restored.responses['tides:3']).toBe(1);
-    expect(restored.responses['tides:1:d1']).toBeUndefined();
-    expect(restored.moved).toEqual([1, 2, 3]);
-    expect(restored.dropped).toEqual([]);
-    // Where the reader was follows its step.
-    expect(restored.stepIndex).toBe(3);
-  });
-
-  test('reordered steps keep their own answers', () => {
-    const backup = backupOf();
-    const updated = lesson(
-      LESSON.steps[0],
-      LESSON.steps[2],
-      LESSON.steps[1],
-      LESSON.steps[3]
-    );
-
-    const restored = restoreProgress(backup, updated);
-    // The measure step is now at index 2; its fields go with it.
-    expect(restored.responses['tides:2:d1']).toBe('2');
-    expect(restored.responses['tides:2:t1']).toBe('0.13');
-    // The choice moved to index 1, taking its answer and its attempt count.
-    expect(restored.responses['tides:1']).toBe(1);
-    expect(restored.attempts['tides:1']).toBe(2);
-  });
-
-  test('a removed step drops its answers and says so', () => {
-    const backup = backupOf();
-    const updated = lesson(LESSON.steps[0], LESSON.steps[2], LESSON.steps[3]);
-
-    const restored = restoreProgress(backup, updated);
-    expect(restored.dropped).toEqual([1]);
-    // The measure step is gone, so its fields are not carried anywhere.
-    expect(
-      Object.keys(restored.responses).filter(k => k.includes('d1'))
-    ).toEqual([]);
-    // Everything else still lands correctly.
-    expect(restored.responses['tides:1']).toBe(1);
-  });
-
-  test('two identical steps that swap places keep one answer each', () => {
-    // Greedy left-to-right matching. Without the "already taken" check both
-    // answers would collapse onto the first match.
-    const twin = choice('Same shape', 3);
-    const les = lesson(read('x'), twin, twin);
-    const backup = buildBackup({
-      lesson: les,
-      responses: { 'tides:1': 'first', 'tides:2': 'second' },
-      attempts: {},
-      visited: [1, 2],
+describe('a backup with no usable step map', () => {
+  // Hand-written, or from a build that stopped emitting one. Falling back to
+  // position is better than refusing the file, and the fallback says it is one.
+  test('falls back to positional restore and flags it', () => {
+    const backup = { ...backupOf(), steps: [], version: 1 };
+    backup.progress = {
+      ...backup.progress,
+      responses: { 'tides:1:d1': '2' },
       stepIndex: 1,
-      startedAt: null,
-    });
-
-    const restored = restoreProgress(backup, les);
-    expect(restored.responses['tides:1']).toBe('first');
-    expect(restored.responses['tides:2']).toBe('second');
-  });
-
-  test('a backup with no step map falls back to positional restore', () => {
-    // Hand-written, or from a build that stopped emitting one. Better than
-    // refusing the file.
-    const backup = { ...backupOf(), steps: [] };
+    };
     const restored = restoreProgress(backup, LESSON);
-    expect(restored.responses['tides:1:d1']).toBe('2');
+
+    expect(restored.byPosition).toBe(true);
+    expect(restored.responses['tides:four-distances:d1']).toBe('2');
   });
 
   test('answers beyond the end of a shortened lesson are discarded', () => {
     const backup = backupOf();
-    const restored = restoreProgress(backup, lesson(LESSON.steps[0]));
+    const restored = restoreProgress(
+      backup,
+      lesson(read('Opening', 'opening'))
+    );
+
     expect(restored.stepIndex).toBe(0);
     expect(Object.keys(restored.responses)).toEqual([]);
     expect(restored.dropped.length).toBeGreaterThan(0);
@@ -264,12 +230,12 @@ describe('validation refuses what it should', () => {
 describe('keys that do not belong are dropped rather than trusted', () => {
   test('a key for another lesson is discarded and counted', () => {
     const backup = backupOf();
-    backup.progress.responses['someone-else:0'] = 'x';
+    backup.progress.responses['someone-else:opening'] = 'x';
     backup.progress.responses['malformed'] = 'y';
 
     const restored = restoreProgress(backup, LESSON);
     expect(restored.discardedKeys).toBe(2);
-    expect(restored.responses['someone-else:0']).toBeUndefined();
+    expect(restored.responses['someone-else:opening']).toBeUndefined();
     expect(restored.responses.malformed).toBeUndefined();
   });
 

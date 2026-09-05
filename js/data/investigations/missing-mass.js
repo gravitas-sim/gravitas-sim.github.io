@@ -82,6 +82,7 @@ const DARK_MATTER = {
   steps: [
     // --- Part 1: what the shape of a curve is telling you --------------------
     {
+      sid: 'two-ways-to-weigh-a',
       type: 'read',
       title: 'Two ways to weigh a thing you cannot touch',
       setup: DM_SOLAR,
@@ -101,6 +102,7 @@ const DARK_MATTER = {
       tip: 'Open the Rotation Curve panel from the Tools section of the right-hand rail. Leave it open: you will use it for the whole lesson.',
     },
     {
+      sid: 'put-the-mass-somewhere',
       type: 'explore',
       title: 'Put the mass somewhere',
       tool: { id: 'dm-shapes' },
@@ -121,6 +123,7 @@ const DARK_MATTER = {
       tip: 'The "outer slope" number is the exponent in v ∝ rⁿ. Keplerian is −0.5. Flat is 0. It is the single number this whole lesson turns on.',
     },
     {
+      sid: 'which-arrangement-gives-a-flat',
       type: 'question',
       title: 'Which arrangement gives a flat curve?',
       kind: 'choice',
@@ -145,6 +148,7 @@ const DARK_MATTER = {
                 visibly do end.`,
     },
     {
+      sid: 'the-solar-system-plotted',
       type: 'explore',
       title: 'The Solar System, plotted',
       body: `Now a real system, measured live. The panel is plotting one point for
@@ -187,6 +191,7 @@ const DARK_MATTER = {
       },
     },
     {
+      sid: 'what-the-slope-means',
       type: 'question',
       title: 'What the slope means',
       kind: 'choice',
@@ -217,6 +222,7 @@ const DARK_MATTER = {
 
     // --- Part 2: turning a speed into a mass --------------------------------
     {
+      sid: 'what-the-speed-tells-you',
       type: 'explore',
       title: 'What the speed tells you about the mass',
       tool: { id: 'dm-enclosed' },
@@ -240,6 +246,7 @@ const DARK_MATTER = {
       tip: 'The bottom plot is not a second measurement. It is the top plot with one line of algebra applied to it.',
     },
     {
+      sid: 'what-a-flat-curve-requires',
       type: 'question',
       title: 'What a flat curve requires',
       kind: 'choice',
@@ -267,6 +274,7 @@ const DARK_MATTER = {
                 not what this measurement shows on its own.`,
     },
     {
+      sid: 'measure-the-enclosed-mass-yourself',
       type: 'measure',
       title: 'Measure the enclosed mass yourself',
       tool: { id: 'dm-enclosed', values: { shape: 1, radius: 5 } },
@@ -325,6 +333,7 @@ const DARK_MATTER = {
 
     // --- Part 3: the galaxy we expected, and the galaxy we found -------------
     {
+      sid: 'now-a-galaxy',
       type: 'predict',
       title: 'Now a galaxy',
       setup: DM_EXPECTED,
@@ -350,6 +359,7 @@ const DARK_MATTER = {
                 full. The next one is what telescopes actually find.`,
     },
     {
+      sid: 'measure-the-expected-curve',
       type: 'measure',
       title: 'Measure the expected curve',
       body: `Read the panel. The shaded strip on the left of the plot is the
@@ -370,6 +380,7 @@ const DARK_MATTER = {
       tip: 'The slope will not be exactly −0.500 the way the Solar System’s was. The disc carries some mass of its own, so the enclosed total does keep growing a little.',
     },
     {
+      sid: 'what-rubin-and-ford-found',
       type: 'read',
       title: 'What Rubin and Ford found',
       setup: DM_OBSERVED,
@@ -388,6 +399,7 @@ const DARK_MATTER = {
       tip: 'Look at the plot. The dashed red line has not moved: that is still the prediction from the visible mass. The points have.',
     },
     {
+      sid: 'measure-the-real-curve',
       type: 'measure',
       title: 'Measure the real curve',
       body: `Record what the panel reports now. The visible mass is unchanged
@@ -412,6 +424,7 @@ const DARK_MATTER = {
 
     // --- Part 4: do what the astronomers actually do -------------------------
     {
+      sid: 'now-do-what-the-astronomers',
       type: 'read',
       title: 'Now do what the astronomers did',
       tool: { id: 'dm-fit', values: { haloVFlat: 0 } },
@@ -430,6 +443,7 @@ const DARK_MATTER = {
       tip: 'The panel scores you: "average miss" is how far your curve sits from the points, in km/s, and the data itself is only good to about ±5. Get under that and the plot says FITTED.',
     },
     {
+      sid: 'try-it-with-stars-alone',
       type: 'explore',
       title: 'Try it with stars alone',
       tool: {
@@ -452,6 +466,7 @@ const DARK_MATTER = {
       tip: 'A heavier disc lifts the whole curve. A wider disc moves its peak outward and flattens it a little. Neither changes the fact that a disc curve comes back down.',
     },
     {
+      sid: 'record-your-best-stars-only',
       type: 'measure',
       title: 'Record your best stars-only fit',
       tool: {
@@ -480,6 +495,7 @@ const DARK_MATTER = {
       tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the measurement error, and it is worst at the outer edge. If you got close to that, you found the real answer.',
     },
     {
+      sid: 'why-a-heavier-disc-cannot',
       type: 'question',
       title: 'Why a heavier disc cannot rescue it',
       kind: 'choice',
@@ -511,6 +527,7 @@ const DARK_MATTER = {
                 hydrogen gas that extends well beyond the stars.`,
     },
     {
+      sid: 'now-add-the-halo',
       type: 'explore',
       title: 'Now add the halo',
       tool: {
@@ -531,6 +548,7 @@ const DARK_MATTER = {
       tip: 'This is the shape the halo has to have, and the reason the pseudo-isothermal profile is used: negligible in the middle, growing without limit outward. Nothing made of stars does that.',
     },
     {
+      sid: 'record-the-fit-that-works',
       type: 'measure',
       title: 'Record the fit that works',
       tool: { id: 'dm-fit' },
@@ -551,6 +569,7 @@ const DARK_MATTER = {
       tip: 'A good fit lands near 150 km/s and a core of about 6 kpc, with an average miss around 2 km/s. There is a genuine degeneracy between the two halo sliders, which is why real papers quote them together with a covariance.',
     },
     {
+      sid: 'how-much-of-it-is',
       type: 'question',
       title: 'How much of it is dark?',
       kind: 'numeric',
@@ -573,6 +592,7 @@ const DARK_MATTER = {
 
     // --- Part 5: what the halo actually does --------------------------------
     {
+      sid: 'what-the-halo-is-holding',
       type: 'explore',
       title: 'What the halo is holding',
       tool: { id: 'dm-flyby' },
@@ -592,6 +612,7 @@ const DARK_MATTER = {
       tip: 'This is exactly the situation the flat rotation curve presents. Real stars at 20 kpc really are moving at this speed, and the visible mass really cannot hold them.',
     },
     {
+      sid: 'take-the-halo-away-from',
       type: 'explore',
       title: 'Take the halo away from the whole galaxy',
       setup: DM_OBSERVED,
@@ -627,6 +648,7 @@ const DARK_MATTER = {
 
     // --- Part 6: Zwicky got there first -------------------------------------
     {
+      sid: 'forty-years-earlier',
       type: 'read',
       title: 'Forty years earlier',
       setup: DM_CLUSTER,
@@ -648,6 +670,7 @@ const DARK_MATTER = {
       tip: 'The panel now shows a Cluster measurements block. A rotation curve is the wrong instrument for a swarm; those three numbers are the right one.',
     },
     {
+      sid: 'zwicky-s-arithmetic-and-the',
       type: 'explore',
       title: 'Zwicky’s arithmetic, and the two ways to get it wrong',
       tool: { id: 'dm-virial' },
@@ -670,6 +693,7 @@ const DARK_MATTER = {
       tip: 'A spectrograph measures one component of a velocity, not three. If the orbits are randomly oriented, each direction carries an equal share, so ⟨v²⟩ = 3σ². That factor of three is the step everyone drops.',
     },
     {
+      sid: 'measure-the-simulated-cluster',
       type: 'measure',
       title: 'Measure the simulated cluster',
       body: `Now the cluster in the simulation. Switch to <strong>simulation
@@ -696,6 +720,7 @@ const DARK_MATTER = {
       tip: 'One thousand simulation mass units is one solar mass, which is the conversion you will need at the end.',
     },
     {
+      sid: 'weigh-the-cluster-by-its',
       type: 'question',
       title: 'Weigh the cluster by its motion',
       kind: 'numeric',
@@ -726,6 +751,7 @@ const DARK_MATTER = {
                 near 84,000 you used σ rather than σ².`,
     },
     {
+      sid: 'now-compare',
       type: 'question',
       title: 'Now compare',
       kind: 'numeric',
@@ -754,6 +780,7 @@ const DARK_MATTER = {
     // become a second lesson: what a student needs from it is the comparison,
     // not a course in modified gravity.
     {
+      sid: 'a-different-way-to-read',
       type: 'read',
       title: 'A different way to read the same curve',
       tool: {
@@ -779,6 +806,7 @@ const DARK_MATTER = {
       tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same measurements.',
     },
     {
+      sid: 'fit-it-both-ways',
       type: 'explore',
       title: 'Fit it both ways',
       tool: { id: 'dm-mond' },
@@ -799,6 +827,7 @@ const DARK_MATTER = {
       tip: 'MOND wants a lighter disc than the halo fit does — about two thirds. A rotation curve cannot measure the mass of the stars directly, so how heavy the disc is was never pinned down by the data in either picture.',
     },
     {
+      sid: 'the-prediction-mond-makes',
       type: 'question',
       title: 'The prediction MOND makes',
       kind: 'numeric',
@@ -828,6 +857,7 @@ const DARK_MATTER = {
                 explaining that tightness is a live problem in galaxy formation.`,
     },
     {
+      sid: 'does-the-curve-decide',
       type: 'question',
       title: 'Does the curve decide?',
       kind: 'short',
@@ -859,6 +889,7 @@ const DARK_MATTER = {
 
     // --- Part 7: what this does and does not establish ----------------------
     {
+      sid: 'what-have-you-actually-shown',
       type: 'question',
       title: 'What have you actually shown?',
       kind: 'short',
@@ -887,6 +918,7 @@ const DARK_MATTER = {
                missing mass and not only its amount.`,
     },
     {
+      sid: 'how-much-of-the-universe',
       type: 'read',
       title: 'How much of the universe is this?',
       tool: { id: 'dm-budget' },
@@ -897,6 +929,7 @@ const DARK_MATTER = {
       tip: 'The last layer is the one to sit with. Every star, nebula and galaxy ever photographed, in every wavelength, is about half a percent of the universe.',
     },
     {
+      sid: 'where-it-stands',
       type: 'read',
       title: 'Where it stands',
       body: `The evidence has grown a great deal since 1933 and since 1970, and

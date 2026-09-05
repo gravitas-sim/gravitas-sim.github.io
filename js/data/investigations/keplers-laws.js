@@ -35,6 +35,7 @@ const KEPLER = {
   ],
   steps: [
     {
+      sid: 'eight-minutes-of-arc',
       type: 'read',
       title: 'Eight minutes of arc',
       body: `For most of recorded history orbits were circles. When observations
@@ -64,6 +65,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'what-you-are-looking-at',
       type: 'read',
       title: 'What you are looking at',
       body: `A single star of one solar mass sits at the center of the view with
@@ -82,6 +84,7 @@ const KEPLER = {
       tip: 'Nothing needs selecting yet. If the wedges are not showing, press the reset button beside the progress bar to rebuild the system.',
     },
     {
+      sid: 'where-is-the-star',
       type: 'predict',
       title: 'Where is the star?',
       body: `An ellipse has a center and two foci. For a circle all three
@@ -101,6 +104,7 @@ const KEPLER = {
         'The star sits at one focus, and the other focus is empty: there is nothing there at all. This is not a coincidence of the Solar System: any inverse-square attraction produces a conic section with the source at a focus, which Newton proved sixty years after Kepler measured it. For a circle the two foci merge at the center, which is why a low-eccentricity orbit looks centered.',
     },
     {
+      sid: 'the-first-law-and-the',
       type: 'read',
       title: 'The First Law, and the anatomy of an ellipse',
       body: `Kepler's <strong>first law</strong>: every planet moves on an
@@ -119,6 +123,7 @@ const KEPLER = {
       tip: 'Drag the slider on the next step to watch the foci separate as e grows.',
     },
     {
+      sid: 'change-the-shape',
       type: 'ellipse',
       title: 'Change the shape',
       start: 0.017,
@@ -184,6 +189,7 @@ const KEPLER = {
       ],
     },
     {
+      sid: 'what-sits-at-the-other',
       type: 'question',
       title: 'What sits at the other focus?',
       kind: 'choice',
@@ -201,6 +207,7 @@ const KEPLER = {
         'Nothing at all. The empty focus is a geometric feature of the ellipse, not a physical location, and there is no object or force there. The center of mass sits very close to the star, not at the far focus, and the planet moves slowest at apoapsis, which is a point on the orbit rather than inside it.',
     },
     {
+      sid: 'measure-the-two-orbits',
       type: 'measure',
       title: 'Measure the two orbits',
       body: `Click the <strong>Circular Orbiter</strong> and read its values from
@@ -281,6 +288,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'where-does-it-move-fastest',
       type: 'predict',
       title: 'Where does it move fastest?',
       body: `Kepler's second law says a line drawn from the star to the planet
@@ -298,6 +306,7 @@ const KEPLER = {
         'Fastest at closest approach. A wedge drawn close to the star is short in radius, so to enclose the same area it has to be long around: the planet must cover more ground per unit time when it is near. Kepler found this rule before he found the ellipse, and it is the reason the northern hemisphere summer is a few days longer than the southern one: Earth is near aphelion in July and dawdles.',
     },
     {
+      sid: 'watch-it-happen',
       type: 'explore',
       title: 'Watch it happen',
       body: `Let the simulation run and keep the eccentric planet selected. The
@@ -323,6 +332,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'equal-areas-however-you-slice',
       type: 'wedges',
       title: 'Equal areas, however you slice it',
       body: `The orbit on screen is cut into equal-time slices, and every slice
@@ -336,6 +346,7 @@ const KEPLER = {
       tip: 'The wedge time below is the real answer to "equal areas in equal times": it is the same number for every wedge because they all represent the same interval.',
     },
     {
+      sid: 'fast-and-slow-in-numbers',
       type: 'measure',
       title: 'Fast and slow, in numbers',
       body: `Now put numbers on it. Press <strong>Space</strong> to pause and
@@ -425,6 +436,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'why-the-speed-changes',
       type: 'question',
       title: 'Why the speed changes',
       kind: 'short',
@@ -437,6 +449,7 @@ const KEPLER = {
         'Angular momentum L = m·v·r·sin(angle) is conserved because gravity is a central force: it acts along the line joining the two bodies and so exerts no torque about the star. As r falls, v must rise to keep the product constant. (Energy is also conserved, with potential converting to kinetic; either argument earns credit, but angular momentum is the one that gives the equal-areas rule directly.)',
     },
     {
+      sid: 'kepler-s-third-law',
       type: 'read',
       title: "Kepler's third law",
       body: `The first two laws describe a single orbit. The third relates
@@ -475,6 +488,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'measure-four-planets',
       type: 'measure',
       title: 'Measure four planets',
       body: `Click each planet in turn and record its semi-major axis and
@@ -600,6 +614,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'work-the-law-out-step',
       type: 'measure',
       title: 'Work the law out, step by step',
       body: `Take your <strong>outermost</strong> planet: the one with the
@@ -673,6 +688,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'use-the-law',
       type: 'question',
       title: 'Use the law',
       kind: 'numeric',
@@ -696,6 +712,7 @@ const KEPLER = {
         "P = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so a³ = 141.0 and P = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
     },
     {
+      sid: 'what-the-constant-depends-on',
       type: 'question',
       title: 'What the constant depends on',
       kind: 'choice',
@@ -714,6 +731,7 @@ const KEPLER = {
         'It depends on the central mass: Newton showed k = 4π²/G(M+m), and since M ≫ m for a planet the planet’s own mass drops out. Read backwards, this is a way to weigh things you can never visit. Measure a period and a distance, and the mass falls out. It is how the Sun was first weighed, how exoplanet host stars are weighed today, and how the four-million-solar-mass black hole at the center of the Milky Way was weighed by tracking the star S2 through a sixteen-year orbit.',
     },
     {
+      sid: 'what-newton-added',
       type: 'read',
       title: 'What Newton added',
       body: `Kepler's three laws describe the Solar System, but they do not
@@ -746,6 +764,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'the-same-laws-forty-light',
       type: 'explore',
       showAreaSweep: true,
       title: 'The same laws, forty light years away',
@@ -787,6 +806,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'weigh-trappist-1-yourself',
       type: 'measure',
       title: 'Weigh TRAPPIST-1 yourself',
       body: `Pick any one of the seven planets, read its semi-major axis and
@@ -883,6 +903,7 @@ const KEPLER = {
       },
     },
     {
+      sid: 'weighing-another-star',
       type: 'question',
       title: 'Weighing another star',
       kind: 'numeric',
@@ -903,6 +924,7 @@ const KEPLER = {
         'About 0.91 solar masses, which is within a few percent of the published value of 0.91. You have just weighed a star 600 light years away using nothing but a distance, a period, and a relation Kepler found by fitting Mars. This is the standard method: essentially every stellar mass in the exoplanet literature comes from some version of this calculation.',
     },
     {
+      sid: 'where-kepler-s-version-breaks',
       type: 'question',
       title: "Where Kepler's version breaks",
       kind: 'choice',
@@ -920,6 +942,7 @@ const KEPLER = {
         "Two equal masses. There m = M, so M + m is twice what Kepler's version assumes and the predicted period is off by a factor of √2, about 41%. In the other three cases the orbiting body is a millionth to a thousandth of the central mass and the correction is invisible. It is exactly this term that lets astronomers measure the individual masses in a binary system rather than just their sum.",
     },
     {
+      sid: 'where-this-leaves-you',
       type: 'read',
       title: 'Where this leaves you',
       body: `You have measured the shape of an orbit, watched a planet trade

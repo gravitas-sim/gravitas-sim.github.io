@@ -60,6 +60,7 @@ const DETECT_THIS_PLANET = {
   steps: [
     // --- Part 1: the question is about the schedule, not the planet ---------
     {
+      sid: 'twelve-nights',
       type: 'read',
       title: 'Twelve nights',
       setup: RV_LAB,
@@ -76,6 +77,7 @@ const DETECT_THIS_PLANET = {
       tip: 'Time on a large telescope is allocated in nights, months in advance. The schedule is decided before anyone knows what the data will show.',
     },
     {
+      sid: 'what-decides-whether-you-find',
       type: 'predict',
       title: 'What decides whether you find it?',
       body: `Four things are obviously true of any observing run: how many
@@ -100,6 +102,7 @@ const DETECT_THIS_PLANET = {
 
     // --- Part 2: a schedule that works --------------------------------------
     {
+      sid: 'schedule-a-twelve-nights-one',
       type: 'explore',
       title: 'Schedule A: twelve nights, one orbit',
       body: `This instrument plans a run and shows you what it would come home
@@ -124,6 +127,7 @@ const DETECT_THIS_PLANET = {
       tip: 'The right-hand panel is folded on the true period. A real survey does not know the period, which is part of why this is harder in practice than it looks here.',
     },
     {
+      sid: 'write-down-what-schedule-a',
       type: 'measure',
       title: 'Write down what Schedule A got',
       body: `Put the instrument back on <strong>Schedule A: one cycle</strong>
@@ -175,6 +179,7 @@ const DETECT_THIS_PLANET = {
       },
     },
     {
+      sid: 'what-have-you-established',
       type: 'question',
       kind: 'choice',
       title: 'What have you established?',
@@ -206,6 +211,7 @@ const DETECT_THIS_PLANET = {
 
     // --- Part 3: a schedule that fails --------------------------------------
     {
+      sid: 'schedule-b-twelve-nights-thirty',
       type: 'predict',
       title: 'Schedule B: twelve nights, thirty-nine days',
       body: `Now the second plan. The same star, the same instrument, the same
@@ -227,6 +233,7 @@ const DETECT_THIS_PLANET = {
                 Schedule B on the next screen and look at the folded panel.`,
     },
     {
+      sid: 'the-same-planet-invisible',
       type: 'explore',
       title: 'The same planet, invisible',
       body: `Switch the preset to <strong>Schedule B: one cycle apart</strong>.
@@ -247,6 +254,7 @@ const DETECT_THIS_PLANET = {
       ],
     },
     {
+      sid: 'write-down-what-schedule-b',
       type: 'measure',
       title: 'Write down what Schedule B got',
       body: `With the preset on <strong>Schedule B</strong>, uncertainty 8 m/s
@@ -291,6 +299,7 @@ const DETECT_THIS_PLANET = {
       },
     },
     {
+      sid: 'why-it-failed',
       type: 'question',
       kind: 'numeric',
       title: 'Why it failed',
@@ -313,6 +322,7 @@ const DETECT_THIS_PLANET = {
 
     // --- Part 4: three knobs, not one ---------------------------------------
     {
+      sid: 'the-third-knob',
       type: 'explore',
       title: 'The third knob',
       body: `Cadence is one of three separate things, and it is worth seeing the
@@ -336,6 +346,7 @@ const DETECT_THIS_PLANET = {
       tip: 'Cadence decides whether you look at the right moments. Baseline decides what periods you could ever see. Precision decides how small a signal survives the noise. They fail independently, and a run can be ruined by any one of them.',
     },
     {
+      sid: 'ambiguous-evidence',
       type: 'question',
       kind: 'choice',
       title: 'Ambiguous evidence',
@@ -365,6 +376,7 @@ const DETECT_THIS_PLANET = {
 
     // --- Part 5: the live star ----------------------------------------------
     {
+      sid: 'do-it-to-the-real',
       type: 'explore',
       title: 'Do it to the real star',
       setup: RV_LAB,
@@ -386,6 +398,7 @@ const DETECT_THIS_PLANET = {
       tip: 'The run restarts by itself if you change the schedule, switch stars, or move the observer: measurements taken under different conditions are not one programme, and the panel will not concatenate them.',
     },
     {
+      sid: 'take-the-data-with-you',
       type: 'read',
       title: 'Take the data with you',
       body: `A run can be exported. Open <strong>Export data</strong> from the
@@ -403,6 +416,7 @@ const DETECT_THIS_PLANET = {
 
     // --- Part 6: what a flat line means -------------------------------------
     {
+      sid: 'the-limits-of-finding-nothing',
       type: 'question',
       kind: 'short',
       title: 'The limits of finding nothing',
@@ -429,6 +443,7 @@ const DETECT_THIS_PLANET = {
                about the star.`,
     },
     {
+      sid: 'what-you-decided-before-you',
       type: 'read',
       title: 'What you decided before you looked',
       body: `Twelve measurements. One instrument. One planet, which was there the

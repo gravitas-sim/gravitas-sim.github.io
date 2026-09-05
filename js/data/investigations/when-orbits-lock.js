@@ -59,6 +59,7 @@ const WHEN_ORBITS_LOCK = {
   steps: [
     // --- Act 1: periods, and the trap in them -------------------------------
     {
+      sid: 'four-moons-and-a-suspicious',
       type: 'read',
       title: 'Four moons and a suspicious coincidence',
       setup: {
@@ -93,6 +94,7 @@ const WHEN_ORBITS_LOCK = {
       tip: 'The simulation is paused. Nothing moves until you let it.',
     },
     {
+      sid: 'how-close-is-close',
       type: 'predict',
       title: 'How close is close?',
       body: `Before measuring anything: Io and Europa are said to be in a 2:1
@@ -112,6 +114,7 @@ const WHEN_ORBITS_LOCK = {
                 the resonance is doing, it is not making the ratio exactly two.`,
     },
     {
+      sid: 'measure-the-four-periods',
       type: 'explore',
       title: 'Measure the four periods',
       // Step 1 paused it so the student could read without four moons moving
@@ -150,6 +153,7 @@ const WHEN_ORBITS_LOCK = {
                far the tidiest ratio.`,
     },
     {
+      sid: 'write-down-the-ratios',
       type: 'measure',
       title: 'Write down the ratios',
       tool: { id: 'resonance-periods' },
@@ -211,6 +215,7 @@ const WHEN_ORBITS_LOCK = {
       },
     },
     {
+      sid: 'which-is-the-impressive-one',
       type: 'question',
       kind: 'choice',
       title: 'Which is the impressive one?',
@@ -243,6 +248,7 @@ const WHEN_ORBITS_LOCK = {
                 twenty-five times better than chance is not proof of anything.`,
     },
     {
+      sid: 'what-a-resonance-actually-is',
       type: 'read',
       title: 'What a resonance actually is',
       body: `Step back from the ratio and ask what the resonance is supposed to
@@ -271,6 +277,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 2: conjunctions -------------------------------------------------
     {
+      sid: 'where-do-the-line-ups',
       type: 'predict',
       title: 'Where do the line-ups happen?',
       setup: {
@@ -296,6 +303,7 @@ const WHEN_ORBITS_LOCK = {
                 and finding it is the rest of this investigation.`,
     },
     {
+      sid: 'watch-the-line-ups',
       type: 'explore',
       title: 'Watch the line-ups',
       tool: { id: 'resonance-conjunctions', inner: 'Io', outer: 'Europa' },
@@ -319,6 +327,7 @@ const WHEN_ORBITS_LOCK = {
                predicted.`,
     },
     {
+      sid: 'why-the-sky-is-the',
       type: 'question',
       kind: 'choice',
       title: 'Why the sky is the wrong place to look',
@@ -347,6 +356,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 3: the resonant angle -------------------------------------------
     {
+      sid: 'the-resonant-angle',
       type: 'read',
       title: 'The resonant angle',
       body: `Here is the construction. It looks arbitrary the first time and it
@@ -389,6 +399,7 @@ const WHEN_ORBITS_LOCK = {
              resonance, and it is the only thing that is.`,
     },
     {
+      sid: 'the-laplace-argument',
       type: 'predict',
       title: 'The Laplace argument',
       body: `For the three inner moons the right combination involves all three
@@ -415,6 +426,7 @@ const WHEN_ORBITS_LOCK = {
                 reason it refuses is the next thing worth understanding.`,
     },
     {
+      sid: 'watch-the-laplace-argument',
       type: 'explore',
       title: 'Watch the Laplace argument',
       tool: { id: 'resonance-angle', argument: 'laplace' },
@@ -455,6 +467,7 @@ const WHEN_ORBITS_LOCK = {
                answer for the first part of the run.`,
     },
     {
+      sid: 'why-the-instrument-refuses',
       type: 'read',
       title: 'Why the instrument refuses',
       body: `An instrument that always gives an answer is not measuring
@@ -485,6 +498,7 @@ const WHEN_ORBITS_LOCK = {
              temptation to call it resonant will be considerable.`,
     },
     {
+      sid: 'record-the-laplace-libration',
       type: 'measure',
       title: 'Record the Laplace libration',
       tool: { id: 'resonance-angle', argument: 'laplace' },
@@ -544,6 +558,7 @@ const WHEN_ORBITS_LOCK = {
       },
     },
     {
+      sid: 'what-180-means',
       type: 'question',
       title: 'What 180° means',
       kind: 'numeric',
@@ -578,6 +593,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 4: breaking it, and the awkward case ----------------------------
     {
+      sid: 'one-percent',
       type: 'predict',
       title: 'One percent',
       body: `Next you will run the same four moons with a single number changed:
@@ -600,6 +616,7 @@ const WHEN_ORBITS_LOCK = {
                 ten times outside it, and outside it there is nothing.`,
     },
     {
+      sid: 'break-it',
       type: 'explore',
       title: 'Break it',
       setup: {
@@ -631,6 +648,7 @@ const WHEN_ORBITS_LOCK = {
                libration verdict took, and for saying why.`,
     },
     {
+      sid: 'what-the-pair-of-runs',
       type: 'question',
       kind: 'choice',
       title: 'What the pair of runs establishes',
@@ -658,6 +676,7 @@ const WHEN_ORBITS_LOCK = {
                 your report.`,
     },
     {
+      sid: 'the-awkward-case',
       type: 'explore',
       title: 'The awkward case',
       setup: {
@@ -699,6 +718,7 @@ const WHEN_ORBITS_LOCK = {
                growing — which is the tell.`,
     },
     {
+      sid: 'the-best-ratio-in-the',
       type: 'question',
       kind: 'choice',
       title: 'The best ratio in the system',
@@ -735,6 +755,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 5: Pluto --------------------------------------------------------
     {
+      sid: 'the-orbit-that-crosses-and',
       type: 'read',
       title: 'The orbit that crosses and never collides',
       setup: {
@@ -769,6 +790,7 @@ const WHEN_ORBITS_LOCK = {
       tip: 'Two departures from reality, both stated in the model: Gravitas is two-dimensional, so Pluto’s 17° inclination is projected away, and Pluto starts on the exact 3:2 rather than at its observed distance. Neither affects the argument you are about to measure.',
     },
     {
+      sid: 'measure-pluto-s-resonance',
       type: 'explore',
       title: 'Measure Pluto’s resonance',
       setup: {
@@ -797,6 +819,7 @@ const WHEN_ORBITS_LOCK = {
                observation that the wanderer's angle circulates.`,
     },
     {
+      sid: 'record-pluto-s-libration',
       type: 'measure',
       title: 'Record Pluto’s libration',
       tool: { id: 'resonance-angle', argument: 'pluto' },
@@ -861,6 +884,7 @@ const WHEN_ORBITS_LOCK = {
       },
     },
     {
+      sid: 'where-the-line-ups-happen',
       type: 'explore',
       title: 'Where the line-ups happen',
       tool: {
@@ -885,6 +909,7 @@ const WHEN_ORBITS_LOCK = {
                near Pluto's furthest point from the Sun.`,
     },
     {
+      sid: 'why-180-protects-pluto',
       type: 'question',
       kind: 'choice',
       title: 'Why 180° protects Pluto',
@@ -927,6 +952,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 6: the Trojans --------------------------------------------------
     {
+      sid: 'sixty-degrees-ahead',
       type: 'read',
       title: 'Sixty degrees ahead',
       setup: {
@@ -960,6 +986,7 @@ const WHEN_ORBITS_LOCK = {
              wide.`,
     },
     {
+      sid: 'the-rotating-frame',
       type: 'explore',
       title: 'The rotating frame',
       setup: {
@@ -1004,6 +1031,7 @@ const WHEN_ORBITS_LOCK = {
                using the rotating frame rather than the main view to read them.`,
     },
     {
+      sid: 'record-the-tadpole',
       type: 'measure',
       title: 'Record the tadpole',
       tool: { id: 'resonance-frame', secondary: 'Jupiter' },
@@ -1071,6 +1099,7 @@ const WHEN_ORBITS_LOCK = {
       },
     },
     {
+      sid: 'two-equilibria-one-survivor',
       type: 'question',
       kind: 'choice',
       title: 'Two equilibria, one survivor',
@@ -1104,6 +1133,7 @@ const WHEN_ORBITS_LOCK = {
                 a population exists.`,
     },
     {
+      sid: 'one-last-ratio',
       type: 'explore',
       title: 'One last ratio',
       tool: {
@@ -1135,6 +1165,7 @@ const WHEN_ORBITS_LOCK = {
 
     // --- Act 7: what counts as evidence --------------------------------------
     {
+      sid: 'what-you-can-and-cannot',
       type: 'read',
       title: 'What you can and cannot conclude from a ratio',
       body: `Collect the four cases.
@@ -1166,6 +1197,7 @@ const WHEN_ORBITS_LOCK = {
              \n\nWhat does settle it is an angle that turns back.`,
     },
     {
+      sid: 'the-report-you-would-write',
       type: 'question',
       kind: 'choice',
       title: 'The report you would write',
@@ -1200,6 +1232,7 @@ const WHEN_ORBITS_LOCK = {
                 it is what Cohen and Hubbard did in 1965 for Pluto.`,
     },
     {
+      sid: 'where-this-goes',
       type: 'read',
       title: 'Where this goes',
       body: `Resonance is not a curiosity at the edge of the Solar System. It is

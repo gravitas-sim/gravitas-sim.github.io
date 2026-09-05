@@ -116,6 +116,11 @@ const lesson = `// =============================================================
 // \`ctx\` by the engine, so a lesson stays a description of what is being taught
 // rather than a piece of the simulation.
 //
+// Every step carries a \`sid\`: an opaque, stable id that student progress is
+// keyed by. Reword a step, move it, translate it - but never change its sid, or
+// every answer already saved against it is orphaned. See
+// js/investigations/progressSchema.js.
+//
 // Scaffolded by tools/new-investigation.mjs. Run \`npm run author:check\` as you
 // write - it validates every step against the widget registry, the scenario
 // catalog and the grader - and \`?author=${id}&step=<n>\` to look at one.
@@ -137,6 +142,7 @@ const ${constName} = {
   ],
   steps: [
     {
+      sid: 'where-this-starts',
       type: 'read',
       title: 'Where this starts',
       body: \`Set the scene. Two or three short paragraphs; separate them with a
@@ -149,6 +155,7 @@ const ${constName} = {
       },
     },
     {
+      sid: 'commit-before-you-measure',
       type: 'predict',
       title: 'Commit before you measure',
       body: \`Ask for a commitment before there is any evidence. The point is the
@@ -164,6 +171,7 @@ const ${constName} = {
         'Why that is the answer, and why the plausible wrong ones are wrong.',
     },
     {
+      sid: 'look-at-it',
       type: 'explore',
       title: 'Look at it',
       body: \`Free play, with a checklist of things worth noticing.\`,
@@ -173,6 +181,7 @@ const ${constName} = {
       ],
     },
     {
+      sid: 'write-down-what-you-measured',
       type: 'measure',
       title: 'Write down what you measured',
       body: \`Ask for numbers. Every field needs an id, a label and a unit; a
@@ -190,6 +199,7 @@ const ${constName} = {
       },
     },
     {
+      sid: 'use-it',
       type: 'question',
       kind: 'numeric',
       title: 'Use it',
@@ -201,6 +211,7 @@ const ${constName} = {
       because: 'The working, in a sentence or two.',
     },
     {
+      sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
       body: \`Close the lesson. Say what they established, and what it does not

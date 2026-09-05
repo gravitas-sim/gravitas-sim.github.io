@@ -53,6 +53,7 @@ const RADIAL_VELOCITY = {
   steps: [
     // --- Part 1: the planet found before it cast a shadow -------------------
     {
+      sid: 'the-planet-you-already-measured',
       type: 'read',
       title: 'The planet you already measured',
       setup: RV_LAB,
@@ -66,6 +67,7 @@ const RADIAL_VELOCITY = {
       tip: 'The star is the bright disc at the center. The planet is the small point tracing the ring around it.',
     },
     {
+      sid: 'how-does-an-invisible-planet',
       type: 'question',
       kind: 'choice',
       title: 'How does an invisible planet give itself away?',
@@ -85,6 +87,7 @@ const RADIAL_VELOCITY = {
                 moves far less, but it does move, and that motion is measurable.`,
     },
     {
+      sid: 'which-one-moves',
       type: 'predict',
       title: 'Which one moves?',
       setup: RV_LAB_PAUSED,
@@ -105,6 +108,7 @@ const RADIAL_VELOCITY = {
                 here and is not.`,
     },
     {
+      sid: 'both-of-them-go-round',
       type: 'explore',
       title: 'Both of them go round',
       body: `This instrument draws the same idea with the star’s orbit magnified
@@ -123,6 +127,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 2: the star wobbles ------------------------------------------
     {
+      sid: 'make-the-planet-heavier',
       type: 'predict',
       title: 'Make the planet heavier',
       body: `Keep the orbit the same size and make the planet more massive.`,
@@ -135,6 +140,7 @@ const RADIAL_VELOCITY = {
                 bigger stellar wobble.`,
     },
     {
+      sid: 'watch-it-grow',
       type: 'explore',
       title: 'Watch it grow',
       body: `Drag the planet-mass slider from an Earth up to a heavy Jupiter and
@@ -155,6 +161,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 3: measuring motion we cannot see -----------------------------
     {
+      sid: 'light-carries-the-answer',
       type: 'read',
       title: 'Light carries the answer',
       body: `Starlight is not a smooth spread of color. Running through it are
@@ -167,6 +174,7 @@ const RADIAL_VELOCITY = {
       tip: 'This is the Doppler effect, the same reason a siren drops in pitch as it passes you.',
     },
     {
+      sid: 'which-way-is-it-going',
       type: 'question',
       kind: 'choice',
       title: 'Which way is it going?',
@@ -185,6 +193,7 @@ const RADIAL_VELOCITY = {
                 approaching star, count as negative.`,
     },
     {
+      sid: 'toward-away-toward-again',
       type: 'explore',
       title: 'Toward, away, toward again',
       body: `On the left, the star goes round its small orbit and an arrow shows
@@ -201,6 +210,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 4: build the curve --------------------------------------------
     {
+      sid: 'open-the-real-instrument',
       type: 'explore',
       title: 'Open the real instrument',
       setup: RV_LAB,
@@ -213,6 +223,7 @@ const RADIAL_VELOCITY = {
       tip: 'The panel reports the velocity relative to the system’s own center of mass, so the curve sits around zero.',
     },
     {
+      sid: 'reading-the-curve',
       type: 'question',
       kind: 'choice',
       title: 'Reading the curve',
@@ -230,6 +241,7 @@ const RADIAL_VELOCITY = {
                 moment it is receding fastest.`,
     },
     {
+      sid: 'measure-the-period',
       type: 'measure',
       title: 'Measure the period',
       body: `The curve repeats. Find the time between two matching points, for
@@ -246,6 +258,7 @@ const RADIAL_VELOCITY = {
       ],
     },
     {
+      sid: 'the-semi-amplitude-k',
       type: 'read',
       title: 'The semi-amplitude, K',
       body: `The curve swings from a maximum down to a minimum and back.
@@ -256,6 +269,7 @@ const RADIAL_VELOCITY = {
       tip: 'The panel reports K for you once it has seen a full cycle, so you can check yourself.',
     },
     {
+      sid: 'read-k-off-the-panel',
       type: 'measure',
       title: 'Read K off the panel',
       setup: RV_LAB,
@@ -266,6 +280,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 5: what controls K --------------------------------------------
     {
+      sid: 'what-would-make-k-bigger',
       type: 'predict',
       title: 'What would make K bigger?',
       body: `Hold the star, the orbit and the viewing angle fixed, and change only
@@ -277,6 +292,7 @@ const RADIAL_VELOCITY = {
                 covered in the same period means a faster star. K goes up.`,
     },
     {
+      sid: 'one-thing-at-a-time',
       type: 'explore',
       title: 'One thing at a time',
       body: `This instrument holds the star, the period and the viewing angle
@@ -293,6 +309,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 6: weigh the planet -------------------------------------------
     {
+      sid: 'weigh-hd-209458-b',
       type: 'question',
       kind: 'numeric',
       title: 'Weigh HD 209458 b',
@@ -315,6 +332,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 7: the inclination problem ------------------------------------
     {
+      sid: 'now-tilt-the-whole-system',
       type: 'predict',
       title: 'Now tilt the whole system',
       body: `Leave the planet exactly as it is. Change only where we happen to be
@@ -333,6 +351,7 @@ const RADIAL_VELOCITY = {
                 part, so the measured K shrinks.`,
     },
     {
+      sid: 'the-same-planet-four-viewing',
       type: 'explore',
       title: 'The same planet, four viewing angles',
       body: `Work through the inclination presets. The bar labeled
@@ -347,6 +366,7 @@ const RADIAL_VELOCITY = {
       },
     },
     {
+      sid: 'm-sin-i',
       type: 'read',
       title: 'M sin i',
       body: `Radial velocity on its own cannot separate a planet’s mass from the
@@ -357,6 +377,7 @@ const RADIAL_VELOCITY = {
              real planet is that heavy or heavier.`,
     },
     {
+      sid: 'what-a-transit-adds',
       type: 'question',
       kind: 'choice',
       title: 'What a transit adds',
@@ -379,6 +400,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 8: a second kind of wobble ------------------------------------
     {
+      sid: 'a-face-on-system',
       type: 'predict',
       title: 'A face-on system',
       body: `Suppose a system sits almost exactly face-on to us. Its radial-velocity
@@ -396,6 +418,7 @@ const RADIAL_VELOCITY = {
                 velocity cannot see and a different method can.`,
     },
     {
+      sid: 'astrometry',
       type: 'read',
       title: 'Astrometry',
       body: `Astrometry measures <em>where</em> a star is, very precisely, over and
@@ -406,6 +429,7 @@ const RADIAL_VELOCITY = {
       tip: 'The angles involved are tiny: often millionths of an arcsecond.',
     },
     {
+      sid: 'tilt-it-again-and-watch',
       type: 'explore',
       title: 'Tilt it again, and watch the other method',
       body: `Move the inclination slider from edge-on to face-on.
@@ -420,6 +444,7 @@ const RADIAL_VELOCITY = {
       },
     },
     {
+      sid: 'two-methods-opposite-weaknesses',
       type: 'question',
       kind: 'choice',
       title: 'Two methods, opposite weaknesses',
@@ -439,6 +464,7 @@ const RADIAL_VELOCITY = {
                 why they are described as complementary.`,
     },
     {
+      sid: 'all-three-at-once',
       type: 'explore',
       title: 'All three at once',
       body: `This panel puts the three methods side by side for one system as you
@@ -454,6 +480,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 9: distance and orbit size ------------------------------------
     {
+      sid: 'move-the-system-further-away',
       type: 'predict',
       title: 'Move the system further away',
       body: `Take a system with a known stellar wobble and imagine it twice as far
@@ -471,6 +498,7 @@ const RADIAL_VELOCITY = {
                 here, and that is what astrometry has to measure.`,
     },
     {
+      sid: 'distance-and-orbit-size',
       type: 'explore',
       title: 'Distance, and orbit size',
       body: `Use the distance slider first: the reflex orbit in AU stays put while
@@ -491,6 +519,7 @@ const RADIAL_VELOCITY = {
       },
     },
     {
+      sid: 'different-methods-different-planets',
       type: 'question',
       kind: 'choice',
       title: 'Different methods, different planets',
@@ -514,6 +543,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 10: combine transit and RV ------------------------------------
     {
+      sid: 'bring-the-transit-back',
       type: 'read',
       title: 'Bring the transit back',
       body: `You now have two independent measurements of the same planet.
@@ -525,6 +555,7 @@ const RADIAL_VELOCITY = {
              they do.`,
     },
     {
+      sid: 'characterize-the-planet',
       type: 'explore',
       title: 'Characterize the planet',
       body: `The panel below takes each measurement in turn and shows what it buys.
@@ -545,6 +576,7 @@ const RADIAL_VELOCITY = {
       },
     },
     {
+      sid: 'how-dense-is-it',
       type: 'question',
       kind: 'numeric',
       title: 'How dense is it?',
@@ -560,6 +592,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 11: the habitability question ---------------------------------
     {
+      sid: 'where-does-hd-209458-b',
       type: 'question',
       kind: 'choice',
       title: 'Where does HD 209458 b sit?',
@@ -580,6 +613,7 @@ const RADIAL_VELOCITY = {
 
     // --- Part 12: the characterization challenge ----------------------------
     {
+      sid: 'three-candidates',
       type: 'read',
       title: 'Three candidates',
       body: `Here are three planets from a survey. For each you have a radius from
@@ -596,6 +630,7 @@ const RADIAL_VELOCITY = {
       },
     },
     {
+      sid: 'which-is-the-strongest-candidate',
       type: 'question',
       kind: 'choice',
       title: 'Which is the strongest candidate?',
@@ -619,6 +654,7 @@ const RADIAL_VELOCITY = {
                 on its own.`,
     },
     {
+      sid: 'what-would-you-still-want',
       type: 'question',
       kind: 'short',
       title: 'What would you still want to know?',
@@ -650,6 +686,7 @@ const RADIAL_VELOCITY = {
 
     // --- Synthesis ----------------------------------------------------------
     {
+      sid: 'the-point-of-all-this',
       type: 'question',
       kind: 'choice',
       title: 'The point of all this',

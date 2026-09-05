@@ -95,6 +95,7 @@ const TRANSITS = {
   ],
   steps: [
     {
+      sid: 'a-firefly-beside-a-lighthouse',
       type: 'read',
       title: 'A firefly beside a lighthouse',
       body: `There are more than six thousand confirmed planets around other
@@ -124,6 +125,7 @@ const TRANSITS = {
       setup: TRANSIT_LAB,
     },
     {
+      sid: 'five-ways-to-find-a',
       type: 'read',
       title: 'Five ways to find a planet you cannot see',
       body: `<strong>Radial velocity.</strong> A planet and its star both orbit
@@ -160,6 +162,7 @@ const TRANSITS = {
       tip: 'Radial velocity gives a mass, transits give a radius. Neither gives both, which is why the two together are worth far more than either alone.',
     },
     {
+      sid: 'what-will-the-brightness-do',
       type: 'predict',
       title: 'What will the brightness do?',
       body: `The planet is about to cross in front of the star from your point of
@@ -178,6 +181,7 @@ const TRANSITS = {
         'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this lesson follows from that one number being small but perfectly measurable.',
     },
     {
+      sid: 'your-first-transit',
       type: 'explore',
       title: 'Your first transit',
       body: `The <strong>Light Curve</strong> panel has opened on the right. It
@@ -209,6 +213,7 @@ const TRANSITS = {
       probe: photometry,
     },
     {
+      sid: 'where-the-depth-comes-from',
       type: 'read',
       title: 'Where the depth comes from',
       body: `A star is, to a photometer, a uniformly bright disk of radius
@@ -232,6 +237,7 @@ const TRANSITS = {
       tip: 'The ratio is usually written k, and it is the single most important number in a transit fit.',
     },
     {
+      sid: 'try-it-on-some-real',
       type: 'explore',
       title: 'Try it on some real planets',
       body: `The instrument on the right draws the silhouette to scale on the
@@ -254,6 +260,7 @@ const TRANSITS = {
       tip: 'This is why the search for small planets moved to small stars. Chasing an Earth around a Sun-like star costs you a space mission; chasing one around an M dwarf is a hundred times easier in signal and can be done from the ground.',
     },
     {
+      sid: 'from-a-depth-to-a',
       type: 'question',
       title: 'From a depth to a size',
       kind: 'numeric',
@@ -267,6 +274,7 @@ const TRANSITS = {
         'The square root of 0.01 is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005 was a hot Jupiter. They were the only ones anybody could see.',
     },
     {
+      sid: 'measure-the-dip',
       type: 'measure',
       title: 'Measure the dip',
       body: `Now do it for real, on the curve you have been watching.
@@ -355,6 +363,7 @@ const TRANSITS = {
       tip: 'A real light curve is noisy, and nobody reads the bottom off it by eye: you fit a model transit to every point at once, which is how the precision ends up better than any single measurement in it. What the panel does here is the same idea with the noise left out.',
     },
     {
+      sid: 'why-that-radius-came-out',
       type: 'read',
       title: 'Why that radius came out too big',
       body: `A star is not a uniformly bright disk. You are looking down through
@@ -405,6 +414,7 @@ const TRANSITS = {
       tip: 'Limb darkening is wavelength dependent, and it is much weaker in the infrared. That is one reason precise radius measurements are usually made in the red or the infrared rather than in blue light.',
     },
     {
+      sid: 'correct-it-and-get-a',
       type: 'measure',
       title: 'Correct it, and get a real radius',
       body: `Divide out the limb darkening, then convert the ratio into a size.
@@ -487,6 +497,7 @@ const TRANSITS = {
       tip: 'A radius of 1.38 R_Jupiter with a mass of only 0.69 M_Jupiter makes this planet less dense than water. Hot Jupiters are inflated by the heat they absorb, and explaining exactly how is still an open problem.',
     },
     {
+      sid: 'the-shape-of-the-dip',
       type: 'read',
       title: 'The shape of the dip',
       body: `A transit is not a step function. It has four contact points, and
@@ -511,6 +522,7 @@ const TRANSITS = {
              useful for stellar astrophysics as well.`,
     },
     {
+      sid: 'reading-the-floor',
       type: 'question',
       title: 'Reading the floor',
       kind: 'choice',
@@ -528,6 +540,7 @@ const TRANSITS = {
         'Limb darkening. You see deeper, hotter layers at the center of the stellar disk and cooler, dimmer layers near the edge, so the planet blocks more light mid-transit than just after ingress. It is also exactly the effect you divided out two steps ago.',
     },
     {
+      sid: 'the-angle-you-happen-to',
       type: 'explore',
       title: 'The angle you happen to be standing at',
       body: `Everything so far assumed the planet crosses the middle of the star.
@@ -556,6 +569,7 @@ const TRANSITS = {
       tip: 'The simulation runs in a plane, so every orbit in it has b = 0 and transits. That is a limitation of a two-dimensional sandbox, not a claim about the sky. This instrument is where the third dimension lives.',
     },
     {
+      sid: 'how-lucky-do-you-have',
       type: 'question',
       title: 'How lucky do you have to be?',
       kind: 'numeric',
@@ -573,6 +587,7 @@ const TRANSITS = {
         'R★/a = 0.00465, or about 1 in 215. That is the single hardest fact about the transit method: even a survey with perfect photometry watching every star in the sky forever would find fewer than one in two hundred of the Earth-like planets out there. Everything the method reports about how common planets are has to be divided by this geometric factor before it means anything.',
     },
     {
+      sid: 'what-the-method-misses',
       type: 'question',
       title: 'What the method misses',
       kind: 'short',
@@ -584,6 +599,7 @@ const TRANSITS = {
         'Two biases should appear. (1) Geometric: transit probability goes as R★/a, so a planet at 0.05 AU is twenty times more likely to transit than one at 1 AU and four hundred times more likely than one at 20 AU. (2) Detection: a survey has to see several transits to confirm a period, so a planet with a long period either falls outside the observing baseline or gives too few events; short periods produce hundreds of transits that can be stacked. Credit also for depth bias, since large planets give deeper dips and are found further out in distance, and for duration or duty-cycle arguments.',
     },
     {
+      sid: 'getting-the-period',
       type: 'predict',
       title: 'Getting the period',
       body: `So far you have used a single dip. The light curve has more in it
@@ -600,6 +616,7 @@ const TRANSITS = {
         'The spacing between transits is the period, by definition: the planet has gone exactly once around. The width of a transit is a different quantity, set by the geometry and the orbital speed, and it is what you use to get the stellar density once you know the period.',
     },
     {
+      sid: 'time-two-transits',
       type: 'measure',
       title: 'Time two transits',
       body: `The readout below numbers every complete transit and gives the
@@ -705,6 +722,7 @@ const TRANSITS = {
       tip: 'The transit numbers in the readout count every complete dip since the recording started, so the orbits between transit 3 and transit 7 is simply 4.',
     },
     {
+      sid: 'from-a-period-to-an',
       type: 'measure',
       title: 'From a period to an orbit',
       body: `A period and a stellar mass are enough to place the planet, through
@@ -798,6 +816,7 @@ const TRANSITS = {
       },
     },
     {
+      sid: 'what-a-transit-cannot-tell',
       type: 'read',
       title: 'What a transit cannot tell you',
       body: `You have a radius, a period and an orbit. You do not have a mass, and
@@ -825,6 +844,7 @@ const TRANSITS = {
       tip: 'The TRAPPIST-1 planets got their masses a third way: they perturb each other enough to shift each other’s transits by minutes, and those transit timing variations are a mass measurement.',
     },
     {
+      sid: 'the-planet-changes-size-with',
       type: 'read',
       title: 'The planet changes size with color',
       body: `Here is something the simple picture does not predict. Measure the
@@ -854,6 +874,7 @@ const TRANSITS = {
       tip: 'The same idea in reverse gives you emission spectra: watch the planet pass behind the star, subtract, and what disappears is the planet’s own light.',
     },
     {
+      sid: 'read-an-atmosphere',
       type: 'explore',
       title: 'Read an atmosphere',
       body: `The instrument plots transit depth against wavelength for a hot
@@ -877,6 +898,7 @@ const TRANSITS = {
       tip: 'Wavelengths beyond about 2.5 μm are absorbed by our own atmosphere and were unreachable until JWST. Its first exoplanet results in 2022 included the first unambiguous carbon dioxide detection in an exoplanet atmosphere.',
     },
     {
+      sid: 'why-the-depth-moves',
       type: 'question',
       title: 'Why the depth moves',
       kind: 'choice',
@@ -895,6 +917,7 @@ const TRANSITS = {
         'Opacity, not size. At a wavelength where an abundant molecule absorbs, the atmosphere becomes opaque higher up, so the radius at which the planet stops transmitting starlight is larger. The star’s own brightness cancels out of the depth entirely, which is what makes this measurement possible in the first place.',
     },
     {
+      sid: 'things-that-are-not-planets',
       type: 'read',
       title: 'Things that are not planets',
       body: `A dip in a light curve is a dip in a light curve. Several things that
@@ -921,6 +944,7 @@ const TRANSITS = {
              It <em>dilutes</em> it.`,
     },
     {
+      sid: 'a-star-you-did-not',
       type: 'explore',
       title: 'A star you did not know was there',
       body: `Suppose a fraction of the light in the aperture comes from a
@@ -958,6 +982,7 @@ const TRANSITS = {
       tip: 'Robo-AO Survey IV corrected 814 candidate radii. Treating the primary and the secondary as equally likely hosts, the mean radius grew by a factor of 1.54, and 35 candidates previously believed to be rocky moved out of the rocky size range entirely.',
     },
     {
+      sid: 'go-and-look',
       type: 'explore',
       title: 'Go and look',
       body: `Knowing that dilution matters does not tell you which stars are
@@ -990,6 +1015,7 @@ const TRANSITS = {
       tip: 'Robo-AO reached about 0.15 arcseconds on a 1.5 m telescope and imaged 3,857 Kepler hosts; SOAR speckle reaches about 0.04 arcseconds on a 4.1 m and has observed close to 3,000 TESS targets. Neither is a large telescope by modern standards. What made them work was doing it to every host, not to a chosen few.',
     },
     {
+      sid: 'now-measure-it',
       type: 'explore',
       title: 'Now measure it',
       body: `The same star and the same planet are back, with one change: a
@@ -1022,6 +1048,7 @@ const TRANSITS = {
       tip: 'Only the depth changes. The period, the duration and the shape are untouched, which is precisely why blending is so easy to miss: nothing about the light curve looks wrong.',
     },
     {
+      sid: 'recover-the-real-planet',
       type: 'measure',
       title: 'Recover the real planet',
       body: `You have measured the same planet twice, once clean and once
@@ -1139,6 +1166,7 @@ const TRANSITS = {
       tip: 'Notice what the correction does not need: the companion’s distance, its mass, or whether it is even bound to the star. Only how much light it adds.',
     },
     {
+      sid: 'what-it-does-to-a',
       type: 'question',
       title: 'What it does to a survey',
       kind: 'choice',
@@ -1159,6 +1187,7 @@ const TRANSITS = {
         'The bias is one-directional: dilution can only ever make a planet look smaller, never larger, so it does not average out. That matters most where a scientific conclusion depends on which side of a line a planet falls: how many rocky planets there are, where the radius valley sits, how many worlds are in a habitable zone. Robo-AO Survey V, working with the companions it could establish were physically bound, found a mean radius correction of 1.77 for those systems, and found hot Jupiters roughly four times more likely to sit in binaries than other planets: a result about planet formation that only exists because somebody imaged the hosts.',
     },
     {
+      sid: 'what-you-did-and-where',
       type: 'read',
       title: 'What you did, and where it goes next',
       body: `You measured a transit depth and turned it into a planet radius, and

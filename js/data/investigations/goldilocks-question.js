@@ -84,6 +84,7 @@ const GOLDILOCKS = {
   ],
   steps: [
     {
+      sid: 'what-does-earth-get-from',
       type: 'read',
       title: 'What does Earth get from the Sun?',
       body: `Sunlight takes eight minutes and twenty seconds to reach us. What
@@ -103,6 +104,7 @@ const GOLDILOCKS = {
       setup: HZ_LAB,
     },
     {
+      sid: 'one-earth-of-starlight',
       type: 'read',
       title: 'One Earth of starlight',
       body: `Rather than carrying watts per square meter around, this lesson
@@ -125,6 +127,7 @@ const GOLDILOCKS = {
       tip: 'One astronomical unit, 1 AU, is the average distance from the Earth to the Sun. It is the natural yardstick for anything inside a planetary system.',
     },
     {
+      sid: 'move-it-twice-as-far',
       type: 'predict',
       title: 'Move it twice as far out',
       body: `Now imagine picking the Earth up and putting it down at 2 AU,
@@ -144,6 +147,7 @@ const GOLDILOCKS = {
         'One quarter. Half is the answer almost everyone reaches for, and it is worth noticing why it is wrong: the light is not being divided along a line, it is being spread over a surface. Double the distance and that surface is four times bigger. You are about to measure this rather than take it on trust.',
     },
     {
+      sid: 'three-distances',
       type: 'explore',
       title: 'Three distances',
       body: `The slider moves the planet. Take a reading at each of the three
@@ -166,6 +170,7 @@ const GOLDILOCKS = {
       tip: 'The bar changes length and the number under it changes with it. Both say the same thing; the bar is there so the change is visible before you read the digits.',
     },
     {
+      sid: 'write-the-three-down',
       type: 'measure',
       title: 'Write the three down',
       body: `Set the slider to each distance in turn and type what the panel
@@ -232,6 +237,7 @@ const GOLDILOCKS = {
       tip: 'The three suggested distances are only suggestions. Any three will do, as long as the starlight value beside each one was read at that distance.',
     },
     {
+      sid: 'what-the-graph-says',
       type: 'question',
       title: 'What the graph says',
       kind: 'choice',
@@ -251,6 +257,7 @@ const GOLDILOCKS = {
         'It falls fast close in and slowly far out. Going from 0.5 AU to 1 AU costs three quarters of the starlight. Going from 2 AU to 2.5 AU, the same half an astronomical unit, costs only a little. That shape is the signature of the relationship you are about to be shown, and it is why the inner part of any planetary system is so much more sensitive to distance than the outer part.',
     },
     {
+      sid: 'the-star-is-not-running',
       type: 'explore',
       title: 'The star is not running out of light',
       body: `Here is why it happens, and it has nothing to do with light getting
@@ -274,6 +281,7 @@ const GOLDILOCKS = {
       tip: 'The same rule governs how loud a speaker sounds and how bright a streetlight looks. It is not special to astronomy; it is what happens to anything that spreads out equally in all directions.',
     },
     {
+      sid: 'writing-it-down-then-using',
       type: 'question',
       title: 'Writing it down, then using it',
       kind: 'numeric',
@@ -299,6 +307,7 @@ const GOLDILOCKS = {
       tip: 'This is called an inverse-square law. "Inverse" because bigger distance means smaller starlight, "square" because it is the distance squared that does the work.',
     },
     {
+      sid: 'leave-the-planet-change-the',
       type: 'predict',
       title: 'Leave the planet, change the star',
       body: `So far the star has been the Sun and only the planet has moved. Now
@@ -319,6 +328,7 @@ const GOLDILOCKS = {
         'Far less. Distance is only half of the story; the other half is how much light the star is producing in the first place. A red dwarf can be less than a thousandth as luminous as the Sun, and a planet at 1 AU around one would be receiving less than a thousandth of what Earth receives.',
     },
     {
+      sid: 'four-stars-one-planet',
       type: 'explore',
       title: 'Four stars, one planet',
       body: `The planet stays at 1 AU. The star slider swaps between four real
@@ -341,6 +351,7 @@ const GOLDILOCKS = {
       tip: 'A star four hundred times fainter delivers four hundred times less light to a planet at the same distance. The two numbers track each other exactly, because luminosity multiplies straight through the inverse-square relation.',
     },
     {
+      sid: 'what-luminosity-does',
       type: 'question',
       title: 'What luminosity does',
       kind: 'choice',
@@ -358,6 +369,7 @@ const GOLDILOCKS = {
         'It is proportional to luminosity. Ten times the luminosity, ten times the starlight at the same distance. Combine that with what you found earlier and you have the whole relation: the starlight goes up with the star’s luminosity and down with the square of the distance.',
     },
     {
+      sid: 'so-where-would-a-planet',
       type: 'explore',
       title: 'So where would a planet have to be?',
       body: `Put those two together and an obvious question follows. If a dim
@@ -386,6 +398,7 @@ const GOLDILOCKS = {
       tip: 'For the red dwarf the band runs from about 0.042 to 0.080 AU. For the bright star it runs from about 2.1 to 3.6 AU. That is a factor of fifty between them, and it is entirely the star’s doing.',
     },
     {
+      sid: 'dim-stars-close-bands',
       type: 'question',
       title: 'Dim stars, close bands',
       kind: 'choice',
@@ -403,6 +416,7 @@ const GOLDILOCKS = {
         'Much closer in. A dim star delivers less light, so a planet has to be nearer to receive the same amount, and the whole band moves inward with it. The relationship is a square root: a star a hundred times more luminous has its band ten times further out. You do not need to calculate that, but it is why the bright star’s band sat around 2 to 3.5 AU while the red dwarf’s sat at a twentieth of an AU.',
     },
     {
+      sid: 'saying-it-carefully',
       type: 'read',
       title: 'Saying it carefully',
       body: `The band has a name: the <strong>circumstellar habitable zone</strong>,
@@ -421,6 +435,7 @@ const GOLDILOCKS = {
       tip: 'Liquid water is the criterion because it is the one requirement every form of life we know of shares, and because we have no way to search for the requirements of life we do not know of.',
     },
     {
+      sid: 'now-put-it-round-the',
       type: 'explore',
       title: 'Now put it round the real Sun',
       body: `Enough diagrams. The simulation behind this panel is now the Sun
@@ -441,6 +456,7 @@ const GOLDILOCKS = {
       tip: 'The ring is a calculation, not an object. There is nothing physically present at 0.98 AU; that is simply the distance at which the model says a runaway greenhouse begins for a planet of this type.',
     },
     {
+      sid: 'reading-the-real-solar-system',
       type: 'question',
       title: 'Reading the real Solar System',
       kind: 'choice',
@@ -459,6 +475,7 @@ const GOLDILOCKS = {
         'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this lesson.',
     },
     {
+      sid: 'the-mars-problem',
       type: 'question',
       title: 'The Mars problem',
       kind: 'short',
@@ -477,6 +494,7 @@ const GOLDILOCKS = {
         'The zone is computed from the star alone, and the definition assumes a rocky planet with suitable atmospheric conditions. Mars is in the right place and fails the assumption: it is too small to have held onto a thick atmosphere, so there is not enough pressure or greenhouse warming to keep water liquid. The zone said "this distance could work for a suitable planet". It never said Mars was one.',
     },
     {
+      sid: 'the-two-edges',
       type: 'read',
       title: 'The two edges',
       body: `Why does the zone stop at each end?
@@ -507,6 +525,7 @@ const GOLDILOCKS = {
       tip: 'Venus is thought to have gone through a runaway greenhouse. It sits at 0.72 AU, receives about 1.9 Earths of starlight, and has a surface hot enough to melt lead under an atmosphere ninety times heavier than ours.',
     },
     {
+      sid: 'two-definitions-of-the-same',
       type: 'explore',
       title: 'Two definitions of the same zone',
       body: `Published habitable zones come in two flavors, and the difference
@@ -534,6 +553,7 @@ const GOLDILOCKS = {
       tip: 'The optimistic inner edge is called Recent Venus and the optimistic outer edge is called Early Mars. The names are literal: those two worlds are the evidence.',
     },
     {
+      sid: 'what-actually-changed',
       type: 'question',
       title: 'What actually changed',
       kind: 'choice',
@@ -550,6 +570,7 @@ const GOLDILOCKS = {
         'The assumptions. The conservative edges come from a climate model asking what a water-rich planet can survive; the optimistic edges come from asking what our own neighbors rule out. Both are defensible and both are published. Which you use depends on what question you are asking, and a paper that quotes a habitable zone should say which one it means.',
     },
     {
+      sid: 'the-wider-definition-on-the',
       type: 'explore',
       title: 'The wider definition, on the real Sun',
       body: `Back to the live Solar System, with one change: the habitable zone
@@ -569,6 +590,7 @@ const GOLDILOCKS = {
       tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just inside its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
     },
     {
+      sid: 'what-the-wider-band-bought',
       type: 'question',
       title: 'What the wider band bought',
       kind: 'choice',
@@ -587,6 +609,7 @@ const GOLDILOCKS = {
         'None. Venus at 0.72 AU still falls just inside the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
     },
     {
+      sid: 'venus-by-the-rule-you',
       type: 'question',
       title: 'Venus, by the rule you already have',
       kind: 'numeric',
@@ -602,6 +625,7 @@ const GOLDILOCKS = {
         'About 1.9 Earths. Venus receives nearly twice the starlight Earth does, which is what puts it inside the runaway greenhouse limit and outside the conservative zone. Its surface sits at about 460 °C, hot enough to melt lead, under an atmosphere ninety times heavier than ours. Note the direction of the argument: the extra starlight starts the process, the atmosphere finishes it.',
     },
     {
+      sid: 'a-year-on-a-circular',
       type: 'read',
       title: 'A year on a circular orbit',
       body: `One thing has been quietly assumed so far: that a planet has
@@ -623,6 +647,7 @@ const GOLDILOCKS = {
       tip: 'Earth’s orbit is not exactly circular: its eccentricity is 0.017, which makes the starlight vary by about seven percent over the year. That is small, and it is not what causes the seasons.',
     },
     {
+      sid: 'now-stretch-the-orbit',
       type: 'predict',
       title: 'Now stretch the orbit',
       body: `In a moment you will be able to raise the eccentricity, which
@@ -643,6 +668,7 @@ const GOLDILOCKS = {
         'It varies, and it peaks when the planet is closest. Because the relationship goes as the inverse square, a modest stretch in the orbit makes a large swing in the starlight: on the orbit you are about to run, the planet receives seven times more at its closest point than at its furthest.',
     },
     {
+      sid: 'run-an-eccentric-year',
       type: 'explore',
       title: 'Run an eccentric year',
       body: `Raise the eccentricity and watch both halves of the panel at once:
@@ -667,6 +693,7 @@ const GOLDILOCKS = {
       tip: 'The peak on the graph is narrow and the trough is wide. That is not a drawing choice: the planet really does spend most of its year in the cold outer part of the orbit, and hurries through the hot part.',
     },
     {
+      sid: 'crossing-the-edges',
       type: 'explore',
       title: 'Crossing the edges',
       body: `Now the habitable zone is drawn on both halves of the panel: as a
@@ -693,6 +720,7 @@ const GOLDILOCKS = {
       tip: 'The fraction is measured in time, not in distance around the loop. Those are different numbers, because the planet does not cover equal stretches of orbit in equal times.',
     },
     {
+      sid: 'reading-the-fraction',
       type: 'question',
       title: 'Reading the fraction',
       kind: 'choice',
@@ -713,6 +741,7 @@ const GOLDILOCKS = {
         'Less than it sounds like. The fraction describes incoming starlight against a climate model’s limits. An atmosphere and an ocean carry an enormous amount of heat and take a long time to change temperature, so a planet does not track the light arriving at it minute by minute any more than a beach cools the instant a cloud passes. A planet that dips outside the zone briefly each year may well be fine. The number is a useful flag, not a forecast.',
     },
     {
+      sid: 'a-real-system-forty-light',
       type: 'predict',
       title: 'A real system, forty light years away',
       body: `Time to point all of this at a real object.
@@ -733,6 +762,7 @@ const GOLDILOCKS = {
         'Much closer in. You worked this out two sections ago: the band tracks the square root of the luminosity. A star eighteen hundred times fainter has its band about forty times closer, which puts it at a few hundredths of an astronomical unit.',
     },
     {
+      sid: 'all-seven-planets',
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
@@ -762,6 +792,7 @@ const GOLDILOCKS = {
       tip: 'TRAPPIST-1b receives about four times what Earth does, and TRAPPIST-1h about a seventh. The seven planets span that entire range within six hundredths of an astronomical unit.',
     },
     {
+      sid: 'watch-it-run',
       type: 'explore',
       title: 'Watch it run',
       body: `The diagram was a diagram. This is the simulation, with all seven
@@ -787,6 +818,7 @@ const GOLDILOCKS = {
       tip: 'The orbital periods here are not typed in. They come out of the same gravity solver as every other scenario, from the measured semi-major axes and the measured stellar mass. If they match the published values, that is the simulation agreeing with the observations.',
     },
     {
+      sid: 'take-the-readings-yourself',
       type: 'measure',
       title: 'Take the readings yourself',
       body: `Rather than being told which planets fall where, read it off the
@@ -853,6 +885,7 @@ const GOLDILOCKS = {
       tip: 'The three planets inside the zone receive between a quarter and two thirds of what Earth does. All three sit closer to their star than Mercury does to the Sun.',
     },
     {
+      sid: 'the-question-the-name-invites',
       type: 'question',
       title: 'The question the name invites',
       kind: 'choice',
@@ -871,6 +904,7 @@ const GOLDILOCKS = {
         'No, and the reason is not that our telescopes are too small. The habitable zone is computed from a star’s luminosity and temperature. Nothing in that calculation knows whether the planet has an atmosphere, whether it has any water to begin with, what it is made of, or what its surface is doing. Being inside the zone means the planet is receiving an amount of energy that would be compatible with surface liquid water if a great many other things also happened to be true.',
     },
     {
+      sid: 'three-planets-that-all-look',
       type: 'explore',
       title: 'Three planets that all look promising',
       body: `To see how much room that leaves, consider three planets that all
@@ -899,6 +933,7 @@ const GOLDILOCKS = {
       tip: 'A planet larger than about 1.6 Earth radii is usually not a bare rock: it tends to have kept a thick hydrogen envelope, which means no surface in the sense we mean.',
     },
     {
+      sid: 'which-one-would-you-observe',
       type: 'question',
       title: 'Which one would you observe next?',
       kind: 'choice',
@@ -919,6 +954,7 @@ const GOLDILOCKS = {
         'Planet B. It is the only one of the three that is both small enough to plausibly be rocky and known to have an atmosphere, and its star is not actively stripping that atmosphere away. That combination is what a spectrum could actually say something about. Planet A may still have an atmosphere too thin to have shown up, and Planet C is large enough that it is probably a small gas-rich world rather than a rocky one. None of this establishes that B is habitable. It establishes that B is where the next observation should point.',
     },
     {
+      sid: 'one-more-and-then-you',
       type: 'question',
       title: 'One more, and then you are done',
       kind: 'choice',
@@ -939,6 +975,7 @@ const GOLDILOCKS = {
         'The third. It is a genuinely interesting object and the discovery is genuinely worth making, and everything past "worth studying further" is unsupported. The flaring is a real concern for whether an atmosphere survives, but it does not by itself rule the planet out, and a single unmeasured atmosphere is exactly the gap the next observation is for. The habitable zone did its job here: it told astronomers where to point.',
     },
     {
+      sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
       body: `Starting from a planet and a star, you found all of this yourself:
