@@ -243,6 +243,23 @@ function cacheElements() {
  * not, and inventing one would be worse than saying so: the panel falls back to
  * a stated assumption and labels it as an assumption.
  */
+/**
+ * Forget any distance a reader or a link chose, and take the scenario's.
+ *
+ * What a restore calls when the link it is applying says nothing about
+ * distance. Doing nothing there was the bug: `distanceIsExplicit` survived from
+ * whatever was restored before it, so opening a link with no distance in a tab
+ * that had already opened one with a distance kept the *old* number - a value
+ * from a different system, presented as this one's assumption.
+ *
+ * Every field a restore touches has to be assigned, not just the ones the link
+ * happens to mention. Absence in a link is a value: it means "the default".
+ */
+export function resetAssumedDistance() {
+  distanceIsExplicit = false;
+  adoptScenarioDistance({ force: true });
+}
+
 function adoptScenarioDistance({ force = false } = {}) {
   // A distance that was set deliberately - typed into the box, or carried by a
   // share link - is the reader's assumption and outranks the scenario's. Opening

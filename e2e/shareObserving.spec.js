@@ -206,7 +206,125 @@ test.describe('an ordinary share link reproduces the viewing context', () => {
 
     expect(defaults.inclination).toBe(90);
     expect(defaults.positionAngle).toBe(0);
-    expect(defaults.distance).toBeGreaterThan(0);
+    // The exact default, not merely "a distance". `> 0` passed while the bug
+    // below was live, because a stale distance is also greater than zero.
+    expect(defaults.distance).toBe(10);
+  });
+
+  test('an old link clears a distance the previous link set', async ({
+    page,
+    app,
+  }) => {
+    // The defect. A restore only assigned the fields its link mentioned, so
+    // `distanceIsExplicit` survived from the previous restore and an older link
+    // kept the earlier link's distance - a number measured for a different
+    // system, presented as this one's assumption.
+    await app.boot();
+    const seen = await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const share = await import('/js/shareState.js');
+      const ast = await import('/js/astrometry.js');
+
+      const roundTrip = async payload =>
+        ui.applyShareState(
+          await share.decodePayload(`#${await share.encodePayload(payload)}`)
+        );
+
+      // 1. A link that does specify a distance.
+      ast.setAssumedDistance(42.5);
+      await roundTrip(ui.captureShareState({ kind: 'seeded' }));
+      const withDistance = ast.getAssumedDistance();
+
+      // 2. Then, in the same tab, a link from before extras existed.
+      const legacy = ui.captureShareState({ kind: 'seeded' });
+      delete legacy.x;
+      await roundTrip(legacy);
+      const afterLegacy = ast.getAssumedDistance();
+
+      return { withDistance, afterLegacy };
+    });
+
+    expect(seen.withDistance).toBeCloseTo(42.5, 6);
+    // Back to the scenario's own default, exactly.
+    expect(seen.afterLegacy).toBe(10);
+  });
+
+  test('opening the panels afterwards does not resurrect the old distance', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const share = await import('/js/shareState.js');
+      const ast = await import('/js/astrometry.js');
+      ast.setAssumedDistance(42.5);
+      await ui.applyShareState(
+        await share.decodePayload(
+          `#${await share.encodePayload(ui.captureShareState({ kind: 'seeded' }))}`
+        )
+      );
+      const legacy = ui.captureShareState({ kind: 'seeded' });
+      delete legacy.x;
+      await ui.applyShareState(
+        await share.decodePayload(`#${await share.encodePayload(legacy)}`)
+      );
+    });
+
+    await app.openPanel('toggleAstrometry', 'astrometryContainer');
+    await expect(page.locator('#astrometryDistance')).toHaveValue('10');
+    expect(
+      await page.evaluate(async () => {
+        const ast = await import('/js/astrometry.js');
+        return ast.getAssumedDistance();
+      })
+    ).toBe(10);
+  });
+
+  test('restoring the same scenario twice does not share a recording', async ({
+    page,
+    app,
+  }) => {
+    // A rebuilt world hands the same body ids to different objects. The
+    // recordings must not span the rebuild.
+    await app.boot();
+    await app.loadScenario('Exoplanet Characterization Lab');
+    await app.waitForFrames(10);
+    await app.openPanel('toggleRadialVelocity', 'rvContainer');
+
+    const samples = () =>
+      page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.radialVelocitySeries().length;
+      });
+    await expect.poll(samples, { timeout: 30_000 }).toBeGreaterThan(5);
+
+    const before = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      return rv.observedStarId();
+    });
+
+    // Paused, so the count after the restore is the restore's doing and not a
+    // frame that happened to land between the reset and the assertion.
+    await app.setPaused(true);
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const share = await import('/js/shareState.js');
+      await ui.applyShareState(
+        await share.decodePayload(
+          `#${await share.encodePayload(ui.captureShareState({ kind: 'seeded' }))}`
+        )
+      );
+    });
+
+    // Same scenario, same body ids - and a recording that starts from nothing.
+    expect(await samples()).toBe(0);
+    expect(
+      await page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.observedStarId();
+      })
+    ).toBe(before);
   });
 });
 

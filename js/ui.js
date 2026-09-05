@@ -90,8 +90,17 @@ import {
 import { withExtras, readExtras } from './experiments/canonicalState.js';
 // Both are already on the start-up path via js/main.js, so naming them here
 // adds nothing to the initial download.
-import { observedStarId, setObservedStar } from './radialVelocity.js';
-import { getAssumedDistance, setAssumedDistance } from './astrometry.js';
+import {
+  clearRadialVelocity,
+  observedStarId,
+  setObservedStar,
+} from './radialVelocity.js';
+import {
+  clearAstrometry,
+  getAssumedDistance,
+  resetAssumedDistance,
+  setAssumedDistance,
+} from './astrometry.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
@@ -5352,6 +5361,13 @@ const applyShareState = payload => {
   // a star by id, and a distance the astrometry panel reads against whichever
   // star is being observed. Everything above has already rebuilt or
   // regenerated the bodies, so an id resolves here and would not have earlier.
+  //
+  // Every field is assigned on every restore, including the ones this link does
+  // not mention. Absence in a link is a value - it means "whatever this
+  // scenario's default is" - and treating it as "leave alone" made a restore
+  // depend on what the tab had opened before it. A reader who followed a link
+  // with a distance and then an older link without one kept the first link's
+  // distance, applied to a different system.
   if (extras.observedStarId !== null) {
     const found = setObservedStar(extras.observedStarId);
     if (!found) {
@@ -5365,7 +5381,17 @@ const applyShareState = payload => {
   } else {
     setObservedStar(null);
   }
+
   if (extras.distancePc !== null) setAssumedDistance(extras.distancePc);
+  else resetAssumedDistance();
+
+  // The recordings belong to the world that was on screen a moment ago, not to
+  // this one. Their own session identity would catch it on the next frame -
+  // the world generation has moved - but clearing here means the panels never
+  // render the previous link's curve at all, and it keeps every restore going
+  // through the same path whether or not a panel happens to be open.
+  clearRadialVelocity();
+  clearAstrometry();
 
   updateSpeedDisplay();
   updateObjectTypeButton();
