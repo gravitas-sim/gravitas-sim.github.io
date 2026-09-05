@@ -25,9 +25,47 @@
 // =============================================================================
 
 import { EJECTION_RADIUS, ENCOUNTER_RADIUS } from './binaryStability.js';
+import { orbitalElements } from './orbital.js';
 
 /** Nothing is watched until a run is started. */
 let watch = null;
+
+/**
+ * How much simulated time between recomputes of the planet's orbital elements.
+ *
+ * Not every step. The elements are a readout for a reader and they change over
+ * orbits; recomputing them a hundred thousand times a run would be a hundred
+ * thousand square roots spent on a number nobody read.
+ */
+const ELEMENT_INTERVAL = 20;
+
+/**
+ * What the planet is orbiting, for the purpose of describing its orbit.
+ *
+ * A circumstellar planet goes round its own star. A circumbinary planet goes
+ * round the pair, which has no body at its center, so it is given a stand-in
+ * of the combined mass at the barycenter - which is precisely the
+ * approximation its orbit is an orbit in, and the approximation that fails as
+ * the planet is brought inward.
+ *
+ * @param {object} w - The watch
+ * @returns {object} Something with pos, vel and mass
+ */
+function hostOf(w) {
+  if (w.spec.mode !== 'circumbinary') return w.star1;
+  const m = w.star1.mass + w.star2.mass;
+  return {
+    pos: {
+      x: (w.star1.pos.x * w.star1.mass + w.star2.pos.x * w.star2.mass) / m,
+      y: (w.star1.pos.y * w.star1.mass + w.star2.pos.y * w.star2.mass) / m,
+    },
+    vel: {
+      x: (w.star1.vel.x * w.star1.mass + w.star2.vel.x * w.star2.mass) / m,
+      y: (w.star1.vel.y * w.star1.mass + w.star2.vel.y * w.star2.mass) / m,
+    },
+    mass: m,
+  };
+}
 
 /**
  * Total energy of the three bodies, in simulation units.
@@ -140,6 +178,18 @@ export function startBinaryWatch(spec, deps) {
     merged: false,
     lost: false,
     finished: false,
+    // The planet's own orbit, as it stands. Recomputed on a slow tick rather
+    // than every step: it is a readout for a person, and it changes over
+    // orbits rather than over steps.
+    elements: null,
+    sinceElements: 0,
+    // The largest eccentricity the orbit has reached. This is the number that
+    // shows a planet being pumped: a circumbinary planet driven out by
+    // resonant forcing has its eccentricity walked up over several periods
+    // while its semi-major axis barely moves, so a run that ends in an
+    // ejection was visibly heading there long before the distance readout said
+    // anything.
+    maxEccentricity: 0,
   };
   // A run whose initial energy is zero has nothing to measure drift against.
   // It cannot happen for a bound binary, and dividing by it silently would be
@@ -216,6 +266,20 @@ function step(w, dt) {
 
   w.unbound = isUnbound(planet, star1, star2, G);
 
+  // The planet's orbit about whatever it is actually going round: its own star
+  // for a circumstellar planet, and for a circumbinary one the pair treated as
+  // a single body at the barycenter, which is the approximation the orbit is
+  // an orbit in. js/orbital.js already does this from state vectors; there is
+  // no second implementation here.
+  w.sinceElements += dt;
+  if (w.sinceElements >= ELEMENT_INTERVAL) {
+    w.sinceElements = 0;
+    w.elements = orbitalElements(planet, hostOf(w), G);
+    if (w.elements && Number.isFinite(w.elements.e)) {
+      if (w.elements.e > w.maxEccentricity) w.maxEccentricity = w.elements.e;
+    }
+  }
+
   // Stop early once the planet is unambiguously gone. Integrating a hyperbolic
   // escape for another twenty binary periods adds nothing and costs the
   // student half a minute of watching a dot recede.
@@ -279,6 +343,26 @@ function summarize(w) {
     dtMin: Number.isFinite(w.dtMin) ? w.dtMin : null,
     dtMax: w.dtMax || null,
     dtMean: w.steps ? w.dtSum / w.steps : null,
+    // The planet's own orbit, in the same units as everything else: the
+    // semi-major axis in binary separations, so it can be read straight
+    // against the starting radius and against the published boundary.
+    //
+    // Prefixed, because `eccentricity` above is the BINARY's and is what the
+    // published fit is a function of. Two eccentricities in one record with
+    // one of them unqualified is a mistake waiting to be made at a call site.
+    // Null rather than Infinity once the orbit opens out. orbitalElements
+    // returns a diverging semi-major axis as the specific energy passes through
+    // zero, which is correct and is not a length: a hyperbolic orbit has no
+    // semi-major axis to report, and printing "Infinity separations" in a
+    // readout is worse than printing nothing. The eccentricity carries the
+    // information instead - it goes above 1, which is exactly the statement
+    // that the orbit no longer closes.
+    planetSemiMajor:
+      Number.isFinite(w.elements?.a) && w.elements.a > 0
+        ? w.elements.a / sep
+        : null,
+    planetEccentricity: Number.isFinite(w.elements?.e) ? w.elements.e : null,
+    planetMaxEccentricity: w.maxEccentricity,
   };
 }
 

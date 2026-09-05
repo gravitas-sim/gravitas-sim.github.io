@@ -86,6 +86,8 @@ function cacheElements() {
     encounters: document.getElementById('binaryRunEncounters'),
     closest: document.getElementById('binaryRunClosest'),
     farthest: document.getElementById('binaryRunFarthest'),
+    orbit: document.getElementById('binaryRunOrbit'),
+    maxEcc: document.getElementById('binaryRunMaxEcc'),
     outcome: document.getElementById('binaryRunOutcome'),
     boundary: document.getElementById('binaryRunBoundary'),
     close: document.getElementById('binaryRunClose'),
@@ -252,6 +254,8 @@ function render() {
       e.encounters,
       e.closest,
       e.farthest,
+      e.orbit,
+      e.maxEcc,
     ]) {
       if (cell) cell.textContent = '—';
     }
@@ -302,6 +306,31 @@ function render() {
   }
   if (e.farthest) {
     e.farthest.textContent = `${formatNumber(run.maxDistance, { sig: 3 })} a`;
+  }
+  // The planet's own orbit, from js/orbital.js. Worth a row of its own because
+  // it is the mechanism rather than the outcome: a planet being driven out by
+  // resonant forcing has its eccentricity walked up over several periods while
+  // its semi-major axis barely moves, so this row says what is happening to it
+  // some time before the distance row says it has gone.
+  if (e.orbit) {
+    if (run.planetEccentricity === null) {
+      e.orbit.textContent = '—';
+    } else if (run.planetSemiMajor === null) {
+      // Open orbit: there is no semi-major axis, and saying so is the result.
+      e.orbit.textContent = t('binaryRun.orbit.open', {
+        e: formatNumber(run.planetEccentricity, { sig: 3 }),
+      });
+    } else {
+      e.orbit.textContent = t('binaryRun.orbit.value', {
+        a: formatNumber(run.planetSemiMajor, { sig: 3 }),
+        e: formatNumber(run.planetEccentricity, { sig: 2 }),
+      });
+    }
+  }
+  if (e.maxEcc) {
+    e.maxEcc.textContent = run.steps
+      ? formatNumber(run.planetMaxEccentricity, { sig: 2 })
+      : '—';
   }
   if (e.outcome) {
     e.outcome.textContent = outcomeText(run, verdict);

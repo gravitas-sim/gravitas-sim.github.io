@@ -115,6 +115,8 @@ export default {
       checklist: [
         'Observa la banda de la estela: ¿sigue siendo un anillo, o empieza a respirar cuando las estrellas pasan cerca?',
         'Lee "Integrado" mientras sube: cuenta periodos binarios, no años',
+        'Vigila la fila "Órbita actual del planeta": el semieje mayor apenas se mueve, y la excentricidad no se está quieta',
+        'Vigila "Excentricidad máxima alcanzada": no vuelve a bajar',
         'Anota la deriva de energía mientras la ejecución está tranquila; querrás la comparación más adelante',
         'Déjalo terminar y lee la frase del final del panel',
       ],
@@ -163,7 +165,14 @@ export default {
                 el de una estrella de 0,5 masas solares a seis AU en su máximo
                 acercamiento. La compañera es una perturbación y no una
                 competidora, y una perturbación así de pequeña se promedia casi
-                del todo.`,
+                del todo.
+                \n\nCasi. Vuelve a mirar la fila de excentricidad máxima de esa
+                ejecución: empieza cerca de cero y termina alrededor de 0,17, y
+                sube de forma sostenida en vez de oscilar. La órbita que
+                "sobrevivió sin problemas" estuvo siendo bombeada todo el rato,
+                despacio, y veinte periodos no bastan ni de lejos para ver dónde
+                acaba. Acuérdate de esto cuando más adelante salga la palabra
+                "estable".`,
     },
     {
       title: 'Aléjalo',
@@ -491,7 +500,9 @@ export default {
              llega nunca— y ejecútalo otra vez.`,
       checklist: [
         'A 4,0: mira cómo las dos estrellas giran dentro de la órbita del planeta, y compara la distancia máxima con 4,0',
-        'A 2,0: mira cómo el anillo deja de cerrarse sobre sí mismo',
+        'A 4,0: la excentricidad máxima alcanzada se asienta en torno a 0,06 y deja de subir',
+        'A 2,0: mira cómo el anillo deja de cerrarse sobre sí mismo, y mira la fila de excentricidad mientras pasa',
+        'A 2,0: la excentricidad pasa de 0,25 en el primer periodo binario y de 1 en el segundo; pasado 1 la órbita está abierta y el semieje mayor deja de existir',
         'A 2,0: lee el número de encuentros al terminar; puede sorprenderte',
         'A 2,0: lee cuándo se marchó',
       ],
@@ -534,10 +545,11 @@ export default {
                 planeta está cerca de un múltiplo entero pequeño del de la
                 binaria, así que el tirón que recibe no es aleatorio: llega casi
                 en la misma fase de su órbita cada vez y los pequeños empujones se
-                acumulan. Su excentricidad sube hasta que la órbita deja de
-                cerrarse. La deriva de energía de siete partes en un millón
-                descarta la primera opción, que es justo para lo que el panel la
-                muestra.`,
+                acumulan. Lo has visto pasar: la fila de excentricidad superó 0,25
+                en el primer periodo binario y 1 en el segundo, y pasado 1 una
+                órbita no se cierra. La deriva de energía de siete partes en un
+                millón descarta la primera opción, que es justo para lo que el
+                panel la muestra.`,
     },
     {
       title: 'La frontera circumbinaria',
@@ -579,9 +591,10 @@ export default {
              y después lee la <strong>distancia máxima</strong>, que es el número
              que explica el desacuerdo.`,
       checklist: [
-        'Ejecuta 3,0 durante cuarenta periodos: resultado y distancia máxima',
-        'Ejecuta 2,5 durante cuarenta periodos: resultado y distancia máxima',
-        'Compara esas distancias con la ejecución de 4,0, donde el planeta se quedó en su anillo',
+        'Ejecuta 3,0 durante cuarenta periodos: resultado, distancia máxima y excentricidad máxima alcanzada',
+        'Ejecuta 2,5 durante cuarenta periodos: las mismas tres cosas',
+        'Compara las tres con la ejecución de 4,0, donde el planeta se quedó en su anillo con una excentricidad por debajo de 0,07',
+        'Opcional: pon dos de ellas una al lado de la otra en el banco A/B, registrando la distancia al primario, y lee la diferencia sobre un mismo eje temporal',
       ],
       tip: 'Las dos informarán de que el planeta sobrevivió a la integración. Fíjate en lo lejos que llegó antes de volver.',
     },

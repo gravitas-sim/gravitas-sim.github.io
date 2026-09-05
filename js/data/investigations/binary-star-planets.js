@@ -167,6 +167,8 @@ const BINARY_STAR_PLANETS = {
       checklist: [
         'Watch the trail band: does it stay a ring, or does it start to breathe in and out as the stars swing past?',
         'Read "Integrated" as it climbs — it counts binary periods, not years',
+        'Watch the "Planet’s orbit now" row: the semi-major axis barely moves, and the eccentricity does not sit still',
+        'Watch "Highest eccentricity reached" — it does not come back down',
         'Note the energy drift while the run is quiet; you will want the comparison later',
         'Let it finish, and read the sentence at the bottom of the panel',
       ],
@@ -248,7 +250,13 @@ const BINARY_STAR_PLANETS = {
                 planet feels a pull about eighteen times stronger than the one
                 from a 0.5 solar-mass star six AU away at its closest. The
                 companion is a perturbation rather than a competitor, and a
-                perturbation that small mostly averages out.`,
+                perturbation that small mostly averages out.
+                \n\nMostly. Look again at the highest-eccentricity row from that
+                run: it starts near zero and finishes around 0.17, and it climbs
+                steadily rather than wobbling. The orbit that "survived
+                untroubled" was being pumped the whole time — slowly, and with
+                twenty periods nowhere near enough to see where it ends up.
+                Hold on to that when the word "stable" comes up later.`,
     },
     {
       sid: 'move-it-out',
@@ -655,7 +663,9 @@ const BINARY_STAR_PLANETS = {
              and run it again.`,
       checklist: [
         'At 4.0: watch the two stars whirl inside the planet’s orbit, and compare the farthest-out figure with 4.0',
-        'At 2.0: watch the ring stop closing on itself',
+        'At 4.0: the highest eccentricity reached settles around 0.06 and stops climbing',
+        'At 2.0: watch the ring stop closing on itself, and watch the eccentricity row while it does',
+        'At 2.0: the eccentricity passes 0.25 in the first binary period and 1 in the second — past 1 the orbit is open and the semi-major axis stops existing',
         'At 2.0: read the encounter count when it finishes — it may surprise you',
         'At 2.0: read when it left',
       ],
@@ -721,10 +731,12 @@ const BINARY_STAR_PLANETS = {
       because: `Resonant forcing. At 2.0 separations the planet's orbital period
                 is close to a small-integer multiple of the binary's, so the
                 pull it gets is not random — it arrives at nearly the same phase
-                of its orbit each time and the small kicks accumulate. Its
-                eccentricity climbs until the orbit no longer closes. The energy
-                drift of seven parts in a million rules out the first option,
-                which is exactly why the panel shows it.`,
+                of its orbit each time and the small kicks accumulate. You
+                watched that happen: the eccentricity row went past 0.25 in the
+                first binary period and past 1 in the second, and past 1 an
+                orbit does not close. The energy drift of seven parts in a
+                million rules out the first option, which is exactly why the
+                panel shows it.`,
     },
     {
       sid: 'circumbinary-boundary',
@@ -775,9 +787,10 @@ const BINARY_STAR_PLANETS = {
              then read the <strong>farthest out</strong> figure, which is the
              number that explains the disagreement.`,
       checklist: [
-        'Run 3.0 for forty periods: outcome, and farthest out',
-        'Run 2.5 for forty periods: outcome, and farthest out',
-        'Compare those distances with the 4.0 run, where the planet stayed on its ring',
+        'Run 3.0 for forty periods: outcome, farthest out, and highest eccentricity reached',
+        'Run 2.5 for forty periods: the same three',
+        'Compare all three with the 4.0 run, where the planet stayed on its ring at an eccentricity under 0.07',
+        'Optional: put two of these side by side in the A/B Bench, recording distance to primary, and read the difference off one time axis',
       ],
       tip: 'Both of these will report that the planet survived the integration. Look at how far it got before it came back.',
     },
