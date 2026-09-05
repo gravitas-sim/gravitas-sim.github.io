@@ -30,6 +30,8 @@
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
+import { parseNumber } from '../answerParse.js';
+import { STANDARD_MISCONCEPTIONS } from '../answerFeedback.js';
 import {
   mergeTranslation,
   translationCoverage,
@@ -96,6 +98,9 @@ export const RULE_INDEX = {
   'content/step': 'Every step has a title and a body',
   'content/completion': 'A lesson ends on a step that closes it',
   'content/prompt': 'A step that asks for something says what',
+  'content/placeholder': 'A placeholder does not give away the expected value',
+  'content/hints':
+    'Staged hints are ordered and the reveal has something to reveal',
   'ref/scenario': 'setup.scenario names a scenario in the catalog',
   'ref/widget': 'tool.id names a registered widget',
   'ref/control': 'tool.values and tool.hide name controls the widget has',
@@ -349,6 +354,70 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
 
       if (!isNonEmptyString(step.title)) E('content/step', 'step has no title');
       if (!isNonEmptyString(step.body)) E('content/step', 'step has no body');
+
+      // --- Placeholders and staged help --------------------------------------
+      // A placeholder is visible before the student has thought about the
+      // question. One that shows the expected measurement hands over the answer
+      // to the first digit, which is not a hint - it is the answer, given
+      // unbidden, to everyone.
+      if (step.kind === 'numeric' && isNonEmptyString(step.placeholder)) {
+        const read = parseNumber(step.placeholder);
+        const tol = Math.abs(toleranceFor(step) ?? 0);
+        if (
+          read.ok &&
+          Number.isFinite(step.answer) &&
+          Math.abs(read.value - step.answer) <= tol
+        ) {
+          E(
+            'content/placeholder',
+            `the placeholder "${step.placeholder}" is the expected answer; say what form the answer takes, not what it is`
+          );
+        }
+      }
+      for (const field of step.fields || []) {
+        if (!isNonEmptyString(field.placeholder)) continue;
+        const read = parseNumber(field.placeholder);
+        const expected = parseNumber(String(field.hint ?? ''));
+        if (read.ok && expected.ok && read.value === expected.value) {
+          E(
+            'content/placeholder',
+            `field "${field.id}" has the expected measurement as its placeholder`
+          );
+        }
+      }
+
+      // Staged hints only make sense in order: a method hint with no concept
+      // before it is fine, but a worked explanation is the last resort and a
+      // step that offers one and nothing else has skipped the two chances a
+      // student had to get there themselves.
+      if (step.hints || step.worked) {
+        if (step.hints && typeof step.hints !== 'object') {
+          E('content/hints', 'hints must be an object of stages');
+        }
+        if (step.worked && !step.hints) {
+          W(
+            'content/hints',
+            'a worked explanation with no hint before it: the reveal is the last resort, not the only one'
+          );
+        }
+      }
+
+      // Misconception rules stand on their own: a step can name a mistake
+      // without offering hints. Each has to be matchable, or it is a message
+      // that can never be shown.
+      for (const rule of step.misconceptions || []) {
+        const known = Object.hasOwn(STANDARD_MISCONCEPTIONS, rule?.id ?? '');
+        if (
+          !known &&
+          !Number.isFinite(rule?.factor) &&
+          !Number.isFinite(rule?.equals)
+        ) {
+          E(
+            'content/hints',
+            `misconception "${rule?.id ?? '?'}" is not a standard one and gives no factor or value to match`
+          );
+        }
+      }
 
       const asks = ['predict', 'question'].includes(step.type);
       if (asks && !isNonEmptyString(step.prompt)) {

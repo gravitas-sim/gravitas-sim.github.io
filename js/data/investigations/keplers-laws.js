@@ -708,6 +708,40 @@ const KEPLER = {
       unit: 'years',
       answer: 8,
       tolerance: 0.4,
+      // Years is the unit the law is stated in here, but a student who worked
+      // the period out in days has done the same physics.
+      expect: {
+        dimension: 'time',
+        unit: 'yr',
+        accept: ['yr', 'years', 'd', 'days'],
+      },
+      // Two specific slips this question invites, both authored rather than
+      // inferred: cubing and stopping, and taking the square root of a instead
+      // of of a³.
+      misconceptions: [
+        {
+          id: 'cubedNotRooted',
+          equals: 64,
+          say: `That is a³. The law says P² = a³, so the period is the square
+                root of 64, not 64 itself.`,
+        },
+        {
+          id: 'rootedTheAxis',
+          equals: 2,
+          say: `That is √a. The cube comes first: work out a³ = 64, then take
+                its square root.`,
+        },
+      ],
+      hints: {
+        concept: `Kepler's third law ties the size of an orbit to how long it
+                  takes, and to nothing else. In these units - years and AU,
+                  around this star - the relation is as simple as it ever gets.`,
+        method: `P² = a³. Put a = 4 in, work out the right-hand side, then undo
+                 the square.`,
+      },
+      worked: `a = 4, so a³ = 64. P² = 64, so P = √64 = 8 years. The check that
+               it is really a law: Jupiter sits at 5.204 AU, giving a³ = 141.0
+               and P = 11.87 years, against a measured 11.86.`,
       because:
         "P = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so a³ = 141.0 and P = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
     },
@@ -920,6 +954,31 @@ const KEPLER = {
       unit: 'M_sun',
       answer: 0.91,
       tolerance: 0.12,
+      expect: {
+        dimension: 'mass',
+        unit: 'M_sun',
+        accept: ['M_sun', 'M_jup', 'M_earth', 'kg'],
+      },
+      misconceptions: [
+        {
+          id: 'periodInDays',
+          // Using 45 days where the formula wants 0.123 years divides the mass
+          // by 365.25² - a specific, checkable slip rather than a guess.
+          equals: 0.91 / 365.25 ** 2,
+          say: `The period has to be in years for this form of the law. Using 45
+                days instead of 0.123 years divides the answer by 365.25².`,
+        },
+      ],
+      hints: {
+        concept: `Newton's version of the third law says the period and the
+                  orbit size together tell you the mass of what is being
+                  orbited. That is the whole reason it matters.`,
+        method: `M = a³ / P², with a in AU and P in *years*. The period is given
+                 in days as well as years — use the years.`,
+      },
+      worked: `a = 0.24, so a³ = 0.0138. P = 0.123 years, so P² = 0.01513.
+               0.0138 / 0.01513 = 0.91 solar masses, within a few per cent of
+               the published value.`,
       because:
         'About 0.91 solar masses, which is within a few percent of the published value of 0.91. You have just weighed a star 600 light years away using nothing but a distance, a period, and a relation Kepler found by fitting Mars. This is the standard method: essentially every stellar mass in the exoplanet literature comes from some version of this calculation.',
     },

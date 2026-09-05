@@ -269,6 +269,38 @@ describe('units are converted only where a step says they may be', () => {
   });
 });
 
+describe('a unit spelled differently is not a conversion', () => {
+  const step = {
+    unit: 'g/cm³',
+    answer: 0.33,
+    expect: {
+      dimension: 'density',
+      unit: 'g/cm³',
+      accept: ['g/cm³', 'g/cm3', 'kg/m³', 'kg/m3'],
+    },
+  };
+
+  test('a superscript and a plain digit are the same unit', () => {
+    const sup = parseAnswer('0.33 g/cm³', step);
+    const plain = parseAnswer('0.33 g/cm3', step);
+    expect(sup.value).toBe(0.33);
+    expect(plain.value).toBe(0.33);
+    // Neither moved the number, so neither is a conversion.
+    expect(sup.converted).toBe(false);
+    expect(plain.converted).toBe(false);
+  });
+
+  test('a genuine conversion is reported as one', () => {
+    const out = parseAnswer('330 kg/m3', step);
+    expect(out.value).toBeCloseTo(0.33, 12);
+    expect(out.converted).toBe(true);
+  });
+
+  test('a decimal comma and a density unit together', () => {
+    expect(parseAnswer('0,33 g/cm³', step, 'es').value).toBe(0.33);
+  });
+});
+
 describe('the unit table agrees with the project constants', () => {
   // The table is written out rather than derived so this module stays
   // dependency-light, and this test is what stops it drifting.

@@ -326,6 +326,31 @@ const RADIAL_VELOCITY = {
       answer: 0.69,
       unit: 'M_J',
       tolerance: 0.08,
+      // Jupiter masses is what the instrument reads and what the literature
+      // quotes, but a student who worked in Earth masses or kilograms has done
+      // the physics; converting is not what is being tested.
+      expect: {
+        dimension: 'mass',
+        unit: 'M_jup',
+        accept: ['M_jup', 'M_earth', 'M_sun', 'kg'],
+      },
+      // The factor-of-two error this part of the lesson is written against:
+      // reading the peak-to-peak range as K doubles the mass, because mass is
+      // proportional to K at fixed period and inclination.
+      misconceptions: [{ id: 'peakToPeakForSemiAmplitude' }],
+      hints: {
+        concept: `K is set by how hard the planet pulls its star. Heavier planet,
+                  bigger wobble — and everything else about this system is
+                  already fixed, so the mass is the only thing left to change.`,
+        method: `Drag the planet-mass slider until the K in the readout reads
+                 about 84 m/s. Leave the inclination at 90 degrees: tilting the
+                 orbit changes K without changing the mass, which is the next
+                 screen's problem rather than this one's.`,
+      },
+      worked: `At 90 degrees and a 3.52-day period, K is proportional to the
+               planet mass: an Earth gives 0.38 m/s and a five-Jupiter planet
+               gives 609. 84 m/s therefore sits at about 0.69 Jupiter masses,
+               which is the published value.`,
       because: `About 0.69 Jupiter masses, which is the published value. The star’s
                 speed told you the mass of a planet nobody had seen.`,
     },
@@ -585,6 +610,34 @@ const RADIAL_VELOCITY = {
       answer: 0.33,
       unit: 'g/cm³',
       tolerance: 0.08,
+      expect: {
+        dimension: 'density',
+        unit: 'g/cm³',
+        accept: ['g/cm³', 'g/cm3', 'kg/m³', 'kg/m3'],
+      },
+      // Earth's density is printed in the comparison row of the same panel, and
+      // reading that instead of the planet's is the mistake this screen invites.
+      // Named because it is one specific misreading of one specific panel, not
+      // a guess about why a number is wrong.
+      misconceptions: [
+        {
+          id: 'earthNotPlanet',
+          equals: 5.51,
+          say: `That is Earth’s density, from the comparison row. The number this
+                question wants is the one on the row for HD 209458 b itself.`,
+        },
+      ],
+      hints: {
+        concept: `Density is mass divided by volume, and you have both: a mass
+                  from the wobble and a radius from the transit.`,
+        method: `The characterization panel has already combined them. Find the
+                 row giving the planet's own bulk density — not the row comparing
+                 it with Earth.`,
+      },
+      worked: `0.69 Jupiter masses inside a sphere of 1.38 Jupiter radii comes
+               out at about 0.33 g/cm³: a third the density of water and a
+               sixteenth of Earth’s. Nothing rocky is that light, so the planet
+               has to be mostly gas.`,
       because: `About 0.33 grams per cubic centimetre: roughly a third the density of
                 water, and about a sixteenth of Earth’s. A Jupiter-sized planet with
                 two thirds of Jupiter’s mass has to be dominated by gas.`,

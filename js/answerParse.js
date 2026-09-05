@@ -112,6 +112,15 @@ export const UNITS = Object.freeze({
     m_jup: JUPITER_MASS_KG / SOLAR_MASS_KG,
     mjup: JUPITER_MASS_KG / SOLAR_MASS_KG,
   },
+  // Base: grams per cubic centimetre, which is what the lessons quote and what
+  // makes "about the density of water" a comparison with 1.
+  density: {
+    'g/cm3': 1,
+    'g/cm³': 1,
+    'g/cc': 1,
+    'kg/m3': 1e-3,
+    'kg/m³': 1e-3,
+  },
   // Base: degrees.
   angle: {
     deg: 1,
@@ -393,6 +402,9 @@ export function parseAnswer(raw, step = {}, locale = 'en') {
     ok: true,
     value: (number.value * known.factor) / target.factor,
     unit: rest,
-    converted: normaliseUnit(rest) !== normaliseUnit(expect.unit),
+    // Whether the number actually moved, not whether the token was spelled
+    // differently: superscripts are normalised on the way in, so "g/cm³" and
+    // "g/cm3" are different strings and the same unit.
+    converted: known.factor !== target.factor,
   };
 }

@@ -72,6 +72,20 @@ export function entryFor(step, index) {
     entry.unit = step.unit ?? null;
     entry.acceptedLow = step.answer - tol;
     entry.acceptedHigh = step.answer + tol;
+    // Which other units the site will accept and convert. An instructor marking
+    // by hand has to know that 2922 days is the same answer as 8 years, or the
+    // key disagrees with the site over a correct paper.
+    entry.acceptedUnits = step.expect?.accept ? [...step.expect.accept] : null;
+  }
+
+  // Whether help was on offer. Not a mark against anyone - it is context for
+  // reading a class's answers, and the report records what each student took.
+  if (step.hints || step.worked) {
+    entry.help = {
+      concept: Boolean(step.hints?.concept),
+      method: Boolean(step.hints?.method),
+      worked: Boolean(step.worked),
+    };
   }
 
   if (step.kind === 'short')

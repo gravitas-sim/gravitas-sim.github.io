@@ -180,6 +180,14 @@ export default {
       unit: 'M_J',
       because:
         'Unas 0,69 masas de Júpiter, que es el valor publicado. La velocidad de la estrella te dio la masa de un planeta que nadie había visto.',
+      hints: {
+        concept:
+          'K depende de con qué fuerza tira el planeta de su estrella. Planeta más pesado, bamboleo mayor — y todo lo demás de este sistema ya está fijado, así que la masa es lo único que queda por cambiar.',
+        method:
+          'Arrastra el control de masa planetaria hasta que la K del panel marque unos 84 m/s. Deja la inclinación en 90 grados: inclinar la órbita cambia K sin cambiar la masa, y ese es el problema de la pantalla siguiente, no de esta.',
+      },
+      worked:
+        'A 90 grados y con un periodo de 3,52 días, K es proporcional a la masa del planeta: una Tierra da 0,38 m/s y un planeta de cinco Júpiter da 609. Por tanto 84 m/s corresponde a unas 0,69 masas de Júpiter, que es el valor publicado.',
     },
     {
       title: 'Ahora inclina todo el sistema',
@@ -316,6 +324,19 @@ export default {
       unit: 'g/cm³',
       because:
         'Unos 0,33 gramos por centímetro cúbico: aproximadamente un tercio de la densidad del agua, y cerca de una dieciseisava parte de la de la Tierra. Un planeta del tamaño de Júpiter con dos tercios de la masa de Júpiter tiene que estar dominado por gas.',
+      misconceptions: [
+        {
+          say: 'Esa es la densidad de la Tierra, de la fila de comparación. El número que pide esta pregunta es el de la fila del propio HD 209458 b.',
+        },
+      ],
+      hints: {
+        concept:
+          'La densidad es masa dividida por volumen, y tienes ambas: una masa a partir del bamboleo y un radio a partir del tránsito.',
+        method:
+          'El panel de caracterización ya las ha combinado. Busca la fila que da la densidad media del propio planeta, no la que la compara con la Tierra.',
+      },
+      worked:
+        '0,69 masas de Júpiter dentro de una esfera de 1,38 radios de Júpiter dan unos 0,33 g/cm³: un tercio de la densidad del agua y una decimosexta parte de la de la Tierra. Nada rocoso es tan ligero, así que el planeta tiene que ser sobre todo gas.',
     },
     {
       title: '¿Dónde se sitúa HD 209458 b?',

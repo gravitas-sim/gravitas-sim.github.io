@@ -2525,5 +2525,49 @@ export const EN = {
   'inv.answer.notYet': 'Not yet. Check your working and try again.',
   'inv.answer.oneGood': 'One good answer:',
   'inv.answer.placeholder': 'Your value',
+  'inv.answer.placeholderUnit': 'Your value in {unit}',
+  'inv.answer.converted': '(read as {value} {target})',
+  'inv.answer.blank': 'There is nothing in the box yet — type a number.',
+  'inv.answer.notANumber':
+    'That is not a number I can read. Digits, a decimal point and an exponent like 3e5 or 3×10^5 all work.',
+  'inv.answer.ambiguous':
+    'I cannot tell which separator is the decimal point. Write it with one decimal separator, or use a space between thousands.',
+  'inv.answer.unknownUnit': 'I do not recognise the unit “{unit}”.',
+  'inv.answer.wrongDimension':
+    '“{unit}” is a unit of {got}, and this answer should be a {want}.',
+  'inv.answer.unitNotAllowed':
+    'This step does not take “{unit}”. Answer in one of: {allowed}.',
+  'inv.answer.unitExpected':
+    'This step expects the number in {expected}, so I cannot use “{unit}”. Convert it yourself and give the number.',
+  'inv.answer.trailingText':
+    'I do not know what to do with “{text}” after the number.',
+  'inv.dimension.time': 'time',
+  'inv.dimension.length': 'length',
+  'inv.dimension.speed': 'speed',
+  'inv.dimension.mass': 'mass',
+  'inv.dimension.angle': 'angle',
+  'inv.hint.ask': 'I could use a hint',
+  'inv.hint.reveal': 'Show me how it is done',
+  'inv.hint.concept': 'Think about:',
+  'inv.hint.method': 'How to get at it:',
+  'inv.hint.worked': 'Worked through:',
+  'inv.hint.given': 'Hint shown.',
+  'inv.hint.revealed': 'Worked explanation shown.',
+  'inv.hint.taken': '{n} hint(s) taken',
+  'inv.hint.takenRevealed': '{n} hint(s) taken, worked answer shown',
+  'inv.misconception.radiusForDiameter':
+    'That is half the value asked for — check whether the question wants a radius or a diameter.',
+  'inv.misconception.diameterForRadius':
+    'That is twice the value asked for — check whether the question wants a radius or a diameter.',
+  'inv.misconception.peakToPeakForSemiAmplitude':
+    'That is the full peak-to-peak range. K is half of it: the distance from the middle of the curve to one extreme, not from one extreme to the other.',
+  'inv.misconception.semiAmplitudeForPeakToPeak':
+    'That is the semi-amplitude K. The peak-to-peak range is twice it.',
+  'inv.misconception.daysForYears':
+    'That looks like the value in days, and the question asks for years.',
+  'inv.misconception.yearsForDays':
+    'That looks like the value in years, and the question asks for days.',
+  'inv.misconception.radiansForDegrees':
+    'That looks like the angle in radians, and the question asks for degrees.',
   'inv.answer.check': 'Check',
 };

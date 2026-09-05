@@ -21,8 +21,8 @@
 //: a rebuild wipes the simulation, and a student will close the tab.
 // =============================================================================
 
-import { tickLabel } from './format.js';
-import { t, onLocaleChange } from './i18n/index.js';
+import { formatNumber, tickLabel } from './format.js';
+import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
 // in statically, which is right for a build script and wrong here: the browser
@@ -98,7 +98,13 @@ import { toast, announce } from './controls.js';
 import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
-import { checkAnswer } from './answerCheck.js';
+import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
+import {
+  helpTaken,
+  hintsFor,
+  matchMisconception,
+  nextHintStage,
+} from './answerFeedback.js';
 import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
 
@@ -759,6 +765,125 @@ function releaseLocks() {
   syncPlacementAvailability();
 }
 
+// --- Answer feedback ----------------------------------------------------------
+
+/**
+ * The placeholder for a numeric box.
+ *
+ * Audited, because a placeholder is visible before the student has thought
+ * about the question: one that shows the shape of the expected measurement -
+ * "e.g. 3.52" - hands over the answer to the first digit. A step may set its
+ * own only when it says something about *form* rather than value, and the
+ * default says nothing at all beyond the unit.
+ *
+ * @param {Object} step - Step definition
+ * @returns {string} The placeholder text
+ */
+function numericPlaceholder(step) {
+  if (step.placeholder) return step.placeholder;
+  return step.unit
+    ? t('inv.answer.placeholderUnit', { unit: step.unit })
+    : t('inv.answer.placeholder');
+}
+
+/**
+ * Why a typed answer could not be read, in words a student can act on.
+ *
+ * Each refusal names a different thing to do about it, which is the whole
+ * reason the parser distinguishes them instead of returning NaN.
+ *
+ * @param {Object} step - Step definition
+ * @param {Object} graded - From gradeAnswer()
+ * @returns {string} The sentence
+ */
+function unreadableMessage(step, graded) {
+  const d = graded.detail || {};
+  const allowed = (step.expect?.accept || []).join(', ');
+  switch (graded.reason) {
+    case 'blank':
+      return t('inv.answer.blank');
+    case 'ambiguousSeparator':
+      return t('inv.answer.ambiguous');
+    case 'incompatibleUnit':
+      return t('inv.answer.wrongDimension', {
+        unit: d.text || '',
+        got: t(`inv.dimension.${d.got}`),
+        want: t(`inv.dimension.${d.dimension}`),
+      });
+    case 'unknownUnit':
+      return t('inv.answer.unknownUnit', { unit: d.text || '' });
+    case 'unitNotAllowed':
+      return allowed
+        ? t('inv.answer.unitNotAllowed', { unit: d.text || '', allowed })
+        : t('inv.answer.unitExpected', {
+            unit: d.text || '',
+            expected: d.expected || step.unit || '',
+          });
+    case 'trailingText':
+      return t('inv.answer.trailingText', { text: d.text || '' });
+    default:
+      return t('inv.answer.notANumber');
+  }
+}
+
+/** The words for a matched misconception: the author's, or the standard one. */
+const misconceptionText = missed =>
+  missed.message || t(`inv.misconception.${missed.id}`);
+
+/**
+ * The hint controls, and whatever the student has already asked for.
+ *
+ * Nothing appears unbidden. A hint that shows itself has done the thinking
+ * before the student has tried to, which is the opposite of what a hint is
+ * for - so each stage is a button, and the worked explanation is behind one
+ * more press than the hints are.
+ *
+ * @param {Object} step - Step definition
+ * @param {string} id - Response-key prefix
+ * @returns {string} Markup, or empty when the step offers no help
+ */
+function hintBlock(step, id) {
+  const hints = hintsFor(step);
+  if (!hints) return '';
+
+  const used = String(responses[`${id}:help`] || '')
+    .split(',')
+    .filter(Boolean);
+  const shown = [];
+  for (const stage of ['concept', 'method']) {
+    if (used.includes(stage) && hints[stage]) {
+      shown.push(
+        `<p class="inv-hint" data-stage="${stage}"><strong>${escape(t(`inv.hint.${stage}`))}</strong> ${prose(hints[stage])}</p>`
+      );
+    }
+  }
+  if (used.includes('reveal') && hints.worked) {
+    shown.push(
+      `<div class="inv-hint is-worked"><strong>${escape(t('inv.hint.worked'))}</strong> ${prose(hints.worked)}</div>`
+    );
+  }
+
+  const next = nextHintStage(step, used);
+  const button = next
+    ? `<button type="button" class="ui-button subtle inv-hint-btn" data-hint="${next}">
+         ${escape(t(next === 'reveal' ? 'inv.hint.reveal' : 'inv.hint.ask'))}
+       </button>`
+    : '';
+
+  const taken = helpTaken(used);
+  // Said plainly, because the report says it too and a student should not find
+  // out afterwards that it was recorded. It is a record, not a penalty.
+  const tally = taken.stages.length
+    ? `<span class="inv-hint-tally">${escape(
+        taken.revealed
+          ? t('inv.hint.takenRevealed', { n: taken.hints })
+          : t('inv.hint.taken', { n: taken.hints })
+      )}</span>`
+    : '';
+
+  return `<div class="inv-hints">${shown.join('')}<div class="inv-hint-row">${button}${tally}</div></div>`;
+}
+
 // --- Step helpers -------------------------------------------------------------
 
 // How much a student has to write on a short-answer step before the model
@@ -1386,26 +1511,45 @@ function renderStep() {
 
   if (step.kind === 'numeric') {
     const locked = saved !== undefined && saved !== '';
-    const right = locked ? checkAnswer(step, saved) : null;
+    const graded = locked
+      ? gradeAnswer(step, saved, { locale: getLocale() })
+      : null;
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
     parts.push(
       `<div class="inv-numeric">
          <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${id}"
-                value="${escape(saved ?? '')}" placeholder="${attr(t('inv.answer.placeholder'))}" />
+                value="${escape(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
          <button type="button" class="ui-button" data-check-numeric="${id}">${escape(t('inv.answer.check'))}</button>
        </div>`
     );
-    if (right === true) {
+
+    if (graded?.status === 'unreadable') {
+      // Not "wrong". The student answered something the step cannot read, and
+      // which of the several reasons that is decides what is worth saying.
       parts.push(
-        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))} ${prose(step.because || '')}</p>`
+        `<p class="inv-feedback is-unreadable">${escape(unreadableMessage(step, graded))}</p>`
       );
-    } else if (right === false) {
+    } else if (graded?.correct === true) {
+      const note = graded.converted
+        ? ` ${escape(t('inv.answer.converted', { unit: graded.unit, value: formatNumber(graded.value, { sig: 4 }), target: step.unit ?? '' }))}`
+        : '';
       parts.push(
-        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}
-         ${attempts[id] >= 3 ? `<br /><em>${prose(step.because || '')}</em>` : ''}</p>`
+        `<p class="inv-feedback is-right">${escape(t('inv.answer.matches'))}${note} ${prose(step.because || '')}</p>`
+      );
+    } else if (graded?.correct === false) {
+      // A named misconception, and only a named one. Everything else is simply
+      // not the right number, which is what it says.
+      const missed = matchMisconception(step, graded.value, toleranceFor(step));
+      const named = missed
+        ? `<br /><em class="inv-misconception">${prose(misconceptionText(missed))}</em>`
+        : '';
+      parts.push(
+        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
       );
     }
+
+    parts.push(hintBlock(step, id));
   }
 
   if (step.type === 'measure' && step.fields) {
@@ -1917,6 +2061,24 @@ function bindStepInputs() {
     });
   });
 
+  // Staged hints. Each press records the stage and re-renders; nothing is shown
+  // that was not asked for, and taking help is recorded rather than charged for
+  // - see helpTaken() in js/answerFeedback.js.
+  els.body.querySelectorAll('[data-hint]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = `${stepId(stepIndex)}:help`;
+      const used = String(responses[key] || '')
+        .split(',')
+        .filter(Boolean);
+      const stage = btn.dataset.hint;
+      if (!used.includes(stage)) used.push(stage);
+      responses[key] = used.join(',');
+      save();
+      renderStep();
+      announce(t(stage === 'reveal' ? 'inv.hint.revealed' : 'inv.hint.given'));
+    });
+  });
+
   els.body.querySelectorAll('[data-reveal]').forEach(btn => {
     btn.addEventListener('click', () => {
       responses[`${btn.dataset.reveal}:shown`] = true;
@@ -1971,6 +2133,13 @@ function bindStepInputs() {
   const checkBtn = els.body.querySelector('[data-check-numeric]');
   if (numeric && checkBtn) {
     const submit = () => {
+      // The first thing they committed to, kept. A student who tries a number,
+      // is told it is wrong, and revises has done something a report should be
+      // able to show; overwriting it leaves only the answer they arrived at
+      // with help, which is a different fact about a different moment.
+      if (responses[`${id}:first`] === undefined && numeric.value.trim()) {
+        responses[`${id}:first`] = numeric.value;
+      }
       responses[id] = numeric.value;
       attempts[id] = (attempts[id] || 0) + 1;
       save();

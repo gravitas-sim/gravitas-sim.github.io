@@ -7071,3 +7071,52 @@
     width: 5px;
   }
 }
+
+/* =============================================================================
+   Answer feedback and staged hints
+   -----------------------------------------------------------------------------
+   An unreadable answer is not a wrong one, so it is not styled like one: it
+   gets the neutral border a note gets rather than the red a wrong answer gets.
+   Distinguished by border and wording as well as colour, so the difference
+   survives a colour-blind reader and a printout.
+   ========================================================================== */
+@layer components {
+  .inv-feedback.is-unreadable {
+    border-left: 3px solid var(--info, #5b9bd5);
+    padding-left: 0.5rem;
+  }
+
+  .inv-misconception {
+    display: inline-block;
+    margin-top: 0.3rem;
+  }
+
+  .inv-hints {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+
+  .inv-hint {
+    border-left: 3px solid var(--border, rgb(255 255 255 / 20%));
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+    padding-left: 0.6rem;
+  }
+
+  .inv-hint.is-worked {
+    border-left-color: var(--accent, #6fb1ff);
+  }
+
+  .inv-hint-row {
+    align-items: center;
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .inv-hint-tally {
+    color: var(--text-dim, #9aa4b2);
+    font-size: 0.75rem;
+  }
+}

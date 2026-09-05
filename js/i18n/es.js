@@ -2547,5 +2547,49 @@ export const ES = {
     'Todavía no. Revisa tu razonamiento e inténtalo de nuevo.',
   'inv.answer.oneGood': 'Una buena respuesta:',
   'inv.answer.placeholder': 'Tu valor',
+  'inv.answer.placeholderUnit': 'Tu valor en {unit}',
+  'inv.answer.converted': '(leído como {value} {target})',
+  'inv.answer.blank': 'La casilla está vacía: escribe un número.',
+  'inv.answer.notANumber':
+    'Eso no es un número que pueda leer. Funcionan los dígitos, un separador decimal y un exponente como 3e5 o 3×10^5.',
+  'inv.answer.ambiguous':
+    'No puedo saber cuál separador es el decimal. Escríbelo con un solo separador decimal, o usa un espacio entre los millares.',
+  'inv.answer.unknownUnit': 'No reconozco la unidad «{unit}».',
+  'inv.answer.wrongDimension':
+    '«{unit}» es una unidad de {got}, y esta respuesta debería ser una magnitud de {want}.',
+  'inv.answer.unitNotAllowed':
+    'Este paso no admite «{unit}». Responde en una de estas: {allowed}.',
+  'inv.answer.unitExpected':
+    'Este paso espera el número en {expected}, así que no puedo usar «{unit}». Conviértelo tú y da el número.',
+  'inv.answer.trailingText': 'No sé qué hacer con «{text}» después del número.',
+  'inv.dimension.time': 'tiempo',
+  'inv.dimension.length': 'longitud',
+  'inv.dimension.speed': 'velocidad',
+  'inv.dimension.mass': 'masa',
+  'inv.dimension.angle': 'ángulo',
+  'inv.hint.ask': 'Me vendría bien una pista',
+  'inv.hint.reveal': 'Muéstrame cómo se hace',
+  'inv.hint.concept': 'Piensa en:',
+  'inv.hint.method': 'Cómo abordarlo:',
+  'inv.hint.worked': 'Resuelto paso a paso:',
+  'inv.hint.given': 'Pista mostrada.',
+  'inv.hint.revealed': 'Explicación resuelta mostrada.',
+  'inv.hint.taken': '{n} pista(s) usada(s)',
+  'inv.hint.takenRevealed':
+    '{n} pista(s) usada(s), respuesta resuelta mostrada',
+  'inv.misconception.radiusForDiameter':
+    'Eso es la mitad del valor pedido: comprueba si la pregunta quiere un radio o un diámetro.',
+  'inv.misconception.diameterForRadius':
+    'Eso es el doble del valor pedido: comprueba si la pregunta quiere un radio o un diámetro.',
+  'inv.misconception.peakToPeakForSemiAmplitude':
+    'Eso es el rango completo de pico a pico. K es la mitad: la distancia desde el centro de la curva hasta un extremo, no de un extremo al otro.',
+  'inv.misconception.semiAmplitudeForPeakToPeak':
+    'Eso es la semiamplitud K. El rango de pico a pico es el doble.',
+  'inv.misconception.daysForYears':
+    'Eso parece el valor en días, y la pregunta pide años.',
+  'inv.misconception.yearsForDays':
+    'Eso parece el valor en años, y la pregunta pide días.',
+  'inv.misconception.radiansForDegrees':
+    'Eso parece el ángulo en radianes, y la pregunta pide grados.',
   'inv.answer.check': 'Comprobar',
 };

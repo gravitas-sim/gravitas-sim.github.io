@@ -251,6 +251,22 @@ export default {
       unit: 'años',
       because:
         'P = 8 años. Ahora pruébalo con un planeta que sí mediste: Júpiter está a 5,204 UA, así que a³ = 141,0 y P = √141,0 = 11,87 años. La tabla dice 11,86. Acabas de predecir el año de un planeta real a partir de nada más que su distancia.',
+      misconceptions: [
+        {
+          say: 'Eso es a³. La ley dice P² = a³, así que el periodo es la raíz cuadrada de 64, no 64.',
+        },
+        {
+          say: 'Eso es √a. El cubo va primero: calcula a³ = 64 y después su raíz cuadrada.',
+        },
+      ],
+      hints: {
+        concept:
+          'La tercera ley de Kepler relaciona el tamaño de una órbita con lo que tarda, y con nada más. En estas unidades — años y UA, alrededor de esta estrella — la relación es todo lo simple que llega a ser.',
+        method:
+          'P² = a³. Sustituye a = 4, calcula el lado derecho y después deshaz el cuadrado.',
+      },
+      worked:
+        'a = 4, así que a³ = 64. P² = 64, luego P = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da a³ = 141,0 y P = 11,87 años, frente a los 11,86 medidos.',
     },
     {
       title: 'De qué depende la constante',
@@ -303,6 +319,19 @@ export default {
       unit: 'M_sol',
       because:
         'Unas 0,91 masas solares, que está a un pequeño porcentaje del valor publicado de 0,91. Acabas de pesar una estrella a 600 años luz usando nada más que una distancia, un periodo y una relación que Kepler encontró ajustando Marte. Este es el método estándar: esencialmente toda masa estelar de la literatura sobre exoplanetas procede de alguna versión de este cálculo.',
+      misconceptions: [
+        {
+          say: 'El periodo tiene que estar en años para esta forma de la ley. Usar 45 días en lugar de 0,123 años divide la respuesta entre 365,25².',
+        },
+      ],
+      hints: {
+        concept:
+          'La versión de Newton de la tercera ley dice que el periodo y el tamaño de la órbita juntos te dan la masa de aquello que se orbita. Esa es toda la razón por la que importa.',
+        method:
+          'M = a³ / P², con a en UA y P en *años*. El periodo se da en días y también en años: usa los años.',
+      },
+      worked:
+        'a = 0,24, así que a³ = 0,0138. P = 0,123 años, luego P² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.',
     },
     {
       title: 'Dónde falla la versión de Kepler',
