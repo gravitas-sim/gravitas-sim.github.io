@@ -1432,6 +1432,12 @@ export const EN = {
     'Started a new recording: the instrument is now on {name}. The earlier samples were of a different star and are not part of this curve.',
   'observing.session.newGeometry':
     'Started a new recording: the observer moved. The earlier samples were taken from a different direction and do not belong with these.',
+  'observing.session.newWorld':
+    'Started a new recording: the simulation was rebuilt. The earlier samples were of a star in the previous world, which may have reused the same identifier.',
+  'observing.session.newUnits':
+    'Started a new recording: the gravitational constant changed, so the earlier samples were converted with a different scale and cannot be plotted beside these.',
+  'observing.session.newConfig':
+    'Started a new recording: the observing schedule changed. The earlier measurements belong to the previous programme.',
   'observing.session.rewound':
     'Rewound to day {time}. Discarded {n} samples recorded after that point: they described a future this run has not reached.',
   'observing.session.unnamedStar': 'this star',

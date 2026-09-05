@@ -30,6 +30,7 @@ import {
   planets,
   state,
   getPhysicsSetting,
+  getWorldGeneration,
 } from './physics.js';
 import { velocityUnitToMs } from './units.js';
 import {
@@ -116,6 +117,27 @@ let showIdeal = true;
  * eagerly would put it in the initial download for everybody to pay for and
  * almost nobody to use.
  */
+/**
+ * The star and geometry the current run is *of*, fixed when it started.
+ *
+ * A recording is a measurement of one star from one direction. Reading either
+ * from live state at export time would relabel a finished run with whatever is
+ * selected now - a file of HD 209458's velocities headed with the name of a
+ * star the reader happened to click afterwards, which is worse than no header.
+ */
+let surveyProvenance = null;
+
+/** Snapshot who is being observed and from where, for the run to keep. */
+function captureProvenance() {
+  const star = observedStar();
+  return {
+    target: star ? { id: star.id, name: star.name || null } : null,
+    inclinationDeg: getInclination(),
+    positionAngleDeg: observerGeometry()?.positionAngleDeg ?? null,
+    worldGeneration: getWorldGeneration(),
+  };
+}
+
 let surveyLib = null;
 
 /** @returns {Promise<object>} The survey module */
@@ -174,6 +196,33 @@ export function setObservedStar(id) {
   targetStarId = found ? id : null;
   return found;
 }
+
+/**
+ * The conditions a recording is made under, as one comparable object.
+ *
+ * Built here rather than at each call site so no axis can be forgotten by one
+ * of them: the world it belongs to, the star, the line of sight, the ruler its
+ * numbers were converted with, and the instrument's own settings. See
+ * js/observingSession.js for why each one invalidates a recording.
+ *
+ * @returns {object} The descriptor
+ */
+function currentSessionKey() {
+  const star = observedStar();
+  return sessionKey({
+    starId: star ? star.id : null,
+    geometry: observerGeometry(),
+    worldGeneration: getWorldGeneration(),
+    velocityScale: velocityUnitToMs(),
+    config: survey ? surveyConfigLabel(surveyConfig) : null,
+  });
+}
+
+/** A configuration as a string, so two schedules can be compared for equality. */
+const surveyConfigLabel = cfg =>
+  cfg
+    ? `c=${cfg.cadenceDays};b=${cfg.baselineDays};s=${cfg.sigmaMs};seed=${cfg.seed}`
+    : null;
 
 /** @returns {?number} The id of the star the instruments are pointed at */
 export const observedStarId = () => observedStar()?.id ?? null;
@@ -254,11 +303,7 @@ export function clearRadialVelocity() {
   // force now, and carries no explanation: the reader asked for it.
   lastSampleTime = null;
   sessionNotice = null;
-  const star = observedStar();
-  recordedSession = sessionKey({
-    starId: star ? star.id : null,
-    geometry: observerGeometry(),
-  });
+  recordedSession = currentSessionKey();
   if (chart) {
     chart.data.datasets[0].data = [];
     chart.update('none');
@@ -539,10 +584,7 @@ export function updateRadialVelocity() {
   lastSampleAt = now;
 
   const star = observedStar();
-  const current = sessionKey({
-    starId: star ? star.id : null,
-    geometry: observerGeometry(),
-  });
+  const current = currentSessionKey();
   const simTime = currentTimeDays();
 
   const decision = decideSampling({
@@ -554,45 +596,43 @@ export function updateRadialVelocity() {
     scrubbing: isScrubbing(),
   });
 
-  switch (decision.action) {
-    case 'hold':
-      renderReadout();
-      return;
-
-    case 'restart':
-      // A different star, or a different direction. The samples already taken
-      // are a measurement of something else, so they are not continued and
-      // they are not mixed in - the recording starts again and says why.
-      startNewSession(current, decision.reason, star);
-      break;
-
-    case 'truncate': {
-      // Rewound and resumed. Everything recorded at or after the new clock
-      // reading is a future that is not going to happen again.
-      const before = series.length;
-      series = dropInvalidatedSamples(series, simTime, p => p.x);
-      const dropped = before - series.length;
-      lastSampleTime = series.length ? series[series.length - 1].x : null;
-      // Same reasoning for the schedule: measurements dated after the clock now
-      // reads describe a future that is not going to happen again, and a
-      // partially rewound run is not a programme either. It starts over.
-      resetSurvey();
-      recordedSession = current;
-      if (dropped > 0) {
-        sessionNotice = t('observing.session.rewound', {
-          n: dropped,
-          time: formatNumber(simTime, { sig: 3 }),
-        });
-      }
-      if (chart) {
-        chart.data.datasets[0].data = series;
-        chart.update('none');
-      }
-      break;
+  // What is already recorded, first. This happens whether or not the clock is
+  // running: a reader who switches stars while paused must not come back to the
+  // old star's curve still on screen.
+  if (decision.invalidate === 'rewound') {
+    // Rewound and resumed. Everything recorded at or after the new clock
+    // reading is a future that is not going to happen again; the rest stands.
+    const before = series.length;
+    series = dropInvalidatedSamples(series, simTime, p => p.x);
+    const dropped = before - series.length;
+    lastSampleTime = series.length ? series[series.length - 1].x : null;
+    // Same reasoning for the schedule: a partially rewound run is not a
+    // programme either. It starts over.
+    resetSurvey();
+    recordedSession = current;
+    if (dropped > 0) {
+      sessionNotice = t('observing.session.rewound', {
+        n: dropped,
+        time: formatNumber(simTime, { sig: 3 }),
+      });
     }
+    if (chart) {
+      chart.data.datasets[0].data = series;
+      chart.update('none');
+    }
+  } else if (decision.invalidate) {
+    // A different star, a different direction, a different world, a different
+    // ruler. The samples already taken measure something else, so they are not
+    // continued and not mixed in - the recording starts again and says why.
+    startNewSession(current, decision.invalidate, star);
+  }
 
-    default:
-      break;
+  // Only now, and separately, whether a measurement may be taken. Nothing above
+  // grants permission: a restart while paused clears the old curve and records
+  // nothing, because no time has passed to record.
+  if (!decision.sample) {
+    renderReadout();
+    return;
   }
 
   const rv = currentRadialVelocity();
@@ -634,6 +674,25 @@ export function updateRadialVelocity() {
 }
 
 /**
+ * Why a recording was abandoned, in the reader's language.
+ *
+ * @param {?string} reason - From sessionChange()
+ * @param {?object} star - The star now observed, for the target message
+ * @returns {string} The sentence to show
+ */
+function sessionNoticeFor(reason, star) {
+  if (reason === 'target') {
+    return t('observing.session.newTarget', {
+      name: star?.name || t('observing.session.unnamedStar'),
+    });
+  }
+  if (reason === 'world') return t('observing.session.newWorld');
+  if (reason === 'units') return t('observing.session.newUnits');
+  if (reason === 'config') return t('observing.session.newConfig');
+  return t('observing.session.newGeometry');
+}
+
+/**
  * Abandon the recording and begin another, saying what moved.
  *
  * @param {object} session - The conditions now in force
@@ -655,13 +714,7 @@ function startNewSession(session, reason, star) {
   resetSurvey();
   recordedSession = session;
   targetStarId = session.starId;
-  sessionNotice = !discarded
-    ? null
-    : reason === 'target'
-      ? t('observing.session.newTarget', {
-          name: star?.name || t('observing.session.unnamedStar'),
-        })
-      : t('observing.session.newGeometry');
+  sessionNotice = !discarded ? null : sessionNoticeFor(reason, star);
   if (chart) {
     chart.data.datasets[0].data = series;
     chart.update('none');
@@ -683,14 +736,19 @@ export const isSurveyRunning = () => survey !== null;
  *   measurements: Array<object>, planned: number, stats: ?object}} The run
  */
 export function radialVelocitySurvey() {
-  const star = observedStar();
   const measurements = survey ? survey.measurements() : [];
+  // A run in progress reports what it is a recording of; with no run there is
+  // nothing to describe but what the controls are currently showing.
+  const provenance = surveyProvenance ?? (survey ? captureProvenance() : null);
+  const live = provenance ?? captureProvenance();
   return {
     running: survey !== null,
     // Before a run there is no schedule, only whatever the controls are showing.
     config: { ...(surveyConfig ?? readSurveyControls()) },
-    target: star ? { id: star.id, name: star.name || null } : null,
-    inclinationDeg: getInclination(),
+    target: live.target,
+    inclinationDeg: live.inclinationDeg,
+    positionAngleDeg: live.positionAngleDeg,
+    worldGeneration: live.worldGeneration,
     measurements,
     planned: survey ? survey.plannedCount : 0,
     // Measurements exist only if the module loaded, so this is never reached
@@ -728,6 +786,10 @@ async function restartSurvey() {
   const lib = await loadSurveyLib();
   survey = lib.createSurvey(readSurveyControls());
   surveyConfig = survey.config;
+  // Who and how, captured when the run starts and never re-read. What a file
+  // says it observed has to be what was observed, not what the panel happens
+  // to be pointed at when somebody presses Export.
+  surveyProvenance = captureProvenance();
   applySurveyStyling();
   renderSurveyStatus();
 }
@@ -750,6 +812,7 @@ function resetSurvey() {
 /** Stop observing on a schedule and go back to the continuous curve. */
 function stopSurvey() {
   survey = null;
+  surveyProvenance = null;
   applySurveyStyling();
   renderSurveyStatus();
 }
@@ -885,10 +948,7 @@ export function setRadialVelocityEnabled(on) {
     // while it was shut. The observer subscription below is released on close,
     // so a geometry change made with the panel hidden used to go unnoticed and
     // the stale samples were kept; the target was never checked at all.
-    const current = sessionKey({
-      starId: star ? star.id : null,
-      geometry: observerGeometry(),
-    });
+    const current = currentSessionKey();
     const changed = recordedSession
       ? sessionChange(recordedSession, current)
       : null;
@@ -904,14 +964,7 @@ export function setRadialVelocityEnabled(on) {
       // samples describe a geometry nobody is standing in any more.
       unsubscribeObserver = onObserverChange(() => {
         const now = observedStar();
-        startNewSession(
-          sessionKey({
-            starId: now ? now.id : null,
-            geometry: observerGeometry(),
-          }),
-          'geometry',
-          now
-        );
+        startNewSession(currentSessionKey(), 'geometry', now);
         renderReadout();
       });
     }

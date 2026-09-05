@@ -35,9 +35,29 @@
  * @returns {{starId: ?(number|string), positionAngleDeg: ?number,
  *   inclinationDeg: ?number}} The descriptor
  */
-export function sessionKey({ starId = null, geometry = null } = {}) {
+export function sessionKey({
+  starId = null,
+  geometry = null,
+  worldGeneration = null,
+  velocityScale = null,
+  config = null,
+} = {}) {
   return {
     starId: starId ?? null,
+    // Which world this star belongs to. Body ids restart from a counter, so a
+    // rebuilt scenario hands the same id to a different star; without this, a
+    // recording of one could be silently continued against its replacement.
+    worldGeneration: Number.isFinite(worldGeneration) ? worldGeneration : null,
+    // Metres per second in one simulation velocity unit. Samples are converted
+    // as they are taken, so a change here - the gravitational constant slider
+    // moves it - means the numbers already recorded were made with a different
+    // ruler and cannot be plotted beside the next one.
+    velocityScale: Number.isFinite(velocityScale)
+      ? Math.round(velocityScale * 1e9) / 1e9
+      : null,
+    // Whatever the instrument's own settings are, as a comparable string. The
+    // radial-velocity panel puts its observing schedule here.
+    config: config === null || config === undefined ? null : String(config),
     // Rounded to a thousandth of a degree. The geometry comes from sliders and
     // is compared for equality; a float that differs in its last bit is not a
     // different observing direction and must not throw away a recording.
@@ -80,6 +100,16 @@ export function sameSession(a, b) {
  */
 export function sessionChange(before, after) {
   if (!before || !after) return null;
+  // Ordered by how fundamental the change is, so the message a reader sees
+  // names the biggest thing that moved rather than an incidental consequence
+  // of it: a rebuilt world usually changes the target too.
+  if (
+    before.worldGeneration !== null &&
+    after.worldGeneration !== null &&
+    before.worldGeneration !== after.worldGeneration
+  ) {
+    return 'world';
+  }
   if (before.starId !== after.starId) return 'target';
   if (
     before.positionAngleDeg !== after.positionAngleDeg ||
@@ -87,25 +117,48 @@ export function sessionChange(before, after) {
   ) {
     return 'geometry';
   }
+  if (
+    before.velocityScale !== null &&
+    after.velocityScale !== null &&
+    before.velocityScale !== after.velocityScale
+  ) {
+    return 'units';
+  }
+  if (before.config !== after.config) return 'config';
   return null;
 }
 
 /**
- * What to do with a recording, given the clock and the session.
+ * Two separate questions about this frame, answered separately.
  *
- * One function so that both panels behave identically. The caller supplies the
- * facts; this decides, and the decision is testable without a simulation.
+ *   invalidate  does what is already recorded still describe what is on screen?
+ *   sample      may a new measurement be taken right now?
  *
- * @param {object} params
- * @param {?object} params.recordedSession - Session the samples were taken under
- * @param {object} params.currentSession - Session now in force
- * @param {?number} params.lastSampleTime - Simulation time of the last sample
- * @param {number} params.simTime - Simulation time now
- * @param {boolean} [params.paused] - Whether the simulation is paused
- * @param {boolean} [params.scrubbing] - Whether the view is parked on a
- *   recorded frame
- * @returns {{action: 'append'|'hold'|'restart'|'truncate',
- *   reason: ?string}} What the panel should do
+ * They used to be one `action`, and collapsing them was a bug. A target change
+ * returned `restart` before the paused and scrubbing checks were ever reached,
+ * so the caller cleared the recording and then fell straight through to append
+ * a point - while the clock was stopped. Selecting a different star on a paused
+ * simulation therefore produced a one-sample "recording" of an instant nobody
+ * observed, and the same happened while scrubbing.
+ *
+ * Invalidation is about the *past*: the conditions under which the existing
+ * samples were taken no longer hold, so they are not part of what happens next.
+ * That is true whether or not the clock is running, so pausing must not
+ * suppress it - a reader who switches stars while paused should not come back
+ * to the old star's curve.
+ *
+ * Permission is about the *present*: a measurement needs the clock to have
+ * moved since the last one. Nothing about invalidation grants it. The advancing
+ * time requirement is absolute, which is what the old ordering violated.
+ *
+ * @param {object} args - The state of things
+ * @param {?object} args.recordedSession - Conditions the samples were taken under
+ * @param {object} args.currentSession - Conditions now
+ * @param {?number} args.lastSampleTime - Simulation clock at the last sample
+ * @param {number} args.simTime - Simulation clock now
+ * @param {boolean} [args.paused] - Whether the simulation is stopped
+ * @param {boolean} [args.scrubbing] - Whether the timeline is being replayed
+ * @returns {{invalidate: ?string, sample: boolean, reason: ?string}} The two answers
  */
 export function decideSampling({
   recordedSession,
@@ -115,37 +168,39 @@ export function decideSampling({
   paused = false,
   scrubbing = false,
 }) {
-  // Nothing recorded yet: any sample starts the session.
-  if (recordedSession === null || lastSampleTime === null) {
-    if (paused || scrubbing) return { action: 'hold', reason: null };
-    return { action: 'append', reason: null };
+  const started = recordedSession !== null && lastSampleTime !== null;
+
+  // --- Does the past still stand? ---------------------------------------------
+  let invalidate = null;
+  if (started) {
+    invalidate = sessionChange(recordedSession, currentSession);
+    // The clock has gone backwards: the run was rewound and resumed. Everything
+    // recorded at or after the new time describes a future that is not going to
+    // happen again. Reported only when the conditions are otherwise unchanged,
+    // because a restart discards those samples anyway.
+    if (!invalidate && simTime < lastSampleTime) invalidate = 'rewound';
   }
 
-  const changed = sessionChange(recordedSession, currentSession);
-  if (changed) return { action: 'restart', reason: changed };
+  // --- May a measurement be taken now? ----------------------------------------
+  // Parked on a recorded frame: the displayed state is a replay, not an
+  // observation, and sampling it would record one instant repeatedly.
+  //
+  // Paused: identical points piled on one instant invent a flat stretch of
+  // curve that was never observed, and on a bounded buffer they evict real
+  // history to do it.
+  let sample = !paused && !scrubbing;
 
-  // Parked on a recorded frame. The displayed state is a replay, not an
-  // observation, and sampling it would record the same instant repeatedly.
-  if (scrubbing) return { action: 'hold', reason: null };
-
-  // Paused. Preserved rather than cleared, and not appended to: identical
-  // points piled on one instant invent a flat stretch of curve that was never
-  // observed, and on a bounded buffer they evict real history to do it.
-  if (paused) return { action: 'hold', reason: null };
-
-  // The clock has gone backwards: the run was rewound and resumed. Everything
-  // recorded at or after the new time describes a future that is not going to
-  // happen again, so it is dropped and the rest of the history is kept.
-  if (simTime < lastSampleTime) {
-    return { action: 'truncate', reason: 'rewound' };
+  if (sample && started && invalidate === null) {
+    // Time has not advanced. A frame can render without the clock moving - a
+    // paused step, a scrub that landed on the same frame - and a sample then is
+    // a duplicate rather than a measurement.
+    if (simTime <= lastSampleTime) sample = false;
   }
+  // After an invalidation there is no previous sample to be too close to: the
+  // caller is about to discard the ones there were. The clock still has to be
+  // running, which the check above already decided.
 
-  // Time has not advanced. A frame can render without the clock moving - a
-  // paused step, a scrub that landed on the same frame - and a sample then is a
-  // duplicate rather than a measurement.
-  if (simTime === lastSampleTime) return { action: 'hold', reason: null };
-
-  return { action: 'append', reason: null };
+  return { invalidate, sample, reason: invalidate };
 }
 
 /**

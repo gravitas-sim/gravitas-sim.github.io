@@ -1432,6 +1432,12 @@ export const ES = {
     'Se inició una grabación nueva: el instrumento apunta ahora a {name}. Las muestras anteriores eran de otra estrella y no forman parte de esta curva.',
   'observing.session.newGeometry':
     'Se inició una grabación nueva: el observador se movió. Las muestras anteriores se tomaron desde otra dirección y no van con estas.',
+  'observing.session.newWorld':
+    'Se inició una grabación nueva: la simulación se reconstruyó. Las muestras anteriores eran de una estrella del mundo previo, que puede haber reutilizado el mismo identificador.',
+  'observing.session.newUnits':
+    'Se inició una grabación nueva: cambió la constante gravitatoria, así que las muestras anteriores se convirtieron con otra escala y no pueden representarse junto a estas.',
+  'observing.session.newConfig':
+    'Se inició una grabación nueva: cambió el calendario de observación. Las medidas anteriores pertenecen al programa previo.',
   'observing.session.rewound':
     'Rebobinado al día {time}. Se descartaron {n} muestras posteriores a ese punto: describían un futuro al que esta ejecución no ha llegado.',
   'observing.session.unnamedStar': 'esta estrella',

@@ -449,32 +449,29 @@ export function updateAstrometry() {
     scrubbing: isScrubbing(),
   });
 
-  switch (decision.action) {
-    case 'hold':
-      render();
-      return;
-
-    case 'restart':
-      startNewSession(current, decision.reason, star);
-      break;
-
-    case 'truncate': {
-      const before = trail.length;
-      trail = dropInvalidatedSamples(trail, simTime, p => p.t);
-      const dropped = before - trail.length;
-      lastSampleTime = trail.length ? trail[trail.length - 1].t : null;
-      recordedSession = current;
-      if (dropped > 0) {
-        sessionNotice = t('observing.session.rewound', {
-          n: dropped,
-          time: formatNumber(simTime, { sig: 3 }),
-        });
-      }
-      break;
+  // The recorded path first, running or not: switching stars while paused must
+  // not leave the old star's track on screen.
+  if (decision.invalidate === 'rewound') {
+    const before = trail.length;
+    trail = dropInvalidatedSamples(trail, simTime, p => p.t);
+    const dropped = before - trail.length;
+    lastSampleTime = trail.length ? trail[trail.length - 1].t : null;
+    recordedSession = current;
+    if (dropped > 0) {
+      sessionNotice = t('observing.session.rewound', {
+        n: dropped,
+        time: formatNumber(simTime, { sig: 3 }),
+      });
     }
+  } else if (decision.invalidate) {
+    startNewSession(current, decision.invalidate, star);
+  }
 
-    default:
-      break;
+  // Separately: whether this frame may contribute a point. A restart does not
+  // grant it - see decideSampling in js/observingSession.js.
+  if (!decision.sample) {
+    render();
+    return;
   }
 
   const cur = currentAstrometricOffset();
@@ -489,6 +486,25 @@ export function updateAstrometry() {
     lastSampleTime = simTime;
   }
   render();
+}
+
+/**
+ * Why a recording was abandoned, in the reader's language.
+ *
+ * @param {?string} reason - From sessionChange()
+ * @param {?object} star - The star now observed, for the target message
+ * @returns {string} The sentence to show
+ */
+function sessionNoticeFor(reason, star) {
+  if (reason === 'target') {
+    return t('observing.session.newTarget', {
+      name: star?.name || t('observing.session.unnamedStar'),
+    });
+  }
+  if (reason === 'world') return t('observing.session.newWorld');
+  if (reason === 'units') return t('observing.session.newUnits');
+  if (reason === 'config') return t('observing.session.newConfig');
+  return t('observing.session.newGeometry');
 }
 
 /**
@@ -509,13 +525,7 @@ function startNewSession(session, reason, star) {
   trail = [];
   lastSampleTime = null;
   recordedSession = session;
-  sessionNotice = !discarded
-    ? null
-    : reason === 'target'
-      ? t('observing.session.newTarget', {
-          name: star?.name || t('observing.session.unnamedStar'),
-        })
-      : t('observing.session.newGeometry');
+  sessionNotice = !discarded ? null : sessionNoticeFor(reason, star);
 }
 
 /**

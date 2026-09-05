@@ -301,6 +301,131 @@ test.describe('the export', () => {
   });
 });
 
+test.describe('a recording belongs to what it recorded', () => {
+  // Two things a finished run must not do: gain a point it never observed
+  // because a target changed while the clock was stopped, and be relabelled at
+  // export time with whatever the panel is pointed at now.
+
+  test('switching stars while paused clears the curve and adds nothing', async ({
+    page,
+    app,
+  }) => {
+    // The reproduction. `restart` used to be returned before the paused check,
+    // and the panel then fell through and appended - so this produced a
+    // one-sample recording of an instant nobody observed.
+    await app.boot();
+    await app.loadScenario('Binary Star System');
+    await app.waitForFrames(20);
+    await app.openPanel('toggleRadialVelocity', 'rvContainer');
+
+    const count = () =>
+      page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.radialVelocitySeries().length;
+      });
+    await expect.poll(count, { timeout: 30_000 }).toBeGreaterThan(5);
+
+    await app.setPaused(true);
+    const whilePaused = await count();
+
+    // Point the instrument at the other star of the binary, still paused.
+    const switched = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const physics = await import('/js/physics.js');
+      const live = physics.stars.filter(s => s.alive);
+      const other = live.find(s => s.id !== rv.observedStarId());
+      if (!other) return null;
+      rv.setObservedStar(other.id);
+      return other.id;
+    });
+    expect(switched).not.toBeNull();
+
+    await page.waitForTimeout(500);
+    const after = await count();
+
+    // The old star's curve is gone, and nothing replaced it while stopped.
+    expect(after).toBe(0);
+    expect(whilePaused).toBeGreaterThan(5);
+
+    // Resuming starts recording the new star.
+    await app.setPaused(false);
+    await expect.poll(count, { timeout: 30_000 }).toBeGreaterThan(2);
+  });
+
+  test('export right after a target change describes the run, not the selection', async ({
+    page,
+    app,
+  }) => {
+    await openRv(page, app);
+    await startSurvey(page, {
+      cadence: 0.3,
+      baseline: 0.9,
+      sigma: 5,
+      seed: 'provenance',
+    });
+    await expect
+      .poll(async () => (await runState(page)).count, { timeout: 60_000 })
+      .toBe(4);
+
+    const recorded = (await runState(page)).target;
+    expect(recorded?.name).toBeTruthy();
+
+    // Now point the panel somewhere else, without restarting the run.
+    await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const physics = await import('/js/physics.js');
+      const other = physics.gas_giants.filter(b => b.alive)[0];
+      if (other) rv.setObservedStar(other.id);
+    });
+
+    const after = await runState(page);
+    // The finished run still says what it is a recording of.
+    expect(after.target).toEqual(recorded);
+  });
+
+  test('export with the panel closed still describes the run', async ({
+    page,
+    app,
+  }) => {
+    await openRv(page, app);
+    await startSurvey(page, {
+      cadence: 0.3,
+      baseline: 0.9,
+      sigma: 5,
+      seed: 'closed',
+    });
+    await expect
+      .poll(async () => (await runState(page)).count, { timeout: 60_000 })
+      .toBe(4);
+    const recorded = await runState(page);
+
+    await page.locator('#rvClose').click();
+    await expect(page.locator('#rvContainer')).toBeHidden();
+
+    await app.railControl('exportDataBtn');
+    await page.locator('#exportDataBtn').click();
+    const row = page.locator('#dataExport [data-export="radialvelocity"]');
+    await expect(row).toContainText(/4 measurements/);
+
+    const download = page.waitForEvent('download');
+    await row.locator('button').click();
+    const path = join(OUT, 'closed-panel.csv');
+    await (await download).saveAs(path);
+
+    const lines = (await readFile(path, 'utf8'))
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .split(/\r?\n/);
+    const header = lines[0].split(',');
+    expect(lines).toHaveLength(5);
+    for (const line of lines.slice(1)) {
+      const cells = line.split(',');
+      expect(cells[header.indexOf('target')]).toBe(recorded.target.name);
+      expect(cells[header.indexOf('noise_seed')]).toBe('closed');
+    }
+  });
+});
+
 test.describe('the lesson', () => {
   test('opens, and its instrument draws both schedules', async ({
     page,

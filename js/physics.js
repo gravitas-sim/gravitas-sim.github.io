@@ -1829,6 +1829,19 @@ const bumpWorldGeneration = () => {
   worldGeneration++;
 };
 
+/**
+ * Which world this is.
+ *
+ * Bumped on every repopulation of the object lists, so it distinguishes two
+ * worlds that a body id cannot: ids restart from a counter, and a rebuilt
+ * scenario hands the same id to a different star. The observing panels put this
+ * in a recording's identity for exactly that reason - without it, a recording
+ * of one star could be continued against its replacement.
+ *
+ * @returns {number} A counter, meaningful only by comparison
+ */
+export const getWorldGeneration = () => worldGeneration;
+
 const updateCachedArrays = () => {
   const currentCounts = {
     bh: bh_list.length,

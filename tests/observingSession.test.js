@@ -85,8 +85,8 @@ describe('switching stars in a binary', () => {
       lastSampleTime: 4.2,
       simTime: 4.3,
     });
-    expect(decision.action).toBe('restart');
-    expect(decision.reason).toBe('target');
+    expect(decision.invalidate).toBeTruthy();
+    expect(decision.invalidate).toBe('target');
   });
 
   test('restarting wins over every other consideration', () => {
@@ -104,7 +104,7 @@ describe('switching stars in a binary', () => {
         simTime: 4.3,
         ...extra,
       });
-      expect(decision.action).toBe('restart');
+      expect(decision.invalidate).toBeTruthy();
     }
   });
 });
@@ -118,7 +118,7 @@ describe('pausing', () => {
       simTime: 4.2,
       paused: true,
     });
-    expect(decision.action).toBe('hold');
+    expect(decision.sample).toBe(false);
   });
 
   test('a frame that renders without the clock moving adds nothing', () => {
@@ -133,7 +133,7 @@ describe('pausing', () => {
       simTime: 4.2,
       paused: false,
     });
-    expect(decision.action).toBe('hold');
+    expect(decision.sample).toBe(false);
   });
 
   test('and resuming appends again', () => {
@@ -143,7 +143,7 @@ describe('pausing', () => {
       lastSampleTime: 4.2,
       simTime: 4.26,
     });
-    expect(decision.action).toBe('append');
+    expect(decision.sample).toBe(true);
   });
 });
 
@@ -171,8 +171,8 @@ describe('rewinding the timeline and resuming', () => {
       lastSampleTime: 9.5,
       simTime: 4.0,
     });
-    expect(decision.action).toBe('truncate');
-    expect(decision.reason).toBe('rewound');
+    expect(decision.invalidate).toBe('rewound');
+    expect(decision.invalidate).toBe('rewound');
   });
 
   test('scrubbing itself records nothing', () => {
@@ -185,7 +185,7 @@ describe('rewinding the timeline and resuming', () => {
       simTime: 4.0,
       scrubbing: true,
     });
-    expect(decision.action).toBe('hold');
+    expect(decision.sample).toBe(false);
   });
 
   test('truncation keeps the past and drops the invalidated future', () => {
@@ -239,8 +239,8 @@ describe('starting from nothing', () => {
         currentSession: session(1),
         lastSampleTime: null,
         simTime: 0,
-      }).action
-    ).toBe('append');
+      }).sample
+    ).toBe(true);
   });
 
   test('but not while paused or scrubbing', () => {
@@ -252,8 +252,115 @@ describe('starting from nothing', () => {
           lastSampleTime: null,
           simTime: 0,
           ...extra,
-        }).action
-      ).toBe('hold');
+        }).sample
+      ).toBe(false);
     }
+  });
+});
+
+describe('invalidating the past never grants permission to sample', () => {
+  // The defect. `restart` was returned before the paused and scrubbing checks
+  // were reached, and the panels then fell through and appended a point - so
+  // selecting a different star on a stopped simulation produced a one-sample
+  // recording of an instant nobody observed.
+
+  const running = {
+    recordedSession: session(1),
+    lastSampleTime: 10,
+    simTime: 10,
+  };
+
+  test.each([
+    ['paused', { paused: true }],
+    ['scrubbing', { scrubbing: true }],
+    ['both', { paused: true, scrubbing: true }],
+  ])(
+    'a target change while %s clears the old data and records nothing',
+    (_w, state) => {
+      const d = decideSampling({
+        ...running,
+        currentSession: session(2),
+        ...state,
+      });
+      // The old star's curve does not survive...
+      expect(d.invalidate).toBe('target');
+      // ...and no measurement is invented at a clock that is not moving.
+      expect(d.sample).toBe(false);
+    }
+  );
+
+  test('the same is true of a geometry change while paused', () => {
+    const d = decideSampling({
+      ...running,
+      currentSession: session(1, { inclinationDeg: 30 }),
+      paused: true,
+    });
+    expect(d.invalidate).toBe('geometry');
+    expect(d.sample).toBe(false);
+  });
+
+  test('running, a target change both clears and starts recording', () => {
+    const d = decideSampling({ ...running, currentSession: session(2) });
+    expect(d.invalidate).toBe('target');
+    // There is no previous sample to be too close to once the old ones go.
+    expect(d.sample).toBe(true);
+  });
+
+  test('a target change does not excuse a clock that has not moved', () => {
+    // Not paused, not scrubbing, but the frame rendered on the same instant.
+    // The restart stands; the sample does not, because the first point of the
+    // new recording still has to be a measurement of something.
+    const d = decideSampling({
+      recordedSession: session(1),
+      currentSession: session(2),
+      lastSampleTime: 10,
+      simTime: 10,
+      paused: false,
+    });
+    expect(d.invalidate).toBe('target');
+    expect(d.sample).toBe(true);
+  });
+});
+
+describe('a recording belongs to one world, one ruler and one configuration', () => {
+  test('a rebuilt world is a different session even with the same body id', () => {
+    // Body ids restart from a counter, so a rebuilt scenario hands the same id
+    // to a different star. Without the generation these two are identical.
+    const before = sessionKey({ starId: 3, worldGeneration: 7 });
+    const after = sessionKey({ starId: 3, worldGeneration: 8 });
+    expect(sessionChange(before, after)).toBe('world');
+  });
+
+  test('the world is reported ahead of the target it usually changes too', () => {
+    const before = sessionKey({ starId: 3, worldGeneration: 7 });
+    const after = sessionKey({ starId: 9, worldGeneration: 8 });
+    expect(sessionChange(before, after)).toBe('world');
+  });
+
+  test('changing the velocity scale invalidates what was already converted', () => {
+    // Samples are converted to m/s as they are taken, so moving the
+    // gravitational constant changes the ruler under the recorded numbers.
+    const before = sessionKey({ starId: 1, velocityScale: 1000 });
+    const after = sessionKey({ starId: 1, velocityScale: 1200 });
+    expect(sessionChange(before, after)).toBe('units');
+  });
+
+  test('a float in its last bit is not a different ruler', () => {
+    const before = sessionKey({ starId: 1, velocityScale: 1000 });
+    const after = sessionKey({ starId: 1, velocityScale: 1000 + 1e-12 });
+    expect(sessionChange(before, after)).toBeNull();
+  });
+
+  test('an instrument configuration change starts a new recording', () => {
+    const before = sessionKey({ starId: 1, config: 'cadence=0.32' });
+    const after = sessionKey({ starId: 1, config: 'cadence=3.52' });
+    expect(sessionChange(before, after)).toBe('config');
+  });
+
+  test('an absent axis never invalidates, so old callers are unaffected', () => {
+    const bare = sessionKey({ starId: 1 });
+    const withWorld = sessionKey({ starId: 1, worldGeneration: 4 });
+    expect(sessionChange(bare, withWorld)).toBeNull();
+    expect(sessionChange(withWorld, bare)).toBeNull();
   });
 });
