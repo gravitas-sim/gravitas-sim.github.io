@@ -1169,6 +1169,14 @@ export const EN = {
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
+  'scenario.Binary Planet Lab.title':
+    'Binary Planet Lab: a planet around one star of a pair',
+  'scenario.Binary Planet Lab.summary':
+    'Two stars of one and half a solar mass, ten AU apart on an orbit of eccentricity 0.4, and an Earth-mass planet circling the heavier one at 1.5 AU. Nothing here is randomized: every mass, distance and starting angle is written down, so two runs differ only where you make them differ. Move the planet outward and there is a distance past which it stops coming back. Finding roughly where, and how much of that answer is physics rather than timestep, is the experiment.',
+  'scenario.Circumbinary Planet Lab.title':
+    'Circumbinary Planet Lab: a planet around both stars at once',
+  'scenario.Circumbinary Planet Lab.summary':
+    'The same two stars, with the planet outside them both at 40 AU, orbiting the pair as though it were one object. Real planets do this - Kepler-16b is the famous one - but only far enough out that the two stars begin to look like one. Bring it inward and the approximation fails: the changing pull of a binary it can still tell apart walks its orbit outward over a few dozen binary periods until it leaves. Here the boundary is a floor, not a ceiling.',
   'scenario.Black Hole Lab.title':
     'Black Hole Lab: a ten solar mass hole, and four things orbiting it',
   'scenario.Black Hole Lab.summary':

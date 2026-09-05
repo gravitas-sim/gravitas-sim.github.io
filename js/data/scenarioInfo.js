@@ -96,6 +96,14 @@ const SCENARIO_STRUCTURE = {
     tags: ['exoplanets', 'detection', 'binary-systems'],
     thumbnail: 'images/scenarios/blended-binary.webp',
   },
+  'Binary Planet Lab': {
+    tags: ['binary-systems', 'exoplanets', 'chaos', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/binary-planet-lab.webp',
+  },
+  'Circumbinary Planet Lab': {
+    tags: ['binary-systems', 'exoplanets', 'chaos', 'orbits-kepler'],
+    thumbnail: 'images/scenarios/circumbinary-planet-lab.webp',
+  },
   'Black Hole Lab': {
     tags: ['compact-objects', 'orbits-kepler'],
     thumbnail: 'images/scenarios/black-hole-lab.webp',

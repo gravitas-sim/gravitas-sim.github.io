@@ -28,6 +28,7 @@
 //   pins this for all 53 scenarios.
 // =============================================================================
 
+import { CIRCUMBINARY, CIRCUMSTELLAR, systemLayout } from '../binaryOrbits.js';
 import {
   EARTH_MASSES_PER_JUPITER_MASS,
   JUPITER_MASSES_PER_SOLAR_MASS,
@@ -2314,6 +2315,123 @@ export const buildWorld = ctx => {
     // The cluster as a whole should not be sailing off the screen: any net
     // drift would add itself to every member's speed and inflate the
     // dispersion, which is the one number the lesson turns on.
+    zeroNetMomentum();
+  }
+
+  // --- Binary Planet Lab / Circumbinary Planet Lab -----------------------------
+  if (
+    starting_preset === 'Binary Planet Lab' ||
+    starting_preset === 'Circumbinary Planet Lab'
+  ) {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const AU = SIM_UNITS_PER_AU;
+    const R_SUN = 0.00465047 * AU;
+    const G = SETTINGS.gravitational_constant;
+    const mode =
+      starting_preset === 'Circumbinary Planet Lab'
+        ? CIRCUMBINARY
+        : CIRCUMSTELLAR;
+    /** How much larger than life the stars are drawn. See the note below. */
+    const STAR_DRAW_EXAGGERATION = 10;
+
+    const m1Solar = SETTINGS.binary_lab_m1;
+    const m2Solar = SETTINGS.binary_lab_m2;
+    const separation = SETTINGS.binary_lab_separation * AU;
+    // One Earth mass. Not zero, because a body with no mass drops out of the
+    // barycenter and out of the energy bookkeeping the diagnostics depend on;
+    // and small enough - three parts in a million of the lighter star - that
+    // the test-particle assumption behind the published stability boundary is
+    // not being quietly violated by the thing being measured.
+    const planetMass = EARTH_MASS_UNIT;
+
+    const layout = systemLayout({
+      mode,
+      m1: m1Solar * SOLAR_MASS_UNIT,
+      m2: m2Solar * SOLAR_MASS_UNIT,
+      separation,
+      eccentricity: SETTINGS.binary_lab_eccentricity,
+      phaseDeg: SETTINGS.binary_lab_binary_phase,
+      planetMass,
+      semiMajor: SETTINGS.binary_lab_planet_a * separation,
+      planetPhaseDeg: SETTINGS.binary_lab_planet_phase,
+      G,
+    });
+
+    // Radii, and the one honest compromise in this scenario.
+    //
+    // js/physics.js absorbs a planet when it comes within star.radius +
+    // planet.radius, so the size these bodies are DRAWN at is the distance at
+    // which a collision gets recorded. At a 10 AU separation a true solar
+    // radius is 0.46 simulation units - about a third of a pixel at this zoom -
+    // and a star nobody can see is not usable. So the stars are drawn ten times
+    // their real size, from the main-sequence relation R ~ M^0.8.
+    //
+    // What that means for the results, stated here and repeated in the panel
+    // and the instructor notes: a "collision" in this scenario is the planet
+    // passing within about 0.06 AU of a star's center - roughly thirteen solar
+    // radii - not a measured impact. A pass that close destroys a planet in
+    // reality too, so the outcome is not fiction; but the split between
+    // "collided" and "ejected" among the disrupted configurations does depend
+    // on this factor, and a student comparing those two counts is comparing
+    // something partly set by a drawing decision. The split between disrupted
+    // and survived does not: every surviving configuration here keeps the
+    // planet at least 400 units from the far star, seventy times the threshold.
+    const star1 = new StarObject(
+      { ...layout.star1.pos },
+      { ...layout.star1.vel },
+      m1Solar
+    );
+    star1.name = 'Star A';
+    star1.radiusInSuns = m1Solar ** 0.8;
+    star1.radius = star1.radiusInSuns * R_SUN * STAR_DRAW_EXAGGERATION;
+    star1.baseColor = '#fff0d0';
+    star1.persistent = true;
+    stars.push(star1);
+
+    const star2 = new StarObject(
+      { ...layout.star2.pos },
+      { ...layout.star2.vel },
+      m2Solar
+    );
+    star2.name = 'Star B';
+    star2.radiusInSuns = m2Solar ** 0.8;
+    star2.radius = star2.radiusInSuns * R_SUN * STAR_DRAW_EXAGGERATION;
+    star2.baseColor = '#ffc898';
+    star2.persistent = true;
+    stars.push(star2);
+
+    const planet = new Planet(
+      { ...layout.planet.pos },
+      { ...layout.planet.vel },
+      1
+    );
+    planet.name = 'Planet';
+    planet.mass = planetMass;
+    // An Earth radius at this scale is 4e-5 units, which is not a thing that
+    // can be drawn at any zoom. 1.5 units is a third of the drawn star and a
+    // ten-thousandth of the binary separation, so it adds almost nothing to the
+    // collision threshold the star already sets. What actually makes the planet
+    // findable on screen is its trail, which is why the scenario asks for a
+    // long one.
+    planet.radius = 1.5;
+    planet.baseColor = '#7ec8ff';
+    planet.persistent = true;
+    planets.push(planet);
+
+    // Built barycentric, so this removes nothing but the planet's own small
+    // contribution. Worth doing anyway: without it the system creeps, and over
+    // forty binary periods a creeping barycenter turns "distance from the
+    // system" - the quantity an ejection is judged on - into a growing number
+    // that has nothing to do with the planet.
     zeroNetMomentum();
   }
 

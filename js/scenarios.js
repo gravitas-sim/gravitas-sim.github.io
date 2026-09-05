@@ -1298,6 +1298,75 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       max_timestep: 0.005,
       min_interaction_distance: 0.01,
     });
+  } else if (ps === 'Binary Planet Lab' || ps === 'Circumbinary Planet Lab') {
+    // Two scenarios, one system. The stars are identical in both - same masses,
+    // same 10 AU separation, same e = 0.4, same starting phase - and the only
+    // difference is where the planet is put and how long the run is set to go.
+    // That is deliberate: a student comparing "a planet around one star" with
+    // "a planet around both" should be comparing the planet's situation, not
+    // two different binaries.
+    //
+    // Nothing here is randomized. js/world/build.js places all three bodies
+    // from closed-form elements, so the same settings give the same world to
+    // the bit and the experiment bench can restore a run by rebuilding it.
+    const circumbinary = ps === 'Circumbinary Planet Lab';
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 2,
+      mutual_gravity: true,
+      star_only_gravity: false,
+      placement: 'Empty',
+      num_planets: 1,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      // A planet thrown at a star should be recorded as a collision, not
+      // absorbed silently, and the stars themselves must not merge during a
+      // close pass: that would change the system mid-experiment.
+      enable_star_merging: false,
+      show_trails: true,
+      // Long enough to see the shape of the planet's orbit change, short
+      // enough that a hundred orbits do not paint the screen solid.
+      trail_length: 300,
+      show_conservation_diagnostics: true,
+      // Velocity Verlet rather than the catalog default. This is the one
+      // scenario family whose entire subject is whether an outcome is real,
+      // and symplectic Euler's O(dt) phase error puts a spurious eccentricity
+      // on the planet within a few orbits - which is exactly the artefact a
+      // student would then read as "the binary is perturbing it". Verlet's
+      // error is O(dt^2) and bounded, so the drift readout stays near 1e-6 on
+      // a quiet run and rises only when something real is unresolved.
+      integrator: 'Velocity Verlet',
+      // The step and the speed are set together, and the arithmetic is worth
+      // writing down. render.js integrates min(frameSeconds, 0.05) * speed * 5
+      // of simulated time per frame, in at most 64 substeps of max_timestep.
+      // At 60 fps that is 0.0833 * speed; choosing speed so this equals
+      // 64 * max_timestep fills the substep budget exactly and no further.
+      //
+      // A binary period here is 5131 time units. The circumstellar run is 20
+      // of them and the circumbinary run 40 - about 103,000 steps either way,
+      // which is a little under half a minute of watching.
+      sim_speed: circumbinary ? 1500 : 750,
+      // Measured, not guessed. At these steps the surviving configurations
+      // give an identical answer at dt, dt/2 and dt/4, and the drift readout
+      // stays at 1e-6. Configurations near the boundary do not, and the
+      // investigation makes that the point rather than hiding it.
+      max_timestep: circumbinary ? 2.0 : 1.0,
+      min_interaction_distance: 0.01,
+      sim_size: 'Large',
+      // The circumstellar planet sits at 1.5 AU inside a 10 AU binary; the
+      // circumbinary one is at 40 AU. Framing the binary plus a margin for the
+      // planet's excursions, without following anything - a follow mode would
+      // hide an ejection by keeping the planet centered while everything else
+      // slid off screen.
+      preset_zoom: circumbinary ? 0.14 : 0.6,
+      follow_mode: 'None',
+      binary_lab_planet_a: circumbinary ? 4.0 : 0.15,
+      binary_lab_periods: circumbinary ? 40 : 20,
+    });
   } else if (ps === 'Transit Lab' || ps === 'Blended Binary') {
     // HD 209458: the first planet ever caught transiting, in 1999, and still
     // the best-studied. Everything here is at true relative scale, which is

@@ -1203,6 +1203,14 @@ export const ES = {
   'scenario.Blended Binary.title': 'Binaria mezclada: una compañera oculta',
   'scenario.Blended Binary.summary':
     'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, así que el tránsito se mide menos profundo y el planeta parece más pequeño. Corregir este efecto es para lo que sirven los sondeos de imagen de alta resolución.',
+  'scenario.Binary Planet Lab.title':
+    'Laboratorio de planeta en binaria: un planeta alrededor de una de las estrellas',
+  'scenario.Binary Planet Lab.summary':
+    'Dos estrellas de una y media masa solar, separadas diez AU en una órbita de excentricidad 0,4, y un planeta de una masa terrestre girando alrededor de la más pesada a 1,5 AU. Nada aquí es aleatorio: cada masa, distancia y ángulo inicial está escrito, así que dos ejecuciones solo difieren donde tú las hagas diferir. Aleja el planeta y hay una distancia a partir de la cual deja de volver. Averiguar dónde, y cuánto de esa respuesta es física y no paso de integración, es el experimento.',
+  'scenario.Circumbinary Planet Lab.title':
+    'Laboratorio circumbinario: un planeta alrededor de las dos estrellas',
+  'scenario.Circumbinary Planet Lab.summary':
+    'Las mismas dos estrellas, con el planeta fuera de ambas a 40 AU, orbitando al par como si fuera un solo objeto. Hay planetas reales que lo hacen -Kepler-16b es el famoso- pero solo lo bastante lejos como para que las dos estrellas empiecen a parecer una. Acércalo y la aproximación falla: el tirón cambiante de una binaria que aún distingue empuja su órbita hacia fuera durante decenas de periodos binarios hasta que se marcha. Aquí la frontera es un suelo, no un techo.',
   'scenario.Black Hole Lab.title':
     'Laboratorio de agujeros negros: diez masas solares y cuatro cuerpos alrededor',
   'scenario.Black Hole Lab.summary':

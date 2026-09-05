@@ -72,6 +72,36 @@ export const DEFAULT_SETTINGS = {
   // The numerical scheme. Symplectic Euler is the default and must stay it:
   // every scenario in the catalog was laid out and timed against its error.
   integrator: 'Symplectic Euler',
+
+  // --- The binary planet laboratory -----------------------------------------
+  // The controlled system behind the two Binary Planet Lab scenarios and the
+  // "Planets in Binary Stars" investigation. Every one of these is stated
+  // rather than sampled, which is the entire difference between this and the
+  // randomized Binary Star System next to it in the catalog: two runs of a
+  // scenario built from a generator are two different experiments.
+  //
+  // The defaults are the ones the investigation is written against, and they
+  // were chosen by running the configurations rather than by taste. With
+  // mu = m2/(m1+m2) = 1/3 and e = 0.4 the published critical radii land at
+  // 0.177 separations for a planet around one star and 3.61 for a planet
+  // around both, which puts a clear survivor and a clear disruption within a
+  // few binary periods of each other and inside a run a student will sit
+  // through. See js/binaryStability.js for the fits and their source.
+  binary_lab_m1: 1.0, // solar masses, the star a circumstellar planet orbits
+  binary_lab_m2: 0.5, // solar masses, the companion
+  binary_lab_separation: 10, // AU, semi-major axis of the stars' relative orbit
+  binary_lab_eccentricity: 0.4,
+  binary_lab_binary_phase: 0, // degrees of true anomaly from periapsis at t=0
+  // The planet's starting semi-major axis, in units of the binary separation.
+  // Expressed as a ratio because that is the variable the stability boundary
+  // is a function of: 0.15 means the same thing whether the stars are 10 AU
+  // apart or 100, and a student changing the separation is then changing one
+  // thing rather than two.
+  binary_lab_planet_a: 0.15,
+  binary_lab_planet_phase: 0, // degrees from +x, independent of the binary's
+  // How many binary periods to integrate before stopping and reporting. Not a
+  // claim about stability at any length: see the outcome wording.
+  binary_lab_periods: 20,
   interactive_add: true,
   trail_length: 15,
   trail_style: 'Glow',
