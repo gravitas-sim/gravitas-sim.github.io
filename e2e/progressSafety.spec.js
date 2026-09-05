@@ -168,6 +168,145 @@ test.describe('the save status', () => {
   });
 });
 
+test.describe('work survives the panel closing when storage refuses', () => {
+  // Reproduced before the fix: with writes failing, answering to step 3 and
+  // reopening the lesson landed back on step 1. Closing a panel is not a
+  // decision to discard, and the warning already promises the answers survive
+  // until the tab does.
+
+  /** Reopen the lesson through the browser, as a reader would. */
+  const reopen = async (page, id = LESSON) => {
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${id}"]`).click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+  };
+
+  test('closing and reopening keeps the answers and the position', async ({
+    page,
+    app,
+  }) => {
+    await breakStorage(page, 'QuotaExceededError');
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const reached = await stepNumber(page);
+    expect(reached).toBeGreaterThanOrEqual(3);
+    await expect(status(page)).toHaveAttribute('data-state', 'full');
+
+    await page.locator('#investigationClose').click();
+    await expect(page.locator('#investigationPanel')).toBeHidden();
+    await reopen(page);
+
+    expect(await stepNumber(page)).toBe(reached);
+    // And the warning is still accurate: safe here, not on the disk.
+    await expect(status(page)).toHaveAttribute('data-state', 'full');
+    await expect(status(page)).toContainText(/lost when you close the tab/i);
+  });
+
+  test('switching to another lesson and back keeps both', async ({
+    page,
+    app,
+  }) => {
+    await breakStorage(page, 'QuotaExceededError');
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const firstReached = await stepNumber(page);
+
+    // A genuinely different lesson: this spec's LESSON is missing-mass.
+    const OTHER = 'detect-this-planet';
+    await page.locator('#investigationClose').click();
+    await reopen(page, OTHER);
+    await answerAndAdvance(page);
+    const otherReached = await stepNumber(page);
+    expect(otherReached).toBeGreaterThanOrEqual(2);
+
+    await page.locator('#investigationClose').click();
+    await reopen(page);
+    expect(await stepNumber(page)).toBe(firstReached);
+
+    await page.locator('#investigationClose').click();
+    await reopen(page, OTHER);
+    expect(await stepNumber(page)).toBe(otherReached);
+  });
+
+  test('a backup taken after a failed save carries the real answers', async ({
+    page,
+    app,
+  }) => {
+    await breakStorage(page, 'QuotaExceededError');
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const reached = await stepNumber(page);
+
+    // Close and reopen first: the file must come from the session copy, not
+    // from whatever the panel happens to be holding.
+    await page.locator('#investigationClose').click();
+    await reopen(page);
+
+    const download = page.waitForEvent('download');
+    await page.locator('#investigationBackupDownload').click();
+    const path = join(OUT, 'after-failure.json');
+    await (await download).saveAs(path);
+    const backup = JSON.parse(await readFile(path, 'utf8'));
+
+    expect(Object.keys(backup.progress.responses).length).toBeGreaterThan(0);
+    expect(backup.steps[reached - 1].sid).toBe(backup.progress.stepSid);
+  });
+
+  test('restoring still replaces what the session is holding', async ({
+    page,
+    app,
+  }) => {
+    // The session copy must not shield stale answers from a deliberate restore.
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    const download = page.waitForEvent('download');
+    await page.locator('#investigationBackupDownload').click();
+    const path = join(OUT, 'session-restore.json');
+    await (await download).saveAs(path);
+    const early = await stepNumber(page);
+
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    expect(await stepNumber(page)).toBeGreaterThan(early);
+
+    page.once('dialog', d => d.accept());
+    await page.locator('#investigationBackupFile').setInputFiles(path);
+    await expect.poll(() => stepNumber(page), { timeout: 15_000 }).toBe(early);
+
+    // ...and it survives closing and reopening, so the session copy was updated.
+    await page.locator('#investigationClose').click();
+    await reopen(page);
+    expect(await stepNumber(page)).toBe(early);
+  });
+
+  test("an authoring preview never becomes the reader's progress", async ({
+    page,
+    app,
+  }) => {
+    await breakStorage(page, 'QuotaExceededError');
+    await openLesson(page, app);
+    await answerAndAdvance(page);
+    await answerAndAdvance(page);
+    const reached = await stepNumber(page);
+
+    // An author opens the same lesson deep in, with storage still refusing.
+    await app.boot({ url: `/?author=${LESSON}&step=9` });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(status(page)).toHaveAttribute('data-state', 'authoring');
+
+    // The preview is a different page load, so the session copy is gone with
+    // it - what matters is that the author's position did not become anyone's
+    // progress, in storage or in the session.
+    await app.boot();
+    await reopen(page);
+    expect(await stepNumber(page)).not.toBe(9);
+    void reached;
+  });
+});
+
 test.describe('the backup file', () => {
   test('carries the work out and puts it back', async ({ page, app }) => {
     await openLesson(page, app);

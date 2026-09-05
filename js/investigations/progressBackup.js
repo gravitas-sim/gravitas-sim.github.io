@@ -162,14 +162,100 @@ export function validateBackup(data) {
     return { ok: false, reason: 'noLesson' };
   }
   const p = data.progress;
-  if (!p || typeof p !== 'object') return { ok: false, reason: 'noProgress' };
-  if (p.responses && typeof p.responses !== 'object') {
+  if (!p || typeof p !== 'object' || Array.isArray(p)) {
+    return { ok: false, reason: 'noProgress' };
+  }
+
+  // Every field is checked before the caller is allowed to touch a student's
+  // current answers. `typeof [] === 'object'` on its own let an array of
+  // anything through as a response map, and nothing checked `attempts`,
+  // `steps`, the timestamps or the values at all - so a file that was almost a
+  // backup could half-apply and leave the panel holding a mixture.
+  if (!isPlainObject(p.responses, true)) {
     return { ok: false, reason: 'badResponses' };
   }
-  if (p.visited && !Array.isArray(p.visited)) {
+  if (!isPlainObject(p.attempts, true)) {
+    return { ok: false, reason: 'badAttempts' };
+  }
+  if (p.visited !== undefined && !Array.isArray(p.visited)) {
     return { ok: false, reason: 'badVisited' };
   }
+  if (!isScalarMap(p.responses)) return { ok: false, reason: 'badResponses' };
+  if (!isNumberMap(p.attempts)) return { ok: false, reason: 'badAttempts' };
+
+  if (p.startedAt !== undefined && p.startedAt !== null) {
+    if (
+      typeof p.startedAt !== 'string' ||
+      Number.isNaN(Date.parse(p.startedAt))
+    ) {
+      return { ok: false, reason: 'badStartedAt' };
+    }
+  }
+  if (
+    p.stepSid !== undefined &&
+    p.stepSid !== null &&
+    typeof p.stepSid !== 'string'
+  ) {
+    return { ok: false, reason: 'badPosition' };
+  }
+  if (p.stepIndex !== undefined && !Number.isInteger(p.stepIndex)) {
+    return { ok: false, reason: 'badPosition' };
+  }
+
+  if (data.steps !== undefined) {
+    if (!Array.isArray(data.steps)) return { ok: false, reason: 'badSteps' };
+    for (const entry of data.steps) {
+      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+        return { ok: false, reason: 'badSteps' };
+      }
+      if (
+        entry.sid !== undefined &&
+        entry.sid !== null &&
+        typeof entry.sid !== 'string'
+      ) {
+        return { ok: false, reason: 'badSteps' };
+      }
+      if (entry.index !== undefined && !Number.isInteger(entry.index)) {
+        return { ok: false, reason: 'badSteps' };
+      }
+    }
+  }
   return { ok: true };
+}
+
+/** A real object, not an array and not null. `optional` allows absence. */
+function isPlainObject(value, optional = false) {
+  if (value === undefined || value === null) return optional;
+  return typeof value === 'object' && !Array.isArray(value);
+}
+
+/**
+ * Every value is something a response can be.
+ *
+ * Answers are strings, numbers and booleans - a choice index, a typed
+ * measurement, a "model answer shown" flag. Anything else is a structure this
+ * build never wrote, and applying it would put an object where the panel
+ * expects a value.
+ */
+function isScalarMap(map) {
+  if (!map) return true;
+  for (const value of Object.values(map)) {
+    const kind = typeof value;
+    if (kind !== 'string' && kind !== 'number' && kind !== 'boolean')
+      return false;
+    if (kind === 'number' && !Number.isFinite(value)) return false;
+    if (kind === 'string' && value.length > 20000) return false;
+  }
+  return true;
+}
+
+/** Attempt counts are finite non-negative integers or the file is not ours. */
+function isNumberMap(map) {
+  if (!map) return true;
+  for (const value of Object.values(map)) {
+    if (!Number.isInteger(value) || value < 0 || value > 1e6) return false;
+  }
+  return true;
 }
 
 /**

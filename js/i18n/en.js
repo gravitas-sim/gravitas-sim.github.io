@@ -2257,6 +2257,14 @@ export const EN = {
     'That backup\u2019s answers are not in a readable form.',
   'inv.backup.invalid.badVisited':
     'That backup\u2019s step history is not in a readable form.',
+  'inv.backup.invalid.badAttempts':
+    'That backup\u2019s attempt counts are not readable, so it was not applied.',
+  'inv.backup.invalid.badStartedAt':
+    'That backup\u2019s start time is not a readable date, so it was not applied.',
+  'inv.backup.invalid.badPosition':
+    'That backup does not say readably which step it stopped on, so it was not applied.',
+  'inv.backup.invalid.badSteps':
+    'That backup\u2019s step list is damaged, so it was not applied.',
   'inv.backup.wrongLesson':
     'That backup is for \u201c{backup}\u201d, and \u201c{open}\u201d is open. Open that investigation first.',
   'inv.backup.confirmReplace':

@@ -2274,6 +2274,14 @@ export const ES = {
     'Las respuestas de esa copia no tienen un formato legible.',
   'inv.backup.invalid.badVisited':
     'El historial de pasos de esa copia no tiene un formato legible.',
+  'inv.backup.invalid.badAttempts':
+    'Los recuentos de intentos de esa copia no se pueden leer, así que no se aplicó.',
+  'inv.backup.invalid.badStartedAt':
+    'La hora de inicio de esa copia no es una fecha legible, así que no se aplicó.',
+  'inv.backup.invalid.badPosition':
+    'Esa copia no indica de forma legible en qué paso se quedó, así que no se aplicó.',
+  'inv.backup.invalid.badSteps':
+    'La lista de pasos de esa copia está dañada, así que no se aplicó.',
   'inv.backup.wrongLesson':
     'Esa copia es de \u201c{backup}\u201d y est\u00e1 abierta \u201c{open}\u201d. Abre esa investigaci\u00f3n primero.',
   'inv.backup.confirmReplace':

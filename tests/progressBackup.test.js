@@ -227,6 +227,96 @@ describe('validation refuses what it should', () => {
   });
 });
 
+describe('a file is checked completely before it can touch live answers', () => {
+  // A half-applied restore is worse than a refused one: the panel ends up
+  // holding a mixture of the student's answers and a stranger's file, with no
+  // way to tell which is which. So every field is checked first.
+  const withProgress = over => ({
+    ...backupOf(),
+    progress: { ...backupOf().progress, ...over },
+  });
+
+  test.each([
+    ['responses as an array', { responses: ['a'] }, 'badResponses'],
+    [
+      'a response holding an object',
+      { responses: { 'tides:opening': { x: 1 } } },
+      'badResponses',
+    ],
+    [
+      'a response holding an array',
+      { responses: { 'tides:opening': [1, 2] } },
+      'badResponses',
+    ],
+    [
+      'a NaN response',
+      { responses: { 'tides:opening': Number.NaN } },
+      'badResponses',
+    ],
+    ['attempts as an array', { attempts: [1] }, 'badAttempts'],
+    [
+      'a fractional attempt count',
+      { attempts: { 'tides:opening': 1.5 } },
+      'badAttempts',
+    ],
+    [
+      'a negative attempt count',
+      { attempts: { 'tides:opening': -1 } },
+      'badAttempts',
+    ],
+    ['a non-string startedAt', { startedAt: 1234 }, 'badStartedAt'],
+    [
+      'an unparseable startedAt',
+      { startedAt: 'the other day' },
+      'badStartedAt',
+    ],
+    ['a numeric stepSid', { stepSid: 3 }, 'badPosition'],
+    ['visited as an object', { visited: { 0: true } }, 'badVisited'],
+  ])('%s is refused as "%s"', (_what, over, reason) => {
+    expect(validateBackup(withProgress(over))).toEqual({ ok: false, reason });
+  });
+
+  test.each([
+    ['steps as an object', { a: 1 }],
+    ['a step entry that is a string', ['nope']],
+    ['a step entry with a numeric sid', [{ sid: 7 }]],
+    ['a step entry with a fractional index', [{ index: 1.5 }]],
+  ])('%s is refused as "badSteps"', (_what, steps) => {
+    expect(validateBackup({ ...backupOf(), steps })).toEqual({
+      ok: false,
+      reason: 'badSteps',
+    });
+  });
+
+  test('a response string longer than any real answer is refused', () => {
+    const huge = { responses: { 'tides:opening': 'x'.repeat(20001) } };
+    expect(validateBackup(withProgress(huge)).reason).toBe('badResponses');
+  });
+
+  test('the ordinary values a lesson stores all pass', () => {
+    // A choice index, a typed measurement, a shown-answer flag, a tool setting.
+    const ok = withProgress({
+      responses: {
+        'tides:which-one': 1,
+        'tides:four-distances:d1': '2.5',
+        'tides:stretch:shown': true,
+      },
+      attempts: { 'tides:which-one': 2 },
+    });
+    expect(validateBackup(ok)).toEqual({ ok: true });
+  });
+
+  test('absent optional fields are fine', () => {
+    const bare = {
+      kind: BACKUP_KIND,
+      version: BACKUP_VERSION,
+      lesson: { id: 'tides' },
+      progress: {},
+    };
+    expect(validateBackup(bare)).toEqual({ ok: true });
+  });
+});
+
 describe('keys that do not belong are dropped rather than trusted', () => {
   test('a key for another lesson is discarded and counted', () => {
     const backup = backupOf();

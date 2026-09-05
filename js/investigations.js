@@ -216,20 +216,21 @@ function save() {
     setSaveState('authoring');
     return;
   }
+  const payload = writeProgress({
+    lesson: active,
+    responses,
+    attempts,
+    visited,
+    stepSid: active.steps[stepIndex]?.sid ?? null,
+    startedAt,
+  });
+
+  // This tab's copy, always, and before the disk is asked. It is what makes
+  // closing and reopening the lesson safe when the write below fails.
+  sessionProgress.set(active.id, payload);
+
   try {
-    localStorage.setItem(
-      storageKey(active.id),
-      JSON.stringify(
-        writeProgress({
-          lesson: active,
-          responses,
-          attempts,
-          visited,
-          stepSid: active.steps[stepIndex]?.sid ?? null,
-          startedAt,
-        })
-      )
-    );
+    localStorage.setItem(storageKey(active.id), JSON.stringify(payload));
     setSaveState('saved');
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -421,6 +422,29 @@ async function restoreProgressBackup(file) {
   }
 }
 
+/**
+ * This tab's copy of every lesson's progress, whether or not the disk took it.
+ *
+ * When localStorage refuses a write the answers stay in the working variables,
+ * which is enough while the panel is open and useless the moment it closes:
+ * reopening the lesson read storage, found nothing or something stale, and the
+ * reader was back at step one with their work gone. Reproduced before the fix -
+ * answer to step 3 with writes failing, close, reopen, and the panel says step
+ * 1. Closing a panel is not a decision to discard.
+ *
+ * So every save lands here first. It is authoritative for this tab: it is
+ * written on every save and storage is not, so it can never be the older of the
+ * two. It dies with the tab, which is exactly what the unsaved warning already
+ * promises.
+ *
+ * Authoring previews never reach it, for the same reason they never reach
+ * storage: an author looking at step 30 must not become the progress a student
+ * finds when they open the lesson.
+ *
+ * @type {Map<string, object>}
+ */
+const sessionProgress = new Map();
+
 /** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
 
@@ -438,13 +462,19 @@ const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
  * @returns {?object} The progress, or null when there is none
  */
 function load(id, lesson = null) {
-  let data;
-  try {
-    const raw = localStorage.getItem(storageKey(id));
-    if (!raw) return null;
-    data = JSON.parse(raw);
-  } catch {
-    return null;
+  // This tab first. It is written on every save and storage is not, so when the
+  // two differ the session copy is the newer one - and when storage refused
+  // every write, it is the only one there is.
+  let data = sessionProgress.get(id) ?? null;
+
+  if (!data) {
+    try {
+      const raw = localStorage.getItem(storageKey(id));
+      if (!raw) return null;
+      data = JSON.parse(raw);
+    } catch {
+      return null;
+    }
   }
 
   // Without the lesson only the counts are readable, which is all the card
