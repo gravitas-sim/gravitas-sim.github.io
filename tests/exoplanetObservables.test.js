@@ -377,7 +377,7 @@ describe('the radial-velocity half-range and its coverage test', () => {
       y: gamma + K * Math.sin(phase + (2 * Math.PI * cycles * i) / (n - 1)),
     }));
 
-  test('a short run through a zero crossing is not complete', () => {
+  test('a short run through a zero crossing has not bracketed both extremes', () => {
     // The case the old test got wrong. Three per cent of a cycle centred on the
     // ascending node: the samples straddle zero, so "has visited both signs"
     // was satisfied, and the reported K was a twentieth of the truth.
@@ -387,21 +387,21 @@ describe('the radial-velocity half-range and its coverage test', () => {
     const sawBothSigns = measured.min < 0 && measured.max > 0;
     expect(sawBothSigns).toBe(true);
 
-    expect(measured.complete).toBe(false);
+    expect(measured.bracketedBothExtremes).toBe(false);
     // And the number it does report is a small fraction of the real K, which is
     // exactly why calling it complete mattered.
     expect(measured.halfRange).toBeLessThan(50 * 0.1);
   });
 
-  test('a fully sampled circular orbit is complete, and its half-range is K', () => {
+  test('a fully sampled circular orbit brackets both extremes, and its half-range is K', () => {
     const run = sine(200, { cycles: 1, K: 84 });
     const measured = halfRangeOfSeries(run);
 
-    expect(measured.complete).toBe(true);
+    expect(measured.bracketedBothExtremes).toBe(true);
     expect(measured.halfRange).toBeCloseTo(84, 1);
   });
 
-  test('three quarters of a cycle covering both extremes is complete', () => {
+  test('three quarters of a cycle covering both extremes brackets them', () => {
     // Coverage is about having seen both extremes turn around, not about having
     // watched a whole period. This run starts below the maximum, rises over it,
     // falls through the minimum and climbs away again - less than a full cycle,
@@ -410,11 +410,11 @@ describe('the radial-velocity half-range and its coverage test', () => {
     const run = sine(120, { cycles: 0.75, phase: Math.PI / 2 - 0.5, K: 84 });
     const measured = halfRangeOfSeries(run);
 
-    expect(measured.complete).toBe(true);
+    expect(measured.bracketedBothExtremes).toBe(true);
     expect(measured.halfRange).toBeCloseTo(84, 0);
   });
 
-  test('a curve that never changes sign can still be complete', () => {
+  test('a curve that never changes sign can still bracket both extremes', () => {
     // A system receding at 30 km/s never produces a negative radial velocity.
     // Under the old test its run could never be complete however long it was
     // watched; the sign of a radial velocity is a fact about the systemic
@@ -423,13 +423,13 @@ describe('the radial-velocity half-range and its coverage test', () => {
     const measured = halfRangeOfSeries(run);
 
     expect(measured.min).toBeGreaterThan(0);
-    expect(measured.complete).toBe(true);
+    expect(measured.bracketedBothExtremes).toBe(true);
     expect(measured.halfRange).toBeCloseTo(84, 1);
   });
 
-  test('a monotonic arc is never complete, however many samples it has', () => {
+  test('a monotonic arc never brackets an extreme, however many samples it has', () => {
     const climbing = Array.from({ length: 500 }, (_, i) => ({ x: i, y: i }));
-    expect(halfRangeOfSeries(climbing).complete).toBe(false);
+    expect(halfRangeOfSeries(climbing).bracketedBothExtremes).toBe(false);
   });
 
   test('too few samples produce no reading at all', () => {
@@ -478,5 +478,136 @@ describe('the astrometric maximum offset is not a semi-major axis', () => {
   test('too few points produce no reading at all', () => {
     expect(maxOffsetOfPath([{ x: 1, y: 0 }])).toBeNull();
     expect(maxOffsetOfPath([])).toBeNull();
+  });
+});
+
+describe('an eccentric orbit has the same half-range as a circular one', () => {
+  // The correction this block exists to lock down. The documentation used to
+  // say the half-range equalled K "only for a circular orbit"; it equals K for
+  // every eccentricity, because
+  //
+  //   v = gamma + K [ cos(nu + omega) + e cos(omega) ]
+  //
+  // and the e*cos(omega) term is a constant offset. Eccentricity changes the
+  // shape of the curve and where in the period the extremes fall, not how far
+  // the curve travels between them.
+
+  /**
+   * One full orbit of a single Keplerian component, sampled uniformly in time.
+   *
+   * Uniform in mean anomaly rather than in true anomaly, because that is what
+   * an observer taking evenly spaced measurements actually gets - and it is
+   * what makes a high-eccentricity peak easy to miss.
+   */
+  const keplerian = (n, { e, omega, K = 50, gamma = 0, cycles = 1 }) =>
+    Array.from({ length: n }, (_, i) => {
+      const M = (2 * Math.PI * cycles * i) / (n - 1);
+      let E = M;
+      for (let k = 0; k < 60; k++) {
+        E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      }
+      const nu =
+        2 *
+        Math.atan2(
+          Math.sqrt(1 + e) * Math.sin(E / 2),
+          Math.sqrt(1 - e) * Math.cos(E / 2)
+        );
+      return {
+        x: i,
+        y: gamma + K * (Math.cos(nu + omega) + e * Math.cos(omega)),
+      };
+    });
+
+  test.each([
+    [0.5, 1.1],
+    [0.5, Math.PI / 4],
+    [0.3, 2.7],
+    [0.7, -0.6],
+  ])('e = %p, omega = %p rad: the half-range is K', (e, omega) => {
+    // Densely sampled over a little more than one orbit, so both extremes are
+    // certainly visited. This test is about the range only; where the extremes
+    // fall relative to the window is a separate question, covered below.
+    const run = keplerian(4000, { e, omega, K: 50, gamma: 120, cycles: 1.25 });
+    const measured = halfRangeOfSeries(run);
+
+    expect(measured.halfRange).toBeCloseTo(50, 1);
+    // The systemic velocity and the e*cos(omega) offset both move the curve and
+    // neither touches the range.
+    expect((measured.max + measured.min) / 2).toBeCloseTo(
+      120 + 50 * e * Math.cos(omega),
+      1
+    );
+  });
+
+  test('an eccentric run whose extremes are interior does bracket them', () => {
+    const run = keplerian(4000, { e: 0.5, omega: 1.1, K: 50, cycles: 1.25 });
+    const measured = halfRangeOfSeries(run);
+    expect(measured.halfRange).toBeCloseTo(50, 1);
+    expect(measured.bracketedBothExtremes).toBe(true);
+  });
+
+  test('an extreme sitting on the boundary is not reported as bracketed', () => {
+    // With omega = 2.7 the velocity minimum falls within a few per cent of the
+    // start of the window. The range is still exactly 2K - the samples do reach
+    // both ends - but nothing was observed on the near side of that minimum, so
+    // the curve was never seen to turn through it. Reporting that honestly is
+    // the whole point of not calling this flag "complete".
+    const run = keplerian(4000, { e: 0.3, omega: 2.7, K: 50, cycles: 1.25 });
+    const measured = halfRangeOfSeries(run);
+
+    expect(measured.halfRange).toBeCloseTo(50, 1);
+    expect(measured.bracketedBothExtremes).toBe(false);
+  });
+
+  test('a highly eccentric orbit is not a sinusoid, and still has half-range K', () => {
+    const e = 0.9;
+    const omega = 1.1;
+    const run = keplerian(6000, { e, omega, K: 50 });
+    const measured = halfRangeOfSeries(run);
+    expect(measured.halfRange).toBeCloseTo(50, 1);
+
+    // The shape really has changed: the star spends most of the period on one
+    // side of the midline, which a sinusoid never does. This is what
+    // eccentricity does instead of changing the range.
+    const mid = (measured.max + measured.min) / 2;
+    const above = run.filter(p => p.y > mid).length / run.length;
+    expect(Math.abs(above - 0.5)).toBeGreaterThan(0.15);
+  });
+
+  test('what eccentricity really costs is the chance of catching the peak', () => {
+    // The honest limitation, and the reason the correction is not merely
+    // pedantic. At the same modest cadence, the circular orbit's peak is caught
+    // and the e = 0.9 orbit's is badly clipped - not because the arithmetic
+    // differs, but because the star is near maximum for a few per cent of the
+    // period.
+    const sparseCircular = halfRangeOfSeries(
+      keplerian(24, { e: 0, omega: 1.1, K: 50 })
+    );
+    const sparseEccentric = halfRangeOfSeries(
+      keplerian(24, { e: 0.9, omega: 1.1, K: 50 })
+    );
+
+    expect(sparseCircular.halfRange).toBeGreaterThan(50 * 0.97);
+    expect(sparseEccentric.halfRange).toBeLessThan(50 * 0.9);
+    // And it is an underestimate, never an overestimate, in the absence of noise.
+    expect(sparseEccentric.halfRange).toBeLessThan(50);
+  });
+
+  test('noise biases the half-range upward, so it is not a lower bound', () => {
+    // The other half of the honest account. With noise, (max - min) is an
+    // extreme order statistic: it exceeds the true range and grows with the
+    // number of samples even though the signal has not changed.
+    const flat = (n, amp, seed) =>
+      Array.from({ length: n }, (_, i) => {
+        // A deterministic pseudo-random sequence, so the test cannot flake.
+        const r = Math.sin((i + 1) * 12.9898 + seed) * 43758.5453;
+        return { x: i, y: amp * ((r - Math.floor(r)) * 2 - 1) };
+      });
+
+    const few = halfRangeOfSeries(flat(20, 1, 1));
+    const many = halfRangeOfSeries(flat(2000, 1, 1));
+    expect(many.halfRange).toBeGreaterThan(few.halfRange);
+    // The underlying signal is identically zero; every bit of this is noise.
+    expect(many.halfRange).toBeGreaterThan(0.9);
   });
 });

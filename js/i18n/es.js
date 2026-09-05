@@ -1425,9 +1425,9 @@ export const ES = {
   'rv.halfRange': 'Semirrango ½(máx − mín)',
   'rv.halfRangeSoFar': 'Semirrango observado hasta ahora',
   'rv.halfRange.hint':
-    'La mitad del rango de la curva observada. Se ha muestreado un ciclo completo, así que es el semirrango de la curva entera. Solo equivale a la semiamplitud orbital K si hay un único planeta en órbita circular; en una órbita excéntrica la curva no es una sinusoide, y con dos planetas es la superposición de dos.',
+    'La mitad del rango de las muestras, ½(máx − mín). Se ha visto que la curva gira en ambos extremos, lo cual no es lo mismo que haber observado un ciclo completo. Con un solo planeta esto equivale a la semiamplitud K sea cual sea la excentricidad — la excentricidad cambia la forma de la curva, no cuánto recorre —, pero el número puede quedarse corto si nunca se muestrearon los extremos verdaderos, y el ruido lo empuja hacia arriba. Con dos planetas se obtiene una superposición cuyo rango no es la K de ninguno de los dos, y la actividad estelar o una deriva a largo plazo añaden variación que no es orbital en absoluto.',
   'rv.halfRangeSoFar.hint':
-    'La mitad del rango de las muestras tomadas hasta ahora, y una cota inferior del rango de la curva completa. No se han observado ambos extremos con la curva girando en cada uno, así que es provisional.',
+    'La mitad del rango de las muestras tomadas hasta ahora, y una cota inferior del rango de la curva observada. Todavía no se ha visto girar la curva en ambos extremos, así que los máximos pueden estar aún por llegar y esto es provisional.',
   'observing.session.newTarget':
     'Se inició una grabación nueva: el instrumento apunta ahora a {name}. Las muestras anteriores eran de otra estrella y no forman parte de esta curva.',
   'observing.session.newGeometry':

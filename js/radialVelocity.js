@@ -235,8 +235,8 @@ export function currentRadialVelocity() {
  * what makes the coverage test defensible - lives with the implementation in
  * js/exoplanetObservables.js, beside the formulas it must not be confused with.
  *
- * @returns {{halfRange: number, complete: boolean, min: number, max: number,
- *   midlineCrossings: number}|null} The estimate, or null before there is one
+ * @returns {{halfRange: number, bracketedBothExtremes: boolean, min: number,
+ *   max: number, midlineCrossings: number}|null} The estimate, or null before there is one
  */
 export function measuredHalfRange() {
   return halfRangeOfSeries(series, { minSamples: MIN_SAMPLES_FOR_RANGE });
@@ -450,18 +450,20 @@ function renderReadout() {
       : t('rv.keepObserving');
   }
   // The label changes with the state of the measurement rather than the value
-  // carrying a parenthetical. Until a full cycle has been observed this is a
-  // lower bound on the range, and saying "half-range observed so far" is the
-  // only honest description of it; once the curve has turned at both ends it
-  // is the half-range of the whole curve, which is K for a circular
-  // single-planet orbit and not K for anything else.
+  // carrying a parenthetical. Until the curve has turned at both ends the
+  // number is certainly a lower bound, and "half-range observed so far" is the
+  // only honest description of it. Afterwards it stays "half-range": for a
+  // single Keplerian component the half-range *is* K at any eccentricity, so
+  // the caveat is not about the orbit's shape but about whether this run saw
+  // the whole curve - which bracketing two turning points does not establish.
+  // See halfRangeOfSeries() in js/exoplanetObservables.js.
   if (e.amplitudeLabel) {
-    e.amplitudeLabel.textContent = amp?.complete
+    e.amplitudeLabel.textContent = amp?.bracketedBothExtremes
       ? t('rv.halfRange')
       : t('rv.halfRangeSoFar');
   }
   if (e.amplitudeCell) {
-    e.amplitudeCell.title = amp?.complete
+    e.amplitudeCell.title = amp?.bracketedBothExtremes
       ? t('rv.halfRange.hint')
       : t('rv.halfRangeSoFar.hint');
   }

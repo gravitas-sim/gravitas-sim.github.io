@@ -1425,9 +1425,9 @@ export const EN = {
   'rv.halfRange': 'Half-range ½(max − min)',
   'rv.halfRangeSoFar': 'Half-range observed so far',
   'rv.halfRange.hint':
-    'Half the range of the observed curve. A full cycle has been sampled, so this is the half-range of the whole curve. It equals the orbital semi-amplitude K only for a single planet on a circular orbit; for an eccentric orbit the curve is not a sinusoid, and for two planets it is a superposition of two.',
+    'Half the range of the samples, ½(max − min). The curve has been seen to turn around at both ends, which is not the same as having observed a whole cycle. For a single planet this equals the semi-amplitude K at any eccentricity — eccentricity changes the shape of the curve, not how far it travels — but the number can still fall short if the true extremes were never sampled, and noise pushes it upward. Two planets give a superposition whose range is neither planet’s K, and stellar activity or a long-term drift adds variation that is not orbital at all.',
   'rv.halfRangeSoFar.hint':
-    'Half the range of the samples taken so far, and a lower bound on the range of the whole curve. The extremes have not both been observed with the curve turning around at each, so this is provisional.',
+    'Half the range of the samples taken so far, and a lower bound on the range of the observed curve. The curve has not yet been seen to turn around at both ends, so the extremes may still be ahead and this is provisional.',
   'observing.session.newTarget':
     'Started a new recording: the instrument is now on {name}. The earlier samples were of a different star and are not part of this curve.',
   'observing.session.newGeometry':

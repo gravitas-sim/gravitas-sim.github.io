@@ -22,7 +22,7 @@ to agree.
 truth, and it holds two quantities that are not the same thing:
 
 **Position angle** is the old observer angle: which way around the orbital plane
-you are standing. It decides *when* conjunction happens, and for a circular orbit
+you are standing. It decides _when_ conjunction happens, and for a circular orbit
 it changes no amplitude at all.
 
 **Inclination** is how tilted the orbit looks from here. 90° is edge-on, 0° is
@@ -32,7 +32,7 @@ closes the astrometric ellipse, and decides whether a transit happens.
 ### A 3-D viewing geometry over a 2-D model
 
 The dynamics stay planar. Gravity is still integrated in the z = 0 plane and this
-work did not change that. What is three-dimensional is the *observing* geometry: a
+work did not change that. What is three-dimensional is the _observing_ geometry: a
 line-of-sight unit vector is built analytically from the two angles,
 
 ```
@@ -52,8 +52,8 @@ decimal places.
 
 Inclination now genuinely drives the light curve. Measured on the running app:
 
-| inclination | 90° | 89° | 87° | 85° | 80° |
-| --- | --- | --- | --- | --- | --- |
+| inclination   | 90°    | 89°    | 87°    | 85°    | 80°  |
+| ------------- | ------ | ------ | ------ | ------ | ---- |
 | transit depth | 1.825% | 1.818% | 1.739% | 1.505% | none |
 
 No fake opacity. The planet's projected chord slides off the disc, and the cutoff
@@ -66,21 +66,50 @@ near 85–86° matches the real geometry of HD 209458.
 **Radial Velocity** projects the observed star's actual simulated velocity onto
 the shared line of sight and plots it against time. It reports the **half-range**
 of the samples taken, ½(max − min), not the peak-to-peak range — conflating
-those is the commonest factor-of-two error in the subject. For HD 209458 b, a
-circular single-planet system observed over a full cycle, that half-range is the
-semi-amplitude: **84.0 m/s against an analytic 83.9**.
+those is the commonest factor-of-two error in the subject. For HD 209458 b,
+observed over a full cycle, that half-range is the semi-amplitude: **84.0 m/s
+against an analytic 83.9**.
+
+For a _single_ Keplerian component the line-of-sight velocity is
+
+    v = γ + K [ cos(ν + ω) + e cos ω ]
+
+and over a whole orbit ν + ω sweeps 2π, so cos(ν + ω) reaches both +1 and −1
+while the `e cos ω` term is a constant offset. The full range is 2K and the
+half-range is K **for every eccentricity and every argument of periastron**.
+An earlier version of this document said the equality held "only for a circular
+orbit", which was wrong: eccentricity changes the curve's _shape_ — it is no
+longer a sinusoid, the extremes are no longer half a period apart, and the star
+races through the sharp one — but not how far the curve travels between them.
+
+The reasons a measured half-range may still not be K are about the observing,
+not the orbit:
+
+- **Incomplete phase sampling.** If the true extremes were never sampled, the
+  half-range is a lower bound. Eccentricity makes this far more likely rather
+  than changing the arithmetic: at e = 0.9 the star sits near its velocity
+  maximum for a few per cent of the period.
+- **Noise.** (max − min) is an extreme order statistic, so it is biased _upward_
+  and grows with the number of samples even for a flat signal.
+- **More than one component.** Two planets give a superposition whose range is
+  neither planet's 2K and depends on their relative phases when observed.
+- **Departures from one fixed Keplerian.** Spots and activity move the line
+  centroid, a distant companion adds a drift, and mutual perturbations make the
+  elements themselves time-dependent.
 
 The panel says "half-range observed so far" until it has watched the curve turn
-around at both extremes and cross its own midline twice, because until then the
-number is a lower bound. It keeps saying "half-range" afterwards, because the
-half-range equals K only for a single planet on a circular orbit: an eccentric
-orbit's velocity curve is not a sinusoid, and two planets give a superposition.
+around at both extremes, because until then the extremes may still be ahead. It
+switches to "half-range" afterwards — but turning around at both ends is _not_
+proof that a whole cycle was observed, and the panel does not claim it was:
+with sparse sampling a local turning point need not be the global extreme.
+Establishing full coverage needs a period, which the panel does not have and
+does not infer.
 
 **Astrometry** plots the star's path on the sky about the barycenter. It reports
 the **largest star–barycenter separation observed**, in AU and as an angle,
 keeping the two visibly separate because distance changes the second and never
 the first. That maximum is not in general the semi-major axis of the reflex
-orbit: the barycenter sits at a *focus*, so on an eccentric orbit the largest
+orbit: the barycenter sits at a _focus_, so on an eccentric orbit the largest
 offset is the apoapsis distance a(1 + e). The astrometric signature α = a_star/d
 quoted in the literature uses a_star, and recovering that from a path needs an
 orbit fit the panel does not attempt — the lesson's model widget computes α from
@@ -95,11 +124,11 @@ do no work at all when closed.
 Measured across an inclination sweep with both panels open:
 
 | inclination | RV half-range | 84 × sin i | max angular offset | sky path |
-| --- | --- | --- | --- | --- |
-| 90° | 84.0 m/s | 84.0 | 0.566 µas | line |
-| 60° | 72.8 m/s | 72.7 | 0.566 µas | ellipse |
-| 30° | 42.0 m/s | 42.0 | 0.566 µas | ellipse |
-| 0° | **0.0 m/s** | 0.0 | **0.566 µas** | circle |
+| ----------- | ------------- | ---------- | ------------------ | -------- |
+| 90°         | 84.0 m/s      | 84.0       | 0.566 µas          | line     |
+| 60°         | 72.8 m/s      | 72.7       | 0.566 µas          | ellipse  |
+| 30°         | 42.0 m/s      | 42.0       | 0.566 µas          | ellipse  |
+| 0°          | **0.0 m/s**   | 0.0        | **0.566 µas**      | circle   |
 
 HD 209458 b is on a circular orbit, so for this system the RV half-range is K
 and the maximum offset is a_star; the columns can be read as those quantities
@@ -157,7 +186,7 @@ places. And [`js/constants.js`](js/constants.js) now holds the physical constant
 **Finding Planets by Their Tug**, 37 steps, sits between Shadows and Goldilocks in
 the browser so the three read as a sequence. Each still stands alone.
 
-It moves from *both bodies orbit the barycenter* through the Doppler shift, a live
+It moves from _both bodies orbit the barycenter_ through the Doppler shift, a live
 RV curve, K, weighing the planet, the M sin i degeneracy and why a transit escapes
 it, astrometry as the complementary method, and finally mass plus radius into a
 density placed against the zone.

@@ -98,9 +98,9 @@
          landmark every element outside a dialog was reported as being outside
          one. A block-level swap, so nothing about the layout changes. -->
     <main id="mainContent" class="simulation-container">
-    <h1 class="visually-hidden" data-i18n="chrome.text2">
-      Gravitas: interactive astrophysics sandbox
-    </h1>
+      <h1 class="visually-hidden" data-i18n="chrome.text2">
+        Gravitas: interactive astrophysics sandbox
+      </h1>
       <canvas
         id="starfieldCanvas"
         class="sim-canvas"
@@ -169,7 +169,9 @@
            which is the correct mechanism and the only one needed. -->
       <div class="three-view-toolbar">
         <div class="three-view-meta">
-          <span class="three-view-title" id="threeViewTitle">Spacetime View</span>
+          <span class="three-view-title" id="threeViewTitle"
+            >Spacetime View</span
+          >
           <span id="threeViewStatus" class="three-view-status">Hidden</span>
         </div>
         <div class="three-toolbar-actions">
@@ -199,7 +201,10 @@
     </div>
 
     <!-- 🔭 Radial Velocity panel -->
-    <div id="rvContainer" class="obs-panel rv-container" style="display: none"
+    <div
+      id="rvContainer"
+      class="obs-panel rv-container"
+      style="display: none"
       role="region"
       aria-labelledby="rvPanelTitle"
     >
@@ -239,10 +244,13 @@
           <span id="rvDirection" class="rv-direction"></span>
         </div>
         <!-- Half-range, not "semi-amplitude K". The panel measures
-             (max - min) / 2 of the samples it has taken, which is K only for a
-             single planet on a circular orbit observed over a whole cycle. The
-             label is written by js/radialVelocity.js and says which of those
-             two things the current reading is. -->
+             (max - min) / 2 of the samples it has taken. For a single Keplerian
+             component that equals K at any eccentricity - the e*cos(omega) term
+             shifts the curve without changing its range - so the gap between
+             this number and K is about sampling, noise and how many things are
+             moving the star, not about the shape of one orbit. The label is
+             written by js/radialVelocity.js and says whether the curve has yet
+             been seen to turn around at both ends. -->
         <div class="rv-readout-cell" id="rvAmplitudeCell">
           <span class="rv-readout-label" id="rvAmplitudeLabel"
             >Half-range observed so far</span
@@ -365,13 +373,14 @@
       id="astrometryContainer"
       class="obs-panel astrometry-container"
       style="display: none"
-    
       role="region"
       aria-labelledby="astrometryPanelTitle"
     >
       <div class="obs-panel-toolbar">
         <div class="obs-panel-meta">
-          <span class="obs-panel-title" id="astrometryPanelTitle">Astrometry</span>
+          <span class="obs-panel-title" id="astrometryPanelTitle"
+            >Astrometry</span
+          >
           <span id="astrometryStatus" class="obs-panel-status">0 points</span>
         </div>
         <div class="obs-panel-actions">
@@ -470,13 +479,14 @@
       id="rotationCurveContainer"
       class="obs-panel rotation-curve-container"
       style="display: none"
-    
       role="region"
       aria-labelledby="rotationCurvePanelTitle"
     >
       <div class="obs-panel-toolbar">
         <div class="obs-panel-meta">
-          <span class="obs-panel-title" id="rotationCurvePanelTitle">Rotation Curve</span>
+          <span class="obs-panel-title" id="rotationCurvePanelTitle"
+            >Rotation Curve</span
+          >
           <span id="rotationCurveStatus" class="obs-panel-status"
             >0 bodies</span
           >
@@ -632,70 +642,70 @@
              MOND readout invites exactly the misreading the mode selector
              exists to prevent. -->
         <div id="rotationCurveHaloControls">
-        <div class="rc-toggle-row">
-          <span id="rotationCurveHaloLabel">Dark matter halo</span>
-          <button
-            type="button"
-            id="rotationCurveHalo"
-            class="toggle-button"
-            data-state="off"
-            role="switch"
-            aria-checked="false"
-            aria-labelledby="rotationCurveHaloLabel"
-          >
-            <span id="rotationCurveHaloState">Off</span>
-          </button>
-        </div>
-
-        <div class="obs-control-row">
-          <span class="obs-control-label">
-            <label for="rotationCurveVFlat">Flat speed</label>
-            <output
-              id="rotationCurveVFlatValue"
-              class="obs-control-value"
-              for="rotationCurveVFlat"
-              >—</output
+          <div class="rc-toggle-row">
+            <span id="rotationCurveHaloLabel">Dark matter halo</span>
+            <button
+              type="button"
+              id="rotationCurveHalo"
+              class="toggle-button"
+              data-state="off"
+              role="switch"
+              aria-checked="false"
+              aria-labelledby="rotationCurveHaloLabel"
             >
-          </span>
-          <input
-            type="range"
-            class="obs-control-slider"
-            id="rotationCurveVFlat"
-            min="0.5"
-            max="30"
-            step="0.5"
-            value="6"
-          />
-          <p class="obs-control-help">
-            How fast the curve settles far out. This is the one number a flat
-            rotation curve actually measures.
-          </p>
-        </div>
+              <span id="rotationCurveHaloState">Off</span>
+            </button>
+          </div>
 
-        <div class="obs-control-row">
-          <span class="obs-control-label">
-            <label for="rotationCurveCore">Core radius</label>
-            <output
-              id="rotationCurveCoreValue"
-              class="obs-control-value"
-              for="rotationCurveCore"
-              >—</output
-            >
-          </span>
-          <input
-            type="range"
-            class="obs-control-slider"
-            id="rotationCurveCore"
-            min="20"
-            max="2000"
-            step="10"
-            value="300"
-          />
-          <p class="obs-control-help">
-            Inside this radius the halo's pull rises with distance; outside it,
-            the halo's contribution levels off.
-          </p>
-        </div>
+          <div class="obs-control-row">
+            <span class="obs-control-label">
+              <label for="rotationCurveVFlat">Flat speed</label>
+              <output
+                id="rotationCurveVFlatValue"
+                class="obs-control-value"
+                for="rotationCurveVFlat"
+                >—</output
+              >
+            </span>
+            <input
+              type="range"
+              class="obs-control-slider"
+              id="rotationCurveVFlat"
+              min="0.5"
+              max="30"
+              step="0.5"
+              value="6"
+            />
+            <p class="obs-control-help">
+              How fast the curve settles far out. This is the one number a flat
+              rotation curve actually measures.
+            </p>
+          </div>
+
+          <div class="obs-control-row">
+            <span class="obs-control-label">
+              <label for="rotationCurveCore">Core radius</label>
+              <output
+                id="rotationCurveCoreValue"
+                class="obs-control-value"
+                for="rotationCurveCore"
+                >—</output
+              >
+            </span>
+            <input
+              type="range"
+              class="obs-control-slider"
+              id="rotationCurveCore"
+              min="20"
+              max="2000"
+              step="10"
+              value="300"
+            />
+            <p class="obs-control-help">
+              Inside this radius the halo's pull rises with distance; outside
+              it, the halo's contribution levels off.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -711,13 +721,14 @@
       id="lightCurveContainer"
       class="light-curve-container"
       style="display: none"
-    
       role="region"
       aria-labelledby="lightCurvePanelTitle"
     >
       <div class="light-curve-toolbar">
         <div class="light-curve-meta">
-          <span class="light-curve-title" id="lightCurvePanelTitle">Transit Light Curve</span>
+          <span class="light-curve-title" id="lightCurvePanelTitle"
+            >Transit Light Curve</span
+          >
           <span id="lightCurveStatus" class="light-curve-status">Hidden</span>
         </div>
         <div class="light-curve-actions">
@@ -1373,25 +1384,25 @@
             scrolling, and one row is what there was room for.
           -->
           <div class="rail-grid">
-          <button
-            id="screenshotBtn"
-            class="ui-button"
-            title="Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock."
-            data-i18n-title="rail.screenshot.hint"
-            data-i18n="rail.screenshot"
-          >
-            📸 Screenshot
-          </button>
-          <button
-            id="recordBtn"
-            class="ui-button"
-            title="Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first."
-            data-i18n-title="rail.record.hint"
-            data-i18n="rail.record"
-            aria-pressed="false"
-          >
-            🎬 Record Clip
-          </button>
+            <button
+              id="screenshotBtn"
+              class="ui-button"
+              title="Take a screenshot (or press P). The scale bar, the elapsed simulated time and any measurement tools you have out are drawn on the canvas itself, so the image documents its own scale and its own clock."
+              data-i18n-title="rail.screenshot.hint"
+              data-i18n="rail.screenshot"
+            >
+              📸 Screenshot
+            </button>
+            <button
+              id="recordBtn"
+              class="ui-button"
+              title="Record a clip of the simulation as it runs: an MP4 where the browser can encode one, a WebM where it cannot. The scenario name, the scale bar and the simulated clock are burned into every frame, so the clip documents itself in a slide. Recording stops itself at 3 minutes or 80 MB, whichever comes first."
+              data-i18n-title="rail.record.hint"
+              data-i18n="rail.record"
+              aria-pressed="false"
+            >
+              🎬 Record Clip
+            </button>
           </div>
           <button
             id="lectureBtn"
@@ -1817,8 +1828,20 @@
             aria-label="Jump to step"
           />
           <span id="investigationAuthorOf"></span>
-          <button id="investigationAuthorPrev" class="ui-button subtle" title="Previous step">◀</button>
-          <button id="investigationAuthorNext" class="ui-button subtle" title="Next step">▶</button>
+          <button
+            id="investigationAuthorPrev"
+            class="ui-button subtle"
+            title="Previous step"
+          >
+            ◀
+          </button>
+          <button
+            id="investigationAuthorNext"
+            class="ui-button subtle"
+            title="Next step"
+          >
+            ▶
+          </button>
         </div>
         <div id="investigationAuthorDiag" class="inv-author-diag"></div>
       </div>

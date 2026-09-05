@@ -256,44 +256,90 @@ export { ARCSEC_PER_RADIAN };
 // exactly that line.
 
 /**
- * Half the range of a recorded radial-velocity series, and whether the run has
- * covered enough of the curve for that to describe the whole curve.
+ * Half the range of a recorded radial-velocity series, and whether both
+ * extremes appear to have been turned through.
  *
- * The returned `halfRange` is (max - min) / 2 over the samples given. It equals
- * the orbital semi-amplitude K only for a single planet on a circular orbit
- * observed over at least a full cycle. An eccentric orbit's velocity curve is
- * K[cos(nu + omega) + e cos omega] + gamma, which is not a sinusoid and whose
- * range depends on e and omega; two planets give a superposition whose range is
- * neither planet's K.
+ * The returned `halfRange` is (max - min) / 2 over the samples given.
  *
- * `complete` is evidence that both extremes have actually been observed, which
- * is what the half-range needs and is a weaker requirement than a full cycle: a
- * run from just before a maximum to just after the following minimum has seen
- * the whole range. The test is that the curve *turned around* at each extreme -
- * that on both sides of the maximum there are samples meaningfully below it,
- * and on both sides of the minimum samples meaningfully above it. A monotonic
- * arc fails because its extremes are its endpoints, with nothing beyond them.
+ * What that equals, and what it does not
+ * -----------------------------------------------------------------------------
+ * For a *single* Keplerian component the line-of-sight velocity is
+ *
+ *   v = gamma + K [ cos(nu + omega) + e cos(omega) ]
+ *
+ * where nu is the true anomaly. Over a whole orbit nu + omega sweeps a full
+ * 2*pi, so cos(nu + omega) attains both +1 and -1, and the e*cos(omega) term is
+ * a *constant* that shifts the entire curve up or down. The full range is
+ * therefore 2K and the half-range is K, exactly, for every eccentricity and
+ * every argument of periastron.
+ *
+ * This file used to say the half-range equalled K "only for a circular orbit",
+ * and that is simply wrong. Eccentricity changes the curve's *shape* - it stops
+ * being a sinusoid, the extremes stop being half a period apart, and the star
+ * spends very little time near the sharp one - but it does not change how far
+ * the curve travels between them.
+ *
+ * The real reasons a measured half-range may not be K:
+ *
+ *   Incomplete phase sampling. The dominant one, and the only one this function
+ *   can say anything about. If the true extremes were never sampled the
+ *   half-range is a lower bound on K. Eccentricity makes this much worse rather
+ *   than changing the arithmetic: at e = 0.9 the star is near its velocity
+ *   maximum for a few per cent of the period, so a schedule that would comfortably
+ *   catch a circular orbit's peak can miss an eccentric one's entirely.
+ *
+ *   Noise. (max - min) over noisy samples is biased *upward*: it is an extreme
+ *   order statistic, so it grows with the number of samples even when the
+ *   underlying signal is flat. A half-range close to the noise level is
+ *   measuring the noise.
+ *
+ *   More than one component. Two planets, or a planet and a bound companion,
+ *   give a superposition whose range is neither component's 2K and depends on
+ *   the relative phases at the times observed.
+ *
+ *   Departures from a single fixed Keplerian. Stellar activity and spots move
+ *   the line centroid, a long-period companion adds a drift across the run, and
+ *   planet-planet perturbations make the elements themselves time-dependent.
+ *
+ * What `bracketedBothExtremes` claims, and what it does not
+ * -----------------------------------------------------------------------------
+ * It is evidence that the curve *turned around* at each end of the observed
+ * range: that on both sides of the sampled maximum there are samples
+ * meaningfully below it, and on both sides of the sampled minimum samples
+ * meaningfully above it. A monotonic arc fails, because its extremes are its
+ * endpoints with nothing beyond them.
+ *
+ * It is deliberately *not* called `complete`, and it must not be read as "a full
+ * cycle has been observed". Bracketing an interior maximum shows only that a
+ * local maximum of the *samples* was passed; with sparse sampling, with more
+ * than one component, or with noise, a local turning point need not be the
+ * global extreme of the underlying curve. The honest reading is: below this
+ * flag the half-range is certainly a lower bound on the observed curve's range,
+ * and above it the run has at least seen the curve reverse at both ends.
+ * Establishing that a whole cycle was covered needs a period, which this
+ * function does not have and does not try to infer.
  *
  * "Meaningfully" is a small fraction of the observed range, so that a single
  * noisy sample just inside the end of a rising run does not read as a turning
  * point.
  *
- * An earlier version of this also demanded two crossings of the midline, which
- * sounds stricter and is simply wrong: a sinusoid sampled over exactly one
- * period beginning at the midline crosses it once in the interior and twice at
- * the endpoints, so the most complete run imaginable was reported as partial.
+ * An earlier version also demanded two crossings of the midline, which sounds
+ * stricter and is simply wrong: a sinusoid sampled over exactly one period
+ * beginning at the midline crosses it once in the interior and twice at the
+ * endpoints, so the most complete run imaginable was reported as partial. The
+ * count is still returned, for diagnostics only.
  *
- * The test it replaces was "the samples include both signs", which is not a
+ * The test *that* replaced was "the samples include both signs", which is not a
  * statement about coverage at all: a few minutes either side of a zero crossing
  * satisfies it while sampling a few per cent of the amplitude, and a system
- * with a systemic velocity large enough that the curve never changes sign can
- * never satisfy it however long it is watched.
+ * whose systemic velocity keeps the curve one-signed can never satisfy it
+ * however long it is watched.
  *
  * @param {Array<{y: number}>} series - Samples, in order
  * @param {object} [options]
  * @param {number} [options.minSamples] - Fewest samples worth quoting
- * @returns {{halfRange: number, complete: boolean, min: number, max: number,
- *   midlineCrossings: number}|null} The estimate, or null when too short
+ * @returns {{halfRange: number, bracketedBothExtremes: boolean, min: number,
+ *   max: number, midlineCrossings: number}|null} The estimate, or null when too short
  */
 /**
  * How far the curve must retreat from an extreme, as a fraction of the observed
@@ -355,12 +401,12 @@ export function halfRangeOfSeries(series, { minSamples = 12 } = {}) {
     }
   }
 
-  const complete =
+  const bracketedBothExtremes =
     range > 0 && turnedAround(hiAt, true) && turnedAround(loAt, false);
 
   return {
     halfRange: (hi - lo) / 2,
-    complete,
+    bracketedBothExtremes,
     min: lo,
     max: hi,
     midlineCrossings,
