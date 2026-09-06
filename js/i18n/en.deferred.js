@@ -184,4 +184,193 @@ export const EN_DEFERRED = {
   'exoW.preset.earthTwin': 'Earth twin, TESS',
   'exoW.preset.earthTwin.note':
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
+
+  // --- The numerical reliability check ---------------------------------------
+  // Deliberately careful wording throughout. There is no string here that says
+  // a result is accurate, because a convergence check cannot establish that:
+  // the strongest thing it supports is that halving the step did not move the
+  // answer, which is a much smaller claim.
+  'reliability.title': 'Numerical reliability',
+  'reliability.hint':
+    'Runs this experiment twice over the same simulated time - once at the step the engine is taking and once at half of it - and reports which conclusions survive.',
+  'reliability.run': 'Check against a halved step',
+  'reliability.cancel': 'Stop',
+  'reliability.running': 'Running {phase} of 2, {percent}% of the way',
+  'reliability.phase.coarse': 'the run at the current step',
+  'reliability.phase.fine': 'the run at half the step',
+  'reliability.cost':
+    'Two runs of {duration} simulated units took {seconds}s: {coarseSub} substeps per frame, then {fineSub}.',
+  'reliability.steps': 'Step {coarse} against {fine}',
+  'reliability.export': 'Export this check',
+
+  'reliability.verdict.converging':
+    'Halving the step did not move this result.',
+  'reliability.verdict.unresolved':
+    'Halving the step moved this result. It is a statement about the timestep, not about the system.',
+  'reliability.verdict.incomparable':
+    'These two runs are not measurements of the same thing, so nothing can be concluded from the difference.',
+  'reliability.verdict.diverged':
+    'The two paths separated, but the aggregate measurements held.',
+
+  'reliability.reason.missingRun': 'One of the two runs is missing.',
+  'reliability.reason.noDuration': 'A run covered no simulated time.',
+  'reliability.reason.differentDurations':
+    'The runs covered different amounts of simulated time.',
+  'reliability.reason.differentSystems':
+    'The runs ended with different numbers of bodies - something merged or was destroyed in one and not the other. That is a finding in itself, and a more interesting one than any number here.',
+  'reliability.reason.noStep': 'The integration step could not be read.',
+  'reliability.reason.stepNotHalved':
+    'The second run was not more finely integrated than the first.',
+  'reliability.reason.noMeasurement':
+    'Nothing was measured that could be compared.',
+  'reliability.reason.trajectoryDiverged':
+    'The paths agreed at the start and parted later, which is what chaos looks like rather than what a bad step looks like.',
+  'reliability.reason.disagreedFromTheStart':
+    'The paths disagreed from the beginning. Nothing chaotic about that: the coarser run was not resolving the motion.',
+  'reliability.reason.outcomeMoved':
+    'The measured outcome changed by more than the tolerance.',
+  'reliability.reason.aggregateMovedToo':
+    'The paths separated and the aggregate moved as well, so there is nothing left to fall back on.',
+  'reliability.reason.substepCeiling':
+    'This scenario is already integrating at {n} substeps per frame, and the engine will not take twice as many. A finer run cannot be made here, so no comparison is offered rather than one against a run at the same step.',
+  'reliability.reason.noExperiment': 'Capture a starting state first.',
+  'reliability.reason.recording': 'A run is being recorded.',
+  'reliability.reason.alreadyRunning': 'A check is already running.',
+  'reliability.reason.noMetrics': 'Choose at least one quantity to measure.',
+  'reliability.reason.cancelled': 'Stopped. The world is back where it was.',
+
+  'reliability.conservationIsNotAccuracy':
+    'Energy and angular momentum are shown as separate evidence, not as the verdict. A well-conserved run can still be wrong: energy is one number, and a close approach can be resolved far too coarsely without disturbing it.',
+  'reliability.conservationNotExpected':
+    'This model is not a closed system, so a drifting energy is it working as designed rather than a fault. The drift figures are reported but decide nothing.',
+  'reliability.driftDidNotFall':
+    'The energy drift did not fall when the step was halved. That is a reason to look harder, not a verdict - the verdict above was computed without it.',
+  'reliability.chaosSeparates':
+    'Two runs of a chaotic system separate eventually however finely they are integrated, and both can still be numerically useful. What matters is that they agreed early: a badly resolved pair disagrees from the first close approach.',
+  'reliability.quoteStatistics':
+    'Quote the aggregates from this run rather than positions at a given time.',
+  'reliability.stillNotProof':
+    'That is not the same as the result being right. It means this step is not what is deciding it.',
+  'reliability.agrees': 'unchanged within {tolerance}',
+  'reliability.moved': 'moved by {change}',
+  'reliability.noValue': 'not measured',
+
+  // --- The A/B experiment bench ---------------------------------------------
+  // Moved out of the start-up catalogue. The bench is loaded on first press
+  // and most visitors never press it, so its prose has no business being
+  // downloaded by everyone; js/experimentsBridge.js registers this before the
+  // panel builds its markup. bench.error.load stays in the base catalogue,
+  // because it is what the bridge says when this very import fails.
+  'bench.title': 'A/B Experiment',
+  'bench.untitled': 'Untitled experiment',
+  'bench.copyOf': 'Copy of {name}',
+  'bench.status.idle': 'No experiment',
+  'bench.status.recording': 'Recording - {n} samples, {seconds} s',
+  'bench.status.runs': '{n} of 2 runs recorded',
+  'bench.field.name': 'Name',
+  'bench.field.namePlaceholder': 'What are you testing?',
+  'bench.field.primary': 'Measure distance from',
+  'bench.field.chart': 'Chart',
+  'bench.primary.none': 'Nothing selected',
+  'bench.section.selection': 'What to measure',
+  'bench.section.saved': 'Saved experiments',
+  'bench.hint.selection':
+    'Pick the bodies this experiment is about, then the quantities to record. A quantity that needs two bodies stays greyed out until two are chosen.',
+  'bench.hint.noBodies': 'Capture a starting state first.',
+  'bench.action.capture': 'Capture start',
+  'bench.action.restore': 'Return to start',
+  'bench.action.record': 'Record',
+  'bench.action.recording': 'Recording',
+  'bench.action.stop': 'Stop',
+  'bench.action.save': 'Save',
+  'bench.action.save.hint': 'Keep this experiment in this browser',
+  'bench.action.close.hint': 'Hide the experiment bench',
+  'bench.action.csv': 'Export CSV',
+  'bench.action.json': 'Export JSON',
+  'bench.action.share': 'Share setup',
+  'bench.action.duplicate': 'Duplicate',
+  'bench.action.import': 'Open a file',
+  'bench.action.delete': 'Delete this experiment',
+  'bench.action.confirmMultivariable': 'Yes, I changed these on purpose',
+  'bench.section.perturb': 'Perturb the start',
+  'bench.hint.perturb':
+    'Change one coordinate of one body in the captured start by a very small amount. Run B is then restored to that perturbed state, so the two runs differ by exactly this and nothing else.',
+  'bench.field.amount': 'Amount (km, or km/s)',
+  'bench.axis.x': 'x position',
+  'bench.axis.y': 'y position',
+  'bench.axis.vx': 'x velocity',
+  'bench.axis.vy': 'y velocity',
+  'bench.action.perturb': 'Apply',
+  'bench.action.asControl': 'Record as numerical control',
+  'bench.perturb.applied':
+    'Perturbed: {body}, {axis}, {km} km — one part in {fraction} of the system',
+  'bench.perturb.done': 'The captured start is perturbed',
+  'bench.perturb.needAmount': 'Type a perturbation that is not zero.',
+  'bench.perturb.noExperiment': 'Capture a start first.',
+  'bench.perturb.no-bodies':
+    'This captured start has no bodies to perturb. Capture with the full state.',
+  'bench.perturb.no-such-body': 'That body is not in the captured start.',
+  'bench.perturb.bad-axis': 'That is not a coordinate.',
+  'bench.perturb.bad-delta': 'Type a perturbation that is not zero.',
+  'bench.control.row': '{label}: {behaviour}, e-folding {tau} s',
+  'bench.control.recorded': 'Recorded as a control: {label}',
+  'bench.control.failed':
+    'Record both runs first, with positions among the measurements.',
+  'bench.run.a': 'Run A',
+  'bench.run.b': 'Run B',
+  'bench.run.empty': 'not recorded',
+  'bench.run.recorded': '{n} samples over {seconds} s',
+  'bench.start.captured': 'Start: {scenario}, seed {seed}, state {hash}',
+  'bench.diff.heading': 'What changed between the runs',
+  'bench.diff.none': 'Nothing. Both runs used the same settings.',
+  'bench.diff.incidental':
+    'Also different, but not experimental variables: {list}',
+  'bench.table.metric': 'Quantity',
+  'bench.table.delta': 'B - A',
+  'bench.table.fraction': 'Fractional',
+  'bench.chart.time': 'Simulated time (s)',
+  'bench.chart.label': 'Run A against Run B on a shared simulated-time axis',
+  'bench.metric.position': 'Position',
+  'bench.metric.separation': 'Separation',
+  'bench.metric.speed': 'Speed',
+  'bench.metric.velocity_x': 'Velocity, x',
+  'bench.metric.velocity_y': 'Velocity, y',
+  'bench.metric.distance_to_primary': 'Distance from primary',
+  'bench.metric.orbital_period': 'Orbital period',
+  'bench.metric.closest_approach': 'Closest approach',
+  'bench.metric.total_energy': 'Total energy',
+  'bench.metric.angular_momentum': 'Angular momentum',
+  'bench.metric.energy_drift': 'Energy drift',
+  'bench.metric.angular_drift': 'Angular momentum drift',
+  'bench.metric.needs': 'Select {n} bodies to measure this',
+  'bench.warn.noChange':
+    'Both runs used identical settings, so any difference between them is numerical, not physical.',
+  'bench.warn.multivariable':
+    '{n} things changed between the runs, not one: {list}. A comparison with more than one independent variable cannot say which one caused the difference.',
+  'bench.warn.identical': 'The two runs started from the same state.',
+  'bench.warn.noOverlap':
+    'The two runs do not overlap in simulated time, so {metric} cannot be compared.',
+  'bench.warn.uneven':
+    'Run {run} was sampled unevenly - its longest gap is {ratio}x its shortest. Values between samples are interpolated.',
+  'bench.flash.captured': 'Start captured',
+  'bench.flash.restored': 'Back to the captured start',
+  'bench.flash.restoredDrift':
+    'Restored, but the state hash differs - see the manifest',
+  'bench.flash.stopped': 'Run recorded',
+  'bench.saved': 'Experiment saved',
+  'bench.saved.none': 'Nothing saved yet.',
+  'bench.imported': 'Opened {name}',
+  'bench.quota': '{used} KB of {total} KB used, {count} of {max} experiments',
+  'bench.error.tooLarge':
+    'That experiment is {size} KB and the limit is {limit} KB. Export it to a file instead.',
+  'bench.error.storeFull':
+    'Saved experiments would exceed {limit} KB. Delete one, or export this to a file.',
+  'bench.error.tooMany':
+    'You already have {limit} saved experiments. Delete one to make room.',
+  'bench.error.quota':
+    'This browser refused to store the experiment. Export it to a file instead.',
+  'bench.error.unavailable':
+    'This browser has no local storage available, so experiments cannot be kept between visits. Export to a file instead.',
+  'bench.error.open': 'That experiment could not be opened ({reason}).',
+  'bench.error.import': 'That file could not be read ({reason}).',
 };

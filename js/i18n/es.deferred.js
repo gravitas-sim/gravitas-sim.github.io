@@ -188,4 +188,193 @@ export const ES_DEFERRED = {
   'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
   'exoW.preset.earthTwin.note':
     'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
+
+  // --- La comprobacion de fiabilidad numerica --------------------------------
+  'reliability.title': 'Fiabilidad numerica',
+  'reliability.hint':
+    'Repite este experimento dos veces durante el mismo tiempo simulado - una con el paso que usa el motor y otra con la mitad - e indica que conclusiones se mantienen.',
+  'reliability.run': 'Comprobar con el paso a la mitad',
+  'reliability.cancel': 'Detener',
+  'reliability.running': 'Ejecutando {phase} de 2, {percent}% completado',
+  'reliability.phase.coarse': 'la pasada con el paso actual',
+  'reliability.phase.fine': 'la pasada con la mitad del paso',
+  'reliability.cost':
+    'Dos pasadas de {duration} unidades simuladas tardaron {seconds}s: {coarseSub} subpasos por fotograma y luego {fineSub}.',
+  'reliability.steps': 'Paso {coarse} frente a {fine}',
+  'reliability.export': 'Exportar esta comprobacion',
+
+  'reliability.verdict.converging':
+    'Reducir el paso a la mitad no movio este resultado.',
+  'reliability.verdict.unresolved':
+    'Reducir el paso a la mitad movio este resultado. Es una afirmacion sobre el paso de integracion, no sobre el sistema.',
+  'reliability.verdict.incomparable':
+    'Las dos pasadas no miden lo mismo, asi que la diferencia no permite concluir nada.',
+  'reliability.verdict.diverged':
+    'Las dos trayectorias se separaron, pero las medidas agregadas se mantuvieron.',
+
+  'reliability.reason.missingRun': 'Falta una de las dos pasadas.',
+  'reliability.reason.noDuration':
+    'Una pasada no cubrio tiempo simulado alguno.',
+  'reliability.reason.differentDurations':
+    'Las pasadas cubrieron cantidades distintas de tiempo simulado.',
+  'reliability.reason.differentSystems':
+    'Las pasadas terminaron con distinto numero de cuerpos: algo se fusiono o se destruyo en una y no en la otra. Eso ya es un hallazgo, y mas interesante que cualquier cifra de aqui.',
+  'reliability.reason.noStep': 'No se pudo leer el paso de integracion.',
+  'reliability.reason.stepNotHalved':
+    'La segunda pasada no se integro con mas finura que la primera.',
+  'reliability.reason.noMeasurement':
+    'No se midio nada que se pudiera comparar.',
+  'reliability.reason.trajectoryDiverged':
+    'Las trayectorias coincidieron al principio y se separaron despues, que es el aspecto del caos y no el de un paso demasiado grande.',
+  'reliability.reason.disagreedFromTheStart':
+    'Las trayectorias discreparon desde el principio. Eso no tiene nada de caotico: la pasada mas gruesa no estaba resolviendo el movimiento.',
+  'reliability.reason.outcomeMoved':
+    'El resultado medido cambio mas que la tolerancia.',
+  'reliability.reason.aggregateMovedToo':
+    'Las trayectorias se separaron y el agregado tambien se movio, asi que no queda nada a lo que recurrir.',
+  'reliability.reason.substepCeiling':
+    'Este escenario ya se integra con {n} subpasos por fotograma y el motor no admite el doble. Aqui no se puede hacer una pasada mas fina, asi que no se ofrece comparacion en lugar de compararla con una pasada del mismo paso.',
+  'reliability.reason.noExperiment': 'Captura primero un estado inicial.',
+  'reliability.reason.recording': 'Se esta grabando una pasada.',
+  'reliability.reason.alreadyRunning': 'Ya hay una comprobacion en curso.',
+  'reliability.reason.noMetrics': 'Elige al menos una magnitud que medir.',
+  'reliability.reason.cancelled':
+    'Detenida. El mundo ha vuelto a donde estaba.',
+
+  'reliability.conservationIsNotAccuracy':
+    'La energia y el momento angular se muestran como evidencia aparte, no como veredicto. Una pasada que conserva bien puede seguir siendo erronea: la energia es un solo numero, y un encuentro cercano puede resolverse con muy poca finura sin alterarla.',
+  'reliability.conservationNotExpected':
+    'Este modelo no es un sistema cerrado, asi que una energia que deriva es el modelo funcionando como se diseno y no un fallo. Las cifras de deriva se informan pero no deciden nada.',
+  'reliability.driftDidNotFall':
+    'La deriva de energia no bajo al reducir el paso a la mitad. Es motivo para mirar con mas cuidado, no un veredicto: el veredicto de arriba se calculo sin ella.',
+  'reliability.chaosSeparates':
+    'Dos pasadas de un sistema caotico acaban separandose por fina que sea la integracion, y ambas pueden seguir siendo utiles numericamente. Lo que importa es que coincidieran al principio: un par mal resuelto discrepa desde el primer acercamiento.',
+  'reliability.quoteStatistics':
+    'Cita los agregados de esta pasada en lugar de posiciones en un instante dado.',
+  'reliability.stillNotProof':
+    'Eso no equivale a que el resultado sea correcto. Significa que este paso no es lo que lo esta decidiendo.',
+  'reliability.agrees': 'sin cambio dentro de {tolerance}',
+  'reliability.moved': 'cambio {change}',
+  'reliability.noValue': 'no medido',
+
+  // --- The A/B experiment bench ---------------------------------------------
+  // Moved out of the start-up catalogue. The bench is loaded on first press
+  // and most visitors never press it, so its prose has no business being
+  // downloaded by everyone; js/experimentsBridge.js registers this before the
+  // panel builds its markup. bench.error.load stays in the base catalogue,
+  // because it is what the bridge says when this very import fails.
+  'bench.title': 'Experimento A/B',
+  'bench.untitled': 'Experimento sin título',
+  'bench.copyOf': 'Copia de {name}',
+  'bench.status.idle': 'Sin experimento',
+  'bench.status.recording': 'Grabando: {n} muestras, {seconds} s',
+  'bench.status.runs': '{n} de 2 ejecuciones grabadas',
+  'bench.field.name': 'Nombre',
+  'bench.field.namePlaceholder': '¿Qué estás probando?',
+  'bench.field.primary': 'Medir distancia desde',
+  'bench.field.chart': 'Gráfica',
+  'bench.primary.none': 'Nada seleccionado',
+  'bench.section.selection': 'Qué medir',
+  'bench.section.saved': 'Experimentos guardados',
+  'bench.hint.selection':
+    'Elige los cuerpos de los que trata el experimento y después las magnitudes que se van a registrar. Una magnitud que necesita dos cuerpos permanece atenuada hasta que se eligen dos.',
+  'bench.hint.noBodies': 'Captura primero un estado inicial.',
+  'bench.action.capture': 'Capturar inicio',
+  'bench.action.restore': 'Volver al inicio',
+  'bench.action.record': 'Grabar',
+  'bench.action.recording': 'Grabando',
+  'bench.action.stop': 'Parar',
+  'bench.action.save': 'Guardar',
+  'bench.action.save.hint': 'Conservar este experimento en este navegador',
+  'bench.action.close.hint': 'Ocultar el banco de experimentos',
+  'bench.action.csv': 'Exportar CSV',
+  'bench.action.json': 'Exportar JSON',
+  'bench.action.share': 'Compartir montaje',
+  'bench.action.duplicate': 'Duplicar',
+  'bench.action.import': 'Abrir un archivo',
+  'bench.action.delete': 'Eliminar este experimento',
+  'bench.action.confirmMultivariable': 'Sí, los cambié a propósito',
+  'bench.section.perturb': 'Perturbar el inicio',
+  'bench.hint.perturb':
+    'Cambia una coordenada de un cuerpo en el inicio capturado en una cantidad muy pequeña. La ejecución B se restaura entonces a ese estado perturbado, de modo que las dos ejecuciones difieren exactamente en eso y en nada más.',
+  'bench.field.amount': 'Cantidad (km, o km/s)',
+  'bench.axis.x': 'posición x',
+  'bench.axis.y': 'posición y',
+  'bench.axis.vx': 'velocidad x',
+  'bench.axis.vy': 'velocidad y',
+  'bench.action.perturb': 'Aplicar',
+  'bench.action.asControl': 'Registrar como control numérico',
+  'bench.perturb.applied':
+    'Perturbado: {body}, {axis}, {km} km — una parte en {fraction} del sistema',
+  'bench.perturb.done': 'El inicio capturado está perturbado',
+  'bench.perturb.needAmount': 'Escribe una perturbación distinta de cero.',
+  'bench.perturb.noExperiment': 'Captura primero un inicio.',
+  'bench.perturb.no-bodies':
+    'Este inicio capturado no tiene cuerpos que perturbar. Captura con el estado completo.',
+  'bench.perturb.no-such-body': 'Ese cuerpo no está en el inicio capturado.',
+  'bench.perturb.bad-axis': 'Eso no es una coordenada.',
+  'bench.perturb.bad-delta': 'Escribe una perturbación distinta de cero.',
+  'bench.control.row': '{label}: {behaviour}, crecimiento {tau} s',
+  'bench.control.recorded': 'Registrado como control: {label}',
+  'bench.control.failed':
+    'Graba primero ambas ejecuciones, con las posiciones entre las medidas.',
+  'bench.run.a': 'Ejecución A',
+  'bench.run.b': 'Ejecución B',
+  'bench.run.empty': 'sin grabar',
+  'bench.run.recorded': '{n} muestras en {seconds} s',
+  'bench.start.captured': 'Inicio: {scenario}, semilla {seed}, estado {hash}',
+  'bench.diff.heading': 'Qué cambió entre las ejecuciones',
+  'bench.diff.none': 'Nada. Ambas ejecuciones usaron los mismos ajustes.',
+  'bench.diff.incidental':
+    'También difieren, pero no son variables experimentales: {list}',
+  'bench.table.metric': 'Magnitud',
+  'bench.table.delta': 'B - A',
+  'bench.table.fraction': 'Fracción',
+  'bench.chart.time': 'Tiempo simulado (s)',
+  'bench.chart.label':
+    'Ejecución A frente a ejecución B sobre un eje común de tiempo simulado',
+  'bench.metric.position': 'Posición',
+  'bench.metric.separation': 'Separación',
+  'bench.metric.speed': 'Rapidez',
+  'bench.metric.velocity_x': 'Velocidad, x',
+  'bench.metric.velocity_y': 'Velocidad, y',
+  'bench.metric.distance_to_primary': 'Distancia al primario',
+  'bench.metric.orbital_period': 'Periodo orbital',
+  'bench.metric.closest_approach': 'Máxima aproximación',
+  'bench.metric.total_energy': 'Energía total',
+  'bench.metric.angular_momentum': 'Momento angular',
+  'bench.metric.energy_drift': 'Deriva de energía',
+  'bench.metric.angular_drift': 'Deriva de momento angular',
+  'bench.metric.needs': 'Selecciona {n} cuerpos para medir esto',
+  'bench.warn.noChange':
+    'Ambas ejecuciones usaron ajustes idénticos, así que cualquier diferencia entre ellas es numérica, no física.',
+  'bench.warn.multivariable':
+    'Cambiaron {n} cosas entre las ejecuciones, no una: {list}. Una comparación con más de una variable independiente no puede decir cuál causó la diferencia.',
+  'bench.warn.identical': 'Las dos ejecuciones partieron del mismo estado.',
+  'bench.warn.noOverlap':
+    'Las dos ejecuciones no se solapan en tiempo simulado, así que {metric} no se puede comparar.',
+  'bench.warn.uneven':
+    'La ejecución {run} se muestreó de forma irregular: su intervalo mayor es {ratio} veces el menor. Los valores intermedios se interpolan.',
+  'bench.flash.captured': 'Inicio capturado',
+  'bench.flash.restored': 'De vuelta al inicio capturado',
+  'bench.flash.restoredDrift':
+    'Restaurado, pero el hash del estado difiere: consulta el manifiesto',
+  'bench.flash.stopped': 'Ejecución grabada',
+  'bench.saved': 'Experimento guardado',
+  'bench.saved.none': 'Todavía no hay nada guardado.',
+  'bench.imported': 'Se abrió {name}',
+  'bench.quota':
+    '{used} KB de {total} KB usados, {count} de {max} experimentos',
+  'bench.error.tooLarge':
+    'Ese experimento ocupa {size} KB y el límite es {limit} KB. Expórtalo a un archivo.',
+  'bench.error.storeFull':
+    'Los experimentos guardados superarían {limit} KB. Elimina uno o exporta este a un archivo.',
+  'bench.error.tooMany':
+    'Ya tienes {limit} experimentos guardados. Elimina uno para hacer sitio.',
+  'bench.error.quota':
+    'Este navegador se negó a almacenar el experimento. Expórtalo a un archivo.',
+  'bench.error.unavailable':
+    'Este navegador no tiene almacenamiento local disponible, así que los experimentos no se pueden conservar entre visitas. Exporta a un archivo.',
+  'bench.error.open': 'No se pudo abrir ese experimento ({reason}).',
+  'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
 };

@@ -284,7 +284,9 @@ describe('the catalogue split', () => {
   test('the deferred half holds only deferred panels’ strings', () => {
     // A string used by the start-up path would render as its own id until
     // somebody opened an unrelated panel.
-    const allowed = /^(binaryRun|assist|rvfit|exoW)\./;
+    // reliability.* belongs here because the bench that shows it is itself
+    // lazy: its bridge registers this catalogue before the panel renders.
+    const allowed = /^(binaryRun|assist|rvfit|exoW|reliability|bench)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
   });
 });

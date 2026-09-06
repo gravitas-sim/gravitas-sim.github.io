@@ -102,7 +102,15 @@ import {
   experimentManifestJson,
   exportBasename,
   importManifest,
+  reliabilityJson,
 } from './exports.js';
+import {
+  DEFAULT_TOLERANCE,
+  explain,
+  relativeChange,
+  reliabilityReport,
+  stepPlan,
+} from './reliability.js';
 import { experimentBlock } from './shareExperiment.js';
 import { perturb } from './perturbation.js';
 
@@ -384,6 +392,310 @@ export const activeExperiment = () => current;
 /** @param {Object|null} exp - Replace the working experiment */
 export function setActiveExperiment(exp) {
   current = exp;
+}
+
+// =============================================================================
+// The numerical reliability check
+// -----------------------------------------------------------------------------
+// Everything above lets a student measure a difference. This asks whether the
+// difference is about the system or about the timestep, by running the same
+// captured start twice over the same simulated duration - once at the step the
+// engine is already taking and once at half of it - and seeing which of the
+// conclusions survive.
+//
+// Sequential, for the reason given at the top of this file: there is one world
+// per loaded module and no constructor for another. Isolation is therefore
+// achieved by restoring rather than by separation, and it is exact in both
+// directions: each phase starts from the captured payload, and when the check
+// finishes - or is cancelled, or throws - the world and every setting it
+// touched are put back to what the student was looking at. Neither phase is
+// written into Run A or Run B.
+// =============================================================================
+
+/** Default simulated span when there is no recorded run to match. */
+const RELIABILITY_DEFAULT_DURATION = 40;
+
+/** Set while a check is running, so it can be asked to stop. */
+let reliabilityAbort = null;
+
+/** @returns {boolean} Whether a reliability check is running */
+export const isCheckingReliability = () => reliabilityAbort !== null;
+
+/**
+ * Ask a running check to stop at the next frame.
+ *
+ * The check restores the world in a finally block, so a cancelled run leaves
+ * no more trace than a completed one.
+ *
+ * @returns {void}
+ */
+export function cancelReliabilityCheck() {
+  if (reliabilityAbort) reliabilityAbort.cancelled = true;
+}
+
+/**
+ * Run one phase to a simulated duration, sampling every frame.
+ *
+ * Every frame rather than on the interval the A/B recorder uses: the two
+ * phases advance the clock by exactly the same amount per frame - the frame
+ * advance is untouched, only the substep cap moves - so sampling per frame
+ * puts both runs' samples on identical instants and the comparison needs no
+ * interpolation.
+ *
+ * The frame count is fixed in advance rather than the loop stopping when the
+ * clock passes a threshold. Both phases advance by the same amount per frame,
+ * so a threshold leaves the last frame free to overshoot by a different amount
+ * in each - and two runs whose durations differ by one frame fail the "same
+ * simulated duration" gate and are reported as incomparable. Which they would
+ * be: the gate is right, and the runner was giving it different lengths. A
+ * fixed count makes both durations identical to the last bit.
+ *
+ * @param {object} cfg - maxTimestep, frames, abort, onProgress, phaseIndex
+ * @returns {Promise<object>} The recorded phase
+ */
+async function runReliabilityPhase(cfg) {
+  restoreInitialState({ keepSettings: true });
+
+  const settings = host.getSettings();
+  settings.max_timestep = cfg.maxTimestep;
+  updatePhysicsSettings(settings);
+
+  const state = host.getState?.();
+  if (state) state.paused = false;
+  host.setFixedStep?.(1 / 60);
+
+  const startClock = getSimulationTime();
+  const startedAt = performance.now();
+  const samples = [];
+  const baselineBodies = selectableBodies().length;
+
+  let frames = 0;
+  await new Promise(resolve => {
+    const tick = () => {
+      if (cfg.abort.cancelled) return resolve();
+
+      const clock = getSimulationTime();
+      const bodies = (current.objects || []).map(bodyById).filter(Boolean);
+      const primary =
+        current.primary !== null ? bodyById(current.primary) : null;
+      samples.push(
+        sampleFrame({
+          t: clock,
+          bodies,
+          primary,
+          conserved: conservedQuantities(),
+          drift: conservationDrift(),
+          secondsPerUnit: timeUnitSeconds(),
+          metrics: current.metrics,
+        })
+      );
+
+      frames++;
+      if (frames >= cfg.frames || samples.length >= MAX_SAMPLES) {
+        return resolve();
+      }
+      cfg.onProgress?.({
+        phase: cfg.phaseIndex,
+        fraction: frames / cfg.frames,
+      });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+
+  host.setFixedStep?.(0);
+  if (state) state.paused = true;
+
+  const drift = conservationDrift();
+  const secondsPerDay = 86400 / timeUnitSeconds();
+  return {
+    step: cfg.step,
+    substeps: cfg.substeps,
+    duration: getSimulationTime() - startClock,
+    samples,
+    results: reduceRun(samples, current.metrics, secondsPerDay),
+    wallMs: performance.now() - startedAt,
+    energyDrift: drift.energyDrift,
+    angularDrift: drift.angularDrift,
+    caveats: drift.caveats || [],
+    integrator: drift.integrator,
+    bodyCount: selectableBodies().length,
+    baselineBodyCount: baselineBodies,
+    perturbed: Boolean(current.perturbation),
+  };
+}
+
+/**
+ * Repeat the captured experiment at the step and at half of it.
+ *
+ * @param {object} [opts] - duration, tolerance, onProgress
+ * @returns {Promise<object>} The report, or a refusal with a reason
+ */
+export async function runReliabilityCheck(opts = {}) {
+  if (!current?.initialState) return { ok: false, reason: 'noExperiment' };
+  if (phase === 'recording') return { ok: false, reason: 'recording' };
+  if (reliabilityAbort) return { ok: false, reason: 'alreadyRunning' };
+  if (!current.metrics?.length) return { ok: false, reason: 'noMetrics' };
+
+  const settings = host.getSettings();
+  const dtSim = host.frameAdvance(1 / 60, settings.sim_speed);
+  const live = host.substepPlan(dtSim, settings.max_timestep);
+  const plan = stepPlan({
+    dtSim,
+    substeps: live.substeps,
+    step: live.step,
+    maxSubsteps: host.maxSubsteps,
+  });
+  if (!plan.ok) {
+    return { ok: false, reason: plan.reason, substeps: plan.substeps };
+  }
+
+  // Match the run the student already recorded, so the check is of the thing
+  // they measured rather than of some other stretch of the same scenario.
+  const recorded = current.runs?.A?.samples;
+  const duration =
+    opts.duration ??
+    (recorded?.length > 1
+      ? recorded[recorded.length - 1].t - recorded[0].t
+      : RELIABILITY_DEFAULT_DURATION);
+  // Whole frames, and the same number for both phases.
+  const frames = Math.max(2, Math.ceil(duration / dtSim));
+
+  const abort = { cancelled: false };
+  reliabilityAbort = abort;
+
+  // Everything the check is about to change, so it can be handed back. The
+  // world is restored from the captured payload; these are the dials.
+  const savedSettings = { ...settings };
+  const savedPaused = host.getState?.()?.paused ?? false;
+  const startedAt = performance.now();
+
+  try {
+    const coarse = await runReliabilityPhase({
+      ...plan.coarse,
+      frames,
+      abort,
+      onProgress: opts.onProgress,
+      phaseIndex: 0,
+    });
+    if (abort.cancelled) return { ok: false, reason: 'cancelled' };
+
+    const fine = await runReliabilityPhase({
+      ...plan.fine,
+      frames,
+      abort,
+      onProgress: opts.onProgress,
+      phaseIndex: 1,
+    });
+    if (abort.cancelled) return { ok: false, reason: 'cancelled' };
+
+    const report = buildReliabilityReport({
+      coarse,
+      fine,
+      tolerance: opts.tolerance,
+      wallMs: performance.now() - startedAt,
+    });
+    current.reliability = report;
+    return report;
+  } finally {
+    reliabilityAbort = null;
+    // Back to the world the student was looking at, whatever happened above.
+    restoreInitialState({ keepSettings: true });
+    Object.assign(host.getSettings(), savedSettings);
+    updatePhysicsSettings(host.getSettings());
+    host.setFixedStep?.(0);
+    const state = host.getState?.();
+    if (state) state.paused = savedPaused;
+    refreshDiff();
+  }
+}
+
+/**
+ * Judge two completed phases.
+ *
+ * Split out from the runner so it can be tested without a browser.
+ *
+ * @param {object} input - coarse, fine, tolerance, wallMs
+ * @returns {object} The student-facing report
+ */
+export function buildReliabilityReport(input) {
+  const { coarse, fine } = input;
+  const tolerance = input.tolerance ?? DEFAULT_TOLERANCE;
+  const ids = current?.metrics || [];
+
+  // Every tracked quantity, judged separately. A single verdict for a run is
+  // not what a reader needs: some conclusions survive refinement and others do
+  // not, and which is which is the useful output.
+  const perMetric = ids.map(id => {
+    const a = coarse.results?.[id]?.value ?? null;
+    const b = fine.results?.[id]?.value ?? null;
+    const change = relativeChange(a, b);
+    return {
+      metric: id,
+      unit: metricUnit(id),
+      coarse: a,
+      fine: b,
+      change,
+      agrees: change === null ? null : change <= tolerance,
+      kind: coarse.results?.[id]?.kind ?? null,
+    };
+  });
+
+  // A path to compare early against late, which is what separates a chaotic
+  // pair from a badly resolved one. The first tracked quantity that varies
+  // sample by sample; the reductions above cannot show when two runs parted.
+  const pathId = ids.find(id => !SCALAR_METRICS.has(id));
+  let aligned = null;
+  if (pathId) {
+    const sa = series(coarse.samples, pathId);
+    const sb = series(fine.samples, pathId);
+    aligned = alignSeries(
+      sa.map(p => ({ t: p.t, v: p.v })),
+      sb.map(p => ({ t: p.t, v: p.v }))
+    ).rows.map(r => ({ t: r.t, a: r.a, b: r.b }));
+  }
+
+  // The outcome the verdict is computed from: the first tracked quantity that
+  // is not itself a conservation diagnostic. Judging convergence by the energy
+  // drift would be exactly the inference this whole module refuses to make.
+  const outcomeId =
+    ids.find(
+      id =>
+        id !== METRICS.ENERGY_DRIFT &&
+        id !== METRICS.ANGULAR_DRIFT &&
+        id !== METRICS.TOTAL_ENERGY &&
+        id !== METRICS.ANGULAR_MOMENTUM
+    ) ?? null;
+
+  const core = reliabilityReport({
+    coarse,
+    fine,
+    aligned,
+    outcomeCoarse: outcomeId
+      ? (coarse.results?.[outcomeId]?.value ?? null)
+      : null,
+    outcomeFine: outcomeId ? (fine.results?.[outcomeId]?.value ?? null) : null,
+    tolerance,
+  });
+
+  return {
+    ok: true,
+    ...core,
+    outcomeMetric: outcomeId,
+    pathMetric: pathId ?? null,
+    metrics: perMetric,
+    cost: {
+      wallMs: input.wallMs ?? null,
+      coarseMs: coarse.wallMs ?? null,
+      fineMs: fine.wallMs ?? null,
+      coarseSamples: coarse.samples.length,
+      fineSamples: fine.samples.length,
+      substeps: { coarse: coarse.substeps, fine: fine.substeps },
+    },
+    integrator: fine.integrator ?? coarse.integrator ?? null,
+    explanation: explain(core),
+    ranAt: new Date().toISOString(),
+  };
 }
 
 /**
@@ -815,6 +1127,10 @@ export function exportFiles(appVersion) {
     json: {
       name: `${stem}.json`,
       text: experimentManifestJson(current, { appVersion }),
+    },
+    reliability: {
+      name: `${stem}-reliability.json`,
+      text: reliabilityJson(current, { appVersion }) ?? '',
     },
   };
 }

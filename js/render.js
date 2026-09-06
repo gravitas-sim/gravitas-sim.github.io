@@ -53,6 +53,7 @@ import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './rotationCurve.js';
 import { tickTimeline } from './timeline.js';
+import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
 import { readToken, onThemeChange } from './theme.js';
 import { speedTrailColor } from './palette.js';
 import { auToSim, formatTime } from './units.js';
@@ -1844,6 +1845,8 @@ export function setFixedStep(seconds) {
 /** @returns {boolean} Whether the loop is stepping deterministically */
 export const isFixedStep = () => fixedStepSeconds > 0;
 
+export { MAX_SUBSTEPS, substepPlan };
+
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
   const frameStart = performance.now();
@@ -1852,7 +1855,7 @@ const gameLoop = timestamp => {
   const measured = (timestamp - state.last_time) / 1000.0;
   state.last_time = timestamp;
   const dt_seconds = fixedStepSeconds || measured;
-  const dt_sim = Math.min(dt_seconds, 0.05) * SETTINGS.sim_speed * 50 * DT;
+  const dt_sim = frameAdvance(dt_seconds, SETTINGS.sim_speed, DT);
   // While scrubbing, tickTimeline holds the restored frame and physics is
   // skipped so the recorded state is what gets drawn.
   const mayIntegrate = tickTimeline(dt_sim);
@@ -1869,14 +1872,8 @@ const gameLoop = timestamp => {
     // and a half, and at 16 substeps it was getting 225 steps per orbit, which
     // symplectic Euler turns into unbound orbits after a few hundred circuits.
     // Only scenarios that opt in pay for this, and those are small ones.
-    const maxStep = SETTINGS.max_timestep || 0;
-    if (maxStep > 0 && dt_sim > maxStep) {
-      const n = Math.min(64, Math.ceil(dt_sim / maxStep));
-      const sub = dt_sim / n;
-      for (let i = 0; i < n; i++) updatePhysics(sub);
-    } else {
-      updatePhysics(dt_sim);
-    }
+    const { substeps, step } = substepPlan(dt_sim, SETTINGS.max_timestep);
+    for (let i = 0; i < substeps; i++) updatePhysics(step);
     // The stopwatch runs on simulated time, so it is advanced by what was
     // actually integrated: a paused frame or a scrubbed one advances it by
     // nothing, and changing the simulation speed does not change a period the

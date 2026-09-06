@@ -80,6 +80,73 @@ export const DEFAULT_TOLERANCE = 0.01;
 export const EARLY_FRACTION = 1 / 3;
 
 /**
+ * How to run the same experiment at the step and at half of it.
+ *
+ * The subtle part of the whole feature, and the one place it could quietly
+ * become a lie. A convergence check is only a check if the second run is
+ * genuinely more finely integrated than the first, and the obvious lever is
+ * the wrong one: halving the frame advance also halves the simulated time each
+ * frame covers, so the substep count falls with it and the actual integration
+ * step barely moves. Measured on Kepler's 2nd Law, halving the frame advance
+ * takes the substep from 0.0463 to 0.0417 - a tenth - while doubling the
+ * number of frames needed to cover the same duration. A check built on that
+ * would compare a run against a near-copy of itself and pronounce everything
+ * converged.
+ *
+ * What actually refines the integration is the cap on the substep. Holding the
+ * frame advance fixed and halving the cap doubles the substeps per frame and
+ * halves the step exactly, and - because the frame advance is untouched - both
+ * runs cover the same simulated duration in the same number of frames and land
+ * their samples on the same instants. The comparison is then between two runs
+ * of the same thing, sampled identically, which is what the method requires.
+ *
+ * The cap on substeps per frame is the one thing that can defeat this. Where
+ * the coarse run is already taking more than half the maximum, the fine run
+ * cannot take twice as many, and its step would be silently the same or barely
+ * smaller. That is refused rather than reported.
+ *
+ * @param {object} input - dtSim, and the plan the engine is currently using
+ * @param {number} input.dtSim - Simulated time per frame, from frameAdvance()
+ * @param {number} input.substeps - Substeps per frame now, from substepPlan()
+ * @param {number} input.step - The integration step now, from substepPlan()
+ * @param {number} [input.maxSubsteps] - The engine's ceiling
+ * @returns {object} The two settings to run under, or why it cannot be done
+ */
+export function stepPlan(input) {
+  const { dtSim, substeps, step } = input || {};
+  const ceiling = input?.maxSubsteps ?? 64;
+
+  if (!(dtSim > 0) || !(step > 0) || !(substeps >= 1)) {
+    return { ok: false, reason: 'noStep', coarse: null, fine: null };
+  }
+  if (substeps * 2 > ceiling) {
+    // Already integrating as finely as the engine will allow in one frame.
+    // Refusing is the honest answer: the alternative is a "fine" run at the
+    // same step as the coarse one, which would agree with it perfectly and
+    // mean nothing.
+    return {
+      ok: false,
+      reason: 'substepCeiling',
+      coarse: null,
+      fine: null,
+      substeps,
+      ceiling,
+    };
+  }
+
+  // The caps to run under. Setting the coarse cap to the step the engine is
+  // already taking reproduces the current stepping exactly - ceil(dtSim/step)
+  // is the substep count it already has - rather than approximating it.
+  return {
+    ok: true,
+    reason: null,
+    dtSim,
+    coarse: { maxTimestep: step, substeps, step },
+    fine: { maxTimestep: step / 2, substeps: substeps * 2, step: step / 2 },
+  };
+}
+
+/**
  * Whether conservation is a meaningful diagnostic for this model at all.
  *
  * Reads the caveat list js/physics.js already produces rather than
@@ -363,7 +430,17 @@ export function explain(report) {
 
   if (report.conservation.status === CONSERVATION.NOT_EXPECTED) {
     notes.push('reliability.conservationNotExpected');
-  } else if (report.conservation.improved === false) {
+  }
+  // Said every time the drift figures are shown, whatever they show and
+  // whether or not they were expected to mean anything. A well-conserved run
+  // is the most persuasive wrong answer this feature has to guard against:
+  // energy is one number, and a close approach can be resolved far too
+  // coarsely without disturbing it.
+  notes.push('reliability.conservationIsNotAccuracy');
+  if (
+    report.conservation.status === CONSERVATION.EXPECTED &&
+    report.conservation.improved === false
+  ) {
     // Worth saying, and worth not overstating. A drift that failed to fall is
     // evidence that something is unresolved; it is not the verdict, and the
     // verdict was computed without it.
@@ -371,6 +448,7 @@ export function explain(report) {
   }
 
   if (report.verdict === VERDICT.DIVERGED) {
+    notes.push('reliability.chaosSeparates');
     notes.push('reliability.quoteStatistics');
   }
   if (report.verdict === VERDICT.CONVERGING) {

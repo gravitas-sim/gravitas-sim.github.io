@@ -27,13 +27,22 @@ let loading = null;
 export function ensureBench() {
   if (!loading) {
     loading = (async () => {
-      const [bench, panel, ui, share, render] = await Promise.all([
-        import('./experiments/bench.js'),
-        import('./experiments/panel.js'),
-        import('./ui.js'),
-        import('./share.js'),
-        import('./render.js'),
-      ]);
+      const [bench, panel, ui, share, render, timestep, physics] =
+        await Promise.all([
+          import('./experiments/bench.js'),
+          import('./experiments/panel.js'),
+          import('./ui.js'),
+          import('./share.js'),
+          import('./render.js'),
+          import('./timestep.js'),
+          import('./physics.js'),
+          // The reliability check's prose is not in the start-up catalogue: the
+          // bench is lazy, so its rarest half should be too. Registered before
+          // the panel renders anything.
+          import('./i18n/deferredMessages.js').then(m =>
+            m.ensureDeferredMessages()
+          ),
+        ]);
       bench.initBench({
         captureShareState: ui.captureShareState,
         applyShareState: ui.applyShareState,
@@ -42,6 +51,15 @@ export function ensureBench() {
         getState: () => ui.state,
         getDefaults: () => ui.DEFAULT_SETTINGS,
         setFixedStep: render.setFixedStep,
+        // The engine's own stepping arithmetic, not a copy of it. The
+        // reliability check has to halve the step the loop is really taking,
+        // and a second implementation of that rule would drift from this one
+        // and quietly compare a run against itself.
+        // Bound to the engine's own DT so the bench never has to know it.
+        frameAdvance: (seconds, simSpeed) =>
+          timestep.frameAdvance(seconds, simSpeed, physics.DT),
+        substepPlan: timestep.substepPlan,
+        maxSubsteps: timestep.MAX_SUBSTEPS,
       });
       panel.setShareHandler(() => share.openShareDialog());
       return { bench, panel };

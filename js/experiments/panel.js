@@ -139,6 +139,18 @@ export function ensurePanel() {
       </div>
       <div id="benchControls" class="experiment-controls-list"></div>
 
+      <details class="experiment-section" id="benchReliabilitySection">
+        <summary>${esc(t('reliability.title'))}</summary>
+        <p class="experiment-hint">${esc(t('reliability.hint'))}</p>
+        <div class="experiment-row experiment-actions">
+          <button id="benchReliabilityRun" class="ui-button" disabled>${esc(t('reliability.run'))}</button>
+          <button id="benchReliabilityCancel" class="ui-button" hidden>${esc(t('reliability.cancel'))}</button>
+          <button id="benchReliabilityExport" class="ui-button" disabled>${esc(t('reliability.export'))}</button>
+        </div>
+        <p id="benchReliabilityStatus" class="experiment-hint" role="status" aria-live="polite"></p>
+        <div id="benchReliabilityReport" class="experiment-results"></div>
+      </details>
+
       <div class="experiment-row experiment-actions">
         <button id="benchExportCsv" class="ui-button" disabled>${esc(t('bench.action.csv'))}</button>
         <button id="benchExportJson" class="ui-button" disabled>${esc(t('bench.action.json'))}</button>
@@ -260,6 +272,7 @@ export function render() {
   renderMetrics(exp);
   renderPerturbation(exp);
   renderControls(exp);
+  renderReliability(exp, recording);
   renderRuns(exp, recording);
   renderComparison(exp);
   renderSaved();
@@ -410,6 +423,103 @@ function renderControls(exp) {
     });
     wrap.appendChild(row);
   }
+}
+
+/**
+ * The reliability check: what it can be asked for, and what it found.
+ *
+ * The report is deliberately a table of conclusions rather than a badge. Some
+ * of what a run measures survives refinement and some does not, and which is
+ * which is the whole output; collapsing that to one word would throw away the
+ * only thing a reader can act on.
+ *
+ * @param {?object} exp - The active experiment
+ * @param {boolean} recording - Whether a run is being recorded
+ * @returns {void}
+ */
+function renderReliability(exp, recording) {
+  const run = $('benchReliabilityRun');
+  const cancel = $('benchReliabilityCancel');
+  const exportBtn = $('benchReliabilityExport');
+  const out = $('benchReliabilityReport');
+  if (!run || !out) return;
+
+  const busy = bench.isCheckingReliability();
+  run.disabled = !exp || recording || busy || !exp.metrics?.length;
+  cancel.hidden = !busy;
+  exportBtn.disabled = !exp?.reliability?.ok;
+
+  const report = exp?.reliability;
+  out.innerHTML = '';
+  if (!report) return;
+
+  if (!report.ok) {
+    const line = document.createElement('p');
+    line.className = 'experiment-note';
+    line.textContent = t(`reliability.reason.${report.reason}`, {
+      n: report.substeps ?? '',
+    });
+    out.appendChild(line);
+    return;
+  }
+
+  const add = (text, cls = 'experiment-note') => {
+    const el = document.createElement('p');
+    el.className = cls;
+    el.textContent = text;
+    out.appendChild(el);
+  };
+
+  add(t(report.explanation.headline), 'experiment-verdict');
+  for (const note of report.explanation.notes) add(t(note));
+
+  add(
+    t('reliability.steps', {
+      coarse: num(report.steps.coarse),
+      fine: num(report.steps.fine),
+    })
+  );
+
+  // Per conclusion, because that is the question a reader has. A row says
+  // whether refinement moved that particular number, and by how much.
+  const table = document.createElement('table');
+  table.className = 'experiment-table';
+  for (const m of report.metrics) {
+    const tr = document.createElement('tr');
+    const label = document.createElement('th');
+    label.scope = 'row';
+    label.textContent = bench.metricLabel(m.metric);
+    const value = document.createElement('td');
+    value.textContent =
+      m.change === null
+        ? t('reliability.noValue')
+        : m.agrees
+          ? t('reliability.agrees', {
+              tolerance: `${(report.tolerance * 100).toFixed(1)}%`,
+            })
+          : t('reliability.moved', {
+              change: `${(m.change * 100).toFixed(2)}%`,
+            });
+    // Marked in the DOM rather than only in the words, so the rows that moved
+    // are findable without reading every one.
+    tr.dataset.agrees = m.agrees === null ? 'unknown' : String(m.agrees);
+    tr.append(label, value);
+    table.appendChild(tr);
+  }
+  out.appendChild(table);
+
+  // What it cost. A convergence check is two extra runs, and a reader deciding
+  // whether to run one on a long experiment should be told that up front
+  // rather than discovering it.
+  add(
+    t('reliability.cost', {
+      duration: num(report.duration),
+      seconds: ((report.cost.wallMs ?? 0) / 1000).toFixed(1),
+      coarseSub: report.cost.substeps.coarse,
+      fineSub: report.cost.substeps.fine,
+    }),
+    'experiment-hint'
+  );
 }
 
 function renderRuns(exp, recording) {
@@ -783,6 +893,29 @@ function wire() {
     );
     render();
   };
+
+  $('benchReliabilityRun').onclick = async () => {
+    const status = $('benchReliabilityStatus');
+    render();
+    const result = await bench.runReliabilityCheck({
+      onProgress: ({ phase, fraction }) => {
+        status.textContent = t('reliability.running', {
+          phase: phase + 1,
+          percent: Math.round(fraction * 100),
+        });
+      },
+    });
+    status.textContent = result.ok
+      ? ''
+      : t(`reliability.reason.${result.reason}`, { n: result.substeps ?? '' });
+    render();
+  };
+
+  $('benchReliabilityCancel').onclick = () => {
+    bench.cancelReliabilityCheck();
+  };
+
+  $('benchReliabilityExport').onclick = () => download('reliability');
 
   $('benchExportCsv').onclick = () => download('csv');
   $('benchExportJson').onclick = () => download('json');

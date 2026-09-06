@@ -59,6 +59,12 @@ const BUDGETS = [
       'is taken *out*: the next feature that wants room here should be looking ' +
       'for a module to defer rather than for another thirty kilobytes. ' +
       'Neither three.js nor Chart.js is in here; both are deferred.\n\n' +
+      'The reliability check took it to 831.7 KB, over. Rather than ask for ' +
+      'another two kilobytes, the 92 bench.* strings went out to the deferred ' +
+      'catalogue: the bench is loaded on first press and most visitors never ' +
+      'press it, so its prose was being downloaded by everyone who loads the ' +
+      'site. bench.error.load stays behind, because it is what the bridge says ' +
+      'when that import fails. 826.3 KB, and the rule above held.\n\n' +
       'That instruction was then tested and honoured. The binary, gravity ' +
       'assist and RV-analysis work took this to 868 KB, and the answer was ' +
       'four deferrals rather than a bigger number: the two scenario-specific ' +

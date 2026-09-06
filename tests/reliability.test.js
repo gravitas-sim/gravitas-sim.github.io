@@ -9,7 +9,10 @@ import {
   conservationTrend,
   reliabilityReport,
   explain,
+  stepPlan,
 } from '../js/experiments/reliability.js';
+import { substepPlan, frameAdvance, MAX_SUBSTEPS } from '../js/timestep.js';
+import { DT } from '../js/physics.js';
 
 /** A recorded run in the shape the bench hands over. */
 const run = (over = {}) => ({
@@ -361,5 +364,124 @@ describe('the report as a whole', () => {
     for (const v of Object.values(VERDICT)) {
       expect(`reliability.verdict.${v}`).not.toMatch(/accurate|correct|valid/i);
     }
+  });
+});
+
+// =============================================================================
+// Halving the step
+//
+// The one place this feature could quietly become a lie. If the "fine" run is
+// not actually more finely integrated, it agrees with the coarse one perfectly
+// and everything is pronounced converged. These pin the arithmetic against the
+// engine's own, imported rather than restated.
+// =============================================================================
+
+describe('planning the two runs', () => {
+  test('halving the frame advance is NOT how you halve the step', () => {
+    // The trap. Kepler's 2nd Law ships sim_speed 5 and max_timestep 0.05.
+    const coarse = substepPlan(frameAdvance(1 / 60, 5, DT), 0.05);
+    const halvedFrame = substepPlan(frameAdvance(1 / 120, 5, DT), 0.05);
+
+    // The frame covers half as much simulated time...
+    expect(frameAdvance(1 / 120, 5, DT)).toBeCloseTo(
+      frameAdvance(1 / 60, 5, DT) / 2,
+      12
+    );
+    // ...and the integration step barely moves, because the substep count
+    // fell with it. A check built on this compares a run against itself.
+    expect(halvedFrame.step / coarse.step).toBeGreaterThan(0.85);
+  });
+
+  test('halving the substep cap halves the step exactly', () => {
+    const dtSim = frameAdvance(1 / 60, 5, DT);
+    const live = substepPlan(dtSim, 0.05);
+    const plan = stepPlan({ dtSim, substeps: live.substeps, step: live.step });
+
+    expect(plan.ok).toBe(true);
+    expect(plan.fine.step).toBeCloseTo(plan.coarse.step / 2, 15);
+    expect(plan.fine.substeps).toBe(plan.coarse.substeps * 2);
+
+    // And the engine, asked to run under those caps, does exactly that - so
+    // the plan is not merely self-consistent.
+    const asRun = c => substepPlan(dtSim, c.maxTimestep);
+    expect(asRun(plan.coarse).step).toBeCloseTo(plan.coarse.step, 15);
+    expect(asRun(plan.fine).step).toBeCloseTo(plan.fine.step, 15);
+    // Same frame advance in both, so the same duration and the same instants.
+    expect(asRun(plan.coarse).substeps * asRun(plan.coarse).step).toBeCloseTo(
+      asRun(plan.fine).substeps * asRun(plan.fine).step,
+      15
+    );
+  });
+
+  test('the coarse plan reproduces the stepping already in force', () => {
+    const dtSim = frameAdvance(1 / 60, 5, DT);
+    const live = substepPlan(dtSim, 0.05);
+    const plan = stepPlan({ dtSim, substeps: live.substeps, step: live.step });
+    // Not an approximation of the student's current step: the same one.
+    expect(plan.coarse.step).toBe(live.step);
+    expect(plan.coarse.substeps).toBe(live.substeps);
+  });
+
+  test('an uncapped scenario is planned too', () => {
+    const dtSim = frameAdvance(1 / 60, 1, DT);
+    const live = substepPlan(dtSim, 0);
+    expect(live.substeps).toBe(1);
+    const plan = stepPlan({ dtSim, substeps: 1, step: dtSim });
+    expect(plan.ok).toBe(true);
+    expect(substepPlan(dtSim, plan.fine.maxTimestep).substeps).toBe(2);
+  });
+
+  test('it refuses rather than pretend when the engine is already at its limit', () => {
+    const plan = stepPlan({
+      dtSim: 1,
+      substeps: MAX_SUBSTEPS,
+      step: 1 / MAX_SUBSTEPS,
+      maxSubsteps: MAX_SUBSTEPS,
+    });
+    // A "fine" run clamped to the same substep count would agree with the
+    // coarse one perfectly and mean nothing.
+    expect(plan.ok).toBe(false);
+    expect(plan.reason).toBe('substepCeiling');
+  });
+
+  test('nonsense in is a refusal out, not a plan', () => {
+    for (const bad of [null, {}, { dtSim: 0, substeps: 1, step: 0 }]) {
+      expect(stepPlan(bad).ok).toBe(false);
+    }
+  });
+});
+
+describe('what the explanation always says', () => {
+  test('a converging verdict still refuses to claim accuracy', () => {
+    const report = reliabilityReport({
+      coarse: run(),
+      fine: run({ step: 0.05 }),
+      outcomeCoarse: 10,
+      outcomeFine: 10.001,
+    });
+    const { headline, notes } = explain(report);
+    expect(headline).toBe('reliability.verdict.converging');
+    expect(notes).toContain('reliability.stillNotProof');
+    // The standing caveat, present whenever drift figures are shown at all.
+    expect(notes).toContain('reliability.conservationIsNotAccuracy');
+  });
+
+  test('a diverged verdict names chaos rather than blaming the step', () => {
+    const aligned = Array.from({ length: 30 }, (_, i) => ({
+      t: i,
+      a: i,
+      b: i + (i > 12 ? (i - 12) * 3 : 0),
+    }));
+    const report = reliabilityReport({
+      coarse: run(),
+      fine: run({ step: 0.05 }),
+      aligned,
+      outcomeCoarse: 10,
+      outcomeFine: 10.001,
+    });
+    const { notes } = explain(report);
+    expect(report.verdict).toBe(VERDICT.DIVERGED);
+    expect(notes).toContain('reliability.chaosSeparates');
+    expect(notes).toContain('reliability.quoteStatistics');
   });
 });

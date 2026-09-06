@@ -189,6 +189,74 @@ export function experimentManifestJson(experiment, opts) {
  * @param {Object} experiment - The experiment record
  * @returns {string} Filename stem
  */
+/**
+ * A reliability check as a standalone, reproducible document.
+ *
+ * Everything needed to repeat it: the captured start's hash, the seed, the
+ * integrator, both steps, both substep counts, the tolerance, every
+ * conclusion with its own agreement, and the drift figures with the note that
+ * they decide nothing. A reader who has the scenario and this file can run the
+ * same check and get the same answer.
+ *
+ * @param {object} experiment - The experiment carrying a `reliability` report
+ * @param {object} [opts] - `appVersion`
+ * @returns {?string} The JSON, or null with no completed check
+ */
+export function reliabilityJson(experiment, { appVersion = 'dev' } = {}) {
+  const r = experiment?.reliability;
+  if (!r?.ok) return null;
+  return `${JSON.stringify(
+    {
+      kind: 'gravitas-reliability-check',
+      appVersion,
+      ranAt: r.ranAt,
+      experiment: {
+        name: experiment.name,
+        scenario: experiment.provenance?.scenario ?? null,
+        seed: experiment.provenance?.seed ?? null,
+        initialStateHash: experiment.provenance?.initialStateHash ?? null,
+      },
+      method: {
+        description:
+          'The same captured start, run twice over the same simulated ' +
+          'duration: once at the step the engine was taking and once at ' +
+          'half of it. The frame advance is identical in both, so both ' +
+          'runs sample the same instants.',
+        integrator: r.integrator,
+        duration: r.duration,
+        tolerance: r.tolerance,
+        steps: r.steps,
+        substeps: r.cost?.substeps ?? null,
+      },
+      verdict: {
+        outcome: r.verdict,
+        reason: r.reason,
+        outcomeMetric: r.outcomeMetric,
+        pathMetric: r.pathMetric,
+        // Spelled out in the file, because a verdict read without it is
+        // exactly the over-reading this check exists to prevent.
+        meaning:
+          r.verdict === 'converging'
+            ? 'Halving the step did not move the measured outcome. This is ' +
+              'not a statement that the result is correct.'
+            : null,
+      },
+      conclusions: r.metrics,
+      conservation: {
+        ...r.conservation,
+        note:
+          'Reported as separate evidence. Conservation does not establish ' +
+          'trajectory accuracy and was not used to compute the verdict.',
+      },
+      series: r.series,
+      cost: r.cost,
+      explanation: r.explanation,
+    },
+    null,
+    2
+  )}\n`;
+}
+
 export function exportBasename(experiment) {
   const name = (experiment?.name || 'experiment')
     .toLowerCase()
