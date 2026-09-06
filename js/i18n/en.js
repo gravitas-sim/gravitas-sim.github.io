@@ -1057,6 +1057,10 @@ export const EN = {
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
+  'scenario.Lagrange Point Lab.title':
+    'Lagrange Point Lab: two stars, one circular orbit, one test particle',
+  'scenario.Lagrange Point Lab.summary':
+    'A sunlike star and a companion a thirtieth its mass, on an exactly circular orbit eight astronomical units across, with a tracer light enough that neither notices it. This is the circular restricted three-body problem: the simplest system with Lagrange points, forbidden regions and a conserved Jacobi constant, and the only arrangement in which any of those are exactly true.',
   'scenario.Orbital Transfer Lab.title':
     'Orbital Transfer Lab: one star, one spacecraft, one destination',
   'scenario.Orbital Transfer Lab.summary':

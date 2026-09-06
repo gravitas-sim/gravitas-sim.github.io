@@ -1,7 +1,7 @@
 // =============================================================================
 // Loading a scenario's own instrument when that scenario loads
 // -----------------------------------------------------------------------------
-// Two panels in this application are not general tools. The Binary Planet Run
+// Three panels in this application are not general tools. The Binary Planet Run
 // readout means nothing outside the two binary labs, and the Gravity Assist
 // two-frame comparison means nothing outside the two assist scenarios - four
 // scenarios out of fifty-seven between them. Both were being imported at
@@ -32,6 +32,11 @@ const PANELS = [
     scenarios: ['Gravity Assist Lab', 'Gravity Assist: Heliocentric'],
     load: () => import('./assistPanel.js'),
     init: m => m.initAssist(),
+  },
+  {
+    scenarios: ['Lagrange Point Lab'],
+    load: () => import('./cr3bpPanel.js'),
+    init: m => m.initCr3bp(),
   },
 ];
 

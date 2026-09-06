@@ -69,6 +69,14 @@ const LAB_VARIABLES = {
     'transfer_outer_au',
     'max_timestep',
   ],
+  'Lagrange Point Lab': [
+    'lagrange_tracer_x',
+    'lagrange_tracer_y',
+    'lagrange_tracer_vx',
+    'lagrange_tracer_vy',
+    'lagrange_secondary_mass',
+    'max_timestep',
+  ],
 };
 
 const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
@@ -1514,6 +1522,42 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       assist_approach_deg: helio ? 200 : 130.6,
       assist_gate: helio ? 45 : 4000,
       assist_probe_mass_ratio: 1e-6,
+    });
+  } else if (ps === 'Lagrange Point Lab') {
+    // The circular restricted three-body problem, built to be exactly that.
+    // Two bodies on a circular orbit, a tracer of negligible mass, nothing
+    // else, and no eccentricity anywhere - because the teaching overlay's
+    // claims are true of this arrangement and of no other, and it checks.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 2,
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      enable_asteroids: false,
+      mutual_gravity: true,
+      show_trails: true,
+      trail_length: 900,
+      show_conservation_diagnostics: true,
+      // The Jacobi constant is conserved by the dynamics, and the lesson asks
+      // students to watch it hold. Symplectic Euler's first-order drift would
+      // make that a claim about the integrator.
+      integrator: 'Velocity Verlet',
+      max_timestep: 0.3,
+      sim_speed: 30,
+      min_interaction_distance: 0.01,
+      sim_size: 'Large',
+      preset_zoom: 0.42,
+      follow_mode: 'None',
+      lagrange_primary_mass: 1,
+      lagrange_secondary_mass: 0.03,
+      lagrange_separation: 8,
+      lagrange_tracer_fraction: 1e-9,
+      lagrange_tracer_x: 0.6,
+      lagrange_tracer_y: 0,
+      lagrange_tracer_vx: 0,
+      lagrange_tracer_vy: 0,
     });
   } else if (ps === 'Orbital Transfer Lab') {
     // A closed-form laboratory. A Hohmann transfer has an exact answer only

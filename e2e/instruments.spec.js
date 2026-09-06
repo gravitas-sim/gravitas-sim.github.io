@@ -422,6 +422,9 @@ test.describe('the integrator setting', () => {
     // The transfer time is checked against the closed form to a per cent,
     // which symplectic Euler's first-order period error cannot support.
     'Orbital Transfer Lab': 'Velocity Verlet',
+    // The lesson watches the Jacobi constant hold; first-order drift would
+    // make that a claim about the integrator.
+    'Lagrange Point Lab': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({

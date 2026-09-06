@@ -103,6 +103,31 @@ export const DEFAULT_SETTINGS = {
   // claim about stability at any length: see the outcome wording.
   binary_lab_periods: 20,
 
+  // --- The Lagrange point laboratory ------------------------------------------
+  // Two massive bodies on an exactly circular orbit and a tracer light enough
+  // to be ignored by both. That is the circular restricted three-body problem,
+  // and every claim the teaching overlay makes - Lagrange points, zero-velocity
+  // curves, the Jacobi constant - is true only of that arrangement.
+  lagrange_primary_mass: 1, // solar masses
+  // 0.03 rather than something rounder: it puts the mass ratio at 0.0291,
+  // comfortably below Routh's 0.0385, so L4 and L5 are linearly stable and the
+  // lesson can show a stable equilibrium beside three unstable ones.
+  lagrange_secondary_mass: 0.03,
+  lagrange_separation: 8, // AU between the two massive bodies
+  // The tracer, as a fraction of the pair. A billionth: far below the
+  // threshold at which it would perturb the orbit it is being predicted
+  // against, and not zero, because a massless body drops out of the
+  // barycentre and out of the conservation diagnostics.
+  lagrange_tracer_fraction: 1e-9,
+  // Where the tracer starts, in units of the separation, measured in the
+  // rotating frame from the barycentre. The default puts it just inside L1.
+  lagrange_tracer_x: 0.6,
+  lagrange_tracer_y: 0,
+  // Its velocity in the rotating frame, which is what sets the Jacobi constant
+  // and therefore which gates are open to it.
+  lagrange_tracer_vx: 0,
+  lagrange_tracer_vy: 0,
+
   // --- The orbital transfer laboratory ----------------------------------------
   // One heavy star, a spacecraft on a circular orbit, and a target on an outer
   // circular coplanar orbit. Nothing else, and nothing eccentric: a Hohmann

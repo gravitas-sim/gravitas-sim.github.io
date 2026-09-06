@@ -700,4 +700,50 @@ export const EN_DEFERRED = {
   'inv.misconception.radiansForDegrees':
     'That looks like the angle in radians, and the question asks for degrees.',
   'inv.answer.check': 'Check',
+
+  // --- The restricted three-body teaching mode ---------------------------------
+  'cr3bp.title': 'Restricted three-body mode',
+  'cr3bp.close': 'Hide the three-body overlay',
+  'cr3bp.convention':
+    'Units: the two bodies are one apart, their total mass is one, and the frame turns with them about their barycentre. The heavier sits at \u2212\u03bc, the lighter at 1\u2212\u03bc. C = 2\u03a9 \u2212 v\u00b2 with v measured in the rotating frame, so a LARGER C means a SLOWER tracer and a SMALLER accessible region \u2014 the opposite direction to every other energy here. (This convention omits the \u03bc(1\u2212\u03bc)/2 term some texts add, which puts C\u2084 at 3\u2212\u03bc+\u03bc\u00b2 rather than 3.)',
+  'cr3bp.valid':
+    'Circular restricted three-body problem, \u03bc = {mu}. The shaded region is where this tracer\u2019s energy forbids it to be.',
+  'cr3bp.invalid.title': 'The overlay is off:',
+  'cr3bp.invalid.bodyCount':
+    'this needs exactly two massive bodies, and the system does not have two.',
+  'cr3bp.invalid.eccentric':
+    'the two bodies are not on a circular orbit, so the Lagrange points and the forbidden region would be moving and the diagram would be of no particular instant.',
+  'cr3bp.invalid.tracerTooHeavy':
+    'the third body is heavy enough to move the other two, so it is not a test particle and the restricted problem does not describe it.',
+  'cr3bp.invalid.noTracer': 'there is no light third body to describe.',
+  'cr3bp.invalid.thirdMass': 'a third massive body is present.',
+  'cr3bp.noTracer': 'No tracer, so no Jacobi constant.',
+  'cr3bp.jacobi': 'Jacobi constant C = {C}',
+  'cr3bp.point': 'Point',
+  'cr3bp.reachableHere': 'Energy permits',
+  'cr3bp.yes': 'yes',
+  'cr3bp.no': 'no',
+  'cr3bp.stableMark': '(stable)',
+  'cr3bp.toGate': 'C would have to fall by {d} for the {gate} neck to open.',
+  'cr3bp.regime.separated':
+    'Every route between the two bodies is closed. The tracer is confined to the region it started in.',
+  'cr3bp.regime.l1Open':
+    'The neck at L1 is open: the energy no longer separates the two bodies. Whether the tracer goes through is a different question.',
+  'cr3bp.regime.l2Open':
+    'L1 and L2 are both open, so the exterior is energetically reachable as well as the other body\u2019s region.',
+  'cr3bp.regime.l3Open':
+    'Only two small forbidden islands remain, around L4 and L5.',
+  'cr3bp.regime.unrestricted':
+    'Nothing anywhere is energetically forbidden to this tracer.',
+  'cr3bp.routh.below':
+    '\u03bc is below Routh\u2019s value of {mu}, so L4 and L5 are linearly stable. The three collinear points never are, at any mass ratio.',
+  'cr3bp.routh.above':
+    '\u03bc is above Routh\u2019s value of {mu}, so none of the five is stable \u2014 not even L4 and L5.',
+  'cr3bp.claims.title': 'Three claims that are not the same claim',
+  'cr3bp.claims.accessible':
+    'Energetically accessible: the Jacobi constant does not forbid the tracer from being at that point. That is all the shading says.',
+  'cr3bp.claims.reachable':
+    'Will actually travel there: a separate question, and this overlay cannot answer it. An open neck is a gap in a wall, not a route through it; the tracer may orbit for ever on one side of an opening it never uses. Only integrating the trajectory settles it.',
+  'cr3bp.claims.stable':
+    'Stable: a third question again. It means a tracer displaced slightly from an equilibrium returns rather than leaves, and it is true here only of L4 and L5, and only below Routh\u2019s mass ratio. Nothing in a zero-velocity curve implies it.',
 };

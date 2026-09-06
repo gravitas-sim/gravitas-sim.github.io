@@ -37,6 +37,18 @@
 // here, stated in the panel, and stated in the lesson rather than left for a
 // reader to infer from a graph going the wrong way.
 //
+// Two conventions are in circulation and they differ by a constant. Many texts
+// add mu*(1-mu)/2 to Omega, which makes the value at the triangular points
+// exactly 3. This file does not add it, so under the definition above
+//
+//   C4 = C5 = 3 - mu + mu^2
+//
+// which is 2.98800 for the Earth-Moon system rather than 2.98785. The
+// difference is only ever a constant offset applied to every C alike, so no
+// comparison in this file changes - but a reader checking a number against a
+// textbook will find the last four digits disagree, and that is worth knowing
+// before it is discovered.
+//
 // A point (x, y) is accessible to a tracer of Jacobi constant C when
 // 2*Omega(x, y) >= C, because v^2 = 2*Omega - C cannot be negative. The
 // boundary, where the two are equal, is the zero-velocity curve.

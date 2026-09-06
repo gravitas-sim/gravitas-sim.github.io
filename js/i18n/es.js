@@ -1089,6 +1089,10 @@ export const ES = {
   'scenario.Blended Binary.title': 'Binaria mezclada: una compañera oculta',
   'scenario.Blended Binary.summary':
     'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, así que el tránsito se mide menos profundo y el planeta parece más pequeño. Corregir este efecto es para lo que sirven los sondeos de imagen de alta resolución.',
+  'scenario.Lagrange Point Lab.title':
+    'Laboratorio de puntos de Lagrange: dos estrellas, una orbita circular, una particula de prueba',
+  'scenario.Lagrange Point Lab.summary':
+    'Una estrella de tipo solar y una companera de una treintava parte de su masa, en una orbita exactamente circular de ocho unidades astronomicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema mas simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la unica disposicion en la que todo eso es exactamente cierto.',
   'scenario.Orbital Transfer Lab.title':
     'Laboratorio de transferencia orbital: una estrella, una nave, un destino',
   'scenario.Orbital Transfer Lab.summary':

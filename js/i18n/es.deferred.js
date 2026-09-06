@@ -709,4 +709,51 @@ export const ES_DEFERRED = {
   'inv.misconception.radiansForDegrees':
     'Eso parece el ángulo en radianes, y la pregunta pide grados.',
   'inv.answer.check': 'Comprobar',
+
+  // --- El modo didactico del problema restringido de tres cuerpos --------------
+  'cr3bp.title': 'Modo de tres cuerpos restringido',
+  'cr3bp.close': 'Ocultar la superposicion de tres cuerpos',
+  'cr3bp.convention':
+    'Unidades: los dos cuerpos estan a distancia uno, su masa total es uno y el sistema de referencia gira con ellos alrededor de su baricentro. El mas pesado esta en \u2212\u03bc y el mas ligero en 1\u2212\u03bc. C = 2\u03a9 \u2212 v\u00b2 con v medida en el sistema giratorio, asi que una C MAYOR significa un trazador MAS LENTO y una region accesible MENOR: el sentido contrario al de cualquier otra energia aqui. (Esta convencion omite el termino \u03bc(1\u2212\u03bc)/2 que anaden algunos textos, lo que situa C\u2084 en 3\u2212\u03bc+\u03bc\u00b2 y no en 3.)',
+  'cr3bp.valid':
+    'Problema restringido circular de tres cuerpos, \u03bc = {mu}. La zona sombreada es donde la energia de este trazador le prohibe estar.',
+  'cr3bp.invalid.title': 'La superposicion esta desactivada:',
+  'cr3bp.invalid.bodyCount':
+    'esto necesita exactamente dos cuerpos masivos, y el sistema no tiene dos.',
+  'cr3bp.invalid.eccentric':
+    'los dos cuerpos no estan en orbita circular, asi que los puntos de Lagrange y la region prohibida estarian moviendose y el diagrama no seria de ningun instante concreto.',
+  'cr3bp.invalid.tracerTooHeavy':
+    'el tercer cuerpo pesa lo bastante como para mover a los otros dos, asi que no es una particula de prueba y el problema restringido no lo describe.',
+  'cr3bp.invalid.noTracer': 'no hay un tercer cuerpo ligero que describir.',
+  'cr3bp.invalid.thirdMass': 'hay un tercer cuerpo masivo.',
+  'cr3bp.noTracer': 'Sin trazador, no hay constante de Jacobi.',
+  'cr3bp.jacobi': 'Constante de Jacobi C = {C}',
+  'cr3bp.point': 'Punto',
+  'cr3bp.reachableHere': 'La energia lo permite',
+  'cr3bp.yes': 'si',
+  'cr3bp.no': 'no',
+  'cr3bp.stableMark': '(estable)',
+  'cr3bp.toGate':
+    'C tendria que bajar {d} para que se abriera el cuello de {gate}.',
+  'cr3bp.regime.separated':
+    'Todas las rutas entre los dos cuerpos estan cerradas. El trazador esta confinado en la region donde empezo.',
+  'cr3bp.regime.l1Open':
+    'El cuello de L1 esta abierto: la energia ya no separa a los dos cuerpos. Que el trazador pase por el es otra cuestion.',
+  'cr3bp.regime.l2Open':
+    'L1 y L2 estan abiertos, asi que el exterior es alcanzable energeticamente igual que la region del otro cuerpo.',
+  'cr3bp.regime.l3Open':
+    'Solo quedan dos pequenas islas prohibidas, alrededor de L4 y L5.',
+  'cr3bp.regime.unrestricted':
+    'Nada en ninguna parte esta energeticamente prohibido para este trazador.',
+  'cr3bp.routh.below':
+    '\u03bc esta por debajo del valor de Routh, {mu}, asi que L4 y L5 son linealmente estables. Los tres puntos colineales no lo son nunca, con ninguna razon de masas.',
+  'cr3bp.routh.above':
+    '\u03bc esta por encima del valor de Routh, {mu}, asi que ninguno de los cinco es estable, ni siquiera L4 y L5.',
+  'cr3bp.claims.title': 'Tres afirmaciones que no son la misma',
+  'cr3bp.claims.accessible':
+    'Accesible energeticamente: la constante de Jacobi no prohibe al trazador estar en ese punto. Eso es todo lo que dice el sombreado.',
+  'cr3bp.claims.reachable':
+    'Que vaya a ir realmente: es otra cuestion, y esta superposicion no puede responderla. Un cuello abierto es un hueco en un muro, no una ruta a traves de el; el trazador puede orbitar para siempre a un lado de una abertura que nunca usa. Solo integrar la trayectoria lo resuelve.',
+  'cr3bp.claims.stable':
+    'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
 };

@@ -54,6 +54,7 @@ import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './rotationCurve.js';
 import { tickTimeline } from './timeline.js';
 import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
+import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
 import { speedTrailColor } from './palette.js';
 import { auToSim, formatTime } from './units.js';
@@ -1905,6 +1906,9 @@ const gameLoop = timestamp => {
     updateAstrometry();
     updateRotationCurve();
     drawObserverIndicator(ctx, canvas.width, canvas.height);
+    // Whatever a lazily loaded panel has registered. Empty, and free, until
+    // one has.
+    drawOverlays(ctx, canvas.width, canvas.height);
   } catch {
     /* non-fatal */
   }

@@ -2435,6 +2435,73 @@ export const buildWorld = ctx => {
     // been given a puzzle that is not the lesson's.
   }
 
+  // --- Lagrange Point Lab ------------------------------------------------------
+  if (starting_preset === 'Lagrange Point Lab') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const AU = SIM_UNITS_PER_AU;
+    const G = SETTINGS.gravitational_constant;
+    const m1 = SETTINGS.lagrange_primary_mass * SOLAR_MASS_UNIT;
+    const m2 = SETTINGS.lagrange_secondary_mass * SOLAR_MASS_UNIT;
+    const separation = SETTINGS.lagrange_separation * AU;
+    const total = m1 + m2;
+    const mu = m2 / total;
+
+    // The barycentre is the origin, the heavier body sits at -mu and the
+    // lighter at 1-mu, in units of the separation. That is the convention
+    // js/cr3bp.js states and works in, and building the world any other way
+    // would mean the overlay and the simulation disagreed about where the
+    // origin is.
+    const n = Math.sqrt((G * total) / (separation * separation * separation));
+    const place = (fraction, mass, name, colour, radiusSuns) => {
+      const x = fraction * separation;
+      const star = new StarObject({ x, y: 0 }, { x: 0, y: n * x }, 0);
+      star.mass = mass;
+      star.massInSuns = mass / SOLAR_MASS_UNIT;
+      star.name = name;
+      star.radiusInSuns = radiusSuns;
+      // Drawn well above life size so both are visible at a zoom that holds
+      // the whole L4/L5 triangle. Nothing here comes within twenty times the
+      // drawn radius, and js/physics.js collides on the drawn radius.
+      star.radius = 30 * 0.00465047 * AU * Math.cbrt(radiusSuns);
+      star.baseColor = colour;
+      star.persistent = true;
+      stars.push(star);
+    };
+    place(-mu, m1, 'Primary', '#ffd27f', 1);
+    place(1 - mu, m2, 'Secondary', '#9fd0ff', 0.35);
+
+    // The tracer, placed and launched in the ROTATING frame. At t = 0 the
+    // rotating and inertial frames coincide in orientation, so the position
+    // carries over unchanged and the velocity picks up the frame's own motion:
+    // v_inertial = v_rotating + omega x r, with omega along +z.
+    const rx = SETTINGS.lagrange_tracer_x * separation;
+    const ry = SETTINGS.lagrange_tracer_y * separation;
+    const tracer = new Planet(
+      { x: rx, y: ry },
+      {
+        x: SETTINGS.lagrange_tracer_vx * separation * n - n * ry,
+        y: SETTINGS.lagrange_tracer_vy * separation * n + n * rx,
+      },
+      1
+    );
+    tracer.name = 'Tracer';
+    tracer.mass = total * SETTINGS.lagrange_tracer_fraction;
+    tracer.massInEarths = tracer.mass / EARTH_MASS_UNIT;
+    tracer.radius = 0.8;
+    tracer.baseColor = '#f07f7f';
+    tracer.persistent = true;
+    planets.push(tracer);
+  }
+
   // --- Orbital Transfer Lab ----------------------------------------------------
   if (starting_preset === 'Orbital Transfer Lab') {
     stars.length = 0;
