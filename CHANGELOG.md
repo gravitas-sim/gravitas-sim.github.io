@@ -33,8 +33,8 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   Radial velocity measurements**: one row per measurement, carrying the
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
-  <!--fact:scenarios-->55<!--/fact--> scenario thumbnails and all
-  <!--fact:investigations-->14<!--/fact--> English lessons, so a class keeps
+  <!--fact:scenarios-->57<!--/fact--> scenario thumbnails and all
+  <!--fact:investigations-->15<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
 - **A measured low-end quality tier.** Chosen from the frame rate the machine
@@ -43,7 +43,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->415<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->431<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of
@@ -79,7 +79,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
   against a suite of <!--fact:physicsChecks-->233<!--/fact-->, and 48 scenarios
-  against a catalog of <!--fact:scenarios-->55<!--/fact-->.
+  against a catalog of <!--fact:scenarios-->57<!--/fact-->.
 
 ### Removed
 

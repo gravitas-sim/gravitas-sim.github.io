@@ -62,6 +62,7 @@ import BUTTERFLY from './investigations/butterfly-effect.js';
 import RESONANCE from './investigations/when-orbits-lock.js';
 import DETECT_THIS_PLANET from './investigations/detect-this-planet.js';
 import BINARY_PLANETS from './investigations/binary-star-planets.js';
+import GRAVITY_ASSIST from './investigations/gravity-assist.js';
 import { gradedSteps, positionIn } from './investigations/catalogue.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
@@ -93,6 +94,7 @@ export const INVESTIGATIONS = [
   RESONANCE,
   DETECT_THIS_PLANET,
   BINARY_PLANETS,
+  GRAVITY_ASSIST,
 ];
 
 /**

@@ -16,6 +16,203 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'gravity-assist': {
+    topic: 'Reference frames, and where a gravity assist gets its energy',
+    difficulty: 'Introductory, no mathematics beyond arithmetic',
+    placement:
+      'A short lesson, 15 to 20 minutes, that fits anywhere after students have met the idea of an orbit. It is the most self-contained thing in the catalogue and works well as a lab-period opener or as the practical half of a lecture on reference frames. It needs no prerequisites and leaves students with a result they will meet again in every outer-solar-system mission they read about.',
+    overview: `Students fly the same flyby twice, once on each side of a planet, and read the
+      result in two frames at once. In the planet's frame the spacecraft leaves at exactly the
+      speed it arrived; in an inertial frame it leaves 78 per cent faster. Both numbers are on
+      screen simultaneously, in two columns, and the lesson is the question of how they can both
+      be true.
+      \n\nThe first two thirds have no star in them, and that is the pedagogical spine rather
+      than a simplification. With nothing else present the planet moves in a straight line, its
+      frame is genuinely inertial, and the measured change in relative speed is three parts in
+      a hundred billion - zero to any precision anyone cares about. Only once that exact version
+      is established does a star appear, at which point the same quantity changes by a third of
+      a per cent and the lesson can name that residual as the patched-conic approximation and
+      quote its size.
+      \n\nThe isolated case is also the only one in which the momentum ledger is legible. On an
+      orbit the planet's velocity changes far more from its own turning than from the
+      spacecraft; in empty space the recoil is the only thing there is, so the panel can show
+      the two momentum changes agreeing to a part in 10^9 rather than assert that they do.`,
+    priorKnowledge: [
+      'That gravity pulls, and that a planet moves',
+      'Reading a number off a panel',
+      'Helpful but not required: the idea that speed is measured relative to something',
+      'No vectors required. The vector addition is introduced in words and pictures at the seventh screen and never written as components',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Speed is not a property of an object',
+        body: 'It is a property of an object and a thing to measure against. The two columns in the panel are the same spacecraft at the same two instants, and they disagree because they measure against different things. Students who have never had to confront this usually believe speed is intrinsic, and the panel makes the belief untenable rather than arguing with it.',
+      },
+      {
+        heading: 'A flyby can only turn the velocity, not lengthen it',
+        body: 'In the planet frame the spacecraft falls in and climbs back out by the same depth, so it leaves at the speed it arrived. That is the conservation statement, and it is exact when the planet frame is inertial. Everything else in the lesson follows from it.',
+      },
+      {
+        heading: 'The gain is a vector sum, not a push',
+        body: 'v(inertial) = v(planet) + v(relative). Rotating the second vector changes the length of the sum without changing the length of either part. The tennis-ball-and-train analogy at the seventh screen is exact rather than illustrative, and worth drawing on a board.',
+      },
+      {
+        heading: 'Which side decides the sign',
+        body: 'Behind the planet gains, in front loses. The natural intuition - "the planet pulls it forward from in front" - gets the sign backwards, which is why the prediction is collected before anything is run.',
+      },
+      {
+        heading: 'The ceiling is set by approach speed, not planet mass',
+        body: 'The largest possible velocity change is twice the approach speed, reached only by a full reversal. A heavier planet bends the path further and so gets closer to that ceiling; it cannot raise it. This is the reason assists are worth so much at Jupiter and so little at Mercury, and students almost always guess that mass sets the limit.',
+      },
+      {
+        heading: 'The planet pays, in momentum',
+        body: 'Equal and opposite, always. The spacecraft here is an Earth mass rather than a tonne, chosen so the recoil is a readable number; the physics is identical and the size is not, and the lesson says so.',
+      },
+      {
+        heading: 'Patched conics, and its measured error',
+        body: 'Treating a flyby as an isolated two-body encounter spliced into a heliocentric orbit is what mission designers do for a first pass. With a star present the relative speed changes by 0.34 per cent and the deflection misses the two-body prediction by six per cent. Those residuals are the approximation, and the closing question exists to stop students reading them as numerical error.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'Voyager 2 arriving at Jupiter at 10 km/s and leaving at 26 with its engines off, then the stripped-down version on screen and why it has no star. Students commit to which side of the planet gains before running anything.',
+      },
+      {
+        steps: '4-6',
+        text: 'The gaining pass, about nine seconds of wall clock. Students record all four speeds and then face the central question. This is the part to slow down for.',
+      },
+      {
+        steps: '7-9',
+        text: 'The vector addition in words, then the mirror-image pass on the other side, then why the loss is smaller than the gain - which is geometry rather than physics and catches almost everybody.',
+      },
+      {
+        steps: '10-12',
+        text: 'The ceiling of twice the approach speed, then the recoil and the momentum ledger, then where the energy actually came from.',
+      },
+      {
+        steps: '13-16',
+        text: 'The same encounter with a star, the residuals it introduces, what they mean, and the three things the model leaves out.',
+      },
+    ],
+    features: [
+      {
+        name: 'Gravity Assist Lab and Gravity Assist: Heliocentric scenarios',
+        text: 'Two controlled encounters built from closed-form orbital elements, so the impact parameter and the approach speed are exact inputs rather than approximate consequences of a starting position. The two shipped Slingshot scenarios cannot be used for this: they are randomised fields of dozens of bodies under mutual gravity, with no isolated encounter and no defined before and after.',
+      },
+      {
+        name: 'The Gravity Assist panel',
+        text: 'Two columns, deliberately side by side rather than one list, because the juxtaposition is the explanation. Also reports which side the spacecraft passed, the closest approach in planet radii, the measured deflection against the two-body prediction, the planet’s recoil, and the momentum ledger. It opens itself when either scenario loads.',
+      },
+      {
+        name: 'The reference frame control',
+        text: 'The panel’s "Planet’s frame" button drives the application’s existing frame system, which re-expresses positions AND trails - so the path is redrawn as the planet would have seen it, a hyperbola, rather than the camera merely following the planet. Worth pressing mid-encounter with a class watching.',
+      },
+      {
+        name: 'The vis-viva correction',
+        text: 'Speeds "at infinity" are read at a stated distance and corrected for the potential there, because at the gate the spacecraft is still travelling 0.6 per cent faster than its asymptotic speed - ten times the accuracy the rest of the lesson works to. Both legs are read at the same distance so the correction is the same size on each.',
+      },
+      {
+        name: 'The A/B experiment bench',
+        text: 'Not required, but the natural extension: capture the start, record the gaining pass, restore, flip the impact parameter and record the losing one, then difference the two speeds on one time axis.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim:
+          'The planet pulls the spacecraft forward, so passing in front gains speed.',
+        response:
+          'The most common wrong answer and the reason the prediction is collected at the third screen before anything runs. A spacecraft ahead of the planet is pulled backwards relative to the planet’s motion. Take it as a show of hands and come back to it after the eighth screen.',
+      },
+      {
+        claim: 'The gravity assist creates energy.',
+        response:
+          'The momentum ledger at the eleventh screen is the answer, and it is worth reading aloud: the spacecraft gained exactly what the planet lost, to a part in a billion. The planet is slower by four millimetres per second.',
+      },
+      {
+        claim:
+          'The spacecraft speeds up because the planet’s gravity accelerates it.',
+        response:
+          'It does accelerate on the way in - and decelerates by exactly as much on the way out. In the planet’s frame the two cancel exactly, which is what the left-hand column shows. The gain is entirely in the frame change.',
+      },
+      {
+        claim: 'A heavier planet would give a bigger boost without limit.',
+        response:
+          'The tenth screen. The ceiling is twice the approach speed and mass cannot raise it; mass only decides how much of the ceiling a given pass reaches. Ask what would happen at a planet the spacecraft approached at 50 km/s.',
+      },
+      {
+        claim: 'The gain and the loss should be equal and opposite.',
+        response:
+          'The ninth screen, and a genuinely good wrong expectation. The change in VELOCITY is the same size both ways; the change in SPEED is not, because speed is the length of a vector sum. Worth drawing: same two arrows, two different angles between them.',
+      },
+      {
+        claim:
+          'The residual in the heliocentric case means the simulation is inaccurate.',
+        response:
+          'The fifteenth screen exists for this. It is a physical effect - an accelerating frame and a third body - and halving the timestep does not shrink it. Students who have done the binary-stars investigation will reach for a convergence check here, which is exactly the right instinct applied to the wrong problem, and is worth praising and then redirecting.',
+      },
+    ],
+    teachingNotes: [
+      'Collect the third screen’s prediction as a show of hands and write the tally on the board. In most classes a clear majority chooses "in front".',
+      'The fourth screen is the one to run at the front of the room. Nine seconds of wall clock, and the moment to press "Planet’s frame" is right after the readings are taken: the same encounter redrawn as a hyperbola about a stationary planet makes the left-hand column obvious.',
+      'The sixth screen is the hinge of the lesson. If a class is going to stall anywhere it is here, and the productive move is to ask what the spacecraft’s speed is "really" - which has no answer, and is the point.',
+      'The tennis-ball-and-train analogy at the seventh screen is exact, not a loose comparison. A ball thrown at 10 m/s at a train approaching at 20 leaves the train at 10 m/s in the train’s frame and 50 m/s in the station’s. It is worth doing on the board with numbers.',
+      'The ninth screen catches almost everyone, including people who got everything before it right. Let them be wrong out loud before resolving it.',
+      'The heliocentric half is quick - the encounter takes a few seconds - so if time is short it is the part to compress rather than cut. The residual and what it means are worth more than the flyby itself.',
+      'For a class that has done Planets in Binary Stars: the fifteenth screen is a deliberate counterpoint. There, a discrepancy that changed with the timestep meant the run was not converged. Here, a discrepancy that does not change with the timestep means the model is approximate. Telling those two apart is the transferable skill.',
+    ],
+    discussion: [
+      'Voyager 2 gained about 16 km/s at Jupiter. Jupiter lost the corresponding momentum. Is there any measurement that could ever detect that?',
+      'The Parker Solar Probe uses seven flybys of Venus on the leading side to lose speed and fall closer to the Sun. Why is losing speed hard, and why does it take seven?',
+      'Every assist is capped at twice the approach speed. What does that imply about missions to the outer solar system, and about why they are so often routed past Jupiter?',
+      'The lesson uses an Earth-mass spacecraft so the recoil is readable. Does using an unrealistic mass weaken the demonstration, and what would you have done instead?',
+      'The heliocentric residual is a third of a per cent. If you were designing a real mission, would that be good enough, and what would you do about it?',
+    ],
+    extensions: [
+      'Sweep the impact parameter through zero - try +80, +40, +20, then the negatives - and plot the speed change against it. The curve is not monotonic, and finding the impact parameter that maximises the gain is a nice piece of numerical experimentation.',
+      'Work out the tennis-ball-and-train problem on paper for the actual numbers on screen: 2.83 km/s for the planet, 4.34 for the approach, 58.6 degrees of turn. The answer should be the number in the panel.',
+      'Use the A/B experiment bench to record the gaining and losing passes as two arms of one experiment and chart speed against simulated time.',
+      'Look up the Voyager 2 Jupiter encounter parameters and compute the deflection with the formula this lesson uses. Jupiter’s GM is 1.267e17 m^3/s^2 and the closest approach was about 722,000 km.',
+      'For a class with trigonometry: derive the ceiling. Show that the change in velocity has magnitude 2 v sin(delta/2), and that this is maximised at delta = 180 degrees.',
+    ],
+    expectations: {
+      4: 'About nine seconds of wall clock. The trail bends visibly as the spacecraft rounds the planet, closest approach is 0.234 AU which is twelve planet radii, and the deflection is 58.6 degrees against a two-body prediction of 58.6 - they agree to a hundredth of a degree, which is worth pointing at. The "Planet’s frame" button is the moment: press it after the readings and the same path is redrawn as a clean hyperbola about a stationary planet.',
+      5: 'Relative to the planet, 4.343 km/s both before and after - the panel reports the change as roughly minus three parts in a hundred billion, which is zero. Relative to everything else, 3.32 km/s before and 5.89 after, a gain of 78 per cent. A student whose left column differs is reading the wrong column; the field check says so. A student whose right column shrank has the impact parameter negative.',
+      8: 'Identical left column, identical deflection magnitude, identical 0.234 AU closest approach. The right column now runs 3.32 to 1.64 km/s, a loss of 50 per cent. The asymmetry between a 2.57 gain and a 1.68 loss is the subject of the next screen and should not be resolved before students have noticed it.',
+      11: 'The planet slows by about 4.3 mm/s, which is 1.5 parts per million of its own 2.83 km/s. The ledger beneath reports the spacecraft gaining 2.17e-6 of momentum and the planet losing 2.17e-6, agreeing to about 1.4e-7 per cent. That agreement is nine orders of magnitude tighter than any plausible accumulated error, which is what lets the twelfth screen rule out the integrator as the source of the energy.',
+      14: 'A few seconds only. Relative to the star the spacecraft goes from about 13.7 to about 19.8 km/s, a gain of 45 per cent. Relative to the planet it goes from 8.48 to 8.51, a change of 0.34 per cent where the isolated version gave 3e-12. The measured deflection is 34.2 degrees against a two-body prediction of 36.3, a six per cent miss. Both residuals are physical. Reading the gate distance of 0.45 AU against the quoted Hill radius of 0.58 AU is worth doing with a class: the encounter is being measured only just inside the region where the planet is what matters.',
+    },
+    modelNotes: `The encounter is a Newtonian three-body problem in a plane - two bodies in the
+      isolated scenario - integrated with Velocity Verlet rather than the catalogue's default
+      symplectic Euler. The lesson asks students to believe that a speed is unchanged to a part
+      in ten million, and first-order phase error is far too coarse to support that claim.
+      \n\nThe spacecraft is placed on its encounter hyperbola from the orbital elements rather
+      than pointed at the planet from a distance, so the impact parameter and the speed at
+      infinity are exact inputs. A probe merely aimed at the planet arrives with a slightly
+      different impact parameter and a noticeably different approach speed, and the comparison
+      against the two-body prediction would then be measuring the setup rather than the physics.
+      \n\nSpeeds relative to the planet are quoted at infinity, computed from the local speed and
+      distance through vis-viva. At the gate the spacecraft is still travelling about 0.6 per
+      cent faster than its asymptotic speed, which is ten times the accuracy the rest of the
+      lesson works to; the alternative was to start the encounter absurdly far out and integrate
+      empty space. Both legs are read at the same distance, so whatever the correction is worth,
+      it is worth the same on each side.
+      \n\nThe spacecraft is one Earth mass, about 10^22 times a real probe. This is the one
+      deliberately unrealistic number in the lesson and it is called out at the closing screen.
+      It is chosen so the planet's recoil is 4 mm/s - ten orders of magnitude above floating
+      point noise, and therefore a number a student can read - rather than 10^-25 m/s, which is
+      true, unreadable, and would reduce the momentum ledger to an assertion. At a mass ratio of
+      10^-6 the test-particle scattering formula still holds to far better than anything here is
+      measured to.
+      \n\nEverything is coplanar. Real flybys are aimed in three dimensions and the out-of-plane
+      component is most of the design problem; nothing in this lesson can show that.
+      \n\nIn the heliocentric scenario the planet's own velocity change is dominated by its
+      orbital turning rather than by the spacecraft, which is why the momentum ledger is
+      demonstrated in the isolated scenario and not there. The panel does not report a recoil
+      with a star present, because the number would be almost entirely the planet going round a
+      corner.`,
+  },
+
   'binary-star-planets': {
     topic:
       'Orbital stability in binaries, and the difference between a physical result and a numerical one',

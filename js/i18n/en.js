@@ -1169,6 +1169,14 @@ export const EN = {
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
+  'scenario.Gravity Assist Lab.title':
+    'Gravity Assist Lab: one planet, one spacecraft, nothing else',
+  'scenario.Gravity Assist Lab.summary':
+    'A rogue planet of five Jupiter masses drifting through empty space, and an Earth-mass spacecraft crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly rather than approximately. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
+  'scenario.Gravity Assist: Heliocentric.title':
+    'Gravity Assist: the same flyby, with a Sun to steal from',
+  'scenario.Gravity Assist: Heliocentric.summary':
+    'The same planet, now on a circular orbit five AU from a star, and a spacecraft that meets it. This is where the energy comes from: the spacecraft leaves faster around the star than it arrived, and the planet is slowed by exactly the momentum it gained. Everything here is approximate - the planet is accelerating, so its frame is not inertial and the encounter is only locally two-body - and the panel reports how approximate rather than hiding it.',
   'scenario.Binary Planet Lab.title':
     'Binary Planet Lab: a planet around one star of a pair',
   'scenario.Binary Planet Lab.summary':
@@ -1462,6 +1470,43 @@ export const EN = {
   'rail.togglePauseAtEvent': 'Pause at Event',
   // --- The binary planet run panel --------------------------------------------
   'binaryRun.close.hint': 'Hide the binary run panel',
+  // --- The gravity assist panel -----------------------------------------------
+  'assist.close.hint': 'Hide the gravity assist panel',
+  'assist.impact': 'Impact parameter (+ behind, \u2212 ahead)',
+  'assist.run': 'Fly it',
+  'assist.flip': 'Other side',
+  'assist.planetFrame': 'Planet\u2019s frame',
+  'assist.side': 'Passed',
+  'assist.side.leading': 'in front of the planet',
+  'assist.side.trailing': 'behind the planet',
+  'assist.closest': 'Closest approach',
+  'assist.closest.value': '{au} AU ({radii} planet radii)',
+  'assist.deflection': 'Turned by',
+  'assist.deflection.value': '{measured}\u00b0 (two-body: {predicted}\u00b0)',
+  'assist.frame.planet': 'Relative to the planet',
+  'assist.frame.inertial': 'Relative to everything else',
+  'assist.before': 'Before',
+  'assist.after': 'After',
+  'assist.change': 'Change',
+  'assist.change.value': '{delta} km/s ({percent}%)',
+  'assist.recoil': 'What it cost the planet',
+  'assist.recoil.value': '{dv} mm/s, or {ratio} of its own speed',
+  'assist.ledger':
+    'The spacecraft gained {probe} of momentum and the planet lost {planet} \u2014 the same number to {mismatch}%. Nothing was created; it was transferred.',
+  'assist.maxDeltaV':
+    'No flyby of this planet at this approach speed can change the velocity by more than {max} km/s, which is twice the approach speed and needs a full reversal.',
+  'assist.status.idle': 'Not started',
+  'assist.status.inbound': 'Approaching',
+  'assist.status.outbound': 'Departing',
+  'assist.status.done': 'Flyby complete',
+  'assist.status.lost': 'The spacecraft did not survive the pass',
+  'assist.caveat.pending':
+    'A star is present, so the numbers on the left will not match exactly. How closely they do is the measure of the approximation, and it appears here once the flyby finishes.',
+  'assist.caveat.helio':
+    'The speed relative to the planet changed by {residual}% across this encounter, and in the isolated version it changes by nothing at all. That residual is the approximation: the planet is accelerating, so its frame is not inertial, and the star pulls on the spacecraft too. Readings were taken {gate} AU out, against a Hill radius of {hill} AU \u2014 the distance beyond which the star, not the planet, is what the spacecraft is really orbiting. This is the patched-conic approximation, and it is what mission designers actually use.',
+  'assist.hint':
+    'The two columns describe the same encounter at the same two moments. The left one cannot change, because the planet does no work on the spacecraft in the planet\u2019s own frame. The right one changes because a vector of fixed length has been rotated and then added to the planet\u2019s velocity. Nothing is created: the planet is slowed by exactly the momentum the spacecraft gains.',
+
   'binaryRun.planetA': 'Planet start (a / a_binary)',
   'binaryRun.periods': 'Binary periods to run',
   'binaryRun.timestep': 'Integration step',

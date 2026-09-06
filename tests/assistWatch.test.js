@@ -82,6 +82,19 @@ describe('arming', () => {
     expect(h.started.before.inertial.x).toBeCloseTo(0.5, 12);
   });
 
+  test('starting exactly at the gate still records a "before"', () => {
+    // The world builder places the spacecraft at exactly the gate distance,
+    // because that is where the reading is defined. Comparing with <= made
+    // that count as "already inside", so whether a run had a before at all
+    // came down to which side of 4000.0000000 the placement rounded to, and
+    // half of them silently reported null instead of a speed.
+    const r = Math.hypot(1200, 40);
+    const h = harness({ gate: r });
+    expect(h.started.startedInside).toBe(false);
+    expect(h.started.before).not.toBeNull();
+    expect(h.started.before.vInf).toBeGreaterThan(0);
+  });
+
   test('starting inside the gate is refused a "before", and says so', () => {
     // Half an encounter has no before, and a speed read from partway down the
     // planet's potential well is not the speed the encounter started with.

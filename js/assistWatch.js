@@ -79,8 +79,15 @@ export function startAssistWatch(spec, deps) {
   // If the probe is already inside the gate there is no inbound leg to record,
   // and a "before" taken from partway through the encounter would be a
   // measurement of nothing. Say so rather than recording it.
+  //
+  // Strictly inside, with a tolerance, and the difference is not pedantic. The
+  // world builder places the spacecraft at exactly the gate distance, because
+  // that is where the reading is defined; comparing with <= made that the
+  // "already inside" case, so whether a run recorded a before at all came down
+  // to which side of 4000.0000000 the placement rounded to. Half the
+  // encounters silently had no before and reported null instead of a speed.
   const r0 = separation(w);
-  w.startedInside = r0 <= spec.gate;
+  w.startedInside = r0 < spec.gate * (1 - 1e-9);
   if (!w.startedInside) w.before = sample(w);
 
   w.unsubscribe = deps.onStep(dt => step(w, dt));

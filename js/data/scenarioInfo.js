@@ -96,6 +96,14 @@ const SCENARIO_STRUCTURE = {
     tags: ['exoplanets', 'detection', 'binary-systems'],
     thumbnail: 'images/scenarios/blended-binary.webp',
   },
+  'Gravity Assist Lab': {
+    tags: ['orbits-kepler', 'solar-system'],
+    thumbnail: 'images/scenarios/gravity-assist-lab.webp',
+  },
+  'Gravity Assist: Heliocentric': {
+    tags: ['orbits-kepler', 'solar-system'],
+    thumbnail: 'images/scenarios/gravity-assist-heliocentric.webp',
+  },
   'Binary Planet Lab': {
     tags: ['binary-systems', 'exoplanets', 'chaos', 'orbits-kepler'],
     thumbnail: 'images/scenarios/binary-planet-lab.webp',

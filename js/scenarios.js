@@ -29,26 +29,42 @@
 let lastPresetApplied = null;
 
 /**
- * Settings the Binary Planet Lab scenarios hand over to the reader.
+ * Settings a laboratory scenario hands over to the reader.
  *
- * These are the investigation's independent variables: where the planet
- * starts, how long to integrate, and how finely. The scenario supplies an
- * opening value for each, and after that they belong to whoever is running the
- * experiment - changing one and rebuilding IS the experiment, so a rebuild
- * that quietly restored the scenario's number would make it impossible.
+ * These are an investigation's independent variables: the thing the student
+ * changes, and the numerical knobs that decide whether the answer can be
+ * believed. The scenario supplies an opening value for each, and after that
+ * they belong to whoever is running the experiment - changing one and
+ * rebuilding IS the experiment, so a rebuild that quietly restored the
+ * scenario's number would make it impossible.
  *
- * Carried only when re-entering the same lab scenario. Switching between the
- * circumstellar and circumbinary labs resets them, because 0.15 separations is
- * a sensible circumstellar orbit and a position inside both stars.
+ * Carried only when re-entering the SAME scenario. Moving between labs resets
+ * them, because the numbers do not transfer: 0.15 binary separations is a
+ * sensible circumstellar orbit and a position inside both stars, and an impact
+ * parameter of 4000 is a sensible gate distance and a miss.
  */
-const BINARY_LAB_SETTINGS = [
-  'binary_lab_planet_a',
-  'binary_lab_periods',
-  'max_timestep',
-];
-
-const isBinaryLab = ps =>
-  ps === 'Binary Planet Lab' || ps === 'Circumbinary Planet Lab';
+const LAB_VARIABLES = {
+  'Binary Planet Lab': [
+    'binary_lab_planet_a',
+    'binary_lab_periods',
+    'max_timestep',
+  ],
+  'Circumbinary Planet Lab': [
+    'binary_lab_planet_a',
+    'binary_lab_periods',
+    'max_timestep',
+  ],
+  'Gravity Assist Lab': [
+    'assist_impact_parameter',
+    'assist_v_infinity',
+    'max_timestep',
+  ],
+  'Gravity Assist: Heliocentric': [
+    'assist_impact_parameter',
+    'assist_v_infinity',
+    'max_timestep',
+  ],
+};
 
 const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   const ps = SETTINGS.preset_scenario;
@@ -57,8 +73,8 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
   // Read before the reset below wipes them, applied after the scenario's own
   // block has had its say.
   const carried = {};
-  if (isBinaryLab(ps) && lastPresetApplied === ps) {
-    for (const key of BINARY_LAB_SETTINGS) carried[key] = SETTINGS[key];
+  if (LAB_VARIABLES[ps] && lastPresetApplied === ps) {
+    for (const key of LAB_VARIABLES[ps]) carried[key] = SETTINGS[key];
   }
   lastPresetApplied = ps;
   const fresh_defaults = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
@@ -1426,6 +1442,73 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       follow_mode: 'None',
       binary_lab_planet_a: circumbinary ? 4.0 : 0.15,
       binary_lab_periods: circumbinary ? 40 : 20,
+    });
+  } else if (
+    ps === 'Gravity Assist Lab' ||
+    ps === 'Gravity Assist: Heliocentric'
+  ) {
+    // Two scenarios, one encounter, and the difference between them is the
+    // whole second half of the lesson.
+    //
+    // The isolated one has no star. That is not a simplification made for
+    // convenience: with nothing else in the universe the planet moves in a
+    // straight line, its frame is exactly inertial, and "the spacecraft's speed
+    // relative to the planet is unchanged" is an exact statement rather than a
+    // good approximation. It is also the only version in which the planet's
+    // recoil is readable, because any change in its velocity IS the recoil
+    // rather than its own orbital turning.
+    //
+    // The heliocentric one puts the same planet on a circular orbit so the
+    // energy has somewhere to come from. Everything there is approximate - the
+    // planet's frame accelerates, the encounter is only locally two-body - and
+    // the panel reports how approximate rather than hiding it.
+    const helio = ps === 'Gravity Assist: Heliocentric';
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: helio ? 1 : 0,
+      mutual_gravity: true,
+      star_only_gravity: false,
+      placement: 'Empty',
+      num_planets: 1,
+      num_gas_giants: 1,
+      num_asteroids: 0,
+      num_comets: 0,
+      num_neutron_stars: 0,
+      num_white_dwarfs: 0,
+      gravitational_constant: 1.0,
+      // A spacecraft that hits the planet has not performed a flyby, and a
+      // merge would also silently change the planet's mass mid-encounter.
+      enable_star_merging: false,
+      show_trails: true,
+      // Long enough to hold the whole approach and departure, which is what
+      // makes the deflection something a student can see rather than only read.
+      trail_length: helio ? 400 : 900,
+      show_conservation_diagnostics: true,
+      // The same reasoning as the binary labs, and more pointed: this lesson
+      // asks a student to believe that a speed is unchanged to a part in ten
+      // million. Symplectic Euler's first-order error is far too coarse to
+      // support that claim; Verlet holds it.
+      integrator: 'Velocity Verlet',
+      // Measured. At these steps the deflection matches the two-body prediction
+      // to better than a hundredth of a degree and the relative speed is
+      // conserved to 1e-8, which is what lets the panel state both as results
+      // rather than as approximations.
+      max_timestep: helio ? 0.25 : 0.5,
+      sim_speed: helio ? 3 : 400,
+      min_interaction_distance: 0.01,
+      sim_size: 'Large',
+      // Framed to hold the whole encounter: the isolated one runs out to 40 AU
+      // either side, the heliocentric one has to show the star as well.
+      preset_zoom: helio ? 0.9 : 0.14,
+      follow_mode: 'None',
+      assist_planet_mass: 5,
+      assist_planet_speed: 0.3,
+      assist_orbit_radius: helio ? 500 : 0,
+      assist_impact_parameter: helio ? 18 : 40,
+      assist_v_infinity: helio ? 0.9 : 0.461,
+      assist_approach_deg: helio ? 200 : 130.6,
+      assist_gate: helio ? 45 : 4000,
+      assist_probe_mass_ratio: 1e-6,
     });
   } else if (ps === 'Transit Lab' || ps === 'Blended Binary') {
     // HD 209458: the first planet ever caught transiting, in 1999, and still

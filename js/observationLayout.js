@@ -31,6 +31,8 @@ const PANEL_IDS = [
   // Same reasoning as pause-at-event: a form rather than a chart, opened from
   // the Tools list, and it lands in the same corner.
   'binaryRunContainer',
+  // Same again: a form-shaped instrument for two scenarios, in the same corner.
+  'assistContainer',
   // The spacetime view is the odd one out - it is draggable and resizable,
   // and the moment a user moves it, it drops out of the stack (see isStacked).
   // Until then it is an instrument like the rest and queues with them.

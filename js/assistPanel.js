@@ -35,11 +35,15 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { simToAu, velocityUnitToMs } from './units.js';
+import { SOLAR_MASS_UNIT as SOLAR_MASS } from './physics.js';
 import { t } from './i18n/index.js';
 
 let enabled = false;
 let els = null;
 let tick = null;
+// Whether the reader has dismissed the panel for the scenario they are in.
+// Reset on a scenario change, honoured within one.
+let dismissed = false;
 
 /** The scenarios this panel has anything to say about. */
 const SCENARIOS = {
@@ -175,9 +179,24 @@ function caveatText(run) {
   if (activeMode() !== 'heliocentric') return '';
   if (!run?.vInfBefore || !run?.vInfAfter) return t('assist.caveat.pending');
   const residual = Math.abs((run.vInfAfter - run.vInfBefore) / run.vInfBefore);
+
+  // The Hill radius is the honest boundary of "the planet is what matters
+  // here": beyond it the star's pull on the spacecraft wins and treating the
+  // encounter as two bodies stops being defensible. Computed rather than
+  // stored, because it follows from three settings and a stored copy would be
+  // a fourth thing to keep in step with them.
+  const parts = bodies();
+  const a = SETTINGS.assist_orbit_radius;
+  const hill =
+    parts && a > 0
+      ? a *
+        Math.cbrt(parts.planet.mass / (3 * (SOLAR_MASS + parts.planet.mass)))
+      : 0;
+
   return t('assist.caveat.helio', {
     residual: formatNumber(residual * 100, { sig: 2 }),
-    hill: formatNumber(simToAu(SETTINGS.assist_hill_radius || 0), { sig: 2 }),
+    hill: formatNumber(simToAu(hill), { sig: 2 }),
+    gate: formatNumber(simToAu(run.gate), { sig: 2 }),
   });
 }
 
@@ -406,17 +425,42 @@ export function initAssist() {
   if (!e.container) return;
 
   e.toggle?.addEventListener('click', () => setAssistEnabled(!enabled));
-  e.close?.addEventListener('click', () => setAssistEnabled(false));
+  e.close?.addEventListener('click', () => {
+    dismissed = true;
+    setAssistEnabled(false);
+  });
   e.run?.addEventListener('click', beginRun);
   e.flip?.addEventListener('click', flipSide);
   e.planetFrame?.addEventListener('click', togglePlanetFrame);
 
+  // There is no rail chip for this panel, and that is deliberate: it is an
+  // instrument for two scenarios rather than a general tool, and the rail's
+  // chip grid is full. So it shows itself when one of its scenarios loads and
+  // stays out of the way everywhere else. Without this the panel is not
+  // reachable at all, which is how the e2e suite found it missing.
+  let lastScenario = null;
   window.addEventListener('gravitasSimulationReset', () => {
     stopAssistWatch();
     // A rebuilt world is a new encounter, and the frame pointed at the old
     // planet is pointing at an id that now means something else.
     setFrame(WORLD);
-    if (enabled && activeMode()) {
+
+    const mode = activeMode();
+    if (current_scenario_name !== lastScenario) {
+      lastScenario = current_scenario_name;
+      dismissed = false;
+    }
+    if (mode && !dismissed) {
+      setAssistEnabled(true);
+      if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
+      armAssistRun();
+      return;
+    }
+    if (!mode && enabled) {
+      setAssistEnabled(false);
+      return;
+    }
+    if (enabled) {
       if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
       armAssistRun();
     } else {

@@ -14,6 +14,7 @@ import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
 import { initPauseAtEvent } from './pauseAtEventPanel.js';
 import { initBinaryRun } from './binaryRunPanel.js';
+import { initAssist } from './assistPanel.js';
 import { initObservationLayout } from './observationLayout.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
@@ -283,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
       initAstrometry();
       initPauseAtEvent();
       initBinaryRun();
+      initAssist();
       initObservationLayout();
     } catch (err) {
       console.error('Light curve unavailable:', err);

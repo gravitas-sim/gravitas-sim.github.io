@@ -115,6 +115,13 @@ export const CAPTURE = {
   // circumstellar one shows a small ring beside a big one, and the
   // circumbinary one shows the pair whirling inside a single wide orbit -
   // which is the difference between the two scenarios, in one frame each.
+  // The assist scenarios run fast so a student can watch a whole encounter in
+  // nine seconds, which is far too fast for a still: at their own speed the
+  // capture lands with the spacecraft already gone. Slowed down and given a
+  // long trail, the isolated one shows a straight planet track with a bent
+  // spacecraft path crossing it - which is the entire lesson in one frame.
+  'Gravity Assist Lab': { settle: 26, speed: 90, trail: 2000 },
+  'Gravity Assist: Heliocentric': { settle: 22, speed: 2, trail: 1200 },
   'Binary Planet Lab': { settle: 20, speed: 40, trail: 1200 },
   'Circumbinary Planet Lab': { settle: 24, speed: 200, trail: 1600 },
   'Interstellar Visitor': { settle: 14, speed: 2, trail: 900 },
