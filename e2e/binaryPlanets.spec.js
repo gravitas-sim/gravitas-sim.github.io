@@ -367,9 +367,9 @@ test.describe('the panel', () => {
     app,
   }) => {
     await app.boot();
+    // No rail chip: the panel is an instrument for two scenarios rather than a
+    // general tool, so it shows itself when one of them loads.
     await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
-    await app.railControl('toggleBinaryRun');
-    await page.locator('#toggleBinaryRun').click();
     await expect(page.locator('#binaryRunContainer')).toBeVisible();
 
     await expect(page.locator('#binaryRunPlanetA')).toHaveValue('0.15');
@@ -383,14 +383,48 @@ test.describe('the panel', () => {
     expect(text).toMatch(/binary periods/i);
   });
 
+  test('stays out of the way in scenarios it has nothing to say about', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await expect(page.locator('#binaryRunContainer')).toBeVisible();
+    // Leaving the lab hides it again: a readout about a planet in a binary
+    // would be describing bodies that no longer exist.
+    await app.loadScenario('Solar System', 'e2e', { run: false });
+    await expect(page.locator('#binaryRunContainer')).toBeHidden();
+    await app.loadScenario('Circumbinary Planet Lab', 'e2e', { run: false });
+    await expect(page.locator('#binaryRunContainer')).toBeVisible();
+  });
+
+  test('closing it keeps it closed until the scenario changes', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await page.locator('#binaryRunClose').click();
+    await expect(page.locator('#binaryRunContainer')).toBeHidden();
+    // A rebuild is not a reason to reappear after being dismissed.
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      ui.initialize_simulation({ seed: 'e2e' });
+    });
+    await expect(page.locator('#binaryRunContainer')).toBeHidden();
+    // Choosing the scenario again is.
+    await app.loadScenario('Solar System', 'e2e', { run: false });
+    await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
+    await expect(page.locator('#binaryRunContainer')).toBeVisible();
+  });
+
   test('never calls a configuration stable, in either language', async ({
     page,
     app,
   }) => {
     await app.boot();
     await app.loadScenario('Binary Planet Lab', 'e2e', { run: false });
-    await app.railControl('toggleBinaryRun');
-    await page.locator('#toggleBinaryRun').click();
+    await expect(page.locator('#binaryRunContainer')).toBeVisible();
 
     for (const [locale, forbidden] of [
       ['en', /\bstable\b/i],

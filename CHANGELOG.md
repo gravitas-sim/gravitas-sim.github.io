@@ -78,7 +78,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->218<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->233<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->55<!--/fact-->.
 
 ### Removed

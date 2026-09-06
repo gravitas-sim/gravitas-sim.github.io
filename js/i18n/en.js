@@ -1461,9 +1461,6 @@ export const EN = {
   // --- Pause at event ---------------------------------------------------------
   'rail.togglePauseAtEvent': 'Pause at Event',
   // --- The binary planet run panel --------------------------------------------
-  'rail.toggleBinaryRun': 'Binary Planet Run',
-  'rail.toggleBinaryRun.hint':
-    'Open the binary planet run panel: set where the planet starts and how many binary periods to integrate, then read what happened to it and how far the run can be trusted. Only useful in the two Binary Planet Lab scenarios.',
   'binaryRun.close.hint': 'Hide the binary run panel',
   'binaryRun.planetA': 'Planet start (a / a_binary)',
   'binaryRun.periods': 'Binary periods to run',

@@ -1461,9 +1461,6 @@ export const ES = {
   // --- Pausar en un evento ----------------------------------------------------
   'rail.togglePauseAtEvent': 'Pausar en evento',
   // --- El panel de ejecución en binaria ----------------------------------------
-  'rail.toggleBinaryRun': 'Ejecución en binaria',
-  'rail.toggleBinaryRun.hint':
-    'Abre el panel de ejecución del planeta en binaria: fija dónde empieza el planeta y cuántos periodos binarios integrar, y luego lee qué le pasó y hasta qué punto se puede confiar en la ejecución. Solo sirve en los dos escenarios de laboratorio de planetas en binarias.',
   'binaryRun.close.hint': 'Ocultar el panel de ejecución en binaria',
   'binaryRun.planetA': 'Inicio del planeta (a / a_binaria)',
   'binaryRun.periods': 'Periodos binarios a integrar',

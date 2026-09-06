@@ -325,13 +325,19 @@ export default {
              \n\nPruébalo. Pon el planeta en <strong>0,50</strong> separaciones,
              lo que lo sitúa casi encima de la Estrella B, y ejecuta. No
              obtendrás una respuesta; obtendrás una queja y una instrucción. Haz
-             lo que dice.`,
+             lo que dice, y sigue haciéndolo hasta que el panel esté dispuesto a
+             contarte algo.
+             \n\nCon una sola reducción no bastará, y eso merece atención.
+             Arreglar un acercamiento mal resuelto no es cuestión de hacerlo un
+             poco mejor: o el paso resuelve la pasada o no la resuelve.`,
       checklist: [
-        'Ejecuta 0,50 con el paso por defecto y lee la deriva: está por encima del filtro',
+        'Ejecuta 0,50 con el paso por defecto de 1,0 y lee la deriva: alrededor del 0,18%, muy por encima del filtro',
+        'Ya que estás, mira la excentricidad del planeta: sale por encima de 100, que no es una órbita sino una explosión',
         'Fíjate en que el panel se niega a decir qué le pasó al planeta',
-        'Pulsa "Repetir con la mitad del paso" y mira cómo cae la deriva',
+        'Pulsa "Repetir con la mitad del paso". La deriva es del 0,17%: prácticamente igual, y sigue rechazada',
+        'Púlsalo otra vez. Con un paso de 0,25 la deriva es del 0,0023%, y ahora sí hay respuesta: el planeta chocó con una estrella, a una centésima de periodo binario',
       ],
-      tip: 'Una décima de por ciento no es una constante natural. Se midió: en estas configuraciones, toda ejecución que derivó más que eso dio un resultado que cambiaba al reducir el paso a la mitad.',
+      tip: 'Una décima de por ciento no es una constante natural. Se midió: en estas configuraciones, toda ejecución que derivó más que eso dio un resultado que cambiaba al reducir el paso a la mitad. Fíjate también en cuál resultó ser la respuesta: una colisión, no una expulsión. Dos de las cuatro cosas que le pueden pasar al planeta aquí se parecen de lejos y las distingue el panel, no el ojo.',
     },
     {
       title: 'Ahora el caso que importa',

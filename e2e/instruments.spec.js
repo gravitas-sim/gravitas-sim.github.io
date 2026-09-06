@@ -398,11 +398,22 @@ test.describe('the integrator setting', () => {
   // libration amplitude of 9 degrees and a period of 273 Io orbits; Velocity
   // Verlet reports 23 and 1,249, within 3% of what RK4 gives. The full table
   // is in RESONANCE_INVESTIGATION.md.
+  //
+  // The two Binary Planet Lab scenarios are here for a different reason from
+  // the resonance ones. Their whole subject is whether an outcome is physical
+  // or numerical, and symplectic Euler's first-order phase error puts a
+  // spurious eccentricity on the planet within a few orbits - which a student
+  // would then read as the binary perturbing it, in a lesson specifically
+  // about not doing that. Velocity Verlet holds a quiet run's energy to about
+  // a part in a million, so the drift readout means what the lesson says it
+  // means and rises only when something real is unresolved.
   const NON_DEFAULT_INTEGRATOR = {
     'Galilean Resonance': 'Velocity Verlet',
     'Broken Laplace Resonance': 'Velocity Verlet',
     'Pluto and Neptune': 'Velocity Verlet',
     'Jupiter Trojans': 'Velocity Verlet',
+    'Binary Planet Lab': 'Velocity Verlet',
+    'Circumbinary Planet Lab': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({

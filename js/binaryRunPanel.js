@@ -48,6 +48,11 @@ import { t } from './i18n/index.js';
 let enabled = false;
 let els = null;
 let tickUnsub = null;
+// Whether the reader has dismissed the panel for the scenario they are in.
+// Reset on a scenario change, so closing it once does not hide it for ever,
+// and honoured within a scenario so it does not reappear on every rebuild
+// after being told to go away.
+let dismissed = false;
 /** The previous finished run, kept so a halved-step repeat can be compared. */
 let previous = null;
 
@@ -394,16 +399,39 @@ export function initBinaryRun() {
   if (!e.container) return;
 
   e.toggle?.addEventListener('click', () => setBinaryRunEnabled(!enabled));
-  e.close?.addEventListener('click', () => setBinaryRunEnabled(false));
+  e.close?.addEventListener('click', () => {
+    dismissed = true;
+    setBinaryRunEnabled(false);
+  });
   e.start?.addEventListener('click', beginRun);
   e.halve?.addEventListener('click', halveAndRepeat);
 
   // A rebuilt world is a new experiment. The old recording refers to bodies
   // that no longer exist, and keeping it would let a student read the previous
   // configuration's outcome beside the new configuration's inputs.
+  // There is no rail chip for this panel, and that is deliberate: it is an
+  // instrument for two scenarios rather than a general tool, and the rail's
+  // chip grid is full. So it shows itself when one of its scenarios loads and
+  // stays out of the way everywhere else.
+  let lastScenario = null;
   window.addEventListener('gravitasSimulationReset', () => {
     stopBinaryWatch();
-    if (enabled && activeMode()) {
+    const mode = activeMode();
+    if (current_scenario_name !== lastScenario) {
+      lastScenario = current_scenario_name;
+      dismissed = false;
+    }
+    if (mode && !dismissed) {
+      setBinaryRunEnabled(true);
+      syncForm();
+      armBinaryRun();
+      return;
+    }
+    if (!mode && enabled) {
+      setBinaryRunEnabled(false);
+      return;
+    }
+    if (enabled) {
       syncForm();
       armBinaryRun();
     } else {

@@ -452,13 +452,19 @@ const BINARY_STAR_PLANETS = {
              \n\nTry it. Set the planet to <strong>0.50</strong> separations,
              which starts it almost on top of Star B, and run. You will not get
              an answer; you will get a complaint and an instruction. Follow the
-             instruction.`,
+             instruction — and keep following it until the panel is willing to
+             tell you something.
+             \n\nOne halving will not be enough, which is worth noticing. Fixing
+             a badly resolved encounter is not a matter of doing slightly better;
+             either the step resolves the pass or it does not.`,
       checklist: [
-        'Run 0.50 at the default step and read the drift — it is over the screen',
+        'Run 0.50 at the default step of 1.0 and read the drift — about 0.18%, well over the screen',
+        'Look at the planet\u2019s eccentricity while you are there: it comes out above 100, which is not an orbit, it is an explosion',
         'Note that the panel declines to say what happened to the planet',
-        'Press "Repeat at half the step" and watch the drift fall',
+        'Press "Repeat at half the step". The drift is 0.17% — essentially unchanged, and still refused',
+        'Press it again. At a step of 0.25 the drift is 0.0023%, and now there is an answer: the planet hit a star, one hundredth of a binary period in',
       ],
-      tip: 'A tenth of a per cent is not a natural constant. It was measured: on these configurations, every run that drifted more than that gave an outcome that changed when the step was halved.',
+      tip: 'A tenth of a per cent is not a natural constant. It was measured: on these configurations, every run that drifted more than that gave an outcome that changed when the step was halved. Note also what the answer turned out to be — a collision, not an ejection. Two of the four things that can happen to the planet here look similar from a distance and are told apart by the panel rather than by eye.',
     },
     {
       sid: 'the-case-that-matters',

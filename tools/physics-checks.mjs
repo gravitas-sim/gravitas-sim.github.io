@@ -4884,6 +4884,7 @@ export async function runChecks() {
       group: 'Planets in binary stars',
       kind: 'data',
       name: 'S-type boundary for an equal-mass circular binary',
+      source: 'Holman & Wiegert 1999, AJ 117, 621, eq. (1) and Table 3',
       measured: binaryStability.criticalSemiMajorSType(0.5, 0).a,
       expected: 0.274,
       unit: 'binary separations',
@@ -4895,6 +4896,7 @@ export async function runChecks() {
       group: 'Planets in binary stars',
       kind: 'data',
       name: 'P-type boundary for an equal-mass circular binary',
+      source: 'Holman & Wiegert 1999, AJ 117, 621, eq. (3) and Table 7',
       measured: binaryStability.criticalSemiMajorPType(0.5, 0).a,
       expected: 2.388,
       unit: 'binary separations',
@@ -4906,6 +4908,8 @@ export async function runChecks() {
       group: 'Planets in binary stars',
       kind: 'data',
       name: 'Kepler-16b lies outside its critical radius, as observed',
+      source:
+        'Doyle et al. 2011, Science 333, 1602; boundary from Holman & Wiegert 1999',
       measured:
         binaryStability.criticalSemiMajorPType(
           0.20255 / (0.6897 + 0.20255),
@@ -4921,6 +4925,8 @@ export async function runChecks() {
       group: 'Planets in binary stars',
       kind: 'data',
       name: 'Alpha Centauri A: circumstellar zone from the published fit',
+      source:
+        'Pourbaix & Boffin 2016, A&A 586, A90; boundary from Holman & Wiegert 1999',
       measured:
         binaryStability.criticalSemiMajorSType(0.972 / (1.133 + 0.972), 0.5179)
           .a * 23.52,
