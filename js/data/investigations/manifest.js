@@ -217,4 +217,17 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 5,
   },
+  {
+    id: 'hohmann-transfer',
+    title: 'Getting There From Here',
+    subtitle: 'Two burns, a long coast, and the arithmetic that decides both',
+    duration: '20-25 min',
+    level: 'Introductory astronomy',
+    summary:
+      'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the manoeuvre and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
+    thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
+    stepCount: 20,
+    gradedCount: 12,
+    objectiveCount: 6,
+  },
 ];

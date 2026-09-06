@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2550,
+    limit: 2650,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -90,7 +90,14 @@ const BUDGETS = [
       'arrived here by being taken OUT of the start-up path, which is the ' +
       'trade the initial budget above asks every new feature to make. Raising ' +
       'this number to absorb something that should have been deferred would ' +
-      'be the opposite, and is not what happened.',
+      'be the opposite, and is not what happened.\n\n' +
+      'Raised again from 2550 to 2650 on the same accounting. The manoeuvre ' +
+      'planner and the Hohmann lesson are a new instrument and a new lesson, ' +
+      'which is what the paragraph above says this budget is loose for; and ' +
+      'the 112 inv.* strings that arrived here did so by leaving the start-up ' +
+      'path, which took the initial download from 833.3 KB to 825.7. Two of ' +
+      'those three numbers moved because something was deferred rather than ' +
+      'added, and the initial budget above was not touched.',
   },
 ];
 

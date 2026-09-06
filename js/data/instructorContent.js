@@ -16,6 +16,164 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'hohmann-transfer': {
+    topic: 'Orbital transfers: two burns, a coast, and the vis-viva equation',
+    difficulty: 'Introductory, with arithmetic and one square root',
+    placement:
+      'Twenty to twenty-five minutes, best placed after students have met circular orbital speed and Kepler\u2019s third law. It pairs naturally with the gravity-assist lesson - that one is about borrowing momentum, this one about buying it - and either order works. It is the most quantitative lesson in the catalogue that still needs no calculus.',
+    overview: `Students plan a Hohmann transfer from 1 AU to 2.5 AU with a pencil, then fly it
+      with the manoeuvre planner and find that the engine agrees with them. Both burns and the
+      coast between them are computed from vis-viva and Kepler\u2019s third law before anything
+      is applied, which is what makes the flight a test rather than a demonstration.
+      \n\nThe lesson is built around two results that students reliably get wrong. The first is
+      that a burn changes the orbit half a revolution away from where it is made: push at 1 AU
+      and the far side climbs to 2.5 while the near side does not move. The second is that
+      arriving is not staying - at the top of the arc the spacecraft is on a closed ellipse
+      whose periapsis is still at 1 AU, and without a second burn it falls straight back and
+      does so for ever.
+      \n\nThe scenario is one star, one spacecraft and one station, all circular and coplanar,
+      because a Hohmann transfer only has a closed-form answer under exactly those conditions.
+      That is stated to students at the end rather than assumed at the start: the last screen
+      asks which of their answers depended on it, and the honest answer is all of them.`,
+    priorKnowledge: [
+      'Circular orbital speed falls with distance from the central mass',
+      'Kepler\u2019s third law, at least as "period grows faster than radius"',
+      'Comfortable with a square root and a subtraction',
+      'Helpful but not required: that angular momentum is conserved without a torque',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A burn changes the orbit on the far side',
+        body: 'The burn point stays on the new orbit - you are still there, at that radius - so that radius remains a point the orbit passes through. Everything gained appears half a revolution later. Students consistently expect the change to happen where the push happens, and the periapsis/apoapsis rows in the planner make the alternative undeniable before they apply anything.',
+      },
+      {
+        heading: 'Radial and transverse burns do different jobs',
+        body: 'A radial push exerts no torque about the primary, so it cannot change the angular momentum and cannot raise the far side by much; it makes the orbit eccentric instead. The third screen has students read the unchanged angular-momentum row in the preview, which is the cleanest demonstration of a conservation law in the catalogue.',
+      },
+      {
+        heading: 'Vis-viva gives the speed anywhere on any orbit',
+        body: 'v\u00b2 = GM(2/r \u2212 1/a) is the only equation the lesson needs, used four times: circular speed at each radius with a = r, and transfer speed at each end with a = 1.75 AU. Working in units of the local circular speed - v/v_circ = sqrt(2 \u2212 r/a) - keeps the arithmetic to one square root and is worth showing on a board.',
+      },
+      {
+        heading: 'Arriving and staying are different achievements',
+        body: 'This is the half students forget, and the lesson makes them predict it before it happens. The spacecraft reaches 2.5 AU on an ellipse whose periapsis is at 1 AU; with no second burn it returns to where it started every 2.3 years indefinitely. Real missions that miss this burn do not orbit their destination, they fly past it.',
+      },
+      {
+        heading: 'Faster twice, slower overall',
+        body: 'Both burns are accelerations and the spacecraft ends up slower than it began, 18.8 km/s against 29.8. The energy went into height rather than speed. Students who can say that clearly have understood the difference between speed and orbital energy, which is the deepest thing in the lesson.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'The problem, then a prediction about pushing straight outward, then a preview of a radial burn that leaves the angular momentum untouched. Nothing is applied yet; the planner previews without changing the world.',
+      },
+      {
+        steps: '4-6',
+        text: 'Why transverse is the lever and why the change appears on the far side, then measuring the two circular speeds and asking why the outer body is slower. Straightforward, and worth moving through briskly.',
+      },
+      {
+        steps: '7-10',
+        text: 'The transfer ellipse, its semi-major axis, the departure speed from vis-viva, and the size of the first burn. This is the arithmetic core - budget half the lesson time here and let students check each other.',
+      },
+      {
+        steps: '11-12',
+        text: 'Applying the first burn and reading where the orbit changed. The preview should show apoapsis at 2.5 AU before they press Apply; a student whose preview disagrees has mistyped, and Undo restores the whole world.',
+      },
+      {
+        steps: '13-15',
+        text: 'The transfer time from Kepler\u2019s third law, the coast itself, and the prediction about doing nothing on arrival. The coast takes about 423 simulated days; use the speed control rather than waiting.',
+      },
+      {
+        steps: '16-20',
+        text: 'The second burn, circularising, the total cost, why both burns were accelerations, and what the whole answer depended on. The last screen is the one to leave time for.',
+      },
+    ],
+    features: [
+      {
+        name: 'The manoeuvre planner',
+        text: 'Opened from the \u25b2 button in the object inspector once a planet, moon or asteroid is selected. It previews without applying: the table shows periapsis, apoapsis, energy, angular momentum and period before and after, and nothing changes until Apply is pressed. Undo restores a full snapshot of the world rather than subtracting the impulse, so a mistyped burn costs nothing.',
+      },
+      {
+        name: 'The Orbital Transfer Lab',
+        text: 'One sunlike star, a spacecraft on a circular orbit at 1 AU and a station at 2.5 AU, with nothing else in the system and eccentricities of about 1e-4. Integrated with Velocity Verlet rather than the catalogue default, because the lesson checks a transfer time against a closed form to a per cent.',
+      },
+      {
+        name: 'The burn log and its export',
+        text: 'Every applied burn is recorded with its simulated time, body, primary, frame, vector, units and the orbit either side, and the log exports as JSON. Useful as a submission: a student\u2019s two burns and their timing are the whole assessment.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'To go further out, point outward and thrust.',
+        response:
+          'A radial burn exerts no torque and so cannot change the angular momentum, which is what sets how far the orbit reaches on the far side. It makes the orbit eccentric for very little gain in size. Have students preview a radial burn at the third screen and read the angular-momentum row: it does not move.',
+      },
+      {
+        claim: 'The orbit changes where the burn happens.',
+        response:
+          'The burn point stays on the new orbit, so it becomes an apsis. The change is entirely on the opposite side. The preview table makes this visible before anything is applied, which is why the lesson has students read it rather than describing it.',
+      },
+      {
+        claim: 'Once the spacecraft reaches 2.5 AU it is at the station.',
+        response:
+          'It is at the station\u2019s radius, on an ellipse whose periapsis is still at 1 AU, travelling 4.6 km/s too slowly for that orbit. Without the second burn it falls back and repeats the trip for ever. The fifteenth screen has students predict this before the coast finishes.',
+      },
+      {
+        claim: 'Both burns speed it up, so it should end up faster.',
+        response:
+          'It ends up slower - 18.8 km/s against 29.8 - and richer in energy. Most of the added energy went into potential rather than kinetic. This catches strong students as often as weak ones and is worth a board discussion rather than a sentence.',
+      },
+      {
+        claim: 'These numbers would work for a real mission to Mars.',
+        response:
+          'They are where a real calculation starts. Mars\u2019s orbit is eccentric and slightly inclined, and the transfer has to arrive when Mars is there. The lesson\u2019s last screen names all three omissions; the planner\u2019s own preview names the two-body assumption on every burn.',
+      },
+    ],
+    teachingNotes: [
+      'The planner works in simulation velocity units and the arithmetic is done in km/s. One simulation unit is 6.661 km/s, and the lesson gives the converted figures (0.873 and 0.690) at the point of use. If students are computing their own conversions, check the first one as a class - a factor error here produces a wildly wrong orbit and an easy diagnosis.',
+      'The inner orbit runs at 29.787 km/s, which is Earth\u2019s actual orbital speed. Worth pointing out: the scenario is a genuine Solar System analogue rather than an arbitrary set of numbers, and a student who knows Earth\u2019s orbital speed has a free check on the unit scale.',
+      'Timing the second burn matters and the lesson says so. A burn made partway up the arc rather than at apoapsis produces a different orbit, because a burn changes the far side and the far side depends on where you are. If a class is short of time, pausing at apoapsis is legitimate and worth saying out loud.',
+      'Screen 5 is a measurement step with no automatic check. Students reading 29.8 and 18.8 km/s are set up correctly; anything else usually means the unit toggle is on simulation units.',
+      'Applying a burn deliberately invalidates any running radial-velocity or astrometry recording, because the orbit those measurements describe no longer exists. If a class has both panels open, expect the recordings to restart and say why - it is the correct behaviour and a small lesson in itself.',
+    ],
+    discussion: [
+      'Both burns were accelerations and the spacecraft ended up slower. Where did the energy go?',
+      'Why is the cheapest transfer the slowest one? What would you spend fuel on to arrive sooner?',
+      'The station has to be there when you arrive. How would you work out when to leave?',
+      'Every number here depended on both orbits being circular and coplanar. Which one would you least like to give up, and why?',
+    ],
+    extensions: [
+      'Run the transfer inwards, from 2.5 AU to 1 AU. Both burns become brakes and the total cost and coast time are identical - the symmetry is worth deriving rather than being told.',
+      'Change the outer radius in the scenario settings and rebuild, then plot total \u0394v against the radius ratio. Past a ratio of about 11.9 the Hohmann transfer stops being optimal.',
+      'Use the A/B experiment bench to record the transfer twice at different timesteps, or the bench\u2019s reliability check to ask whether the measured transfer time is about the system or about the integration.',
+      'Have students plan the transfer for a real destination - Mars at 1.52 AU, Jupiter at 5.20 - and compare their \u0394v against the published figures for a real mission.',
+    ],
+    expectations: {
+      3: 'The preview shows periapsis falling, apoapsis rising, and the specific angular momentum unchanged to every digit shown. Students should set the field back to zero without applying; if somebody applies it, Undo restores the world exactly.',
+      5: 'About 29.8 km/s for the spacecraft and 18.8 for the station. Anything an order of magnitude off is the unit toggle rather than the student.',
+      11: 'The previewed apoapsis reads 250 simulation units, which is 2.5 AU, and the periapsis stays at 100. After applying, the trail visibly climbs away from the inner circle. A student whose apoapsis is wildly wrong has entered the km/s figure rather than the converted one.',
+      14: 'The coast takes about 423 simulated days and the speed falls from 35.6 km/s to 14.2 as the spacecraft climbs. At normal speed this is a long wait; the transport control is the intended route.',
+      17: 'The eccentricity in the preview falls to a few thousandths, and the periapsis and apoapsis both read about 250 simulation units. A residual eccentricity above about 0.05 means the burn was made away from apoapsis rather than at it.',
+    },
+    modelNotes: `Two-body motion about a single dominant mass, integrated with Velocity Verlet
+      rather than the catalogue\u2019s default symplectic Euler, because the lesson checks a
+      transfer time against pi*sqrt(a^3/mu) and first-order period error is too coarse for that.
+      \n\nThe scenario is built circular by construction: each body is placed at sqrt(mu/r) with
+      the orbiting body\u2019s own mass included in mu, the same mu the readout uses, so the
+      orbits open at eccentricities of about 1e-4 rather than at some value the setup and the
+      inspector disagree about. The spacecraft is a billionth of the star\u2019s mass - not zero,
+      because a massless body drops out of the barycentre and out of the conservation
+      diagnostics, and small enough that the two-body formulae the lesson uses are right well
+      past the precision anybody reads.
+      \n\nThe manoeuvre planner\u2019s preview is the osculating two-body orbit computed by the
+      same orbitalElements() the inspector uses. In this scenario that is exact to the precision
+      of the integration; in a system with a third mass of any consequence it would not be, and
+      both the panel and every exported burn record say so.
+      \n\ne2e/maneuver.spec.js flies the whole transfer through the engine and checks both burns
+      and the coast against the closed form: the coast comes out at 162.62 simulation time units
+      against 162.63 predicted.`,
+  },
   'gravity-assist': {
     topic: 'Reference frames, and where a gravity assist gets its energy',
     difficulty: 'Introductory, no mathematics beyond arithmetic',

@@ -79,6 +79,7 @@ const LOADERS = {
   'detect-this-planet': () => import('./detect-this-planet.js'),
   'binary-star-planets': () => import('./binary-star-planets.js'),
   'gravity-assist': () => import('./gravity-assist.js'),
+  'hohmann-transfer': () => import('./hohmann-transfer.js'),
 };
 
 /**
@@ -108,6 +109,7 @@ const TRANSLATIONS = {
     'detect-this-planet': () => import('./es/detect-this-planet.js'),
     'binary-star-planets': () => import('./es/binary-star-planets.js'),
     'gravity-assist': () => import('./es/gravity-assist.js'),
+    'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
   },
 };
 
