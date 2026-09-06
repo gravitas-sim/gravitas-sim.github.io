@@ -533,7 +533,7 @@ test.describe('the lesson', () => {
     await page.locator('#investigationsBtn').click();
     const card = page.locator(`[data-investigation="${LESSON}"]`);
     await expect(card).toBeVisible();
-    await expect(card).toContainText('15-20 min');
+    await expect(card).toContainText('30-35 min');
     await card.click();
 
     await expect(page.locator('#investigationPanel')).toBeVisible();

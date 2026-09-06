@@ -2410,6 +2410,11 @@ export const buildWorld = ctx => {
       );
       probe.name = 'Spacecraft';
       probe.mass = planetMass * SETTINGS.assist_probe_mass_ratio;
+      // The gravitating mass and the reported one, kept in step. The Planet
+      // constructor was handed one Earth mass and the line above then replaced
+      // the mass it moves with, so the inspector claimed an Earth while the
+      // force law used sixteen ten-thousandths of one.
+      probe.massInEarths = probe.mass / EARTH_MASS_UNIT;
       // Drawn at 0.4 units: visible as a dot, and small enough that the sum of
       // the two radii is set by the planet rather than by it.
       probe.radius = 0.4;

@@ -414,6 +414,11 @@ test.describe('the integrator setting', () => {
     'Jupiter Trojans': 'Velocity Verlet',
     'Binary Planet Lab': 'Velocity Verlet',
     'Circumbinary Planet Lab': 'Velocity Verlet',
+    // Both assist scenarios are a scattering measurement checked against a
+    // closed-form deflection, and symplectic Euler does not hold an angle to
+    // the precision the lesson asks students to read off.
+    'Gravity Assist Lab': 'Velocity Verlet',
+    'Gravity Assist: Heliocentric': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({

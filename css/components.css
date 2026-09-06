@@ -621,7 +621,33 @@
     flex-direction: column;
     gap: var(--space-2);
     padding-bottom: var(--space-2);
-    overflow: hidden;
+    overflow-x: hidden;
+
+    /* Never taller than the space between the panel's own bottom edge and the
+       top of the window. Without this an instrument grows upward off the top
+       of the screen as its contents grow, and the first thing to leave is the
+       toolbar - so the close button becomes unreachable and the panel cannot
+       be dismissed at all. The radial velocity panel crossed that line at 900
+       tall in a 900px window when its Analyse action was added: 36px of
+       header, including the X, sat above the viewport.
+
+       The collapsed rule below is the same problem solved for one case; this
+       is the general one, and it holds for a short laptop screen as well as
+       for whatever gets added to a panel next. */
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Pinned, so scrolling the contents never takes the title and the close
+     button away with them. Opaque rather than inherited: the panel's own
+     background sits behind a backdrop-filter, and a transparent toolbar would
+     have the content scroll visibly underneath it. */
+  .obs-panel-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--surface-1, rgba(5, 9, 22, 0.95));
   }
 
   /* Collapsed: the title bar and nothing else. Three instruments will not fit

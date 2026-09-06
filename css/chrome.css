@@ -952,6 +952,21 @@
     max-width: calc(100vw - min(396px, 40vw) - var(--space-3) * 2 - 240px);
   }
 
+  /* The instrument stack moves with the bench, and for the same reason.
+     A scenario-specific panel appears on its own when its scenario loads -
+     that is the point of it - and the two binary labs and the two assist
+     scenarios all have a lesson written around them. The lesson panel is 396px
+     at the left edge with a z-index of 20; the stack is 420px at the left edge
+     with a z-index of 160. So the instrument landed squarely on top of the
+     lesson and swallowed its clicks: walking binary-star-planets failed on a
+     multiple-choice step because the Binary Planet Run readout was over the
+     options, and the reader saw the lesson text disappear behind a panel they
+     had not asked for. Same strip, same offset, same reasoning as the bench. */
+  body.investigation-open .obs-panel {
+    left: calc(min(396px, 40vw) + var(--space-3) * 2);
+    max-width: calc(100vw - min(396px, 40vw) - var(--space-3) * 2 - 240px);
+  }
+
   /* --- Sharing the strip with a step's tool or plot ----------------------- */
   body.investigation-open.bench-open {
     --bench-reserve: calc(min(46vh, 420px) + var(--space-3));
@@ -985,7 +1000,8 @@
   }
 
   @media (max-width: 1100px) {
-    body.investigation-open .experiment-panel {
+    body.investigation-open .experiment-panel,
+    body.investigation-open .obs-panel {
       left: calc(min(396px, 40vw) + var(--space-2) * 2);
       max-width: calc(100vw - min(396px, 40vw) - var(--space-2) * 2 - 240px);
     }
@@ -1023,6 +1039,22 @@
         100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
           var(--space-2) * 3
       ) !important;
+    }
+
+    /* No strip to move into on a phone, so the instrument goes back to the
+       full width and sits above the lesson sheet rather than beside it. */
+    body.investigation-open .obs-panel {
+      left: var(--space-2);
+      right: var(--space-2);
+      width: auto;
+      max-width: none;
+      bottom: calc(
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
+      );
+      max-height: calc(
+        100vh - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          var(--space-2) * 3
+      );
     }
 
     /* Three panels do not fit one above another on a phone, so on a tool step
