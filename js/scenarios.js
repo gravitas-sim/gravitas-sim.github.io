@@ -64,6 +64,11 @@ const LAB_VARIABLES = {
     'assist_v_infinity',
     'max_timestep',
   ],
+  'Orbital Transfer Lab': [
+    'transfer_inner_au',
+    'transfer_outer_au',
+    'max_timestep',
+  ],
 };
 
 const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
@@ -1509,6 +1514,43 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
       assist_approach_deg: helio ? 200 : 130.6,
       assist_gate: helio ? 45 : 4000,
       assist_probe_mass_ratio: 1e-6,
+    });
+  } else if (ps === 'Orbital Transfer Lab') {
+    // A closed-form laboratory. A Hohmann transfer has an exact answer only
+    // between circular coplanar orbits about a single dominant mass, so this
+    // scenario is that and nothing else: one star, one spacecraft, one target,
+    // no belts, no third body, no eccentricity anywhere. A lesson that asks a
+    // student to check a measurement against the closed form has to be run
+    // somewhere the closed form is actually the right answer.
+    Object.assign(SETTINGS, {
+      num_black_holes: 0,
+      num_stars: 1,
+      num_planets: 0,
+      num_gas_giants: 0,
+      num_asteroids: 0,
+      num_comets: 0,
+      enable_asteroids: false,
+      mutual_gravity: true,
+      show_trails: true,
+      // Long enough to hold a whole transfer arc, which is the thing the
+      // lesson is about looking at.
+      trail_length: 700,
+      show_conservation_diagnostics: true,
+      // The transfer time is checked against pi*sqrt(a^3/mu) to a per cent.
+      // Symplectic Euler's first-order error in the period is far too coarse
+      // to support that; Verlet holds it.
+      integrator: 'Velocity Verlet',
+      max_timestep: 0.4,
+      sim_speed: 60,
+      min_interaction_distance: 0.01,
+      sim_size: 'Large',
+      preset_zoom: 0.55,
+      follow_mode: 'None',
+      transfer_star_mass: 1,
+      transfer_inner_au: 1,
+      transfer_outer_au: 2.5,
+      transfer_probe_mass_ratio: 1e-9,
+      transfer_target_phase_deg: 0,
     });
   } else if (ps === 'Transit Lab' || ps === 'Blended Binary') {
     // HD 209458: the first planet ever caught transiting, in 1999, and still

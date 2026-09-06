@@ -1057,6 +1057,10 @@ export const EN = {
   'scenario.Blended Binary.title': 'Blended Binary: a hidden companion',
   'scenario.Blended Binary.summary':
     'The same star and planet as the Transit Lab, with a second star half a magnitude fainter sitting 300 AU away: far too close on the sky for a survey telescope to separate, and well inside one photometric aperture. Its light fills in part of the dip, so the transit measures shallower and the planet looks smaller than it is. Correcting for exactly this effect is what high-resolution imaging surveys of planet hosts are for.',
+  'scenario.Orbital Transfer Lab.title':
+    'Orbital Transfer Lab: one star, one spacecraft, one destination',
+  'scenario.Orbital Transfer Lab.summary':
+    'A spacecraft on a circular orbit at 1 AU and a station on a circular orbit at 2.5 AU, about a single sunlike star with nothing else in the system. Circular and coplanar is what makes the transfer between them exactly solvable, so a burn planned by hand can be checked against the arithmetic rather than only watched.',
   'scenario.Gravity Assist Lab.title':
     'Gravity Assist Lab: one planet, one spacecraft, nothing else',
   'scenario.Gravity Assist Lab.summary':
@@ -1245,47 +1249,8 @@ export const EN = {
   'rail.sub.share': 'Capture',
 
   // --- The lesson engine's own chrome ---------------------------------------
-  'inv.error.scenario': 'Could not load this step’s scenario.',
-  'inv.plot.placeholder': 'Values you enter appear here',
-  'inv.plot.title': 'Your measurements',
-  'inv.import.default': 'Use selected object',
-  'inv.import.needObject': 'Select an object with a measurable orbit first.',
-  'inv.import.duplicate': 'You have already recorded that one.',
-  'inv.import.full': 'All rows are filled. Clear one to import again.',
-  'inv.action.finish': 'Finish',
-  'inv.action.next': 'Next',
-  'inv.probe.unavailable': 'Readout unavailable',
-  'inv.answer.correct': 'Correct.',
-  'inv.answer.recorded': 'Recorded.',
-  'inv.answer.model': 'Model answer shown.',
-  'inv.announce.started': 'Investigation started: {title}',
-  'inv.report.building': 'Building…',
-  'inv.report.done': 'Lab report downloaded',
-  'inv.report.failed': 'Could not build the report.',
-  'inv.report.download': 'Download lab report (PDF)',
-  'inv.progress.cleared': 'Progress cleared',
-  'inv.progress.steps': '{done} of {total} steps',
-  'inv.scenario.reset': 'Scenario reset',
   'inv.link.unknown': 'That investigation link does not match a lesson.',
   'inv.load.failed': 'That lesson could not be loaded. Try again.',
-  'inv.card.loading': 'Loading…',
-  'inv.card.review': 'Review lesson',
-  'inv.card.start': 'Start lesson',
-  'inv.card.resume': 'Resume at step {n}',
-  'inv.card.complete': 'Complete',
-  'inv.card.seen': '{done} of {total} steps seen',
-  'inv.card.report': 'Lab report',
-  'inv.card.series': '{label}, lesson {index} of {of}',
-  'inv.summary.about': 'about {h} hours',
-  'inv.summary.range': '{l}–{h} hours',
-  'inv.summary.work': '{hours} of work',
-  'inv.summary.level': 'All at {level} level.',
-  'inv.summary.lessons': { one: '{n} lesson', other: '{n} lessons' },
-  'inv.summary.steps': { one: '{n} step', other: '{n} steps' },
-  'inv.summary.complete': '{n} complete',
-  'inv.summary.going': '{n} in progress',
-  'inv.card.objectives': { one: '{n} objective', other: '{n} objectives' },
-
   // --- Shortcuts, panels and the rest of the interface -----------------------
   'shortcut.pause': 'Pause / resume',
   'shortcut.stepBack': 'Step back one recorded frame',
@@ -2160,82 +2125,22 @@ export const EN = {
   'tideP.bhOnSunNear': 'the same black hole, on the Sun at three million km',
 
   // --- Lesson panel chrome ---------------------------------------------------
-  'inv.step.counter': 'Step {n} of {total}',
-  'inv.step.kind.read': 'read',
-  'inv.step.kind.predict': 'predict',
-  'inv.step.kind.explore': 'explore',
-  'inv.step.kind.measure': 'measure',
-  'inv.step.kind.question': 'question',
   // Kepler's Laws steps 5 and 10 are their own step types - an ellipse the
   // student reshapes and a set of swept-area wedges - and neither had a badge,
   // so the first lesson in the catalogue printed the literal text
   // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
   // so they take the word the other hands-on screens already use rather than
   // introducing two more for a reader to learn.
-  'inv.step.kind.ellipse': 'explore',
-  'inv.step.kind.wedges': 'explore',
   'inv.action.restart': 'Restart',
   'inv.action.restart.hint': 'Clear every answer and start this lesson again',
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Lesson step',
-  'inv.save.saved': 'Progress saved on this device',
-  'inv.save.full':
-    'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
-  'inv.save.unavailable':
-    'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
-  'inv.save.authoring':
-    'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
-  'inv.save.foreign':
-    'Saved progress from a newer version of Gravitas was found and left untouched. Your answers work here but are not being saved.',
-  'inv.progress.migrated':
-    'Carried {n} saved answers over from an older format, matched by position. If this lesson has changed since you last opened it, check that each answer is on the question you meant.',
-  'inv.progress.removedSteps':
-    'Discarded {n} saved answers for steps this lesson no longer has.',
-  'inv.progress.foreign':
-    'Your saved progress for this lesson was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
   'inv.backup.download': 'Download progress backup',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
   'inv.backup.restore': 'Restore progress backup',
   'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
-  'inv.backup.downloaded': 'Progress backup downloaded.',
-  'inv.backup.restored': 'Progress restored.',
-  'inv.backup.restoredMoved':
-    'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
-  'inv.backup.restoredPartly':
-    'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
-  'inv.backup.restoredUncertain':
-    'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
-  'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
-  'inv.backup.notJson': 'That file is not readable as JSON.',
-  'inv.backup.failed': 'That backup could not be read.',
-  'inv.backup.invalid.notAnObject': 'That file is not a progress backup.',
-  'inv.backup.invalid.notABackup':
-    'That is a JSON file, but not a Gravitas progress backup.',
-  'inv.backup.invalid.noVersion':
-    'That backup has no version and cannot be read safely.',
-  'inv.backup.invalid.tooNew':
-    'That backup was made by a newer version of Gravitas than this one.',
-  'inv.backup.invalid.noLesson':
-    'That backup does not say which investigation it belongs to.',
-  'inv.backup.invalid.noProgress': 'That backup contains no progress.',
-  'inv.backup.invalid.badResponses':
-    'That backup\u2019s answers are not in a readable form.',
-  'inv.backup.invalid.badVisited':
-    'That backup\u2019s step history is not in a readable form.',
-  'inv.backup.invalid.badAttempts':
-    'That backup\u2019s attempt counts are not readable, so it was not applied.',
-  'inv.backup.invalid.badStartedAt':
-    'That backup\u2019s start time is not a readable date, so it was not applied.',
-  'inv.backup.invalid.badPosition':
-    'That backup does not say readably which step it stopped on, so it was not applied.',
-  'inv.backup.invalid.badSteps':
-    'That backup\u2019s step list is damaged, so it was not applied.',
-  'inv.backup.wrongLesson':
-    'That backup is for \u201c{backup}\u201d, and \u201c{open}\u201d is open. Open that investigation first.',
-  'inv.backup.confirmReplace':
-    'Replace your current answers with the backup? You have {n} answers recorded, and this cannot be undone.',
   'inv.probe.title': 'Live readout',
   'objectType.stars': 'Add Stars',
 
@@ -2435,57 +2340,13 @@ export const EN = {
   'lessonFn.fluidFlowPressureRadiation31': 'Fluid flow, pressure, radiation',
 
   // --- Answer feedback -------------------------------------------------------
-  'inv.answer.matches': 'That matches.',
-  'inv.answer.notYet': 'Not yet. Check your working and try again.',
-  'inv.answer.oneGood': 'One good answer:',
-  'inv.answer.placeholder': 'Your value',
-  'inv.answer.placeholderUnit': 'Your value in {unit}',
-  'inv.answer.converted': '(read as {value} {target})',
-  'inv.answer.blank': 'There is nothing in the box yet — type a number.',
-  'inv.answer.notANumber':
-    'That is not a number I can read. Digits, a decimal point and an exponent like 3e5 or 3×10^5 all work.',
-  'inv.answer.ambiguous':
-    'I cannot tell which separator is the decimal point. Write it with one decimal separator, or use a space between thousands.',
-  'inv.answer.unknownUnit': 'I do not recognise the unit “{unit}”.',
-  'inv.answer.wrongDimension':
-    '“{unit}” is a unit of {got}, and this answer should be a {want}.',
-  'inv.answer.unitNotAllowed':
-    'This step does not take “{unit}”. Answer in one of: {allowed}.',
-  'inv.answer.unitExpected':
-    'This step expects the number in {expected}, so I cannot use “{unit}”. Convert it yourself and give the number.',
-  'inv.answer.trailingText':
-    'I do not know what to do with “{text}” after the number.',
-  'inv.dimension.time': 'time',
-  'inv.dimension.length': 'length',
-  'inv.dimension.speed': 'speed',
-  'inv.dimension.mass': 'mass',
-  'inv.dimension.angle': 'angle',
-  'inv.hint.ask': 'I could use a hint',
-  'inv.hint.reveal': 'Show me how it is done',
-  'inv.hint.concept': 'Think about:',
-  'inv.hint.method': 'How to get at it:',
-  'inv.hint.worked': 'Worked through:',
-  'inv.hint.given': 'Hint shown.',
-  'inv.hint.revealed': 'Worked explanation shown.',
-  'inv.hint.taken': '{n} hint(s) taken',
-  'inv.hint.takenRevealed': '{n} hint(s) taken, worked answer shown',
-  'inv.misconception.radiusForDiameter':
-    'That is half the value asked for — check whether the question wants a radius or a diameter.',
-  'inv.misconception.diameterForRadius':
-    'That is twice the value asked for — check whether the question wants a radius or a diameter.',
-  'inv.misconception.peakToPeakForSemiAmplitude':
-    'That is the full peak-to-peak range. K is half of it: the distance from the middle of the curve to one extreme, not from one extreme to the other.',
-  'inv.misconception.semiAmplitudeForPeakToPeak':
-    'That is the semi-amplitude K. The peak-to-peak range is twice it.',
-  'inv.misconception.daysForYears':
-    'That looks like the value in days, and the question asks for years.',
-  'inv.misconception.yearsForDays':
-    'That looks like the value in years, and the question asks for days.',
-  'inv.misconception.radiansForDegrees':
-    'That looks like the angle in radians, and the question asks for degrees.',
-  'inv.answer.check': 'Check',
-
   // --- The classroom assignment builder ---------------------------------------
   // Kept in the base catalogue rather than the deferred one: a student opening
   // an assignment link meets these strings at boot, before any panel loads.
+
+  // These two are on a static button in index.html, translated by the boot
+  // sweep, so they cannot wait for the planner's own chunk to arrive.
+  'burn.open.label': 'Plan a burn',
+  'burn.open.hint':
+    'Plan an impulsive burn for this body: set a radial and transverse delta-v, see the orbit it would produce, and apply it only if you mean to.',
 };

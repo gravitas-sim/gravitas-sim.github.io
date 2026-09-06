@@ -419,6 +419,9 @@ test.describe('the integrator setting', () => {
     // the precision the lesson asks students to read off.
     'Gravity Assist Lab': 'Velocity Verlet',
     'Gravity Assist: Heliocentric': 'Velocity Verlet',
+    // The transfer time is checked against the closed form to a per cent,
+    // which symplectic Euler's first-order period error cannot support.
+    'Orbital Transfer Lab': 'Velocity Verlet',
   };
 
   test('every shipped scenario loads under the scheme it declares', async ({

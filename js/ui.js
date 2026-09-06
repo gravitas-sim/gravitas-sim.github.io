@@ -2727,9 +2727,8 @@ const buildInspectorView = (object, type, info) => {
     'Earth-Moon System',
     "Kepler's 2nd Law",
   ];
-  const orbitingTypes = ['Planet', 'GasGiant', 'Asteroid', 'Comet'];
   if (
-    orbitingTypes.includes(type) &&
+    ORBITING_TYPES.includes(type) &&
     sweepScenarios.includes(current_scenario_name)
   ) {
     overlays.push({
@@ -2760,6 +2759,9 @@ const buildInspectorView = (object, type, info) => {
  *
  * @param {object} view - The view model
  */
+/** Object kinds that orbit something, and so can be given a burn. */
+const ORBITING_TYPES = ['Planet', 'GasGiant', 'Asteroid', 'Comet'];
+
 const paintInspectorHeader = view => {
   const icon = document.getElementById('inspectorIcon');
   const title = document.getElementById('inspectorTitle');
@@ -2770,6 +2772,14 @@ const paintInspectorHeader = view => {
     title.title = view.name;
   }
   if (kind && kind.textContent !== view.kind) kind.textContent = view.kind;
+
+  // Offered only for something that is actually in orbit around something.
+  // A burn on a star at the centre of its own system is not a manoeuvre, and
+  // the planner has nothing to draw for it.
+  const burn = document.getElementById('inspectorManeuver');
+  if (burn) {
+    burn.hidden = !ORBITING_TYPES.includes(state.selectedObject?.type);
+  }
 };
 
 const massControlModel = (object, type) => {
@@ -5978,6 +5988,24 @@ const deleteSelectedObject = () => {
 };
 
 document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
+
+// The manoeuvre planner, opened from the body it is about. Deliberately not a
+// rail chip: the Tools group already fills the height it has, and a burn is a
+// thing you do to a particular object rather than a tool you reach for in the
+// abstract. Lazy - most visitors never plan one.
+const inspectorManeuverBtn = document.getElementById('inspectorManeuver');
+if (inspectorManeuverBtn) {
+  inspectorManeuverBtn.onclick = async () => {
+    const target = state.selectedObject?.object;
+    if (!target) return;
+    try {
+      const { openManeuverFor } = await import('./maneuverBridge.js');
+      await openManeuverFor(target.id);
+    } catch (err) {
+      console.error('The manoeuvre planner could not be loaded:', err);
+    }
+  };
+}
 setupReferenceFrameControl();
 const inspectorPinBtn = document.getElementById('inspectorPin');
 if (inspectorPinBtn) inspectorPinBtn.onclick = pinCurrentObject;

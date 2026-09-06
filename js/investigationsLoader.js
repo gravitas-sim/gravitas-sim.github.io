@@ -34,7 +34,16 @@ export function ensureInvestigations() {
       }
     }
     onFirstLoad.clear();
-    loading = import('./investigations.js').then(mod => {
+    // The panel's prose is not in the start-up catalogue: js/investigations.js
+    // is the only module that reads it, it is the largest family of strings in
+    // the application, and a visitor who never opens a lesson was downloading
+    // all of it. Registered here, before initInvestigations() renders anything.
+    loading = Promise.all([
+      import('./investigations.js'),
+      import('./i18n/deferredMessages.js').then(m =>
+        m.ensureDeferredMessages()
+      ),
+    ]).then(([mod]) => {
       mod.initInvestigations();
       return mod;
     });

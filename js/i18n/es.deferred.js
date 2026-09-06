@@ -512,4 +512,201 @@ export const ES_DEFERRED = {
     'Se han reescrito {n} paso(s) desde que se asigno esto. Esos empiezan en blanco en lugar de mostrar una respuesta a una pregunta que ya no se hace.',
   'assign.notice.missing':
     'Ya no hay {n} paso(s) en la leccion y se han dejado fuera.',
+
+  // --- El planificador de maniobras --------------------------------------------
+  'burn.title': 'Planificador de maniobras',
+  'burn.close': 'Ocultar el planificador de maniobras',
+  'burn.body': 'Cuerpo',
+  'burn.about':
+    'En orbita alrededor de {name}. La \u0394v se mide respecto a el.',
+  'burn.noPrimary':
+    'Este cuerpo no orbita claramente alrededor de nada, asi que no hay un sistema de referencia en el que planificar un impulso.',
+  'burn.radial': '\u0394v radial',
+  'burn.transverse': '\u0394v transversal',
+  'burn.frame':
+    'La direccion radial se aleja del primario; la transversal es perpendicular a ella, en el sentido del movimiento. Solo coinciden con \u201ca lo largo de la velocidad\u201d donde la velocidad radial es cero: en todo punto de una orbita circular, y en el periastro y el apoastro de una elipse.',
+  'burn.quantity': 'Magnitud',
+  'burn.before': 'Ahora',
+  'burn.after': 'Despues',
+  'burn.periapsis': 'Periastro',
+  'burn.apoapsis': 'Apoastro',
+  'burn.energy': 'Energia especifica',
+  'burn.angularMomentum': 'Momento angular especifico',
+  'burn.period': 'Periodo',
+  'burn.none': '\u2014',
+  'burn.magnitude': '\u0394v total {dv}.',
+  'burn.becomesUnbound':
+    'Este impulso pone al cuerpo en una trayectoria de escape. No tiene apoastro ni periodo: se va y no vuelve.',
+  'burn.staysUnbound':
+    'El cuerpo ya esta en una trayectoria de escape y este impulso no lo captura.',
+  'burn.becomesBound':
+    'Este impulso captura al cuerpo en una orbita cerrada desde una trayectoria de escape.',
+  'burn.twoBody':
+    'La orbita prevista es la orbita osculadora de dos cuerpos alrededor de este primario: es lo que ocurriria si estos fueran los dos unicos cuerpos del universo. Se ignoran todos los demas, asi que en un sistema donde otra masa cuenta la trayectoria real se apartara de esta prediccion, y deprisa si esa masa esta cerca.',
+  'burn.apply': 'Aplicar impulso',
+  'burn.undo': 'Deshacer el ultimo impulso',
+  'burn.export': 'Exportar el registro de impulsos',
+  'burn.logRow':
+    'Impulso {n}: {body} en t = {time}, radial {radial}, transversal {transverse}.',
+
+  // --- The investigations panel ------------------------------------------------
+  // js/investigations.js is the only module that reads these and it is loaded
+  // on demand, so a visitor who never opens a lesson was downloading all of
+  // them. Registered by ensureInvestigations() before initInvestigations()
+  // runs. The dozen that stay in the base catalogue are on static buttons in
+  // index.html, translated by the boot sweep, plus the two the loader itself
+  // says when a lesson fails before its chunk arrives.
+  'inv.error.scenario': 'No se pudo cargar el escenario de este paso.',
+  'inv.plot.placeholder': 'Los valores que introduzcas aparecen aquí',
+  'inv.plot.title': 'Tus medidas',
+  'inv.import.default': 'Usar el objeto seleccionado',
+  'inv.import.needObject':
+    'Selecciona primero un objeto con una órbita medible.',
+  'inv.import.duplicate': 'Ese ya lo has registrado.',
+  'inv.import.full':
+    'Todas las filas están llenas. Vacía una para importar de nuevo.',
+  'inv.action.finish': 'Terminar',
+  'inv.action.next': 'Siguiente',
+  'inv.probe.unavailable': 'Lectura no disponible',
+  'inv.answer.correct': 'Correcto.',
+  'inv.answer.recorded': 'Registrado.',
+  'inv.answer.model': 'Respuesta modelo mostrada.',
+  'inv.announce.started': 'Investigación iniciada: {title}',
+  'inv.report.building': 'Generando…',
+  'inv.report.done': 'Informe de laboratorio descargado',
+  'inv.report.failed': 'No se pudo generar el informe.',
+  'inv.report.download': 'Descargar informe de laboratorio (PDF)',
+  'inv.progress.cleared': 'Progreso borrado',
+  'inv.progress.steps': '{done} de {total} pasos',
+  'inv.scenario.reset': 'Escenario reiniciado',
+  'inv.card.loading': 'Cargando…',
+  'inv.card.review': 'Repasar la lección',
+  'inv.card.start': 'Empezar la lección',
+  'inv.card.resume': 'Continuar en el paso {n}',
+  'inv.card.complete': 'Completada',
+  'inv.card.seen': '{done} de {total} pasos vistos',
+  'inv.card.report': 'Informe de laboratorio',
+  'inv.card.series': '{label}, lección {index} de {of}',
+  'inv.summary.about': 'unas {h} horas',
+  'inv.summary.range': '{l}–{h} horas',
+  'inv.summary.work': '{hours} de trabajo',
+  'inv.summary.level': 'Todas de nivel {level}.',
+  'inv.summary.lessons': { one: '{n} lección', other: '{n} lecciones' },
+  'inv.summary.steps': { one: '{n} paso', other: '{n} pasos' },
+  'inv.summary.complete': '{n} completada',
+  'inv.summary.going': '{n} en curso',
+  'inv.card.objectives': { one: '{n} objetivo', other: '{n} objetivos' },
+
+  'inv.step.counter': 'Paso {n} de {total}',
+  'inv.step.kind.read': 'lectura',
+  'inv.step.kind.predict': 'predicción',
+  'inv.step.kind.explore': 'exploración',
+  'inv.step.kind.measure': 'medida',
+  'inv.step.kind.question': 'pregunta',
+  'inv.step.kind.ellipse': 'exploración',
+  'inv.step.kind.wedges': 'exploración',
+  'inv.save.saved': 'Progreso guardado en este dispositivo',
+  'inv.save.full':
+    'No se pudo guardar el progreso: el almacenamiento de este navegador est\u00e1 lleno. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+  'inv.save.unavailable':
+    'No se puede guardar el progreso en este navegador; la navegaci\u00f3n privada suele impedirlo. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+  'inv.save.authoring':
+    'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
+  'inv.save.foreign':
+    'Se encontró progreso guardado por una versión más reciente de Gravitas y se ha dejado intacto. Tus respuestas funcionan aquí, pero no se están guardando.',
+  'inv.progress.migrated':
+    'Se han recuperado {n} respuestas guardadas de un formato anterior, emparejadas por posición. Si esta lección ha cambiado desde la última vez que la abriste, comprueba que cada respuesta esté en la pregunta que pretendías.',
+  'inv.progress.removedSteps':
+    'Se descartaron {n} respuestas guardadas de pasos que esta lección ya no tiene.',
+  'inv.progress.foreign':
+    'Tu progreso guardado de esta lección lo escribió una versión más reciente de Gravitas y no se ha podido leer. Se ha dejado tal cual en lugar de sobrescribirlo.',
+  'inv.backup.downloaded': 'Copia del progreso descargada.',
+  'inv.backup.restored': 'Progreso restaurado.',
+  'inv.backup.restoredMoved':
+    'Progreso restaurado. {moved} respuestas se asociaron a pasos que han cambiado de sitio desde la copia.',
+  'inv.backup.restoredPartly':
+    'Progreso restaurado, pero {dropped} pasos de la copia ya no est\u00e1n en esta investigaci\u00f3n y sus respuestas se omitieron.',
+  'inv.backup.restoredUncertain':
+    'Se restauraron {applied} respuestas. {n} no se pudieron ubicar porque sus pasos han cambiado desde que se hizo la copia; siguen estando en el archivo que restauraste.',
+  'inv.backup.tooLarge':
+    'Ese archivo es demasiado grande para ser una copia del progreso.',
+  'inv.backup.notJson': 'Ese archivo no se puede leer como JSON.',
+  'inv.backup.failed': 'No se pudo leer esa copia de seguridad.',
+  'inv.backup.invalid.notAnObject': 'Ese archivo no es una copia del progreso.',
+  'inv.backup.invalid.notABackup':
+    'Es un archivo JSON, pero no una copia de progreso de Gravitas.',
+  'inv.backup.invalid.noVersion':
+    'Esa copia no tiene versi\u00f3n y no se puede leer con seguridad.',
+  'inv.backup.invalid.tooNew':
+    'Esa copia se hizo con una versi\u00f3n de Gravitas m\u00e1s reciente que esta.',
+  'inv.backup.invalid.noLesson':
+    'Esa copia no indica a qu\u00e9 investigaci\u00f3n pertenece.',
+  'inv.backup.invalid.noProgress':
+    'Esa copia no contiene ning\u00fan progreso.',
+  'inv.backup.invalid.badResponses':
+    'Las respuestas de esa copia no tienen un formato legible.',
+  'inv.backup.invalid.badVisited':
+    'El historial de pasos de esa copia no tiene un formato legible.',
+  'inv.backup.invalid.badAttempts':
+    'Los recuentos de intentos de esa copia no se pueden leer, así que no se aplicó.',
+  'inv.backup.invalid.badStartedAt':
+    'La hora de inicio de esa copia no es una fecha legible, así que no se aplicó.',
+  'inv.backup.invalid.badPosition':
+    'Esa copia no indica de forma legible en qué paso se quedó, así que no se aplicó.',
+  'inv.backup.invalid.badSteps':
+    'La lista de pasos de esa copia está dañada, así que no se aplicó.',
+  'inv.backup.wrongLesson':
+    'Esa copia es de \u201c{backup}\u201d y est\u00e1 abierta \u201c{open}\u201d. Abre esa investigaci\u00f3n primero.',
+  'inv.backup.confirmReplace':
+    '\u00bfReemplazar tus respuestas actuales con la copia? Tienes {n} respuestas registradas y esto no se puede deshacer.',
+  'inv.answer.matches': 'Eso coincide.',
+  'inv.answer.notYet':
+    'Todavía no. Revisa tu razonamiento e inténtalo de nuevo.',
+  'inv.answer.oneGood': 'Una buena respuesta:',
+  'inv.answer.placeholder': 'Tu valor',
+  'inv.answer.placeholderUnit': 'Tu valor en {unit}',
+  'inv.answer.converted': '(leído como {value} {target})',
+  'inv.answer.blank': 'La casilla está vacía: escribe un número.',
+  'inv.answer.notANumber':
+    'Eso no es un número que pueda leer. Funcionan los dígitos, un separador decimal y un exponente como 3e5 o 3×10^5.',
+  'inv.answer.ambiguous':
+    'No puedo saber cuál separador es el decimal. Escríbelo con un solo separador decimal, o usa un espacio entre los millares.',
+  'inv.answer.unknownUnit': 'No reconozco la unidad «{unit}».',
+  'inv.answer.wrongDimension':
+    '«{unit}» es una unidad de {got}, y esta respuesta debería ser una magnitud de {want}.',
+  'inv.answer.unitNotAllowed':
+    'Este paso no admite «{unit}». Responde en una de estas: {allowed}.',
+  'inv.answer.unitExpected':
+    'Este paso espera el número en {expected}, así que no puedo usar «{unit}». Conviértelo tú y da el número.',
+  'inv.answer.trailingText': 'No sé qué hacer con «{text}» después del número.',
+  'inv.dimension.time': 'tiempo',
+  'inv.dimension.length': 'longitud',
+  'inv.dimension.speed': 'velocidad',
+  'inv.dimension.mass': 'masa',
+  'inv.dimension.angle': 'ángulo',
+  'inv.hint.ask': 'Me vendría bien una pista',
+  'inv.hint.reveal': 'Muéstrame cómo se hace',
+  'inv.hint.concept': 'Piensa en:',
+  'inv.hint.method': 'Cómo abordarlo:',
+  'inv.hint.worked': 'Resuelto paso a paso:',
+  'inv.hint.given': 'Pista mostrada.',
+  'inv.hint.revealed': 'Explicación resuelta mostrada.',
+  'inv.hint.taken': '{n} pista(s) usada(s)',
+  'inv.hint.takenRevealed':
+    '{n} pista(s) usada(s), respuesta resuelta mostrada',
+  'inv.misconception.radiusForDiameter':
+    'Eso es la mitad del valor pedido: comprueba si la pregunta quiere un radio o un diámetro.',
+  'inv.misconception.diameterForRadius':
+    'Eso es el doble del valor pedido: comprueba si la pregunta quiere un radio o un diámetro.',
+  'inv.misconception.peakToPeakForSemiAmplitude':
+    'Eso es el rango completo de pico a pico. K es la mitad: la distancia desde el centro de la curva hasta un extremo, no de un extremo al otro.',
+  'inv.misconception.semiAmplitudeForPeakToPeak':
+    'Eso es la semiamplitud K. El rango de pico a pico es el doble.',
+  'inv.misconception.daysForYears':
+    'Eso parece el valor en días, y la pregunta pide años.',
+  'inv.misconception.yearsForDays':
+    'Eso parece el valor en años, y la pregunta pide días.',
+  'inv.misconception.radiansForDegrees':
+    'Eso parece el ángulo en radianes, y la pregunta pide grados.',
+  'inv.answer.check': 'Comprobar',
 };

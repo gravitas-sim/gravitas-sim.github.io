@@ -144,6 +144,13 @@ const ALLOWED_UPWARD = new Map([
       'would undo the lazy load, which is the point of the module.',
   ],
   [
+    'js/maneuverBridge.js -> js/ui.js',
+    'The same deliberate lazy edge as the bench bridge above: ui.js is dynamic-' +
+      'imported inside the path that loads the manoeuvre planner, so the ' +
+      'planner and its prose stay out of the initial download. A static import ' +
+      'would satisfy the layering and undo the lazy load.',
+  ],
+  [
     'js/investigations.js -> js/ui.js',
     'A lesson steps the world: it loads scenarios, suppresses the inspector, ' +
       'draws area-sweep wedges and restores share state. That is coordinator ' +

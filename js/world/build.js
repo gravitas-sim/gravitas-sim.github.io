@@ -2435,6 +2435,81 @@ export const buildWorld = ctx => {
     // been given a puzzle that is not the lesson's.
   }
 
+  // --- Orbital Transfer Lab ----------------------------------------------------
+  if (starting_preset === 'Orbital Transfer Lab') {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const AU = SIM_UNITS_PER_AU;
+    const G = SETTINGS.gravitational_constant;
+    const starMass = SETTINGS.transfer_star_mass * SOLAR_MASS_UNIT;
+    const r1 = SETTINGS.transfer_inner_au * AU;
+    const r2 = SETTINGS.transfer_outer_au * AU;
+
+    const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 0);
+    star.mass = starMass;
+    star.massInSuns = SETTINGS.transfer_star_mass;
+    star.name = 'Sol';
+    // Drawn ten times life size so it is visible at a zoom that also holds a
+    // 2.5 AU orbit. The exaggeration cannot reach the physics here: the
+    // spacecraft never comes within twenty times the drawn radius, and
+    // js/physics.js collides on the drawn radius.
+    star.radiusInSuns = 1;
+    star.radius = 10 * 0.00465047 * AU;
+    star.persistent = true;
+    stars.push(star);
+
+    // Circular, exactly. The speed is sqrt(GM/r) with the spacecraft's own
+    // mass included in mu, because orbitalElements() includes it and a
+    // scenario that set up its orbit with a different mu than the readout uses
+    // would open with a small eccentricity nobody asked for.
+    const probeMass = starMass * SETTINGS.transfer_probe_mass_ratio;
+    const circular = (radius, mass, phaseDeg) => {
+      const phase = (phaseDeg * Math.PI) / 180;
+      const mu = G * (starMass + mass);
+      const v = Math.sqrt(mu / radius);
+      return {
+        pos: { x: radius * Math.cos(phase), y: radius * Math.sin(phase) },
+        vel: { x: -v * Math.sin(phase), y: v * Math.cos(phase) },
+      };
+    };
+
+    const inner = circular(r1, probeMass, 0);
+    const probe = new Planet(inner.pos, inner.vel, 1);
+    probe.name = 'Spacecraft';
+    probe.mass = probeMass;
+    // The reported mass and the gravitating mass, kept in step. The Planet
+    // constructor was handed one Earth mass and the line above replaced what
+    // it moves with.
+    probe.massInEarths = probe.mass / EARTH_MASS_UNIT;
+    probe.radius = 0.5;
+    probe.baseColor = '#e8f4ff';
+    probe.persistent = true;
+    planets.push(probe);
+
+    // The destination. Given a real mass so it shows up in the inspector as a
+    // body rather than a marker, and kept light enough that it does not
+    // perturb the transfer the lesson asks students to check against the
+    // two-body answer.
+    const targetMass = starMass * 1e-8;
+    const outer = circular(r2, targetMass, SETTINGS.transfer_target_phase_deg);
+    const target = new Planet(outer.pos, outer.vel, 1);
+    target.name = 'Target Station';
+    target.mass = targetMass;
+    target.massInEarths = target.mass / EARTH_MASS_UNIT;
+    target.radius = 0.9;
+    target.baseColor = '#f4c86a';
+    target.persistent = true;
+    planets.push(target);
+  }
+
   // --- Binary Planet Lab / Circumbinary Planet Lab -----------------------------
   if (
     starting_preset === 'Binary Planet Lab' ||

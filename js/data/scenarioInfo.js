@@ -104,6 +104,10 @@ const SCENARIO_STRUCTURE = {
     tags: ['orbits-kepler', 'solar-system'],
     thumbnail: 'images/scenarios/gravity-assist-heliocentric.webp',
   },
+  'Orbital Transfer Lab': {
+    tags: ['orbits-kepler', 'solar-system'],
+    thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
+  },
   'Binary Planet Lab': {
     tags: ['binary-systems', 'exoplanets', 'chaos', 'orbits-kepler'],
     thumbnail: 'images/scenarios/binary-planet-lab.webp',

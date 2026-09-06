@@ -103,6 +103,26 @@ export const DEFAULT_SETTINGS = {
   // claim about stability at any length: see the outcome wording.
   binary_lab_periods: 20,
 
+  // --- The orbital transfer laboratory ----------------------------------------
+  // One heavy star, a spacecraft on a circular orbit, and a target on an outer
+  // circular coplanar orbit. Nothing else, and nothing eccentric: a Hohmann
+  // transfer has a closed-form answer only between circular coplanar orbits,
+  // and a lesson that asks a student to check their measurement against that
+  // answer has to be run somewhere the answer is actually right.
+  transfer_star_mass: 1, // solar masses
+  transfer_inner_au: 1, // spacecraft's starting circular radius
+  transfer_outer_au: 2.5, // the target's circular radius
+  // The spacecraft's mass, as a fraction of the star's. Not zero: a massless
+  // body drops out of the barycentre and out of the energy bookkeeping the
+  // conservation diagnostics use. Small enough that the two-body formulae,
+  // which assume it, are right to well past the precision anybody reads.
+  transfer_probe_mass_ratio: 1e-9,
+  // Where the target starts, in degrees ahead of the spacecraft. The phase
+  // that makes the transfer actually arrive somewhere useful is a result the
+  // lesson derives rather than a number it hands over, so this is deliberately
+  // not that value.
+  transfer_target_phase_deg: 0,
+
   // --- The gravity assist laboratory ------------------------------------------
   // A moving planet and a very light spacecraft, and nothing else in the
   // isolated case. Same reasoning as the binary lab: the two shipped Slingshot

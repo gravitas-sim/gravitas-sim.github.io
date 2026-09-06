@@ -509,4 +509,195 @@ export const EN_DEFERRED = {
     '{n} step(s) have been rewritten since this was set. Those start blank rather than showing an answer to a question that is no longer being asked.',
   'assign.notice.missing':
     '{n} step(s) are no longer in the lesson and have been left out.',
+
+  // --- The manoeuvre planner ---------------------------------------------------
+  'burn.title': 'Manoeuvre planner',
+  'burn.close': 'Hide the manoeuvre planner',
+  'burn.body': 'Body',
+  'burn.about': 'In orbit about {name}. Delta-v is measured relative to it.',
+  'burn.noPrimary':
+    'This body is not clearly in orbit around anything, so there is no frame to plan a burn in.',
+  'burn.radial': 'Radial \u0394v',
+  'burn.transverse': 'Transverse \u0394v',
+  'burn.frame':
+    'Radial points away from the primary; transverse is perpendicular to it, the way the body is going. The two coincide with \u201calong the velocity\u201d only where the radial velocity is zero \u2013 everywhere on a circular orbit, and at periapsis and apoapsis of an ellipse.',
+  'burn.quantity': 'Quantity',
+  'burn.before': 'Now',
+  'burn.after': 'After',
+  'burn.periapsis': 'Periapsis',
+  'burn.apoapsis': 'Apoapsis',
+  'burn.energy': 'Specific energy',
+  'burn.angularMomentum': 'Specific angular momentum',
+  'burn.period': 'Period',
+  'burn.none': '\u2014',
+  'burn.magnitude': 'Total \u0394v {dv}.',
+  'burn.becomesUnbound':
+    'This burn puts the body on an escape trajectory. It has no apoapsis and no period: it leaves and does not come back.',
+  'burn.staysUnbound':
+    'The body is already on an escape trajectory and this burn does not capture it.',
+  'burn.becomesBound':
+    'This burn captures the body into a closed orbit from an escape trajectory.',
+  'burn.twoBody':
+    'The predicted orbit is the osculating two-body orbit about this primary: it is what would happen if these were the only two bodies in the universe. Every other body is ignored, so in a system where another mass matters the real trajectory will drift away from this prediction \u2013 quickly, if the other mass is close.',
+  'burn.apply': 'Apply burn',
+  'burn.undo': 'Undo last burn',
+  'burn.export': 'Export burn log',
+  'burn.logRow':
+    'Burn {n}: {body} at t = {time}, radial {radial}, transverse {transverse}.',
+
+  // --- The investigations panel ------------------------------------------------
+  // js/investigations.js is the only module that reads these and it is loaded
+  // on demand, so a visitor who never opens a lesson was downloading all of
+  // them. Registered by ensureInvestigations() before initInvestigations()
+  // runs. The dozen that stay in the base catalogue are on static buttons in
+  // index.html, translated by the boot sweep, plus the two the loader itself
+  // says when a lesson fails before its chunk arrives.
+  'inv.error.scenario': 'Could not load this step’s scenario.',
+  'inv.plot.placeholder': 'Values you enter appear here',
+  'inv.plot.title': 'Your measurements',
+  'inv.import.default': 'Use selected object',
+  'inv.import.needObject': 'Select an object with a measurable orbit first.',
+  'inv.import.duplicate': 'You have already recorded that one.',
+  'inv.import.full': 'All rows are filled. Clear one to import again.',
+  'inv.action.finish': 'Finish',
+  'inv.action.next': 'Next',
+  'inv.probe.unavailable': 'Readout unavailable',
+  'inv.answer.correct': 'Correct.',
+  'inv.answer.recorded': 'Recorded.',
+  'inv.answer.model': 'Model answer shown.',
+  'inv.announce.started': 'Investigation started: {title}',
+  'inv.report.building': 'Building…',
+  'inv.report.done': 'Lab report downloaded',
+  'inv.report.failed': 'Could not build the report.',
+  'inv.report.download': 'Download lab report (PDF)',
+  'inv.progress.cleared': 'Progress cleared',
+  'inv.progress.steps': '{done} of {total} steps',
+  'inv.scenario.reset': 'Scenario reset',
+  'inv.card.loading': 'Loading…',
+  'inv.card.review': 'Review lesson',
+  'inv.card.start': 'Start lesson',
+  'inv.card.resume': 'Resume at step {n}',
+  'inv.card.complete': 'Complete',
+  'inv.card.seen': '{done} of {total} steps seen',
+  'inv.card.report': 'Lab report',
+  'inv.card.series': '{label}, lesson {index} of {of}',
+  'inv.summary.about': 'about {h} hours',
+  'inv.summary.range': '{l}–{h} hours',
+  'inv.summary.work': '{hours} of work',
+  'inv.summary.level': 'All at {level} level.',
+  'inv.summary.lessons': { one: '{n} lesson', other: '{n} lessons' },
+  'inv.summary.steps': { one: '{n} step', other: '{n} steps' },
+  'inv.summary.complete': '{n} complete',
+  'inv.summary.going': '{n} in progress',
+  'inv.card.objectives': { one: '{n} objective', other: '{n} objectives' },
+
+  'inv.step.counter': 'Step {n} of {total}',
+  'inv.step.kind.read': 'read',
+  'inv.step.kind.predict': 'predict',
+  'inv.step.kind.explore': 'explore',
+  'inv.step.kind.measure': 'measure',
+  'inv.step.kind.question': 'question',
+  'inv.step.kind.ellipse': 'explore',
+  'inv.step.kind.wedges': 'explore',
+  'inv.save.saved': 'Progress saved on this device',
+  'inv.save.full':
+    'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+  'inv.save.unavailable':
+    'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+  'inv.save.authoring':
+    'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
+  'inv.save.foreign':
+    'Saved progress from a newer version of Gravitas was found and left untouched. Your answers work here but are not being saved.',
+  'inv.progress.migrated':
+    'Carried {n} saved answers over from an older format, matched by position. If this lesson has changed since you last opened it, check that each answer is on the question you meant.',
+  'inv.progress.removedSteps':
+    'Discarded {n} saved answers for steps this lesson no longer has.',
+  'inv.progress.foreign':
+    'Your saved progress for this lesson was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
+  'inv.backup.downloaded': 'Progress backup downloaded.',
+  'inv.backup.restored': 'Progress restored.',
+  'inv.backup.restoredMoved':
+    'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
+  'inv.backup.restoredPartly':
+    'Progress restored, but {dropped} steps in the backup are no longer in this lesson and their answers were left out.',
+  'inv.backup.restoredUncertain':
+    'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
+  'inv.backup.tooLarge': 'That file is too large to be a progress backup.',
+  'inv.backup.notJson': 'That file is not readable as JSON.',
+  'inv.backup.failed': 'That backup could not be read.',
+  'inv.backup.invalid.notAnObject': 'That file is not a progress backup.',
+  'inv.backup.invalid.notABackup':
+    'That is a JSON file, but not a Gravitas progress backup.',
+  'inv.backup.invalid.noVersion':
+    'That backup has no version and cannot be read safely.',
+  'inv.backup.invalid.tooNew':
+    'That backup was made by a newer version of Gravitas than this one.',
+  'inv.backup.invalid.noLesson':
+    'That backup does not say which investigation it belongs to.',
+  'inv.backup.invalid.noProgress': 'That backup contains no progress.',
+  'inv.backup.invalid.badResponses':
+    'That backup\u2019s answers are not in a readable form.',
+  'inv.backup.invalid.badVisited':
+    'That backup\u2019s step history is not in a readable form.',
+  'inv.backup.invalid.badAttempts':
+    'That backup\u2019s attempt counts are not readable, so it was not applied.',
+  'inv.backup.invalid.badStartedAt':
+    'That backup\u2019s start time is not a readable date, so it was not applied.',
+  'inv.backup.invalid.badPosition':
+    'That backup does not say readably which step it stopped on, so it was not applied.',
+  'inv.backup.invalid.badSteps':
+    'That backup\u2019s step list is damaged, so it was not applied.',
+  'inv.backup.wrongLesson':
+    'That backup is for \u201c{backup}\u201d, and \u201c{open}\u201d is open. Open that investigation first.',
+  'inv.backup.confirmReplace':
+    'Replace your current answers with the backup? You have {n} answers recorded, and this cannot be undone.',
+  'inv.answer.matches': 'That matches.',
+  'inv.answer.notYet': 'Not yet. Check your working and try again.',
+  'inv.answer.oneGood': 'One good answer:',
+  'inv.answer.placeholder': 'Your value',
+  'inv.answer.placeholderUnit': 'Your value in {unit}',
+  'inv.answer.converted': '(read as {value} {target})',
+  'inv.answer.blank': 'There is nothing in the box yet — type a number.',
+  'inv.answer.notANumber':
+    'That is not a number I can read. Digits, a decimal point and an exponent like 3e5 or 3×10^5 all work.',
+  'inv.answer.ambiguous':
+    'I cannot tell which separator is the decimal point. Write it with one decimal separator, or use a space between thousands.',
+  'inv.answer.unknownUnit': 'I do not recognise the unit “{unit}”.',
+  'inv.answer.wrongDimension':
+    '“{unit}” is a unit of {got}, and this answer should be a {want}.',
+  'inv.answer.unitNotAllowed':
+    'This step does not take “{unit}”. Answer in one of: {allowed}.',
+  'inv.answer.unitExpected':
+    'This step expects the number in {expected}, so I cannot use “{unit}”. Convert it yourself and give the number.',
+  'inv.answer.trailingText':
+    'I do not know what to do with “{text}” after the number.',
+  'inv.dimension.time': 'time',
+  'inv.dimension.length': 'length',
+  'inv.dimension.speed': 'speed',
+  'inv.dimension.mass': 'mass',
+  'inv.dimension.angle': 'angle',
+  'inv.hint.ask': 'I could use a hint',
+  'inv.hint.reveal': 'Show me how it is done',
+  'inv.hint.concept': 'Think about:',
+  'inv.hint.method': 'How to get at it:',
+  'inv.hint.worked': 'Worked through:',
+  'inv.hint.given': 'Hint shown.',
+  'inv.hint.revealed': 'Worked explanation shown.',
+  'inv.hint.taken': '{n} hint(s) taken',
+  'inv.hint.takenRevealed': '{n} hint(s) taken, worked answer shown',
+  'inv.misconception.radiusForDiameter':
+    'That is half the value asked for — check whether the question wants a radius or a diameter.',
+  'inv.misconception.diameterForRadius':
+    'That is twice the value asked for — check whether the question wants a radius or a diameter.',
+  'inv.misconception.peakToPeakForSemiAmplitude':
+    'That is the full peak-to-peak range. K is half of it: the distance from the middle of the curve to one extreme, not from one extreme to the other.',
+  'inv.misconception.semiAmplitudeForPeakToPeak':
+    'That is the semi-amplitude K. The peak-to-peak range is twice it.',
+  'inv.misconception.daysForYears':
+    'That looks like the value in days, and the question asks for years.',
+  'inv.misconception.yearsForDays':
+    'That looks like the value in years, and the question asks for days.',
+  'inv.misconception.radiansForDegrees':
+    'That looks like the angle in radians, and the question asks for degrees.',
+  'inv.answer.check': 'Check',
 };
