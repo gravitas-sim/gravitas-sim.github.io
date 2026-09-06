@@ -377,4 +377,76 @@ export const ES_DEFERRED = {
     'Este navegador no tiene almacenamiento local disponible, así que los experimentos no se pueden conservar entre visitas. Exporta a un archivo.',
   'bench.error.open': 'No se pudo abrir ese experimento ({reason}).',
   'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
+
+  // --- El barrido de parametros -----------------------------------------------
+  'sweep.title': 'Barrido de parametros',
+  'sweep.hint':
+    'Repite el mismo escenario varias veces cambiando un solo parametro, y muestra como se mueve la medida con el.',
+  'sweep.scenario': 'Escenario',
+  'sweep.parameter': 'Parametro',
+  'sweep.from': 'Desde',
+  'sweep.to': 'hasta',
+  'sweep.count': 'Valores',
+  'sweep.duration': 'Tiempo simulado por prueba',
+  'sweep.run': 'Ejecutar el barrido',
+  'sweep.cancel': 'Detener',
+  'sweep.export': 'Exportar el barrido',
+  'sweep.guided': 'Ejemplo guiado',
+  'sweep.progress': 'Prueba {trial} de {total}, {percent}%',
+  'sweep.done':
+    '{ok} de {total} pruebas medidas, {failed} fallidas, {cancelled} sin ejecutar. {seconds}s.',
+  'sweep.range': 'Rango permitido de {min} a {max}',
+  'sweep.settings':
+    'Las demas condiciones iniciales son las del escenario con la semilla {seed}. {integrator}, {substeps} subpasos por fotograma, paso {step}.',
+
+  'sweep.param.planetA': 'Orbita inicial del planeta',
+  'sweep.param.impact': 'Parametro de impacto',
+  'sweep.param.vInfinity': 'Velocidad de aproximacion lejana',
+  'sweep.unit.separations': 'separaciones binarias',
+  'sweep.unit.simUnits': 'unidades de simulacion',
+  'sweep.unit.simVelocity': 'unidades de velocidad de simulacion',
+
+  'sweep.status.ok': 'medida',
+  'sweep.status.buildFailed': 'el mundo no se pudo construir con este valor',
+  'sweep.status.bodiesMissing':
+    'los cuerpos que necesita esta medida no estaban',
+  'sweep.status.notFinite': 'la medida no resulto ser un numero',
+  'sweep.status.lostBody':
+    'un cuerpo se destruyo durante esta prueba, asi que las muestras posteriores son de otro sistema',
+  'sweep.status.cancelled': 'sin ejecutar',
+
+  'sweep.reason.parameterNotSweepable':
+    'Ese parametro no se puede barrer en este escenario. Solo las variables de laboratorio propias de un escenario sobreviven a la reconstruccion que necesita cada prueba.',
+  'sweep.reason.valueCount':
+    'Un barrido necesita entre {min} y {max} valores. Con dos valores ya esta la comparacion A/B del banco.',
+  'sweep.reason.rangeNotNumeric': 'El rango debe ser dos numeros.',
+  'sweep.reason.rangeEmpty': 'El rango empieza y termina en el mismo valor.',
+  'sweep.reason.outOfRange':
+    'Fuera del rango en el que este parametro esta definido aqui, que es de {min} a {max}.',
+  'sweep.reason.crossesExcluded':
+    'Ese rango pasa por {from} a {to}, donde el escenario no describe un sobrevuelo en absoluto.',
+  'sweep.reason.duration':
+    'El tiempo simulado por prueba debe estar entre {min} y {max}.',
+  'sweep.reason.noMetrics': 'Elige al menos una magnitud que medir.',
+  'sweep.reason.notReady': 'El banco todavia se esta cargando.',
+  'sweep.reason.alreadyRunning': 'Ya hay un barrido en curso.',
+  'sweep.reason.recording': 'Se esta grabando una pasada.',
+
+  'sweep.summary.changed':
+    '{metric} paso de {min} a {max} a lo largo del rango.',
+  'sweep.summary.monotonic': 'Cambio en una sola direccion en todo el rango.',
+  'sweep.summary.turned':
+    'Dio la vuelta en lugar de moverse en una sola direccion, asi que el valor interesante esta dentro del rango y no en un extremo.',
+  'sweep.summary.flat':
+    '{metric} no se movio de forma apreciable en este rango. Es un resultado sobre este rango y esta duracion, no sobre el parametro.',
+  'sweep.partial':
+    'Algunas pruebas no dieron medida, asi que esto describe los valores que se ejecutaron y no el rango que se pidio.',
+
+  'sweep.guide.title':
+    'Hasta donde puede orbitar un planeta alrededor de una estrella de un par?',
+  'sweep.guide.body':
+    'Esto barre la orbita inicial del planeta desde muy cerca hasta bastante lejos, manteniendo fijas las estrellas, la semilla y el paso de integracion, y mide cuanto se aleja el planeta de su estrella. Cerca, la orbita es la del propio planeta y la distancia apenas cambia. Mas lejos la segunda estrella empieza a contar, y pasado cierto punto el planeta deja de estar en orbita.',
+  'sweep.guide.after':
+    'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
+  'sweep.guide.run': 'Ejecutar el barrido guiado',
 };

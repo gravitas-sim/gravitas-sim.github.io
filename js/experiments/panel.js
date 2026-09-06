@@ -15,6 +15,7 @@
 
 import { t, onLocaleChange } from '../i18n/index.js';
 import { ensureChartJs } from '../chartjs.js';
+import { formatNumber } from '../format.js';
 import { chartColors } from '../observationChart.js';
 import {
   requestObservationLayout,
@@ -23,6 +24,7 @@ import {
 import * as bench from './bench.js';
 import { OFFERED_METRICS } from './bench.js';
 import { METRIC_ARITY, SCALAR_METRICS } from './metrics.js';
+import { SWEEPABLE, parameterFor, sweepableScenarios } from './sweep.js';
 import { describeDiff } from './canonicalState.js';
 import { describePerturbation, systemExtent } from './perturbation.js';
 
@@ -31,6 +33,8 @@ const PANEL_ID = 'experimentPanel';
 let root = null;
 let chart = null;
 let chartCanvas = null;
+/** The sweep's own chart, kept apart so the two do not fight over one canvas. */
+let sweepChart = null;
 let statusTimer = 0;
 let onShareRequest = null;
 
@@ -138,6 +142,59 @@ export function ensurePanel() {
         <button id="benchControl" class="ui-button" disabled>${esc(t('bench.action.asControl'))}</button>
       </div>
       <div id="benchControls" class="experiment-controls-list"></div>
+
+      <details class="experiment-section" id="benchSweepSection">
+        <summary>${esc(t('sweep.title'))}</summary>
+        <p class="experiment-hint">${esc(t('sweep.hint'))}</p>
+
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchSweepScenario">${esc(t('sweep.scenario'))}</label>
+          <select id="benchSweepScenario" class="experiment-input"></select>
+        </div>
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchSweepParam">${esc(t('sweep.parameter'))}</label>
+          <select id="benchSweepParam" class="experiment-input"></select>
+        </div>
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchSweepFrom">${esc(t('sweep.from'))}</label>
+          <input id="benchSweepFrom" class="experiment-input" type="number" step="any" />
+          <label class="experiment-label" for="benchSweepTo">${esc(t('sweep.to'))}</label>
+          <input id="benchSweepTo" class="experiment-input" type="number" step="any" />
+        </div>
+        <p id="benchSweepRange" class="experiment-hint"></p>
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchSweepCount">${esc(t('sweep.count'))}</label>
+          <input id="benchSweepCount" class="experiment-input" type="number" min="3" max="20" step="1" value="8" />
+          <label class="experiment-label" for="benchSweepDuration">${esc(t('sweep.duration'))}</label>
+          <input id="benchSweepDuration" class="experiment-input" type="number" step="any" value="10000" />
+        </div>
+
+        <div class="experiment-row experiment-actions">
+          <button id="benchSweepRun" class="ui-button">${esc(t('sweep.run'))}</button>
+          <button id="benchSweepCancel" class="ui-button" hidden>${esc(t('sweep.cancel'))}</button>
+          <button id="benchSweepExport" class="ui-button" disabled>${esc(t('sweep.export'))}</button>
+        </div>
+        <p id="benchSweepStatus" class="experiment-hint" role="status" aria-live="polite"></p>
+
+        <div id="benchSweepChartWrap" class="experiment-chart" hidden>
+          <div class="experiment-row">
+            <label class="experiment-label" for="benchSweepMetric">${esc(t('bench.field.chart'))}</label>
+            <select id="benchSweepMetric" class="experiment-input"></select>
+          </div>
+          <canvas id="benchSweepChart" height="150" aria-label="${esc(t('sweep.title'))}"></canvas>
+        </div>
+        <div id="benchSweepResults" class="experiment-results"></div>
+
+        <details class="experiment-section" id="benchSweepGuide">
+          <summary>${esc(t('sweep.guided'))}</summary>
+          <p class="experiment-note"><strong>${esc(t('sweep.guide.title'))}</strong></p>
+          <p class="experiment-hint">${esc(t('sweep.guide.body'))}</p>
+          <div class="experiment-row experiment-actions">
+            <button id="benchSweepGuided" class="ui-button">${esc(t('sweep.guide.run'))}</button>
+          </div>
+          <p class="experiment-hint">${esc(t('sweep.guide.after'))}</p>
+        </details>
+      </details>
 
       <details class="experiment-section" id="benchReliabilitySection">
         <summary>${esc(t('reliability.title'))}</summary>
@@ -272,6 +329,8 @@ export function render() {
   renderMetrics(exp);
   renderPerturbation(exp);
   renderControls(exp);
+  renderSweepControls();
+  renderSweepResults();
   renderReliability(exp, recording);
   renderRuns(exp, recording);
   renderComparison(exp);
@@ -423,6 +482,294 @@ function renderControls(exp) {
     });
     wrap.appendChild(row);
   }
+}
+
+/**
+ * The sweep controls, and the results when there are some.
+ *
+ * The scenario and parameter pickers are populated from the allowlist rather
+ * than from the settings object, so an unsweepable parameter is not offered
+ * and then refused. The range hint under them is the parameter's own bounds,
+ * shown before the reader types rather than after.
+ *
+ * @returns {void}
+ */
+function renderSweepControls() {
+  const scenarioSel = $('benchSweepScenario');
+  const paramSel = $('benchSweepParam');
+  if (!scenarioSel || !paramSel) return;
+
+  if (!scenarioSel.options.length) {
+    for (const name of sweepableScenarios()) {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      scenarioSel.appendChild(opt);
+    }
+    // Open on the scenario that is loaded, when it is one that can be swept.
+    const live = bench.currentScenarioName?.();
+    if (live && SWEEPABLE[live]) scenarioSel.value = live;
+  }
+
+  const entry = SWEEPABLE[scenarioSel.value];
+  const wanted = entry ? entry.parameters.map(p => p.key).join('|') : '';
+  if (paramSel.dataset.forScenario !== wanted) {
+    paramSel.dataset.forScenario = wanted;
+    paramSel.innerHTML = '';
+    for (const p of entry?.parameters || []) {
+      const opt = document.createElement('option');
+      opt.value = p.key;
+      opt.textContent = `${t(p.labelKey)} (${t(p.unitKey)})`;
+      paramSel.appendChild(opt);
+    }
+    fillSweepRange();
+  }
+
+  const busy = bench.isSweeping();
+  $('benchSweepRun').disabled = busy || bench.isRecording();
+  $('benchSweepGuided').disabled = busy || bench.isRecording();
+  $('benchSweepCancel').hidden = !busy;
+  $('benchSweepExport').disabled = !bench.latestSweep()?.ok;
+}
+
+/** Put the selected parameter's own bounds into the range fields and the hint. */
+function fillSweepRange() {
+  const def = parameterFor(
+    $('benchSweepScenario')?.value,
+    $('benchSweepParam')?.value
+  );
+  const hint = $('benchSweepRange');
+  if (!def) {
+    if (hint) hint.textContent = '';
+    return;
+  }
+  if (hint) {
+    hint.textContent = t('sweep.range', { min: def.min, max: def.max });
+  }
+  // Opened at the parameter's range, or at the positive half where zero is
+  // excluded - a default that spans an excluded band would be refused the
+  // moment the reader pressed Run.
+  const from = def.exclude ? def.exclude.to : def.min;
+  $('benchSweepFrom').value = String(from);
+  $('benchSweepTo').value = String(def.max);
+}
+
+/** The results table, the plot and what the numbers add up to. */
+function renderSweepResults() {
+  const out = $('benchSweepResults');
+  const sweep = bench.latestSweep();
+  if (!out) return;
+  out.innerHTML = '';
+  const wrap = $('benchSweepChartWrap');
+  if (wrap) wrap.hidden = !sweep?.ok;
+  if (!sweep?.ok) return;
+
+  const add = (text, cls = 'experiment-note') => {
+    const el = document.createElement('p');
+    el.className = cls;
+    el.textContent = text;
+    out.appendChild(el);
+  };
+
+  // What each measurement did across the range, in words. Modest on purpose:
+  // it says the span and whether it turned over, and does not fit anything.
+  for (const s of sweep.summaries) {
+    const label = bench.metricLabel(s.metric);
+    if (!s.changed) {
+      add(t('sweep.summary.flat', { metric: label }));
+      continue;
+    }
+    add(
+      t('sweep.summary.changed', {
+        metric: label,
+        min: formatNumber(s.min, { sig: 4 }),
+        max: formatNumber(s.max, { sig: 4 }),
+      })
+    );
+    add(
+      s.monotonic ? t('sweep.summary.monotonic') : t('sweep.summary.turned'),
+      'experiment-hint'
+    );
+  }
+
+  // A trial that did not measure is a row in the table, and the fact that some
+  // did not is said here too: a summary of the values that ran is not a
+  // summary of the range that was asked for.
+  if (sweep.counts.failed || sweep.counts.cancelled) {
+    add(t('sweep.partial'), 'experiment-hint');
+  }
+
+  const table = document.createElement('table');
+  table.className = 'experiment-table';
+  const head = document.createElement('tr');
+  for (const label of [
+    t('sweep.parameter'),
+    ...sweep.metrics.map(m => bench.metricLabel(m)),
+    '',
+  ]) {
+    const th = document.createElement('th');
+    th.textContent = label;
+    head.appendChild(th);
+  }
+  table.appendChild(head);
+
+  for (const trial of sweep.trials) {
+    const tr = document.createElement('tr');
+    tr.dataset.status = trial.status;
+    const first = document.createElement('th');
+    first.scope = 'row';
+    first.textContent = formatNumber(trial.value, { sig: 4 });
+    tr.appendChild(first);
+    for (const m of sweep.metrics) {
+      const td = document.createElement('td');
+      const v = trial.results?.[m];
+      td.textContent = Number.isFinite(v) ? formatNumber(v, { sig: 4 }) : '—';
+      tr.appendChild(td);
+    }
+    // The status in words on every row, so a dash is never ambiguous between
+    // "did not run", "would not build" and "lost a body".
+    const why = document.createElement('td');
+    why.textContent =
+      trial.status === 'ok' ? '' : t(`sweep.status.${trial.status}`);
+    tr.appendChild(why);
+    table.appendChild(tr);
+  }
+  out.appendChild(table);
+
+  const n = sweep.numerics;
+  add(
+    t('sweep.done', {
+      ok: sweep.counts.ok,
+      total: sweep.counts.total,
+      failed: sweep.counts.failed,
+      cancelled: sweep.counts.cancelled,
+      seconds: (sweep.wallMs / 1000).toFixed(1),
+    }),
+    'experiment-hint'
+  );
+  if (n) {
+    add(
+      t('sweep.settings', {
+        seed: sweep.seed,
+        integrator: n.integrator,
+        substeps: n.substeps,
+        step: formatNumber(n.step, { sig: 4 }),
+      }),
+      'experiment-hint'
+    );
+  }
+
+  renderSweepChart(sweep);
+}
+
+/** The measurement against the parameter. */
+async function renderSweepChart(sweep) {
+  const picker = $('benchSweepMetric');
+  if (!picker) return;
+  const plottable = sweep.metrics.filter(m =>
+    sweep.trials.some(tr => Number.isFinite(tr.results?.[m]))
+  );
+  if (!plottable.length) return;
+
+  if (picker.dataset.forSweep !== plottable.join('|')) {
+    picker.dataset.forSweep = plottable.join('|');
+    picker.innerHTML = '';
+    for (const m of plottable) {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = bench.metricLabel(m);
+      picker.appendChild(opt);
+    }
+    picker.onchange = () => renderSweepChart(sweep);
+  }
+  const metric = picker.value || plottable[0];
+
+  const Chart = await ensureChartJs();
+  if (!Chart) return;
+  const colors = chartColors();
+  // Only the trials that measured. A failed trial is not a zero, and joining
+  // the line across it would draw a value nobody observed.
+  const points = sweep.trials
+    .filter(tr => Number.isFinite(tr.results?.[metric]))
+    .map(tr => ({ x: tr.value, y: tr.results[metric] }))
+    .sort((a, b) => a.x - b.x);
+
+  const data = {
+    datasets: [
+      {
+        label: bench.metricLabel(metric),
+        data: points,
+        borderColor: colors.cool,
+        backgroundColor: colors.cool,
+        borderWidth: 2,
+        pointRadius: 3,
+        showLine: true,
+      },
+    ],
+  };
+  const def = parameterFor(sweep.scenario, sweep.parameter);
+  const xTitle = def
+    ? `${t(def.labelKey)} (${t(def.unitKey)})`
+    : sweep.parameter;
+
+  if (sweepChart) {
+    sweepChart.data = data;
+    sweepChart.options.scales.x.title.text = xTitle;
+    sweepChart.options.scales.y.title.text = bench.metricLabel(metric);
+    sweepChart.update('none');
+    return;
+  }
+  sweepChart = new Chart($('benchSweepChart'), {
+    type: 'scatter',
+    data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: { legend: { labels: { color: colors.label } } },
+      scales: {
+        x: {
+          type: 'linear',
+          title: { display: true, text: xTitle, color: colors.label },
+          ticks: { color: colors.tick, maxTicksLimit: 8 },
+          grid: { color: colors.grid },
+        },
+        y: {
+          title: {
+            display: true,
+            text: bench.metricLabel(metric),
+            color: colors.label,
+          },
+          ticks: { color: colors.tick },
+          grid: { color: colors.grid },
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Start a sweep and keep the panel talking while it runs.
+ *
+ * @param {object} spec - What to sweep
+ * @returns {Promise<void>}
+ */
+async function startSweep(spec) {
+  const status = $('benchSweepStatus');
+  render();
+  const result = await bench.runSweep(spec, {
+    onProgress: ({ trial, total, fraction }) => {
+      status.textContent = t('sweep.progress', {
+        trial: trial + 1,
+        total,
+        percent: Math.round(fraction * 100),
+      });
+    },
+  });
+  status.textContent = result.ok
+    ? ''
+    : t(`sweep.reason.${result.reason}`, result.detail || {});
+  render();
 }
 
 /**
@@ -892,6 +1239,55 @@ function wire() {
         : t('bench.control.failed')
     );
     render();
+  };
+
+  $('benchSweepScenario').onchange = () => {
+    renderSweepControls();
+    fillSweepRange();
+  };
+  $('benchSweepParam').onchange = () => fillSweepRange();
+
+  $('benchSweepRun').onclick = () =>
+    startSweep({
+      scenario: $('benchSweepScenario').value,
+      parameter: $('benchSweepParam').value,
+      from: Number($('benchSweepFrom').value),
+      to: Number($('benchSweepTo').value),
+      count: Number($('benchSweepCount').value),
+      duration: Number($('benchSweepDuration').value),
+      metrics: bench.activeExperiment()?.metrics?.length
+        ? [...bench.activeExperiment().metrics]
+        : ['distance_to_primary', 'speed'],
+      seed: 'sweep',
+    });
+
+  $('benchSweepCancel').onclick = () => bench.cancelSweep();
+  $('benchSweepExport').onclick = () => download('sweep');
+
+  // The guided example. Fixed on purpose: a reader following it and a reader
+  // reading about it should be looking at the same numbers, so nothing here is
+  // taken from whatever the controls happen to say.
+  $('benchSweepGuided').onclick = () => {
+    $('benchSweepScenario').value = 'Binary Planet Lab';
+    renderSweepControls();
+    $('benchSweepParam').value = 'binary_lab_planet_a';
+    $('benchSweepFrom').value = '0.05';
+    $('benchSweepTo').value = '0.4';
+    $('benchSweepCount').value = '12';
+    $('benchSweepDuration').value = '10000';
+    return startSweep({
+      scenario: 'Binary Planet Lab',
+      parameter: 'binary_lab_planet_a',
+      from: 0.05,
+      to: 0.4,
+      count: 12,
+      // About two binary periods. One period is roughly 5131 time units here
+      // (a = 1000, total mass 1500, G = 1), and a trial shorter than an orbit
+      // measures the planet's starting position rather than its orbit.
+      duration: 10000,
+      metrics: ['distance_to_primary', 'speed'],
+      seed: 'guided',
+    });
   };
 
   $('benchReliabilityRun').onclick = async () => {

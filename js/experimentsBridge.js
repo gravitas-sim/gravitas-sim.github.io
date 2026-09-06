@@ -48,6 +48,9 @@ export function ensureBench() {
         applyShareState: ui.applyShareState,
         getSettings: () => ui.SETTINGS,
         getScenario: () => ui.current_scenario_name,
+        // A sweep rebuilds the world per trial rather than restoring one, so it
+        // needs the builder itself. Seeded, so a trial is reproducible.
+        initializeSimulation: opts => ui.initialize_simulation(opts),
         getState: () => ui.state,
         getDefaults: () => ui.DEFAULT_SETTINGS,
         setFixedStep: render.setFixedStep,

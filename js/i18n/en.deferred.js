@@ -373,4 +373,77 @@ export const EN_DEFERRED = {
     'This browser has no local storage available, so experiments cannot be kept between visits. Export to a file instead.',
   'bench.error.open': 'That experiment could not be opened ({reason}).',
   'bench.error.import': 'That file could not be read ({reason}).',
+
+  // --- The parameter sweep ----------------------------------------------------
+  'sweep.title': 'Parameter sweep',
+  'sweep.hint':
+    'Runs the same scenario several times, changing one parameter and nothing else, and reports how the measurement moves with it.',
+  'sweep.scenario': 'Scenario',
+  'sweep.parameter': 'Parameter',
+  'sweep.from': 'From',
+  'sweep.to': 'to',
+  'sweep.count': 'Values',
+  'sweep.duration': 'Simulated time per trial',
+  'sweep.run': 'Run the sweep',
+  'sweep.cancel': 'Stop',
+  'sweep.export': 'Export the sweep',
+  'sweep.guided': 'Guided example',
+  'sweep.progress': 'Trial {trial} of {total}, {percent}%',
+  'sweep.done':
+    '{ok} of {total} trials measured, {failed} failed, {cancelled} not run. {seconds}s.',
+  'sweep.range': 'Allowed range {min} to {max}',
+  'sweep.settings':
+    'Every other initial condition is the scenario default at seed {seed}. {integrator}, {substeps} substeps per frame, step {step}.',
+
+  'sweep.param.planetA': 'Planet\u2019s starting orbit',
+  'sweep.param.impact': 'Impact parameter',
+  'sweep.param.vInfinity': 'Approach speed far away',
+  'sweep.unit.separations': 'binary separations',
+  'sweep.unit.simUnits': 'simulation units',
+  'sweep.unit.simVelocity': 'simulation velocity units',
+
+  'sweep.status.ok': 'measured',
+  'sweep.status.buildFailed': 'the world would not build at this value',
+  'sweep.status.bodiesMissing':
+    'the bodies this measurement needs were not there',
+  'sweep.status.notFinite': 'the measurement did not come out as a number',
+  'sweep.status.lostBody':
+    'a body was destroyed during this trial, so the later samples are of a different system',
+  'sweep.status.cancelled': 'not run',
+
+  'sweep.reason.parameterNotSweepable':
+    'That parameter cannot be swept in this scenario. Only a scenario\u2019s own laboratory variables survive the rebuild each trial needs.',
+  'sweep.reason.valueCount':
+    'A sweep needs between {min} and {max} values. Two values is the A/B comparison the bench already does.',
+  'sweep.reason.rangeNotNumeric': 'The range must be two numbers.',
+  'sweep.reason.rangeEmpty': 'The range starts and ends at the same value.',
+  'sweep.reason.outOfRange':
+    'Outside the range this parameter is defined over here, which is {min} to {max}.',
+  'sweep.reason.crossesExcluded':
+    'That range passes through {from} to {to}, where the scenario does not describe a flyby at all.',
+  'sweep.reason.duration':
+    'Simulated time per trial must be between {min} and {max}.',
+  'sweep.reason.noMetrics': 'Choose at least one quantity to measure.',
+  'sweep.reason.notReady': 'The bench is still loading.',
+  'sweep.reason.alreadyRunning': 'A sweep is already running.',
+  'sweep.reason.recording': 'A run is being recorded.',
+
+  'sweep.summary.changed':
+    '{metric} moved from {min} to {max} across the range.',
+  'sweep.summary.monotonic': 'It changed in one direction throughout.',
+  'sweep.summary.turned':
+    'It turned over rather than moving in one direction, so the interesting value is somewhere inside the range rather than at an end.',
+  'sweep.summary.flat':
+    '{metric} did not move measurably across this range. That is a result about this range and this duration, not about the parameter.',
+  'sweep.partial':
+    'Some trials did not produce a measurement, so this describes the values that ran rather than the range that was asked for.',
+
+  // The guided example. One question, one parameter, and a note about what the
+  // answer does and does not establish.
+  'sweep.guide.title': 'How far out can a planet orbit one star of a pair?',
+  'sweep.guide.body':
+    'This sweeps the planet\u2019s starting orbit from close in to well out, holding the stars, the seed and the timestep fixed, and measures how far the planet gets from its star. Close in, the orbit is the planet\u2019s own and the distance barely changes. Further out the second star starts to matter, and past a point the planet stops being in orbit at all.',
+  'sweep.guide.after':
+    'Read where the measurement stops behaving smoothly - that is the boundary this scenario has, at this duration. A longer run can only move it inwards: an orbit that survived 20 binary periods has not been shown to survive 200.',
+  'sweep.guide.run': 'Run the guided sweep',
 };

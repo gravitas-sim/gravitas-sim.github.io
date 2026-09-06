@@ -21,7 +21,7 @@
 // is a bug worth fixing once, in one place.
 // =============================================================================
 
-import { csvField } from '../csv.js';
+import { csvField, num, toCsv } from '../csv.js';
 import { METRIC_UNITS, SCALAR_METRICS } from './metrics.js';
 import { canonicalJson } from './canonicalState.js';
 
@@ -255,6 +255,85 @@ export function reliabilityJson(experiment, { appVersion = 'dev' } = {}) {
     null,
     2
   )}\n`;
+}
+
+/**
+ * A sweep as a CSV somebody else could reproduce.
+ *
+ * The header carries what the rows cannot: which scenario, which seed, which
+ * integrator, the substep count and the step it implies, the simulated
+ * duration per trial and the parameter's own bounds. A table of numbers
+ * without those is a picture of a result rather than a record of one - the
+ * same sweep at a different timestep is a different experiment, and a reader
+ * who cannot tell has no way to check.
+ *
+ * Failed trials are rows, not omissions, with their status in a column. A file
+ * that quietly contained eleven of twenty values would describe a sweep of a
+ * range nobody asked for.
+ *
+ * @param {object} sweep - A completed sweep from bench.runSweep
+ * @returns {{csv: string, rows: number}} The document and its trial count
+ */
+export function sweepCsv(sweep) {
+  if (!sweep?.ok || !sweep.trials?.length) return { csv: '', rows: 0 };
+
+  const lines = [];
+  const comment = text => lines.push(`# ${text}`);
+  comment('Gravitas parameter sweep');
+  comment(`ran_at: ${sweep.ranAt}`);
+  comment(`scenario: ${sweep.scenario}`);
+  comment(`seed: ${sweep.seed}`);
+  comment(`parameter: ${sweep.parameter}`);
+  comment(
+    `values: ${sweep.values.length} from ${sweep.values[0]} to ${sweep.values[sweep.values.length - 1]}`
+  );
+  comment(`duration_per_trial: ${sweep.duration}`);
+  // Both, because they can differ: a frame is indivisible, so the achievable
+  // durations are multiples of the frame advance and a request between two of
+  // them is rounded to one.
+  comment(`duration_requested: ${sweep.requestedDuration}`);
+  comment(`frames_per_trial: ${sweep.framesPerTrial}`);
+  comment('every other initial condition is the scenario default at this seed');
+
+  const n = sweep.numerics;
+  if (n) {
+    comment(`integrator: ${n.integrator}`);
+    comment(`sim_speed: ${n.simSpeed}`);
+    comment(`max_timestep: ${n.maxTimestep}`);
+    comment(`frame_advance: ${n.frameAdvance}`);
+    comment(`substeps_per_frame: ${n.substeps}`);
+    comment(`integration_step: ${n.step}`);
+  }
+  comment(
+    `trials: ${sweep.counts.ok} measured, ${sweep.counts.failed} failed, ${sweep.counts.cancelled} not run`
+  );
+  if (sweep.cancelled) comment('this sweep was stopped before it finished');
+
+  const header = ['trial', 'value', 'status', 'samples', 'duration', 'wall_ms'];
+  for (const id of sweep.metrics) header.push(id);
+  const rows = [header];
+  for (const tr of sweep.trials) {
+    const row = [
+      String(tr.index),
+      num(tr.value, 6),
+      csvField(tr.status),
+      String(tr.samples ?? 0),
+      tr.duration === undefined ? '' : num(tr.duration),
+      tr.wallMs === undefined ? '' : num(tr.wallMs, 1),
+    ];
+    for (const id of sweep.metrics) {
+      const v = tr.results?.[id];
+      // Empty rather than zero for a trial that produced no number: a failed
+      // build is not a measurement of nothing.
+      row.push(Number.isFinite(v) ? num(v, 6) : '');
+    }
+    rows.push(row);
+  }
+
+  return {
+    csv: `${lines.join('\n')}\n${toCsv(rows)}`,
+    rows: sweep.trials.length,
+  };
 }
 
 export function exportBasename(experiment) {

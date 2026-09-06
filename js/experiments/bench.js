@@ -103,6 +103,7 @@ import {
   exportBasename,
   importManifest,
   reliabilityJson,
+  sweepCsv,
 } from './exports.js';
 import {
   DEFAULT_TOLERANCE,
@@ -111,6 +112,7 @@ import {
   reliabilityReport,
   stepPlan,
 } from './reliability.js';
+import * as SWEEP from './sweep.js';
 import { experimentBlock } from './shareExperiment.js';
 import { perturb } from './perturbation.js';
 
@@ -385,6 +387,16 @@ export function addNumericalControl(result) {
 export function setRecordBodies(on) {
   if (current) current.recordBodies = Boolean(on);
 }
+
+/**
+ * The scenario loaded right now.
+ *
+ * So the sweep panel can open on it when it is one that can be swept, rather
+ * than making the reader pick a scenario they are already looking at.
+ *
+ * @returns {string} Scenario key
+ */
+export const currentScenarioName = () => host.getScenario?.() || '';
 
 /** @returns {Object|null} The experiment being worked on */
 export const activeExperiment = () => current;
@@ -697,6 +709,352 @@ export function buildReliabilityReport(input) {
     ranAt: new Date().toISOString(),
   };
 }
+
+// =============================================================================
+// The parameter sweep
+// -----------------------------------------------------------------------------
+// One variable, several values, everything else held still. Each trial rebuilds
+// the world from the scenario at a new value of the parameter and runs it for
+// the same simulated duration, so what varies between trials is the parameter
+// and the parameter alone: same seed, same integrator, same substep cap, same
+// number of frames.
+//
+// Rebuilding rather than restoring, and that is the difference from every other
+// run in this file. A captured state is a world that already exists; a sweep
+// needs a world that would have existed had the parameter been different, and
+// only the scenario builder can make one. js/scenarios.js carries the
+// laboratory variables across a rebuild of the same scenario for exactly this
+// reason - see LAB_VARIABLES there and the allowlist in ./sweep.js, which is
+// that list plus the range in which each value still means something.
+//
+// Bodies are resolved by role after each build. Ids are not stable across a
+// rebuild, and reusing the captured selection would measure whatever body
+// happened to inherit the number.
+//
+// No second engine: the same physics.js, the same stepping from ./timestep.js
+// through the host, the same sampleFrame and reduceRun as a recorded run.
+// =============================================================================
+
+/** Set while a sweep runs, so it can be asked to stop. */
+let sweepAbort = null;
+
+/** @returns {boolean} Whether a sweep is running */
+export const isSweeping = () => sweepAbort !== null;
+
+/** Ask a running sweep to stop after the trial in progress. @returns {void} */
+export function cancelSweep() {
+  if (sweepAbort) sweepAbort.cancelled = true;
+}
+
+/**
+ * Find the bodies a scenario's measurements are about, in the world as built.
+ *
+ * @param {object} roles - From SWEEPABLE in ./sweep.js
+ * @returns {{bodies: Array<object>, primary: ?object, ok: boolean}} What was found
+ */
+function resolveRoles(roles) {
+  const all = selectableBodies();
+  const pick = spec => {
+    // 'planet' means the scenario's massive planet. In the assist labs the
+    // spacecraft is also a Planet object, so it has to be excluded by name
+    // before falling through to the gas giant.
+    if (spec === 'planet') {
+      return (
+        planets.find(b => b.name !== 'Spacecraft') || gas_giants[0] || null
+      );
+    }
+    return all.find(b => b.name === spec) || null;
+  };
+  const bodies = (roles.bodies || []).map(pick);
+  const primary = roles.primary ? pick(roles.primary) : null;
+  return {
+    bodies: bodies.filter(Boolean),
+    primary,
+    ok: bodies.every(Boolean) && (!roles.primary || Boolean(primary)),
+  };
+}
+
+/**
+ * Run one value of the parameter.
+ *
+ * @param {object} cfg - value, spec, roles, frames, abort, onProgress, index
+ * @returns {Promise<object>} The trial
+ */
+async function runSweepTrial(cfg) {
+  const { spec, value } = cfg;
+  const settings = host.getSettings();
+  const startedAt = performance.now();
+
+  const trial = {
+    index: cfg.index,
+    value,
+    status: SWEEP.TRIAL_STATUS.OK,
+    results: {},
+    samples: 0,
+    wallMs: 0,
+    // Recorded per trial rather than once for the sweep: if a rebuild were
+    // ever to change one of them, the file would show it rather than imply
+    // that every trial ran under the header's numbers.
+    numerics: null,
+  };
+
+  // Build the world at this value. applyPreset carries the parameter because
+  // it is a LAB_VARIABLE of this scenario and the scenario is not changing.
+  try {
+    settings[spec.parameter] = value;
+    host.initializeSimulation({ seed: spec.seed });
+  } catch (err) {
+    console.warn('Sweep trial failed to build:', err);
+    trial.status = SWEEP.TRIAL_STATUS.BUILD_FAILED;
+    trial.error = String(err?.message || err);
+    return trial;
+  }
+
+  // The value has to have survived the rebuild. If a scenario ever stops
+  // carrying it, every trial would silently run the same world and the sweep
+  // would report a flat line - which is a believable result and a false one.
+  const applied = settings[spec.parameter];
+  if (!Number.isFinite(applied) || Math.abs(applied - value) > 1e-9) {
+    trial.status = SWEEP.TRIAL_STATUS.BUILD_FAILED;
+    trial.error = `parameter did not survive the rebuild: asked ${value}, got ${applied}`;
+    return trial;
+  }
+
+  const found = resolveRoles(spec.roles);
+  if (!found.ok) {
+    trial.status = SWEEP.TRIAL_STATUS.BODIES_MISSING;
+    return trial;
+  }
+
+  const dtSim = host.frameAdvance(1 / 60, settings.sim_speed);
+  const stepping = host.substepPlan(dtSim, settings.max_timestep);
+  trial.numerics = {
+    integrator: settings.integrator,
+    simSpeed: settings.sim_speed,
+    maxTimestep: settings.max_timestep,
+    step: stepping.step,
+    substeps: stepping.substeps,
+    frameAdvance: dtSim,
+  };
+
+  const state = host.getState?.();
+  if (state) state.paused = false;
+  // A fixed step, so the trial is the same calculation on a fast machine and a
+  // slow one. Without it the number of integration steps in a trial depends on
+  // how long frames happened to take, and the sweep would be measuring the
+  // browser.
+  host.setFixedStep?.(1 / 60);
+
+  const samples = [];
+  const secondsPerDay = 86400 / timeUnitSeconds();
+  const startClock = getSimulationTime();
+  const take = () =>
+    samples.push(
+      sampleFrame({
+        t: getSimulationTime(),
+        bodies: found.bodies,
+        primary: found.primary,
+        conserved: conservedQuantities(),
+        drift: conservationDrift(),
+        secondsPerUnit: timeUnitSeconds(),
+        metrics: spec.metrics,
+      })
+    );
+
+  // The starting state, before anything has moved. Taken here rather than on
+  // the first animation frame because the render loop advances the world on
+  // its own frames: by the time a sampler scheduled with requestAnimationFrame
+  // first runs, one frame has already been integrated and the initial
+  // condition is gone. On a scenario whose frame covers 62.5 time units that
+  // is not a rounding - it was the whole first sixtieth of a short trial.
+  take();
+
+  let frames = 0;
+  await new Promise(resolve => {
+    const tick = () => {
+      if (cfg.abort.cancelled) return resolve();
+      take();
+      frames++;
+      if (frames >= cfg.frames || samples.length >= MAX_SAMPLES) {
+        return resolve();
+      }
+      cfg.onProgress?.({
+        trial: cfg.index,
+        total: cfg.total,
+        fraction: frames / cfg.frames,
+      });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+
+  host.setFixedStep?.(0);
+  if (state) state.paused = true;
+
+  trial.wallMs = performance.now() - startedAt;
+  trial.samples = samples.length;
+  trial.duration = getSimulationTime() - startClock;
+
+  if (cfg.abort.cancelled) {
+    trial.status = SWEEP.TRIAL_STATUS.CANCELLED;
+    return trial;
+  }
+
+  // A body that died mid-trial makes every later sample a measurement of a
+  // different system. Reported as its own outcome rather than as a number,
+  // because a collision IS the result at that value and averaging through it
+  // would hide the most interesting trial in the sweep.
+  if (
+    found.bodies.some(b => b.alive === false) ||
+    !resolveRoles(spec.roles).ok
+  ) {
+    trial.status = SWEEP.TRIAL_STATUS.LOST_BODY;
+    return trial;
+  }
+
+  const reduced = reduceRun(samples, spec.metrics, secondsPerDay);
+  for (const id of spec.metrics) trial.results[id] = reduced[id]?.value ?? null;
+  trial.kinds = Object.fromEntries(
+    spec.metrics.map(id => [id, reduced[id]?.kind ?? null])
+  );
+
+  if (!spec.metrics.some(id => Number.isFinite(trial.results[id]))) {
+    trial.status = SWEEP.TRIAL_STATUS.NOT_FINITE;
+  }
+  return trial;
+}
+
+/**
+ * Sweep one parameter across a row of values.
+ *
+ * @param {object} spec - scenario, parameter, from, to, count, duration,
+ *   metrics, seed
+ * @param {object} [opts] - `onProgress`, `onTrial`
+ * @returns {Promise<object>} The completed sweep, or a refusal
+ */
+export async function runSweep(spec, opts = {}) {
+  // The bench is normally initialised by its bridge before anything can reach
+  // this, but a direct import can get here first and a TypeError is a worse
+  // answer than a refusal.
+  if (!host) return { ok: false, reason: 'notReady' };
+  if (sweepAbort) return { ok: false, reason: 'alreadyRunning' };
+  if (phase === 'recording') return { ok: false, reason: 'recording' };
+
+  const check = SWEEP.validateSweepSpec(spec);
+  if (!check.ok) {
+    return { ok: false, reason: check.reason, detail: check.detail };
+  }
+
+  const entry = SWEEP.SWEEPABLE[spec.scenario];
+  const values = SWEEP.planValues(spec);
+  const seed = spec.seed || 'sweep';
+  const abort = { cancelled: false };
+  sweepAbort = abort;
+
+  // Everything the sweep is about to destroy. Each trial rebuilds the world,
+  // so unlike the other runs here there is no captured start to return to -
+  // the live world has to be photographed before the first build and put back
+  // after the last, whether the sweep finished or was stopped.
+  const settings = host.getSettings();
+  const savedSettings = { ...settings };
+  const savedWorld = host.captureShareState({
+    kind: 'full',
+    includeCamera: false,
+    forExperiment: true,
+  });
+  const savedPaused = host.getState?.()?.paused ?? false;
+  const startedAt = performance.now();
+
+  const trials = [];
+  try {
+    // One build before the first trial, so that applyPreset has seen this
+    // scenario. It carries the laboratory variables only when re-entering the
+    // same scenario, so without this the first trial's value would be reset to
+    // the scenario's own and the sweep would open with a duplicate point.
+    settings.preset_scenario = spec.scenario;
+    host.initializeSimulation({ seed });
+
+    // Advances, not samples: there is one sample before the first advance and
+    // one after each, so `frames` advances span frames * dtSim.
+    //
+    // Rounded rather than ceiled, and reported afterwards rather than assumed.
+    // A frame is 62.5 time units in the binary labs, so the achievable
+    // durations are multiples of that and a request for 40 cannot be honoured
+    // - it becomes 62.5. Silently running longer than asked and labelling the
+    // result with the request would misdescribe every short trial, so the
+    // sweep carries both numbers and the panel shows the one that happened.
+    const dtSim = host.frameAdvance(1 / 60, settings.sim_speed);
+    const frames = Math.max(1, Math.round(spec.duration / dtSim));
+    const achievedDuration = frames * dtSim;
+
+    for (let i = 0; i < values.length; i++) {
+      if (abort.cancelled) {
+        // The values that never ran are in the results as cancelled, not
+        // missing: a table that stopped at nine of twenty should say so.
+        trials.push({
+          index: i,
+          value: values[i],
+          status: SWEEP.TRIAL_STATUS.CANCELLED,
+          results: {},
+        });
+        continue;
+      }
+      const trial = await runSweepTrial({
+        spec: { ...spec, roles: entry.roles, seed },
+        value: values[i],
+        index: i,
+        total: values.length,
+        frames,
+        abort,
+        onProgress: opts.onProgress,
+      });
+      trials.push(trial);
+      opts.onTrial?.(trial);
+    }
+
+    const summaries = spec.metrics
+      .map(id => SWEEP.summarise(trials, id))
+      .filter(Boolean);
+
+    const result = {
+      ok: true,
+      scenario: spec.scenario,
+      parameter: spec.parameter,
+      values,
+      duration: achievedDuration,
+      requestedDuration: spec.duration,
+      frameAdvance: dtSim,
+      framesPerTrial: frames,
+      metrics: [...spec.metrics],
+      seed,
+      trials,
+      summaries,
+      counts: SWEEP.tally(trials),
+      cancelled: abort.cancelled,
+      wallMs: performance.now() - startedAt,
+      numerics: trials.find(tr => tr.numerics)?.numerics ?? null,
+      ranAt: new Date().toISOString(),
+    };
+    lastSweep = result;
+    return result;
+  } finally {
+    sweepAbort = null;
+    // The world the reader was looking at, whatever happened above.
+    host.applyShareState(JSON.parse(JSON.stringify(savedWorld)));
+    Object.assign(host.getSettings(), savedSettings);
+    updatePhysicsSettings(host.getSettings());
+    host.setFixedStep?.(0);
+    resetConservationBaseline();
+    const state = host.getState?.();
+    if (state) state.paused = savedPaused;
+  }
+}
+
+/** The most recent completed sweep, for the panel and the export. */
+let lastSweep = null;
+
+/** @returns {?object} The last sweep run in this session */
+export const latestSweep = () => lastSweep;
 
 /**
  * Put the world back to the experiment's captured start.
@@ -1131,6 +1489,16 @@ export function exportFiles(appVersion) {
     reliability: {
       name: `${stem}-reliability.json`,
       text: reliabilityJson(current, { appVersion }) ?? '',
+    },
+    sweep: {
+      name: `${lastSweep ? `${lastSweep.scenario}-${lastSweep.parameter}` : stem}
+        `
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .concat('-sweep.csv'),
+      text: sweepCsv(lastSweep).csv,
     },
   };
 }
