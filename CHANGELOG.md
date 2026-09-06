@@ -33,7 +33,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   Radial velocity measurements**: one row per measurement, carrying the
   uncertainty, the target and the observing configuration.
 - **Offline support.** A service worker precaches the application shell, the
-  <!--fact:scenarios-->57<!--/fact--> scenario thumbnails and all
+  <!--fact:scenarios-->58<!--/fact--> scenario thumbnails and all
   <!--fact:investigations-->15<!--/fact--> English lessons, so a class keeps
   working when the room's wifi drops. The cache name is a content hash, so a
   build invalidates it. See [OFFLINE_AND_LOW_END.md](OFFLINE_AND_LOW_END.md).
@@ -79,7 +79,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
   against a suite of <!--fact:physicsChecks-->243<!--/fact-->, and 48 scenarios
-  against a catalog of <!--fact:scenarios-->57<!--/fact-->.
+  against a catalog of <!--fact:scenarios-->58<!--/fact-->.
 
 ### Removed
 

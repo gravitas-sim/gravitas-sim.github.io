@@ -17,7 +17,7 @@ No account, no install, no server. It is a static site.
 
 ## What is in it
 
-**<!--fact:scenarios-->57<!--/fact--> built-in scenarios**, from the Solar
+**<!--fact:scenarios-->58<!--/fact--> built-in scenarios**, from the Solar
 System and TRAPPIST-1 to the GW150914 black-hole merger, a star torn apart by
 tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
@@ -162,7 +162,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->1819<!--/fact--> strings, and
+of <!--fact:uiStrings-->1712<!--/fact--> strings, and
 all <!--fact:investigations-->15<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -196,7 +196,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->2967<!--/fact--> tests across <!--fact:jestSuites-->76<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->2992<!--/fact--> tests across <!--fact:jestSuites-->77<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -212,10 +212,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->200<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->629<!--/fact--> KB           | <!--fact:buildStartupFiles-->42<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->2507<!--/fact--> KB         | <!--fact:buildDeferredChunks-->82<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->829<!--/fact--> KB** |                                               |
+| CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
+| JavaScript at start-up | <!--fact:buildStartupJs-->625<!--/fact--> KB           | <!--fact:buildStartupFiles-->42<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->2529<!--/fact--> KB         | <!--fact:buildDeferredChunks-->84<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->826<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -313,8 +313,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->429<!--/fact--> tests
-in <!--fact:e2eFiles-->37<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->439<!--/fact--> tests
+in <!--fact:e2eFiles-->38<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
@@ -395,7 +395,7 @@ published ones from the precision the reference is quoted to.
 
 The same checks run in `npm test`, so a physics regression fails a pull request.
 `npm run validate:scenarios` extends the conservation audit to
-all <!--fact:scenarios-->57<!--/fact--> shipped scenarios in a real browser, and
+all <!--fact:scenarios-->58<!--/fact--> shipped scenarios in a real browser, and
 names, per scenario, which documented departures it has switched on — static
 black holes, one-way gravity and the dark-matter halo all conserve less than the
 full model does, on purpose.
