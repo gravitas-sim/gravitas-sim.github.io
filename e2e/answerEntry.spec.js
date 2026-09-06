@@ -232,4 +232,91 @@ test.describe('in Spanish', () => {
       /bamboleo|estrella/i
     );
   });
+
+  test('switching language does not re-mark an answer already given', async ({
+    page,
+    app,
+  }) => {
+    // "0,69" is sixty-nine hundredths to a Spanish reader and, to an English
+    // one, either 69 or nothing. Storing only the text meant a later reader
+    // decided after the fact what the student had meant: it graded correct in
+    // the panel and incorrect in the PDF, which grades in English, and
+    // switching the interface language silently re-marked finished work.
+    //
+    // Opened as a student, not as an author, because an authoring preview
+    // writes nothing and what is being checked is exactly what gets written.
+    await app.boot();
+    await page.evaluate(async () => {
+      const i = await import('/js/i18n/index.js');
+      await i.setLocale('es');
+    });
+    await app.boot();
+
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation="radial-velocity"]').click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+
+    // Walk to the first numeric step through the interface.
+    for (let i = 0; i < 40; i++) {
+      if (await page.locator('[data-numeric]').count()) break;
+      const options = page.locator('#investigationBody .inv-option');
+      if (await options.count()) await options.first().click();
+      const boxes = page.locator('#investigationBody input[type="checkbox"]');
+      for (let b = 0; b < (await boxes.count()); b++) {
+        const box = boxes.nth(b);
+        if (!(await box.isChecked())) await box.check();
+      }
+      const fields = page.locator('#investigationBody input[data-field]');
+      for (let f = 0; f < (await fields.count()); f++) {
+        const field = fields.nth(f);
+        if (!(await field.inputValue())) await field.fill('1');
+      }
+      const next = page.locator('#investigationNext');
+      if (!(await next.isEnabled())) break;
+      await next.click();
+    }
+    await expect(answer(page)).toBeVisible();
+
+    // Answer with a decimal comma, and be told it is right.
+    const typed = await page.evaluate(async () => {
+      const reg = await import('/js/data/investigations/registry.js');
+      const lesson = await reg.loadInvestigation('radial-velocity');
+      const step = lesson.steps.find(
+        s => s.kind === 'numeric' && Number.isFinite(s.answer)
+      );
+      return { sid: step.sid, text: String(step.answer).replace('.', ',') };
+    });
+    await answer(page).fill(typed.text);
+    await check(page).click();
+    await expect(feedback(page)).toHaveClass(/is-right/);
+
+    // The convention is stored beside the text, so a later reader does not
+    // have to guess it.
+    const stored = await page.evaluate(sid => {
+      const raw = localStorage.getItem(
+        'gravitas_investigation_radial-velocity'
+      );
+      const data = raw ? JSON.parse(raw) : {};
+      const key = `radial-velocity:${sid}`;
+      return {
+        text: data.responses?.[key],
+        locale: data.responses?.[`${key}:locale`],
+      };
+    }, typed.sid);
+    expect(stored.text).toBe(typed.text);
+    expect(stored.locale).toBe('es');
+
+    // Switch the interface to English and reopen the lesson. The verdict on
+    // work already done must not move.
+    await page.evaluate(async () => {
+      const i = await import('/js/i18n/index.js');
+      await i.setLocale('en');
+    });
+    await app.boot();
+    await page.locator('#investigationsBtn').click();
+    await page.locator('[data-investigation="radial-velocity"]').click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(answer(page)).toBeVisible();
+    await expect(feedback(page)).toHaveClass(/is-right/);
+  });
 });

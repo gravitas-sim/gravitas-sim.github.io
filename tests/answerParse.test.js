@@ -1,11 +1,14 @@
 import { describe, test, expect } from '@jest/globals';
 import {
+  LOCALE_SUFFIX,
   PARSE_FAILURE,
   UNITS,
   decimalSeparatorFor,
+  localeOfAnswer,
   lookupUnit,
   parseAnswer,
   parseNumber,
+  recordAnswer,
 } from '../js/answerParse.js';
 import {
   AU_METERS,
@@ -332,5 +335,62 @@ describe('the unit table agrees with the project constants', () => {
     expect(lookupUnit('°')).toEqual({ dimension: 'angle', factor: 1 });
     expect(lookupUnit('parsnips')).toBeNull();
     expect(lookupUnit('')).toBeNull();
+  });
+});
+
+// =============================================================================
+// The convention an answer was written under
+//
+// "1,234" is 1234 in English and 1.234 in Spanish. Nothing in the string says
+// which, so the string alone is not a record of what a student answered. These
+// cover the storage side; tests/answerEntry.test.js covers the grading that
+// reads it and e2e/rvWorkspace.spec.js walks it through the panel.
+// =============================================================================
+
+describe('the locale an answer was stored under', () => {
+  test('the same text means different numbers under the two conventions', () => {
+    expect(parseNumber('1,234', 'en').value).toBe(1234);
+    expect(parseNumber('1,234', 'es').value).toBeCloseTo(1.234, 12);
+    expect(parseNumber('1.234', 'en').value).toBeCloseTo(1.234, 12);
+    expect(parseNumber('1.234', 'es').value).toBe(1234);
+  });
+
+  test('recordAnswer keeps the text exactly and the convention beside it', () => {
+    const responses = {};
+    recordAnswer(responses, 'tides:abc', ' 1,234 ', 'es');
+    // Untouched: the student's own text is what a report shows them, and
+    // trimming or reformatting it here would make the document disagree with
+    // what they remember typing.
+    expect(responses['tides:abc']).toBe(' 1,234 ');
+    expect(responses[`tides:abc${LOCALE_SUFFIX}`]).toBe('es');
+  });
+
+  test('a stored answer keeps its meaning when the interface changes language', () => {
+    const responses = {};
+    recordAnswer(responses, 'tides:abc', '1,234', 'es');
+    // The reader is English now. The answer is still Spanish.
+    const locale = localeOfAnswer(responses, 'tides:abc', 'en');
+    expect(locale).toBe('es');
+    expect(parseNumber(responses['tides:abc'], locale).value).toBeCloseTo(
+      1.234,
+      12
+    );
+  });
+
+  test('an answer stored before the sub-key existed falls back to the reader', () => {
+    // Legacy progress: text, no convention. There is nothing to recover, so it
+    // gets the current locale - which is what the panel always did to it. The
+    // point of the fallback is that the PDF now does the same thing rather
+    // than silently assuming English.
+    const legacy = { 'tides:abc': '1,234' };
+    expect(localeOfAnswer(legacy, 'tides:abc', 'es')).toBe('es');
+    expect(localeOfAnswer(legacy, 'tides:abc', 'en')).toBe('en');
+    expect(localeOfAnswer(legacy, 'tides:abc')).toBe('en');
+  });
+
+  test('a blank or non-string stored locale is not trusted', () => {
+    for (const bad of ['', null, 7, {}]) {
+      expect(localeOfAnswer({ 'k:s:locale': bad }, 'k:s', 'es')).toBe('es');
+    }
   });
 });

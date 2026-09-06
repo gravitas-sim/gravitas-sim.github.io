@@ -99,6 +99,7 @@ import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
+import { localeOfAnswer, recordAnswer } from './answerParse.js';
 import {
   helpTaken,
   hintsFor,
@@ -1512,7 +1513,9 @@ function renderStep() {
   if (step.kind === 'numeric') {
     const locked = saved !== undefined && saved !== '';
     const graded = locked
-      ? gradeAnswer(step, saved, { locale: getLocale() })
+      ? gradeAnswer(step, saved, {
+          locale: localeOfAnswer(responses, id, getLocale()),
+        })
       : null;
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
     parts.push(
@@ -2140,7 +2143,10 @@ function bindStepInputs() {
       if (responses[`${id}:first`] === undefined && numeric.value.trim()) {
         responses[`${id}:first`] = numeric.value;
       }
-      responses[id] = numeric.value;
+      // The text and the convention it was typed under, together. Storing the
+      // text alone let a later reader - the PDF, or the same panel after a
+      // language switch - decide that "1,234" had meant something else.
+      recordAnswer(responses, id, numeric.value, getLocale());
       attempts[id] = (attempts[id] || 0) + 1;
       save();
       renderStep();
@@ -2751,7 +2757,14 @@ async function generateReport() {
       startedAt,
       links,
       stepIdFor: stepId,
-      checkAnswer,
+      // Per answer, not per report. This used to be `checkAnswer` bare, which
+      // defaults to English, so every Spanish numeric answer was re-read under
+      // English rules on its way into the PDF and a student could be marked
+      // correct on screen and incorrect on the document they hand in.
+      checkAnswer: (step, value, key) =>
+        checkAnswer(step, value, {
+          locale: localeOfAnswer(responses, key, getLocale()),
+        }),
     });
 
     const slug = `${name

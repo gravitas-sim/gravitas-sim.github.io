@@ -73,7 +73,9 @@ const plain = text =>
  * @param {Array} opts.links - [{step, title, url}] states used by the lesson
  * @param {Object} [opts.plot] - {points, xLabel, yLabel, slope} to draw
  * @param {Function} opts.stepIdFor - index -> response key
- * @param {Function} opts.checkAnswer - (step, value) -> boolean|null
+ * @param {Function} opts.checkAnswer - (step, value, key) -> boolean|null.
+ *   The key is passed so the caller can grade under the locale the answer was
+ *   written in rather than under whatever is current.
  * @returns {Uint8Array} PDF bytes
  */
 export function buildLabReport({
@@ -190,7 +192,7 @@ export function buildLabReport({
     if (step.kind === 'choice') {
       const chosen =
         typeof value === 'number' ? step.options[value] : '(not answered)';
-      const right = checkAnswer(step, value);
+      const right = checkAnswer(step, value, id);
       if (right !== null && answered) {
         autoTotal++;
         if (right) autoRight++;
@@ -209,7 +211,7 @@ export function buildLabReport({
     }
 
     if (step.kind === 'numeric') {
-      const right = checkAnswer(step, value);
+      const right = checkAnswer(step, value, id);
       if (answered) {
         autoTotal++;
         if (right) autoRight++;

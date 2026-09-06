@@ -123,9 +123,9 @@ describe('boundaryVerdict', () => {
     expect(boundaryVerdict('circumstellar', critical, mu, e).side).toBe(
       'tooCloseToCall'
     );
-    expect(
-      boundaryVerdict('circumstellar', critical + 0.01, mu, e).side
-    ).toBe('tooCloseToCall');
+    expect(boundaryVerdict('circumstellar', critical + 0.01, mu, e).side).toBe(
+      'tooCloseToCall'
+    );
     // And the band is narrow: it does not swallow everything.
     expect(boundaryVerdict('circumstellar', critical + 0.05, mu, e).side).toBe(
       'expectedDisrupted'
@@ -219,9 +219,9 @@ describe('convergenceVerdict', () => {
   const at = (outcome, trustworthy = true) => ({ outcome, trustworthy });
 
   test('two trustworthy runs that agree license the outcome', () => {
-    expect(convergenceVerdict(at(OUTCOME.EJECTED), at(OUTCOME.EJECTED))).toEqual(
-      { converged: true, outcome: OUTCOME.EJECTED, reason: null }
-    );
+    expect(
+      convergenceVerdict(at(OUTCOME.EJECTED), at(OUTCOME.EJECTED))
+    ).toEqual({ converged: true, outcome: OUTCOME.EJECTED, reason: null });
   });
 
   test('an outcome that flips with the timestep is not an outcome', () => {

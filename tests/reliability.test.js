@@ -59,7 +59,9 @@ describe('when conservation means anything', () => {
   });
 
   test('a merger mid-run is a legitimate discontinuity, not a failure', () => {
-    const e = conservationExpectation(run({ bodyCount: 2, baselineBodyCount: 3 }));
+    const e = conservationExpectation(
+      run({ bodyCount: 2, baselineBodyCount: 3 })
+    );
     expect(e.status).toBe(CONSERVATION.NOT_EXPECTED);
     expect(e.reasons).toContain('caveat.bodyCountChanged');
   });
@@ -219,8 +221,16 @@ describe('an under-resolved encounter', () => {
 
 describe('legitimate nonconservative behaviour', () => {
   test('a merging scenario is not judged on its energy', () => {
-    const coarse = run({ step: 0.1, caveats: ['caveat.merging'], energyDrift: 0.4 });
-    const fine = run({ step: 0.05, caveats: ['caveat.merging'], energyDrift: 0.4 });
+    const coarse = run({
+      step: 0.1,
+      caveats: ['caveat.merging'],
+      energyDrift: 0.4,
+    });
+    const fine = run({
+      step: 0.05,
+      caveats: ['caveat.merging'],
+      energyDrift: 0.4,
+    });
     const r = reliabilityReport({
       coarse,
       fine,
@@ -248,7 +258,11 @@ describe('legitimate nonconservative behaviour', () => {
   test('orbital decay is nonconservative on purpose', () => {
     const r = reliabilityReport({
       coarse: run({ caveats: ['caveat.orbitDecay'], energyDrift: 0.05 }),
-      fine: run({ step: 0.05, caveats: ['caveat.orbitDecay'], energyDrift: 0.05 }),
+      fine: run({
+        step: 0.05,
+        caveats: ['caveat.orbitDecay'],
+        energyDrift: 0.05,
+      }),
       outcomeCoarse: 1.5,
       outcomeFine: 1.5,
     });

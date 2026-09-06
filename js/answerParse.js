@@ -170,6 +170,56 @@ export function decimalSeparatorFor(locale) {
 }
 
 /**
+ * The sub-key a numeric answer's input locale is stored under.
+ *
+ * A number is not self-describing. "1,234" is one thousand two hundred and
+ * thirty-four written in English and one point two three four written in
+ * Spanish, and the string alone cannot say which was meant - only the
+ * convention the person was typing under can. Storing the raw text and
+ * re-reading it later under whatever locale happens to be current therefore
+ * changes what a student said after they said it: the same answer was correct
+ * in the panel and wrong in the PDF, because the report graded in English
+ * while the panel graded in Spanish, and switching languages silently re-marked
+ * work that was already done.
+ *
+ * So the convention is stored with the answer and grading uses that.
+ */
+export const LOCALE_SUFFIX = ':locale';
+
+/**
+ * The locale one stored answer was written under.
+ *
+ * Falls back for answers stored before the sub-key existed. There is no way to
+ * recover what those were typed under, so they get the caller's current locale
+ * - which is what the panel already did to them, so nothing that was being
+ * graded one way starts being graded another. The report now does the same,
+ * which is the half that was inconsistent.
+ *
+ * @param {object} responses - The stored answers
+ * @param {string} key - The step's response key
+ * @param {string} [fallback] - For answers with no recorded locale
+ * @returns {string} The locale to interpret the answer under
+ */
+export function localeOfAnswer(responses, key, fallback = 'en') {
+  const stored = responses?.[`${key}${LOCALE_SUFFIX}`];
+  return typeof stored === 'string' && stored ? stored : fallback;
+}
+
+/**
+ * Store an answer together with the convention it was written under.
+ *
+ * @param {object} responses - The stored answers, mutated
+ * @param {string} key - The step's response key
+ * @param {string} raw - Exactly what was typed, unmodified
+ * @param {string} locale - The locale in force as it was typed
+ * @returns {void}
+ */
+export function recordAnswer(responses, key, raw, locale) {
+  responses[key] = raw;
+  responses[`${key}${LOCALE_SUFFIX}`] = String(locale || 'en');
+}
+
+/**
  * Read the numeric part of a string.
  *
  * Returns the number and whatever text followed it, so the caller can decide

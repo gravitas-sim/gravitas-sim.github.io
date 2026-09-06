@@ -26,7 +26,13 @@ const point = (day, rv, sigma = 1, quality = 'ok') => ({
 });
 
 /** A recording in the shape js/rvSurvey.js and the panel produce. */
-function recording({ period = 3.2, K = 45, gamma = 5, n = 24, step = 0.37 } = {}) {
+function recording({
+  period = 3.2,
+  K = 45,
+  gamma = 5,
+  n = 24,
+  step = 0.37,
+} = {}) {
   const points = Array.from({ length: n }, (_, i) => {
     const day = i * step;
     return point(day, gamma + K * Math.sin((2 * Math.PI * day) / period), 2);

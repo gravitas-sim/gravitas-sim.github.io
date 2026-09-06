@@ -1,0 +1,323 @@
+// =============================================================================
+// The RV workspace, reached the way a student reaches it
+// -----------------------------------------------------------------------------
+// e2e/rvWorkspace.spec.js hands the workspace a recording object directly. That
+// is a fine way to test the workspace and a useless way to test getting into
+// it, and the gap was not academic: the Analyse button's listener was
+// registered inside the Restart button's listener, so Analyse did nothing at
+// all until a student pressed Restart, and pressed Restart n times bound n
+// copies of the handler. Every unit test passed throughout.
+//
+// So this file touches nothing but the controls a student can see. Record with
+// the panel, press Analyse, drag the sliders, open the export dialog, download
+// the file, and check the numbers in it against the residuals in it.
+// =============================================================================
+
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { test, expect } from './fixtures.js';
+
+const OUT = join(process.cwd(), 'test-results', 'rv-launch');
+
+/** Open the RV panel on a scenario whose star is free to move. */
+async function openRv(page, app) {
+  await app.boot();
+  await app.loadScenario('Exoplanet Characterization Lab');
+  await app.waitForFrames(10);
+  await app.openPanel('toggleRadialVelocity', 'rvContainer');
+  await expect(page.locator('#rvCanvas')).toBeVisible();
+}
+
+/** Switch the synthetic run on, with a schedule. */
+async function startSurvey(page, { cadence, baseline, sigma, seed }) {
+  await page.locator('#rvSurveyEnabled').check();
+  await expect(page.locator('#rvSurveyFields')).toBeVisible();
+  await page.locator('#rvSurveyCadence').fill(String(cadence));
+  await page.locator('#rvSurveyBaseline').fill(String(baseline));
+  await page.locator('#rvSurveySigma').fill(String(sigma));
+  await page.locator('#rvSurveySeed').fill(String(seed));
+  await page.locator('#rvSurveySeed').blur();
+}
+
+/** Let the run collect at least `n` measurements. */
+async function collect(page, app, n) {
+  await expect
+    .poll(
+      async () =>
+        page.evaluate(async () => {
+          const rv = await import('/js/radialVelocity.js');
+          return rv.radialVelocitySurvey().measurements.length;
+        }),
+      { timeout: 30000 }
+    )
+    .toBeGreaterThanOrEqual(n);
+  await app.waitForFrames(2);
+}
+
+/** Record a short run and return once there is something to analyse. */
+async function record(page, app, opts = {}) {
+  await openRv(page, app);
+  await startSurvey(page, {
+    cadence: 0.05,
+    baseline: 0.6,
+    sigma: 3,
+    seed: 'launch-path',
+    ...opts,
+  });
+  await collect(page, app, 8);
+}
+
+test.describe('reaching the workspace', () => {
+  test('Analyse works on the first recording, with no Restart', async ({
+    page,
+    app,
+  }) => {
+    await record(page, app);
+
+    // The regression, in one line. Nothing has been restarted; the button is
+    // pressed exactly once, the way somebody who has just taken a recording
+    // would press it.
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+
+    // And it opened on the run that was showing, not on a blank workspace.
+    const used = await page.evaluate(async () => {
+      const ws = await import('/js/rvWorkspace.js');
+      return ws.analysis().used;
+    });
+    expect(used).toBeGreaterThanOrEqual(8);
+  });
+
+  test('the Analyse handler is registered exactly once, however many restarts', async ({
+    page,
+    app,
+  }) => {
+    // Counted at the source. Nothing in the DOM API reports how many listeners
+    // an element carries, so the tally is installed before the application
+    // boots and the application registers into it without knowing.
+    await page.addInitScript(() => {
+      window.__clickBinds = {};
+      const proto = window.EventTarget.prototype;
+      const real = proto.addEventListener;
+      proto.addEventListener = function (type, fn, opts) {
+        if (type === 'click' && this.id) {
+          window.__clickBinds[this.id] =
+            (window.__clickBinds[this.id] || 0) + 1;
+        }
+        return real.call(this, type, fn, opts);
+      };
+    });
+
+    await record(page, app);
+
+    const binds = page =>
+      page.evaluate(() => window.__clickBinds.rvAnalyse || 0);
+
+    // One, before anything has been restarted. This was zero: the listener
+    // lived inside the Restart handler and had never run.
+    expect(await binds(page)).toBe(1);
+
+    for (let i = 0; i < 3; i++) {
+      await page.locator('#rvSurveyRestart').click();
+      await collect(page, app, 8);
+    }
+
+    // Still one. It was four.
+    expect(await binds(page)).toBe(1);
+
+    // And it still opens on the run that is showing now.
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+    const used = await page.evaluate(async () => {
+      const ws = await import('/js/rvWorkspace.js');
+      return ws.analysis().used;
+    });
+    expect(used).toBeGreaterThanOrEqual(8);
+  });
+});
+
+test.describe('the sliders and the file', () => {
+  test('every model parameter moves the fit, and the export matches it', async ({
+    page,
+    app,
+  }) => {
+    await record(page, app);
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+
+    /** The RMS the panel is currently reporting. */
+    const shownRms = async () => {
+      const text = await page.locator('#rvFitStats').textContent();
+      const m = text.match(/RMS ([\d.]+)/);
+      return m ? Number(m[1]) : null;
+    };
+
+    // Every one of the four, through its own control. A slider that does not
+    // change the reported goodness of fit is a slider whose value is being
+    // discarded - which is exactly what happened while the panel scored a
+    // refit instead of the model on screen.
+    for (const key of ['period', 'K', 'phase', 'gamma']) {
+      const slider = page.locator(`#rvFit_${key}`);
+      await expect(slider).toBeVisible();
+      const rmsBefore = await shownRms();
+      const value = await slider.inputValue();
+      const step = Number(await slider.getAttribute('step')) || 0.01;
+      await slider.fill(String(Number(value) + step * 25));
+      await slider.dispatchEvent('input');
+      await page.waitForTimeout(80);
+      const rmsAfter = await shownRms();
+      expect(rmsAfter).not.toBeNull();
+      expect(Math.abs(rmsAfter - rmsBefore)).toBeGreaterThan(1e-9);
+    }
+
+    // Now export what is on screen, and check the file against itself.
+    const rmsOnScreen = await shownRms();
+
+    await app.railControl('exportDataBtn');
+    await page.locator('#exportDataBtn').click();
+    const dialog = page.locator('#dataExport');
+    await expect(dialog).toBeVisible();
+
+    const row = dialog.locator('[data-export="rvfit"]');
+    await expect(row).toBeVisible();
+
+    const download = page.waitForEvent('download');
+    await row.locator('button').click();
+    const path = join(OUT, 'fit.csv');
+    await (await download).saveAs(path);
+
+    const text = (await readFile(path, 'utf8')).replace(/^\uFEFF/, '');
+    const lines = text.trim().split(/\r?\n/);
+    const comments = lines.filter(l => l.startsWith('#'));
+    const table = lines.filter(l => !l.startsWith('#'));
+
+    // The row was reachable at all, which it was not while rvFitCsv returned a
+    // bare string: the dialog read `.rows` off it, found undefined, and wrote
+    // no file.
+    expect(table.length).toBeGreaterThan(1);
+
+    const header = table[0].split(',');
+    const iResidual = header.indexOf('residual_ms');
+    const iModel = header.indexOf('model_ms');
+    const iRv = header.indexOf('rv_ms');
+    expect(iResidual).toBeGreaterThan(-1);
+
+    const residuals = table.slice(1).map(l => {
+      const cells = l.split(',');
+      return {
+        residual: Number(cells[iResidual]),
+        model: Number(cells[iModel]),
+        rv: Number(cells[iRv]),
+      };
+    });
+
+    // Each residual is the observation minus the model in the same row.
+    for (const r of residuals) {
+      expect(r.residual).toBeCloseTo(r.rv - r.model, 4);
+    }
+
+    // And the RMS in the header is the RMS of those residuals - computed here
+    // from the file rather than read out of it, so that a header claiming one
+    // model while the rows describe another cannot pass.
+    const fromFile = Math.sqrt(
+      residuals.reduce((a, r) => a + r.residual * r.residual, 0) /
+        residuals.length
+    );
+    const stated = Number(
+      comments.find(c => c.startsWith('# residual_rms_ms:')).split(':')[1]
+    );
+    expect(stated).toBeCloseTo(fromFile, 3);
+
+    // The number on screen is the number in the file. These disagreed while
+    // the panel scored a refit and the residuals came from the trial.
+    expect(rmsOnScreen).toBeCloseTo(fromFile, 1);
+
+    // The convention behind any chi-square travels with it.
+    expect(text).toMatch(/# degrees_of_freedom:/);
+    expect(text).toMatch(/# parameters_estimated_from_data:/);
+  });
+});
+
+test.describe('recordings that are not clean', () => {
+  test('the first epoch carries noise like every other', async ({
+    page,
+    app,
+  }) => {
+    await record(page, app, { sigma: 20, seed: 'first-epoch' });
+
+    const first = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const m = rv.radialVelocitySurvey().measurements.filter(x => !x.missed);
+      return m.slice(0, 6).map(x => ({ rv: x.rv, truth: x.truth }));
+    });
+
+    expect(first.length).toBeGreaterThan(2);
+    // It used to be recorded raw, so this difference was exactly zero while
+    // every later epoch scattered by ~20 m/s. One point sitting perfectly on
+    // the truth is a hint no real observer gets.
+    expect(Math.abs(first[0].rv - first[0].truth)).toBeGreaterThan(1e-6);
+  });
+
+  test('degraded readings are held out of the fit and the count is shown', async ({
+    page,
+    app,
+  }) => {
+    await record(page, app);
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+
+    const shown = await page.evaluate(async () => {
+      const ws = await import('/js/rvWorkspace.js');
+      const a = ws.analysis();
+      return {
+        used: a.used,
+        degraded: a.excluded.degraded,
+        status: document.getElementById('rvFitStatus').textContent,
+      };
+    });
+
+    // Whatever the run produced, the panel's own count and the analysis agree,
+    // and any held-out readings are disclosed rather than quietly missing.
+    expect(shown.status).toMatch(new RegExp(`${shown.used}`));
+    if (shown.degraded > 0) {
+      expect(shown.status).toMatch(/interpolated|interpolad/i);
+    }
+  });
+
+  test('a recording that cannot be fitted says so instead of throwing', async ({
+    page,
+    app,
+  }) => {
+    await record(page, app);
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+
+    // Two points at the same instant: the normal equations are singular and
+    // there is no fit to be had. The panel must survive being asked.
+    const out = await page.evaluate(async () => {
+      const bridge = await import('/js/rvWorkspaceBridge.js');
+      await bridge.openRvWorkspace({
+        points: [
+          { day: 1, rv: 10, sigma: 1, quality: 'ok', missed: false },
+          { day: 1, rv: 12, sigma: 1, quality: 'ok', missed: false },
+          { day: 1, rv: 11, sigma: 1, quality: 'ok', missed: false },
+        ],
+        target: 'singular',
+        config: {},
+      });
+      const ws = await import('/js/rvWorkspace.js');
+      ws.snapToBestAtPeriod();
+      const a = ws.analysis();
+      return {
+        finitePeriod: Number.isFinite(ws.trialParameters().period),
+        scored: a.tooFew ? 'tooFew' : a.atTrial === null ? 'null' : 'scored',
+      };
+    });
+
+    expect(out.finitePeriod).toBe(true);
+    expect(['tooFew', 'null', 'scored']).toContain(out.scored);
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+    // The fixture fails this test on any console error or uncaught exception,
+    // so surviving to here is the assertion.
+  });
+});

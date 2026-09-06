@@ -32,7 +32,13 @@
  * 1: implicit (no `schema` key). Keyed by step index; `visited` and `stepIndex`
  *    are indices.
  * 2: keyed by step sid; `visited` is a list of sids and the position is
- *    `stepSid`.
+ *    `stepSid`. A numeric answer gained a `:locale` sub-key recording the
+ *    convention it was typed under. That was deliberately additive rather than
+ *    a version 3: a build without the sub-key reads such a payload correctly
+ *    apart from the locale, whereas bumping the version would make every older
+ *    build refuse an entire lesson's progress to fix one field. Answers stored
+ *    before it existed have no `:locale`, and the reader falls back - see
+ *    localeOfAnswer in js/answerParse.js.
  */
 export const PROGRESS_SCHEMA = 2;
 
