@@ -126,10 +126,45 @@ export function registerMessages(locale, messages) {
   // missing and warned about once. Now that it exists, forget that so a
   // genuine gap later is still reported.
   for (const id of Object.keys(messages)) missing.delete(id);
+
+  // Tell everything that shows text, exactly as a language change would.
+  //
+  // Registering is a change to the catalogue, and whether a panel rendered
+  // before or after its own strings arrived is a race nobody should have to
+  // reason about. It is winnable in the normal path - the bridges await this
+  // before importing their panel - and losable the moment anything drives a
+  // panel directly, which a lesson, a share link and the tests all do: the
+  // reset that triggers the bridge is dispatched synchronously, the bridge's
+  // await is not, so a caller that renders on the next line renders first and
+  // gets message ids.
+  //
+  // Announcing the change instead of relying on ordering removes the race
+  // rather than narrowing it. Only for the locale on screen: registering the
+  // other language's copy changes nothing anyone is looking at.
+  if (locale === current) notifyLocaleListeners();
 }
 
 let current = DEFAULT_LOCALE;
 const listeners = new Set();
+
+/**
+ * Tell everything that shows text that the catalogue it read from has changed.
+ *
+ * Called for a language change and for a late registration alike, because to
+ * a panel holding rendered strings the two are the same event.
+ *
+ * @returns {void}
+ */
+function notifyLocaleListeners() {
+  listeners.forEach(fn => {
+    try {
+      fn(current);
+    } catch (err) {
+      // One bad listener must not leave half the interface in the old language.
+      console.warn('[i18n] listener failed:', err);
+    }
+  });
+}
 
 /** @returns {string} The active locale id */
 export const getLocale = () => current;
@@ -317,14 +352,7 @@ export async function setLocale(id, { persist = true } = {}) {
     }
   }
 
-  listeners.forEach(fn => {
-    try {
-      fn(current);
-    } catch (err) {
-      // One bad listener must not leave half the interface in the old language.
-      console.warn('[i18n] listener failed:', err);
-    }
-  });
+  notifyLocaleListeners();
   window.dispatchEvent(
     new CustomEvent('gravitasLocaleChanged', {
       detail: { locale: current, changed },

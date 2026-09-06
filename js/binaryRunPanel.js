@@ -43,7 +43,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
-import { t } from './i18n/index.js';
+import { t, onLocaleChange } from './i18n/index.js';
 
 let enabled = false;
 let els = null;
@@ -395,6 +395,14 @@ export const lastFinishedRun = () => (previous ? { ...previous } : null);
 
 /** Wire the panel up. Called once at boot. */
 export function initBinaryRun() {
+  // The catalogue can arrive after this panel does. These strings are not in
+  // the start-up bundle, and although the bridge registers them before it
+  // imports this module, anything that drives the panel directly - a lesson, a
+  // share link, a test - can render before that await resolves and paint
+  // message ids. Redrawing when the catalogue changes removes the race rather
+  // than narrowing it, and is the same subscription a language switch needs.
+  onLocaleChange(() => render());
+
   const e = cacheElements();
   if (!e.container) return;
 

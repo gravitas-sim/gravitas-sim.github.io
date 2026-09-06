@@ -33,7 +33,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
-import { t } from './i18n/index.js';
+import { t, onLocaleChange } from './i18n/index.js';
 
 let enabled = false;
 let els = null;
@@ -227,6 +227,10 @@ export const currentReport = () => exportReport();
 
 /** Wire the panel up. Called once, when the chunk loads. */
 export function initRvWorkspacePanel() {
+  // The catalogue can arrive after this panel does; see the note on the same
+  // subscription in js/binaryRunPanel.js.
+  onLocaleChange(() => render());
+
   const e = cacheElements();
   if (!e.container) return;
 

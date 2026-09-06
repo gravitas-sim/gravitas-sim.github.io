@@ -160,11 +160,31 @@ test.describe('the sliders and the file', () => {
       const slider = page.locator(`#rvFit_${key}`);
       await expect(slider).toBeVisible();
       const rmsBefore = await shownRms();
-      const value = await slider.inputValue();
-      const step = Number(await slider.getAttribute('step')) || 0.01;
-      await slider.fill(String(Number(value) + step * 25));
+
+      // Moved with the control's own stepper rather than by writing a value.
+      // Two earlier attempts got this wrong in different ways: nudging by a
+      // fixed number of steps silently clamped near the top of a range, so the
+      // slider never moved and the assertion below was testing that nothing
+      // had happened; and computing a target arithmetically produced values
+      // off the slider's step grid, which the browser refuses outright.
+      // stepUp handles the grid and the bounds, and stepping the other way
+      // when it is already at the maximum handles the end.
+      const before = Number(await slider.inputValue());
+      const moved = await slider.evaluate(el => {
+        const start = Number(el.value);
+        for (let i = 0; i < 25; i++) el.stepUp();
+        if (Number(el.value) === start) {
+          for (let i = 0; i < 25; i++) el.stepDown();
+        }
+        return Number(el.value);
+      });
       await slider.dispatchEvent('input');
       await page.waitForTimeout(80);
+
+      // The control really did move, so a still RMS below means the value was
+      // ignored rather than that the test failed to press anything.
+      expect(moved).not.toBe(before);
+
       const rmsAfter = await shownRms();
       expect(rmsAfter).not.toBeNull();
       expect(Math.abs(rmsAfter - rmsBefore)).toBeGreaterThan(1e-9);
