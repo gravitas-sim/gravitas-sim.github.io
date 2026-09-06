@@ -102,6 +102,44 @@ export const DEFAULT_SETTINGS = {
   // How many binary periods to integrate before stopping and reporting. Not a
   // claim about stability at any length: see the outcome wording.
   binary_lab_periods: 20,
+
+  // --- The gravity assist laboratory ------------------------------------------
+  // A moving planet and a very light spacecraft, and nothing else in the
+  // isolated case. Same reasoning as the binary lab: the two shipped Slingshot
+  // scenarios are randomised fields of dozens of bodies under mutual gravity,
+  // which is fine to watch and impossible to interpret - there is no isolated
+  // encounter in them, no defined before and after, and no controlled impact
+  // parameter.
+  //
+  // The defaults were measured rather than chosen. At five Jupiter masses with
+  // the probe crossing at 0.461 units, an impact parameter of 40 turns it by
+  // 60.9 degrees and takes its inertial speed from 0.35 to 0.63; the same
+  // encounter on the other side takes it to 0.18. Closest approach is 23 units
+  // against a planet drawn at 2, so the pass is distant and well resolved.
+  assist_planet_mass: 5, // Jupiter masses
+  // How fast the planet moves through the inertial frame. Only used when there
+  // is no star; with one, the planet's speed is whatever its orbit gives it.
+  assist_planet_speed: 0.3,
+  // Radius of the planet's circular orbit about a star, or 0 for no star at
+  // all. Zero is the honest case for teaching the frame change: with no star
+  // the planet's frame is exactly inertial, so "the speed relative to the
+  // planet is unchanged" is exact rather than approximate.
+  assist_orbit_radius: 0,
+  // SIGNED, and the sign is the lesson: positive passes behind the planet and
+  // gains speed, negative passes in front and loses it.
+  assist_impact_parameter: 40,
+  assist_v_infinity: 0.461, // speed relative to the planet, far away
+  assist_approach_deg: 130.6, // direction of the incoming asymptote
+  // Where "before" and "after" are read, planet-to-spacecraft. The same
+  // distance on both legs, so the vis-viva correction is the same size on both
+  // and the two numbers being compared mean the same thing.
+  assist_gate: 4000,
+  // The spacecraft's mass as a fraction of the planet's. A real probe is 1e-25
+  // of a planet, which makes the recoil true and unreadable; at 1e-6 the
+  // planet's velocity change is 5e-7 - ten orders of magnitude above float
+  // noise, and still small enough that the test-particle scattering formula
+  // holds to far better than anything here is measured to.
+  assist_probe_mass_ratio: 1e-6,
   interactive_add: true,
   trail_length: 15,
   trail_style: 'Glow',

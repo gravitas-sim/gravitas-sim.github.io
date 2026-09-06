@@ -78,6 +78,7 @@ const LOADERS = {
   'when-orbits-lock': () => import('./when-orbits-lock.js'),
   'detect-this-planet': () => import('./detect-this-planet.js'),
   'binary-star-planets': () => import('./binary-star-planets.js'),
+  'gravity-assist': () => import('./gravity-assist.js'),
 };
 
 /**
@@ -106,6 +107,7 @@ const TRANSLATIONS = {
     'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
     'detect-this-planet': () => import('./es/detect-this-planet.js'),
     'binary-star-planets': () => import('./es/binary-star-planets.js'),
+    'gravity-assist': () => import('./es/gravity-assist.js'),
   },
 };
 

@@ -202,4 +202,18 @@ export const MANIFEST = [
     gradedCount: 17,
     objectiveCount: 5,
   },
+  {
+    id: 'gravity-assist',
+    title: 'Where Does a Gravity Assist Get Its Speed?',
+    subtitle:
+      'The same flyby, measured in two frames, with two different answers',
+    duration: '15-20 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, and find out why the two measurements disagree — and who actually paid.',
+    thumbnail: 'images/scenarios/gravity-assist-lab.webp',
+    stepCount: 16,
+    gradedCount: 8,
+    objectiveCount: 5,
+  },
 ];

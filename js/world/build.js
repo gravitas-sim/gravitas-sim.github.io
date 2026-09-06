@@ -29,6 +29,7 @@
 // =============================================================================
 
 import { CIRCUMBINARY, CIRCUMSTELLAR, systemLayout } from '../binaryOrbits.js';
+import { encounterState } from '../gravityAssist.js';
 import {
   EARTH_MASSES_PER_JUPITER_MASS,
   JUPITER_MASSES_PER_SOLAR_MASS,
@@ -2316,6 +2317,117 @@ export const buildWorld = ctx => {
     // drift would add itself to every member's speed and inflate the
     // dispersion, which is the one number the lesson turns on.
     zeroNetMomentum();
+  }
+
+  // --- Gravity Assist Lab / Gravity Assist: Heliocentric -----------------------
+  if (
+    starting_preset === 'Gravity Assist Lab' ||
+    starting_preset === 'Gravity Assist: Heliocentric'
+  ) {
+    stars.length = 0;
+    planets.length = 0;
+    gas_giants.length = 0;
+    asteroids.length = 0;
+    comets.length = 0;
+    bh_list.length = 0;
+    neutron_stars.length = 0;
+    white_dwarfs.length = 0;
+    debris.length = 0;
+
+    const G = SETTINGS.gravitational_constant;
+    const JUP_IN_SUNS = 1 / JUPITER_MASSES_PER_SOLAR_MASS;
+
+    const planetMass =
+      SETTINGS.assist_planet_mass * JUP_IN_SUNS * SOLAR_MASS_UNIT;
+    const mu = G * planetMass;
+    const orbitRadius = SETTINGS.assist_orbit_radius;
+    const hasStar = orbitRadius > 0;
+
+    // Where the planet is and how fast it is going. With a star it is on a
+    // circular orbit and its speed is not ours to choose; without one it
+    // drifts, and the speed is a stated parameter of the experiment.
+    let planetPos = { x: 0, y: 0 };
+    let planetVel = { x: SETTINGS.assist_planet_speed, y: 0 };
+    if (hasStar) {
+      const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
+      star.name = 'Star';
+      star.mass = SOLAR_MASS_UNIT;
+      star.massInSuns = 1;
+      star.radiusInSuns = 1;
+      star.luminosityInSuns = 1;
+      // Drawn far larger than life. At this zoom a true solar radius is under
+      // a pixel, and this scenario is about the shape of a path.
+      star.radius = 8;
+      star.temperature = 5772;
+      star.spectralType = 'G2V';
+      star.baseColor = '#ffd34d';
+      star.persistent = true;
+      stars.push(star);
+
+      planetPos = { x: orbitRadius, y: 0 };
+      // The pair's mass, not just the star's: the planet is a thousandth of a
+      // solar mass and ignoring it would start the orbit slightly eccentric.
+      const vCirc = Math.sqrt(
+        (G * (SOLAR_MASS_UNIT + planetMass)) / orbitRadius
+      );
+      planetVel = { x: 0, y: vCirc };
+    }
+
+    const planet = new GasGiant({ ...planetPos }, { ...planetVel });
+    planet.name = 'Planet';
+    planet.mass = planetMass;
+    planet.massInJupiters = SETTINGS.assist_planet_mass;
+    // A five-Jupiter planet is about one Jupiter radius across; drawn at 2
+    // units so it is visible, which is 40 times smaller than the closest the
+    // spacecraft comes on the default pass. The exaggeration therefore cannot
+    // reach the physics here the way it can in a tight binary: js/physics.js
+    // collides on the drawn radius, and no configuration this lesson uses gets
+    // within twenty times it.
+    planet.radiusInSuns = 0.102763;
+    planet.radius = 2;
+    planet.baseColor = '#c9a882';
+    planet.persistent = true;
+    gas_giants.push(planet);
+
+    // The spacecraft, placed on the encounter hyperbola from its elements so
+    // that the impact parameter and the speed at infinity are exact inputs.
+    // Pointing a probe at a planet from a finite distance and hoping gives a
+    // different b and a noticeably different vInf, and the comparison against
+    // theory would then be measuring the setup.
+    const state = encounterState({
+      mu,
+      b: SETTINGS.assist_impact_parameter,
+      vInf: SETTINGS.assist_v_infinity,
+      distance: SETTINGS.assist_gate,
+      approachDeg: SETTINGS.assist_approach_deg,
+    });
+
+    if (state) {
+      const probe = new Planet(
+        { x: planetPos.x + state.pos.x, y: planetPos.y + state.pos.y },
+        { x: planetVel.x + state.vel.x, y: planetVel.y + state.vel.y },
+        1
+      );
+      probe.name = 'Spacecraft';
+      probe.mass = planetMass * SETTINGS.assist_probe_mass_ratio;
+      // Drawn at 0.4 units: visible as a dot, and small enough that the sum of
+      // the two radii is set by the planet rather than by it.
+      probe.radius = 0.4;
+      probe.baseColor = '#e8f4ff';
+      probe.persistent = true;
+      planets.push(probe);
+    }
+
+    // Deliberately NOT zeroing the net momentum here, unlike every other hand
+    // built scenario in this file.
+    //
+    // The whole point of the isolated case is that the planet's velocity change
+    // is its recoil from the encounter. Re-centering the system on its
+    // barycenter would subtract a constant from both bodies, which changes
+    // nothing physical - but it would also mean the planet does not start at
+    // the speed the scenario says it does, and a student reading "the planet
+    // was moving at 2.8 km/s" off the settings and 2.7 off the inspector has
+    // been given a puzzle that is not the lesson's.
   }
 
   // --- Binary Planet Lab / Circumbinary Planet Lab -----------------------------

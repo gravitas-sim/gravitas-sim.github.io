@@ -76,6 +76,7 @@ const LAYERS = [
       /^js\/observerGeometry\.js$/,
       /^js\/binaryOrbits\.js$/,
       /^js\/binaryStability\.js$/,
+      /^js\/gravityAssist\.js$/,
       /^js\/chaos\//,
       /^js\/experiments\/align\.js$/,
       /^js\/resonance\//,

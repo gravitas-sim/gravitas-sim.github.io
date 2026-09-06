@@ -1203,6 +1203,14 @@ export const ES = {
   'scenario.Blended Binary.title': 'Binaria mezclada: una compañera oculta',
   'scenario.Blended Binary.summary':
     'La misma estrella y el mismo planeta que en el laboratorio de tránsitos, con una segunda estrella medio magnitud más débil situada a 300 AU: demasiado cerca en el cielo para que un telescopio de sondeo las separe, y muy dentro de una misma apertura fotométrica. Su luz rellena parte de la caída, así que el tránsito se mide menos profundo y el planeta parece más pequeño. Corregir este efecto es para lo que sirven los sondeos de imagen de alta resolución.',
+  'scenario.Gravity Assist Lab.title':
+    'Laboratorio de asistencia gravitatoria: un planeta, una nave y nada más',
+  'scenario.Gravity Assist Lab.summary':
+    'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una masa terrestre que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra completamente distinta respecto de todo lo demás.',
+  'scenario.Gravity Assist: Heliocentric.title':
+    'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
+  'scenario.Gravity Assist: Heliocentric.summary':
+    'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y el planeta se frena exactamente en el momento lineal que ella ganó. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
   'scenario.Binary Planet Lab.title':
     'Laboratorio de planeta en binaria: un planeta alrededor de una de las estrellas',
   'scenario.Binary Planet Lab.summary':
@@ -1462,6 +1470,44 @@ export const ES = {
   'rail.togglePauseAtEvent': 'Pausar en evento',
   // --- El panel de ejecución en binaria ----------------------------------------
   'binaryRun.close.hint': 'Ocultar el panel de ejecución en binaria',
+  // --- El panel de asistencia gravitatoria -------------------------------------
+  'assist.close.hint': 'Ocultar el panel de asistencia gravitatoria',
+  'assist.impact': 'Parámetro de impacto (+ por detrás, \u2212 por delante)',
+  'assist.run': 'Lanzarla',
+  'assist.flip': 'El otro lado',
+  'assist.planetFrame': 'Sistema del planeta',
+  'assist.side': 'Pasó',
+  'assist.side.leading': 'por delante del planeta',
+  'assist.side.trailing': 'por detrás del planeta',
+  'assist.closest': 'Máximo acercamiento',
+  'assist.closest.value': '{au} AU ({radii} radios planetarios)',
+  'assist.deflection': 'Desviada',
+  'assist.deflection.value':
+    '{measured}\u00b0 (dos cuerpos: {predicted}\u00b0)',
+  'assist.frame.planet': 'Respecto del planeta',
+  'assist.frame.inertial': 'Respecto de todo lo demás',
+  'assist.before': 'Antes',
+  'assist.after': 'Después',
+  'assist.change': 'Cambio',
+  'assist.change.value': '{delta} km/s ({percent}%)',
+  'assist.recoil': 'Lo que le costó al planeta',
+  'assist.recoil.value': '{dv} mm/s, o {ratio} de su propia velocidad',
+  'assist.ledger':
+    'La nave ganó {probe} de momento lineal y el planeta perdió {planet}: el mismo número con un {mismatch}% de diferencia. No se creó nada; se transfirió.',
+  'assist.maxDeltaV':
+    'Ningún sobrevuelo de este planeta a esta velocidad de aproximación puede cambiar la velocidad más de {max} km/s, que es el doble de la velocidad de aproximación y exige una inversión completa.',
+  'assist.status.idle': 'Sin empezar',
+  'assist.status.inbound': 'Acercándose',
+  'assist.status.outbound': 'Alejándose',
+  'assist.status.done': 'Sobrevuelo terminado',
+  'assist.status.lost': 'La nave no sobrevivió al paso',
+  'assist.caveat.pending':
+    'Hay una estrella presente, así que los números de la izquierda no coincidirán exactamente. Lo cerca que estén es la medida de la aproximación, y aparece aquí cuando termine el sobrevuelo.',
+  'assist.caveat.helio':
+    'La velocidad respecto del planeta cambió un {residual}% en este encuentro, y en la versión aislada no cambia nada en absoluto. Ese residuo es la aproximación: el planeta acelera, así que su sistema no es inercial, y la estrella también tira de la nave. Las lecturas se tomaron a {gate} AU, frente a un radio de Hill de {hill} AU: la distancia más allá de la cual lo que la nave orbita de verdad es la estrella y no el planeta. Esto es la aproximación de cónicas empalmadas, y es la que usan de verdad quienes diseñan misiones.',
+  'assist.hint':
+    'Las dos columnas describen el mismo encuentro en los mismos dos instantes. La de la izquierda no puede cambiar, porque en el sistema del propio planeta este no realiza trabajo sobre la nave. La de la derecha cambia porque se ha rotado un vector de longitud fija y luego se ha sumado a la velocidad del planeta. No se crea nada: el planeta se frena exactamente en el momento lineal que gana la nave.',
+
   'binaryRun.planetA': 'Inicio del planeta (a / a_binaria)',
   'binaryRun.periods': 'Periodos binarios a integrar',
   'binaryRun.timestep': 'Paso de integración',

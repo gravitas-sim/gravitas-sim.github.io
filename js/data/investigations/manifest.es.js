@@ -207,4 +207,18 @@ export const MANIFEST = [
     gradedCount: 17,
     objectiveCount: 5,
   },
+  {
+    id: 'gravity-assist',
+    title: '¿De dónde saca su velocidad una asistencia gravitatoria?',
+    subtitle:
+      'El mismo sobrevuelo, medido en dos sistemas de referencia, con dos respuestas distintas',
+    duration: '15-20 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
+    thumbnail: 'images/scenarios/gravity-assist-lab.webp',
+    stepCount: 16,
+    gradedCount: 8,
+    objectiveCount: 5,
+  },
 ];

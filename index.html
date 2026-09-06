@@ -514,6 +514,150 @@
       </p>
     </div>
 
+    <!-- 🛰 Gravity assist -->
+    <div
+      id="assistContainer"
+      class="obs-panel assist-container"
+      style="display: none"
+      role="region"
+      aria-labelledby="assistTitle"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title" id="assistTitle">Gravity Assist</span>
+          <span id="assistStatus" class="obs-panel-status">Not started</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="assistClose"
+            class="obs-panel-btn"
+            title="Hide the gravity assist panel"
+            data-i18n-title="assist.close.hint"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-form">
+        <label class="pause-event-field">
+          <span data-i18n="assist.impact"
+            >Impact parameter (+ behind, − ahead)</span
+          >
+          <input type="number" id="assistImpact" step="1" />
+        </label>
+        <div class="pause-event-actions">
+          <button id="assistRun" class="obs-panel-btn" type="button">
+            <span data-i18n="assist.run">Fly it</span>
+          </button>
+          <button id="assistFlip" class="obs-panel-btn" type="button">
+            <span data-i18n="assist.flip">Other side</span>
+          </button>
+          <button
+            id="assistPlanetFrame"
+            class="obs-panel-btn"
+            type="button"
+            aria-pressed="false"
+          >
+            <span data-i18n="assist.planetFrame">Planet's frame</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pause-event-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="assist.side">Passed</span>
+          <span id="assistSide" class="rv-readout-value">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="assist.closest"
+            >Closest approach</span
+          >
+          <span id="assistClosest" class="rv-readout-value numeric">—</span>
+        </div>
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="assist.deflection"
+            >Turned by</span
+          >
+          <span id="assistDeflection" class="rv-readout-value numeric">—</span>
+        </div>
+      </div>
+
+      <!-- The two columns are the explanation. Same encounter, same instants,
+           two answers, side by side rather than one after the other. -->
+      <div class="assist-frames">
+        <div class="assist-frame">
+          <h4 class="assist-frame-title" data-i18n="assist.frame.planet">
+            Relative to the planet
+          </h4>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.before"
+              >Before</span
+            >
+            <span id="assistRelBefore" class="rv-readout-value numeric">—</span>
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.after">After</span>
+            <span id="assistRelAfter" class="rv-readout-value numeric">—</span>
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.change"
+              >Change</span
+            >
+            <span id="assistRelChange" class="rv-readout-value numeric">—</span>
+          </div>
+        </div>
+        <div class="assist-frame">
+          <h4 class="assist-frame-title" data-i18n="assist.frame.inertial">
+            Relative to everything else
+          </h4>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.before"
+              >Before</span
+            >
+            <span id="assistInertBefore" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.after">After</span>
+            <span id="assistInertAfter" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+          <div class="rv-readout-cell">
+            <span class="rv-readout-label" data-i18n="assist.change"
+              >Change</span
+            >
+            <span id="assistInertChange" class="rv-readout-value numeric"
+              >—</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="pause-event-readout">
+        <div class="rv-readout-cell">
+          <span class="rv-readout-label" data-i18n="assist.recoil"
+            >What it cost the planet</span
+          >
+          <span id="assistRecoil" class="rv-readout-value numeric">—</span>
+        </div>
+      </div>
+
+      <p id="assistLedger" class="assist-ledger" role="status"></p>
+      <p id="assistCaveat" class="assist-caveat"></p>
+
+      <p class="obs-panel-hint" data-i18n="assist.hint">
+        The two columns describe the same encounter at the same two moments. The
+        left one cannot change, because the planet does no work on the
+        spacecraft in the planet's own frame. The right one changes because a
+        vector of fixed length has been rotated and then added to the planet's
+        velocity. Nothing is created: the planet is slowed by exactly the
+        momentum the spacecraft gains.
+      </p>
+    </div>
+
     <!-- 🪐 Binary planet run -->
     <div
       id="binaryRunContainer"
