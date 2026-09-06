@@ -346,15 +346,62 @@ export function buildPayload({
  * @returns {Promise<string>} Fragment text
  */
 export async function encodePayload(payload) {
+  return encodeTagged('', VERSION, payload);
+}
+
+/**
+ * Encode any object into a fragment, with a tag saying what it is.
+ *
+ * The deflate-or-not choice and the base64url alphabet are the same for every
+ * kind of link this application makes, and there is no reason for a second
+ * copy of either. The tag goes in front of the version so that a reader - and
+ * hasSharedLink() - can tell an assignment from a world without decoding it,
+ * and so that the world format stays exactly what it was: its tag is the empty
+ * string, which is what every link already in existence has.
+ *
+ * @param {string} tag - Kind marker, letters only; '' for a world
+ * @param {number} version - Schema version of the payload
+ * @param {Object} payload - Anything JSON can carry
+ * @returns {Promise<string>} Fragment text, without the '#'
+ */
+export async function encodeTagged(tag, version, payload) {
   const json = JSON.stringify(payload);
   const raw = new TextEncoder().encode(json);
   const packed = await deflate(raw);
   // Compression can lose on very short payloads: deflate has overhead and a
   // 120-byte seeded link has little to find. Keep whichever is shorter.
   if (packed && packed.length < raw.length) {
-    return `${VERSION}z${bytesToBase64Url(packed)}`;
+    return `${tag}${version}z${bytesToBase64Url(packed)}`;
   }
-  return `${VERSION}r${bytesToBase64Url(raw)}`;
+  return `${tag}${version}r${bytesToBase64Url(raw)}`;
+}
+
+/**
+ * Decode a tagged fragment, refusing one of the wrong kind.
+ *
+ * @param {string} tag - The kind expected
+ * @param {string} fragment - Text after the '#'
+ * @param {number} maxVersion - Highest schema this build understands
+ * @returns {Promise<{version: number, payload: Object}>} What it held
+ */
+export async function decodeTagged(tag, fragment, maxVersion) {
+  const text = String(fragment || '').replace(/^#/, '');
+  const pattern = new RegExp(`^${tag}(\\d+)([zr])([\\s\\S]*)$`);
+  const match = pattern.exec(text);
+  if (!match) throw new Error('wrongKind');
+  const version = Number(match[1]);
+  if (!(version >= 1)) throw new Error('wrongKind');
+  if (version > maxVersion) throw new Error('newerVersion');
+  const bytes = base64UrlToBytes(match[3]);
+  const raw = match[2] === 'z' ? await inflate(bytes) : bytes;
+  if (!raw) throw new Error('corrupt');
+  let payload;
+  try {
+    payload = JSON.parse(new TextDecoder().decode(raw));
+  } catch {
+    throw new Error('corrupt');
+  }
+  return { version, payload };
 }
 
 /**

@@ -446,4 +446,67 @@ export const EN_DEFERRED = {
   'sweep.guide.after':
     'Read where the measurement stops behaving smoothly - that is the boundary this scenario has, at this duration. A longer run can only move it inwards: an orbit that survived 20 binary periods has not been shown to survive 200.',
   'sweep.guide.run': 'Run the guided sweep',
+
+  // --- Classroom assignments --------------------------------------------------
+  // Every one of these is shown from a lazy chunk - the builder, the link
+  // bridge, or the lesson panel with an assignment open - so none of them has
+  // any business in a first-time visitor's download. Registered by
+  // ensureDeferredMessages() before any of those render.
+  'assign.title': 'Build an assignment',
+  'assign.hint':
+    'Choose the steps to set. Steps that build the world another step is about are added for you, and shown below where they land.',
+  'assign.close': 'Close',
+  'assign.name': 'Assignment name',
+  'assign.intro': 'Instructions for students (optional)',
+  'assign.selectAll': 'Select all',
+  'assign.selectNone': 'Clear',
+  'assign.count':
+    '{chosen} chosen, {included} included, of {total} in the lesson',
+  'assign.build': 'Make the link',
+  'assign.print': 'Printable instructions',
+  'assign.download': 'Save as a file',
+  'assign.link': 'Assignment link',
+  'assign.link.ok': 'A comfortable {n} characters.',
+  'assign.link.long':
+    'This link is {n} characters, above the {limit} that mail clients and course systems reliably carry. Fewer steps would shorten it; a truncated link fails at the student\u2019s end, where nobody can fix it.',
+  'assign.added.setup':
+    'Added: this builds the {scenario} world that \u201c{step}\u201d is about.',
+  'assign.added.summary':
+    '{n} step(s) were added because the steps you chose are about the worlds they build.',
+  'assign.subtitle': '{n} steps of {lesson} ({total} in the full lesson)',
+  'assign.print.steps': '{n} steps',
+  'assign.print.open': 'Open the assignment at this address:',
+  'assign.print.id': 'Assignment {id}, issued {date}.',
+
+  'assign.error.nothingSelected': 'Choose at least one step.',
+  'assign.error.noLesson': 'That lesson could not be read.',
+  'assign.error.unknownSteps':
+    'This assignment names steps the lesson does not have.',
+  'assign.error.tooManySteps': 'An assignment can hold at most {max} steps.',
+  'assign.error.titleTooLong': 'That name is too long.',
+  'assign.error.introTooLong': 'Those instructions are too long.',
+  'assign.error.notAnObject': 'That link does not contain an assignment.',
+  'assign.error.wrongKind': 'That link is not an assignment link.',
+  'assign.error.badVersion': 'That assignment link is malformed.',
+  'assign.error.newerVersion':
+    'That assignment was made by a newer version of Gravitas. Reload the page and try again.',
+  'assign.error.badLesson': 'That assignment does not name a lesson.',
+  'assign.error.badId': 'That assignment has no usable identifier.',
+  'assign.error.noSteps': 'That assignment contains no steps.',
+  'assign.error.badStepId':
+    'That assignment names a step in a form we cannot use.',
+  'assign.error.duplicateSteps': 'That assignment lists the same step twice.',
+  'assign.error.fingerprintMismatch': 'That assignment link is incomplete.',
+  'assign.error.badText': 'That assignment link is malformed.',
+  'assign.error.unexpectedField':
+    'That file carries a \u201c{field}\u201d field, which an assignment never has. It was not made by this tool and has not been opened.',
+  'assign.error.notJson': 'That file is not an assignment.',
+  'assign.error.corrupt':
+    'That link looks incomplete. Mail clients sometimes break long links across lines.',
+  'assign.error.noStepsLeft':
+    'None of this assignment\u2019s steps are in the lesson any more. It was probably set against an older version.',
+  'assign.notice.changed':
+    '{n} step(s) have been rewritten since this was set. Those start blank rather than showing an answer to a question that is no longer being asked.',
+  'assign.notice.missing':
+    '{n} step(s) are no longer in the lesson and have been left out.',
 };

@@ -73,6 +73,8 @@ const plain = text =>
  * @param {Array} opts.links - [{step, title, url}] states used by the lesson
  * @param {Object} [opts.plot] - {points, xLabel, yLabel, slope} to draw
  * @param {Function} opts.stepIdFor - index -> response key
+ * @param {?object} [opts.assignment] - The assignment payload, when this is one
+ * @param {?object} [opts.binding] - How its steps resolved against the lesson
  * @param {Function} opts.checkAnswer - (step, value, key) -> boolean|null.
  *   The key is passed so the caller can grade under the locale the answer was
  *   written in rather than under whatever is current.
@@ -89,6 +91,8 @@ export function buildLabReport({
   plot = null,
   stepIdFor,
   checkAnswer,
+  assignment = null,
+  binding = null,
 }) {
   const inv = investigation;
   const doc = createDocument({
@@ -109,8 +113,31 @@ export function buildLabReport({
     .row('Investigation', inv.id)
     .row('Started', dateText(startedAt))
     .row('Report generated', dateText(new Date().toISOString()))
-    .row('Steps completed', `${visited.size} of ${inv.steps.length}`)
-    .rule({ gap: 8 });
+    .row('Steps completed', `${visited.size} of ${inv.steps.length}`);
+
+  // --- Which activity this is ------------------------------------------------
+  // An assignment is a subset of a lesson, so "12 of 12 steps" on its own is
+  // ambiguous between a short activity finished and a long one misreported.
+  // The identification says which assignment, which of the lesson's steps were
+  // in it, and - when the lesson has moved on since - which of them no longer
+  // resolve. An instructor marking a stack of these needs to be able to tell
+  // two assignments cut from one lesson apart at a glance.
+  if (assignment) {
+    doc
+      .row(
+        'Assignment',
+        `${plain(assignment.t || assignment.i)} (${assignment.i})`
+      )
+      .row('Assignment version', `v${assignment.v}, issued ${assignment.c}`)
+      .row('Steps in this assignment', assignment.s.join(', '));
+    if (binding && (binding.changed || binding.missing)) {
+      doc.row(
+        'Since this was set',
+        `${binding.changed} step(s) rewritten, ${binding.missing} no longer in the lesson`
+      );
+    }
+  }
+  doc.rule({ gap: 8 });
 
   // --- Objectives ------------------------------------------------------------
   if (inv.objectives?.length) {

@@ -24,7 +24,7 @@ import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './notify.js';
 import { trapFocus } from './focusTrap.js';
 import { embedSnippet } from './embed.js';
-import { lessonInHash } from './investigationsLoader.js';
+import { assignmentInHash, lessonInHash } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 
 /** Releases the focus trap; set while the dialog is open. */
@@ -124,6 +124,11 @@ function watchForDivergence() {
     // unable to reload or bookmark their way back to it - and, when start-up
     // loses the race, on the sandbox instead of on the lesson.
     if (lessonInHash()) return;
+    // An assignment fragment is not a lesson fragment, so the test above does
+    // not see one, and the first scenario a step sets up would strip it -
+    // leaving a student unable to reload or bookmark the work they were set,
+    // which is exactly the failure the test above exists to prevent.
+    if (assignmentInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }

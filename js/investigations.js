@@ -101,6 +101,12 @@ import { buildLabReport, downloadPdf } from './labReport.js';
 import { checkAnswer, gradeAnswer, toleranceFor } from './answerCheck.js';
 import { localeOfAnswer, recordAnswer } from './answerParse.js';
 import {
+  assignmentStorageKey,
+  filterResponses,
+  stepBindings,
+} from './assignments/assignment.js';
+import { stepFingerprint } from './investigations/progressBackup.js';
+import {
   helpTaken,
   hintsFor,
   matchMisconception,
@@ -155,6 +161,36 @@ export const isAuthoringPreview = () => authoring !== null;
 // --- Persistence --------------------------------------------------------------
 
 const storageKey = id => `${STORAGE_PREFIX}${id}`;
+
+/**
+ * The assignment being worked through, if this is one rather than a lesson.
+ *
+ * A short activity cut from a lesson keeps its own answers: two assignments
+ * built from the same lesson are two pieces of work, and neither is the
+ * lesson. So the storage key comes from the assignment when there is one, and
+ * the lesson's own progress is left exactly as the student left it.
+ *
+ * @type {?object}
+ */
+let assignment = null;
+
+/** How the assignment's steps resolved against the lesson as it is today. */
+let assignmentBinding = null;
+
+/** @returns {?object} The assignment in force */
+export const activeAssignment = () => assignment;
+
+/** @returns {?object} How its steps bound to the current lesson */
+export const activeAssignmentBinding = () => assignmentBinding;
+
+/**
+ * Where this activity's progress lives.
+ *
+ * @param {string} id - Lesson id
+ * @returns {string} Storage key
+ */
+const progressKey = id =>
+  assignment ? assignmentStorageKey(assignment) : storageKey(id);
 
 /**
  * Whether the last write reached the disk, and what went wrong if not.
@@ -234,10 +270,10 @@ function save() {
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
-  sessionProgress.set(active.id, payload);
+  sessionProgress.set(progressKey(active.id), payload);
 
   try {
-    localStorage.setItem(storageKey(active.id), JSON.stringify(payload));
+    localStorage.setItem(progressKey(active.id), JSON.stringify(payload));
     setSaveState('saved');
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -472,11 +508,11 @@ function load(id, lesson = null) {
   // This tab first. It is written on every save and storage is not, so when the
   // two differ the session copy is the newer one - and when storage refused
   // every write, it is the only one there is.
-  let data = sessionProgress.get(id) ?? null;
+  let data = sessionProgress.get(progressKey(id)) ?? null;
 
   if (!data) {
     try {
-      const raw = localStorage.getItem(storageKey(id));
+      const raw = localStorage.getItem(progressKey(id));
       if (!raw) return null;
       data = JSON.parse(raw);
     } catch {
@@ -2306,19 +2342,49 @@ let openGeneration = 0;
  * @param {string} id - Investigation id
  * @returns {Promise<void>} Resolves once the lesson is open, or abandoned
  */
-export async function openInvestigation(id) {
+export async function openInvestigation(id, opts = {}) {
   const generation = ++openGeneration;
   // The one await in the panel's life. Everything below it runs against a
   // lesson that is fully in hand, so no other code path had to learn that a
   // lesson might not be there yet.
   const inv = await loadInvestigation(id);
   if (!inv || generation !== openGeneration) return;
-  active = inv;
+
+  // An assignment is the same lesson with most of its steps taken out. It is
+  // built here rather than being a second kind of thing the panel has to know
+  // about: everything below works on `active`, and `active.id` stays the
+  // lesson's, so a response key means the same question whether it was
+  // answered in the assignment or in the whole lesson.
+  assignment = opts.assignment ?? null;
+  assignmentBinding = null;
+  if (assignment) {
+    assignmentBinding = stepBindings(assignment, inv, stepFingerprint);
+    if (!assignmentBinding.usable) {
+      assignment = null;
+      assignmentBinding = null;
+      return { ok: false, reason: 'noStepsLeft' };
+    }
+    active = { ...inv, steps: assignmentBinding.steps };
+  } else {
+    active = inv;
+  }
   // In an authoring preview the saved progress is not read at all: an author is
   // shown a clean lesson rather than somebody's half-finished one, and reading
   // it would also mean the position they asked for could be silently overridden.
-  const saved = authoring ? null : load(id, inv);
+  const saved = authoring ? null : load(id, active);
   responses = saved?.responses || {};
+  if (assignment && saved?.responses) {
+    // A step rewritten under its own id since this assignment was made is a
+    // different question, and a stored answer to the old one is not an answer
+    // to it. Held back rather than shown, which is the whole point of
+    // carrying fingerprints in the payload.
+    const filtered = filterResponses(
+      assignmentBinding,
+      saved.responses,
+      sid => `${inv.id}:${sid}`
+    );
+    responses = filtered.kept;
+  }
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
@@ -2331,8 +2397,16 @@ export async function openInvestigation(id) {
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
-  els.title.textContent = inv.title;
-  els.subtitle.textContent = inv.subtitle;
+  els.title.textContent = assignment?.t || inv.title;
+  // The lesson it was cut from stays visible: a student should be able to see
+  // that this is eight steps of Tides rather than a thing called Week 3.
+  els.subtitle.textContent = assignment
+    ? t('assign.subtitle', {
+        lesson: inv.title,
+        n: active.steps.length,
+        total: inv.steps.length,
+      })
+    : inv.subtitle;
   document.body.classList.add('investigation-open');
   closeBrowser({ restoreFocus: false });
   // Focus follows the choice into the panel. Without this, closing the browser
@@ -2757,6 +2831,8 @@ async function generateReport() {
       startedAt,
       links,
       stepIdFor: stepId,
+      assignment,
+      binding: assignmentBinding,
       // Per answer, not per report. This used to be `checkAnswer` bare, which
       // defaults to English, so every Spanish numeric answer was re-read under
       // English rules on its way into the PDF and a student could be marked
@@ -3024,6 +3100,29 @@ export function initInvestigations() {
   // Everything in it - the bar, the diagnostics, the rules - is authoring
   // machinery, and the lazy boundary the lessons already use is the right
   // place for it.
+  // The assignment builder: ?assign=<lesson>. Lazy for the same reason as the
+  // authoring preview below - it is machinery for the person setting the work,
+  // not for the people doing it.
+  const assignMatch = /[?&]assign=([A-Za-z0-9_-]+)/.exec(window.location.href);
+  if (assignMatch) {
+    const lessonId = assignMatch[1];
+    if (!hasInvestigation(lessonId)) {
+      toast(t('inv.link.unknown'));
+    } else {
+      Promise.all([
+        loadInvestigation(lessonId),
+        import('./assignments/assignmentBuilder.js'),
+        import('./i18n/deferredMessages.js').then(m =>
+          m.ensureDeferredMessages()
+        ),
+      ])
+        .then(([loaded, builder]) => {
+          if (loaded) builder.openBuilder(loaded);
+        })
+        .catch(() => toast(t('inv.load.failed')));
+    }
+  }
+
   if (/[?&#]author=/.test(window.location.href)) {
     import('./authoring/preview.js')
       .then(preview => {

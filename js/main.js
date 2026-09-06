@@ -18,6 +18,10 @@ import { initObservationLayout } from './observationLayout.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
 import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
+import {
+  assignmentInHash,
+  watchForAssignments,
+} from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
@@ -322,7 +326,18 @@ document.addEventListener('DOMContentLoaded', () => {
         loadScenarioByKey(key);
       },
     });
-    if (hasSharedLink()) {
+    // An assignment link names a lesson rather than a world, so it is checked
+    // first and separately: the two fragments cannot be confused - a world's
+    // starts with a digit and an assignment's with 'a' - and an assignment
+    // still wants the default scenario built underneath it, because the lesson
+    // it opens will load whatever world its first step asks for.
+    // Both the link that is here now and any pasted into this tab later. The
+    // machinery that reads one is behind a dynamic import in the loader.
+    watchForAssignments();
+
+    if (assignmentInHash()) {
+      initialize_simulation();
+    } else if (hasSharedLink()) {
       // A link names its own scenario, so building the default one first would
       // be work thrown away — and on a heavy scenario that is a visible stall.
       // Decoding is async (the payload is deflated), so the loop starts on an

@@ -2502,4 +2502,6 @@ export const ES = {
   'inv.misconception.radiansForDegrees':
     'Eso parece el ángulo en radianes, y la pregunta pide grados.',
   'inv.answer.check': 'Comprobar',
+
+  // --- El generador de tareas para clase --------------------------------------
 };

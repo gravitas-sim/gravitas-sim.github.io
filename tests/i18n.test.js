@@ -286,7 +286,8 @@ describe('the catalogue split', () => {
     // somebody opened an unrelated panel.
     // reliability.* belongs here because the bench that shows it is itself
     // lazy: its bridge registers this catalogue before the panel renders.
-    const allowed = /^(binaryRun|assist|rvfit|exoW|reliability|bench|sweep)\./;
+    const allowed =
+      /^(binaryRun|assist|rvfit|exoW|reliability|bench|sweep|assign)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
   });
 });

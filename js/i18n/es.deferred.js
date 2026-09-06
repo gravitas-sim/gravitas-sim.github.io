@@ -449,4 +449,67 @@ export const ES_DEFERRED = {
   'sweep.guide.after':
     'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
   'sweep.guide.run': 'Ejecutar el barrido guiado',
+
+  // --- Tareas para clase --------------------------------------------------
+  // Every one of these is shown from a lazy chunk - the builder, the link
+  // bridge, or the lesson panel with an assignment open - so none of them has
+  // any business in a first-time visitor's download. Registered by
+  // ensureDeferredMessages() before any of those render.
+  'assign.title': 'Crear una tarea',
+  'assign.hint':
+    'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se anaden solos, y se indican donde corresponden.',
+  'assign.close': 'Cerrar',
+  'assign.name': 'Nombre de la tarea',
+  'assign.intro': 'Instrucciones para el alumnado (opcional)',
+  'assign.selectAll': 'Seleccionar todo',
+  'assign.selectNone': 'Limpiar',
+  'assign.count':
+    '{chosen} elegidos, {included} incluidos, de {total} de la leccion',
+  'assign.build': 'Crear el enlace',
+  'assign.print': 'Instrucciones imprimibles',
+  'assign.download': 'Guardar como archivo',
+  'assign.link': 'Enlace de la tarea',
+  'assign.link.ok': 'Son {n} caracteres, un tamano comodo.',
+  'assign.link.long':
+    'Este enlace tiene {n} caracteres, por encima de los {limit} que los clientes de correo y las plataformas de curso transportan con fiabilidad. Con menos pasos seria mas corto; un enlace truncado falla en el lado del alumnado, donde nadie puede arreglarlo.',
+  'assign.added.setup':
+    'Anadido: construye el mundo {scenario} del que trata \u201c{step}\u201d.',
+  'assign.added.summary':
+    'Se anadieron {n} paso(s) porque los que elegiste tratan sobre los mundos que estos construyen.',
+  'assign.subtitle': '{n} pasos de {lesson} ({total} en la leccion completa)',
+  'assign.print.steps': '{n} pasos',
+  'assign.print.open': 'Abre la tarea en esta direccion:',
+  'assign.print.id': 'Tarea {id}, emitida el {date}.',
+
+  'assign.error.nothingSelected': 'Elige al menos un paso.',
+  'assign.error.noLesson': 'No se pudo leer esa leccion.',
+  'assign.error.unknownSteps':
+    'Esta tarea nombra pasos que la leccion no tiene.',
+  'assign.error.tooManySteps': 'Una tarea admite como maximo {max} pasos.',
+  'assign.error.titleTooLong': 'Ese nombre es demasiado largo.',
+  'assign.error.introTooLong': 'Esas instrucciones son demasiado largas.',
+  'assign.error.notAnObject': 'Ese enlace no contiene una tarea.',
+  'assign.error.wrongKind': 'Ese enlace no es un enlace de tarea.',
+  'assign.error.badVersion': 'Ese enlace de tarea esta mal formado.',
+  'assign.error.newerVersion':
+    'Esa tarea se creo con una version mas nueva de Gravitas. Recarga la pagina e intentalo de nuevo.',
+  'assign.error.badLesson': 'Esa tarea no nombra ninguna leccion.',
+  'assign.error.badId': 'Esa tarea no tiene un identificador utilizable.',
+  'assign.error.noSteps': 'Esa tarea no contiene ningun paso.',
+  'assign.error.badStepId':
+    'Esa tarea nombra un paso en un formato que no podemos usar.',
+  'assign.error.duplicateSteps': 'Esa tarea lista el mismo paso dos veces.',
+  'assign.error.fingerprintMismatch': 'Ese enlace de tarea esta incompleto.',
+  'assign.error.badText': 'Ese enlace de tarea esta mal formado.',
+  'assign.error.unexpectedField':
+    'Ese archivo lleva un campo \u201c{field}\u201d, que una tarea nunca tiene. No lo creo esta herramienta y no se ha abierto.',
+  'assign.error.notJson': 'Ese archivo no es una tarea.',
+  'assign.error.corrupt':
+    'Ese enlace parece incompleto. Algunos clientes de correo parten los enlaces largos en varias lineas.',
+  'assign.error.noStepsLeft':
+    'Ninguno de los pasos de esta tarea sigue en la leccion. Probablemente se creo con una version anterior.',
+  'assign.notice.changed':
+    'Se han reescrito {n} paso(s) desde que se asigno esto. Esos empiezan en blanco en lugar de mostrar una respuesta a una pregunta que ya no se hace.',
+  'assign.notice.missing':
+    'Ya no hay {n} paso(s) en la leccion y se han dejado fuera.',
 };

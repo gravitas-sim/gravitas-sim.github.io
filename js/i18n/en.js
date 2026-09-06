@@ -2482,4 +2482,8 @@ export const EN = {
   'inv.misconception.radiansForDegrees':
     'That looks like the angle in radians, and the question asks for degrees.',
   'inv.answer.check': 'Check',
+
+  // --- The classroom assignment builder ---------------------------------------
+  // Kept in the base catalogue rather than the deferred one: a student opening
+  // an assignment link meets these strings at boot, before any panel loads.
 };
