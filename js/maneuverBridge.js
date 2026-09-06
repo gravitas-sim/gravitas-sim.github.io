@@ -54,5 +54,22 @@ export async function openManeuverFor(bodyId = null) {
   planner.openManeuverPlanner(bodyId);
 }
 
+/**
+ * Listen for the inspector asking for the planner. Called once from start-up.
+ *
+ * The listener is what keeps the dependency one-way: ui.js announces, this
+ * module answers, and nothing in the coordinator has to know that the planner
+ * exists.
+ *
+ * @returns {void}
+ */
+export function watchForManeuver() {
+  window.addEventListener('gravitasManeuverRequested', event => {
+    openManeuverFor(event.detail?.bodyId ?? null).catch(err =>
+      console.error('The manoeuvre planner could not be loaded:', err)
+    );
+  });
+}
+
 /** @returns {boolean} Whether the planner has been loaded */
 export const maneuverPlannerLoaded = () => loading !== null;

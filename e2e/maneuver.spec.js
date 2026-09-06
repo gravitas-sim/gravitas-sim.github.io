@@ -200,7 +200,11 @@ test.describe('undo', () => {
     app,
   }) => {
     await openPlanner(page, app);
-    await app.waitForFrames(150);
+    // A long enough history that the reset is unambiguous. The clock starts
+    // climbing again the instant the world is restored - five simulation units
+    // a frame here - so a short history is overtaken before the test can read
+    // it, which is what made an earlier version of this check race.
+    await app.waitForFrames(400);
 
     // The timeline's own clock rather than its frame count. The recorder
     // throttles captures on simulated time, and this scenario runs fast enough
@@ -216,15 +220,21 @@ test.describe('undo', () => {
     await page.locator('#maneuverTransverse').dispatchEvent('input');
     await page.locator('#maneuverApply').click();
     await page.locator('#maneuverUndo').click();
-    await page.waitForTimeout(200);
 
-    const clockAfter = await page.evaluate(async () => {
-      const tl = await import('/js/timeline.js');
-      return tl.getSimClock();
-    });
+    // Polled rather than waited on: the restore is asynchronous, and the
+    // window in which the clock is below where it was is bounded.
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async () => {
+            const tl = await import('/js/timeline.js');
+            return tl.getSimClock();
+          }),
+        { timeout: 5000, intervals: [50] }
+      )
+      .toBeLessThan(clockBefore);
     // Restoring re-initialises the world, so the recorded history - which
     // describes a future that has been discarded - goes with it.
-    expect(clockAfter).toBeLessThan(clockBefore);
   });
 });
 

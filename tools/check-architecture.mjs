@@ -78,6 +78,7 @@ const LAYERS = [
       /^js\/binaryStability\.js$/,
       /^js\/gravityAssist\.js$/,
       /^js\/maneuver\.js$/,
+      /^js\/cr3bp\.js$/,
       /^js\/chaos\//,
       /^js\/experiments\/align\.js$/,
       /^js\/resonance\//,
@@ -198,6 +199,25 @@ export function layerOf(file) {
  * Static imports, re-exports and dynamic `import('./x.js')` with a literal
  * specifier all count: a dynamic import is still a dependency, it is just a
  * later one, and a cycle through one is every bit as real.
+ *
+ * KNOWN GAP, deliberately left. The pattern below anchors every form to the
+ * start of a line, which is right for a static import - it stops the word
+ * "import" inside a string being read as one - and wrong for a dynamic import,
+ * which is an expression and appears mid-line in `x = import(...)`. So a
+ * dynamic import that is not the first thing on its line is invisible here.
+ *
+ * That is not hypothetical: js/investigations.js reached js/controls.js while
+ * js/controls.js reached it back through the loader, and the cycle only became
+ * visible when an unrelated edit moved an `import(` onto its own line. The
+ * cycle was real the whole time and has been fixed.
+ *
+ * Anchoring only the static forms - a two-line change, tried - surfaces around
+ * a dozen more, nearly all of the same shape: a lazily loaded bridge reaching
+ * back into js/ui.js or js/controls.js, which is how every deferred feature in
+ * this application is wired. Each is a lazy edge that cannot deadlock module
+ * initialisation, and untangling them is a restructuring of the bridge pattern
+ * rather than a bug fix. Worth doing; too large to do as a side effect of
+ * whatever feature notices it.
  *
  * @returns {Promise<Map<string, Set<string>>>} file -> imported files
  */

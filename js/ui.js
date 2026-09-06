@@ -5995,15 +5995,19 @@ document.getElementById('inspectorDelete').onclick = deleteSelectedObject;
 // abstract. Lazy - most visitors never plan one.
 const inspectorManeuverBtn = document.getElementById('inspectorManeuver');
 if (inspectorManeuverBtn) {
-  inspectorManeuverBtn.onclick = async () => {
+  // An event rather than an import. ui.js is the coordinator and the bridge
+  // reaches back into it for captureShareState and the settings, so importing
+  // the bridge from here - even lazily - puts the two in a cycle. The bridge
+  // listens for this instead, which is the same shape as the bench's rail
+  // button and leaves the dependency pointing one way.
+  inspectorManeuverBtn.onclick = () => {
     const target = state.selectedObject?.object;
     if (!target) return;
-    try {
-      const { openManeuverFor } = await import('./maneuverBridge.js');
-      await openManeuverFor(target.id);
-    } catch (err) {
-      console.error('The manoeuvre planner could not be loaded:', err);
-    }
+    window.dispatchEvent(
+      new CustomEvent('gravitasManeuverRequested', {
+        detail: { bodyId: target.id },
+      })
+    );
   };
 }
 setupReferenceFrameControl();

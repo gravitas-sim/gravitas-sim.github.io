@@ -23,6 +23,7 @@ import {
   watchForAssignments,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
+import { watchForManeuver } from './maneuverBridge.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
 import { initScenarioBrowser } from './scenarioBrowser.js';
@@ -331,6 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // starts with a digit and an assignment's with 'a' - and an assignment
     // still wants the default scenario built underneath it, because the lesson
     // it opens will load whatever world its first step asks for.
+    // The inspector's burn button, answered from outside ui.js.
+    watchForManeuver();
+
     // Both the link that is here now and any pasted into this tab later. The
     // machinery that reads one is behind a dynamic import in the loader.
     watchForAssignments();

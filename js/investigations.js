@@ -94,7 +94,12 @@ import {
 } from './lightCurve.js';
 import { encodePayload, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
-import { toast, announce } from './controls.js';
+// From js/notify.js rather than through js/controls.js, which only re-exports
+// them. Going through controls put this module in a cycle - controls
+// dynamic-imports the loader, the loader dynamic-imports this - and although
+// every edge in it was lazy, a cycle that exists only because of a convenience
+// re-export is not one worth keeping.
+import { toast, announce } from './notify.js';
 import { buildLabReport, downloadPdf } from './labReport.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
