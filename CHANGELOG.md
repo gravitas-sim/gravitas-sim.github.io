@@ -43,7 +43,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->431<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->441<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

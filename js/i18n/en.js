@@ -2032,6 +2032,38 @@ export const EN = {
   'exoW.modeledHabitableZone': 'Modeled habitable zone',
   'exoW.thisPlanetIs': 'This planet is',
   // --- Can You Detect This Planet? -------------------------------------------
+  // --- The transit noise budget -----------------------------------------------
+  'exoW.whatSwampsATransit': 'What a transit is competing with',
+  'exoW.whatSwampsATransit.note':
+    'Photon noise is quoted per hour and averages down over the whole in-transit time. The other two are correlated on the timescale of a transit and do not average down at all.',
+  'exoW.transitDepth': 'Transit depth',
+  'exoW.photonNoise': 'Photon and read noise',
+  'exoW.stellarNoise': 'Starspots and granulation',
+  'exoW.instrumentNoise': 'Instrument and atmosphere',
+  'exoW.transitDuration': 'Transit duration',
+  'exoW.transitsObserved': 'Transits observed',
+  'exoW.ppmAxis': 'parts per million',
+  'exoW.depthMarker': 'depth',
+  'exoW.depthOverNoise': 'depth / noise = {ratio}',
+  'exoW.noise.photon': 'photon',
+  'exoW.noise.stellar': 'stellar',
+  'exoW.noise.instrument': 'instrument',
+  'exoW.noise.total': 'total',
+  'exoW.preset.hotJupiterKepler': 'Hot Jupiter, Kepler',
+  'exoW.preset.hotJupiterKepler.note':
+    'A HAT-P-7 b-like hot Jupiter: 6,400 ppm deep, a four-hour transit, and six hundred of them over four years from a stable platform above the atmosphere. The easy end of the problem.',
+  'exoW.preset.sameFromTheGround': 'Same planet, from the ground',
+  'exoW.preset.sameFromTheGround.note':
+    'The identical planet and the identical depth, through air. Scintillation and airmass trends are correlated on exactly the timescale of a transit, so they set a floor that more nights cannot lower.',
+  'exoW.preset.superEarthTess': 'Super-Earth, TESS',
+  'exoW.preset.superEarthTess.note':
+    'Pi Mensae c: twice Earth\u2019s radius around a naked-eye star, 290 ppm. A real TESS detection, and not a comfortable one.',
+  'exoW.preset.rockyTess': 'Rocky planet in the habitable zone, TESS',
+  'exoW.preset.rockyTess.note':
+    'TOI-700 d: about Earth\u2019s size, but around a small red star, so the depth is a respectable 550 ppm. The difficulty is a 37-day period \u2014 roughly one transit per TESS sector, and it took a year of them.',
+  'exoW.preset.earthTwin': 'Earth twin, TESS',
+  'exoW.preset.earthTwin.note':
+    'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
   'exoW.whatYourScheduleSees': 'What your schedule sees',
   'exoW.theDashedCurveIsTheTruth':
     'The dashed curve is the planet as the simulation knows it, drawn here to teach. A real survey has only the points.',

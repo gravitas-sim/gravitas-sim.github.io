@@ -2042,6 +2042,38 @@ export const ES = {
   'exoW.modeledHabitableZone': 'Zona habitable modelada',
   'exoW.thisPlanetIs': 'Este planeta está',
   // --- ¿Puedes detectar este planeta? ----------------------------------------
+  // --- El presupuesto de ruido de un tránsito ----------------------------------
+  'exoW.whatSwampsATransit': 'Contra qué compite un tránsito',
+  'exoW.whatSwampsATransit.note':
+    'El ruido de fotones se da por hora y se promedia a lo largo de todo el tiempo en tránsito. Los otros dos están correlacionados en la escala de tiempo de un tránsito y no se promedian en absoluto.',
+  'exoW.transitDepth': 'Profundidad del tránsito',
+  'exoW.photonNoise': 'Ruido de fotones y lectura',
+  'exoW.stellarNoise': 'Manchas y granulación estelar',
+  'exoW.instrumentNoise': 'Instrumento y atmósfera',
+  'exoW.transitDuration': 'Duración del tránsito',
+  'exoW.transitsObserved': 'Tránsitos observados',
+  'exoW.ppmAxis': 'partes por millón',
+  'exoW.depthMarker': 'profundidad',
+  'exoW.depthOverNoise': 'profundidad / ruido = {ratio}',
+  'exoW.noise.photon': 'fotones',
+  'exoW.noise.stellar': 'estelar',
+  'exoW.noise.instrument': 'instrumento',
+  'exoW.noise.total': 'total',
+  'exoW.preset.hotJupiterKepler': 'Júpiter caliente, Kepler',
+  'exoW.preset.hotJupiterKepler.note':
+    'Un Júpiter caliente tipo HAT-P-7 b: 6.400 ppm de profundidad, un tránsito de cuatro horas y seiscientos de ellos en cuatro años desde una plataforma estable por encima de la atmósfera. El extremo fácil del problema.',
+  'exoW.preset.sameFromTheGround': 'El mismo planeta, desde tierra',
+  'exoW.preset.sameFromTheGround.note':
+    'El mismo planeta y la misma profundidad, a través del aire. El centelleo y las tendencias con la masa de aire están correlacionados justo en la escala de tiempo de un tránsito, así que fijan un suelo que más noches no pueden bajar.',
+  'exoW.preset.superEarthTess': 'Supertierra, TESS',
+  'exoW.preset.superEarthTess.note':
+    'Pi Mensae c: el doble del radio terrestre alrededor de una estrella visible a simple vista, 290 ppm. Una detección real de TESS, y no precisamente cómoda.',
+  'exoW.preset.rockyTess': 'Planeta rocoso en la zona habitable, TESS',
+  'exoW.preset.rockyTess.note':
+    'TOI-700 d: del tamaño de la Tierra, pero alrededor de una estrella roja pequeña, así que la profundidad es unos respetables 550 ppm. La dificultad es un periodo de 37 días: aproximadamente un tránsito por sector de TESS, y costó un año de ellos.',
+  'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
+  'exoW.preset.earthTwin.note':
+    'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
   'exoW.whatYourScheduleSees': 'Lo que ve tu calendario',
   'exoW.theDashedCurveIsTheTruth':
     'La curva discontinua es el planeta tal como lo conoce la simulación, dibujada aquí para enseñar. Un sondeo real solo tiene los puntos.',

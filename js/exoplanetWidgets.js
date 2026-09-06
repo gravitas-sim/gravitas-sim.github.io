@@ -1673,6 +1673,342 @@ const surveySchedule = {
 };
 
 /** Every instrument this lesson uses. */
+// =============================================================================
+// The transit noise budget
+// -----------------------------------------------------------------------------
+// Why a transit that is definitely there is often not findable.
+//
+// A transit is a box a few hundred parts per million deep. Whether you can see
+// it is a race between that depth and everything else that makes a star's
+// brightness wobble, and the instructive part is that the competitors do not
+// behave alike:
+//
+//   white noise   photons and readout. Averages down as the square root of the
+//                 time spent, so more observing always helps.
+//   red noise     starspots, granulation, thermal drifts, pointing jitter.
+//                 Correlated on hours, which is exactly the timescale of a
+//                 transit, so it does NOT average down and more observing does
+//                 not help at all.
+//
+// That distinction is the whole point of the widget. A student who has only met
+// "signal to noise goes as root N" will predict that any planet can be found by
+// waiting, and the red-noise floor is where that prediction dies. It is also
+// why the same planet is trivial from space and impossible from the ground:
+// the depth has not changed, the floor has.
+//
+// The presets are real systems, and the numbers are the published ones. Two of
+// them are meant to be discouraging: an Earth twin at 84 ppm is not detectable
+// by TESS around a Sun-like star, and saying so is more useful than pretending
+// every planet is one more night of observing away.
+// =============================================================================
+
+/** How many binned points to draw across the folded light curve. */
+const LC_BINS = 60;
+
+const transitNoise = {
+  id: 'transit-noise',
+  get title() {
+    return t('exoW.whatSwampsATransit');
+  },
+  get note() {
+    return t('exoW.whatSwampsATransit.note');
+  },
+  controls: [
+    {
+      id: 'depth',
+      get label() {
+        return t('exoW.transitDepth');
+      },
+      unit: 'ppm',
+      min: 20,
+      max: 8000,
+      step: 10,
+      value: 6400,
+      decimals: 0,
+    },
+    {
+      id: 'white',
+      get label() {
+        return t('exoW.photonNoise');
+      },
+      unit: 'ppm/hr',
+      min: 10,
+      max: 4000,
+      step: 10,
+      value: 40,
+      decimals: 0,
+    },
+    {
+      id: 'stellar',
+      get label() {
+        return t('exoW.stellarNoise');
+      },
+      unit: 'ppm',
+      min: 0,
+      max: 2000,
+      step: 5,
+      value: 15,
+      decimals: 0,
+    },
+    {
+      id: 'instrument',
+      get label() {
+        return t('exoW.instrumentNoise');
+      },
+      unit: 'ppm',
+      min: 0,
+      max: 4000,
+      step: 5,
+      value: 10,
+      decimals: 0,
+    },
+    {
+      id: 'duration',
+      get label() {
+        return t('exoW.transitDuration');
+      },
+      unit: 'hr',
+      min: 0.5,
+      max: 14,
+      step: 0.1,
+      value: 4,
+      decimals: 1,
+    },
+    {
+      id: 'ntransits',
+      get label() {
+        return t('exoW.transitsObserved');
+      },
+      unit: '',
+      min: 1,
+      max: 800,
+      step: 1,
+      value: 600,
+      decimals: 0,
+    },
+  ],
+  presets: [
+    {
+      get label() {
+        return t('exoW.preset.hotJupiterKepler');
+      },
+      // HAT-P-7 b: 1.431 R_J across a 1.84 R_sun star is 6400 ppm, and Kepler
+      // stared at it for four years.
+      values: {
+        depth: 6400,
+        white: 40,
+        stellar: 15,
+        instrument: 10,
+        duration: 4,
+        ntransits: 600,
+      },
+      get note() {
+        return t('exoW.preset.hotJupiterKepler.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.preset.sameFromTheGround');
+      },
+      // The identical planet through an atmosphere. Scintillation and airmass
+      // trends are correlated on exactly the transit timescale.
+      values: {
+        depth: 6400,
+        white: 900,
+        stellar: 15,
+        instrument: 2500,
+        duration: 4,
+        ntransits: 3,
+      },
+      get note() {
+        return t('exoW.preset.sameFromTheGround.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.preset.superEarthTess');
+      },
+      // Pi Mensae c: 2.04 R_earth across a 1.10 R_sun star, 290 ppm, and a
+      // naked-eye-bright host so the photon noise is unusually low for TESS.
+      values: {
+        depth: 290,
+        white: 130,
+        stellar: 40,
+        instrument: 30,
+        duration: 2.9,
+        ntransits: 12,
+      },
+      get note() {
+        return t('exoW.preset.superEarthTess.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.preset.rockyTess');
+      },
+      // TOI-700 d: an Earth-size planet in the habitable zone of an M dwarf.
+      // The depth is respectable because the star is small; the difficulty is
+      // that a 37-day period yields about one transit per TESS sector.
+      values: {
+        depth: 550,
+        white: 800,
+        stellar: 250,
+        instrument: 60,
+        duration: 1.8,
+        ntransits: 11,
+      },
+      get note() {
+        return t('exoW.preset.rockyTess.note');
+      },
+    },
+    {
+      get label() {
+        return t('exoW.preset.earthTwin');
+      },
+      // An Earth around a Sun, seen by TESS. 84 ppm, a 13-hour transit, and
+      // one transit a year. This one is not a hard case; it is out of reach.
+      values: {
+        depth: 84,
+        white: 700,
+        stellar: 60,
+        instrument: 40,
+        duration: 13,
+        ntransits: 2,
+      },
+      get note() {
+        return t('exoW.preset.earthTwin.note');
+      },
+    },
+  ],
+  compute(v) {
+    const hours = Math.max(0.01, v.duration * v.ntransits);
+    // White noise is quoted per hour and averages as the square root of the
+    // in-transit time, which is the only term that does.
+    const white = v.white / Math.sqrt(hours);
+    const red = Math.hypot(v.stellar, v.instrument);
+    const total = Math.hypot(white, red);
+    return {
+      hours,
+      white,
+      whitePerHour: v.white,
+      stellar: v.stellar,
+      instrument: v.instrument,
+      red,
+      total,
+      depth: v.depth,
+      // Not called significance, and not turned into a probability. It is the
+      // depth measured in units of its own uncertainty, which is a description
+      // of the measurement rather than a claim about a planet.
+      ratio: total > 0 ? v.depth / total : Infinity,
+      // What the floor alone would allow, however long anyone observed. The
+      // number that says whether waiting can ever work.
+      ceiling: red > 0 ? v.depth / red : Infinity,
+    };
+  },
+  draw(canvas, v) {
+    const { ctx, w, h } = surface(canvas, responsiveHeight(260, 190));
+    const th = chartColors();
+    const c = this.compute(v);
+
+    const gap = 26;
+    const boxW = (w - 78 - gap) / 2;
+    const left = { x: 52, y: 16, w: boxW, h: h - 66 };
+    const right = { x: 52 + boxW + gap, y: 16, w: boxW, h: h - 66 };
+
+    // --- Left: the budget, as bars against the depth ---
+    drawFrame(ctx, left, { x: t('exoW.ppmAxis'), y: '' }, th);
+    const terms = [
+      { key: 'photon', value: c.white, colour: th.accent },
+      { key: 'stellar', value: c.stellar, colour: '#f2a65a' },
+      { key: 'instrument', value: c.instrument, colour: '#c98ae0' },
+      { key: 'total', value: c.total, colour: th.ink },
+    ];
+    const scaleMax = Math.max(c.depth, ...terms.map(x => x.value)) * 1.15 || 1;
+    const rowH = (left.h - 12) / (terms.length + 1);
+    ctx.font = '10px ui-monospace, monospace';
+
+    terms.forEach((term, i) => {
+      const y = left.y + 8 + i * rowH;
+      const barW = (term.value / scaleMax) * (left.w - 76);
+      ctx.fillStyle = term.colour;
+      ctx.fillRect(left.x + 70, y, Math.max(1, barW), rowH * 0.55);
+      ctx.fillStyle = th.muted;
+      ctx.textAlign = 'right';
+      ctx.fillText(t(`exoW.noise.${term.key}`), left.x + 65, y + rowH * 0.45);
+      ctx.textAlign = 'left';
+      ctx.fillText(
+        formatNumber(term.value, { sig: 2 }),
+        left.x + 74 + Math.max(1, barW),
+        y + rowH * 0.45
+      );
+    });
+
+    // The depth, as a line across all of them. Whether the bars reach it is
+    // the entire question, and a line is the fastest way to read that.
+    const depthX = left.x + 70 + (c.depth / scaleMax) * (left.w - 76);
+    ctx.strokeStyle = th.good || '#8de08a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(depthX, left.y + 4);
+    ctx.lineTo(depthX, left.y + left.h - 4);
+    ctx.stroke();
+    ctx.fillStyle = th.good || '#8de08a';
+    ctx.textAlign = 'center';
+    ctx.fillText(t('exoW.depthMarker'), depthX, left.y + left.h + 12);
+
+    // --- Right: what the folded light curve actually looks like ---
+    drawFrame(ctx, right, { x: t('exoW.phaseAxis'), y: '' }, th);
+    // Half the plot window is transit, so the box is visible if anything is.
+    const inTransit = i => i >= LC_BINS * 0.35 && i < LC_BINS * 0.65;
+    const span = Math.max(c.depth, c.total * 3) * 1.6 || 1;
+    const yOf = ppm =>
+      right.y + right.h * 0.35 + (ppm / span) * (right.h * 0.5);
+
+    ctx.strokeStyle = th.grid;
+    ctx.beginPath();
+    ctx.moveTo(right.x, yOf(0));
+    ctx.lineTo(right.x + right.w, yOf(0));
+    ctx.stroke();
+
+    // The noise on each binned point is the total, because each bin holds the
+    // same share of the observing time as the budget assumed.
+    const seed = Math.round(v.depth + v.white * 7 + v.ntransits * 13);
+    ctx.fillStyle = th.ink;
+    for (let i = 0; i < LC_BINS; i++) {
+      const x = right.x + 3 + ((right.w - 6) * i) / (LC_BINS - 1);
+      const signal = inTransit(i) ? c.depth : 0;
+      const y = yOf(signal + gaussianAt(seed, i) * c.total);
+      ctx.beginPath();
+      ctx.arc(x, y, 1.7, 0, TAU);
+      ctx.fill();
+    }
+
+    // The truth, so a student can see where the box was even when the points
+    // do not show it. Dashed and labelled, exactly like the RV widget's.
+    ctx.strokeStyle = th.good || '#8de08a';
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i < LC_BINS; i++) {
+      const x = right.x + 3 + ((right.w - 6) * i) / (LC_BINS - 1);
+      const y = yOf(inTransit(i) ? c.depth : 0);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = th.muted;
+    ctx.textAlign = 'left';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.fillText(
+      t('exoW.depthOverNoise', { ratio: formatNumber(c.ratio, { sig: 2 }) }),
+      right.x + 4,
+      right.y + right.h + 12
+    );
+  },
+};
+
 export const EXOPLANET_WIDGETS = [
   reflexMotion,
   rvObserver,
@@ -1682,4 +2018,5 @@ export const EXOPLANET_WIDGETS = [
   methodComparison,
   planetCharacterization,
   surveySchedule,
+  transitNoise,
 ];

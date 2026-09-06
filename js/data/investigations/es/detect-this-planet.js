@@ -14,7 +14,7 @@ export default {
   title: '¿Puedes detectar este planeta?',
   subtitle:
     'El mismo planeta, las mismas doce noches, dos respuestas distintas',
-  duration: '15-20 min',
+  duration: '30-35 min',
   level: 'Astronomía introductoria',
   summary:
     'Un planeta está ahí o no está, pero que lo encuentres depende de decisiones que tomas antes de hacer una sola medida. Planifica dos campañas de observación de la misma estrella, con el mismo instrumento y el mismo número de noches, y descubre que una encuentra un Júpiter y la otra no puede decirte absolutamente nada.',
@@ -177,9 +177,221 @@ export default {
         'Crédito completo por las dos mitades. Lo que descarta: planetas lo bastante masivos y cercanos como para producir una oscilación de velocidad holgadamente mayor que la precisión, en el rango de periodos que el calendario podía muestrear; a grandes rasgos, queda excluido un Júpiter caliente. Lo que no descarta: planetas más pequeños, cuya señal queda por debajo del ruido; planetas con periodos más largos que el intervalo total, que aparecen como una deriva demasiado lenta para verse o como ningún cambio; planetas con periodos que la cadencia solapa, exactamente como en el calendario B; y planetas en órbitas casi de frente, donde la componente del movimiento estelar a lo largo de la línea de visión es pequeña por masivo que sea el planeta.\n\nAcepta dos cualesquiera de las cuatro exclusiones. No aceptes «no hay planeta» sin matizar, ni «no aprendimos nada»: una no detección con una sensibilidad declarada es un resultado real y es la forma en que se publican los límites superiores. Una buena respuesta dice que la conclusión trata de una región del espacio de parámetros, no de la estrella.',
     },
     {
+      title: 'La otra forma de encontrarlos',
+      body: `Todo lo anterior ha vigilado el movimiento de la estrella. Hay un
+             segundo método, y a él se debe la mayoría de los planetas que
+             conocemos: vigilar el <strong>brillo</strong> de la estrella y
+             esperar a que el planeta pase por delante.
+             \n\nLa aritmética es más fácil que en el caso de la velocidad
+             radial. Un planeta bloquea la fracción del disco estelar que cubre,
+             así que la profundidad de la caída es solo un cociente de áreas:
+             \n\n<strong>profundidad = (R<sub>planeta</sub> / R<sub>estrella</sub>)²</strong>
+             \n\nSin masas, sin inclinación, sin espectroscopía. Pero el mismo
+             problema estructural está esperando: que puedas ver la caída tiene
+             muy poco que ver con que el planeta esté ahí, y mucho con
+             decisiones tomadas antes de empezar a observar.`,
+      tip: 'Los tránsitos exigen además que la órbita esté casi de canto. Para un Júpiter caliente las probabilidades son de una entre diez; para una Tierra a una unidad astronómica, de una entre doscientas.',
+    },
+    {
+      title: '¿Cómo de profunda es una Tierra?',
+      body: `El radio de la Tierra es de 6.371 km y el del Sol de 695.700 km.
+             \n\nCalcula la profundidad del tránsito que vería un astrónomo
+             alienígena cuando la Tierra cruza por delante del Sol, y dala en
+             partes por millón.`,
+      prompt: 'Profundidad del tránsito, en partes por millón',
+      unit: 'ppm',
+      hints: {
+        concept: `El planeta bloquea la fracción del disco estelar que cubre, y
+                  el área va con el radio al cuadrado.`,
+        method: `Divide los radios, eleva el resultado al cuadrado y multiplica
+                 por un millón para pasar de fracción a partes por millón.`,
+      },
+      worked: `6371 / 695700 = 0,009158. Al cuadrado son 8,39 × 10⁻⁵, es decir 84
+               partes por millón: la estrella se atenúa ocho milésimas de uno por
+               ciento durante unas trece horas, una vez al año.`,
+      because: `Unas 84 ppm. Quédate con ese número: es toda la razón por la que
+                encontrar otra Tierra es difícil, y vuelve dentro de unas
+                pantallas como un planeta al que un telescopio real no llega.`,
+      misconceptions: [
+        {
+          say: `Ese es el cociente de los radios, no el de las áreas. Un tránsito
+                bloquea un disco, así que la profundidad va con el cuadrado.`,
+        },
+      ],
+    },
+    {
+      title: 'Contra qué compite un tránsito',
+      body: `Una profundidad es solo la mitad de la pregunta. La otra mitad es
+             todo lo demás que hace oscilar el brillo medido de una estrella, y
+             este instrumento lo pone todo uno al lado del otro.
+             \n\nEmpieza con un caso real del extremo fácil: un Júpiter caliente
+             de los que Kepler estuvo mirando cuatro años. 6.400 partes por
+             millón de profundidad, un tránsito de cuatro horas, y seiscientos de
+             ellos.
+             \n\nLas barras de la izquierda son las contribuciones al ruido. La
+             línea verde es la profundidad. El panel de la derecha es el aspecto
+             que tendría de verdad la curva de luz plegada.`,
+      checklist: [
+        'Lee la cifra de profundidad sobre ruido bajo la curva de luz: unas 355',
+        'Fíjate en lo lejos que queda la línea verde de profundidad respecto de cada barra de ruido',
+        'Arrastra el número de tránsitos de 600 a 1 y mira qué le pasa al cociente',
+        'Ahora vuelve a subirlo por encima de 600 y fíjate en lo poco que mejora',
+      ],
+      tip: 'Un cociente de 355 no es una detección marginal que se discuta. Este es el régimen en el que las preguntas interesantes son sobre el planeta y no sobre si existe.',
+    },
+    {
+      title: 'El mismo planeta, desde tierra',
+      body: `Coge ese planeta idéntico -misma estrella, mismas 6.400 ppm de
+             profundidad, mismo tránsito de cuatro horas- y obsérvalo con un buen
+             telescopio pequeño desde la superficie de la Tierra en vez de desde
+             el espacio.
+             \n\nEl aire sobre el telescopio es turbulento, la estrella sale y se
+             pone atravesando masas de aire cambiantes, y el detector se calienta
+             y se enfría a lo largo de la noche.`,
+      prompt:
+        'Observando el mismo tránsito de 6.400 ppm desde tierra en vez de desde el espacio, esperas que la profundidad sobre ruido caiga de 355 a aproximadamente:',
+      options: [
+        '250: la atmósfera cuesta algo, pero no mucho',
+        '100: una penalización seria, y aun así una detección fácil',
+        '2,5: de la certeza a la discusión',
+        '0,1: completamente invisible',
+      ],
+      because: `Unas 2,5, que es un factor de ciento cuarenta. El planeta no ha
+                cambiado, ni tampoco su profundidad; lo que ha cambiado es un
+                suelo por debajo de la medida que ninguna cantidad de paciencia
+                elimina. Los sondeos desde tierra sí encontraron Júpiteres
+                calientes, pero tuvieron que observar miles de estrellas durante
+                años para lograrlo, y esta es la razón.`,
+    },
+    {
+      title: 'El suelo',
+      body: `Cambia el instrumento a <strong>El mismo planeta, desde
+             tierra</strong>.
+             \n\nLa línea de profundidad no se ha movido. La barra de ruido de
+             fotones es mayor, como cabía esperar de un telescopio más pequeño.
+             Pero mira la barra del instrumento, y luego el total.
+             \n\nAhora haz el experimento que importa: sube el número de tránsitos
+             todo lo que dé de sí.`,
+      checklist: [
+        'Lee la profundidad sobre ruido con tres tránsitos: unas 2,5',
+        'Arrastra el número de tránsitos a 300: cien veces más observación',
+        'Vuelve a leerlo. Ha pasado de 2,55 a unas 2,56',
+        'Vuelve al ajuste de Kepler y haz lo mismo allí',
+      ],
+      tip: 'Cien veces más datos han comprado cuatro milésimas de mejora. Sea lo que sea lo que limita esta medida, no es la cantidad de datos.',
+    },
+    {
+      title: 'Por qué dejaron de ayudar más noches',
+      body: `El ruido viene en dos clases, y se comportan de forma completamente
+             distinta al promediar.
+             \n\nEl <strong>ruido blanco</strong> es independiente de una medida a
+             la siguiente: conteo de fotones, ruido de lectura del detector. Los
+             errores independientes se cancelan en parte, así que promediar N de
+             ellos reduce el ruido en √N. Este es el comportamiento que a todo el
+             mundo le enseñan, y por eso "toma más datos" suele ser un buen
+             consejo.
+             \n\nEl <strong>ruido rojo</strong> está correlacionado: manchas
+             estelares girando por el disco, granulación convectiva, el telescopio
+             calentándose, la estrella derivando por el detector. Estos vagan a lo
+             largo de <em>horas</em>, que es exactamente la duración de un
+             tránsito. Promediar no los elimina, porque las medidas vecinas están
+             equivocadas en el mismo sentido.
+             \n\nAsí que un presupuesto de ruido tiene un <strong>suelo</strong>.
+             El término de fotones se va cayendo según observas más y los términos
+             correlacionados se quedan exactamente donde estaban; y una vez por
+             debajo del suelo, lo único que compra observar más son más datos con
+             la misma precisión.`,
+      tip: 'Por eso los telescopios espaciales valen lo que cuestan. Por encima de la atmósfera, con un entorno térmico estable y sin masa de aire, el suelo baja varios órdenes de magnitud, y la profundidad que persigues no ha cambiado nada.',
+    },
+    {
+      title: 'Dos presupuestos, uno al lado del otro',
+      body: `Lee la profundidad sobre ruido de dos de los ajustes, y la mayor
+             contribución individual al ruido en cada uno.`,
+      fields: [
+        {
+          label: 'Júpiter caliente con Kepler: profundidad sobre ruido',
+          unit: '',
+          hint: 'cociente',
+        },
+        {
+          label: 'El mismo planeta desde tierra: profundidad sobre ruido',
+          unit: '',
+          hint: 'cociente',
+        },
+        {
+          label: 'El mayor término de ruido desde tierra, en ppm',
+          unit: 'ppm',
+          hint: 'ppm',
+        },
+      ],
+    },
+    {
+      title: '¿Por qué no compraron nada las cien noches extra?',
+      body: `Desde tierra, tres tránsitos dieron un cociente de 2,55 y trescientos
+             dieron 2,56.`,
+      prompt: 'La mejor explicación es:',
+      options: [
+        'Los datos extra eran de peor calidad que las tres primeras noches',
+        'La medida ya está en su suelo de ruido correlacionado, y ese término no se promedia',
+        'Trescientos tránsitos siguen siendo pocos para que la raíz cuadrada importe',
+        'La profundidad del tránsito cambia de una noche a otra',
+      ],
+      because: `El suelo. Con tres tránsitos el término de fotones ya está en unas
+                260 ppm frente a un término correlacionado de 2.500: el total es
+                esencialmente todo suelo, y promediar no puede tocarlo. La ley de
+                la raíz cuadrada no es falsa; simplemente se aplica a solo uno de
+                los dos términos, y ese dejó de importar hace rato.`,
+    },
+    {
+      title: 'El límite de lo que puede hacer un sondeo',
+      body: `Ahora tres casos reales de TESS, en orden de dificultad.
+             \n\n<strong>Supertierra</strong> es Pi Mensae c: el doble del radio
+             terrestre, alrededor de una estrella lo bastante brillante como para
+             verla a simple vista. Profundidad 290 ppm, y una detección genuina.
+             \n\n<strong>Planeta rocoso en la zona habitable</strong> es TOI-700 d:
+             más o menos del tamaño de la Tierra, pero alrededor de una estrella
+             roja pequeña, así que la profundidad son unos respetables 550 ppm. Su
+             problema es un periodo de 37 días: aproximadamente un tránsito por
+             sector de TESS, y costó un año de ellos.
+             \n\n<strong>Gemela de la Tierra</strong> son las 84 ppm que calculaste
+             antes, alrededor de una estrella como el Sol. Un tránsito de trece
+             horas, una vez al año.`,
+      checklist: [
+        'Supertierra: profundidad sobre ruido de unas 5,3, una detección real y no precisamente cómoda',
+        'Planeta rocoso: unas 1,75, a partir de once tránsitos reunidos a lo largo de un año',
+        'Gemela de la Tierra: unas 0,54, el tránsito es más pequeño que el ruido que lo mide',
+        'En la gemela de la Tierra, arrastra los tránsitos a 200 y mira cómo el cociente se para en torno a 1,2',
+        'Fíjate en que la gemela de la Tierra tiene con diferencia el tránsito más largo y no le sirve de nada',
+      ],
+      tip: 'TOI-700 d es un planeta real, encontrado en 2020, y encontrarlo costó once sectores de datos de TESS más un reanálisis después de un error en los parámetros estelares originales.',
+    },
+    {
+      title: '¿Qué haría falta?',
+      body: `La gemela de la Tierra se queda en 0,54 -la caída es más o menos la
+             mitad de la incertidumbre que la mide- y cien veces más observación
+             la lleva a 1,2 y no más allá.`,
+      prompt:
+        'Para convertir eso en una detección, lo que de verdad tendría que cambiar es:',
+      options: [
+        'Más tránsitos, hasta que gane la ley de la raíz cuadrada',
+        'Un tránsito más largo, para que cada evento aporte más datos',
+        'Un suelo de ruido correlacionado más bajo: un instrumento más estable, o una estrella más tranquila',
+        'Nada: un tránsito de 84 ppm está por debajo de cualquier medida posible',
+      ],
+      because: `El suelo. Es lo que limita esta medida a 1,2 por mucho que se
+                observe, así que bajarlo es la única jugada que cambia la
+                respuesta, y es exactamente lo que hace una misión diseñada para
+                ello. La cuarta opción merece rechazarse explícitamente: 84 ppm no
+                está por debajo de lo físicamente medible, y Kepler midió de forma
+                rutinaria tránsitos menos profundos que ese. Está por debajo de lo
+                que <em>este</em> instrumento puede alcanzar alrededor de
+                <em>esta</em> estrella, y la diferencia entre esas dos
+                afirmaciones es todo el asunto de esta lección.`,
+    },
+    {
       title: 'Lo que decidiste antes de mirar',
-      body: 'Doce medidas. Un instrumento. Un planeta, que estuvo ahí todo el tiempo.\n\nEl calendario A estableció, más allá de toda duda razonable, que la velocidad de esta estrella no es constante, a lo largo de un ciclo que muestreó de principio a fin. Eso no es lo mismo que haber detectado un planeta: es la prueba sobre la que un planeta pasa a ser, con diferencia, la mejor explicación, una vez que se demuestra que la variación se repite con un periodo definido y se descartan las demás causas.\n\nEl calendario B, con once veces el intervalo total y ni una medida menos, no pudo establecer ni siquiera eso. No está vacío: acota cuán grande pudo ser la oscilación de velocidad de la estrella en las dos fases que llegó a visitar, y esa es una restricción real aunque estrecha. Lo que no puede es decir nada sobre las otras ocho décimas del ciclo, que es donde vive este planeta.\n\nNinguno de los dos resultados es un fallo de los datos. Ambos se decidieron meses antes, cuando alguien escribió una cadencia. El calendario de observación forma parte del experimento y, como el resto del experimento, puede diseñarse bien o mal antes de que llegue un solo fotón.',
-      tip: 'Los sondeos reales se protegen de esto espaciando las observaciones de forma deliberadamente irregular, observando desde varias longitudes geográficas y comprobando cualquier periodo candidato frente a la cadencia que lo encontró.',
+      body: 'Dos métodos, y la misma lección dos veces.\n\nDoce medidas. Un instrumento. Un planeta, que estuvo ahí todo el tiempo.\n\nEl calendario A estableció, más allá de toda duda razonable, que la velocidad de esta estrella no es constante, a lo largo de un ciclo que muestreó de principio a fin. Eso no es lo mismo que haber detectado un planeta: es la prueba sobre la que un planeta pasa a ser, con diferencia, la mejor explicación, una vez que se demuestra que la variación se repite con un periodo definido y se descartan las demás causas.\n\nEl calendario B, con once veces el intervalo total y ni una medida menos, no pudo establecer ni siquiera eso. No está vacío: acota cuán grande pudo ser la oscilación de velocidad de la estrella en las dos fases que llegó a visitar, y esa es una restricción real aunque estrecha. Lo que no puede es decir nada sobre las otras ocho décimas del ciclo, que es donde vive este planeta.\n\nNinguno de los dos resultados es un fallo de los datos. Ambos se decidieron meses antes, cuando alguien escribió una cadencia. El calendario de observación forma parte del experimento y, como el resto del experimento, puede diseñarse bien o mal antes de que llegue un solo fotón.\n\nLa mitad de los tránsitos hizo el mismo planteamiento con otro mando. Un planeta, una profundidad, y una detección a 355 sigmas o una discusión a 2,5 dependiendo por completo de lo que hubiera por debajo de la medida. Y mientras que el fallo de la velocidad radial podía repararse observando de otra manera, el fotométrico en general no: pasado el suelo de ruido correlacionado, más noches compran más datos con la misma precisión y nada más. Una gemela de la Tierra no es indetectable en principio: es indetectable con ese instrumento, alrededor de esa estrella, y mejorar cualquiera de las tres cosas es un proyecto distinto de tener paciencia.\n\nQue es el resumen honesto de las dos mitades. La pregunta \u00ab¿puedes detectar este planeta?\u00bb nunca trata solo del planeta.',
+      tip: 'Los sondeos reales se protegen del fallo de la velocidad radial con espaciados deliberadamente irregulares, varias longitudes geográficas y comprobando cualquier periodo candidato frente a la cadencia que lo encontró. Del fotométrico se protegen yendo al espacio, eligiendo estrellas tranquilas y modelando el ruido correlacionado en vez de fingir que se promediará solo.',
     },
   ],
 };

@@ -539,8 +539,28 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The synthetic observing run in the live Radial Velocity panel, against the simulated star, followed by the CSV export. Schedule A completes in about thirteen seconds of wall clock.',
       },
       {
-        steps: '14-15',
-        text: 'A written question on the limits of a nondetection, then the closing statement that the outcome was decided by a cadence written down months before the observations.',
+        steps: '14',
+        text: 'A written question on the limits of a nondetection: what a flat dataset excludes, and what it leaves open.',
+      },
+      {
+        steps: '15-16',
+        text: 'The turn to transits. The depth of a transit is a ratio of areas, and students compute the 84 ppm an Earth would make across the Sun - a number that comes back at step 23 as a planet TESS cannot reach.',
+      },
+      {
+        steps: '17-19',
+        text: 'The noise budget instrument, opening on a Kepler hot Jupiter at a depth-over-noise of 355. Students predict what the same planet does from the ground, then watch it fall to 2.5 - and watch a hundred times more observing take it to 2.56.',
+      },
+      {
+        steps: '20-22',
+        text: 'White noise against red noise, why only one of them averages down, and a measurement of both budgets side by side. Then the question that names the floor.',
+      },
+      {
+        steps: '23-24',
+        text: 'Three real TESS cases in order of difficulty: Pi Mensae c at 5.3, TOI-700 d at 1.75 after a year of sectors, and an Earth twin at 0.54 that a hundred times more data takes only to 1.2. Then what would actually have to change.',
+      },
+      {
+        steps: '25',
+        text: 'The closing statement, now covering both halves: the radial-velocity failure could have been repaired by observing differently, and the photometric one mostly cannot.',
       },
     ],
     features: [
@@ -667,6 +687,10 @@ export const INSTRUCTOR_CONTENT = {
       7: 'Schedule B. The left panel spans 38.7 days and looks almost flat; the folded panel shows all twelve points stacked in two adjacent bins. Coverage drops to 2 of 10 and chi-square per degree of freedom to about 1.9. Moving the cadence to 3.0 or 4.2 restores most of the coverage immediately, which is the cleanest way to show that the failure is the cadence and nothing else.',
       8: 'Coverage 2 of 10, scatter about 11 m/s, chi-square per degree of freedom about 1.9. The scatter being close to the 8 m/s error bar is the whole result. Setting the uncertainty to zero here is worth doing: the run still fails, which separates "noisy" from "uninformative".',
       10: 'The Neptune preset at 8 m/s gives K near 7.3 m/s, full phase coverage and chi-square per degree of freedom near 1.7 - a perfect schedule that still fails. Switching to 1 m/s leaves the planet and the schedule untouched and takes chi-square per degree of freedom to about 22.8.',
+      17: 'The instrument opens on the Kepler hot Jupiter: 6,400 ppm deep, a four-hour transit, six hundred of them, and a depth-over-noise of about 355. The green depth line sits far beyond every noise bar. Dragging the transit count from 600 down to 1 takes the ratio to about 250 - a factor of twenty-five fewer transits costs only a third of the signal, because the measurement is already photon-limited to an absurd degree.',
+      19: 'The same planet from the ground: photon noise rises to about 260 ppm over three transits, but the instrument bar is at 2,500 and the total is essentially all of it. Depth over noise about 2.55. Dragging the transit count to 300 - a hundred times more observing - takes it to 2.56. That non-improvement is the single most useful number in this half of the lesson and is worth pausing on.',
+      21: 'About 355 with Kepler and about 2.55 from the ground, a factor of 140 on the same planet. The largest ground-based term is the instrument-and-atmosphere bar at 2,500 ppm. A student who reports the two ratios the other way round has read the columns backwards; the field check says so.',
+      23: 'Pi Mensae c about 5.3, TOI-700 d about 1.75, the Earth twin about 0.54. Two things to draw out. The Earth twin has by far the longest transit - thirteen hours against under two for TOI-700 d - and it is still the least detectable, which cuts against the intuition that a longer transit is an easier one. And dragging its transit count to 200 stops the ratio at about 1.2 rather than continuing to climb.',
       12: 'The live panel completes Schedule A in about thirteen seconds of wall clock at normal speed, laying down twelve points on the dashed overlay. Untick the overlay and what is left is what an observer has. If a student runs the simulation fast, the panel warns that the frames are too coarse for the cadence and the extremes may be flattened; that warning is real and the answer is to slow down and restart.',
     },
   },

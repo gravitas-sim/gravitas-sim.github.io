@@ -178,16 +178,17 @@ export const MANIFEST = [
   {
     id: 'detect-this-planet',
     title: 'Can You Detect This Planet?',
-    subtitle: 'Same planet, same twelve nights, two different answers',
-    duration: '15-20 min',
+    subtitle:
+      'Two methods, the same problem: the answer was decided before the data arrived',
+    duration: '30-35 min',
     level: 'Introductory astronomy',
     summary:
-      'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two observing runs of the same star with the same instrument and the same number of nights, and discover that one of them finds a Jupiter and the other cannot tell you anything at all.',
+      'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 355-sigma certainty from space and a 2.5-sigma maybe from the ground — and taking a hundred times more data from the ground changes nothing.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detecting exoplanets',
-    stepCount: 15,
-    gradedCount: 8,
-    objectiveCount: 4,
+    stepCount: 25,
+    gradedCount: 13,
+    objectiveCount: 8,
   },
   {
     id: 'binary-star-planets',

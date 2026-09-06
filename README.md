@@ -24,7 +24,7 @@ concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
 **<!--fact:investigations-->15<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->431<!--/fact--> steps between
+investigations**, <!--fact:investigationSteps-->441<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -162,7 +162,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->1977<!--/fact--> strings, and
+of <!--fact:uiStrings-->2002<!--/fact--> strings, and
 all <!--fact:investigations-->15<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot

@@ -46,17 +46,22 @@ const DETECT_THIS_PLANET = {
   thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
   series: 'Detecting exoplanets',
   title: 'Can You Detect This Planet?',
-  subtitle: 'Same planet, same twelve nights, two different answers',
-  duration: '15-20 min',
+  subtitle:
+    'Two methods, the same problem: the answer was decided before the data arrived',
+  duration: '30-35 min',
   level: 'Introductory astronomy',
   lock: { placement: true, inspector: true },
   summary:
-    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two observing runs of the same star with the same instrument and the same number of nights, and discover that one of them finds a Jupiter and the other cannot tell you anything at all.',
+    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 355-sigma certainty from space and a 2.5-sigma maybe from the ground — and taking a hundred times more data from the ground changes nothing.',
   objectives: [
     'Predict whether an observing schedule can detect a given planet, and say which of cadence, baseline and precision decides it',
     'Explain why more measurements over a longer baseline can be worse than fewer over a shorter one',
     'State what excess scatter in a radial-velocity dataset does and does not establish',
     'Say what a flat radial-velocity dataset rules out, and what it leaves open',
+    'Compute a transit depth from a planet and star radius, and compare it with a photometric noise budget',
+    'Distinguish white noise, which averages down with more observing, from correlated noise, which does not',
+    'Explain why a long-period planet is hard to find even when its transit is deep and long',
+    'Say what makes a planet undetectable by a given instrument rather than merely difficult',
   ],
   steps: [
     // --- Part 1: the question is about the schedule, not the planet ---------
@@ -443,12 +448,298 @@ const DETECT_THIS_PLANET = {
                the conclusion is about a region of parameter space rather than
                about the star.`,
     },
+    // --- Part 6: the other method, and its own version of the problem -------
+    {
+      sid: 'the-other-way-to-find-one',
+      type: 'read',
+      title: 'The other way to find one',
+      body: `Everything so far has watched the star move. There is a second
+             method, and it accounts for most of the planets we know: watch the
+             star's <strong>brightness</strong>, and wait for the planet to pass
+             in front of it.
+             \n\nThe arithmetic is easier than the radial-velocity case. A planet
+             blocks the fraction of the star's disc that it covers, so the depth
+             of the dip is just a ratio of areas:
+             \n\n<strong>depth = (R<sub>planet</sub> / R<sub>star</sub>)²</strong>
+             \n\nNo masses, no inclination, no spectroscopy. But the same
+             structural problem is waiting: whether you can see the dip has very
+             little to do with whether the planet is there, and a great deal to
+             do with decisions made before the observing started.`,
+      tip: 'Transits also require the orbit to be near edge-on. For a hot Jupiter the odds are about one in ten; for an Earth at one AU, about one in two hundred.',
+    },
+    {
+      sid: 'how-deep-is-an-earth',
+      type: 'question',
+      kind: 'numeric',
+      title: 'How deep is an Earth?',
+      body: `Earth's radius is 6,371 km and the Sun's is 695,700 km.
+             \n\nWork out the depth of the transit an alien astronomer would see
+             when Earth crosses the Sun, and give it in parts per million.`,
+      prompt: 'Transit depth, in parts per million',
+      answer: 84,
+      unit: 'ppm',
+      tolerance: 6,
+      hints: {
+        concept: `The planet blocks the fraction of the star's disc that it
+                  covers, and area goes as radius squared.`,
+        method: `Divide the radii, square the result, then multiply by a
+                 million to turn a fraction into parts per million.`,
+      },
+      worked: `6371 / 695700 = 0.009158. Squared, that is 8.39 × 10⁻⁵, which is
+               84 parts per million — the star dims by eight thousandths of one
+               per cent for about thirteen hours, once a year.`,
+      because: `About 84 ppm. Hold on to that number: it is the whole reason
+                finding another Earth is hard, and it comes back in a few
+                screens as a planet that a real telescope cannot reach.`,
+      misconceptions: [
+        {
+          id: 'forgotToSquare',
+          equals: 9158,
+          say: `That is the ratio of the radii rather than of the areas. A
+                transit blocks a disc, so the depth goes as the square.`,
+        },
+      ],
+    },
+    {
+      sid: 'the-noise-budget',
+      type: 'explore',
+      title: 'What a transit is competing with',
+      body: `A depth is only half the question. The other half is everything else
+             that makes a star's measured brightness wobble, and this instrument
+             lays those out side by side.
+             \n\nIt opens on a real case at the easy end: a hot Jupiter of the
+             kind Kepler stared at for four years. 6,400 parts per million deep,
+             a four-hour transit, six hundred of them.
+             \n\nThe bars on the left are the noise contributions. The green line
+             is the depth. The panel on the right is what the folded light curve
+             would actually look like.`,
+      tool: {
+        id: 'transit-noise',
+        values: {
+          depth: 6400,
+          white: 40,
+          stellar: 15,
+          instrument: 10,
+          duration: 4,
+          ntransits: 600,
+        },
+        title: 'The transit noise budget',
+        note: 'Photon noise is quoted per hour and averages down over the whole in-transit time. The other two do not average down at all, which is the point of the next few screens.',
+      },
+      checklist: [
+        'Read the depth-over-noise figure under the light curve: about 355',
+        'Notice how far the green depth line sits beyond every noise bar',
+        'Drag the number of transits from 600 down to 1 and watch what happens to the ratio',
+        'Now drag it back up past 600 and notice how little further it improves',
+      ],
+      tip: 'A ratio of 355 is not a marginal detection being argued over. This is the regime where the interesting questions are about the planet rather than about whether it exists.',
+    },
+    {
+      sid: 'the-same-planet-from-the-ground',
+      type: 'predict',
+      title: 'The same planet, from the ground',
+      body: `Take that identical planet — same star, same 6,400 ppm depth, same
+             four-hour transit — and observe it with a good small telescope from
+             the surface of the Earth instead of from space.
+             \n\nThe air above the telescope is turbulent, the star rises and sets
+             through changing airmass, and the detector warms and cools through
+             the night.`,
+      prompt:
+        'Observing the same 6,400 ppm transit from the ground instead of from space, you expect the depth-over-noise to fall from 355 to about:',
+      options: [
+        '250 — the atmosphere costs something, but not much',
+        '100 — a serious penalty, still an easy detection',
+        '2.5 — from certainty to an argument',
+        '0.1 — completely invisible',
+      ],
+      answer: 2,
+      because: `About 2.5, which is a factor of a hundred and forty. The planet
+                has not changed and neither has its depth; what changed is a
+                floor underneath the measurement that no amount of patience
+                removes. Ground-based surveys did find hot Jupiters — but they
+                had to observe thousands of stars for years to do it, and this
+                is why.`,
+    },
+    {
+      sid: 'the-floor',
+      type: 'explore',
+      title: 'The floor',
+      body: `Switch the instrument to <strong>Same planet, from the ground</strong>.
+             \n\nThe depth line has not moved. The photon-noise bar is larger, as
+             you would expect from a smaller telescope. But look at the
+             instrument bar, and then at the total.
+             \n\nNow do the experiment that matters: crank the number of transits
+             up as far as it will go.`,
+      tool: {
+        id: 'transit-noise',
+        values: {
+          depth: 6400,
+          white: 900,
+          stellar: 15,
+          instrument: 2500,
+          duration: 4,
+          ntransits: 3,
+        },
+      },
+      checklist: [
+        'Read the depth-over-noise with three transits: about 2.5',
+        'Drag the transit count to 300 — a hundred times more observing',
+        'Read it again. It has gone from 2.55 to about 2.56',
+        'Switch back to the Kepler preset and do the same thing there',
+      ],
+      tip: 'A hundred times more data bought four thousandths of an improvement. Whatever is limiting this measurement, it is not the amount of data.',
+    },
+    {
+      sid: 'white-noise-and-red-noise',
+      type: 'read',
+      title: 'Why more nights stopped helping',
+      body: `Noise comes in two kinds, and they behave completely differently
+             when you average.
+             \n\n<strong>White noise</strong> is independent from one measurement
+             to the next: photon counting, detector read noise. Independent
+             errors partly cancel, so averaging N of them shrinks the noise by
+             √N. This is the behaviour everyone is taught, and it is why "take
+             more data" is usually good advice.
+             \n\n<strong>Red noise</strong> is correlated: starspots rotating
+             across the disc, convective granulation, the telescope warming, the
+             star drifting across the detector. These wander over <em>hours</em>
+             — which is exactly the length of a transit. Averaging does not
+             remove them, because neighbouring measurements are wrong in the
+             same direction.
+             \n\nSo a noise budget has a <strong>floor</strong>. The photon term
+             falls away as you observe longer and the correlated terms stay
+             exactly where they are, and once you are below the floor the only
+             thing more observing buys you is more data at the same precision.`,
+      tip: 'This is why space telescopes are worth their cost. Above the atmosphere, with a stable thermal environment and no airmass, the floor drops by orders of magnitude — and the depth you are chasing has not changed at all.',
+    },
+    {
+      sid: 'read-two-budgets',
+      type: 'measure',
+      title: 'Two budgets, side by side',
+      body: `Read the depth-over-noise for two of the presets, and read the
+             largest single noise contribution in each.`,
+      tool: { id: 'transit-noise' },
+      fields: [
+        {
+          id: 'keplerRatio',
+          label: 'Hot Jupiter with Kepler: depth over noise',
+          unit: '',
+          hint: 'ratio',
+        },
+        {
+          id: 'groundRatio',
+          label: 'The same planet from the ground: depth over noise',
+          unit: '',
+          hint: 'ratio',
+        },
+        {
+          id: 'groundWorst',
+          label: 'The largest noise term from the ground, in ppm',
+          unit: 'ppm',
+          hint: 'ppm',
+        },
+      ],
+      validate: v => {
+        if (
+          !Number.isFinite(v.keplerRatio) ||
+          !Number.isFinite(v.groundRatio)
+        ) {
+          return null;
+        }
+        if (v.groundRatio > v.keplerRatio) {
+          return {
+            level: 'warn',
+            message:
+              'Those look swapped. The space-based figure is the large one — about 355 against about 2.5.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'A factor of about 140 between them, and the same planet in both. The instrument bar is what did it.',
+        };
+      },
+    },
+    {
+      sid: 'why-more-nights-do-not-help',
+      type: 'question',
+      kind: 'choice',
+      title: 'Why did the extra hundred nights buy nothing?',
+      body: `From the ground, three transits gave a ratio of 2.55 and three
+             hundred gave 2.56.`,
+      prompt: 'The best explanation is:',
+      options: [
+        'The extra data was lower quality than the first three nights',
+        'The measurement is already at its correlated-noise floor, and that term does not average down',
+        'Three hundred transits is still too few for the square root to matter',
+        'The transit depth changes from night to night',
+      ],
+      answer: 1,
+      because: `The floor. With three transits the photon term is already about
+                260 ppm against a correlated term of 2,500 — the total is
+                essentially all floor, and averaging cannot touch it. The square
+                root law is not wrong; it simply applies to only one of the two
+                terms, and that one stopped mattering some time ago.`,
+    },
+    {
+      sid: 'the-edge-of-what-tess-can-do',
+      type: 'explore',
+      title: 'The edge of what a survey can do',
+      body: `Now three real cases from TESS, in order of difficulty.
+             \n\n<strong>Super-Earth</strong> is π Mensae c: twice Earth's radius,
+             around a star bright enough to see with the naked eye. Depth 290
+             ppm, and a genuine detection.
+             \n\n<strong>Rocky planet in the habitable zone</strong> is TOI-700 d:
+             about Earth's size, but around a small red star, so the depth is a
+             respectable 550 ppm. Its problem is a 37-day period — roughly one
+             transit per TESS sector, and it took a year of them.
+             \n\n<strong>Earth twin</strong> is the 84 ppm you computed earlier,
+             around a Sun-like star. A thirteen-hour transit, once a year.`,
+      tool: { id: 'transit-noise' },
+      checklist: [
+        'Super-Earth: depth over noise about 5.3 — a real detection, and not a comfortable one',
+        'Rocky planet: about 1.75, from eleven transits gathered over a year',
+        'Earth twin: about 0.54 — the transit is smaller than the noise on it',
+        'On the Earth twin, drag the transits to 200 and watch the ratio stop at about 1.2',
+        'Notice the Earth twin has by far the longest transit and it does not help',
+      ],
+      tip: 'TOI-700 d is a real planet, found in 2020, and finding it took eleven sectors of TESS data plus a reanalysis after an error in the original stellar parameters.',
+    },
+    {
+      sid: 'what-would-it-take',
+      type: 'question',
+      kind: 'choice',
+      title: 'What would it take?',
+      body: `The Earth twin sits at 0.54 — the dip is about half the size of the
+             uncertainty on it — and a hundred times more observing takes it to
+             1.2 and no further.`,
+      prompt:
+        'To turn that into a detection, the thing that would actually have to change is:',
+      options: [
+        'More transits, until the square root law wins',
+        'A longer transit, so each event contributes more data',
+        'A lower correlated-noise floor — a more stable instrument, or a quieter star',
+        'Nothing: an 84 ppm transit is below any possible measurement',
+      ],
+      answer: 2,
+      because: `The floor. That is what caps this measurement at 1.2 however long
+                anyone observes, so lowering it is the only move that changes the
+                answer — which is precisely what a purpose-built mission does.
+                The fourth option is worth rejecting explicitly: 84 ppm is not
+                below what is physically measurable, and Kepler routinely
+                measured shallower transits than that. It is below what
+                <em>this</em> instrument can reach around <em>this</em> star, and
+                the difference between those two statements is the whole subject
+                of this lesson.`,
+    },
+
     {
       sid: 'what-you-decided-before-you',
       type: 'read',
       title: 'What you decided before you looked',
-      body: `Twelve measurements. One instrument. One planet, which was there the
-             whole time.
+      body: `Two methods, and the same lesson twice.
+             \n\nTwelve measurements. One instrument. One planet, which was there
+             the whole time.
              \n\nSchedule A established beyond reasonable argument that this
              star's velocity is not constant, over a cycle it sampled from end to
              end. That is not the same as having detected a planet — it is the
@@ -465,8 +756,19 @@ const DETECT_THIS_PLANET = {
              months earlier, when someone wrote down a cadence. The observing
              schedule is part of the experiment, and like the rest of the
              experiment it can be designed well or badly before a single photon
-             arrives.`,
-      tip: 'Real surveys defend against this by deliberately irregular spacing, by observing from several longitudes, and by checking any candidate period against the cadence that found it.',
+             arrives.
+             \n\nThe transit half made the same point with a different knob. One
+             planet, one depth, and a detection at 355 sigma or an argument at
+             2.5 depending entirely on what was underneath the measurement. And
+             where the radial-velocity failure could be repaired by observing
+             differently, the photometric one mostly cannot: past the correlated
+             noise floor, more nights buy more data at the same precision and
+             nothing else. An Earth twin is not undetectable in principle — it is
+             undetectable with that instrument, around that star, and improving
+             any of the three is a different project from being patient.
+             \n\nWhich is the honest summary of both halves. The question
+             "can you detect this planet?" is never only about the planet.`,
+      tip: 'Real surveys defend against the radial-velocity failure with deliberately irregular spacing, several longitudes, and checking any candidate period against the cadence that found it. Against the photometric one they defend by going to space, by choosing quiet stars, and by modelling the correlated noise instead of pretending it will average away.',
     },
   ],
 };
