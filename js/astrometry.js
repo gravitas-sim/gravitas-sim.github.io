@@ -27,7 +27,7 @@
 // written so nobody can read it.
 // =============================================================================
 
-import { stars, gas_giants, planets } from './physics.js';
+import { stars, gas_giants, planets, getInterventionEpoch } from './physics.js';
 import { state } from './appState.js';
 import { SIM_UNITS_PER_AU } from './units.js';
 import {
@@ -208,6 +208,9 @@ export function clearAstrometry() {
   recordedSession = sessionKey({
     starId: star ? star.id : null,
     geometry: observerGeometry(),
+    // A burn changes the wobble this is a recording of, and nothing else in
+    // the key can see that: same star, same line of sight.
+    interventionEpoch: getInterventionEpoch(),
   });
   render();
 }
@@ -454,6 +457,9 @@ export function updateAstrometry() {
   const current = sessionKey({
     starId: star ? star.id : null,
     geometry: observerGeometry(),
+    // A burn changes the wobble this is a recording of, and nothing else in
+    // the key can see that: same star, same line of sight.
+    interventionEpoch: getInterventionEpoch(),
   });
   const simTime = currentTimeDays();
 
@@ -519,6 +525,7 @@ function sessionNoticeFor(reason, star) {
     });
   }
   if (reason === 'world') return t('observing.session.newWorld');
+  if (reason === 'maneuver') return t('observing.session.maneuver');
   if (reason === 'units') return t('observing.session.newUnits');
   if (reason === 'config') return t('observing.session.newConfig');
   return t('observing.session.newGeometry');
@@ -569,6 +576,7 @@ export function setAstrometryEnabled(on) {
       const current = sessionKey({
         starId: star ? star.id : null,
         geometry: observerGeometry(),
+        interventionEpoch: getInterventionEpoch(),
       });
       const changed = recordedSession
         ? sessionChange(recordedSession, current)
@@ -587,6 +595,7 @@ export function setAstrometryEnabled(on) {
           sessionKey({
             starId: now ? now.id : null,
             geometry: observerGeometry(),
+            interventionEpoch: getInterventionEpoch(),
           }),
           'geometry',
           now

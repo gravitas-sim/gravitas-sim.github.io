@@ -1823,6 +1823,7 @@ let lastObjectCounts = {
 // were no longer in the simulation while the renderer drew the new ones.
 let worldGeneration = 0;
 let lastWorldGeneration = -1;
+let interventionEpoch = 0;
 
 /** Invalidate the physics caches. Call after repopulating the object lists. */
 const bumpWorldGeneration = () => {
@@ -1841,6 +1842,30 @@ const bumpWorldGeneration = () => {
  * @returns {number} A counter, meaningful only by comparison
  */
 export const getWorldGeneration = () => worldGeneration;
+
+/**
+ * How many times a body's state has been changed by hand.
+ *
+ * Distinct from the world generation, which counts rebuilds. This counts
+ * interventions: a manoeuvre burn, a bench perturbation - the same objects,
+ * moving differently because somebody made them. An observing session cannot
+ * see the difference from the target's identity, and it matters to one: a
+ * radial-velocity curve recorded before a burn is a recording of an orbit the
+ * planet is no longer on, and continuing it afterwards would splice two
+ * different systems into one dataset.
+ *
+ * @returns {number} A counter, meaningful only by comparison
+ */
+export const getInterventionEpoch = () => interventionEpoch;
+
+/**
+ * Record that a body's state was changed by hand rather than by integration.
+ *
+ * @returns {number} The new epoch
+ */
+export function noteIntervention() {
+  return ++interventionEpoch;
+}
 
 const updateCachedArrays = () => {
   const currentCounts = {

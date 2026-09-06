@@ -30,6 +30,7 @@ import {
   planets,
   state,
   getPhysicsSetting,
+  getInterventionEpoch,
   getWorldGeneration,
 } from './physics.js';
 import { velocityUnitToMs, timeUnitSeconds } from './units.js';
@@ -151,6 +152,7 @@ function captureProvenance() {
     inclinationDeg: getInclination(),
     positionAngleDeg: observerGeometry()?.positionAngleDeg ?? null,
     worldGeneration: getWorldGeneration(),
+    interventionEpoch: getInterventionEpoch(),
     scenario: current_scenario_name,
     // Both scales the measurements were expressed in. A recording read back
     // under a different unit mode would otherwise be silently rescaled.
@@ -352,6 +354,7 @@ function currentSessionKey() {
     starId: star ? star.id : null,
     geometry: observerGeometry(),
     worldGeneration: getWorldGeneration(),
+    interventionEpoch: getInterventionEpoch(),
     velocityScale: velocityUnitToMs(),
     config: survey ? surveyConfigLabel(surveyConfig) : null,
   });
@@ -837,6 +840,7 @@ function sessionNoticeFor(reason, star) {
     });
   }
   if (reason === 'world') return t('observing.session.newWorld');
+  if (reason === 'maneuver') return t('observing.session.maneuver');
   if (reason === 'units') return t('observing.session.newUnits');
   if (reason === 'config') return t('observing.session.newConfig');
   return t('observing.session.newGeometry');

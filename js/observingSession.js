@@ -39,6 +39,7 @@ export function sessionKey({
   starId = null,
   geometry = null,
   worldGeneration = null,
+  interventionEpoch = null,
   velocityScale = null,
   config = null,
 } = {}) {
@@ -48,6 +49,14 @@ export function sessionKey({
     // rebuilt scenario hands the same id to a different star; without this, a
     // recording of one could be silently continued against its replacement.
     worldGeneration: Number.isFinite(worldGeneration) ? worldGeneration : null,
+    // A body whose velocity was changed by hand - a manoeuvre burn, a bench
+    // perturbation - is on a different orbit from the one the samples so far
+    // describe, and no other field here can tell: same star, same geometry,
+    // same units, same world. Without this a recording would continue across
+    // the burn and be plotted as one curve of two different systems.
+    interventionEpoch: Number.isFinite(interventionEpoch)
+      ? interventionEpoch
+      : null,
     // Metres per second in one simulation velocity unit. Samples are converted
     // as they are taken, so a change here - the gravitational constant slider
     // moves it - means the numbers already recorded were made with a different
@@ -96,7 +105,7 @@ export function sameSession(a, b) {
  *
  * @param {?object} before - The session the samples were taken under
  * @param {?object} after - The session now in force
- * @returns {?('target'|'geometry')} What changed, or null
+ * @returns {?('world'|'maneuver'|'target'|'geometry')} What changed, or null
  */
 export function sessionChange(before, after) {
   if (!before || !after) return null;
@@ -110,6 +119,7 @@ export function sessionChange(before, after) {
   ) {
     return 'world';
   }
+  if (before.interventionEpoch !== after.interventionEpoch) return 'maneuver';
   if (before.starId !== after.starId) return 'target';
   if (
     before.positionAngleDeg !== after.positionAngleDeg ||

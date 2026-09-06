@@ -1343,6 +1343,8 @@ export const EN = {
     'Started a new recording: the gravitational constant changed, so the earlier samples were converted with a different scale and cannot be plotted beside these.',
   'observing.session.newConfig':
     'Started a new recording: the observing schedule changed. The earlier measurements belong to the previous programme.',
+  'observing.session.maneuver':
+    'A manoeuvre changed this body\u2019s orbit, so the measurements taken before it describe a path it is no longer on. Recording has started again.',
   'observing.session.rewound':
     'Rewound to day {time}. Discarded {n} samples recorded after that point: they described a future this run has not reached.',
   'observing.session.unnamedStar': 'this star',

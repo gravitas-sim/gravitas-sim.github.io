@@ -77,6 +77,7 @@ const LAYERS = [
       /^js\/binaryOrbits\.js$/,
       /^js\/binaryStability\.js$/,
       /^js\/gravityAssist\.js$/,
+      /^js\/maneuver\.js$/,
       /^js\/chaos\//,
       /^js\/experiments\/align\.js$/,
       /^js\/resonance\//,

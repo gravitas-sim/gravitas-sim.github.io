@@ -1341,6 +1341,8 @@ export const ES = {
     'Se inició una grabación nueva: cambió la constante gravitatoria, así que las muestras anteriores se convirtieron con otra escala y no pueden representarse junto a estas.',
   'observing.session.newConfig':
     'Se inició una grabación nueva: cambió el calendario de observación. Las medidas anteriores pertenecen al programa previo.',
+  'observing.session.maneuver':
+    'Una maniobra cambio la orbita de este cuerpo, asi que las mediciones anteriores describen una trayectoria en la que ya no esta. La grabacion ha vuelto a empezar.',
   'observing.session.rewound':
     'Rebobinado al día {time}. Se descartaron {n} muestras posteriores a ese punto: describían un futuro al que esta ejecución no ha llegado.',
   'observing.session.unnamedStar': 'esta estrella',
