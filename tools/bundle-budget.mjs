@@ -58,18 +58,33 @@ const BUDGETS = [
       'at start-up. Raised to 830 KB, which is where it stays until something ' +
       'is taken *out*: the next feature that wants room here should be looking ' +
       'for a module to defer rather than for another thirty kilobytes. ' +
-      'Neither three.js nor Chart.js is in here; both are deferred.',
+      'Neither three.js nor Chart.js is in here; both are deferred.\n\n' +
+      'That instruction was then tested and honoured. The binary, gravity ' +
+      'assist and RV-analysis work took this to 868 KB, and the answer was ' +
+      'four deferrals rather than a bigger number: the two scenario-specific ' +
+      'panels now arrive with their scenarios, the export dialog and every CSV ' +
+      'builder behind it arrive on the first press of the export button, and ' +
+      'the twelve kilobytes of prose those panels needed moved into a second ' +
+      'catalogue that registers itself when they load. 868 KB back to 828 KB, ' +
+      'against a baseline of 821.8 KB before the work started.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2400,
+    limit: 2550,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
       'rather than a regression - the bytes were always downloaded, they were ' +
       'just downloaded from jsdelivr - and none of it is in the initial ' +
-      'download. Loose on purpose: a new lesson or instrument belongs here.',
+      'download. Loose on purpose: a new lesson or instrument belongs here.\n\n' +
+      'Raised from 2400 to 2550 for two reasons that are both the system ' +
+      'working. Two investigations and their instruments were added, which is ' +
+      'exactly what this budget is loose for; and about forty kilobytes ' +
+      'arrived here by being taken OUT of the start-up path, which is the ' +
+      'trade the initial budget above asks every new feature to make. Raising ' +
+      'this number to absorb something that should have been deferred would ' +
+      'be the opposite, and is not what happened.',
   },
 ];
 

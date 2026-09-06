@@ -22,8 +22,15 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const { EN } = await import(`${ROOT}js/i18n/en.js`);
-const { ES } = await import(`${ROOT}js/i18n/es.js`);
+// Merged, because the catalogue is split across two files for code-splitting
+// reasons and is one catalogue as far as coverage is concerned. See
+// js/i18n/en.deferred.js for why the split exists.
+const { EN: EN_BASE } = await import(`${ROOT}js/i18n/en.js`);
+const { ES: ES_BASE } = await import(`${ROOT}js/i18n/es.js`);
+const { EN_DEFERRED } = await import(`${ROOT}js/i18n/en.deferred.js`);
+const { ES_DEFERRED } = await import(`${ROOT}js/i18n/es.deferred.js`);
+const EN = { ...EN_BASE, ...EN_DEFERRED };
+const ES = { ...ES_BASE, ...ES_DEFERRED };
 const { SCENARIO_INFO } = await import(`${ROOT}js/data/scenarioInfo.js`);
 const { TAG_ORDER } = await import(`${ROOT}js/data/scenarioTags.js`);
 

@@ -10,6 +10,8 @@
 // the two modules and nothing else.
 // =============================================================================
 
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
 let loading = null;
 
 /**
@@ -20,6 +22,7 @@ let loading = null;
 export function ensureRvWorkspace() {
   if (!loading) {
     loading = (async () => {
+      await ensureDeferredMessages();
       const [workspace, panel, dataExport] = await Promise.all([
         import('./rvWorkspace.js'),
         import('./rvWorkspacePanel.js'),

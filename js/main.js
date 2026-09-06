@@ -13,13 +13,12 @@ import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
 import { initAstrometry } from './astrometry.js';
 import { initPauseAtEvent } from './pauseAtEventPanel.js';
-import { initBinaryRun } from './binaryRunPanel.js';
-import { initAssist } from './assistPanel.js';
+import { initScenarioPanels } from './scenarioPanelBridge.js';
 import { initObservationLayout } from './observationLayout.js';
 import { initControls } from './controls.js';
 import { initTutorial } from './tutorial.js';
 import { initShare, hasSharedLink, applySharedLinkFromUrl } from './share.js';
-import { initExportDialog } from './exportDialog.js';
+import { initExportBridge } from './exportBridge.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
 import { initScenarioBrowser } from './scenarioBrowser.js';
@@ -283,8 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
       initRotationCurve();
       initAstrometry();
       initPauseAtEvent();
-      initBinaryRun();
-      initAssist();
+      initScenarioPanels();
       initObservationLayout();
     } catch (err) {
       console.error('Light curve unavailable:', err);
@@ -298,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initShare();
-    initExportDialog();
+    initExportBridge();
     // The markup sweep runs after the dialogs exist but before the interface is
     // revealed, so nothing is ever seen in the wrong language.
     initI18nDom();

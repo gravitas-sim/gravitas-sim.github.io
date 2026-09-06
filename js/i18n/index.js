@@ -102,6 +102,32 @@ export async function loadLocale(id) {
 /** @returns {boolean} True when a locale's catalogue is in memory */
 export const isLocaleLoaded = id => Boolean(CATALOGUES[id]);
 
+/**
+ * Merge extra messages into a locale after it has loaded.
+ *
+ * For strings that belong to a lazily loaded chunk. A single message object
+ * cannot be code-split - esbuild follows the static import and the whole
+ * catalogue lands in the entry graph - so the strings for panels most visitors
+ * never open live in their own module and register themselves when that panel
+ * arrives.
+ *
+ * Idempotent, because a bridge may be asked to load twice, and additive: it
+ * never removes a key, so a re-registration cannot blank a string that is
+ * already on screen.
+ *
+ * @param {string} locale - Which catalogue to extend
+ * @param {object} messages - Ids to strings
+ * @returns {void}
+ */
+export function registerMessages(locale, messages) {
+  if (!locale || !messages) return;
+  CATALOGUES[locale] = { ...(CATALOGUES[locale] || {}), ...messages };
+  // A string that was asked for before its chunk arrived was recorded as
+  // missing and warned about once. Now that it exists, forget that so a
+  // genuine gap later is still reported.
+  for (const id of Object.keys(messages)) missing.delete(id);
+}
+
 let current = DEFAULT_LOCALE;
 const listeners = new Set();
 

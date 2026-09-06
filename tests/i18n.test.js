@@ -13,8 +13,17 @@ import {
   num,
   initI18n,
 } from '../js/i18n/index.js';
-import { EN } from '../js/i18n/en.js';
-import { ES } from '../js/i18n/es.js';
+import { EN as EN_BASE } from '../js/i18n/en.js';
+import { ES as ES_BASE } from '../js/i18n/es.js';
+import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
+import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
+
+// One catalogue, in two files. The split is a code-splitting measure - a
+// single message object cannot be deferred, so the strings for panels most
+// visitors never open live beside the chunks that use them - and every check
+// below is about the catalogue as a whole.
+const EN = { ...EN_BASE, ...EN_DEFERRED };
+const ES = { ...ES_BASE, ...ES_DEFERRED };
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import {
   scenarioTitle,
@@ -107,12 +116,15 @@ describe('looking a message up', () => {
 
   test('falls back to English rather than to a blank', async () => {
     // Proven by asking for an id English has and Spanish is pretending not to.
+    // Mutating ES_BASE rather than the merged view: the merge above is a copy,
+    // and deleting from a copy would leave the runtime's catalogue untouched
+    // and the test passing for the wrong reason.
     const id = 'settings.settingsCancel';
-    const saved = ES[id];
-    delete ES[id];
+    const saved = ES_BASE[id];
+    delete ES_BASE[id];
     await setLocale('es', { persist: false });
     expect(t(id)).toBe(EN[id]);
-    ES[id] = saved;
+    ES_BASE[id] = saved;
   });
 
   test('an unknown id renders as itself, never as nothing', async () => {
@@ -242,8 +254,38 @@ describe('choosing a language', () => {
     // before it can be counted.
     await setLocale('es', { persist: false });
     const { translated, total } = coverageOf('es');
-    expect(total).toBe(Object.keys(EN).length);
-    expect(translated).toBe(Object.keys(ES).length);
+    // Against the loaded catalogues, not the merged view: the deferred half
+    // is registered by the bridge that loads its panel, and in a bare test
+    // environment no panel has been loaded.
+    expect(total).toBe(Object.keys(EN_BASE).length);
+    expect(translated).toBe(Object.keys(ES_BASE).length);
+  });
+});
+
+describe('the catalogue split', () => {
+  test('both halves are present in both languages', () => {
+    // The split exists so a panel most visitors never open does not cost them
+    // its prose at start-up. It is only safe while the two halves stay in
+    // step, and nothing else in this suite would notice a key added to one.
+    expect(Object.keys(EN_DEFERRED).sort()).toEqual(
+      Object.keys(ES_DEFERRED).sort()
+    );
+    expect(Object.keys(EN_DEFERRED).length).toBeGreaterThan(50);
+  });
+
+  test('no id appears in both halves', () => {
+    // A duplicated id would be shadowed by whichever half registered last,
+    // which is a bug that would show up as a string reverting when a panel
+    // opens.
+    const overlap = Object.keys(EN_DEFERRED).filter(k => k in EN_BASE);
+    expect(overlap).toEqual([]);
+  });
+
+  test('the deferred half holds only deferred panels’ strings', () => {
+    // A string used by the start-up path would render as its own id until
+    // somebody opened an unrelated panel.
+    const allowed = /^(binaryRun|assist|rvfit|exoW)\./;
+    expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
   });
 });
 

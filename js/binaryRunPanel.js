@@ -441,3 +441,17 @@ export function initBinaryRun() {
 
   e.container.style.display = 'none';
 }
+
+/**
+ * Show the panel for a scenario that has already finished loading.
+ *
+ * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
+ * event, so by the time init() subscribes to that event it has been and gone.
+ * This is the one-off catch-up for the load that caused the import; every
+ * later rebuild is handled by the subscription.
+ *
+ * @returns {void}
+ */
+export function notifyScenarioReady() {
+  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+}
