@@ -18,6 +18,7 @@ import {
   lightCurveCsv,
   transitTableCsv,
   radialVelocityCsv,
+  rvFitCsv,
   exportSummary,
   downloadCsv,
   csvFilename,
@@ -126,6 +127,17 @@ function files() {
           : 'No observing run. Open the Radial Velocity tool and switch on the synthetic observing run.',
       ready: s.rvMeasurements > 0,
       build: radialVelocityCsv,
+    },
+    {
+      key: 'rvfit',
+      name: 'Radial velocity fit',
+      // Offered only once a fit exists. Exporting an untouched default would
+      // be exporting the opening guess, which is not an analysis of anything.
+      detail: s.rvFit
+        ? `The fitted period, amplitude, phase and systemic velocity, the assumptions behind them, every residual, and the recording they came from.`
+        : 'No fit yet. Take a recording, press Analyse on the Radial Velocity panel, and adjust the model or search a range of periods.',
+      ready: Boolean(s.rvFit),
+      build: rvFitCsv,
     },
     {
       key: 'transits',

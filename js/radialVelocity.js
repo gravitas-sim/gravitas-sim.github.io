@@ -32,7 +32,7 @@ import {
   getPhysicsSetting,
   getWorldGeneration,
 } from './physics.js';
-import { velocityUnitToMs } from './units.js';
+import { velocityUnitToMs, timeUnitSeconds } from './units.js';
 import {
   projectVelocityLOS,
   observerGeometry,
@@ -44,6 +44,8 @@ import { mountObserverControls } from './observerControls.js';
 import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
 import { halfRangeOfSeries } from './exoplanetObservables.js';
+import { orbitalElements, dominantPrimary } from './orbital.js';
+import { current_scenario_name } from './appState.js';
 import {
   decideSampling,
   dropInvalidatedSamples,
@@ -342,6 +344,7 @@ function cacheElements() {
     surveySeed: document.getElementById('rvSurveySeed'),
     surveyIdeal: document.getElementById('rvSurveyIdeal'),
     surveyRestart: document.getElementById('rvSurveyRestart'),
+    analyse: document.getElementById('rvAnalyse'),
     surveyStatus: document.getElementById('rvSurveyStatus'),
   };
   return els;
@@ -767,6 +770,57 @@ export function radialVelocitySurvey() {
   };
 }
 
+/** The scenario a recording was taken in, for its provenance block. */
+const currentScenarioName = () => current_scenario_name;
+
+/**
+ * The parameters the simulation is actually using, for the reveal.
+ *
+ * Computed from the orbital elements of the star and whatever it is most
+ * strongly bound to, rather than inferred from the noiseless velocity column.
+ * That distinction matters: a value reconstructed by fitting the truth series
+ * would be a fit wearing the word "truth", and would agree with the student's
+ * fit for reasons that have nothing to do with being right.
+ *
+ * Null when there is nothing identifiable to describe - a star with no
+ * companion, or a scene the routine cannot make sense of. The workspace shows
+ * "nothing to reveal" rather than a number in that case, which is the honest
+ * outcome and also the one a real observation would give.
+ *
+ * @returns {?{period: number, K: number, gamma: number, note: string}}
+ */
+function surveyTruth() {
+  const star = observedStar();
+  if (!star) return null;
+  const others = [...stars, ...gas_giants, ...planets].filter(b => b !== star);
+  const companion = dominantPrimary(star, others);
+  if (!companion) return null;
+
+  const G = getPhysicsSetting('gravitational_constant');
+  const elements = orbitalElements(star, companion, G);
+  if (!elements?.period || !(elements.period > 0)) return null;
+
+  // The star's own orbit about the barycentre is what the spectrograph sees,
+  // so K is the semi-amplitude of the star's motion, projected on the line of
+  // sight, in the same units the panel reports.
+  const total = star.mass + companion.mass;
+  const starOrbit = (elements.a * companion.mass) / total;
+  const speed = (2 * Math.PI * starOrbit) / elements.period;
+  const inclination = (getInclination() * Math.PI) / 180;
+  const K = speed * Math.sin(inclination) * velocityUnitToMs();
+
+  return {
+    // Days, to match the measurement times.
+    period: (elements.period * timeUnitSeconds()) / 86400 || null,
+    K,
+    // The observing mode measures against the system barycentre, so there is
+    // no systemic offset to recover. Saying zero is more useful than omitting
+    // it, because a student who fits a nonzero gamma has found something.
+    gamma: 0,
+    note: 'from the simulated orbit, projected on the line of sight',
+  };
+}
+
 /**
  * Read the schedule out of the controls.
  *
@@ -931,6 +985,30 @@ function initSurveyControls() {
   });
 
   e.surveyRestart?.addEventListener('click', () => {
+    // The analysis workspace is the heaviest thing in the observing feature and
+    // most visitors never take a recording, so it arrives through a bridge that
+    // imports it on the first press rather than at start-up.
+    e.analyse?.addEventListener('click', async () => {
+      const run = radialVelocitySurvey();
+      if (!run.measurements.length) return;
+      const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
+      await openRvWorkspace({
+        points: run.measurements,
+        target: run.target?.name ?? null,
+        scenario: currentScenarioName(),
+        seed: run.config.seed ?? null,
+        config: {
+          cadenceDays: run.config.cadenceDays,
+          baselineDays: run.config.baselineDays,
+          sigma: run.config.sigmaMs,
+        },
+        worldGeneration: run.worldGeneration ?? null,
+        recordedAt: new Date().toISOString(),
+        // What the simulation was actually doing, kept apart from the
+        // measurements so the workspace can refuse to look at it until asked.
+        truth: surveyTruth(),
+      });
+    });
     if (survey) restartSurvey().catch(() => {});
   });
 }

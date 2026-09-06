@@ -1472,6 +1472,53 @@ export const ES = {
   'binaryRun.close.hint': 'Ocultar el panel de ejecución en binaria',
   // --- El panel de asistencia gravitatoria -------------------------------------
   'assist.close.hint': 'Ocultar el panel de asistencia gravitatoria',
+  // --- El espacio de análisis de velocidad radial -------------------------------
+  'rv.survey.analyse': 'Analizar',
+  'rv.survey.analyse.hint':
+    'Abre el espacio de análisis sobre estas medidas: ajusta un modelo circular a mano, o busca en un rango acotado de periodos.',
+  'rvfit.close.hint': 'Ocultar el espacio de análisis',
+  'rvfit.period': 'Periodo',
+  'rvfit.amplitude': 'Amplitud K',
+  'rvfit.phase': 'Fase',
+  'rvfit.gamma': 'Velocidad sistémica',
+  'rvfit.minPeriod': 'Buscar desde',
+  'rvfit.maxPeriod': 'hasta',
+  'rvfit.snap': 'Mejor ajuste a este periodo',
+  'rvfit.search': 'Buscar en este rango',
+  'rvfit.reveal': 'Revelar la verdad de la simulación',
+  'rvfit.status.none': 'Sin registro',
+  'rvfit.status.tooFew': 'No hay medidas suficientes',
+  'rvfit.status.points': '{used} medidas ajustadas, {dropped} excluidas',
+  'rvfit.tooFew':
+    'Un modelo circular tiene cuatro parámetros, así que necesita al menos tres medidas utilizables y este registro tiene {n}.',
+  'rvfit.chi2': '\u03c7\u00b2 reducida {reduced}, RMS de residuos {rms} m/s',
+  'rvfit.noChi2':
+    'RMS de residuos {rms} m/s. Sin \u03c7\u00b2 reducida, porque estas medidas no llevan incertidumbres utilizables y una \u03c7\u00b2 calculada con pesos inventados no significaría nada.',
+  'rvfit.rivalsList':
+    'Periodos que ajustan dentro de \u0394\u03c7\u00b2 = 1 del mejor: {list}. Nada en estos datos los distingue.',
+  'rvfit.oneMinimum':
+    'Un mínimo claro en el rango buscado. Eso dice algo sobre este rango y este muestreo, no es una detección.',
+  'rvfit.structured':
+    'Los residuos cambian de signo {runs} veces donde por azar se esperarían {expected}. Tienen una forma, así que al modelo circular le falta algo.',
+  'rvfit.unstructured':
+    'Los residuos cambian de signo {runs} veces frente a las {expected} esperadas por azar, que es lo que parece ruido disperso.',
+  'rvfit.truth':
+    'La simulación usó: periodo {period} d, K {K} m/s, velocidad sistémica {gamma} m/s.',
+  'rvfit.noTruth':
+    'Este registro no lleva sus parámetros generadores, así que no hay nada que revelar.',
+  'rvfit.badBounds':
+    'La búsqueda necesita un rango con un límite inferior positivo por debajo del superior.',
+  'rvfit.noData': 'Toma primero un registro',
+  'rvfit.noSearch':
+    'Ejecuta una búsqueda acotada para ver la curva de \u03c7\u00b2',
+  'rvfit.plot.time': 'medidas y modelo',
+  'rvfit.plot.folded': 'plegado sobre el periodo de prueba',
+  'rvfit.plot.residuals': 'residuos',
+  'rvfit.plot.periodogram': '\u03c7\u00b2 frente al periodo',
+  'rvfit.rivals': '{n} periodos ajustan más o menos igual de bien',
+  'rvfit.hint':
+    'Un modelo circular de un solo planeta: periodo, amplitud, fase y velocidad sistémica, y nada más. Cuando no ajusta, los residuos mostrarán una forma en vez de absorber el problema en un parámetro, que es la razón de mantener el modelo así de restrictivo. El punto más bajo del periodograma no es una respuesta: en datos poco muestreados varios periodos ajustan igual de bien de forma rutinaria, y los que lo hacen se listan debajo.',
+
   'assist.impact': 'Parámetro de impacto (+ por detrás, \u2212 por delante)',
   'assist.run': 'Lanzarla',
   'assist.flip': 'El otro lado',
@@ -2043,6 +2090,12 @@ export const ES = {
   'exoW.thisPlanetIs': 'Este planeta está',
   // --- ¿Puedes detectar este planeta? ----------------------------------------
   // --- El presupuesto de ruido de un tránsito ----------------------------------
+  'exoW.readout.depthOverNoise': 'Profundidad sobre ruido',
+  'exoW.readout.totalNoise': 'Ruido total sobre la profundidad',
+  'exoW.readout.photonAfterAveraging': 'Ruido de fotones, tras promediar',
+  'exoW.readout.correlatedFloor': 'Suelo correlacionado',
+  'exoW.readout.inTransitHours': 'Horas pasadas en tránsito',
+  'exoW.readout.ceiling': 'Lo mejor posible, observando infinitamente',
   'exoW.whatSwampsATransit': 'Contra qué compite un tránsito',
   'exoW.whatSwampsATransit.note':
     'El ruido de fotones se da por hora y se promedia a lo largo de todo el tiempo en tránsito. Los otros dos están correlacionados en la escala de tiempo de un tránsito y no se promedian en absoluto.',

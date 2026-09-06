@@ -356,6 +356,15 @@
             >
               Restart run
             </button>
+            <button
+              id="rvAnalyse"
+              class="obs-panel-btn"
+              data-i18n="rv.survey.analyse"
+              title="Open the analysis workspace on these measurements: fit a circular model by hand or search a bounded range of periods"
+              data-i18n-title="rv.survey.analyse.hint"
+            >
+              Analyse
+            </button>
           </div>
           <p id="rvSurveyStatus" class="rv-survey-status" role="status"></p>
         </div>
@@ -511,6 +520,99 @@
         the interval the event was localised to. The simulation stops just after
         the event rather than winding back onto it, which would leave the
         recordings and the timeline describing a moment that never happened.
+      </p>
+    </div>
+
+    <!-- 📉 Radial velocity analysis workspace -->
+    <div
+      id="rvFitContainer"
+      class="obs-panel rvfit-container"
+      style="display: none"
+      role="region"
+      aria-labelledby="rvFitTitle"
+    >
+      <div class="obs-panel-toolbar">
+        <div class="obs-panel-meta">
+          <span class="obs-panel-title" id="rvFitTitle">RV Analysis</span>
+          <span id="rvFitStatus" class="obs-panel-status">No recording</span>
+        </div>
+        <div class="obs-panel-actions">
+          <button
+            id="rvFitClose"
+            class="obs-panel-btn"
+            title="Hide the analysis workspace"
+            data-i18n-title="rvfit.close.hint"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <canvas id="rvFitCanvas" class="rvfit-canvas"></canvas>
+
+      <div class="rvfit-sliders">
+        <label class="rvfit-field">
+          <span data-i18n="rvfit.period">Period</span>
+          <input type="range" id="rvFit_period" />
+          <span class="rvfit-value" id="rvFitValue_period">—</span>
+        </label>
+        <label class="rvfit-field">
+          <span data-i18n="rvfit.amplitude">Amplitude K</span>
+          <input type="range" id="rvFit_K" />
+          <span class="rvfit-value" id="rvFitValue_K">—</span>
+        </label>
+        <label class="rvfit-field">
+          <span data-i18n="rvfit.phase">Phase</span>
+          <input type="range" id="rvFit_phase" />
+          <span class="rvfit-value" id="rvFitValue_phase">—</span>
+        </label>
+        <label class="rvfit-field">
+          <span data-i18n="rvfit.gamma">Systemic velocity</span>
+          <input type="range" id="rvFit_gamma" />
+          <span class="rvfit-value" id="rvFitValue_gamma">—</span>
+        </label>
+      </div>
+
+      <p id="rvFitStats" class="rvfit-stats"></p>
+      <p id="rvFitStructure" class="rvfit-structure"></p>
+
+      <div class="pause-event-form">
+        <label class="pause-event-field">
+          <span data-i18n="rvfit.minPeriod">Search from</span>
+          <input type="number" id="rvFitMinPeriod" step="0.01" value="0.5" />
+        </label>
+        <label class="pause-event-field">
+          <span data-i18n="rvfit.maxPeriod">to</span>
+          <input type="number" id="rvFitMaxPeriod" step="0.1" value="20" />
+        </label>
+        <div class="pause-event-actions">
+          <button id="rvFitSnap" class="obs-panel-btn" type="button">
+            <span data-i18n="rvfit.snap">Best fit at this period</span>
+          </button>
+          <button id="rvFitSearch" class="obs-panel-btn" type="button">
+            <span data-i18n="rvfit.search">Search this range</span>
+          </button>
+        </div>
+      </div>
+
+      <canvas id="rvFitPeriodogram" class="rvfit-canvas"></canvas>
+      <p id="rvFitRivals" class="rvfit-rivals"></p>
+
+      <div class="pause-event-actions">
+        <button id="rvFitReveal" class="obs-panel-btn" type="button">
+          <span data-i18n="rvfit.reveal">Reveal simulation truth</span>
+        </button>
+      </div>
+      <p id="rvFitTruth" class="rvfit-truth" role="status"></p>
+
+      <p class="obs-panel-hint" data-i18n="rvfit.hint">
+        A circular single-planet model: period, amplitude, phase and systemic
+        velocity, and nothing else. When it does not fit, the residuals will
+        show a shape rather than absorbing the problem into a parameter — which
+        is the reason for keeping the model this restrictive. The lowest point
+        on the periodogram is not an answer: on sparsely sampled data several
+        periods routinely fit equally well, and the ones that do are listed
+        beneath it.
       </p>
     </div>
 

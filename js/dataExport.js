@@ -359,6 +359,122 @@ export const RADIAL_VELOCITY_COLUMNS = [
  *
  * @returns {{csv: string, rows: number, target: ?string}} The document and what went into it
  */
+/** Columns for an exported fit. One row per measurement, plus a header block. */
+const RV_FIT_COLUMNS = [
+  'day',
+  'phase',
+  'rv_ms',
+  'sigma_ms',
+  'model_ms',
+  'residual_ms',
+  'quality',
+];
+
+/**
+ * A fit from the analysis workspace, as CSV with its assumptions on top.
+ *
+ * The parameter block is comment lines above the table rather than extra
+ * columns repeated on every row. It carries the model, the assumptions behind
+ * it, the search bounds if one was run, and the provenance of the recording -
+ * because a fit that does not say which run it came from, on what schedule and
+ * with what noise seed, is not reproducible by whoever receives it.
+ *
+ * Returns null when the workspace has never been opened, so the export dialog
+ * can offer the row only when there is something behind it. Read through the
+ * bridge's own accessor so that asking does not pull the chunk in.
+ *
+ * @returns {?string} The file, or null with no fit to export
+ */
+export function rvFitCsv() {
+  const report = latestRvFitReport?.();
+  if (!report) return null;
+
+  const lines = [];
+  const comment = text => lines.push(`# ${text}`);
+  comment('Radial velocity fit');
+  comment(`model: ${report.model}`);
+  for (const a of report.assumptions) comment(`assumption: ${a}`);
+  comment(`period_days: ${report.parameters.period}`);
+  comment(`K_ms: ${report.parameters.K}`);
+  comment(`phase_rad: ${report.parameters.phase}`);
+  comment(`gamma_ms: ${report.parameters.gamma}`);
+  comment(`weighting: ${report.fit?.weighting ?? 'unknown'}`);
+  // Null whenever the weights were invented, and the file says so rather than
+  // leaving the field blank for a reader to fill in with an assumption.
+  comment(
+    `reduced_chi2: ${
+      report.fit?.reducedChi2 === null
+        ? 'not applicable - no usable uncertainties'
+        : report.fit?.reducedChi2
+    }`
+  );
+  comment(`residual_rms_ms: ${report.fit?.rms ?? ''}`);
+  comment(`measurements_used: ${report.used} of ${report.planned} planned`);
+  comment(
+    `excluded: ${report.excluded.missed} missed, ${report.excluded.notFinite} unreadable, ${report.excluded.badSigma} bad uncertainty`
+  );
+  if (report.search) {
+    comment(
+      `search_bounds_days: ${report.search.bounds.minPeriod} to ${report.search.bounds.maxPeriod}`
+    );
+    comment(
+      `other_minima_days: ${report.search.minima
+        .map(m => `${m.period.toFixed(4)} (dchi2 ${m.deltaChi2.toFixed(3)})`)
+        .join('; ')}`
+    );
+  }
+  if (report.structure) {
+    comment(
+      `residual_sign_changes: ${report.structure.runs} against ${report.structure.expectedRuns.toFixed(1)} expected by chance`
+    );
+  }
+  for (const [key, value] of Object.entries(report.recording)) {
+    comment(`recording_${key}: ${value ?? ''}`);
+  }
+  comment(`truth_revealed: ${report.truthRevealed}`);
+  if (report.truth) {
+    comment(
+      `truth_period_days: ${report.truth.period}, truth_K_ms: ${report.truth.K}`
+    );
+  }
+
+  const rows = [RV_FIT_COLUMNS.slice()];
+  for (const r of report.residuals) {
+    rows.push([
+      num(r.day),
+      num(r.phase, 4),
+      num(r.rv),
+      r.sigma === null || r.sigma === undefined ? '' : num(r.sigma),
+      num(r.model),
+      num(r.residual),
+      csvField(r.quality || 'ok'),
+    ]);
+  }
+  return `${lines.join('\n')}\n${rows.map(r => r.join(',')).join('\n')}\n`;
+}
+
+/**
+ * Where the export dialog reads a fit from.
+ *
+ * Injected rather than imported so that dataExport.js, which is in the
+ * start-up path, never reaches into the lazily loaded workspace chunk. The
+ * bridge installs this the first time somebody opens the workspace; until then
+ * it is undefined and rvFitCsv() returns null.
+ *
+ * @type {?Function}
+ */
+let latestRvFitReport = null;
+
+/**
+ * Let the workspace publish its current fit to the export dialog.
+ *
+ * @param {?Function} fn - Returns the report, or null
+ * @returns {void}
+ */
+export function setRvFitReporter(fn) {
+  latestRvFitReport = typeof fn === 'function' ? fn : null;
+}
+
 export function radialVelocityCsv() {
   const run = radialVelocitySurvey();
   const rows = [RADIAL_VELOCITY_COLUMNS.slice()];
@@ -416,6 +532,9 @@ export function exportSummary() {
     samples: curve.days.length,
     transits: log.length,
     rvMeasurements: run.measurements.length,
+    // Whether the analysis workspace has a fit to export. Undefined until
+    // somebody opens it, which is exactly when the row should appear.
+    rvFit: Boolean(latestRvFitReport?.()),
     rvUsable: run.measurements.filter(
       m => !m.missed && m.quality !== 'degraded'
     ).length,

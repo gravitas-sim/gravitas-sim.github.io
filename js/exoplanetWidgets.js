@@ -1905,6 +1905,53 @@ const transitNoise = {
       ceiling: red > 0 ? v.depth / red : Infinity,
     };
   },
+  readout(v) {
+    const c = this.compute(v);
+    return [
+      {
+        get label() {
+          return t('exoW.readout.depthOverNoise');
+        },
+        value: formatNumber(c.ratio, { sig: 3 }),
+        emphasis: true,
+      },
+      {
+        get label() {
+          return t('exoW.readout.totalNoise');
+        },
+        value: withUnit(formatNumber(c.total, { sig: 3 }), 'ppm'),
+      },
+      {
+        get label() {
+          return t('exoW.readout.photonAfterAveraging');
+        },
+        value: withUnit(formatNumber(c.white, { sig: 3 }), 'ppm'),
+      },
+      {
+        get label() {
+          return t('exoW.readout.correlatedFloor');
+        },
+        value: withUnit(formatNumber(c.red, { sig: 3 }), 'ppm'),
+      },
+      {
+        get label() {
+          return t('exoW.readout.inTransitHours');
+        },
+        value: withUnit(formatNumber(c.hours, { sig: 3 }), 'hr'),
+      },
+      {
+        // The number that says whether patience can ever work. With the photon
+        // term driven to zero by infinite observing, the correlated floor is
+        // what is left, and this is the ratio it would allow.
+        get label() {
+          return t('exoW.readout.ceiling');
+        },
+        value: Number.isFinite(c.ceiling)
+          ? formatNumber(c.ceiling, { sig: 3 })
+          : '\u221e',
+      },
+    ];
+  },
   draw(canvas, v) {
     const { ctx, w, h } = surface(canvas, responsiveHeight(260, 190));
     const th = chartColors();

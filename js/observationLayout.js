@@ -33,6 +33,8 @@ const PANEL_IDS = [
   'binaryRunContainer',
   // Same again: a form-shaped instrument for two scenarios, in the same corner.
   'assistContainer',
+  // The analysis workspace, opened from the radial velocity panel.
+  'rvFitContainer',
   // The spacetime view is the odd one out - it is draggable and resizable,
   // and the moment a user moves it, it drops out of the stack (see isStacked).
   // Until then it is an instrument like the rest and queues with them.

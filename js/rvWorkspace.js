@@ -318,14 +318,13 @@ const scaler = (lo, hi, a, b) => {
  */
 export function draw(canvas) {
   if (!canvas) return;
-  const height = responsiveHeight(430, 340);
-  const ctx = surface(canvas, height);
+  // surface() sizes the canvas for the display's pixel ratio, clears it, and
+  // hands back the context along with the CSS-pixel dimensions to draw in.
+  const { ctx, w, h: height } = surface(canvas, responsiveHeight(430, 340));
   if (!ctx) return;
   const p = palette();
-  const w = canvas.clientWidth || 600;
   const a = analysis();
 
-  ctx.clearRect(0, 0, w, height);
   if (!a || a.tooFew) {
     ctx.fillStyle = p.muted;
     ctx.font = `12px ${MONO}`;
@@ -453,12 +452,9 @@ export function draw(canvas) {
  */
 export function drawPeriodogram(canvas) {
   if (!canvas) return;
-  const height = responsiveHeight(150, 110);
-  const ctx = surface(canvas, height);
+  const { ctx, w, h: height } = surface(canvas, responsiveHeight(150, 110));
   if (!ctx) return;
   const p = palette();
-  const w = canvas.clientWidth || 600;
-  ctx.clearRect(0, 0, w, height);
 
   if (!search?.grid?.length) {
     ctx.fillStyle = p.muted;

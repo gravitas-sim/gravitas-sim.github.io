@@ -1472,6 +1472,52 @@ export const EN = {
   'binaryRun.close.hint': 'Hide the binary run panel',
   // --- The gravity assist panel -----------------------------------------------
   'assist.close.hint': 'Hide the gravity assist panel',
+  // --- The radial velocity analysis workspace ----------------------------------
+  'rv.survey.analyse': 'Analyse',
+  'rv.survey.analyse.hint':
+    'Open the analysis workspace on these measurements: fit a circular model by hand, or search a bounded range of periods.',
+  'rvfit.close.hint': 'Hide the analysis workspace',
+  'rvfit.period': 'Period',
+  'rvfit.amplitude': 'Amplitude K',
+  'rvfit.phase': 'Phase',
+  'rvfit.gamma': 'Systemic velocity',
+  'rvfit.minPeriod': 'Search from',
+  'rvfit.maxPeriod': 'to',
+  'rvfit.snap': 'Best fit at this period',
+  'rvfit.search': 'Search this range',
+  'rvfit.reveal': 'Reveal simulation truth',
+  'rvfit.status.none': 'No recording',
+  'rvfit.status.tooFew': 'Not enough measurements',
+  'rvfit.status.points': '{used} measurements fitted, {dropped} excluded',
+  'rvfit.tooFew':
+    'A circular model has four parameters, so it needs at least three usable measurements and this recording has {n}.',
+  'rvfit.chi2': 'Reduced \u03c7\u00b2 {reduced}, residual RMS {rms} m/s',
+  'rvfit.noChi2':
+    'Residual RMS {rms} m/s. No reduced \u03c7\u00b2, because these measurements carry no usable uncertainties and a \u03c7\u00b2 computed from invented weights would not mean anything.',
+  'rvfit.rivalsList':
+    'Periods fitting within \u0394\u03c7\u00b2 = 1 of the best: {list}. Nothing in this data distinguishes them.',
+  'rvfit.oneMinimum':
+    'One clear minimum in the searched range. That is a statement about this range and this sampling, not a detection.',
+  'rvfit.structured':
+    'The residuals change sign {runs} times where {expected} would be expected by chance. They have a shape, so the circular model is missing something.',
+  'rvfit.unstructured':
+    'The residuals change sign {runs} times against {expected} expected by chance, which is what scattered noise looks like.',
+  'rvfit.truth':
+    'The simulation used: period {period} d, K {K} m/s, systemic velocity {gamma} m/s.',
+  'rvfit.noTruth':
+    'This recording does not carry its generating parameters, so there is nothing to reveal.',
+  'rvfit.badBounds':
+    'The search needs a range with a positive lower bound below the upper one.',
+  'rvfit.noData': 'Take a recording first',
+  'rvfit.noSearch': 'Run a bounded search to see the \u03c7\u00b2 curve',
+  'rvfit.plot.time': 'measurements and model',
+  'rvfit.plot.folded': 'folded on the trial period',
+  'rvfit.plot.residuals': 'residuals',
+  'rvfit.plot.periodogram': '\u03c7\u00b2 against period',
+  'rvfit.rivals': '{n} periods fit about equally well',
+  'rvfit.hint':
+    'A circular single-planet model: period, amplitude, phase and systemic velocity, and nothing else. When it does not fit, the residuals will show a shape rather than absorbing the problem into a parameter \u2014 which is the reason for keeping the model this restrictive. The lowest point on the periodogram is not an answer: on sparsely sampled data several periods routinely fit equally well, and the ones that do are listed beneath it.',
+
   'assist.impact': 'Impact parameter (+ behind, \u2212 ahead)',
   'assist.run': 'Fly it',
   'assist.flip': 'Other side',
@@ -2033,6 +2079,12 @@ export const EN = {
   'exoW.thisPlanetIs': 'This planet is',
   // --- Can You Detect This Planet? -------------------------------------------
   // --- The transit noise budget -----------------------------------------------
+  'exoW.readout.depthOverNoise': 'Depth over noise',
+  'exoW.readout.totalNoise': 'Total noise on the depth',
+  'exoW.readout.photonAfterAveraging': 'Photon noise, after averaging',
+  'exoW.readout.correlatedFloor': 'Correlated floor',
+  'exoW.readout.inTransitHours': 'Hours spent in transit',
+  'exoW.readout.ceiling': 'Best possible, with infinite observing',
   'exoW.whatSwampsATransit': 'What a transit is competing with',
   'exoW.whatSwampsATransit.note':
     'Photon noise is quoted per hour and averages down over the whole in-transit time. The other two are correlated on the timescale of a transit and do not average down at all.',
