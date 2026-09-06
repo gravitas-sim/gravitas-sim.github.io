@@ -63,6 +63,7 @@ export const EXCLUDED = Object.freeze({
   MISSED: 'missed',
   NOT_FINITE: 'notFinite',
   BAD_SIGMA: 'badSigma',
+  DEGRADED: 'degraded',
 });
 
 /**
@@ -74,18 +75,36 @@ export const EXCLUDED = Object.freeze({
  * exports twelve planned epochs and fits nine should be able to see where the
  * other three went.
  *
- * Degraded points are kept by default. They are real readings taken with a
- * stated interpolation error, and dropping them silently would be a different
- * kind of dishonesty from keeping them silently; the caller can drop them.
+ * Degraded points are DROPPED by default. They used to be kept by default, on
+ * the reasoning that they are real readings with a stated interpolation error
+ * and that dropping them silently was its own dishonesty. That reasoning was
+ * half right: the answer to a silent drop is a reported one, not a silent
+ * keep. A degraded reading's error is known to exceed the tolerance, so it
+ * carries an error the stated sigma does not describe, and leaving it in a
+ * weighted fit at its face-value sigma overweights the worst point in the run.
+ * Every count is returned either way, and the panel and the exports print it.
+ *
+ * A caller that wants them back passes `keepDegraded`, and then gets them with
+ * their sigma widened to sqrt(sigma^2 + interpolationError^2) - including them
+ * at face value would be the overweighting this exists to avoid. Unverified
+ * points are kept: their error is unknown, not known to be large, and there is
+ * nothing to widen a sigma by. They are counted so the disclosure can say so.
  *
  * @param {Array<object>} points - Measurements from js/rvSurvey.js
- * @param {object} [opts] - `dropDegraded` to exclude flagged readings too
+ * @param {object} [opts] - `keepDegraded` to fit flagged readings too
  * @returns {{usable: Array<object>, excluded: Array<object>, counts: object}}
  */
 export function usablePoints(points, opts = {}) {
   const usable = [];
   const excluded = [];
-  const counts = { missed: 0, notFinite: 0, badSigma: 0, degraded: 0 };
+  const counts = {
+    missed: 0,
+    notFinite: 0,
+    badSigma: 0,
+    degraded: 0,
+    unverified: 0,
+    degradedKept: 0,
+  };
 
   for (const p of points || []) {
     if (!p) continue;
@@ -107,12 +126,27 @@ export function usablePoints(points, opts = {}) {
       excluded.push({ point: p, reason: EXCLUDED.BAD_SIGMA });
       continue;
     }
+    if (p.quality === 'unverified') counts.unverified++;
+
     if (p.quality === 'degraded') {
       counts.degraded++;
-      if (opts.dropDegraded) {
-        excluded.push({ point: p, reason: 'degraded' });
+      if (!opts.keepDegraded) {
+        excluded.push({ point: p, reason: EXCLUDED.DEGRADED });
         continue;
       }
+      counts.degradedKept++;
+      // In quadrature, because the interpolation error and the observing noise
+      // are independent. A degraded point kept at its face-value sigma would
+      // be trusted most precisely where it is least trustworthy.
+      const err = Number.isFinite(p.interpolationError)
+        ? p.interpolationError
+        : 0;
+      usable.push(
+        Number.isFinite(p.sigma) && err > 0
+          ? { ...p, sigma: Math.hypot(p.sigma, err), sigmaWidened: true }
+          : p
+      );
+      continue;
     }
     usable.push(p);
   }
@@ -200,6 +234,86 @@ export function modelCurve(params, days) {
 }
 
 /**
+ * Score a model exactly as supplied, optimising nothing.
+ *
+ * The counterpart to fitAtPeriod, and the distinction is not cosmetic. When a
+ * student drags a slider, the number under the plot has to describe the curve
+ * on the plot. fitAtPeriod re-derives the best amplitude, phase and offset at
+ * whatever period it is given, so using it to "score" a hand-set model reports
+ * how good the model COULD have been - a student could set the amplitude to
+ * zero and watch the goodness-of-fit refuse to move.
+ *
+ * Degrees of freedom
+ * -----------------------------------------------------------------------------
+ * A chi-square per degree of freedom needs a count of parameters that were
+ * estimated FROM THIS DATA, and that count depends on how the model arrived
+ * rather than on the model. So the caller states it:
+ *
+ *   evaluated by hand   nothing was estimated from the data, so dof = n. The
+ *                       default, because a slider position is not a fit.
+ *   fitted at a period  three linear parameters came out of these points, and
+ *                       the period was chosen against them too, so dof = n - 4.
+ *
+ * A student who eyeballs a curve has in some sense used the data, but not in a
+ * way with a defined parameter count, and inventing one would be worse than
+ * stating the convention. The report says which convention it used.
+ *
+ * @param {Array<object>} points - Usable measurements
+ * @param {object} params - period, K, phase, gamma, exactly as they are
+ * @param {object} [opts] - `estimatedParameters`, `weights`
+ * @returns {?object} The score, or null when there is nothing to score
+ */
+export function evaluateModel(points, params, opts = {}) {
+  if (!Array.isArray(points) || !points.length) return null;
+  if (!params || !(params.period > 0)) return null;
+
+  const weighting = opts.weights || weightsFor(points);
+  const w = weighting.weights;
+  const predicted = modelCurve(
+    params,
+    points.map(p => p.day)
+  );
+
+  let chi2 = 0;
+  let sumSq = 0;
+  for (let i = 0; i < points.length; i++) {
+    const r = points[i].rv - predicted[i];
+    if (!Number.isFinite(r)) return null;
+    chi2 += w[i] * r * r;
+    sumSq += r * r;
+  }
+
+  const estimated = Number.isFinite(opts.estimatedParameters)
+    ? opts.estimatedParameters
+    : 0;
+  const dof = points.length - estimated;
+
+  return {
+    period: params.period,
+    K: params.K,
+    phase: params.phase,
+    gamma: params.gamma,
+    chi2,
+    dof,
+    // Null rather than a number in the two cases where the quotient would be
+    // meaningless: nothing left to divide by, and weights that were invented
+    // because the data carried no usable uncertainties.
+    reducedChi2:
+      dof > 0 && weighting.mode === WEIGHTING.INVERSE_VARIANCE
+        ? chi2 / dof
+        : null,
+    rms: Math.sqrt(sumSq / points.length),
+    weighting: weighting.mode,
+    weightingReason: weighting.reason,
+    n: points.length,
+    estimatedParameters: estimated,
+    // So a reader can tell a scored model from a fitted one without guessing
+    // from the dof.
+    optimised: false,
+  };
+}
+
+/**
  * The best circular fit at one fixed period, in closed form.
  *
  * Linear in gamma, A and B, so this is one 3x3 solve and no iteration. The
@@ -284,6 +398,11 @@ export function fitAtPeriod(points, periodDays, opts = {}) {
     weighting: weighting.mode,
     weightingReason: weighting.reason,
     n: points.length,
+    // Three linear parameters came out of these points and the period was
+    // chosen against them, so four were estimated from the data. See
+    // evaluateModel for why the convention is stated rather than assumed.
+    estimatedParameters: MODEL_PARAMETERS,
+    optimised: true,
   };
 }
 
@@ -489,7 +608,12 @@ export function fitReport(points, params, opts = {}) {
   const { usable, counts } = usablePoints(points, opts);
   if (!usable.length || !params?.period) return null;
   const folded = foldOnPeriod(usable, params);
-  const scored = fitAtPeriod(usable, params.period);
+  // Scored, not refitted. The residuals below are of `params`; a chi-square
+  // from fitAtPeriod would be of a different model and the two would disagree
+  // in the same file.
+  const scored = evaluateModel(usable, params, {
+    estimatedParameters: opts.estimatedParameters ?? 0,
+  });
 
   return {
     model: 'circular-single',

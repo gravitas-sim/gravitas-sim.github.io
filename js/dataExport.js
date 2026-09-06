@@ -379,21 +379,37 @@ const RV_FIT_COLUMNS = [
  * because a fit that does not say which run it came from, on what schedule and
  * with what noise seed, is not reproducible by whoever receives it.
  *
- * Returns null when the workspace has never been opened, so the export dialog
- * can offer the row only when there is something behind it. Read through the
- * bridge's own accessor so that asking does not pull the chunk in.
+ * Returns the same {csv, rows} pair as every other builder here, with `rows`
+ * counting residual rows and excluding the header. It used to return a bare
+ * string, or null with nothing to export, and neither reached a file: the
+ * dialog's download() reads `built.rows`, so the string exported nothing and
+ * reported "empty", and the null threw on property access and reported a
+ * failure. The row was unusable in both directions.
  *
- * @returns {?string} The file, or null with no fit to export
+ * An empty result is {csv: '', rows: 0} rather than a header-only document,
+ * matching what the dialog does with a zero count - it toasts and writes no
+ * file, so there is no half-empty download to explain.
+ *
+ * Read through the bridge's own accessor so that asking does not pull the
+ * chunk in.
+ *
+ * @returns {{csv:string, rows:number}} The document and its residual count
  */
+/**
+ * What every builder here returns when there is nothing to write: the dialog
+ * checks `rows` and writes no file at zero.
+ */
+const EMPTY_CSV = Object.freeze({ csv: '', rows: 0 });
+
 export function rvFitCsv() {
   const report = latestRvFitReport?.();
-  if (!report) return null;
+  if (!report) return EMPTY_CSV;
 
   const lines = [];
   const comment = text => lines.push(`# ${text}`);
   comment('Radial velocity fit');
-  comment(`model: ${report.model}`);
-  for (const a of report.assumptions) comment(`assumption: ${a}`);
+  comment(`model: ${report.model ?? 'unknown'}`);
+  for (const a of report.assumptions || []) comment(`assumption: ${a}`);
   comment(`period_days: ${report.parameters.period}`);
   comment(`K_ms: ${report.parameters.K}`);
   comment(`phase_rad: ${report.parameters.phase}`);
@@ -409,9 +425,22 @@ export function rvFitCsv() {
     }`
   );
   comment(`residual_rms_ms: ${report.fit?.rms ?? ''}`);
-  comment(`measurements_used: ${report.used} of ${report.planned} planned`);
+  // The dof convention travels with the numbers, because a reduced chi-square
+  // is not interpretable without it. See evaluateModel in rvFit.js.
+  comment(`degrees_of_freedom: ${report.fit?.dof ?? ''}`);
   comment(
-    `excluded: ${report.excluded.missed} missed, ${report.excluded.notFinite} unreadable, ${report.excluded.badSigma} bad uncertainty`
+    `parameters_estimated_from_data: ${report.fit?.estimatedParameters ?? 0}` +
+      (report.fit?.optimised
+        ? ' (fitted)'
+        : ' (model as supplied; sliders are not a fit)')
+  );
+  comment(`measurements_used: ${report.used} of ${report.planned} planned`);
+  const ex = report.excluded || {};
+  comment(
+    `excluded: ${ex.missed ?? 0} missed, ${ex.notFinite ?? 0} unreadable, ${ex.badSigma ?? 0} bad uncertainty, ${ex.degraded ?? 0} degraded (held out of the fit)`
+  );
+  comment(
+    `unverified_interpolation: ${ex.unverified ?? 0} fitted with an unknown interpolation error`
   );
   if (report.search) {
     comment(
@@ -428,7 +457,7 @@ export function rvFitCsv() {
       `residual_sign_changes: ${report.structure.runs} against ${report.structure.expectedRuns.toFixed(1)} expected by chance`
     );
   }
-  for (const [key, value] of Object.entries(report.recording)) {
+  for (const [key, value] of Object.entries(report.recording || {})) {
     comment(`recording_${key}: ${value ?? ''}`);
   }
   comment(`truth_revealed: ${report.truthRevealed}`);
@@ -438,8 +467,9 @@ export function rvFitCsv() {
     );
   }
 
+  const residuals = Array.isArray(report.residuals) ? report.residuals : [];
   const rows = [RV_FIT_COLUMNS.slice()];
-  for (const r of report.residuals) {
+  for (const r of residuals) {
     rows.push([
       num(r.day),
       num(r.phase, 4),
@@ -450,7 +480,12 @@ export function rvFitCsv() {
       csvField(r.quality || 'ok'),
     ]);
   }
-  return `${lines.join('\n')}\n${rows.map(r => r.join(',')).join('\n')}\n`;
+
+  // A fit with no residuals is a fit of nothing. Reporting rows: 0 keeps the
+  // dialog from writing a file that is entirely commentary.
+  if (!residuals.length) return EMPTY_CSV;
+
+  return { csv: `${lines.join('\n')}\n${toCsv(rows)}`, rows: residuals.length };
 }
 
 /**
@@ -490,7 +525,9 @@ export function radialVelocityCsv() {
       m.rv === null || m.rv === undefined ? '' : num(m.rv),
       m.sigma === null || m.sigma === undefined ? '' : num(m.sigma),
       csvField(m.quality || 'ok'),
-      num(m.interpolationError || 0, 4),
+      // Empty, not zero, where the estimate could not be made at all: an
+      // unverified epoch is not an epoch verified to be exact.
+      Number.isFinite(m.interpolationError) ? num(m.interpolationError, 4) : '',
       csvField(name),
       id === undefined || id === null ? '' : String(id),
       num(run.inclinationDeg, 4),

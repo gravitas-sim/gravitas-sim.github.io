@@ -114,14 +114,32 @@ function render() {
   }
 
   if (e.status) {
-    e.status.textContent = t('rvfit.status.points', {
+    const ex = a.excluded;
+    // Degraded readings belong in this total now that they are dropped by
+    // default: a student who sees "12 fitted, 0 excluded" while three epochs
+    // were silently held back has been told the wrong thing.
+    let status = t('rvfit.status.points', {
       used: a.used,
-      dropped: a.excluded.missed + a.excluded.notFinite + a.excluded.badSigma,
+      dropped: ex.missed + ex.notFinite + ex.badSigma + ex.degraded,
     });
+    if (ex.degraded) {
+      status += ` ${t('rvfit.status.degraded', { n: ex.degraded })}`;
+    }
+    if (ex.unverified) {
+      status += ` ${t('rvfit.status.unverified', { n: ex.unverified })}`;
+    }
+    e.status.textContent = status;
   }
 
   if (e.stats) {
     const f = a.atTrial;
+    // Null when the model could not be scored at all - a non-finite residual,
+    // or a period that is not a period. There is no statistic to print and
+    // saying so beats throwing on the next property access.
+    if (!f) {
+      e.stats.textContent = t('rvfit.noStats');
+      return;
+    }
     // The reduced chi-square is null whenever the weights were invented, and
     // the readout says why rather than printing a number that would be read as
     // a goodness of fit.

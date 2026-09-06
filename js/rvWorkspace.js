@@ -33,6 +33,7 @@
 
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import {
+  evaluateModel,
   fitAtPeriod,
   foldOnPeriod,
   periodSearch,
@@ -119,6 +120,9 @@ export function setTrial(key, value) {
  */
 export function snapToBestAtPeriod() {
   const { usable } = usablePoints(source?.points || []);
+  // Null when the normal equations are singular - every point at the same
+  // phase, or fewer than three of them. The trial is left exactly as it was
+  // rather than being overwritten with nothing.
   const fit = fitAtPeriod(usable, trial.period);
   if (fit) {
     trial = {
@@ -206,14 +210,17 @@ export function analysis() {
   if (usable.length < 3) {
     return { tooFew: true, used: usable.length, excluded: counts };
   }
-  const scored = fitAtPeriod(usable, trial.period);
+  // Scored exactly as dialled in. This used to call fitAtPeriod, which
+  // silently re-derived the amplitude, phase and offset - so the number under
+  // the plot described the best curve available at that period while the
+  // residuals on the plot were of the student's curve, and a student could
+  // drag the amplitude to zero without the goodness-of-fit moving.
+  const scored = evaluateModel(usable, trial);
   const folded = foldOnPeriod(usable, trial);
   return {
     tooFew: false,
     trial: { ...trial },
-    // The chi-square of what the student has actually dialled in, which is not
-    // the same as the best fit at that period and should not be confused with
-    // it.
+    // Of the model on screen, always.
     atTrial: scored,
     folded,
     structure: residualStructure(folded),
@@ -232,7 +239,12 @@ export function analysis() {
  */
 export function exportReport() {
   if (!source?.points?.length) return null;
-  const report = fitReport(source.points, trial, { search });
+  // Zero estimated parameters: these are the numbers on the sliders, however
+  // they got there, and the export says so rather than implying a fit.
+  const report = fitReport(source.points, trial, {
+    search,
+    estimatedParameters: 0,
+  });
   if (!report) return null;
   return {
     ...report,

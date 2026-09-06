@@ -34,6 +34,12 @@ export const EN_DEFERRED = {
   'rvfit.status.none': 'No recording',
   'rvfit.status.tooFew': 'Not enough measurements',
   'rvfit.status.points': '{used} measurements fitted, {dropped} excluded',
+  'rvfit.status.degraded':
+    '({n} of those were interpolated across frames too coarse to resolve the curve, so they are held out of the fit.)',
+  'rvfit.status.unverified':
+    '({n} were interpolated with too little history to estimate the error, which is unknown rather than small. They are fitted.)',
+  'rvfit.noStats':
+    'This model cannot be scored against these measurements. Check the period.',
   'rvfit.tooFew':
     'A circular model has four parameters, so it needs at least three usable measurements and this recording has {n}.',
   'rvfit.chi2': 'Reduced \u03c7\u00b2 {reduced}, residual RMS {rms} m/s',

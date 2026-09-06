@@ -34,6 +34,12 @@ export const ES_DEFERRED = {
   'rvfit.status.none': 'Sin registro',
   'rvfit.status.tooFew': 'No hay medidas suficientes',
   'rvfit.status.points': '{used} medidas ajustadas, {dropped} excluidas',
+  'rvfit.status.degraded':
+    '(De esas, {n} se interpolaron entre fotogramas demasiado espaciados para resolver la curva, as\u00ed que quedan fuera del ajuste.)',
+  'rvfit.status.unverified':
+    '({n} se interpolaron con muy poco historial para estimar el error, que es desconocido y no peque\u00f1o. S\u00ed entran en el ajuste.)',
+  'rvfit.noStats':
+    'Este modelo no se puede evaluar con estas mediciones. Revisa el periodo.',
   'rvfit.tooFew':
     'Un modelo circular tiene cuatro parámetros, así que necesita al menos tres medidas utilizables y este registro tiene {n}.',
   'rvfit.chi2': '\u03c7\u00b2 reducida {reduced}, RMS de residuos {rms} m/s',

@@ -44,7 +44,7 @@ import { mountObserverControls } from './observerControls.js';
 import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
 import { halfRangeOfSeries } from './exoplanetObservables.js';
-import { orbitalElements, dominantPrimary } from './orbital.js';
+import { orbitalElements } from './orbital.js';
 import { current_scenario_name } from './appState.js';
 import {
   decideSampling,
@@ -129,7 +129,21 @@ let showIdeal = true;
  */
 let surveyProvenance = null;
 
-/** Snapshot who is being observed and from where, for the run to keep. */
+/**
+ * Snapshot everything about the run that the world could change later.
+ *
+ * Taken once, when the run starts. A student can record a schedule, load a
+ * different scenario, tilt the observer, switch units and only then press
+ * Analyse or Export; every fact below would be a different fact by then, and
+ * a file describing the run has to describe the run.
+ *
+ * The generating parameters are captured here too, for the same reason and one
+ * more: the reveal is supposed to show what produced these measurements, and
+ * recomputing it from the current world would show what would produce
+ * different ones.
+ *
+ * @returns {object} The frozen description of the run
+ */
 function captureProvenance() {
   const star = observedStar();
   return {
@@ -137,6 +151,129 @@ function captureProvenance() {
     inclinationDeg: getInclination(),
     positionAngleDeg: observerGeometry()?.positionAngleDeg ?? null,
     worldGeneration: getWorldGeneration(),
+    scenario: current_scenario_name,
+    // Both scales the measurements were expressed in. A recording read back
+    // under a different unit mode would otherwise be silently rescaled.
+    units: {
+      velocityUnitToMs: velocityUnitToMs(),
+      timeUnitSeconds: timeUnitSeconds(),
+      velocity: 'm/s',
+      time: 'days',
+    },
+    startedAt: new Date().toISOString(),
+    truth: computeTruth(),
+  };
+}
+
+/**
+ * The parameters actually generating the signal, or null when there is no
+ * single honest answer.
+ *
+ * Computed from the orbital elements of the observed star and whatever it is
+ * most strongly bound to. Two things this refuses to do:
+ *
+ * It does not use the circular expression on an eccentric orbit. The star's
+ * radial-velocity semi-amplitude is
+ *
+ *   K = 2 pi a1 sin i / (P sqrt(1 - e^2))
+ *
+ * and dropping the eccentricity factor understates K by 15% at e = 0.5 and by
+ * a factor of two at e = 0.87 - which a student would read as their fit being
+ * wrong.
+ *
+ * It does not answer at all for a system where one companion is not the whole
+ * story. If a second body would produce a comparable wobble, the single-planet
+ * number is not the truth about anything and the workspace shows "nothing to
+ * reveal" instead, which is also what a real observation would give.
+ *
+ * @returns {?object} period, K, gamma and a note, or null
+ */
+function computeTruth() {
+  const star = observedStar();
+  if (!star) return null;
+  const others = [...stars, ...gas_giants, ...planets].filter(b => b !== star);
+  if (!others.length) return null;
+
+  const G = getPhysicsSetting('gravitational_constant');
+  const inclination = (getInclination() * Math.PI) / 180;
+
+  /** The star's reflex semi-amplitude from one companion, in m/s. */
+  const amplitudeFrom = body => {
+    const el = orbitalElements(star, body, G);
+    if (!el?.period || !(el.period > 0) || !(el.a > 0)) return null;
+    if (!(el.e >= 0) || el.e >= 1) return null;
+    const total = star.mass + body.mass;
+    const aStar = (el.a * body.mass) / total;
+    const k =
+      (2 * Math.PI * aStar * Math.sin(inclination)) /
+      (el.period * Math.sqrt(1 - el.e * el.e));
+    return { el, k: k * velocityUnitToMs() };
+  };
+
+  const ranked = others
+    .map(b => ({ body: b, ...(amplitudeFrom(b) || {}) }))
+    .filter(r => Number.isFinite(r.k))
+    .sort((a, b) => b.k - a.k);
+  if (!ranked.length) return null;
+
+  const [first, second] = ranked;
+  // A tenth is the line. Below it the second companion is a perturbation the
+  // fit will absorb into its residuals; above it the signal is not one
+  // sinusoid and quoting a single K would be inventing a system.
+  if (second && second.k > 0.1 * first.k) {
+    return {
+      period: null,
+      K: null,
+      gamma: null,
+      note: 'multipleCompanions',
+      companions: ranked.length,
+    };
+  }
+
+  return {
+    period: (first.el.period * timeUnitSeconds()) / 86400,
+    K: first.k,
+    eccentricity: first.el.e,
+    // The observing mode measures against the system barycentre, so there is
+    // no systemic offset to recover.
+    gamma: 0,
+    note: first.el.e > 1e-3 ? 'eccentricOrbit' : 'circularOrbit',
+    companions: ranked.length,
+  };
+}
+
+/**
+ * The recording, as the analysis workspace wants it.
+ *
+ * Assembled from the frozen provenance rather than from the world, so opening
+ * the analysis an hour and three scenarios later describes the run that
+ * produced the numbers.
+ *
+ * @param {object} run - From radialVelocitySurvey()
+ * @returns {object} The payload
+ */
+function recordingPayload(run) {
+  const p = run.provenance || {};
+  return {
+    points: run.measurements,
+    target: p.target?.name ?? null,
+    targetId: p.target?.id ?? null,
+    scenario: p.scenario ?? null,
+    seed: run.config.seed ?? null,
+    config: {
+      cadenceDays: run.config.cadenceDays,
+      baselineDays: run.config.baselineDays,
+      sigma: run.config.sigmaMs,
+    },
+    geometry: {
+      inclinationDeg: p.inclinationDeg ?? null,
+      positionAngleDeg: p.positionAngleDeg ?? null,
+    },
+    units: p.units ?? null,
+    worldGeneration: p.worldGeneration ?? null,
+    recordedAt: p.startedAt ?? null,
+    openedAt: new Date().toISOString(),
+    truth: p.truth ?? null,
   };
 }
 
@@ -763,61 +900,12 @@ export function radialVelocitySurvey() {
     positionAngleDeg: live.positionAngleDeg,
     worldGeneration: live.worldGeneration,
     measurements,
+    // The whole frozen block, so callers stop rebuilding it from live state.
+    provenance,
     planned: survey ? survey.plannedCount : 0,
     // Measurements exist only if the module loaded, so this is never reached
     // before surveyLib is there to describe them.
     stats: measurements.length ? surveyLib.surveyStats(measurements) : null,
-  };
-}
-
-/** The scenario a recording was taken in, for its provenance block. */
-const currentScenarioName = () => current_scenario_name;
-
-/**
- * The parameters the simulation is actually using, for the reveal.
- *
- * Computed from the orbital elements of the star and whatever it is most
- * strongly bound to, rather than inferred from the noiseless velocity column.
- * That distinction matters: a value reconstructed by fitting the truth series
- * would be a fit wearing the word "truth", and would agree with the student's
- * fit for reasons that have nothing to do with being right.
- *
- * Null when there is nothing identifiable to describe - a star with no
- * companion, or a scene the routine cannot make sense of. The workspace shows
- * "nothing to reveal" rather than a number in that case, which is the honest
- * outcome and also the one a real observation would give.
- *
- * @returns {?{period: number, K: number, gamma: number, note: string}}
- */
-function surveyTruth() {
-  const star = observedStar();
-  if (!star) return null;
-  const others = [...stars, ...gas_giants, ...planets].filter(b => b !== star);
-  const companion = dominantPrimary(star, others);
-  if (!companion) return null;
-
-  const G = getPhysicsSetting('gravitational_constant');
-  const elements = orbitalElements(star, companion, G);
-  if (!elements?.period || !(elements.period > 0)) return null;
-
-  // The star's own orbit about the barycentre is what the spectrograph sees,
-  // so K is the semi-amplitude of the star's motion, projected on the line of
-  // sight, in the same units the panel reports.
-  const total = star.mass + companion.mass;
-  const starOrbit = (elements.a * companion.mass) / total;
-  const speed = (2 * Math.PI * starOrbit) / elements.period;
-  const inclination = (getInclination() * Math.PI) / 180;
-  const K = speed * Math.sin(inclination) * velocityUnitToMs();
-
-  return {
-    // Days, to match the measurement times.
-    period: (elements.period * timeUnitSeconds()) / 86400 || null,
-    K,
-    // The observing mode measures against the system barycentre, so there is
-    // no systemic offset to recover. Saying zero is more useful than omitting
-    // it, because a student who fits a nonzero gamma has found something.
-    gamma: 0,
-    note: 'from the simulated orbit, projected on the line of sight',
   };
 }
 
@@ -985,32 +1073,38 @@ function initSurveyControls() {
   });
 
   e.surveyRestart?.addEventListener('click', () => {
-    // The analysis workspace is the heaviest thing in the observing feature and
-    // most visitors never take a recording, so it arrives through a bridge that
-    // imports it on the first press rather than at start-up.
-    e.analyse?.addEventListener('click', async () => {
-      const run = radialVelocitySurvey();
-      if (!run.measurements.length) return;
-      const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
-      await openRvWorkspace({
-        points: run.measurements,
-        target: run.target?.name ?? null,
-        scenario: currentScenarioName(),
-        seed: run.config.seed ?? null,
-        config: {
-          cadenceDays: run.config.cadenceDays,
-          baselineDays: run.config.baselineDays,
-          sigma: run.config.sigmaMs,
-        },
-        worldGeneration: run.worldGeneration ?? null,
-        recordedAt: new Date().toISOString(),
-        // What the simulation was actually doing, kept apart from the
-        // measurements so the workspace can refuse to look at it until asked.
-        truth: surveyTruth(),
-      });
-    });
     if (survey) restartSurvey().catch(() => {});
   });
+
+  // Registered here, once, as a sibling of every other control.
+  //
+  // It was nested inside the Restart handler, which had two consequences and
+  // both of them shipped: a first recording could not be analysed at all until
+  // Restart had been pressed, and every press after that added another
+  // listener, so the fourth restart opened the workspace four times.
+  e.analyse?.addEventListener('click', openWorkspaceOnCurrentRun);
+}
+
+/**
+ * Hand the current recording to the analysis workspace.
+ *
+ * The workspace is the heaviest thing in the observing feature and most
+ * visitors never take a recording, so it arrives through a bridge that imports
+ * it on the first press rather than at start-up.
+ *
+ * Everything handed over is read from the recording's own frozen provenance
+ * rather than from the world as it stands now. A student can record a run,
+ * change the scenario, tilt the observer and then press Analyse; the file that
+ * comes out has to describe the run that produced the numbers, not whatever is
+ * on screen at the moment they asked.
+ *
+ * @returns {Promise<void>}
+ */
+async function openWorkspaceOnCurrentRun() {
+  const run = radialVelocitySurvey();
+  if (!run.measurements.length) return;
+  const { openRvWorkspace } = await import('./rvWorkspaceBridge.js');
+  await openRvWorkspace(recordingPayload(run));
 }
 
 /**

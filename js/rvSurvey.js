@@ -88,14 +88,22 @@ export const INTERPOLATION_TOLERANCE_MS = 0.5;
 /**
  * How the value at a scheduled epoch was arrived at.
  *
- *   ok        interpolated between frames that resolve the curve
- *   degraded  interpolated, but the frames were too coarse to trust to the
- *             tolerance above; the value is reported and flagged
- *   missed    nobody was observing when this epoch came due, so there is no
- *             value at all
+ *   ok          read exactly at the epoch, or interpolated between frames that
+ *               demonstrably resolve the curve
+ *   unverified  interpolated, but with fewer than three readings in hand there
+ *               is nothing to compare the straight line against, so the error
+ *               is unknown rather than small. Distinct from `ok` because an
+ *               estimate that could not be made is not an estimate of zero,
+ *               and this used to be recorded as a verified zero error and
+ *               graded `ok` on the strength of it.
+ *   degraded    interpolated, error estimated, and the estimate exceeds the
+ *               tolerance above; the value is reported and flagged
+ *   missed      nobody was observing when this epoch came due, so there is no
+ *               value at all
  */
 export const QUALITY = Object.freeze({
   OK: 'ok',
+  UNVERIFIED: 'unverified',
   DEGRADED: 'degraded',
   MISSED: 'missed',
 });
@@ -215,7 +223,7 @@ export function gaussianAt(seed, index) {
  *
  * @returns {object} The measurement
  */
-function record(index, day, rv, truth, quality, gapDays, sigma, error = 0) {
+function record(index, day, rv, truth, quality, gapDays, sigma, error = null) {
   return {
     index,
     day,
@@ -263,6 +271,21 @@ export function createSurvey(config = {}) {
   const epochTime = k => startDay + k * cfg.cadenceDays;
 
   /**
+   * The observing noise for one epoch, in m/s.
+   *
+   * Keyed by epoch index and not drawn sequentially, so a run that misses
+   * epochs 3 and 4 still gets exactly the scatter on epoch 5 that an
+   * uninterrupted run would - the missed epochs consume nothing. That is what
+   * makes two students with the same seed comparable when one of them
+   * backgrounded the tab.
+   *
+   * @param {number} index - Epoch index
+   * @returns {number} The deviate, or zero for a noiseless run
+   */
+  const noiseAt = index =>
+    cfg.sigmaMs > 0 ? cfg.sigmaMs * gaussianAt(cfg.seedValue, index) : 0;
+
+  /**
    * The value at `when`, and how much the straight line is likely to be wrong.
    *
    * Linear between the two bracketing readings, as before. The error estimate
@@ -274,7 +297,8 @@ export function createSurvey(config = {}) {
    * @param {number} when - The scheduled epoch
    * @param {object} left - The reading before it
    * @param {object} right - The reading after it
-   * @returns {{value: number, error: number}} The reading and its error estimate
+   * @returns {{value: number, error: ?number}} The reading, and its error
+   *   estimate or null where none could be made
    */
   const interpolate = (when, left, right) => {
     const span = right.day - left.day;
@@ -282,12 +306,13 @@ export function createSurvey(config = {}) {
     const value = left.rv + (right.rv - left.rv) * f;
 
     // A third point, from before the bracket, turns the straight line into a
-    // parabola. Without one - the first epoch of a run - there is nothing to
-    // compare against and the estimate is honestly unknown, reported as zero
-    // and paired with a `degraded` mark only if the gap is also implausible.
+    // parabola. Without one - early in a run - there is nothing to compare
+    // against and the estimate is unknown. Null, not zero: this returned zero,
+    // and the caller's `error <= tolerance` test then certified an
+    // unmeasurable error as a good measurement.
     const third = history.length >= 3 ? history[history.length - 3] : null;
     if (!third || third.day === left.day || third.day === right.day) {
-      return { value, error: 0 };
+      return { value, error: null };
     }
     const pts = [third, left, right];
     let quad = 0;
@@ -372,10 +397,23 @@ export function createSurvey(config = {}) {
         }
 
         // The first epoch of a run falls on the first reading: there is nothing
-        // to interpolate and the reading is the value.
+        // to interpolate and the reading is the value. It is still an
+        // observation, so it still carries observing noise - it did not, and
+        // every run therefore opened with one point sitting exactly on the
+        // truth while the rest scattered around it. The interpolation error is
+        // a real zero here, because nothing was interpolated.
         if (!previous || previous.day >= when) {
           taken.push(
-            record(next, when, trueRv, trueRv, QUALITY.OK, 0, cfg.sigmaMs)
+            record(
+              next,
+              when,
+              trueRv + noiseAt(next),
+              trueRv,
+              QUALITY.OK,
+              0,
+              cfg.sigmaMs,
+              0
+            )
           );
           added.push(taken[taken.length - 1]);
           next++;
@@ -384,14 +422,16 @@ export function createSurvey(config = {}) {
 
         const { value, error } = interpolate(when, previous, reading);
         const quality =
-          error <= INTERPOLATION_TOLERANCE_MS ? QUALITY.OK : QUALITY.DEGRADED;
-        const noise =
-          cfg.sigmaMs > 0 ? cfg.sigmaMs * gaussianAt(cfg.seedValue, next) : 0;
+          error === null
+            ? QUALITY.UNVERIFIED
+            : error <= INTERPOLATION_TOLERANCE_MS
+              ? QUALITY.OK
+              : QUALITY.DEGRADED;
         taken.push(
           record(
             next,
             when,
-            value + noise,
+            value + noiseAt(next),
             value,
             quality,
             gapDays,
@@ -421,22 +461,35 @@ export function createSurvey(config = {}) {
     /**
      * How the run went, in the terms a reader needs before trusting it.
      *
-     * @returns {{ok: number, degraded: number, missed: number,
-     *   worstError: number}} The tally
+     * `worstError` is the largest error that could be *measured*, and is null
+     * when none could be. `unverified` counts the epochs it could not be
+     * measured for, so a reader can tell "no error found" from "no error
+     * looked for".
+     *
+     * @returns {{ok: number, unverified: number, degraded: number,
+     *   missed: number, worstError: ?number}} The tally
      */
-    quality: () => ({
-      ok: taken.filter(m => m.quality === QUALITY.OK).length,
-      degraded: taken.filter(m => m.quality === QUALITY.DEGRADED).length,
-      missed: taken.filter(m => m.quality === QUALITY.MISSED).length,
-      worstError: taken.reduce(
-        (w, m) => Math.max(w, m.interpolationError || 0),
-        0
-      ),
-    }),
+    quality: () => {
+      const known = taken
+        .map(m => m.interpolationError)
+        .filter(e => Number.isFinite(e));
+      return {
+        ok: taken.filter(m => m.quality === QUALITY.OK).length,
+        unverified: taken.filter(m => m.quality === QUALITY.UNVERIFIED).length,
+        degraded: taken.filter(m => m.quality === QUALITY.DEGRADED).length,
+        missed: taken.filter(m => m.quality === QUALITY.MISSED).length,
+        worstError: known.length ? Math.max(...known) : null,
+      };
+    },
 
     /** @returns {boolean} Whether any measurement is less than trustworthy */
     anyCoarse: () =>
-      taken.some(m => m.quality === QUALITY.DEGRADED || m.missed),
+      taken.some(
+        m =>
+          m.quality === QUALITY.DEGRADED ||
+          m.quality === QUALITY.UNVERIFIED ||
+          m.missed
+      ),
 
     /** Throw the run away and wait for a new first reading. */
     reset() {

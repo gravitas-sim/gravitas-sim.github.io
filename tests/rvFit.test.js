@@ -58,11 +58,37 @@ describe('choosing what to fit', () => {
     expect(excluded[0].reason).toBe(EXCLUDED.MISSED);
   });
 
-  test('a degraded reading is kept by default and droppable on request', () => {
+  test('a degraded reading is dropped by default and keepable on request', () => {
     const pts = [point(0, 1), point(1, 2, 1, 'degraded'), point(2, 3)];
-    expect(usablePoints(pts).usable).toHaveLength(3);
-    expect(usablePoints(pts).counts.degraded).toBe(1);
-    expect(usablePoints(pts, { dropDegraded: true }).usable).toHaveLength(2);
+    const dropped = usablePoints(pts);
+    expect(dropped.usable).toHaveLength(2);
+    expect(dropped.counts.degraded).toBe(1);
+    expect(dropped.excluded.map(e => e.reason)).toContain(EXCLUDED.DEGRADED);
+
+    const kept = usablePoints(pts, { keepDegraded: true });
+    expect(kept.usable).toHaveLength(3);
+    // Counted even when kept, so the disclosure can be printed either way.
+    expect(kept.counts.degraded).toBe(1);
+    expect(kept.counts.degradedKept).toBe(1);
+  });
+
+  test('a kept degraded reading has its interpolation error folded in', () => {
+    const bad = { ...point(1, 2, 3, 'degraded'), interpolationError: 4 };
+    const { usable } = usablePoints([point(0, 1), bad, point(2, 3)], {
+      keepDegraded: true,
+    });
+    const widened = usable.find(p => p.sigmaWidened);
+    // 3 and 4 in quadrature. Kept at its face-value 3 it would have been the
+    // most heavily weighted point in the run, which is the opposite of true.
+    expect(widened.sigma).toBeCloseTo(5, 10);
+  });
+
+  test('an unverified reading is kept, and counted as unverified', () => {
+    const pts = [point(0, 1), point(1, 2, 1, 'unverified'), point(2, 3)];
+    const { usable, counts } = usablePoints(pts);
+    expect(usable).toHaveLength(3);
+    expect(counts.unverified).toBe(1);
+    expect(counts.degraded).toBe(0);
   });
 
   test('a non-finite reading or a negative sigma is not a measurement', () => {
