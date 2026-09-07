@@ -39,8 +39,15 @@ async function startSurvey(page, { cadence, baseline, sigma, seed }) {
   await page.locator('#rvSurveySeed').blur();
 }
 
-/** Let the run collect at least `n` measurements. */
-async function collect(page, app, n) {
+/**
+ * Let the run collect at least `n` measurements.
+ *
+ * The wait is in simulated days rather than in wall clock, so the timeout has
+ * to be generous enough for the longest schedule here on a machine that is
+ * running several browsers at once. It is not a hang detector; the assertion
+ * below is.
+ */
+async function collect(page, app, n, timeout = 30000) {
   await expect
     .poll(
       async () =>
@@ -48,7 +55,7 @@ async function collect(page, app, n) {
           const rv = await import('/js/radialVelocity.js');
           return rv.radialVelocitySurvey().measurements.length;
         }),
-      { timeout: 30000 }
+      { timeout }
     )
     .toBeGreaterThanOrEqual(n);
   await app.waitForFrames(2);
@@ -56,15 +63,16 @@ async function collect(page, app, n) {
 
 /** Record a short run and return once there is something to analyse. */
 async function record(page, app, opts = {}) {
+  const { points = 8, collectTimeout = 30000, ...schedule } = opts;
   await openRv(page, app);
   await startSurvey(page, {
     cadence: 0.05,
     baseline: 0.6,
     sigma: 3,
     seed: 'launch-path',
-    ...opts,
+    ...schedule,
   });
-  await collect(page, app, 8);
+  await collect(page, app, points, collectTimeout);
 }
 
 test.describe('reaching the workspace', () => {
@@ -141,7 +149,18 @@ test.describe('the sliders and the file', () => {
     page,
     app,
   }) => {
-    await record(page, app);
+    // A full cycle of the 3.5247-day signal rather than the sixth of one the
+    // other tests here record. The reason is in the loop below: these
+    // assertions are about the sliders moving the reported fit, and a model
+    // that cannot be brought near the data has a goodness of fit that barely
+    // responds to anything.
+    test.setTimeout(180000);
+    await record(page, app, {
+      cadence: 0.3,
+      baseline: 4,
+      points: 14,
+      collectTimeout: 120000,
+    });
     await page.locator('#rvAnalyse').click();
     await expect(page.locator('#rvFitContainer')).toBeVisible();
 
@@ -156,21 +175,23 @@ test.describe('the sliders and the file', () => {
     // change the reported goodness of fit is a slider whose value is being
     // discarded - which is exactly what happened while the panel scored a
     // refit instead of the model on screen.
-    // K first, and deliberately. The model opens with an amplitude that can be
-    // at or near zero, and a sine of zero amplitude is the same flat line at
-    // every period and phase - so moving those sliders correctly changes
-    // nothing, and testing them first measures the opening guess rather than
-    // the panel.
-    const amplitude = page.locator('#rvFit_K');
-    await amplitude.evaluate(el => {
-      el.value = String((Number(el.min) + Number(el.max)) / 3);
-    });
-    await amplitude.dispatchEvent('input');
-    await page.waitForTimeout(80);
-
+    //
+    // Each one is tested from the fit the panel's own search finds, restored
+    // before every parameter. Starting anywhere else is what made this test
+    // intermittent, in two different ways that are the same way: with the
+    // model far from the data the residuals are the signal itself and the
+    // reported RMS is on a plateau, so a large and perfectly effective move of
+    // the period slider changed the quoted figure by less than the digits on
+    // screen; and a model snapped to the best fit at a wrong period has an
+    // amplitude near zero, where a sine is the same flat line at every phase.
+    // From a model that is actually near the data, every move is a move away
+    // from it and the RMS has to follow.
     for (const key of ['K', 'period', 'phase', 'gamma']) {
       const slider = page.locator(`#rvFit_${key}`);
       await expect(slider).toBeVisible();
+
+      await page.locator('#rvFitSearch').click();
+      await expect.poll(shownRms, { timeout: 20000 }).not.toBeNull();
       const rmsBefore = await shownRms();
 
       // Moved with the control's own stepper rather than by writing a value.
