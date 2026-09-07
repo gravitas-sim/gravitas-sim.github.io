@@ -666,6 +666,20 @@ jobs:
           done
           grep -o 'name="gravitas-revision" content="[^"]*"' index.html
 
+      - name: Re-seal the service worker over the stamped files
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          # The manifest's version is a sha256 over the CONTENTS of everything
+          # it precaches, index.html included. Stamping the revision into that
+          # file changes its bytes, so the committed manifest stops describing
+          # what is about to be served: clients would cache assets under a
+          # version string computed from different ones. Regenerated here, so
+          # the stamped HTML, the manifest, the cached assets and the exported
+          # revision all describe the same candidate.
+          node tools/build-service-worker.mjs
+          node tools/build-service-worker.mjs --check
+          grep -o "VERSION = '[^']*'" sw-manifest.js || true
+
       - name: Record which commit this is
         if: steps.tip.outputs.superseded == 'false'
         run: |

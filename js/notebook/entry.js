@@ -242,6 +242,7 @@ export function provenanceOf({
   simSpeed = null,
   substeps = null,
   referenceFrame = null,
+  displayFrame = null,
   observer = null,
   units = null,
   quality = null,
@@ -288,7 +289,14 @@ export function provenanceOf({
       simSpeed: num(simSpeed),
       substeps: num(substeps),
     },
+    /**
+     * The frame the MEASUREMENTS were taken in, or null when the source does
+     * not record one. Never filled in from the world on screen: a display
+     * choice made later is not a fact about an older recording.
+     */
     referenceFrame: referenceFrame === null ? null : String(referenceFrame),
+    /** The frame the reader happened to be viewing in when they saved. */
+    displayFrame: displayFrame === null ? null : String(displayFrame),
     observer: observer ? { ...observer } : null,
     units: units ? { ...units } : null,
     // The rendering tier and measured frame rate at capture. A reading taken

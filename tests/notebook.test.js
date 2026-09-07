@@ -1360,7 +1360,12 @@ describe('provenance belongs to the recording, not to the world on screen', () =
     expect(p.revisionSource).toBe('deployed');
     expect(p.numerical.integrator).toBe('yoshida');
     expect(p.quality).toEqual({ tier: 'full', fps: 60 });
-    expect(p.referenceFrame).toBe('world');
+    // The reference frame is a DISPLAY choice made now, not a fact about the
+    // recording. This recording does not carry one, so the entry says unknown
+    // rather than writing in whatever the reader happened to be viewing - and
+    // the viewing frame is kept separately, where it is true.
+    expect(p.referenceFrame).toBe(null);
+    expect(p.displayFrame).toBe('world');
   });
 
   test('a recording that carries nothing falls back to the live world', async () => {

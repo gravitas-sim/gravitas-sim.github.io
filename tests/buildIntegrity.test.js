@@ -173,3 +173,54 @@ describe('the service worker manifest is current', () => {
     }
   });
 });
+
+describe('the deploy sequence keeps its artefacts describing one candidate', () => {
+  const workflow = () =>
+    readFileSync(
+      new URL('../.github/workflows/ci.yml', import.meta.url),
+      'utf8'
+    );
+
+  test('the revision is stamped before the manifest is re-sealed', () => {
+    // The manifest's version is a sha256 over the CONTENTS of everything it
+    // precaches, index.html included. Stamping the commit into that file
+    // changes its bytes, so a manifest generated before the stamp stops
+    // describing what is served: clients would cache assets under a version
+    // computed from different ones. Verified locally by running the
+    // workflow-equivalent sequence, which showed the manifest going stale at
+    // the stamp and coming back current after the re-seal.
+    const yml = workflow();
+    const stamp = yml.indexOf('Stamp the commit into the pages');
+    const reseal = yml.indexOf('Re-seal the service worker over the stamped');
+    const record = yml.indexOf('Record which commit this is');
+    const verify = yml.indexOf('Verify the tree is safe to publish');
+    expect(stamp).toBeGreaterThan(0);
+    expect(reseal).toBeGreaterThan(stamp);
+    expect(record).toBeGreaterThan(reseal);
+    expect(verify).toBeGreaterThan(record);
+  });
+
+  test('the re-seal both regenerates and re-checks', () => {
+    // Regenerating without checking would let a failure pass silently, which
+    // is the whole failure mode this step exists to close.
+    const yml = workflow();
+    const step = yml.slice(
+      yml.indexOf('Re-seal the service worker over the stamped'),
+      yml.indexOf('Record which commit this is')
+    );
+    expect(step).toContain('node tools/build-service-worker.mjs\n');
+    expect(step).toContain('--check');
+  });
+
+  test('the stamp writes a meta tag the application actually reads', () => {
+    // js/notebookBridge.js reads meta[name="gravitas-revision"]. If the
+    // workflow ever stamped a different name the provenance would silently
+    // fall back to "unknown" on a real deployment and nobody would notice.
+    expect(workflow()).toContain('name="gravitas-revision"');
+    const bridge = readFileSync(
+      new URL('../js/notebookBridge.js', import.meta.url),
+      'utf8'
+    );
+    expect(bridge).toContain("meta('gravitas-revision')");
+  });
+});

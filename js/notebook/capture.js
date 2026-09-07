@@ -63,6 +63,22 @@ function recordedProvenance(rec, report) {
   }
   put('recordedAt', rec.recordedAt);
   put('scheduleFingerprint', rec.scheduleFingerprint);
+
+  // The reference frame is the live world's, not the recording's, and it must
+  // not masquerade as a historical fact.
+  //
+  // A recording carries the observer geometry it was taken under - that IS a
+  // fact about the measurements. It does not carry the reference frame, which
+  // is a display choice made now: somebody analysing an old recording while
+  // centred on a different body would otherwise have "barycentre:7" written
+  // into the entry as though the samples had been taken in it. So the live
+  // frame is relabelled as what it is, and the recording's own frame is
+  // recorded as unknown rather than filled in from the present.
+  if (rec.referenceFrame !== undefined && rec.referenceFrame !== null) {
+    put('referenceFrame', rec.referenceFrame);
+  } else {
+    out.referenceFrame = null;
+  }
   const mc = liveUncertaintyFor(report);
   if (mc) {
     put('uncertaintySeed', mc.spec.seed);
@@ -326,6 +342,10 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
       ...provenance,
       ...recordedProvenance(rec, report),
       units: rec.units ?? provenance.units ?? { velocity: 'm/s', time: 'days' },
+      // What the reader was looking at when they saved, kept apart from what
+      // the recording was taken in. Both are true; only one is about the
+      // measurements.
+      displayFrame: provenance.referenceFrame ?? null,
       flags: [...(provenance.flags || []), ...flags],
     }),
     prose: {
