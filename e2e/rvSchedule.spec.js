@@ -296,7 +296,7 @@ test.describe('both arms have one lifecycle', () => {
     await page.evaluate(() => {
       const shape = document.getElementById('rvSurveyShape');
       shape.value = 'irregular';
-      shape.dispatchEvent(new Event('change', { bubbles: true }));
+      shape.dispatchEvent(new window.Event('change', { bubbles: true }));
       document.getElementById('rvSurveyEnabled').click();
     });
     await page.waitForTimeout(1500);
