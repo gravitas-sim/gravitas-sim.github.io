@@ -392,3 +392,164 @@ describe('the fingerprint hash', () => {
     expect(shortHash(stepFingerprint(en))).toBe(shortHash(stepFingerprint(es)));
   });
 });
+
+describe('prerequisites are resolved to a fixed point', () => {
+  /** A lesson whose later steps depend on earlier ones by declaration. */
+  const chained = {
+    id: 'chain',
+    steps: [
+      { sid: 's0-setup', type: 'read', setup: { scenario: 'A' } },
+      { sid: 's1-measure', type: 'measure' },
+      { sid: 's2-setup', type: 'read', setup: { scenario: 'B' } },
+      { sid: 's3-measure', type: 'measure', requires: ['s1-measure'] },
+      {
+        sid: 's4-question',
+        type: 'question',
+        kind: 'numeric',
+        requires: ['s3-measure'],
+      },
+    ],
+  };
+
+  test('a chain longer than one link is followed all the way', () => {
+    // s4 needs s3, s3 needs s1, s1 sits under s0, and s3/s4 sit under s2.
+    // The first version pulled in one level and stopped.
+    const out = resolveSelection(chained, ['s4-question']);
+    expect(out.ok).toBe(true);
+    expect(out.sids).toEqual([
+      's0-setup',
+      's1-measure',
+      's2-setup',
+      's3-measure',
+      's4-question',
+    ]);
+  });
+
+  test('every addition says which step needed it, and why', () => {
+    const out = resolveSelection(chained, ['s4-question']);
+    const byId = Object.fromEntries(out.added.map(a => [a.sid, a]));
+    expect(byId['s3-measure']).toMatchObject({
+      reason: 'requires',
+      forSid: 's4-question',
+    });
+    expect(byId['s1-measure']).toMatchObject({
+      reason: 'requires',
+      forSid: 's3-measure',
+    });
+    // The setup a pulled-in step needs is itself pulled in, which is the case
+    // one level of resolution could never reach.
+    expect(byId['s0-setup']).toMatchObject({ reason: 'setup', scenario: 'A' });
+    expect(byId['s2-setup']).toMatchObject({ reason: 'setup', scenario: 'B' });
+  });
+
+  test('steps in lesson order, never in dependency order', () => {
+    const out = resolveSelection(chained, ['s4-question', 's1-measure']);
+    const order = chained.steps.map(s => s.sid);
+    const positions = out.sids.map(sid => order.indexOf(sid));
+    expect(positions).toEqual([...positions].sort((a, b) => a - b));
+  });
+
+  test('a dependency the lesson does not have is reported, not invented', () => {
+    const broken = {
+      id: 'broken',
+      steps: [
+        { sid: 'a', type: 'read', setup: { scenario: 'A' } },
+        { sid: 'b', type: 'measure', requires: ['gone'] },
+      ],
+    };
+    const out = resolveSelection(broken, ['b']);
+    expect(out.unknown).toContain('gone');
+    expect(out.sids).toEqual(['a', 'b']);
+  });
+
+  test('a cycle terminates rather than spinning', () => {
+    const cyclic = {
+      id: 'cyclic',
+      steps: [
+        { sid: 'x', type: 'measure', requires: ['y'] },
+        { sid: 'y', type: 'measure', requires: ['x'] },
+      ],
+    };
+    const out = resolveSelection(cyclic, ['x']);
+    expect(out.sids).toEqual(['x', 'y']);
+  });
+});
+
+describe('a binding cannot survive an answer-semantic change', () => {
+  const choice = over => ({
+    sid: 'q',
+    type: 'question',
+    kind: 'choice',
+    options: ['a', 'b', 'c', 'd'],
+    answer: 1,
+    ...over,
+  });
+
+  test('a same-length reorder that moves the answer is caught', () => {
+    // The defect: only the option COUNT was hashed, so this reorder left the
+    // fingerprint identical - and a stored answer is an index, so a student's
+    // "1" silently came to mean a different option.
+    const before = stepFingerprint(choice());
+    const after = stepFingerprint(
+      choice({ options: ['b', 'a', 'c', 'd'], answer: 0 })
+    );
+    expect(after).not.toBe(before);
+  });
+
+  test('changing which option is correct is caught', () => {
+    expect(stepFingerprint(choice({ answer: 2 }))).not.toBe(
+      stepFingerprint(choice())
+    );
+  });
+
+  test('a numeric answer or its tolerance moving is caught', () => {
+    const numeric = over => ({
+      sid: 'n',
+      type: 'question',
+      kind: 'numeric',
+      answer: 8,
+      tolerance: 0.4,
+      unit: 'years',
+      ...over,
+    });
+    expect(stepFingerprint(numeric({ answer: 9 }))).not.toBe(
+      stepFingerprint(numeric())
+    );
+    expect(stepFingerprint(numeric({ tolerance: 0.1 }))).not.toBe(
+      stepFingerprint(numeric())
+    );
+    expect(stepFingerprint(numeric({ unit: 'days' }))).not.toBe(
+      stepFingerprint(numeric())
+    );
+  });
+
+  test('translating the options does not invalidate anything', () => {
+    // The counterweight. Every binding in Spanish would break if the prose
+    // were hashed, and a translation changes no answer's meaning.
+    expect(stepFingerprint(choice({ options: ['α', 'β', 'γ', 'δ'] }))).toBe(
+      stepFingerprint(choice())
+    );
+  });
+
+  test('an assignment binding reports the change instead of staying valid', () => {
+    const lesson = { id: 'l', steps: [choice()] };
+    const assignment = buildAssignment({
+      lesson,
+      chosen: ['q'],
+      title: 'T',
+      fingerprint: stepFingerprint,
+    });
+    const moved = {
+      id: 'l',
+      steps: [choice({ options: ['b', 'a', 'c', 'd'], answer: 0 })],
+    };
+    const binding = stepBindings(assignment, moved, stepFingerprint);
+    expect(binding.changed).toBe(1);
+    expect(binding.bindings[0].status).toBe(BINDING.CHANGED);
+
+    // And the student's stored answer to the old question is held back rather
+    // than shown against the new one.
+    const kept = filterResponses(binding, { 'l:q': '1' }, sid => `l:${sid}`);
+    expect(kept.kept['l:q']).toBeUndefined();
+  });
+});

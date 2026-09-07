@@ -326,7 +326,8 @@ export function initRvWorkspacePanel() {
   // when the export asks, which is always after the module has finished.
   setUncertaintyReporter(
     () => uncertaintyReport(),
-    () => clearUncertainty()
+    () => clearUncertainty(),
+    () => mcInputsKey()
   );
 
   if (e.mcTrials) {

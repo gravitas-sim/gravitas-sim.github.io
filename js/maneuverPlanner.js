@@ -28,6 +28,7 @@
 
 import {
   getSimulationTime,
+  setSimulationTime,
   noteIntervention,
   stars,
   planets,
@@ -326,8 +327,22 @@ function applyBurn() {
   // subtracting the impulse: by the time somebody presses Undo the body has
   // usually moved, and reversing the velocity there leaves it on a third orbit
   // that is neither the old one nor the new one.
+  // forExperiment, so the capture carries the simulation clock and the open
+  // tools as well as the bodies.
+  //
+  // Without it captureShareState() omits the clock deliberately - a seeded
+  // share link means "the world as generated", not "the world at this moment"
+  // - and applyShareState() then restored the clock to zero. An undo is the
+  // other case: it is a return to a moment that happened, so it wants the
+  // whole moment. Asking the existing contract for it beats keeping a private
+  // clock beside the snapshot and setting it back by hand, which is a second
+  // restoration path that can disagree with the first.
   undoStack.push({
-    state: host.captureShareState({ kind: 'full', includeCamera: false }),
+    state: host.captureShareState({
+      kind: 'full',
+      includeCamera: false,
+      forExperiment: true,
+    }),
     simTime: getSimulationTime(),
   });
   if (undoStack.length > MAX_UNDO) undoStack.shift();
@@ -357,14 +372,60 @@ function applyBurn() {
   render();
 }
 
-/** Put the world back to just before the last burn. */
+/**
+ * Set while an undo is restoring, so the rebuild it causes is not mistaken for
+ * somebody loading a different world.
+ *
+ * The bug this closes: applyShareState() rebuilds the world, the rebuild
+ * dispatches gravitasSimulationReset, and the bridge's listener called
+ * resetManeuverPlanner() - which empties the undo stack. So the FIRST undo
+ * wiped the history for every burn before it. Two burns then two undos left
+ * the second undo with nothing to pop and the world stranded one burn in.
+ */
+let restoring = false;
+
+/** @returns {boolean} Whether an undo is in progress */
+export const isRestoringManeuver = () => restoring;
+
+/** @returns {number} How many burns can still be undone */
+export const undoDepth = () => undoStack.length;
+
+/**
+ * Put the world back to just before the last burn.
+ *
+ * Restores through the application's own share-state contract rather than a
+ * private snapshot format, so everything a world carries comes back the way it
+ * does for a share link - and then puts the simulation clock back too, which
+ * the contract does not cover. Without that the bodies returned to their
+ * pre-burn positions while the clock kept the time they reached after it, so
+ * the burn log's timestamps, the timeline and every recording indexed by the
+ * clock described a moment the world was no longer in.
+ */
 function undoBurn() {
   const snapshot = undoStack.pop();
   if (!snapshot || !host) return;
-  // Restoring re-initialises the world, which resets the timeline and bumps
-  // the world generation - so the recordings that were taken after the burn
-  // are discarded by the machinery that already exists for a rebuild.
-  host.applyShareState(JSON.parse(JSON.stringify(snapshot.state)));
+
+  restoring = true;
+  try {
+    // Restoring re-initialises the world, which resets the timeline and bumps
+    // the world generation - so the recordings taken after the burn are
+    // discarded by the machinery that already exists for a rebuild.
+    host.applyShareState(JSON.parse(JSON.stringify(snapshot.state)));
+    // The clock rides in the payload, restored by applyShareState() itself.
+    // This is the belt to that contract's braces: if a future capture stops
+    // asking for the clock, the recorded time still comes back rather than
+    // silently reverting to zero, and the two agree by construction because
+    // both came from the same getSimulationTime() call.
+    if (
+      Number.isFinite(snapshot.simTime) &&
+      getSimulationTime() !== snapshot.simTime
+    ) {
+      setSimulationTime(snapshot.simTime);
+    }
+  } finally {
+    restoring = false;
+  }
+
   noteIntervention();
   log.pop();
   render();
@@ -415,8 +476,15 @@ function exportLog() {
   setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
-/** Forget everything. Called when the world is rebuilt under the planner. */
+/**
+ * Forget everything. Called when the world is rebuilt under the planner.
+ *
+ * Ignored while an undo is restoring. An undo rebuilds the world by design and
+ * that rebuild is not somebody loading a different system, so treating it as
+ * one destroyed the very history the undo is walking back through.
+ */
 export function resetManeuverPlanner() {
+  if (restoring) return;
   undoStack.length = 0;
   log.length = 0;
   render();

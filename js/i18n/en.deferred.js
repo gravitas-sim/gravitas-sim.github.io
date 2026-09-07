@@ -1214,6 +1214,25 @@ export const EN_DEFERRED = {
     'the two runs were not measurements of the same thing',
 
   'nb.rv.title': 'Radial-velocity fit to {target}',
+  'nb.rv.mcPeriod': 'Period, with Monte Carlo interval',
+  'nb.rv.mcK': 'K, with Monte Carlo interval',
+  'nb.rv.mcNote':
+    'half the 16th-84th percentile span over {n} trials, seed {seed}',
+  'nb.rv.mcFamilies': 'Alias families the refits split into',
+  'nb.rv.mcTopFamily':
+    'the most populated is {period} d, winning {pct}% of trials; no single interval is meaningful',
+  'nb.flag.uncertainty-analysed':
+    'an uncertainty analysis was kept with this reading',
+  'nb.flag.uncertainty-multimodal':
+    'the refits split into several alias families, so no single interval is quoted',
+  'nb.flag.uncertainty-cancelled': 'the uncertainty analysis was stopped early',
+  'nb.flag.uncertainty-partial': 'some uncertainty trials produced no fit',
+  'nb.flag.uncertainty-grid-limited':
+    'the uncertainty interval was withheld as grid-limited',
+  'nb.flag.uncertainty-refused':
+    'an uncertainty analysis was attempted and refused',
+  'nb.flag.uncertainty-stale':
+    'an uncertainty analysis exists but was computed for a different fit, so it is not attached',
   'nb.rv.period': 'Period',
   'nb.rv.K': 'Velocity semi-amplitude K',
   'nb.rv.msini': 'gives M sin i, not a mass',

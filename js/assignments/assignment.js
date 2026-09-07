@@ -141,22 +141,59 @@ export function resolveSelection(lesson, chosen) {
     wanted.add(sid);
   }
 
-  // Pull in the world each chosen step is about. Recorded with the step that
-  // needed it, so the interface can say "step 12 needs this" rather than
-  // presenting an unexplained extra.
+  // Pull in what each chosen step needs, and what THOSE need in turn.
+  //
+  // Two kinds of prerequisite, resolved to a fixed point rather than one level
+  // deep. The first version pulled in each step's setup and stopped, so a step
+  // whose question refers to a measurement made three steps earlier - "the
+  // period you found above" - was handed to a student with the measurement
+  // step missing, and the setup that measurement needed was never considered
+  // either because it was reached through a step that had itself been added.
+  //
+  //   setup     the world the step is about, found by walking backwards.
+  //   requires  a dependency the lesson declares by sid: a measurement a later
+  //             step computes from, an import a later field is filled by.
+  //
+  // The loop runs until nothing new is added. A cycle cannot spin it, because
+  // a sid is only ever added once.
   const added = [];
-  for (const sid of [...wanted]) {
-    const setupIndex = setupIndexFor(lesson, indexOf.get(sid));
-    if (setupIndex < 0) continue;
-    const setupSid = steps[setupIndex].sid;
-    if (wanted.has(setupSid)) continue;
-    wanted.add(setupSid);
-    added.push({
-      sid: setupSid,
-      reason: 'setup',
-      forSid: sid,
-      scenario: steps[setupIndex].setup?.scenario ?? null,
-    });
+  const explain = (sid, reason, forSid, scenario = null) => {
+    if (wanted.has(sid)) return;
+    wanted.add(sid);
+    added.push({ sid, reason, forSid, scenario });
+  };
+
+  let growing = true;
+  while (growing) {
+    growing = false;
+    for (const sid of [...wanted]) {
+      const index = indexOf.get(sid);
+      if (index === undefined) continue;
+
+      // Declared dependencies first: they are the reason a step is answerable
+      // at all, and they may themselves sit under a different setup.
+      for (const need of steps[index].requires || []) {
+        if (!indexOf.has(need)) {
+          if (!unknown.includes(need)) unknown.push(need);
+          continue;
+        }
+        if (wanted.has(need)) continue;
+        explain(need, 'requires', sid);
+        growing = true;
+      }
+
+      const setupIndex = setupIndexFor(lesson, index);
+      if (setupIndex < 0) continue;
+      const setupSid = steps[setupIndex].sid;
+      if (wanted.has(setupSid)) continue;
+      explain(
+        setupSid,
+        'setup',
+        sid,
+        steps[setupIndex].setup?.scenario ?? null
+      );
+      growing = true;
+    }
   }
 
   const sids = steps.map(s => s.sid).filter(sid => wanted.has(sid));

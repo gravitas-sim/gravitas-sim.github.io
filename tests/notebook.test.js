@@ -1381,7 +1381,29 @@ describe('provenance belongs to the recording, not to the world on screen', () =
       analysis: rvAnalysis(),
       report: {
         ...recordedReport({ scheduleFingerprint: 'SCHED42' }),
-        uncertainty: { spec: { seed: 'mc-seed-9' } },
+        // A real report: the seed only travels with an analysis that actually
+        // succeeded and describes this fit. A bare {spec:{seed}} is now
+        // rejected by the staleness gate, which is the point of the gate.
+        uncertainty: {
+          ok: true,
+          inputsKey: 'KEY-A',
+          spec: { seed: 'mc-seed-9', model: 'circular-single' },
+          requested: 100,
+          completed: 100,
+          succeeded: 100,
+          failed: 0,
+          failures: {},
+          outcome: 'complete',
+          cancelled: false,
+          complete: true,
+          gridLimited: false,
+          multimodal: false,
+          period: { p16: 3.4, median: 3.5, p84: 3.6, min: 3.4, max: 3.6 },
+          K: { p16: 39, median: 40, p84: 41, min: 39, max: 41 },
+          families: [],
+          assumptions: ['rvfit.mc.assume.model'],
+        },
+        uncertaintyKey: 'KEY-A',
       },
       provenance: {},
     });
@@ -1480,5 +1502,233 @@ describe('the simulation clock is recorded in the right units', () => {
     expect(entries[0].snapshot.provenance).toEqual(entry.snapshot.provenance);
     expect(entries[0].fingerprint).toBe(entry.fingerprint);
     expect(entries[0].tampered).toBeUndefined();
+  });
+});
+
+describe('the uncertainty analysis travels with the evidence', () => {
+  const rvAnalysisFor = () => ({
+    tooFew: false,
+    trial: { period: 3.5, K: 42, phase: 1.2, gamma: -3 },
+    atTrial: { rms: 4.2, reducedChi2: 1.08 },
+    folded: [
+      { phase: 0.1, rv: 40, sigma: 4, model: 39 },
+      { phase: 0.6, rv: -38, sigma: 4, model: -39 },
+    ],
+    structure: { runsRatio: 0.97 },
+    used: 12,
+    excluded: { degraded: 0, unverified: 0 },
+    revealed: false,
+    truth: null,
+  });
+
+  /** A complete, unimodal report for the fit being captured. */
+  const goodReport = (over = {}) => ({
+    recording: { target: 'HD 1', scenario: 'Lab', seed: 'rec' },
+    uncertaintyKey: 'KEY-A',
+    uncertainty: {
+      ok: true,
+      inputsKey: 'KEY-A',
+      spec: {
+        seed: 'mc-7',
+        model: 'circular-single',
+        errors: 'independentGaussian',
+        resampledAbout: 'studentFit',
+        minPeriod: 1,
+        maxPeriod: 10,
+        samples: 400,
+        epochs: 24,
+      },
+      requested: 200,
+      completed: 200,
+      succeeded: 198,
+      failed: 2,
+      failures: { noSearch: 2, notFinite: 0 },
+      outcome: 'partial',
+      cancelled: false,
+      complete: false,
+      gridLimited: false,
+      multimodal: false,
+      period: { p16: 3.48, median: 3.5, p84: 3.53, min: 3.47, max: 3.54 },
+      K: { p16: 41, median: 42, p84: 43, min: 40, max: 44 },
+      families: [
+        {
+          count: 198,
+          fraction: 1,
+          period: { p16: 3.48, median: 3.5, p84: 3.53, min: 3.47, max: 3.54 },
+          K: { p16: 41, median: 42, p84: 43, min: 40, max: 44 },
+        },
+      ],
+      assumptions: ['rvfit.mc.assume.model', 'rvfit.mc.assume.precision'],
+      ...over,
+    },
+  });
+
+  test('an interval becomes a quantity with its uncertainty', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: goodReport(),
+      provenance: {},
+    });
+    const period = entry.snapshot.quantities.find(
+      q => q.label === EN_DEFERRED['nb.rv.mcPeriod']
+    );
+    expect(period).toBeDefined();
+    expect(period.value).toBe(3.5);
+    expect(period.uncertainty).toBeCloseTo((3.53 - 3.48) / 2, 12);
+    expect(period.unit).toBe('d');
+    expect(period.note).toContain('mc-7');
+  });
+
+  test('the whole reproducible block is in the provenance', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const p = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: goodReport(),
+      provenance: {},
+    }).snapshot.provenance;
+
+    expect(p.uncertaintySeed).toBe('mc-7');
+    const u = p.uncertainty;
+    // Source identity, model, seed, bounds, trial counts, status, intervals,
+    // aliases and assumptions - the whole list the brief names.
+    expect(u.resampledAbout).toBe('studentFit');
+    expect(u.model).toBe('circular-single');
+    expect(u.errors).toBe('independentGaussian');
+    expect(u.seed).toBe('mc-7');
+    expect([u.minPeriod, u.maxPeriod]).toEqual([1, 10]);
+    expect(u.samples).toBe(400);
+    expect(u.epochs).toBe(24);
+    expect([u.requested, u.completed, u.succeeded, u.failed]).toEqual([
+      200, 200, 198, 2,
+    ]);
+    expect(u.failures).toEqual({ noSearch: 2, notFinite: 0 });
+    expect(u.outcome).toBe('partial');
+    expect(u.cancelled).toBe(false);
+    expect(u.complete).toBe(false);
+    expect(u.period.median).toBe(3.5);
+    expect(u.families).toHaveLength(1);
+    expect(u.assumptions).toContain('rvfit.mc.assume.precision');
+    expect(u.inputsKey).toBe('KEY-A');
+  });
+
+  test('a stale report is not attached, and the entry says so', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    // The analysis was computed for a different recording or fit. This is the
+    // last place it could be attached to the wrong numbers and outlive the
+    // session in a file.
+    const entry = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: { ...goodReport(), uncertaintyKey: 'KEY-B' },
+      provenance: {},
+    });
+    expect(entry.snapshot.provenance.uncertainty).toBe(null);
+    expect(entry.snapshot.provenance.uncertaintySeed).toBe(null);
+    expect(entry.snapshot.provenance.flags).toContain('uncertainty-stale');
+    expect(
+      entry.snapshot.quantities.some(
+        q => q.label === EN_DEFERRED['nb.rv.mcPeriod']
+      )
+    ).toBe(false);
+  });
+
+  test('a multimodal result records the families, not a fabricated bar', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: goodReport({
+        multimodal: true,
+        period: null,
+        K: null,
+        families: [
+          {
+            count: 120,
+            fraction: 0.6,
+            period: { p16: 1.3, median: 1.31, p84: 1.32, min: 1.3, max: 1.32 },
+            K: { p16: 30, median: 35, p84: 40, min: 30, max: 40 },
+          },
+          {
+            count: 80,
+            fraction: 0.4,
+            period: { p16: 0.8, median: 0.81, p84: 0.82, min: 0.8, max: 0.82 },
+            K: { p16: 28, median: 33, p84: 38, min: 28, max: 38 },
+          },
+        ],
+      }),
+      provenance: {},
+    });
+    expect(
+      entry.snapshot.quantities.some(
+        q => q.label === EN_DEFERRED['nb.rv.mcPeriod']
+      )
+    ).toBe(false);
+    const families = entry.snapshot.quantities.find(
+      q => q.label === EN_DEFERRED['nb.rv.mcFamilies']
+    );
+    expect(families.value).toBe(2);
+    expect(families.note).toContain('60.0%');
+    expect(entry.snapshot.provenance.flags).toContain('uncertainty-multimodal');
+  });
+
+  test('a refused analysis is flagged rather than silently absent', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: {
+        recording: {},
+        uncertainty: { ok: false, reason: 'noUncertainties', assumptions: [] },
+      },
+      provenance: {},
+    });
+    expect(entry.snapshot.provenance.flags).toContain('uncertainty-refused');
+    expect(entry.snapshot.provenance.uncertainty).toBe(null);
+  });
+
+  test('it survives save, reload, export and import unchanged', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysisFor(),
+      report: goodReport(),
+      provenance: {},
+    });
+
+    // Save to the store and read it back, the way reopening the panel does.
+    expect(store.save([entry]).ok).toBe(true);
+    const reloaded = store.load().entries[0];
+    expect(reloaded.snapshot.provenance.uncertainty).toEqual(
+      entry.snapshot.provenance.uncertainty
+    );
+
+    // Then out to a file and back in.
+    const data = JSON.parse(
+      JSON.stringify(buildBackup({ entries: [reloaded], revision: 'x' }))
+    );
+    expect(validateBackup(data).ok).toBe(true);
+    const { entries, tampered } = restoreBackup(data);
+    expect(tampered).toBe(0);
+    expect(entries[0].snapshot.provenance.uncertainty).toEqual(
+      entry.snapshot.provenance.uncertainty
+    );
+    expect(entries[0].fingerprint).toBe(entry.fingerprint);
+  });
+
+  test('every uncertainty flag it can raise is named in both languages', () => {
+    const flags = [
+      'uncertainty-analysed',
+      'uncertainty-multimodal',
+      'uncertainty-cancelled',
+      'uncertainty-partial',
+      'uncertainty-grid-limited',
+      'uncertainty-refused',
+      'uncertainty-stale',
+    ];
+    for (const flag of flags) {
+      expect(typeof EN_DEFERRED[`nb.flag.${flag}`]).toBe('string');
+      expect(typeof ES_DEFERRED[`nb.flag.${flag}`]).toBe('string');
+    }
+    for (const id of ['nb.rv.mcPeriod', 'nb.rv.mcK', 'nb.rv.mcFamilies']) {
+      expect(typeof EN_DEFERRED[id]).toBe('string');
+      expect(typeof ES_DEFERRED[id]).toBe('string');
+    }
   });
 });

@@ -2471,7 +2471,21 @@ export async function openInvestigation(id, opts = {}) {
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
   startedAt = saved?.startedAt || new Date().toISOString();
-  stepIndex = saved?.stepSid ? Math.max(0, indexOfSid(inv, saved.stepSid)) : 0;
+  // Resolved against `active`, which for an assignment is the SUBSET, not
+  // against the whole investigation.
+  //
+  // This read indexOfSid(inv, ...), so a student resuming an eight-step
+  // assignment cut from a thirty-step lesson was sent to the position that sid
+  // holds in the LESSON - past the end of their assignment, and clamped to
+  // whatever step happened to be there. Their saved answers were intact and
+  // they were dropped in the wrong place to find them.
+  //
+  // A sid that is not in the subset at all means the assignment was recut
+  // since they last worked on it; starting at the beginning of what they
+  // actually have is the honest fallback, and their responses are unaffected.
+  stepIndex = saved?.stepSid
+    ? Math.max(0, indexOfSid(active, saved.stepSid))
+    : 0;
   progressNotes = saved?.notes || [];
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);

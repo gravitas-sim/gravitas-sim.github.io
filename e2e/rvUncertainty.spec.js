@@ -315,6 +315,103 @@ test.describe('the export', () => {
     expect(JSON.stringify(exported.uncertainty)).not.toMatch(/truth/i);
   });
 
+  test('the downloaded CSV carries the whole reproducible block', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await analyse(page, {
+      days: evenly(30, 0.4),
+      period: 3.5,
+      K: 40,
+      sigma: 4,
+      bounds: { minPeriod: 1, maxPeriod: 10 },
+    });
+    await page.locator('#rvMcTrials').fill('80');
+    await page.locator('#rvMcSeed').fill('csv-seed');
+    await page.locator('#rvMcRun').click();
+    const r = await report(page);
+    expect(r.ok).toBe(true);
+
+    // The actual file the export writes, not the object behind it.
+    const csv = await page.evaluate(async () => {
+      const ex = await import('/js/dataExport.js');
+      return ex.rvFitCsv()?.csv ?? null;
+    });
+    expect(csv).toBeTruthy();
+
+    for (const needle of [
+      'uncertainty_analysis: parametric Monte Carlo',
+      'uncertainty_source: studentFit',
+      'uncertainty_model: circular-single',
+      'uncertainty_error_model: independentGaussian',
+      'uncertainty_seed: csv-seed',
+      'uncertainty_search_bounds_days: 1 to 10',
+      'uncertainty_trials_requested: 80',
+      'uncertainty_outcome:',
+      'uncertainty_cancelled:',
+      'uncertainty_alias_families:',
+      'uncertainty_assumption:',
+    ]) {
+      expect(csv).toContain(needle);
+    }
+    // A unimodal run reports its interval; a multimodal one would not.
+    if (r.period) {
+      expect(csv).toContain('uncertainty_period_days_p16_median_p84:');
+    } else {
+      expect(csv).toContain('uncertainty_single_interval: none');
+    }
+    // And never the answer.
+    expect(csv).not.toMatch(/uncertainty_[a-z_]*truth/i);
+  });
+
+  test('a stale analysis is refused by the file, not printed beside a new fit', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await analyse(page, {
+      days: evenly(30, 0.4),
+      period: 3.5,
+      K: 40,
+      sigma: 4,
+      bounds: { minPeriod: 1, maxPeriod: 10 },
+    });
+    await page.locator('#rvMcTrials').fill('60');
+    await page.locator('#rvMcRun').click();
+    expect((await report(page)).ok).toBe(true);
+
+    // Move the fit under it. The panel withholds the numbers on screen; the
+    // file has to withhold them too, because a file outlives the session.
+    await page.evaluate(async () => {
+      const ws = await import('/js/rvWorkspace.js');
+      ws.setTrial('period', ws.trialParameters().period * 1.37);
+    });
+
+    const csv = await page.evaluate(async () => {
+      const ex = await import('/js/dataExport.js');
+      return ex.rvFitCsv()?.csv ?? null;
+    });
+    expect(csv).toContain('uncertainty_analysis: stale');
+    expect(csv).not.toContain('uncertainty_period_days_p16_median_p84:');
+  });
+
+  test('a file with no analysis says none was run', async ({ page, app }) => {
+    await app.boot();
+    await analyse(page, {
+      days: evenly(20, 0.5),
+      period: 3.5,
+      K: 40,
+      sigma: 4,
+      bounds: { minPeriod: 1, maxPeriod: 10 },
+    });
+    const csv = await page.evaluate(async () => {
+      const ex = await import('/js/dataExport.js');
+      return ex.rvFitCsv()?.csv ?? null;
+    });
+    expect(csv).toContain('uncertainty_analysis: not run');
+  });
+
   test('an export with no analysis run says so rather than omitting it', async ({
     page,
     app,

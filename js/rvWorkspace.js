@@ -273,6 +273,15 @@ export function exportReport() {
     // this carries it verbatim. Null when nobody ran one, which is honest -
     // an export with no interval says none was computed.
     uncertainty: uncertaintyFor ? uncertaintyFor() : null,
+    /**
+     * The inputs key THIS fit would produce right now.
+     *
+     * Carried so a consumer can tell a current interval from one computed
+     * against a different recording, fit or search range. The panel already
+     * withholds a stale report on screen; the export needs the same check,
+     * because a file is where an interval outlives the session that made it.
+     */
+    uncertaintyKey: uncertaintyKeyFor ? uncertaintyKeyFor() : null,
   };
 }
 
@@ -296,10 +305,14 @@ let onRecordingChanged = null;
  * @param {?Function} [onChange] - Called when a new recording is loaded
  * @returns {void}
  */
-export function setUncertaintyReporter(fn, onChange = null) {
+export function setUncertaintyReporter(fn, onChange = null, keyFn = null) {
   uncertaintyFor = typeof fn === 'function' ? fn : null;
   onRecordingChanged = typeof onChange === 'function' ? onChange : null;
+  uncertaintyKeyFor = typeof keyFn === 'function' ? keyFn : null;
 }
+
+/** Returns the key the current inputs would produce; see exportReport(). */
+let uncertaintyKeyFor = null;
 
 // --- Drawing -----------------------------------------------------------------
 

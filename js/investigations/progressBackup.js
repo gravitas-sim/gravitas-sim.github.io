@@ -82,7 +82,46 @@ export function stepFingerprint(step) {
   // The number of options discriminates two choice questions from each other
   // without depending on their wording.
   parts.push(Array.isArray(step.options) ? String(step.options.length) : '-');
+  // The answer's semantics, which the count alone does not carry.
+  //
+  // The count was the whole of it, so a same-length reorder of the options
+  // left the fingerprint identical - and a stored answer is an INDEX. A
+  // student's "2" would silently come to mean a different option, and an
+  // assignment binding would go on calling it valid. Changing which option is
+  // correct, or moving a numeric answer or its tolerance, was invisible in
+  // exactly the same way.
+  //
+  // Deliberately not the option prose: the Spanish shadow translates it, and
+  // hashing words would invalidate every binding in the other language for no
+  // reason. What is hashed is the shape of the answer - where the correct one
+  // sits, what a numeric answer is, and how wide its tolerance is - all of
+  // which a translation leaves alone and an edit to the question does not.
+  parts.push(answerSignature(step));
   return parts.join('|');
+}
+
+/**
+ * What would make a stored answer mean something different.
+ *
+ * @param {object} step - Step definition
+ * @returns {string} A short signature, or '-'
+ */
+function answerSignature(step) {
+  const bits = [];
+  if (step.answer !== undefined && step.answer !== null) {
+    bits.push(`a=${JSON.stringify(step.answer)}`);
+  }
+  if (Number.isFinite(step.tolerance)) bits.push(`t=${step.tolerance}`);
+  if (step.unit) bits.push(`u=${step.unit}`);
+  // A choice question's correct option, by position: the one thing a reorder
+  // moves and a translation does not.
+  if (Array.isArray(step.options) && Number.isInteger(step.answer)) {
+    bits.push(`c=${step.answer}`);
+  }
+  // Multi-select and rubric shapes, when a lesson uses them.
+  if (Array.isArray(step.correct))
+    bits.push(`m=${[...step.correct].join(',')}`);
+  return bits.length ? bits.join(';') : '-';
 }
 
 /**

@@ -466,6 +466,7 @@ export function rvFitCsv() {
       `truth_period_days: ${report.truth.period}, truth_K_ms: ${report.truth.K}`
     );
   }
+  writeUncertaintyComments(comment, report);
 
   const residuals = Array.isArray(report.residuals) ? report.residuals : [];
   const rows = [RV_FIT_COLUMNS.slice()];
@@ -486,6 +487,124 @@ export function rvFitCsv() {
   if (!residuals.length) return EMPTY_CSV;
 
   return { csv: `${lines.join('\n')}\n${toCsv(rows)}`, rows: residuals.length };
+}
+
+/**
+ * The Monte Carlo block, written into the fit's own file.
+ *
+ * The file omitted it entirely, so a student who ran an uncertainty analysis
+ * and then exported their fit got a file with parameters and no statement of
+ * how well they were determined - which is the half a reader most needs and
+ * the half that takes longest to produce.
+ *
+ * Written as comments beside the fit rather than as a second file, because an
+ * interval that travels separately from the fit it describes is an interval
+ * that will be filed next to the wrong one.
+ *
+ * The staleness contract is enforced here as well as in the panel. A report
+ * whose `inputsKey` no longer matches the fit being exported describes a
+ * different recording or a different model, and the file says that instead of
+ * printing its numbers: an interval attached to the wrong fit is worse than no
+ * interval, and this is the last place it can be caught before a file leaves
+ * the application.
+ *
+ * @param {Function} comment - Writes one `# ` line
+ * @param {object} report - From rvWorkspace.exportReport()
+ * @returns {void}
+ */
+function writeUncertaintyComments(comment, report) {
+  const u = report.uncertainty;
+  if (!u) {
+    comment('uncertainty_analysis: not run');
+    return;
+  }
+
+  if (!u.ok) {
+    comment(`uncertainty_analysis: refused (${u.reason})`);
+    for (const a of u.assumptions || [])
+      comment(`uncertainty_assumption: ${a}`);
+    return;
+  }
+
+  const key = uncertaintyKeyFor(report);
+  if (key !== null && u.inputsKey !== null && u.inputsKey !== key) {
+    comment(
+      'uncertainty_analysis: stale - it was computed for a different ' +
+        'recording, fit or search range, so its intervals are not reported here'
+    );
+    comment(`uncertainty_computed_for: ${u.inputsKey}`);
+    comment(`uncertainty_this_fit: ${key}`);
+    return;
+  }
+
+  const spec = u.spec || {};
+  comment(
+    'uncertainty_analysis: parametric Monte Carlo over the recorded epochs'
+  );
+  comment(`uncertainty_source: ${spec.resampledAbout ?? 'unknown'}`);
+  comment(`uncertainty_model: ${spec.model ?? 'unknown'}`);
+  comment(`uncertainty_error_model: ${spec.errors ?? 'unknown'}`);
+  comment(`uncertainty_seed: ${spec.seed ?? ''}`);
+  comment(`uncertainty_inputs_key: ${u.inputsKey ?? ''}`);
+  comment(
+    `uncertainty_search_bounds_days: ${spec.minPeriod ?? ''} to ${spec.maxPeriod ?? ''}`
+  );
+  comment(`uncertainty_grid_points_per_trial: ${spec.samples ?? ''}`);
+  comment(`uncertainty_epochs: ${spec.epochs ?? ''}`);
+  comment(
+    `uncertainty_trials_requested: ${u.requested}, attempted: ${u.completed}, produced_a_fit: ${u.succeeded}, failed: ${u.failed}`
+  );
+  for (const [reason, n] of Object.entries(u.failures || {})) {
+    if (n > 0) comment(`uncertainty_failed_${reason}: ${n}`);
+  }
+  comment(`uncertainty_outcome: ${u.outcome}`);
+  comment(`uncertainty_cancelled: ${u.cancelled}`);
+  comment(`uncertainty_complete: ${u.complete}`);
+  if (u.gridLimited) {
+    comment(
+      'uncertainty_grid_limited: every trial returned the same period, so no ' +
+        'interval is reported - it would describe the search grid, not the data'
+    );
+  }
+
+  if (u.period && u.K) {
+    comment(
+      `uncertainty_period_days_p16_median_p84: ${u.period.p16}, ${u.period.median}, ${u.period.p84}`
+    );
+    comment(
+      `uncertainty_K_ms_p16_median_p84: ${u.K.p16}, ${u.K.median}, ${u.K.p84}`
+    );
+  } else {
+    comment(
+      'uncertainty_single_interval: none - the refits split into separate ' +
+        'alias families and one interval across them would describe nothing'
+    );
+  }
+
+  comment(`uncertainty_alias_families: ${(u.families || []).length}`);
+  (u.families || []).forEach((f, i) => {
+    comment(
+      `uncertainty_family_${i + 1}: share ${(100 * f.fraction).toFixed(1)}%, ` +
+        `trials ${f.count}, period_days ${f.period.p16}..${f.period.median}..${f.period.p84}, ` +
+        `K_ms ${f.K.p16}..${f.K.median}..${f.K.p84}`
+    );
+  });
+  for (const a of u.assumptions || []) comment(`uncertainty_assumption: ${a}`);
+}
+
+/**
+ * The inputs key this fit would produce, for the staleness check above.
+ *
+ * Recomputed from the report rather than read off it, because the point is to
+ * compare what the analysis was run against with what is being exported now.
+ * Returns null when the report does not carry enough to compare, and a null
+ * comparison is treated as "cannot tell" rather than as "stale".
+ *
+ * @param {object} report - From rvWorkspace.exportReport()
+ * @returns {?string} The key, or null
+ */
+function uncertaintyKeyFor(report) {
+  return report?.uncertaintyKey ?? null;
 }
 
 /**

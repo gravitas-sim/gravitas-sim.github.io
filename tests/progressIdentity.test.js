@@ -47,16 +47,37 @@ const swap = (lesson, a, b) => ({
 });
 
 describe('the defect this replaces', () => {
-  test('steps 1 and 5 of detect-this-planet are structurally identical', () => {
-    // Both are four-option predict steps with no tool and no scenario, so the
-    // fingerprint cannot tell them apart. They are different questions.
-    expect(stepFingerprint(DETECT.steps[1])).toBe(
-      stepFingerprint(DETECT.steps[5])
-    );
-    expect(DETECT.steps[1].title).not.toBe(DETECT.steps[5].title);
+  test('a fingerprint is not an identity, and never can be', () => {
+    // The reason sids exist. A fingerprint describes a step's SHAPE, and two
+    // different questions can have the same shape - so it can say "this step
+    // was rewritten" and can never say "this is that step".
+    //
+    // Steps 1 and 5 used to be the illustration here. They no longer collide,
+    // because the fingerprint now includes where the correct option sits and
+    // those two differ - which is the strengthening that stopped a same-length
+    // option reorder from silently keeping a binding valid. The property being
+    // documented is unchanged, so it is shown with a pair that still collides:
+    // same type, same option count, same correct answer, different question.
+    const a = {
+      sid: 'one',
+      type: 'predict',
+      options: ['w', 'x', 'y', 'z'],
+      answer: 2,
+      title: 'Which way does it move first?',
+    };
+    const b = {
+      sid: 'two',
+      type: 'predict',
+      options: ['p', 'q', 'r', 's'],
+      answer: 2,
+      title: 'Which curve is the deeper one?',
+    };
+    expect(stepFingerprint(a)).toBe(stepFingerprint(b));
+    expect(a.title).not.toBe(b.title);
+    expect(a.sid).not.toBe(b.sid);
 
-    // And they are not the only pair: the three survey-schedule explores
-    // collide, as do the two four-option choice questions.
+    // And it still happens in a real lesson: detect-this-planet contains
+    // colliding pairs among its explores, which carry no answer at all.
     const prints = DETECT.steps.map(stepFingerprint);
     expect(new Set(prints).size).toBeLessThan(prints.length);
   });

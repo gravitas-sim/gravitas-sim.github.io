@@ -250,6 +250,7 @@ export function provenanceOf({
   recordedAt = null,
   scheduleFingerprint = null,
   uncertaintySeed = null,
+  uncertainty = null,
 } = {}) {
   return {
     scenario: scenario === null ? null : String(scenario),
@@ -306,6 +307,13 @@ export function provenanceOf({
       scheduleFingerprint === null ? null : String(scheduleFingerprint),
     /** The Monte Carlo seed, when an uncertainty analysis was kept with it. */
     uncertaintySeed: uncertaintySeed === null ? null : String(uncertaintySeed),
+    /**
+     * The whole reproducible Monte Carlo block, when one was kept with this
+     * reading. Copied rather than referenced: the panel's report is replaced
+     * on the next run, and an entry holding a reference would silently gain a
+     * different interval.
+     */
+    uncertainty: uncertainty ? JSON.parse(JSON.stringify(uncertainty)) : null,
   };
 }
 

@@ -63,10 +63,63 @@ function recordedProvenance(rec, report) {
   }
   put('recordedAt', rec.recordedAt);
   put('scheduleFingerprint', rec.scheduleFingerprint);
-  if (report?.uncertainty?.spec?.seed) {
-    put('uncertaintySeed', report.uncertainty.spec.seed);
+  const mc = liveUncertaintyFor(report);
+  if (mc) {
+    put('uncertaintySeed', mc.spec.seed);
+    // Everything needed to reproduce the interval, in the entry itself, so a
+    // restored notebook can be checked without the recording beside it.
+    put('uncertainty', {
+      seed: mc.spec.seed ?? null,
+      model: mc.spec.model ?? null,
+      errors: mc.spec.errors ?? null,
+      resampledAbout: mc.spec.resampledAbout ?? null,
+      minPeriod: mc.spec.minPeriod ?? null,
+      maxPeriod: mc.spec.maxPeriod ?? null,
+      samples: mc.spec.samples ?? null,
+      epochs: mc.spec.epochs ?? null,
+      requested: mc.requested,
+      completed: mc.completed,
+      succeeded: mc.succeeded,
+      failed: mc.failed,
+      failures: { ...mc.failures },
+      outcome: mc.outcome,
+      cancelled: mc.cancelled,
+      complete: mc.complete,
+      gridLimited: mc.gridLimited,
+      multimodal: mc.multimodal,
+      inputsKey: mc.inputsKey ?? null,
+      period: mc.period ? { ...mc.period } : null,
+      K: mc.K ? { ...mc.K } : null,
+      families: (mc.families || []).map(f => ({
+        count: f.count,
+        fraction: f.fraction,
+        period: { ...f.period },
+        K: { ...f.K },
+      })),
+      assumptions: [...(mc.assumptions || [])],
+    });
   }
   return out;
+}
+
+/**
+ * The uncertainty report, but only if it describes the fit being captured.
+ *
+ * The staleness contract, applied at the last place an interval can be
+ * attached to the wrong thing. A notebook entry outlives the session, so a
+ * report computed against a different recording, a different fitted model or a
+ * different search range must not travel in it as though it were about these
+ * numbers.
+ *
+ * @param {object} report - From rvWorkspace.exportReport()
+ * @returns {?object} The report, or null when it is absent, refused or stale
+ */
+function liveUncertaintyFor(report) {
+  const u = report?.uncertainty;
+  if (!u?.ok) return null;
+  const key = report?.uncertaintyKey ?? null;
+  if (key !== null && u.inputsKey !== null && u.inputsKey !== key) return null;
+  return u;
 }
 
 /** Thin an array to at most `max` points, keeping the ends. */
@@ -98,6 +151,12 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
   const trial = analysis.trial;
   const fit = analysis.atTrial;
   const truth = analysis.revealed ? analysis.truth : null;
+  // The uncertainty analysis, when one was run against THIS fit. The staleness
+  // check is the same one the export does: a report computed for a different
+  // recording or a different model is not evidence about this one, and a
+  // notebook entry is precisely where such a mismatch would survive longest
+  // without being noticed. Declared here because the quantities below read it.
+  const mc = liveUncertaintyFor(report);
 
   const quantities = [
     quantity({
@@ -139,6 +198,45 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
         unit: '',
         kind: KIND.MEASURED,
         note: t('nb.rv.chi2Note'),
+      })
+    );
+  }
+
+  if (mc?.period && mc?.K) {
+    // A measured interval, so the bounds are measured too. Recorded as an
+    // uncertainty on the parameter rather than as three separate numbers,
+    // because that is what a reader quotes.
+    quantities.push(
+      quantity({
+        label: t('nb.rv.mcPeriod'),
+        value: mc.period.median,
+        unit: 'd',
+        kind: KIND.MEASURED,
+        uncertainty: (mc.period.p84 - mc.period.p16) / 2,
+        note: t('nb.rv.mcNote', { n: mc.succeeded, seed: mc.spec.seed }),
+      }),
+      quantity({
+        label: t('nb.rv.mcK'),
+        value: mc.K.median,
+        unit: 'm/s',
+        kind: KIND.MEASURED,
+        uncertainty: (mc.K.p84 - mc.K.p16) / 2,
+      })
+    );
+  } else if (mc?.multimodal) {
+    // No single interval exists. The number that IS meaningful is how often
+    // the leading alias won, and it is recorded instead of a fabricated bar.
+    const top = mc.families[0];
+    quantities.push(
+      quantity({
+        label: t('nb.rv.mcFamilies'),
+        value: mc.families.length,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t('nb.rv.mcTopFamily', {
+          period: top.period.median.toPrecision(5),
+          pct: (100 * top.fraction).toFixed(1),
+        }),
       })
     );
   }
@@ -189,6 +287,16 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
 
   const flags = [];
   if (analysis.revealed) flags.push('truth-revealed');
+  if (mc) {
+    flags.push('uncertainty-analysed');
+    if (mc.multimodal) flags.push('uncertainty-multimodal');
+    if (mc.outcome !== 'complete') flags.push(`uncertainty-${mc.outcome}`);
+    if (mc.gridLimited) flags.push('uncertainty-grid-limited');
+  } else if (report?.uncertainty && !report.uncertainty.ok) {
+    flags.push('uncertainty-refused');
+  } else if (report?.uncertainty) {
+    flags.push('uncertainty-stale');
+  }
   if (analysis.excluded?.degraded) flags.push('degraded-epochs');
   if (analysis.excluded?.unverified) flags.push('unverified-epochs');
   if (fit.reducedChi2 === null) flags.push('weights-assumed');

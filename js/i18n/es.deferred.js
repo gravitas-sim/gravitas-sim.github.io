@@ -1232,6 +1232,27 @@ export const ES_DEFERRED = {
   'nb.flag.verdict-incomparable': 'las dos ejecuciones no medían lo mismo',
 
   'nb.rv.title': 'Ajuste de velocidad radial de {target}',
+  'nb.rv.mcPeriod': 'Período, con intervalo de Monte Carlo',
+  'nb.rv.mcK': 'K, con intervalo de Monte Carlo',
+  'nb.rv.mcNote':
+    'la mitad del rango entre los percentiles 16 y 84 sobre {n} pruebas, semilla {seed}',
+  'nb.rv.mcFamilies': 'Familias de alias en las que se separaron los reajustes',
+  'nb.rv.mcTopFamily':
+    'la más poblada es {period} d, con el {pct}% de las pruebas; ningún intervalo único es significativo',
+  'nb.flag.uncertainty-analysed':
+    'se guardó un análisis de incertidumbre con esta medición',
+  'nb.flag.uncertainty-multimodal':
+    'los reajustes se separaron en varias familias de alias, así que no se da un intervalo único',
+  'nb.flag.uncertainty-cancelled':
+    'el análisis de incertidumbre se detuvo antes de terminar',
+  'nb.flag.uncertainty-partial':
+    'algunas pruebas de incertidumbre no dieron ajuste',
+  'nb.flag.uncertainty-grid-limited':
+    'el intervalo de incertidumbre se retuvo por estar limitado por la rejilla',
+  'nb.flag.uncertainty-refused':
+    'se intentó un análisis de incertidumbre y fue rechazado',
+  'nb.flag.uncertainty-stale':
+    'existe un análisis de incertidumbre pero se calculó para otro ajuste, así que no se adjunta',
   'nb.rv.period': 'Período',
   'nb.rv.K': 'Semiamplitud de velocidad K',
   'nb.rv.msini': 'da M sin i, no una masa',

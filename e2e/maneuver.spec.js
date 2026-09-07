@@ -418,3 +418,157 @@ test.describe('the whole transfer', () => {
     expect(out.final.periapsis / out.plan.r2).toBeCloseTo(1, 2);
   });
 });
+
+test.describe('two burns, then undo twice', () => {
+  /** Everything an undo has to put back, read together. */
+  const worldState = page =>
+    page.evaluate(async () => {
+      const p = await import('/js/physics.js');
+      const planner = await import('/js/maneuverPlanner.js');
+      const probe = p.planets.find(b => b.name === 'Spacecraft');
+      return {
+        simTime: p.getSimulationTime(),
+        vx: probe.vel.x,
+        vy: probe.vel.y,
+        x: probe.pos.x,
+        y: probe.pos.y,
+        undoDepth: planner.undoDepth(),
+        burns: planner.burnLog().length,
+        worldGeneration: p.getWorldGeneration(),
+        interventionEpoch: p.getInterventionEpoch(),
+      };
+    });
+
+  /** Apply a transverse burn through the real controls. */
+  async function burn(page, dv) {
+    await page.locator('#maneuverTransverse').fill(String(dv));
+    await page.locator('#maneuverTransverse').dispatchEvent('input');
+    await page.locator('#maneuverApply').click();
+  }
+
+  /**
+   * Stop the clock, so the readings either side of an operation are
+   * comparable.
+   *
+   * Necessary, not tidiness: the simulation advances between one round trip
+   * into the page and the next, so a "before" sampled by one call and a
+   * snapshot taken inside a click are seconds of simulated time apart. Pausing
+   * removes the race without weakening anything - an undo restores the clock
+   * or it does not, and a still world is where that is visible.
+   */
+  const freeze = page =>
+    page.evaluate(async () => {
+      const s = await import('/js/appState.js');
+      s.state.paused = true;
+    });
+
+  test('each undo walks back exactly one burn, clock included', async ({
+    page,
+    app,
+  }) => {
+    await openPlanner(page, app);
+    await app.waitForFrames(20);
+    await freeze(page);
+
+    const before1 = await worldState(page);
+    await burn(page, 0.4);
+    // Move the clock on by hand, so the second snapshot is a different moment
+    // and an undo that ignored the clock would be visible.
+    await page.evaluate(async () => {
+      const p = await import('/js/physics.js');
+      p.setSimulationTime(p.getSimulationTime() + 500);
+    });
+
+    const before2 = await worldState(page);
+    expect(before2.burns).toBe(1);
+    expect(before2.undoDepth).toBe(1);
+    expect(before2.simTime).toBeCloseTo(before1.simTime + 500, 6);
+    await burn(page, 0.3);
+    await page.evaluate(async () => {
+      const p = await import('/js/physics.js');
+      p.setSimulationTime(p.getSimulationTime() + 500);
+    });
+
+    const afterBoth = await worldState(page);
+    expect(afterBoth.burns).toBe(2);
+    // The defect: the first undo rebuilt the world, the rebuild fired
+    // gravitasSimulationReset, and the listener emptied the stack - so this
+    // was 0 by the time the second undo was pressed.
+    expect(afterBoth.undoDepth).toBe(2);
+
+    // First undo: back to just before the second burn.
+    await page.locator('#maneuverUndo').click();
+    const undone1 = await worldState(page);
+    expect(undone1.burns).toBe(1);
+    // History for the FIRST burn survives, which is the whole bug.
+    expect(undone1.undoDepth).toBe(1);
+    await expect(page.locator('#maneuverUndo')).toBeEnabled();
+    // The clock came back with the bodies rather than running on.
+    expect(undone1.simTime).toBeCloseTo(before2.simTime, 6);
+    expect(undone1.vx).toBeCloseTo(before2.vx, 6);
+    expect(undone1.vy).toBeCloseTo(before2.vy, 6);
+
+    // Second undo: back to before any burn at all.
+    await page.locator('#maneuverUndo').click();
+    const undone2 = await worldState(page);
+    expect(undone2.burns).toBe(0);
+    expect(undone2.undoDepth).toBe(0);
+    expect(undone2.simTime).toBeCloseTo(before1.simTime, 6);
+    expect(undone2.vx).toBeCloseTo(before1.vx, 6);
+    expect(undone2.vy).toBeCloseTo(before1.vy, 6);
+    await expect(page.locator('#maneuverUndo')).toBeDisabled();
+  });
+
+  test('dependent recordings are invalidated, not silently continued', async ({
+    page,
+    app,
+  }) => {
+    await openPlanner(page, app);
+    await app.waitForFrames(20);
+    const start = await worldState(page);
+
+    await burn(page, 0.4);
+    await app.waitForFrames(10);
+    const afterBurn = await worldState(page);
+    // A burn is an intervention: an observing session spanning it is a
+    // recording of two different orbits.
+    expect(afterBurn.interventionEpoch).toBeGreaterThan(
+      start.interventionEpoch
+    );
+
+    await page.locator('#maneuverUndo').click();
+    await app.waitForFrames(3);
+    const undone = await worldState(page);
+    // The undo is an intervention too, and the world it rebuilt is a new one.
+    expect(undone.interventionEpoch).toBeGreaterThan(
+      afterBurn.interventionEpoch
+    );
+    expect(undone.worldGeneration).toBeGreaterThan(afterBurn.worldGeneration);
+  });
+
+  test('a genuine world rebuild still clears the planner', async ({
+    page,
+    app,
+  }) => {
+    // The guard must not swallow the real case: loading a different scenario
+    // is somebody changing the world, and the burns recorded against the old
+    // bodies are not a log of anything on screen.
+    await openPlanner(page, app);
+    await app.waitForFrames(20);
+    await burn(page, 0.4);
+    await app.waitForFrames(10);
+    expect((await worldState(page)).undoDepth).toBe(1);
+
+    await app.loadScenario('Solar System');
+    await app.waitForFrames(20);
+    const after = await page.evaluate(async () => {
+      const planner = await import('/js/maneuverPlanner.js');
+      return {
+        undoDepth: planner.undoDepth(),
+        burns: planner.burnLog().length,
+      };
+    });
+    expect(after.undoDepth).toBe(0);
+    expect(after.burns).toBe(0);
+  });
+});
