@@ -21,7 +21,11 @@ let loading = null;
  */
 function ensureDialog() {
   if (!loading) {
+    // The prose is nice to have; the dialog is the point. A failure to fetch
+    // the strings must not stop the dialog opening - it would show message ids,
+    // which is visible and recoverable, where not opening is neither.
     loading = ensureDeferredMessages()
+      .catch(() => {})
       .then(() => import('./exportDialog.js'))
       .then(mod => {
         mod.initExportDialog();

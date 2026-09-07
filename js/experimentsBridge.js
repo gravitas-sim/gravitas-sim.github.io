@@ -40,7 +40,7 @@ export function ensureBench() {
           // bench is lazy, so its rarest half should be too. Registered before
           // the panel renders anything.
           import('./i18n/deferredMessages.js').then(m =>
-            m.ensureDeferredMessages()
+            m.ensureDeferredMessages().catch(() => {})
           ),
         ]);
       bench.initBench({

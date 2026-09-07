@@ -25,7 +25,7 @@ export function ensureManeuverPlanner() {
         import('./ui.js'),
         import('./i18n/deferredMessages.js'),
       ]);
-      await i18n.ensureDeferredMessages();
+      await i18n.ensureDeferredMessages().catch(() => {});
       planner.initManeuver({
         captureShareState: ui.captureShareState,
         applyShareState: ui.applyShareState,

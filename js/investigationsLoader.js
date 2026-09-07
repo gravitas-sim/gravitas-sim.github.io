@@ -41,7 +41,7 @@ export function ensureInvestigations() {
     loading = Promise.all([
       import('./investigations.js'),
       import('./i18n/deferredMessages.js').then(m =>
-        m.ensureDeferredMessages()
+        m.ensureDeferredMessages().catch(() => {})
       ),
     ]).then(([mod]) => {
       mod.initInvestigations();

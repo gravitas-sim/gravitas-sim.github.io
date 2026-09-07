@@ -71,12 +71,41 @@ const CATALOGUES = { [DEFAULT_LOCALE]: EN };
 const pending = new Map();
 
 /**
+ * Locales whose BASE catalogue is in memory.
+ *
+ * Separate from CATALOGUES, and the separation is the point. A deferred panel
+ * registers its strings for every locale, not only the one on screen - so a
+ * reader in English who opens one ends up with a CATALOGUES.es holding that
+ * panel's dozen strings and nothing else. Keying "is this locale loaded?" off
+ * the object's existence then made that partial catalogue stand in for the real
+ * one: loadLocale returned early, es.js was never fetched, and switching to
+ * Spanish produced an English interface with a dozen Spanish labels in it. No
+ * error, no warning, and the strings that were present made it look deliberate.
+ *
+ * Presence in this set means the base file has been loaded. Nothing else does.
+ */
+const baseLoaded = new Set([DEFAULT_LOCALE]);
+
+/**
+ * Strings registered at runtime, per locale, kept beside the base catalogues.
+ *
+ * Beside rather than merged into, so that CATALOGUES[id] stays the object the
+ * locale's own module exported. Merging a copy over it worked and cost
+ * something subtle: two tests delete a key from the exported object to prove
+ * the English fallback, and against a copy the deletion is invisible and the
+ * test passes for the wrong reason. Anything that reasons about what a locale
+ * file actually contains - coverage, the split check, those tests - wants the
+ * file, and a lookup wants the file plus whatever arrived later.
+ */
+const registered = Object.create(null);
+
+/**
  * Make sure a locale's catalogue is in memory.
  * @param {string} id - Locale id
  * @returns {Promise<Object>} The catalogue, or English if it cannot be had
  */
 export async function loadLocale(id) {
-  if (CATALOGUES[id]) return CATALOGUES[id];
+  if (baseLoaded.has(id)) return CATALOGUES[id];
   const entry = LOCALES.find(l => l.id === id);
   if (!entry?.load) return EN;
   if (!pending.has(id)) {
@@ -86,12 +115,16 @@ export async function loadLocale(id) {
         .load()
         .then(catalogue => {
           CATALOGUES[id] = catalogue;
+          baseLoaded.add(id);
           return catalogue;
         })
         .catch(err => {
           // A locale that will not load is not a broken application: every
           // lookup falls through to English, which is exactly what happens.
+          // The pending entry is dropped so a later attempt can retry rather
+          // than being handed this failure for ever.
           console.warn(`[i18n] could not load "${id}":`, err);
+          pending.delete(id);
           return EN;
         })
     );
@@ -100,7 +133,7 @@ export async function loadLocale(id) {
 }
 
 /** @returns {boolean} True when a locale's catalogue is in memory */
-export const isLocaleLoaded = id => Boolean(CATALOGUES[id]);
+export const isLocaleLoaded = id => baseLoaded.has(id);
 
 /**
  * Merge extra messages into a locale after it has loaded.
@@ -121,7 +154,7 @@ export const isLocaleLoaded = id => Boolean(CATALOGUES[id]);
  */
 export function registerMessages(locale, messages) {
   if (!locale || !messages) return;
-  CATALOGUES[locale] = { ...(CATALOGUES[locale] || {}), ...messages };
+  registered[locale] = { ...(registered[locale] || {}), ...messages };
   // A string that was asked for before its chunk arrived was recorded as
   // missing and warned about once. Now that it exists, forget that so a
   // genuine gap later is still reported.
@@ -156,7 +189,13 @@ const listeners = new Set();
  * @returns {void}
  */
 function notifyLocaleListeners() {
-  listeners.forEach(fn => {
+  // A snapshot, not the live set. A listener that rebuilds a panel can register
+  // a fresh listener as it runs, and a Set visits entries added during
+  // iteration - so the new one ran, rebuilt again, registered again, and the
+  // tab locked up. The bench did exactly that: changing language with it open
+  // hung the browser. Notifying the listeners that existed when the change
+  // happened is also the more defensible semantics on its own.
+  [...listeners].forEach(fn => {
     try {
       fn(current);
     } catch (err) {
@@ -248,9 +287,13 @@ const raw = (catalogue, id) =>
  * @returns {string} The message in the active locale, or in English, or the id
  */
 export function t(id, vars) {
-  let entry = raw(CATALOGUES[current], id);
+  // Registered strings first, then the locale's own file, then English. A
+  // panel's late-arriving prose should win over nothing, and lose to nothing.
+  let entry = raw(registered[current], id);
+  if (entry === undefined) entry = raw(CATALOGUES[current], id);
   if (entry === undefined && current !== DEFAULT_LOCALE) {
-    entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
+    entry = raw(registered[DEFAULT_LOCALE], id);
+    if (entry === undefined) entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
   }
   if (entry === undefined) {
     if (!missing.has(id)) {
@@ -277,7 +320,9 @@ export function t(id, vars) {
  * @param {string} id - Message id
  * @returns {boolean} True if the active locale has it
  */
-export const hasMessage = id => raw(CATALOGUES[current], id) !== undefined;
+export const hasMessage = id =>
+  raw(registered[current], id) !== undefined ||
+  raw(CATALOGUES[current], id) !== undefined;
 
 /**
  * How much of the catalogue a locale actually carries.
@@ -338,7 +383,7 @@ export function num(n) {
  */
 export async function setLocale(id, { persist = true } = {}) {
   const next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
-  if (!CATALOGUES[next]) await loadLocale(next);
+  if (!baseLoaded.has(next)) await loadLocale(next);
   const changed = next !== current;
   current = next;
 

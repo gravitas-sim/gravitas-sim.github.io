@@ -22,7 +22,7 @@ let loading = null;
 export function ensureRvWorkspace() {
   if (!loading) {
     loading = (async () => {
-      await ensureDeferredMessages();
+      await ensureDeferredMessages().catch(() => {});
       const [workspace, panel, dataExport] = await Promise.all([
         import('./rvWorkspace.js'),
         import('./rvWorkspacePanel.js'),

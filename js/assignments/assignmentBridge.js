@@ -30,7 +30,7 @@ export async function openAssignmentFromUrl() {
       // These strings are not in the start-up catalogue, and every refusal
       // below is one of them.
       import('../i18n/deferredMessages.js').then(m =>
-        m.ensureDeferredMessages()
+        m.ensureDeferredMessages().catch(() => {})
       ),
     ]
   );

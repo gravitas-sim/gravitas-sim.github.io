@@ -3118,7 +3118,7 @@ export function initInvestigations() {
         loadInvestigation(lessonId),
         import('./assignments/assignmentBuilder.js'),
         import('./i18n/deferredMessages.js').then(m =>
-          m.ensureDeferredMessages()
+          m.ensureDeferredMessages().catch(() => {})
         ),
       ])
         .then(([loaded, builder]) => {

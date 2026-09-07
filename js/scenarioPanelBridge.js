@@ -58,7 +58,7 @@ async function loadForScenario() {
   for (const entry of PANELS) {
     if (!entry.scenarios.includes(name)) continue;
     // The strings for these panels are not in the start-up catalogue.
-    await ensureDeferredMessages();
+    await ensureDeferredMessages().catch(() => {});
     const mod = await entry.load();
     if (!loaded.has(mod)) {
       loaded.add(mod);

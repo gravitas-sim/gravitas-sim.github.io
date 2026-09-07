@@ -230,9 +230,31 @@ export function ensurePanel() {
   `;
   document.body.appendChild(root);
   wire();
+  // Registered once for the life of the module, not once per panel. This used
+  // to live here and rebuild the panel, which called ensurePanel() again and
+  // subscribed again - so every language change doubled the listener count,
+  // and the rebuild happened inside the notification that triggered it.
+  subscribeToLocaleOnce();
+  return root;
+}
+
+/** Whether the locale subscription below has been made. */
+let localeSubscribed = false;
+
+/**
+ * Rebuild the panel when the language changes, once.
+ *
+ * Rebuilding is simpler and less error-prone than re-translating in place, and
+ * a language change is rare enough that redrawing one panel is free. What is
+ * not free is subscribing again while doing it.
+ *
+ * @returns {void}
+ */
+function subscribeToLocaleOnce() {
+  if (localeSubscribed) return;
+  localeSubscribed = true;
   onLocaleChange(() => {
-    // Rebuilding is simpler and less error-prone than re-translating in place,
-    // and a language change is rare enough that redrawing one panel is free.
+    if (!root) return;
     const wasOpen = isOpen();
     root.remove();
     root = null;
@@ -241,7 +263,6 @@ export function ensurePanel() {
       openPanel();
     }
   });
-  return root;
 }
 
 /** Escape text for the one place this file interpolates into HTML. */
