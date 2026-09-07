@@ -394,3 +394,138 @@ describe('whether the claims apply at all', () => {
     expect(out.violations).toContain(VIOLATION.NO_TRACER);
   });
 });
+
+describe('the assumptions are checked before anything is claimed', () => {
+  const pair = [{ mass: 1 }, { mass: 0.1 }];
+  const tracer = { mass: 1e-9 };
+
+  test('an eccentricity nobody could compute is not "circular"', () => {
+    // The defect: the guard was `isFinite(e) && e > MAX`, so a null or a NaN -
+    // which is what an unbound, degenerate or unreadable pair produces -
+    // skipped the check and the system passed as circular. Silence about an
+    // orbit is not evidence that it is round.
+    for (const e of [null, undefined, NaN, Infinity]) {
+      const verdict = assumptionsHold({
+        massive: pair,
+        tracer,
+        eccentricity: e,
+      });
+      expect(verdict.ok).toBe(false);
+      expect(verdict.violations).toContain(VIOLATION.ECCENTRICITY_UNKNOWN);
+    }
+    // A real, small eccentricity still passes.
+    expect(
+      assumptionsHold({ massive: pair, tracer, eccentricity: 0.001 }).ok
+    ).toBe(true);
+  });
+
+  test('an eccentric pair is still refused, and named separately', () => {
+    const verdict = assumptionsHold({
+      massive: pair,
+      tracer,
+      eccentricity: 0.2,
+    });
+    expect(verdict.violations).toContain(VIOLATION.ECCENTRIC);
+    expect(verdict.violations).not.toContain(VIOLATION.ECCENTRICITY_UNKNOWN);
+  });
+
+  test('extra massive bodies are counted, not ignored', () => {
+    // The overlay took the first light body as the tracer and said nothing
+    // about the rest, so a system with four more planets was presented as a
+    // restricted three-body problem. It is their COMBINED pull the restriction
+    // assumes away, so it is the total that is judged.
+    const heavy = assumptionsHold({
+      massive: pair,
+      tracer,
+      eccentricity: 0.001,
+      others: [{ mass: 0.01 }],
+    });
+    expect(heavy.ok).toBe(false);
+    expect(heavy.violations).toContain(VIOLATION.THIRD_MASS);
+
+    // Individually negligible, collectively not.
+    const many = assumptionsHold({
+      massive: pair,
+      tracer,
+      eccentricity: 0.001,
+      others: Array.from({ length: 40 }, () => ({ mass: 1e-7 })),
+    });
+    expect(many.violations).toContain(VIOLATION.THIRD_MASS);
+
+    // Genuinely negligible dust does not trip it.
+    expect(
+      assumptionsHold({
+        massive: pair,
+        tracer,
+        eccentricity: 0.001,
+        others: [{ mass: 1e-12 }, { mass: 1e-12 }],
+      }).ok
+    ).toBe(true);
+  });
+
+  test('an unbound pair has no rotating frame and is refused', () => {
+    const verdict = assumptionsHold({
+      massive: pair,
+      tracer,
+      eccentricity: 0.001,
+      bound: false,
+    });
+    expect(verdict.violations).toContain(VIOLATION.UNBOUND);
+  });
+
+  test('every violation the module can raise has a name in both languages', async () => {
+    const { EN_DEFERRED } = await import('../js/i18n/en.deferred.js');
+    const { ES_DEFERRED } = await import('../js/i18n/es.deferred.js');
+    for (const v of Object.values(VIOLATION)) {
+      expect(typeof EN_DEFERRED[`cr3bp.invalid.${v}`]).toBe('string');
+      expect(typeof ES_DEFERRED[`cr3bp.invalid.${v}`]).toBe('string');
+    }
+  });
+});
+
+describe('both directions of revolution are handled', () => {
+  /**
+   * The Jacobi constant is invariant under reflecting the system.
+   *
+   * The frame was assumed to rotate counter-clockwise, so a clockwise pair had
+   * every frame-rotation term with the wrong sign - and the Jacobi constant,
+   * the Lagrange points and the zero-velocity curves came out mirrored. The
+   * restricted problem is invariant under (y, vy) -> (-y, -vy) together with
+   * reversing the rotation, so a clockwise system maps exactly onto the
+   * standard convention and both can be supported rather than one declined.
+   */
+  test('a reflected state has the same Jacobi constant', () => {
+    const mu = 0.2;
+    const state = { x: 0.4, y: 0.3, vx: -0.15, vy: 0.22 };
+    const reflected = { x: state.x, y: -state.y, vx: state.vx, vy: -state.vy };
+    expect(jacobiConstant(reflected, mu)).toBeCloseTo(
+      jacobiConstant(state, mu),
+      12
+    );
+  });
+
+  test('the effective potential is symmetric about the line of centres', () => {
+    // Which is why the reflection is exact rather than an approximation.
+    const mu = 0.3;
+    for (const [x, y] of [
+      [0.1, 0.5],
+      [-0.7, 0.2],
+      [1.3, 0.9],
+    ]) {
+      expect(effectivePotential(x, -y, mu)).toBeCloseTo(
+        effectivePotential(x, y, mu),
+        12
+      );
+    }
+  });
+
+  test('the Lagrange points reflect with the system', () => {
+    const points = lagrangePoints(0.15);
+    const l4 = points.find(p => p.name === 'L4');
+    const l5 = points.find(p => p.name === 'L5');
+    // L4 and L5 are each other's reflection, so a mirrored frame swaps which
+    // one a reader is looking at rather than moving either.
+    expect(l5.x).toBeCloseTo(l4.x, 12);
+    expect(l5.y).toBeCloseTo(-l4.y, 12);
+  });
+});

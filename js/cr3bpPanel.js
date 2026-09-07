@@ -117,16 +117,30 @@ export function readSystem() {
   const tracer = light[0] ?? null;
 
   let eccentricity = null;
+  let bound = true;
   if (massive.length === 2) {
     const el = orbitalElements(
       massive[1],
       massive[0],
       SETTINGS.gravitational_constant
     );
-    eccentricity = el ? el.e : null;
+    // Null rather than zero when the elements could not be found: an
+    // eccentricity nobody computed is not a circular orbit, and
+    // assumptionsHold() now refuses it rather than passing it through.
+    eccentricity = el && Number.isFinite(el.e) ? el.e : null;
+    bound = el ? el.bound !== false : false;
   }
 
-  const verdict = assumptionsHold({ massive, tracer, eccentricity });
+  // Everything that is neither the pair nor the tracer, so their combined pull
+  // is judged rather than assumed away one body at a time.
+  const others = light.filter(b => b !== tracer);
+  const verdict = assumptionsHold({
+    massive,
+    tracer,
+    eccentricity,
+    others,
+    bound,
+  });
   if (massive.length !== 2) return { verdict, mu: null, tracer, eccentricity };
 
   // Heavier body first, so the frame matches the convention in js/cr3bp.js:
@@ -159,7 +173,41 @@ export function readSystem() {
     // frame the problem is posed in.
     cos: separation > 0 ? sx / separation : 1,
     sin: separation > 0 ? sy / separation : 0,
+    // Which way the pair goes round.
+    //
+    // The frame was assumed to rotate counter-clockwise. A pair orbiting the
+    // other way has angular velocity -n, so every frame-rotation term had the
+    // wrong sign and the Jacobi constant, the Lagrange points and the
+    // zero-velocity curves came out mirrored - a confident, wrong picture with
+    // nothing on screen to suggest it.
+    //
+    // Both directions are supported rather than one declined, because the
+    // restricted problem is invariant under reflecting y and vy together with
+    // reversing the rotation: a clockwise system maps exactly onto the
+    // counter-clockwise convention. `spin` carries the sign so tracerState()
+    // can apply that reflection and the overlay can draw it the right way up.
+    spin: pairSpin(primary, secondary),
   };
+}
+
+/**
+ * The sign of the pair's orbital angular momentum about their barycentre.
+ *
+ * +1 counter-clockwise, -1 clockwise. Zero angular momentum means a radial
+ * plunge with no rotating frame to speak of; +1 is returned so nothing divides
+ * by it, and the eccentricity check refuses that system anyway.
+ *
+ * @param {object} primary - Heavier body
+ * @param {object} secondary - Lighter body
+ * @returns {number} +1 or -1
+ */
+function pairSpin(primary, secondary) {
+  const rx = secondary.pos.x - primary.pos.x;
+  const ry = secondary.pos.y - primary.pos.y;
+  const vx = secondary.vel.x - primary.vel.x;
+  const vy = secondary.vel.y - primary.vel.y;
+  const h = rx * vy - ry * vx;
+  return h < 0 ? -1 : 1;
 }
 
 /**
@@ -199,7 +247,16 @@ export function tracerState(system) {
   const rx = wx * cos + wy * sin;
   const ry = -wx * sin + wy * cos;
 
-  return { x, y, vx: rx + y, vy: ry - x, mu };
+  // Reflect a clockwise system onto the counter-clockwise convention. The
+  // restricted problem is invariant under (y, vy) -> (-y, -vy) together with
+  // reversing the direction of rotation, so this is an exact mapping and not
+  // an approximation: the Jacobi constant and the zero-velocity curves that
+  // come out of it are the system's own, drawn in a mirrored frame.
+  const spin = system.spin ?? 1;
+  const fy = y * spin;
+  const fry = ry * spin;
+
+  return { x, y: fy, vx: rx + fy, vy: fry - x, mu, spin };
 }
 
 /** Turn on or off. @param {boolean} on - Whether to show it @returns {void} */

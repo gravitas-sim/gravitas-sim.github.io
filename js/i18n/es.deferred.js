@@ -1618,10 +1618,15 @@ export const ES_DEFERRED = {
     'esto necesita exactamente dos cuerpos masivos, y el sistema no tiene dos.',
   'cr3bp.invalid.eccentric':
     'los dos cuerpos no estan en orbita circular, asi que los puntos de Lagrange y la region prohibida estarian moviendose y el diagrama no seria de ningun instante concreto.',
+  'cr3bp.invalid.eccentricityUnknown':
+    'No se pudo determinar la excentricidad del par, así que aquí no hay nada a lo que llamar circular. El silencio sobre una órbita no es prueba de que sea redonda.',
+  'cr3bp.invalid.thirdMass':
+    'Hay otros cuerpos con masa suficiente para importar. El problema restringido supone que todo salvo los dos cuerpos masivos no ejerce atracción, y su masa combinada supera ese límite.',
+  'cr3bp.invalid.unbound':
+    'Los dos cuerpos masivos no están en una órbita cerrada uno alrededor del otro, así que no hay un sistema rotante en el que plantear el problema.',
   'cr3bp.invalid.tracerTooHeavy':
     'el tercer cuerpo pesa lo bastante como para mover a los otros dos, asi que no es una particula de prueba y el problema restringido no lo describe.',
   'cr3bp.invalid.noTracer': 'no hay un tercer cuerpo ligero que describir.',
-  'cr3bp.invalid.thirdMass': 'hay un tercer cuerpo masivo.',
   'cr3bp.noTracer': 'Sin trazador, no hay constante de Jacobi.',
   'cr3bp.jacobi': 'Constante de Jacobi C = {C}',
   'cr3bp.point': 'Punto',

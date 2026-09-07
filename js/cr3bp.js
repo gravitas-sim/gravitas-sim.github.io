@@ -342,9 +342,14 @@ export function potentialField({ mu, bounds, width, height }) {
 export const VIOLATION = Object.freeze({
   BODY_COUNT: 'bodyCount',
   ECCENTRIC: 'eccentric',
+  /** The pair's eccentricity could not be determined at all. */
+  ECCENTRICITY_UNKNOWN: 'eccentricityUnknown',
   TRACER_TOO_HEAVY: 'tracerTooHeavy',
+  /** Some body other than the pair and the tracer is heavy enough to matter. */
   THIRD_MASS: 'thirdMass',
   NO_TRACER: 'noTracer',
+  /** The pair is not on a closed orbit, so there is no rotating frame. */
+  UNBOUND: 'unbound',
 });
 
 /**
@@ -378,22 +383,54 @@ export const MAX_TRACER_FRACTION = 1e-6;
  * @param {object} system - massive[], tracer, eccentricity
  * @returns {{ok: boolean, violations: Array<string>, mu: ?number}} The verdict
  */
-export function assumptionsHold({ massive = [], tracer = null, eccentricity }) {
+export function assumptionsHold({
+  massive = [],
+  tracer = null,
+  eccentricity,
+  others = [],
+  bound = true,
+}) {
   const violations = [];
   if (massive.length !== 2) violations.push(VIOLATION.BODY_COUNT);
   if (!tracer) violations.push(VIOLATION.NO_TRACER);
 
   const mu =
     massive.length === 2 ? massRatio(massive[0].mass, massive[1].mass) : null;
+  const total = massive.length === 2 ? massive[0].mass + massive[1].mass : 0;
 
-  if (Number.isFinite(eccentricity) && eccentricity > MAX_ECCENTRICITY) {
+  // An eccentricity nobody could compute is not a circular orbit.
+  //
+  // The test was `Number.isFinite(e) && e > MAX`, so a null or NaN - which is
+  // what an unbound, degenerate or unreadable pair produces - skipped the
+  // check entirely and the system passed as circular. Silence is not evidence
+  // of roundness, and a zero-velocity curve drawn from it is a diagram of a
+  // system nobody established exists.
+  if (!Number.isFinite(eccentricity)) {
+    violations.push(VIOLATION.ECCENTRICITY_UNKNOWN);
+  } else if (eccentricity > MAX_ECCENTRICITY) {
     violations.push(VIOLATION.ECCENTRIC);
   }
-  if (massive.length === 2 && tracer) {
-    const total = massive[0].mass + massive[1].mass;
-    if (total > 0 && (tracer.mass || 0) / total > MAX_TRACER_FRACTION) {
+
+  if (bound === false) violations.push(VIOLATION.UNBOUND);
+
+  if (massive.length === 2 && tracer && total > 0) {
+    if ((tracer.mass || 0) / total > MAX_TRACER_FRACTION) {
       violations.push(VIOLATION.TRACER_TOO_HEAVY);
     }
   }
+
+  // Everything that is neither the pair nor the tracer.
+  //
+  // The overlay took the first light body as the tracer and said nothing about
+  // the rest, so a system with four more planets was presented as a restricted
+  // three-body problem. Their combined pull is what the restriction assumes
+  // away, so it is their TOTAL that is judged, not each one separately.
+  if (massive.length === 2 && total > 0) {
+    const extra = others.reduce((sum, b) => sum + (b?.mass || 0), 0);
+    if (extra / total > MAX_TRACER_FRACTION) {
+      violations.push(VIOLATION.THIRD_MASS);
+    }
+  }
+
   return { ok: violations.length === 0, violations, mu };
 }

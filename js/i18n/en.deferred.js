@@ -1596,10 +1596,15 @@ export const EN_DEFERRED = {
     'this needs exactly two massive bodies, and the system does not have two.',
   'cr3bp.invalid.eccentric':
     'the two bodies are not on a circular orbit, so the Lagrange points and the forbidden region would be moving and the diagram would be of no particular instant.',
+  'cr3bp.invalid.eccentricityUnknown':
+    "The pair's eccentricity could not be determined, so there is nothing here to call circular. Silence about an orbit is not evidence that it is round.",
+  'cr3bp.invalid.thirdMass':
+    'Other bodies here are heavy enough to matter. The restricted problem assumes everything but the two massive bodies pulls on nothing, and their combined mass is above that limit.',
+  'cr3bp.invalid.unbound':
+    'The two massive bodies are not on a closed orbit about each other, so there is no rotating frame to pose the problem in.',
   'cr3bp.invalid.tracerTooHeavy':
     'the third body is heavy enough to move the other two, so it is not a test particle and the restricted problem does not describe it.',
   'cr3bp.invalid.noTracer': 'there is no light third body to describe.',
-  'cr3bp.invalid.thirdMass': 'a third massive body is present.',
   'cr3bp.noTracer': 'No tracer, so no Jacobi constant.',
   'cr3bp.jacobi': 'Jacobi constant C = {C}',
   'cr3bp.point': 'Point',
