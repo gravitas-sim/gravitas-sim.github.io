@@ -1,0 +1,269 @@
+// =============================================================================
+// The observing schedule's controls
+// -----------------------------------------------------------------------------
+// The prose and the arithmetic behind the schedule fields in the Radial
+// Velocity panel: what the plan came out as, what it refused to read, which
+// fields the chosen shapes need, and how a comparison of two schedules reads.
+//
+// A separate module because js/radialVelocity.js is in the start-up download
+// and this is not needed until somebody switches the synthetic observing run
+// on. The panel imports it alongside js/rvSurvey.js, which the same tick of
+// the same checkbox already pays for, and everything here is written to be
+// called with a context rather than to reach for the panel's state - so the
+// panel keeps its own DOM writing and this keeps the strings.
+// =============================================================================
+
+import { t } from './i18n/index.js';
+import { formatNumber } from './format.js';
+import {
+  parseEpochList,
+  parseGaps,
+  planSchedule,
+  scheduleFingerprint,
+} from './rvSchedule.js';
+
+/**
+ * The period range both arms are searched over.
+ *
+ * One range for both arms. Two arms searched over two ranges would differ in
+ * their search as well as in their times, and a difference in the answer could
+ * not be attributed to either.
+ *
+ * The long end is the longer of the two spans: a period that never completes a
+ * cycle inside the run has not been observed to repeat.
+ *
+ * The short end is deliberately generous - a hundredth of the span, or twice
+ * the tightest spacing if that is shorter still - and NOT any kind of Nyquist
+ * limit on the spacing. That would be the one choice that makes this whole
+ * comparison pointless. Unevenly sampled data has no Nyquist limit, and the
+ * advantage an irregular schedule has over a comb is exactly that it can
+ * recover a period shorter than the comb's mean spacing; a range starting at
+ * twice that spacing would have excluded the answer from the search before
+ * either arm was fitted, and both arms would then have agreed, wrongly, that
+ * there was nothing there.
+ *
+ * @param {Array<Array<object>>} sets - The two arms' measurements
+ * @returns {?{minPeriod: number, maxPeriod: number}} The bounds
+ */
+export function comparisonBounds(sets) {
+  const spans = [];
+  let tightest = Infinity;
+  for (const set of sets) {
+    const days = (set || [])
+      .map(m => Number(m.day))
+      .filter(Number.isFinite)
+      .sort((a, b) => a - b);
+    if (days.length < 2) continue;
+    spans.push(days[days.length - 1] - days[0]);
+    for (let i = 1; i < days.length; i++) {
+      const gap = days[i] - days[i - 1];
+      if (gap > 0 && gap < tightest) tightest = gap;
+    }
+  }
+  if (!spans.length || !Number.isFinite(tightest)) return null;
+  const maxPeriod = Math.max(...spans);
+  const minPeriod = Math.max(1e-3, Math.min(2 * tightest, maxPeriod / 100));
+  if (!(maxPeriod > minPeriod)) return null;
+  return { minPeriod, maxPeriod };
+}
+
+/**
+ * What the note under the schedule fields should say.
+ *
+ * @param {object} ctx - {kind, epochList, gapsText, config}
+ * @returns {{text: string, state: string}} The note and whether it is a warning
+ */
+export function scheduleNote(ctx) {
+  const kind = ctx.kind || 'regular';
+  const parts = [];
+  let state = 'ok';
+
+  // What the reader typed and this could not read. Reported rather than
+  // dropped: observing on a shorter list than somebody wrote, silently, is the
+  // one failure that would undermine the whole instrument.
+  if (kind === 'explicit') {
+    const parsed = parseEpochList(ctx.epochList ?? '');
+    if (parsed.rejected.length) {
+      parts.push(
+        t('rvsched.note.rejected', {
+          count: parsed.rejected.length,
+          list: parsed.rejected.slice(0, 4).join(', '),
+        })
+      );
+      state = 'warn';
+    }
+    if (parsed.duplicates)
+      parts.push(t('rvsched.note.duplicates', { count: parsed.duplicates }));
+    if (!parsed.offsets.length) {
+      parts.push(t('rvsched.note.noTimes'));
+      state = 'warn';
+    }
+  }
+
+  const gapsText = String(ctx.gapsText ?? '').trim();
+  if (gapsText) {
+    const parsedGaps = parseGaps(gapsText);
+    if (parsedGaps.rejected.length) {
+      parts.push(
+        t('rvsched.note.badGaps', {
+          list: parsedGaps.rejected.slice(0, 4).join(', '),
+        })
+      );
+      state = 'warn';
+    }
+  }
+
+  // What the plan actually came out as, which is not always what was asked
+  // for: a gap removes epochs, and a clustered plan can only place so many.
+  const cfg = ctx.config || {};
+  if (cfg.kind) {
+    const plan = planSchedule({
+      kind: cfg.kind,
+      epochs: cfg.epochs,
+      baselineDays: cfg.baselineDays,
+      jitter: cfg.jitter,
+      clusters: cfg.clusters,
+      explicit: cfg.explicit,
+      gaps: cfg.gaps,
+      seed: cfg.seed,
+    });
+    parts.push(
+      t('rvsched.note.plan', {
+        planned: plan.planned,
+        span: formatNumber(plan.span, { sig: 3 }),
+        id: scheduleFingerprint(plan),
+      })
+    );
+    if (plan.dropped)
+      parts.push(t('rvsched.note.dropped', { count: plan.dropped }));
+    if (plan.planned < 4) state = 'warn';
+  }
+
+  return { text: parts.join(' '), state };
+}
+
+/**
+ * What the comparison block should say.
+ *
+ * @param {object} ctx - {report, bounds, progress: {a, b, planned}}
+ * @returns {{text: string, state: string}} The block and whether it is a warning
+ */
+export function comparisonText(ctx) {
+  const compareReport = ctx.report;
+  const compareBounds = ctx.bounds;
+  if (!compareReport) {
+    return {
+      text: t('rvsched.compare.waiting', {
+        a: ctx.progress?.a ?? 0,
+        b: ctx.progress?.b ?? 0,
+        planned: ctx.progress?.planned ?? 0,
+      }),
+      state: 'ok',
+    };
+  }
+
+  const [a, b] = compareReport.arms;
+  const line = arm =>
+    t('rvsched.compare.arm', {
+      kind: t(`rvsched.shape.${arm.kind}`),
+      taken: arm.taken,
+      period: arm.fit ? formatNumber(arm.fit.periodDays, { sig: 4 }) : '—',
+      k: arm.fit?.amplitudeMs
+        ? formatNumber(arm.fit.amplitudeMs, { sig: 3 })
+        : '—',
+      hole: arm.coverage
+        ? formatNumber(arm.coverage.largestGap * 100, { sig: 2 })
+        : '—',
+      alias: formatNumber((arm.window?.worstPeak ?? 0) * 100, { sig: 2 }),
+    });
+
+  const parts = [line(a), line(b)];
+
+  // The range both arms were searched over. A period is only ever "the best
+  // fit in this range", and a reader who cannot see the range cannot tell a
+  // measurement from a boundary.
+  if (compareBounds) {
+    parts.push(
+      t('rvsched.compare.range', {
+        min: formatNumber(compareBounds.minPeriod, { sig: 3 }),
+        max: formatNumber(compareBounds.maxPeriod, { sig: 4 }),
+      })
+    );
+  }
+
+  if (!compareReport.controls.controlled) {
+    parts.push(
+      t('rvsched.compare.uncontrolled', {
+        list: compareReport.controls.broken
+          .map(x => t(`rvsched.compare.control.${x.control}`))
+          .join(', '),
+      })
+    );
+  } else if (compareReport.periods) {
+    parts.push(
+      compareReport.periods.agree
+        ? t('rvsched.compare.agree', {
+            tolerance: formatNumber(compareReport.periods.toleranceDays, {
+              sig: 2,
+            }),
+          })
+        : t('rvsched.compare.disagree', {
+            difference: formatNumber(compareReport.periods.differenceDays, {
+              sig: 3,
+            }),
+          })
+    );
+  }
+
+  // A fit that came back on the edge of its search is the range's answer, not
+  // the star's, and two of them agree about nothing at all.
+  if (compareReport.caveats.includes('atBound')) {
+    parts.push(t('rvsched.compare.atBound'));
+  }
+
+  if (compareReport.alias) {
+    parts.push(
+      t('rvsched.compare.alias', {
+        period: formatNumber(compareReport.alias.periodDays, { sig: 3 }),
+        side: compareReport.alias.side === 'a' ? 'A' : 'B',
+      })
+    );
+  }
+
+  // The caveat that can never be dropped: one draw each says what happened
+  // this time, not which schedule is better.
+  parts.push(t('rvsched.compare.oneDraw'));
+
+  return {
+    text: parts.join(' '),
+    state: compareReport.interpretable ? 'ok' : 'warn',
+  };
+}
+
+/**
+ * Which of the schedule fields the chosen shapes need.
+ *
+ * @param {object} ctx - {kind, kindB, comparing, gapsText}
+ * @returns {object} A hidden flag per field
+ */
+export function fieldVisibility(ctx) {
+  const kind = ctx.kind || 'regular';
+  const comparing = Boolean(ctx.comparing);
+  // Both arms read the shape-specific fields from the same controls, which is
+  // what keeps everything but the shape held equal - so a field is wanted when
+  // EITHER arm needs it.
+  const kindB = comparing ? ctx.kindB || '' : '';
+  const wants = shape => kind === shape || kindB === shape;
+  // The count is on show whenever the run has a plan rather than only a
+  // cadence: a shape needs it, a comparison holds it constant, and a gap turns
+  // a cadence into a plan whose count the reader can no longer work out from
+  // the spacing.
+  const gapped = Boolean(String(ctx.gapsText ?? '').trim());
+  return {
+    epochs: kind === 'regular' && !comparing && !gapped,
+    jitter: !wants('irregular'),
+    clusters: !wants('clustered'),
+    epochList: !wants('explicit'),
+    compareShape: !comparing,
+  };
+}

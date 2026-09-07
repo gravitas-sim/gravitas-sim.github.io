@@ -286,14 +286,27 @@ describe('the catalogue split', () => {
     // somebody opened an unrelated panel.
     // reliability.* belongs here because the bench that shows it is itself
     // lazy: its bridge registers this catalogue before the panel renders.
-    // rvsched.* belongs here for the same reason one level down: the radial
-    // velocity panel is eager, but its synthetic observing run is opt-in and
-    // its schedule controls are inside a section that is hidden until the
-    // reader switches it on - which is the moment the panel registers this
-    // catalogue and re-sweeps the document.
+    // rvsched.* and most of rv.survey.* belong here for the same reason one
+    // level down: the radial velocity panel is eager, but its synthetic
+    // observing run is opt-in and its controls are inside a section that is
+    // hidden until the reader switches it on - which is the moment the panel
+    // registers this catalogue and re-sweeps the document. What stays behind
+    // in the start-up half is rv.survey.enable, which is the label on the
+    // checkbox that does the switching, and the two chart dataset labels,
+    // which are written whenever the chart is built and not only during a run.
     const allowed =
-      /^(binaryRun|assist|rvfit|rvsched|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
+      /^(binaryRun|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
+
+    // ...and the three that must NOT have gone with them.
+    for (const id of [
+      'rv.survey.enable',
+      'rv.survey.velocityLabel',
+      'rv.survey.measurementsLabel',
+    ]) {
+      expect(EN_BASE[id]).toBeTruthy();
+      expect(EN_DEFERRED[id]).toBeUndefined();
+    }
   });
 });
 

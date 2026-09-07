@@ -1179,9 +1179,6 @@ export const ES = {
   // --- El panel de ejecución en binaria ----------------------------------------
   // --- El panel de asistencia gravitatoria -------------------------------------
   // --- El espacio de análisis de velocidad radial -------------------------------
-  'rv.survey.analyse': 'Analizar',
-  'rv.survey.analyse.hint':
-    'Abre el espacio de análisis sobre estas medidas: ajusta un modelo circular a mano, o busca en un rango acotado de periodos.',
 
   'rail.togglePauseAtEvent.hint':
     'Abre Pausar en evento: detiene la simulación en el momento en que ocurre algo elegido — el siguiente periastro o apoastro de un cuerpo respecto a su primario, un cruce de una separación indicada, o el siguiente punto medio de tránsito. El evento se localiza a partir de los pasos de integración, no de los fotogramas, así que el panel puede decirte con qué precisión lo encontró.',
@@ -1231,24 +1228,8 @@ export const ES = {
 
   // --- La campaña de observación sintética ------------------------------------
   'rv.survey.enable': 'Campaña de observación sintética',
-  'rv.survey.hint':
-    'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
-  'rv.survey.cadence': 'Cadencia',
-  'rv.survey.baseline': 'Intervalo total',
-  'rv.survey.sigma': 'Incertidumbre',
-  'rv.survey.seed': 'Semilla del ruido',
-  'rv.survey.ideal': 'Mostrar la señal ideal (capa didáctica)',
-  'rv.survey.restart': 'Reiniciar campaña',
-  'rv.survey.restart.hint':
-    'Descarta las medidas y empieza el calendario de nuevo',
   'rv.survey.velocityLabel': 'Velocidad radial',
-  'rv.survey.idealLabel': 'Señal ideal (capa didáctica, no son datos)',
   'rv.survey.measurementsLabel': 'Medidas',
-  'rv.survey.progress': '{taken} de {planned} medidas tomadas.',
-  'rv.survey.complete': 'El calendario ha terminado.',
-  'rv.survey.waiting': 'Esperando a que avance el reloj de la simulación.',
-  'rv.survey.coarse':
-    'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
   'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
   'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
   'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',

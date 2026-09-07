@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2790,
+    limit: 2860,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -121,7 +121,21 @@ const BUDGETS = [
       'was NOT touched - it still has six kilobytes of headroom, which is the ' +
       'budget that governs what a first-time visitor actually downloads. ' +
       'Nothing was deferred to make this number work and nothing was ' +
-      'removed to fit under it.',
+      'removed to fit under it.\n\n' +
+      'Raised from 2790 to 2860 for the observing-schedule feature, itemised ' +
+      'from a fresh build rather than estimated. The Design the Schedule ' +
+      'lesson is 17.5 KB and its Spanish shadow 15.3 KB; js/rvCompare.js is ' +
+      '4.1 KB and js/rvScheduleControls.js 3.1 KB; the instructor guide entry ' +
+      'is about 11 KB inside the portal chunk, and the rvsched.* prose about ' +
+      '4.5 KB across two catalogues. A lesson and an instrument is exactly ' +
+      'what the paragraph at the top of this reason says this budget is ' +
+      'loose for. The trade the initial budget demands was made in the same ' +
+      "change and in the same direction: the schedule fields' prose and the " +
+      'rules behind them left the start-up path for js/rvScheduleControls.js ' +
+      'and the deferred catalogue - the synthetic run is opt-in and its ' +
+      'section is hidden until it is switched on, which is the moment the ' +
+      'panel registers them - and the initial download came back from ' +
+      '832.9 KB to 829.8 KB. The initial limit was NOT touched.',
   },
 ];
 

@@ -1803,4 +1803,27 @@ export const EN_DEFERRED = {
     'At least one of these fits sits on the edge of the period range that was searched, which means the range decided it and not the measurements. Lengthen the baseline or widen the range before reading anything into the comparison.',
   'rvsched.compare.oneDraw':
     'One noise draw each: this says what these two schedules did on this run, not which schedule is better.',
+  // --- The synthetic observing run's own controls ------------------------------
+  // Eager until this release. The section is opt-in and hidden until it is
+  // switched on, which is the moment the panel registers this catalogue, so
+  // every visitor who never takes a recording was downloading its prose.
+  'rv.survey.hint':
+    'Keep only the measurements a stated schedule would actually have produced, each with an uncertainty. Nothing is recorded between them.',
+  'rv.survey.cadence': 'Cadence',
+  'rv.survey.baseline': 'Baseline',
+  'rv.survey.sigma': 'Uncertainty',
+  'rv.survey.seed': 'Noise seed',
+  'rv.survey.ideal': 'Show the ideal signal (teaching overlay)',
+  'rv.survey.restart': 'Restart run',
+  'rv.survey.restart.hint':
+    'Discard the measurements and begin the schedule again',
+  'rv.survey.analyse': 'Analyse',
+  'rv.survey.analyse.hint':
+    'Open the analysis workspace on these measurements: fit a circular model by hand, or search a bounded range of periods.',
+  'rv.survey.idealLabel': 'Ideal signal (teaching overlay, not data)',
+  'rv.survey.progress': '{taken} of {planned} measurements taken.',
+  'rv.survey.complete': 'The schedule is finished.',
+  'rv.survey.waiting': 'Waiting for the simulation clock to advance.',
+  'rv.survey.coarse':
+    'The simulation is running too fast for this cadence: some measurements were read between widely spaced frames and their extremes may be flattened. Reduce the speed and restart the run.',
 };

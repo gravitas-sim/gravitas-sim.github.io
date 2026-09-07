@@ -1190,9 +1190,6 @@ export const EN = {
   // --- The binary planet run panel --------------------------------------------
   // --- The gravity assist panel -----------------------------------------------
   // --- The radial velocity analysis workspace ----------------------------------
-  'rv.survey.analyse': 'Analyse',
-  'rv.survey.analyse.hint':
-    'Open the analysis workspace on these measurements: fit a circular model by hand, or search a bounded range of periods.',
 
   'rail.togglePauseAtEvent.hint':
     'Open Pause at Event: stop the simulation the moment a chosen thing happens — the next periapsis or apoapsis of a body about its primary, a crossing of a stated separation, or the next transit midpoint. The event is found from the integration steps, not the frames, so the panel can tell you how precisely it was located.',
@@ -1240,24 +1237,8 @@ export const EN = {
 
   // --- The synthetic observing run --------------------------------------------
   'rv.survey.enable': 'Synthetic observing run',
-  'rv.survey.hint':
-    'Keep only the measurements a stated schedule would actually have produced, each with an uncertainty. Nothing is recorded between them.',
-  'rv.survey.cadence': 'Cadence',
-  'rv.survey.baseline': 'Baseline',
-  'rv.survey.sigma': 'Uncertainty',
-  'rv.survey.seed': 'Noise seed',
-  'rv.survey.ideal': 'Show the ideal signal (teaching overlay)',
-  'rv.survey.restart': 'Restart run',
-  'rv.survey.restart.hint':
-    'Discard the measurements and begin the schedule again',
   'rv.survey.velocityLabel': 'Radial velocity',
-  'rv.survey.idealLabel': 'Ideal signal (teaching overlay, not data)',
   'rv.survey.measurementsLabel': 'Measurements',
-  'rv.survey.progress': '{taken} of {planned} measurements taken.',
-  'rv.survey.complete': 'The schedule is finished.',
-  'rv.survey.waiting': 'Waiting for the simulation clock to advance.',
-  'rv.survey.coarse':
-    'The simulation is running too fast for this cadence: some measurements were read between widely spaced frames and their extremes may be flattened. Reduce the speed and restart the run.',
   'welcome.scenarioGone': 'That scenario is no longer available.',
   'welcome.shownAgain': 'It will be shown again next time',
   'welcome.showAgain': 'Show this again on my next visit',

@@ -1827,4 +1827,27 @@ export const ES_DEFERRED = {
     'Al menos uno de estos ajustes queda en el borde del rango de periodos explorado, asi que lo decidio el rango y no las medidas. Alarga la linea de base o amplia el rango antes de interpretar la comparacion.',
   'rvsched.compare.oneDraw':
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
+  // --- The synthetic observing run's own controls ------------------------------
+  // Eager until this release. The section is opt-in and hidden until it is
+  // switched on, which is the moment the panel registers this catalogue, so
+  // every visitor who never takes a recording was downloading its prose.
+  'rv.survey.hint':
+    'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
+  'rv.survey.cadence': 'Cadencia',
+  'rv.survey.baseline': 'Intervalo total',
+  'rv.survey.sigma': 'Incertidumbre',
+  'rv.survey.seed': 'Semilla del ruido',
+  'rv.survey.ideal': 'Mostrar la señal ideal (capa didáctica)',
+  'rv.survey.restart': 'Reiniciar campaña',
+  'rv.survey.restart.hint':
+    'Descarta las medidas y empieza el calendario de nuevo',
+  'rv.survey.analyse': 'Analizar',
+  'rv.survey.analyse.hint':
+    'Abre el espacio de análisis sobre estas medidas: ajusta un modelo circular a mano, o busca en un rango acotado de periodos.',
+  'rv.survey.idealLabel': 'Señal ideal (capa didáctica, no son datos)',
+  'rv.survey.progress': '{taken} de {planned} medidas tomadas.',
+  'rv.survey.complete': 'El calendario ha terminado.',
+  'rv.survey.waiting': 'Esperando a que avance el reloj de la simulación.',
+  'rv.survey.coarse':
+    'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
 };

@@ -291,6 +291,8 @@ function recordingPayload(run) {
 let surveyLib = null;
 /** js/rvSchedule.js, loaded with the survey. */
 let scheduleLib = null;
+/** js/rvScheduleControls.js, loaded with the survey. */
+let controlsLib = null;
 /** js/rvCompare.js, loaded only when a comparison is asked for. */
 let compareLib = null;
 /**
@@ -318,6 +320,9 @@ async function loadSurveyLib() {
   // from, so a run that has the survey has already paid for them, and the
   // panel needs the parsers synchronously once the reader starts typing times.
   if (!scheduleLib) scheduleLib = await import('./rvSchedule.js');
+  // The schedule fields' prose and the shape rules, which are only needed once
+  // somebody has switched the run on. See js/rvScheduleControls.js.
+  if (!controlsLib) controlsLib = await import('./rvScheduleControls.js');
   return surveyLib;
 }
 
@@ -1200,51 +1205,6 @@ function renderSurveyStatus() {
 }
 
 /**
- * The period range both arms are searched over.
- *
- * One range for both arms. Two arms searched over two ranges would differ in
- * their search as well as in their times, and a difference in the answer could
- * not be attributed to either.
- *
- * The long end is the longer of the two spans: a period that never completes a
- * cycle inside the run has not been observed to repeat.
- *
- * The short end is deliberately generous - a hundredth of the span, or twice
- * the tightest spacing if that is shorter still - and NOT any kind of Nyquist
- * limit on the spacing. That would be the one choice that makes this whole
- * comparison pointless. Unevenly sampled data has no Nyquist limit, and the
- * advantage an irregular schedule has over a comb is exactly that it can
- * recover a period shorter than the comb's mean spacing; a range starting at
- * twice that spacing would have excluded the answer from the search before
- * either arm was fitted, and both arms would then have agreed, wrongly, that
- * there was nothing there.
- *
- * @param {Array<Array<object>>} sets - The two arms' measurements
- * @returns {?{minPeriod: number, maxPeriod: number}} The bounds
- */
-function comparisonBounds(sets) {
-  const spans = [];
-  let tightest = Infinity;
-  for (const set of sets) {
-    const days = (set || [])
-      .map(m => Number(m.day))
-      .filter(Number.isFinite)
-      .sort((a, b) => a - b);
-    if (days.length < 2) continue;
-    spans.push(days[days.length - 1] - days[0]);
-    for (let i = 1; i < days.length; i++) {
-      const gap = days[i] - days[i - 1];
-      if (gap > 0 && gap < tightest) tightest = gap;
-    }
-  }
-  if (!spans.length || !Number.isFinite(tightest)) return null;
-  const maxPeriod = Math.max(...spans);
-  const minPeriod = Math.max(1e-3, Math.min(2 * tightest, maxPeriod / 100));
-  if (!(maxPeriod > minPeriod)) return null;
-  return { minPeriod, maxPeriod };
-}
-
-/**
  * Compute the comparison, once both arms have finished observing.
  *
  * Not before: a fit to half a schedule is a fit to a different schedule, and
@@ -1260,7 +1220,7 @@ function maybeCompare() {
 
   loadCompareLib()
     .then(lib => {
-      const bounds = comparisonBounds([
+      const bounds = controlsLib.comparisonBounds([
         survey.measurements(),
         compareSurvey.measurements(),
       ]);
@@ -1330,199 +1290,68 @@ export function radialVelocityComparison() {
   };
 }
 
-/** Draw the schedule note: what the plan came out as, and what was refused. */
+/**
+ * Draw the schedule note.
+ *
+ * The prose and the plan arithmetic live in js/rvScheduleControls.js, which
+ * arrives with the survey; before that there is nothing to say, because the
+ * fields it describes are hidden.
+ *
+ * @returns {void}
+ */
 function renderScheduleNote() {
   const e = cacheElements();
   if (!e.surveyScheduleNote) return;
-  if (!scheduleLib || !e.surveyShape) {
+  if (!controlsLib || !e.surveyShape) {
     e.surveyScheduleNote.textContent = '';
     return;
   }
-
-  const kind = e.surveyShape.value || 'regular';
-  const parts = [];
-  let state = 'ok';
-
-  // What the reader typed and this could not read. Reported rather than
-  // dropped: observing on a shorter list than somebody wrote, silently, is the
-  // one failure that would undermine the whole instrument.
-  if (kind === 'explicit') {
-    const parsed = scheduleLib.parseEpochList(e.surveyEpochList?.value ?? '');
-    if (parsed.rejected.length) {
-      parts.push(
-        t('rvsched.note.rejected', {
-          count: parsed.rejected.length,
-          list: parsed.rejected.slice(0, 4).join(', '),
-        })
-      );
-      state = 'warn';
-    }
-    if (parsed.duplicates)
-      parts.push(t('rvsched.note.duplicates', { count: parsed.duplicates }));
-    if (!parsed.offsets.length) {
-      parts.push(t('rvsched.note.noTimes'));
-      state = 'warn';
-    }
-  }
-
-  const gapsText = String(e.surveyGaps?.value ?? '').trim();
-  if (gapsText) {
-    const parsedGaps = scheduleLib.parseGaps(gapsText);
-    if (parsedGaps.rejected.length) {
-      parts.push(
-        t('rvsched.note.badGaps', {
-          list: parsedGaps.rejected.slice(0, 4).join(', '),
-        })
-      );
-      state = 'warn';
-    }
-  }
-
-  // What the plan actually came out as, which is not always what was asked
-  // for: a gap removes epochs, and a clustered plan can only place so many.
-  const cfg = readSurveyControls();
-  if (cfg.kind) {
-    const plan = scheduleLib.planSchedule({
-      kind: cfg.kind,
-      epochs: cfg.epochs,
-      baselineDays: cfg.baselineDays,
-      jitter: cfg.jitter,
-      clusters: cfg.clusters,
-      explicit: cfg.explicit,
-      gaps: cfg.gaps,
-      seed: cfg.seed,
-    });
-    parts.push(
-      t('rvsched.note.plan', {
-        planned: plan.planned,
-        span: formatNumber(plan.span, { sig: 3 }),
-        id: scheduleLib.scheduleFingerprint(plan),
-      })
-    );
-    if (plan.dropped)
-      parts.push(t('rvsched.note.dropped', { count: plan.dropped }));
-    if (plan.planned < 4) state = 'warn';
-  }
-
-  e.surveyScheduleNote.textContent = parts.join(' ');
-  e.surveyScheduleNote.dataset.state = state;
+  const note = controlsLib.scheduleNote({
+    kind: e.surveyShape.value || 'regular',
+    epochList: e.surveyEpochList?.value ?? '',
+    gapsText: e.surveyGaps?.value ?? '',
+    config: readSurveyControls(),
+  });
+  e.surveyScheduleNote.textContent = note.text;
+  e.surveyScheduleNote.dataset.state = note.state;
 }
 
 /** Draw the comparison, or say why there is nothing to draw yet. */
 function renderCompareReport() {
   const e = cacheElements();
   if (!e.compareReport) return;
-  if (!compareSurvey) {
+  if (!compareSurvey || !controlsLib) {
     e.compareReport.textContent = '';
     return;
   }
-
-  if (!compareReport) {
-    e.compareReport.textContent = t('rvsched.compare.waiting', {
+  const out = controlsLib.comparisonText({
+    report: compareReport,
+    bounds: compareBounds,
+    progress: {
       a: survey ? survey.count() : 0,
       b: compareSurvey.count(),
       planned: compareSurvey.plannedCount,
-    });
-    return;
-  }
-
-  const [a, b] = compareReport.arms;
-  const line = arm =>
-    t('rvsched.compare.arm', {
-      kind: t(`rvsched.shape.${arm.kind}`),
-      taken: arm.taken,
-      period: arm.fit ? formatNumber(arm.fit.periodDays, { sig: 4 }) : '—',
-      k: arm.fit?.amplitudeMs
-        ? formatNumber(arm.fit.amplitudeMs, { sig: 3 })
-        : '—',
-      hole: arm.coverage
-        ? formatNumber(arm.coverage.largestGap * 100, { sig: 2 })
-        : '—',
-      alias: formatNumber((arm.window?.worstPeak ?? 0) * 100, { sig: 2 }),
-    });
-
-  const parts = [line(a), line(b)];
-
-  // The range both arms were searched over. A period is only ever "the best
-  // fit in this range", and a reader who cannot see the range cannot tell a
-  // measurement from a boundary.
-  if (compareBounds) {
-    parts.push(
-      t('rvsched.compare.range', {
-        min: formatNumber(compareBounds.minPeriod, { sig: 3 }),
-        max: formatNumber(compareBounds.maxPeriod, { sig: 4 }),
-      })
-    );
-  }
-
-  if (!compareReport.controls.controlled) {
-    parts.push(
-      t('rvsched.compare.uncontrolled', {
-        list: compareReport.controls.broken
-          .map(x => t(`rvsched.compare.control.${x.control}`))
-          .join(', '),
-      })
-    );
-  } else if (compareReport.periods) {
-    parts.push(
-      compareReport.periods.agree
-        ? t('rvsched.compare.agree', {
-            tolerance: formatNumber(compareReport.periods.toleranceDays, {
-              sig: 2,
-            }),
-          })
-        : t('rvsched.compare.disagree', {
-            difference: formatNumber(compareReport.periods.differenceDays, {
-              sig: 3,
-            }),
-          })
-    );
-  }
-
-  // A fit that came back on the edge of its search is the range's answer, not
-  // the star's, and two of them agree about nothing at all.
-  if (compareReport.caveats.includes('atBound')) {
-    parts.push(t('rvsched.compare.atBound'));
-  }
-
-  if (compareReport.alias) {
-    parts.push(
-      t('rvsched.compare.alias', {
-        period: formatNumber(compareReport.alias.periodDays, { sig: 3 }),
-        side: compareReport.alias.side === 'a' ? 'A' : 'B',
-      })
-    );
-  }
-
-  // The caveat that can never be dropped: one draw each says what happened
-  // this time, not which schedule is better.
-  parts.push(t('rvsched.compare.oneDraw'));
-
-  e.compareReport.textContent = parts.join(' ');
-  e.compareReport.dataset.state = compareReport.interpretable ? 'ok' : 'warn';
+    },
+  });
+  e.compareReport.textContent = out.text;
+  e.compareReport.dataset.state = out.state;
 }
 
-/** Show only the fields the chosen shape uses. */
+/** Show only the fields the chosen shapes use. */
 function syncScheduleFields() {
   const e = cacheElements();
-  if (!e.surveyShape) return;
-  const kind = e.surveyShape.value || 'regular';
-  const comparing = comparisonWanted();
-  // On show whenever the run has a plan rather than only a cadence: a shape
-  // needs it, a comparison holds it constant, and a gap turns a cadence into a
-  // plan whose count the reader can no longer work out from the spacing.
-  const gapped = Boolean(String(e.surveyGaps?.value ?? '').trim());
-  if (e.surveyEpochsField)
-    e.surveyEpochsField.hidden = kind === 'regular' && !comparing && !gapped;
-  // Both arms read these from the same fields, which is what keeps everything
-  // but the shape held equal - so a field is shown when EITHER arm needs it.
-  const kindB = comparing ? e.compareShape?.value || '' : '';
-  const wants = shape => kind === shape || kindB === shape;
-  if (e.surveyJitterField) e.surveyJitterField.hidden = !wants('irregular');
-  if (e.surveyClustersField) e.surveyClustersField.hidden = !wants('clustered');
-  if (e.surveyEpochListField)
-    e.surveyEpochListField.hidden = !wants('explicit');
-  if (e.compareShapeField) e.compareShapeField.hidden = !comparing;
+  if (!e.surveyShape || !controlsLib) return;
+  const hidden = controlsLib.fieldVisibility({
+    kind: e.surveyShape.value || 'regular',
+    kindB: e.compareShape?.value || '',
+    comparing: comparisonWanted(),
+    gapsText: e.surveyGaps?.value ?? '',
+  });
+  if (e.surveyEpochsField) e.surveyEpochsField.hidden = hidden.epochs;
+  if (e.surveyJitterField) e.surveyJitterField.hidden = hidden.jitter;
+  if (e.surveyClustersField) e.surveyClustersField.hidden = hidden.clusters;
+  if (e.surveyEpochListField) e.surveyEpochListField.hidden = hidden.epochList;
+  if (e.compareShapeField) e.compareShapeField.hidden = hidden.compareShape;
 
   // Filled in from the cadence the reader already set, so switching shape
   // holds the number of observations constant instead of inventing one.
