@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import {
   ASSUMPTIONS,
   MC_LIMITS,
+  OUTCOME,
   REFUSED,
   TRIAL,
   aliasFamilies,
@@ -132,11 +133,14 @@ describe('finding the bottom of the trough', () => {
     const { points, bounds } = wellSampled();
     const coarse = periodSearch(points, { ...bounds, samples: 200 });
     const weights = weightsFor(points);
+    const fMin = 1 / bounds.maxPeriod;
+    const fMax = 1 / bounds.minPeriod;
     const refined = refineAtTrough(
       points,
       1 / coarse.bestPeriod,
-      (1 / bounds.minPeriod - 1 / bounds.maxPeriod) / (coarse.samples - 1),
-      weights
+      (fMax - fMin) / (coarse.samples - 1),
+      weights,
+      { fMin, fMax }
     );
     expect(refined).not.toBe(null);
     expect(refined.chi2).toBeLessThanOrEqual(coarse.best.chi2);
@@ -152,7 +156,10 @@ describe('finding the bottom of the trough', () => {
       { day: 1, rv: 2, sigma: 1 },
       { day: 1, rv: 3, sigma: 1 },
     ];
-    const out = refineAtTrough(same, 0.3, 0.01, weightsFor(same));
+    const out = refineAtTrough(same, 0.3, 0.01, weightsFor(same), {
+      fMin: 0.1,
+      fMax: 1,
+    });
     expect(out === null || Number.isFinite(out.period)).toBe(true);
   });
 });
@@ -724,5 +731,195 @@ describe('the histogram', () => {
   test('nothing to bin is null, not an empty chart', () => {
     expect(histogram([])).toBe(null);
     expect(histogram([NaN, Infinity])).toBe(null);
+  });
+});
+
+describe('refinement never leaves the range it was told to search', () => {
+  /**
+   * A 1.999-day sinusoid, searched over 2 to 3 days.
+   *
+   * The truth sits just outside the low edge, so the grid must pin to the
+   * 2-day boundary - and the first version of refineAtTrough then bracketed
+   * `best +/- step`, walked off the end, and returned 1.99666. A search told
+   * to consider only 2 to 3 days must not answer 1.997.
+   */
+  const edgeCase = () => {
+    const g = gaussianStream('edge');
+    const points = Array.from({ length: 30 }, (_, i) => {
+      const day = i * 0.31;
+      return {
+        day,
+        rv: 5 + 30 * Math.sin((2 * Math.PI * day) / 1.999 + 0.7) + 3 * g(),
+        sigma: 3,
+        quality: 'ok',
+        missed: false,
+      };
+    });
+    const bounds = { minPeriod: 2, maxPeriod: 3 };
+    const grid = periodSearch(points, { ...bounds, samples: 400 });
+    return { points, bounds, grid };
+  };
+
+  test('the grid pins to the boundary, as it must', () => {
+    const { grid } = edgeCase();
+    expect(grid.bestPeriod).toBeGreaterThanOrEqual(2);
+    expect(grid.bestPeriod).toBeLessThanOrEqual(3);
+    expect(grid.bestPeriod).toBeCloseTo(2, 3);
+  });
+
+  test('every accepted trial stays inside 2 to 3 days', async () => {
+    const { points, bounds, grid } = edgeCase();
+    const out = await runMonteCarlo(
+      { points, params: grid.best, ...bounds, trials: 200, seed: 'edge' },
+      NOW
+    );
+    expect(out.ok).toBe(true);
+    expect(out.succeeded).toBeGreaterThan(150);
+    for (const family of out.families) {
+      expect(family.period.min).toBeGreaterThanOrEqual(2);
+      expect(family.period.max).toBeLessThanOrEqual(3);
+    }
+  });
+
+  test('the boundary itself stays a candidate rather than being skipped', () => {
+    // Clamping the bracket must not mean losing the edge: when the trough's
+    // lowest point IS the boundary, the boundary is the answer.
+    const { points, bounds, grid } = edgeCase();
+    const fMin = 1 / bounds.maxPeriod;
+    const fMax = 1 / bounds.minPeriod;
+    const step = (fMax - fMin) / (grid.samples - 1);
+    const refined = refineAtTrough(points, fMax, step, weightsFor(points), {
+      fMin,
+      fMax,
+    });
+    expect(refined).not.toBe(null);
+    expect(refined.period).toBeGreaterThanOrEqual(bounds.minPeriod);
+    expect(refined.period).toBeLessThanOrEqual(bounds.maxPeriod);
+    // It found the edge, because that is where the minimum is.
+    expect(refined.period).toBeCloseTo(2, 4);
+  });
+
+  test('refinement is refused rather than guessed without bounds', () => {
+    const { points } = edgeCase();
+    const w = weightsFor(points);
+    expect(refineAtTrough(points, 0.4, 0.01, w, undefined)).toBe(null);
+    expect(refineAtTrough(points, 0.4, 0.01, w, { fMin: 0, fMax: 1 })).toBe(
+      null
+    );
+    expect(refineAtTrough(points, 0.4, 0.01, w, { fMin: 1, fMax: 0.5 })).toBe(
+      null
+    );
+  });
+
+  test('a worse refinement is discarded and the grid fit kept', () => {
+    // The floor: refitTrial must never trade a valid result for one that is
+    // out of range or higher in chi-square.
+    const { points, bounds, grid } = edgeCase();
+    const out = refitTrial(points, { ...bounds, samples: 400 });
+    expect(out.status).toBe(TRIAL.OK);
+    expect(out.chi2).toBeLessThanOrEqual(grid.best.chi2 + 1e-9);
+    expect(out.period).toBeGreaterThanOrEqual(bounds.minPeriod);
+    expect(out.period).toBeLessThanOrEqual(bounds.maxPeriod);
+  });
+
+  test('a narrow range is respected too', async () => {
+    // Bounds tighter than the grid step: the bracket collapses onto the range
+    // and nothing may escape it.
+    const { points } = edgeCase();
+    const bounds = { minPeriod: 2.4, maxPeriod: 2.45 };
+    const grid = periodSearch(points, { ...bounds, samples: 200 });
+    const out = await runMonteCarlo(
+      { points, params: grid.best, ...bounds, trials: 80, seed: 'narrow' },
+      NOW
+    );
+    for (const family of out.families) {
+      expect(family.period.min).toBeGreaterThanOrEqual(2.4);
+      expect(family.period.max).toBeLessThanOrEqual(2.45);
+    }
+  });
+});
+
+describe('a run is bound to the inputs it started from', () => {
+  test('the snapshot is frozen and the caller cannot reach into it', async () => {
+    const { points, fit, bounds } = wellSampled();
+    const live = points.map(p => ({ ...p }));
+    const params = { ...fit };
+    const out = await runMonteCarlo(
+      { points: live, params, ...bounds, trials: 60, seed: 'bound' },
+      NOW
+    );
+    // Mutating the caller's objects afterwards cannot change what ran.
+    const before = JSON.stringify(out.spec);
+    live[0].rv = 99999;
+    params.period = 99;
+    expect(JSON.stringify(out.spec)).toBe(before);
+    expect(out.spec.fit.period).toBe(fit.period);
+  });
+
+  test('the report carries the key of the inputs it describes', async () => {
+    const { points, fit, bounds } = wellSampled();
+    const out = await runMonteCarlo(
+      {
+        points,
+        params: fit,
+        ...bounds,
+        trials: 60,
+        seed: 'k',
+        inputsKey: 'RECORDING-A/3.5',
+      },
+      NOW
+    );
+    expect(out.inputsKey).toBe('RECORDING-A/3.5');
+    expect(out.spec.inputsKey).toBe('RECORDING-A/3.5');
+  });
+
+  test('the three outcomes are named, not inferred from two booleans', async () => {
+    const { points, fit, bounds } = wellSampled();
+    const complete = await runMonteCarlo(
+      { points, params: fit, ...bounds, trials: 60, seed: 'o' },
+      NOW
+    );
+    expect(complete.outcome).toBe(OUTCOME.COMPLETE);
+
+    let done = 0;
+    const cancelled = await runMonteCarlo(
+      { points, params: fit, ...bounds, trials: 400, seed: 'o' },
+      {
+        ...NOW,
+        onProgress: p => {
+          done = p.done;
+        },
+        shouldCancel: () => done >= 24,
+      }
+    );
+    expect(cancelled.outcome).toBe(OUTCOME.CANCELLED);
+
+    const partial = summarise({
+      trials: [
+        { status: TRIAL.OK, period: 3.5, K: 40 },
+        { status: TRIAL.NO_SEARCH },
+      ],
+      failures: { [TRIAL.NO_SEARCH]: 1, [TRIAL.NOT_FINITE]: 0 },
+      spec: {
+        seed: 's',
+        minPeriod: 1,
+        maxPeriod: 10,
+        samples: 200,
+        params: {},
+      },
+      requested: 2,
+      baseline: 14,
+    });
+    expect(partial.outcome).toBe(OUTCOME.PARTIAL);
+    expect(partial.cancelled).toBe(false);
+  });
+
+  test('every outcome has a sentence in both languages', () => {
+    for (const outcome of Object.values(OUTCOME)) {
+      expect(typeof EN_DEFERRED[`rvfit.mc.outcome.${outcome}`]).toBe('string');
+      expect(typeof ES_DEFERRED[`rvfit.mc.outcome.${outcome}`]).toBe('string');
+    }
+    expect(typeof EN_DEFERRED['rvfit.mc.stale']).toBe('string');
+    expect(typeof ES_DEFERRED['rvfit.mc.stale']).toBe('string');
   });
 });

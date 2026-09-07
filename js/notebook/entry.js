@@ -230,6 +230,9 @@ export function provenanceOf({
   target = null,
   simTimeDays = null,
   simTimeSeconds = null,
+  simTimeUnits = null,
+  timeUnitSeconds = null,
+  revisionSource = null,
   worldGeneration = null,
   interventionEpoch = null,
   seed = null,
@@ -244,23 +247,40 @@ export function provenanceOf({
   quality = null,
   flags = [],
   initialStateHash = null,
+  recordedAt = null,
+  scheduleFingerprint = null,
+  uncertaintySeed = null,
 } = {}) {
   return {
     scenario: scenario === null ? null : String(scenario),
     target: target === null ? null : String(target),
-    // Days for a reader, seconds for anybody reproducing it. Both, because
-    // converting between them needs a constant this block would not carry.
-    simTimeDays: num(simTimeDays),
+    // Days for a reader, seconds for anybody reproducing it, and the raw
+    // simulation clock under its own name. All three, because the clock is in
+    // simulation time units whose length depends on the gravitational
+    // constant: a reader given only "seconds" cannot check the arithmetic, and
+    // a reader given a number labelled seconds that is really units has been
+    // told something false.
+    simTimeUnits: num(simTimeUnits),
     simTimeSeconds: num(simTimeSeconds),
+    simTimeDays: num(simTimeDays),
+    /** Seconds in one simulation time unit, so the conversion is checkable. */
+    timeUnitSeconds: num(timeUnitSeconds),
     // Which world. Body ids restart from a counter on a rebuild, so this is
     // the only field that distinguishes two runs of the same scenario.
     worldGeneration: num(worldGeneration),
     // How many times a body's state was changed by hand before this reading.
     interventionEpoch: num(interventionEpoch),
     seed: seed === null ? null : String(seed),
-    // The build. 'dev' from a development server is honest; a fabricated
-    // version number would not be.
+    // The build. Null where there is none - a development server has neither
+    // a deployed commit nor a stamp - because a fabricated version number
+    // would be worse than an admitted absence. See revisionSource below.
     revision: revision === null ? null : String(revision),
+    /**
+     * Whether the revision identifies the deployed build, a local one, or
+     * nothing at all. An unknown build and an inferred one are different
+     * facts and a report that conflates them cannot be audited.
+     */
+    revisionSource: revisionSource === null ? null : String(revisionSource),
     numerical: {
       integrator: integrator === null ? null : String(integrator),
       maxTimestep: num(timestep),
@@ -279,6 +299,13 @@ export function provenanceOf({
     flags: [...new Set((flags || []).filter(Boolean).map(String))].sort(),
     initialStateHash:
       initialStateHash === null ? null : String(initialStateHash),
+    /** Wall-clock stamp from the instrument. Not a simulation time. */
+    recordedAt: recordedAt === null ? null : String(recordedAt),
+    /** Which observing schedule produced the measurements. */
+    scheduleFingerprint:
+      scheduleFingerprint === null ? null : String(scheduleFingerprint),
+    /** The Monte Carlo seed, when an uncertainty analysis was kept with it. */
+    uncertaintySeed: uncertaintySeed === null ? null : String(uncertaintySeed),
   };
 }
 

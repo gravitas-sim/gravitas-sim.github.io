@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2760,
+    limit: 2790,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -108,7 +108,20 @@ const BUDGETS = [
       'nothing could render them - js/widgets.js is reached only from the ' +
       'lazy js/investigations.js - and the initial download went DOWN from ' +
       '829.7 KB to 828.6 KB across a feature that added a panel, a report ' +
-      'writer and 4.7 KB of CSS. The initial limit was not touched.',
+      'writer and 4.7 KB of CSS. The initial limit was not touched.\n\n' +
+      'Raised from 2760 to 2790 for the release-preparation pass, and this ' +
+      'one is bug-fix weight rather than a new instrument, so it is itemised ' +
+      'rather than waved through. Measured against a190265: +5.4 KB deferred, ' +
+      'from clamping the Monte Carlo refinement to its search bounds and ' +
+      'keeping the grid fit as a floor; the generation token, inputs key and ' +
+      'named run outcomes; the notebook provenance fields the clock fix needs ' +
+      '(sim units, the conversion factor, the revision source) and the ' +
+      'recorded-provenance precedence; and the prose for all of it in two ' +
+      'languages. The initial download moved 822.2 to 823.5 KB and its limit ' +
+      'was NOT touched - it still has six kilobytes of headroom, which is the ' +
+      'budget that governs what a first-time visitor actually downloads. ' +
+      'Nothing was deferred to make this number work and nothing was ' +
+      'removed to fit under it.',
   },
 ];
 

@@ -513,25 +513,60 @@ jobs:
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
+          # A skipped job is not a passing job.
+          #
+          # This accepted `success|skipped` for every job, so anything that did
+          # not run - a cancelled matrix leg, a job skipped because something it
+          # needed failed, a condition added later - reported the whole of CI
+          # green. The deployment gate consults this job, so a skip was a route
+          # to publishing something nothing had checked.
+          #
+          # Now every job must succeed, and only the jobs the workflow itself
+          # declares optional for THIS event may be skipped. cross-browser
+          # carries `if: github.event_name != 'pull_request'`, so it is expected
+          # to skip on a pull request and required to succeed on anything else.
+          #
+          # Written with a case statement rather than an associative array so
+          # it runs on any bash and can be exercised outside Actions.
           failed=0
-          for result in \
-            "${{ needs.checks.result }}" \
-            "${{ needs.build.result }}" \
-            "${{ needs.e2e.result }}" \
-            "${{ needs.accessibility.result }}" \
-            "${{ needs.e2e-build.result }}" \
-            "${{ needs.cross-browser.result }}"
-          do
-            case "$result" in
-              success|skipped) ;;
-              *) failed=1 ;;
+
+          require() {
+            # $1 job name, $2 result
+            if [ "$2" != "success" ]; then
+              echo "::error::$1 is required for a ${{ github.event_name }} event; its result was '$2'."
+              failed=1
+            else
+              echo "$1: success"
+            fi
+          }
+
+          optional() {
+            # $1 job name, $2 result. May skip; may not fail.
+            case "$2" in
+              success|skipped) echo "$1: $2 (optional for this event)" ;;
+              *)
+                echo "::error::$1 ran and did not pass: '$2'."
+                failed=1 ;;
             esac
-          done
+          }
+
+          require checks        "${{ needs.checks.result }}"
+          require build         "${{ needs.build.result }}"
+          require e2e           "${{ needs.e2e.result }}"
+          require accessibility "${{ needs.accessibility.result }}"
+          require e2e-build     "${{ needs.e2e-build.result }}"
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            optional cross-browser "${{ needs.cross-browser.result }}"
+          else
+            require  cross-browser "${{ needs.cross-browser.result }}"
+          fi
+
           if [ "$failed" -ne 0 ]; then
-            echo "::error::At least one CI job did not pass."
+            echo "::error::At least one required CI job did not succeed."
             exit 1
           fi
-          echo "All required jobs passed."
+          echo "Every job required for a ${{ github.event_name }} event succeeded."
 
   # ---------------------------------------------------------------------------
   # Publishing
@@ -606,6 +641,30 @@ jobs:
           else
             echo "superseded=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Stamp the commit into the pages a reader can see
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          # So a measurement kept in the evidence notebook can say which build
+          # produced it. Read from the document rather than fetched: the marker
+          # file below does not exist on a development server, and asking the
+          # network for it there logged a 404 on every load.
+          for page in index.html model/index.html instructors/index.html; do
+            [ -f "$page" ] || continue
+            python3 - "$page" "${{ github.sha }}" <<'PY'
+          import sys, re
+          path, sha = sys.argv[1], sys.argv[2]
+          html = open(path, encoding='utf-8').read()
+          tag = f'<meta name="gravitas-revision" content="{sha}" />'
+          if 'name="gravitas-revision"' in html:
+              html = re.sub(r'<meta name="gravitas-revision"[^>]*/?>', tag, html)
+          else:
+              html = html.replace('</head>', f'    {tag}\n  </head>', 1)
+          open(path, 'w', encoding='utf-8').write(html)
+          print(f'stamped {path}')
+          PY
+          done
+          grep -o 'name="gravitas-revision" content="[^"]*"' index.html
 
       - name: Record which commit this is
         if: steps.tip.outputs.superseded == 'false'

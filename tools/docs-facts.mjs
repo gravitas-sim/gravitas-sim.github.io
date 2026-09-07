@@ -186,6 +186,12 @@ async function cheapFacts() {
     new URL('../js/i18n/index.js', import.meta.url)
   );
   const { EN } = await import(new URL('../js/i18n/en.js', import.meta.url));
+  // The other half of the same catalogue. Imported here rather than at the top
+  // of the file so that a failure to read it is a failure of this fact and not
+  // of the whole tool.
+  const { EN_DEFERRED } = await import(
+    new URL('../js/i18n/en.deferred.js', import.meta.url)
+  );
   const { INVESTIGATIONS } = await import(
     new URL('../js/data/investigations.js', import.meta.url)
   );
@@ -203,7 +209,16 @@ async function cheapFacts() {
     objectives: MANIFEST.reduce((sum, l) => sum + l.objectiveCount, 0),
     locales: LOCALES.length,
     localeNames: LOCALES.map(l => l.endonym).join(', '),
-    uiStrings: Object.keys(EN).length,
+    // Base plus deferred, de-duplicated.
+    //
+    // This counted the base catalogue alone, so every string moved out of the
+    // start-up path to keep the download budget silently left the total: the
+    // widget and panel families that went deferred took the reported figure
+    // from 1620 down to 1295 while the application gained strings. The two
+    // halves are one catalogue as far as a reader is concerned, and
+    // tests/i18n.test.js already guarantees no id is in both, so a union is
+    // the right count and the Set is a guard rather than a fix.
+    uiStrings: new Set([...Object.keys(EN), ...Object.keys(EN_DEFERRED)]).size,
     // How many scenarios the stability audit actually covers. Read out of the
     // tool's own list rather than assumed to be all of them: /model/ claimed
     // the audit ran over "all 48 shipped scenarios" when it runs over twelve

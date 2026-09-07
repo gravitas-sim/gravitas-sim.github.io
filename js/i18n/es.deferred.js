@@ -808,6 +808,13 @@ export const ES_DEFERRED = {
   'rvfit.mc.cancel': 'Cancelar',
   'rvfit.mc.running': 'Prueba {done} de {total}…',
   'rvfit.mc.idle': 'Sin ejecutar todavía.',
+  'rvfit.mc.stale':
+    'La grabación, el ajuste o el rango de búsqueda han cambiado desde que se ejecutó este análisis, así que sus intervalos ya no describen lo que hay en pantalla. Vuelve a ejecutarlo.',
+  'rvfit.mc.outcome.complete':
+    'Todas las pruebas se ejecutaron y dieron ajuste.',
+  'rvfit.mc.outcome.cancelled':
+    'Detenido por ti tras {done} de {total} pruebas.',
+  'rvfit.mc.outcome.partial': '{done} de {total} pruebas dieron ajuste.',
 
   'rvfit.mc.refused.noFit':
     'No hay ningún ajuste en pantalla alrededor del cual remuestrear. Fija primero un período.',

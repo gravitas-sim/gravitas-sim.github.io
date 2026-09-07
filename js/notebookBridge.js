@@ -43,35 +43,94 @@ export function ensureNotebook() {
 export const notebookLoaded = () => loading !== null;
 
 /**
- * A build identifier for an entry's provenance.
+ * Where the build identifier comes from, and whether it is real.
  *
- * The production build stamps one onto the document; a development server has
- * none, and 'dev' is the honest answer rather than a fabricated version. The
- * same function the bench's manifest uses, restated here so the notebook does
- * not have to import the bench to record which build took a reading.
+ * Three cases, kept apart because a report that cannot tell them apart is a
+ * report whose provenance cannot be audited:
  *
- * @returns {string} Build identifier
+ *   deployed    the commit the live site was built from, stamped into the
+ *               document by the deploy job. The only value that identifies
+ *               this build to anybody else.
+ *   stamped     some other build id on the document. Real, but local to
+ *               whoever built it.
+ *   unknown     a development server, which has neither. Recorded as unknown
+ *               rather than as the string 'dev', because 'dev' reads like a
+ *               version and is not one.
+ *
+ * Read from the document, not fetched. The first version asked the network for
+ * deployed-revision.json, which the deploy job writes - and that file does not
+ * exist anywhere else, so every development load and every browser test logged
+ * a 404 for it. A missing marker is the ordinary case, not an error, and it
+ * must not look like one. So the deploy job stamps the commit into index.html
+ * instead and this only reads what is in front of it.
+ *
+ * @returns {{id: ?string, source: string}} The build
  */
+const REVISION_SOURCE = Object.freeze({
+  DEPLOYED: 'deployed',
+  STAMPED: 'stamped',
+  UNKNOWN: 'unknown',
+});
+
 export function buildRevision() {
-  return (
-    document.documentElement.dataset.build ||
-    document.querySelector('meta[name="gravitas-build"]')?.content ||
-    'dev'
-  );
+  const meta = name =>
+    document.querySelector(`meta[name="${name}"]`)?.content?.trim() || null;
+  const deployed = meta('gravitas-revision');
+  if (deployed) {
+    return { id: deployed, source: REVISION_SOURCE.DEPLOYED };
+  }
+  const stamped =
+    document.documentElement.dataset.build || meta('gravitas-build');
+  return stamped
+    ? { id: String(stamped), source: REVISION_SOURCE.STAMPED }
+    : { id: null, source: REVISION_SOURCE.UNKNOWN };
+}
+
+/**
+ * The scenario actually on screen.
+ *
+ * `SETTINGS.preset_scenario` is a request, not an answer: it holds the
+ * sentinel 'None' whenever the world was built from a share link, a lesson's
+ * own setup or a sandbox edit rather than from the gallery - see applyPreset in
+ * js/scenarios.js, which returns early on it. The notebook was writing that
+ * sentinel into an entry's provenance as though 'None' were the name of a
+ * scenario. Where the sentinel is in force the scenario is unknown, and null
+ * is how this codebase says unknown.
+ *
+ * @param {object} settings - SETTINGS
+ * @returns {?string} The scenario, or null when there is not one
+ */
+export function resolveScenario(settings) {
+  const preset = settings?.preset_scenario;
+  if (!preset || preset === 'None') return null;
+  return String(preset);
 }
 
 /**
  * Everything about the running simulation an entry should record.
  *
- * Read once, here, at the moment of capture. Every value is copied out as a
- * number or a string - nothing that follows is a live reference - which is
- * what makes the resulting snapshot immune to the next rebuild.
+ * Atomic, and that is why it is shaped this way. The first version awaited six
+ * dynamic imports and *then* read the clock, the world generation and the
+ * geometry - so on a cold cache the world advanced by however long the imports
+ * took between the reader pressing save and the numbers being read, and the
+ * entry recorded a moment that was not the moment. The imports resolve first;
+ * every read below happens in one synchronous block with no await in it.
+ *
+ * On the clock
+ * -----------------------------------------------------------------------------
+ * getSimClock() returns simulation time UNITS, not seconds. One unit is
+ * timeUnitSeconds() seconds - it depends on the gravitational constant, and is
+ * about 1.84 days at the default setting. The first version stored the raw
+ * clock under `simTimeSeconds` and divided it by 86400 for `simTimeDays`, which
+ * mislabelled the unit and made the day figure wrong by a factor of 158810.
+ * Everything here goes through the application's own conversion, the raw clock
+ * keeps its real name, and the factor is recorded so a reader can redo it.
  *
  * @param {object} [extra] - Fields the caller knows and this cannot
  * @returns {Promise<object>} Fields for provenanceOf()
  */
 export async function liveProvenance(extra = {}) {
-  const [physics, timeline, quality, frame, observer, state] =
+  const [physics, timeline, quality, frame, observer, state, units, constants] =
     await Promise.all([
       import('./physics.js'),
       import('./timeline.js'),
@@ -79,36 +138,53 @@ export async function liveProvenance(extra = {}) {
       import('./referenceFrame.js'),
       import('./observerGeometry.js'),
       import('./appState.js'),
+      import('./units.js'),
+      import('./constants.js'),
     ]);
 
+  // --- One synchronous block. Nothing below awaits. -------------------------
   const settings = state.SETTINGS || {};
-  const seconds = timeline.getSimClock();
+  const clockUnits = timeline.getSimClock();
+  const unitSeconds = units.timeUnitSeconds();
   const geometry = observer.observerGeometry();
+  const worldGeneration = physics.getWorldGeneration();
+  const interventionEpoch = physics.getInterventionEpoch?.() ?? null;
+  const frameMode = frame.frameMode();
+  const frameObject = frame.frameObjectId();
+  const qualityNow = quality.qualityReport();
+  const revision = buildRevision();
+  const scenario = resolveScenario(settings);
+  const integrator = settings.integrator ?? null;
+  const maxTimestep = settings.max_timestep || null;
+  const simSpeed = settings.sim_speed ?? null;
+  // --- End of the atomic block. --------------------------------------------
+
+  const seconds = Number.isFinite(clockUnits) ? clockUnits * unitSeconds : null;
 
   return {
-    scenario: settings.preset_scenario ?? null,
+    scenario,
+    /** The raw clock, under its real name. */
+    simTimeUnits: Number.isFinite(clockUnits) ? clockUnits : null,
     simTimeSeconds: seconds,
-    // Days as well as seconds: a reader wants days and anybody reproducing the
-    // reading wants the raw clock, and converting between them needs a
-    // constant this block would not otherwise carry.
-    simTimeDays: Number.isFinite(seconds) ? seconds / 86400 : null,
-    worldGeneration: physics.getWorldGeneration(),
-    interventionEpoch: physics.getInterventionEpoch?.() ?? null,
-    revision: buildRevision(),
-    integrator: settings.integrator ?? null,
-    timestep: settings.max_timestep || null,
-    simSpeed: settings.sim_speed ?? null,
+    simTimeDays: seconds === null ? null : seconds / constants.SECONDS_PER_DAY,
+    /** So the conversion above can be checked, and redone. */
+    timeUnitSeconds: unitSeconds,
+    worldGeneration,
+    interventionEpoch,
+    revision: revision.id,
+    revisionSource: revision.source,
+    integrator,
+    timestep: maxTimestep,
+    simSpeed,
     // Mode plus the object it is centred on, because "object" alone does not
     // say which object and two readings taken in different object frames are
     // not comparable.
-    referenceFrame: frame.frameObjectId()
-      ? `${frame.frameMode()}:${frame.frameObjectId()}`
-      : frame.frameMode(),
+    referenceFrame: frameObject ? `${frameMode}:${frameObject}` : frameMode,
     observer: {
       positionAngleDeg: geometry.positionAngleDeg,
       inclinationDeg: geometry.inclinationDeg,
     },
-    quality: quality.qualityReport(),
+    quality: qualityNow,
     ...extra,
   };
 }

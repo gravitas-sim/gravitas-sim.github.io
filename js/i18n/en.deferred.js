@@ -799,6 +799,12 @@ export const EN_DEFERRED = {
   'rvfit.mc.cancel': 'Cancel',
   'rvfit.mc.running': 'Trial {done} of {total}…',
   'rvfit.mc.idle': 'Not run yet.',
+  'rvfit.mc.stale':
+    'The recording, the fit or the search range has changed since this analysis ran, so its intervals no longer describe what is on screen. Run it again.',
+  'rvfit.mc.outcome.complete': 'Every trial ran and produced a fit.',
+  'rvfit.mc.outcome.cancelled':
+    'Stopped by you after {done} of {total} trials.',
+  'rvfit.mc.outcome.partial': '{done} of {total} trials produced a fit.',
 
   'rvfit.mc.refused.noFit':
     'There is no fit on screen to resample around. Set a period first.',

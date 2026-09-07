@@ -267,9 +267,20 @@ test.describe('what a saved reading records', () => {
     expect(p.seed).toBe('seed-x');
     // From the running simulation, not from the recording.
     expect(p.worldGeneration).toBeGreaterThan(0);
-    expect(p.simTimeSeconds).toBeGreaterThan(0);
-    expect(p.simTimeDays).toBeGreaterThan(0);
-    expect(p.revision).toBeTruthy();
+    // The clock is in simulation time UNITS. All three forms are recorded
+    // along with the factor, so a reader can check the arithmetic - and the
+    // day figure is no longer the raw clock divided by 86400.
+    expect(p.simTimeUnits).toBeGreaterThan(0);
+    expect(p.timeUnitSeconds).toBeGreaterThan(1);
+    expect(p.simTimeSeconds).toBeCloseTo(p.simTimeUnits * p.timeUnitSeconds, 3);
+    expect(p.simTimeDays).toBeCloseTo(p.simTimeSeconds / 86400, 6);
+    expect(p.simTimeDays).not.toBeCloseTo(p.simTimeUnits / 86400, 9);
+    // A development server has no deployed commit and no build stamp, and the
+    // honest record of that is null plus a source that says so - not the
+    // string 'dev', which reads like a version and is not one.
+    expect(['deployed', 'stamped', 'unknown']).toContain(p.revisionSource);
+    if (p.revisionSource === 'unknown') expect(p.revision).toBe(null);
+    else expect(p.revision).toBeTruthy();
     expect(p.numerical.integrator).toBeTruthy();
     expect(p.numerical.simSpeed).not.toBe(null);
     expect(p.observer).toMatchObject({

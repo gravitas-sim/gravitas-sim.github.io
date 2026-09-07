@@ -55,7 +55,16 @@ export function ensureDeferredMessages() {
     // static markup that exists from the first paint, so there is no subtree to
     // scope this to, and re-translating an element to the string it already has
     // costs nothing.
-    applyTranslations(document);
+    //
+    // Skipped where there is no document, which is every Node authoring tool:
+    // docs-facts.mjs, the manual builder and author-check all import modules
+    // that reach this, and a bare `applyTranslations(document)` threw a
+    // ReferenceError at them. The callers' answer was a blanket
+    // `.catch(() => {})`, which swallowed that AND every genuine failure with
+    // it. Registering the strings is the part a Node tool needs and it has
+    // already happened above; repainting a page there is meaningless, so it is
+    // declined explicitly rather than thrown and caught.
+    if (typeof document !== 'undefined') applyTranslations(document);
   })().catch(err => {
     // Forget the attempt so the next caller can make a fresh one.
     //

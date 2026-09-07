@@ -1287,3 +1287,198 @@ describe('a capture retains no reference to the live world', () => {
     expect(p.units.velocity).toBe('m/s');
   });
 });
+
+describe('provenance belongs to the recording, not to the world on screen', () => {
+  /** A report as rvWorkspace.exportReport() returns one. */
+  const recordedReport = (over = {}) => ({
+    recording: {
+      target: 'HD 1 (recorded)',
+      scenario: 'Exoplanet Characterization Lab',
+      seed: 'rec-seed',
+      worldGeneration: 7,
+      geometry: { positionAngleDeg: 12, inclinationDeg: 71 },
+      recordedAt: '2026-01-02T03:04:05.000Z',
+      ...over,
+    },
+  });
+
+  const rvAnalysis = () => ({
+    tooFew: false,
+    trial: { period: 3.5, K: 42, phase: 1.2, gamma: -3 },
+    atTrial: { rms: 4.2, reducedChi2: 1.08 },
+    folded: [
+      { phase: 0.1, rv: 40, sigma: 4, model: 39 },
+      { phase: 0.6, rv: -38, sigma: 4, model: -39 },
+    ],
+    structure: { runsRatio: 0.97 },
+    used: 12,
+    excluded: { degraded: 0, unverified: 0 },
+    revealed: false,
+    truth: null,
+  });
+
+  test('switching scenario after recording does not restamp the entry', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    // The live world is a DIFFERENT scenario, a later world and a different
+    // observing direction: exactly the state a student is in when they record
+    // a run, go and look at something else, then come back and save the fit.
+    const live = {
+      scenario: 'Solar System',
+      target: 'Sun (live)',
+      seed: 'live-seed',
+      worldGeneration: 42,
+      observer: { positionAngleDeg: 0, inclinationDeg: 90 },
+      revision: 'abc123',
+      revisionSource: 'deployed',
+      integrator: 'yoshida',
+      quality: { tier: 'full', fps: 60 },
+      referenceFrame: 'world',
+      simTimeUnits: 500,
+      simTimeSeconds: 500 * 158809.7,
+      simTimeDays: 1063,
+    };
+    const entry = fromRvFit({
+      analysis: rvAnalysis(),
+      report: recordedReport(),
+      provenance: live,
+    });
+    const p = entry.snapshot.provenance;
+
+    // The recording's, every one of them.
+    expect(p.scenario).toBe('Exoplanet Characterization Lab');
+    expect(p.target).toBe('HD 1 (recorded)');
+    expect(p.seed).toBe('rec-seed');
+    expect(p.worldGeneration).toBe(7);
+    expect(p.observer).toEqual({
+      positionAngleDeg: 12,
+      inclinationDeg: 71,
+    });
+    expect(p.recordedAt).toBe('2026-01-02T03:04:05.000Z');
+
+    // And the live world still supplies what a recording does not carry.
+    expect(p.revision).toBe('abc123');
+    expect(p.revisionSource).toBe('deployed');
+    expect(p.numerical.integrator).toBe('yoshida');
+    expect(p.quality).toEqual({ tier: 'full', fps: 60 });
+    expect(p.referenceFrame).toBe('world');
+  });
+
+  test('a recording that carries nothing falls back to the live world', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysis(),
+      report: { recording: {} },
+      provenance: { scenario: 'Solar System', worldGeneration: 3 },
+    });
+    // Filling a gap is not the same as overwriting a fact.
+    expect(entry.snapshot.provenance.scenario).toBe('Solar System');
+    expect(entry.snapshot.provenance.worldGeneration).toBe(3);
+  });
+
+  test('the schedule and the analysis seed travel with the entry', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysis(),
+      report: {
+        ...recordedReport({ scheduleFingerprint: 'SCHED42' }),
+        uncertainty: { spec: { seed: 'mc-seed-9' } },
+      },
+      provenance: {},
+    });
+    expect(entry.snapshot.provenance.scheduleFingerprint).toBe('SCHED42');
+    expect(entry.snapshot.provenance.uncertaintySeed).toBe('mc-seed-9');
+  });
+});
+
+describe('the simulation clock is recorded in the right units', () => {
+  test('units, seconds and days are all kept, with the conversion', () => {
+    // The defect: the raw clock is in simulation time units, and it was stored
+    // under `simTimeSeconds` and divided by 86400 for `simTimeDays`. At the
+    // default gravitational constant one unit is 158809.7 s, so the day figure
+    // was wrong by that factor and the second figure was mislabelled.
+    const unitSeconds = 158809.7;
+    const clockUnits = 100;
+    const p = provenanceOf({
+      simTimeUnits: clockUnits,
+      simTimeSeconds: clockUnits * unitSeconds,
+      simTimeDays: (clockUnits * unitSeconds) / 86400,
+      timeUnitSeconds: unitSeconds,
+    });
+    expect(p.simTimeUnits).toBe(100);
+    expect(p.simTimeSeconds).toBeCloseTo(15880970, 0);
+    expect(p.simTimeDays).toBeCloseTo(183.8, 1);
+    expect(p.timeUnitSeconds).toBe(unitSeconds);
+    // The wrong answer, so a regression is unambiguous.
+    expect(p.simTimeDays).not.toBeCloseTo(clockUnits / 86400, 6);
+  });
+
+  test('the conversion is recorded, so a reader can redo it', () => {
+    const p = provenanceOf({
+      simTimeUnits: 12,
+      simTimeSeconds: 12 * 158809.7,
+      simTimeDays: (12 * 158809.7) / 86400,
+      timeUnitSeconds: 158809.7,
+    });
+    expect(p.simTimeSeconds / p.simTimeUnits).toBeCloseTo(p.timeUnitSeconds, 6);
+    expect(p.simTimeDays * 86400).toBeCloseTo(p.simTimeSeconds, 3);
+  });
+
+  test('a non-default gravitational constant changes the conversion', async () => {
+    // Not a fixed constant: timeUnitSeconds() derives from the simulation's
+    // gravitational constant, so an entry that hard-coded 86400 would be wrong
+    // by a different factor in a lesson that changes G.
+    const units = await import('../js/units.js');
+    const base = units.timeUnitSeconds();
+    units.setSimGravitationalConstant(
+      units.getSimGravitationalConstant?.() ?? 1
+    );
+    const same = units.timeUnitSeconds();
+    expect(same).toBeCloseTo(base, 6);
+    units.setSimGravitationalConstant(4);
+    const changed = units.timeUnitSeconds();
+    expect(changed).not.toBeCloseTo(base, 3);
+    // Restore, so nothing after this test sees a different ruler.
+    units.setSimGravitationalConstant(1);
+    expect(units.timeUnitSeconds()).toBeCloseTo(base, 6);
+  });
+
+  test('an unknown build is unknown, not "dev"', () => {
+    const p = provenanceOf({ revision: null, revisionSource: 'unknown' });
+    expect(p.revision).toBe(null);
+    expect(p.revisionSource).toBe('unknown');
+    const deployed = provenanceOf({
+      revision: 'a190265',
+      revisionSource: 'deployed',
+    });
+    expect(deployed.revision).toBe('a190265');
+    expect(deployed.revisionSource).toBe('deployed');
+  });
+
+  test('the new fields survive a download and a restore unchanged', () => {
+    const entry = buildEntry({
+      source: SOURCE.RV_FIT,
+      title: 'Round trip',
+      quantities: [quantity({ label: 'P', value: 3.5, unit: 'd' })],
+      provenance: provenanceOf({
+        scenario: 'Lab',
+        simTimeUnits: 100,
+        simTimeSeconds: 15880970,
+        simTimeDays: 183.8,
+        timeUnitSeconds: 158809.7,
+        revision: 'a190265',
+        revisionSource: 'deployed',
+        recordedAt: '2026-01-02T03:04:05.000Z',
+        scheduleFingerprint: 'SCHED42',
+        uncertaintySeed: 'mc-9',
+      }),
+    });
+    const data = JSON.parse(
+      JSON.stringify(buildBackup({ entries: [entry], revision: 'x' }))
+    );
+    expect(validateBackup(data).ok).toBe(true);
+    const { entries } = restoreBackup(data);
+    expect(entries[0].snapshot.provenance).toEqual(entry.snapshot.provenance);
+    expect(entries[0].fingerprint).toBe(entry.fingerprint);
+    expect(entries[0].tampered).toBeUndefined();
+  });
+});

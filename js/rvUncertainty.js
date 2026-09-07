@@ -82,6 +82,16 @@ export const MC_LIMITS = Object.freeze({
   minPoints: 4,
 });
 
+/** What became of a whole run. */
+export const OUTCOME = Object.freeze({
+  /** Every requested trial ran and every one produced a fit. */
+  COMPLETE: 'complete',
+  /** The reader stopped it. */
+  CANCELLED: 'cancelled',
+  /** It ran to the end but some trials produced no fit. */
+  PARTIAL: 'partial',
+});
+
 /** What became of one trial. */
 export const TRIAL = Object.freeze({
   OK: 'ok',
@@ -178,51 +188,90 @@ export function resampleAtEpochs(points, model, normal) {
 const INV_PHI = (Math.sqrt(5) - 1) / 2;
 
 /**
- * Find the bottom of a trough between two grid points.
+ * Find the bottom of a trough between two grid points, without leaving the range.
  *
  * Necessary, not a refinement for its own sake. The period grid is spaced for
  * *finding* a trough - ten samples across the natural peak width - and that is
  * far coarser than the width of the trough's own bottom. Without this step
  * every trial's best period snapped to the same grid point and the Monte Carlo
- * reported a zero-width interval: measured on a fourteen-day baseline, the
- * grid step was 0.055 d against a real period uncertainty of 0.011 d, so all
- * four hundred trials returned the identical number and the interval was a
- * property of the grid rather than of the data.
+ * reported a zero-width interval: measured on a fourteen-day baseline, the grid
+ * step was 0.055 d against a real period uncertainty of 0.011 d, so all four
+ * hundred trials returned the identical number and the interval was a property
+ * of the grid rather than of the data.
  *
  * Golden-section search on chi-square in FREQUENCY, bracketed by the grid
  * points either side of the best one. Frequency because that is what the grid
- * is uniform in, so the bracket is symmetric there and not in period. Twenty
- * evaluations against the grid's two hundred, so a tenth more work.
+ * is uniform in, so the bracket is symmetric there and not in period.
  *
- * Uses fitAtPeriod, the same solve the grid used and the same one the student
- * ran. No optimiser, no gradients, no starting guess to get wrong.
+ * Clamped to the searched range, which is the whole point of taking `bounds`
+ * -----------------------------------------------------------------------------
+ * The first version bracketed `best +/- step` and stopped there, so a trough
+ * whose lowest grid point was the first or last one had a bracket reaching
+ * outside the range the reader asked for - and returned a period from outside
+ * it. Reproduced with a 1.999-day sinusoid searched over 2 to 3 days: the grid
+ * pinned to the 2-day edge, as it must, and refinement walked off to 1.99666.
+ * A search told to consider only 2 to 3 days must not answer 1.997; the honest
+ * answer at an edge is the edge, which is a reader's cue that the range is
+ * wrong.
+ *
+ * So the bracket is intersected with the range. Where that leaves the best
+ * point ON a boundary the bracket is one-sided, the boundary stays a candidate,
+ * and golden-section converges onto it.
+ *
+ * Never returns something worse than what it was given: the caller's grid fit
+ * is the floor, and a refinement that fails or lands higher is discarded.
  *
  * @param {Array<object>} points - The synthetic run
  * @param {number} bestFrequency - Lowest grid point, in cycles per day
  * @param {number} step - Grid spacing in frequency
  * @param {object} weights - From weightsFor, so every solve is weighted alike
- * @returns {?object} The refined fit, or null when it cannot be improved on
+ * @param {{fMin: number, fMax: number}} bounds - The searched range, in
+ *   frequency. Refinement may not return anything outside it.
+ * @returns {?object} A fit strictly inside the range, or null
  */
-export function refineAtTrough(points, bestFrequency, step, weights) {
-  let lo = bestFrequency - step;
-  let hi = bestFrequency + step;
-  if (!(lo > 0)) lo = bestFrequency / 2;
+export function refineAtTrough(points, bestFrequency, step, weights, bounds) {
+  const fMin = Number(bounds?.fMin);
+  const fMax = Number(bounds?.fMax);
+  if (!(fMin > 0) || !(fMax > fMin)) return null;
+
+  // The bracket, intersected with the searched range. Math.max/min rather than
+  // a refusal: a best point on a boundary is a normal outcome - it is what a
+  // range that excludes the true period looks like - and it still has a trough
+  // bottom worth locating on the inside.
+  let lo = Math.max(fMin, bestFrequency - step);
+  let hi = Math.min(fMax, bestFrequency + step);
   if (!(hi > lo)) return null;
 
   const chi2At = f => {
+    // Belt and braces. Every f below comes from within [lo, hi] by
+    // construction, and a future edit to the search must not be able to
+    // silently reintroduce an out-of-range answer.
+    if (f < fMin || f > fMax) return null;
     const fit = fitAtPeriod(points, 1 / f, { weights });
     return fit ? { chi2: fit.chi2, fit } : null;
   };
+
+  // The boundary candidates themselves, so a trough whose bottom is the edge
+  // of the range is represented rather than approached and missed.
+  let best = null;
+  const consider = candidate => {
+    if (!candidate) return;
+    if (!best || candidate.chi2 < best.chi2) best = candidate;
+  };
+  consider(chi2At(lo));
+  consider(chi2At(hi));
 
   let c = hi - (hi - lo) * INV_PHI;
   let d = lo + (hi - lo) * INV_PHI;
   let fc = chi2At(c);
   let fd = chi2At(d);
-  if (!fc || !fd) return null;
+  if (!fc || !fd) return best?.fit ?? null;
+  consider(fc);
+  consider(fd);
 
   // Twenty iterations narrows the bracket by a factor of about 15000, which
-  // takes a 0.0045 grid step to 3e-7 in frequency - far below any interval
-  // this data could support, and cheap enough not to think about again.
+  // takes a 0.0045 grid step to 3e-7 in frequency - far below any interval this
+  // data could support, and cheap enough not to think about again.
   for (let i = 0; i < 20; i++) {
     if (fc.chi2 < fd.chi2) {
       hi = d;
@@ -230,17 +279,19 @@ export function refineAtTrough(points, bestFrequency, step, weights) {
       fd = fc;
       c = hi - (hi - lo) * INV_PHI;
       fc = chi2At(c);
-      if (!fc) return null;
+      if (!fc) break;
+      consider(fc);
     } else {
       lo = c;
       c = d;
       fc = fd;
       d = lo + (hi - lo) * INV_PHI;
       fd = chi2At(d);
-      if (!fd) return null;
+      if (!fd) break;
+      consider(fd);
     }
   }
-  return fc.chi2 <= fd.chi2 ? fc.fit : fd.fit;
+  return best?.fit ?? null;
 }
 
 /**
@@ -259,16 +310,29 @@ export function refitTrial(synthetic, search) {
   const found = periodSearch(synthetic, search);
   if (!found?.best) return { status: TRIAL.NO_SEARCH };
 
-  const step =
-    (1 / search.minPeriod - 1 / search.maxPeriod) /
-    Math.max(1, (found.samples || 1) - 1);
+  const fMin = 1 / search.maxPeriod;
+  const fMax = 1 / search.minPeriod;
+  const step = (fMax - fMin) / Math.max(1, (found.samples || 1) - 1);
+  const candidate = refineAtTrough(
+    synthetic,
+    1 / found.bestPeriod,
+    step,
+    weightsFor(synthetic),
+    { fMin, fMax }
+  );
+
+  // The grid's own answer is the floor. A refinement is only taken when it is
+  // in range and no worse; otherwise the run keeps a result it already knows is
+  // valid rather than trading it for one that is not.
+  const inRange = fit =>
+    fit &&
+    Number.isFinite(fit.period) &&
+    fit.period >= search.minPeriod - 1e-12 &&
+    fit.period <= search.maxPeriod + 1e-12;
   const refined =
-    refineAtTrough(
-      synthetic,
-      1 / found.bestPeriod,
-      step,
-      weightsFor(synthetic)
-    ) || found.best;
+    inRange(candidate) && candidate.chi2 <= found.best.chi2
+      ? candidate
+      : found.best;
 
   const { period, K, gamma, phase, chi2 } = refined;
   if (![period, K, gamma, phase].every(Number.isFinite)) {
@@ -455,6 +519,10 @@ export function summarise({
       maxPeriod: spec.maxPeriod,
       samples: spec.samples,
       epochs: spec.epochs,
+      // In the exported block as well as at the top level, so a file on its
+      // own is enough to tell whether the interval still describes the fit it
+      // is filed beside.
+      inputsKey: spec.inputsKey ?? null,
       baseline,
       model: 'circular-single',
       errors: 'independentGaussian',
@@ -475,6 +543,30 @@ export function summarise({
      * with failed trials are both incomplete, and the panel says which.
      */
     complete: !cancelled && trials.length === requested && failed === 0,
+    /**
+     * The three things that can have happened, as one word.
+     *
+     * `complete` and `cancelled` were both booleans and a reader had to infer
+     * the third state - ran to the end but lost trials to failed fits - from
+     * their combination. Named, because "partial" and "cancelled" call for
+     * different things from whoever reads the interval: one is a smaller
+     * sample, the other is a sample the reader chose to stop.
+     */
+    outcome: cancelled
+      ? OUTCOME.CANCELLED
+      : trials.length === requested && failed === 0
+        ? OUTCOME.COMPLETE
+        : OUTCOME.PARTIAL,
+    /**
+     * The inputs this report describes, so a stale one can be recognised.
+     *
+     * An interval is about one recording, one fit and one search range. When
+     * any of those move the interval is no longer about what is on screen, and
+     * a panel with no way to tell would go on displaying it beside the new
+     * numbers. Carried rather than recomputed: the report has to be checkable
+     * after it has been exported and restored.
+     */
+    inputsKey: spec.inputsKey ?? null,
     families,
     multimodal: families.length > 1,
     /**
@@ -579,7 +671,22 @@ export async function runMonteCarlo(spec, hooks = {}) {
         Math.sin((2 * Math.PI * p.day) / spec.params.period + spec.params.phase)
   );
 
-  const normal = gaussianStream(spec.seed);
+  // The inputs, frozen. Every value the run needs is copied out here and
+  // nothing below reads `spec` again: the caller's object belongs to a panel
+  // whose sliders keep moving, and a run that re-read it mid-flight would be
+  // resampling around a model that is no longer the one it started from.
+  const snapshot = Object.freeze({
+    points: Object.freeze(usable.map(p => Object.freeze({ ...p }))),
+    params: Object.freeze({ ...spec.params }),
+    minPeriod: spec.minPeriod,
+    maxPeriod: spec.maxPeriod,
+    trials: requested,
+    seed: spec.seed,
+    samples,
+    inputsKey: spec.inputsKey ?? null,
+  });
+
+  const normal = gaussianStream(snapshot.seed);
   const trials = [];
   const failures = { [TRIAL.NO_SEARCH]: 0, [TRIAL.NOT_FINITE]: 0 };
   let cancelled = false;
@@ -599,7 +706,10 @@ export async function runMonteCarlo(spec, hooks = {}) {
         break;
       }
     }
-    const trial = refitTrial(resampleAtEpochs(usable, model, normal), search);
+    const trial = refitTrial(
+      resampleAtEpochs(snapshot.points, model, normal),
+      search
+    );
     trials.push(trial);
     if (trial.status !== TRIAL.OK) failures[trial.status]++;
   }
@@ -610,10 +720,12 @@ export async function runMonteCarlo(spec, hooks = {}) {
     trials,
     failures,
     spec: {
-      ...spec,
-      samples,
-      epochs: usable.length,
-      params: { ...spec.params },
+      ...snapshot,
+      // The points themselves are not part of the exported block: they are
+      // already in the recording the report sits beside, and a second copy
+      // would be a second thing that could disagree with it.
+      points: undefined,
+      epochs: snapshot.points.length,
     },
     requested,
     cancelled,

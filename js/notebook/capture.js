@@ -29,6 +29,46 @@ import {
   quantity,
 } from './entry.js';
 
+/**
+ * The provenance a recording carries, which outranks the live world's.
+ *
+ * Only fields the recording actually has: an absent one is omitted rather than
+ * set to null, so the caller's spread cannot overwrite a good live value with
+ * a blank. The simulation clock is deliberately not among them - an analysis
+ * of a completed recording happened at the recording's own epochs, and the
+ * clock reading from whenever somebody pressed save is not when it was
+ * observed.
+ *
+ * @param {object} rec - `recording` from rvWorkspace.exportReport()
+ * @param {object} report - The whole report, for its own fields
+ * @returns {object} Provenance overrides
+ */
+function recordedProvenance(rec, report) {
+  const out = {};
+  const put = (key, value) => {
+    if (value !== undefined && value !== null) out[key] = value;
+  };
+  put('scenario', rec.scenario);
+  put('target', rec.target);
+  put('seed', rec.seed);
+  put('worldGeneration', rec.worldGeneration);
+  put('interventionEpoch', rec.interventionEpoch);
+  // The direction the star was watched from when the samples were taken, not
+  // wherever the sliders happen to be now.
+  if (rec.geometry) {
+    put('observer', {
+      positionAngleDeg: rec.geometry.positionAngleDeg ?? null,
+      inclinationDeg: rec.geometry.inclinationDeg ?? null,
+    });
+  }
+  put('recordedAt', rec.recordedAt);
+  put('scheduleFingerprint', rec.scheduleFingerprint);
+  if (report?.uncertainty?.spec?.seed) {
+    put('uncertaintySeed', report.uncertainty.spec.seed);
+  }
+  return out;
+}
+
 /** Thin an array to at most `max` points, keeping the ends. */
 function thin(points, max) {
   if (points.length <= max) return points;
@@ -162,14 +202,22 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
     title: t('nb.rv.title', { target: rec.target || t('nb.unknownTarget') }),
     quantities,
     figure: fig,
+    // The RECORDING's provenance wins; the live world only fills the gaps.
+    //
+    // This was the wrong way round and the consequence was silent corruption:
+    // a student who recorded a run, switched scenario and then saved the fit
+    // got an entry stamped with the scenario, world generation and observing
+    // geometry of the world they were looking at rather than the one the
+    // measurements came from. The reading was right and its provenance
+    // described a different star.
+    //
+    // What the live world still supplies is what a recording genuinely does
+    // not carry: the build, the rendering tier, the reference frame. Not the
+    // clock - see recordedProvenance().
     provenance: provenanceOf({
       ...provenance,
-      scenario: provenance.scenario ?? rec.scenario ?? null,
-      target: provenance.target ?? rec.target ?? null,
-      seed: provenance.seed ?? rec.seed ?? null,
-      worldGeneration:
-        provenance.worldGeneration ?? rec.worldGeneration ?? null,
-      units: provenance.units ?? { velocity: 'm/s', time: 'days' },
+      ...recordedProvenance(rec, report),
+      units: rec.units ?? provenance.units ?? { velocity: 'm/s', time: 'days' },
       flags: [...(provenance.flags || []), ...flags],
     }),
     prose: {
