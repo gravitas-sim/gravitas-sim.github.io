@@ -51,6 +51,7 @@ import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
 import { registerOverlay } from './overlays.js';
 import { t, onLocaleChange } from './i18n/index.js';
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { formatNumber } from './format.js';
 import {
   LAGRANGE_NAMES,
@@ -476,6 +477,15 @@ function paintPoints(ctx, system, C) {
 
 /** Wire the panel up. Called once, when the chunk arrives. @returns {void} */
 export function initCr3bp() {
+  // This panel's strings are not in the start-up catalogue, so it registers
+  // them itself rather than trusting whoever opened it to have done so. The
+  // bridge does register them first in the normal path; a lesson, a share link
+  // or a test that drives the panel directly does not, and a panel that renders
+  // message ids because of who called it is a panel with a bug.
+  ensureDeferredMessages()
+    .then(() => render())
+    .catch(() => {});
+
   mount();
   window.addEventListener('gravitasSimulationReset', () => {
     // A rebuilt world is a different mu and possibly a different problem. The

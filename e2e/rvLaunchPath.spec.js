@@ -156,7 +156,19 @@ test.describe('the sliders and the file', () => {
     // change the reported goodness of fit is a slider whose value is being
     // discarded - which is exactly what happened while the panel scored a
     // refit instead of the model on screen.
-    for (const key of ['period', 'K', 'phase', 'gamma']) {
+    // K first, and deliberately. The model opens with an amplitude that can be
+    // at or near zero, and a sine of zero amplitude is the same flat line at
+    // every period and phase - so moving those sliders correctly changes
+    // nothing, and testing them first measures the opening guess rather than
+    // the panel.
+    const amplitude = page.locator('#rvFit_K');
+    await amplitude.evaluate(el => {
+      el.value = String((Number(el.min) + Number(el.max)) / 3);
+    });
+    await amplitude.dispatchEvent('input');
+    await page.waitForTimeout(80);
+
+    for (const key of ['K', 'period', 'phase', 'gamma']) {
       const slider = page.locator(`#rvFit_${key}`);
       await expect(slider).toBeVisible();
       const rmsBefore = await shownRms();
@@ -179,15 +191,24 @@ test.describe('the sliders and the file', () => {
         return Number(el.value);
       });
       await slider.dispatchEvent('input');
-      await page.waitForTimeout(80);
 
       // The control really did move, so a still RMS below means the value was
       // ignored rather than that the test failed to press anything.
       expect(moved).not.toBe(before);
 
-      const rmsAfter = await shownRms();
-      expect(rmsAfter).not.toBeNull();
-      expect(Math.abs(rmsAfter - rmsBefore)).toBeGreaterThan(1e-9);
+      // Polled rather than waited on. A fixed pause is a guess about how long
+      // the panel takes to redraw, and under parallel load an 80ms guess was
+      // wrong often enough to read the previous value and call the slider
+      // dead. The poll still fails, by timing out, if the value genuinely
+      // does not move.
+      await expect
+        .poll(shownRms, {
+          timeout: 5000,
+          intervals: [25],
+          message: `${key}: moved ${before} -> ${moved} and the RMS did not follow`,
+        })
+        .not.toBe(rmsBefore);
+      expect(await shownRms(), `${key}: no RMS shown`).not.toBeNull();
     }
 
     // Now export what is on screen, and check the file against itself.

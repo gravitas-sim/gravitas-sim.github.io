@@ -34,6 +34,7 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { t, onLocaleChange } from './i18n/index.js';
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 let enabled = false;
 let els = null;
@@ -227,6 +228,15 @@ export const currentReport = () => exportReport();
 
 /** Wire the panel up. Called once, when the chunk loads. */
 export function initRvWorkspacePanel() {
+  // This panel's strings are not in the start-up catalogue, so it registers
+  // them itself rather than trusting whoever opened it to have done so. The
+  // bridge does register them first in the normal path; a lesson, a share link
+  // or a test that drives the panel directly does not, and a panel that renders
+  // message ids because of who called it is a panel with a bug.
+  ensureDeferredMessages()
+    .then(() => render())
+    .catch(() => {});
+
   // The catalogue can arrive after this panel does; see the note on the same
   // subscription in js/binaryRunPanel.js.
   onLocaleChange(() => render());
