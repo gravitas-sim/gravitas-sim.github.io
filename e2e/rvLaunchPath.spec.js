@@ -383,3 +383,77 @@ test.describe('recordings that are not clean', () => {
     // so surviving to here is the assertion.
   });
 });
+
+test.describe('what a saved fit remembers about the run', () => {
+  test('the entry carries the conditions the samples were taken under', async ({
+    page,
+    app,
+  }) => {
+    // The whole chain, in the order a student walks it: the sampler records,
+    // the workspace analyses, the notebook keeps it. The gap this covers is
+    // the one where the workspace dropped the acquisition metadata and the
+    // notebook filled it back in from whatever world was on screen - so a
+    // recording taken at one geometry was written down at another.
+    test.setTimeout(180000);
+    await record(page, app, { cadence: 0.2, baseline: 1.6, points: 8 });
+
+    // What the run was actually taken under, read from the sampler itself.
+    const taken = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const run = rv.radialVelocitySurvey();
+      return {
+        inclinationDeg: run.inclinationDeg,
+        positionAngleDeg: run.positionAngleDeg,
+        integrator: run.provenance?.numerical?.integrator ?? null,
+        maxTimestep: run.provenance?.numerical?.maxTimestep ?? null,
+      };
+    });
+    expect(taken.integrator).toBeTruthy();
+
+    await page.locator('#rvAnalyse').click();
+    await expect(page.locator('#rvFitContainer')).toBeVisible();
+    await page.locator('#rvFitSearch').click();
+
+    // The world moves on, exactly as it does when a student goes and looks at
+    // something else before saving.
+    await page.evaluate(async () => {
+      const observer = await import('/js/observerControls.js');
+      const { SETTINGS } = await import('/js/appState.js');
+      SETTINGS.integrator = 'yoshida';
+      SETTINGS.max_timestep = 4;
+      observer.setObserverGeometry?.({
+        inclinationDeg: 20,
+        positionAngleDeg: 170,
+      });
+    });
+
+    // The draft has to be saved, not merely opened.
+    await page.locator('#rvFitNotebook').click();
+    await expect(page.locator('#nbDraftClaim')).toBeVisible();
+    await page
+      .locator('#nbDraftClaim')
+      .fill('The period is what this schedule could see.');
+    await page.locator('#nbDraftSave').click();
+    await expect(page.locator('.nb-entry')).toHaveCount(1);
+
+    const entry = await page.evaluate(async () => {
+      const panel = await import('/js/notebookPanel.js');
+      const all = panel.notebookEntries();
+      return all.length ? all[all.length - 1] : null;
+    });
+    expect(entry).not.toBe(null);
+    const p = entry.snapshot.provenance;
+
+    // The geometry the star was watched from, not the one on screen now.
+    expect(p.observer.inclinationDeg).toBeCloseTo(taken.inclinationDeg, 6);
+    expect(p.observer.positionAngleDeg).toBeCloseTo(taken.positionAngleDeg, 6);
+    // The integrator the samples were produced under, not the one just set.
+    expect(p.numerical.integrator).toBe(taken.integrator);
+    expect(p.numerical.integrator).not.toBe('yoshida');
+    expect(p.numerical.maxTimestep).toBe(taken.maxTimestep);
+    // And when the observations happened, in their own units.
+    expect(p.observedEpochs.unit).toBe('days');
+    expect(p.observedEpochs.count).toBeGreaterThanOrEqual(8);
+    expect(p.simTimeUnits).toBe(null);
+  });
+});

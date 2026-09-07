@@ -249,6 +249,8 @@ export function provenanceOf({
   flags = [],
   initialStateHash = null,
   recordedAt = null,
+  observedEpochs = null,
+  analysedAt = null,
   scheduleFingerprint = null,
   uncertaintySeed = null,
   uncertainty = null,
@@ -256,6 +258,12 @@ export function provenanceOf({
   return {
     scenario: scenario === null ? null : String(scenario),
     target: target === null ? null : String(target),
+    // WHEN THE READING WAS TAKEN, which for a live instrument is the clock
+    // now and for a completed recording is not known from the clock at all -
+    // see observedEpochs below, which is where a recording's acquisition time
+    // lives. Null here means the source does not know; it is never filled in
+    // from the world on screen.
+    //
     // Days for a reader, seconds for anybody reproducing it, and the raw
     // simulation clock under its own name. All three, because the clock is in
     // simulation time units whose length depends on the gravitational
@@ -310,6 +318,31 @@ export function provenanceOf({
       initialStateHash === null ? null : String(initialStateHash),
     /** Wall-clock stamp from the instrument. Not a simulation time. */
     recordedAt: recordedAt === null ? null : String(recordedAt),
+    /**
+     * When the observations were made, in the recording's own units.
+     *
+     * Acquisition metadata, and the answer to the question the simulation
+     * clock was being made to answer badly: a fit of a recording taken over
+     * days 0 to 5.7 is evidence about days 0 to 5.7, whatever the clock said
+     * when somebody pressed save.
+     */
+    observedEpochs: observedEpochs
+      ? {
+          count: num(observedEpochs.count),
+          firstDay: num(observedEpochs.firstDay),
+          lastDay: num(observedEpochs.lastDay),
+          spanDays: num(observedEpochs.spanDays),
+          unit: observedEpochs.unit ? String(observedEpochs.unit) : null,
+        }
+      : null,
+    /**
+     * When the entry was made, as opposed to when the data was taken.
+     *
+     * Analysis metadata, kept beside the display frame and the build for the
+     * same reason: none of the three is a fact about how the observations
+     * were generated.
+     */
+    analysedAt: analysedAt === null ? null : String(analysedAt),
     /** Which observing schedule produced the measurements. */
     scheduleFingerprint:
       scheduleFingerprint === null ? null : String(scheduleFingerprint),

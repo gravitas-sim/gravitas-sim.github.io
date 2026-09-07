@@ -1355,11 +1355,24 @@ describe('provenance belongs to the recording, not to the world on screen', () =
     });
     expect(p.recordedAt).toBe('2026-01-02T03:04:05.000Z');
 
-    // And the live world still supplies what a recording does not carry.
+    // The live world still supplies what is genuinely about the analysis
+    // rather than about the observations: which build did the sums, and what
+    // the renderer was managing while the reader worked.
     expect(p.revision).toBe('abc123');
     expect(p.revisionSource).toBe('deployed');
-    expect(p.numerical.integrator).toBe('yoshida');
     expect(p.quality).toEqual({ tier: 'full', fps: 60 });
+
+    // But NOT how the world was being integrated. That is a condition the
+    // observations were generated under, and this recording does not carry
+    // one, so it stays unknown. Writing in the current integrator described
+    // the state of the sliders when save was pressed as though it were the
+    // state of the world when the star was watched.
+    expect(p.numerical.integrator).toBe(null);
+    expect(p.numerical.maxTimestep).toBe(null);
+    // Same for the clock: an analysis of a completed recording did not happen
+    // at the clock reading of the moment somebody saved it.
+    expect(p.simTimeUnits).toBe(null);
+    expect(p.simTimeDays).toBe(null);
     // The reference frame is a DISPLAY choice made now, not a fact about the
     // recording. This recording does not carry one, so the entry says unknown
     // rather than writing in whatever the reader happened to be viewing - and
@@ -1735,5 +1748,173 @@ describe('the uncertainty analysis travels with the evidence', () => {
       expect(typeof EN_DEFERRED[id]).toBe('string');
       expect(typeof ES_DEFERRED[id]).toBe('string');
     }
+  });
+});
+
+// =============================================================================
+// The real chain
+// -----------------------------------------------------------------------------
+// Everything above hands fromRvFit() a report object written by hand. That is
+// how the provenance gap survived: the fabricated reports carried fields the
+// production chain never produced, so the tests exercised a shape the
+// application does not build. These go through the actual one - a recording
+// payload of the shape js/radialVelocity.js hands over, loaded into the real
+// js/rvWorkspace.js, exported by its real exportReport(), and captured.
+// =============================================================================
+describe('provenance survives the chain the application actually uses', () => {
+  /** A recording payload of the shape recordingPayload() produces. */
+  const payload = (over = {}) => ({
+    points: Array.from({ length: 20 }, (_, i) => ({
+      day: i * 0.3,
+      rv: 40 * Math.sin((2 * Math.PI * i * 0.3) / 3.1) - 2,
+      sigma: 3,
+      quality: 'ok',
+      missed: false,
+    })),
+    target: 'HD 12345',
+    targetId: 7,
+    scenario: 'Exoplanet Characterization Lab',
+    seed: 'rec-1',
+    config: { cadenceDays: 0.3, baselineDays: 5.7, sigma: 3 },
+    geometry: { inclinationDeg: 80, positionAngleDeg: 10 },
+    units: { velocity: 'm/s', time: 'days', timeUnitSeconds: 158809.7 },
+    numerical: { integrator: 'verlet', maxTimestep: 0.5, simSpeed: 1 },
+    worldGeneration: 4,
+    recordedAt: '2026-01-02T03:04:05.000Z',
+    ...over,
+  });
+
+  /** The live world a student is looking at by the time they press save. */
+  const liveWorld = {
+    scenario: 'Solar System',
+    target: 'Sun (live)',
+    seed: 'live-seed',
+    worldGeneration: 99,
+    observer: { positionAngleDeg: 170, inclinationDeg: 20 },
+    integrator: 'yoshida',
+    timestep: 4,
+    simSpeed: 8,
+    referenceFrame: 'object:3',
+    revision: 'abc123',
+    revisionSource: 'deployed',
+    quality: { tier: 'reduced', fps: 31 },
+    simTimeUnits: 500,
+    simTimeSeconds: 500 * 158809.7,
+    simTimeDays: 1063,
+  };
+
+  /** Run a payload through the real workspace and capture the fit. */
+  async function capture(recording, live = liveWorld) {
+    const ws = await import('../js/rvWorkspace.js');
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    ws.resetWorkspace();
+    ws.loadRecording(recording);
+    ws.runSearch({ minPeriod: 1, maxPeriod: 8 });
+    const report = ws.exportReport();
+    const analysis = ws.analysis();
+    return fromRvFit({ analysis, report, provenance: live });
+  }
+
+  test('the observing geometry is the recording own, not the world on screen', async () => {
+    // The reproduction: 80 and 10 went in, 20 and 170 came out, because the
+    // workspace never carried the geometry and the capture filled the gap.
+    const entry = await capture(payload());
+    expect(entry.snapshot.provenance.observer).toEqual({
+      inclinationDeg: 80,
+      positionAngleDeg: 10,
+    });
+  });
+
+  test('the integration settings are the ones it was recorded under', async () => {
+    const entry = await capture(payload());
+    const n = entry.snapshot.provenance.numerical;
+    expect(n.integrator).toBe('verlet');
+    expect(n.maxTimestep).toBe(0.5);
+    expect(n.simSpeed).toBe(1);
+  });
+
+  test('the observation epochs are carried, with their unit', async () => {
+    const entry = await capture(payload());
+    const p = entry.snapshot.provenance;
+    expect(p.observedEpochs).toEqual({
+      count: 20,
+      firstDay: 0,
+      lastDay: 5.7,
+      spanDays: 5.7,
+      unit: 'days',
+    });
+    // And the live clock is not passed off as when the star was watched.
+    expect(p.simTimeDays).toBe(null);
+    expect(p.simTimeUnits).toBe(null);
+  });
+
+  test('the scenario, target and world are the recording own', async () => {
+    const entry = await capture(payload());
+    const p = entry.snapshot.provenance;
+    expect(p.scenario).toBe('Exoplanet Characterization Lab');
+    expect(p.target).toBe('HD 12345');
+    expect(p.seed).toBe('rec-1');
+    expect(p.worldGeneration).toBe(4);
+    expect(p.recordedAt).toBe('2026-01-02T03:04:05.000Z');
+    expect(p.units).toEqual({
+      velocity: 'm/s',
+      time: 'days',
+      timeUnitSeconds: 158809.7,
+    });
+  });
+
+  test('display and analysis metadata stay labelled as such', async () => {
+    const entry = await capture(payload());
+    const p = entry.snapshot.provenance;
+    // The frame the reader is viewing in is not the frame the samples were
+    // taken in, and the recording does not know the second one.
+    expect(p.referenceFrame).toBe(null);
+    expect(p.displayFrame).toBe('object:3');
+    // The build that did the arithmetic is a fact about the analysis.
+    expect(p.revision).toBe('abc123');
+    expect(p.quality).toEqual({ tier: 'reduced', fps: 31 });
+  });
+
+  test('an older recording that carries none of it says unknown', async () => {
+    // Restored from a file written before any of this was captured. Every
+    // missing field has to stay missing rather than being supplied from
+    // whatever world happens to be loaded.
+    const old = payload();
+    delete old.geometry;
+    delete old.numerical;
+    delete old.units;
+    delete old.recordedAt;
+    const entry = await capture(old);
+    const p = entry.snapshot.provenance;
+    expect(p.observer).toBe(null);
+    expect(p.numerical.integrator).toBe(null);
+    expect(p.numerical.maxTimestep).toBe(null);
+    // Units are the units of the numbers in the entry, which the workspace
+    // always knows: it computes in metres per second and days. What it must
+    // not do is invent the recording's own conversion factor, which is a fact
+    // about the world the samples came from.
+    expect(p.units).toEqual({ velocity: 'm/s', time: 'days' });
+    expect(p.units.timeUnitSeconds).toBeUndefined();
+    expect(p.recordedAt).toBe(null);
+    // What it does still know, it still says.
+    expect(p.scenario).toBe('Exoplanet Characterization Lab');
+    expect(p.observedEpochs.count).toBe(20);
+  });
+
+  test('changing the observer between recordings does not cross-contaminate', async () => {
+    const first = await capture(
+      payload({ geometry: { inclinationDeg: 80, positionAngleDeg: 10 } })
+    );
+    const second = await capture(
+      payload({
+        seed: 'rec-2',
+        geometry: { inclinationDeg: 35, positionAngleDeg: 200 },
+      })
+    );
+    expect(first.snapshot.provenance.observer.inclinationDeg).toBe(80);
+    expect(second.snapshot.provenance.observer.inclinationDeg).toBe(35);
+    // The first entry is immutable evidence and did not move.
+    expect(first.snapshot.provenance.seed).toBe('rec-1');
+    expect(second.snapshot.provenance.seed).toBe('rec-2');
   });
 });

@@ -267,26 +267,38 @@ test.describe('what a saved reading records', () => {
     expect(p.seed).toBe('seed-x');
     // From the running simulation, not from the recording.
     expect(p.worldGeneration).toBeGreaterThan(0);
-    // The clock is in simulation time UNITS. All three forms are recorded
-    // along with the factor, so a reader can check the arithmetic - and the
-    // day figure is no longer the raw clock divided by 86400.
-    expect(p.simTimeUnits).toBeGreaterThan(0);
+    // WHEN the observations happened, which for a recording is its own epochs
+    // and not the simulation clock at the moment somebody pressed save. The
+    // clock fields are the acquisition time, and a completed recording does
+    // not know one, so they are null and the epochs carry the answer.
+    expect(p.simTimeUnits).toBe(null);
+    expect(p.simTimeDays).toBe(null);
+    expect(p.observedEpochs.count).toBeGreaterThan(3);
+    expect(p.observedEpochs.unit).toBe('days');
+    expect(p.observedEpochs.spanDays).toBeGreaterThan(0);
+    expect(p.observedEpochs.lastDay).toBeGreaterThanOrEqual(
+      p.observedEpochs.firstDay
+    );
+    // The conversion factor is still recorded, because the numbers in the
+    // entry are in days and a reader has to be able to redo the arithmetic.
     expect(p.timeUnitSeconds).toBeGreaterThan(1);
-    expect(p.simTimeSeconds).toBeCloseTo(p.simTimeUnits * p.timeUnitSeconds, 3);
-    expect(p.simTimeDays).toBeCloseTo(p.simTimeSeconds / 86400, 6);
-    expect(p.simTimeDays).not.toBeCloseTo(p.simTimeUnits / 86400, 9);
     // A development server has no deployed commit and no build stamp, and the
     // honest record of that is null plus a source that says so - not the
     // string 'dev', which reads like a version and is not one.
     expect(['deployed', 'stamped', 'unknown']).toContain(p.revisionSource);
     if (p.revisionSource === 'unknown') expect(p.revision).toBe(null);
     else expect(p.revision).toBeTruthy();
-    expect(p.numerical.integrator).toBeTruthy();
-    expect(p.numerical.simSpeed).not.toBe(null);
-    expect(p.observer).toMatchObject({
-      positionAngleDeg: expect.any(Number),
-      inclinationDeg: expect.any(Number),
-    });
+    // This recording was handed to the workspace directly and carries no
+    // acquisition settings, so they stay unknown. Filling them from the world
+    // on screen would describe the sliders at the moment of saving as though
+    // they were the conditions the samples were produced under.
+    // e2e/rvLaunchPath.spec.js covers the other half: a recording made by the
+    // real sampler does carry them, and they reach the entry.
+    expect(p.numerical.integrator).toBe(null);
+    expect(p.numerical.maxTimestep).toBe(null);
+    // Same again for where it was watched from: this recording does not say,
+    // so the entry does not either.
+    expect(p.observer).toBe(null);
     expect(p.quality.tier).toBeTruthy();
     // A recording does not carry a reference frame: the frame is a display
     // choice made now, and writing the live one into the entry would have the

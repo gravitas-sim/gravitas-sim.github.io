@@ -54,15 +54,46 @@ function recordedProvenance(rec, report) {
   put('worldGeneration', rec.worldGeneration);
   put('interventionEpoch', rec.interventionEpoch);
   // The direction the star was watched from when the samples were taken, not
-  // wherever the sliders happen to be now.
-  if (rec.geometry) {
+  // wherever the sliders happen to be now. `observer` is what the workspace
+  // reports; `geometry` is the older payload shape, kept so a saved recording
+  // restored from a file still knows where it was looking from.
+  const geometry = rec.observer ?? rec.geometry;
+  if (geometry) {
     put('observer', {
-      positionAngleDeg: rec.geometry.positionAngleDeg ?? null,
-      inclinationDeg: rec.geometry.inclinationDeg ?? null,
+      positionAngleDeg: geometry.positionAngleDeg ?? null,
+      inclinationDeg: geometry.inclinationDeg ?? null,
     });
+  } else {
+    out.observer = null;
   }
   put('recordedAt', rec.recordedAt);
   put('scheduleFingerprint', rec.scheduleFingerprint);
+  put('units', rec.units);
+
+  // WHEN the observations happened, in their own units, as opposed to what the
+  // simulation clock said when somebody analysed them. Both used to arrive as
+  // one number and it was the second one.
+  put('observedEpochs', rec.epochs);
+  // The clock is deliberately not carried over from the live world for a
+  // recording: an analysis happened at the recording's own epochs, and the
+  // reading from whenever save was pressed is not when it was observed. Null
+  // is the honest answer, and observedEpochs above is the real one.
+  out.simTimeUnits = null;
+  out.simTimeSeconds = null;
+  out.simTimeDays = null;
+
+  // How the world was being integrated while the samples were produced. A
+  // recording that does not carry this leaves it unknown rather than being
+  // described by whatever the sliders say now.
+  if (rec.numerical) {
+    put('integrator', rec.numerical.integrator);
+    put('timestep', rec.numerical.maxTimestep ?? rec.numerical.timestep);
+    put('simSpeed', rec.numerical.simSpeed);
+  } else {
+    out.integrator = null;
+    out.timestep = null;
+    out.simSpeed = null;
+  }
 
   // The reference frame is the live world's, not the recording's, and it must
   // not masquerade as a historical fact.

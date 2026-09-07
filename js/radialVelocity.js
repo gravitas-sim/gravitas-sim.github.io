@@ -46,7 +46,7 @@ import { ensureChartJs } from './chartjs.js';
 import { formatNumber, withUnit } from './format.js';
 import { halfRangeOfSeries } from './exoplanetObservables.js';
 import { orbitalElements } from './orbital.js';
-import { current_scenario_name } from './appState.js';
+import { SETTINGS, current_scenario_name } from './appState.js';
 import {
   decideSampling,
   dropInvalidatedSamples,
@@ -162,6 +162,16 @@ function captureProvenance() {
       timeUnitSeconds: timeUnitSeconds(),
       velocity: 'm/s',
       time: 'days',
+    },
+    // How the world was being integrated while these samples were produced.
+    // Acquisition metadata, not display metadata: a recording made at a
+    // quarter-day step is not the same evidence as one made at four days, and
+    // reading the setting again when somebody presses save would describe
+    // whatever they had changed it to since.
+    numerical: {
+      integrator: SETTINGS.integrator ?? null,
+      maxTimestep: SETTINGS.max_timestep ?? null,
+      simSpeed: SETTINGS.sim_speed ?? null,
     },
     startedAt: new Date().toISOString(),
     truth: computeTruth(),
@@ -281,6 +291,10 @@ function recordingPayload(run) {
       positionAngleDeg: p.positionAngleDeg ?? null,
     },
     units: p.units ?? null,
+    // Null rather than the live settings when the recording predates this
+    // being captured. An unknown integrator is a fact; the current one
+    // presented as the historical one is not.
+    numerical: p.numerical ?? null,
     worldGeneration: p.worldGeneration ?? null,
     recordedAt: p.startedAt ?? null,
     openedAt: new Date().toISOString(),

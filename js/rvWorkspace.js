@@ -270,6 +270,30 @@ export function exportReport() {
       scheduleKind: source.config?.scheduleKind ?? null,
       scheduleEpochs: source.config?.scheduleEpochs ?? null,
       scheduleFingerprint: source.scheduleFingerprint ?? null,
+
+      // --- The rest of the acquisition metadata -------------------------
+      //
+      // These used to stop here, and everything downstream filled the gap
+      // from the world on screen: a recording taken at inclination 80 and
+      // position angle 10 was written into a notebook entry as 20 and 170,
+      // because that is where the sliders happened to be when somebody
+      // pressed save. A recording's conditions are historical facts, and the
+      // ones it does not carry have to stay unknown rather than be supplied
+      // from the present.
+      targetId: source.targetId ?? null,
+      /** Where the star was watched from when the samples were taken. */
+      observer: source.geometry
+        ? {
+            inclinationDeg: source.geometry.inclinationDeg ?? null,
+            positionAngleDeg: source.geometry.positionAngleDeg ?? null,
+          }
+        : null,
+      /** The scales the measurements are expressed in. */
+      units: source.units ?? null,
+      /** How the world was being integrated while they were produced. */
+      numerical: source.numerical ?? null,
+      /** When the observations happened, in the recording's own units. */
+      epochs: epochSpan(source.points),
     },
     truthRevealed: revealed,
     truth: revealed ? truthParameters() : null,
@@ -300,6 +324,32 @@ export function exportReport() {
  * out what the reader had clicked would be the wrong way round.
  */
 let uncertaintyFor = null;
+
+/**
+ * When the observations happened, explicitly and in their own units.
+ *
+ * The acquisition time of a recording, which is not the simulation clock at
+ * the moment somebody analysed it. Both used to reach a notebook entry as one
+ * number, and it was the second one.
+ *
+ * @param {Array<object>} points - The recording's measurements
+ * @returns {?object} The span, or null with nothing to span
+ */
+function epochSpan(points) {
+  const days = (points || [])
+    .map(p => Number(p.day))
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+  if (!days.length) return null;
+  return {
+    count: days.length,
+    firstDay: days[0],
+    lastDay: days[days.length - 1],
+    spanDays: days[days.length - 1] - days[0],
+    /** Named, because "3.5" is not a time until it has one. */
+    unit: 'days',
+  };
+}
 
 /** Called when a new recording is loaded, so the panel can drop its report. */
 let onRecordingChanged = null;
