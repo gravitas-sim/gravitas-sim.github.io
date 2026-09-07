@@ -11,6 +11,7 @@ import {
   phaseCoverage,
   surveyStats,
 } from '../js/rvSurvey.js';
+import { SCHEDULE } from '../js/rvSchedule.js';
 
 // =============================================================================
 // Synthetic observing runs
@@ -515,6 +516,38 @@ describe('epochs nobody observed are missed, not invented', () => {
     survey.observe(2.0, signal(2.0));
     const missed = survey.measurements().filter(m => m.missed);
     expect(missed.length).toBeGreaterThan(0);
+  });
+
+  test('a short closure is caught by suspend where the gap rule cannot see it', () => {
+    // The sharp case, and the reason the panel has to suspend BOTH arms of a
+    // comparison rather than only the one it happens to hold a reference to.
+    // A clustered schedule has a large maximum spacing, so the "readings more
+    // than a whole cadence apart" rule tolerates a closure that nevertheless
+    // spans one of its tight in-cluster epochs. Only an explicit suspend
+    // records that epoch as missed; without it the panel reports a clean
+    // measurement of an instant nobody was watching.
+    const clustered = {
+      kind: SCHEDULE.CLUSTERED,
+      epochs: 9,
+      baselineDays: 30,
+      clusters: 3,
+      tightDays: 0.05,
+      sigmaMs: 0,
+      seed: 'short-closure',
+    };
+    const withSuspend = createSurvey(clustered);
+    const without = createSurvey(clustered);
+
+    // Both observe the first epoch of the first cluster.
+    for (const s of [withSuspend, without]) s.observe(0, signal(0));
+    // One is told the panel closed; the other is not. Time passes by less than
+    // the schedule's own longest spacing, but past the next tight epoch.
+    withSuspend.suspend(0);
+    for (const s of [withSuspend, without]) s.observe(0.06, signal(0.06));
+
+    const missedIn = s => s.measurements().filter(m => m.missed).length;
+    expect(missedIn(withSuspend)).toBeGreaterThan(0);
+    expect(missedIn(without)).toBe(0);
   });
 
   test('missed epochs stay out of the statistics by default', () => {

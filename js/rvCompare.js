@@ -29,7 +29,7 @@
 //     would show the reader a coverage they could not have computed.
 // =============================================================================
 
-import { periodSearch } from './rvFit.js';
+import { MODEL_PARAMETERS, periodSearch, usablePoints } from './rvFit.js';
 import {
   phaseCoverageDetail,
   scheduleFingerprint,
@@ -54,7 +54,7 @@ export const CAVEAT = Object.freeze({
   IDENTICAL: 'identicalSchedules',
   /** An arm has too few measurements to fit at all. */
   UNFITTABLE: 'unfittable',
-  /** An arm did not complete its plan. */
+  /** An arm did not complete its plan, or lost points from it. */
   INCOMPLETE: 'incomplete',
   /** The arms disagree, and the disagreement sits on a window peak. */
   ALIAS: 'aliasDifference',
@@ -126,19 +126,51 @@ function atSearchBound(search, opts) {
 /**
  * Measure one arm of the comparison.
  *
+ * Five different counts live in here and they are not interchangeable, which
+ * is the whole reason this used to lie. A schedule PLANS epochs; a run ATTEMPTS
+ * them and returns a row for each, including the ones it MISSED, which carry no
+ * velocity at all; of the rows that do carry one, some are EXCLUDED by the
+ * fitting policy - unreadable, no usable uncertainty, or degraded; and what is
+ * left is what was USED. Reporting the row count as "measurements taken" and
+ * handing the rows straight to the fitter counted a missed epoch as an
+ * observation and let its null velocity into the arithmetic as a zero, so an
+ * arm that lost half its nights to weather reported a full run and a confident
+ * period.
+ *
  * @param {object} arm - {label, kind, plan, measurements}
- * @param {object} opts - {minPeriod, maxPeriod, samples}
+ * @param {object} opts - {minPeriod, maxPeriod, samples, keepDegraded}
  * @returns {object} The arm's report
  */
 export function describeArm(arm, opts = {}) {
   const measurements = Array.isArray(arm?.measurements) ? arm.measurements : [];
-  const times = days(measurements);
-  const spacings = spacingsOf(times);
-  const span = times.length ? Math.max(...times) - Math.min(...times) : 0;
 
+  // The same filter the workspace fits through. Sharing it is the point: an
+  // arm scored under one policy and read under another is not evidence about
+  // either.
+  const { usable, counts } = usablePoints(measurements, {
+    keepDegraded: Boolean(opts.keepDegraded),
+  });
+
+  const usedTimes = days(usable);
+  const spacings = spacingsOf(usedTimes);
+  const span = usedTimes.length
+    ? Math.max(...usedTimes) - Math.min(...usedTimes)
+    : 0;
+  // What the run attempted, as opposed to what it came back with. A gap in the
+  // middle leaves the attempted span intact and the observed span shorter only
+  // if the loss was at an end, and the difference between those two numbers is
+  // itself worth seeing.
+  const attemptedTimes = days(measurements);
+  const attemptedSpan = attemptedTimes.length
+    ? Math.max(...attemptedTimes) - Math.min(...attemptedTimes)
+    : 0;
+
+  // A fit needs more points than it has parameters. Four points and four
+  // parameters is not a measurement, it is an interpolation, so the floor is
+  // one clear of the model.
   const search =
-    measurements.length >= 4
-      ? periodSearch(measurements, {
+    usable.length > MODEL_PARAMETERS
+      ? periodSearch(usable, {
           minPeriod: opts.minPeriod,
           maxPeriod: opts.maxPeriod,
           samples: opts.samples,
@@ -161,22 +193,63 @@ export function describeArm(arm, opts = {}) {
     }
   }
 
-  const window = spectralWindow(times);
+  // Two windows, and they answer two questions. The planned one is a property
+  // of the schedule and can be computed before observing anything, which is
+  // what makes it worth arguing a proposal from. The observed one is the
+  // window of the data that was actually fitted, and it is the one that
+  // explains the fit in hand. They are the same only when nothing was lost.
+  const plannedTimes = (arm?.plan?.epochs || [])
+    .map(e => Number(e.offset))
+    .filter(Number.isFinite);
+  const plannedWindow = spectralWindow(plannedTimes);
+  const window = spectralWindow(usedTimes);
   const fitted = search?.bestPeriod ?? null;
+
+  const planned = Number.isFinite(arm?.plan?.planned) ? arm.plan.planned : null;
+  const summarise = w =>
+    w
+      ? {
+          worstPeak: w.worstPeak,
+          peaks: w.peaks.slice(0, 3).map(p => ({
+            frequency: p.frequency,
+            periodDays: p.period,
+            power: p.power,
+          })),
+        }
+      : null;
 
   return {
     label: arm?.label ?? null,
     kind: arm?.kind ?? arm?.plan?.kind ?? null,
     fingerprint: arm?.plan ? scheduleFingerprint(arm.plan) : null,
-    planned: Number.isFinite(arm?.plan?.planned) ? arm.plan.planned : null,
-    taken: measurements.length,
-    missed:
-      Number.isFinite(arm?.plan?.planned) &&
-      arm.plan.planned >= measurements.length
-        ? arm.plan.planned - measurements.length
+    /** Epochs the schedule asked for, after its own gaps. */
+    planned,
+    /** Rows the run produced, missed epochs included. */
+    attempted: measurements.length,
+    /** Rows carrying a velocity, before the fitting policy is applied. */
+    taken: measurements.length - counts.missed,
+    /** Rows carrying no velocity at all. */
+    missed: counts.missed,
+    /** Epochs the run never reached, as opposed to reached and lost. */
+    notReached:
+      planned !== null && planned > measurements.length
+        ? planned - measurements.length
         : 0,
     droppedToGaps: Number.isFinite(arm?.plan?.dropped) ? arm.plan.dropped : 0,
+    /** What the fit was computed from. */
+    used: usable.length,
+    /** Why the rest were left out. */
+    excluded: {
+      missed: counts.missed,
+      notFinite: counts.notFinite,
+      badSigma: counts.badSigma,
+      degraded: counts.degraded,
+      degradedKept: counts.degradedKept,
+    },
+    /** First to last of the points that were fitted. */
     spanDays: span,
+    /** First to last of everything the run attempted. */
+    attemptedSpanDays: attemptedSpan,
     minSpacingDays: spacings.length ? Math.min(...spacings) : 0,
     medianSpacingDays: median(spacings),
     maxSpacingDays: spacings.length ? Math.max(...spacings) : 0,
@@ -191,19 +264,13 @@ export function describeArm(arm, opts = {}) {
           runnerUp,
         }
       : null,
-    // Folded on the fitted period, never on the truth. Without a fit there is
-    // no period to fold on and the honest answer is that we cannot say.
-    coverage: fitted ? phaseCoverageDetail(times, fitted) : null,
-    window: window
-      ? {
-          worstPeak: window.worstPeak,
-          peaks: window.peaks.slice(0, 3).map(p => ({
-            frequency: p.frequency,
-            periodDays: p.period,
-            power: p.power,
-          })),
-        }
-      : null,
+    // Folded on the fitted period, never on the truth, and over the points
+    // that were fitted rather than over the epochs that were planned. Without
+    // a fit there is no period to fold on and the honest answer is that we
+    // cannot say.
+    coverage: fitted ? phaseCoverageDetail(usedTimes, fitted) : null,
+    window: summarise(window),
+    plannedWindow: summarise(plannedWindow),
   };
 }
 
@@ -220,7 +287,12 @@ export function checkControls(a, b, held = {}) {
   const broken = [];
   const note = (control, left, right) => broken.push({ control, left, right });
 
-  if (a.taken !== b.taken) note(CONTROL.COUNT, a.taken, b.taken);
+  // Compared on the points that were FITTED, not on the rows that came back.
+  // Two arms with the same number of rows are not a controlled comparison if
+  // one of them lost half its velocities: the fits then differ in how much
+  // data went into them as well as in when it was taken, and no difference in
+  // the answers can be attributed to either.
+  if (a.used !== b.used) note(CONTROL.COUNT, a.used, b.used);
 
   // Baselines are compared on what was actually observed rather than on what
   // was planned, and loosely: two schedules of the same span place their last
@@ -329,7 +401,12 @@ export function compareSchedules(armA, armB, opts = {}) {
   if (a.fingerprint && a.fingerprint === b.fingerprint)
     caveats.push(CAVEAT.IDENTICAL);
   if (!a.fit || !b.fit) caveats.push(CAVEAT.UNFITTABLE);
-  if (a.missed > 0 || b.missed > 0) caveats.push(CAVEAT.INCOMPLETE);
+  // Anything that means an arm was fitted on less than it planned: epochs it
+  // never reached, epochs it reached and missed, and points the fitting policy
+  // held out.
+  const short = arm =>
+    arm.notReached > 0 || arm.missed > 0 || arm.used < arm.taken;
+  if (short(a) || short(b)) caveats.push(CAVEAT.INCOMPLETE);
   if (a.fit?.atBound || b.fit?.atBound) caveats.push(CAVEAT.AT_BOUND);
   if (alias) caveats.push(CAVEAT.ALIAS);
 

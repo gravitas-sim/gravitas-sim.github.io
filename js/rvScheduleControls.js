@@ -166,7 +166,11 @@ export function comparisonText(ctx) {
   const line = arm =>
     t('rvsched.compare.arm', {
       kind: t(`rvsched.shape.${arm.kind}`),
-      taken: arm.taken,
+      // What the fit was computed from, which is not the number of rows the
+      // run produced: an epoch that came back without a velocity is a row and
+      // not an observation.
+      used: arm.used,
+      planned: arm.planned ?? arm.attempted,
       period: arm.fit ? formatNumber(arm.fit.periodDays, { sig: 4 }) : '—',
       k: arm.fit?.amplitudeMs
         ? formatNumber(arm.fit.amplitudeMs, { sig: 3 })
@@ -178,6 +182,48 @@ export function comparisonText(ctx) {
     });
 
   const parts = [line(a), line(b)];
+
+  // What each arm lost, and to what. Silence here would let a run that was
+  // fitted on half its nights read exactly like one that got them all.
+  for (const arm of [a, b]) {
+    const lost = [];
+    if (arm.notReached)
+      lost.push(t('rvsched.compare.lost.notReached', { n: arm.notReached }));
+    if (arm.missed)
+      lost.push(t('rvsched.compare.lost.missed', { n: arm.missed }));
+    if (arm.excluded?.degraded && !arm.excluded.degradedKept)
+      lost.push(
+        t('rvsched.compare.lost.degraded', { n: arm.excluded.degraded })
+      );
+    const other =
+      (arm.excluded?.notFinite ?? 0) + (arm.excluded?.badSigma ?? 0);
+    if (other) lost.push(t('rvsched.compare.lost.unusable', { n: other }));
+    if (lost.length) {
+      parts.push(
+        t('rvsched.compare.lost', {
+          kind: t(`rvsched.shape.${arm.kind}`),
+          list: lost.join(', '),
+        })
+      );
+    }
+  }
+
+  // The window of the times that were fitted is not the window of the times
+  // that were planned once anything has been lost, and the second is the one a
+  // proposal was argued from.
+  for (const arm of [a, b]) {
+    const planned = arm.plannedWindow?.worstPeak;
+    const observed = arm.window?.worstPeak;
+    if (!Number.isFinite(planned) || !Number.isFinite(observed)) continue;
+    if (Math.abs(planned - observed) < 0.01) continue;
+    parts.push(
+      t('rvsched.compare.windowMoved', {
+        kind: t(`rvsched.shape.${arm.kind}`),
+        planned: formatNumber(planned * 100, { sig: 2 }),
+        observed: formatNumber(observed * 100, { sig: 2 }),
+      })
+    );
+  }
 
   // The range both arms were searched over. A period is only ever "the best
   // fit in this range", and a reader who cannot see the range cannot tell a

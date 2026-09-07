@@ -1782,7 +1782,7 @@ export const EN_DEFERRED = {
   'rvsched.compare.waiting':
     'Observing both schedules: {a} and {b} of {planned}. The comparison appears when both are finished.',
   'rvsched.compare.arm':
-    '{kind}: {taken} measurements, best period {period} d, K {k} m/s, largest unobserved arc {hole}% of the cycle, worst window peak {alias}%.',
+    '{kind}: {used} of {planned} epochs fitted, best period {period} d, K {k} m/s, largest unobserved arc {hole}% of the cycle, worst window peak {alias}%.',
   'rvsched.compare.agree':
     'Both schedules land on the same period, within the {tolerance} d this baseline can resolve.',
   'rvsched.compare.disagree':
@@ -1797,6 +1797,14 @@ export const EN_DEFERRED = {
   'rvsched.compare.control.seed': 'the noise seed',
   'rvsched.compare.control.system': 'the star',
   'rvsched.compare.control.noiseModel': 'the noise model',
+  'rvsched.compare.lost':
+    'The {kind} arm did not fit everything it planned: {list}.',
+  'rvsched.compare.lost.notReached': '{n} epochs never reached',
+  'rvsched.compare.lost.missed': '{n} epochs observed as missed',
+  'rvsched.compare.lost.degraded': '{n} degraded readings held out of the fit',
+  'rvsched.compare.lost.unusable': '{n} readings without a usable value',
+  'rvsched.compare.windowMoved':
+    'What the {kind} schedule planned and what it actually sampled are not the same window: worst peak {planned}% planned against {observed}% observed.',
   'rvsched.compare.range':
     'Both arms were searched over the same range, {min} to {max} days: a best period is the best fit inside a range, and outside it nothing was tried.',
   'rvsched.compare.atBound':

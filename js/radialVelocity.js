@@ -312,6 +312,18 @@ let compareReport = null;
 let compareBounds = null;
 /** Whether the comparison has been computed for the recordings now in hand. */
 let compareStale = true;
+/**
+ * Which generation of observing the panel is on.
+ *
+ * Bumped by everything that ends or replaces a run: a restart, a stop, a
+ * schedule change, a world rebuild. Every asynchronous step that installs or
+ * publishes something captures it first and gives up if it has moved, because
+ * all of them have an await in the middle - the survey library, the comparison
+ * library, the period searches - and without this a slow restart could install
+ * its survey after a faster one, or a comparison begun before the reader
+ * switched observing off could publish its result afterwards.
+ */
+let surveyGeneration = 0;
 
 /** @returns {Promise<object>} The survey module */
 async function loadSurveyLib() {
@@ -1072,7 +1084,19 @@ function cadenceEpochCount() {
  * session machinery exists to prevent.
  */
 async function restartSurvey() {
+  const generation = ++surveyGeneration;
   const lib = await loadSurveyLib();
+  // Both libraries are fetched before anything is installed, so the two arms
+  // are created in one synchronous block against one world rather than either
+  // side of a second await.
+  const wanted = comparisonWanted();
+  if (wanted) await loadCompareLib();
+  // Overtaken while those were in flight: another restart, a stop, a rebuild.
+  // Installing now would revive a run the reader has already ended or replace
+  // a newer one with an older one.
+  if (generation !== surveyGeneration) return;
+
+  const e = cacheElements();
   survey = lib.createSurvey(readSurveyControls());
   surveyConfig = survey.config;
 
@@ -1080,22 +1104,19 @@ async function restartSurvey() {
   // are created here, together, so neither can start against a world the other
   // did not see.
   compareReport = null;
+  compareBounds = null;
   compareStale = true;
-  if (comparisonWanted()) {
-    const e = cacheElements();
-    await loadCompareLib();
-    compareSurvey = lib.createSurvey(
-      readSurveyControls(e.compareShape?.value || 'irregular')
-    );
-  } else {
-    compareSurvey = null;
-  }
+  compareSurvey = wanted
+    ? lib.createSurvey(readSurveyControls(e.compareShape?.value || 'irregular'))
+    : null;
+
   // Who and how, captured when the run starts and never re-read. What a file
   // says it observed has to be what was observed, not what the panel happens
   // to be pointed at when somebody presses Export.
   surveyProvenance = captureProvenance();
   applySurveyStyling();
   renderSurveyStatus();
+  renderCompareReport();
 }
 
 /**
@@ -1108,6 +1129,7 @@ async function restartSurvey() {
  */
 function resetSurvey() {
   if (!survey) return;
+  surveyGeneration++;
   survey.reset();
   compareSurvey?.reset();
   compareReport = null;
@@ -1119,6 +1141,7 @@ function resetSurvey() {
 
 /** Stop observing on a schedule and go back to the continuous curve. */
 function stopSurvey() {
+  surveyGeneration++;
   survey = null;
   compareSurvey = null;
   compareReport = null;
@@ -1217,12 +1240,19 @@ function maybeCompare() {
   if (!compareSurvey || !survey || !compareStale) return;
   if (!survey.isComplete() || !compareSurvey.isComplete()) return;
   compareStale = false;
+  // The run this comparison belongs to. The period searches below are a slow
+  // await, and a reader who changes a setting or switches observing off while
+  // they are running must not be shown their result afterwards.
+  const generation = surveyGeneration;
+  const armA = survey;
+  const armB = compareSurvey;
 
   loadCompareLib()
     .then(lib => {
+      if (generation !== surveyGeneration || survey !== armA) return;
       const bounds = controlsLib.comparisonBounds([
-        survey.measurements(),
-        compareSurvey.measurements(),
+        armA.measurements(),
+        armB.measurements(),
       ]);
       compareBounds = bounds;
       if (!bounds) {
@@ -1230,20 +1260,20 @@ function maybeCompare() {
         renderCompareReport();
         return;
       }
-      const a = survey.config;
-      const b = compareSurvey.config;
-      compareReport = lib.compareSchedules(
+      const a = armA.config;
+      const b = armB.config;
+      const report = lib.compareSchedules(
         {
           label: 'A',
           kind: a.kind ?? 'regular',
           plan: a.plan,
-          measurements: survey.measurements(),
+          measurements: armA.measurements(),
         },
         {
           label: 'B',
           kind: b.kind ?? 'regular',
           plan: b.plan,
-          measurements: compareSurvey.measurements(),
+          measurements: armB.measurements(),
         },
         {
           ...bounds,
@@ -1260,9 +1290,14 @@ function maybeCompare() {
           },
         }
       );
+      // Checked again on the way out: the searches take long enough that the
+      // world can have moved on since the check on the way in.
+      if (generation !== surveyGeneration || survey !== armA) return;
+      compareReport = report;
       renderCompareReport();
     })
     .catch(() => {
+      if (generation !== surveyGeneration) return;
       compareReport = null;
       renderCompareReport();
     });
@@ -1502,7 +1537,14 @@ export function setRadialVelocityEnabled(on) {
     // A run does not end when the panel is hidden, but observing stops. Epochs
     // that fall due before it reopens are recorded as missed rather than
     // reconstructed from the two readings either side of the gap.
-    survey?.suspend(currentTimeDays());
+    //
+    // Both arms, or the comparison stops being one: suspending only the first
+    // left the second observing through a closed panel, so the two recordings
+    // then differed in how long anybody was watching as well as in when they
+    // looked.
+    const now = currentTimeDays();
+    survey?.suspend(now);
+    compareSurvey?.suspend(now);
 
     // Closed means closed: listeners released, so an unopened panel costs
     // nothing and reopening does not stack a second subscription.

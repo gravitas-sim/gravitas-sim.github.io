@@ -1806,7 +1806,7 @@ export const ES_DEFERRED = {
   'rvsched.compare.waiting':
     'Observando ambos calendarios: {a} y {b} de {planned}. La comparacion aparece cuando ambos terminen.',
   'rvsched.compare.arm':
-    '{kind}: {taken} medidas, mejor periodo {period} d, K {k} m/s, mayor arco sin observar {hole}% del ciclo, pico de ventana peor {alias}%.',
+    '{kind}: {used} de {planned} epocas ajustadas, mejor periodo {period} d, K {k} m/s, mayor arco sin observar {hole}% del ciclo, pico de ventana peor {alias}%.',
   'rvsched.compare.agree':
     'Ambos calendarios dan el mismo periodo, dentro de los {tolerance} d que esta linea de base puede resolver.',
   'rvsched.compare.disagree':
@@ -1821,6 +1821,15 @@ export const ES_DEFERRED = {
   'rvsched.compare.control.seed': 'la semilla de ruido',
   'rvsched.compare.control.system': 'la estrella',
   'rvsched.compare.control.noiseModel': 'el modelo de ruido',
+  'rvsched.compare.lost':
+    'El brazo {kind} no ajusto todo lo que planifico: {list}.',
+  'rvsched.compare.lost.notReached': '{n} epocas nunca alcanzadas',
+  'rvsched.compare.lost.missed': '{n} epocas observadas como perdidas',
+  'rvsched.compare.lost.degraded':
+    '{n} lecturas degradadas excluidas del ajuste',
+  'rvsched.compare.lost.unusable': '{n} lecturas sin un valor utilizable',
+  'rvsched.compare.windowMoved':
+    'Lo que planifico el calendario {kind} y lo que realmente muestreo no son la misma ventana: pico peor del {planned}% planificado frente al {observed}% observado.',
   'rvsched.compare.range':
     'Ambos brazos se exploraron en el mismo rango, de {min} a {max} dias: el mejor periodo es el mejor ajuste dentro de un rango, y fuera de el no se probo nada.',
   'rvsched.compare.atBound':

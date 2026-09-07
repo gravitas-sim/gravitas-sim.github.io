@@ -89,18 +89,93 @@ describe('describing one arm', () => {
     expect(arm.coverage.largestGap).toBeLessThan(1);
   });
 
-  test('epochs the run never took are counted as missed', () => {
+  test('epochs the run never reached are counted apart from missed ones', () => {
+    // Never reached and reached-but-missed are different failures. One is a
+    // run that stopped early; the other is weather.
     const arm = describeArm(
       { plan, measurements: observe(plan).slice(0, 20) },
       BOUNDS
     );
-    expect(arm.missed).toBe(4);
+    expect(arm.notReached).toBe(4);
+    expect(arm.missed).toBe(0);
+    expect(arm.attempted).toBe(20);
+    expect(arm.used).toBe(20);
+  });
+
+  test('a missed epoch is a row with no velocity, not an observation', () => {
+    // The defect this replaces: the rows went straight to the fitter, so a
+    // null velocity entered the arithmetic as a zero and the arm reported a
+    // full run.
+    const points = observe(plan).map((p, i) =>
+      i % 2 === 0 ? { ...p, rv: null, quality: 'missed', missed: true } : p
+    );
+    const arm = describeArm({ plan, measurements: points }, BOUNDS);
+    expect(arm.attempted).toBe(24);
+    expect(arm.taken).toBe(12);
+    expect(arm.missed).toBe(12);
+    expect(arm.used).toBe(12);
+    expect(arm.excluded.missed).toBe(12);
+    // And the fit is the fit of the twelve that exist.
+    expect(arm.fit.periodDays).toBeCloseTo(PERIOD, 1);
+  });
+
+  test('degraded points are held out of the fit and counted', () => {
+    const points = observe(plan).map((p, i) =>
+      i < 6 ? { ...p, quality: 'degraded', interpolationError: 4 } : p
+    );
+    const arm = describeArm({ plan, measurements: points }, BOUNDS);
+    expect(arm.taken).toBe(24);
+    expect(arm.used).toBe(18);
+    expect(arm.excluded.degraded).toBe(6);
+    // Unless the caller says to keep them, in which case their uncertainty is
+    // widened rather than their exclusion reversed silently.
+    const kept = describeArm(
+      { plan, measurements: points },
+      { ...BOUNDS, keepDegraded: true }
+    );
+    expect(kept.used).toBe(24);
+    expect(kept.excluded.degradedKept).toBe(6);
+  });
+
+  test('an arm with nothing usable is refused a fit', () => {
+    const points = observe(plan).map(p => ({
+      ...p,
+      rv: null,
+      quality: 'missed',
+      missed: true,
+    }));
+    const arm = describeArm({ plan, measurements: points }, BOUNDS);
+    expect(arm.used).toBe(0);
+    expect(arm.fit).toBe(null);
+    expect(arm.coverage).toBe(null);
+  });
+
+  test('too few usable points is refused a fit, not fitted anyway', () => {
+    // Four points and four parameters is an interpolation, not a measurement.
+    const arm = describeArm(
+      { plan, measurements: observe(plan).slice(0, 4) },
+      BOUNDS
+    );
+    expect(arm.fit).toBe(null);
+  });
+
+  test('the observed window is the window of the points that were fitted', () => {
+    const points = observe(plan).map((p, i) =>
+      i % 2 === 0 ? { ...p, rv: null, quality: 'missed', missed: true } : p
+    );
+    const arm = describeArm({ plan, measurements: points }, BOUNDS);
+    // The planned window is a property of the schedule and survives the
+    // weather; the observed one describes half as many nights, so they differ.
+    expect(arm.plannedWindow.worstPeak).not.toBeCloseTo(
+      arm.window.worstPeak,
+      6
+    );
   });
 });
 
 describe('the controls', () => {
-  const left = { taken: 20, spanDays: 30 };
-  const right = { taken: 20, spanDays: 30 };
+  const left = { taken: 20, used: 20, spanDays: 30 };
+  const right = { taken: 20, used: 20, spanDays: 30 };
 
   test('equal counts, spans, noise and seed is a controlled comparison', () => {
     const out = checkControls(left, right, {
@@ -113,7 +188,15 @@ describe('the controls', () => {
   });
 
   test('a different count is a broken control, not a footnote', () => {
-    const out = checkControls(left, { taken: 18, spanDays: 30 });
+    const out = checkControls(left, { taken: 18, used: 18, spanDays: 30 });
+    expect(out.controlled).toBe(false);
+    expect(out.broken[0].control).toBe(CONTROL.COUNT);
+  });
+
+  test('the same rows fitted on different numbers of points is not controlled', () => {
+    // Both arms came back with twenty rows and one of them lost six of its
+    // velocities. That is not a comparison of scheduling.
+    const out = checkControls(left, { taken: 20, used: 14, spanDays: 30 });
     expect(out.controlled).toBe(false);
     expect(out.broken[0].control).toBe(CONTROL.COUNT);
   });

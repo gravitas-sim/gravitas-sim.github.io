@@ -164,9 +164,12 @@ test.describe('comparing two schedules', () => {
 
     const s = await state(page);
     const [a, b] = s.report.arms;
-    // Same count, same span, same noise: only the times differ.
-    expect(a.taken).toBe(10);
-    expect(b.taken).toBe(10);
+    // Same count, same span, same noise: only the times differ. Counted on the
+    // points that were fitted, which is the number the comparison rests on.
+    expect(a.used).toBe(10);
+    expect(b.used).toBe(10);
+    expect(a.missed).toBe(0);
+    expect(b.missed).toBe(0);
     expect(s.report.controls.controlled).toBe(true);
     expect(a.fingerprint).not.toBe(b.fingerprint);
     // The caveat that can never be dropped.
@@ -194,6 +197,118 @@ test.describe('comparing two schedules', () => {
       /\bbetter than\b|\bwins\b|\bbest schedule\b/i
     );
     expect(JSON.stringify(s.report)).not.toMatch(/"winner"|"better"/);
+  });
+});
+
+test.describe('both arms have one lifecycle', () => {
+  test('closing the panel stops both arms, not just the first', async ({
+    page,
+    app,
+  }) => {
+    // tests/rvSurvey.test.js has the sharp case - a closure too short for the
+    // gap heuristic to notice, which only an explicit suspend records as
+    // missed. This is the wiring: that the panel calls it on both arms, so the
+    // two recordings do not differ in how long anybody was watching.
+    test.setTimeout(180000);
+    await openRv(page, app);
+    await page.locator('#rvSurveyBaseline').fill('2');
+    await page.locator('#rvSurveyCompareEnabled').check();
+    await page.locator('#rvSurveyShapeB').selectOption('irregular');
+    await page.locator('#rvSurveyEpochs').fill('12');
+    await page.locator('#rvSurveyEpochs').blur();
+
+    await expect
+      .poll(async () => (await state(page)).taken, { timeout: 60000 })
+      .toBeGreaterThanOrEqual(2);
+
+    // Closed, and then time passes.
+    await page.locator('#rvClose').click();
+    await page.waitForTimeout(2000);
+    await page.locator('#toggleRadialVelocity').click();
+    await expect(page.locator('#rvContainer')).toBeVisible();
+
+    // Both arms recorded the epochs that fell due while nobody was watching as
+    // missed, rather than one of them inventing values across the closure.
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async () => {
+            const rv = await import('/js/radialVelocity.js');
+            const cmp = rv.radialVelocityComparison();
+            const missedIn = ms => ms.filter(m => m.missed).length;
+            return {
+              a: missedIn(rv.radialVelocitySurvey().measurements),
+              b: missedIn(cmp.second.measurements),
+            };
+          }),
+        { timeout: 60000 }
+      )
+      .toEqual(expect.objectContaining({ a: expect.any(Number) }));
+
+    const missed = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const cmp = rv.radialVelocityComparison();
+      const missedIn = ms => ms.filter(m => m.missed).length;
+      return {
+        a: missedIn(rv.radialVelocitySurvey().measurements),
+        b: missedIn(cmp.second.measurements),
+      };
+    });
+    expect(missed.a).toBeGreaterThan(0);
+    expect(missed.b).toBeGreaterThan(0);
+  });
+
+  test('a rapid change of schedule cannot install the older run', async ({
+    page,
+    app,
+  }) => {
+    // Both restarts are asynchronous - the survey and comparison libraries are
+    // fetched in the middle - so without a generation the slower one installs
+    // its survey after the faster one and the panel observes a schedule the
+    // reader has already replaced.
+    await openRv(page, app);
+    await page.locator('#rvSurveyBaseline').fill('3');
+    await page.evaluate(() => {
+      const shape = document.getElementById('rvSurveyShape');
+      const epochs = document.getElementById('rvSurveyEpochs');
+      const fire = el =>
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      shape.value = 'irregular';
+      fire(shape);
+      epochs.value = '9';
+      fire(epochs);
+      shape.value = 'clustered';
+      fire(shape);
+    });
+    await expect
+      .poll(async () => (await state(page)).kind, { timeout: 20000 })
+      .toBe('clustered');
+    // And it stays there: the earlier restart must not arrive late.
+    await page.waitForTimeout(1000);
+    expect((await state(page)).kind).toBe('clustered');
+  });
+
+  test('switching observing off cannot be undone by a restart in flight', async ({
+    page,
+    app,
+  }) => {
+    await openRv(page, app);
+    await page.evaluate(() => {
+      const shape = document.getElementById('rvSurveyShape');
+      shape.value = 'irregular';
+      shape.dispatchEvent(new Event('change', { bubbles: true }));
+      document.getElementById('rvSurveyEnabled').click();
+    });
+    await page.waitForTimeout(1500);
+    const running = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      return {
+        survey: rv.isSurveyRunning(),
+        comparison: rv.radialVelocityComparison(),
+      };
+    });
+    expect(running.survey).toBe(false);
+    expect(running.comparison).toBe(null);
   });
 });
 
