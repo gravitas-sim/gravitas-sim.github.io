@@ -190,7 +190,7 @@ export const MANIFEST = [
       'Un planeta está ahí o no está, pero que lo encuentres depende de decisiones que tomas antes de hacer una sola medida. Planifica dos campañas de observación de la misma estrella, con el mismo instrumento y el mismo número de noches, y descubre que una encuentra un Júpiter y la otra no puede decirte absolutamente nada.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
-    stepCount: 25,
+    stepCount: 26,
     gradedCount: 13,
     objectiveCount: 8,
   },

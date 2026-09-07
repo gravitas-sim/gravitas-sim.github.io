@@ -1681,29 +1681,70 @@ const surveySchedule = {
 // A transit is a box a few hundred parts per million deep. Whether you can see
 // it is a race between that depth and everything else that makes a star's
 // brightness wobble, and the instructive part is that the competitors do not
-// behave alike:
+// behave alike. There are THREE of them here, not two, and the middle one is
+// the one this widget used to get wrong.
 //
-//   white noise   photons and readout. Averages down as the square root of the
-//                 time spent, so more observing always helps.
-//   red noise     starspots, granulation, thermal drifts, pointing jitter.
-//                 Correlated on hours, which is exactly the timescale of a
-//                 transit, so it does NOT average down and more observing does
-//                 not help at all.
+//   white              photons and readout. Independent from one integration
+//                      to the next, so it falls as the square root of the
+//                      total in-transit time.
+//   correlated within  granulation, spot crossings, a thermal ramp over a
+//   one transit        night. Wanders on hours, so binning WITHIN a transit
+//                      buys nothing - but a transit three weeks later is a
+//                      fresh draw, so it falls as the square root of the
+//                      NUMBER OF TRANSITS.
+//   persistent floor   anything phase-locked to the observation itself: a
+//                      contaminating star in the aperture, a detector
+//                      sensitivity pattern the target lands on every orbit, a
+//                      systematic in the pipeline. Coherent across the whole
+//                      campaign, so it never averages down at all.
 //
-// That distinction is the whole point of the widget. A student who has only met
-// "signal to noise goes as root N" will predict that any planet can be found by
-// waiting, and the red-noise floor is where that prediction dies. It is also
-// why the same planet is trivial from space and impossible from the ground:
-// the depth has not changed, the floor has.
+// What was wrong before
+// -----------------------------------------------------------------------------
+// The model had two terms and treated everything correlated as permanent:
+// red = hypot(stellar, instrument), used unchanged however many transits were
+// observed. The accompanying explanation said correlation on transit
+// timescales means more observing cannot help, and that conflates two claims.
+// It is true that averaging inside one transit does not remove an hours-long
+// wander. It does not follow that a second transit is no help: unless the
+// noise is locked to something that repeats with the observation, each visit
+// samples it afresh and N visits reduce it by root N. Only a genuinely
+// persistent term survives, and that term is usually much smaller than the
+// hours-correlated one.
 //
-// The presets are real systems, and the numbers are the published ones. Two of
-// them are meant to be discouraging: an Earth twin at 84 ppm is not detectable
-// by TESS around a Sun-like star, and saying so is more useful than pretending
-// every planet is one more night of observing away.
+// The practical difference is large. Under the old model a ground-based hot
+// Jupiter sat at a floor of 2,500 ppm no matter how many nights were spent;
+// under this one, thirty nights bring the same night-to-night component down
+// by a factor of 5.5, and what is left is whatever is really locked to the
+// observation. That is why people observe forty transits of the same planet.
+//
+// The assumptions, which are strong and are stated in the panel
+// -----------------------------------------------------------------------------
+// The middle term is treated as PERFECTLY correlated across one transit and
+// PERFECTLY independent between transits. Real noise is neither: a spot group
+// lives for weeks and a thermal ramp may repeat every orbit. So this is a
+// two-point caricature of a continuous correlation function, chosen because it
+// makes the two limits visible and arithmetic. Where the truth lies between
+// them is exactly what a real analysis has to measure, and the panel says so
+// rather than implying the answer is one of the two ends.
+//
+// The presets separate what is measured from what is assumed. Depths and
+// durations are published values with their sources; the three noise terms are
+// illustrative, because a real noise budget depends on the star, the aperture,
+// the pipeline version and the week.
 // =============================================================================
 
 /** How many binned points to draw across the folded light curve. */
 const LC_BINS = 60;
+
+/**
+ * The integration the white-noise control is quoted for.
+ *
+ * One hour, stated rather than implied. The control used to be labelled
+ * 'ppm/hr', which reads as a rate and invites the reading that noise grows
+ * with time; what is meant is the standard deviation of a point binned to one
+ * hour, from which every other integration follows by a square root.
+ */
+const WHITE_REFERENCE_HOURS = 1;
 
 const transitNoise = {
   id: 'transit-noise',
@@ -1727,11 +1768,16 @@ const transitNoise = {
       decimals: 0,
     },
     {
+      // Labelled as an uncertainty for a stated integration, not as 'ppm/hr'.
+      // That unit is ambiguous - it reads as a rate, as though the noise grew
+      // with time - when what is meant is the scatter of a point binned to one
+      // hour. Naming the integration makes the square root below say something
+      // rather than assert something.
       id: 'white',
       get label() {
-        return t('exoW.photonNoise');
+        return t('exoW.whitePerHour');
       },
-      unit: 'ppm/hr',
+      unit: 'ppm',
       min: 10,
       max: 4000,
       step: 10,
@@ -1739,27 +1785,31 @@ const transitNoise = {
       decimals: 0,
     },
     {
-      id: 'stellar',
+      // Named for how it behaves, not for what causes it. Granulation, spot
+      // crossings and a night's thermal ramp all land here; so would a
+      // detector effect that resets between visits. What they share is the
+      // correlation timescale, and that is what the arithmetic cares about.
+      id: 'correlated',
       get label() {
-        return t('exoW.stellarNoise');
+        return t('exoW.correlatedWithinTransit');
       },
       unit: 'ppm',
       min: 0,
-      max: 2000,
+      max: 3000,
       step: 5,
       value: 15,
       decimals: 0,
     },
     {
-      id: 'instrument',
+      id: 'floor',
       get label() {
-        return t('exoW.instrumentNoise');
+        return t('exoW.persistentFloor');
       },
       unit: 'ppm',
       min: 0,
-      max: 4000,
-      step: 5,
-      value: 10,
+      max: 2000,
+      step: 1,
+      value: 4,
       decimals: 0,
     },
     {
@@ -1788,20 +1838,33 @@ const transitNoise = {
     },
   ],
   presets: [
+    // Each preset separates two kinds of number, because they have completely
+    // different standing. `measured` is a published property of a real system
+    // with its source; `assumed` is an illustrative noise budget, because a
+    // real one depends on the star, the aperture, the pipeline version and the
+    // week, and no single set of three numbers is the answer for any system.
+    // The panel shows the distinction rather than presenting nine numbers as
+    // though they were all measurements.
     {
       get label() {
         return t('exoW.preset.hotJupiterKepler');
       },
-      // HAT-P-7 b: 1.431 R_J across a 1.84 R_sun star is 6400 ppm, and Kepler
-      // stared at it for four years.
+      // HAT-P-7 b. Depth from the Kepler light curve: 5800 +/- 150 ppm
+      // (Pal et al. 2008, ApJ 680, 1450), consistent with 5900 +/- 250 ppm
+      // from Morris et al. 2013 (ApJL 764, L22). The widget previously used
+      // 6400 ppm, which matched neither and appears to have been derived from
+      // a radius ratio rather than taken from a measured light curve.
       values: {
-        depth: 6400,
+        depth: 5900,
         white: 40,
-        stellar: 15,
-        instrument: 10,
+        correlated: 15,
+        // Kepler's long-term systematic floor for a bright, quiet star is of
+        // order ten parts per million; illustrative, like the two above.
+        floor: 10,
         duration: 4,
         ntransits: 600,
       },
+      measured: ['depth', 'duration'],
       get note() {
         return t('exoW.preset.hotJupiterKepler.note');
       },
@@ -1811,15 +1874,21 @@ const transitNoise = {
         return t('exoW.preset.sameFromTheGround');
       },
       // The identical planet through an atmosphere. Scintillation and airmass
-      // trends are correlated on exactly the transit timescale.
+      // trends wander over a night, so they land in the correlated term - and
+      // crucially they are a fresh draw on the next night, which is why
+      // ground-based photometry of the same planet does improve with more
+      // nights. What does not improve is whatever is locked to the observation
+      // itself: a contaminating star in the aperture, a colour-dependent
+      // extinction residual that recurs at the same hour angle.
       values: {
-        depth: 6400,
+        depth: 5900,
         white: 900,
-        stellar: 15,
-        instrument: 2500,
+        correlated: 2500,
+        floor: 120,
         duration: 4,
         ntransits: 3,
       },
+      measured: ['depth', 'duration'],
       get note() {
         return t('exoW.preset.sameFromTheGround.note');
       },
@@ -1828,16 +1897,20 @@ const transitNoise = {
       get label() {
         return t('exoW.preset.superEarthTess');
       },
-      // Pi Mensae c: 2.04 R_earth across a 1.10 R_sun star, 290 ppm, and a
-      // naked-eye-bright host so the photon noise is unusually low for TESS.
+      // Pi Mensae c. Rp = 2.04 +/- 0.05 R_earth (Huang et al. 2018, ApJL 868,
+      // L39) about a G0V host of 1.1 R_sun, so (Rp/Rs)^2 = 289 ppm. A later
+      // re-characterisation from 20-second cadence gives 2.14 R_earth and
+      // therefore 318 ppm; 290 is the discovery value and the difference is a
+      // good illustration of how a depth moves as a radius is refined.
       values: {
         depth: 290,
         white: 130,
-        stellar: 40,
-        instrument: 30,
+        correlated: 40,
+        floor: 12,
         duration: 2.9,
         ntransits: 12,
       },
+      measured: ['depth', 'duration'],
       get note() {
         return t('exoW.preset.superEarthTess.note');
       },
@@ -1846,17 +1919,21 @@ const transitNoise = {
       get label() {
         return t('exoW.preset.rockyTess');
       },
-      // TOI-700 d: an Earth-size planet in the habitable zone of an M dwarf.
-      // The depth is respectable because the star is small; the difficulty is
-      // that a 37-day period yields about one transit per TESS sector.
+      // TOI-700 d. Measured TESS depth 547 ppm (Gilbert et al. 2020, AJ 160,
+      // 116), for a 1.19 +/- 0.11 R_earth planet about a 0.416 R_sun M dwarf
+      // over 11 sectors. Worth noting that (Rp/Rs)^2 from those radii is about
+      // 690 ppm: the measured depth is shallower than the geometric ratio
+      // because limb darkening and the fitted impact parameter both matter,
+      // which is why the preset carries the measured number.
       values: {
-        depth: 550,
+        depth: 547,
         white: 800,
-        stellar: 250,
-        instrument: 60,
+        correlated: 250,
+        floor: 45,
         duration: 1.8,
         ntransits: 11,
       },
+      measured: ['depth', 'duration'],
       get note() {
         return t('exoW.preset.rockyTess.note');
       },
@@ -1865,44 +1942,73 @@ const transitNoise = {
       get label() {
         return t('exoW.preset.earthTwin');
       },
-      // An Earth around a Sun, seen by TESS. 84 ppm, a 13-hour transit, and
-      // one transit a year. This one is not a hard case; it is out of reach.
+      // An Earth about a Sun. 84 ppm is exact by construction rather than
+      // measured: (R_earth/R_sun)^2 = 8.4e-5. The 13-hour duration is the
+      // central-transit value for a 1 AU circular orbit. Nothing like this has
+      // been detected by TESS and the widget should say why rather than imply
+      // it is one more sector away.
       values: {
         depth: 84,
         white: 700,
-        stellar: 60,
-        instrument: 40,
+        correlated: 60,
+        floor: 30,
         duration: 13,
         ntransits: 2,
       },
+      measured: ['depth', 'duration'],
       get note() {
         return t('exoW.preset.earthTwin.note');
       },
     },
   ],
   compute(v) {
-    const hours = Math.max(0.01, v.duration * v.ntransits);
-    // White noise is quoted per hour and averages as the square root of the
-    // in-transit time, which is the only term that does.
-    const white = v.white / Math.sqrt(hours);
-    const red = Math.hypot(v.stellar, v.instrument);
-    const total = Math.hypot(white, red);
+    const transits = Math.max(1, v.ntransits);
+    const hours = Math.max(0.01, v.duration * transits);
+
+    // Three terms, three different powers of the observing.
+    //
+    // White: independent integration to integration, so it falls as the square
+    // root of the total in-transit time. The control is the scatter of a
+    // one-hour bin, which is why the ratio below is against one hour rather
+    // than against a bare number.
+    const white = v.white / Math.sqrt(hours / WHITE_REFERENCE_HOURS);
+
+    // Correlated within a transit: perfectly correlated across the transit, so
+    // the transit yields one independent sample however finely it is binned -
+    // and perfectly independent between transits, so N transits give N
+    // samples. It falls as the square root of the number of TRANSITS, not of
+    // the time. This is the term the previous model held fixed.
+    const correlated = v.correlated / Math.sqrt(transits);
+
+    // Persistent: coherent across the campaign, so averaging does nothing to
+    // it at all. This is the only genuine floor.
+    const floor = v.floor;
+
+    const total = Math.hypot(white, correlated, floor);
     return {
       hours,
+      transits,
       white,
-      whitePerHour: v.white,
-      stellar: v.stellar,
-      instrument: v.instrument,
-      red,
+      whitePerReference: v.white,
+      referenceHours: WHITE_REFERENCE_HOURS,
+      correlated,
+      correlatedPerTransit: v.correlated,
+      floor,
       total,
       depth: v.depth,
       // Not called significance, and not turned into a probability. It is the
       // depth measured in units of its own uncertainty, which is a description
       // of the measurement rather than a claim about a planet.
       ratio: total > 0 ? v.depth / total : Infinity,
-      // What the floor alone would allow, however long anyone observed. The
-      // number that says whether waiting can ever work.
-      ceiling: red > 0 ? v.depth / red : Infinity,
+      // What is left after infinite observing: the persistent term alone, since
+      // both of the others go to zero. The number that says whether patience
+      // can ever work, and under the old model it was wrong by however much of
+      // the budget was merely hours-correlated.
+      ceiling: floor > 0 ? v.depth / floor : Infinity,
+      // How much of the present total would survive unlimited observing. Near
+      // 1 means the campaign is already floor-limited; near 0 means more
+      // transits are still buying precision.
+      floorShare: total > 0 ? floor / total : 0,
     };
   },
   readout(v) {
@@ -1929,9 +2035,21 @@ const transitNoise = {
       },
       {
         get label() {
-          return t('exoW.readout.correlatedFloor');
+          return t('exoW.readout.correlatedAfterTransits', {
+            n: formatNumber(c.transits, { sig: 3 }),
+          });
         },
-        value: withUnit(formatNumber(c.red, { sig: 3 }), 'ppm'),
+        value: withUnit(formatNumber(c.correlated, { sig: 3 }), 'ppm'),
+      },
+      {
+        // Named as what survives rather than as 'the floor', because the term
+        // above is also a floor in the sense of not binning away - it just is
+        // not a permanent one, and running the two together is the error this
+        // widget used to make.
+        get label() {
+          return t('exoW.readout.persistentFloor');
+        },
+        value: withUnit(formatNumber(c.floor, { sig: 3 }), 'ppm'),
       },
       {
         get label() {
@@ -1940,9 +2058,10 @@ const transitNoise = {
         value: withUnit(formatNumber(c.hours, { sig: 3 }), 'hr'),
       },
       {
-        // The number that says whether patience can ever work. With the photon
-        // term driven to zero by infinite observing, the correlated floor is
-        // what is left, and this is the ratio it would allow.
+        // What unlimited observing would reach. Both the white term and the
+        // within-transit term go to zero, so only the persistent one is left -
+        // which is a far smaller number than the old model's, because that one
+        // counted the hours-correlated term as permanent too.
         get label() {
           return t('exoW.readout.ceiling');
         },
@@ -1966,8 +2085,8 @@ const transitNoise = {
     drawFrame(ctx, left, { x: t('exoW.ppmAxis'), y: '' }, th);
     const terms = [
       { key: 'photon', value: c.white, colour: th.accent },
-      { key: 'stellar', value: c.stellar, colour: '#f2a65a' },
-      { key: 'instrument', value: c.instrument, colour: '#c98ae0' },
+      { key: 'correlated', value: c.correlated, colour: '#f2a65a' },
+      { key: 'floor', value: c.floor, colour: '#c98ae0' },
       { key: 'total', value: c.total, colour: th.ink },
     ];
     const scaleMax = Math.max(c.depth, ...terms.map(x => x.value)) * 1.15 || 1;

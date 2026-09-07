@@ -154,16 +154,20 @@ export const ES_DEFERRED = {
   'exoW.readout.depthOverNoise': 'Profundidad sobre ruido',
   'exoW.readout.totalNoise': 'Ruido total sobre la profundidad',
   'exoW.readout.photonAfterAveraging': 'Ruido de fotones, tras promediar',
-  'exoW.readout.correlatedFloor': 'Suelo correlacionado',
+  'exoW.readout.correlatedAfterTransits':
+    'T\u00e9rmino intratr\u00e1nsito, tras {n} tr\u00e1nsitos',
+  'exoW.readout.persistentFloor':
+    'Suelo persistente (nunca promedia a la baja)',
   'exoW.readout.inTransitHours': 'Horas pasadas en tránsito',
   'exoW.readout.ceiling': 'Lo mejor posible, observando infinitamente',
   'exoW.whatSwampsATransit': 'Contra qué compite un tránsito',
   'exoW.whatSwampsATransit.note':
     'El ruido de fotones se da por hora y se promedia a lo largo de todo el tiempo en tránsito. Los otros dos están correlacionados en la escala de tiempo de un tránsito y no se promedian en absoluto.',
   'exoW.transitDepth': 'Profundidad del tránsito',
-  'exoW.photonNoise': 'Ruido de fotones y lectura',
-  'exoW.stellarNoise': 'Manchas y granulación estelar',
-  'exoW.instrumentNoise': 'Instrumento y atmósfera',
+  'exoW.whitePerHour': 'Ruido blanco, \u03c3 de un bin de 1 hora',
+  'exoW.correlatedWithinTransit':
+    'Correlacionado dentro de un tr\u00e1nsito, independiente entre ellos',
+  'exoW.persistentFloor': 'Coherente en toda la campa\u00f1a',
   'exoW.transitDuration': 'Duración del tránsito',
   'exoW.transitsObserved': 'Tránsitos observados',
   'exoW.ppmAxis': 'partes por millón',

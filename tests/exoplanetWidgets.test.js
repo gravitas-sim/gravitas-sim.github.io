@@ -370,3 +370,172 @@ describe('the observing-schedule planner', () => {
     expect(labels.some(l => l.includes('scatter'))).toBe(true);
   });
 });
+
+// =============================================================================
+// The transit noise budget
+// -----------------------------------------------------------------------------
+// The widget used to have two terms and treat everything correlated as
+// permanent, which made a second transit worthless against starspots. It has
+// three now, and these pin the three limits that distinguish them - because
+// the whole teaching point is that they scale differently, and a model that
+// got the middle one wrong taught the opposite of the intended lesson.
+// =============================================================================
+
+describe('the transit noise budget', () => {
+  const noise = getWidget('transit-noise');
+  /** A budget with one term switched on at a time. */
+  const at = over =>
+    noise.compute({
+      depth: 1000,
+      white: 0,
+      correlated: 0,
+      floor: 0,
+      duration: 2,
+      ntransits: 1,
+      ...over,
+    });
+
+  test('zero noise is an infinite ratio, not a division by zero', () => {
+    const c = at({});
+    expect(c.total).toBe(0);
+    expect(c.ratio).toBe(Infinity);
+    expect(c.ceiling).toBe(Infinity);
+    // And nothing anywhere is NaN, which is what a naive 0/0 would give.
+    for (const v of Object.values(c)) {
+      if (typeof v === 'number') expect(Number.isNaN(v)).toBe(false);
+    }
+  });
+
+  test('white noise falls as the square root of the total in-transit time', () => {
+    // Quadrupling the time halves it, whether the time comes from longer
+    // transits or more of them - white noise cannot tell the difference.
+    const one = at({ white: 100, duration: 1, ntransits: 1 });
+    const longer = at({ white: 100, duration: 4, ntransits: 1 });
+    const more = at({ white: 100, duration: 1, ntransits: 4 });
+    expect(one.white).toBeCloseTo(100, 10);
+    expect(longer.white).toBeCloseTo(50, 10);
+    expect(more.white).toBeCloseTo(50, 10);
+  });
+
+  test('the white control is the scatter of a one-hour bin, and says so', () => {
+    // One hour of in-transit time returns the control's own value, which is
+    // what makes "sigma of a 1-hour bin" a definition rather than a label.
+    const c = at({ white: 250, duration: 1, ntransits: 1 });
+    expect(c.white).toBeCloseTo(250, 10);
+    expect(c.referenceHours).toBe(1);
+  });
+
+  test('the within-transit term falls as the square root of the TRANSIT COUNT', () => {
+    // The correction. Under the old model this term never moved; here a
+    // hundred transits reduce it tenfold, which is why anybody bothers
+    // observing the same planet again.
+    const one = at({ correlated: 300, ntransits: 1 });
+    const hundred = at({ correlated: 300, ntransits: 100 });
+    expect(one.correlated).toBeCloseTo(300, 10);
+    expect(hundred.correlated).toBeCloseTo(30, 10);
+  });
+
+  test('the within-transit term does not care how long the transit is', () => {
+    // Perfectly correlated across one transit means one independent sample per
+    // transit however long it lasts. That is the assumption, and it is the
+    // thing that distinguishes this term from the white one.
+    const short = at({ correlated: 300, duration: 1, ntransits: 9 });
+    const long = at({ correlated: 300, duration: 12, ntransits: 9 });
+    expect(short.correlated).toBeCloseTo(long.correlated, 12);
+    expect(short.correlated).toBeCloseTo(100, 10);
+  });
+
+  test('a fully persistent floor never averages down at all', () => {
+    const few = at({ floor: 80, duration: 3, ntransits: 2 });
+    const many = at({ floor: 80, duration: 12, ntransits: 5000 });
+    expect(few.floor).toBe(80);
+    expect(many.floor).toBe(80);
+    // And it is what unlimited observing would be left with.
+    expect(many.total).toBeCloseTo(80, 10);
+    expect(many.ceiling).toBeCloseTo(1000 / 80, 10);
+  });
+
+  test('with no persistent term, patience has no ceiling', () => {
+    // The other limit, and the one the old model could never reach: with
+    // nothing locked to the observation, enough transits reach any precision.
+    const c = at({ white: 500, correlated: 500, floor: 0, ntransits: 10 });
+    expect(c.ceiling).toBe(Infinity);
+    expect(c.floorShare).toBe(0);
+    const patient = at({
+      white: 500,
+      correlated: 500,
+      floor: 0,
+      ntransits: 1e6,
+    });
+    expect(patient.total).toBeLessThan(c.total / 100);
+  });
+
+  test('the three terms add in quadrature and nothing else', () => {
+    const c = at({
+      white: 30,
+      correlated: 40,
+      floor: 120,
+      duration: 1,
+      ntransits: 1,
+    });
+    expect(c.total).toBeCloseTo(Math.hypot(30, 40, 120), 10);
+  });
+
+  test('floorShare says how much of the budget observing cannot touch', () => {
+    const early = at({ white: 900, correlated: 900, floor: 50, ntransits: 1 });
+    const late = at({
+      white: 900,
+      correlated: 900,
+      floor: 50,
+      ntransits: 5000,
+    });
+    expect(early.floorShare).toBeLessThan(0.1);
+    expect(late.floorShare).toBeGreaterThan(0.9);
+  });
+
+  test('more transits always help unless the budget is purely persistent', () => {
+    // A monotonicity the old model violated: with a large correlated term it
+    // reported the same total for one transit and for a thousand.
+    let previous = Infinity;
+    for (const ntransits of [1, 2, 5, 20, 100]) {
+      const c = at({ white: 200, correlated: 600, floor: 10, ntransits });
+      expect(c.total).toBeLessThan(previous);
+      previous = c.total;
+    }
+    // And with only a persistent term, they do not.
+    const a = at({ floor: 100, ntransits: 1 });
+    const b = at({ floor: 100, ntransits: 1000 });
+    expect(a.total).toBeCloseTo(b.total, 12);
+  });
+
+  test('every preset marks which of its numbers are measurements', () => {
+    // Depths and durations are published; the three noise terms are
+    // illustrative. Presenting all nine as though they were measurements is
+    // what this field exists to prevent.
+    for (const preset of noise.presets) {
+      expect(Array.isArray(preset.measured)).toBe(true);
+      expect(preset.measured).toContain('depth');
+      for (const key of preset.measured) {
+        expect(preset.values[key]).toBeGreaterThan(0);
+      }
+      for (const key of ['white', 'correlated', 'floor']) {
+        expect(preset.measured).not.toContain(key);
+      }
+    }
+  });
+
+  test('the ground-based preset is no longer a permanent wall', () => {
+    // The concrete consequence of the fix. The same planet from the ground,
+    // three nights against thirty: the old model said the two were identical.
+    const three = noise.compute({
+      ...noise.presets[1].values,
+      ntransits: 3,
+    });
+    const thirty = noise.compute({
+      ...noise.presets[1].values,
+      ntransits: 30,
+    });
+    expect(thirty.total).toBeLessThan(three.total / 2);
+    expect(thirty.ratio).toBeGreaterThan(three.ratio * 2);
+  });
+});

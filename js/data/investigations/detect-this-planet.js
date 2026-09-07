@@ -52,7 +52,7 @@ const DETECT_THIS_PLANET = {
   level: 'Introductory astronomy',
   lock: { placement: true, inspector: true },
   summary:
-    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 355-sigma certainty from space and a 2.5-sigma maybe from the ground — and taking a hundred times more data from the ground changes nothing.',
+    'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 587-sigma certainty from space and a 4-sigma maybe from three nights on the ground — and work out how many more nights would fix that, and where the answer stops improving.',
   objectives: [
     'Predict whether an observing schedule can detect a given planet, and say which of cadence, baseline and precision decides it',
     'Explain why more measurements over a longer baseline can be worse than fewer over a shorter one',
@@ -507,110 +507,151 @@ const DETECT_THIS_PLANET = {
       body: `A depth is only half the question. The other half is everything else
              that makes a star's measured brightness wobble, and this instrument
              lays those out side by side.
-             \n\nIt opens on a real case at the easy end: a hot Jupiter of the
-             kind Kepler stared at for four years. 6,400 parts per million deep,
-             a four-hour transit, six hundred of them.
+             \n\nIt opens on a real case at the easy end: HAT-P-7 b, a hot
+             Jupiter that Kepler stared at for four years. The measured depth is
+             <strong>5,900 parts per million</strong>, the transit lasts about
+             four hours, and there were six hundred of them.
+             \n\nThree noise terms, and they behave differently. White noise is
+             independent point to point. The second is correlated across a
+             single transit but independent from one transit to the next. The
+             third is locked to the observation itself and never averages down
+             at all. Which is which decides everything that follows.
              \n\nThe bars on the left are the noise contributions. The green line
              is the depth. The panel on the right is what the folded light curve
              would actually look like.`,
       tool: {
         id: 'transit-noise',
         values: {
-          depth: 6400,
+          depth: 5900,
           white: 40,
-          stellar: 15,
-          instrument: 10,
+          correlated: 15,
+          floor: 10,
           duration: 4,
           ntransits: 600,
         },
         title: 'The transit noise budget',
-        note: 'Photon noise is quoted per hour and averages down over the whole in-transit time. The other two do not average down at all, which is the point of the next few screens.',
+        note: 'The white-noise control is the scatter of a one-hour bin, and it falls as the square root of the total in-transit time. The second term falls as the square root of the number of transits — not of the time. The third does not fall at all. The depth and duration are measured; the three noise numbers are illustrative.',
       },
       checklist: [
-        'Read the depth-over-noise figure under the light curve: about 355',
+        'Read the depth-over-noise figure under the light curve: about 587',
         'Notice how far the green depth line sits beyond every noise bar',
         'Drag the number of transits from 600 down to 1 and watch what happens to the ratio',
-        'Now drag it back up past 600 and notice how little further it improves',
+        'Now drag it back up past 600 and notice how little further it improves — and read the persistent-floor row to see why',
       ],
-      tip: 'A ratio of 355 is not a marginal detection being argued over. This is the regime where the interesting questions are about the planet rather than about whether it exists.',
+      tip: 'A ratio of 587 is not a marginal detection being argued over. This is the regime where the interesting questions are about the planet rather than about whether it exists. Almost all of the remaining noise here is the persistent term, which is why more transits stopped buying anything.',
     },
     {
       sid: 'the-same-planet-from-the-ground',
       type: 'predict',
       title: 'The same planet, from the ground',
-      body: `Take that identical planet — same star, same 6,400 ppm depth, same
+      body: `Take that identical planet — same star, same 5,900 ppm depth, same
              four-hour transit — and observe it with a good small telescope from
              the surface of the Earth instead of from space.
              \n\nThe air above the telescope is turbulent, the star rises and sets
              through changing airmass, and the detector warms and cools through
              the night.`,
       prompt:
-        'Observing the same 6,400 ppm transit from the ground instead of from space, you expect the depth-over-noise to fall from 355 to about:',
+        'Observing the same 5,900 ppm transit from the ground on three nights instead of from space, you expect the depth-over-noise to fall from 587 to about:',
       options: [
         '250 — the atmosphere costs something, but not much',
         '100 — a serious penalty, still an easy detection',
-        '2.5 — from certainty to an argument',
+        '4 — from certainty to an argument',
         '0.1 — completely invisible',
       ],
       answer: 2,
-      because: `About 2.5, which is a factor of a hundred and forty. The planet
-                has not changed and neither has its depth; what changed is a
-                floor underneath the measurement that no amount of patience
-                removes. Ground-based surveys did find hot Jupiters — but they
-                had to observe thousands of stars for years to do it, and this
-                is why.`,
+      because: `About 4, a factor of a hundred and fifty. The planet has not
+                changed and neither has its depth; what changed is that the
+                night-to-night wander of the atmosphere is now the largest term
+                in the budget. Three nights is not many, though — the next
+                screen asks what happens with three hundred, and the answer is
+                not the one this lesson used to give.`,
     },
     {
       sid: 'the-floor',
       type: 'explore',
-      title: 'The floor',
+      title: 'How far can patience get you?',
       body: `Switch the instrument to <strong>Same planet, from the ground</strong>.
-             \n\nThe depth line has not moved. The photon-noise bar is larger, as
-             you would expect from a smaller telescope. But look at the
-             instrument bar, and then at the total.
-             \n\nNow do the experiment that matters: crank the number of transits
-             up as far as it will go.`,
+             \n\nThe depth line has not moved. The white-noise bar is larger, as
+             you would expect from a smaller telescope. But the biggest bar is
+             the middle one: the night-to-night wander of the atmosphere, which
+             is correlated across a whole transit and so cannot be binned away
+             within one night.
+             \n\nNow do the experiment that matters: crank the number of
+             transits up as far as it will go, and watch two numbers — the
+             ratio, and the row that says what unlimited observing would reach.`,
       tool: {
         id: 'transit-noise',
         values: {
-          depth: 6400,
+          depth: 5900,
           white: 900,
-          stellar: 15,
-          instrument: 2500,
+          correlated: 2500,
+          floor: 120,
           duration: 4,
           ntransits: 3,
         },
       },
       checklist: [
-        'Read the depth-over-noise with three transits: about 2.5',
+        'Read the depth-over-noise with three nights: about 4',
         'Drag the transit count to 300 — a hundred times more observing',
-        'Read it again. It has gone from 2.55 to about 2.56',
-        'Switch back to the Kepler preset and do the same thing there',
+        'Read it again: about 31, an improvement of nearly eight times',
+        'Now read the ceiling row: about 49, and it does not move however far you drag',
       ],
-      tip: 'A hundred times more data bought four thousandths of an improvement. Whatever is limiting this measurement, it is not the amount of data.',
+      tip: 'A hundred times more data bought a factor of eight, not a factor of ten — because part of the budget was already the persistent term. Drag further and the ratio creeps towards 49 and stops. That number, not the number of nights, is what decides whether the measurement is possible.',
     },
     {
       sid: 'white-noise-and-red-noise',
       type: 'read',
-      title: 'Why more nights stopped helping',
-      body: `Noise comes in two kinds, and they behave completely differently
-             when you average.
-             \n\n<strong>White noise</strong> is independent from one measurement
-             to the next: photon counting, detector read noise. Independent
-             errors partly cancel, so averaging N of them shrinks the noise by
-             √N. This is the behaviour everyone is taught, and it is why "take
-             more data" is usually good advice.
-             \n\n<strong>Red noise</strong> is correlated: starspots rotating
-             across the disc, convective granulation, the telescope warming, the
-             star drifting across the detector. These wander over <em>hours</em>
-             — which is exactly the length of a transit. Averaging does not
-             remove them, because neighbouring measurements are wrong in the
-             same direction.
-             \n\nSo a noise budget has a <strong>floor</strong>. The photon term
-             falls away as you observe longer and the correlated terms stay
-             exactly where they are, and once you are below the floor the only
-             thing more observing buys you is more data at the same precision.`,
-      tip: 'This is why space telescopes are worth their cost. Above the atmosphere, with a stable thermal environment and no airmass, the floor drops by orders of magnitude — and the depth you are chasing has not changed at all.',
+      title: 'Three kinds of noise, three different answers',
+      body: `Noise is usually taught as two kinds. It is more useful here as
+             three, because the middle one is the one that decides how much
+             observing is worth doing.
+             \n\n<strong>White noise</strong> is independent from one
+             measurement to the next: photon counting, detector read noise.
+             Independent errors partly cancel, so averaging N of them shrinks
+             the noise by √N. It falls with the <em>total time</em> spent in
+             transit, however that time is accumulated.
+             \n\n<strong>Correlated within a transit</strong> is the awkward
+             one: granulation, a spot crossing, the detector warming through a
+             night. These wander over <em>hours</em> — the length of a transit —
+             so binning more finely inside one transit gains you nothing. But a
+             transit three weeks later is a fresh draw of the same process, so
+             this term falls as the square root of the <em>number of
+             transits</em>. Not of the time: ten one-hour transits beat one
+             ten-hour transit for this term, and they are equal for white noise.
+             \n\n<strong>Persistent</strong> is anything locked to the
+             observation itself: a faint star inside the aperture, a detector
+             pattern the target lands on every orbit, a bias in the pipeline.
+             It is the same wrong number every time, so averaging does nothing
+             whatsoever. This is the only true floor.
+             \n\nSo the answer to "will more observing help?" is <em>usually
+             yes, and then eventually no</em>. It helps until the persistent
+             term dominates, and the ceiling row in the panel tells you where
+             that is before you spend the nights.`,
+      tip: 'This is why space telescopes are worth their cost, and it is not only that the atmosphere is gone. Above it the hours-correlated term is far smaller and the persistent term is far better characterised — and a systematic you can measure is a systematic you can subtract.',
+    },
+    {
+      sid: 'assumptions-of-the-model',
+      type: 'read',
+      title: 'What this model is pretending',
+      body: `The panel makes two assumptions about the middle term and they are
+             both extreme.
+             \n\nIt treats that noise as <strong>perfectly correlated</strong>
+             across one transit — so a transit gives one independent sample
+             however finely you bin it — and <strong>perfectly
+             independent</strong> between transits, so N transits give exactly
+             N samples. Real noise is neither. A spot group lives for weeks and
+             will be partly the same on consecutive nights. A thermal cycle may
+             repeat with the spacecraft's orbit and so be partly persistent.
+             \n\nThe truth is a correlation function, and the two ends of it are
+             what the panel shows: the middle term is the best case for more
+             observing, the persistent term is the worst. A real analysis has to
+             measure where between them the noise actually sits, usually by
+             looking at how the scatter of binned points falls with bin size and
+             seeing where it stops following √N.
+             \n\nThat is worth knowing before you trust a number from a panel
+             like this one. The model is a caricature chosen to make the two
+             limits visible, not a noise budget for any real instrument.`,
+      tip: 'The standard diagnostic is a "beta factor": the ratio of the actual scatter of binned residuals to what pure white noise would predict. Published transit papers routinely quote it, and values of 1.5 to 3 are common — which is to say the truth is usually nearer the optimistic end than the pessimistic one, but never at it.',
     },
     {
       sid: 'read-two-budgets',
@@ -650,13 +691,13 @@ const DETECT_THIS_PLANET = {
           return {
             level: 'warn',
             message:
-              'Those look swapped. The space-based figure is the large one — about 355 against about 2.5.',
+              'Those look swapped. The space-based figure is the large one — about 587 against about 4.',
           };
         }
         return {
           level: 'ok',
           message:
-            'A factor of about 140 between them, and the same planet in both. The instrument bar is what did it.',
+            'A factor of about 150 between them, and the same planet in both. The within-transit bar is what did it — and unlike the persistent one, that bar does come down with more nights.',
         };
       },
     },
@@ -664,22 +705,28 @@ const DETECT_THIS_PLANET = {
       sid: 'why-more-nights-do-not-help',
       type: 'question',
       kind: 'choice',
-      title: 'Why did the extra hundred nights buy nothing?',
-      body: `From the ground, three transits gave a ratio of 2.55 and three
-             hundred gave 2.56.`,
+      title: 'Where does patience stop paying?',
+      body: `From the ground, three transits gave a ratio of about 4 and three
+             hundred gave about 31 — a real improvement, but not the factor of
+             ten that a pure square-root law would predict. Drag further and it
+             creeps towards 49 and stops.`,
       prompt: 'The best explanation is:',
       options: [
         'The extra data was lower quality than the first three nights',
-        'The measurement is already at its correlated-noise floor, and that term does not average down',
+        'Part of the budget is persistent, so the terms that do average down are running out of room',
         'Three hundred transits is still too few for the square root to matter',
         'The transit depth changes from night to night',
       ],
       answer: 1,
-      because: `The floor. With three transits the photon term is already about
-                260 ppm against a correlated term of 2,500 — the total is
-                essentially all floor, and averaging cannot touch it. The square
-                root law is not wrong; it simply applies to only one of the two
-                terms, and that one stopped mattering some time ago.`,
+      because: `Two of the three terms fall with more observing and one does
+                not. At three nights the atmosphere's night-to-night wander
+                dominates at about 1,440 ppm and the persistent term is only
+                120; by three hundred nights the wander is down to 144 and the
+                persistent term is the largest thing left. The square root law
+                was never wrong — it applies to two of the three terms, and the
+                third is what sets the ceiling of 49. Deciding whether that
+                ceiling is high enough is what tells you whether the nights are
+                worth spending.`,
     },
     {
       sid: 'the-edge-of-what-tess-can-do',
@@ -691,17 +738,18 @@ const DETECT_THIS_PLANET = {
              ppm, and a genuine detection.
              \n\n<strong>Rocky planet in the habitable zone</strong> is TOI-700 d:
              about Earth's size, but around a small red star, so the depth is a
-             respectable 550 ppm. Its problem is a 37-day period — roughly one
+             respectable 547 ppm as measured by TESS. Its problem is a 37-day
+             period — roughly one
              transit per TESS sector, and it took a year of them.
              \n\n<strong>Earth twin</strong> is the 84 ppm you computed earlier,
              around a Sun-like star. A thirteen-hour transit, once a year.`,
       tool: { id: 'transit-noise' },
       checklist: [
-        'Super-Earth: depth over noise about 5.3 — a real detection, and not a comfortable one',
-        'Rocky planet: about 1.75, from eleven transits gathered over a year',
-        'Earth twin: about 0.54 — the transit is smaller than the noise on it',
-        'On the Earth twin, drag the transits to 200 and watch the ratio stop at about 1.2',
-        'Notice the Earth twin has by far the longest transit and it does not help',
+        'Super-Earth: depth over noise about 10.5 — a real detection, and not a comfortable one',
+        'Rocky planet: about 2.7, from eleven transits gathered over a year',
+        'Earth twin: about 0.6 — the transit is smaller than the noise on it',
+        'On the Earth twin, drag the transits to 200: the ratio reaches about 2.5 and its ceiling is 2.8',
+        'Notice the Earth twin has by far the longest transit and it barely helps',
       ],
       tip: 'TOI-700 d is a real planet, found in 2020, and finding it took eleven sectors of TESS data plus a reanalysis after an error in the original stellar parameters.',
     },
@@ -710,21 +758,23 @@ const DETECT_THIS_PLANET = {
       type: 'question',
       kind: 'choice',
       title: 'What would it take?',
-      body: `The Earth twin sits at 0.54 — the dip is about half the size of the
-             uncertainty on it — and a hundred times more observing takes it to
-             1.2 and no further.`,
+      body: `The Earth twin sits at about 0.6 — the dip is smaller than the
+             uncertainty on it. A hundred times more observing takes it to about
+             2.5, and its ceiling — what unlimited observing would reach — is
+             2.8. Not zero, and not a detection either.`,
       prompt:
         'To turn that into a detection, the thing that would actually have to change is:',
       options: [
         'More transits, until the square root law wins',
         'A longer transit, so each event contributes more data',
-        'A lower correlated-noise floor — a more stable instrument, or a quieter star',
+        'A lower persistent floor — a more stable instrument, or a better-characterised systematic',
         'Nothing: an 84 ppm transit is below any possible measurement',
       ],
       answer: 2,
-      because: `The floor. That is what caps this measurement at 1.2 however long
-                anyone observes, so lowering it is the only move that changes the
-                answer — which is precisely what a purpose-built mission does.
+      because: `The persistent floor. That is what caps this measurement however
+                long anyone observes, so lowering it is the only move that
+                changes the answer — which is precisely what a purpose-built
+                mission does.
                 The fourth option is worth rejecting explicitly: 84 ppm is not
                 below what is physically measurable, and Kepler routinely
                 measured shallower transits than that. It is below what
@@ -758,8 +808,8 @@ const DETECT_THIS_PLANET = {
              experiment it can be designed well or badly before a single photon
              arrives.
              \n\nThe transit half made the same point with a different knob. One
-             planet, one depth, and a detection at 355 sigma or an argument at
-             2.5 depending entirely on what was underneath the measurement. And
+             planet, one depth, and a detection at 587 sigma or an argument at
+             4 depending entirely on what was underneath the measurement. And
              where the radial-velocity failure could be repaired by observing
              differently, the photometric one mostly cannot: past the correlated
              noise floor, more nights buy more data at the same precision and

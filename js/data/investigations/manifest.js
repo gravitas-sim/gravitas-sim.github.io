@@ -183,10 +183,10 @@ export const MANIFEST = [
     duration: '30-35 min',
     level: 'Introductory astronomy',
     summary:
-      'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 355-sigma certainty from space and a 2.5-sigma maybe from the ground — and taking a hundred times more data from the ground changes nothing.',
+      'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 587-sigma certainty from space and a 4-sigma maybe from three nights on the ground — and work out how many more nights would fix that, and where the answer stops improving.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detecting exoplanets',
-    stepCount: 25,
+    stepCount: 26,
     gradedCount: 13,
     objectiveCount: 8,
   },

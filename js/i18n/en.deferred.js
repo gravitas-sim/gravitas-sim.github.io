@@ -150,16 +150,19 @@ export const EN_DEFERRED = {
   'exoW.readout.depthOverNoise': 'Depth over noise',
   'exoW.readout.totalNoise': 'Total noise on the depth',
   'exoW.readout.photonAfterAveraging': 'Photon noise, after averaging',
-  'exoW.readout.correlatedFloor': 'Correlated floor',
+  'exoW.readout.correlatedAfterTransits':
+    'Within-transit term, after {n} transits',
+  'exoW.readout.persistentFloor': 'Persistent floor (never averages down)',
   'exoW.readout.inTransitHours': 'Hours spent in transit',
   'exoW.readout.ceiling': 'Best possible, with infinite observing',
   'exoW.whatSwampsATransit': 'What a transit is competing with',
   'exoW.whatSwampsATransit.note':
     'Photon noise is quoted per hour and averages down over the whole in-transit time. The other two are correlated on the timescale of a transit and do not average down at all.',
   'exoW.transitDepth': 'Transit depth',
-  'exoW.photonNoise': 'Photon and read noise',
-  'exoW.stellarNoise': 'Starspots and granulation',
-  'exoW.instrumentNoise': 'Instrument and atmosphere',
+  'exoW.whitePerHour': 'White noise, \u03c3 of a 1-hour bin',
+  'exoW.correlatedWithinTransit':
+    'Correlated within one transit, independent between them',
+  'exoW.persistentFloor': 'Coherent across the whole campaign',
   'exoW.transitDuration': 'Transit duration',
   'exoW.transitsObserved': 'Transits observed',
   'exoW.ppmAxis': 'parts per million',

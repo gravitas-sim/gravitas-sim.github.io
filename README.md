@@ -24,7 +24,7 @@ concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
 **<!--fact:investigations-->17<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->479<!--/fact--> steps between
+investigations**, <!--fact:investigationSteps-->480<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -196,7 +196,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->3073<!--/fact--> tests across <!--fact:jestSuites-->78<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->3085<!--/fact--> tests across <!--fact:jestSuites-->78<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -214,7 +214,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->201<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->624<!--/fact--> KB           | <!--fact:buildStartupFiles-->43<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->2619<!--/fact--> KB         | <!--fact:buildDeferredChunks-->88<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->2627<!--/fact--> KB         | <!--fact:buildDeferredChunks-->88<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->826<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written

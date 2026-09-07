@@ -264,44 +264,79 @@ export default {
                 años para lograrlo, y esta es la razón.`,
     },
     {
-      title: 'El suelo',
+      title: '¿Hasta dónde llega la paciencia?',
       body: `Cambia el instrumento a <strong>El mismo planeta, desde
              tierra</strong>.
-             \n\nLa línea de profundidad no se ha movido. La barra de ruido de
-             fotones es mayor, como cabía esperar de un telescopio más pequeño.
-             Pero mira la barra del instrumento, y luego el total.
-             \n\nAhora haz el experimento que importa: sube el número de tránsitos
-             todo lo que dé de sí.`,
+             \n\nLa línea de profundidad no se ha movido. La barra de ruido
+             blanco es mayor, como cabía esperar de un telescopio más pequeño.
+             Pero la barra más grande es la del medio: el vaivén de la atmósfera
+             de una noche a otra, que está correlacionado a lo largo de todo un
+             tránsito y por tanto no se puede promediar dentro de una sola noche.
+             \n\nAhora haz el experimento que importa: sube el número de
+             tránsitos todo lo que dé de sí y vigila dos números, la razón y la
+             fila que dice a qué llegaría una observación ilimitada.`,
       checklist: [
-        'Lee la profundidad sobre ruido con tres tránsitos: unas 2,5',
+        'Lee la profundidad sobre ruido con tres noches: unas 4',
         'Arrastra el número de tránsitos a 300: cien veces más observación',
-        'Vuelve a leerlo. Ha pasado de 2,55 a unas 2,56',
-        'Vuelve al ajuste de Kepler y haz lo mismo allí',
+        'Vuelve a leerlo: unas 31, una mejora de casi ocho veces',
+        'Ahora lee la fila del techo: unas 49, y no se mueve por mucho que arrastres',
       ],
-      tip: 'Cien veces más datos han comprado cuatro milésimas de mejora. Sea lo que sea lo que limita esta medida, no es la cantidad de datos.',
+      tip: 'Cien veces más datos han comprado un factor de ocho, no de diez, porque parte del presupuesto ya era el término persistente. Sigue arrastrando y la razón se acerca a 49 y se para. Ese número, y no el de noches, es el que decide si la medida es posible.',
     },
     {
-      title: 'Por qué dejaron de ayudar más noches',
-      body: `El ruido viene en dos clases, y se comportan de forma completamente
-             distinta al promediar.
-             \n\nEl <strong>ruido blanco</strong> es independiente de una medida a
-             la siguiente: conteo de fotones, ruido de lectura del detector. Los
-             errores independientes se cancelan en parte, así que promediar N de
-             ellos reduce el ruido en √N. Este es el comportamiento que a todo el
-             mundo le enseñan, y por eso "toma más datos" suele ser un buen
-             consejo.
-             \n\nEl <strong>ruido rojo</strong> está correlacionado: manchas
-             estelares girando por el disco, granulación convectiva, el telescopio
-             calentándose, la estrella derivando por el detector. Estos vagan a lo
-             largo de <em>horas</em>, que es exactamente la duración de un
-             tránsito. Promediar no los elimina, porque las medidas vecinas están
-             equivocadas en el mismo sentido.
-             \n\nAsí que un presupuesto de ruido tiene un <strong>suelo</strong>.
-             El término de fotones se va cayendo según observas más y los términos
-             correlacionados se quedan exactamente donde estaban; y una vez por
-             debajo del suelo, lo único que compra observar más son más datos con
-             la misma precisión.`,
-      tip: 'Por eso los telescopios espaciales valen lo que cuestan. Por encima de la atmósfera, con un entorno térmico estable y sin masa de aire, el suelo baja varios órdenes de magnitud, y la profundidad que persigues no ha cambiado nada.',
+      title: 'Tres clases de ruido, tres respuestas distintas',
+      body: `El ruido suele enseñarse en dos clases. Aquí es más útil en tres,
+             porque la del medio es la que decide cuánta observación merece la
+             pena hacer.
+             \n\nEl <strong>ruido blanco</strong> es independiente de una medida
+             a la siguiente: conteo de fotones, ruido de lectura del detector.
+             Los errores independientes se cancelan en parte, así que promediar N
+             de ellos reduce el ruido en √N. Cae con el <em>tiempo total</em>
+             pasado en tránsito, se acumule como se acumule.
+             \n\nEl <strong>correlacionado dentro de un tránsito</strong> es el
+             incómodo: granulación, el paso de una mancha, el detector
+             calentándose durante una noche. Estos vagan a lo largo de
+             <em>horas</em>, la duración de un tránsito, así que agrupar más fino
+             dentro de un tránsito no gana nada. Pero un tránsito tres semanas
+             después es una tirada nueva del mismo proceso, así que este término
+             cae como la raíz cuadrada del <em>número de tránsitos</em>. No del
+             tiempo: diez tránsitos de una hora le ganan a uno de diez horas para
+             este término, y empatan para el ruido blanco.
+             \n\nEl <strong>persistente</strong> es cualquier cosa atada a la
+             propia observación: una estrella débil dentro de la apertura, un
+             patrón del detector sobre el que cae el objetivo en cada órbita, un
+             sesgo en el procesado. Es el mismo número equivocado siempre, así que
+             promediar no le hace absolutamente nada. Este es el único suelo de
+             verdad.
+             \n\nAsí que la respuesta a «¿ayudará observar más?» es <em>casi
+             siempre sí, y al final no</em>. Ayuda hasta que domina el término
+             persistente, y la fila del techo te dice dónde está eso antes de
+             gastar las noches.`,
+      tip: 'Por eso los telescopios espaciales valen lo que cuestan, y no es solo que la atmósfera desaparezca. Por encima de ella el término correlacionado en horas es mucho menor y el persistente está mucho mejor caracterizado, y un sistemático que puedes medir es un sistemático que puedes restar.',
+    },
+    {
+      title: 'Qué está fingiendo este modelo',
+      body: `El panel hace dos supuestos sobre el término del medio y los dos son
+             extremos.
+             \n\nLo trata como <strong>perfectamente correlacionado</strong> a lo
+             largo de un tránsito —de modo que un tránsito da una sola muestra
+             independiente por fino que lo agrupes— y <strong>perfectamente
+             independiente</strong> entre tránsitos, de modo que N tránsitos dan
+             exactamente N muestras. El ruido real no es ninguna de las dos cosas.
+             Un grupo de manchas vive semanas y será en parte el mismo en noches
+             consecutivas. Un ciclo térmico puede repetirse con la órbita de la
+             nave y ser así en parte persistente.
+             \n\nLa verdad es una función de correlación, y los dos extremos son
+             lo que muestra el panel: el término del medio es el mejor caso para
+             observar más, el persistente es el peor. Un análisis real tiene que
+             medir dónde entre ambos está de verdad el ruido, normalmente mirando
+             cómo cae la dispersión de los puntos agrupados con el tamaño del
+             grupo y viendo dónde deja de seguir √N.
+             \n\nEso conviene saberlo antes de fiarse de un número de un panel
+             como este. El modelo es una caricatura elegida para hacer visibles
+             los dos extremos, no un presupuesto de ruido de ningún instrumento
+             real.`,
+      tip: 'El diagnóstico habitual es un «factor beta»: la razón entre la dispersión real de los residuos agrupados y la que predeciría el ruido blanco puro. Los artículos de tránsitos lo citan de forma rutinaria, y son comunes valores de 1,5 a 3, es decir que la verdad suele estar más cerca del extremo optimista que del pesimista, pero nunca en él.',
     },
     {
       title: 'Dos presupuestos, uno al lado del otro',
@@ -326,21 +361,26 @@ export default {
       ],
     },
     {
-      title: '¿Por qué no compraron nada las cien noches extra?',
-      body: `Desde tierra, tres tránsitos dieron un cociente de 2,55 y trescientos
-             dieron 2,56.`,
+      title: '¿Dónde deja de pagar la paciencia?',
+      body: `Desde tierra, tres tránsitos daban una razón de unas 4 y trescientos
+             daban unas 31: una mejora real, pero no el factor de diez que
+             predeciría una ley de raíz cuadrada pura. Sigue arrastrando y se
+             acerca a 49 y se para.`,
       prompt: 'La mejor explicación es:',
       options: [
-        'Los datos extra eran de peor calidad que las tres primeras noches',
-        'La medida ya está en su suelo de ruido correlacionado, y ese término no se promedia',
-        'Trescientos tránsitos siguen siendo pocos para que la raíz cuadrada importe',
+        'Los datos extra eran de peor calidad que los de las tres primeras noches',
+        'Parte del presupuesto es persistente, así que a los términos que sí promedian se les acaba el margen',
+        'Trescientos tránsitos siguen siendo pocos para que importe la raíz cuadrada',
         'La profundidad del tránsito cambia de una noche a otra',
       ],
-      because: `El suelo. Con tres tránsitos el término de fotones ya está en unas
-                260 ppm frente a un término correlacionado de 2.500: el total es
-                esencialmente todo suelo, y promediar no puede tocarlo. La ley de
-                la raíz cuadrada no es falsa; simplemente se aplica a solo uno de
-                los dos términos, y ese dejó de importar hace rato.`,
+      because: `Dos de los tres términos caen al observar más y uno no. Con tres
+                noches domina el vaivén nocturno de la atmósfera, unas 1.440 ppm,
+                y el persistente es solo 120; con trescientas noches el vaivén ha
+                bajado a 144 y el persistente es lo más grande que queda. La ley
+                de la raíz cuadrada nunca estuvo mal: se aplica a dos de los tres
+                términos, y el tercero es el que fija el techo de 49. Decidir si
+                ese techo es bastante alto es lo que te dice si merece la pena
+                gastar las noches.`,
     },
     {
       title: 'El límite de lo que puede hacer un sondeo',
@@ -350,7 +390,7 @@ export default {
              verla a simple vista. Profundidad 290 ppm, y una detección genuina.
              \n\n<strong>Planeta rocoso en la zona habitable</strong> es TOI-700 d:
              más o menos del tamaño de la Tierra, pero alrededor de una estrella
-             roja pequeña, así que la profundidad son unos respetables 550 ppm. Su
+             roja pequeña, así que la profundidad son unos respetables 547 ppm medidos por TESS. Su
              problema es un periodo de 37 días: aproximadamente un tránsito por
              sector de TESS, y costó un año de ellos.
              \n\n<strong>Gemela de la Tierra</strong> son las 84 ppm que calculaste
@@ -378,7 +418,7 @@ export default {
         'Un suelo de ruido correlacionado más bajo: un instrumento más estable, o una estrella más tranquila',
         'Nada: un tránsito de 84 ppm está por debajo de cualquier medida posible',
       ],
-      because: `El suelo. Es lo que limita esta medida a 1,2 por mucho que se
+      because: `El suelo persistente. Es lo que limita esta medida por mucho que se
                 observe, así que bajarlo es la única jugada que cambia la
                 respuesta, y es exactamente lo que hace una misión diseñada para
                 ello. La cuarta opción merece rechazarse explícitamente: 84 ppm no
