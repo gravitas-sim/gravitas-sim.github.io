@@ -173,6 +173,7 @@ export function ensurePanel() {
           <button id="benchSweepRun" class="ui-button">${esc(t('sweep.run'))}</button>
           <button id="benchSweepCancel" class="ui-button" hidden>${esc(t('sweep.cancel'))}</button>
           <button id="benchSweepExport" class="ui-button" disabled>${esc(t('sweep.export'))}</button>
+          <button id="benchSweepNotebook" class="ui-button" disabled>${esc(t('nb.action.save'))}</button>
         </div>
         <p id="benchSweepStatus" class="experiment-hint" role="status" aria-live="polite"></p>
 
@@ -203,6 +204,7 @@ export function ensurePanel() {
           <button id="benchReliabilityRun" class="ui-button" disabled>${esc(t('reliability.run'))}</button>
           <button id="benchReliabilityCancel" class="ui-button" hidden>${esc(t('reliability.cancel'))}</button>
           <button id="benchReliabilityExport" class="ui-button" disabled>${esc(t('reliability.export'))}</button>
+          <button id="benchReliabilityNotebook" class="ui-button" disabled>${esc(t('nb.action.save'))}</button>
         </div>
         <p id="benchReliabilityStatus" class="experiment-hint" role="status" aria-live="polite"></p>
         <div id="benchReliabilityReport" class="experiment-results"></div>
@@ -211,6 +213,7 @@ export function ensurePanel() {
       <div class="experiment-row experiment-actions">
         <button id="benchExportCsv" class="ui-button" disabled>${esc(t('bench.action.csv'))}</button>
         <button id="benchExportJson" class="ui-button" disabled>${esc(t('bench.action.json'))}</button>
+        <button id="benchNotebook" class="ui-button" disabled>${esc(t('nb.action.save'))}</button>
         <button id="benchShare" class="ui-button" disabled>${esc(t('bench.action.share'))}</button>
       </div>
       <div class="experiment-row experiment-actions">
@@ -551,6 +554,7 @@ function renderSweepControls() {
   $('benchSweepGuided').disabled = busy || bench.isRecording();
   $('benchSweepCancel').hidden = !busy;
   $('benchSweepExport').disabled = !bench.latestSweep()?.ok;
+  $('benchSweepNotebook').disabled = !bench.latestSweep()?.ok;
 }
 
 /** Put the selected parameter's own bounds into the range fields and the hint. */
@@ -816,6 +820,7 @@ function renderReliability(exp, recording) {
   run.disabled = !exp || recording || busy || !exp.metrics?.length;
   cancel.hidden = !busy;
   exportBtn.disabled = !exp?.reliability?.ok;
+  $('benchReliabilityNotebook').disabled = !exp?.reliability?.ok;
 
   const report = exp?.reliability;
   out.innerHTML = '';
@@ -933,6 +938,7 @@ function renderComparison(exp) {
   const ready = exp?.runs?.A && exp?.runs?.B;
   $('benchExportCsv').disabled = !ready;
   $('benchExportJson').disabled = !ready;
+  $('benchNotebook').disabled = !ready;
   $('benchShare').disabled = !exp;
 
   if (!ready) {
@@ -1334,6 +1340,41 @@ function wire() {
 
   $('benchReliabilityExport').onclick = () => download('reliability');
 
+  // The three notebook buttons. Dynamic imports so the notebook, its PDF
+  // writer and its prose stay out of the bench's chunk as well as out of the
+  // start-up path: keeping a result is a separate decision from producing one.
+  $('benchNotebook').onclick = () =>
+    keep((capture, provenance) =>
+      capture.fromBenchComparison({
+        experiment: bench.activeExperiment(),
+        comparison: bench.compare(),
+        labelFor: bench.metricLabel,
+        provenance,
+      })
+    );
+  $('benchSweepNotebook').onclick = () =>
+    keep((capture, provenance) =>
+      capture.fromSweep({
+        sweep: bench.latestSweep(),
+        labelFor: bench.metricLabel,
+        provenance,
+      })
+    );
+  $('benchReliabilityNotebook').onclick = () =>
+    keep((capture, provenance) =>
+      capture.fromReliability({
+        report: bench.activeExperiment()?.reliability,
+        labelFor: bench.metricLabel,
+        provenance: {
+          ...provenance,
+          scenario:
+            bench.activeExperiment()?.provenance?.scenario ??
+            provenance.scenario,
+          seed: bench.activeExperiment()?.provenance?.seed ?? provenance.seed,
+        },
+      })
+    );
+
   $('benchExportCsv').onclick = () => download('csv');
   $('benchExportJson').onclick = () => download('json');
   $('benchShare').onclick = () => onShareRequest?.();
@@ -1359,6 +1400,18 @@ function tickStatus() {
     }
     renderStatus(bench.activeExperiment(), true);
   }, 400);
+}
+
+/**
+ * Hand a result to the evidence notebook.
+ *
+ * @param {Function} make - (capture, provenance) => entry|null
+ * @returns {Promise<void>}
+ */
+async function keep(make) {
+  const { captureToNotebook } = await import('../notebookBridge.js');
+  const saved = await captureToNotebook(make);
+  if (!saved) bench.say(t('nb.nothingToSave'));
 }
 
 function download(which) {

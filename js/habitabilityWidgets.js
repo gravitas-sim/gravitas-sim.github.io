@@ -31,6 +31,13 @@ import {
 } from './habitability.js';
 import { TRAPPIST1_STAR, TRAPPIST1_PLANETS } from './data/trappist1.js';
 import { t } from './i18n/index.js';
+// This family's labels are in the deferred half of the catalogue; see the note
+// in js/widgets.js. Registered from the module that renders them, because a
+// lesson, a share link, an authoring preview or a test can import this file
+// directly and never reach the registry.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
 
 // A fixed dark palette rather than the theme's: these are pictures of space
 // with bright stars in them, and theme-colored ink over them is unreadable in

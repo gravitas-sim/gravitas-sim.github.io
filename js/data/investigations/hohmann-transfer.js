@@ -37,6 +37,10 @@ const HOHMANN_TRANSFER = {
   subtitle: 'Two burns, a long coast, and the arithmetic that decides both',
   duration: '20-25 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
   summary:
     'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the manoeuvre and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',

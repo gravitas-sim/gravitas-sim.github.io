@@ -43,6 +43,11 @@ const PANEL_IDS = [
   // so it is absent from the DOM until then; the layout skips ids it cannot
   // find, which is what lets a lazily-built panel join a static list.
   'experimentPanel',
+  // The evidence notebook, built by js/notebookPanel.js on first use and
+  // absent from the DOM until then, like the bench above it. Last in the
+  // stack: it is where a reading goes after it has been taken, so it should
+  // not displace the instrument that took it.
+  'evidenceNotebook',
 ];
 
 // Clear of the transport bar along the bottom.

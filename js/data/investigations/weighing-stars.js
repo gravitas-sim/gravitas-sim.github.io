@@ -28,6 +28,10 @@ const WEIGHING = {
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
   summary:
     'Kepler’s laws end with Newton’s correction, and this is what that correction is for. Watch two stars circle each other, find the balance point they are both going round, and use nothing but the size and the timing of their orbit to work out how much each one weighs. No telescope has ever put a star on a scale; this is how it is actually done.',

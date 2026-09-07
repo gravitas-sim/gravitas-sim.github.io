@@ -15,7 +15,11 @@ import {
 } from '../js/data/investigations/registry.js';
 import { seriesPosition } from '../js/data/investigations.js';
 import { gradedSteps } from '../js/data/investigations/catalogue.js';
-import { manifestEntries } from '../tools/build-investigation-manifest.js';
+import {
+  browseMeta,
+  manifestEntries,
+} from '../tools/build-investigation-manifest.js';
+import { BROWSE_META } from '../js/data/investigations/browseData.js';
 import { mergeTranslation } from '../js/data/investigations/i18n.js';
 
 /**
@@ -78,6 +82,24 @@ describe('the manifest', () => {
     expect(MANIFEST).toEqual(manifestEntries());
   });
 
+  test('the filter metadata is what the generator would write today', () => {
+    // Same failure as above, one file over: a lesson gains a tag or a numeric
+    // step, nobody runs `npm run manifest`, and the browser's subject filter
+    // quietly stops offering it.
+    expect(BROWSE_META).toEqual(browseMeta());
+  });
+
+  test('the filter metadata is not duplicated into the manifest', () => {
+    // It is language-independent, so it lives in one file rather than once per
+    // locale - and the manifest is in the start-up download while this is read
+    // only by the lesson browser.
+    for (const entry of MANIFEST) {
+      expect(entry.tags).toBeUndefined();
+      expect(entry.numericCount).toBeUndefined();
+      expect(BROWSE_META[entry.id]).toBeDefined();
+    }
+  });
+
   test('describes every lesson, in catalogue order', () => {
     expect(MANIFEST.map(m => m.id)).toEqual(INVESTIGATIONS.map(i => i.id));
     expect(investigationIds()).toEqual(INVESTIGATIONS.map(i => i.id));
@@ -122,10 +144,16 @@ describe('loading a lesson', () => {
       [
         ...lessons,
         ...TRANSLATED_LOCALES.map(l => `manifest.${l}.js`),
+        // The lesson machinery. Anything else in this directory is a lesson,
+        // and a file here that is neither is either a stray or something the
+        // registry does not know to load.
+        'browse.js',
+        'browseData.js',
         'catalogue.js',
         'i18n.js',
         'manifest.js',
         'registry.js',
+        'sequences.js',
       ].sort()
     );
   });

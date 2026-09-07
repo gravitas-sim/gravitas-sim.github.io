@@ -287,7 +287,7 @@ describe('the catalogue split', () => {
     // reliability.* belongs here because the bench that shows it is itself
     // lazy: its bridge registers this catalogue before the panel renders.
     const allowed =
-      /^(binaryRun|assist|rvfit|exoW|reliability|bench|sweep|assign|burn|inv|cr3bp)\./;
+      /^(binaryRun|assist|rvfit|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
   });
 });

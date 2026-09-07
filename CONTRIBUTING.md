@@ -346,7 +346,7 @@ a student's download.
 ### After adding one
 
 ```bash
-npm run manifest    # regenerate both lesson-card manifests
+npm run manifest    # lesson-card manifests and the browser's filter metadata
 npm run author:check
 npm test            # investigationRegistry.test.js catches a missed registration
 npm run docs:sync   # lesson and step counts in the docs

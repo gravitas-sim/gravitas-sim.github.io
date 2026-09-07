@@ -28,6 +28,15 @@
 // =============================================================================
 
 import { t } from './i18n/index.js';
+// This family's labels are in the deferred half of the catalogue; see the note
+// in js/widgets.js. Registered from the module that renders them rather than
+// from the registry, because a lesson, a share link, an authoring preview or a
+// test can import this file directly and never go through the registry at all
+// - which is how e2e/resonance.spec.js found `resW.row.frame` on screen.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
+
 import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
 import { recorder, partition } from './resonance/recorder.js';
 import {

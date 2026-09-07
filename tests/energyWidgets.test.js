@@ -1,4 +1,15 @@
 import { describe, test, expect } from '@jest/globals';
+
+import { registerMessages } from '../js/i18n/index.js';
+import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
+
+// These widgets' prose lives in the deferred catalogue, because everything
+// that reaches them is lazily loaded: js/widgets.js is imported only by
+// js/investigations.js, whose loader registers the catalogue before any step
+// draws. A test that reads a preset's label has to do the same, or every
+// label is the message id it was going to be translated from.
+registerMessages('en', EN_DEFERRED);
+
 import { escapeSpeed, circularSpeed, launchPath } from '../js/energyWidgets.js';
 import { getWidget, widgetDefaults } from '../js/widgets.js';
 

@@ -82,6 +82,10 @@ const TRANSITS = {
     'Measure a transit, weigh what it tells you, and find what is hiding',
   duration: '50-70 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   summary:
     'Work through the transit method from first principles on HD 209458 b, the first planet ever caught crossing its star: measure a depth and turn it into a radius, correct it for limb darkening, time two transits to get a period, read an atmosphere out of the color of the dip, and finish by finding the hidden companion star that makes the planet look smaller than it is.',

@@ -24,6 +24,10 @@ const KEPLER = {
   subtitle: 'Measure the shape, pacing and timing of real orbits',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['orbits', 'solar-system'],
   lock: { placement: true, inspector: true },
   summary:
     'Work through all three of Kepler’s laws by measuring orbits rather than being shown them: find the focus of an ellipse, watch equal areas sweep out in equal times, and recover the three-halves power law by plotting it yourself.',

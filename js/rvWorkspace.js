@@ -68,6 +68,10 @@ export function loadRecording(recording) {
   source = recording || null;
   revealed = false;
   search = null;
+  // An interval computed from a different observing run must not survive into
+  // this one: it would be exported beside the new recording's provenance and
+  // read as an interval on these points.
+  onRecordingChanged?.();
   if (!source?.points?.length) return;
 
   // A starting guess that is honest about being a guess: the midpoint of the
@@ -263,7 +267,38 @@ export function exportReport() {
     },
     truthRevealed: revealed,
     truth: revealed ? truthParameters() : null,
+    // The uncertainty analysis, when one has been run. Published from the
+    // panel rather than computed here: the analysis is optional and its
+    // report is already the reproducible block, seed and grid included, so
+    // this carries it verbatim. Null when nobody ran one, which is honest -
+    // an export with no interval says none was computed.
+    uncertainty: uncertaintyFor ? uncertaintyFor() : null,
   };
+}
+
+/**
+ * Where the export gets the uncertainty report from.
+ *
+ * Published in rather than imported, for the same reason dataExport.js is
+ * handed a reporter by the bridge: this module is the analysis and the panel
+ * is the interface, and a module that reached up into its own panel to find
+ * out what the reader had clicked would be the wrong way round.
+ */
+let uncertaintyFor = null;
+
+/** Called when a new recording is loaded, so the panel can drop its report. */
+let onRecordingChanged = null;
+
+/**
+ * Register the uncertainty reporter and its invalidation hook.
+ *
+ * @param {?Function} fn - Returns the last uncertainty report, or null
+ * @param {?Function} [onChange] - Called when a new recording is loaded
+ * @returns {void}
+ */
+export function setUncertaintyReporter(fn, onChange = null) {
+  uncertaintyFor = typeof fn === 'function' ? fn : null;
+  onRecordingChanged = typeof onChange === 'function' ? onChange : null;
 }
 
 // --- Drawing -----------------------------------------------------------------

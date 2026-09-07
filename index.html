@@ -602,8 +602,65 @@
         <button id="rvFitReveal" class="obs-panel-btn" type="button">
           <span data-i18n="rvfit.reveal">Reveal simulation truth</span>
         </button>
+        <!--
+          Saves the fit as it stands into the evidence notebook: the
+          parameters, the folded curve, and the conditions the recording was
+          made under. Whether the truth has been revealed travels with it.
+        -->
+        <button id="rvFitNotebook" class="obs-panel-btn" type="button">
+          <span data-i18n="nb.action.save">Save to notebook</span>
+        </button>
       </div>
       <p id="rvFitTruth" class="rvfit-truth" role="status"></p>
+
+      <!--
+        The optional uncertainty analysis. Everything inside is written by
+        js/rvWorkspacePanel.js from the report js/rvUncertainty.js returns: no
+        interval, no family and no assumption is spelled out here, so nothing
+        in this file can disagree with the analysis that produced it. Closed by
+        default because it is an extra step, not part of reading the fit.
+      -->
+      <details id="rvMcSection" class="rvfit-mc">
+        <summary data-i18n="rvfit.mc.title">
+          Uncertainty analysis (optional)
+        </summary>
+        <p class="obs-panel-hint" data-i18n="rvfit.mc.hint">
+          Simulates this observing run again and again — the same epochs, the
+          same stated uncertainties, a fresh noise draw each time — and refits
+          every one with the search you just ran.
+        </p>
+        <div class="rvfit-mc-controls">
+          <label class="rvfit-mc-field" for="rvMcTrials">
+            <span data-i18n="rvfit.mc.trials">Trials</span>
+            <input id="rvMcTrials" type="number" value="400" />
+          </label>
+          <label class="rvfit-mc-field" for="rvMcSeed">
+            <span data-i18n="rvfit.mc.seed">Noise seed</span>
+            <input id="rvMcSeed" type="text" value="mc-1" autocomplete="off" />
+          </label>
+          <button id="rvMcRun" class="obs-panel-btn" type="button">
+            <span data-i18n="rvfit.mc.run">Run analysis</span>
+          </button>
+          <button id="rvMcCancel" class="obs-panel-btn" type="button" hidden="">
+            <span data-i18n="rvfit.mc.cancel">Cancel</span>
+          </button>
+        </div>
+        <p class="rvfit-mc-seedhint" data-i18n="rvfit.mc.seedHint">
+          The same seed reproduces the same intervals exactly, and the export
+          carries it.
+        </p>
+        <p
+          id="rvMcStatus"
+          class="rvfit-mc-status"
+          role="status"
+          aria-live="polite"
+        ></p>
+        <div id="rvMcResult" class="rvfit-mc-result"></div>
+        <canvas id="rvMcPeriodHist" class="rvfit-canvas"></canvas>
+        <canvas id="rvMcAmplitudeHist" class="rvfit-canvas"></canvas>
+        <div id="rvMcAssumptions" class="rvfit-mc-assume"></div>
+        <div id="rvMcGuidance" class="rvfit-mc-guidance"></div>
+      </details>
 
       <p class="obs-panel-hint" data-i18n="rvfit.hint">
         A circular single-planet model: period, amplitude, phase and systemic
@@ -1841,6 +1898,16 @@
             >
               A/B Bench
             </button>
+            <button
+              id="toggleNotebook"
+              class="rail-chip"
+              aria-pressed="false"
+              title="Open the evidence notebook: readings you have saved from the instruments, the analysis workspace and the bench, each one frozen with the conditions it was taken under, and each with room for your claim, your evidence and the limitations you can see."
+              data-i18n-title="rail.toggleNotebook.hint"
+              data-i18n="rail.toggleNotebook"
+            >
+              Evidence Notebook
+            </button>
           </div>
 
           <p class="rail-subhead" data-i18n="rail.sub.view">View</p>
@@ -2312,12 +2379,102 @@
           ></span>
         </p>
 
+        <!--
+          Search and filters. Every option in every one of these menus is
+          written by js/investigations.js from the manifest: the subjects are
+          the tags the lessons declare, and the lengths are bucketed from the
+          durations they declare. Nothing about a lesson is spelled out here,
+          so nothing here can disagree with the catalogue.
+        -->
+        <div class="inv-browser-tools">
+          <div class="inv-search">
+            <label class="visually-hidden" for="investigationSearch"
+              >Search lessons</label
+            >
+            <input
+              id="investigationSearch"
+              class="inv-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Search by title, topic or subject"
+              data-i18n-placeholder="inv.filter.search.placeholder"
+            />
+          </div>
+          <div class="inv-filters">
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.subject">Subject</span>
+              <select id="investigationFilterSubject"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.length">Time needed</span>
+              <select id="investigationFilterLength"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.calculation">Calculation</span>
+              <select id="investigationFilterCalculation"></select>
+            </label>
+            <label class="inv-filter">
+              <span data-i18n="inv.filter.progress">Progress</span>
+              <select id="investigationFilterProgress"></select>
+            </label>
+            <button
+              type="button"
+              id="investigationFilterClear"
+              class="ui-button inv-filter-clear"
+              hidden=""
+              data-i18n="inv.filter.clear"
+            >
+              Clear filters
+            </button>
+          </div>
+        </div>
+
         <div id="investigationBrowserScroll" class="inv-browser-scroll">
           <!--
             No role="list": the children are buttons, which cannot be
             listitems, and the scenario grid above carries no role either.
           -->
+          <!--
+            Curated orders through the catalogue. The order and the reasons
+            come from js/data/investigations/sequences.js; the titles,
+            durations and "fits a demonstration" labels are read off the
+            manifest, so a lesson that gets longer stops being called short
+            without anybody editing a sequence.
+          -->
+          <section
+            id="investigationSequences"
+            class="inv-sequences"
+            aria-labelledby="investigationSequencesTitle"
+            hidden=""
+          >
+            <h4 id="investigationSequencesTitle" data-i18n="inv.seq.heading">
+              Ways through
+            </h4>
+            <p class="inv-seq-intro" data-i18n="inv.seq.intro">
+              Lessons stand alone, but some build on each other. These are
+              orders that work, with what each one assumes you have already
+              done.
+            </p>
+            <div id="investigationSequenceList" class="inv-seq-list"></div>
+          </section>
+          <h4
+            id="investigationAllHeading"
+            class="inv-all-heading"
+            data-i18n="inv.seq.all"
+            hidden=""
+          >
+            Every lesson
+          </h4>
           <div id="investigationList" class="inv-grid"></div>
+          <p id="investigationEmpty" class="inv-empty" hidden="" role="status">
+            <span id="investigationEmptyText"></span>
+            <button
+              type="button"
+              id="investigationEmptyAction"
+              class="ui-button"
+              hidden=""
+            ></button>
+          </p>
         </div>
       </div>
     </div>

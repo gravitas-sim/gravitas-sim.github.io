@@ -70,6 +70,10 @@ const GOLDILOCKS = {
     "Move a planet, change its star, and decide what 'habitable' really means",
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['exoplanets', 'habitability'],
   lock: { placement: true, inspector: true, areaSweep: false },
   summary:
     'Work out for yourself why a planet twice as far from its star receives a quarter as much energy, why dim stars have their habitable zones tucked in close, and why an eccentric orbit means a planet does not receive one steady amount of light all year. Then finish with the harder question the phrase "habitable zone" invites people to skip: what does being inside it actually tell you?',

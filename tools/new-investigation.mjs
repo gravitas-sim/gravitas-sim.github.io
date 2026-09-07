@@ -17,7 +17,7 @@
 //   js/data/investigations/registry.js     the lazy loader, and the translation
 //   js/data/investigations.js              the synchronous barrel
 //   js/data/instructorContent.js           the guide stub
-//   then: npm run manifest                 regenerates both manifests
+//   then: npm run manifest                 manifests and filter metadata
 //
 // Nothing is overwritten. Re-running after an edit reports what is already in
 // place and touches nothing else, so it is safe to run twice.
@@ -133,6 +133,13 @@ const ${constName} = {
   subtitle: ${JSON.stringify(subtitle)},
   duration: '30-40 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. Pick from the vocabulary the
+  // other lessons already use - chaos, compact-objects, exoplanets, galaxies,
+  // gravity, habitability, observing, orbits, resonance, solar-system,
+  // spaceflight, stars - and add a new one only with a name for it in both
+  // js/i18n/en.deferred.js and js/i18n/es.deferred.js as inv.tag.<tag>, which
+  // tests/investigationBrowse.test.js checks.
+  tags: ['orbits'],
   lock: { placement: true, inspector: true },
   summary:
     'A paragraph for the lesson card: what the student measures, and what it lets them conclude.',
@@ -351,7 +358,7 @@ if (skipped.length) {
 console.log(
   `
 Next:
-  npm run manifest          regenerate both manifests from the lessons
+  npm run manifest          regenerate the manifests and the filter metadata
   npm run author:check      validate the new lesson, and every other one
   npm run format            the scaffold is written plainly, prettier owns it
 

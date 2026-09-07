@@ -36,6 +36,10 @@ const TIDES = {
     'Stretch a world, move a moon, and discover why gravity can tear objects apart',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['gravity', 'solar-system'],
   lock: { placement: true, inspector: true },
   summary:
     'Tides are not caused by strong gravity. They are caused by gravity being unequal across an object, and the whole lesson is built on that one subtraction: take the pull on the centre away from the pull on the near side and the far side, and everything from the two daily high tides to a star being shredded by a black hole falls out of what is left.',

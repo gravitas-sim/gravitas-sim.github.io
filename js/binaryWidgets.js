@@ -17,6 +17,13 @@
 import { withUnit } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
+// This family's labels are in the deferred half of the catalogue; see the note
+// in js/widgets.js. Registered from the module that renders them, because a
+// lesson, a share link, an authoring preview or a test can import this file
+// directly and never reach the registry.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
 
 /** Simulated years that pass in one second of watching. */
 const YEARS_PER_SECOND = 0.25;

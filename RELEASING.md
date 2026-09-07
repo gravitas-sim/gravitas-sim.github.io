@@ -43,7 +43,7 @@ from that file, and `package.json`'s `version` is checked against it.
 
 ```bash
 npm run docs:sync -- --full     # counts, facts.tex, CITATION.cff, .zenodo.json
-npm run manifest                # the lesson-card manifests
+npm run manifest                # lesson-card manifests and filter metadata
 npm run vendor                  # only if a vendored dependency moved
 npm run manual                  # the user manual's generated tables
 ```

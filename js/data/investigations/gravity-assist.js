@@ -58,6 +58,10 @@ const GRAVITY_ASSIST = {
     'The same flyby, measured in two frames, with two different answers',
   duration: '15-20 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
   summary:
     'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, and find out why the two measurements disagree — and who actually paid.',

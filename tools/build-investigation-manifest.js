@@ -3,7 +3,8 @@
 // Generate js/data/investigations/manifest.js
 // -----------------------------------------------------------------------------
 // The lesson browser draws ten cards. Every field on a card - title, subtitle,
-// duration, level, summary, thumbnail, series, step count, objective count -
+// duration, level, tags, summary, thumbnail, series, step and numeric counts,
+// objective count -
 // is a handful of bytes, and reading them out of the lessons themselves means
 // loading 225KB of lesson text to render a grid.
 //
@@ -79,6 +80,30 @@ const entryOf = inv => ({
 });
 
 /**
+ * What the browser's filters need, which is not what a card shows.
+ *
+ * Kept out of the manifest for two reasons. It is the same in every language -
+ * a tag is an identifier and a count is a number - so putting it in the
+ * manifest would duplicate it once per locale. And the manifest is in the
+ * start-up download, while the filters arrive with the lesson browser, which
+ * nobody has opened yet; a subject filter's vocabulary has no business being
+ * fetched by a visitor who never opens the catalogue.
+ */
+const browseMetaOf = inv => ({
+  // Subject tags, so the browser can offer a filter without a second list of
+  // lessons to keep in step with this one.
+  tags: [...(inv.tags || [])].sort(),
+  // How much arithmetic the lesson asks for, counted rather than judged.
+  //
+  // The obvious field to filter on would be difficulty, and this catalogue has
+  // none to offer: all seventeen lessons are introductory and say so. What does
+  // vary is whether a reader is asked to work a number out, and that is
+  // countable - so it is counted here instead of somebody deciding which
+  // lessons feel harder.
+  numericCount: inv.steps.filter(s => s.kind === 'numeric').length,
+});
+
+/**
  * The manifest as data.
  *
  * Separate from rendering it so a test can compare it against the checked-in
@@ -91,6 +116,56 @@ const entryOf = inv => ({
  */
 export const manifestEntries = (lessons = INVESTIGATIONS) =>
   lessons.map(entryOf);
+
+/**
+ * The filter metadata as data, for the same reason as manifestEntries.
+ *
+ * @param {Array<Object>} lessons - The catalogue
+ * @returns {Object} Keyed by lesson id
+ */
+export const browseMeta = (lessons = INVESTIGATIONS) =>
+  Object.fromEntries(lessons.map(inv => [inv.id, browseMetaOf(inv)]));
+
+/** Where the filter metadata lives. One file; it is language-independent. */
+export const BROWSE_PATH = path.join(DIR, 'browseData.js');
+
+const BROWSE_HEADER = `// =============================================================================
+// Lesson filter metadata - GENERATED, do not edit
+// -----------------------------------------------------------------------------
+// Written by tools/build-investigation-manifest.js from the lesson files in
+// this directory. Run \`npm run manifest\` after changing a lesson's tags or
+// adding a numeric step.
+//
+// Not part of the manifest, deliberately. Everything here is the same in every
+// language, so the manifest would carry it once per locale; and the manifest
+// is in the start-up download while this is read only by the lesson browser's
+// filters, which arrive with the browser itself.
+// =============================================================================
+`;
+
+/**
+ * Render the filter-metadata module.
+ *
+ * @returns {Promise<string>} The file contents
+ */
+export async function renderBrowseData() {
+  const raw = `${BROWSE_HEADER}\nexport const BROWSE_META = ${JSON.stringify(
+    browseMeta(),
+    null,
+    2
+  )};\n`;
+  const options = (await prettier.resolveConfig(BROWSE_PATH)) || {};
+  return prettier.format(raw, { ...options, filepath: BROWSE_PATH });
+}
+
+/** @returns {string} What is on disk today, or the empty string */
+export const currentBrowseData = () => {
+  try {
+    return readFileSync(BROWSE_PATH, 'utf8');
+  } catch {
+    return '';
+  }
+};
 
 /**
  * The catalogue in one language.
@@ -154,4 +229,11 @@ if (
         `(${INVESTIGATIONS.length} lessons, ${locale})`
     );
   }
+  const browse = await renderBrowseData();
+  const browseChanged = currentBrowseData() !== browse;
+  writeFileSync(BROWSE_PATH, browse);
+  console.log(
+    `${browseChanged ? 'Wrote' : 'Unchanged'}: ` +
+      `${path.relative(process.cwd(), BROWSE_PATH)} (filter metadata)`
+  );
 }

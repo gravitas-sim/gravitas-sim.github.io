@@ -64,6 +64,10 @@ const ENERGY = {
   subtitle: 'Find out what decides whether something comes back',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['orbits', 'gravity'],
   // The equal-area wedges belong to the lesson this scenario was built for,
   // not to this one.
   lock: { placement: true, inspector: true, areaSweep: false },

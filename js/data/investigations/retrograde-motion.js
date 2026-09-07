@@ -19,6 +19,10 @@ const RETROGRADE = {
   subtitle: 'Change the frame, and fourteen centuries of epicycles fall away',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['orbits', 'solar-system', 'observing'],
   lock: { placement: true, inspector: false },
   summary:
     'Twice every three years Mars stops in the sky, reverses, and loops back on itself. Watched from outside, nothing of the sort happens: Earth and Mars both go round the Sun the same way and never turn back. You will measure both orbits, predict what Mars does when seen from Earth, then switch the reference frame and watch the loop draw itself. Nothing in the physics changes when you do. That is the entire point, and it is what took astronomy from Ptolemy to Copernicus.',

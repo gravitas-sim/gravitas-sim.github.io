@@ -35,6 +35,23 @@ import {
   gradedSteps,
   seriesPosition,
 } from './data/investigations/registry.js';
+// Search, filters and the curated orders. Both read the same generated
+// manifest the cards do, so there is one list of lessons and not three.
+import {
+  NO_FILTERS,
+  PROGRESSES,
+  filterCatalogue,
+  isFiltered,
+  loosening,
+  subjectsOf,
+} from './data/investigations/browse.js';
+import {
+  LENGTH,
+  LENGTHS,
+  CALCULATIONS,
+  SEQUENCES,
+  resolveSequence,
+} from './data/investigations/sequences.js';
 // The thumbnail block and its fallback wiring are shared with the scenario
 // gallery and the front door's featured cards, so a borrowed capture lazy-loads
 // and degrades identically wherever it appears.
@@ -2635,46 +2652,342 @@ function browserCardHtml(inv, index, shared) {
     </button>`;
 }
 
+// --- Search, filters and the curated orders -----------------------------------
+
+/**
+ * What the reader has narrowed the list to.
+ *
+ * Module state, deliberately: a student who filters to "in progress", opens a
+ * lesson and comes back should find the list as they left it, and that has to
+ * survive the panel being closed and reopened. It is not written to storage -
+ * a filter is about the next five minutes, and finding the catalogue silently
+ * cut down a week later would be a bug, not a convenience.
+ */
+let browserFilters = { ...NO_FILTERS };
+
+/** For tests and for the assignment flow: start from the whole catalogue. */
+export function resetBrowserFilters() {
+  browserFilters = { ...NO_FILTERS };
+}
+
+/** The current filter set, for tests. */
+export const browserFilterState = () => ({ ...browserFilters });
+
+/** Options for one select: an "any" row, then the values. */
+function fillSelect(select, values, labelOf, anyLabel, current) {
+  if (!select) return;
+  select.innerHTML = [
+    `<option value="">${escape(anyLabel)}</option>`,
+    ...values.map(
+      value =>
+        `<option value="${attr(value)}">${escape(labelOf(value))}</option>`
+    ),
+  ].join('');
+  select.value = current || '';
+}
+
+/**
+ * Build the filter menus from the catalogue.
+ *
+ * Called on every render rather than once, because the labels are translated
+ * and the subject counts move as lessons are added.
+ */
+function fillFilterMenus() {
+  const subjects = subjectsOf(MANIFEST);
+  fillSelect(
+    els.filterSubject,
+    subjects.map(s => s.tag),
+    tag => {
+      const found = subjects.find(s => s.tag === tag);
+      return t('inv.filter.subject.option', {
+        subject: t(`inv.tag.${tag}`),
+        n: found ? found.count : 0,
+      });
+    },
+    t('inv.filter.subject.any'),
+    browserFilters.subject
+  );
+  fillSelect(
+    els.filterLength,
+    LENGTHS,
+    value => t(`inv.filter.length.${value}`),
+    t('inv.filter.length.any'),
+    browserFilters.length
+  );
+  fillSelect(
+    els.filterCalculation,
+    CALCULATIONS,
+    value => t(`inv.filter.calculation.${value}`),
+    t('inv.filter.calculation.any'),
+    browserFilters.calculation
+  );
+  fillSelect(
+    els.filterProgress,
+    PROGRESSES,
+    value => t(`inv.filter.progress.${value}`),
+    t('inv.filter.progress.any'),
+    browserFilters.progress
+  );
+}
+
+/**
+ * One lesson inside a curated sequence.
+ *
+ * The title, duration and length label all come from the manifest entry. The
+ * sequence contributes the position, the reason and the prerequisites.
+ */
+function sequenceStepHtml(step, index) {
+  const inv = step.entry;
+  const p = progressFor(inv.id);
+  const complete = p.started && p.done >= p.total;
+  const needs = step.needs
+    .map(id => investigationMeta(id)?.title)
+    .filter(Boolean);
+
+  // Only a lesson that really is short gets called short. Anything longer says
+  // how long it is and offers the builder, which is the honest way to get a
+  // fifteen-minute activity out of a seventy-minute lesson.
+  const fit =
+    step.fit === LENGTH.DEMO
+      ? t('inv.seq.fit.demo')
+      : step.fit === LENGTH.PERIOD
+        ? t('inv.seq.fit.period')
+        : t('inv.seq.fit.long');
+
+  return `<li class="inv-seq-step${complete ? ' is-complete' : ''}">
+      <span class="inv-seq-num" aria-hidden="true">${index + 1}</span>
+      <span class="inv-seq-body">
+        <button type="button" class="inv-seq-open" data-sequence-lesson="${escape(inv.id)}">
+          ${escape(inv.title)}
+        </button>
+        <span class="inv-seq-tags">
+          <span class="inv-seq-time">${escape(inv.duration)}</span>
+          <span class="inv-seq-fit is-${escape(step.fit)}">${escape(fit)}</span>
+          ${complete ? `<span class="inv-seq-done">${escape(t('inv.card.complete'))}</span>` : ''}
+        </span>
+        <span class="inv-seq-why">${escape(t(step.whyId))}</span>
+        ${
+          needs.length
+            ? `<span class="inv-seq-needs">${escape(
+                t('inv.seq.needs', { lessons: needs.join(', ') })
+              )}</span>`
+            : `<span class="inv-seq-needs is-none">${escape(t('inv.seq.needs.none'))}</span>`
+        }
+        ${
+          step.fit === LENGTH.LONG
+            ? `<a class="inv-seq-assign" href="?assign=${encodeURIComponent(inv.id)}">${escape(
+                t('inv.seq.assign')
+              )}</a>`
+            : ''
+        }
+      </span>
+    </li>`;
+}
+
+/** All the curated sequences, resolved against the catalogue. */
+function renderSequences() {
+  if (!els.sequenceList) return;
+  els.sequenceList.innerHTML = SEQUENCES.map(sequence => {
+    const steps = resolveSequence(sequence, MANIFEST);
+    if (!steps.length) return '';
+    return `<section class="inv-seq">
+        <h5 class="inv-seq-title">${escape(t(sequence.titleId))}</h5>
+        <p class="inv-seq-blurb">${escape(t(sequence.blurbId))}</p>
+        <ol class="inv-seq-steps">${steps
+          .map((step, i) => sequenceStepHtml(step, i))
+          .join('')}</ol>
+      </section>`;
+  }).join('');
+
+  // A distinct attribute from the cards' `data-investigation`, on purpose: that
+  // one has meant "a lesson card" everywhere for long enough that half a dozen
+  // tests select on it bare, and a second element answering to it made those
+  // selectors ambiguous rather than wrong. The sequence rows say what they are.
+  els.sequenceList.querySelectorAll('[data-sequence-lesson]').forEach(btn => {
+    btn.addEventListener('click', () =>
+      openCardLesson(btn, btn.dataset.sequenceLesson)
+    );
+  });
+}
+
+/**
+ * Open a lesson from a card or a sequence row.
+ *
+ * Shared so a sequence entry behaves exactly like a card: the same busy state,
+ * the same failure message, the same lazy fetch.
+ */
+function openCardLesson(btn, id = btn.dataset.investigation) {
+  // Opening is a fetch now, so the control says so. On a warm cache this class
+  // is added and removed within a frame and nobody sees it; on a phone on
+  // campus wifi it is the difference between a considered wait and a card
+  // that looks broken.
+  btn.setAttribute('aria-busy', 'true');
+  const cta = btn.querySelector('.inv-card-cta');
+  const wasCta = cta?.textContent;
+  if (cta) cta.textContent = t('inv.card.loading');
+  return openInvestigation(id)
+    .catch(() => toast(t('inv.load.failed')))
+    .finally(() => {
+      btn.removeAttribute('aria-busy');
+      if (cta && wasCta) cta.textContent = wasCta;
+    });
+}
+
+/** Nothing matched: say what would help rather than leaving a blank panel. */
+function renderEmpty(filtered) {
+  if (!els.empty) return;
+  els.empty.hidden = Boolean(filtered.length);
+  if (filtered.length) return;
+
+  const relax = loosening(MANIFEST, browserFilters, progressFor);
+  if (els.emptyText)
+    els.emptyText.textContent = browserFilters.query
+      ? t('inv.empty.search', { query: browserFilters.query })
+      : t('inv.empty.filters');
+  if (els.emptyAction) {
+    els.emptyAction.hidden = false;
+    els.emptyAction.textContent = relax
+      ? t('inv.empty.relax', {
+          filter: t(`inv.filter.${relax.key}`).toLowerCase(),
+          n: relax.count,
+        })
+      : t('inv.filter.clear');
+    els.emptyAction.dataset.relax = relax ? relax.key : '';
+  }
+}
+
 function renderBrowser() {
   if (!els.list) return;
   const shared = sharedLevel();
+  const narrowed = isFiltered(browserFilters);
+  const rows = filterCatalogue(MANIFEST, browserFilters, progressFor);
+
+  fillFilterMenus();
 
   if (els.count) {
-    els.count.textContent = browserSummary();
+    // While filtering, the count is the answer to what was just typed, and the
+    // element is a live region so it is also the announcement. The standing
+    // summary of the whole catalogue would bury that.
+    els.count.textContent = narrowed
+      ? t('inv.filter.count', { n: rows.length, total: MANIFEST.length })
+      : browserSummary();
   }
   // The level, said once, where it is a fact about the set rather than a pill
   // repeated eight times.
   if (els.level) {
-    els.level.hidden = !shared;
+    els.level.hidden = !shared || narrowed;
     if (shared)
       els.level.textContent = t('inv.summary.level', {
         level: shared.toLowerCase(),
       });
   }
+  if (els.filterClear) els.filterClear.hidden = !narrowed;
 
-  els.list.innerHTML = MANIFEST.map((inv, i) =>
-    browserCardHtml(inv, i, shared)
-  ).join('');
+  // The curated orders are an answer to "where do I start", which is not the
+  // question somebody typing in the search box is asking.
+  if (els.sequences) {
+    els.sequences.hidden = narrowed;
+    if (!narrowed) renderSequences();
+    else els.sequenceList.innerHTML = '';
+  }
+  if (els.allHeading) els.allHeading.hidden = narrowed;
+
+  els.list.innerHTML = rows
+    .map((row, i) => browserCardHtml(row.entry, i, shared))
+    .join('');
 
   wireThumbnailFallbacks(els.list);
 
   els.list.querySelectorAll('[data-investigation]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Opening is a fetch now, so the card says so. On a warm cache this class
-      // is added and removed within a frame and nobody sees it; on a phone on
-      // campus wifi it is the difference between a considered wait and a card
-      // that looks broken.
-      btn.setAttribute('aria-busy', 'true');
-      const cta = btn.querySelector('.inv-card-cta');
-      const wasCta = cta?.textContent;
-      if (cta) cta.textContent = t('inv.card.loading');
-      openInvestigation(btn.dataset.investigation)
-        .catch(() => toast(t('inv.load.failed')))
-        .finally(() => {
-          btn.removeAttribute('aria-busy');
-          if (cta && wasCta) cta.textContent = wasCta;
-        });
-    });
+    btn.addEventListener('click', () => openCardLesson(btn));
+  });
+
+  renderEmpty(rows);
+}
+
+/**
+ * A keystroke waiting out the debounce.
+ *
+ * Held here rather than inside the listener because any other filter change
+ * has to settle it first. Without that, choosing a subject a tenth of a second
+ * after typing renders with the old empty query and the typed text is lost -
+ * which is exactly what happened, and is why the timer is module state.
+ */
+let pendingQuery = null;
+
+/** Apply a keystroke that has not waited out its debounce yet. */
+function flushQuery() {
+  if (pendingQuery === null) return;
+  clearTimeout(pendingQuery);
+  pendingQuery = null;
+  browserFilters = {
+    ...browserFilters,
+    query: (els.search?.value || '').trim(),
+  };
+}
+
+/** Take a filter change and redraw. */
+function setBrowserFilter(key, value) {
+  flushQuery();
+  browserFilters = { ...browserFilters, [key]: value };
+  renderBrowser();
+}
+
+/** Empty every filter, including the box the reader typed in. */
+function clearBrowserFilters() {
+  if (pendingQuery !== null) clearTimeout(pendingQuery);
+  pendingQuery = null;
+  resetBrowserFilters();
+  if (els.search) els.search.value = '';
+  renderBrowser();
+}
+
+/** Wire the search box and the four menus. Once, at start-up. */
+function wireBrowserFilters() {
+  // Debounced, because a keystroke rebuilds seventeen cards and their
+  // thumbnails; 150ms is below the point a reader notices and above the rate
+  // anybody types.
+  els.search?.addEventListener('input', () => {
+    if (pendingQuery !== null) clearTimeout(pendingQuery);
+    pendingQuery = setTimeout(() => {
+      pendingQuery = null;
+      setBrowserFilter('query', els.search.value.trim());
+    }, 150);
+  });
+  // Escape empties the box rather than closing the panel out from under
+  // somebody who was only trying to undo a search.
+  els.search?.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || !els.search.value) return;
+    event.stopPropagation();
+    event.preventDefault();
+    if (pendingQuery !== null) clearTimeout(pendingQuery);
+    pendingQuery = null;
+    els.search.value = '';
+    setBrowserFilter('query', '');
+  });
+
+  const menus = [
+    [els.filterSubject, 'subject'],
+    [els.filterLength, 'length'],
+    [els.filterCalculation, 'calculation'],
+    [els.filterProgress, 'progress'],
+  ];
+  menus.forEach(([select, key]) => {
+    select?.addEventListener('change', () =>
+      setBrowserFilter(key, select.value)
+    );
+  });
+
+  els.filterClear?.addEventListener('click', () => {
+    clearBrowserFilters();
+    els.search?.focus();
+  });
+
+  els.emptyAction?.addEventListener('click', () => {
+    const key = els.emptyAction.dataset.relax;
+    if (key) setBrowserFilter(key, '');
+    else clearBrowserFilters();
+    els.search?.focus();
   });
 }
 
@@ -2715,8 +3028,16 @@ export function openBrowser() {
   // into view and drags the heading off the top: at 320x568 the panel opened
   // 137px down, so the first thing a reader saw was the second half of a
   // sentence and no title at all.
+  //
+  // With a filter still applied from earlier there may be no first card at
+  // all, and the trap places focus nowhere: a keyboard user would arrive
+  // inside a modal with focus on the document and nothing to tab from. The
+  // search box is the right fallback - it is both focusable and the thing they
+  // need in order to see any lessons again.
   setTimeout(() => {
-    els.list?.querySelector('.inv-card')?.focus({ preventScroll: true });
+    const first = els.list?.querySelector('.inv-card');
+    if (first) first.focus({ preventScroll: true });
+    else els.search?.focus({ preventScroll: true });
     if (els.browserContent) els.browserContent.scrollTop = 0;
   }, 60);
 }
@@ -2954,6 +3275,20 @@ export function initInvestigations() {
     browserContent: document.getElementById('investigationBrowserContent'),
     count: document.getElementById('investigationBrowserCount'),
     level: document.getElementById('investigationBrowserLevel'),
+    search: document.getElementById('investigationSearch'),
+    filterSubject: document.getElementById('investigationFilterSubject'),
+    filterLength: document.getElementById('investigationFilterLength'),
+    filterCalculation: document.getElementById(
+      'investigationFilterCalculation'
+    ),
+    filterProgress: document.getElementById('investigationFilterProgress'),
+    filterClear: document.getElementById('investigationFilterClear'),
+    sequences: document.getElementById('investigationSequences'),
+    sequenceList: document.getElementById('investigationSequenceList'),
+    allHeading: document.getElementById('investigationAllHeading'),
+    empty: document.getElementById('investigationEmpty'),
+    emptyText: document.getElementById('investigationEmptyText'),
+    emptyAction: document.getElementById('investigationEmptyAction'),
     browserClose: document.getElementById('investigationBrowserClose'),
     browserChip: document.getElementById('investigationBrowserChip'),
     panel: document.getElementById('investigationPanel'),
@@ -3010,6 +3345,7 @@ export function initInvestigations() {
     ?.addEventListener('click', () => {
       isBrowserOpen() ? closeBrowser() : openBrowser();
     });
+  wireBrowserFilters();
   els.browserClose?.addEventListener('click', closeBrowser);
   els.browserChip?.addEventListener('click', closeBrowser);
   els.browser.addEventListener('click', e => {

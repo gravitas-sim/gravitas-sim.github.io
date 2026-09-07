@@ -50,6 +50,10 @@ const DETECT_THIS_PLANET = {
     'Two methods, the same problem: the answer was decided before the data arrived',
   duration: '30-35 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   summary:
     'A planet is either there or it is not, but whether you find it depends on choices you make before you take a single measurement. Plan two radial-velocity runs of the same star with the same instrument and the same number of nights, and find that one detects a Jupiter and the other cannot tell you anything. Then do it again with transits, where the same planet is a 587-sigma certainty from space and a 4-sigma maybe from three nights on the ground — and work out how many more nights would fix that, and where the answer stops improving.',

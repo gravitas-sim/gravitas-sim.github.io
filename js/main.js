@@ -8,6 +8,7 @@ import {
 } from './ui.js';
 import { watchFor3DView } from './view3dBridge.js';
 import { watchForBench } from './experimentsBridge.js';
+import { watchForNotebook } from './notebookBridge.js';
 import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
 import { initRotationCurve } from './rotationCurve.js';
@@ -280,6 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
     watchFor3DView();
     // The bench is a button until somebody presses it; see experimentsBridge.js.
     watchForBench();
+    // And the evidence notebook, on the same terms.
+    watchForNotebook();
     // An optional panel must never take the simulation down with it.
     try {
       initLightCurve();

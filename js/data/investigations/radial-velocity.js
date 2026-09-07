@@ -38,6 +38,10 @@ const RADIAL_VELOCITY = {
   subtitle: 'Watch a star wobble, weigh its planet, and combine the clues',
   duration: '45-55 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true, areaSweep: false },
   summary:
     'A planet you cannot see still pulls on its star, and the star moves. Measure that motion two different ways, turn it into a mass, and combine it with the radius a transit gave you to work out what kind of world it is.',

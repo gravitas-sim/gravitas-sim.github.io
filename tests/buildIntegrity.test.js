@@ -138,7 +138,10 @@ describe('the service worker manifest is current', () => {
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
     const bodies = lessons.filter(
-      p => !/\/(manifest|manifest\.es|registry|i18n|catalogue)\.js$/.test(p)
+      p =>
+        !/\/(manifest|manifest\.es|registry|i18n|catalogue|browse|browseData|sequences)\.js$/.test(
+          p
+        )
     );
     expect(bodies.length).toBe(MANIFEST.length);
   });

@@ -562,6 +562,211 @@ export function createDocument({ title = 'Document', footer = '' } = {}) {
       return api;
     },
 
+    /**
+     * A figure with real axis ranges and several named series.
+     *
+     * Distinct from chart() above, which anchors both axes at zero and draws
+     * one scatter with a line through the origin. That is exactly right for
+     * the lesson plot it was written for and wrong for evidence: a
+     * phase-folded velocity curve straddles zero, a sweep's parameter rarely
+     * starts at it, and a drift series is interesting precisely in the last
+     * digit. So this one takes the range from the data.
+     *
+     * Series carry where their numbers came from, and that decides the ink:
+     * measured data is drawn solid, an analytic model dashed, revealed
+     * simulation truth dotted. A reader who cannot see which curve is which
+     * cannot read the figure, and a legend that says "model" without saying it
+     * is a model is how a student comes to believe the simulation measured it.
+     *
+     * @param {Object} spec
+     * @param {Array<Object>} spec.series - [{label, points:[[x,y]], kind,
+     *   style, errors}]
+     * @param {string} [spec.xLabel] - Horizontal axis caption
+     * @param {string} [spec.yLabel] - Vertical axis caption
+     * @param {number} [spec.height] - Plot height in points
+     * @param {boolean} [spec.logX] - Logarithmic horizontal axis
+     * @returns {Object} The builder, for chaining
+     */
+    figure({
+      series = [],
+      xLabel = '',
+      yLabel = '',
+      height = 165,
+      logX = false,
+    }) {
+      const kept = series.filter(s => s?.points?.length);
+      if (!kept.length) return api;
+
+      // Log only where every x is positive; a log axis with a zero on it is a
+      // drawing that lies about its own scale.
+      const useLog = logX && kept.every(s => s.points.every(([x]) => x > 0));
+      const fx = v => (useLog ? Math.log10(v) : v);
+
+      const xs = kept.flatMap(s => s.points.map(([x]) => fx(x)));
+      const ys = kept.flatMap(s => s.points.map(([, yv]) => yv));
+      const errs = kept.flatMap(s =>
+        s.errors ? s.points.map((_, i) => Math.abs(s.errors[i] || 0)) : [0]
+      );
+      const pad = Math.max(...errs, 0);
+
+      let x0 = Math.min(...xs);
+      let x1 = Math.max(...xs);
+      let y0 = Math.min(...ys) - pad;
+      let y1 = Math.max(...ys) + pad;
+      // A constant series has zero span and would divide by nothing. Give it a
+      // band around its value so the flat line is visibly flat rather than
+      // clipped to an edge.
+      if (!(x1 > x0)) {
+        x0 -= 0.5;
+        x1 += 0.5;
+      }
+      if (!(y1 > y0)) {
+        y0 -= 0.5;
+        y1 += 0.5;
+      }
+      const headroom = (y1 - y0) * 0.06;
+      y0 -= headroom;
+      y1 += headroom;
+
+      const padL = 56;
+      const padB = 30;
+      const legendH = 12 * Math.ceil(kept.length / 3);
+      need(height + legendH + 16);
+      const bottom = y - height + padB;
+      const plotW = CONTENT_W - padL;
+      const plotH = height - padB;
+      const X = v => MARGIN + padL + ((fx(v) - x0) / (x1 - x0)) * plotW;
+      const Y = v => bottom + ((v - y0) / (y1 - y0)) * plotH;
+
+      const path = [];
+      // Frame and a zero line where zero is inside the vertical range: a
+      // velocity curve is read against it.
+      path.push(
+        `0.55 0.55 0.6 RG`,
+        `0.8 w`,
+        `${MARGIN + padL} ${bottom} m`,
+        `${MARGIN + padL + plotW} ${bottom} l`,
+        `${MARGIN + padL} ${bottom} m`,
+        `${MARGIN + padL} ${bottom + plotH} l`,
+        `S`
+      );
+      if (y0 < 0 && y1 > 0) {
+        path.push(
+          `0.82 0.82 0.85 RG`,
+          `0.5 w`,
+          `[2 2] 0 d`,
+          `${MARGIN + padL} ${Y(0).toFixed(2)} m`,
+          `${MARGIN + padL + plotW} ${Y(0).toFixed(2)} l`,
+          `S`,
+          `[] 0 d`
+        );
+      }
+
+      // Four inks, cycled. Chosen to stay apart when printed in grey, because
+      // a marked lab report is usually printed.
+      const INKS = [
+        '0.13 0.45 0.70',
+        '0.72 0.28 0.14',
+        '0.20 0.52 0.32',
+        '0.42 0.32 0.62',
+      ];
+      // Solid measured, dashed analytic, dotted revealed truth.
+      const DASH = {
+        measured: '[] 0 d',
+        analytic: '[4 2] 0 d',
+        truth: '[1 2] 0 d',
+      };
+
+      kept.forEach((s, i) => {
+        const ink = INKS[i % INKS.length];
+        const pts = s.points.filter(
+          ([x, yv]) => Number.isFinite(x) && Number.isFinite(yv)
+        );
+        if (!pts.length) return;
+
+        if (s.errors) {
+          path.push(`${ink} RG`, `0.6 w`, `[] 0 d`);
+          pts.forEach(([x, yv], j) => {
+            const e = Math.abs(s.errors[j] || 0);
+            if (!(e > 0)) return;
+            const cx = X(x).toFixed(2);
+            path.push(
+              `${cx} ${Y(yv - e).toFixed(2)} m`,
+              `${cx} ${Y(yv + e).toFixed(2)} l`,
+              `S`
+            );
+          });
+        }
+
+        if (s.style === 'points') {
+          path.push(`${ink} rg`);
+          for (const [x, yv] of pts) {
+            path.push(
+              `${(X(x) - 1.7).toFixed(2)} ${(Y(yv) - 1.7).toFixed(2)} 3.4 3.4 re`,
+              `f`
+            );
+          }
+        } else {
+          path.push(`${ink} RG`, `1 w`, DASH[s.kind] || DASH.measured);
+          pts.forEach(([x, yv], j) => {
+            path.push(
+              `${X(x).toFixed(2)} ${Y(yv).toFixed(2)} ${j ? 'l' : 'm'}`
+            );
+          });
+          path.push(`S`, `[] 0 d`);
+        }
+      });
+      ops.push(path.join('\n'));
+
+      const label = (text, lx, ly, size = 7, align = 'left', ink = null) => {
+        const tt = toWinAnsi(text);
+        const wpx = textWidth(tt, size, false);
+        const px =
+          align === 'right' ? lx - wpx : align === 'center' ? lx - wpx / 2 : lx;
+        ops.push(
+          `BT\n${ink || '0.35 0.35 0.42'} rg\n/F1 ${size} Tf\n` +
+            `1 0 0 1 ${px.toFixed(2)} ${ly.toFixed(2)} Tm\n(${pdfString(tt)}) Tj\nET`
+        );
+      };
+
+      const axisValue = v => (useLog ? sigText(10 ** v) : sigText(v));
+      label(axisValue(x0), MARGIN + padL, bottom - 10, 7, 'left');
+      label(axisValue(x1), MARGIN + padL + plotW, bottom - 10, 7, 'right');
+      label(sigText(y1), MARGIN + padL - 4, bottom + plotH - 3, 7, 'right');
+      label(sigText(y0), MARGIN + padL - 4, bottom + 1, 7, 'right');
+      label(
+        useLog ? `${xLabel} (log)` : xLabel,
+        MARGIN + padL + plotW / 2,
+        bottom - 21,
+        8,
+        'center'
+      );
+      label(yLabel, MARGIN, bottom + plotH + 6, 8, 'left');
+
+      // The legend says the kind as well as the name, because that is the
+      // distinction the whole figure exists to keep.
+      let lx = MARGIN + padL;
+      let ly = bottom - padB + 2;
+      kept.forEach((s, i) => {
+        const ink = INKS[i % INKS.length];
+        const caption =
+          s.kind && s.kind !== 'measured' ? `${s.label} (${s.kind})` : s.label;
+        ops.push(
+          `${ink} RG\n1 w\n${DASH[s.kind] || DASH.measured}\n` +
+            `${lx} ${(ly + 2.5).toFixed(2)} m ${lx + 12} ${(ly + 2.5).toFixed(2)} l S\n[] 0 d`
+        );
+        label(caption, lx + 16, ly, 7, 'left', ink);
+        lx += 20 + textWidth(toWinAnsi(caption), 7, false);
+        if ((i + 1) % 3 === 0) {
+          lx = MARGIN + padL;
+          ly -= 11;
+        }
+      });
+
+      y = ly - 10;
+      return api;
+    },
+
     /** Force a page break. */
     /**
      * A bulleted list. Wrapped lines hang under the text, not the bullet, so a

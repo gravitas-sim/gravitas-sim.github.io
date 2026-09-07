@@ -31,6 +31,10 @@ const BLACK_HOLES = {
   subtitle: 'Make a black hole bigger and discover some surprising rules',
   duration: '35-45 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['compact-objects', 'gravity'],
   // The inspector stays available here. Every number this lesson quotes is one
   // the object card already computes, and letting a student check the lesson
   // against the simulation is the point rather than a distraction.

@@ -3197,6 +3197,242 @@
     display: none;
   }
 
+  /* --- Search and filters ---------------------------------------------------- */
+  /* A search box on its own row and four menus below it. Native <select>s
+     rather than custom popovers: they are keyboard-operable and screen-reader
+     legible without any work from us, and on a phone they open the platform's
+     own picker, which is a better control than anything drawn here. */
+
+  .inv-browser-tools {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+  }
+
+  .inv-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: rgb(0 0 0 / 18%);
+    color: var(--text);
+    font: inherit;
+    font-size: var(--text-sm);
+  }
+  .inv-search-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent-line);
+  }
+  .inv-search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .inv-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-2) var(--space-3);
+  }
+  .inv-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    /* Each menu takes an equal share of the row and shrinks together, so a long
+       translated option label does not push the last one onto its own line. */
+    flex: 1 1 11rem;
+  }
+  .inv-filter > span {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-filter select {
+    width: 100%;
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: rgb(0 0 0 / 18%);
+    color: var(--text);
+    font: inherit;
+    font-size: var(--text-sm);
+  }
+  .inv-filter select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .inv-filter-clear {
+    flex: 0 0 auto;
+    font-size: var(--text-xs);
+  }
+  .inv-filter-clear[hidden] {
+    display: none;
+  }
+
+  /* --- Nothing matched ------------------------------------------------------- */
+
+  .inv-empty {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-5) 0 0;
+    padding: var(--space-4);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+  .inv-empty[hidden] {
+    display: none;
+  }
+  .inv-empty button[hidden] {
+    display: none;
+  }
+
+  /* --- The curated orders ---------------------------------------------------- */
+  /* Shown above the grid when nothing is filtered, and taken away the moment a
+     reader starts searching: "where do I start" and "where is the transit one"
+     are different questions and only one of them is being asked at a time. */
+
+  .inv-sequences[hidden],
+  .inv-all-heading[hidden] {
+    display: none;
+  }
+  .inv-sequences h4,
+  .inv-all-heading {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-all-heading {
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .inv-seq-intro {
+    margin: 0 0 var(--space-4);
+    max-width: 60ch;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+  .inv-seq-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: var(--space-4);
+  }
+  .inv-seq {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgb(255 255 255 / 2%);
+  }
+  .inv-seq-title {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-base);
+    color: var(--text);
+  }
+  .inv-seq-blurb {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-seq-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .inv-seq-step {
+    display: grid;
+    grid-template-columns: 1.6rem 1fr;
+    gap: var(--space-2);
+    align-items: start;
+  }
+  .inv-seq-num {
+    display: grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+  }
+  .inv-seq-step.is-complete .inv-seq-num {
+    border-color: var(--accent-line);
+    color: var(--accent);
+  }
+  .inv-seq-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .inv-seq-open {
+    /* A link in behaviour, a button in fact: it fetches a lesson rather than
+       navigating, so it must not claim to be an address. */
+    align-self: flex-start;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border-strong);
+    cursor: pointer;
+  }
+  .inv-seq-open:hover,
+  .inv-seq-open:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentcolor;
+  }
+  .inv-seq-open:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  .inv-seq-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-seq-fit.is-demo,
+  .inv-seq-done {
+    color: var(--accent);
+  }
+  .inv-seq-why,
+  .inv-seq-needs {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+  .inv-seq-needs {
+    font-style: italic;
+  }
+  .inv-seq-assign {
+    align-self: flex-start;
+    margin-top: 2px;
+    font-size: var(--text-xs);
+  }
+
   /* --- The grid ------------------------------------------------------------- */
 
   .inv-browser-scroll {
@@ -3471,6 +3707,14 @@
   @media (max-width: 760px) {
     .inv-grid {
       grid-template-columns: 1fr;
+    }
+    .inv-seq-list {
+      grid-template-columns: 1fr;
+    }
+    /* Two menus per row rather than four squeezed into one: below this width
+       an 11rem menu and a Spanish option label do not fit side by side. */
+    .inv-filter {
+      flex-basis: calc(50% - var(--space-3));
     }
     /* One card per row has no neighbour to line up with, so the reserved flag
        row is just a gap above the title. */

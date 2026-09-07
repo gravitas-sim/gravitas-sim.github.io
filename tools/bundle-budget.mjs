@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2650,
+    limit: 2760,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -97,7 +97,18 @@ const BUDGETS = [
       'the 112 inv.* strings that arrived here did so by leaving the start-up ' +
       'path, which took the initial download from 833.3 KB to 825.7. Two of ' +
       'those three numbers moved because something was deferred rather than ' +
-      'added, and the initial budget above was not touched.',
+      'added, and the initial budget above was not touched.\n\n' +
+      'Raised again from 2650 to 2760 on the same accounting, for the ' +
+      'evidence notebook. The panel, the capture helpers, the PDF report and ' +
+      'the store are a new instrument, which is what this budget is loose ' +
+      'for, and every byte of them is behind js/notebookBridge.js - a 2 KB ' +
+      'eager module that is a rail button and nothing else. The trade the ' +
+      'initial budget demands was made in the same change: the resW, chaosW ' +
+      'and energyW widget catalogues moved out of the start-up path, where ' +
+      'nothing could render them - js/widgets.js is reached only from the ' +
+      'lazy js/investigations.js - and the initial download went DOWN from ' +
+      '829.7 KB to 828.6 KB across a feature that added a panel, a report ' +
+      'writer and 4.7 KB of CSS. The initial limit was not touched.',
   },
 ];
 

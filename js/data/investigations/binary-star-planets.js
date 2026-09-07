@@ -57,6 +57,10 @@ const BINARY_STAR_PLANETS = {
   subtitle: 'What survives around two stars, and how you would know',
   duration: '40-50 min',
   level: 'Introductory astronomy',
+  // Subject tags, for the browser's filters. A fixed vocabulary
+  // shared across the catalogue rather than free text, so a filter can offer
+  // the whole set without a second list to keep in step.
+  tags: ['exoplanets', 'stars', 'chaos'],
   lock: { placement: true },
   summary:
     'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',

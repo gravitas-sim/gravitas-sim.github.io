@@ -476,15 +476,29 @@ test.describe('the student report', () => {
 // =============================================================================
 
 /** Lesson modules the page has actually fetched, by filename. */
-const lessonsFetched = page =>
-  page.evaluate(() =>
-    performance
-      .getEntriesByType('resource')
-      .map(r => r.name)
-      .filter(n => /\/data\/investigations\/[a-z-]+\.js/.test(n))
-      .map(n => n.split('/').pop())
-      .filter(n => !['registry.js', 'manifest.js', 'catalogue.js'].includes(n))
+// Kept as "which lesson bodies were fetched" rather than "which files in that
+// directory", because the directory also holds the machinery - the registry,
+// the manifests, the catalogue, and the browser's search and filter modules -
+// and a list of exclusions is a list somebody has to remember to extend. The
+// lesson ids come from the manifest, so this needs no editing when one is
+// added; tests/investigationRegistry.test.js is what guards the directory
+// against strays.
+const lessonsFetched = async page => {
+  const ids = await page.evaluate(async () => {
+    const { MANIFEST } = await import('/js/data/investigations/registry.js');
+    return MANIFEST.map(m => m.id);
+  });
+  return page.evaluate(
+    lessons =>
+      performance
+        .getEntriesByType('resource')
+        .map(r => r.name)
+        .filter(n => /\/data\/investigations\/[^/]+\.js/.test(n))
+        .map(n => n.split('/').pop())
+        .filter(n => lessons.includes(n.replace(/\.js$/, ''))),
+    ids
   );
+};
 
 test.describe('lesson loading', () => {
   test('the browser lists every lesson without loading any of them', async ({

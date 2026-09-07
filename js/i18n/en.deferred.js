@@ -584,6 +584,853 @@ export const EN_DEFERRED = {
   'inv.card.seen': '{done} of {total} steps seen',
   'inv.card.report': 'Lab report',
   'inv.card.series': '{label}, lesson {index} of {of}',
+  // Habitability, binary and tidal widget prose. Same boundary and same
+  // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
+  // reached only from the lazy js/investigations.js, and each of these three
+  // modules registers this catalogue itself so a direct import cannot render
+  // raw ids.
+  'binW.twoStarsOrbiting': 'Two stars, orbiting',
+  'binW.bothStarsAreMovingWatch':
+    'Both stars are moving. Watch them for a few seconds before reading anything off.',
+  'binW.massOfStarA': 'Mass of Star A',
+  'binW.massOfStarB': 'Mass of Star B',
+  'binW.mark': '⚑ Mark',
+  'binW.stop': '■ Stop',
+  'binW.runPause': '▶ Run / Pause',
+  'binW.reset': '↺ Reset',
+  'binW.starADistanceFromThe': 'Star A, distance from the barycenter',
+  'binW.starBDistanceFromThe': 'Star B, distance from the barycenter',
+  'binW.distanceBetweenTheTwoStars': 'Distance between the two stars',
+  'binW.whichStarIsCloserTo': 'Which star is closer to the balance point',
+  'binW.yearsSinceYouStartedWatching': 'Years since you started watching',
+  'binW.stopwatch': 'Stopwatch',
+  'binW.timeForOneFullOrbit': 'Time for one full orbit',
+  'binW.totalMassOfThePair': 'Total mass of the pair',
+  'binW.howFarThePlanetMoves': 'How far the planet moves',
+  'binW.howFarTheStarMoves': 'How far the star moves',
+  'binW.theStarSWobbleCompared':
+    'The star’s wobble, compared with the planet’s orbit',
+  'binW.lightweightPair': 'lightweight pair',
+  'binW.heavyweightPair': 'heavyweight pair',
+  'binW.sameSizeOrbitDifferentMasses': 'Same size orbit, different masses',
+  'binW.bothPairsAreExactlyThe':
+    'Both pairs are exactly the same distance apart. Only the masses differ. Watch which one gets round first.',
+  'binW.yearsElapsed': 'Years elapsed',
+  'binW.separationOfEachPair': 'Separation of each pair',
+  'binW.theBalancePoint': 'The balance point',
+  'binW.aSeeSawBalancesWhen':
+    'A see-saw balances when the heavier child sits closer to the middle. Two stars do exactly the same thing.',
+  'binW.starADistanceFromThe2': 'Star A, distance from the middle',
+  'binW.starBDistanceFromThe2': 'Star B, distance from the middle',
+  'binW.1AuAnd2Au': '1 AU and 2 AU',
+  'binW.starBIsTwiceAs':
+    'Star B is twice as far out, so Star A must be twice as heavy to balance it.',
+  'binW.1AuAnd3Au': '1 AU and 3 AU',
+  'binW.starBIsThreeTimes':
+    'Star B is three times as far out, so Star A is three times as heavy.',
+  'binW.2AuAnd4Au': '2 AU and 4 AU',
+  'binW.twiceAsFarAgainSo':
+    'Twice as far again, so twice as heavy again. Only the ratio of the two distances matters, not the distances themselves.',
+  'binW.equal2AuEach': 'Equal, 2 AU each',
+  'binW.equalDistancesMeanEqualMasses':
+    'Equal distances mean equal masses. This is the case you started the lesson with.',
+  'binW.starAIsThisFar': 'Star A is this far from the middle',
+  'binW.starBIsThisFar': 'Star B is this far from the middle',
+  'binW.theHeavierStarAndBy': 'The heavier star, and by how much',
+  'binW.siriusWatchedForACentury': 'Sirius, watched for a century',
+  'binW.observationsUpTo': 'Observations up to',
+  'binW.oneDecade': 'One decade',
+  'binW.threeDotsTheyAreMoving':
+    'Three dots. They are moving, but nobody could tell you the shape of the orbit from this.',
+  'binW.halfAnOrbit': 'Half an orbit',
+  'binW.oneFullOrbit': 'One full orbit',
+  'binW.aCentury': 'A century',
+  'binW.observationsPlotted': 'Observations plotted',
+  'binW.yearsOfWatching': 'Years of watching',
+  'binW.orbitsCompleted': 'Orbits completed',
+  'binW.periodOnceTheOrbitCloses': 'Period, once the orbit closes',
+  'binW.orbitSizeOnceTheOrbit': 'Orbit size, once the orbit closes',
+  'tideW.thePullOnThreePoints': 'The pull on three points',
+  'tideW.distanceToTheCompanion': 'Distance to the companion',
+  'tideW.moonSDistance': '× Moon’s distance',
+  'tideW.massOfTheCompanion': 'Mass of the companion',
+  'tideW.moonSMass': '× Moon’s mass',
+  'tideW.pullOnTheNearSide': 'Pull on the near side',
+  'tideW.pullOnTheCentre': 'Pull on the centre',
+  'tideW.pullOnTheFarSide': 'Pull on the far side',
+  'tideW.nearSideMinusTheCentre': 'Near side, minus the centre',
+  'tideW.farSideMinusTheCentre': 'Far side, minus the centre',
+  'tideW.nearSideBiggerThanFar': 'Near side bigger than far side by',
+  'tideW.towardTheCompanion': 'toward the companion',
+  'tideW.whatIsLeftOver': 'what is left over',
+  'tideW.tidalStrength': 'Tidal strength',
+  'tideW.distance': 'Distance',
+  'tideW.mass': 'Mass',
+  'tideW.tidalStretch': 'Tidal stretch',
+  'tideW.inFullUnits': 'In full units',
+  'tideW.sevenRealTidesOnOne': 'Seven real tides, on one scale',
+  'tideW.highlight': 'Highlight',
+  'tideW.pairing': 'Pairing',
+  'tideW.separation': 'Separation',
+  'tideW.comparedWithTheLunarTide': 'Compared with the lunar tide',
+  'tideW.cometIce': 'Comet ice',
+  'tideW.aPorousWeaklyBoundNucleus':
+    'A porous, weakly bound nucleus. Very little grip for its size, so the balance tips a long way out.',
+  'tideW.theMoon': 'The Moon',
+  'tideW.iron': 'Iron',
+  'tideW.aDenseMetallicBodyMore':
+    'A dense metallic body. More grip for its size, so it can come in closer before the balance tips.',
+  'tideW.stretchAgainstGrip': 'Stretch against grip',
+  'tideW.distanceFromTheEarthS': 'Distance from the Earth’s centre',
+  'tideW.earthRadii': 'Earth radii',
+  'tideW.densityOfTheBody': 'Density of the body',
+  'tideW.itsOwnGravityAtIts': 'Its own gravity, at its surface',
+  'tideW.tidalStretchAtItsSurface': 'Tidal stretch, at its surface',
+  'tideW.stretchGrip': 'Stretch ÷ grip',
+  'tideW.theTwoAreEqualAt': 'The two are equal at',
+  'tideW.whatThatMeans': 'What that means',
+  'tideW.bringAMoonInToward': 'Bring a moon in toward Saturn',
+  'tideW.distanceFromSaturnSCentre': 'Distance from Saturn’s centre',
+  'tideW.saturnRadii': 'Saturn radii',
+  'tideW.densityOfTheMoon': 'Density of the moon',
+  'tideW.porousIce': 'Porous ice',
+  'tideW.whatSaturnSRingParticles':
+    'What Saturn’s ring particles actually are: water ice, loosely packed. This is the case the rings themselves test.',
+  'tideW.solidIce': 'Solid ice',
+  'tideW.denseUnfracturedIceTheLimit':
+    'Dense, unfractured ice. The limit moves inward, because a denser body grips itself harder.',
+  'tideW.rock': 'Rock',
+  'tideW.denserSoItHoldsTogether':
+    'Denser, so it holds together closer in. The Roche limit is not one distance: it depends on what is falling in.',
+  'tideW.denserStillAndTheLimit':
+    'Denser still, and the limit moves in again. Change what the moon is made of and you change where it breaks.',
+  'tideW.rocheLimitBodyWithNo': 'Roche limit, body with no strength',
+  'tideW.rocheLimitBodyThatKeeps': 'Roche limit, body that keeps its shape',
+  'tideW.stretchGripWhereYouHave': 'Stretch ÷ grip where you have put it',
+  'tideW.verdict': 'Verdict',
+  'tideW.forComparisonTheARing': 'For comparison, the A ring’s outer edge',
+  'tideW.andMimasTheInnermostRound': 'And Mimas, the innermost round moon',
+  'tideW.aSunLikeStarFalling': 'A Sun-like star falling toward a black hole',
+  'tideW.blackHoleMass': 'Black hole mass',
+  'tideW.stellar10M': 'Stellar, 10 M☉',
+  'tideW.sagittariusA4MillionM': 'Sagittarius A*, 4 million M☉',
+  'tideW.aGiant1BillionM': 'A giant, 1 billion M☉',
+  'tideW.starIsTornApartAt': 'Star is torn apart at',
+  'tideW.eventHorizonAt': 'Event horizon at',
+  'tideW.tidalRadiusHorizon': 'Tidal radius ÷ horizon',
+  'tideW.whatAnOutsideObserverSees': 'What an outside observer sees',
+  'hzW.howMuchStarlightReachesThe': 'How much starlight reaches the planet?',
+  'hzW.distanceFromTheStar': 'Distance from the star',
+  'hzW.halfOfEarthSDistance': 'Half of Earth’s distance.',
+  'hzW.earthSDistanceFromThe': 'Earth’s distance from the Sun.',
+  'hzW.twiceEarthSDistance': 'Twice Earth’s distance.',
+  'hzW.threeTimesEarthSDistance': 'Three times Earth’s distance.',
+  'hzW.starlightReachingEachSquareMeter':
+    'Starlight reaching each square meter',
+  'hzW.theSameThingInPhysical': 'The same thing in physical units',
+  'hzW.earthForComparison': 'Earth, for comparison',
+  'hzW.theSameLightSpreadFurther': 'The same light, spread further',
+  'hzW.theStarIsNotRunning':
+    'The star is not running out of light. Watch the patch of light and the shell it lands on as the distance grows.',
+  'hzW.theShell': 'The shell',
+  'hzW.soEachSquareMeterGets': 'So each square meter gets',
+  'hzW.totalEnergyCrossingTheShell': 'Total energy crossing the shell',
+  'hzW.theShellIsThisMany': 'The shell is this many times bigger',
+  'hzW.aDimRedDwarf': 'A dim red dwarf',
+  'hzW.likeProximaCentauriTheNearest':
+    'Like Proxima Centauri, the nearest star to the Sun.',
+  'hzW.anOrangeDwarf': 'An orange dwarf',
+  'hzW.likeAlphaCentauriB': 'Like Alpha Centauri B.',
+  'hzW.theSun': 'The Sun',
+  'hzW.theStarWeKnowBest': 'The star we know best.',
+  'hzW.aHotterBrighterStar': 'A hotter, brighter star',
+  'hzW.likeProcyonA': 'Like Procyon A.',
+  'hzW.theSamePlanetADifferent': 'The same planet, a different star',
+  'hzW.star': 'Star',
+  'hzW.planetSDistance': 'Planet’s distance',
+  'hzW.itsLuminosity': 'Its luminosity',
+  'hzW.starlightThePlanetReceives': 'Starlight the planet receives',
+  'hzW.habitableZoneRunsFrom': 'Habitable zone runs from',
+  'hzW.thisPlanetIs': 'This planet is',
+  'hzW.whereTheEdgesComeFrom': 'Where the edges come from',
+  'hzW.definition': 'Definition',
+  'hzW.conservative': 'Conservative',
+  'hzW.optimistic': 'Optimistic',
+  'hzW.definitionShown': 'Definition shown',
+  'hzW.innerEdge': 'Inner edge',
+  'hzW.outerEdge': 'Outer edge',
+  'hzW.widthOfTheZone': 'Width of the zone',
+  'hzW.earthSitsAt': 'Earth sits at',
+  'hzW.aYearOnAnEccentric': 'A year on an eccentric orbit',
+  'hzW.eccentricity': 'Eccentricity',
+  'hzW.semiMajorAxis': 'Semi-major axis',
+  'hzW.runPause': '▶ Run / Pause',
+  'hzW.reset': '↺ Reset',
+  'hzW.distanceRightNow': 'Distance right now',
+  'hzW.starlightRightNow': 'Starlight right now',
+  'hzW.closestFurthest': 'Closest / furthest',
+  'hzW.starlightAtClosestFurthest': 'Starlight at closest / furthest',
+  'hzW.rightNowThePlanetIs': 'Right now the planet is',
+  'hzW.fractionOfTheYearInside': 'Fraction of the year inside the zone',
+  'hzW.trappist1AllSevenPlanets': 'TRAPPIST-1, all seven planets',
+  'hzW.zoneDefinition': 'Zone definition',
+  'hzW.habitableZone': 'Habitable zone',
+  'hzW.mercury': 'Mercury',
+  'hzW.venus': 'Venus',
+  'hzW.earth': 'Earth',
+  'hzW.planetA': 'Planet A',
+  'hzW.planetB': 'Planet B',
+  'hzW.planetC': 'Planet C',
+  'hzW.threePlanetsSimilarStarlight': 'Three planets, similar starlight',
+  'hzW.showing': 'Showing',
+  // --- The uncertainty analysis -------------------------------------------------
+  // A parametric Monte Carlo over the recorded epochs. The strings that matter
+  // most here are the assumption list and the guidance: an interval is a
+  // statement about precision, and a student who reads it as a statement about
+  // correctness has learned the opposite of the lesson.
+  'rvfit.mc.title': 'Uncertainty analysis (optional)',
+  'rvfit.mc.hint':
+    'Simulates this observing run again and again — the same epochs, the same stated uncertainties, a fresh noise draw each time — and refits every one with the search you just ran. Where the refits land is how well your data pins the period down.',
+  'rvfit.mc.trials': 'Trials',
+  'rvfit.mc.seed': 'Noise seed',
+  'rvfit.mc.seedHint':
+    'The same seed reproduces the same intervals exactly, and the export carries it.',
+  'rvfit.mc.run': 'Run analysis',
+  'rvfit.mc.cancel': 'Cancel',
+  'rvfit.mc.running': 'Trial {done} of {total}…',
+  'rvfit.mc.idle': 'Not run yet.',
+
+  'rvfit.mc.refused.noFit':
+    'There is no fit on screen to resample around. Set a period first.',
+  'rvfit.mc.refused.tooFewPoints':
+    'Only {n} usable measurements; this needs at least {need}.',
+  'rvfit.mc.refused.noUncertainties':
+    'This run states no uncertainties, so there is nothing to propagate. Every simulated run would be identical to your fit and the interval would come out as zero — which would read as a perfectly determined period rather than as an absence of error bars. Set a non-zero uncertainty in the observing panel and record again.',
+  'rvfit.mc.refused.badBounds':
+    'The period range is not a range. Check the search bounds above.',
+  'rvfit.mc.refused.badTrials': 'Choose between {min} and {max} trials.',
+
+  'rvfit.mc.failed.noSearch': 'the period search found nothing to fit',
+  'rvfit.mc.failed.notFinite':
+    'the solve returned a value that was not a number',
+
+  'rvfit.mc.assume.model':
+    'A circular orbit with one companion. Every interval below is conditional on that model being the right one.',
+  'rvfit.mc.assume.gaussian':
+    'Errors are Gaussian, with the standard deviation each epoch states.',
+  'rvfit.mc.assume.independent':
+    'Errors are independent between epochs: no night-to-night systematic, no drift in the instrument.',
+  'rvfit.mc.assume.sigmas':
+    'The stated uncertainties are correct. If they are optimistic, so is every interval here.',
+  'rvfit.mc.assume.precision':
+    'This measures precision, not correctness. A wrong model can produce a very tight interval.',
+  'rvfit.mc.assumptions': 'These intervals are conditional on:',
+
+  'rvfit.mc.result.single':
+    'Period {median} d, from {p16} to {p84} ({pct}% of trials). Amplitude {kMedian} m/s, from {kP16} to {kP84}.',
+  'rvfit.mc.result.multimodal': {
+    one: 'The refits landed in {n} separate family — see below.',
+    other:
+      'The refits landed in {n} separate families. There is no single period with an error bar here: quoting one would average solutions that fit the data about equally well and describe nothing.',
+  },
+  'rvfit.mc.result.gridLimited':
+    'Every trial returned the same period, which means the search grid is coarser than the uncertainty being measured. No interval is reported, because it would be a picture of the grid rather than of the data.',
+  'rvfit.mc.result.incomplete':
+    '{done} of {total} trials ran. The intervals below are from those {done}.',
+  'rvfit.mc.result.cancelled': 'Cancelled after {done} of {total} trials.',
+  'rvfit.mc.result.failures': '{n} trials produced no fit: {why}.',
+  'rvfit.mc.result.epochs':
+    '{n} epochs, {baseline} d baseline, {samples} grid points per trial, seed {seed}.',
+
+  'rvfit.mc.families': 'Alias families',
+  'rvfit.mc.col.share': 'Share',
+  'rvfit.mc.col.period': 'Period (d)',
+  'rvfit.mc.col.amplitude': 'K (m/s)',
+  'rvfit.mc.col.trials': 'Trials',
+  'rvfit.mc.familyRow': '{median} ({p16}–{p84})',
+  'rvfit.mc.otherFamilies': {
+    one: 'and {n} more family with under 1% of trials',
+    other: 'and {n} more families with under 1% of trials each',
+  },
+
+  'rvfit.mc.plot.period': 'Recovered periods',
+  'rvfit.mc.plot.amplitude': 'Recovered amplitudes',
+  'rvfit.mc.plot.periodAxis': 'Period (days)',
+  'rvfit.mc.plot.amplitudeAxis': 'K (m/s)',
+  'rvfit.mc.plot.count': 'Trials per bin',
+  'rvfit.mc.plot.none': 'Nothing to plot yet.',
+
+  // The guidance the whole feature exists for. Printed under the results, not
+  // in a help page: the moment a student has a tight interval on screen is the
+  // moment the distinction matters.
+  'rvfit.mc.guidance.heading': 'Precision is not correctness',
+  'rvfit.mc.guidance.a':
+    'A narrow interval says the noise in your data would not have moved the answer much. It does not say the answer is right. Fit a circular model to an eccentric orbit and you can get a period pinned to four decimal places that is wrong in the first — the interval is measuring the noise, and the model error is not noise.',
+  'rvfit.mc.guidance.b':
+    'So read the interval and the residuals together. A tight interval with structured residuals means a precisely determined parameter of a model that does not fit. The residual structure is the thing to believe.',
+  'rvfit.mc.guidance.c':
+    'And when the refits split into families, that is the honest answer: the data support several periods. More observations, or observations spaced differently, are what removes families — not more trials here. Running ten thousand trials makes each interval smoother and the families no less real.',
+
+  // --- Widget prose, moved off the start-up path ---------------------------
+  // Resonance, chaos and energy widget strings. Nothing outside a lesson can
+  // render these: js/widgets.js is reached only from js/investigations.js,
+  // which is lazy and whose loader registers this catalogue before any step
+  // draws. Same boundary and same reasoning as the exoW.* family above it.
+  'resW.periods.title': 'Measured periods and the ratios between them',
+  'resW.periods.note':
+    'Periods are measured from the orbits themselves and averaged over the whole run, not read from a table. The nearest small-integer ratio is found by continued fractions, which will find one for any number at all — so the last figure on each row, how much closer than chance the ratio is, matters more than the ratio.',
+  'resW.periods.axis': 'orbital period, logarithmic',
+  'resW.periods.scaled': 'scale model: distances ×100, clock ×1000',
+  'resW.periods.true': 'true scale',
+  'resW.angle.title': 'The resonant angle',
+  'resW.angle.note':
+    'Top: the angle wrapped into one turn. If it visits every value the bodies take up every relative geometry in turn and there is no resonance. Bottom: the same angle unwrapped, where a circulation is a ramp and a libration is a wave. The verdict is made from the lower plot, and it is allowed to be "cannot tell yet".',
+  'resW.conj.title': 'Where the two bodies line up',
+  'resW.conj.note':
+    'Every conjunction in the run, plotted twice: where it happened in the sky, and where the outer body was on its own orbit at the time. A resonance shows up as a clump in the second dial — and if that clump sits at 180°, every line-up happens at the outer body’s aphelion.',
+  'resW.conj.sky': 'longitude in the sky',
+  'resW.conj.orbit': 'position on the outer orbit',
+  'resW.frame.title': 'The rotating frame',
+  'resW.frame.note':
+    'The same system seen from a frame turning with the secondary, which is fixed at the right and one unit out. L4 and L5 are the two triangular equilibrium points. In this frame a co-orbital body draws a closed loop around one of them; a body that is not co-orbital goes right round.',
+  'resW.plot.wrapped': 'angle, wrapped into 0–360°',
+  'resW.plot.unwrapped': 'the same angle, unwrapped',
+  'resW.empty.no-world': 'no system loaded',
+  'resW.empty.warming-up': 'watching — let the simulation run',
+  'resW.empty.no-argument':
+    'this system has no pair for the requested argument',
+  'resW.empty.no-pair': 'the named bodies are not both here',
+  'resW.empty.no-secondary': 'no secondary body to build a rotating frame on',
+  'resW.empty.no-conjunctions': 'no line-up has happened yet',
+  'resW.row.status': 'Status',
+  'resW.row.argument': 'Argument',
+  'resW.row.ratio': 'P({a}) / P({b})',
+  'resW.row.watched': 'Watched for',
+  'resW.row.verdict': 'Verdict',
+  'resW.row.centre': 'Libration centre',
+  'resW.row.amplitude': 'Amplitude',
+  'resW.row.libration': 'Libration period',
+  'resW.row.circulation': 'Circulation period',
+  'resW.row.needed': 'What is missing',
+  'resW.row.sampling': 'Sampling',
+  'resW.row.pair': 'Pair',
+  'resW.row.count': 'Conjunctions seen',
+  'resW.row.skySpread': 'Spread in the sky',
+  'resW.row.orbitSpread': 'Spread on the outer orbit',
+  'resW.row.where': 'Which means',
+  'resW.row.frame': 'Frame turns with',
+  'resW.value.periodDays': '{days} days',
+  'resW.value.periodYears': '{years} years',
+  'resW.value.ratio':
+    '{ratio} — nearest {p}:{q}, off by {off}% ({chance}× closer than chance)',
+  'resW.value.watched': '{cycles} conjunction cycles ({days} days)',
+  'resW.value.amplitudeBound': 'at least ±{amp}° — it has not turned back yet',
+  'resW.value.librationPeriod':
+    '{days} days = {cycles} conjunction cycles ({certainty})',
+  'resW.value.measured': 'measured',
+  'resW.value.provisional': 'from one swing, provisional',
+  'resW.value.librationUnresolved':
+    'longer than this run — any circulation would take over {cycles} conjunction cycles',
+  'resW.value.circulationPeriod': '{days} days = {cycles} conjunction cycles',
+  'resW.value.needed':
+    'the angle has moved {drift}° so far; that is a libration of at least that width or a circulation taking {cycles} conjunction cycles, and nothing here separates them',
+  'resW.value.sampling': '{n} samples, one every {every} days',
+  'resW.value.spread': 'centred on {mean}°, spread ±{spread}°',
+  'resW.value.tadpole': '{kind} about {centre}°, amplitude ±{amp}°',
+  'resW.verdict.none': 'nothing measured yet',
+  'resW.verdict.circulation':
+    'CIRCULATION — the angle runs through every value, so there is no resonance',
+  'resW.verdict.libration':
+    'LIBRATION — the angle turns back rather than going round: the bodies are locked',
+  'resW.verdict.stationary':
+    'EQUILIBRIUM — the angle has not moved at all: this body is sitting at a Lagrange point',
+  'resW.verdict.librationProvisional':
+    'LIBRATION — the angle turned back and returned to where it began; one more reversal will confirm the period',
+  'resW.inconclusive.one-reversal':
+    'INCONCLUSIVE — it has turned back once, which a slowly circulating angle with a wobble on it also does',
+  'resW.inconclusive.drifting-centre':
+    'INCONCLUSIVE — it swings, but each swing ends further on than the last, so the centre is moving',
+  'resW.inconclusive.confined':
+    'INCONCLUSIVE — confined so far, but it has not turned back yet, and a slow enough circulation would look the same',
+  'resW.inconclusive.ambiguous-drift':
+    'INCONCLUSIVE — this run cannot tell a wide libration from a slow circulation',
+  'resW.inconclusive.too-few-samples': 'INCONCLUSIVE — not enough samples yet',
+  'resW.inconclusive.too-short':
+    'INCONCLUSIVE — the run is shorter than twenty conjunction cycles',
+  'resW.inconclusive.undersampled':
+    'INCONCLUSIVE — the angle is moving too fast between samples to follow',
+  'resW.inconclusive.no-window': 'INCONCLUSIVE — no time has passed',
+  'resW.where.aphelion':
+    'every line-up happens near the outer body’s aphelion, at its furthest',
+  'resW.where.perihelion':
+    'every line-up happens near the outer body’s perihelion, at its closest',
+  'resW.where.side': 'the line-ups cluster, but away from either apse',
+  'resW.where.scattered': 'the line-ups are spread all round the orbit',
+  'resW.kind.tadpole': 'tadpole',
+  'resW.kind.horseshoe': 'horseshoe',
+  'chaosW.title': 'How far apart the two runs are',
+  'chaosW.note':
+    'The distance between Run A and Run B, added up over every body and matched by identity, at each moment of simulated time. The same data on two axes: linear above, logarithmic below. A straight line on the lower plot is exponential growth.',
+  'chaosW.plot.linear': 'separation, linear scale',
+  'chaosW.plot.log': 'separation, logarithmic scale',
+  'chaosW.plot.empty': 'not enough overlapping samples',
+  'chaosW.axis.separation': 'separation',
+  'chaosW.axis.logSeparation': 'log₁₀ separation',
+  'chaosW.axis.time': 'simulated time →',
+  'chaosW.empty.no-runs':
+    'Record Run A and Run B in the A/B Bench, then come back.',
+  'chaosW.empty.no-overlap':
+    'The two runs do not overlap in simulated time. Record them for similar lengths.',
+  'chaosW.row.status': 'Status',
+  'chaosW.row.perturbation': 'Perturbation',
+  'chaosW.row.start': 'Separation at the start',
+  'chaosW.row.end': 'Separation at the end',
+  'chaosW.row.growth': 'Grew by',
+  'chaosW.row.behaviour': 'Behaviour',
+  'chaosW.row.window': 'Fitted over',
+  'chaosW.row.noEstimate': 'No e-folding time because',
+  'chaosW.row.straightLine': 'A straight line fits',
+  'chaosW.row.refinement': 'Under refinement',
+  'chaosW.value.perturbation': '{body}, {axis}, {km}',
+  'chaosW.value.window': 't = {from} to {to} s  ({efolds} e-folds)',
+  'chaosW.value.resolved': 'resolved — the e-folding times agree to {spread}%',
+  'chaosW.verdict.none': 'nothing measured yet',
+  'chaosW.verdict.identical':
+    'the two runs are identical — the simulation is deterministic',
+  'chaosW.verdict.bounded': 'bounded: the two runs stay close',
+  'chaosW.verdict.linear':
+    'growing in proportion to time — that is drift, not chaos',
+  'chaosW.verdict.saturated':
+    'saturated: the runs are as far apart as this system allows',
+  'chaosW.verdict.exponential':
+    'exponential, e-folding time {tau} s  (r² = {r2})',
+  'chaosW.reject.too-few-points': 'too few usable samples to fit anything',
+  'chaosW.reject.too-little-range':
+    'the separation did not grow through enough e-folds. Under three, a straight line can imitate an exponential.',
+  'chaosW.reject.too-short':
+    'the fitted interval is shorter than two e-folding times',
+  'chaosW.reject.poor-fit':
+    'an exponential does not fit this well enough to quote a timescale',
+  'chaosW.reject.not-growing': 'the separation is not growing',
+  'chaosW.reject.no-window': 'no interval of the run is usable for a fit',
+  'chaosW.reject.insufficient': 'not enough data',
+  'chaosW.unresolved.need-two-estimates':
+    'record the comparison again with a smaller timestep or another integrator',
+  'chaosW.unresolved.behaviour-changed':
+    'NOT RESOLVED — the behaviour itself changed with the numerics',
+  'chaosW.unresolved.timescale-moved':
+    'NOT RESOLVED — the e-folding time moved with the timestep, so it is a property of the integrator',
+  'energyW.theMoon': 'the Moon',
+  'energyW.earth': 'Earth',
+  'energyW.jupiter': 'Jupiter',
+  'energyW.theSun': 'the Sun',
+  'energyW.total': 'TOTAL',
+  'energyW.doesItComeBack': 'Does it come back?',
+  'energyW.launchSpeed': 'Launch speed',
+  'energyW.slow6KmS': 'Slow: 6 km/s',
+  'energyW.orbit78KmS': 'Orbit: 7.8 km/s',
+  'energyW.boundary109KmS': 'Boundary: 10.9 km/s',
+  'energyW.fast14KmS': 'Fast: 14 km/s',
+  'energyW.clearlyGoneItLeavesAlong':
+    'Clearly gone. It leaves along an open path and still has speed to spare when it is far away.',
+  'energyW.run': '▶ Run',
+  'energyW.reset': '↺ Reset',
+  'energyW.totalEnergy': 'Total energy',
+  'energyW.escapeSpeedFromHere': 'Escape speed from here',
+  'energyW.furthestItGets': 'Furthest it gets',
+  'energyW.energyAroundOneOrbit': 'Energy around one orbit',
+  'energyW.clickAPlanetInThe': 'Click a planet in the simulation',
+  'energyW.watching': 'Watching',
+  'energyW.energyOfMotion': 'Energy of motion',
+  'energyW.howMuchTheTotalHas': 'How much the total has moved',
+  'energyW.whereItIs': 'Where it is',
+  'energyW.whatMakesEscapeHard': 'What makes escape hard?',
+  'energyW.escapeSpeedFromFourReal':
+    'Escape speed from four real bodies. Move the slider to start further out and watch every bar fall.',
+  'energyW.startDistance': 'Start distance',
+  'energyW.bodyRadius': '× body radius',
+  'energyW.atTheSurface': 'At the surface',
+  'energyW.twiceAsFarOut': 'Twice as far out',
+  'energyW.tenRadiiOut': 'Ten radii out',
+  'energyW.startingDistance': 'Starting distance',
+  'energyW.oneLawThreeShapes': 'One law, three shapes',
+  'energyW.theSamePlanetTheSame':
+    'The same planet, the same launch point, the same law of gravity. Only the speed is different.',
+  'energyW.speedAsAFractionOf': 'Speed, as a fraction of escape speed',
+  'energyW.belowEscape': 'Below escape',
+  'energyW.exactlyEscape': 'Exactly escape',
+  'energyW.aboveEscape': 'Above escape',
+  'energyW.shapeOfThePath': 'Shape of the path',
+  'energyW.escapeSpeedHere': 'Escape speed here',
+  'energyW.belowEscapeEllipse': 'below escape: ellipse',
+  'energyW.escapeExactlyParabola': 'escape exactly: parabola',
+  'energyW.aboveEscapeHyperbola': 'above escape: hyperbola',
+  // --- The evidence notebook ---------------------------------------------------
+  // Every string a saved reading can print. The three `nb.kind.*` words are the
+  // load-bearing ones: they are what separates a number the student obtained
+  // from data, one a closed-form model predicts, and one read out of the
+  // simulation's own state - and the last is not a measurement at all.
+  'nb.title': 'Evidence notebook',
+  'nb.intro':
+    'Readings you have kept. Each one is frozen as it was taken, with the conditions it was taken under; the words are yours to revise, the numbers are not. Order them the way your argument runs.',
+  'nb.empty':
+    'Nothing kept yet. Save a fit from the radial-velocity workspace, or a result from the A/B bench, and it will appear here.',
+  'nb.untitled': 'Untitled reading',
+  'nb.unknownTarget': 'an unnamed target',
+  'nb.unknownScenario': 'an unnamed scenario',
+  'nb.nothingToSave': 'There is no completed result to keep yet.',
+
+  'nb.kind.measured': 'measured',
+  'nb.kind.analytic': 'predicted',
+  'nb.kind.truth': 'revealed',
+
+  'nb.field.title': 'Heading',
+  'nb.field.claim': 'Claim',
+  'nb.field.evidence': 'Supporting evidence',
+  'nb.field.limitations': 'Limitations',
+  'nb.placeholder.claim': 'What do you think this reading shows? One sentence.',
+  'nb.placeholder.evidence':
+    'Which numbers above support that, and how closely?',
+  'nb.placeholder.limitations':
+    'What would this reading not settle, however good it looks? One per line.',
+
+  'nb.action.save': 'Save to notebook',
+  'nb.action.report': 'Report',
+  'nb.action.report.hint':
+    'Download a PDF of the notebook: every entry with its numbers, its figure, your words and the conditions it was taken under.',
+  'nb.action.download': 'Download',
+  'nb.action.download.hint':
+    'Download the notebook as a file you can keep or move to another machine. This is also the answer when the browser refuses to store it.',
+  'nb.action.restore': 'Restore',
+  'nb.action.restore.hint':
+    'Load a notebook file. Entries you already have are replaced by their saved copies rather than duplicated.',
+  'nb.action.close': 'Close the notebook',
+  'nb.action.up': 'Move “{title}” earlier',
+  'nb.action.down': 'Move “{title}” later',
+  'nb.action.delete': 'Delete “{title}”',
+  'nb.confirm.delete':
+    'Delete “{title}”? The reading cannot be taken again from a world that has moved on, and this cannot be undone.',
+
+  'nb.draft.heading': 'Keep this reading',
+  'nb.draft.hint':
+    'The numbers are already frozen, so you can take your time over the words — changing the simulation now will not alter what was captured.',
+  'nb.draft.save': 'Keep it',
+  'nb.draft.discard': 'Discard',
+
+  'nb.entry.results': 'What was recorded',
+  'nb.entry.conditions': 'Conditions it was taken under',
+  'nb.entry.checksum': 'checksum {code}',
+  'nb.entry.figure': {
+    one: 'Figure: {title} ({n} series, drawn in the report)',
+    other: 'Figure: {title} ({n} series, drawn in the report)',
+  },
+  'nb.entry.tampered':
+    'This entry no longer matches its own checksum, so its numbers were changed outside Gravitas. It is kept as it arrived and the report says so.',
+
+  'nb.save.ok': '{n} of {max} entries · {pct}% of the space used',
+  'nb.save.unavailable':
+    'This browser will not store anything, so the notebook is only in this tab. Download it before you close the page.',
+  'nb.save.quota':
+    'Your browser refused to store the notebook — it is probably full. The notebook is still on screen; download it now.',
+  'nb.save.too-large':
+    'One entry is {bytes} KB, over the {limit} KB limit for a single entry. It is still on screen; download the notebook.',
+  'nb.save.total-exceeded':
+    'The notebook is {bytes} KB, over the {limit} KB limit. Delete an entry or download the notebook and start a fresh one.',
+  'nb.save.too-many':
+    'The notebook holds the most entries it can ({limit}). Delete one, or download this notebook and start another.',
+  'nb.save.from-a-newer-version':
+    'The stored notebook was written by a newer Gravitas and has not been opened, so nothing has been overwritten.',
+  'nb.save.unreadable':
+    'The stored notebook could not be read. Nothing has been overwritten; restore from a file if you have one.',
+  'nb.save.tooLarge': 'That file is too large to be a notebook.',
+  'nb.save.notJson': 'That file is not readable as a notebook.',
+  'nb.save.notAnObject': 'That file is not a notebook.',
+  'nb.save.notANotebook': 'That file is not a Gravitas notebook.',
+  'nb.save.noVersion': 'That notebook file does not say which version it is.',
+  'nb.save.tooNew': 'That notebook was written by a newer Gravitas.',
+  'nb.save.noEntries': 'That notebook file has no entries in it.',
+  'nb.save.tooManyEntries':
+    'That notebook file holds more entries than one notebook may.',
+  'nb.save.not-an-entry':
+    'That notebook file contains something that is not an entry.',
+  'nb.save.no-id': 'An entry in that file has no identity.',
+  'nb.save.no-snapshot': 'An entry in that file has no recorded reading in it.',
+  'nb.save.no-quantities': 'An entry in that file records no numbers.',
+  'nb.save.bad-quantity':
+    'An entry in that file has an unreadable number in it.',
+  'nb.save.unknown-kind':
+    'An entry in that file labels a number in a way this version does not know.',
+  'nb.save.bad-figure': 'An entry in that file has an unreadable figure in it.',
+
+  'nb.source.rv-fit': 'Radial-velocity fit',
+  'nb.source.bench-comparison': 'A/B comparison',
+  'nb.source.bench-reliability': 'Reliability check',
+  'nb.source.bench-sweep': 'Parameter sweep',
+
+  'nb.prov.scenario': 'Scenario',
+  'nb.prov.target': 'Target',
+  'nb.prov.simTime': 'Simulation time',
+  'nb.prov.days': '{d} days',
+  'nb.prov.seed': 'Seed',
+  'nb.prov.world': 'World generation',
+  'nb.prov.interventions': 'Manual changes before this reading',
+  'nb.prov.revision': 'Build',
+  'nb.prov.numerical': 'Numerical settings',
+  'nb.prov.step': 'max step {v}',
+  'nb.prov.speed': 'speed {v}',
+  'nb.prov.geometry': 'Observing geometry',
+  'nb.prov.geometryValue': 'position angle {pa}°, inclination {inc}°',
+  'nb.prov.frame': 'Reference frame',
+  'nb.prov.quality': 'Rendering while measured',
+  'nb.prov.qualityValue': '{tier} tier, {fps} fps',
+  'nb.prov.units': 'Units',
+  'nb.prov.flags': 'Noted',
+  'nb.prov.stateHash': 'Initial state',
+
+  'nb.flag.truth-revealed':
+    'the simulation truth had been revealed before this was kept',
+  'nb.flag.degraded-epochs': 'some epochs were degraded and were dropped',
+  'nb.flag.unverified-epochs': 'some epochs were unverified',
+  'nb.flag.weights-assumed':
+    'the uncertainties were assumed, so there is no reduced chi-square',
+  'nb.flag.structured-residuals':
+    'the residuals still have a shape in them, so the model is not sufficient',
+  'nb.flag.multivariable': 'more than one variable differed between the runs',
+  'nb.flag.bench-warning': 'the bench raised a warning about this comparison',
+  'nb.flag.cancelled': 'the run was cancelled before it finished',
+  'nb.flag.failed-trials': 'some trials did not produce a result',
+  'nb.flag.reliability-check': 'this is a comparison of two step sizes',
+  'nb.flag.verdict-converging': 'halving the step did not move the outcome',
+  'nb.flag.verdict-unresolved': 'halving the step moved the outcome',
+  'nb.flag.verdict-diverged':
+    'the paths separated while the aggregate held — chaos, not a bad step',
+  'nb.flag.verdict-incomparable':
+    'the two runs were not measurements of the same thing',
+
+  'nb.rv.title': 'Radial-velocity fit to {target}',
+  'nb.rv.period': 'Period',
+  'nb.rv.K': 'Velocity semi-amplitude K',
+  'nb.rv.msini': 'gives M sin i, not a mass',
+  'nb.rv.gamma': 'Systemic velocity',
+  'nb.rv.rms': 'Residual RMS',
+  'nb.rv.chi2': 'Reduced chi-square',
+  'nb.rv.chi2Note': 'of the model as dialled in, not of a refitted one',
+  'nb.rv.truthPeriod': 'Period (simulation)',
+  'nb.rv.truthK': 'K (simulation)',
+  'nb.rv.figure': 'Velocities folded on the trial period',
+  'nb.rv.phase': 'Phase',
+  'nb.rv.velocity': 'Radial velocity (m/s)',
+  'nb.rv.observed': 'Observed',
+  'nb.rv.model': 'Circular model',
+  'nb.rv.evidence':
+    '{used} epochs were fitted, leaving a residual RMS of {rms} m/s.',
+  'nb.rv.limit.model':
+    'A circular single-companion model: an eccentric orbit or a second companion would show up as structure in the residuals rather than as a worse period.',
+  'nb.rv.limit.msini':
+    'Only the line-of-sight component is measured, so K constrains M sin i and not a mass.',
+  'nb.rv.limit.revealed':
+    'The simulation truth was revealed before this was kept, so any agreement below is not an independent check.',
+
+  'nb.bench.title': 'A/B comparison: {name}',
+  'nb.bench.runA': '{metric}, run A',
+  'nb.bench.runB': '{metric}, run B',
+  'nb.bench.figure': '{metric} against simulated time',
+  'nb.bench.time': 'Sample',
+  'nb.bench.evidence': 'The runs differed in: {changed}.',
+  'nb.bench.evidenceNone':
+    'No parameter difference was recorded between the two runs.',
+  'nb.bench.limit.oneSeed':
+    'One seed and one pair of runs: this shows what happened, not how often it happens.',
+  'nb.bench.limit.multivariable':
+    'More than one variable differed, so the comparison does not isolate any single one.',
+
+  'nb.sweep.title': '{parameter} swept in {scenario}',
+  'nb.sweep.trials': 'Trials that produced a result',
+  'nb.sweep.duration': 'Simulated duration per trial',
+  'nb.sweep.durationNote': 'the same for every trial',
+  'nb.sweep.min': '{metric}, smallest',
+  'nb.sweep.max': '{metric}, largest',
+  'nb.sweep.figure': '{metric} against {parameter}',
+  'nb.sweep.changed':
+    '{metric} changes with {parameter} across the range swept, {direction}.',
+  'nb.sweep.flat':
+    '{metric} does not change with {parameter} across the range swept, beyond the declared tolerance.',
+  'nb.sweep.dir.increasing': 'increasing throughout',
+  'nb.sweep.dir.decreasing': 'decreasing throughout',
+  'nb.sweep.dir.flat': 'without a consistent direction',
+  'nb.sweep.noSummary': 'Too few trials succeeded to summarise a trend.',
+  'nb.sweep.limit.oneVariable':
+    'One variable was swept and everything else held: nothing here says how the parameters interact.',
+  'nb.sweep.limit.failed':
+    '{n} trials did not produce a result, so the range is not evenly sampled.',
+  'nb.sweep.limit.cancelled':
+    'The sweep was cancelled, so the range was not covered as planned.',
+
+  'nb.rel.title': 'Reliability check: {scenario}',
+  'nb.rel.coarse': '{metric} at the working step',
+  'nb.rel.fine': '{metric} at half the step',
+  'nb.rel.agrees': 'unchanged within {tolerance}',
+  'nb.rel.moved': 'moved by more than {tolerance}',
+  'nb.rel.cost': 'Wall-clock cost of the check',
+  'nb.rel.costNote': 'both runs together',
+  'nb.rel.earlyWorst': 'Worst early disagreement between the paths',
+  'nb.rel.earlyNote': 'over the first {n} samples',
+  'nb.rel.worst': 'Worst disagreement over the whole run',
+  'nb.rel.worstNote': 'relative to the range of the quantity',
+  'nb.rel.evidence':
+    'The same state was run at a step of {coarse} and of {fine}, and the two were compared against a tolerance of {tolerance}.',
+  'nb.rel.limit.conservation':
+    'Conserving energy is not the same as following the right trajectory: a scheme can conserve well and still be on the wrong path.',
+  'nb.rel.limit.chaos':
+    'In a chaotic system two useful runs separate eventually, so a separation is not by itself a sign of a bad step size.',
+  'nb.rel.limit.noFigure':
+    'Only the summary statistics of the two paths are kept, not the paths themselves.',
+  'nb.rel.limit.verdict.converging':
+    'Halving the step left the outcome alone. That is the strongest statement a convergence check supports; it is not a claim that the answer is correct.',
+  'nb.rel.limit.verdict.unresolved':
+    'Halving the step moved the outcome, so this reading describes the timestep as much as the system.',
+  'nb.rel.limit.verdict.diverged':
+    'The paths separated while the aggregate held. Quote the statistic, not the trajectory.',
+  'nb.rel.limit.verdict.incomparable':
+    'The two runs were not measurements of the same thing, so nothing can be concluded from their agreement or disagreement.',
+
+  'nb.report.title': 'Evidence notebook',
+  'nb.report.subtitle':
+    'Readings kept from a Gravitas session, each with the conditions it was taken under.',
+  'nb.report.footer': 'Gravitas — evidence notebook',
+  'nb.report.student': 'Kept by',
+  'nb.report.anonymous': 'not given',
+  'nb.report.generated': 'Report generated',
+  'nb.report.build': 'Build',
+  'nb.report.entries': 'Entries',
+  'nb.report.howToRead': 'How to read the numbers',
+  'nb.report.readMeasured':
+    'measured — obtained from data the instrument produced.',
+  'nb.report.readAnalytic':
+    'predicted — what a closed-form model says should happen, not an observation.',
+  'nb.report.readTruth':
+    'revealed — read out of the simulation’s own state. Available only because this is a simulation, and not a measurement.',
+  'nb.report.tampered': {
+    one: '{n} entry no longer matches its own checksum; see the note on it below.',
+    other:
+      '{n} entries no longer match their own checksums; see the notes on them below.',
+  },
+  'nb.report.source': 'Source',
+  'nb.report.captured': 'Captured',
+  'nb.report.checksum': 'Checksum',
+  'nb.report.entryTampered':
+    'This entry does not match its own checksum: its numbers were changed outside Gravitas.',
+  'nb.report.results': 'What was recorded',
+  'nb.report.colQuantity': 'Quantity',
+  'nb.report.colValue': 'Value',
+  'nb.report.colKind': 'Kind',
+  'nb.report.colNote': 'Note',
+  'nb.report.figure': 'Figure',
+  'nb.report.conditions': 'Conditions it was taken under',
+  'nb.report.noValue': 'not recorded',
+  'nb.report.notRecorded': 'not recorded',
+
+  // --- The browser's search and filters ---------------------------------------
+  // Every option these describe is generated from the manifest. The subject
+  // names below are the tag vocabulary the lessons declare, translated once
+  // here rather than repeated in seventeen lesson files.
+  'inv.filter.search.placeholder': 'Search by title, topic or subject',
+  'inv.filter.query': 'Search',
+  'inv.filter.subject': 'Subject',
+  'inv.filter.subject.any': 'Any subject',
+  'inv.filter.subject.option': '{subject} ({n})',
+  'inv.filter.length': 'Time needed',
+  'inv.filter.length.any': 'Any length',
+  'inv.filter.length.demo': 'Demonstration (25 min or less)',
+  'inv.filter.length.period': 'One class period (up to 50 min)',
+  'inv.filter.length.long': 'More than a period (50 min+)',
+  'inv.filter.calculation': 'Calculation',
+  'inv.filter.calculation.any': 'Any amount of arithmetic',
+  'inv.filter.calculation.none': 'No numbers to work out',
+  'inv.filter.calculation.some': 'A few numbers to work out',
+  'inv.filter.calculation.lots': 'Several numbers to work out',
+  'inv.filter.progress': 'Progress',
+  'inv.filter.progress.any': 'Any progress',
+  'inv.filter.progress.new': 'Not started',
+  'inv.filter.progress.going': 'In progress',
+  'inv.filter.progress.done': 'Finished',
+  'inv.filter.clear': 'Clear filters',
+  'inv.filter.count': {
+    one: '{n} of {total} lessons matches',
+    other: '{n} of {total} lessons match',
+  },
+
+  'inv.tag.chaos': 'Chaos',
+  'inv.tag.compact-objects': 'Compact objects',
+  'inv.tag.exoplanets': 'Exoplanets',
+  'inv.tag.galaxies': 'Galaxies',
+  'inv.tag.gravity': 'Gravity',
+  'inv.tag.habitability': 'Habitability',
+  'inv.tag.observing': 'Observing',
+  'inv.tag.orbits': 'Orbits',
+  'inv.tag.resonance': 'Resonance',
+  'inv.tag.solar-system': 'The solar system',
+  'inv.tag.spaceflight': 'Spaceflight',
+  'inv.tag.stars': 'Stars',
+
+  'inv.empty.search': 'Nothing matches “{query}”.',
+  'inv.empty.filters': 'No lesson matches all of those at once.',
+  'inv.empty.relax': {
+    one: 'Ignore {filter}: {n} lesson',
+    other: 'Ignore {filter}: {n} lessons',
+  },
+
+  // --- The curated orders -----------------------------------------------------
+  'inv.seq.heading': 'Ways through',
+  'inv.seq.intro':
+    'Lessons stand alone, but some build on each other. These are orders that work, with what each one assumes you have already done.',
+  'inv.seq.all': 'Every lesson',
+  'inv.seq.needs': 'Assumes you have done: {lessons}.',
+  'inv.seq.needs.none': 'Nothing assumed. Start here.',
+  'inv.seq.fit.demo': 'Fits a demonstration',
+  'inv.seq.fit.period': 'Fits a class period',
+  'inv.seq.fit.long': 'Longer than a period',
+  'inv.seq.assign':
+    'Cut a shorter activity out of this lesson with the assignment builder',
+
+  'inv.seq.orbits.title': 'Orbital mechanics',
+  'inv.seq.orbits.blurb':
+    'From the shape of an orbit to moving between two of them. The first two lessons measure what orbits do; the last three spend that understanding on getting somewhere.',
+  'inv.seq.orbits.keplers-laws':
+    'The three laws, measured rather than recited. Everything after this refers back to the ellipse and the period–size relation you find here.',
+  'inv.seq.orbits.orbital-energy':
+    'Why a faster orbit is a lower one. The energy bookkeeping here is what makes a transfer burn make sense instead of looking backwards.',
+  'inv.seq.orbits.hohmann-transfer':
+    'The cheapest way between two circular orbits, planned and flown. Short enough to run as a demonstration once the energy argument is in place.',
+  'inv.seq.orbits.gravity-assist':
+    'The other way to change orbit: borrow from a planet instead of burning fuel. Reads as a companion to the transfer lesson rather than a sequel.',
+  'inv.seq.orbits.lagrange-points':
+    'Where the two-body picture stops being enough. A natural place to end, and the doorway into the three-body sequence.',
+
+  'inv.seq.exoplanets.title': 'Detecting exoplanets',
+  'inv.seq.exoplanets.blurb':
+    'The two methods that have found nearly every known planet, then using them together on an unknown star. Longer lessons: plan on two sittings, or set part of one as homework.',
+  'inv.seq.exoplanets.transit-photometry':
+    'Depth, duration and noise, from a light curve you measure yourself. The vocabulary the rest of the sequence uses.',
+  'inv.seq.exoplanets.radial-velocity':
+    'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
+  'inv.seq.exoplanets.detect-this-planet':
+    'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
+  'inv.seq.exoplanets.goldilocks-question':
+    'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit lesson; the radial-velocity one helps.',
+
+  'inv.seq.threebody.title': 'When two bodies are not enough',
+  'inv.seq.threebody.blurb':
+    'Resonance, equilibrium points and sensitivity to initial conditions — the three ways adding one more body changes the answer.',
+  'inv.seq.threebody.when-orbits-lock':
+    'The gentlest introduction to a third body: repeated small tugs that add up. No prior three-body work needed.',
+  'inv.seq.threebody.lagrange-points':
+    'The equilibrium points of the restricted problem, and the rotating frame they live in. Short, and the frame is what the next lesson leans on.',
+  'inv.seq.threebody.butterfly-effect':
+    'Sensitive dependence, measured with a separation you watch grow. Much more convincing once you have seen an orbit that stays put.',
+  'inv.seq.threebody.binary-star-planets':
+    'Everything above at once: stability, resonance and chaos deciding where a planet can survive around two stars.',
+
   'inv.summary.about': 'about {h} hours',
   'inv.summary.range': '{l}–{h} hours',
   'inv.summary.work': '{hours} of work',

@@ -23,6 +23,7 @@
 // self-contained model that runs whether or not a simulation is loaded.
 // =============================================================================
 
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { TRANSIT_WIDGETS } from './transitWidgets.js';
 import { ENERGY_WIDGETS } from './energyWidgets.js';
 import { BINARY_WIDGETS } from './binaryWidgets.js';
@@ -33,6 +34,25 @@ import { TIDAL_WIDGETS } from './tidalWidgets.js';
 import { DARK_MATTER_WIDGETS } from './darkMatterWidgets.js';
 import { CHAOS_WIDGETS } from './chaosWidgets.js';
 import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
+
+// Every widget family's prose lives in the deferred half of the catalogue,
+// because nothing in the start-up path can reach one: this registry is
+// imported only by the lazy js/investigations.js. That is what keeps eleven
+// kilobytes of instrument labels out of everybody's first download.
+//
+// Registered here rather than left to whoever opened the widget, for the same
+// reason js/rvWorkspacePanel.js registers its own: the lesson loader does call
+// ensureDeferredMessages() first on the normal path, and a share link, an
+// authoring preview or a test that imports a widget module directly does not.
+// A readout that prints `resW.row.frame` because of who called it is a bug in
+// the widget, not in the caller - which is exactly what happened when these
+// families were moved, and what e2e/resonance.spec.js caught.
+//
+// Fire-and-forget: the registry is data, it has no async entry point, and a
+// draw that lands in the same tick as the import still repaints on the next
+// frame with the strings in place. Failure is swallowed because a missing
+// translation must degrade to an English label rather than break the panel.
+ensureDeferredMessages().catch(() => {});
 
 const WIDGETS = [
   ...TRANSIT_WIDGETS,
