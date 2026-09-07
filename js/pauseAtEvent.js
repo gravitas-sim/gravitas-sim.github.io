@@ -324,16 +324,25 @@ function step() {
 
   const sample = { t: nowDays, value: signal.value };
   const before = watch.previous;
+
+  // The clock advances once per rendered frame, and this runs once per
+  // integration substep, so several samples in a row carry the same timestamp.
+  // Pairing two of those brackets the crossing to zero elapsed time - a
+  // resolution the clock does not have - and interpolates across a span of
+  // zero. So one sample per distinct clock reading: the bracket is then the
+  // frame the crossing happened in, which is the real resolution and is never
+  // zero. The cost is that a crossing is reported at the end of its frame
+  // rather than at the substep that produced it, which is inside the bracket
+  // the readout already quotes.
+  if (before && sample.t === before.t) return;
+
   watch.previous = sample;
   if (!before) return;
 
   // A clock that went backwards means the timeline was scrubbed. The previous
   // sample is from a future that is being replayed away; drop it and start the
   // bracket again rather than reading a crossing out of two unrelated states.
-  if (sample.t < before.t) {
-    watch.previous = sample;
-    return;
-  }
+  if (sample.t < before.t) return;
 
   if (!crossedZero(before.value, sample.value, signal.rising)) return;
 
