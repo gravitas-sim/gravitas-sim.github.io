@@ -230,4 +230,18 @@ export const MANIFEST = [
     gradedCount: 12,
     objectiveCount: 6,
   },
+  {
+    id: 'lagrange-points',
+    title: 'Where Can It Get To?',
+    subtitle:
+      'Forbidden regions, five balance points, and one conserved number',
+    duration: '20-25 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
+    thumbnail: 'images/scenarios/lagrange-point-lab.webp',
+    stepCount: 18,
+    gradedCount: 7,
+    objectiveCount: 6,
+  },
 ];

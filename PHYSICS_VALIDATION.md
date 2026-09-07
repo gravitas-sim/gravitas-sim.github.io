@@ -719,7 +719,7 @@ of `npm test`. For each scenario it reports the drift in linear momentum, total
 energy and angular momentum over a simulated run at the scenario's own
 `sim_speed`, and flags every documented departure that scenario has switched on.
 
-Across all <!--fact:scenarios-->58<!--/fact--> scenarios: every scenario
+Across all <!--fact:scenarios-->59<!--/fact--> scenarios: every scenario
 whose settings claim momentum
 conservation conserves it to round-off (`≤ 2.0e-15`), and every resolved few-body
 scenario holds its energy and angular momentum within 5%. Representative rows:

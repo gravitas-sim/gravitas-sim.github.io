@@ -1,3 +1,12 @@
+import { registerMessages } from '../js/i18n/index.js';
+import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
+
+// These widgets' prose lives in the deferred catalogue, because everything
+// that reaches them is lazily loaded. The application registers it before the
+// panel renders; a test that reads a preset's label has to do the same, or
+// every label is the message id it was going to be translated from.
+registerMessages('en', EN_DEFERRED);
+
 import { allWidgets, widgetDefaults, getWidget } from '../js/widgets.js';
 import {
   relativeInsolation,

@@ -1282,7 +1282,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->16<!--/fact--> lessons and cannot fall behind
+        <!--fact:investigations-->17<!--/fact--> lessons and cannot fall behind
         them. It listed six of the twelve when it was maintained by hand.
       </p>
       <div class="doc-table-wrap">
@@ -1358,6 +1358,10 @@
               <td>Getting There From Here</td>
               <td>Two-body motion about a single dominant mass, integrated with Velocity Verlet rather than the catalogue’s default symplectic Euler, because the lesson checks a transfer time against pi*sqrt(a^3/mu) and first-order period error is too coarse for that. The scenario is built circular by construction: each body is placed at sqrt(mu/r) with the orbiting body’s own mass included in mu, the same mu the readout uses, so the orbits open at eccentricities of about 1e-4 rather than at some value the setup and the inspector disagree about. The spacecraft is a billionth of the star’s mass - not zero, because a massless body drops out of the barycentre and out of the conservation diagnostics, and small enough that the two-body formulae the lesson uses are right well past the precision anybody reads. The manoeuvre planner’s preview is the osculating two-body orbit computed by the same orbitalElements() the inspector uses. In this scenario that is exact to the precision of the integration; in a system with a third mass of any consequence it would not be, and both the panel and every exported burn record say so. e2e/maneuver.spec.js flies the whole transfer through the engine and checks both burns and the coast against the closed form: the coast comes out at 162.62 simulation time units against 162.63 predicted.</td>
             </tr>
+            <tr>
+              <td>Where Can It Get To?</td>
+              <td>Two massive bodies on a circular orbit, integrated with Velocity Verlet rather than the catalogue’s default symplectic Euler, because the lesson asks students to watch a conserved quantity hold and first-order drift would make that a claim about the integrator. Measured eccentricity is 2.4e-9 and the tracer is a billionth of the pair. The world is built to the convention the analysis uses: barycentre at the origin, heavier body at -mu, lighter at 1-mu, so the overlay and the simulation agree about where everything is. The tracer is placed and launched in the rotating frame and converted, which is what makes its Jacobi constant a chosen quantity rather than an accident of the setup. The effective potential is sampled on a 220-square grid in the rotating frame’s own coordinates. That grid depends on the mass ratio and nothing else, so it survives a moving camera and a moving tracer and is computed once; the per-frame cost is one comparison per cell. e2e/cr3bp.spec.js bisects the tracer’s speed for the value at which the L1 neck opens and recovers the closed form’s C1 to six decimal places.</td>
+            </tr>
           <!--/fact-block-->
           </tbody>
         </table>
@@ -1387,7 +1391,7 @@
         <a href="#validation">Validation</a>, and
         <code>npm run validate:scenarios</code> extends the conservation audit
         to <!--fact:stabilityScenarios-->12<!--/fact--> of the
-        <!--fact:scenarios-->58<!--/fact--> shipped scenarios in a real browser
+        <!--fact:scenarios-->59<!--/fact--> shipped scenarios in a real browser
         &mdash; the ones most exposed to integrator error, which is a different
         and smaller claim than the one this sentence used to make.
       </p>

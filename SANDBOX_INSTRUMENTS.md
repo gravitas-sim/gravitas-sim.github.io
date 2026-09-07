@@ -253,7 +253,7 @@ catalog was laid out, timed and tuned against its particular error, and several
 of them cap their timestep because of it. Quietly promoting a more accurate
 scheme would change the dynamics of the whole catalog at once. Two checks in the
 validation suite exist only to notice if that ever happens, and an e2e test loads
-every scenario in the catalog &mdash; <!--fact:scenarios-->58<!--/fact--> of
+every scenario in the catalog &mdash; <!--fact:scenarios-->59<!--/fact--> of
 them &mdash; and confirms each one comes up under the default. The test reads
 the catalog rather than a list, so it does not need updating when one is added.
 

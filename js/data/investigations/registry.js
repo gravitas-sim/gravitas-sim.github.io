@@ -80,6 +80,7 @@ const LOADERS = {
   'binary-star-planets': () => import('./binary-star-planets.js'),
   'gravity-assist': () => import('./gravity-assist.js'),
   'hohmann-transfer': () => import('./hohmann-transfer.js'),
+  'lagrange-points': () => import('./lagrange-points.js'),
 };
 
 /**
@@ -110,6 +111,7 @@ const TRANSLATIONS = {
     'binary-star-planets': () => import('./es/binary-star-planets.js'),
     'gravity-assist': () => import('./es/gravity-assist.js'),
     'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
+    'lagrange-points': () => import('./es/lagrange-points.js'),
   },
 };
 

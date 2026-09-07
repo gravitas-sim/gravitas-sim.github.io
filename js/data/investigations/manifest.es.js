@@ -235,4 +235,18 @@ export const MANIFEST = [
     gradedCount: 12,
     objectiveCount: 6,
   },
+  {
+    id: 'lagrange-points',
+    title: '¿Hasta dónde puede llegar?',
+    subtitle:
+      'Regiones prohibidas, cinco puntos de equilibrio y un número conservado',
+    duration: '20-25 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
+    thumbnail: 'images/scenarios/lagrange-point-lab.webp',
+    stepCount: 18,
+    gradedCount: 7,
+    objectiveCount: 6,
+  },
 ];

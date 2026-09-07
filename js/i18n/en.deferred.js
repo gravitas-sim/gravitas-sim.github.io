@@ -746,4 +746,123 @@ export const EN_DEFERRED = {
     'Will actually travel there: a separate question, and this overlay cannot answer it. An open neck is a gap in a wall, not a route through it; the tracer may orbit for ever on one side of an opening it never uses. Only integrating the trajectory settles it.',
   'cr3bp.claims.stable':
     'Stable: a third question again. It means a tracer displaced slightly from an equilibrium returns rather than leaves, and it is true here only of L4 and L5, and only below Routh\u2019s mass ratio. Nothing in a zero-velocity curve implies it.',
+
+  // --- The exoplanet lesson widgets ---------------------------------------------
+  // js/exoplanetWidgets.js is reached only through js/widgets.js, which is
+  // reached only from js/investigations.js - all of it lazy. These were in the
+  // start-up catalogue for a widget nobody sees until they open a lesson.
+  'exoW.whoIsActuallyMoving': 'Who is actually moving?',
+  'exoW.theStarAndThePlanet':
+    'The star and the planet both go round the same point. Turn the magnification up to see the star do it.',
+  'exoW.planetMass': 'Planet mass',
+  'exoW.orbitSize': 'Orbit size',
+  'exoW.stellarWobbleShown': 'Stellar wobble shown',
+  'exoW.jupiterAtJupiterSDistance': 'Jupiter, at Jupiter’s distance',
+  'exoW.theSunReallyDoesThis':
+    'The Sun really does this. Its reflex orbit is about one solar radius across, and it takes twelve years to go round.',
+  'exoW.anEarth': 'An Earth',
+  'exoW.starSOwnOrbit': 'Star’s own orbit',
+  'exoW.planetSOrbit': 'Planet’s orbit',
+  'exoW.planetSOrbitIsBigger': 'Planet’s orbit is bigger by',
+  'exoW.bothGoRoundOnceEvery': 'Both go round once every',
+  'exoW.towardUsAwayFromUs': 'Toward us, away from us',
+  'exoW.inclination': 'Inclination',
+  'exoW.radialVelocityNow': 'Radial velocity now',
+  'exoW.whichWay': 'Which way',
+  'exoW.semiAmplitudeK': 'Semi-amplitude K',
+  'exoW.whatMakesTheWobbleBigger': 'What makes the wobble bigger?',
+  'exoW.oneThingChangesAtA':
+    'One thing changes at a time. The star, the period and the viewing angle are all held still.',
+  'exoW.aNeptune': 'A Neptune',
+  'exoW.aHeavyJupiter': 'A heavy Jupiter',
+  'exoW.doubleTheMassAndK': 'Double the mass and K',
+  'exoW.theSamePlanetTilted': 'The same planet, tilted',
+  'exoW.thePlanetDoesNotChange':
+    'The planet does not change. Only our viewing angle does. Watch what happens to the mass radial velocity reports.',
+  'exoW.truePlanetMass': 'True planet mass',
+  'exoW.edgeOn90': 'Edge-on, 90°',
+  'exoW.aTransitingSystemIsClose':
+    'A transiting system is close to this, which is what makes its mass a mass rather than a lower limit.',
+  'exoW.faceOn5': 'Face-on, 5°',
+  'exoW.almostNoRadialVelocitySignal':
+    'Almost no radial-velocity signal at all. The planet is still there.',
+  'exoW.kWeWouldMeasure': 'K we would measure',
+  'exoW.massRvAloneReports': 'Mass RV alone reports',
+  'exoW.thatIsTheTrueMass': 'That is the true mass times',
+  'exoW.soRadialVelocityGives': 'So radial velocity gives',
+  'exoW.theWobbleAcrossTheSky': 'The wobble across the sky',
+  'exoW.astrometryMeasuresWhereTheStar':
+    'Astrometry measures where the star is, not how fast it is coming at us. Nothing here is a picture of the planet.',
+  'exoW.distance': 'Distance',
+  'exoW.aTextbookRadialVelocityTarget':
+    'A textbook radial-velocity target and a hopeless astrometric one: close in, and nearly fifty parsecs away.',
+  'exoW.sunAndJupiterAt10': 'Sun and Jupiter at 10 pc',
+  'exoW.theSameMethodAWide':
+    'The same method, a wide orbit and a near system: hundreds of times easier.',
+  'exoW.twiceAsFarAway': 'Twice as far away',
+  'exoW.theStarSOrbitHas':
+    'The star’s orbit has not changed at all. Only the angle it subtends has.',
+  'exoW.starSReflexOrbit': 'Star’s reflex orbit',
+  'exoW.angularSignature': 'Angular signature',
+  'exoW.orbitalPeriod': 'Orbital period',
+  'exoW.distanceChanges': 'Distance changes',
+  'exoW.threeMethodsOneSystem': 'Three methods, one system',
+  'exoW.tiltTheSamePlanetAnd':
+    'Tilt the same planet and watch which measurements survive. No method wins everywhere.',
+  'exoW.transit': 'Transit',
+  'exoW.radialVelocity': 'Radial velocity',
+  'exoW.astrometry': 'Astrometry',
+  'exoW.together': 'Together',
+  'exoW.whatDoWeActuallyKnow': 'What do we actually know?',
+  'exoW.eachRowIsOneObservation':
+    'Each row is one observation and what it buys. The last two rows need the ones above them.',
+  'exoW.radiusFromTheTransit': 'Radius, from the transit',
+  'exoW.massFromRadialVelocity': 'Mass, from radial velocity',
+  'exoW.starSLuminosity': 'Star’s luminosity',
+  'exoW.starSTemperature': 'Star’s temperature',
+  'exoW.thePlanetThisLessonMeasured':
+    'The planet this lesson measured. Large, light, and far too close to its star for the zone.',
+  'exoW.planetAARockyCandidate': 'Planet A: a rocky candidate',
+  'exoW.planetBPuffy': 'Planet B: puffy',
+  'exoW.planetCRockyTooHot': 'Planet C: rocky, too hot',
+  'exoW.aRockyDensityAndFar':
+    'A rocky density, and far too close to its star for the zone. Composition alone was never the whole question.',
+  'exoW.bulkDensity': 'Bulk density',
+  'exoW.whichMeans': 'Which means',
+  'exoW.starlightReceived': 'Starlight received',
+  'exoW.modeledHabitableZone': 'Modeled habitable zone',
+  'exoW.thisPlanetIs': 'This planet is',
+  'exoW.whatYourScheduleSees': 'What your schedule sees',
+  'exoW.theDashedCurveIsTheTruth':
+    'The dashed curve is the planet as the simulation knows it, drawn here to teach. A real survey has only the points.',
+  'exoW.daysBetweenMeasurements': 'Days between measurements',
+  'exoW.numberOfMeasurements': 'Number of measurements',
+  'exoW.measurementUncertainty': 'Measurement uncertainty',
+  'exoW.noiseSeed': 'Noise seed',
+  'exoW.scheduleAIntensive': 'Schedule A: one cycle',
+  'exoW.scheduleAIntensive.note':
+    'Twelve measurements spread across a single orbit. Every part of the cycle is looked at once.',
+  'exoW.scheduleBPatient': 'Schedule B: one cycle apart',
+  'exoW.scheduleBPatient.note':
+    'The same twelve measurements over eleven times the baseline, one taken every 3.52 days. The planet completes almost exactly one orbit between them.',
+  'exoW.aSmallerPlanet': 'A smaller planet',
+  'exoW.aBetterSpectrograph': 'A better spectrograph',
+  'exoW.aSmallerPlanet.note':
+    'A Neptune instead of a Jupiter, on the good schedule. The signal is now comparable to the error bars.',
+  'exoW.aBetterSpectrograph.note':
+    'The same Neptune, measured eight times more precisely. Nothing about the planet or the schedule changed.',
+  'exoW.daysAxis': 'Days',
+  'exoW.phaseAxis': 'Phase',
+  'exoW.idealSignalOverlay': 'dashed: ideal signal (teaching overlay)',
+  'exoW.foldedOnTheTruePeriod': 'folded on the true period',
+  'exoW.measurementsTaken': 'Measurements',
+  'exoW.phaseCoverage': 'Phase coverage',
+  'exoW.binsOfTheCycle': 'bins of the cycle',
+  'exoW.scatterOfTheMeasurements': 'Scatter of the measurements',
+  'exoW.scatterExpectedFromNoise': 'Scatter expected from noise alone',
+  'exoW.scatterVsConstantVelocity': 'Against a constant velocity',
+  'exoW.needsAnErrorBar': 'needs an uncertainty to compare against',
+  'exoW.whatThatDoesNotSay': 'What that does not say',
+  'exoW.excessScatterIsNotAPlanet':
+    'Extra scatter means the velocity is not constant. It does not identify a planet, a period or a mass.',
 };

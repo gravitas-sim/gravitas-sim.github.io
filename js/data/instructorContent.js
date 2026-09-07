@@ -16,6 +16,159 @@
 const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 
 export const INSTRUCTOR_CONTENT = {
+  'lagrange-points': {
+    topic:
+      'The circular restricted three-body problem: Jacobi constant, zero-velocity curves and Lagrange points',
+    difficulty: 'Introductory, conceptual, with one arithmetic step',
+    placement:
+      'Twenty to twenty-five minutes, after students have met orbits and ideally after the Hohmann-transfer lesson, which introduces the manoeuvre planner this one uses. It is the most conceptually demanding lesson in the catalogue and the least computational: almost all the work is distinguishing three claims that sound identical.',
+    overview: `Students meet a conserved quantity that buys a boundary rather than a solution.
+      The three-body problem has no closed-form trajectory, but the Jacobi constant is exact, and
+      from it comes a wall the tracer can never cross. The lesson has them read the constant,
+      watch it hold, speed the tracer up, and see the walls open in a fixed order.
+      \n\nIts spine is a distinction, not a calculation. Energetically accessible, actually
+      reachable, and stable are three different statements about the same diagram, and students
+      reliably collapse them into one. The lesson meets them one at a time and separated by
+      screens: energy through screen 9, then a deliberately inconclusive experiment at screen 11
+      where the neck is open and the tracer may simply not go through, then stability introduced
+      at screen 13 as an explicitly third thing.
+      \n\nThe sign convention is the other hazard and is stated three times. C rises as the
+      tracer slows, so every mental graph is upside down relative to the rest of the course.`,
+    priorKnowledge: [
+      'That gravity holds things in orbit',
+      'Comfort with the idea of a conserved quantity',
+      'Helpful: having seen a potential-energy landscape, even qualitatively',
+      'No vectors, no calculus. The effective potential is described rather than differentiated',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'A conserved quantity can buy a boundary without buying a solution',
+        body: 'This is the intellectual pay-off and worth naming explicitly. The trajectory is not solvable, and yet C is exact, and from C alone comes a region the tracer provably never enters. Students who have only met conservation laws as calculation shortcuts have not seen one used this way.',
+      },
+      {
+        heading: 'The sign convention runs backwards',
+        body: 'C = 2*Omega - v^2, so a faster tracer has a smaller C. Larger C means more confined. Expect this to be got wrong at least once by most of the class; the panel states it under every reading and the lesson repeats it at screens 4, 5 and 9.',
+      },
+      {
+        heading: 'The walls open in a fixed order',
+        body: 'C1 > C2 > C3 > C4 = C5 always. As the tracer speeds up it first gains the neck at L1 between the two bodies, then L2 to the exterior, then L3, then nothing is forbidden. The order is a property of the problem and not of this system.',
+      },
+      {
+        heading: 'Accessible, reachable and stable are three claims',
+        body: 'The zero-velocity curve makes only the first. Screen 11 is built so the tracer may visibly fail to use an open neck, which is the only honest way to teach it - asserting the distinction while the tracer sails through would teach the opposite.',
+      },
+      {
+        heading: 'L4 and L5 are stable at maxima, which sounds impossible',
+        body: 'They sit at maxima of the effective potential and are nonetheless stable below Routh\u2019s ratio, because the Coriolis force turns a departing tracer into a small orbit about the point. Worth drawing: it is the least intuitive true thing in the lesson, and it is why the Trojan asteroids exist.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'The system, the rotating frame, the normalisation, and a prediction about whether speeding up opens or closes the forbidden region. Set the units carefully here - every number later is in them.',
+      },
+      {
+        steps: '4-6',
+        text: 'The Jacobi constant, reading it twice to see it hold, and what a conserved quantity is worth when the trajectory is unsolvable. Screen 6 is the conceptual centre of the first half.',
+      },
+      {
+        steps: '7-9',
+        text: 'The five points, the equilateral geometry of L4, and the ordering of the critical values. Brisk; the arithmetic is one line.',
+      },
+      {
+        steps: '10-12',
+        text: 'Open the L1 neck with a burn, predict what happens, then watch it possibly not happen. Budget time here and resist resolving the ambiguity - the ambiguity is the teaching.',
+      },
+      {
+        steps: '13-15',
+        text: 'Stability as a third question, the surprise that L4 and L5 are stable at maxima, and the Trojans. This is the part students remember.',
+      },
+      {
+        steps: '16-18',
+        text: 'Break the assumptions deliberately and watch the overlay refuse, then the eccentric case, then the three claims restated side by side. Leave time for the last screen.',
+      },
+    ],
+    features: [
+      {
+        name: 'The restricted three-body panel',
+        text: 'Opens with the scenario. Reports the Jacobi constant, which neck is open, the five points with their critical values, and whether the energy permits each. It states the normalisation and the sign convention under the reading, and it disables itself with a named reason when the assumptions fail.',
+      },
+      {
+        name: 'The zero-velocity overlay',
+        text: 'The shaded region is where this tracer\u2019s energy forbids it to be. It is recomputed as the tracer\u2019s speed changes and is drawn from a grid cached against the mass ratio, so it costs nothing to watch it move.',
+      },
+      {
+        name: 'The manoeuvre planner',
+        text: 'Used at screen 10 to change the tracer\u2019s speed deliberately rather than by dragging. Its Undo restores the whole world, so a class can try several burns and compare.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A bigger Jacobi constant means the tracer has more energy.',
+        response:
+          'The opposite. C = 2*Omega - v^2, so speeding the tracer up reduces C. Expect this one; it is not carelessness but a reasonable inference from every other energy they have met. The panel prints the convention under every reading.',
+      },
+      {
+        claim: 'The neck at L1 is open, so the tracer will go through it.',
+        response:
+          'An open neck is a gap in a wall, not a route through it. Screen 11 exists to be inconclusive: let students run it and see the tracer loiter. If it does cross on their first attempt, have them undo and try a different burn - it will not always.',
+      },
+      {
+        claim: 'The Lagrange points are where gravity cancels.',
+        response:
+          'They are where gravity from both bodies plus the centrifugal effect of the rotating frame cancel. In an inertial frame nothing cancels at all: a body at L4 is in orbit, accelerating the whole time. The frame is doing half the work and it is worth saying so.',
+      },
+      {
+        claim: 'L4 and L5 are stable because they are at potential minima.',
+        response:
+          'They are at maxima. The stability comes from the Coriolis force in the rotating frame, which turns a departing tracer back into a small orbit about the point, and it holds only below Routh\u2019s mass ratio of 0.03852.',
+      },
+      {
+        claim: 'This all applies to any three bodies.',
+        response:
+          'Two of them must be on a circular orbit and the third must be negligible. Screen 16 has students break it on purpose. The elliptic restricted problem exists and has no conserved Jacobi constant, which is exactly why the panel refuses rather than approximating.',
+      },
+    ],
+    teachingNotes: [
+      'This system has mu = 0.0291 against Routh\u2019s 0.03852 - close enough that raising the small star\u2019s mass a little makes L4 and L5 unstable, which is a good live demonstration if a class has time. The panel says which side of the line the system is on.',
+      'The critical values here are C1 = 3.313, C2 = 3.274, C3 = 3.029 and C4 = C5 = 2.971. A student comparing them against a textbook may find the last differs: this application omits the mu(1-mu)/2 term some texts add to Omega, so C4 is 3 - mu + mu^2 rather than 3. The panel states this and it is worth pre-empting.',
+      'Screen 5 asks students to read C twice and see it unchanged. It holds to about four parts in a hundred thousand over several orbits, which is the Velocity Verlet integrator rather than the physics; the scenario chooses that integrator for this reason. If a class asks, that is a good moment to talk about what a numerical result can and cannot establish.',
+      'Screen 11 is the one that decides whether the lesson worked. Do not tell students what will happen. If several groups get different outcomes from different burns, that is the best possible result and worth collecting on a board.',
+      'The overlay disables itself if a class adds a third body while exploring. That is intended, and the message names the assumption that failed - it is not a fault to work around.',
+    ],
+    discussion: [
+      'The trajectory cannot be solved but the boundary can be drawn exactly. What else in physics works like that?',
+      'What would you have to measure to find out whether the tracer actually goes through an open neck?',
+      'Why does nothing accumulate at L1 or L2, when spacecraft are put there anyway?',
+      'The frame is doing half the work. What is a Lagrange point in an inertial frame?',
+    ],
+    extensions: [
+      'Raise the small star\u2019s mass past a thirtieth of the large one and watch L4 and L5 stop being marked as stable. Ask students to predict the threshold before they cross it.',
+      'Place the tracer near L4 with a small velocity and let it run for many orbits: it librates about the point rather than sitting at it, which is what the Trojans actually do.',
+      'Compute the Sun-Earth mass ratio and work out where L1 and L2 are, then compare against the real distances to SOHO and JWST.',
+      'Use the A/B experiment bench to record the same tracer at two timesteps and check that the Jacobi constant\u2019s drift is the integrator rather than the system.',
+    ],
+    expectations: {
+      5: 'Two readings of C agreeing to four or five figures. A difference in the fourth figure over a long run is the integrator; a large difference means something was changed between the readings.',
+      10: 'C falls as the burn is applied and the shaded region visibly retreats. The neck opens when C passes 3.313. Students who see C rise have burned retrograde, which is a useful mistake to have made.',
+      12: 'Genuinely variable. Some burns send the tracer through the neck within an orbit, some leave it looping on the near side indefinitely, some send it out through L2 instead. All three are correct and the variation is the point.',
+      16: 'The overlay switches off and names the assumption: "this needs exactly two massive bodies" for an added star, or the tracer being heavy enough to move the others. Removing the change brings it straight back.',
+    },
+    modelNotes: `Two massive bodies on a circular orbit, integrated with Velocity Verlet rather
+      than the catalogue\u2019s default symplectic Euler, because the lesson asks students to
+      watch a conserved quantity hold and first-order drift would make that a claim about the
+      integrator. Measured eccentricity is 2.4e-9 and the tracer is a billionth of the pair.
+      \n\nThe world is built to the convention the analysis uses: barycentre at the origin,
+      heavier body at -mu, lighter at 1-mu, so the overlay and the simulation agree about where
+      everything is. The tracer is placed and launched in the rotating frame and converted, which
+      is what makes its Jacobi constant a chosen quantity rather than an accident of the setup.
+      \n\nThe effective potential is sampled on a 220-square grid in the rotating frame\u2019s own
+      coordinates. That grid depends on the mass ratio and nothing else, so it survives a moving
+      camera and a moving tracer and is computed once; the per-frame cost is one comparison per
+      cell. e2e/cr3bp.spec.js bisects the tracer\u2019s speed for the value at which the L1 neck
+      opens and recovers the closed form\u2019s C1 to six decimal places.`,
+  },
   'hohmann-transfer': {
     topic: 'Orbital transfers: two burns, a coast, and the vis-viva equation',
     difficulty: 'Introductory, with arithmetic and one square root',
