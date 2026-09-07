@@ -1670,11 +1670,72 @@ function renderStep() {
   syncEllipsePanel(step);
   syncToolPanel(step);
   syncLightCurve(step);
+  syncEventWatch(step);
   renderProbe();
   renderFooter();
   bindStepInputs();
   refreshMeasurements();
 }
+
+/**
+ * Open the pause-at-event tool for a step that asks a student to catch a moment.
+ *
+ * A step declares `pauseAt: {kind, body, primary, label, note}`. This opens the
+ * tool with those bodies and that event already chosen and arms NOTHING: the
+ * reader presses Arm in the tool, or the step's own button, and that press is
+ * the interaction the lesson is asking for.
+ *
+ * Everything heavier than this is behind a dynamic import, so a lesson that
+ * never reaches one of these steps never fetches the tool or its prose.
+ *
+ * The release on the way out is the important half. A watch armed on one step
+ * must not fire into the next one, and a step that has finished with the tool
+ * has to drop its listener - see js/investigations/eventWatch.js, which holds
+ * the generation and the world check that make that true.
+ *
+ * @param {Object} step - Step definition
+ */
+function syncEventWatch(step) {
+  const spec = step?.pauseAt;
+  if (!spec) {
+    // Leaving the activity. Released unconditionally rather than only when we
+    // armed something, because the listener is ours either way and a lesson
+    // that closed with one attached is a lesson whose callbacks outlive it.
+    if (eventWatchLoaded) {
+      import('./investigations/eventWatch.js')
+        .then(m => m.release())
+        .catch(() => {});
+    }
+    return;
+  }
+
+  eventWatchLoaded = true;
+  import('./investigations/eventWatch.js')
+    .then(async watch => {
+      // A fresh step gets a fresh generation, so anything armed for the
+      // previous one cannot report into this one.
+      watch.release();
+      const ctx = probeContext();
+      const bodies = ctx?.bodies || [];
+      const body = watch.resolveByName(bodies, spec.body);
+      const primary = watch.resolveByName(bodies, spec.primary);
+      // A transit watch needs no bodies: it reads the photometer's own
+      // detector, so it is armable with nothing selected.
+      if (spec.kind !== 'transit' && (!body || !primary)) return;
+      await watch.openToolFor({
+        kind: spec.kind,
+        bodyId: body?.id ?? null,
+        primaryId: primary?.id ?? null,
+        separation: Number.isFinite(spec.separation) ? spec.separation : null,
+      });
+    })
+    .catch(err => {
+      console.warn('The pause-at-event tool could not be opened:', err);
+    });
+}
+
+/** Whether this session has ever loaded the event-watch integration. */
+let eventWatchLoaded = false;
 
 /**
  * Show or hide the docked plot panel for the current step.
@@ -2461,6 +2522,11 @@ export function closeInvestigation() {
   if (els.ellipsePanel) els.ellipsePanel.hidden = true;
   stopToolLoop();
   if (els.toolPanel) els.toolPanel.hidden = true;
+  // A watch this lesson's activity armed goes with the lesson. Closing the
+  // panel does not re-render a step, so this cannot be left to
+  // syncEventWatch() - a watch armed on the last step visited would otherwise
+  // outlive the lesson and pause the simulation into a closed panel.
+  syncEventWatch(null);
   document.body.classList.remove('investigation-lightcurve');
   document.body.classList.remove('investigation-aux');
   if (lightCurveOpenedByLesson) {

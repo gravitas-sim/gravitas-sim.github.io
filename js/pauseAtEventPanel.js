@@ -213,16 +213,7 @@ function arm() {
         : null,
   };
 
-  const verdict = armEvent(spec, {
-    resolveBody,
-    pause: () => {
-      if (state) state.paused = true;
-    },
-    clockDays: currentTimeDays,
-    onStep: onPhysicsStep,
-    G: () => getPhysicsSetting('gravitational_constant'),
-    transitLog: () => transitAnalysis().log,
-  });
+  const verdict = armEvent(spec, watchDeps());
 
   if (!verdict.ok) {
     say(explain(verdict), 'refused');
@@ -231,6 +222,92 @@ function arm() {
   }
   say(t('pauseEvent.armed'), 'info');
   render();
+}
+
+/**
+ * The dependency block the watcher needs.
+ *
+ * Lifted out of arm() so a lesson can arm through the same one. A second copy
+ * would be a second thing that could disagree with this about what the clock
+ * is, and the clock is what every reported event time is in.
+ *
+ * @returns {object} deps for armEvent
+ */
+function watchDeps() {
+  return {
+    resolveBody,
+    pause: () => {
+      if (state) state.paused = true;
+    },
+    clockDays: currentTimeDays,
+    onStep: onPhysicsStep,
+    G: () => getPhysicsSetting('gravitational_constant'),
+    transitLog: () => transitAnalysis().log,
+  };
+}
+
+/**
+ * Show a spec in the form without arming it.
+ *
+ * For the guided lessons: a step opens the tool with the right bodies and the
+ * right event already chosen, and the reader presses Arm themselves. Selecting
+ * is not arming, and a lesson that armed on their behalf would be answering
+ * its own question.
+ *
+ * @param {object} spec - {kind, bodyId, primaryId, separation}
+ * @returns {boolean} Whether every part of the spec could be shown
+ */
+export function presetSelection(spec) {
+  const e = cacheElements();
+  if (!e.kind) return false;
+  fillBodies();
+
+  let complete = true;
+  const set = (el, value) => {
+    if (!el || value === null || value === undefined) return;
+    const wanted = String(value);
+    // Only if the option exists. Assigning a value a select does not have
+    // leaves it on whatever it was showing, and a form that silently shows a
+    // different body from the one the step named is worse than one that says
+    // it could not.
+    if (![...el.options].some(o => o.value === wanted)) {
+      complete = false;
+      return;
+    }
+    el.value = wanted;
+  };
+
+  set(e.kind, spec.kind);
+  set(e.body, spec.bodyId);
+  set(e.primary, spec.primaryId);
+  if (Number.isFinite(spec.separation) && e.separation) {
+    e.separation.value = simToAu(spec.separation).toFixed(3);
+  }
+  syncFields();
+  render();
+  return complete;
+}
+
+/**
+ * Arm the spec a lesson step supplied, through the panel's own deps.
+ *
+ * Reports the refusal in the panel as well as returning it, so a reader who
+ * pressed a lesson button sees the reason in the tool they are looking at.
+ *
+ * @param {object} spec - {kind, bodyId, primaryId, separation, note}
+ * @returns {{ok: boolean, reason?: string, detail?: object}} Outcome
+ */
+export function armFromSpec(spec) {
+  presetSelection(spec);
+  const verdict = armEvent(spec, watchDeps());
+  if (!verdict.ok) {
+    say(explain(verdict), 'refused');
+    render();
+    return verdict;
+  }
+  say(t('pauseEvent.armed'), 'info');
+  render();
+  return verdict;
 }
 
 /** Redraw the panel from the module's state. */

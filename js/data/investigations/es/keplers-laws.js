@@ -163,15 +163,24 @@ export default {
     },
     {
       title: 'Rápido y lento, en números',
-      body: 'Ahora ponle números. Pulsa <strong>Espacio</strong> para pausar y reanudar, y atrapa el planeta en cada extremo de su órbita.\n\nAnota su velocidad cuando esté <strong>más cerca</strong> de la estrella, y de nuevo cuando esté <strong>más lejos</strong>. Vigila la lectura «Distancia a la estrella» para saber cuándo estás en cada extremo: alcanza un mínimo en el máximo acercamiento y un máximo en el extremo lejano. El cociente se calcula por ti.',
+      body: 'Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> se ha abierto abajo con el <strong>Eccentric Orbiter</strong> y su estrella ya seleccionados. Pon el evento en <strong>periastro</strong> y pulsa <strong>Armar</strong>. La simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta y anota la velocidad y la distancia. Luego ármala otra vez para el <strong>apoastro</strong> y haz lo mismo en el extremo lejano.\n\nLas dos cifras se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el encuadre. El cociente se calcula por ti.\n\n<strong>Lee las dos cifras que te da la herramienta.</strong> Informa de cuándo <em>fue</em> el evento y de cuánto más allá se <em>detuvo</em> de verdad la simulación. Son cosas distintas: el mundo se integra a pasos y el evento cae entre dos de ellos. La herramienta lo acota e interpola el instante, y luego para en el primer paso posterior; no rebobina el mundo hasta el evento, porque el reloj no es lo único indexado por el reloj. Así que la velocidad que lees es la del estado en pausa, un poco más allá del extremo, y el instante del evento es una estimación de cuándo ocurrió. En esta órbita la diferencia es pequeña, y lo honesto es saber que está ahí.',
+      tip: 'Si la herramienta se niega a armar y dice que la órbita es circular, no es un fallo. En una órbita perfectamente redonda no hay punto más cercano: la tasa radial es cero en todas partes y su signo lo decide el error de redondeo, así que una vigilancia dispararía en el primer paso y en todos los siguientes. La herramienta declina y lo dice. El Eccentric Orbiter es bastante excéntrico; el Circular Orbiter no lo es, y vale la pena armarlo una vez para ver el rechazo.',
       fields: [
         {
           label: 'Velocidad en el máximo acercamiento',
           unit: 'km/s',
         },
         {
+          label: 'Distancia a la estrella ahí',
+          unit: 'AU',
+        },
+        {
           label: 'Velocidad en el punto más lejano',
           unit: 'km/s',
+        },
+        {
+          label: 'Distancia a la estrella ahí',
+          unit: 'AU',
         },
         {
           label: 'Cociente (rápida ÷ lenta)',

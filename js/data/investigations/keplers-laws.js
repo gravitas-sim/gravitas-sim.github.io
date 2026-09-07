@@ -353,15 +353,44 @@ const KEPLER = {
       sid: 'fast-and-slow-in-numbers',
       type: 'measure',
       title: 'Fast and slow, in numbers',
-      body: `Now put numbers on it. Press <strong>Space</strong> to pause and
-             resume, and catch the planet at each end of its orbit.
-             \n\nRecord its speed when it is <strong>closest</strong> to the
-             star, then again when it is <strong>furthest</strong>. Watch the
-             "Distance from star" reading to know when you are at each extreme: it reaches a minimum at closest approach and a maximum at the far
-             end. The ratio is worked out for you.`,
+      body: `Now put numbers on it — and let the simulation find the two
+             moments for you, because catching them by hand measures your
+             reflexes rather than the orbit.
+             \n\nThe <strong>Pause at Event</strong> tool has opened below
+             with the <strong>Eccentric Orbiter</strong> and its star already
+             chosen. Set the event to <strong>periapsis</strong> and press
+             <strong>Arm</strong>. The simulation runs until the planet reaches
+             its closest point and stops there. Select the planet and record
+             the speed. Then arm it again for <strong>apoapsis</strong> and do
+             the same at the far end.
+             \n\nBoth numbers are measured <strong>relative to the star</strong>
+             — the readout subtracts the star's own motion, so the distance and
+             the speed describe the orbit rather than the pair's drift through
+             the frame. The ratio is worked out for you.
+             \n\n<strong>Read the two numbers the tool gives you.</strong> It
+             reports when the event <em>was</em>, and how far past it the
+             simulation actually <em>stopped</em>. Those are different things:
+             the world is integrated in steps, and the event falls between two
+             of them. The tool brackets it and interpolates the time, then stops
+             at the first step after it — it does not wind the world back onto
+             the event, because the clock is not the only thing indexed by the
+             clock. So the speed you read is the speed at the paused state, a
+             short way past the extreme, and the event time is an estimate of
+             when the extreme happened. For this orbit the difference is small,
+             and the honest thing is to know it is there.`,
+      // Opens the tool with these two bodies chosen and arms nothing: the
+      // reader presses Arm, which is the interaction being asked for. See
+      // js/investigations/eventWatch.js.
+      pauseAt: {
+        kind: 'periapsis',
+        body: 'Eccentric Orbiter',
+        primary: 'Kepler Star',
+      },
       fields: [
         { id: 'v_peri', label: 'Speed at closest approach', unit: 'km/s' },
+        { id: 'r_peri', label: 'Distance from star there', unit: 'AU' },
         { id: 'v_apo', label: 'Speed at furthest point', unit: 'km/s' },
+        { id: 'r_apo', label: 'Distance from star there', unit: 'AU' },
         {
           id: 'v_ratio',
           label: 'Ratio (fast ÷ slow)',
@@ -390,6 +419,27 @@ const KEPLER = {
         const body = ctx.find('Eccentric');
         const el = body && ctx.elements(body);
         if (!el) return null;
+        // The two distances, when they were recorded. Checked before the
+        // speed ratio because a swapped pair explains a wrong ratio, and
+        // "these are the wrong way round" is more use than "your ratio is
+        // off". Both are separations from the star in the same relative frame
+        // the speeds are read in.
+        if (Number.isFinite(v.r_peri) && Number.isFinite(v.r_apo)) {
+          if (v.r_peri >= v.r_apo) {
+            return {
+              level: 'warn',
+              message:
+                'The distance you recorded at closest approach is not smaller than the one at the far point, so the two readings are swapped or both came from the same end. The tool stops at whichever event it was armed for - check that the second arm was apoapsis.',
+            };
+          }
+          const eFromR = (v.r_apo - v.r_peri) / (v.r_apo + v.r_peri);
+          if (Math.abs(eFromR - el.e) / Math.max(el.e, 1e-6) > 0.25) {
+            return {
+              level: 'warn',
+              message: `Your two distances imply an eccentricity of ${eFromR.toFixed(3)}, but this orbit's is ${el.e.toFixed(3)}. Both have to come from the paused state at each event, measured from the star.`,
+            };
+          }
+        }
         // Conservation of angular momentum at the two extremes, where velocity
         // is perpendicular to the radius, gives v_peri/v_apo = (1+e)/(1-e).
         const expected = (1 + el.e) / (1 - el.e);
@@ -412,6 +462,7 @@ const KEPLER = {
           message: `Your ratio is ${ratio.toFixed(2)}, but for e = ${el.e.toFixed(3)} it should be about (1+e)/(1−e) = ${expected.toFixed(2)}. Double-check both readings: pausing a little before or after the true extreme is the usual cause.`,
         };
       },
+      tip: 'If the tool refuses to arm and says the orbit is circular, that is not a fault. On a perfectly round orbit there is no closest point: the radial rate is zero everywhere and its sign is decided by rounding error, so a watch would fire on the first step and every step after it. The tool declines and says so. The Eccentric Orbiter is eccentric enough; the Circular Orbiter is not, and it is worth arming it once to see the refusal.',
       probe: ctx => {
         const b = ctx.selected;
         if (!b) return [{ label: 'Select a planet', value: '-' }];
