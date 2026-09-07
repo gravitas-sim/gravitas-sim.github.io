@@ -16,6 +16,7 @@
 import { t } from './i18n/index.js';
 import { formatNumber } from './format.js';
 import {
+  SCHEDULE_PROBLEM,
   parseEpochList,
   parseGaps,
   planSchedule,
@@ -68,6 +69,61 @@ export function comparisonBounds(sets) {
 }
 
 /**
+ * Problems that mean the run would not be the run the reader described.
+ *
+ * A duplicate time and an over-long list are reported and then observed
+ * anyway: merging two entries at one instant is what a schedule IS, and the
+ * length limit is the instrument protecting itself, with the discarded count
+ * stated. Everything else changes which instants get observed, and observing
+ * them while telling the student their own list was used is the failure this
+ * whole feature exists to prevent - so the run does not start.
+ */
+const FATAL = new Set([
+  SCHEDULE_PROBLEM.UNREADABLE,
+  SCHEDULE_PROBLEM.DECIMAL_COMMA,
+  SCHEDULE_PROBLEM.NEGATIVE,
+  SCHEDULE_PROBLEM.TOO_FEW,
+  SCHEDULE_PROBLEM.GAP_SYNTAX,
+  SCHEDULE_PROBLEM.GAP_ORDER,
+  SCHEDULE_PROBLEM.GAP_RANGE,
+  SCHEDULE_PROBLEM.UNUSABLE,
+]);
+
+/**
+ * Whether the schedule in the controls can be observed as described.
+ *
+ * @param {object} ctx - The same context scheduleNote() takes
+ * @returns {{runnable: boolean, problems: Array<object>}} The verdict
+ */
+export function scheduleFault(ctx) {
+  const problems = [];
+  if ((ctx.kind || 'regular') === 'explicit') {
+    problems.push(...parseEpochList(ctx.epochList ?? '').problems);
+  }
+  const gapsText = String(ctx.gapsText ?? '').trim();
+  if (gapsText) problems.push(...parseGaps(gapsText).problems);
+  const cfg = ctx.config || {};
+  if (cfg.kind) {
+    problems.push(
+      ...planSchedule({
+        kind: cfg.kind,
+        epochs: cfg.epochs,
+        baselineDays: cfg.baselineDays,
+        jitter: cfg.jitter,
+        clusters: cfg.clusters,
+        explicit: cfg.explicit,
+        gaps: cfg.gaps,
+        seed: cfg.seed,
+      }).problems
+    );
+  }
+  return {
+    runnable: !problems.some(p => FATAL.has(p.id)),
+    problems,
+  };
+}
+
+/**
  * What the note under the schedule fields should say.
  *
  * @param {object} ctx - {kind, epochList, gapsText, config}
@@ -77,47 +133,24 @@ export function scheduleNote(ctx) {
   const kind = ctx.kind || 'regular';
   const parts = [];
   let state = 'ok';
+  /** Every fault, from the parsers and from the plan, in one list. */
+  const problems = [];
 
-  // What the reader typed and this could not read. Reported rather than
+  // What the reader typed and this could not use. Reported rather than
   // dropped: observing on a shorter list than somebody wrote, silently, is the
   // one failure that would undermine the whole instrument.
   if (kind === 'explicit') {
-    const parsed = parseEpochList(ctx.epochList ?? '');
-    if (parsed.rejected.length) {
-      parts.push(
-        t('rvsched.note.rejected', {
-          count: parsed.rejected.length,
-          list: parsed.rejected.slice(0, 4).join(', '),
-        })
-      );
-      state = 'warn';
-    }
-    if (parsed.duplicates)
-      parts.push(t('rvsched.note.duplicates', { count: parsed.duplicates }));
-    if (!parsed.offsets.length) {
-      parts.push(t('rvsched.note.noTimes'));
-      state = 'warn';
-    }
+    problems.push(...parseEpochList(ctx.epochList ?? '').problems);
   }
-
   const gapsText = String(ctx.gapsText ?? '').trim();
-  if (gapsText) {
-    const parsedGaps = parseGaps(gapsText);
-    if (parsedGaps.rejected.length) {
-      parts.push(
-        t('rvsched.note.badGaps', {
-          list: parsedGaps.rejected.slice(0, 4).join(', '),
-        })
-      );
-      state = 'warn';
-    }
-  }
+  if (gapsText) problems.push(...parseGaps(gapsText).problems);
 
   // What the plan actually came out as, which is not always what was asked
   // for: a gap removes epochs, and a clustered plan can only place so many.
   const cfg = ctx.config || {};
+  let plan = null;
   if (cfg.kind) {
-    const plan = planSchedule({
+    plan = planSchedule({
       kind: cfg.kind,
       epochs: cfg.epochs,
       baselineDays: cfg.baselineDays,
@@ -127,6 +160,21 @@ export function scheduleNote(ctx) {
       gaps: cfg.gaps,
       seed: cfg.seed,
     });
+    problems.push(...plan.problems);
+  }
+
+  for (const problem of problems) {
+    parts.push(
+      t(`rvsched.problem.${problem.id}`, {
+        count: problem.count ?? 0,
+        limit: problem.limit ?? 0,
+        list: (problem.list || []).join(', '),
+      })
+    );
+    state = 'warn';
+  }
+
+  if (plan && plan.epochs.length) {
     parts.push(
       t('rvsched.note.plan', {
         planned: plan.planned,
@@ -137,9 +185,14 @@ export function scheduleNote(ctx) {
     if (plan.dropped)
       parts.push(t('rvsched.note.dropped', { count: plan.dropped }));
     if (plan.planned < 4) state = 'warn';
+  } else if (plan) {
+    // Nothing to observe. Said plainly, because the alternative the panel used
+    // to take was to observe something else and not mention it.
+    parts.push(t('rvsched.note.willNotRun'));
+    state = 'warn';
   }
 
-  return { text: parts.join(' '), state };
+  return { text: parts.join(' '), state, ok: problems.length === 0 };
 }
 
 /**

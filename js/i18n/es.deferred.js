@@ -1790,17 +1790,32 @@ export const ES_DEFERRED = {
   'rvsched.clusters': 'Grupos',
   'rvsched.epochList': 'Tiempos de observacion (dias)',
   'rvsched.gaps': 'Huecos (dias, desde-hasta)',
+  'rvsched.problem.unreadable':
+    'No se pudieron leer {count} entradas y se ignoraron: {list}.',
+  'rvsched.problem.decimalComma':
+    'La coma separa un tiempo del siguiente, asi que una coma decimal no se distingue de una lista: escribe 0.5, no 0,5. {count} entradas parecen comas decimales.',
+  'rvsched.problem.negative':
+    '{count} tiempos son anteriores al inicio de la campana y no se pueden observar: {list}.',
+  'rvsched.problem.duplicate':
+    '{count} tiempos aparecen dos veces; un instante es una sola observacion.',
+  'rvsched.problem.tooFew':
+    'Un calendario necesita al menos {limit} tiempos y este tiene {count}.',
+  'rvsched.problem.overLimit':
+    'Se descartaron {count} entradas por encima del limite de {limit}.',
+  'rvsched.problem.gapSyntax':
+    'Un hueco son dos dias con un guion entre ellos, como 4-9. No se pudieron leer: {list}.',
+  'rvsched.problem.gapOrder':
+    'Un hueco tiene que acabar despues de empezar: {list}.',
+  'rvsched.problem.gapRange':
+    'Un hueco no puede pasar del dia {limit}: {list}.',
+  'rvsched.problem.unusable':
+    'Esta lista no se puede observar tal como esta, y la campana no volvera a una cadencia regular. Corrigela o elige otro calendario.',
+  'rvsched.note.willNotRun':
+    'No se observara nada hasta que se corrija el calendario de arriba.',
   'rvsched.note.plan':
     '{planned} observaciones en {span} dias. Calendario {id}.',
   'rvsched.note.dropped':
     '{count} cayeron dentro de un hueco y no se observaron.',
-  'rvsched.note.rejected':
-    'No se pudieron leer {count} entradas y se ignoraron: {list}.',
-  'rvsched.note.duplicates':
-    '{count} tiempos aparecen dos veces; un instante es una sola observacion.',
-  'rvsched.note.noTimes':
-    'No hay tiempos legibles, asi que la campana vuelve a una cadencia regular.',
-  'rvsched.note.badGaps': 'No se pudieron leer estos huecos: {list}.',
   'rvsched.compare': 'Comparar con un segundo calendario',
   'rvsched.compare.shape': 'Segundo calendario',
   'rvsched.compare.waiting':

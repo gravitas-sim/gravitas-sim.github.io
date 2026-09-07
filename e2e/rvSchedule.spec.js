@@ -97,6 +97,91 @@ test.describe('the schedule controls', () => {
     }
   });
 
+  test('a list it cannot use does not become a comb behind the reader', async ({
+    page,
+    app,
+  }) => {
+    // The failure this whole feature exists to prevent: the panel telling a
+    // student their own times were used and observing on an evenly spaced
+    // schedule instead. An unusable list now runs nothing and says so.
+    await openRv(page, app);
+    await page.locator('#rvSurveyShape').selectOption('explicit');
+    await page.locator('#rvSurveyEpochList').fill('nothing usable here');
+    await page.locator('#rvSurveyEpochList').blur();
+
+    const s = await state(page);
+    expect(s.note).toMatch(/could not be read|cannot be observed/i);
+    expect(s.note).toMatch(/will be observed|corrected/i);
+    // Nothing is observing, and in particular nothing regular is.
+    await page.waitForTimeout(1200);
+    const after = await state(page);
+    expect(after.taken).toBe(0);
+    expect(
+      await page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.isSurveyRunning();
+      })
+    ).toBe(false);
+  });
+
+  test('a decimal comma is refused rather than read as a list', async ({
+    page,
+    app,
+  }) => {
+    await openRv(page, app);
+    await page.locator('#rvSurveyShape').selectOption('explicit');
+    await page.locator('#rvSurveyEpochList').fill('0,5 1,5 2,5');
+    await page.locator('#rvSurveyEpochList').blur();
+    const s = await state(page);
+    expect(s.note).toMatch(/0\.5/);
+    expect(s.taken).toBe(0);
+  });
+
+  test('an unreadable gap does not silently become no gap at all', async ({
+    page,
+    app,
+  }) => {
+    await openRv(page, app);
+    await page.locator('#rvSurveyGaps').fill('-1-2');
+    await page.locator('#rvSurveyGaps').blur();
+    const s = await state(page);
+    expect(s.note).toMatch(/-1-2/);
+    expect(
+      await page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.isSurveyRunning();
+      })
+    ).toBe(false);
+  });
+
+  test('a schedule written into the field reads back as the same schedule', async ({
+    page,
+    app,
+  }) => {
+    // The panel prints a checksum over the epoch times. Writing a plan out and
+    // reading it back has to produce the same one, or the field is changing
+    // the schedule as it displays it.
+    await openRv(page, app);
+    await page.locator('#rvSurveyBaseline').fill('12');
+    await page.locator('#rvSurveyShape').selectOption('irregular');
+    await page.locator('#rvSurveyEpochs').fill('11');
+    await page.locator('#rvSurveyEpochs').blur();
+    const irregular = await state(page);
+
+    const written = await page.evaluate(async () => {
+      const rv = await import('/js/radialVelocity.js');
+      const sched = await import('/js/rvSchedule.js');
+      const plan = rv.radialVelocitySurvey().config.plan;
+      return sched.formatEpochList(plan.epochs.map(e => e.offset));
+    });
+    await page.locator('#rvSurveyShape').selectOption('explicit');
+    await page.locator('#rvSurveyEpochList').fill(written);
+    await page.locator('#rvSurveyEpochList').blur();
+
+    const back = await state(page);
+    expect(back.scheduleId).toBe(irregular.scheduleId);
+  });
+
   test('what it could not read is reported, not dropped', async ({
     page,
     app,

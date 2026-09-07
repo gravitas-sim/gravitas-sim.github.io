@@ -1043,6 +1043,38 @@ function readSurveyControls(kindOverride = null) {
   };
 }
 
+/**
+ * Start the run again, if the reader has asked for one at all.
+ *
+ * Keyed on the checkbox rather than on there being a survey object. A schedule
+ * the panel refuses to observe leaves no survey, and a handler that restarted
+ * only when one existed meant correcting the schedule did nothing: the reader
+ * fixed their list, the note went quiet, and observing never began.
+ *
+ * @returns {void}
+ */
+function restartIfObserving() {
+  const e = cacheElements();
+  if (!e.surveyEnabled?.checked) return;
+  restartSurvey().catch(() => {});
+}
+
+/**
+ * Whether the schedule in the controls describes a run that can be observed.
+ *
+ * @returns {boolean} False when the note is telling the reader to fix it
+ */
+function scheduleIsRunnable() {
+  const e = cacheElements();
+  if (!controlsLib || !e.surveyShape) return true;
+  return controlsLib.scheduleFault({
+    kind: e.surveyShape.value || 'regular',
+    epochList: e.surveyEpochList?.value ?? '',
+    gapsText: e.surveyGaps?.value ?? '',
+    config: readSurveyControls(),
+  }).runnable;
+}
+
 /** @returns {boolean} Whether the reader has asked for a second schedule */
 function comparisonWanted() {
   const e = cacheElements();
@@ -1097,6 +1129,23 @@ async function restartSurvey() {
   if (generation !== surveyGeneration) return;
 
   const e = cacheElements();
+
+  // A schedule the panel cannot observe as described does not get observed as
+  // something else. The note says what is wrong; nothing starts until it is
+  // fixed.
+  if (controlsLib && !scheduleIsRunnable()) {
+    survey = null;
+    compareSurvey = null;
+    compareReport = null;
+    compareBounds = null;
+    surveyProvenance = null;
+    applySurveyStyling();
+    renderSurveyStatus();
+    renderScheduleNote();
+    renderCompareReport();
+    return;
+  }
+
   survey = lib.createSurvey(readSurveyControls());
   surveyConfig = survey.config;
 
@@ -1428,7 +1477,7 @@ function initSurveyControls() {
   ]) {
     input?.addEventListener('change', () => {
       syncScheduleFields();
-      if (survey) restartSurvey().catch(() => {});
+      restartIfObserving();
     });
   }
 
@@ -1436,7 +1485,7 @@ function initSurveyControls() {
   for (const select of [e.surveyShape, e.compareShape]) {
     select?.addEventListener('change', () => {
       syncScheduleFields();
-      if (survey) restartSurvey().catch(() => {});
+      restartIfObserving();
     });
   }
 
@@ -1445,8 +1494,8 @@ function initSurveyControls() {
     // Turning the comparison on mid-run would leave the second arm having
     // missed everything the first already saw, which is not a comparison. Both
     // arms start again, together.
-    if (survey) restartSurvey().catch(() => {});
-    else renderCompareReport();
+    restartIfObserving();
+    renderCompareReport();
   });
 
   e.surveyIdeal?.addEventListener('change', () => {
@@ -1455,7 +1504,7 @@ function initSurveyControls() {
   });
 
   e.surveyRestart?.addEventListener('click', () => {
-    if (survey) restartSurvey().catch(() => {});
+    restartIfObserving();
   });
 
   // Registered here, once, as a sibling of every other control.

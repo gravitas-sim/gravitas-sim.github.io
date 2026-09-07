@@ -1767,16 +1767,29 @@ export const EN_DEFERRED = {
   'rvsched.clusters': 'Groups',
   'rvsched.epochList': 'Observation times (days)',
   'rvsched.gaps': 'Gaps (days, from-to)',
+  'rvsched.problem.unreadable':
+    '{count} entries could not be read and were ignored: {list}.',
+  'rvsched.problem.decimalComma':
+    'A comma separates one time from the next, so a decimal comma cannot be told from a list: write 0.5, not 0,5. {count} entries look like decimal commas.',
+  'rvsched.problem.negative':
+    '{count} times are before the run starts and cannot be observed: {list}.',
+  'rvsched.problem.duplicate':
+    '{count} times were listed twice; an instant is one observation.',
+  'rvsched.problem.tooFew':
+    'A schedule needs at least {limit} times and this has {count}.',
+  'rvsched.problem.overLimit':
+    '{count} entries past the limit of {limit} were discarded.',
+  'rvsched.problem.gapSyntax':
+    'A gap is two days with a dash between them, as in 4-9. These could not be read: {list}.',
+  'rvsched.problem.gapOrder': 'A gap has to end after it starts: {list}.',
+  'rvsched.problem.gapRange': 'A gap cannot run past day {limit}: {list}.',
+  'rvsched.problem.unusable':
+    'This list cannot be observed as it stands, and the run will not fall back to a regular cadence. Correct it or choose another schedule.',
+  'rvsched.note.willNotRun':
+    'Nothing will be observed until the schedule above is corrected.',
   'rvsched.note.plan':
     '{planned} observations over {span} days. Schedule {id}.',
   'rvsched.note.dropped': '{count} fell inside a gap and were not observed.',
-  'rvsched.note.rejected':
-    '{count} entries could not be read and were ignored: {list}.',
-  'rvsched.note.duplicates':
-    '{count} times were listed twice; an instant is one observation.',
-  'rvsched.note.noTimes':
-    'No readable times, so the run falls back to a regular cadence.',
-  'rvsched.note.badGaps': 'These gaps could not be read: {list}.',
   'rvsched.compare': 'Compare with a second schedule',
   'rvsched.compare.shape': 'Second schedule',
   'rvsched.compare.waiting':

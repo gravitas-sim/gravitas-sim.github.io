@@ -80,6 +80,45 @@ export const SCHEDULE_LIMITS = Object.freeze({
   maxClusters: 12,
 });
 
+/**
+ * What can be wrong with a schedule somebody typed.
+ *
+ * Named rather than described, so the panel can say it in either language and
+ * a test can assert on the fault rather than on the prose. Every one of these
+ * is reported; none of them is quietly worked around, because a schedule the
+ * instrument silently corrected is a schedule the student did not run.
+ */
+export const SCHEDULE_PROBLEM = Object.freeze({
+  /** Tokens that are not numbers at all. */
+  UNREADABLE: 'unreadable',
+  /** A decimal comma, where a comma is the list separator. */
+  DECIMAL_COMMA: 'decimalComma',
+  /** Times before the run starts. */
+  NEGATIVE: 'negative',
+  /** Two entries at the same instant: one observation, however it was typed. */
+  DUPLICATE: 'duplicate',
+  /** Fewer usable entries than a schedule needs. */
+  TOO_FEW: 'tooFew',
+  /** More entries than the limit, so some were discarded. */
+  OVER_LIMIT: 'overLimit',
+  /** A gap that is not two numbers with a dash between them. */
+  GAP_SYNTAX: 'gapSyntax',
+  /** A gap whose end is not after its start. */
+  GAP_ORDER: 'gapOrder',
+  /** A gap outside the range a run can have. */
+  GAP_RANGE: 'gapRange',
+  /** An explicit schedule that cannot be observed as typed. */
+  UNUSABLE: 'unusable',
+});
+
+/**
+ * How precisely an epoch time is kept, in decimal places of a day.
+ *
+ * Under a tenth of a second. Shared by the planner and by the text field, so
+ * a plan written out and read back is the same plan.
+ */
+export const EPOCH_DECIMALS = 6;
+
 /** What an irregular schedule defaults to: noticeable, not chaotic. */
 export const DEFAULT_JITTER = 0.35;
 
@@ -115,19 +154,53 @@ const clampNum = (v, lo, hi, fallback) => {
  *   duplicates: number}} The parse
  */
 export function parseEpochList(text) {
-  const tokens = String(text ?? '')
-    .split(/[\s,;]+/)
-    .filter(Boolean);
+  const raw = String(text ?? '');
+  const problems = [];
+  const note = (id, extra = {}) => problems.push({ id, ...extra });
+
+  // A comma separates times here, in every language this ships in, so a
+  // decimal comma is ambiguous rather than merely unusual: "0,5 1,5" would
+  // silently become three observations at 0, 1 and 5 instead of two at 0.5 and
+  // 1.5. Caught before the split, which is the only point at which the
+  // evidence still exists, and refused rather than guessed at.
+  const decimalCommas = raw.match(/\d,\d/g) || [];
+  if (decimalCommas.length) {
+    note(SCHEDULE_PROBLEM.DECIMAL_COMMA, { count: decimalCommas.length });
+  }
+
+  const tokens = raw.split(/[\s,;]+/).filter(Boolean);
   const offsets = [];
   const rejected = [];
+  const negatives = [];
   for (const token of tokens) {
     const n = Number(token);
-    if (!Number.isFinite(n) || n < 0) {
+    if (!Number.isFinite(n)) {
+      rejected.push(token);
+      continue;
+    }
+    // A time before the run starts is not a time in the run. Separated from
+    // the unreadable ones because it is a different mistake with a different
+    // correction.
+    if (n < 0) {
+      negatives.push(token);
       rejected.push(token);
       continue;
     }
     offsets.push(n);
   }
+  if (rejected.length > negatives.length) {
+    note(SCHEDULE_PROBLEM.UNREADABLE, {
+      count: rejected.length - negatives.length,
+      list: rejected.filter(t => !negatives.includes(t)).slice(0, 4),
+    });
+  }
+  if (negatives.length) {
+    note(SCHEDULE_PROBLEM.NEGATIVE, {
+      count: negatives.length,
+      list: negatives.slice(0, 4),
+    });
+  }
+
   offsets.sort((a, b) => a - b);
   const unique = [];
   let duplicates = 0;
@@ -139,22 +212,52 @@ export function parseEpochList(text) {
     }
     unique.push(offset);
   }
+  if (duplicates) note(SCHEDULE_PROBLEM.DUPLICATE, { count: duplicates });
+
+  // Truncation is reported. Observing the first four hundred of somebody's six
+  // hundred times without saying so is the same failure as dropping the ones
+  // that could not be read, one order of magnitude quieter.
+  const kept = unique.slice(0, SCHEDULE_LIMITS.maxEpochs);
+  const discarded = unique.length - kept.length;
+  if (discarded) {
+    note(SCHEDULE_PROBLEM.OVER_LIMIT, {
+      count: discarded,
+      limit: SCHEDULE_LIMITS.maxEpochs,
+    });
+  }
+  if (kept.length < SCHEDULE_LIMITS.minEpochs) {
+    note(SCHEDULE_PROBLEM.TOO_FEW, {
+      count: kept.length,
+      limit: SCHEDULE_LIMITS.minEpochs,
+    });
+  }
+
   return {
-    ok: unique.length >= SCHEDULE_LIMITS.minEpochs,
-    offsets: unique.slice(0, SCHEDULE_LIMITS.maxEpochs),
+    /** Whether this list can be observed exactly as it was typed. */
+    ok: problems.length === 0 && kept.length >= SCHEDULE_LIMITS.minEpochs,
+    offsets: kept,
     rejected,
     duplicates,
+    discarded,
+    problems,
   };
 }
 
 /**
  * Render a list of times for the text field.
  *
+ * Six decimals by default rather than three, and trailing zeros trimmed. The
+ * field is a round trip - the panel writes a plan into it and reads the plan
+ * back out - and three decimals is not enough to survive one: 1.000499 came
+ * back as 1 and 2.9999 as 3, so a schedule could be moved by a tenth of a day
+ * by being displayed. Six decimals is under a tenth of a second and well
+ * inside the minimum spacing a plan will accept.
+ *
  * @param {Array<number>} offsets - Days from the run start
  * @param {number} [decimals] - How much precision to show
  * @returns {string} The list
  */
-export const formatEpochList = (offsets, decimals = 3) =>
+export const formatEpochList = (offsets, decimals = EPOCH_DECIMALS) =>
   (offsets || []).map(v => Number(v.toFixed(decimals)).toString()).join(', ');
 
 /**
@@ -164,39 +267,98 @@ export const formatEpochList = (offsets, decimals = 3) =>
  * @returns {{ok: boolean, gaps: Array<Array<number>>, rejected: Array<string>}}
  */
 export function parseGaps(text) {
-  const tokens = String(text ?? '')
-    .split(/[\s,;]+/)
-    .filter(Boolean);
+  const raw = String(text ?? '');
+  const problems = [];
+  const note = (id, extra = {}) => problems.push({ id, ...extra });
+
+  if (/\d,\d/.test(raw)) {
+    note(SCHEDULE_PROBLEM.DECIMAL_COMMA, {
+      count: (raw.match(/\d,\d/g) || []).length,
+    });
+  }
+
+  const tokens = raw.split(/[\s,;]+/).filter(Boolean);
   const gaps = [];
   const rejected = [];
+  const outOfRange = [];
+  const misordered = [];
+
+  // The whole token, not its pieces. Splitting on the dash and keeping
+  // whatever was left accepted "-1-2" as the interval [1, 2]: a leading minus
+  // vanished into the separator and a gap the reader did not ask for was
+  // silently applied to their run.
+  const RANGE = /^(\d+(?:\.\d+)?)\s*[-\u2013]\s*(\d+(?:\.\d+)?)$/;
   for (const token of tokens) {
-    // An en dash as well as a hyphen: a reader who typed this in a document
-    // and pasted it should not have to know which one they got.
-    const parts = token.split(/[-–]/).filter(s => s !== '');
-    if (parts.length !== 2) {
+    const m = RANGE.exec(token);
+    if (!m) {
       rejected.push(token);
       continue;
     }
-    const from = Number(parts[0]);
-    const to = Number(parts[1]);
-    if (!Number.isFinite(from) || !Number.isFinite(to) || to <= from) {
+    const from = Number(m[1]);
+    const to = Number(m[2]);
+    if (!Number.isFinite(from) || !Number.isFinite(to)) {
+      rejected.push(token);
+      continue;
+    }
+    if (to <= from) {
+      misordered.push(token);
+      rejected.push(token);
+      continue;
+    }
+    if (to > SCHEDULE_LIMITS.maxBaselineDays) {
+      outOfRange.push(token);
       rejected.push(token);
       continue;
     }
     gaps.push([from, to]);
   }
+
+  const plainlyUnreadable = rejected.filter(
+    t => !misordered.includes(t) && !outOfRange.includes(t)
+  );
+  if (plainlyUnreadable.length) {
+    note(SCHEDULE_PROBLEM.GAP_SYNTAX, {
+      count: plainlyUnreadable.length,
+      list: plainlyUnreadable.slice(0, 4),
+    });
+  }
+  if (misordered.length) {
+    note(SCHEDULE_PROBLEM.GAP_ORDER, {
+      count: misordered.length,
+      list: misordered.slice(0, 4),
+    });
+  }
+  if (outOfRange.length) {
+    note(SCHEDULE_PROBLEM.GAP_RANGE, {
+      count: outOfRange.length,
+      list: outOfRange.slice(0, 4),
+      limit: SCHEDULE_LIMITS.maxBaselineDays,
+    });
+  }
+
   gaps.sort((a, b) => a[0] - b[0]);
+  const kept = gaps.slice(0, SCHEDULE_LIMITS.maxGaps);
+  const discarded = gaps.length - kept.length;
+  if (discarded) {
+    note(SCHEDULE_PROBLEM.OVER_LIMIT, {
+      count: discarded,
+      limit: SCHEDULE_LIMITS.maxGaps,
+    });
+  }
+
   return {
-    ok: rejected.length === 0,
-    gaps: gaps.slice(0, SCHEDULE_LIMITS.maxGaps),
+    ok: problems.length === 0,
+    gaps: kept,
     rejected,
+    discarded,
+    problems,
   };
 }
 
-/** Render gaps back for the text field. */
+/** Render gaps back for the text field, at the precision they were set at. */
 export const formatGaps = gaps =>
   (gaps || [])
-    .map(([a, b]) => `${Number(a.toFixed(3))}-${Number(b.toFixed(3))}`)
+    .map(([a, b]) => `${Number(a.toFixed(6))}-${Number(b.toFixed(6))}`)
     .join(', ');
 
 /**
@@ -353,14 +515,35 @@ export function planSchedule(cfg = {}) {
     requested > 1 ? baselineDays / (requested - 1) / 10 : 0.1
   );
 
+  const problems = [];
   let offsets;
   if (kind === SCHEDULE.EXPLICIT) {
-    offsets = (Array.isArray(cfg.explicit) ? cfg.explicit : [])
+    const supplied = Array.isArray(cfg.explicit) ? cfg.explicit : [];
+    const usable = supplied
       .map(Number)
       .filter(v => Number.isFinite(v) && v >= 0)
-      .sort((a, b) => a - b)
-      .slice(0, SCHEDULE_LIMITS.maxEpochs);
-    if (!offsets.length) offsets = regularOffsets(requested, baselineDays);
+      .sort((a, b) => a - b);
+    offsets = usable.slice(0, SCHEDULE_LIMITS.maxEpochs);
+    if (usable.length > offsets.length) {
+      problems.push({
+        id: SCHEDULE_PROBLEM.OVER_LIMIT,
+        count: usable.length - offsets.length,
+        limit: SCHEDULE_LIMITS.maxEpochs,
+      });
+    }
+    // No substitution. A list that cannot be observed as typed produces a plan
+    // with no epochs and a reason, and the caller refuses to run it. Falling
+    // back to a regular cadence here meant the instrument told the student
+    // their times had been used and then observed on a comb instead - the one
+    // failure this whole feature exists to prevent.
+    if (offsets.length < SCHEDULE_LIMITS.minEpochs) {
+      problems.push({
+        id: SCHEDULE_PROBLEM.UNUSABLE,
+        count: offsets.length,
+        limit: SCHEDULE_LIMITS.minEpochs,
+      });
+      offsets = [];
+    }
   } else if (kind === SCHEDULE.IRREGULAR) {
     offsets = irregularOffsets(requested, baselineDays, jitter, cfg.seed);
   } else if (kind === SCHEDULE.CLUSTERED) {
@@ -368,6 +551,16 @@ export function planSchedule(cfg = {}) {
   } else {
     offsets = regularOffsets(requested, baselineDays);
   }
+
+  // Quantised to the microday, which is under a tenth of a second and far
+  // below anything this instrument can resolve.
+  //
+  // The reason is reproducibility rather than tidiness. The field this plan is
+  // written into is a round trip - the panel shows the times and reads them
+  // back - and an offset carrying seventeen significant digits does not
+  // survive being written down. A schedule that changes when it is displayed
+  // is not a schedule anyone can repeat, and the checksum said so by moving.
+  offsets = offsets.map(v => Number(v.toFixed(EPOCH_DECIMALS)));
 
   const gaps = (Array.isArray(cfg.gaps) ? cfg.gaps : [])
     .filter(
@@ -391,6 +584,10 @@ export function planSchedule(cfg = {}) {
   return {
     kind,
     epochs,
+    /** Whether this plan is the plan that was asked for. */
+    ok: problems.length === 0,
+    /** Why it is not, when it is not. Empty when it is. */
+    problems,
     /** How many the shape produced, before gaps. */
     generated: all.length,
     /** How many survive the gaps: the number of observations this plan makes. */

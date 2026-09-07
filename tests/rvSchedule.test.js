@@ -4,6 +4,7 @@ import {
   SCHEDULE,
   SCHEDULE_KINDS,
   SCHEDULE_LIMITS,
+  SCHEDULE_PROBLEM,
   formatEpochList,
   formatGaps,
   parseEpochList,
@@ -62,6 +63,134 @@ describe('reading a list of times', () => {
   test('it round-trips through the text field', () => {
     const offsets = [0, 1.25, 3.5, 7];
     expect(parseEpochList(formatEpochList(offsets)).offsets).toEqual(offsets);
+  });
+});
+describe('a schedule the instrument cannot honour is refused, not adjusted', () => {
+  test('a decimal comma is ambiguous and is named as such', () => {
+    // "0,5 1,5" would silently become three observations at 0, 1 and 5. The
+    // comma is the list separator in both languages this ships in, so the
+    // decimal comma cannot be told from a list and is not guessed at.
+    const out = parseEpochList('0,5 1,5');
+    expect(out.ok).toBe(false);
+    expect(out.problems.map(p => p.id)).toContain(
+      SCHEDULE_PROBLEM.DECIMAL_COMMA
+    );
+  });
+
+  test('a full stop is the decimal point, and it works', () => {
+    const out = parseEpochList('0.5, 1.5, 2.25');
+    expect(out.ok).toBe(true);
+    expect(out.offsets).toEqual([0.5, 1.5, 2.25]);
+  });
+
+  test('times before the run are a different mistake from unreadable ones', () => {
+    const out = parseEpochList('0 1 oops -3 2');
+    const ids = out.problems.map(p => p.id);
+    expect(ids).toContain(SCHEDULE_PROBLEM.UNREADABLE);
+    expect(ids).toContain(SCHEDULE_PROBLEM.NEGATIVE);
+    expect(out.offsets).toEqual([0, 1, 2]);
+  });
+
+  test('entries past the limit are discarded and counted', () => {
+    // Observing the first four hundred of six hundred times without saying so
+    // is the same failure as dropping the unreadable ones, one order of
+    // magnitude quieter.
+    const many = Array.from({ length: 500 }, (_, i) => i * 0.1);
+    const out = parseEpochList(many.join(' '));
+    expect(out.offsets).toHaveLength(SCHEDULE_LIMITS.maxEpochs);
+    expect(out.discarded).toBe(500 - SCHEDULE_LIMITS.maxEpochs);
+    const limit = out.problems.find(p => p.id === SCHEDULE_PROBLEM.OVER_LIMIT);
+    expect(limit.count).toBe(100);
+    expect(limit.limit).toBe(SCHEDULE_LIMITS.maxEpochs);
+    expect(out.ok).toBe(false);
+  });
+
+  test('too few times is reported rather than padded', () => {
+    const out = parseEpochList('3');
+    expect(out.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.TOO_FEW);
+    expect(out.ok).toBe(false);
+  });
+});
+
+describe('gap syntax is checked whole', () => {
+  test('a leading minus is not a separator', () => {
+    // "-1-2" was accepted as the interval [1, 2]: the minus vanished into the
+    // dash split and a gap nobody asked for was applied to the run.
+    const out = parseGaps('-1-2');
+    expect(out.gaps).toEqual([]);
+    expect(out.ok).toBe(false);
+    expect(out.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.GAP_SYNTAX);
+  });
+
+  test('an en dash is still a dash, and decimals still work', () => {
+    const out = parseGaps('4-9, 15\u201316.5');
+    expect(out.ok).toBe(true);
+    expect(out.gaps).toEqual([
+      [4, 9],
+      [15, 16.5],
+    ]);
+  });
+
+  test('a gap has to end after it starts', () => {
+    const out = parseGaps('9-4');
+    expect(out.gaps).toEqual([]);
+    expect(out.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.GAP_ORDER);
+  });
+
+  test('a gap cannot run past the longest baseline there is', () => {
+    const out = parseGaps(`1-${SCHEDULE_LIMITS.maxBaselineDays + 10}`);
+    expect(out.gaps).toEqual([]);
+    expect(out.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.GAP_RANGE);
+  });
+
+  test('gaps past the limit are discarded and counted', () => {
+    const many = Array.from(
+      { length: SCHEDULE_LIMITS.maxGaps + 3 },
+      (_, i) => `${i * 2}-${i * 2 + 1}`
+    ).join(', ');
+    const out = parseGaps(many);
+    expect(out.gaps).toHaveLength(SCHEDULE_LIMITS.maxGaps);
+    expect(out.discarded).toBe(3);
+    expect(out.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.OVER_LIMIT);
+  });
+});
+
+describe('a schedule survives being written down and read back', () => {
+  test('times round-trip through the field at their own precision', () => {
+    // Three decimals turned 1.000499 into 1 and 2.9999 into 3, so a schedule
+    // could be moved by a tenth of a day by being displayed.
+    const times = [0, 0.123456, 1.000499, 2.9999, 17.5];
+    const back = parseEpochList(formatEpochList(times));
+    expect(back.ok).toBe(true);
+    expect(back.offsets).toHaveLength(times.length);
+    for (const [i, t] of times.entries()) {
+      expect(back.offsets[i]).toBeCloseTo(t, 6);
+    }
+  });
+
+  test('gaps round-trip too', () => {
+    const gaps = [
+      [1.25, 2.5],
+      [8.0625, 9.125],
+    ];
+    const back = parseGaps(formatGaps(gaps));
+    expect(back.ok).toBe(true);
+    expect(back.gaps).toEqual(gaps);
+  });
+
+  test('a plan written out and read back plans the same times', () => {
+    const plan = planSchedule({
+      kind: SCHEDULE.IRREGULAR,
+      epochs: 20,
+      baselineDays: 33.3,
+      seed: 'round-trip',
+    });
+    const back = planSchedule({
+      kind: SCHEDULE.EXPLICIT,
+      explicit: parseEpochList(formatEpochList(offsetsOf(plan))).offsets,
+      baselineDays: 33.3,
+    });
+    expect(scheduleFingerprint(back)).toBe(scheduleFingerprint(plan));
   });
 });
 
@@ -191,14 +320,41 @@ describe('the shapes share a count and a baseline', () => {
     expect(plan.span).toBe(20);
   });
 
-  test('an empty explicit list falls back rather than observing nothing', () => {
+  test('an empty explicit list refuses rather than substituting a comb', () => {
+    // It used to fall back to a regular cadence, which is the one behaviour
+    // this feature cannot have: the panel would tell the student their own
+    // times were being used and observe on an evenly spaced comb instead.
     const plan = planSchedule({
       kind: SCHEDULE.EXPLICIT,
       explicit: [],
       epochs: 6,
       baselineDays: 5,
     });
-    expect(plan.planned).toBe(6);
+    expect(plan.planned).toBe(0);
+    expect(plan.ok).toBe(false);
+    expect(plan.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.UNUSABLE);
+  });
+
+  test('a single usable time is not a schedule either', () => {
+    const plan = planSchedule({
+      kind: SCHEDULE.EXPLICIT,
+      explicit: [2.5],
+      epochs: 6,
+      baselineDays: 5,
+    });
+    expect(plan.planned).toBe(0);
+    expect(plan.problems.map(p => p.id)).toContain(SCHEDULE_PROBLEM.UNUSABLE);
+  });
+
+  test('a usable explicit list is used, and says so', () => {
+    const plan = planSchedule({
+      kind: SCHEDULE.EXPLICIT,
+      explicit: [0, 0.4, 1.1, 2.6],
+      epochs: 6,
+      baselineDays: 5,
+    });
+    expect(plan.ok).toBe(true);
+    expect(plan.epochs.map(e => e.offset)).toEqual([0, 0.4, 1.1, 2.6]);
   });
 
   test('a configuration with no kind is the regular cadence, unchanged', () => {
