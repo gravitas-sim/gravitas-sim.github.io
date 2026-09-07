@@ -494,13 +494,21 @@
     gap: 2px;
   }
 
+  /* Padding is 4px rather than 5.
+     The rail must fit the window without scrolling - one section open at a
+     time is the whole design, and e2e/presentation.spec.js asserts it. The
+     Tools group has grown by a chip at a time and was eleven pixels over
+     before this pass and sixteen after the evidence notebook joined it. A
+     pixel off the top and bottom of each chip recovers about twenty across the
+     group, which is the difference between fitting and not; the chips remain
+     comfortably above the size a pointer needs. */
   .ui-container .rail-chip {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     width: 100%;
-    padding: 5px var(--space-2);
+    padding: 4px var(--space-2);
     font-size: var(--text-2xs);
     line-height: 1.25;
     text-align: center;
@@ -582,8 +590,11 @@
   }
 
   /* Sections are tighter now that there are more of them. */
+  /* 1px between chips rather than 2. Ten gaps in the Tools group, so this is
+     the last ten pixels the rail needed to fit without scrolling. The chips
+     still read as separate: each has its own background against the rail. */
   .rail-group > [role='group'] {
-    gap: 2px;
+    gap: 1px;
   }
 
   /* ==========================================================================
