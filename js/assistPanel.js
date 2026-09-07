@@ -420,6 +420,44 @@ export const predictedPeriapsis = () => {
   );
 };
 
+/** The scenario the panel last matched itself to. */
+let lastScenario = null;
+
+/**
+ * Match the panel to whatever scenario is loaded now.
+ *
+ * Shared by the rebuild subscription and by the late-arrival catch-up below.
+ * Arming is conditional: the rebuild path has just stopped the watch, so the
+ * guard costs it nothing, and the catch-up must not discard an encounter that
+ * was recorded while this chunk was still being fetched.
+ *
+ * @returns {void}
+ */
+function showForCurrentScenario() {
+  const e = cacheElements();
+  const mode = activeMode();
+  if (current_scenario_name !== lastScenario) {
+    lastScenario = current_scenario_name;
+    dismissed = false;
+  }
+  if (mode && !dismissed) {
+    setAssistEnabled(true);
+    if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
+    if (!currentAssist()) armAssistRun();
+    render();
+    return;
+  }
+  if (!mode && enabled) {
+    setAssistEnabled(false);
+    return;
+  }
+  if (enabled) {
+    if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
+    if (!currentAssist()) armAssistRun();
+  }
+  render();
+}
+
 /** Wire the panel up. Called once at boot. */
 export function initAssist() {
   // This panel's strings are not in the start-up catalogue, so it registers
@@ -456,34 +494,12 @@ export function initAssist() {
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else. Without this the panel is not
   // reachable at all, which is how the e2e suite found it missing.
-  let lastScenario = null;
   window.addEventListener('gravitasSimulationReset', () => {
     stopAssistWatch();
     // A rebuilt world is a new encounter, and the frame pointed at the old
     // planet is pointing at an id that now means something else.
     setFrame(WORLD);
-
-    const mode = activeMode();
-    if (current_scenario_name !== lastScenario) {
-      lastScenario = current_scenario_name;
-      dismissed = false;
-    }
-    if (mode && !dismissed) {
-      setAssistEnabled(true);
-      if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
-      armAssistRun();
-      return;
-    }
-    if (!mode && enabled) {
-      setAssistEnabled(false);
-      return;
-    }
-    if (enabled) {
-      if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
-      armAssistRun();
-    } else {
-      render();
-    }
+    showForCurrentScenario();
   });
 
   e.container.style.display = 'none';
@@ -495,10 +511,14 @@ export function initAssist() {
  * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
- * later rebuild is handled by the subscription.
+ * later rebuild is handled by the subscription. It shows the panel directly
+ * rather than dispatching a reset event: nothing was rebuilt, and a synthetic
+ * reset would have every other listener on that event act on a rebuild that
+ * never happened - including this app's reference frame, which the handler
+ * above deliberately returns to the world frame.
  *
  * @returns {void}
  */
 export function notifyScenarioReady() {
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  showForCurrentScenario();
 }

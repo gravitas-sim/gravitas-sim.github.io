@@ -440,6 +440,55 @@ test.describe('the panel', () => {
     }
   });
 
+  // The panel chunk is fetched asynchronously, so its scenario catch-up can
+  // arrive after a run has already finished - a slow first load, or a test that
+  // drives the panel directly. The catch-up used to dispatch a synthetic
+  // gravitasSimulationReset, which stopped the watch, re-armed it and threw the
+  // finished run away; it also told every other listener in the app that the
+  // world had been rebuilt when nothing had.
+  test('a late scenario catch-up neither re-arms nor fakes a rebuild', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const out = await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
+      const { SETTINGS } = await import('/js/appState.js');
+      const watch = await import('/js/binaryWatch.js');
+      const panel = await import('/js/binaryRunPanel.js');
+      // This panel's strings are deferred, and everything below is synchronous:
+      // without the catalogue in hand first the readout is message ids.
+      const { ensureDeferredMessages } = await import(
+        '/js/i18n/deferredMessages.js'
+      );
+      await ensureDeferredMessages();
+      SETTINGS.preset_scenario = 'Binary Planet Lab';
+      SETTINGS.binary_lab_periods = 1;
+      ui.initialize_simulation({ seed: 'e2e' });
+      panel.setBinaryRunEnabled(true);
+      panel.armBinaryRun();
+      let guard = 0;
+      while (!watch.currentRun()?.finished && guard < 200_000) {
+        physics.updatePhysics(1.0);
+        guard++;
+      }
+      let resets = 0;
+      const count = () => resets++;
+      window.addEventListener('gravitasSimulationReset', count);
+      panel.notifyScenarioReady();
+      window.removeEventListener('gravitasSimulationReset', count);
+      return {
+        finished: Boolean(watch.currentRun()?.finished),
+        boundary: document.getElementById('binaryRunBoundary').textContent,
+        resets,
+      };
+    });
+    expect(out.finished).toBe(true);
+    expect(out.resets).toBe(0);
+    expect(out.boundary).toMatch(/Holman/);
+  });
+
   test('says the boundary is a published fit and whose', async ({
     page,
     app,

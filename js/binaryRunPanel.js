@@ -394,6 +394,44 @@ export const isBinaryRunEnabled = () => enabled;
 /** @returns {?object} The last finished run, for the lesson and the bench */
 export const lastFinishedRun = () => (previous ? { ...previous } : null);
 
+/**
+ * Match the panel to whatever scenario is loaded now.
+ *
+ * Called on a world rebuild, and again when the chunk arrives late for the
+ * rebuild that imported it. Arming is conditional on there being nothing to
+ * arm over: the rebuild path has just stopped the watch, so the guard is free
+ * there, and the late-arrival path must not throw away a run that finished
+ * while the chunk was still being fetched.
+ *
+ * @returns {void}
+ */
+function showForCurrentScenario() {
+  const mode = activeMode();
+  if (current_scenario_name !== lastScenario) {
+    lastScenario = current_scenario_name;
+    dismissed = false;
+  }
+  if (mode && !dismissed) {
+    setBinaryRunEnabled(true);
+    syncForm();
+    if (!currentRun()) armBinaryRun();
+    render();
+    return;
+  }
+  if (!mode && enabled) {
+    setBinaryRunEnabled(false);
+    return;
+  }
+  if (enabled) {
+    syncForm();
+    if (!currentRun()) armBinaryRun();
+  }
+  render();
+}
+
+/** The scenario the panel last matched itself to. */
+let lastScenario = null;
+
 /** Wire the panel up. Called once at boot. */
 export function initBinaryRun() {
   // This panel's strings are not in the start-up catalogue, so it registers
@@ -431,30 +469,9 @@ export function initBinaryRun() {
   // instrument for two scenarios rather than a general tool, and the rail's
   // chip grid is full. So it shows itself when one of its scenarios loads and
   // stays out of the way everywhere else.
-  let lastScenario = null;
   window.addEventListener('gravitasSimulationReset', () => {
     stopBinaryWatch();
-    const mode = activeMode();
-    if (current_scenario_name !== lastScenario) {
-      lastScenario = current_scenario_name;
-      dismissed = false;
-    }
-    if (mode && !dismissed) {
-      setBinaryRunEnabled(true);
-      syncForm();
-      armBinaryRun();
-      return;
-    }
-    if (!mode && enabled) {
-      setBinaryRunEnabled(false);
-      return;
-    }
-    if (enabled) {
-      syncForm();
-      armBinaryRun();
-    } else {
-      render();
-    }
+    showForCurrentScenario();
   });
 
   e.container.style.display = 'none';
@@ -466,10 +483,14 @@ export function initBinaryRun() {
  * The chunk is fetched by js/scenarioPanelBridge.js in response to the reset
  * event, so by the time init() subscribes to that event it has been and gone.
  * This is the one-off catch-up for the load that caused the import; every
- * later rebuild is handled by the subscription.
+ * later rebuild is handled by the subscription. It shows the panel directly
+ * rather than dispatching a reset event: no world was rebuilt, and every other
+ * listener on that event - the bench, the watches, the notebook - would act on
+ * a rebuild that never happened. Locally it also discarded a run that had
+ * finished while this chunk was still in flight.
  *
  * @returns {void}
  */
 export function notifyScenarioReady() {
-  window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
+  showForCurrentScenario();
 }
