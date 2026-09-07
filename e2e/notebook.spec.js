@@ -288,7 +288,13 @@ test.describe('what a saved reading records', () => {
       inclinationDeg: expect.any(Number),
     });
     expect(p.quality.tier).toBeTruthy();
-    expect(p.referenceFrame).toBeTruthy();
+    // A recording does not carry a reference frame: the frame is a display
+    // choice made now, and writing the live one into the entry would have the
+    // saved evidence claim the samples were taken in a frame nobody was in
+    // when they were taken. So the recording's own frame is null - unknown -
+    // and the frame it is being read in is recorded separately, as that.
+    expect(p.referenceFrame).toBe(null);
+    expect(p.displayFrame).toBeTruthy();
     expect(p.units).toBeTruthy();
   });
 

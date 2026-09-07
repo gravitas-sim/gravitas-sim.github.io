@@ -34,6 +34,21 @@ async function openBrowser(page, app) {
   ).not.toHaveCount(0);
 }
 
+/**
+ * How many lessons the catalogue has.
+ *
+ * Read from the manifest rather than written down. This file's thesis is that
+ * the browser is the catalogue, and a literal here would make every one of
+ * these assertions a statement about the number seventeen instead - which is
+ * how four of them came to fail on the day an eighteenth lesson was added,
+ * having caught nothing.
+ */
+const lessonCount = page =>
+  page.evaluate(async () => {
+    const { MANIFEST } = await import('/js/data/investigations/registry.js');
+    return MANIFEST.length;
+  });
+
 /** The lesson ids currently in the grid, in order. */
 const shownIds = page =>
   page
@@ -71,10 +86,12 @@ test.describe('the filters are the catalogue', () => {
       };
     });
 
-    expect(built.lessons).toBe(17);
+    // Every lesson the catalogue holds, and more than a handful of them.
+    expect(built.lessons).toBe(await lessonCount(page));
+    expect(built.lessons).toBeGreaterThan(10);
     expect(built.menu).toEqual(built.subjects);
     expect(built.markupNamesALesson).toBe(false);
-    await expect.poll(() => shownIds(page)).toHaveLength(17);
+    await expect.poll(() => shownIds(page)).toHaveLength(built.lessons);
   });
 
   test('the count line says how many matched, and says it out loud', async ({
@@ -90,7 +107,7 @@ test.describe('the filters are the catalogue', () => {
     await page
       .locator('#investigationFilterSubject')
       .selectOption('spaceflight');
-    await expect(count).toContainText('3 of 17');
+    await expect(count).toContainText(`3 of ${await lessonCount(page)}`);
     await expect
       .poll(() => shownIds(page))
       .toEqual(['gravity-assist', 'hohmann-transfer', 'lagrange-points']);
@@ -203,7 +220,9 @@ test.describe('filtering', () => {
     const clear = page.locator('#investigationFilterClear');
     await expect(clear).toBeVisible();
     await clear.click();
-    await expect.poll(() => shownIds(page)).toHaveLength(17);
+    await expect
+      .poll(() => shownIds(page))
+      .toHaveLength(await lessonCount(page));
     await expect(clear).toBeHidden();
     // Focus lands somewhere useful rather than on the document.
     await expect(page.locator('#investigationSearch')).toBeFocused();
@@ -292,7 +311,9 @@ test.describe('opening a result and coming back', () => {
     await page.locator('#investigationFilterProgress').selectOption('going');
     await expect.poll(() => shownIds(page)).toEqual(['gravity-assist']);
     await page.locator('#investigationFilterProgress').selectOption('new');
-    await expect.poll(() => shownIds(page)).toHaveLength(16);
+    // Everything except the one just opened.
+    const untouched = (await lessonCount(page)) - 1;
+    await expect.poll(() => shownIds(page)).toHaveLength(untouched);
   });
 });
 
