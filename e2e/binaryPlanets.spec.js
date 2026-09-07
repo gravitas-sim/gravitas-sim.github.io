@@ -459,9 +459,8 @@ test.describe('the panel', () => {
       const panel = await import('/js/binaryRunPanel.js');
       // This panel's strings are deferred, and everything below is synchronous:
       // without the catalogue in hand first the readout is message ids.
-      const { ensureDeferredMessages } = await import(
-        '/js/i18n/deferredMessages.js'
-      );
+      const { ensureDeferredMessages } =
+        await import('/js/i18n/deferredMessages.js');
       await ensureDeferredMessages();
       SETTINGS.preset_scenario = 'Binary Planet Lab';
       SETTINGS.binary_lab_periods = 1;
