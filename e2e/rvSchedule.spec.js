@@ -272,7 +272,7 @@ test.describe('both arms have one lifecycle', () => {
       const shape = document.getElementById('rvSurveyShape');
       const epochs = document.getElementById('rvSurveyEpochs');
       const fire = el =>
-        el.dispatchEvent(new Event('change', { bubbles: true }));
+        el.dispatchEvent(new window.Event('change', { bubbles: true }));
       shape.value = 'irregular';
       fire(shape);
       epochs.value = '9';
