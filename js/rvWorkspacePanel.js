@@ -390,15 +390,29 @@ function frame(ctx, box, p, title) {
 }
 
 /**
- * The run in flight, so it can be cancelled and so two cannot overlap.
+ * The run the panel is currently waiting for, or null.
  *
- * Carries its own generation. Every write back into the panel checks it
- * against `mcGeneration` first, so a run whose inputs have since moved
- * finishes quietly and touches nothing: not the report, not the progress line,
- * not another run's state.
+ * This is OWNERSHIP and nothing else: it answers "is there a run whose result
+ * this panel is still expecting", which is what disables the Run button and
+ * shows Cancel. It is deliberately not the same question as "may this run
+ * publish", which is what `mcGeneration` answers.
+ *
+ * Conflating the two locked the panel permanently. Supersession bumped the
+ * generation and cancelled the token but left it here, and the superseded
+ * run's own cleanup was conditional on still being current - which the
+ * generation bump had just made impossible. So nothing ever released the
+ * token, `runUncertainty()` returned at its first line for the rest of the
+ * session, and the Run button stayed disabled with no error anywhere.
  */
 let mcRun = null;
-/** Bumped by anything that makes an in-flight or finished run obsolete. */
+/**
+ * Bumped by anything that makes an in-flight or finished run obsolete.
+ *
+ * Permission to publish. A run may write its report, its progress line and
+ * its status only while the generation it captured is still the current one;
+ * releasing its own ownership is separate, and is always allowed, because a
+ * run that has finished is not running whatever else has changed.
+ */
 let mcGeneration = 0;
 /** The last report, kept for redrawing on a resize or a language change. */
 let mcReport = null;
@@ -479,11 +493,22 @@ export const uncertaintyReport = () => mcReport;
  * `finally` - there is no way to abort a promise chain mid-await - but every
  * write it attempts is dropped, so it cannot resurrect an interval for a
  * recording that is no longer loaded.
+ *
+ * Ownership is released here rather than left to the orphan. Waiting for it
+ * would mean the panel stayed locked until the batch it is in the middle of
+ * finishes, and - before this was separated from permission to publish - it
+ * meant the panel stayed locked for ever. The orphan's own cleanup checks
+ * whether it is still the owner before touching anything, so releasing early
+ * is safe: whatever runs next owns the token, and the orphan finds it gone.
  */
 export function clearUncertainty() {
   mcGeneration++;
   mcReport = null;
-  if (mcRun) mcRun.cancelled = true;
+  if (mcRun) {
+    mcRun.cancelled = true;
+    mcRun = null;
+  }
+  renderUncertainty();
 }
 
 /** For tests: which generation the panel is on. @returns {number} */
@@ -795,8 +820,10 @@ export async function runUncertainty() {
   mcReport = null;
   renderUncertainty();
 
-  /** Whether this run is still the one the panel is waiting for. */
-  const current = () => mcRun === token && generation === mcGeneration;
+  /** Whether the panel is still waiting for THIS run. */
+  const owns = () => mcRun === token;
+  /** Whether what this run produces is still wanted. */
+  const mayPublish = () => owns() && generation === mcGeneration;
 
   let outcome = null;
   try {
@@ -819,7 +846,7 @@ export async function runUncertainty() {
         onProgress: ({ done, total }) => {
           // A superseded run's progress must not overwrite the line the
           // current one is writing, nor reappear after it finished.
-          if (!current() || !e.mcStatus) return;
+          if (!mayPublish() || !e.mcStatus) return;
           e.mcStatus.textContent = t('rvfit.mc.running', { done, total });
         },
         shouldCancel: () => token.cancelled || generation !== mcGeneration,
@@ -829,11 +856,19 @@ export async function runUncertainty() {
     console.warn('[rv] the uncertainty analysis did not finish:', err);
     outcome = null;
   } finally {
-    // Everything below is conditional on still being the current run. A
-    // superseded one lands here too, and its whole job is to leave no trace.
-    if (current()) {
-      mcReport = outcome;
+    // Two separate decisions, and running them together is what broke this.
+    //
+    // Publishing is conditional on the generation: a superseded run leaves no
+    // trace, because nobody asked for it. Releasing the token is conditional
+    // only on still holding it: a run that has finished is not running, and
+    // the panel has to be told so whether or not anyone still wants the
+    // answer. Anything that superseded this run has already taken the token,
+    // in which case there is nothing here to release and nothing to redraw.
+    const publish = mayPublish();
+    const held = owns();
+    if (held) {
       mcRun = null;
+      if (publish) mcReport = outcome;
       if (e.mcStatus) e.mcStatus.textContent = '';
       renderUncertainty();
     }

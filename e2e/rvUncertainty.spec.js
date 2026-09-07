@@ -47,7 +47,12 @@ async function analyse(page, { days, period, K, sigma, bounds, seed = 'd' }) {
     [days, { period, K, gamma: -3, phase: 1.1 }, sigma, bounds, seed]
   );
   await expect(page.locator('#rvFitContainer')).toBeVisible();
-  await page.locator('#rvMcSection > summary').click();
+  // Opened rather than toggled: a test that analyses a second recording would
+  // otherwise close the section it opened for the first.
+  await page.evaluate(() => {
+    document.getElementById('rvMcSection').open = true;
+  });
+  await expect(page.locator('#rvMcTrials')).toBeVisible();
 }
 
 const evenly = (n, step) => Array.from({ length: n }, (_, i) => i * step);
@@ -466,5 +471,140 @@ test.describe('everyone can use it', () => {
     await expect(page.locator('#rvMcRun')).toContainText('Ejecutar');
     const guidance = await page.locator('.rvfit-mc-guidance').innerText();
     expect(guidance.toLowerCase()).toContain('precisión');
+  });
+});
+
+// =============================================================================
+// Supersession
+// -----------------------------------------------------------------------------
+// A run that is overtaken - by a new recording, a reset, or another run - must
+// leave no trace AND must leave the panel usable. Those are two different
+// jobs, and the panel used to do only the first: clearUncertainty() bumped the
+// generation and cancelled the token but left it in place, so the superseded
+// run's own cleanup - which was conditional on still being current - could
+// never release it. The panel was then locked out of running anything ever
+// again, with the Run button disabled and no error anywhere.
+// =============================================================================
+
+test.describe('a run that is overtaken', () => {
+  const RECORDING = {
+    days: evenly(30, 0.4),
+    period: 3.5,
+    K: 45,
+    sigma: 4,
+    bounds: { minPeriod: 1, maxPeriod: 10 },
+  };
+
+  /** Start a run without waiting for it. */
+  const startRun = page =>
+    page.evaluate(async () => {
+      const panel = await import('/js/rvWorkspacePanel.js');
+      panel.runUncertainty();
+      return panel.isUncertaintyRunning();
+    });
+
+  /** Everything the panel says about its own state. */
+  const state = page =>
+    page.evaluate(async () => {
+      const panel = await import('/js/rvWorkspacePanel.js');
+      return {
+        running: panel.isUncertaintyRunning(),
+        report: panel.uncertaintyReport(),
+        runDisabled: document.getElementById('rvMcRun').disabled,
+        status: document.getElementById('rvMcStatus')?.textContent ?? '',
+      };
+    });
+
+  test('replacing the recording mid-run frees the panel for the next one', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await analyse(page, RECORDING);
+    await page.locator('#rvMcTrials').fill('400');
+    expect(await startRun(page)).toBe(true);
+
+    // The recording is replaced while it runs, which is what the workspace
+    // does when a student analyses a second recording.
+    await analyse(page, { ...RECORDING, period: 5.1, seed: 'other' });
+
+    // The superseded run finishes on its own. Nothing it produces may appear.
+    await expect
+      .poll(async () => (await state(page)).running, { timeout: 60_000 })
+      .toBe(false);
+    const after = await state(page);
+    expect(after.report).toBe(null);
+    expect(after.runDisabled).toBe(false);
+    expect(after.status).not.toMatch(/\d+\s*\/\s*\d+/);
+
+    // And the panel really can run again, which is the part that was broken.
+    await page.locator('#rvMcTrials').fill('60');
+    await page.locator('#rvMcRun').click();
+    const fresh = await report(page);
+    expect(fresh).not.toBe(null);
+    expect(fresh.ok).toBe(true);
+  });
+
+  test('replacing it repeatedly leaves the panel usable', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await analyse(page, RECORDING);
+    await page.locator('#rvMcTrials').fill('400');
+    for (let i = 0; i < 3; i++) {
+      await startRun(page);
+      await analyse(page, { ...RECORDING, period: 4 + i, seed: `s${i}` });
+    }
+    await expect
+      .poll(async () => (await state(page)).running, { timeout: 60_000 })
+      .toBe(false);
+    expect((await state(page)).report).toBe(null);
+
+    await page.locator('#rvMcTrials').fill('60');
+    await page.locator('#rvMcRun').click();
+    expect((await report(page)).ok).toBe(true);
+  });
+
+  test('a reset while running frees it too', async ({ page, app }) => {
+    await app.boot();
+    await analyse(page, RECORDING);
+    await page.locator('#rvMcTrials').fill('400');
+    await startRun(page);
+    await page.evaluate(async () => {
+      const panel = await import('/js/rvWorkspacePanel.js');
+      panel.clearUncertainty();
+    });
+    await expect
+      .poll(async () => (await state(page)).running, { timeout: 60_000 })
+      .toBe(false);
+    expect((await state(page)).report).toBe(null);
+
+    await page.locator('#rvMcTrials').fill('60');
+    await page.locator('#rvMcRun').click();
+    expect((await report(page)).ok).toBe(true);
+  });
+
+  test('the reader cancelling it is not supersession, and still reports', async ({
+    page,
+    app,
+  }) => {
+    // The distinction the panel has to keep: a cancelled run reports what it
+    // managed, because the reader asked for it to stop. A superseded one
+    // reports nothing, because nobody asked for it at all.
+    await app.boot();
+    await analyse(page, RECORDING);
+    await page.locator('#rvMcTrials').fill('400');
+    await startRun(page);
+    await page.locator('#rvMcCancel').click();
+
+    const out = await report(page);
+    expect(out).not.toBe(null);
+    expect(out.outcome).toBe('cancelled');
+    expect((await state(page)).runDisabled).toBe(false);
+
+    await page.locator('#rvMcTrials').fill('60');
+    await page.locator('#rvMcRun').click();
+    expect((await report(page)).outcome).toBe('complete');
   });
 });
