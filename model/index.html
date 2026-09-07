@@ -1282,7 +1282,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->17<!--/fact--> lessons and cannot fall behind
+        <!--fact:investigations-->18<!--/fact--> lessons and cannot fall behind
         them. It listed six of the twelve when it was maintained by hand.
       </p>
       <div class="doc-table-wrap">
@@ -1345,6 +1345,10 @@
             <tr>
               <td>Can You Detect This Planet?</td>
               <td>The star and planet are integrated as a Newtonian two-body system in a plane, and the radial velocity the live panel reports is the projection of the star's actual simulated velocity onto the line of sight, relative to the system barycenter. The survey-schedule instrument at steps 3 to 11 is analytic rather than integrated: it evaluates a circular single-planet velocity curve from js/exoplanetObservables.js, which is exact for the near-circular orbit of HD 209458 b and would not be for an eccentric one. Real radial-velocity curves of eccentric planets are not sinusoids, and the phase-coverage argument the lesson makes is unchanged by that but the shape of the curve is not. The noise is Gaussian, identically distributed, and independent between measurements. Real radial-velocity errors are none of the three: they include correlated systematics from the instrument and the atmosphere, and stellar jitter from spots and granulation that is correlated on the star's rotation period and is often the dominant term for an active star. The lesson names underestimated error bars at step 11 as the leading alternative explanation for a marginal excess, which is the honest version of this simplification, but a class that goes on to real data should be told that jitter is why a 1 m/s spectrograph does not deliver 1 m/s planet sensitivity. The schedule itself is idealized in the other direction: measurements arrive exactly on time, with no weather, no target visibility window and no lost nights. That makes the two schedules cleanly comparable and understates how much worse a real cadence is. Nothing in the model prevents a measurement from being scheduled while the target would be below the horizon, because the simulation has no horizon. One numerical caveat is surfaced in the interface rather than hidden here: measurements are read by interpolating the simulated velocity between render frames, and at high simulation speeds consecutive frames can be an appreciable fraction of an orbit apart. The panel detects this and says so, because a straight line drawn across a quarter of a cycle flattens the extremes. At the default speed the frames are far finer than the cadence and the interpolation is exact to well under a metre per second.</td>
+            </tr>
+            <tr>
+              <td>Design the Schedule</td>
+              <td>The star and planet are integrated by the simulation, not modelled analytically, so the velocities are whatever the dynamics produce. The observing layer keeps only the measurements a stated schedule would have produced: each epoch is interpolated between the render frames either side of it and carries a Gaussian uncertainty drawn from a generator seeded by name and keyed by the epoch’s index in the ungapped plan, so removing an epoch does not redraw the others. Both arms of a comparison observe the same frames, which is why the noise is a shared draw rather than two independent ones. The period search is the same weighted circular fit the analysis workspace uses, run over one range for both arms; the reported window function is computed from the times alone and uses no velocities at all.</td>
             </tr>
             <tr>
               <td>Planets in Binary Stars</td>

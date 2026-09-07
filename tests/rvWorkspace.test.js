@@ -183,6 +183,29 @@ describe('the truth stays hidden until it is asked for', () => {
     expect(JSON.stringify(a)).not.toMatch(/from the simulated orbit/);
   });
 
+  test('the export carries the schedule the recording was taken on', () => {
+    // A fit is only reproducible if the times are. Two analyses of the same
+    // star with different checksums were not observed at the same instants,
+    // and nothing else in the report says so.
+    const r = recording();
+    loadRecording({
+      ...r,
+      scheduleFingerprint: 'SCHED42',
+      config: { ...r.config, scheduleKind: 'irregular', scheduleEpochs: 24 },
+    });
+    const out = exportReport().recording;
+    expect(out.scheduleKind).toBe('irregular');
+    expect(out.scheduleEpochs).toBe(24);
+    expect(out.scheduleFingerprint).toBe('SCHED42');
+  });
+
+  test('a cadence recording says it had no plan rather than inventing one', () => {
+    loadRecording(recording());
+    const out = exportReport().recording;
+    expect(out.scheduleKind).toBe(null);
+    expect(out.scheduleFingerprint).toBe(null);
+  });
+
   test('the export says whether it was looked at', () => {
     loadRecording(recording());
     expect(exportReport().truthRevealed).toBe(false);
