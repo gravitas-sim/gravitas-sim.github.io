@@ -44,6 +44,7 @@
 // =============================================================================
 
 import { mulberry32, normalizeSeed } from './rng.js';
+import { planSchedule, scheduleFingerprint } from './rvSchedule.js';
 
 /**
  * What a run looks like before anyone changes it.
@@ -134,12 +135,52 @@ export function normalizeSurveyConfig(cfg = {}) {
   const rawSigma = Number(cfg.sigmaMs ?? SURVEY_DEFAULTS.sigmaMs);
   const sigmaMs = Number.isFinite(rawSigma) && rawSigma > 0 ? rawSigma : 0;
   const seed = String(cfg.seed ?? SURVEY_DEFAULTS.seed);
+
+  // The schedule, which a configuration may state in either of two ways.
+  //
+  // A cadence and a baseline is the original form and stays exactly what it
+  // was: no `kind`, no explicit list, and every existing lesson, share link
+  // and test takes the same path it always did. A `kind` opts into
+  // js/rvSchedule.js, which places the same number of observations over the
+  // same span differently - and that is the whole point of the comparison the
+  // scheduling lesson asks for.
+  const plan = cfg.kind
+    ? planSchedule({
+        kind: cfg.kind,
+        epochs: cfg.epochs,
+        baselineDays,
+        jitter: cfg.jitter,
+        clusters: cfg.clusters,
+        tightDays: cfg.tightDays,
+        explicit: cfg.explicit,
+        gaps: cfg.gaps,
+        seed,
+      })
+    : null;
+
   return {
     cadenceDays,
     baselineDays,
     sigmaMs,
     seed,
     seedValue: normalizeSeed(seed),
+    kind: plan ? plan.kind : null,
+    plan,
+    scheduleId: plan ? scheduleFingerprint(plan) : null,
+    // The schedule's own inputs, carried through so this function is
+    // idempotent.
+    //
+    // It was not: the returned object dropped `epochs`, `gaps` and the rest,
+    // so normalising an already-normalised config rebuilt a DIFFERENT plan
+    // from the defaults - and epochCount() does exactly that. A gapped
+    // sixteen-epoch run reported twelve, the observing loop indexed past the
+    // end of its own schedule, and it threw.
+    epochs: cfg.epochs ?? null,
+    jitter: cfg.jitter ?? null,
+    clusters: cfg.clusters ?? null,
+    tightDays: cfg.tightDays ?? null,
+    explicit: cfg.explicit ? [...cfg.explicit] : null,
+    gaps: cfg.gaps ? cfg.gaps.map(g => [...g]) : null,
   };
 }
 
@@ -154,7 +195,10 @@ export function normalizeSurveyConfig(cfg = {}) {
  * @returns {number} Count of scheduled epochs
  */
 export function epochCount(cfg) {
-  const { cadenceDays, baselineDays } = normalizeSurveyConfig(cfg);
+  const normalised = normalizeSurveyConfig(cfg);
+  // An explicit plan already knows how many observations survive its gaps.
+  if (normalised.plan) return normalised.plan.planned;
+  const { cadenceDays, baselineDays } = normalised;
   // A hair of slack, so a baseline a reader entered as 3.52 with a cadence of
   // 0.32 gives the 12 points they counted on rather than 11 because the two
   // numbers do not divide exactly in binary floating point.
@@ -267,8 +311,46 @@ export function createSurvey(config = {}) {
    */
   let suspendedAt = null;
 
-  /** @param {number} k - Epoch index @returns {number} Its scheduled time */
-  const epochTime = k => startDay + k * cfg.cadenceDays;
+  // The schedule, as a list of offsets from the run's start.
+  //
+  // A cadence produces an arithmetic list and an explicit plan produces
+  // whatever it produces; below this line the two are the same thing, so the
+  // observing loop has one shape rather than a branch at every epoch.
+  //
+  // `index` is the epoch's place in the UNGAPPED plan and is what the noise is
+  // keyed by, so removing a gap's worth of observations does not redraw the
+  // scatter on the ones that remain. For a cadence it is just 0, 1, 2...
+  const schedule = cfg.plan
+    ? cfg.plan.epochs.map(e => ({ index: e.index, offset: e.offset }))
+    : Array.from({ length: total }, (_, k) => ({
+        index: k,
+        offset: k * cfg.cadenceDays,
+      }));
+
+  /** @param {number} k - Position in the schedule @returns {number} Its time */
+  const epochTime = k => startDay + schedule[k].offset;
+
+  /** @param {number} k - Position in the schedule @returns {number} Its noise index */
+  const epochIndex = k => schedule[k].index;
+
+  /**
+   * How far apart two consecutive observations are, at the widest.
+   *
+   * The "nobody was watching" test compares the gap between two readings
+   * against this. It used to compare against the cadence, which an explicit
+   * list does not have; the largest planned spacing is the generalisation, and
+   * for a regular schedule it IS the cadence, so that path is unchanged to the
+   * last bit.
+   *
+   * Deliberately the largest rather than the local spacing: the test exists to
+   * catch a loop that stopped running - a closed panel, a backgrounded tab -
+   * and a clustered schedule's tight intra-group spacing would make it fire on
+   * an ordinary slow frame. Whether the frames actually resolve the curve is a
+   * different question, already answered by the interpolation error below.
+   */
+  const watchWindow = cfg.plan
+    ? Math.max(cfg.plan.maxSpacing || 0, cfg.cadenceDays)
+    : cfg.cadenceDays;
 
   /**
    * The observing noise for one epoch, in m/s.
@@ -387,9 +469,17 @@ export function createSurvey(config = {}) {
         // the history: without this ordering the first epoch after a resume
         // looked like the first epoch of a run and was recorded as a clean
         // measurement of an instant nobody observed.
-        if (resuming || (previous && gapDays > cfg.cadenceDays)) {
+        if (resuming || (previous && gapDays > watchWindow)) {
           taken.push(
-            record(next, when, null, null, QUALITY.MISSED, gapDays, cfg.sigmaMs)
+            record(
+              epochIndex(next),
+              when,
+              null,
+              null,
+              QUALITY.MISSED,
+              gapDays,
+              cfg.sigmaMs
+            )
           );
           added.push(taken[taken.length - 1]);
           next++;
@@ -405,9 +495,9 @@ export function createSurvey(config = {}) {
         if (!previous || previous.day >= when) {
           taken.push(
             record(
-              next,
+              epochIndex(next),
               when,
-              trueRv + noiseAt(next),
+              trueRv + noiseAt(epochIndex(next)),
               trueRv,
               QUALITY.OK,
               0,
@@ -429,9 +519,9 @@ export function createSurvey(config = {}) {
               : QUALITY.DEGRADED;
         taken.push(
           record(
-            next,
+            epochIndex(next),
             when,
-            value + noiseAt(next),
+            value + noiseAt(epochIndex(next)),
             value,
             quality,
             gapDays,
