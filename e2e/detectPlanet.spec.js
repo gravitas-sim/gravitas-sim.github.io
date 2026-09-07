@@ -371,6 +371,10 @@ test.describe('the export', () => {
       'baseline_days',
       'sigma_ms',
       'noise_seed',
+      'schedule_kind',
+      'schedule_id',
+      'schedule_epochs_planned',
+      'schedule_gaps_days',
     ]);
     // One row per measurement and nothing between them.
     expect(lines).toHaveLength(5);

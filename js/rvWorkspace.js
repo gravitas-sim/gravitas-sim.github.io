@@ -264,6 +264,12 @@ export function exportReport() {
       plannedEpochs: source.points.length,
       recordedAt: source.recordedAt ?? null,
       worldGeneration: source.worldGeneration ?? null,
+      // When the telescope looked, as opposed to how precisely. Null for a
+      // plain cadence run: it had no plan beyond its spacing, and naming a
+      // shape it never had would be worse than saying nothing.
+      scheduleKind: source.config?.scheduleKind ?? null,
+      scheduleEpochs: source.config?.scheduleEpochs ?? null,
+      scheduleFingerprint: source.scheduleFingerprint ?? null,
     },
     truthRevealed: revealed,
     truth: revealed ? truthParameters() : null,

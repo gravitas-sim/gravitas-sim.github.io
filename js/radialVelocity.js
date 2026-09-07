@@ -267,7 +267,15 @@ function recordingPayload(run) {
       cadenceDays: run.config.cadenceDays,
       baselineDays: run.config.baselineDays,
       sigma: run.config.sigmaMs,
+      // Null for a plain cadence run, which is the honest answer: it had no
+      // plan beyond its spacing.
+      scheduleKind: run.config.kind ?? null,
+      scheduleEpochs: run.config.plan?.planned ?? null,
     },
+    // What the workspace and the notebook stamp into a saved result. Two
+    // analyses of "the same star" that carry different fingerprints were not
+    // observed at the same instants, and nothing else in the payload says so.
+    scheduleFingerprint: run.config.scheduleId ?? null,
     geometry: {
       inclinationDeg: p.inclinationDeg ?? null,
       positionAngleDeg: p.positionAngleDeg ?? null,

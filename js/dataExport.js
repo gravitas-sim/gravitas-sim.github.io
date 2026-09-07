@@ -336,6 +336,18 @@ export const RADIAL_VELOCITY_COLUMNS = [
   'baseline_days',
   'sigma_ms',
   'noise_seed',
+  // The schedule, for the runs that have one. A cadence run leaves these
+  // empty, which is itself the statement that the times were a plain comb.
+  //
+  // schedule_id is the checksum over the epoch times: two files with the same
+  // id were observed at the same instants, and two with different ids were
+  // not, however similar the rest of the header looks. Without it a reader
+  // comparing two exports has to compare four hundred numbers to find out
+  // whether they are looking at one schedule or two.
+  'schedule_kind',
+  'schedule_id',
+  'schedule_epochs_planned',
+  'schedule_gaps_days',
 ];
 
 /**
@@ -654,6 +666,14 @@ export function radialVelocityCsv() {
       num(cfg.baselineDays),
       num(cfg.sigmaMs),
       csvField(cfg.seed),
+      csvField(cfg.kind || ''),
+      csvField(cfg.scheduleId || ''),
+      cfg.plan ? String(cfg.plan.planned) : '',
+      csvField(
+        (cfg.plan?.gaps || [])
+          .map(([from, to]) => `${num(from)}-${num(to)}`)
+          .join(' ')
+      ),
     ]);
   }
 

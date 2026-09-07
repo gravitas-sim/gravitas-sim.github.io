@@ -540,6 +540,41 @@ describe('the radial-velocity export', () => {
     }
   });
 
+  test('a cadence run leaves the schedule columns empty', () => {
+    // Empty is the statement that the times were a plain comb. Writing
+    // "regular" there would claim a plan the run did not have.
+    observing.run = runOf([{ index: 0, day: 0, rv: 1, sigma: 8 }]);
+    const [header, ...body] = rows(radialVelocityCsv().csv);
+    const col = name => header.indexOf(name);
+    expect(body[0][col('schedule_kind')]).toBe('');
+    expect(body[0][col('schedule_id')]).toBe('');
+    expect(body[0][col('schedule_epochs_planned')]).toBe('');
+  });
+
+  test('a shaped schedule travels with every row of the file', () => {
+    // Two exports are the same recording only if they were observed at the
+    // same instants, and schedule_id is what says so without comparing every
+    // time in the file.
+    observing.run = runOf([{ index: 0, day: 0, rv: 1, sigma: 8 }], {
+      config: {
+        cadenceDays: 0.32,
+        baselineDays: 3.52,
+        sigmaMs: 8,
+        seed: 'lesson-a',
+        seedValue: 1,
+        kind: 'clustered',
+        scheduleId: 'ABC1234',
+        plan: { planned: 9, gaps: [[1, 1.5]] },
+      },
+    });
+    const [header, ...body] = rows(radialVelocityCsv().csv);
+    const col = name => header.indexOf(name);
+    expect(body[0][col('schedule_kind')]).toBe('clustered');
+    expect(body[0][col('schedule_id')]).toBe('ABC1234');
+    expect(body[0][col('schedule_epochs_planned')]).toBe('9');
+    expect(body[0][col('schedule_gaps_days')]).toBe('1-1.5');
+  });
+
   test('the same run exports the same file twice', () => {
     // Reproducibility has to survive the serializer, not just the generator:
     // an assignment that says "compare your file with your partner's" fails on
