@@ -1776,4 +1776,51 @@ export const ES_DEFERRED = {
   'exoW.whatThatDoesNotSay': 'Lo que eso no dice',
   'exoW.excessScatterIsNotAPlanet':
     'Una dispersión mayor significa que la velocidad no es constante. No identifica un planeta, ni un periodo, ni una masa.',
+
+  // --- Calendarios de observacion, y la comparacion de dos ---------------------
+  'rvsched.shape': 'Calendario',
+  'rvsched.shape.regular': 'Cadencia regular',
+  'rvsched.shape.irregular': 'Irregular',
+  'rvsched.shape.clustered': 'Agrupado',
+  'rvsched.shape.explicit': 'Tiempos indicados',
+  'rvsched.epochs': 'Observaciones',
+  'rvsched.jitter': 'Dispersion',
+  'rvsched.clusters': 'Grupos',
+  'rvsched.epochList': 'Tiempos de observacion (dias)',
+  'rvsched.gaps': 'Huecos (dias, desde-hasta)',
+  'rvsched.note.plan':
+    '{planned} observaciones en {span} dias. Calendario {id}.',
+  'rvsched.note.dropped':
+    '{count} cayeron dentro de un hueco y no se observaron.',
+  'rvsched.note.rejected':
+    'No se pudieron leer {count} entradas y se ignoraron: {list}.',
+  'rvsched.note.duplicates':
+    '{count} tiempos aparecen dos veces; un instante es una sola observacion.',
+  'rvsched.note.noTimes':
+    'No hay tiempos legibles, asi que la campana vuelve a una cadencia regular.',
+  'rvsched.note.badGaps': 'No se pudieron leer estos huecos: {list}.',
+  'rvsched.compare': 'Comparar con un segundo calendario',
+  'rvsched.compare.shape': 'Segundo calendario',
+  'rvsched.compare.waiting':
+    'Observando ambos calendarios: {a} y {b} de {planned}. La comparacion aparece cuando ambos terminen.',
+  'rvsched.compare.arm':
+    '{kind}: {taken} medidas, mejor periodo {period} d, K {k} m/s, mayor arco sin observar {hole}% del ciclo, pico de ventana peor {alias}%.',
+  'rvsched.compare.agree':
+    'Ambos calendarios dan el mismo periodo, dentro de los {tolerance} d que esta linea de base puede resolver.',
+  'rvsched.compare.disagree':
+    'Los dos calendarios discrepan en {difference} d: mas de lo que la linea de base puede resolver, asi que la diferencia esta en los tiempos, no en la aritmetica.',
+  'rvsched.compare.alias':
+    'Esa diferencia coincide con un pico de la ventana del calendario {side} en {period} d: uno de estos ajustes es la misma senal leida a un alias de distancia.',
+  'rvsched.compare.uncontrolled':
+    'Esto no compara solo el calendario: no se mantuvieron iguales {list}.',
+  'rvsched.compare.control.count': 'el numero de observaciones',
+  'rvsched.compare.control.baseline': 'la linea de base',
+  'rvsched.compare.control.sigma': 'la incertidumbre declarada',
+  'rvsched.compare.control.seed': 'la semilla de ruido',
+  'rvsched.compare.control.system': 'la estrella',
+  'rvsched.compare.control.noiseModel': 'el modelo de ruido',
+  'rvsched.compare.atBound':
+    'Al menos uno de estos ajustes queda en el borde del rango de periodos explorado, asi que lo decidio el rango y no las medidas. Alarga la linea de base o amplia el rango antes de interpretar la comparacion.',
+  'rvsched.compare.oneDraw':
+    'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
 };

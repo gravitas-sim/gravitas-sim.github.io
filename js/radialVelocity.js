@@ -56,6 +56,7 @@ import {
 import { isScrubbing } from './timeline.js';
 import { currentTimeDays } from './lightCurve.js';
 import { t } from './i18n/index.js';
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
@@ -280,11 +281,47 @@ function recordingPayload(run) {
 }
 
 let surveyLib = null;
+/** js/rvSchedule.js, loaded with the survey. */
+let scheduleLib = null;
+/** js/rvCompare.js, loaded only when a comparison is asked for. */
+let compareLib = null;
+/**
+ * The second arm of a controlled comparison.
+ *
+ * A second survey observing the SAME star over the same frames as the first,
+ * at its own times. Nothing else differs: same count, same baseline, same
+ * noise level, same seed. That is what makes the two recordings comparable,
+ * and it is why the second arm is another survey rather than a re-run - a
+ * re-run would be a different noise draw as well as a different schedule, and
+ * the reader could not tell which one moved the answer.
+ */
+let compareSurvey = null;
+/** The comparison as last computed, or null. */
+let compareReport = null;
+/** Whether the comparison has been computed for the recordings now in hand. */
+let compareStale = true;
 
 /** @returns {Promise<object>} The survey module */
 async function loadSurveyLib() {
   if (!surveyLib) surveyLib = await import('./rvSurvey.js');
+  // The schedule shapes come with it. They are what the survey builds its plan
+  // from, so a run that has the survey has already paid for them, and the
+  // panel needs the parsers synchronously once the reader starts typing times.
+  if (!scheduleLib) scheduleLib = await import('./rvSchedule.js');
   return surveyLib;
+}
+
+/**
+ * The comparison, which is heavier again: it fits.
+ *
+ * Only the reader who ticks Compare pays for js/rvCompare.js and the period
+ * search underneath it.
+ *
+ * @returns {Promise<object>} The module
+ */
+async function loadCompareLib() {
+  if (!compareLib) compareLib = await import('./rvCompare.js');
+  return compareLib;
 }
 /** Why the current recording was started, when it was not simply the first. */
 let sessionNotice = null;
@@ -486,6 +523,21 @@ function cacheElements() {
     surveyRestart: document.getElementById('rvSurveyRestart'),
     analyse: document.getElementById('rvAnalyse'),
     surveyStatus: document.getElementById('rvSurveyStatus'),
+    surveyShape: document.getElementById('rvSurveyShape'),
+    surveyEpochs: document.getElementById('rvSurveyEpochs'),
+    surveyEpochsField: document.getElementById('rvSurveyEpochsField'),
+    surveyJitter: document.getElementById('rvSurveyJitter'),
+    surveyJitterField: document.getElementById('rvSurveyJitterField'),
+    surveyClusters: document.getElementById('rvSurveyClusters'),
+    surveyClustersField: document.getElementById('rvSurveyClustersField'),
+    surveyEpochList: document.getElementById('rvSurveyEpochList'),
+    surveyEpochListField: document.getElementById('rvSurveyEpochListField'),
+    surveyGaps: document.getElementById('rvSurveyGaps'),
+    surveyScheduleNote: document.getElementById('rvSurveyScheduleNote'),
+    compareEnabled: document.getElementById('rvSurveyCompareEnabled'),
+    compareShape: document.getElementById('rvSurveyShapeB'),
+    compareShapeField: document.getElementById('rvSurveyShapeBField'),
+    compareReport: document.getElementById('rvSurveyCompareReport'),
   };
   return els;
 }
@@ -789,9 +841,17 @@ export function updateRadialVelocity() {
   // throttling is a decision about a picture and has no business here.
   if (survey) {
     const added = survey.observe(simTime, rv);
-    if (added.length) {
-      if (chart) chart.data.datasets[1].data = surveyChartPoints();
+    // The comparison arm sees exactly the same frames and the same velocity.
+    // Anything else - a second pass, a replay, a re-run - would change the
+    // noise draw as well as the times, and the comparison would no longer be
+    // about scheduling.
+    const addedB = compareSurvey ? compareSurvey.observe(simTime, rv) : [];
+    if (addedB.length) compareStale = true;
+    if (added.length || addedB.length) {
+      if (added.length && chart)
+        chart.data.datasets[1].data = surveyChartPoints();
       renderSurveyStatus();
+      maybeCompare();
     }
   }
 
@@ -920,14 +980,72 @@ export function radialVelocitySurvey() {
  * case where the panel is not in the document at all, which is how the tests
  * and the embed build see it. rvSurvey.js clamps whatever comes out.
  */
-function readSurveyControls() {
+function readSurveyControls(kindOverride = null) {
   const e = cacheElements();
-  return {
+  const base = {
     cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
     baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
     sigmaMs: Number(e.surveySigma?.value ?? 8),
     seed: String(e.surveySeed?.value ?? 'survey-1'),
   };
+
+  const kind = kindOverride ?? (e.surveyShape?.value || 'regular');
+  const gapsText = String(e.surveyGaps?.value ?? '').trim();
+
+  // The original form, and still the default one. A regular cadence with no
+  // gaps and no comparison is the run this panel has always done, and it takes
+  // the path it has always taken - no plan, no epoch count, nothing for a
+  // share link or an existing lesson to have to know about.
+  const plain =
+    kind === 'regular' && !gapsText && !comparisonWanted() && !kindOverride;
+  if (plain || !scheduleLib) return base;
+
+  const gaps = scheduleLib.parseGaps(gapsText).gaps;
+  const explicit = scheduleLib.parseEpochList(
+    String(e.surveyEpochList?.value ?? '')
+  ).offsets;
+
+  return {
+    ...base,
+    kind,
+    epochs: epochCountControl(),
+    jitter: Number(e.surveyJitter?.value),
+    clusters: Number(e.surveyClusters?.value),
+    explicit,
+    gaps,
+  };
+}
+
+/** @returns {boolean} Whether the reader has asked for a second schedule */
+function comparisonWanted() {
+  const e = cacheElements();
+  return Boolean(e.compareEnabled?.checked);
+}
+
+/**
+ * How many observations a shaped schedule makes.
+ *
+ * Defaults to the number the cadence and baseline in the other fields would
+ * have produced, which is what makes switching shape a controlled change: the
+ * reader gets the same number of observations over the same span, placed
+ * differently, rather than a different programme entirely.
+ *
+ * @returns {number} The count
+ */
+function epochCountControl() {
+  const e = cacheElements();
+  const typed = Number(e.surveyEpochs?.value);
+  if (Number.isFinite(typed) && typed >= 2) return Math.trunc(typed);
+  return cadenceEpochCount();
+}
+
+/** @returns {number} What the cadence and baseline would have produced */
+function cadenceEpochCount() {
+  const e = cacheElements();
+  const cadence = Number(e.surveyCadence?.value ?? 0.32);
+  const baseline = Number(e.surveyBaseline?.value ?? 3.52);
+  if (!(cadence > 0) || !(baseline >= 0)) return 12;
+  return Math.max(2, Math.floor(baseline / cadence) + 1);
 }
 
 /**
@@ -942,6 +1060,21 @@ async function restartSurvey() {
   const lib = await loadSurveyLib();
   survey = lib.createSurvey(readSurveyControls());
   surveyConfig = survey.config;
+
+  // The second arm, built from the same numbers with one field changed. Both
+  // are created here, together, so neither can start against a world the other
+  // did not see.
+  compareReport = null;
+  compareStale = true;
+  if (comparisonWanted()) {
+    const e = cacheElements();
+    await loadCompareLib();
+    compareSurvey = lib.createSurvey(
+      readSurveyControls(e.compareShape?.value || 'irregular')
+    );
+  } else {
+    compareSurvey = null;
+  }
   // Who and how, captured when the run starts and never re-read. What a file
   // says it observed has to be what was observed, not what the panel happens
   // to be pointed at when somebody presses Export.
@@ -961,16 +1094,24 @@ async function restartSurvey() {
 function resetSurvey() {
   if (!survey) return;
   survey.reset();
+  compareSurvey?.reset();
+  compareReport = null;
+  compareStale = true;
   if (chart) chart.data.datasets[1].data = [];
   renderSurveyStatus();
+  renderCompareReport();
 }
 
 /** Stop observing on a schedule and go back to the continuous curve. */
 function stopSurvey() {
   survey = null;
+  compareSurvey = null;
+  compareReport = null;
+  compareStale = true;
   surveyProvenance = null;
   applySurveyStyling();
   renderSurveyStatus();
+  renderCompareReport();
 }
 
 /**
@@ -1048,6 +1189,301 @@ function renderSurveyStatus() {
   e.surveyStatus.dataset.state = survey.anyCoarse() ? 'warn' : 'ok';
 }
 
+/**
+ * The period range both arms are searched over.
+ *
+ * The same range for both, derived from what the two schedules have in common
+ * - the count and the baseline they were both built from - rather than from
+ * each arm's own spacings. Two arms searched over two ranges would differ in
+ * their search as well as in their times, and a difference in the answer could
+ * not be attributed to either.
+ *
+ * Twice the regular spacing at the short end, because nothing below that is
+ * sampled at all, and the baseline at the long end, because a period longer
+ * than the run has not been observed to repeat.
+ *
+ * @param {object} cfg - The first arm's configuration
+ * @returns {?{minPeriod: number, maxPeriod: number}} The bounds
+ */
+function comparisonBounds(cfg) {
+  const baseline = Number(cfg?.baselineDays);
+  const epochs = Number(cfg?.epochs) || cadenceEpochCount();
+  if (!(baseline > 0) || !(epochs > 1)) return null;
+  const spacing = baseline / (epochs - 1);
+  const minPeriod = Math.max(2 * spacing, 1e-3);
+  if (!(baseline > minPeriod)) return null;
+  return { minPeriod, maxPeriod: baseline };
+}
+
+/**
+ * Compute the comparison, once both arms have finished observing.
+ *
+ * Not before: a fit to half a schedule is a fit to a different schedule, and
+ * showing one while the run is still going would have the numbers moving under
+ * the reader for reasons that have nothing to do with what they are comparing.
+ *
+ * @returns {void}
+ */
+function maybeCompare() {
+  if (!compareSurvey || !survey || !compareStale) return;
+  if (!survey.isComplete() || !compareSurvey.isComplete()) return;
+  compareStale = false;
+
+  loadCompareLib()
+    .then(lib => {
+      const bounds = comparisonBounds(survey.config);
+      if (!bounds) {
+        compareReport = null;
+        renderCompareReport();
+        return;
+      }
+      const a = survey.config;
+      const b = compareSurvey.config;
+      compareReport = lib.compareSchedules(
+        {
+          label: 'A',
+          kind: a.kind ?? 'regular',
+          plan: a.plan,
+          measurements: survey.measurements(),
+        },
+        {
+          label: 'B',
+          kind: b.kind ?? 'regular',
+          plan: b.plan,
+          measurements: compareSurvey.measurements(),
+        },
+        {
+          ...bounds,
+          held: {
+            sigmaMs: { a: a.sigmaMs, b: b.sigmaMs },
+            seed: { a: a.seed, b: b.seed },
+            // Both arms observed the same frames of the same world, so the
+            // system is the same by construction; it is stated rather than
+            // assumed so the check is a check.
+            system: {
+              a: surveyProvenance?.target?.id ?? null,
+              b: surveyProvenance?.target?.id ?? null,
+            },
+          },
+        }
+      );
+      renderCompareReport();
+    })
+    .catch(() => {
+      compareReport = null;
+      renderCompareReport();
+    });
+}
+
+/**
+ * Everything the comparison knows, for the lesson, the export and the tests.
+ *
+ * @returns {?object} The report, or null when no comparison is running
+ */
+export function radialVelocityComparison() {
+  if (!compareSurvey) return null;
+  const b = compareSurvey.config;
+  return {
+    running: true,
+    complete: Boolean(survey?.isComplete() && compareSurvey.isComplete()),
+    second: {
+      kind: b.kind ?? 'regular',
+      scheduleId: b.scheduleId ?? null,
+      planned: compareSurvey.plannedCount,
+      taken: compareSurvey.count(),
+      measurements: compareSurvey.measurements(),
+    },
+    report: compareReport,
+  };
+}
+
+/** Draw the schedule note: what the plan came out as, and what was refused. */
+function renderScheduleNote() {
+  const e = cacheElements();
+  if (!e.surveyScheduleNote) return;
+  if (!scheduleLib || !e.surveyShape) {
+    e.surveyScheduleNote.textContent = '';
+    return;
+  }
+
+  const kind = e.surveyShape.value || 'regular';
+  const parts = [];
+  let state = 'ok';
+
+  // What the reader typed and this could not read. Reported rather than
+  // dropped: observing on a shorter list than somebody wrote, silently, is the
+  // one failure that would undermine the whole instrument.
+  if (kind === 'explicit') {
+    const parsed = scheduleLib.parseEpochList(e.surveyEpochList?.value ?? '');
+    if (parsed.rejected.length) {
+      parts.push(
+        t('rvsched.note.rejected', {
+          count: parsed.rejected.length,
+          list: parsed.rejected.slice(0, 4).join(', '),
+        })
+      );
+      state = 'warn';
+    }
+    if (parsed.duplicates)
+      parts.push(t('rvsched.note.duplicates', { count: parsed.duplicates }));
+    if (!parsed.offsets.length) {
+      parts.push(t('rvsched.note.noTimes'));
+      state = 'warn';
+    }
+  }
+
+  const gapsText = String(e.surveyGaps?.value ?? '').trim();
+  if (gapsText) {
+    const parsedGaps = scheduleLib.parseGaps(gapsText);
+    if (parsedGaps.rejected.length) {
+      parts.push(
+        t('rvsched.note.badGaps', {
+          list: parsedGaps.rejected.slice(0, 4).join(', '),
+        })
+      );
+      state = 'warn';
+    }
+  }
+
+  // What the plan actually came out as, which is not always what was asked
+  // for: a gap removes epochs, and a clustered plan can only place so many.
+  const cfg = readSurveyControls();
+  if (cfg.kind) {
+    const plan = scheduleLib.planSchedule({
+      kind: cfg.kind,
+      epochs: cfg.epochs,
+      baselineDays: cfg.baselineDays,
+      jitter: cfg.jitter,
+      clusters: cfg.clusters,
+      explicit: cfg.explicit,
+      gaps: cfg.gaps,
+      seed: cfg.seed,
+    });
+    parts.push(
+      t('rvsched.note.plan', {
+        planned: plan.planned,
+        span: formatNumber(plan.span, { sig: 3 }),
+        id: scheduleLib.scheduleFingerprint(plan),
+      })
+    );
+    if (plan.dropped)
+      parts.push(t('rvsched.note.dropped', { count: plan.dropped }));
+    if (plan.planned < 4) state = 'warn';
+  }
+
+  e.surveyScheduleNote.textContent = parts.join(' ');
+  e.surveyScheduleNote.dataset.state = state;
+}
+
+/** Draw the comparison, or say why there is nothing to draw yet. */
+function renderCompareReport() {
+  const e = cacheElements();
+  if (!e.compareReport) return;
+  if (!compareSurvey) {
+    e.compareReport.textContent = '';
+    return;
+  }
+
+  if (!compareReport) {
+    e.compareReport.textContent = t('rvsched.compare.waiting', {
+      a: survey ? survey.count() : 0,
+      b: compareSurvey.count(),
+      planned: compareSurvey.plannedCount,
+    });
+    return;
+  }
+
+  const [a, b] = compareReport.arms;
+  const line = arm =>
+    t('rvsched.compare.arm', {
+      kind: t(`rvsched.shape.${arm.kind}`),
+      taken: arm.taken,
+      period: arm.fit ? formatNumber(arm.fit.periodDays, { sig: 4 }) : '—',
+      k: arm.fit?.amplitudeMs
+        ? formatNumber(arm.fit.amplitudeMs, { sig: 3 })
+        : '—',
+      hole: arm.coverage
+        ? formatNumber(arm.coverage.largestGap * 100, { sig: 2 })
+        : '—',
+      alias: formatNumber((arm.window?.worstPeak ?? 0) * 100, { sig: 2 }),
+    });
+
+  const parts = [line(a), line(b)];
+
+  if (!compareReport.controls.controlled) {
+    parts.push(
+      t('rvsched.compare.uncontrolled', {
+        list: compareReport.controls.broken
+          .map(x => t(`rvsched.compare.control.${x.control}`))
+          .join(', '),
+      })
+    );
+  } else if (compareReport.periods) {
+    parts.push(
+      compareReport.periods.agree
+        ? t('rvsched.compare.agree', {
+            tolerance: formatNumber(compareReport.periods.toleranceDays, {
+              sig: 2,
+            }),
+          })
+        : t('rvsched.compare.disagree', {
+            difference: formatNumber(compareReport.periods.differenceDays, {
+              sig: 3,
+            }),
+          })
+    );
+  }
+
+  // A fit that came back on the edge of its search is the range's answer, not
+  // the star's, and two of them agree about nothing at all.
+  if (compareReport.caveats.includes('atBound')) {
+    parts.push(t('rvsched.compare.atBound'));
+  }
+
+  if (compareReport.alias) {
+    parts.push(
+      t('rvsched.compare.alias', {
+        period: formatNumber(compareReport.alias.periodDays, { sig: 3 }),
+        side: compareReport.alias.side === 'a' ? 'A' : 'B',
+      })
+    );
+  }
+
+  // The caveat that can never be dropped: one draw each says what happened
+  // this time, not which schedule is better.
+  parts.push(t('rvsched.compare.oneDraw'));
+
+  e.compareReport.textContent = parts.join(' ');
+  e.compareReport.dataset.state = compareReport.interpretable ? 'ok' : 'warn';
+}
+
+/** Show only the fields the chosen shape uses. */
+function syncScheduleFields() {
+  const e = cacheElements();
+  if (!e.surveyShape) return;
+  const kind = e.surveyShape.value || 'regular';
+  const comparing = comparisonWanted();
+  // The count is what a comparison holds constant, so it is on show whenever
+  // one is running even if the shape would not otherwise need it.
+  if (e.surveyEpochsField)
+    e.surveyEpochsField.hidden = kind === 'regular' && !comparing;
+  if (e.surveyJitterField) e.surveyJitterField.hidden = kind !== 'irregular';
+  if (e.surveyClustersField)
+    e.surveyClustersField.hidden = kind !== 'clustered';
+  if (e.surveyEpochListField)
+    e.surveyEpochListField.hidden =
+      kind !== 'explicit' &&
+      !(comparing && e.compareShape?.value === 'explicit');
+  if (e.compareShapeField) e.compareShapeField.hidden = !comparing;
+
+  // Filled in from the cadence the reader already set, so switching shape
+  // holds the number of observations constant instead of inventing one.
+  if (e.surveyEpochs && !e.surveyEpochs.value)
+    e.surveyEpochs.value = String(cadenceEpochCount());
+
+  renderScheduleNote();
+}
+
 /** Wire the schedule controls up. Called once, from initRadialVelocity(). */
 function initSurveyControls() {
   const e = cacheElements();
@@ -1055,7 +1491,14 @@ function initSurveyControls() {
 
   e.surveyEnabled.addEventListener('change', () => {
     if (e.surveyFields) e.surveyFields.hidden = !e.surveyEnabled.checked;
-    if (e.surveyEnabled.checked) restartSurvey().catch(() => stopSurvey());
+    // The schedule controls' strings are not in the start-up catalogue: this
+    // section is opt-in, and its labels are message ids until it is asked for.
+    // Registering them here is the moment they become visible.
+    if (e.surveyEnabled.checked) ensureDeferredMessages().catch(() => {});
+    if (e.surveyEnabled.checked)
+      restartSurvey()
+        .then(() => syncScheduleFields())
+        .catch(() => stopSurvey());
     else stopSurvey();
   });
 
@@ -1065,11 +1508,34 @@ function initSurveyControls() {
     e.surveyBaseline,
     e.surveySigma,
     e.surveySeed,
+    e.surveyEpochs,
+    e.surveyJitter,
+    e.surveyClusters,
+    e.surveyEpochList,
+    e.surveyGaps,
   ]) {
     input?.addEventListener('change', () => {
+      renderScheduleNote();
       if (survey) restartSurvey().catch(() => {});
     });
   }
+
+  // A shape change moves the fields as well as the plan.
+  for (const select of [e.surveyShape, e.compareShape]) {
+    select?.addEventListener('change', () => {
+      syncScheduleFields();
+      if (survey) restartSurvey().catch(() => {});
+    });
+  }
+
+  e.compareEnabled?.addEventListener('change', () => {
+    syncScheduleFields();
+    // Turning the comparison on mid-run would leave the second arm having
+    // missed everything the first already saw, which is not a comparison. Both
+    // arms start again, together.
+    if (survey) restartSurvey().catch(() => {});
+    else renderCompareReport();
+  });
 
   e.surveyIdeal?.addEventListener('change', () => {
     showIdeal = Boolean(e.surveyIdeal.checked);

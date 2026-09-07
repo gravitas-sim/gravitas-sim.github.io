@@ -58,6 +58,15 @@ export const CAVEAT = Object.freeze({
   INCOMPLETE: 'incomplete',
   /** The arms disagree, and the disagreement sits on a window peak. */
   ALIAS: 'aliasDifference',
+  /**
+   * A best fit sitting on the edge of the search.
+   *
+   * The search returns the best period IN RANGE, and a signal whose period is
+   * outside the range comes back pinned to whichever end is nearest. Two arms
+   * pinned to the same end agree perfectly and mean nothing, which is the one
+   * way this comparison could quietly mislead: it looks like a result.
+   */
+  AT_BOUND: 'atBound',
 });
 
 const days = measurements =>
@@ -91,6 +100,27 @@ const median = list => {
 export function periodResolution(periodDays, baselineDays) {
   if (!(periodDays > 0) || !(baselineDays > 0)) return Infinity;
   return (periodDays * periodDays) / baselineDays;
+}
+
+/**
+ * Whether a fit came back pinned to the edge of its search range.
+ *
+ * Within one resolution element of either end. Anything closer than that to a
+ * bound is a fit the range decided rather than the data.
+ *
+ * @param {object} search - From periodSearch
+ * @param {object} opts - The bounds the search was given
+ * @returns {boolean} Whether it is on the edge
+ */
+function atSearchBound(search, opts) {
+  const p = search?.bestPeriod;
+  if (!Number.isFinite(p)) return false;
+  const width = periodResolution(p, search.baseline);
+  const lo = Number(opts.minPeriod);
+  const hi = Number(opts.maxPeriod);
+  if (Number.isFinite(lo) && p - lo <= width) return true;
+  if (Number.isFinite(hi) && hi - p <= width) return true;
+  return false;
 }
 
 /**
@@ -153,6 +183,7 @@ export function describeArm(arm, opts = {}) {
     fit: search
       ? {
           periodDays: search.bestPeriod,
+          atBound: atSearchBound(search, opts),
           amplitudeMs: search.best?.K ?? null,
           chi2: search.best?.chi2 ?? null,
           minima: search.minima?.length ?? 0,
@@ -299,6 +330,7 @@ export function compareSchedules(armA, armB, opts = {}) {
     caveats.push(CAVEAT.IDENTICAL);
   if (!a.fit || !b.fit) caveats.push(CAVEAT.UNFITTABLE);
   if (a.missed > 0 || b.missed > 0) caveats.push(CAVEAT.INCOMPLETE);
+  if (a.fit?.atBound || b.fit?.atBound) caveats.push(CAVEAT.AT_BOUND);
   if (alias) caveats.push(CAVEAT.ALIAS);
 
   return {
@@ -307,7 +339,14 @@ export function compareSchedules(armA, armB, opts = {}) {
     periods,
     alias,
     caveats,
-    /** True only when the comparison isolates scheduling and both arms fit. */
-    interpretable: controls.controlled && Boolean(a.fit && b.fit),
+    /**
+     * True only when the comparison isolates scheduling, both arms fitted, and
+     * neither fit is the search range's own edge reported as a period.
+     */
+    interpretable:
+      controls.controlled &&
+      Boolean(a.fit && b.fit) &&
+      !a.fit?.atBound &&
+      !b.fit?.atBound,
   };
 }

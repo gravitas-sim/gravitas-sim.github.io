@@ -216,6 +216,22 @@ describe('comparing two schedules', () => {
     expect(out.caveats).toContain(CAVEAT.ALIAS);
   });
 
+  test('a fit pinned to the edge of the search is not a result', () => {
+    // The signal is at 2.7 days and the search is confined to 3.2-6, which
+    // holds neither it nor a harmonic of it. Both arms come back pinned near
+    // an end of the range and would otherwise look like an agreement.
+    const bounds = { minPeriod: 3.2, maxPeriod: 6 };
+    const out = compareSchedules(armOf(regular), armOf(irregular), bounds);
+    expect(out.arms[0].fit.atBound).toBe(true);
+    expect(out.arms[1].fit.atBound).toBe(true);
+    expect(out.caveats).toContain(CAVEAT.AT_BOUND);
+    expect(out.interpretable).toBe(false);
+    // A range that does hold the signal is interpretable again, so the flag
+    // is about the fit and not about this pair of schedules.
+    const honest = compareSchedules(armOf(regular), armOf(irregular), BOUNDS);
+    expect(honest.interpretable).toBe(true);
+  });
+
   test('a difference that lands on a window peak is named as an alias', () => {
     const verdict = {
       agree: false,

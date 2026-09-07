@@ -340,6 +340,118 @@
               <input type="text" id="rvSurveySeed" value="survey-1" size="8" />
             </label>
           </div>
+
+          <!-- When the telescope looked, as opposed to how often. Everything
+               here is off the default path: with the shape left on "regular"
+               the run is the cadence run it always was, and the epoch count
+               and its shape-specific fields stay out of the way. -->
+          <div class="rv-survey-grid rv-survey-schedule">
+            <label class="rv-survey-field">
+              <span data-i18n="rvsched.shape">Schedule</span>
+              <select id="rvSurveyShape">
+                <option value="regular" data-i18n="rvsched.shape.regular">
+                  Regular cadence
+                </option>
+                <option value="irregular" data-i18n="rvsched.shape.irregular">
+                  Irregular
+                </option>
+                <option value="clustered" data-i18n="rvsched.shape.clustered">
+                  Clustered
+                </option>
+                <option value="explicit" data-i18n="rvsched.shape.explicit">
+                  Listed times
+                </option>
+              </select>
+            </label>
+            <label class="rv-survey-field" id="rvSurveyEpochsField" hidden="">
+              <span data-i18n="rvsched.epochs">Observations</span>
+              <input
+                type="number"
+                id="rvSurveyEpochs"
+                min="2"
+                max="400"
+                step="1"
+                value="12"
+                inputmode="numeric"
+              />
+            </label>
+            <label class="rv-survey-field" id="rvSurveyJitterField" hidden="">
+              <span data-i18n="rvsched.jitter">Scatter</span>
+              <input
+                type="number"
+                id="rvSurveyJitter"
+                min="0"
+                max="0.45"
+                step="0.05"
+                value="0.35"
+                inputmode="decimal"
+              />
+            </label>
+            <label class="rv-survey-field" id="rvSurveyClustersField" hidden="">
+              <span data-i18n="rvsched.clusters">Groups</span>
+              <input
+                type="number"
+                id="rvSurveyClusters"
+                min="2"
+                max="12"
+                step="1"
+                value="3"
+                inputmode="numeric"
+              />
+            </label>
+          </div>
+          <label class="rv-survey-list" id="rvSurveyEpochListField" hidden="">
+            <span data-i18n="rvsched.epochList">Observation times (days)</span>
+            <textarea
+              id="rvSurveyEpochList"
+              rows="2"
+              spellcheck="false"
+              placeholder="0, 0.4, 1.1, 2.6"
+            ></textarea>
+          </label>
+          <label class="rv-survey-list">
+            <span data-i18n="rvsched.gaps">Gaps (days, from-to)</span>
+            <input
+              type="text"
+              id="rvSurveyGaps"
+              spellcheck="false"
+              placeholder="1.2-1.8, 2.5-2.7"
+            />
+          </label>
+          <p id="rvSurveyScheduleNote" class="rv-survey-note" role="status"></p>
+
+          <!-- The controlled comparison. Off unless asked for: it doubles the
+               observing the panel does and the reader should meet one schedule
+               before they are shown two. -->
+          <div class="rv-survey-compare">
+            <label class="rv-survey-toggle">
+              <input type="checkbox" id="rvSurveyCompareEnabled" />
+              <span data-i18n="rvsched.compare"
+                >Compare with a second schedule</span
+              >
+            </label>
+            <label class="rv-survey-field" id="rvSurveyShapeBField" hidden="">
+              <span data-i18n="rvsched.compare.shape">Second schedule</span>
+              <select id="rvSurveyShapeB">
+                <option value="regular" data-i18n="rvsched.shape.regular">
+                  Regular cadence
+                </option>
+                <option value="irregular" data-i18n="rvsched.shape.irregular">
+                  Irregular
+                </option>
+                <option value="clustered" data-i18n="rvsched.shape.clustered">
+                  Clustered
+                </option>
+                <option value="explicit" data-i18n="rvsched.shape.explicit">
+                  Listed times
+                </option>
+              </select>
+            </label>
+            <div
+              id="rvSurveyCompareReport"
+              class="rv-survey-compare-report"
+            ></div>
+          </div>
           <div class="rv-survey-actions">
             <label class="rv-survey-toggle">
               <input type="checkbox" id="rvSurveyIdeal" checked="" />

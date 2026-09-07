@@ -1753,4 +1753,50 @@ export const EN_DEFERRED = {
   'exoW.whatThatDoesNotSay': 'What that does not say',
   'exoW.excessScatterIsNotAPlanet':
     'Extra scatter means the velocity is not constant. It does not identify a planet, a period or a mass.',
+
+  // --- Observing schedules, and comparing two of them -------------------------
+  'rvsched.shape': 'Schedule',
+  'rvsched.shape.regular': 'Regular cadence',
+  'rvsched.shape.irregular': 'Irregular',
+  'rvsched.shape.clustered': 'Clustered',
+  'rvsched.shape.explicit': 'Listed times',
+  'rvsched.epochs': 'Observations',
+  'rvsched.jitter': 'Scatter',
+  'rvsched.clusters': 'Groups',
+  'rvsched.epochList': 'Observation times (days)',
+  'rvsched.gaps': 'Gaps (days, from-to)',
+  'rvsched.note.plan':
+    '{planned} observations over {span} days. Schedule {id}.',
+  'rvsched.note.dropped': '{count} fell inside a gap and were not observed.',
+  'rvsched.note.rejected':
+    '{count} entries could not be read and were ignored: {list}.',
+  'rvsched.note.duplicates':
+    '{count} times were listed twice; an instant is one observation.',
+  'rvsched.note.noTimes':
+    'No readable times, so the run falls back to a regular cadence.',
+  'rvsched.note.badGaps': 'These gaps could not be read: {list}.',
+  'rvsched.compare': 'Compare with a second schedule',
+  'rvsched.compare.shape': 'Second schedule',
+  'rvsched.compare.waiting':
+    'Observing both schedules: {a} and {b} of {planned}. The comparison appears when both are finished.',
+  'rvsched.compare.arm':
+    '{kind}: {taken} measurements, best period {period} d, K {k} m/s, largest unobserved arc {hole}% of the cycle, worst window peak {alias}%.',
+  'rvsched.compare.agree':
+    'Both schedules land on the same period, within the {tolerance} d this baseline can resolve.',
+  'rvsched.compare.disagree':
+    'The two schedules disagree by {difference} d - more than the baseline can resolve, so the difference is in the times, not in the arithmetic.',
+  'rvsched.compare.alias':
+    'That difference sits on a peak in schedule {side} own window at {period} d: one of these fits is the same signal read off one alias away.',
+  'rvsched.compare.uncontrolled':
+    'This is not a comparison of scheduling alone - these were not held equal: {list}.',
+  'rvsched.compare.control.count': 'the number of observations',
+  'rvsched.compare.control.baseline': 'the baseline',
+  'rvsched.compare.control.sigma': 'the stated uncertainty',
+  'rvsched.compare.control.seed': 'the noise seed',
+  'rvsched.compare.control.system': 'the star',
+  'rvsched.compare.control.noiseModel': 'the noise model',
+  'rvsched.compare.atBound':
+    'At least one of these fits sits on the edge of the period range that was searched, which means the range decided it and not the measurements. Lengthen the baseline or widen the range before reading anything into the comparison.',
+  'rvsched.compare.oneDraw':
+    'One noise draw each: this says what these two schedules did on this run, not which schedule is better.',
 };

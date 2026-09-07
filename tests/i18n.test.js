@@ -286,8 +286,13 @@ describe('the catalogue split', () => {
     // somebody opened an unrelated panel.
     // reliability.* belongs here because the bench that shows it is itself
     // lazy: its bridge registers this catalogue before the panel renders.
+    // rvsched.* belongs here for the same reason one level down: the radial
+    // velocity panel is eager, but its synthetic observing run is opt-in and
+    // its schedule controls are inside a section that is hidden until the
+    // reader switches it on - which is the moment the panel registers this
+    // catalogue and re-sweeps the document.
     const allowed =
-      /^(binaryRun|assist|rvfit|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
+      /^(binaryRun|assist|rvfit|rvsched|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
   });
 });
