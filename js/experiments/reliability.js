@@ -53,9 +53,14 @@ export const VERDICT = Object.freeze({
   /** The two runs are not measurements of the same thing. */
   INCOMPARABLE: 'incomparable',
   /**
-   * The path separated but the aggregate held. Neither a pass nor a failure:
-   * it is what a chaotic system looks like, and the useful response is to
-   * stop quoting positions and start quoting statistics.
+   * The paths separated while the aggregates held.
+   *
+   * An observation, not a diagnosis. It is consistent with sensitive
+   * dependence and equally consistent with a small systematic difference that
+   * accumulates - a step size that shifts a period by a fraction of a percent
+   * gives the same picture, as do two sinusoids of slightly different
+   * frequency. Neither a pass nor a failure; the useful response is to stop
+   * quoting positions and quote something the comparison does support.
    */
   DIVERGED: 'diverged',
 });
@@ -367,9 +372,20 @@ export function reliabilityReport(input) {
     verdict = VERDICT.INCOMPARABLE;
     reason = 'noMeasurement';
   } else if (series && !series.wholeAgrees && series.earlyAgrees) {
-    // Agreed at the start and parted later. That is chaos, not an unresolved
-    // integration, and the distinction changes what a student should do next:
-    // stop quoting the trajectory, and quote something the system can support.
+    // Agreed at the start and parted later.
+    //
+    // This used to be called chaos. It is not: it is what chaos looks like AND
+    // what a small systematic difference looks like. Two sinusoids whose
+    // frequencies differ by a fraction of a percent agree early and separate
+    // late in exactly this pattern, and a step size that shifts an orbital
+    // period slightly produces precisely that. Early agreement rules out a
+    // scheme that was wrong from the first close approach; it does not
+    // distinguish sensitive dependence from an accumulating offset.
+    //
+    // So the verdict names the OBSERVATION - the paths separated while the
+    // aggregates held - and the notes say what that supports and what it does
+    // not. Diagnosing chaos needs evidence this comparison does not collect:
+    // how the separation grows, and whether it does so from many starts.
     verdict = VERDICT.DIVERGED;
     reason = 'trajectoryDiverged';
   } else if (series && !series.earlyAgrees) {
@@ -448,7 +464,12 @@ export function explain(report) {
   }
 
   if (report.verdict === VERDICT.DIVERGED) {
-    notes.push('reliability.chaosSeparates');
+    // What the comparison shows, then what it cannot decide, then what would.
+    // Three notes rather than one, because collapsing them is how "the paths
+    // separated" became "this system is chaotic".
+    notes.push('reliability.divergenceObserved');
+    notes.push('reliability.divergenceIsNotChaos');
+    notes.push('reliability.divergenceNextStep');
     notes.push('reliability.quoteStatistics');
   }
   if (report.verdict === VERDICT.CONVERGING) {

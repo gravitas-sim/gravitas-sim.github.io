@@ -466,7 +466,7 @@ describe('what the explanation always says', () => {
     expect(notes).toContain('reliability.conservationIsNotAccuracy');
   });
 
-  test('a diverged verdict names chaos rather than blaming the step', () => {
+  test('a diverged verdict describes what it saw and declines to diagnose', () => {
     const aligned = Array.from({ length: 30 }, (_, i) => ({
       t: i,
       a: i,
@@ -481,7 +481,85 @@ describe('what the explanation always says', () => {
     });
     const { notes } = explain(report);
     expect(report.verdict).toBe(VERDICT.DIVERGED);
-    expect(notes).toContain('reliability.chaosSeparates');
+    // The observation, the refusal to diagnose from it, and what would settle
+    // it - three separate notes, because collapsing them is how "the paths
+    // separated" turned into "this system is chaotic".
+    expect(notes).toContain('reliability.divergenceObserved');
+    expect(notes).toContain('reliability.divergenceIsNotChaos');
+    expect(notes).toContain('reliability.divergenceNextStep');
     expect(notes).toContain('reliability.quoteStatistics');
+    // The claim this used to make is gone.
+    expect(notes).not.toContain('reliability.chaosSeparates');
+  });
+});
+
+describe('early agreement then late divergence does not establish chaos', () => {
+  /**
+   * The counterexample, built rather than asserted.
+   *
+   * Two sinusoids whose frequencies differ by a third of a percent. Nothing
+   * chaotic about either: both are perfectly predictable, and one is simply a
+   * slightly wrong period. They agree early and separate late in exactly the
+   * pattern that used to be reported as chaos - which is why the pattern
+   * cannot be reported as chaos.
+   */
+  const DETUNE = 8e-5;
+  const detunedSinusoids = (n = 2000) =>
+    Array.from({ length: n }, (_, i) => {
+      // Twenty samples per cycle, so neither series is aliased - sampling near
+      // the period is its own artefact and would prove nothing about either.
+      const t = i * 0.05;
+      return {
+        t,
+        a: Math.sin(2 * Math.PI * t),
+        b: Math.sin(2 * Math.PI * (1 + DETUNE) * t),
+      };
+    });
+
+  test('two detuned sinusoids satisfy the comparator, not just the eye', () => {
+    // Asserted through compareSeries itself: that is the function the verdict
+    // is read from, so passing its own early/whole test is what makes this
+    // counterexample count.
+    const stats = compareSeries(detunedSinusoids(), { tolerance: 0.01 });
+    expect(stats.earlyAgrees).toBe(true);
+    expect(stats.wholeAgrees).toBe(false);
+    expect(stats.earlyWorst).toBeLessThan(stats.worst);
+  });
+
+  test('the report calls it a separation and not a diagnosis', () => {
+    const report = reliabilityReport({
+      coarse: run(),
+      fine: run({ step: 0.05 }),
+      aligned: detunedSinusoids(),
+      outcomeCoarse: 10,
+      outcomeFine: 10.001,
+    });
+    expect(report.verdict).toBe(VERDICT.DIVERGED);
+    const { headline, notes } = explain(report);
+    // Nothing in what it says asserts chaos from this pattern.
+    const said = [headline, ...notes].join(' ');
+    expect(said).not.toMatch(/chaosSeparates/);
+    expect(notes).toContain('reliability.divergenceIsNotChaos');
+  });
+
+  test('the three findings stay distinct in both languages', async () => {
+    const { EN_DEFERRED } = await import('../js/i18n/en.deferred.js');
+    const { ES_DEFERRED } = await import('../js/i18n/es.deferred.js');
+    for (const id of [
+      'reliability.divergenceObserved',
+      'reliability.divergenceIsNotChaos',
+      'reliability.divergenceNextStep',
+      'reliability.reason.trajectoryDiverged',
+    ]) {
+      expect(typeof EN_DEFERRED[id]).toBe('string');
+      expect(typeof ES_DEFERRED[id]).toBe('string');
+    }
+    // The removed claim is gone from both, not merely unused.
+    expect('reliability.chaosSeparates' in EN_DEFERRED).toBe(false);
+    expect('reliability.chaosSeparates' in ES_DEFERRED).toBe(false);
+    // And the surviving reason no longer says the pattern is chaos.
+    expect(EN_DEFERRED['reliability.reason.trajectoryDiverged']).not.toMatch(
+      /what chaos looks like/i
+    );
   });
 });

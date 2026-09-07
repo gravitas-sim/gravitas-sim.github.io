@@ -227,7 +227,7 @@ export const EN_DEFERRED = {
   'reliability.reason.noMeasurement':
     'Nothing was measured that could be compared.',
   'reliability.reason.trajectoryDiverged':
-    'The paths agreed at the start and parted later, which is what chaos looks like rather than what a bad step looks like.',
+    'The paths agreed at the start and parted later. That rules out a scheme that was wrong from the first close approach; it does not say why they parted.',
   'reliability.reason.disagreedFromTheStart':
     'The paths disagreed from the beginning. Nothing chaotic about that: the coarser run was not resolving the motion.',
   'reliability.reason.outcomeMoved':
@@ -238,6 +238,10 @@ export const EN_DEFERRED = {
     'This scenario is already integrating at {n} substeps per frame, and the engine will not take twice as many. A finer run cannot be made here, so no comparison is offered rather than one against a run at the same step.',
   'reliability.reason.noExperiment': 'Capture a starting state first.',
   'reliability.reason.recording': 'A run is being recorded.',
+  'reliability.reason.sweeping':
+    'A parameter sweep is using the simulation. Wait for it to finish, or cancel it.',
+  'reliability.reason.checking':
+    'A reliability check is using the simulation. Wait for it to finish, or cancel it.',
   'reliability.reason.alreadyRunning': 'A check is already running.',
   'reliability.reason.noMetrics': 'Choose at least one quantity to measure.',
   'reliability.reason.cancelled': 'Stopped. The world is back where it was.',
@@ -248,8 +252,12 @@ export const EN_DEFERRED = {
     'This model is not a closed system, so a drifting energy is it working as designed rather than a fault. The drift figures are reported but decide nothing.',
   'reliability.driftDidNotFall':
     'The energy drift did not fall when the step was halved. That is a reason to look harder, not a verdict - the verdict above was computed without it.',
-  'reliability.chaosSeparates':
-    'Two runs of a chaotic system separate eventually however finely they are integrated, and both can still be numerically useful. What matters is that they agreed early: a badly resolved pair disagrees from the first close approach.',
+  'reliability.divergenceObserved':
+    'What this comparison shows: at these two step sizes the aggregate measurements agree, and the trajectories do not, from some point onwards.',
+  'reliability.divergenceIsNotChaos':
+    'That pattern does not establish chaos. A small systematic difference produces it too: a step size that shifts an orbital period by a fraction of a percent makes two runs drift apart in phase, and two sinusoids of slightly different frequency agree early and separate late for the same reason. Sensitive dependence is one explanation among several.',
+  'reliability.divergenceNextStep':
+    'Telling them apart needs evidence this run does not collect - how the separation grows with time, and whether it grows the same way from many nearby starts. Convergence of the aggregates, divergence of the trajectory, and evidence of chaos are three different findings.',
   'reliability.quoteStatistics':
     'Quote the aggregates from this run rather than positions at a given time.',
   'reliability.stillNotProof':

@@ -430,6 +430,28 @@ const RELIABILITY_DEFAULT_DURATION = 40;
 /** Set while a check is running, so it can be asked to stop. */
 let reliabilityAbort = null;
 
+/**
+ * What is using the live world right now, if anything.
+ *
+ * A/B recording, the sweep and the reliability check all drive the same world:
+ * they restore it, step it at a chosen rate and put it back. Two of them at
+ * once interleave their restores, and each then measures a world the other is
+ * moving - so the numbers describe neither.
+ *
+ * They each guarded against themselves and against recording, and against
+ * nothing else: a sweep could start on top of a reliability check and either
+ * could start on top of the other. One function answers for all three, so a
+ * fourth operation cannot be added without confronting it.
+ *
+ * @returns {?string} A refusal reason, or null when the world is free
+ */
+export function liveWorldBusy() {
+  if (phase === 'recording') return 'recording';
+  if (reliabilityAbort) return 'checking';
+  if (sweepAbort) return 'sweeping';
+  return null;
+}
+
 /** @returns {boolean} Whether a reliability check is running */
 export const isCheckingReliability = () => reliabilityAbort !== null;
 
@@ -481,7 +503,20 @@ async function runReliabilityPhase(cfg) {
   const samples = [];
   const baselineBodies = selectableBodies().length;
 
+  // Frames that ACTUALLY advanced the simulation, and every rAF tick.
+  //
+  // These were one number, and counting rAF ticks assumes each one stepped the
+  // world. A backgrounded tab, a paused simulation or a frame that produced no
+  // step all tick without advancing the clock, so a run stopped after N ticks
+  // having covered less simulated time than it was asked for - and reported
+  // the requested duration as though it had been achieved. Both phases still
+  // take exactly N advancing frames, which is what keeps their durations
+  // identical and the comparison admissible.
   let frames = 0;
+  let ticks = 0;
+  let stalled = 0;
+  let lastClock = startClock;
+  let sampleCapHit = false;
   await new Promise(resolve => {
     const tick = () => {
       if (cfg.abort.cancelled) return resolve();
@@ -502,10 +537,25 @@ async function runReliabilityPhase(cfg) {
         })
       );
 
-      frames++;
-      if (frames >= cfg.frames || samples.length >= MAX_SAMPLES) {
+      ticks++;
+      if (clock > lastClock) {
+        frames++;
+        lastClock = clock;
+      } else {
+        stalled++;
+      }
+
+      if (samples.length >= MAX_SAMPLES) {
+        sampleCapHit = true;
         return resolve();
       }
+      if (frames >= cfg.frames) return resolve();
+      // A world that is not advancing at all would otherwise spin here for
+      // ever. Ten ticks per requested frame is generous enough that an
+      // ordinary slow machine never reaches it and tight enough that a paused
+      // run gives up rather than hanging; the run then reports what it got.
+      if (ticks >= cfg.frames * 10 + 120) return resolve();
+
       cfg.onProgress?.({
         phase: cfg.phaseIndex,
         fraction: frames / cfg.frames,
@@ -524,6 +574,16 @@ async function runReliabilityPhase(cfg) {
     step: cfg.step,
     substeps: cfg.substeps,
     duration: getSimulationTime() - startClock,
+    /** What was asked for, beside what was achieved. */
+    requestedFrames: cfg.frames,
+    advancedFrames: frames,
+    ticks,
+    /** rAF ticks that moved no simulated time: a paused or throttled tab. */
+    stalledFrames: stalled,
+    /** True when the sample cap ended the run before the duration did. */
+    sampleCapHit,
+    /** Whether the phase covered the simulated time it was asked for. */
+    complete: frames >= cfg.frames && !sampleCapHit,
     samples,
     results: reduceRun(samples, current.metrics, secondsPerDay),
     wallMs: performance.now() - startedAt,
@@ -545,8 +605,10 @@ async function runReliabilityPhase(cfg) {
  */
 export async function runReliabilityCheck(opts = {}) {
   if (!current?.initialState) return { ok: false, reason: 'noExperiment' };
-  if (phase === 'recording') return { ok: false, reason: 'recording' };
-  if (reliabilityAbort) return { ok: false, reason: 'alreadyRunning' };
+  const busy = liveWorldBusy();
+  if (busy) {
+    return { ok: false, reason: busy === 'checking' ? 'alreadyRunning' : busy };
+  }
   if (!current.metrics?.length) return { ok: false, reason: 'noMetrics' };
 
   const settings = host.getSettings();
@@ -578,6 +640,18 @@ export async function runReliabilityCheck(opts = {}) {
 
   // Everything the check is about to change, so it can be handed back. The
   // world is restored from the captured payload; these are the dials.
+  // The world as it is RIGHT NOW, not the experiment's captured start.
+  //
+  // The finally below restored the capture, so a student who captured a state,
+  // let the world run on and then ran a check was thrown back to the capture
+  // point rather than to where they had been - the check quietly rewound their
+  // simulation. Saved with forExperiment so the clock and the open tools come
+  // back too, and restored on every exit including cancellation and a throw.
+  const savedWorld = host.captureShareState({
+    kind: 'full',
+    includeCamera: false,
+    forExperiment: true,
+  });
   const savedSettings = { ...settings };
   const savedPaused = host.getState?.()?.paused ?? false;
   const startedAt = performance.now();
@@ -611,8 +685,10 @@ export async function runReliabilityCheck(opts = {}) {
     return report;
   } finally {
     reliabilityAbort = null;
-    // Back to the world the student was looking at, whatever happened above.
-    restoreInitialState({ keepSettings: true });
+    // Back to the world the student was looking at, whatever happened above -
+    // which is the state saved before the phases, not the experiment's
+    // captured start.
+    host.applyShareState(JSON.parse(JSON.stringify(savedWorld)));
     Object.assign(host.getSettings(), savedSettings);
     updatePhysicsSettings(host.getSettings());
     host.setFixedStep?.(0);
@@ -937,8 +1013,10 @@ export async function runSweep(spec, opts = {}) {
   // this, but a direct import can get here first and a TypeError is a worse
   // answer than a refusal.
   if (!host) return { ok: false, reason: 'notReady' };
-  if (sweepAbort) return { ok: false, reason: 'alreadyRunning' };
-  if (phase === 'recording') return { ok: false, reason: 'recording' };
+  const busy = liveWorldBusy();
+  if (busy) {
+    return { ok: false, reason: busy === 'sweeping' ? 'alreadyRunning' : busy };
+  }
 
   const check = SWEEP.validateSweepSpec(spec);
   if (!check.ok) {
@@ -1187,7 +1265,10 @@ function loop() {
  * @returns {boolean} Whether recording started
  */
 export function startRun(label) {
-  if (!current || phase === 'recording') return false;
+  // Refuses while a sweep or a reliability check has the world, for the reason
+  // in liveWorldBusy(): both of those restore and re-step it underneath, and a
+  // recording taken across that is a recording of two different worlds.
+  if (!current || liveWorldBusy()) return false;
 
   // Both runs start from the captured state, not just Run B.
   //

@@ -229,7 +229,7 @@ export const ES_DEFERRED = {
   'reliability.reason.noMeasurement':
     'No se midio nada que se pudiera comparar.',
   'reliability.reason.trajectoryDiverged':
-    'Las trayectorias coincidieron al principio y se separaron despues, que es el aspecto del caos y no el de un paso demasiado grande.',
+    'Las trayectorias coincidieron al principio y se separaron después. Eso descarta un esquema que fuera erróneo desde el primer acercamiento; no dice por qué se separaron.',
   'reliability.reason.disagreedFromTheStart':
     'Las trayectorias discreparon desde el principio. Eso no tiene nada de caotico: la pasada mas gruesa no estaba resolviendo el movimiento.',
   'reliability.reason.outcomeMoved':
@@ -240,6 +240,10 @@ export const ES_DEFERRED = {
     'Este escenario ya se integra con {n} subpasos por fotograma y el motor no admite el doble. Aqui no se puede hacer una pasada mas fina, asi que no se ofrece comparacion en lugar de compararla con una pasada del mismo paso.',
   'reliability.reason.noExperiment': 'Captura primero un estado inicial.',
   'reliability.reason.recording': 'Se esta grabando una pasada.',
+  'reliability.reason.sweeping':
+    'Un barrido de parámetros está usando la simulación. Espera a que termine, o cancélalo.',
+  'reliability.reason.checking':
+    'Una comprobación de fiabilidad está usando la simulación. Espera a que termine, o cancélala.',
   'reliability.reason.alreadyRunning': 'Ya hay una comprobacion en curso.',
   'reliability.reason.noMetrics': 'Elige al menos una magnitud que medir.',
   'reliability.reason.cancelled':
@@ -251,10 +255,14 @@ export const ES_DEFERRED = {
     'Este modelo no es un sistema cerrado, asi que una energia que deriva es el modelo funcionando como se diseno y no un fallo. Las cifras de deriva se informan pero no deciden nada.',
   'reliability.driftDidNotFall':
     'La deriva de energia no bajo al reducir el paso a la mitad. Es motivo para mirar con mas cuidado, no un veredicto: el veredicto de arriba se calculo sin ella.',
-  'reliability.chaosSeparates':
-    'Dos pasadas de un sistema caotico acaban separandose por fina que sea la integracion, y ambas pueden seguir siendo utiles numericamente. Lo que importa es que coincidieran al principio: un par mal resuelto discrepa desde el primer acercamiento.',
+  'reliability.divergenceObserved':
+    'Lo que muestra esta comparación: con estos dos tamaños de paso las medidas agregadas coinciden y las trayectorias no, a partir de cierto punto.',
+  'reliability.divergenceIsNotChaos':
+    'Ese patrón no demuestra caos. Una diferencia sistemática pequeña también lo produce: un paso de integración que desplaza el período orbital una fracción de un por ciento hace que dos ejecuciones se desfasen, y dos sinusoides de frecuencia ligeramente distinta coinciden al principio y se separan después por la misma razón. La dependencia sensible es una explicación entre varias.',
+  'reliability.divergenceNextStep':
+    'Distinguirlas requiere pruebas que esta ejecución no recoge: cómo crece la separación con el tiempo, y si crece igual desde muchos inicios cercanos. La convergencia de los agregados, la divergencia de la trayectoria y la evidencia de caos son tres hallazgos distintos.',
   'reliability.quoteStatistics':
-    'Cita los agregados de esta pasada en lugar de posiciones en un instante dado.',
+    'Cita los agregados de esta ejecución en vez de posiciones en un instante dado.',
   'reliability.stillNotProof':
     'Eso no equivale a que el resultado sea correcto. Significa que este paso no es lo que lo esta decidiendo.',
   'reliability.agrees': 'sin cambio dentro de {tolerance}',
