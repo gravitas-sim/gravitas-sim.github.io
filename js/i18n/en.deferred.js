@@ -1449,6 +1449,8 @@ export const EN_DEFERRED = {
     'The other half of the picture: what the star does. Transits give you size, this gives you mass, and neither alone gives you a density.',
   'inv.seq.exoplanets.detect-this-planet':
     'An unknown system with both instruments and no answer key. Worth doing only once both methods are familiar.',
+  'inv.seq.exoplanets.design-the-schedule':
+    'The same argument on the real instrument, where the run takes minutes and cannot be rewound. Do the analytic version first; this one asks you to plan the observing yourself.',
   'inv.seq.exoplanets.goldilocks-question':
     'What a detection does and does not tell you about whether anywhere is habitable. Needs the transit lesson; the radial-velocity one helps.',
 
@@ -1795,6 +1797,8 @@ export const EN_DEFERRED = {
   'rvsched.compare.control.seed': 'the noise seed',
   'rvsched.compare.control.system': 'the star',
   'rvsched.compare.control.noiseModel': 'the noise model',
+  'rvsched.compare.range':
+    'Both arms were searched over the same range, {min} to {max} days: a best period is the best fit inside a range, and outside it nothing was tried.',
   'rvsched.compare.atBound':
     'At least one of these fits sits on the edge of the period range that was searched, which means the range decided it and not the measurements. Lengthen the baseline or widen the range before reading anything into the comparison.',
   'rvsched.compare.oneDraw':

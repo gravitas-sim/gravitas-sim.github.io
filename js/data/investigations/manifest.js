@@ -191,6 +191,21 @@ export const MANIFEST = [
     objectiveCount: 8,
   },
   {
+    id: 'design-the-schedule',
+    title: 'Design the Schedule',
+    subtitle:
+      'Eight nights on the real instrument, and the times you choose decide the answer',
+    duration: '35-40 min',
+    level: 'Introductory astronomy',
+    summary:
+      'You have eight nights and one star. Plan the run yourself in the live Radial Velocity panel, commit to a prediction, then observe two schedules side by side against the same star with the same instrument and the same noise — and watch one of them recover a Jupiter while the other cannot establish that the velocity changes at all. Then break your own result: change the seed, lose a fortnight to weather, and type a list of dates by hand, until you can say what a reported period has to carry before anybody else can check it.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    series: 'Detecting exoplanets',
+    stepCount: 14,
+    gradedCount: 7,
+    objectiveCount: 7,
+  },
+  {
     id: 'binary-star-planets',
     title: 'Planets in Binary Stars',
     subtitle: 'What survives around two stars, and how you would know',

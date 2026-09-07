@@ -159,6 +159,11 @@ export const SEQUENCES = [
         needs: ['transit-photometry', 'radial-velocity'],
       },
       {
+        id: 'design-the-schedule',
+        whyId: 'inv.seq.exoplanets.design-the-schedule',
+        needs: ['radial-velocity', 'detect-this-planet'],
+      },
+      {
         id: 'goldilocks-question',
         whyId: 'inv.seq.exoplanets.goldilocks-question',
         needs: ['transit-photometry'],

@@ -195,6 +195,21 @@ export const MANIFEST = [
     objectiveCount: 8,
   },
   {
+    id: 'design-the-schedule',
+    title: 'Diseña el calendario',
+    subtitle:
+      'Ocho noches en el instrumento real, y los tiempos que elijas deciden la respuesta',
+    duration: '35-40 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Tienes ocho noches y una estrella. Planifica tú mismo la campaña en el panel de Velocidad Radial, comprométete con una predicción y luego observa dos calendarios en paralelo sobre la misma estrella, con el mismo instrumento y el mismo ruido: uno recupera un Júpiter y el otro ni siquiera puede establecer que la velocidad cambie. Después rompe tu propio resultado — cambia la semilla, pierde quince días por mal tiempo y escribe una lista de fechas a mano — hasta que puedas decir qué debe acompañar a un periodo publicado para que otra persona pueda comprobarlo.',
+    thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
+    series: 'Detección de exoplanetas',
+    stepCount: 14,
+    gradedCount: 7,
+    objectiveCount: 7,
+  },
+  {
     id: 'binary-star-planets',
     title: 'Planetas en estrellas binarias',
     subtitle: 'Qué sobrevive alrededor de dos estrellas, y cómo lo sabrías',

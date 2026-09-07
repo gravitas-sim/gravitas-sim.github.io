@@ -306,6 +306,8 @@ let compareLib = null;
 let compareSurvey = null;
 /** The comparison as last computed, or null. */
 let compareReport = null;
+/** The period range both arms were searched over, for the readout. */
+let compareBounds = null;
 /** Whether the comparison has been computed for the recordings now in hand. */
 let compareStale = true;
 
@@ -1200,27 +1202,46 @@ function renderSurveyStatus() {
 /**
  * The period range both arms are searched over.
  *
- * The same range for both, derived from what the two schedules have in common
- * - the count and the baseline they were both built from - rather than from
- * each arm's own spacings. Two arms searched over two ranges would differ in
+ * One range for both arms. Two arms searched over two ranges would differ in
  * their search as well as in their times, and a difference in the answer could
  * not be attributed to either.
  *
- * Twice the regular spacing at the short end, because nothing below that is
- * sampled at all, and the baseline at the long end, because a period longer
- * than the run has not been observed to repeat.
+ * The long end is the longer of the two spans: a period that never completes a
+ * cycle inside the run has not been observed to repeat.
  *
- * @param {object} cfg - The first arm's configuration
+ * The short end is deliberately generous - a hundredth of the span, or twice
+ * the tightest spacing if that is shorter still - and NOT any kind of Nyquist
+ * limit on the spacing. That would be the one choice that makes this whole
+ * comparison pointless. Unevenly sampled data has no Nyquist limit, and the
+ * advantage an irregular schedule has over a comb is exactly that it can
+ * recover a period shorter than the comb's mean spacing; a range starting at
+ * twice that spacing would have excluded the answer from the search before
+ * either arm was fitted, and both arms would then have agreed, wrongly, that
+ * there was nothing there.
+ *
+ * @param {Array<Array<object>>} sets - The two arms' measurements
  * @returns {?{minPeriod: number, maxPeriod: number}} The bounds
  */
-function comparisonBounds(cfg) {
-  const baseline = Number(cfg?.baselineDays);
-  const epochs = Number(cfg?.epochs) || cadenceEpochCount();
-  if (!(baseline > 0) || !(epochs > 1)) return null;
-  const spacing = baseline / (epochs - 1);
-  const minPeriod = Math.max(2 * spacing, 1e-3);
-  if (!(baseline > minPeriod)) return null;
-  return { minPeriod, maxPeriod: baseline };
+function comparisonBounds(sets) {
+  const spans = [];
+  let tightest = Infinity;
+  for (const set of sets) {
+    const days = (set || [])
+      .map(m => Number(m.day))
+      .filter(Number.isFinite)
+      .sort((a, b) => a - b);
+    if (days.length < 2) continue;
+    spans.push(days[days.length - 1] - days[0]);
+    for (let i = 1; i < days.length; i++) {
+      const gap = days[i] - days[i - 1];
+      if (gap > 0 && gap < tightest) tightest = gap;
+    }
+  }
+  if (!spans.length || !Number.isFinite(tightest)) return null;
+  const maxPeriod = Math.max(...spans);
+  const minPeriod = Math.max(1e-3, Math.min(2 * tightest, maxPeriod / 100));
+  if (!(maxPeriod > minPeriod)) return null;
+  return { minPeriod, maxPeriod };
 }
 
 /**
@@ -1239,7 +1260,11 @@ function maybeCompare() {
 
   loadCompareLib()
     .then(lib => {
-      const bounds = comparisonBounds(survey.config);
+      const bounds = comparisonBounds([
+        survey.measurements(),
+        compareSurvey.measurements(),
+      ]);
+      compareBounds = bounds;
       if (!bounds) {
         compareReport = null;
         renderCompareReport();
@@ -1418,6 +1443,18 @@ function renderCompareReport() {
 
   const parts = [line(a), line(b)];
 
+  // The range both arms were searched over. A period is only ever "the best
+  // fit in this range", and a reader who cannot see the range cannot tell a
+  // measurement from a boundary.
+  if (compareBounds) {
+    parts.push(
+      t('rvsched.compare.range', {
+        min: formatNumber(compareBounds.minPeriod, { sig: 3 }),
+        max: formatNumber(compareBounds.maxPeriod, { sig: 4 }),
+      })
+    );
+  }
+
   if (!compareReport.controls.controlled) {
     parts.push(
       t('rvsched.compare.uncontrolled', {
@@ -1475,13 +1512,14 @@ function syncScheduleFields() {
   // one is running even if the shape would not otherwise need it.
   if (e.surveyEpochsField)
     e.surveyEpochsField.hidden = kind === 'regular' && !comparing;
-  if (e.surveyJitterField) e.surveyJitterField.hidden = kind !== 'irregular';
-  if (e.surveyClustersField)
-    e.surveyClustersField.hidden = kind !== 'clustered';
+  // Both arms read these from the same fields, which is what keeps everything
+  // but the shape held equal - so a field is shown when EITHER arm needs it.
+  const kindB = comparing ? e.compareShape?.value || '' : '';
+  const wants = shape => kind === shape || kindB === shape;
+  if (e.surveyJitterField) e.surveyJitterField.hidden = !wants('irregular');
+  if (e.surveyClustersField) e.surveyClustersField.hidden = !wants('clustered');
   if (e.surveyEpochListField)
-    e.surveyEpochListField.hidden =
-      kind !== 'explicit' &&
-      !(comparing && e.compareShape?.value === 'explicit');
+    e.surveyEpochListField.hidden = !wants('explicit');
   if (e.compareShapeField) e.compareShapeField.hidden = !comparing;
 
   // Filled in from the cadence the reader already set, so switching shape

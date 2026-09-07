@@ -61,6 +61,7 @@ import TIDES from './investigations/tides.js';
 import BUTTERFLY from './investigations/butterfly-effect.js';
 import RESONANCE from './investigations/when-orbits-lock.js';
 import DETECT_THIS_PLANET from './investigations/detect-this-planet.js';
+import DESIGN_THE_SCHEDULE from './investigations/design-the-schedule.js';
 import BINARY_PLANETS from './investigations/binary-star-planets.js';
 import GRAVITY_ASSIST from './investigations/gravity-assist.js';
 import HOHMANN_TRANSFER from './investigations/hohmann-transfer.js';
@@ -95,6 +96,7 @@ export const INVESTIGATIONS = [
   BUTTERFLY,
   RESONANCE,
   DETECT_THIS_PLANET,
+  DESIGN_THE_SCHEDULE,
   BINARY_PLANETS,
   GRAVITY_ASSIST,
   HOHMANN_TRANSFER,

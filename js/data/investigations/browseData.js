@@ -64,6 +64,10 @@ export const BROWSE_META = {
     tags: ['exoplanets', 'observing'],
     numericCount: 2,
   },
+  'design-the-schedule': {
+    tags: ['exoplanets', 'observing'],
+    numericCount: 0,
+  },
   'binary-star-planets': {
     tags: ['chaos', 'exoplanets', 'stars'],
     numericCount: 2,

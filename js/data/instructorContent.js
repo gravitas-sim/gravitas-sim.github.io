@@ -778,6 +778,165 @@ export const INSTRUCTOR_CONTENT = {
       in this lesson is a much weaker claim than the ones in the paper, and no claim at all about
       the real systems the paper's readers care about.`,
   },
+  'design-the-schedule': {
+    topic:
+      'Observing design on the live instrument, and what a result has to carry',
+    difficulty: 'Introductory, written for non-science majors',
+    placement:
+      'The hands-on companion to Can You Detect This Planet?, and best run immediately after it in the following lab period. That lesson makes the argument with an analytic planner in seconds; this one makes students do it for real on the live spectrograph, where a run takes minutes and cannot be rewound. It needs 35 to 40 minutes, most of which is observing time that a class can spend discussing predictions. It also works as a standalone experimental-design lab for any course that needs one, because everything it demonstrates is about the schedule rather than about exoplanets.',
+    overview: `Students plan an eight-night radial-velocity run themselves in the live Radial
+      Velocity panel, commit to a prediction, and then observe two schedules side by side
+      against the same simulated star. The panel's Compare mode runs both arms over the same
+      frames with the same eight observations, the same 24.673-day baseline, the same 8 m/s
+      uncertainty and the same noise seed, so the only difference between the two recordings
+      is when they looked. The regular arm's nights land 3.525 days apart against a 3.5247-day
+      period, so every one of them falls at the same orbital phase and the run cannot establish
+      that the velocity varies at all; the irregular arm of the same eight nights recovers the
+      period.
+      \n\nThe second half is about not over-reading that. Students change the noise seed to
+      separate a property of the schedule from a property of the draw, lose the middle of the
+      run to weather and watch the panel refuse to call the comparison controlled, type a list
+      of dates by hand, and close on what a reported period needs beside it - the times, the
+      seed, the uncertainty and the range searched - before anybody else can check it.`,
+    priorKnowledge: [
+      'That a planet makes its star move, and that radial velocity measures the part of that motion along the line of sight',
+      'Reading a point with an error bar off a plot',
+      'Strongly recommended: Can You Detect This Planet?, which makes the same argument analytically and in a fifth of the time',
+      'No statistics beyond the idea that a measurement has an uncertainty. The window function is introduced in words as "what these times cannot tell apart"',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A controlled comparison is a comparison of one thing',
+        body: 'The two arms share the star, the frames, the observation count, the baseline, the stated uncertainty and the noise seed. Holding all of that fixed is what licenses attributing the difference in the answers to the times. The panel checks every one of those holds rather than assuming them, and says which ones broke; a class that has only ever met controls as a phrase in a methods section can see one being enforced.',
+      },
+      {
+        heading: 'The spectral window',
+        body: 'A property of the observation times alone, computable before any telescope is pointed anywhere. A peak near one says there is a frequency at which two entirely different signals produce identical measurements, so no amount of care in the fitting can separate them. The regular arm here has a window peak of essentially 1.0 and the irregular arm about 0.57, and that number - not the fitted period - is what a proposal should be argued from.',
+      },
+      {
+        heading: 'A search range is part of a result',
+        body: 'A period search returns the best period inside the range it was given, and a true period outside that range comes back as whichever end was nearest, with no error and no complaint. Two runs that both did that agree with each other perfectly and mean nothing. The panel prints the range for every comparison and flags a fit sitting on its own boundary rather than reporting it as a measurement.',
+      },
+      {
+        heading: 'One draw is not a study',
+        body: 'Each arm is a single noise realisation. That the irregular schedule won here is a fact about this run; that irregular schedules are better is a claim about schedules, and one run of each cannot support it. The seed step exists so the distinction can be tested rather than asserted: the regular arm fails on every seed because its failure is geometric, while the irregular arm\u2019s period and especially its amplitude move from draw to draw.',
+      },
+      {
+        heading: 'Phase coverage and amplitude bias',
+        body: 'The winning arm here typically returns K near 100 m/s against a true 84, because eight points with a two-thirds phase hole overestimate an amplitude. This is worth naming out loud: recovering the right period is not the same as measuring the orbit, and the lesson deliberately does not tune the configuration to hide it.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-2',
+        text: 'The framing - eight nights, one star, the times to be decided in advance - and the setup of the live panel: baseline 24.673 d, uncertainty 8 m/s, seed schedule-1, regular cadence, eight observations. Have students write down the schedule checksum the note prints.',
+      },
+      {
+        steps: '3-4',
+        text: 'The prediction, collected before anything is observed, then the comparison run itself. This is the long screen: about seven simulated orbits. It is a good moment to poll the room on the prediction and to point out that the second arm is not a second run.',
+      },
+      {
+        steps: '5-7',
+        text: 'Reading the two arms, then the two questions that decide what the reading is worth: what a window peak of 100% means, and what one draw of each schedule does and does not establish. The second is the harder one and the one worth discussing aloud.',
+      },
+      {
+        steps: '8',
+        text: 'Changing the noise seed and running again, to separate the geometric failure of the comb from the luck in the irregular arm.',
+      },
+      {
+        steps: '9-11',
+        text: 'The run as it actually arrives: a weather gap typed into the panel, which drops epochs and can break the control, and then a hand-typed list of times, which is also where students discover that unreadable entries are reported rather than dropped.',
+      },
+      {
+        steps: '12-14',
+        text: 'What a number has to be quoted with - the range searched, the schedule, the seed - and the closing statement that a schedule is not administration around a sampled measurement but the measurement itself.',
+      },
+    ],
+    features: [
+      {
+        name: 'Schedule shapes in the Radial Velocity panel (steps 2-11)',
+        text: 'The observing run can be given a shape - regular, irregular, clustered, or a typed list of times - an observation count, and weather gaps, instead of only a cadence. The note under the controls reports what the plan came out as, what fell inside a gap, and what it could not read, and prints a checksum over the epoch times so two recordings can be told apart.',
+      },
+      {
+        name: 'Compare mode (steps 4-11)',
+        text: 'A second schedule observing the same star over the same frames as the first, with the noise on the nth observation drawn identically in both arms. Both arms are searched over one range derived from what they share, and the report states what was held equal, what was not, whether the two periods differ by more than the baseline can resolve, and whether a difference lands on one of the schedules\u2019 own window peaks.',
+      },
+      {
+        name: 'Seeded noise',
+        text: 'The scatter comes from a generator dedicated to observing, seeded by name and keyed by epoch index, so removing an epoch to a gap does not redraw the scatter on the ones that remain. Two students with the same seed get identical measurements and can compare answers.',
+      },
+      {
+        name: 'CSV export',
+        text: 'Export data \u2192 Radial velocity measurements. Every row carries the schedule kind, the schedule checksum, the planned epoch count and the gaps alongside the cadence, baseline, uncertainty and seed, which is what makes a result somebody else can check rather than only read.',
+      },
+      {
+        name: 'Exoplanet Characterization Lab scenario (steps 1-11)',
+        text: 'HD 209458 with the star free to move: P = 3.5247 d, K = 84 m/s, the same system the other radial-velocity lessons use. One orbit is about thirteen seconds of wall clock at normal speed, so the 24.673-day run is a few minutes unless the simulation speed is raised.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'A cadence that matches the period is the ideal cadence.',
+        response:
+          'It is the worst one available. Matching the period returns the star to the same phase at every visit, so the run sees a nearly constant velocity. Collect the step 3 prediction before revealing this; the first option is chosen by a substantial fraction of most classes.',
+      },
+      {
+        claim: 'This experiment shows that irregular sampling is better.',
+        response:
+          'It shows what happened on one draw of one pair of schedules against one period. Step 8 is where a class can actually test the generalisation, and the honest finding is asymmetric: the comb fails on every seed for a geometric reason, while the irregular arm gets lucky to varying degrees.',
+      },
+      {
+        claim: 'The period the panel reports is the period of the planet.',
+        response:
+          'It is the best fit inside a stated range. Change the range and the number changes; put the true period outside it and the fit returns a boundary. The panel prints the range with every comparison and flags a fit on the edge, and step 12 is built on that.',
+      },
+      {
+        claim: 'Losing nights to weather just means slightly less data.',
+        response:
+          'It means fewer observations in the same baseline, a hole in the phase coverage, and - if the two arms lose different numbers of nights - a comparison that is no longer about scheduling at all. The panel says so rather than quietly reporting a shorter run.',
+      },
+      {
+        claim: 'Recovering the right period means the orbit has been measured.',
+        response:
+          'The winning arm here typically returns an amplitude around 100 m/s against a true 84, from eight points that missed two-thirds of the cycle. The period can be right while the amplitude is badly biased, and the coverage number in the report is what says so.',
+      },
+    ],
+    teachingNotes: [
+      'The observing at step 4 takes a few minutes of wall clock. Raise the simulation speed rather than shortening the baseline - but watch for the panel\u2019s warning that frames are too far apart for the schedule, which means measurements are being read across the curve instead of on it, and is a real defect in the data rather than a cosmetic complaint.',
+      'Collect the step 3 prediction as a show of hands before anybody runs anything. The lesson\u2019s whole structure depends on the prediction existing before the result does, and the reading step declares the prediction as a prerequisite so an assignment cannot include one without the other.',
+      'Numbers will differ slightly between machines: the frames land differently at different simulation speeds, so the fitted values move. The story does not - the comb sees a nearly constant velocity on every machine and every seed.',
+      'Step 11 is the one to let run long if there is time. Students who know the period can design a list of times that beats both built-in shapes, which is the most useful thing in the lesson and the closest to what a real second season of observing does.',
+      'If a class is short of time, steps 9 and 10 can be dropped without breaking anything later; steps 12 and 13 cannot, because they are where the result becomes reportable.',
+    ],
+    discussion: [
+      'The window function can be computed before any observing happens. What would you have to know about a target to design a schedule for it, and what do you do when you do not know the period you are looking for?',
+      'The regular schedule failed for a reason that has nothing to do with luck, and the irregular one succeeded partly by luck. Which of those two statements could you have made before running anything, and which needed the run?',
+      'Ground-based observers cannot observe in daylight, which forces a cadence near a whole number of days. Which planets does that make hardest to find, and what did observers do about it?',
+      'You are asked to referee a paper reporting a 3.5-day period from eight measurements. What do you ask the authors for?',
+    ],
+    extensions: [
+      'Have each student run the comparison with a different seed and pool the results on a board. The distribution of the irregular arm\u2019s recovered period and amplitude is the beginning of an error analysis that no single run could produce.',
+      'Export both arms and fit them in Python or a spreadsheet, using the schedule checksum in the file to keep the two recordings straight. A class that has done any curve fitting can reproduce the panel\u2019s numbers and then try a range that excludes the true period, to see a boundary reported as a result.',
+      'Design a schedule for a planet whose period is not known in advance - the real problem. Give students a range of plausible periods and ask for eight times that would distinguish them, then test the design against the simulation.',
+    ],
+    modelNotes: `The star and planet are integrated by the simulation, not modelled analytically, so the
+      velocities are whatever the dynamics produce. The observing layer keeps only the measurements a
+      stated schedule would have produced: each epoch is interpolated between the render frames either
+      side of it and carries a Gaussian uncertainty drawn from a generator seeded by name and keyed by
+      the epoch\u2019s index in the ungapped plan, so removing an epoch does not redraw the others.
+      Both arms of a comparison observe the same frames, which is why the noise is a shared draw rather
+      than two independent ones. The period search is the same weighted circular fit the analysis
+      workspace uses, run over one range for both arms; the reported window function is computed from
+      the times alone and uses no velocities at all.`,
+    expectations: {
+      2: 'The note under the controls should read eight observations over 24.673 days with a schedule checksum. If it shows a different count, the Observations field has been left at its default rather than set to 8.',
+      4: 'Both arms observe together and the comparison appears only when both have finished; before that the panel reports progress as two counts. Expect a few minutes at normal speed, or under a minute at high speed.',
+      5: 'The regular arm lands somewhere well away from 3.5 days with an amplitude of a few m/s - it has seen essentially no variation - while the irregular arm recovers about 3.52 days with an amplitude near 100 m/s against a true 84. The exact figures move with the simulation speed and the seed; the pattern does not.',
+      8: 'The regular arm fails on every seed, because its failure is geometric. The irregular arm recovers the period on most seeds, with the amplitude varying more than the period does.',
+      10: 'The note reports how many epochs fell inside the 8-16 day gap. If the two arms lose different numbers, the comparison block says it is no longer a comparison of scheduling alone and lists what stopped being equal.',
+      11: 'Unreadable entries and duplicate times are reported in the note rather than dropped silently, and a list that cannot be read at all falls back to a regular cadence and says so.',
+    },
+  },
   'detect-this-planet': {
     topic: 'Observational design and the limits of a measurement',
     difficulty: 'Introductory, written for non-science majors',

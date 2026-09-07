@@ -1468,6 +1468,8 @@ export const ES_DEFERRED = {
     'La otra mitad del cuadro: lo que hace la estrella. El tránsito da el tamaño, esto da la masa, y ninguno por separado da una densidad.',
   'inv.seq.exoplanets.detect-this-planet':
     'Un sistema desconocido con los dos instrumentos y sin solucionario. Vale la pena solo cuando ambos métodos resultan familiares.',
+  'inv.seq.exoplanets.design-the-schedule':
+    'El mismo argumento en el instrumento real, donde la campaña dura minutos y no se puede rebobinar. Haz antes la versión analítica; esta te pide planificar tú la observación.',
   'inv.seq.exoplanets.goldilocks-question':
     'Qué dice y qué no dice una detección sobre si algún sitio es habitable. Necesita la lección de tránsitos; la de velocidad radial ayuda.',
 
@@ -1819,6 +1821,8 @@ export const ES_DEFERRED = {
   'rvsched.compare.control.seed': 'la semilla de ruido',
   'rvsched.compare.control.system': 'la estrella',
   'rvsched.compare.control.noiseModel': 'el modelo de ruido',
+  'rvsched.compare.range':
+    'Ambos brazos se exploraron en el mismo rango, de {min} a {max} dias: el mejor periodo es el mejor ajuste dentro de un rango, y fuera de el no se probo nada.',
   'rvsched.compare.atBound':
     'Al menos uno de estos ajustes queda en el borde del rango de periodos explorado, asi que lo decidio el rango y no las medidas. Alarga la linea de base o amplia el rango antes de interpretar la comparacion.',
   'rvsched.compare.oneDraw':
