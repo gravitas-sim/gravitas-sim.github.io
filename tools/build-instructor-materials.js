@@ -241,7 +241,21 @@ async function main() {
     secret
   );
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(OUT_FILE, JSON.stringify(payload));
+  // A throwaway build says so, in the file.
+  //
+  // Until now the only sign was a line on stdout, which meant a CI artifact
+  // and a publishable one were byte-indistinguishable to anything downstream -
+  // and the whole reason this mode exists is that its output must not be
+  // published. A release step cannot enforce a rule it cannot check, so the
+  // marker goes where the check can see it. It is written only for a throwaway
+  // build, so the real artifact is unchanged and no existing copy is
+  // invalidated by this.
+  writeFileSync(
+    OUT_FILE,
+    JSON.stringify(
+      usedThrowaway ? { ...payload, unpublishable: true } : payload
+    )
+  );
 
   const totalPdf = files.reduce((t, f) => t + f.size, 0);
   console.log(

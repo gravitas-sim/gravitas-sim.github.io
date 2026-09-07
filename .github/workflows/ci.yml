@@ -94,10 +94,17 @@ on:
 
 # A second push to the same branch makes the first one irrelevant. Never cancel
 # a run on main, though: those are the ones whose result gets referenced later.
+#
+# Because main runs are not cancelled, two pushes in quick succession both run
+# to completion and can finish out of order. That is handled where it matters -
+# in the deploy job, which refuses to publish a commit that is no longer the tip
+# of main - rather than by cancelling runs whose results somebody may want.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+# Read-only by default. The deploy job widens this for itself alone, so no
+# other job in this file can write a Pages deployment even by accident.
 permissions:
   contents: read
 
@@ -525,3 +532,148 @@ jobs:
             exit 1
           fi
           echo "All required jobs passed."
+
+  # ---------------------------------------------------------------------------
+  # Publishing
+  # ---------------------------------------------------------------------------
+  # The gap this closes: Pages used to serve the branch directly, so every push
+  # to main went live the moment it landed and nothing consulted CI. At 521e64f
+  # the site deployed while formatting and the bundle budget were both failing.
+  # Serving from a branch cannot be gated - GitHub publishes the commit, not a
+  # verdict about it - so the source has to be Actions, and this is the job that
+  # supplies it. Switching that setting is an owner action; see RELEASE.md.
+  #
+  # What it publishes is the repository tree exactly as committed. Not dist/:
+  # the site is served unbundled from the root, its service worker precaches
+  # root paths by name, and swapping in the bundled build would be a different
+  # site rather than a safer way to ship this one. dist/ keeps its existing job,
+  # which is to be tested.
+  #
+  # Nothing here runs a build. `npm run build:ci` rewrites the instructor
+  # bundle with a throwaway key, and a deploy that regenerated it would publish
+  # something nobody can open - so the deploy never regenerates anything, and
+  # verify-release.mjs refuses the tree if a throwaway bundle reached it anyway.
+  #
+  # The four ways this can decline to publish, all of them leaving the previous
+  # deployment exactly where it is:
+  #
+  #   CI failed        `needs: [ci]` without `always()`, so a failure skips this
+  #                    job. GitHub Pages keeps serving the last successful
+  #                    deployment; nothing is torn down.
+  #   CI cancelled     same path. A cancelled dependency is not a success.
+  #   CI skipped       cannot happen for a push to main - every job it needs is
+  #                    unconditional there - but if it ever did, `needs` treats
+  #                    a skipped dependency as not-success and this is skipped
+  #                    too.
+  #   superseded       checked explicitly below, because two pushes can finish
+  #                    out of order and the older one must not overwrite the
+  #                    newer.
+  deploy:
+    name: Deploy to Pages
+    needs: [ci]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # Queue deployments rather than cancelling them: a half-finished deploy that
+    # is cancelled leaves an indeterminate live site, which is worse than a
+    # short wait. Ordering between queued deploys is handled by the supersession
+    # check below.
+    concurrency:
+      group: pages-deploy
+      cancel-in-progress: false
+    steps:
+      - name: Check out the exact commit that was validated
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Refuse to publish a superseded commit
+        id: tip
+        run: |
+          tip=$(git ls-remote origin refs/heads/main | cut -f1)
+          echo "Run commit:  ${{ github.sha }}"
+          echo "Tip of main: ${tip}"
+          if [ "${tip}" != "${{ github.sha }}" ]; then
+            echo "::notice::Superseded by ${tip}; leaving the current deployment in place."
+            echo "superseded=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "superseded=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Record which commit this is
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          cat > deployed-revision.json <<JSON
+          {
+            "commit": "${{ github.sha }}",
+            "ref": "${{ github.ref_name }}",
+            "runId": "${{ github.run_id }}",
+            "runAttempt": "${{ github.run_attempt }}",
+            "deployedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "workflow": "${{ github.workflow }}"
+          }
+          JSON
+          cat deployed-revision.json
+
+      - name: Verify the tree is safe to publish
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          # No npm install: this must not run anything that could regenerate a
+          # tracked file, least of all the instructor bundle.
+          node tools/verify-release.mjs .
+
+      - name: Confirm the checkout is unmodified
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          # deployed-revision.json is the only thing this job creates, and it is
+          # untracked. Anything else differing from the commit means a step
+          # rewrote a tracked file, which is exactly how a throwaway instructor
+          # bundle would reach the site.
+          dirty=$(git status --porcelain --untracked-files=no)
+          if [ -n "$dirty" ]; then
+            echo "::error::The checkout was modified before publishing:"
+            echo "$dirty"
+            exit 1
+          fi
+
+      - name: Package the site
+        if: steps.tip.outputs.superseded == 'false'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        if: steps.tip.outputs.superseded == 'false'
+        uses: actions/deploy-pages@v4
+
+      - name: Say what went live
+        if: steps.tip.outputs.superseded == 'false'
+        run: |
+          {
+            echo "### Deployed"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo "| URL | ${{ steps.deployment.outputs.page_url }} |"
+            echo "| Revision file | ${{ steps.deployment.outputs.page_url }}deployed-revision.json |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Say why nothing went live
+        if: steps.tip.outputs.superseded == 'true'
+        run: |
+          {
+            echo "### Not deployed: superseded"
+            echo ""
+            echo "This run validated \`${{ github.sha }}\`, which is no longer the tip"
+            echo "of main. The newer commit's own run will deploy. The previous"
+            echo "successful deployment is untouched."
+          } >> "$GITHUB_STEP_SUMMARY"
