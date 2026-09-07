@@ -1508,10 +1508,12 @@ function syncScheduleFields() {
   if (!e.surveyShape) return;
   const kind = e.surveyShape.value || 'regular';
   const comparing = comparisonWanted();
-  // The count is what a comparison holds constant, so it is on show whenever
-  // one is running even if the shape would not otherwise need it.
+  // On show whenever the run has a plan rather than only a cadence: a shape
+  // needs it, a comparison holds it constant, and a gap turns a cadence into a
+  // plan whose count the reader can no longer work out from the spacing.
+  const gapped = Boolean(String(e.surveyGaps?.value ?? '').trim());
   if (e.surveyEpochsField)
-    e.surveyEpochsField.hidden = kind === 'regular' && !comparing;
+    e.surveyEpochsField.hidden = kind === 'regular' && !comparing && !gapped;
   // Both arms read these from the same fields, which is what keeps everything
   // but the shape held equal - so a field is shown when EITHER arm needs it.
   const kindB = comparing ? e.compareShape?.value || '' : '';
@@ -1561,7 +1563,7 @@ function initSurveyControls() {
     e.surveyGaps,
   ]) {
     input?.addEventListener('change', () => {
-      renderScheduleNote();
+      syncScheduleFields();
       if (survey) restartSurvey().catch(() => {});
     });
   }

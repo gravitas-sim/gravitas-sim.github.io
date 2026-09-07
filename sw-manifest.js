@@ -3,8 +3,8 @@
 // 272 files, 8155KB. The version is a hash of their contents, so
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
-self.__GRAVITAS_CACHE_VERSION = 'gravitas-36adddd8ebe1';
-self.__GRAVITAS_PRECACHE_BYTES = 8350958;
+self.__GRAVITAS_CACHE_VERSION = 'gravitas-c87dc2eda444';
+self.__GRAVITAS_PRECACHE_BYTES = 8351123;
 self.__GRAVITAS_PRECACHE = [
   './css/chrome.css',
   './css/components.css',
