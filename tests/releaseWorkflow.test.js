@@ -79,13 +79,25 @@ describe('what the deploy job publishes', () => {
     expect(checkout.with.ref).toBe('${{ github.sha }}');
   });
 
-  test('it publishes the repository root, not dist/', () => {
+  test('it publishes a staging copy of the root, not dist/ and not the checkout', () => {
     // The site is served unbundled from the root and the service worker
-    // precaches root paths by name. Publishing dist/ would be a different site.
+    // precaches root paths by name. Publishing dist/ would be a different
+    // site.
+    //
+    // It is a staging copy rather than the checkout itself because the deploy
+    // has four files to write - three stamped pages and the re-sealed manifest
+    // - and the guard that follows refused exactly those four when they were
+    // written in place. _site holds the validated commit plus those four and
+    // nothing else; tools/prepare-pages.mjs assembles it and checks that.
     const upload = deploy.steps.find(s =>
       (s.uses || '').includes('upload-pages-artifact')
     );
-    expect(upload.with.path).toBe('.');
+    expect(upload.with.path).toBe('_site');
+    const prepare = deploy.steps.find(s =>
+      (s.run || '').includes('prepare-pages.mjs')
+    );
+    expect(prepare).toBeTruthy();
+    expect(prepare.run).toMatch(/--out _site/);
   });
 
   test('it never runs a build, because a build rewrites the instructor bundle', () => {
@@ -104,14 +116,22 @@ describe('what the deploy job publishes', () => {
   });
 
   test('it verifies the tree before uploading', () => {
-    const verify = step('Verify');
-    expect(verify.run).toMatch(/verify-release\.mjs/);
+    // The verifier runs inside tools/prepare-pages.mjs now, along with the
+    // rest of the sequence, so what the workflow has to get right is that the
+    // preparation happens before the upload.
     const order = deploy.steps.map(s => `${s.name || ''} ${s.uses || ''}`);
     const uploadAt = order.findIndex(n => n.includes('upload-pages-artifact'));
-    expect(uploadAt).toBeGreaterThan(-1);
-    expect(order.findIndex(n => n.includes(verify.name))).toBeLessThan(
-      uploadAt
+    const prepareAt = deploy.steps.findIndex(s =>
+      (s.run || '').includes('prepare-pages.mjs')
     );
+    expect(uploadAt).toBeGreaterThan(-1);
+    expect(prepareAt).toBeGreaterThan(-1);
+    expect(prepareAt).toBeLessThan(uploadAt);
+    const tool = readFileSync(
+      new URL('../tools/prepare-pages.mjs', import.meta.url),
+      'utf8'
+    );
+    expect(tool).toMatch(/verifyRelease\(out\)/);
   });
 
   test('it fails if anything modified the checkout', () => {
@@ -179,10 +199,21 @@ describe('permissions', () => {
 
 describe('diagnosability', () => {
   test('the deployed revision is written into the site', () => {
-    const record = deploy.steps.find(s => (s.name || '').includes('Record'));
-    expect(record.run).toMatch(/deployed-revision\.json/);
-    expect(record.run).toMatch(/github\.sha/);
-    expect(record.run).toMatch(/runId/);
+    // Written by the preparation step, into the staging tree, from the same
+    // commit the pages are stamped with - which is checked there rather than
+    // asserted here.
+    const prepare = deploy.steps.find(s =>
+      (s.run || '').includes('prepare-pages.mjs')
+    );
+    expect(prepare.run).toMatch(/deployed-revision\.json/);
+    expect(prepare.run).toMatch(/github\.sha/);
+    expect(prepare.run).toMatch(/--run-id/);
+    const tool = readFileSync(
+      new URL('../tools/prepare-pages.mjs', import.meta.url),
+      'utf8'
+    );
+    expect(tool).toMatch(/deployed-revision\.json/);
+    expect(tool).toMatch(/runId/);
   });
 
   test('the run summary names the commit and the URL', () => {

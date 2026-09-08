@@ -642,73 +642,45 @@ jobs:
             echo "superseded=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Stamp the commit into the pages a reader can see
+      - name: Prepare the publishable tree
         if: steps.tip.outputs.superseded == 'false'
         run: |
-          # So a measurement kept in the evidence notebook can say which build
-          # produced it. Read from the document rather than fetched: the marker
-          # file below does not exist on a development server, and asking the
-          # network for it there logged a 404 on every load.
-          for page in index.html model/index.html instructors/index.html; do
-            [ -f "$page" ] || continue
-            python3 - "$page" "${{ github.sha }}" <<'PY'
-          import sys, re
-          path, sha = sys.argv[1], sys.argv[2]
-          html = open(path, encoding='utf-8').read()
-          tag = f'<meta name="gravitas-revision" content="{sha}" />'
-          if 'name="gravitas-revision"' in html:
-              html = re.sub(r'<meta name="gravitas-revision"[^>]*/?>', tag, html)
-          else:
-              html = html.replace('</head>', f'    {tag}\n  </head>', 1)
-          open(path, 'w', encoding='utf-8').write(html)
-          print(f'stamped {path}')
-          PY
-          done
-          grep -o 'name="gravitas-revision" content="[^"]*"' index.html
-
-      - name: Re-seal the service worker over the stamped files
-        if: steps.tip.outputs.superseded == 'false'
-        run: |
-          # The manifest's version is a sha256 over the CONTENTS of everything
-          # it precaches, index.html included. Stamping the revision into that
-          # file changes its bytes, so the committed manifest stops describing
-          # what is about to be served: clients would cache assets under a
-          # version string computed from different ones. Regenerated here, so
-          # the stamped HTML, the manifest, the cached assets and the exported
-          # revision all describe the same candidate.
-          node tools/build-service-worker.mjs
-          node tools/build-service-worker.mjs --check
-          grep -o "VERSION = '[^']*'" sw-manifest.js || true
-
-      - name: Record which commit this is
-        if: steps.tip.outputs.superseded == 'false'
-        run: |
-          cat > deployed-revision.json <<JSON
-          {
-            "commit": "${{ github.sha }}",
-            "ref": "${{ github.ref_name }}",
-            "runId": "${{ github.run_id }}",
-            "runAttempt": "${{ github.run_attempt }}",
-            "deployedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "workflow": "${{ github.workflow }}"
-          }
-          JSON
-          cat deployed-revision.json
-
-      - name: Verify the tree is safe to publish
-        if: steps.tip.outputs.superseded == 'false'
-        run: |
-          # No npm install: this must not run anything that could regenerate a
-          # tracked file, least of all the instructor bundle.
-          node tools/verify-release.mjs .
+          # Everything the deploy has to do to the site, done to a copy.
+          #
+          # This job used to stamp the revision into three pages, regenerate
+          # the service-worker manifest over the stamped bytes, and then refuse
+          # to publish because `git status` found the checkout modified - by
+          # those four intended edits. The guard was right to exist and pointed
+          # at the wrong tree.
+          #
+          # tools/prepare-pages.mjs exports the validated commit with `git
+          # archive`, does all of it in there, and checks the result: that the
+          # staged tree differs from the commit only in the four files this job
+          # is allowed to change, that nothing else appeared or vanished, and
+          # that the stamped pages, the manifest and the revision marker all
+          # name one commit. It runs outside Actions too, which is how
+          # tests/deployRehearsal.test.js exercises this whole sequence.
+          #
+          # No npm install: nothing here may regenerate a tracked file, least
+          # of all the instructor bundle.
+          node tools/prepare-pages.mjs \
+            --out _site \
+            --commit "${{ github.sha }}" \
+            --ref "${{ github.ref_name }}" \
+            --run-id "${{ github.run_id }}" \
+            --run-attempt "${{ github.run_attempt }}" \
+            --workflow "${{ github.workflow }}"
+          grep -o 'name="gravitas-revision" content="[^"]*"' _site/index.html
+          grep -o "VERSION = '[^']*'" _site/sw-manifest.js || true
+          cat _site/deployed-revision.json
 
       - name: Confirm the checkout is unmodified
         if: steps.tip.outputs.superseded == 'false'
         run: |
-          # deployed-revision.json is the only thing this job creates, and it is
-          # untracked. Anything else differing from the commit means a step
-          # rewrote a tracked file, which is exactly how a throwaway instructor
-          # bundle would reach the site.
+          # Now a question with one right answer: nothing above writes to the
+          # checkout at all, so anything differing from the commit means a step
+          # rewrote a tracked file - which is how a throwaway instructor bundle
+          # would reach the site. _site is untracked and excluded by the flag.
           dirty=$(git status --porcelain --untracked-files=no)
           if [ -n "$dirty" ]; then
             echo "::error::The checkout was modified before publishing:"
@@ -720,7 +692,9 @@ jobs:
         if: steps.tip.outputs.superseded == 'false'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          # The staging directory, not the checkout: what gets published is
+          # the validated commit plus the four files above and nothing else.
+          path: _site
 
       - name: Deploy
         id: deployment

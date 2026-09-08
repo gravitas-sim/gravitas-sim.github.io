@@ -181,19 +181,29 @@ describe('the deploy sequence keeps its artefacts describing one candidate', () 
       'utf8'
     );
 
+  const tool = () =>
+    readFileSync(
+      new URL('../tools/prepare-pages.mjs', import.meta.url),
+      'utf8'
+    );
+
   test('the revision is stamped before the manifest is re-sealed', () => {
     // The manifest's version is a sha256 over the CONTENTS of everything it
     // precaches, index.html included. Stamping the commit into that file
     // changes its bytes, so a manifest generated before the stamp stops
     // describing what is served: clients would cache assets under a version
-    // computed from different ones. Verified locally by running the
-    // workflow-equivalent sequence, which showed the manifest going stale at
-    // the stamp and coming back current after the re-seal.
-    const yml = workflow();
-    const stamp = yml.indexOf('Stamp the commit into the pages');
-    const reseal = yml.indexOf('Re-seal the service worker over the stamped');
-    const record = yml.indexOf('Record which commit this is');
-    const verify = yml.indexOf('Verify the tree is safe to publish');
+    // computed from different ones.
+    //
+    // The order used to be a property of the YAML, which is why this read the
+    // YAML. The sequence lives in tools/prepare-pages.mjs now - so that it can
+    // be run outside Actions, which is how tests/deployRehearsal.test.js
+    // exercises the whole thing including both guards - and the order is a
+    // property of that file.
+    const src = tool();
+    const stamp = src.indexOf('for (const page of STAMPED_PAGES) stampPage');
+    const reseal = src.indexOf('run(process.execPath, [builder]');
+    const record = src.indexOf("'deployed-revision.json'),\n      `${JSON");
+    const verify = src.indexOf('verifyRelease(out)');
     expect(stamp).toBeGreaterThan(0);
     expect(reseal).toBeGreaterThan(stamp);
     expect(record).toBeGreaterThan(reseal);
@@ -203,13 +213,25 @@ describe('the deploy sequence keeps its artefacts describing one candidate', () 
   test('the re-seal both regenerates and re-checks', () => {
     // Regenerating without checking would let a failure pass silently, which
     // is the whole failure mode this step exists to close.
-    const yml = workflow();
-    const step = yml.slice(
-      yml.indexOf('Re-seal the service worker over the stamped'),
-      yml.indexOf('Record which commit this is')
+    const src = tool();
+    expect(src).toContain('run(process.execPath, [builder], { cwd: out })');
+    expect(src).toContain(
+      "run(process.execPath, [builder, '--check'], { cwd: out })"
     );
-    expect(step).toContain('node tools/build-service-worker.mjs\n');
-    expect(step).toContain('--check');
+  });
+
+  test('the job publishes the staging directory, not the checkout', () => {
+    // The defect this replaces: the job stamped three pages and regenerated
+    // the manifest in the checkout, then ran `git status` and refused to
+    // publish because the checkout had been modified - by those four edits.
+    const yml = workflow();
+    expect(yml).toContain('node tools/prepare-pages.mjs');
+    expect(yml).toContain('path: _site');
+    expect(yml).not.toMatch(/^\s+path: \.$/m);
+    // And the guard is still there, now asking a question with one right
+    // answer.
+    expect(yml).toContain('Confirm the checkout is unmodified');
+    expect(yml).toContain('git status --porcelain --untracked-files=no');
   });
 
   test('the stamp writes a meta tag the application actually reads', () => {
