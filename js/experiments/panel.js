@@ -624,6 +624,17 @@ function renderSweepResults() {
     add(t('sweep.partial'), 'experiment-hint');
   }
 
+  // A trial that ran but covered less than it was asked to is neither a
+  // failure nor a result of the experiment on the label. Its numbers are in
+  // the table; this is what keeps them out of the summary above without
+  // hiding them.
+  if (sweep.counts.partial) {
+    add(
+      t('sweep.incomplete', { count: sweep.counts.partial }),
+      'experiment-hint'
+    );
+  }
+
   const table = document.createElement('table');
   table.className = 'experiment-table';
   const head = document.createElement('tr');

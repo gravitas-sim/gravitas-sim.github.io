@@ -105,6 +105,58 @@ describe('whether two runs can be compared at all', () => {
     expect(comparable(null, run()).ok).toBe(false);
     expect(comparable(run(), run({ duration: 0 })).reason).toBe('noDuration');
   });
+
+  test('a phase that stopped early cannot certify anything', () => {
+    // The runner has reported this since it started measuring simulated
+    // progress rather than counting animation frames, and nothing read it. A
+    // run that stopped early is not a run of the experiment on the label,
+    // however well it agrees with another one that also stopped early.
+    const r = comparable(run({ complete: false }), run({ step: 0.05 }));
+    expect(r.ok).toBe(false);
+    expect(r.reason).toBe('phaseIncomplete');
+    expect(r.which).toBe('coarse');
+  });
+
+  test('a phase that hit the sample ceiling cannot either', () => {
+    const r = comparable(
+      run(),
+      run({ step: 0.05, complete: false, sampleCapHit: true })
+    );
+    expect(r.ok).toBe(false);
+    expect(r.reason).toBe('phaseCapped');
+    expect(r.which).toBe('fine');
+  });
+
+  test('two capped phases that agree are still not a verdict', () => {
+    // The exact reproduction: both phases complete:false and sampleCapHit,
+    // with aggregates that agree. It reported "converging" and certified a
+    // step for an experiment nobody ran.
+    const capped = over =>
+      run({ complete: false, sampleCapHit: true, ...over });
+    const report = reliabilityReport({
+      coarse: capped(),
+      fine: capped({ step: 0.05 }),
+      outcomeCoarse: 1.2345,
+      outcomeFine: 1.2346,
+    });
+    expect(report.verdict).not.toBe(VERDICT.CONVERGING);
+    expect(report.verdict).toBe(VERDICT.INCOMPARABLE);
+    expect(report.reason).toBe('phaseCapped');
+  });
+
+  test('a complete pair is unaffected', () => {
+    const r = comparable(
+      run({ complete: true, sampleCapHit: false }),
+      run({ step: 0.05, complete: true, sampleCapHit: false })
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  test('a run that does not say either way is taken at its word', () => {
+    // Older records, and every caller that predates the runner reporting it.
+    // Absence is not a claim of incompleteness.
+    expect(comparable(run(), run({ step: 0.05 })).ok).toBe(true);
+  });
 });
 
 describe('relative change', () => {

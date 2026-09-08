@@ -52,6 +52,21 @@ export const TRIAL_STATUS = Object.freeze({
   LOST_BODY: 'lostBody',
   /** The reader stopped the sweep before this trial ran. */
   CANCELLED: 'cancelled',
+  /**
+   * The simulation stopped advancing while the trial was waiting for it.
+   *
+   * A paused world, a backgrounded tab, a scenario that froze. The trial holds
+   * whatever it managed and says it did not cover what it was asked to.
+   */
+  STALLED: 'stalled',
+  /**
+   * It hit the sample ceiling before covering the duration asked for.
+   *
+   * The evidence it did gather is kept and reported as partial; what it must
+   * not do is look like a trial that ran to completion, which is exactly what
+   * a shortened run labelled `ok` looked like.
+   */
+  CAPPED: 'capped',
 });
 
 /** A trial that did not produce a usable number. */
@@ -60,6 +75,18 @@ export const FAILED_STATUSES = Object.freeze([
   TRIAL_STATUS.BODIES_MISSING,
   TRIAL_STATUS.NOT_FINITE,
   TRIAL_STATUS.LOST_BODY,
+]);
+
+/**
+ * A trial that ran but did not cover what it was asked to.
+ *
+ * Not a failure - it has real samples and real numbers, and they are kept and
+ * plotted - but not a trial of the duration the sweep claims either. A summary
+ * that averaged these in would be describing an experiment nobody ran.
+ */
+export const PARTIAL_STATUSES = Object.freeze([
+  TRIAL_STATUS.STALLED,
+  TRIAL_STATUS.CAPPED,
 ]);
 
 /**
@@ -279,8 +306,18 @@ export function validateSweepSpec(spec) {
  * @returns {?object} The summary, or null with fewer than two usable trials
  */
 export function summarise(trials, metric, opts = {}) {
+  // Complete trials only. A trial that stalled or hit the sample cap covered
+  // less of the run than the sweep says it did, and averaging it in with the
+  // rest produces a curve of a duration that was never swept. Its numbers are
+  // still kept, reported and plotted - see PARTIAL_STATUSES - they are just
+  // not evidence about the experiment as described.
   const usable = (trials || []).filter(
     tr => tr.status === TRIAL_STATUS.OK && Number.isFinite(tr.results?.[metric])
+  );
+  const partial = (trials || []).filter(
+    tr =>
+      PARTIAL_STATUSES.includes(tr.status) &&
+      Number.isFinite(tr.results?.[metric])
   );
   if (usable.length < 2) return null;
 
@@ -313,6 +350,9 @@ export function summarise(trials, metric, opts = {}) {
     direction: up > down ? 'increasing' : down > up ? 'decreasing' : 'flat',
     firstValue: byParam[0].value,
     lastValue: byParam[byParam.length - 1].value,
+    /** Trials with numbers that are not part of the summary, and why. */
+    partial: partial.length,
+    partialStatuses: [...new Set(partial.map(tr => tr.status))].sort(),
   };
 }
 
@@ -338,5 +378,6 @@ export function tally(trials) {
   // Derived, so it cannot drift from the statuses it sums. A cancelled trial
   // is not a failure: nobody ran it.
   counts.failed = FAILED_STATUSES.reduce((n, st) => n + counts[st], 0);
+  counts.partial = PARTIAL_STATUSES.reduce((n, st) => n + counts[st], 0);
   return counts;
 }

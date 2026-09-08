@@ -407,3 +407,142 @@ test.describe('what it reports', () => {
     expect(sweepOut.summaries.some(s => s.changed)).toBe(true);
   });
 });
+
+// =============================================================================
+// Finishing, and saying so
+// -----------------------------------------------------------------------------
+// The runner used to count every requestAnimationFrame callback as progress,
+// so a trial could finish having integrated nothing and report the duration it
+// was asked for; and it stopped at the sample ceiling with the status left at
+// `ok`, so a shortened run went into the summary as a full one. Progress is
+// measured on the simulation clock now, and a run that does not cover what it
+// was asked to says which way it fell short.
+// =============================================================================
+test.describe('a trial that does not finish says so', () => {
+  test('every completed trial reports what it was asked for and what it did', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(240_000);
+    await app.boot();
+    await openBench(page, app);
+
+    const out = await sweep(page, { ...BINARY, count: 3 });
+    expect(out.ok).toBe(true);
+    for (const tr of out.trials) {
+      expect(tr.status).toBe('ok');
+      expect(tr.complete).toBe(true);
+      // Asked and achieved, in the same units, on the trial itself.
+      expect(tr.requestedFrames).toBeGreaterThan(0);
+      expect(tr.advancedFrames).toBe(tr.requestedFrames);
+      expect(tr.sampleCapHit).toBe(false);
+      // The clock really moved, and every advancing tick was counted once.
+      expect(tr.duration).toBeGreaterThan(0);
+      expect(tr.stalledTicks).toBeGreaterThanOrEqual(0);
+      expect(tr.ticks).toBeGreaterThanOrEqual(tr.advancedFrames);
+    }
+  });
+
+  test('a world that stops advancing is a stalled trial, not a finished one', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(240_000);
+    await app.boot();
+    await openBench(page, app);
+
+    // The clock is frozen a moment after the sweep starts. Every animation
+    // frame still fires; none of them advances the simulation. The old runner
+    // counted them all and returned a trial labelled `ok` that had integrated
+    // almost nothing.
+    const out = await page.evaluate(
+      async spec => {
+        const bench = await import('/js/experiments/bench.js');
+        const running = bench.runSweep(spec);
+        const { SETTINGS } = await import('/js/appState.js');
+        setTimeout(() => {
+          SETTINGS.sim_speed = 0;
+        }, 250);
+        const result = await running;
+        SETTINGS.sim_speed = 1;
+        return result;
+      },
+      { ...BINARY, count: 3, duration: 20000 }
+    );
+
+    const stalled = out.trials.filter(tr => tr.status === 'stalled');
+    expect(stalled.length).toBeGreaterThan(0);
+    for (const tr of stalled) {
+      expect(tr.complete).toBe(false);
+      expect(tr.advancedFrames).toBeLessThan(tr.requestedFrames);
+      expect(tr.stalledTicks).toBeGreaterThan(0);
+    }
+    // Its numbers are kept - partial evidence is still evidence - but it is
+    // not part of the curve the summary describes.
+    const sweepLib = await page.evaluate(async () => {
+      const s = await import('/js/experiments/sweep.js');
+      return s.PARTIAL_STATUSES;
+    });
+    expect(sweepLib).toContain('stalled');
+    const summary = await page.evaluate(
+      async ([trials, metric]) => {
+        const s = await import('/js/experiments/sweep.js');
+        return {
+          summary: s.summarise(trials, metric),
+          tally: s.tally(trials),
+        };
+      },
+      [out.trials, 'distance_to_primary']
+    );
+    expect(summary.tally.partial).toBeGreaterThan(0);
+    if (summary.summary) {
+      expect(summary.summary.n).toBe(
+        out.trials.filter(tr => tr.status === 'ok').length
+      );
+      expect(summary.summary.partial).toBeGreaterThan(0);
+    }
+  });
+
+  test('cancelling mid-sweep leaves the live world where it was', async ({
+    page,
+    app,
+  }, testInfo) => {
+    // The restoration half of the same contract: an operation that stops early
+    // still puts back what it borrowed.
+    testInfo.setTimeout(240_000);
+    await app.boot();
+    await openBench(page, app);
+
+    const before = await page.evaluate(async () => {
+      const { SETTINGS, current_scenario_name } =
+        await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        parameter: SETTINGS.binary_lab_planet_a,
+        timestep: SETTINGS.max_timestep,
+      };
+    });
+
+    const out = await page.evaluate(
+      async spec => {
+        const bench = await import('/js/experiments/bench.js');
+        const running = bench.runSweep(spec);
+        setTimeout(() => bench.cancelSweep(), 400);
+        return running;
+      },
+      { ...BINARY, count: 6, duration: 20000 }
+    );
+    expect(out.cancelled).toBe(true);
+
+    const after = await page.evaluate(async () => {
+      const { SETTINGS, current_scenario_name } =
+        await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        parameter: SETTINGS.binary_lab_planet_a,
+        timestep: SETTINGS.max_timestep,
+      };
+    });
+    expect(after).toEqual(before);
+  });
+});

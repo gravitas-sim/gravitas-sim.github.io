@@ -223,6 +223,10 @@ export const ES_DEFERRED = {
     'Las pasadas cubrieron cantidades distintas de tiempo simulado.',
   'reliability.reason.differentSystems':
     'Las pasadas terminaron con distinto numero de cuerpos: algo se fusiono o se destruyo en una y no en la otra. Eso ya es un hallazgo, y mas interesante que cualquier cifra de aqui.',
+  'reliability.reason.phaseIncomplete':
+    'Una de las dos ejecuciones se detuvo antes de cubrir la duracion pedida, asi que no son la misma prueba. Repite la comprobacion sin cambiar la velocidad ni abandonar la pestana.',
+  'reliability.reason.phaseCapped':
+    'Una de las dos ejecuciones alcanzo el limite de muestras antes de terminar, asi que cubre menos de lo que la comprobacion afirma. Acorta la duracion o baja la velocidad de la simulacion.',
   'reliability.reason.noStep': 'No se pudo leer el paso de integracion.',
   'reliability.reason.stepNotHalved':
     'La segunda pasada no se integro con mas finura que la primera.',
@@ -426,6 +430,8 @@ export const ES_DEFERRED = {
   'sweep.status.lostBody':
     'un cuerpo se destruyo durante esta prueba, asi que las muestras posteriores son de otro sistema',
   'sweep.status.cancelled': 'sin ejecutar',
+  'sweep.status.stalled': 'se detuvo antes',
+  'sweep.status.capped': 'alcanzo el limite de muestras',
 
   'sweep.reason.parameterNotSweepable':
     'Ese parametro no se puede barrer en este escenario. Solo las variables de laboratorio propias de un escenario sobreviven a la reconstruccion que necesita cada prueba.',
@@ -451,6 +457,8 @@ export const ES_DEFERRED = {
     'Dio la vuelta en lugar de moverse en una sola direccion, asi que el valor interesante esta dentro del rango y no en un extremo.',
   'sweep.summary.flat':
     '{metric} no se movio de forma apreciable en este rango. Es un resultado sobre este rango y esta duracion, no sobre el parametro.',
+  'sweep.incomplete':
+    '{count} ensayos se ejecutaron pero no cubrieron la duracion pedida. Sus numeros estan en la tabla y no en el resumen de arriba: una curva trazada con ellos describiria un experimento mas corto que el que este barrido dice haber hecho.',
   'sweep.partial':
     'Algunas pruebas no dieron medida, asi que esto describe los valores que se ejecutaron y no el rango que se pidio.',
 

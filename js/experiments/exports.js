@@ -305,11 +305,30 @@ export function sweepCsv(sweep) {
     comment(`integration_step: ${n.step}`);
   }
   comment(
-    `trials: ${sweep.counts.ok} measured, ${sweep.counts.failed} failed, ${sweep.counts.cancelled} not run`
+    `trials: ${sweep.counts.ok} measured, ${sweep.counts.failed} failed, ${sweep.counts.cancelled} not run, ${sweep.counts.partial ?? 0} incomplete`
   );
+  if (sweep.counts.partial) {
+    comment(
+      'an incomplete trial ran and measured something over less than the ' +
+        'duration above; its row is here and it is not in the summary'
+    );
+  }
   if (sweep.cancelled) comment('this sweep was stopped before it finished');
 
-  const header = ['trial', 'value', 'status', 'samples', 'duration', 'wall_ms'];
+  // Asked and achieved on every row, because a reader comparing two trials of
+  // "the same" duration has to be able to see that one of them stopped early.
+  const header = [
+    'trial',
+    'value',
+    'status',
+    'complete',
+    'samples',
+    'duration',
+    'duration_requested',
+    'frames_advanced',
+    'frames_requested',
+    'wall_ms',
+  ];
   for (const id of sweep.metrics) header.push(id);
   const rows = [header];
   for (const tr of sweep.trials) {
@@ -317,8 +336,14 @@ export function sweepCsv(sweep) {
       String(tr.index),
       num(tr.value, 6),
       csvField(tr.status),
+      tr.complete === undefined ? '' : String(Boolean(tr.complete)),
       String(tr.samples ?? 0),
       tr.duration === undefined ? '' : num(tr.duration),
+      tr.requestedDuration === undefined || tr.requestedDuration === null
+        ? ''
+        : num(tr.requestedDuration),
+      tr.advancedFrames === undefined ? '' : String(tr.advancedFrames),
+      tr.requestedFrames === undefined ? '' : String(tr.requestedFrames),
       tr.wallMs === undefined ? '' : num(tr.wallMs, 1),
     ];
     for (const id of sweep.metrics) {

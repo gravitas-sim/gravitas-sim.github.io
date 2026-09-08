@@ -31,17 +31,24 @@
 // nonconservative is not a broken integration and telling a student otherwise
 // teaches them to distrust the wrong thing.
 //
-// Chaos gets its own answer
+// Paths that part company get their own answer
 // -----------------------------------------------------------------------------
-// Two runs of a chaotic system at different steps diverge in position almost
-// immediately, and that is expected rather than a failure. What distinguishes
-// chaos from a bad integration is WHEN they part: a chaotic pair agrees at the
-// start and separates later, while a badly resolved pair is wrong from the
-// first close approach. So a path-like measurement is compared over an early
-// window as well as over the whole run, and a pair that agrees early and not
-// late is reported as a diverged trajectory rather than an unresolved one -
-// with the aggregate measurements, which are what such a system can actually
-// support, judged separately.
+// Two runs of a sensitive system at different steps separate in position while
+// their aggregates still agree, and that is a different situation from an
+// integration that is simply too coarse. A pair that disagrees from the first
+// close approach was wrong from the start; a pair that agrees early and parts
+// later still has usable aggregate measurements. So a path-like measurement is
+// compared over an early window as well as over the whole run, and the two
+// cases are reported differently.
+//
+// What that pattern does NOT establish is chaos. Early agreement followed by
+// late divergence is what sensitive dependence looks like and also what a
+// small systematic difference looks like: two sinusoids whose frequencies
+// differ by a fraction of a percent do exactly this, and so does a step size
+// that shifts an orbital period slightly. Distinguishing them needs evidence
+// this comparison does not collect - how fast the separation grows, and
+// whether it does so from many different starts - so the verdict names the
+// observation and the notes say what it supports.
 // =============================================================================
 
 /** What the comparison concluded about the measured outcome. */
@@ -226,6 +233,29 @@ export function comparable(coarse, fine, opts = {}) {
     return { ok: false, reason: 'noStep' };
   }
   if (!(fine.step < coarse.step)) return { ok: false, reason: 'stepNotHalved' };
+
+  // A phase that stopped early is not a phase of the experiment that was
+  // asked for.
+  //
+  // The runner has reported `complete` and `sampleCapHit` since it started
+  // measuring simulated progress instead of counting animation frames, and
+  // nothing read them: two phases that each stopped at the sample ceiling
+  // agreed with each other, as truncated runs of the same length tend to, and
+  // the check certified the step as converging on the strength of it. The
+  // agreement is real and it is agreement about a shorter run than the one on
+  // the label, which is not what the reader asked whether they could trust.
+  for (const [which, run] of [
+    ['coarse', coarse],
+    ['fine', fine],
+  ]) {
+    if (run.complete === false || run.sampleCapHit === true) {
+      return {
+        ok: false,
+        reason: run.sampleCapHit ? 'phaseCapped' : 'phaseIncomplete',
+        which,
+      };
+    }
+  }
 
   return { ok: true, reason: null };
 }

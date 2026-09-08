@@ -221,6 +221,10 @@ export const EN_DEFERRED = {
     'The runs covered different amounts of simulated time.',
   'reliability.reason.differentSystems':
     'The runs ended with different numbers of bodies - something merged or was destroyed in one and not the other. That is a finding in itself, and a more interesting one than any number here.',
+  'reliability.reason.phaseIncomplete':
+    'One of the two runs stopped before it covered the duration it was asked for, so the two are not runs of the same experiment. Repeat the check without changing the speed or leaving the tab.',
+  'reliability.reason.phaseCapped':
+    'One of the two runs hit the sample ceiling before it finished, so it covers less than the check claims. Shorten the duration, or slow the simulation so fewer samples cover it.',
   'reliability.reason.noStep': 'The integration step could not be read.',
   'reliability.reason.stepNotHalved':
     'The second run was not more finely integrated than the first.',
@@ -421,6 +425,8 @@ export const EN_DEFERRED = {
   'sweep.status.lostBody':
     'a body was destroyed during this trial, so the later samples are of a different system',
   'sweep.status.cancelled': 'not run',
+  'sweep.status.stalled': 'stopped early',
+  'sweep.status.capped': 'hit the sample limit',
 
   'sweep.reason.parameterNotSweepable':
     'That parameter cannot be swept in this scenario. Only a scenario\u2019s own laboratory variables survive the rebuild each trial needs.',
@@ -446,6 +452,8 @@ export const EN_DEFERRED = {
     'It turned over rather than moving in one direction, so the interesting value is somewhere inside the range rather than at an end.',
   'sweep.summary.flat':
     '{metric} did not move measurably across this range. That is a result about this range and this duration, not about the parameter.',
+  'sweep.incomplete':
+    '{count} trials ran but did not cover the duration asked for. Their numbers are in the table and are not in the summary above: a curve drawn through them would describe a shorter experiment than the one this sweep says it ran.',
   'sweep.partial':
     'Some trials did not produce a measurement, so this describes the values that ran rather than the range that was asked for.',
 

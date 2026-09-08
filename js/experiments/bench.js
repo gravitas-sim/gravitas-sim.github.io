@@ -945,19 +945,55 @@ async function runSweepTrial(cfg) {
   // is not a rounding - it was the whole first sixtieth of a short trial.
   take();
 
-  let frames = 0;
+  // Progress is measured in SIMULATED time, not in animation frames.
+  //
+  // Counting every requestAnimationFrame callback measured the browser: a
+  // paused world, a backgrounded tab or a frame the engine skipped all
+  // advanced the count, so a trial could finish having integrated nothing and
+  // report the duration it was asked for. The clock decides now, and a run
+  // that stops advancing is stalled rather than complete.
+  //
+  // Two ceilings, because a clock that has stopped is not going to start
+  // again on its own and waiting out a long trial to discover that helps
+  // nobody: a run of consecutive non-advancing callbacks ends the trial
+  // quickly, and an overall tick ceiling catches the slow-but-not-stopped case.
+  let advanced = 0;
+  let ticks = 0;
+  let stalled = 0;
+  let sinceAdvance = 0;
+  let capped = false;
+  let lastClock = startClock;
+  const tickCeiling = cfg.frames * 10 + 120;
+  const stallLimit = 120;
   await new Promise(resolve => {
     const tick = () => {
       if (cfg.abort.cancelled) return resolve();
-      take();
-      frames++;
-      if (frames >= cfg.frames || samples.length >= MAX_SAMPLES) {
+      ticks++;
+      const clock = getSimulationTime();
+      if (clock > lastClock) {
+        lastClock = clock;
+        advanced++;
+        sinceAdvance = 0;
+        take();
+      } else {
+        stalled++;
+        sinceAdvance++;
+      }
+      if (samples.length >= MAX_SAMPLES) {
+        capped = true;
+        return resolve();
+      }
+      if (
+        advanced >= cfg.frames ||
+        ticks >= tickCeiling ||
+        sinceAdvance >= stallLimit
+      ) {
         return resolve();
       }
       cfg.onProgress?.({
         trial: cfg.index,
         total: cfg.total,
-        fraction: frames / cfg.frames,
+        fraction: advanced / cfg.frames,
       });
       requestAnimationFrame(tick);
     };
@@ -970,6 +1006,17 @@ async function runSweepTrial(cfg) {
   trial.wallMs = performance.now() - startedAt;
   trial.samples = samples.length;
   trial.duration = getSimulationTime() - startClock;
+
+  // What was asked for beside what was achieved, in the same units, on every
+  // trial. A reader comparing two trials of "the same" duration has to be able
+  // to see that one of them stopped early.
+  trial.requestedFrames = cfg.frames;
+  trial.advancedFrames = advanced;
+  trial.ticks = ticks;
+  trial.stalledTicks = stalled;
+  trial.sampleCapHit = capped;
+  trial.requestedDuration = cfg.requestedDuration ?? null;
+  trial.complete = !capped && advanced >= cfg.frames;
 
   if (cfg.abort.cancelled) {
     trial.status = SWEEP.TRIAL_STATUS.CANCELLED;
@@ -996,7 +1043,15 @@ async function runSweepTrial(cfg) {
 
   if (!spec.metrics.some(id => Number.isFinite(trial.results[id]))) {
     trial.status = SWEEP.TRIAL_STATUS.NOT_FINITE;
+    return trial;
   }
+
+  // It ran and it measured something, but it did not cover what it was asked
+  // to. Said rather than rounded up to success: the numbers are kept, and the
+  // summary leaves them out of a curve that claims a duration they do not
+  // have.
+  if (capped) trial.status = SWEEP.TRIAL_STATUS.CAPPED;
+  else if (advanced < cfg.frames) trial.status = SWEEP.TRIAL_STATUS.STALLED;
   return trial;
 }
 
@@ -1083,6 +1138,7 @@ export async function runSweep(spec, opts = {}) {
         index: i,
         total: values.length,
         frames,
+        requestedDuration: achievedDuration,
         abort,
         onProgress: opts.onProgress,
       });
