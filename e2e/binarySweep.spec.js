@@ -193,6 +193,55 @@ test.describe('what the sweep reports', () => {
   });
 });
 
+test.describe('stopping it', () => {
+  test('a stopped sweep keeps what it finished and says what it missed', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(420_000);
+    await openLab(page, app);
+    await shortenWindow(page, 4);
+    const before = await page.evaluate(async () => {
+      const { SETTINGS, current_scenario_name } =
+        await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        radius: SETTINGS.binary_lab_planet_a,
+        step: SETTINGS.max_timestep,
+      };
+    });
+
+    await page.locator('#binarySweepRun').click();
+    // Long enough that a trial or two is done, short of all five.
+    await page.waitForTimeout(6000);
+    await page.locator('#binarySweepCancel').click();
+
+    const report = await sweepReport(page);
+    expect(report.cancelled).toBe(true);
+    // The radii it never reached are missing rather than reported as anything.
+    const notRun = report.trials.filter(tr => tr.outcome === 'notRun');
+    expect(notRun.length + report.trials.length).toBeGreaterThan(0);
+    for (const trial of report.trials) {
+      expect(trial.outcome).not.toBe('survived');
+      if (trial.outcome === 'notRun') expect(trial.trustworthy).toBe(false);
+    }
+    const caveat = await page.locator('#binarySweepCaveat').innerText();
+    expect(caveat.toLowerCase()).toMatch(/stopped/);
+
+    // And the world the reader was looking at came back anyway.
+    const after = await page.evaluate(async () => {
+      const { SETTINGS, current_scenario_name } =
+        await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        radius: SETTINGS.binary_lab_planet_a,
+        step: SETTINGS.max_timestep,
+      };
+    });
+    expect(after).toEqual(before);
+  });
+});
+
 test.describe('re-running one trial at a smaller step', () => {
   test('it checks one radius and says what that settles', async ({
     page,
