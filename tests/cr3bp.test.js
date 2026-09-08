@@ -5,6 +5,7 @@ import {
   REGIME,
   ROUTH_MU,
   VIOLATION,
+  forceLawViolations,
   assumptionsHold,
   collinearPoints,
   effectivePotential,
@@ -480,6 +481,71 @@ describe('the assumptions are checked before anything is claimed', () => {
       expect(typeof EN_DEFERRED[`cr3bp.invalid.${v}`]).toBe('string');
       expect(typeof ES_DEFERRED[`cr3bp.invalid.${v}`]).toBe('string');
     }
+  });
+});
+describe('the force law has to be the one the model describes', () => {
+  const pair = [{ mass: 10 }, { mass: 1 }];
+  const tracer = { mass: 1e-6 };
+  const hold = forceLaw =>
+    assumptionsHold({
+      massive: pair,
+      tracer,
+      eccentricity: 0,
+      forceLaw,
+    });
+
+  test('nothing but Newtonian gravity is nothing to report', () => {
+    expect(
+      hold({ extraPotential: null, softening: 5, minDistance: 400 }).ok
+    ).toBe(true);
+  });
+
+  test('a halo in force is refused', () => {
+    const out = hold({
+      extraPotential: 'halo',
+      softening: 5,
+      minDistance: 400,
+    });
+    expect(out.ok).toBe(false);
+    expect(out.violations).toContain(VIOLATION.EXTRA_POTENTIAL);
+  });
+
+  test('MOND in force is refused', () => {
+    expect(
+      hold({ extraPotential: 'mond', softening: 5, minDistance: 400 })
+        .violations
+    ).toContain(VIOLATION.EXTRA_POTENTIAL);
+  });
+
+  test('a softening floor nothing is inside is not a modification', () => {
+    // The engine clamps the separation used in the force calculation; outside
+    // that radius the law is exactly the inverse square. Refusing a floor that
+    // nothing comes near would be refusing a dormant setting.
+    expect(forceLawViolations({ softening: 5, minDistance: 400 })).toEqual([]);
+  });
+
+  test('bodies inside the floor are being integrated under another law', () => {
+    expect(forceLawViolations({ softening: 50, minDistance: 40 })).toContain(
+      VIOLATION.SOFTENED
+    );
+  });
+
+  test('a hair outside the floor counts too', () => {
+    // A tracer three per cent clear of the clamp will cross it as it moves.
+    expect(forceLawViolations({ softening: 100, minDistance: 103 })).toContain(
+      VIOLATION.SOFTENED
+    );
+    expect(forceLawViolations({ softening: 100, minDistance: 130 })).toEqual(
+      []
+    );
+  });
+
+  test('no force law given is no claim either way', () => {
+    // Callers that predate this - and the pure tests above - are unaffected.
+    expect(forceLawViolations(null)).toEqual([]);
+    expect(assumptionsHold({ massive: pair, tracer, eccentricity: 0 }).ok).toBe(
+      true
+    );
   });
 });
 

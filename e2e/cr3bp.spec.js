@@ -335,3 +335,226 @@ test.describe('what the panel says', () => {
     }
   });
 });
+
+// =============================================================================
+// The force law, and which way round the frame goes
+// -----------------------------------------------------------------------------
+// The body-count and eccentricity checks were repaired first and still let
+// through configurations where the law being integrated is not the one drawn:
+// a dark-matter halo or MOND actually in force, or bodies close enough that
+// the engine is clamping the force between them. And the drawn L4/L5 did not
+// undo the reflection that a clockwise pair goes through, so on those systems
+// the leading point was drawn and labelled at the trailing one.
+// =============================================================================
+test.describe('the force law has to be the one on the label', () => {
+  test('a halo actually in force disables the overlay and says why', async ({
+    page,
+    app,
+  }) => {
+    await openLab(page, app);
+    expect((await readout(page)).ok).toBe(true);
+
+    const after = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      physics.updatePhysicsSettings({
+        galaxy_gravity: 'halo',
+        halo_v_flat: 6,
+      });
+      panel.refreshCr3bp();
+      const out = panel.cr3bpReadout();
+      const text = document.getElementById('cr3bpValidity').textContent;
+      physics.updatePhysicsSettings({ galaxy_gravity: 'newtonian' });
+      panel.refreshCr3bp();
+      return { out, text };
+    });
+
+    expect(after.out.ok).toBe(false);
+    expect(after.out.violations).toContain('extraPotential');
+    expect(after.text).toMatch(/dark-matter halo|MOND/i);
+  });
+
+  test('MOND selected but doing nothing is not a reason to refuse', async ({
+    page,
+    app,
+  }) => {
+    // The setting is chosen and the scenario has declared no scale, so a0
+    // comes out zero and the integration is Newtonian in every respect. A
+    // check that refused this would be refusing a dormant setting.
+    await openLab(page, app);
+
+    const after = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      physics.updatePhysicsSettings({
+        galaxy_gravity: 'mond',
+        galaxy_kpc_per_unit: 0,
+        galaxy_msun_per_unit: 0,
+      });
+      panel.refreshCr3bp();
+      const out = panel.cr3bpReadout();
+      physics.updatePhysicsSettings({ galaxy_gravity: 'newtonian' });
+      panel.refreshCr3bp();
+      return out;
+    });
+
+    // ok at all means no violations were raised, this one included.
+    expect(after.ok).toBe(true);
+  });
+
+  test('MOND with a declared scale is refused', async ({ page, app }) => {
+    await openLab(page, app);
+
+    const after = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      physics.updatePhysicsSettings({
+        galaxy_gravity: 'mond',
+        galaxy_kpc_per_unit: 0.1,
+        galaxy_msun_per_unit: 1e9,
+      });
+      panel.refreshCr3bp();
+      const out = panel.cr3bpReadout();
+      physics.updatePhysicsSettings({
+        galaxy_gravity: 'newtonian',
+        galaxy_kpc_per_unit: 0,
+        galaxy_msun_per_unit: 0,
+      });
+      panel.refreshCr3bp();
+      return out;
+    });
+
+    expect(after.ok).toBe(false);
+    expect(after.violations).toContain('extraPotential');
+  });
+
+  test('a softening floor the bodies are inside is refused', async ({
+    page,
+    app,
+  }) => {
+    await openLab(page, app);
+    expect((await readout(page)).ok).toBe(true);
+
+    const after = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      const sys = panel.readSystem();
+      // A floor bigger than the pair's own separation: the engine is clamping
+      // the force between them and the picture is of a law nobody is using.
+      physics.updatePhysicsSettings({
+        min_interaction_distance: (sys?.separation ?? 100) * 2,
+      });
+      panel.refreshCr3bp();
+      const out = panel.cr3bpReadout();
+      physics.updatePhysicsSettings({ min_interaction_distance: 5 });
+      panel.refreshCr3bp();
+      return out;
+    });
+
+    expect(after.ok).toBe(false);
+    expect(after.violations).toContain('softenedForces');
+  });
+
+  test('the check follows a setting back as well as forward', async ({
+    page,
+    app,
+  }) => {
+    // Responsiveness: switching the halo on and off again has to restore the
+    // overlay, not leave it refusing a configuration that is now fine.
+    await openLab(page, app);
+    const states = await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      const read = () => {
+        panel.refreshCr3bp();
+        return panel.cr3bpReadout().ok;
+      };
+      const before = read();
+      physics.updatePhysicsSettings({
+        galaxy_gravity: 'halo',
+        halo_v_flat: 6,
+      });
+      const during = read();
+      physics.updatePhysicsSettings({ galaxy_gravity: 'newtonian' });
+      const after = read();
+      return { before, during, after };
+    });
+    expect(states).toEqual({ before: true, during: false, after: true });
+  });
+});
+
+test.describe('which way round the pair goes', () => {
+  test('L4 leads the secondary whichever direction the pair orbits', async ({
+    page,
+    app,
+  }) => {
+    // The physical fact: L4 sits 60 degrees ahead of the secondary in the
+    // direction of motion, and L5 the same distance behind. The drawn points
+    // were computed in the counter-clockwise convention and rotated back into
+    // the world without undoing the reflection a clockwise pair goes through,
+    // so on those systems the two were swapped.
+    await openLab(page, app);
+
+    const check = await page.evaluate(async () => {
+      const panel = await import('/js/cr3bpPanel.js');
+      const physics = await import('/js/physics.js');
+
+      /** Signed angle from the secondary to a point, about the barycentre. */
+      const leadOf = (system, point) => {
+        const ang = p =>
+          Math.atan2(p.y - system.origin.y, p.x - system.origin.x);
+        let d = ang(point) - ang(system.secondary.pos);
+        while (d > Math.PI) d -= 2 * Math.PI;
+        while (d < -Math.PI) d += 2 * Math.PI;
+        // Positive means "ahead in the direction of motion" for either spin.
+        return d * (system.spin ?? 1);
+      };
+
+      const measure = () => {
+        const system = panel.readSystem();
+        const points = panel.lagrangePointsInWorld(system);
+        const at = name => points.find(p => p.name === name);
+        return {
+          spin: system.spin,
+          mu: system.mu,
+          l4: leadOf(system, at('L4')),
+          l5: leadOf(system, at('L5')),
+        };
+      };
+
+      const forward = measure();
+
+      // Reverse the pair. Every velocity flips, so the same system now goes
+      // round the other way and the frame's reflection kicks in.
+      for (const b of [...physics.stars, ...physics.planets]) {
+        b.vel.x = -b.vel.x;
+        b.vel.y = -b.vel.y;
+      }
+      panel.refreshCr3bp();
+      const reversed = measure();
+
+      for (const b of [...physics.stars, ...physics.planets]) {
+        b.vel.x = -b.vel.x;
+        b.vel.y = -b.vel.y;
+      }
+      panel.refreshCr3bp();
+      return { forward, reversed };
+    });
+
+    // Ahead and behind by the same angle, in both directions of travel. The
+    // angle is not exactly sixty degrees as seen from the barycentre - the
+    // equilateral triangle is on the primary-secondary line, and the
+    // barycentre sits at -mu along it - so the expectation is computed rather
+    // than assumed, from the same mass ratio the panel reports.
+    for (const state of [check.forward, check.reversed]) {
+      const expected = Math.atan2(Math.sqrt(3) / 2, 0.5 - state.mu);
+      expect(state.l4).toBeCloseTo(expected, 6);
+      expect(state.l5).toBeCloseTo(-expected, 6);
+      // Leading, not trailing: the sign is the whole point.
+      expect(state.l4).toBeGreaterThan(0);
+      expect(state.l5).toBeLessThan(0);
+    }
+    // And the two runs really were different directions.
+    expect(check.forward.spin).toBe(-check.reversed.spin);
+  });
+});

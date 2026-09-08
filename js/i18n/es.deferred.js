@@ -1636,6 +1636,10 @@ export const ES_DEFERRED = {
     'Los dos cuerpos masivos no están en una órbita cerrada uno alrededor del otro, así que no hay un sistema rotante en el que plantear el problema.',
   'cr3bp.invalid.tracerTooHeavy':
     'el tercer cuerpo pesa lo bastante como para mover a los otros dos, asi que no es una particula de prueba y el problema restringido no lo describe.',
+  'cr3bp.invalid.extraPotential':
+    'algo que no son estos dos cuerpos tira del tercero: hay un halo de materia oscura o MOND en funcionamiento, y los puntos de Lagrange de una ley modificada no son los que se dibujan aqui.',
+  'cr3bp.invalid.softenedForces':
+    'los cuerpos estan tan juntos que el motor esta limitando la fuerza entre ellos, asi que la ley de corto alcance que se integra no es la del inverso del cuadrado que supone esta imagen.',
   'cr3bp.invalid.noTracer': 'no hay un tercer cuerpo ligero que describir.',
   'cr3bp.noTracer': 'Sin trazador, no hay constante de Jacobi.',
   'cr3bp.jacobi': 'Constante de Jacobi C = {C}',

@@ -1614,6 +1614,10 @@ export const EN_DEFERRED = {
     'The two massive bodies are not on a closed orbit about each other, so there is no rotating frame to pose the problem in.',
   'cr3bp.invalid.tracerTooHeavy':
     'the third body is heavy enough to move the other two, so it is not a test particle and the restricted problem does not describe it.',
+  'cr3bp.invalid.extraPotential':
+    'something other than these two bodies is pulling on the third: a dark-matter halo or MOND is in force, and the Lagrange points of a modified law are not the ones drawn here.',
+  'cr3bp.invalid.softenedForces':
+    'the bodies are close enough together that the engine is clamping the force between them, so the close-range law being integrated is not the inverse square this picture assumes.',
   'cr3bp.invalid.noTracer': 'there is no light third body to describe.',
   'cr3bp.noTracer': 'No tracer, so no Jacobi constant.',
   'cr3bp.jacobi': 'Jacobi constant C = {C}',

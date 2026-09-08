@@ -46,7 +46,9 @@ import {
   asteroids,
   comets,
   world_to_screen,
+  getPhysicsSetting,
 } from './physics.js';
+import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
 import { registerOverlay } from './overlays.js';
@@ -111,6 +113,54 @@ const lightBodies = () =>
  *
  * @returns {?object} The pair, the tracer, mu, the separation and the verdict
  */
+/**
+ * The force law the engine is actually applying to these bodies.
+ *
+ * What is ACTING, not what is selected. MOND is chosen by a setting and does
+ * nothing whatever unless the scenario has declared a physical scale - the
+ * same guard that keeps it out of the Solar System - and a halo with no
+ * rotation speed is a halo of nothing, so neither of those is a reason to
+ * refuse a configuration that is Newtonian in every respect that matters. The
+ * softening floor is likewise not a modification until something comes inside
+ * it, so the closest distance in play is measured and handed over with it.
+ *
+ * @param {Array<object>} massive - The two heavy bodies
+ * @param {?object} tracer - The light third body
+ * @returns {object} {extraPotential, softening, minDistance}
+ */
+function activeForceLaw(massive, tracer) {
+  const mode = getPhysicsSetting('galaxy_gravity');
+  let extraPotential = null;
+  if (mode === 'halo' && Number(getPhysicsSetting('halo_v_flat')) > 0) {
+    extraPotential = 'halo';
+  } else if (mode === 'mond') {
+    const a0 = a0InSimUnits(
+      {
+        kpcPerUnit: getPhysicsSetting('galaxy_kpc_per_unit'),
+        solarMassPerUnit: getPhysicsSetting('galaxy_msun_per_unit'),
+      },
+      getPhysicsSetting('gravitational_constant')
+    );
+    if (Number.isFinite(a0) && a0 > 0) extraPotential = 'mond';
+  }
+
+  // Every distance the model depends on: the pair's separation, and the
+  // tracer's distance to each of them. Any one of these inside the floor means
+  // the force being integrated there is not the inverse square drawn here.
+  const gap = (a, b) =>
+    a && b ? Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y) : Infinity;
+  const distances = [];
+  if (massive.length === 2) distances.push(gap(massive[0], massive[1]));
+  if (tracer) for (const m of massive) distances.push(gap(tracer, m));
+  const finite = distances.filter(d => Number.isFinite(d));
+
+  return {
+    extraPotential,
+    softening: Number(getPhysicsSetting('min_interaction_distance')) || 0,
+    minDistance: finite.length ? Math.min(...finite) : Infinity,
+  };
+}
+
 export function readSystem() {
   const massive = massiveBodies();
   const light = lightBodies();
@@ -140,6 +190,7 @@ export function readSystem() {
     eccentricity,
     others,
     bound,
+    forceLaw: activeForceLaw(massive, tracer),
   });
   if (massive.length !== 2) return { verdict, mu: null, tracer, eccentricity };
 
@@ -498,20 +549,43 @@ function paintForbidden(ctx, system, C) {
 }
 
 /** Mark the five equilibria. */
-function paintPoints(ctx, system, C) {
-  const points = lagrangePoints(system.mu);
-  if (!points) return;
+/**
+ * The Lagrange points in world coordinates, in the order cr3bp.js returns them.
+ *
+ * Exported because the transform is the part that can be wrong: everything
+ * js/cr3bp.js computes is in the counter-clockwise convention, a clockwise
+ * pair is mapped onto it by flipping y, and a caller that rotates those points
+ * back into the world without undoing the flip draws L4 where L5 is. That is
+ * checkable against the physics - L4 leads the secondary in the direction of
+ * motion, whichever way the pair goes round - and now it is checked.
+ *
+ * @param {object} system - From readSystem()
+ * @returns {?Array<object>} Each point with x and y in world coordinates
+ */
+export function lagrangePointsInWorld(system) {
+  const points = lagrangePoints(system?.mu);
+  if (!points || !system) return null;
   const { origin, separation, cos, sin } = system;
+  const spin = system.spin ?? 1;
+  return points.map(p => {
+    const py = p.y * spin;
+    return {
+      ...p,
+      x: origin.x + separation * (p.x * cos - py * sin),
+      y: origin.y + separation * (p.x * sin + py * cos),
+    };
+  });
+}
 
+function paintPoints(ctx, system, C) {
+  const points = lagrangePointsInWorld(system);
+  if (!points) return;
   ctx.save();
   ctx.font = '11px system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (const p of points) {
-    // Rotate the rotating-frame point back into world coordinates.
-    const wx = origin.x + separation * (p.x * cos - p.y * sin);
-    const wy = origin.y + separation * (p.x * sin + p.y * cos);
-    const s = world_to_screen({ x: wx, y: wy });
+    const s = world_to_screen({ x: p.x, y: p.y });
 
     // Filled when the tracer's energy permits it to be there, hollow when it
     // does not. Deliberately not "reachable" - the fill says the energy does

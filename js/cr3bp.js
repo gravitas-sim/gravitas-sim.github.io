@@ -350,6 +350,25 @@ export const VIOLATION = Object.freeze({
   NO_TRACER: 'noTracer',
   /** The pair is not on a closed orbit, so there is no rotating frame. */
   UNBOUND: 'unbound',
+  /**
+   * Something other than the two bodies' Newtonian gravity is acting.
+   *
+   * A dark-matter halo or MOND, actually in force rather than merely selected
+   * in a menu. The restricted problem is a statement about two point masses
+   * pulling on a third with an inverse square law; add a background field or
+   * change the law at low acceleration and the Lagrange points are not where
+   * this module says they are, however carefully the arithmetic is done.
+   */
+  EXTRA_POTENTIAL: 'extraPotential',
+  /**
+   * The close-range force is not the force this model assumes.
+   *
+   * The engine clamps the separation used in the force calculation at a
+   * softening floor, which is exactly Newtonian outside that radius and not
+   * Newtonian at all inside it. A configuration whose distances sit inside the
+   * floor is being integrated under a different law from the one drawn.
+   */
+  SOFTENED: 'softenedForces',
 });
 
 /**
@@ -361,6 +380,16 @@ export const VIOLATION = Object.freeze({
  * drawing of a system that does not exist.
  */
 export const MAX_ECCENTRICITY = 0.01;
+
+/**
+ * How close to the softening floor is close enough to matter.
+ *
+ * The engine's floor is a hard clamp - the force is exactly Newtonian outside
+ * it and constant-radius inside - so anything at or under the floor is being
+ * integrated under a different law. A little over it counts too: a tracer
+ * sitting a few per cent outside will cross it as it moves.
+ */
+export const SOFTENING_MARGIN = 1.05;
 
 /**
  * How heavy the tracer may be before "restricted" is a lie.
@@ -389,6 +418,7 @@ export function assumptionsHold({
   eccentricity,
   others = [],
   bound = true,
+  forceLaw = null,
 }) {
   const violations = [];
   if (massive.length !== 2) violations.push(VIOLATION.BODY_COUNT);
@@ -432,5 +462,40 @@ export function assumptionsHold({
     }
   }
 
+  violations.push(...forceLawViolations(forceLaw));
+
   return { ok: violations.length === 0, violations, mu };
+}
+
+/**
+ * Whether the force law being integrated is the one this model describes.
+ *
+ * Judged on what is ACTING, not on what is selected. MOND is chosen by a
+ * setting and then does nothing at all unless the scenario has declared a
+ * physical scale, and a halo with no rotation speed is a halo of nothing;
+ * refusing those would be refusing a configuration that is Newtonian in every
+ * respect that matters. Equally, a softening floor is not a modification of
+ * anything until something comes inside it - the clamp is exact Newtonian
+ * gravity outside its own radius - so it is judged against the distances in
+ * play rather than against zero.
+ *
+ * @param {?object} forceLaw - {extraPotential, softening, minDistance}
+ * @returns {Array<string>} Violations, empty when the law is Newtonian here
+ */
+export function forceLawViolations(forceLaw) {
+  if (!forceLaw) return [];
+  const out = [];
+  if (forceLaw.extraPotential) out.push(VIOLATION.EXTRA_POTENTIAL);
+
+  const softening = Number(forceLaw.softening);
+  const closest = Number(forceLaw.minDistance);
+  if (
+    Number.isFinite(softening) &&
+    softening > 0 &&
+    Number.isFinite(closest) &&
+    closest <= softening * SOFTENING_MARGIN
+  ) {
+    out.push(VIOLATION.SOFTENED);
+  }
+  return out;
 }
