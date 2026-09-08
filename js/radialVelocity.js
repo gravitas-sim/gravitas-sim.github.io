@@ -1039,22 +1039,30 @@ function readSurveyControls(kindOverride = null) {
   // share link or an existing lesson to have to know about.
   const plain =
     kind === 'regular' && !gapsText && !comparisonWanted() && !kindOverride;
-  if (plain || !scheduleLib) return base;
+  if (plain || !controlsLib) return base;
 
-  const gaps = scheduleLib.parseGaps(gapsText).gaps;
-  const explicit = scheduleLib.parseEpochList(
-    String(e.surveyEpochList?.value ?? '')
-  ).offsets;
-
+  // The rest is parsing and clamping that only a shaped schedule needs, so it
+  // lives in the module that arrives with the schedule controls rather than in
+  // the start-up download.
   return {
     ...base,
-    kind,
-    epochs: epochCountControl(),
-    jitter: Number(e.surveyJitter?.value),
-    clusters: Number(e.surveyClusters?.value),
-    explicit,
-    gaps,
+    ...controlsLib.scheduleConfig({
+      kind,
+      epochs: e.surveyEpochs?.value,
+      cadenceDays: base.cadenceDays,
+      baselineDays: base.baselineDays,
+      jitter: e.surveyJitter?.value,
+      clusters: e.surveyClusters?.value,
+      epochList: e.surveyEpochList?.value ?? '',
+      gapsText,
+    }),
   };
+}
+
+/** @returns {boolean} Whether the reader has asked for a second schedule */
+function comparisonWanted() {
+  const e = cacheElements();
+  return Boolean(e.compareEnabled?.checked);
 }
 
 /**
@@ -1087,38 +1095,6 @@ function scheduleIsRunnable() {
     gapsText: e.surveyGaps?.value ?? '',
     config: readSurveyControls(),
   }).runnable;
-}
-
-/** @returns {boolean} Whether the reader has asked for a second schedule */
-function comparisonWanted() {
-  const e = cacheElements();
-  return Boolean(e.compareEnabled?.checked);
-}
-
-/**
- * How many observations a shaped schedule makes.
- *
- * Defaults to the number the cadence and baseline in the other fields would
- * have produced, which is what makes switching shape a controlled change: the
- * reader gets the same number of observations over the same span, placed
- * differently, rather than a different programme entirely.
- *
- * @returns {number} The count
- */
-function epochCountControl() {
-  const e = cacheElements();
-  const typed = Number(e.surveyEpochs?.value);
-  if (Number.isFinite(typed) && typed >= 2) return Math.trunc(typed);
-  return cadenceEpochCount();
-}
-
-/** @returns {number} What the cadence and baseline would have produced */
-function cadenceEpochCount() {
-  const e = cacheElements();
-  const cadence = Number(e.surveyCadence?.value ?? 0.32);
-  const baseline = Number(e.surveyBaseline?.value ?? 3.52);
-  if (!(cadence > 0) || !(baseline >= 0)) return 12;
-  return Math.max(2, Math.floor(baseline / cadence) + 1);
 }
 
 /**
@@ -1318,41 +1294,13 @@ function maybeCompare() {
         armB.measurements(),
       ]);
       compareBounds = bounds;
-      if (!bounds) {
-        compareReport = null;
-        renderCompareReport();
-        return;
-      }
-      const a = armA.config;
-      const b = armB.config;
-      const report = lib.compareSchedules(
-        {
-          label: 'A',
-          kind: a.kind ?? 'regular',
-          plan: a.plan,
-          measurements: armA.measurements(),
-        },
-        {
-          label: 'B',
-          kind: b.kind ?? 'regular',
-          plan: b.plan,
-          measurements: armB.measurements(),
-        },
-        {
-          ...bounds,
-          held: {
-            sigmaMs: { a: a.sigmaMs, b: b.sigmaMs },
-            seed: { a: a.seed, b: b.seed },
-            // Both arms observed the same frames of the same world, so the
-            // system is the same by construction; it is stated rather than
-            // assumed so the check is a check.
-            system: {
-              a: surveyProvenance?.target?.id ?? null,
-              b: surveyProvenance?.target?.id ?? null,
-            },
-          },
-        }
-      );
+      const report = controlsLib.buildComparison({
+        lib,
+        armA,
+        armB,
+        bounds,
+        target: surveyProvenance?.target?.id ?? null,
+      });
       // Checked again on the way out: the searches take long enough that the
       // world can have moved on since the check on the way in.
       if (generation !== surveyGeneration || survey !== armA) return;
@@ -1453,8 +1401,14 @@ function syncScheduleFields() {
 
   // Filled in from the cadence the reader already set, so switching shape
   // holds the number of observations constant instead of inventing one.
-  if (e.surveyEpochs && !e.surveyEpochs.value)
-    e.surveyEpochs.value = String(cadenceEpochCount());
+  if (e.surveyEpochs && !e.surveyEpochs.value) {
+    e.surveyEpochs.value = String(
+      controlsLib.epochCount({
+        cadenceDays: Number(e.surveyCadence?.value ?? 0.32),
+        baselineDays: Number(e.surveyBaseline?.value ?? 3.52),
+      })
+    );
+  }
 
   renderScheduleNote();
 }

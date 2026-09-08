@@ -69,6 +69,46 @@ export function comparisonBounds(sets) {
 }
 
 /**
+ * How many observations a shaped schedule makes.
+ *
+ * Defaults to the number the cadence and baseline would have produced, which
+ * is what makes switching shape a controlled change: the reader gets the same
+ * number of observations over the same span, placed differently, rather than a
+ * different programme.
+ *
+ * @param {object} fields - {epochs, cadenceDays, baselineDays}
+ * @returns {number} The count
+ */
+export function epochCount({ epochs, cadenceDays, baselineDays }) {
+  const typed = Number(epochs);
+  if (Number.isFinite(typed) && typed >= 2) return Math.trunc(typed);
+  const cadence = Number(cadenceDays);
+  const baseline = Number(baselineDays);
+  if (!(cadence > 0) || !(baseline >= 0)) return 12;
+  return Math.max(2, Math.floor(baseline / cadence) + 1);
+}
+
+/**
+ * The schedule half of the observing configuration.
+ *
+ * Only reached once a shape, a gap or a comparison has been asked for; a plain
+ * cadence run never comes here at all and takes the path it always took.
+ *
+ * @param {object} raw - What the controls say
+ * @returns {object} The schedule fields for js/rvSurvey.js
+ */
+export function scheduleConfig(raw) {
+  return {
+    kind: raw.kind,
+    epochs: epochCount(raw),
+    jitter: Number(raw.jitter),
+    clusters: Number(raw.clusters),
+    explicit: parseEpochList(raw.epochList ?? '').offsets,
+    gaps: parseGaps(raw.gapsText ?? '').gaps,
+  };
+}
+
+/**
  * Problems that mean the run would not be the run the reader described.
  *
  * A duplicate time and an over-long list are reported and then observed
@@ -121,6 +161,48 @@ export function scheduleFault(ctx) {
     runnable: !problems.some(p => FATAL.has(p.id)),
     problems,
   };
+}
+
+/**
+ * Build the comparison of two finished arms.
+ *
+ * The arithmetic and the held-constant bookkeeping, kept out of the start-up
+ * download with the rest of this module. The caller owns the generation guard:
+ * it decides whether the answer is still wanted by the time it arrives.
+ *
+ * @param {object} ctx - {lib, armA, armB, bounds, target}
+ * @returns {?object} The comparison, or null without usable bounds
+ */
+export function buildComparison(ctx) {
+  const { lib, armA, armB, bounds } = ctx;
+  if (!bounds) return null;
+  const a = armA.config;
+  const b = armB.config;
+  return lib.compareSchedules(
+    {
+      label: 'A',
+      kind: a.kind ?? 'regular',
+      plan: a.plan,
+      measurements: armA.measurements(),
+    },
+    {
+      label: 'B',
+      kind: b.kind ?? 'regular',
+      plan: b.plan,
+      measurements: armB.measurements(),
+    },
+    {
+      ...bounds,
+      held: {
+        sigmaMs: { a: a.sigmaMs, b: b.sigmaMs },
+        seed: { a: a.seed, b: b.seed },
+        // Both arms observed the same frames of the same world, so the system
+        // is the same by construction; it is stated rather than assumed so the
+        // check is a check.
+        system: { a: ctx.target ?? null, b: ctx.target ?? null },
+      },
+    }
+  );
 }
 
 /**
