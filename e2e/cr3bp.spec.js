@@ -115,60 +115,100 @@ test.describe('the Jacobi constant, through the real integrator', () => {
 });
 
 test.describe('access opens and closes with the tracer', () => {
-  test('a slower tracer is more confined, and the panel says which gates are shut', async ({
-    page,
-    app,
-  }) => {
-    await openLab(page, app);
-
-    const out = await page.evaluate(async () => {
-      const physics = await import('/js/physics.js');
-      const ui = await import('/js/ui.js');
-      const panel = await import('/js/cr3bpPanel.js');
-      ui.state.paused = true;
-      const tracer = physics.planets.find(b => b.name === 'Tracer');
-      const base = { x: tracer.vel.x, y: tracer.vel.y };
-
-      const sample = () => {
-        const r = panel.cr3bpReadout();
-        return {
-          C: r.C,
-          regime: r.regime.regime,
-          l1: r.regime.l1Open,
-          l2: r.regime.l2Open,
+  /**
+   * Put the tracer at a stated speed IN THE ROTATING FRAME.
+   *
+   * This test used to add a fixed vector to the tracer's inertial velocity and
+   * call the starting state "at rest in the rotating frame". It was neither.
+   * The tracer is orbiting, so it already has rotating-frame motion - 0.12 at
+   * the earliest moment the panel can be sampled, growing with every frame the
+   * world advances - and a fixed increment adds to that vectorially. When it
+   * pointed the other way the tracer got SLOWER, the Jacobi constant correctly
+   * went up, and the assertion that it must fall failed: on a loaded CI runner
+   * one frame later than a quiet laptop, by 0.0023.
+   *
+   * So the speed is constructed instead, through the exact inverse of the
+   * panel's own transform, and the world is frozen before anything is read so
+   * the configuration cannot move underneath the measurements.
+   */
+  /** Sample the panel at a series of rotating-frame speeds, one frozen world. */
+  const sweepSpeeds = (page, speeds, { reverse = false } = {}) =>
+    page.evaluate(
+      async ([list, flip]) => {
+        const physics = await import('/js/physics.js');
+        const ui = await import('/js/ui.js');
+        const panel = await import('/js/cr3bpPanel.js');
+        // Frozen FIRST. Every number below is about one configuration, and a
+        // configuration that moves between samples is several.
+        ui.state.paused = true;
+        if (flip) {
+          for (const b of [...physics.stars, ...physics.planets]) {
+            b.vel.x = -b.vel.x;
+            b.vel.y = -b.vel.y;
+          }
+        }
+        const tracer = physics.planets.find(b => b.name === 'Tracer');
+        const at = speed => {
+          const system = panel.readSystem();
+          const v = panel.inertialVelocityFor(system, { vx: speed, vy: 0 });
+          tracer.vel.x = v.x;
+          tracer.vel.y = v.y;
+          const state = panel.tracerState(panel.readSystem());
+          const r = panel.cr3bpReadout();
+          return {
+            asked: speed,
+            speed: Math.hypot(state.vx, state.vy),
+            C: r.C,
+            regime: r.regime.regime,
+            l1: r.regime.l1Open,
+            l2: r.regime.l2Open,
+          };
         };
-      };
+        const spin = panel.readSystem().spin;
+        const rows = list.map(at);
+        ui.state.paused = false;
+        return { rows, spin };
+      },
+      [speeds, reverse]
+    );
 
-      // At rest in the rotating frame: the largest C the tracer can have here,
-      // and the most confined it can be.
-      const still = sample();
+  for (const direction of ['as it orbits', 'with the pair reversed']) {
+    const reverse = direction === 'with the pair reversed';
 
-      // Give it some speed in the rotating frame. C must fall.
-      tracer.vel.x = base.x + 0.35;
-      tracer.vel.y = base.y + 0.2;
-      const moving = sample();
+    test(`a slower tracer is more confined, and the panel says which gates are shut (${direction})`, async ({
+      page,
+      app,
+    }) => {
+      await openLab(page, app);
+      const { rows, spin } = await sweepSpeeds(page, [0, 0.3, 0.9], {
+        reverse,
+      });
+      const [still, moving, fast] = rows;
 
-      // Enough speed to open everything.
-      tracer.vel.x = base.x + 1.4;
-      tracer.vel.y = base.y + 0.9;
-      const fast = sample();
+      // The construction worked: these ARE the speeds that were asked for.
+      for (const row of rows) {
+        expect(row.speed).toBeCloseTo(row.asked, 9);
+      }
+      expect(reverse ? spin : -spin).toBe(
+        -1 * (reverse ? 1 : 1) * (reverse ? 1 : 1)
+      );
 
-      tracer.vel.x = base.x;
-      tracer.vel.y = base.y;
-      ui.state.paused = false;
-      return { still, moving, fast };
+      // More speed, smaller C - and by exactly the difference of the squares,
+      // which is the whole content of C = 2*Omega - v^2. Checked rather than
+      // assumed, because a transform with a sign error would still produce a
+      // monotone sequence.
+      expect(moving.C).toBeLessThan(still.C);
+      expect(fast.C).toBeLessThan(moving.C);
+      expect(still.C - moving.C).toBeCloseTo(0.3 ** 2, 9);
+      expect(still.C - fast.C).toBeCloseTo(0.9 ** 2, 9);
+
+      // And a smaller C opens gates rather than closing them.
+      expect(still.l1).toBe(false);
+      expect(still.regime).toBe('separated');
+      expect(fast.l1).toBe(true);
+      expect(fast.l2).toBe(true);
     });
-
-    // The sign convention, checked on the live system: more speed, smaller C.
-    expect(out.moving.C).toBeLessThan(out.still.C);
-    expect(out.fast.C).toBeLessThan(out.moving.C);
-
-    // And a smaller C opens gates rather than closing them.
-    expect(out.still.l1).toBe(false);
-    expect(out.still.regime).toBe('separated');
-    expect(out.fast.l1).toBe(true);
-    expect(out.fast.l2).toBe(true);
-  });
+  }
 
   test('the L1 neck opens within a hair of the predicted critical value', async ({
     page,

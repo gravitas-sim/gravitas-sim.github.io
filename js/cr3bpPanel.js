@@ -310,6 +310,64 @@ export function tracerState(system) {
   return { x, y: fy, vx: rx + fy, vy: fry - x, mu, spin };
 }
 
+/**
+ * The inertial velocity that would put the tracer at a given rotating-frame one.
+ *
+ * The exact inverse of tracerState()'s velocity half, and it exists because
+ * there is no other honest way to ask "what happens when this tracer moves
+ * faster in the rotating frame". Adding a fixed vector to the INERTIAL
+ * velocity does not do it: the rotating-frame velocity is the inertial one
+ * minus the frame's own motion at that point, so a fixed increment adds to the
+ * rotating-frame velocity too - and adds to it vectorially. Where the tracer
+ * already has rotating-frame motion pointing the other way, that increment
+ * makes it SLOWER, and the Jacobi constant correctly goes up.
+ *
+ * e2e/cr3bp.spec.js used to do exactly that and call the result "at rest in
+ * the rotating frame". It passed whenever the sample happened early enough
+ * that the existing rotating-frame speed was small, and failed on a loaded
+ * runner one frame later, with the physics right and the fixture wrong.
+ *
+ * @param {object} system - From readSystem()
+ * @param {{vx: number, vy: number}} rotating - Wanted rotating-frame velocity,
+ *   in the normalised units tracerState() reports
+ * @returns {?{x: number, y: number}} The world velocity to assign
+ */
+export function inertialVelocityFor(system, rotating) {
+  const state = tracerState(system);
+  if (!state) return null;
+  const { cos, sin, separation } = system;
+  const spin = system.spin ?? 1;
+
+  const n = Math.sqrt(
+    (SETTINGS.gravitational_constant *
+      (system.primary.mass + system.secondary.mass)) /
+      separation ** 3
+  );
+
+  // Undo the frame terms, then the reflection, then the rotation - each the
+  // inverse of the step tracerState() applies, in reverse order.
+  const rx = Number(rotating.vx) - state.y;
+  const fry = Number(rotating.vy) + state.x;
+  const ry = fry * spin;
+  const wx = rx * cos - ry * sin;
+  const wy = rx * sin + ry * cos;
+
+  const total = system.primary.mass + system.secondary.mass;
+  const bvx =
+    (system.primary.mass * system.primary.vel.x +
+      system.secondary.mass * system.secondary.vel.x) /
+    total;
+  const bvy =
+    (system.primary.mass * system.primary.vel.y +
+      system.secondary.mass * system.secondary.vel.y) /
+    total;
+
+  return {
+    x: bvx + wx * separation * n,
+    y: bvy + wy * separation * n,
+  };
+}
+
 /** Turn on or off. @param {boolean} on - Whether to show it @returns {void} */
 export function setCr3bpEnabled(on) {
   enabled = Boolean(on);
