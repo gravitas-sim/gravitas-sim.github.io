@@ -80,15 +80,16 @@ describe('the deploy job only runs behind the gate', () => {
 
   test('the source suite is sharded and every shard has to pass', () => {
     const e2e = workflow.jobs.e2e;
-    // Four shards, so the suite fits inside the job limit it kept exceeding.
-    expect(e2e.strategy.matrix.shard).toEqual([1, 2, 3, 4]);
+    // Six shards, so the suite fits inside the job limit it kept exceeding
+    // with room to spare rather than by twelve seconds.
+    expect(e2e.strategy.matrix.shard).toEqual([1, 2, 3, 4, 5, 6]);
     // One failing shard must not cancel the others: a cancelled shard says
     // nothing about the tests it never reached.
     expect(e2e.strategy['fail-fast']).toBe(false);
     // Two workers per runner, as before. The parallelism belongs across
     // runners; more workers on one make every test in this suite slower.
     const run = e2e.steps.map(st => st.run || '').join('\n');
-    expect(run).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/4/);
+    expect(run).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/6/);
     expect(run).not.toMatch(/--workers/);
     // And the gate requires the matrix as a whole, which GitHub rolls up to
     // success only when every shard succeeded.

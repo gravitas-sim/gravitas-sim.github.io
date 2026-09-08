@@ -59,17 +59,21 @@ thing.
 
 ## How CI runs them
 
-The source suite is **split across four runners**, two workers each:
+The source suite is **split across six runners**, two workers each:
 
 ```bash
-npx playwright test --shard=1/4      # what one CI runner does
+npx playwright test --shard=1/6      # what one CI runner does
 ```
 
-It stopped fitting in a single job. At two workers the whole suite takes about
-55 minutes of wall clock on a runner, against a 25-minute limit, and the job was
-cancelled part-way through with nothing useful to show for it. Four shards bring
-the slowest one to roughly a third of the limit, with room for the npm install,
-the browser download and the report upload.
+It stopped fitting in a single job: at two workers the whole suite is about an
+hour of runner time against a 25-minute limit, and the job was cancelled
+part-way through with nothing useful to show for it.
+
+Four shards fitted and were measured on CI at 16.3, 15.5, 11.1 and 19.8
+minutes - the last of those against a 20-minute step cap, which is not headroom.
+Six brings the same 63 minutes of runner time to about 11 minutes a shard, with
+room for the npm install, the browser download and the report upload underneath
+a 25-minute job.
 
 Two workers per runner, deliberately, and not more. Every test here drives a
 live simulation, so workers on the same machine compete for the same CPU and
@@ -84,8 +88,8 @@ produced a report blocks the deploy regardless of what the report job did.
 
 Locally, `npm run e2e` is unchanged: no shards, no blob reports, the same HTML
 report it always wrote. `tests/shardInventory.test.js` asks Playwright for both
-inventories and fails if the four shards do not cover the unsharded suite
-exactly once, mobile included.
+inventories and fails if the shards do not cover the unsharded suite exactly
+once, mobile included.
 
 ## Other browsers
 

@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 // =============================================================================
 // The shards add up to the suite
 // -----------------------------------------------------------------------------
-// The source browser suite runs as four shards across four runners because it
+// The source browser suite runs as six shards across six runners because it
 // stopped fitting in one job. That is only a safe change while the four of them
 // between them run every test the single job ran, once each: a sharding mistake
 // - a stale total, a filter applied on one side only - would quietly stop
@@ -14,7 +14,7 @@ import { execFileSync } from 'node:child_process';
 // rather than runs, which takes seconds.
 // =============================================================================
 
-const SHARDS = 4;
+const SHARDS = 6;
 
 /** Every test id Playwright would run, for a given shard or for all of them. */
 function inventory(shard) {
@@ -40,7 +40,7 @@ function inventory(shard) {
   return ids;
 }
 
-describe('the four shards cover the suite exactly once', () => {
+describe('the shards cover the suite exactly once', () => {
   const whole = inventory(null);
   const shards = Array.from({ length: SHARDS }, (_, i) => inventory(i + 1));
 
@@ -77,10 +77,10 @@ describe('the four shards cover the suite exactly once', () => {
     for (const id of mobile) expect(union.has(id)).toBe(true);
   });
 
-  test('no shard is empty and none holds more than half', () => {
+  test('no shard is empty and none holds more than a third', () => {
     for (const ids of shards) {
       expect(ids.length).toBeGreaterThan(0);
-      expect(ids.length).toBeLessThan(whole.length / 2);
+      expect(ids.length).toBeLessThan(whole.length / 3);
     }
   });
 });
