@@ -158,6 +158,8 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'write-down-the-ratios',
+      // Read off the instrument that step sets running.
+      requires: ['measure-the-four-periods'],
       type: 'measure',
       title: 'Write down the ratios',
       tool: { id: 'resonance-periods' },
@@ -220,6 +222,8 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'which-is-the-impressive-one',
+      // "The three ratios you measured".
+      requires: ['write-down-the-ratios'],
       type: 'question',
       kind: 'choice',
       title: 'Which is the impressive one?',
@@ -503,6 +507,9 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-the-laplace-libration',
+      // Recorded off the angle instrument once it has reached its verdict,
+      // which takes the run that step starts.
+      requires: ['watch-the-laplace-argument'],
       type: 'measure',
       title: 'Record the Laplace libration',
       tool: { id: 'resonance-angle', argument: 'laplace' },
@@ -824,6 +831,8 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-pluto-s-libration',
+      // Read off the run that step starts.
+      requires: ['measure-pluto-s-resonance'],
       type: 'measure',
       title: 'Record Pluto’s libration',
       tool: { id: 'resonance-angle', argument: 'pluto' },
@@ -1036,6 +1045,8 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-the-tadpole',
+      // Read off the frame instrument that step sets running.
+      requires: ['the-rotating-frame'],
       type: 'measure',
       title: 'Record the tadpole',
       tool: { id: 'resonance-frame', secondary: 'Jupiter' },

@@ -247,6 +247,9 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'apply-the-first-burn',
+      // "Put your answer into the transverse box" - the answer worked out
+      // there.
+      requires: ['first-burn-size'],
       type: 'explore',
       title: 'Make it',
       body: `In the planner, set the radial Δv back to <strong>0</strong> and
@@ -265,6 +268,8 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'where-the-change-appeared',
+      // It compares the orbit before and after that burn.
+      requires: ['apply-the-first-burn'],
       type: 'question',
       kind: 'choice',
       title: 'Where did the orbit change?',
@@ -311,6 +316,8 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'watch-the-coast',
+      // There is no transfer ellipse to coast along until that burn is made.
+      requires: ['apply-the-first-burn'],
       type: 'explore',
       title: 'Coast',
       body: `Let it run. The spacecraft climbs away from the star, slowing the
@@ -373,6 +380,8 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'apply-the-second-burn',
+      // The second burn is made at apoapsis, which is where that coast ends.
+      requires: ['watch-the-coast'],
       type: 'explore',
       title: 'Circularise',
       body: `When the spacecraft is at the top of its arc — apoapsis, where the
@@ -390,6 +399,8 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'total-cost',
+      // The two burns being added up.
+      requires: ['first-burn-size', 'second-burn-size'],
       type: 'question',
       kind: 'numeric',
       title: 'What did it cost?',

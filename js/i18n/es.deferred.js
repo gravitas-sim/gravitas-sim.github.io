@@ -494,6 +494,8 @@ export const ES_DEFERRED = {
     'Este enlace tiene {n} caracteres, por encima de los {limit} que los clientes de correo y las plataformas de curso transportan con fiabilidad. Con menos pasos seria mas corto; un enlace truncado falla en el lado del alumnado, donde nadie puede arreglarlo.',
   'assign.added.setup':
     'Anadido: construye el mundo {scenario} del que trata \u201c{step}\u201d.',
+  'assign.added.requires':
+    'Anadido: \u201c{step}\u201d usa lo que produce este paso.',
   'assign.added.summary':
     'Se anadieron {n} paso(s) porque los que elegiste tratan sobre los mundos que estos construyen.',
   'assign.subtitle': '{n} pasos de {lesson} ({total} en la leccion completa)',

@@ -166,6 +166,8 @@ const RETROGRADE = {
     },
     {
       sid: 'which-one-is-faster',
+      // Answered off the periods measured there.
+      requires: ['the-two-orbits'],
       type: 'question',
       title: 'Which one is faster?',
       kind: 'choice',
@@ -185,6 +187,8 @@ const RETROGRADE = {
     },
     {
       sid: 'how-fast-each-one-goes',
+      // It says "copy across the two periods you measured a moment ago".
+      requires: ['the-two-orbits'],
       type: 'measure',
       title: 'How fast each one goes round',
       body: `A period is awkward to compare directly. Turn each one into an
@@ -272,6 +276,8 @@ const RETROGRADE = {
     },
     {
       sid: 'a-lap-gained',
+      // Checked against the gain rate worked out there.
+      requires: ['how-fast-each-one-goes'],
       type: 'question',
       title: 'A lap gained',
       kind: 'numeric',

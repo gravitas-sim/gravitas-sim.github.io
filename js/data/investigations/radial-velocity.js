@@ -314,6 +314,8 @@ const RADIAL_VELOCITY = {
     // --- Part 6: weigh the planet -------------------------------------------
     {
       sid: 'weigh-hd-209458-b',
+      // The K to match is the one read off the panel there.
+      requires: ['read-k-off-the-panel'],
       type: 'question',
       kind: 'numeric',
       title: 'Weigh HD 209458 b',

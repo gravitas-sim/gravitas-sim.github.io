@@ -180,6 +180,9 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'what-the-quiet-run-did',
+      // "With the run finished, read four numbers off the panel" - the run
+      // that step performs.
+      requires: ['run-the-default'],
       type: 'measure',
       title: 'What the quiet run did',
       body: `With the run finished, read four numbers off the panel.`,
@@ -301,6 +304,8 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'when-did-it-leave',
+      // Reads the 0.30 run off the panel.
+      requires: ['run-it-at-030'],
       type: 'measure',
       title: 'When did it leave?',
       body: `Read the run off the panel.`,
@@ -491,6 +496,8 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'the-drift-was-tiny',
+      // Records what the 0.25 runs said.
+      requires: ['the-case-that-matters'],
       type: 'measure',
       title: 'Three runs of the same configuration',
       body: `Write down what the three runs said. The point of the exercise is
@@ -683,6 +690,8 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'no-encounter-at-all',
+      // Reads the circumbinary run off the panel.
+      requires: ['run-the-circumbinary'],
       type: 'measure',
       title: 'It left without touching anything',
       body: `Read the run.`,
@@ -833,6 +842,9 @@ const BINARY_STAR_PLANETS = {
     // --- Part 5: what a finite integration is worth --------------------------
     {
       sid: 'the-strongest-claim',
+      // The claim is about the planet at 0.15, which is the run recorded
+      // there.
+      requires: ['what-the-quiet-run-did'],
       type: 'question',
       kind: 'choice',
       title: 'The strongest claim',

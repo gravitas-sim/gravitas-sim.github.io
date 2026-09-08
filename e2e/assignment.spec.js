@@ -599,3 +599,88 @@ test.describe('the rest of the machinery still works', () => {
     expect(out.keys.length).toBe(1);
   });
 });
+
+// =============================================================================
+// The lessons' own dependencies, through the builder
+// -----------------------------------------------------------------------------
+// tests/assignment.test.js resolves the subsets. This is the part that only a
+// browser can show: that an instructor ticking one calculation gets a workable
+// assignment out of the builder, that it says why, that it runs, and that it
+// does so in Spanish too.
+// =============================================================================
+test.describe('a calculation brings the measurements it copies', () => {
+  /** Tick a step by its permanent id rather than by position. */
+  async function tickBySid(page, sid) {
+    const index = await page.evaluate(async wanted => {
+      const reg = await import('/js/data/investigations/registry.js');
+      const lesson = await reg.loadInvestigation('keplers-laws');
+      return lesson.steps.findIndex(s => s.sid === wanted);
+    }, sid);
+    expect(index).toBeGreaterThan(-1);
+    await page
+      .locator('.assignment-step input[type=checkbox]')
+      .nth(index)
+      .check();
+    return index;
+  }
+
+  const includedSids = page =>
+    page.$$eval(
+      '.assignment-step[data-included="true"] input[type=checkbox]',
+      nodes => nodes.map(n => n.dataset.sid).filter(Boolean)
+    );
+
+  test('ticking the calculation pulls in the table it reads from', async ({
+    page,
+    app,
+  }) => {
+    await openBuilder(page, app);
+    await tickBySid(page, 'work-the-law-out-step');
+
+    const sids = await includedSids(page);
+    expect(sids).toContain('work-the-law-out-step');
+    expect(sids).toContain('measure-four-planets');
+    // And says why, on screen, rather than adding it silently.
+    // And says why, naming the dependency for what it is rather than
+    // claiming the added step builds a world.
+    const why = await page.locator('.assignment-why').allInnerTexts();
+    expect(why.join(' ')).toMatch(/uses what this step produces/i);
+    expect(why.join(' ')).not.toMatch(/builds the — world/i);
+  });
+
+  test('the assignment it builds actually runs', async ({ page, app }) => {
+    await openBuilder(page, app);
+    await tickBySid(page, 'work-the-law-out-step');
+    const link = await makeLink(page, 'Third law');
+
+    // The assignment travels in the fragment, so the path to open is
+    // everything from the slash before it - not a query string.
+    const path = link.slice(link.indexOf('/#'));
+    expect(path.startsWith('/#')).toBe(true);
+    await app.boot({ url: path });
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    // The first step of the subset is the measurement, not the calculation:
+    // the student is given the table before being asked to copy from it.
+    const first = await page.evaluate(async () => {
+      const inv = await import('/js/investigations.js');
+      return inv.activeSteps?.()?.[0]?.sid ?? null;
+    });
+    if (first !== null) expect(first).toBe('measure-four-planets');
+  });
+
+  test('it holds in Spanish', async ({ page, app }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem('gravitas_locale', 'es');
+    });
+    await openBuilder(page, app);
+    await tickBySid(page, 'work-the-law-out-step');
+    const sids = await includedSids(page);
+    expect(sids).toContain('measure-four-planets');
+    // Dependencies are structural: a translation is a shadow of words and
+    // must not be able to change which steps an assignment contains.
+    const why = await page.locator('.assignment-why').first().innerText();
+    expect(why).not.toMatch(/assign\.[a-z]/i);
+  });
+});

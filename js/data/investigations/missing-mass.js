@@ -471,6 +471,8 @@ const DARK_MATTER = {
     },
     {
       sid: 'record-your-best-stars-only',
+      // It records the best stars-only fit, which is the fit made there.
+      requires: ['try-it-with-stars-alone'],
       type: 'measure',
       title: 'Record your best stars-only fit',
       tool: {
@@ -553,6 +555,8 @@ const DARK_MATTER = {
     },
     {
       sid: 'record-the-fit-that-works',
+      // It records the model that fitted, which is the one built there.
+      requires: ['now-add-the-halo'],
       type: 'measure',
       title: 'Record the fit that works',
       tool: { id: 'dm-fit' },

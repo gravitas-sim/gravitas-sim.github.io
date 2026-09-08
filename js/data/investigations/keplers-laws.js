@@ -670,6 +670,10 @@ const KEPLER = {
     },
     {
       sid: 'work-the-law-out-step',
+      // The two values in the first two boxes are copied from the table the
+      // student filled in there; without it this step asks them to copy numbers
+      // they were never asked to write down.
+      requires: ['measure-four-planets'],
       type: 'measure',
       title: 'Work the law out, step by step',
       body: `Take your <strong>outermost</strong> planet: the one with the

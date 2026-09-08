@@ -576,6 +576,9 @@ const WEIGHING = {
     },
     {
       sid: 'weigh-the-pair',
+      // "Put your two measurements in" - the separation and the period, one
+      // from each of those two screens.
+      requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
       type: 'measure',
       title: 'Weigh the pair',
       body: `Put your two measurements in. The arithmetic is done for you, line
@@ -717,6 +720,8 @@ const WEIGHING = {
     },
     {
       sid: 'now-weigh-each-one',
+      // The four solar masses being shared out are the total weighed there.
+      requires: ['weigh-the-pair'],
       type: 'measure',
       title: 'Now weigh each one',
       body: `You have four solar masses to share out, and you know the split has

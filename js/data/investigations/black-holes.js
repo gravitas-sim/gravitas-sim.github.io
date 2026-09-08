@@ -452,6 +452,9 @@ const BLACK_HOLES = {
     },
     {
       sid: 'where-the-room-comes-from',
+      // "That is the rule you measured earlier" - the radius-mass rule from
+      // those three measurements.
+      requires: ['three-measurements'],
       type: 'question',
       title: 'Where the room comes from',
       kind: 'numeric',
@@ -704,6 +707,9 @@ const BLACK_HOLES = {
     },
     {
       sid: 'a-mystery-black-hole-size',
+      // Answered from the two rules found there: radius against mass, and
+      // density against mass.
+      requires: ['three-measurements', 'mass-divided-by-volume'],
       type: 'question',
       title: 'A mystery black hole: size and density',
       kind: 'choice',

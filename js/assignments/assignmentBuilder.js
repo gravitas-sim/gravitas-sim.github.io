@@ -177,10 +177,20 @@ function render() {
       const note = document.createElement('span');
       note.className = 'assignment-why';
       const needer = lesson.steps.find(s => s.sid === why.forSid);
-      note.textContent = t('assign.added.setup', {
-        scenario: why.scenario || '—',
-        step: needer?.title || why.forSid,
-      });
+      // Two different reasons and they are not interchangeable. A setup step
+      // builds the world a later step is about; a declared dependency is a
+      // measurement, a prediction or an action that a later step reads. Saying
+      // "this builds the world" of a step that builds nothing would tell an
+      // instructor something false about their own assignment.
+      note.textContent =
+        why.reason === 'requires'
+          ? t('assign.added.requires', {
+              step: needer?.title || why.forSid,
+            })
+          : t('assign.added.setup', {
+              scenario: why.scenario || '—',
+              step: needer?.title || why.forSid,
+            });
       li.appendChild(note);
     }
     list.appendChild(li);

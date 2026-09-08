@@ -479,6 +479,8 @@ const BUTTERFLY_EFFECT = {
     },
     {
       sid: 'how-long-does-a-prediction',
+      // "Take tau from your measurement".
+      requires: ['write-down-what-you-measured'],
       type: 'question',
       title: 'How long does a prediction last?',
       kind: 'numeric',
@@ -506,6 +508,8 @@ const BUTTERFLY_EFFECT = {
     },
     {
       sid: 'buying-more-time',
+      // The same tau again.
+      requires: ['write-down-what-you-measured'],
       type: 'question',
       title: 'Buying more time',
       kind: 'choice',
@@ -553,6 +557,8 @@ const BUTTERFLY_EFFECT = {
     },
     {
       sid: 'before-you-refine',
+      // The prediction is about the divergence measured there.
+      requires: ['write-down-what-you-measured'],
       type: 'predict',
       title: 'Before you refine',
       body: `You are about to repeat the three-body comparison with the timestep

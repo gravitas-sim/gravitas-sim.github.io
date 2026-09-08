@@ -1053,6 +1053,9 @@ const TRANSITS = {
     },
     {
       sid: 'recover-the-real-planet',
+      // The clean depth and the blended depth, one from each of those two
+      // measurements. Neither on its own recovers anything.
+      requires: ['measure-the-dip', 'now-measure-it'],
       type: 'measure',
       title: 'Recover the real planet',
       body: `You have measured the same planet twice, once clean and once

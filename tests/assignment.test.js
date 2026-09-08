@@ -553,3 +553,106 @@ describe('a binding cannot survive an answer-semantic change', () => {
     expect(kept.kept['l:q']).toBeUndefined();
   });
 });
+
+// =============================================================================
+// The lessons' own dependencies
+// -----------------------------------------------------------------------------
+// The resolver has been able to follow `requires` for a while and only one
+// lesson declared any, so a subset could be assigned that asks a student to
+// copy numbers from a step nobody gave them. These go against the real lesson
+// files rather than a fixture: the resolver working on a shape nobody ships is
+// what let this sit.
+// =============================================================================
+describe('a subset of a real lesson brings what it needs', () => {
+  const lessonById = async id => {
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    return INVESTIGATIONS.find(inv => inv.id === id);
+  };
+
+  test("Kepler's calculation brings the table it copies from", async () => {
+    // The reproduction: this yielded the third-law reading plus the
+    // calculation, and left out the four planets whose values the calculation
+    // asks the student to copy.
+    const out = resolveSelection(await lessonById('keplers-laws'), [
+      'work-the-law-out-step',
+    ]);
+    expect(out.sids).toContain('measure-four-planets');
+    expect(out.sids).toContain('work-the-law-out-step');
+    expect(out.added.some(a => a.sid === 'measure-four-planets')).toBe(true);
+  });
+
+  test('a burn that has to happen first is included', async () => {
+    const out = resolveSelection(await lessonById('hohmann-transfer'), [
+      'apply-the-second-burn',
+    ]);
+    expect(out.sids).toContain('apply-the-first-burn');
+    expect(out.sids).toContain('watch-the-coast');
+    // And in the order they have to happen in.
+    expect(out.sids.indexOf('apply-the-first-burn')).toBeLessThan(
+      out.sids.indexOf('watch-the-coast')
+    );
+    expect(out.sids.indexOf('watch-the-coast')).toBeLessThan(
+      out.sids.indexOf('apply-the-second-burn')
+    );
+  });
+
+  test('a reading brings the run it reads', async () => {
+    const out = resolveSelection(await lessonById('binary-star-planets'), [
+      'the-strongest-claim',
+    ]);
+    expect(out.sids).toContain('run-the-default');
+    expect(out.sids).toContain('what-the-quiet-run-did');
+  });
+
+  test('it does not sweep in every preceding step', async () => {
+    // The point of declaring dependencies is that the ones that are not
+    // dependencies stay out. A selection that quietly became "everything
+    // before this" would be no selection at all.
+    const kepler = await lessonById('keplers-laws');
+    const out = resolveSelection(kepler, ['work-the-law-out-step']);
+    const index = kepler.steps.findIndex(
+      s => s.sid === 'work-the-law-out-step'
+    );
+    expect(out.sids.length).toBeLessThan(index + 1);
+    expect(out.sids).not.toContain('watch-it-happen');
+  });
+
+  test('every dependency any lesson declares names an earlier step of its own', async () => {
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    for (const inv of INVESTIGATIONS) {
+      const at = new Map(inv.steps.map((s, i) => [s.sid, i]));
+      inv.steps.forEach((step, i) => {
+        for (const need of step.requires || []) {
+          // A dependency on a step that does not exist is silently dropped by
+          // the resolver, which is the worst of both worlds: the subset looks
+          // resolved and is missing the thing it needs.
+          expect(at.has(need)).toBe(true);
+          expect(at.get(need)).toBeLessThan(i);
+        }
+      });
+    }
+  });
+
+  test('every real lesson subset resolves to something runnable', async () => {
+    // Each graded step on its own, across every lesson: the resolved subset
+    // must contain it, its dependencies, and the setup that builds the world
+    // each of those is about.
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    for (const inv of INVESTIGATIONS) {
+      for (const step of inv.steps) {
+        if (!step.requires?.length) continue;
+        const out = resolveSelection(inv, [step.sid]);
+        for (const need of step.requires) {
+          expect(out.sids).toContain(need);
+        }
+        // Order is the lesson's own, so a dependency cannot land after the
+        // step that needs it.
+        for (const need of step.requires) {
+          expect(out.sids.indexOf(need)).toBeLessThan(
+            out.sids.indexOf(step.sid)
+          );
+        }
+      }
+    }
+  });
+});

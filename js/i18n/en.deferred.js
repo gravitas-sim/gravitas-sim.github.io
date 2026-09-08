@@ -490,6 +490,8 @@ export const EN_DEFERRED = {
     'This link is {n} characters, above the {limit} that mail clients and course systems reliably carry. Fewer steps would shorten it; a truncated link fails at the student\u2019s end, where nobody can fix it.',
   'assign.added.setup':
     'Added: this builds the {scenario} world that \u201c{step}\u201d is about.',
+  'assign.added.requires':
+    'Added: \u201c{step}\u201d uses what this step produces.',
   'assign.added.summary':
     '{n} step(s) were added because the steps you chose are about the worlds they build.',
   'assign.subtitle': '{n} steps of {lesson} ({total} in the full lesson)',

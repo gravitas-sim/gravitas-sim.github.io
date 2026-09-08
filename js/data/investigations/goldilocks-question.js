@@ -286,6 +286,8 @@ const GOLDILOCKS = {
     },
     {
       sid: 'writing-it-down-then-using',
+      // "The areas you just read off" are the three recorded there.
+      requires: ['write-the-three-down'],
       type: 'question',
       title: 'Writing it down, then using it',
       kind: 'numeric',
