@@ -69,11 +69,21 @@ It stopped fitting in a single job: at two workers the whole suite is about an
 hour of runner time against a 25-minute limit, and the job was cancelled
 part-way through with nothing useful to show for it.
 
-Four shards fitted and were measured on CI at 16.3, 15.5, 11.1 and 19.8
-minutes - the last of those against a 20-minute step cap, which is not headroom.
-Six brings the same 63 minutes of runner time to about 11 minutes a shard, with
-room for the npm install, the browser download and the report upload underneath
-a 25-minute job.
+Sharding divides the suite by **test count**, which says nothing about how long
+those tests take, and the floor is set by a single file: tests inside one spec
+run serially, and `chaos.spec.js` alone is about twelve minutes locally. No
+number of shards gets below that.
+
+Measured, twice. Four shards on CI: 16.3, 15.5, 11.1, 19.8 minutes - the last
+against a 20-minute step cap, which is luck rather than headroom. Six shards:
+one of them went over it. Locally the six-way split is 14.9 minutes at its
+worst and CI runs this workload about 1.4 times slower, so the real figure is
+around 21.
+
+So the caps are set above what was measured rather than at a round number the
+work has to fit into: 32 minutes for the test step, 40 for the job. The
+per-test timeout (90s) and every assertion are untouched - a hung shard is
+still caught, at a third again its expected duration.
 
 Two workers per runner, deliberately, and not more. Every test here drives a
 live simulation, so workers on the same machine compete for the same CPU and

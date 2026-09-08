@@ -254,11 +254,25 @@ jobs:
   e2e:
     name: Browser smoke tests (sources) ${{ matrix.shard }}/6
     runs-on: ubuntu-latest
-    # The unsharded job kept exceeding this. Four shards fitted but only just:
-    # the slowest came in at 19.8 minutes against the 20-minute step cap
-    # below, which is not headroom, it is luck. Six brings the whole suite's
-    # 63 minutes of runner time to about 11 minutes a shard.
-    timeout-minutes: 25
+    # Measured rather than guessed, twice, because the first two guesses were
+    # wrong in both directions.
+    #
+    # The unsharded job kept exceeding 25 minutes. Four shards fitted but only
+    # just - 19.8 minutes against a 20-minute step cap - and six then produced
+    # a shard that went over it, because sharding divides by TEST COUNT and
+    # says nothing about duration. What actually sets the floor is one file:
+    # tests inside a spec run serially, and chaos.spec.js alone is about twelve
+    # minutes locally, so whichever shard holds most of it cannot finish faster
+    # than that however many shards there are.
+    #
+    # Measured: the whole suite is 54 minutes locally at two workers, the
+    # slowest six-way shard is 14.9 of them, and CI runs this workload about
+    # 1.4 times slower than that - so the worst shard is around 21 minutes
+    # there. The caps are set above that with room rather than at a round
+    # number the work has to fit into: 32 for the step, 40 for the job. Neither
+    # the per-test timeout nor any assertion changes; a hung shard is still
+    # caught, at a third again its expected duration.
+    timeout-minutes: 40
     strategy:
       # One shard failing must not cancel the other three. A cancelled shard
       # tells you nothing about the tests it did not reach, and the whole point
@@ -308,7 +322,7 @@ jobs:
         # and the upload below still happens. A shard whose report never
         # arrived is not a shard that passed, and the aggregate treats it that
         # way.
-        timeout-minutes: 20
+        timeout-minutes: 32
         # Two workers, the same as the unsharded job had. The suite drives a
         # live simulation in every test and more workers on one runner make
         # every one of them slower; the parallelism belongs across runners.
