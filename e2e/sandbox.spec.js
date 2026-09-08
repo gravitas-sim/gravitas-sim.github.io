@@ -231,12 +231,30 @@ test.describe('placing an object is deliberate', () => {
       );
     });
 
+  /**
+   * Stop the world, so the only thing that can change the body count is a click.
+   *
+   * Placement is an interface action rather than a physics one, so it still
+   * works; what stops is the merging and absorbing that was moving the number
+   * underneath these assertions.
+   */
+  const freezeWorld = page =>
+    page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      physics.state.paused = true;
+    });
+
   test('a click on empty space adds nothing until a type is chosen', async ({
     page,
     app,
   }) => {
     await app.boot();
     await page.waitForTimeout(500);
+    // Frozen for the duration. The default scenario is a live world whose
+    // bodies can merge while a test is counting them, and a count that drops
+    // by one between two reads looks exactly like a click that did something
+    // - which is how this test came to fail on runs where nothing was wrong.
+    await freezeWorld(page);
 
     const before = await bodyCount(page);
     expect(before).toBeGreaterThan(0);
@@ -257,6 +275,7 @@ test.describe('placing an object is deliberate', () => {
   }) => {
     await app.boot();
     await page.waitForTimeout(500);
+    await freezeWorld(page);
 
     await page.click('#objectTypeBtn');
     await expect(page.locator('#objectTypePicker')).toBeVisible();
