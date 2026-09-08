@@ -300,6 +300,67 @@ export default {
       tip: 'Vale la pena probar antes de seguir: ejecuta 0,20, justo fuera de la frontera. El artículo describe islas de inestabilidad dentro de la línea ajustada e islas de estabilidad fuera, y el panel se niega a predecir nada a menos de 0,02 separaciones de ella. Un ajuste a dónde está la transición la mayor parte de las veces no es un muro.',
     },
     {
+      title: 'Cinco radios de una vez',
+      body: 'Has ejecutado dos configuraciones a mano y has leido cuatro numeros del panel cada vez. Hacerlo tres veces mas no te va a ensenar nada que no te ensenaran las dos primeras, asi que lo hara el panel.\n\nAbre <strong>Barrer el radio inicial</strong> al final del panel de Ejecucion Planeta Binario. Ejecuta el mismo experimento de veinte periodos en <strong>0,12, 0,15, 0,18, 0,22 y 0,30</strong> separaciones, con las masas, la excentricidad, la semilla, el integrador y el paso exactamente como estan ahora. Lo unico que cambia entre ensayos es donde empieza el planeta.\n\nLa frontera publicada esta en 0,177. Comprometete antes de ejecutarlo.',
+      prompt: '¿Cual de estas cosas esperas que muestren los cinco ensayos?',
+      options: [
+        'Supervivencia por debajo de 0,177 y expulsion por encima, de forma nitida',
+        'Supervivencia en los radios pequenos y expulsion en los grandes, con el cambio en algun punto cercano a 0,177 pero no necesariamente en el',
+        'Expulsion en todos los radios, porque la binaria es excentrica',
+        'Supervivencia en todos los radios, porque veinte periodos no son muchos',
+      ],
+      because:
+        'La segunda. El ajuste describe donde suele estar la transicion en una rejilla de sistemas, no un muro en este. El propio articulo informa de islas de inestabilidad dentro de la linea y de islas de estabilidad fuera, y veinte periodos son pocos para que una inestabilidad lenta haya terminado de ocurrir. Lo que cabe esperar es un cambio de resultado cerca de 0,177, sin garantia de donde exactamente.',
+      tip: 'Una prediccion escrita es lo que convierte el resultado en prueba y no en demostracion.',
+    },
+    {
+      title: 'Ejecuta el barrido',
+      body: 'Pulsa <strong>Ejecutar el barrido</strong> y dejalo. Cinco ensayos de veinte periodos binarios tardan entre <strong>cuatro y siete minutos</strong> segun la maquina, mas o menos lo que te habrian costado a mano las cinco ejecuciones, menos escribir y copiar.\n\nFijate en lo que informa mientras avanza. Cada ensayo termina con un <em>resultado</em>, no con una puntuacion: seguia ahi al final, salio del sistema, choco con una estrella, o no establecio nada. Eso ultimo es un resultado de verdad, y por eso la tabla tiene una columna de periodos hechos frente a periodos pedidos.',
+      tip: 'Parar esta ahi si lo necesitas. Un barrido detenido conserva los ensayos que termino y dice que radios no alcanzo, en vez de presentar cuatro puntos como cinco.',
+    },
+    {
+      title: 'Lee los cinco ensayos',
+      body: 'Lee esto de la tabla. Todos los ensayos corrieron los mismos veinte periodos, asi que los resultados son comparables entre si y con las dos ejecuciones que hiciste a mano.',
+      fields: [
+        { label: 'Ensayos que seguian ahi al final' },
+        { label: 'Mayor radio inicial que sobrevivio' },
+        { label: 'Menor radio inicial que no' },
+      ],
+    },
+    {
+      title: 'Que sostienen cinco puntos',
+      body: 'El grafico coloca cada ensayo en su propio radio inicial, en la fila de lo que le paso. No traza ninguna linea entre ellos, y eso es deliberado.',
+      prompt: '¿Por que no unirlos?',
+      options: [
+        'Porque cinco puntos no bastan para ajustar una curva',
+        'Porque una linea afirmaria que todo lo que hay entre dos radios probados se comporta como sus vecinos, que es justo lo que el articulo niega',
+        'Porque los resultados son palabras y no numeros',
+        'Porque los ensayos se ejecutaron en orden aleatorio',
+      ],
+      because:
+        'Una linea entre 0,22 y 0,30 diria que todo lo intermedio sobrevive hasta cierto cruce y es expulsado despues. Holman y Wiegert encontraron islas de ambas cosas a los dos lados de su linea ajustada: la transicion no es nitida ni monotona en el radio. Cinco muestras de un sistema asi son cinco hechos sobre cinco radios.',
+      tip: 'La tercera opcion no es la razon: un resultado es una categoria, y las categorias se grafican perfectamente. Lo que no admiten es interpolacion.',
+    },
+    {
+      title: '¿El borde es real o es la aritmetica?',
+      body: 'Elige el ensayo donde cambia el resultado — el selector lo marca — y pulsa <strong>Comprobarlo</strong>. Eso repite ese unico radio con <strong>la mitad del paso</strong>, con todo lo demas identico, y compara los dos resultados.\n\nEs la misma prueba que hiciste a mano en 0,25, aplicada al unico valor del barrido donde importa. Una configuracion cuyo destino cambia al reducir el paso a la mitad no ha sido medida con ninguno de los dos pasos.',
+      tip: 'Repite un ensayo y no todo el barrido, y ese es el punto: la comprobacion va donde la respuesta esta en duda.',
+    },
+    {
+      title: 'Que zanja la comprobacion',
+      body: 'Supon que los dos pasos coinciden: el planeta es expulsado a ese radio tanto con el paso del barrido como con la mitad.',
+      prompt: '¿Que ha quedado establecido?',
+      options: [
+        'Que el planeta es inestable a ese radio',
+        'Que la expulsion no es un artefacto del tamano del paso, en estos veinte periodos',
+        'Que la frontera publicada es incorrecta',
+        'Que el barrido tambien es fiable en todos los demas radios',
+      ],
+      because:
+        'La segunda, y solo la segunda. Que dos tamanos de paso coincidan descarta la aritmetica como causa de lo que viste. No dice nada de lo que pasa despues del periodo veinte, nada de los radios que no comprobaste y nada del ajuste publicado, que se construyo con diez mil periodos en una rejilla de sistemas y no con veinte en este.',
+      tip: 'El panel dice lo mismo con sus propias palabras bajo la tabla, y la entrada del cuaderno lo lleva a todo lo que exportes.',
+    },
+    {
       title: 'Una pregunta más difícil que "qué pasó"',
       body: `Todo lo anterior se ha creído a la simulación. Es hora de dejar de
              hacerlo.
@@ -587,6 +648,11 @@ export default {
                 distintos, y además es un suelo y no un techo.`,
         },
       ],
+    },
+    {
+      title: 'Opcional: el mismo barrido, aqui fuera',
+      body: '<strong>Opcional, y tarda entre ocho y doce minutos.</strong> Saltatelo si la sesion es corta; nada de lo que viene despues depende de ello.\n\nEl barrido tambien funciona aqui fuera, con su propio rango y su propia ventana: <strong>2,0, 2,5, 3,0, 3,5 y 4,0</strong> separaciones, cuarenta periodos binarios cada uno, porque un planeta circumbinario es lento y veinte periodos de la pareja son solo tres o cuatro orbitas suyas.\n\nLa frontera publicada para esta configuracion es 3,61. Predice que haran los cinco antes de pulsar, como hiciste dentro, y espera el desacuerdo del que acabas de leer en vez de una linea limpia.',
+      tip: 'Ventana mas larga, mismo argumento: un resultado habla de la ventana en la que se observo, y cuarenta periodos aqui fuera es una mirada mas corta que veinte ahi dentro.',
     },
     {
       title: 'Donde el ajuste y la simulación no se ponen de acuerdo',

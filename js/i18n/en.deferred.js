@@ -1861,4 +1861,88 @@ export const EN_DEFERRED = {
   'rv.survey.waiting': 'Waiting for the simulation clock to advance.',
   'rv.survey.coarse':
     'The simulation is running too fast for this cadence: some measurements were read between widely spaced frames and their extremes may be flattened. Reduce the speed and restart the run.',
+
+  // --- The binary lesson's sweep ----------------------------------------------
+  'binarySweep.title': 'Sweep the starting radius',
+  'binarySweep.hint':
+    'The same run you have been doing by hand, at five starting radii, with everything else held fixed. Each trial reports what happened to the planet - not an average of where it was.',
+  'binarySweep.run': 'Run the sweep',
+  'binarySweep.cancel': 'Stop',
+  'binarySweep.recheck': 'Re-run at half the step',
+  'binarySweep.recheckRun': 'Check it',
+  'binarySweep.keep': 'Keep in the notebook',
+  'binarySweep.running': 'Trial {done} of {total}…',
+  'binarySweep.done': '{n} trials, {periods} binary periods each, {seconds}s.',
+  'binarySweep.refused': 'The sweep did not start ({reason}).',
+  'binarySweep.col.radius': 'Start',
+  'binarySweep.col.outcome': 'What happened',
+  'binarySweep.col.periods': 'Periods done',
+  'binarySweep.col.farthest': 'Farthest',
+  'binarySweep.col.encounters': 'Close passes',
+  'binarySweep.col.drift': 'Energy drift',
+  'binarySweep.outcome.survived': 'still there at the end',
+  'binarySweep.outcome.ejected': 'left the system',
+  'binarySweep.outcome.collided': 'hit a star',
+  'binarySweep.outcome.unreliable': 'not trustworthy',
+  'binarySweep.outcome.incomplete': 'window not finished',
+  'binarySweep.outcome.notRun': 'did not run',
+  'binarySweep.short.survived': 'still there',
+  'binarySweep.short.ejected': 'left',
+  'binarySweep.short.collided': 'hit',
+  'binarySweep.short.unreliable': 'untrusted',
+  'binarySweep.short.incomplete': 'unfinished',
+  'binarySweep.axis': 'Starting radius, in binary separations',
+  'binarySweep.caveat.incomplete':
+    '{n} trials did not finish the window, so they establish nothing about the planet either way.',
+  'binarySweep.caveat.unreliable':
+    '{n} trials drifted too far in energy to draw a conclusion from, whatever the planet appeared to do.',
+  'binarySweep.caveat.cancelled':
+    'This sweep was stopped before it finished, so the values it never reached are missing rather than uninteresting.',
+  'binarySweep.caveat.window':
+    'Every one of these is {periods} binary periods. The published boundary is fitted to ten thousand, and a planet can circle quietly for hundreds before its orbit is walked out - so "still there" is a statement about this window and not about the future.',
+  'binarySweep.recheck.atChange': '{value} - where the outcome changes',
+  'binarySweep.recheck.agreed':
+    'At {value} the smaller step gives the same answer, {outcome}: that outcome is resolved at this window, which is not the same as the planet being stable.',
+  'binarySweep.recheck.disagreed':
+    'At {value} the smaller step does not agree ({reason}), so neither run has measured this configuration.',
+  'binarySweep.recheck.reason.outcomeChanged': 'the outcome changed',
+  'binarySweep.recheck.reason.unreliableRun':
+    'one of the runs is untrustworthy',
+  'binarySweep.recheck.reason.notFinished': 'one of the runs did not finish',
+
+  // --- The binary sweep, kept as evidence -------------------------------------
+  'nb.binarySweep.title': 'Starting radius sweep ({scenario})',
+  'nb.binarySweep.trials': 'Trials',
+  'nb.binarySweep.window': 'Observation window',
+  'nb.binarySweep.periods': 'binary periods',
+  'nb.binarySweep.windowNote':
+    'Every trial was watched for this long and no longer. Nothing here is a statement about what happens afterwards.',
+  'nb.binarySweep.survived': 'Still there at the end',
+  'nb.binarySweep.survivedNote':
+    'Survived the window. Not "stable": the published boundary is fitted to ten thousand binary periods.',
+  'nb.binarySweep.ejected': 'Left the system',
+  'nb.binarySweep.unusable': 'Established nothing',
+  'nb.binarySweep.unusableNote':
+    'Trials that did not finish the window, or drifted too far in energy to draw a conclusion from.',
+  'nb.binarySweep.figure': 'What happened, against where it started',
+  'nb.binarySweep.axisX': 'Starting radius (binary separations)',
+  'nb.binarySweep.axisY': 'Outcome',
+  'nb.binarySweep.line':
+    '{value} separations: {outcome}, after {done} of {asked} periods.',
+  'nb.binarySweep.evidence': 'One run at each starting radius:',
+  'nb.binarySweep.predicted': 'Predicted before running it: {prediction}',
+  'nb.binarySweep.limit.window':
+    'Each trial is {periods} binary periods. A planet can circle quietly for hundreds before its orbit is walked out, so a survival here is about this window.',
+  'nb.binarySweep.limit.held':
+    'Masses {m1} and {m2}, eccentricity {e}, seed {seed}: one system, and the starting radius is the only thing that changed.',
+  'nb.binarySweep.limit.unusable':
+    '{n} trials established nothing and are in the figure as such rather than dropped.',
+  'nb.binarySweep.limit.cancelled':
+    'The sweep was stopped early, so the radii it never reached are missing rather than uninteresting.',
+  'nb.binarySweep.limit.resolved':
+    'The trial at {value} was re-run at half the step and gave the same outcome, so that outcome is not an artefact of the step size.',
+  'nb.binarySweep.limit.unresolved':
+    'The trial at {value} gave a different outcome at half the step, so neither run has measured it.',
+  'nb.binarySweep.limit.noRecheck':
+    'No trial was re-run at a smaller step, so none of these outcomes has been shown to be independent of the step size.',
 };

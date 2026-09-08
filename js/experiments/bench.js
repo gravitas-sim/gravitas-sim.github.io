@@ -921,6 +921,16 @@ async function runSweepTrial(cfg) {
   // browser.
   host.setFixedStep?.(1 / 60);
 
+  // An optional observer, for a sweep whose result is not a reduced metric.
+  //
+  // The binary lesson's sweep is the case this exists for: what it wants from
+  // each trial is the physical outcome the binary watcher reports - survived,
+  // ejected, collided - and a mean distance is no substitute for it. Rather
+  // than a second runner, the caller supplies three functions and everything
+  // else here is unchanged: the world is built the same way, progress is
+  // measured on the same clock, and the same restoration puts it all back.
+  cfg.observer?.arm?.({ value, settings, roles: found });
+
   const samples = [];
   const secondsPerDay = 86400 / timeUnitSeconds();
   const startClock = getSimulationTime();
@@ -943,7 +953,12 @@ async function runSweepTrial(cfg) {
   // first runs, one frame has already been integrated and the initial
   // condition is gone. On a scenario whose frame covers 62.5 time units that
   // is not a rounding - it was the whole first sixtieth of a short trial.
-  take();
+  //
+  // An observed trial samples nothing: its result is what the observer reports,
+  // the metrics are not read, and a long window would otherwise fill the sample
+  // buffer and stop the trial at the cap with its own answer half-collected.
+  const sampling = !cfg.observer;
+  if (sampling) take();
 
   // Progress is measured in SIMULATED time, not in animation frames.
   //
@@ -962,6 +977,8 @@ async function runSweepTrial(cfg) {
   let stalled = 0;
   let sinceAdvance = 0;
   let capped = false;
+  /** Whether the observer said the trial had finished on its own terms. */
+  let observed = false;
   let lastClock = startClock;
   const tickCeiling = cfg.frames * 10 + 120;
   const stallLimit = 120;
@@ -974,13 +991,21 @@ async function runSweepTrial(cfg) {
         lastClock = clock;
         advanced++;
         sinceAdvance = 0;
-        take();
+        if (sampling) take();
       } else {
         stalled++;
         sinceAdvance++;
       }
-      if (samples.length >= MAX_SAMPLES) {
+      if (sampling && samples.length >= MAX_SAMPLES) {
         capped = true;
+        return resolve();
+      }
+      // The observer's own finish line. A binary run ends when the watcher has
+      // counted the periods it was asked for, which is not the same instant as
+      // the frame budget expiring - and reaching it IS completion, not a
+      // shortfall.
+      if (cfg.observer?.done?.()) {
+        observed = true;
         return resolve();
       }
       if (
@@ -1016,7 +1041,13 @@ async function runSweepTrial(cfg) {
   trial.stalledTicks = stalled;
   trial.sampleCapHit = capped;
   trial.requestedDuration = cfg.requestedDuration ?? null;
-  trial.complete = !capped && advanced >= cfg.frames;
+  // With an observer, "complete" is its verdict: the frame budget is a
+  // backstop for a run that never reaches its own finish line, not the
+  // definition of one.
+  trial.complete = cfg.observer
+    ? observed && !capped
+    : !capped && advanced >= cfg.frames;
+  if (cfg.observer) trial.observed = cfg.observer.read?.() ?? null;
 
   if (cfg.abort.cancelled) {
     trial.status = SWEEP.TRIAL_STATUS.CANCELLED;
@@ -1041,7 +1072,10 @@ async function runSweepTrial(cfg) {
     spec.metrics.map(id => [id, reduced[id]?.kind ?? null])
   );
 
-  if (!spec.metrics.some(id => Number.isFinite(trial.results[id]))) {
+  if (
+    !cfg.observer &&
+    !spec.metrics.some(id => Number.isFinite(trial.results[id]))
+  ) {
     trial.status = SWEEP.TRIAL_STATUS.NOT_FINITE;
     return trial;
   }
@@ -1051,7 +1085,14 @@ async function runSweepTrial(cfg) {
   // summary leaves them out of a curve that claims a duration they do not
   // have.
   if (capped) trial.status = SWEEP.TRIAL_STATUS.CAPPED;
-  else if (advanced < cfg.frames) trial.status = SWEEP.TRIAL_STATUS.STALLED;
+  else if (!cfg.observer && advanced < cfg.frames) {
+    trial.status = SWEEP.TRIAL_STATUS.STALLED;
+  } else if (cfg.observer && !observed) {
+    // It ran out of budget before the watcher finished: an incomplete
+    // observation, which the binary lesson reports as its own outcome rather
+    // than as a survival.
+    trial.status = SWEEP.TRIAL_STATUS.STALLED;
+  }
   return trial;
 }
 
@@ -1139,6 +1180,7 @@ export async function runSweep(spec, opts = {}) {
         total: values.length,
         frames,
         requestedDuration: achievedDuration,
+        observer: opts.observer ?? null,
         abort,
         onProgress: opts.onProgress,
       });

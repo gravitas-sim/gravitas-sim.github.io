@@ -430,6 +430,181 @@ const BINARY_STAR_PLANETS = {
     },
 
     // --- Part 3: is the answer about the planet or the arithmetic? -----------
+    // --- The sweep: the same run at five radii, without the typing ---------
+    {
+      sid: 'predict-the-sweep',
+      type: 'predict',
+      title: 'Five radii at once',
+      body: `You have run two configurations by hand and read four numbers off
+             the panel each time. Doing that for three more is not going to
+             teach you anything the first two did not — so the panel will do it.
+             
+
+Open <strong>Sweep the starting radius</strong> at the bottom
+             of the Binary Planet Run panel. It runs the same twenty-period
+             experiment at <strong>0.12, 0.15, 0.18, 0.22 and 0.30</strong>
+             separations, with the masses, the eccentricity, the seed, the
+             integrator and the step held exactly as they are now. The only
+             thing that changes between trials is where the planet starts.
+             
+
+The published boundary is at 0.177. Commit before you run it.`,
+      prompt: 'Which of these do you expect the five trials to show?',
+      options: [
+        'Survival below 0.177 and ejection above it, sharply',
+        'Survival at the small radii and ejection at the large ones, with the change somewhere near 0.177 but not necessarily at it',
+        'Ejection at every radius, because the binary is eccentric',
+        'Survival at every radius, because twenty periods is not long',
+      ],
+      answer: 1,
+      because: `The second. The fit is a fit to where a transition mostly sits,
+                across a grid of systems — not a wall in this one. The paper
+                itself reports islands of instability inside the line and
+                islands of stability outside it, and twenty periods is short
+                enough that a slow instability has not finished happening. What
+                you should expect is a change of outcome somewhere in the
+                neighbourhood of 0.177, and no guarantee about exactly where.`,
+      tip: 'A prediction you have written down is what makes the result evidence rather than a demonstration.',
+    },
+    {
+      sid: 'run-the-sweep',
+      type: 'explore',
+      title: 'Run the sweep',
+      setup: S_LAB,
+      requires: ['predict-the-sweep'],
+      body: `Press <strong>Run the sweep</strong> and leave it. Five trials of
+             twenty binary periods takes about <strong>four to seven
+             minutes</strong> depending on the machine — roughly what the five
+             runs would have cost you by hand, minus the typing and the
+             copying.
+             
+
+Watch what it reports as it goes. Each trial ends with an
+             <em>outcome</em>, not a score: still there at the end, left the
+             system, hit a star, or nothing established. That last one is a
+             real result and it is why the table has a column for periods done
+             against periods asked.`,
+      tip: 'Stop is there if you need it. A stopped sweep keeps the trials it finished and says which radii it never reached, rather than quietly reporting four points as five.',
+    },
+    {
+      sid: 'read-the-sweep',
+      type: 'measure',
+      title: 'Read the five trials',
+      requires: ['run-the-sweep'],
+      body: `Read these off the table. Every trial ran the same twenty periods,
+             so the outcomes are comparable with each other and with the two
+             runs you did by hand.`,
+      fields: [
+        {
+          id: 'sweep_survived',
+          label: 'Trials still there at the end',
+          unit: '',
+          hint: '4',
+        },
+        {
+          id: 'sweep_last_survivor',
+          label: 'Largest starting radius that survived',
+          unit: 'separations',
+          hint: '0.22',
+        },
+        {
+          id: 'sweep_first_loss',
+          label: 'Smallest starting radius that did not',
+          unit: 'separations',
+          hint: '0.30',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.sweep_last_survivor)) return null;
+        if (v.sweep_last_survivor >= v.sweep_first_loss) {
+          return {
+            level: 'error',
+            message:
+              'The survivor has to be inside the loss, or the two columns have been read the wrong way round.',
+          };
+        }
+        if (v.sweep_last_survivor > 0.177) {
+          return {
+            level: 'ok',
+            message:
+              'Your last survivor is outside the published boundary of 0.177 — which the paper allows for, and which is the next question.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'The change of outcome sits between your two figures. Where exactly, this sweep does not say.',
+        };
+      },
+    },
+    {
+      sid: 'what-the-sweep-shows',
+      type: 'question',
+      kind: 'choice',
+      title: 'What five points support',
+      requires: ['read-the-sweep'],
+      body: `The plot puts each trial at its own starting radius, on the row for
+             what happened to it. It draws no line through them, and that is
+             deliberate.`,
+      prompt: 'Why not join them up?',
+      options: [
+        'Because five points are not enough to fit a curve to',
+        'Because a line would assert that everything between two tested radii behaves like its neighbours, which is the claim the paper explicitly denies',
+        'Because the outcomes are words rather than numbers',
+        'Because the trials were run in a random order',
+      ],
+      answer: 1,
+      because: `A line between 0.22 and 0.30 would say that everything in
+                between survives up to some crossing point and is ejected after
+                it. Holman & Wiegert found islands of both on either side of
+                their fitted line — the transition is not sharp and is not
+                monotone in radius. Five samples of a system like that are five
+                facts about five radii.`,
+      tip: 'The third option is not the reason: an outcome is a category, and categories are perfectly plottable. What they are not is interpolatable.',
+    },
+    {
+      sid: 'resolve-the-edge',
+      type: 'explore',
+      title: 'Is the edge real, or is it the arithmetic?',
+      setup: S_LAB,
+      requires: ['read-the-sweep'],
+      body: `Pick the trial where the outcome changes — the selector marks it —
+             and press <strong>Check it</strong>. That re-runs that one radius
+             at <strong>half the step</strong>, with everything else identical,
+             and compares the two outcomes.
+             
+
+This is the same test you did by hand at 0.25, applied to the
+             one value in the sweep where it matters. A configuration whose
+             fate changes when you halve the step has not been measured at
+             either step.`,
+      tip: 'It reruns one trial rather than the whole sweep, which is the point: the check belongs where the answer is in doubt.',
+    },
+    {
+      sid: 'is-it-resolved',
+      type: 'question',
+      kind: 'choice',
+      title: 'What the recheck settles',
+      requires: ['resolve-the-edge'],
+      body: `Suppose the two steps agree: the planet is ejected at that radius
+             at both the step you swept at and half of it.`,
+      prompt: 'What has that established?',
+      options: [
+        'That the planet is unstable at that radius',
+        'That the ejection is not an artefact of the step size, over these twenty periods',
+        'That the published boundary is wrong',
+        'That the sweep can be trusted at every other radius too',
+      ],
+      answer: 1,
+      because: `The second, and only the second. Agreement between two step
+                sizes rules out the arithmetic as the cause of what you saw. It
+                says nothing about what happens after period twenty, nothing
+                about the radii you did not check, and nothing about the
+                published fit, which is built on ten thousand periods across a
+                grid of systems rather than twenty in this one.`,
+      tip: 'The panel says the same thing in its own words underneath the table, and the notebook entry carries it into anything you export.',
+    },
+
     {
       sid: 'a-harder-question',
       type: 'read',
@@ -794,6 +969,28 @@ const BINARY_STAR_PLANETS = {
                 coefficients — and it is a floor rather than a ceiling.`,
         },
       ],
+    },
+    {
+      sid: 'sweep-the-circumbinary',
+      type: 'explore',
+      title: 'Optional: the same sweep, out here',
+      setup: P_LAB,
+      body: `<strong>Optional, and it takes about eight to twelve minutes.</strong>
+             Skip it if the session is short; nothing after this depends on it.
+             
+
+The sweep works out here too, with its own range and its own
+             window: <strong>2.0, 2.5, 3.0, 3.5 and 4.0</strong> separations,
+             forty binary periods each, because a circumbinary planet is slow
+             and twenty periods of the pair is only three or four of its own
+             orbits.
+             
+
+The published boundary for this configuration is 3.61. Predict
+             what the five will do before you press it, as you did inside — and
+             expect the disagreement you have just been reading about rather
+             than a clean line.`,
+      tip: 'Longer window, same argument: an outcome is about the window it was watched over, and forty periods out here is a shorter look than twenty was inside.',
     },
     {
       sid: 'where-the-fit-disagrees',

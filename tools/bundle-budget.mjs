@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2860,
+    limit: 2900,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -135,7 +135,19 @@ const BUDGETS = [
       'and the deferred catalogue - the synthetic run is opt-in and its ' +
       'section is hidden until it is switched on, which is the moment the ' +
       'panel registers them - and the initial download came back from ' +
-      '832.9 KB to 829.8 KB. The initial limit was NOT touched.',
+      '832.9 KB to 829.8 KB. The initial limit was NOT touched.\n\n' +
+      "Raised from 2860 to 2900 for the binary lesson's parameter sweep, " +
+      'itemised from a fresh build against 2849.3 KB before it. The six new ' +
+      'lesson steps are 15.9 KB of English and 14.6 KB of Spanish - the ' +
+      'lesson chunks went 31.8 to 47.7 and 31.5 to 46.1 - and ' +
+      "js/experiments/binarySweep.js with the panel's sweep controls and the " +
+      'notebook capture is the rest, with about 6 KB of prose in two ' +
+      'catalogues. A lesson and an instrument is what the paragraph at the ' +
+      'top of this reason says this budget is loose for. The initial download ' +
+      "did NOT move: its share of this work is the sweep section's styling, " +
+      "and the section is built out of the panel system's existing classes " +
+      'so that share is three merged selectors and nothing else. 829.9 KB ' +
+      'before, 830.0 KB after, against an untouched 830.0 limit.',
   },
 ];
 

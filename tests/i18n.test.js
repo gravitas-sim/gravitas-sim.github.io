@@ -295,7 +295,7 @@ describe('the catalogue split', () => {
     // checkbox that does the switching, and the two chart dataset labels,
     // which are written whenever the chart is built and not only during a run.
     const allowed =
-      /^(binaryRun|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
+      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // ...and the three that must NOT have gone with them.

@@ -233,7 +233,18 @@ export function parameterFor(scenario, key) {
  * @param {object} spec - from, to, count
  * @returns {Array<number>} The values, ascending or descending as given
  */
-export function planValues({ from, to, count }) {
+export function planValues({ from, to, count, values }) {
+  // An explicit list, when the caller has reasons for its points rather than a
+  // range to divide up. The binary lesson's sweep is the case: its radii sit
+  // where the hand-run examples and the published boundary are, and spreading
+  // five points evenly between the ends would put none of them where the
+  // interesting thing happens. Sorted, because a sweep is read left to right.
+  if (Array.isArray(values) && values.length) {
+    return values
+      .map(Number)
+      .filter(Number.isFinite)
+      .sort((a, b) => a - b);
+  }
   const n = Math.round(count);
   if (!Number.isFinite(from) || !Number.isFinite(to)) return [];
   if (!(n >= 2)) return [];
@@ -263,17 +274,36 @@ export function validateSweepSpec(spec) {
   const def = parameterFor(spec.scenario, spec.parameter);
   if (!def) return fail('parameterNotSweepable');
 
-  const count = Math.round(spec.count);
-  if (!(count >= MIN_VALUES) || !(count <= MAX_VALUES)) {
-    return fail('valueCount', { min: MIN_VALUES, max: MAX_VALUES });
-  }
-  if (!Number.isFinite(spec.from) || !Number.isFinite(spec.to)) {
+  const explicit =
+    Array.isArray(spec.values) && spec.values.length
+      ? spec.values.map(Number)
+      : null;
+  if (explicit && explicit.some(v => !Number.isFinite(v))) {
     return fail('rangeNotNumeric');
   }
-  if (spec.from === spec.to) return fail('rangeEmpty');
 
-  const lo = Math.min(spec.from, spec.to);
-  const hi = Math.max(spec.from, spec.to);
+  // The minimum is about ranges. Three points is where dividing a range stops
+  // being the A/B comparison the bench already does, so a range still has to
+  // have them. An explicit list is different: the caller has named the values,
+  // and a list of one is a deliberate re-measurement of a single
+  // configuration - which is what the binary lesson's convergence check is -
+  // rather than a sweep pretending to be one. The upper limit applies to both.
+  const count = Math.round(explicit ? explicit.length : spec.count);
+  const floor = explicit ? 1 : MIN_VALUES;
+  if (!(count >= floor) || !(count <= MAX_VALUES)) {
+    return fail('valueCount', { min: floor, max: MAX_VALUES });
+  }
+  if (!explicit) {
+    if (!Number.isFinite(spec.from) || !Number.isFinite(spec.to)) {
+      return fail('rangeNotNumeric');
+    }
+    if (spec.from === spec.to) return fail('rangeEmpty');
+  }
+
+  // Explicit values are checked against the same bounds as a range: a list is
+  // not a way round the limits, it is a way of choosing inside them.
+  const lo = explicit ? Math.min(...explicit) : Math.min(spec.from, spec.to);
+  const hi = explicit ? Math.max(...explicit) : Math.max(spec.from, spec.to);
   if (lo < def.min || hi > def.max) {
     return fail('outOfRange', { min: def.min, max: def.max });
   }

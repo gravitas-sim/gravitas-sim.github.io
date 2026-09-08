@@ -218,8 +218,8 @@ export const MANIFEST = [
     summary:
       'La mayoría de las estrellas vienen de dos en dos, así que la mayoría de los planetas tienen que arreglárselas en un sistema con dos soles. Algunas órbitas funcionan y otras no, y la línea que las separa es más nítida de lo que imaginarías. Encuéntrala dos veces —una para un planeta alrededor de una estrella y otra para un planeta alrededor de las dos— y averigua después cuánto de lo que acabas de medir era la física y cuánto la aritmética.',
     thumbnail: 'images/scenarios/binary-planet-lab.webp',
-    stepCount: 30,
-    gradedCount: 17,
+    stepCount: 37,
+    gradedCount: 21,
     objectiveCount: 5,
   },
   {

@@ -7166,7 +7166,9 @@
     flex: 1 1 auto;
   }
 
-  .rv-survey-field input {
+  .rv-survey-field input,
+  .rv-survey-list textarea,
+  .rv-survey-list input {
     background: var(--input-bg, rgb(255 255 255 / 6%));
     border: 1px solid var(--border, rgb(255 255 255 / 15%));
     border-radius: 4px;
@@ -7199,9 +7201,17 @@
 
   /* A border rather than a colour on its own: the warning has to survive a
      colour-blind reader and a monochrome printout. */
-  .rv-survey-status[data-state='warn'] {
-    border-left: 3px solid var(--warning, #e0a458);
-    padding-left: 0.5rem;
+  .rv-survey-status[data-state='warn'],
+  /* --- The binary lesson's sweep ------------------------------------------ */
+  /* Almost nothing, deliberately. The section is built out of the panel
+     system's own furniture - obs-panel-hint for the prose, pause-event-actions
+     for the controls, experiment-table for the table - so the only rules here
+     are the two things it has that nothing else does: a plot, and rows dimmed
+     because nothing can be concluded from them. */
+  .experiment-table tr[data-outcome='unreliable'],
+  .experiment-table tr[data-outcome='incomplete'],
+  .experiment-table tr[data-outcome='notRun'] {
+    opacity: 0.75;
   }
 
   /* --- When the telescope looked ------------------------------------------ */
@@ -7209,12 +7219,15 @@
      alone: the two groups answer different questions - how precisely, and at
      what times - and a reader who reads them as one grid of eight numbers has
      to work out which is which. */
-  .rv-survey-schedule {
+  .rv-survey-schedule,
+  .rv-survey-compare,
+  .binary-sweep {
     border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
     padding-top: 0.5rem;
   }
 
-  .rv-survey-field select {
+  .rv-survey-field select,
+  .binary-sweep-field select {
     background: var(--input-bg, rgb(255 255 255 / 6%));
     border: 1px solid var(--border, rgb(255 255 255 / 15%));
     border-radius: 4px;
@@ -7237,28 +7250,29 @@
     color: var(--text-dim, #9aa4b2);
   }
 
+  /* A list of times is prose-shaped, so it overrides the width and the face
+     the field rule above gives every other input in this panel. */
   .rv-survey-list textarea,
   .rv-survey-list input {
-    background: var(--input-bg, rgb(255 255 255 / 6%));
-    border: 1px solid var(--border, rgb(255 255 255 / 15%));
-    border-radius: 4px;
-    color: inherit;
     font-family: var(--font-mono, monospace);
-    font-size: 0.72rem;
     padding: 0.25rem 0.3rem;
     resize: vertical;
     width: 100%;
   }
 
   .rv-survey-note,
-  .rv-survey-compare-report {
+  .rv-survey-compare-report,
+  .binary-sweep-status,
+  .binary-sweep-table {
     font-size: 0.72rem;
     line-height: 1.4;
     margin: 0;
   }
 
   .rv-survey-note:empty,
-  .rv-survey-compare-report:empty {
+  .rv-survey-compare-report:empty,
+  .binary-sweep-status:empty,
+  .binary-sweep-table:empty {
     display: none;
   }
 
@@ -7269,10 +7283,8 @@
   }
 
   .rv-survey-compare {
-    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
     display: grid;
     gap: 0.4rem;
-    padding-top: 0.5rem;
   }
 }
 

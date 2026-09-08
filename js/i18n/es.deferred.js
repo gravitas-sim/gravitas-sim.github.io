@@ -1888,4 +1888,89 @@ export const ES_DEFERRED = {
   'rv.survey.waiting': 'Esperando a que avance el reloj de la simulación.',
   'rv.survey.coarse':
     'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
+
+  // --- El barrido de la leccion binaria ---------------------------------------
+  'binarySweep.title': 'Barrer el radio inicial',
+  'binarySweep.hint':
+    'La misma ejecucion que has hecho a mano, con cinco radios iniciales y todo lo demas fijo. Cada ensayo informa de lo que le paso al planeta, no de un promedio de donde estuvo.',
+  'binarySweep.run': 'Ejecutar el barrido',
+  'binarySweep.cancel': 'Parar',
+  'binarySweep.recheck': 'Repetir con la mitad del paso',
+  'binarySweep.recheckRun': 'Comprobarlo',
+  'binarySweep.keep': 'Guardar en el cuaderno',
+  'binarySweep.running': 'Ensayo {done} de {total}…',
+  'binarySweep.done':
+    '{n} ensayos, {periods} periodos binarios cada uno, {seconds}s.',
+  'binarySweep.refused': 'El barrido no arranco ({reason}).',
+  'binarySweep.col.radius': 'Inicio',
+  'binarySweep.col.outcome': 'Que paso',
+  'binarySweep.col.periods': 'Periodos hechos',
+  'binarySweep.col.farthest': 'Mas lejos',
+  'binarySweep.col.encounters': 'Pasos cercanos',
+  'binarySweep.col.drift': 'Deriva de energia',
+  'binarySweep.outcome.survived': 'seguia ahi al final',
+  'binarySweep.outcome.ejected': 'salio del sistema',
+  'binarySweep.outcome.collided': 'choco con una estrella',
+  'binarySweep.outcome.unreliable': 'no fiable',
+  'binarySweep.outcome.incomplete': 'ventana sin terminar',
+  'binarySweep.outcome.notRun': 'no se ejecuto',
+  'binarySweep.short.survived': 'seguia ahi',
+  'binarySweep.short.ejected': 'salio',
+  'binarySweep.short.collided': 'choco',
+  'binarySweep.short.unreliable': 'no fiable',
+  'binarySweep.short.incomplete': 'sin terminar',
+  'binarySweep.axis': 'Radio inicial, en separaciones binarias',
+  'binarySweep.caveat.incomplete':
+    '{n} ensayos no completaron la ventana, asi que no establecen nada sobre el planeta en ningun sentido.',
+  'binarySweep.caveat.unreliable':
+    '{n} ensayos derivaron demasiado en energia como para sacar una conclusion, hiciera lo que hiciera el planeta.',
+  'binarySweep.caveat.cancelled':
+    'Este barrido se detuvo antes de terminar, asi que los valores que no alcanzo faltan, no es que no fueran interesantes.',
+  'binarySweep.caveat.window':
+    'Cada uno de estos son {periods} periodos binarios. La frontera publicada esta ajustada con diez mil, y un planeta puede girar tranquilo durante cientos antes de que su orbita sea expulsada: "seguia ahi" habla de esta ventana, no del futuro.',
+  'binarySweep.recheck.atChange': '{value} - donde cambia el resultado',
+  'binarySweep.recheck.agreed':
+    'En {value} el paso mas pequeno da la misma respuesta, {outcome}: ese resultado esta resuelto para esta ventana, que no es lo mismo que que el planeta sea estable.',
+  'binarySweep.recheck.disagreed':
+    'En {value} el paso mas pequeno no coincide ({reason}), asi que ninguna de las dos ejecuciones ha medido esta configuracion.',
+  'binarySweep.recheck.reason.outcomeChanged': 'el resultado cambio',
+  'binarySweep.recheck.reason.unreliableRun':
+    'una de las ejecuciones no es fiable',
+  'binarySweep.recheck.reason.notFinished': 'una de las ejecuciones no termino',
+
+  // --- El barrido binario, guardado como prueba --------------------------------
+  'nb.binarySweep.title': 'Barrido del radio inicial ({scenario})',
+  'nb.binarySweep.trials': 'Ensayos',
+  'nb.binarySweep.window': 'Ventana de observacion',
+  'nb.binarySweep.periods': 'periodos binarios',
+  'nb.binarySweep.windowNote':
+    'Cada ensayo se observo este tiempo y no mas. Nada de esto dice lo que pasa despues.',
+  'nb.binarySweep.survived': 'Seguia ahi al final',
+  'nb.binarySweep.survivedNote':
+    'Sobrevivio a la ventana. No "estable": la frontera publicada esta ajustada con diez mil periodos binarios.',
+  'nb.binarySweep.ejected': 'Salio del sistema',
+  'nb.binarySweep.unusable': 'No establecio nada',
+  'nb.binarySweep.unusableNote':
+    'Ensayos que no completaron la ventana, o que derivaron demasiado en energia como para concluir nada.',
+  'nb.binarySweep.figure': 'Que paso, frente a donde empezo',
+  'nb.binarySweep.axisX': 'Radio inicial (separaciones binarias)',
+  'nb.binarySweep.axisY': 'Resultado',
+  'nb.binarySweep.line':
+    '{value} separaciones: {outcome}, tras {done} de {asked} periodos.',
+  'nb.binarySweep.evidence': 'Una ejecucion en cada radio inicial:',
+  'nb.binarySweep.predicted': 'Predicho antes de ejecutarlo: {prediction}',
+  'nb.binarySweep.limit.window':
+    'Cada ensayo son {periods} periodos binarios. Un planeta puede girar tranquilo durante cientos antes de que su orbita sea expulsada, asi que sobrevivir aqui habla de esta ventana.',
+  'nb.binarySweep.limit.held':
+    'Masas {m1} y {m2}, excentricidad {e}, semilla {seed}: un solo sistema, y el radio inicial es lo unico que cambio.',
+  'nb.binarySweep.limit.unusable':
+    '{n} ensayos no establecieron nada y estan en la figura como tales, no descartados.',
+  'nb.binarySweep.limit.cancelled':
+    'El barrido se detuvo antes de tiempo, asi que los radios que no alcanzo faltan, no es que no fueran interesantes.',
+  'nb.binarySweep.limit.resolved':
+    'El ensayo en {value} se repitio con la mitad del paso y dio el mismo resultado, asi que ese resultado no es un artefacto del tamano del paso.',
+  'nb.binarySweep.limit.unresolved':
+    'El ensayo en {value} dio otro resultado con la mitad del paso, asi que ninguna de las dos ejecuciones lo ha medido.',
+  'nb.binarySweep.limit.noRecheck':
+    'Ningun ensayo se repitio con un paso menor, asi que no se ha demostrado que ninguno de estos resultados sea independiente del tamano del paso.',
 };

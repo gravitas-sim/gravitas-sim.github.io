@@ -214,8 +214,8 @@ export const MANIFEST = [
     summary:
       'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',
     thumbnail: 'images/scenarios/binary-planet-lab.webp',
-    stepCount: 30,
-    gradedCount: 17,
+    stepCount: 37,
+    gradedCount: 21,
     objectiveCount: 5,
   },
   {

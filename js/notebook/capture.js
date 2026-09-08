@@ -618,6 +618,155 @@ export function fromSweep({ sweep, labelFor = id => id, provenance = {} }) {
 }
 
 /**
+ * The binary lesson's sweep: five starting radii and what happened to each.
+ *
+ * Kept apart from fromSweep() above because the two record different kinds of
+ * thing. A generic sweep's evidence is a metric against a parameter, and its
+ * entry says how that metric moved. This one's evidence is an OUTCOME against a
+ * parameter - survived, ejected, collided, or nothing established - and a
+ * number that averaged those would be meaningless. So the outcomes are the
+ * figure, the diagnostics behind each one are the quantities, and the
+ * limitation that is always true of a finite window is written into every
+ * entry rather than left to the reader.
+ *
+ * @param {object} spec
+ * @param {object} spec.report - From binaryRunPanel.binarySweepReport()
+ * @param {string} [spec.prediction] - What the student said before running it
+ * @param {object} [spec.provenance] - Extra provenance fields
+ * @returns {?object} A draft entry
+ */
+export function fromBinarySweep({ report, prediction = '', provenance = {} }) {
+  if (!report?.trials?.length) return null;
+
+  const held = report.held || {};
+  const counted = outcome =>
+    report.trials.filter(tr => tr.outcome === outcome).length;
+
+  const quantities = [
+    quantity({
+      label: t('nb.binarySweep.trials'),
+      value: report.trials.length,
+      unit: '',
+      kind: KIND.MEASURED,
+    }),
+    quantity({
+      label: t('nb.binarySweep.window'),
+      value: report.periods,
+      unit: t('nb.binarySweep.periods'),
+      kind: KIND.MEASURED,
+      // The number that makes every other number in this entry conditional.
+      note: t('nb.binarySweep.windowNote'),
+    }),
+    quantity({
+      label: t('nb.binarySweep.survived'),
+      value: counted('survived'),
+      unit: '',
+      kind: KIND.MEASURED,
+      note: t('nb.binarySweep.survivedNote'),
+    }),
+    quantity({
+      label: t('nb.binarySweep.ejected'),
+      value: counted('ejected'),
+      unit: '',
+      kind: KIND.MEASURED,
+    }),
+  ];
+  const unusable =
+    counted('incomplete') + counted('unreliable') + counted('notRun');
+  if (unusable) {
+    quantities.push(
+      quantity({
+        label: t('nb.binarySweep.unusable'),
+        value: unusable,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t('nb.binarySweep.unusableNote'),
+      })
+    );
+  }
+
+  // One series per outcome, points only. A line through these would be a
+  // stability boundary drawn through five samples, which is exactly the claim
+  // the lesson spends its second half taking apart.
+  const outcomes = [...new Set(report.trials.map(tr => tr.outcome))];
+  const fig = figure({
+    title: t('nb.binarySweep.figure'),
+    xLabel: t('nb.binarySweep.axisX'),
+    yLabel: t('nb.binarySweep.axisY'),
+    series: outcomes.map((outcome, i) =>
+      figureSeries({
+        label: t(`binarySweep.outcome.${outcome}`),
+        kind: KIND.MEASURED,
+        style: 'points',
+        points: report.trials
+          .filter(tr => tr.outcome === outcome)
+          .map(tr => [tr.value, i + 1])
+          .sort((a, b) => a[0] - b[0]),
+      })
+    ),
+  });
+
+  const flags = [];
+  if (report.cancelled) flags.push('cancelled');
+  if (unusable) flags.push('failed-trials');
+
+  const lines = report.trials.map(tr =>
+    t('nb.binarySweep.line', {
+      value: tr.value,
+      outcome: t(`binarySweep.outcome.${tr.outcome}`),
+      done: Number(tr.periodsDone ?? 0).toFixed(1),
+      asked: tr.periodsAsked ?? '—',
+    })
+  );
+
+  return buildEntry({
+    source: SOURCE.BENCH_SWEEP,
+    title: t('nb.binarySweep.title', { scenario: report.kind }),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      seed: provenance.seed ?? report.seed ?? null,
+      // The settings the trials were actually integrated at, from the sweep's
+      // own record rather than from whatever the panel shows now.
+      integrator: provenance.integrator ?? held.integrator ?? null,
+      timestep: provenance.timestep ?? held.maxTimestep ?? null,
+      simSpeed: provenance.simSpeed ?? held.simSpeed ?? null,
+      substeps: provenance.substeps ?? report.numerics?.substeps ?? null,
+      flags: [...(provenance.flags || []), ...flags],
+    }),
+    prose: {
+      claim: prediction ? t('nb.binarySweep.predicted', { prediction }) : '',
+      evidence: [t('nb.binarySweep.evidence'), ...lines].join('\n'),
+      limitations: [
+        t('nb.binarySweep.limit.window', { periods: report.periods }),
+        t('nb.binarySweep.limit.held', {
+          m1: held.m1,
+          m2: held.m2,
+          e: held.eccentricity,
+          seed: report.seed,
+        }),
+        ...(unusable
+          ? [t('nb.binarySweep.limit.unusable', { n: unusable })]
+          : []),
+        ...(report.cancelled ? [t('nb.binarySweep.limit.cancelled')] : []),
+        ...(report.recheck
+          ? [
+              report.recheck.verdict.converged
+                ? t('nb.binarySweep.limit.resolved', {
+                    value: report.recheck.value,
+                  })
+                : t('nb.binarySweep.limit.unresolved', {
+                    value: report.recheck.value,
+                  }),
+            ]
+          : [t('nb.binarySweep.limit.noRecheck')]),
+      ].join('\n'),
+    },
+  });
+}
+
+/**
  * A numerical-reliability check: the same state at dt and dt/2.
  *
  * The one source where the distinction this module exists for is the whole

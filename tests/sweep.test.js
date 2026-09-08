@@ -115,6 +115,59 @@ describe('planning the values', () => {
   });
 });
 
+describe('a list of values the caller chose', () => {
+  test('an explicit list is used as given, sorted', () => {
+    // The binary lesson picks its radii for reasons - the hand-run examples
+    // and the published boundary - and five points spread evenly between the
+    // ends would put none of them where the interesting thing happens.
+    expect(planValues({ values: [0.3, 0.12, 0.18] })).toEqual([
+      0.12, 0.18, 0.3,
+    ]);
+  });
+
+  test('without one, the range is divided as before', () => {
+    expect(planValues({ from: 0, to: 4, count: 5 })).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  test('a list is checked against the same bounds as a range', () => {
+    // Not a way round the limits, a way of choosing inside them.
+    const base = {
+      scenario: 'Binary Planet Lab',
+      parameter: 'binary_lab_planet_a',
+      duration: 2000,
+      metrics: ['distance_to_primary'],
+    };
+    expect(
+      validateSweepSpec({ ...base, values: [0.05, 0.1, 0.2, 0.3] }).ok
+    ).toBe(true);
+    const out = validateSweepSpec({ ...base, values: [0.05, 0.1, 9] });
+    expect(out.ok).toBe(false);
+    expect(out.reason).toBe('outOfRange');
+  });
+
+  test('a range of two is still refused, and a named single value is not', () => {
+    // The three-value minimum is about dividing a RANGE: two points is the A/B
+    // comparison the bench already does. A list of one is a different thing -
+    // a deliberate re-measurement of one configuration, which is what the
+    // binary lesson's convergence check is.
+    const base = {
+      scenario: 'Binary Planet Lab',
+      parameter: 'binary_lab_planet_a',
+      duration: 2000,
+      metrics: ['distance_to_primary'],
+    };
+    const range = validateSweepSpec({ ...base, from: 0.1, to: 0.2, count: 2 });
+    expect(range.ok).toBe(false);
+    expect(range.reason).toBe('valueCount');
+    expect(validateSweepSpec({ ...base, values: [0.22] }).ok).toBe(true);
+    // The upper limit still applies to a list.
+    const many = Array.from({ length: 40 }, (_, i) => 0.05 + i * 0.01);
+    expect(validateSweepSpec({ ...base, values: many }).reason).toBe(
+      'valueCount'
+    );
+  });
+});
+
 describe('refusing a sweep that cannot mean anything', () => {
   test('a valid request is accepted', () => {
     expect(validateSweepSpec(spec()).ok).toBe(true);
