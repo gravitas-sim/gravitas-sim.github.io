@@ -11,7 +11,7 @@ way.
 
 ```bash
 npx playwright install chromium   # once
-npm run e2e                       # everything, headless, ~2.5 min
+npm run e2e                       # everything, headless, unsharded
 npm run e2e:headed                # watch it, chromium only
 npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
@@ -56,6 +56,36 @@ npm run e2e:all                    # both targets, one after the other
 The config selects one or the other from `GRAVITAS_E2E_TARGET` and includes or
 excludes `production.spec.js` to match, so the two never run against the wrong
 thing.
+
+## How CI runs them
+
+The source suite is **split across four runners**, two workers each:
+
+```bash
+npx playwright test --shard=1/4      # what one CI runner does
+```
+
+It stopped fitting in a single job. At two workers the whole suite takes about
+55 minutes of wall clock on a runner, against a 25-minute limit, and the job was
+cancelled part-way through with nothing useful to show for it. Four shards bring
+the slowest one to roughly a third of the limit, with room for the npm install,
+the browser download and the report upload.
+
+Two workers per runner, deliberately, and not more. Every test here drives a
+live simulation, so workers on the same machine compete for the same CPU and
+each one gets slower; the parallelism that helps is across machines.
+
+Each shard writes a **blob report** and uploads it under its own name. A
+separate job merges the four into one HTML report with every trace and
+screenshot in it, and runs whether the shards passed or not — a report is most
+wanted when they did not. That job decides nothing: the deployment gate requires
+the shard matrix itself, so a shard that failed, was cancelled, or never
+produced a report blocks the deploy regardless of what the report job did.
+
+Locally, `npm run e2e` is unchanged: no shards, no blob reports, the same HTML
+report it always wrote. `tests/shardInventory.test.js` asks Playwright for both
+inventories and fails if the four shards do not cover the unsharded suite
+exactly once, mobile included.
 
 ## Other browsers
 

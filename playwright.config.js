@@ -71,6 +71,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const isCI = Boolean(process.env.CI);
+/** Whether this run is one shard of several. See `reporter` below. */
+const SHARDED = process.argv.some(arg => arg.startsWith('--shard'));
 
 /** 'src' (default) or 'dist'. */
 const target = process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : 'src';
@@ -194,8 +196,20 @@ export default defineConfig({
   // No accidental `test.only` reaching main.
   forbidOnly: isCI,
 
+  // A sharded run reports in `blob`, which is the only format that can be
+  // merged: four runners each produce a fragment and one job stitches them
+  // into a single HTML report with everybody's traces and screenshots in it.
+  // An unsharded run - which is what `npm run e2e` still is locally - keeps
+  // the HTML report it always had, so nothing about running this by hand
+  // changes.
+  //
+  // Keyed on the command line that is actually running rather than on an
+  // environment variable of our own, so a workflow that shards and a config
+  // that reports cannot disagree about which is happening.
   reporter: isCI
-    ? [['github'], ['html', { open: 'never' }], ['list']]
+    ? SHARDED
+      ? [['github'], ['blob'], ['list']]
+      : [['github'], ['html', { open: 'never' }], ['list']]
     : [['list'], ['html', { open: 'never' }]],
 
   use: {

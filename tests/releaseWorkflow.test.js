@@ -61,10 +61,78 @@ describe('the deploy job only runs behind the gate', () => {
   test('every job the gate aggregates is actually listed', () => {
     // A new job that nobody added to `needs` would be a check that cannot
     // block a deploy, which is worse than not having it.
+    //
+    // e2e-report is the one deliberate exception and it is named here rather
+    // than skipped quietly: it exists to publish a report when the shards
+    // fail, so requiring it would mean a failed suite could not produce its
+    // own diagnostics, and it decides nothing.
+    const REPORTING_ONLY = new Set(['e2e-report']);
     const aggregated = new Set(gate.needs);
     for (const name of Object.keys(workflow.jobs)) {
       if (name === 'ci' || name === 'deploy') continue;
+      if (REPORTING_ONLY.has(name)) {
+        expect(aggregated.has(name)).toBe(false);
+        continue;
+      }
       expect(aggregated.has(name)).toBe(true);
+    }
+  });
+
+  test('the source suite is sharded and every shard has to pass', () => {
+    const e2e = workflow.jobs.e2e;
+    // Four shards, so the suite fits inside the job limit it kept exceeding.
+    expect(e2e.strategy.matrix.shard).toEqual([1, 2, 3, 4]);
+    // One failing shard must not cancel the others: a cancelled shard says
+    // nothing about the tests it never reached.
+    expect(e2e.strategy['fail-fast']).toBe(false);
+    // Two workers per runner, as before. The parallelism belongs across
+    // runners; more workers on one make every test in this suite slower.
+    const run = e2e.steps.map(st => st.run || '').join('\n');
+    expect(run).toMatch(/--shard=\$\{\{ matrix\.shard \}\}\/4/);
+    expect(run).not.toMatch(/--workers/);
+    // And the gate requires the matrix as a whole, which GitHub rolls up to
+    // success only when every shard succeeded.
+    expect(gate.needs).toContain('e2e');
+  });
+
+  test('a shard that produces no report is not a shard that passed', () => {
+    const e2e = workflow.jobs.e2e;
+    const upload = e2e.steps.find(st =>
+      (st.name || '').includes("Upload this shard's blob report")
+    );
+    // Missing blobs fail the upload rather than being shrugged off, and the
+    // step runs even when the tests failed - which is when it matters.
+    expect(upload.with['if-no-files-found']).toBe('error');
+    expect(String(upload.if)).toContain('!cancelled()');
+    // The step running the tests is capped below the job, so an overrunning
+    // shard is killed with time left to upload what it has.
+    const runStep = e2e.steps.find(st => (st.run || '').includes('--shard='));
+    expect(runStep['timeout-minutes']).toBeLessThan(e2e['timeout-minutes']);
+  });
+
+  test('the shards report into one mergeable HTML report', () => {
+    const report = workflow.jobs['e2e-report'];
+    expect(report.needs).toContain('e2e');
+    // It runs whether the shards passed or not, because a report is most
+    // wanted when they did not.
+    expect(String(report.if)).toContain('!cancelled()');
+    const run = report.steps.map(st => st.run || '').join('\n');
+    expect(run).toMatch(/merge-reports --reporter html/);
+    const download = report.steps.find(st =>
+      (st.uses || '').includes('download-artifact')
+    );
+    expect(download.with.pattern).toBe('blob-report-sources-*');
+  });
+
+  test('each shard uploads under its own name', () => {
+    // Four artifacts with one name is one artifact, and three quarters of the
+    // run is then missing from the merge.
+    const names = workflow.jobs.e2e.steps
+      .filter(st => (st.uses || '').includes('upload-artifact'))
+      .map(st => st.with.name);
+    expect(names.length).toBeGreaterThan(0);
+    for (const name of names) {
+      expect(name).toContain('${{ matrix.shard }}');
     }
   });
 });

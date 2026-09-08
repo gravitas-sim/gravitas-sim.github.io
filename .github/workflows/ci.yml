@@ -252,9 +252,20 @@ jobs:
           if-no-files-found: error
 
   e2e:
-    name: Browser smoke tests (sources)
+    name: Browser smoke tests (sources) ${{ matrix.shard }}/4
     runs-on: ubuntu-latest
+    # Comfortably inside the 25 minutes the unsharded job kept exceeding, with
+    # room for the install and the upload. The slowest shard measured locally
+    # is the one holding chaos.spec.js at about a third of this.
     timeout-minutes: 25
+    strategy:
+      # One shard failing must not cancel the other three. A cancelled shard
+      # tells you nothing about the tests it did not reach, and the whole point
+      # of splitting the suite is to find out what is broken in one run rather
+      # than three.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
 
@@ -291,19 +302,75 @@ jobs:
         if: steps.browsers.outputs.cache-hit == 'true'
         run: npx playwright install-deps chromium
 
-      - name: Run the suite
-        run: npm run e2e
+      - name: Run shard ${{ matrix.shard }} of 4
+        # Shorter than the job, so a shard that overruns is killed by this step
+        # and the upload below still happens. A shard whose report never
+        # arrived is not a shard that passed, and the aggregate treats it that
+        # way.
+        timeout-minutes: 20
+        # Two workers, the same as the unsharded job had. The suite drives a
+        # live simulation in every test and more workers on one runner make
+        # every one of them slower; the parallelism belongs across runners.
+        run: npx playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Upload the report
+      - name: Upload this shard's blob report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          # Uniquely named, or the four shards overwrite one another and the
+          # merge has one quarter of the run to work with.
+          name: blob-report-sources-${{ matrix.shard }}
+          path: blob-report
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload this shard's traces and screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts-sources-${{ matrix.shard }}
+          path: test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  e2e-report:
+    name: Browser smoke tests (sources) report
+    runs-on: ubuntu-latest
+    # Runs whether the shards passed or not: the report is most wanted when
+    # they did not. It does not decide anything - see the `ci` job, which
+    # requires every shard itself - so a merge that fails cannot turn a red
+    # suite green, and this job succeeding says nothing about the tests.
+    if: ${{ !cancelled() }}
+    needs: [e2e]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Collect every shard's blob report
+        uses: actions/download-artifact@v4
+        with:
+          pattern: blob-report-sources-*
+          path: all-blob-reports
+          merge-multiple: true
+
+      - name: Merge them into one HTML report
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Upload the combined report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-sources
-          path: |
-            playwright-report
-            test-results
+          path: playwright-report
           retention-days: 7
-          if-no-files-found: ignore
+          if-no-files-found: error
 
   accessibility:
     name: Accessibility (axe + keyboard)
@@ -509,7 +576,13 @@ jobs:
         run: |
           echo "checks:        ${{ needs.checks.result }}"
           echo "build:         ${{ needs.build.result }}"
-          echo "e2e:           ${{ needs.e2e.result }}"
+          # One result for the whole matrix: GitHub rolls the four source
+          # shards up into this, and it is 'success' only when every one of
+          # them succeeded. A shard that failed, was cancelled or never ran
+          # makes it something else, and `require` below refuses all three -
+          # so a shard whose report never arrived cannot be mistaken for a
+          # shard that passed.
+          echo "e2e (4 shards): ${{ needs.e2e.result }}"
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
@@ -552,7 +625,7 @@ jobs:
 
           require checks        "${{ needs.checks.result }}"
           require build         "${{ needs.build.result }}"
-          require e2e           "${{ needs.e2e.result }}"
+          require e2e           "${{ needs.e2e.result }}"   # all four shards
           require accessibility "${{ needs.accessibility.result }}"
           require e2e-build     "${{ needs.e2e-build.result }}"
 
