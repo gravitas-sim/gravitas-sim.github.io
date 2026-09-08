@@ -102,6 +102,172 @@ export const EN_DEFERRED = {
     'The speed relative to the planet changed by {residual}% across this encounter, and in the isolated version it changes by nothing at all. That residual is the approximation: the planet is accelerating, so its frame is not inertial, and the star pulls on the spacecraft too. Readings were taken {gate} AU out, against a Hill radius of {hill} AU \u2014 the distance beyond which the star, not the planet, is what the spacecraft is really orbiting. This is the patched-conic approximation, and it is what mission designers actually use.',
   'assist.hint':
     'The two columns describe the same encounter at the same two moments. The left one cannot change, because the planet does no work on the spacecraft in the planet\u2019s own frame. The right one changes because a vector of fixed length has been rotated and then added to the planet\u2019s velocity. Nothing is created: the planet is slowed by exactly the momentum the spacecraft gains.',
+  // --- The retained comparison, and the optional sweep ---------------------
+  'assist.exp.cancel': 'Stop',
+  'assist.exp.keep': 'Keep in the notebook',
+  'assist.exp.running': 'Pass {done} of {total}\u2026',
+  'assist.exp.refused': 'It did not start ({reason}).',
+  'assist.ab.title': 'Both sides, kept side by side',
+  'assist.ab.hint':
+    'The same encounter twice, at +40 and \u221240, rebuilt from the same baseline each time so that the sign of the impact parameter is the only difference between them.',
+  'assist.ab.run': 'Run both passes',
+  'assist.ab.done': '{done} of 2 passes measured, {seconds}s.',
+  'assist.ab.col.gaining': 'Behind ({b})',
+  'assist.ab.col.losing': 'In front ({b})',
+  'assist.ab.row.side': 'Passed',
+  'assist.ab.row.closest': 'Closest approach',
+  'assist.ab.row.deflection': 'Turned by',
+  'assist.ab.row.relBefore': 'Planet frame, before',
+  'assist.ab.row.relAfter': 'Planet frame, after',
+  'assist.ab.row.inertBefore': 'Inertial frame, before',
+  'assist.ab.row.inertAfter': 'Inertial frame, after',
+  'assist.ab.row.speedChange': 'Change in speed',
+  'assist.ab.row.deltaV': 'Change in velocity',
+  'assist.ab.row.encounter': 'Encounter',
+  'assist.encounter.complete': 'read in and out',
+  'assist.encounter.incomplete': 'never came back out \u2014 not measured',
+  'assist.encounter.noBefore': 'began inside the gate \u2014 no before',
+  'assist.encounter.lost': 'the spacecraft was lost',
+  'assist.encounter.notRun': 'did not run',
+  'assist.ab.caveat.incomplete':
+    '{n} of the two passes did not produce a complete encounter ({which}), so nothing in its column is a before-and-after.',
+  'assist.ab.caveat.cancelled':
+    'This was stopped before it finished, so the passes that never ran are marked as such rather than left out.',
+  'assist.ab.caveat.deltaV':
+    'The two passes changed the velocity by the same amount to {percent}%, turned by the same angle to {deflection}%, and came equally close to {closest}%. That is the mirror image doing what a mirror image should.',
+  'assist.ab.caveat.notMirrored':
+    'The SPEED changes are not mirrored and were never going to be: {gain} km/s gained against {loss} km/s lost, a ratio of {ratio}. Speed is the length of a vector sum, and adding a fixed-length vector at two different angles does not lengthen and shorten that sum by the same amount.',
+  'assist.ab.caveat.recoil':
+    'The spacecraft has mass, so the planet recoiled by {recoil} mm/s. That recoil is {ratio} of the spacecraft\u2019s own velocity change, against a mass ratio of {mass}: the two {agree}, which is momentum conservation written as a division.',
+  'assist.ab.caveat.agree': 'agree to better than a per cent',
+  'assist.ab.caveat.disagree': 'do not agree, which is worth investigating',
+  'assist.ab.caveat.conserved':
+    'So \u201cthe planet\u2019s frame\u201d names two frames, not one: one before the encounter and one after, differing by that recoil. What survives the change is not the spacecraft\u2019s speed, which is frame-dependent, but the system\u2019s momentum (balanced to {ledger}%) and the speed relative to the planet (changed by {residual}%).',
+  'assist.ab.caveat.held':
+    'Held for both passes: approach speed {vinf} km/s, readings taken {gate} AU out on both legs, integration step {step}, seed {seed}.',
+  'assist.sweep.title': 'Optional: sweep how close it passes',
+  'assist.sweep.hint':
+    'Five passes on the gaining side, from 20 to 90, with the approach speed and everything else held. All five clear the planet by at least three of its radii.',
+  'assist.sweep.run': 'Run the sweep',
+  'assist.sweep.done': '{n} passes, {seconds}s.',
+  'assist.sweep.col.b': 'Impact parameter',
+  'assist.sweep.col.deflection': 'Turned by',
+  'assist.sweep.col.speedChange': 'Change in speed',
+  'assist.sweep.col.closest': 'Closest approach',
+  'assist.sweep.col.encounter': 'Encounter',
+  'assist.sweep.plot.turn': 'turn (\u00b0)',
+  'assist.sweep.plot.gain': 'speed change (km/s)',
+  'assist.sweep.plot.axis': 'Impact parameter',
+  'assist.sweep.caveat.incomplete':
+    '{n} of the passes did not produce a complete encounter ({which}) and are left off the plot rather than drawn at a value they never measured.',
+  'assist.sweep.caveat.sameTrial':
+    'Across these {n} passes the largest turn and the largest speed gain are the same pass, at {b}.',
+  'assist.sweep.caveat.differentTrials':
+    'The largest turn was at {turned} and the largest speed gain at {gained}. They are not the same pass.',
+  'assist.sweep.caveat.notALaw':
+    'Neither answer is a rule. Turning the relative velocity helps only while it is being brought round towards the planet\u2019s own direction of travel; turn it past that and the gain falls again. In this laboratory that best turn is about 131\u00b0 and the closest pass the planet survives manages about 97\u00b0, so the sweep never reaches the far side of the hill.',
+  'assist.sweep.caveat.held':
+    'Held for every pass: approach speed {vinf} km/s, integration step {step}, seed {seed}. Only the impact parameter changed.',
+  // --- The chaos lesson's controlled pair ----------------------------------
+  'bench.chaos.title': 'The lesson\u2019s controlled pair',
+  'bench.chaos.hint':
+    'Sets the comparison up and runs both arms over the same stretch of simulated time: capture, Run A, back to the start, the nudge, Run B. Everything it does is what you would have done by hand, in the order you would have done it.',
+  'bench.chaos.run': 'Set up and run both',
+  'bench.chaos.runSame': 'Run it twice, unchanged',
+  'bench.chaos.changedNothing':
+    'Nothing was changed between the runs: this is the reproducibility control, and the separation it reports is what the engine does with identical input.',
+  'bench.chaos.cancel': 'Stop',
+  'bench.chaos.control': 'Numerical control',
+  'bench.chaos.control.finerStep': 'half the largest step',
+  'bench.chaos.control.altIntegrator': 'a different integrator',
+  'bench.chaos.runControl': 'Repeat as a control',
+  'bench.chaos.name.binary': 'Binary control pair',
+  'bench.chaos.name.triple': 'Three-body pair',
+  'bench.chaos.wrongScenario':
+    'This is for the chaos lesson\u2019s two scenarios. Load the Binary Pair or the Three-Body Sensitivity Lab.',
+  'bench.chaos.benchBusy':
+    'The bench is holding \u201c{name}\u201d with runs recorded in it. Save it or capture a new start before running this, so nothing of yours is lost.',
+  'bench.chaos.running': 'Recording run {arm}\u2026',
+  'bench.chaos.changed':
+    'What changed between the runs: {body} moved {km} km along {axis}, and nothing else.',
+  'bench.chaos.settingsChanged':
+    'Settings that also differ between the runs: {keys}. That is more than one variable, and the comparison cannot separate them.',
+  'bench.chaos.settingsSame':
+    'No setting differs between the two runs, so the nudge is the only difference.',
+  'bench.chaos.intervals':
+    'Run A covered {a} simulated seconds and Run B {b}, against {asked} asked for. The fit uses their overlap.',
+  'bench.chaos.steps':
+    'Measured step: {mean} on average, {min} to {max}, over {n} steps, with {integrator}. Measured rather than taken from the settings, because the engine splits a frame into at most a fixed number of substeps and which limit binds depends on the scenario.',
+  'bench.chaos.exponential':
+    'Exponential: e-folding time {tau} simulated seconds, r\u00b2 {r2}, fitted between {from} and {to}.',
+  'bench.chaos.resolved':
+    'Resolved: {n} controls that really did compute it differently agree to {spread}%.',
+  'bench.chaos.unresolved.need-two-estimates':
+    'Not resolved yet: this needs two repeats that computed the answer differently, and there {n} so far. Until then the divergence is a number this integrator produced.',
+  'bench.chaos.unresolved.controlsIneffective':
+    'Not resolved: the repeats did not actually change the arithmetic - the measured step and the integrator came out the same - so they agree with the original for no reason worth having.',
+  'bench.chaos.unresolved.behaviour-changed':
+    'UNRESOLVED: the repeats did not even agree about what kind of growth this is. The honest report is that this measurement is numerically unresolved, not a smaller number.',
+  'bench.chaos.unresolved.timescale-moved':
+    'UNRESOLVED: the e-folding times span {spread}%, which is more than refinement should move a physical answer. The honest report is that this measurement is numerically unresolved.',
+  'bench.chaos.cancelled':
+    'This was stopped before it finished, so at least one arm is shorter than it was asked to be.',
+
+  // --- The Lagrange lesson's controlled pair -------------------------------
+  'cr3bp.pair.title': 'Two directions, one accessible region',
+  'cr3bp.pair.hint':
+    'The same tracer, in the same place, at the same speed in the rotating frame, sent two different ways. Same Jacobi constant, same open neck, everything else held. Two binary periods each.',
+  'cr3bp.pair.run': 'Run both directions',
+  'cr3bp.pair.cancel': 'Stop',
+  'cr3bp.pair.keep': 'Keep in the notebook',
+  'cr3bp.pair.invalid':
+    'This needs a valid restricted three-body system with a tracer in it.',
+  'cr3bp.pair.benchBusy':
+    'The bench is holding \u201c{name}\u201d with runs recorded in it. Save it or capture a new start first, so nothing of yours is lost.',
+  'cr3bp.pair.reset':
+    'Put the tracer back to ({x}, {y}) at rest in the rotating frame, so both directions start from the same stated place.',
+  'cr3bp.pair.running': 'Running direction {done} of 2\u2026',
+  'cr3bp.pair.done': 'Both directions, {periods} binary periods each.',
+  'cr3bp.pair.col.a': 'A ({deg}\u00b0)',
+  'cr3bp.pair.col.b': 'B ({deg}\u00b0)',
+  'cr3bp.pair.row.start': 'Started at',
+  'cr3bp.pair.row.speed': 'Rotating-frame speed',
+  'cr3bp.pair.row.direction': 'Direction',
+  'cr3bp.pair.row.jacobi': 'Jacobi constant',
+  'cr3bp.pair.row.neck': 'L1 neck',
+  'cr3bp.pair.row.crossed': 'Crossed it?',
+  'cr3bp.pair.row.closest': 'Closest it came to L1',
+  'cr3bp.pair.row.reach': 'x reached',
+  'cr3bp.pair.row.watched': 'Watched',
+  'cr3bp.pair.row.step': 'Measured step',
+  'cr3bp.pair.open': 'open',
+  'cr3bp.pair.closed': 'closed',
+  'cr3bp.pair.crossedAt': 'yes, after {t} periods',
+  'cr3bp.pair.notCrossed': 'not during this run',
+  'cr3bp.pair.whole': 'the whole window',
+  'cr3bp.pair.short': 'cut short',
+  'cr3bp.pair.caveat.controlled':
+    'The two arms had the same Jacobi constant to {d} and the same open neck, so they were allowed in exactly the same places.',
+  'cr3bp.pair.caveat.missingArm':
+    'One of the two arms did not run, so there is nothing to compare.',
+  'cr3bp.pair.caveat.constantsDiffer':
+    'The two arms did not come out with the same Jacobi constant, so they were not allowed in the same places and nothing below is evidence about trajectories.',
+  'cr3bp.pair.caveat.neckClosed':
+    'The L1 neck was not open for both arms, so \u201cit did not go through\u201d is a statement about a wall rather than about a path.',
+  'cr3bp.pair.caveat.exteriorOpen':
+    'The L2 neck was open too, so the tracer was not confined to the two stars\u2019 regions and \u201cit did not use the L1 neck\u201d is about one gap of several.',
+  'cr3bp.pair.caveat.cancelled':
+    'This was stopped before it finished, so at least one arm was watched for less than the window.',
+  'cr3bp.pair.caveat.window':
+    'Everything here is about {periods} binary periods. A path that did not use the neck in that time may use it in the next.',
+  'cr3bp.pair.conclusion.notControlled':
+    'The control failed, so no conclusion about paths follows from these two runs.',
+  'cr3bp.pair.conclusion.windowIncomplete':
+    'At least one arm was cut short, so it did not fail to cross \u2014 it was not watched long enough to say.',
+  'cr3bp.pair.conclusion.sameRegionDifferentPaths':
+    'Same accessible region, different paths: which is the whole point. Where the tracer is ALLOWED to go was identical between the two arms by construction, and where it WENT was not.',
+  'cr3bp.pair.conclusion.sameRegionSimilarPaths':
+    'These two came out similar, which is allowed: the diagram does not forbid two directions from behaving alike any more than it requires it. Nothing here says the paths had to match.',
   'binaryRun.planetA': 'Planet start (a / a_binary)',
   'binaryRun.periods': 'Binary periods to run',
   'binaryRun.timestep': 'Integration step',
@@ -438,6 +604,8 @@ export const EN_DEFERRED = {
     'Outside the range this parameter is defined over here, which is {min} to {max}.',
   'sweep.reason.crossesExcluded':
     'That range passes through {from} to {to}, where the scenario does not describe a flyby at all.',
+  'sweep.reason.valueExcluded':
+    'These values fall between {from} and {to}, where the scenario does not describe a flyby at all: {inside}.',
   'sweep.reason.duration':
     'Simulated time per trial must be between {min} and {max}.',
   'sweep.reason.noMetrics': 'Choose at least one quantity to measure.',
@@ -1945,4 +2113,155 @@ export const EN_DEFERRED = {
     'The trial at {value} gave a different outcome at half the step, so neither run has measured it.',
   'nb.binarySweep.limit.noRecheck':
     'No trial was re-run at a smaller step, so none of these outcomes has been shown to be independent of the step size.',
+  // --- The gravity-assist comparison and sweep, in the notebook ------------
+  'nb.assist.unit.speed': 'sim velocity units',
+  'nb.assist.unit.simVelocity': 'sim velocity units',
+  'nb.assist.unit.simUnits': 'sim units',
+  'nb.assist.predicted': 'Before running it, I predicted: {prediction}',
+  'nb.assist.incomplete': 'Passes with no complete encounter',
+  'nb.assist.incompleteNote':
+    'No outgoing reading, so there is no before-and-after and nothing in that pass is evidence.',
+  'nb.assist.limit.gate':
+    'Both readings were taken {gate} units from the planet and corrected to the speed at infinity by the same amount, so the differences are what this measures.',
+  'nb.assist.limit.held':
+    'Only the impact parameter differed: approach speed {vinf}, integrator and step, seed {seed}.',
+  'nb.assist.limit.incomplete':
+    '{n} pass(es) produced no complete encounter; they are reported, not dropped.',
+  'nb.assist.limit.cancelled':
+    'Stopped before it finished, so it does not cover the values it was asked for.',
+  'nb.assist.ab.title': 'The same flyby on both sides of the planet',
+  'nb.assist.ab.gain': 'Speed change, passing behind',
+  'nb.assist.ab.loss': 'Speed change, passing in front',
+  'nb.assist.ab.deltaV': 'Velocity change, either side',
+  'nb.assist.ab.deltaVNote':
+    'The same on both sides, because it is the same rotation of the same-length vector. It is also the same in every inertial frame, unlike the speed change.',
+  'nb.assist.ab.relResidual': 'Change in speed relative to the planet',
+  'nb.assist.ab.relResidualNote':
+    'Zero to the integrator\u2019s accuracy, and exactly zero in the two-body problem: the encounter can turn the relative velocity and cannot lengthen it.',
+  'nb.assist.ab.recoil': 'The planet\u2019s recoil',
+  'nb.assist.ab.recoilNote':
+    'It is {ratio} of the spacecraft\u2019s own velocity change, against a mass ratio of {mass}.',
+  'nb.assist.ab.figure': 'Speed before and after, in both frames',
+  'nb.assist.ab.axisX': '0 = before the encounter, 1 = after',
+  'nb.assist.ab.axisY': 'Speed (sim velocity units)',
+  'nb.assist.ab.series.gaining.planet': 'behind: relative to the planet',
+  'nb.assist.ab.series.gaining.inertial': 'behind: inertial',
+  'nb.assist.ab.series.losing.planet': 'in front: relative to the planet',
+  'nb.assist.ab.series.losing.inertial': 'in front: inertial',
+  'nb.assist.ab.which.gaining': 'behind',
+  'nb.assist.ab.which.losing': 'in front',
+  'nb.assist.ab.evidence':
+    'Two passes of the same encounter, rebuilt from the same baseline, differing only in the sign of the impact parameter:',
+  'nb.assist.ab.line':
+    '  {which} (b = {b}): {outcome}, turned {turn}\u00b0, speed change {change}',
+  'nb.assist.ab.limit.notMirrored':
+    'The gain and the loss are not the same size \u2014 the loss is {ratio} of the gain \u2014 and nothing requires them to be. Both passes changed the VELOCITY equally; speed is the length of a sum, and lengths do not add and subtract symmetrically.',
+  'nb.assist.ab.limit.recoil':
+    'The spacecraft has mass, so the planet recoils: \u201cthe planet\u2019s frame\u201d is one inertial frame before the encounter and a slightly different one after. The relative speed holds anyway \u2014 two-body, at any mass ratio \u2014 and the system conserves total momentum in every frame.',
+  'nb.assist.sweep.title': 'Five impact parameters on the gaining side',
+  'nb.assist.sweep.passes': 'Passes run',
+  'nb.assist.sweep.passesNote': '{n} of them produced a complete encounter.',
+  'nb.assist.sweep.mostTurned': 'Impact parameter that turned the most',
+  'nb.assist.sweep.mostGained': 'Impact parameter that gained the most speed',
+  'nb.assist.sweep.sameNote':
+    'The same pass turned the most and gained the most, in this range.',
+  'nb.assist.sweep.differentNote':
+    'A different pass gained the most from the one that turned the most.',
+  'nb.assist.sweep.figure': 'Turn and speed change against impact parameter',
+  'nb.assist.sweep.axisX': 'Impact parameter (sim units)',
+  'nb.assist.sweep.axisY': 'Degrees, and sim velocity units',
+  'nb.assist.sweep.series.turn': 'deflection (degrees)',
+  'nb.assist.sweep.series.gain': 'speed change (sim velocity units)',
+  'nb.assist.sweep.evidence':
+    'One side of the planet, five distances, everything else held:',
+  'nb.assist.sweep.line':
+    '  b = {b}: {outcome}, turned {turn}\u00b0, speed change {change}',
+  'nb.assist.sweep.limit.oneSide':
+    'All five passes are on the gaining side; the sweep says nothing about the losing one.',
+  'nb.assist.sweep.limit.notALaw':
+    'That more turn gave more speed here is a fact about this geometry, not a rule. The gain grows only while the turn brings the relative velocity round towards the planet\u2019s own direction of travel; past that it falls. Here the best turn is unreachable \u2014 the pass that would produce it hits the planet.',
+  // --- The chaos pair and the neck pair, in the notebook -------------------
+  'nb.chaosPair.simSeconds': 'simulated seconds',
+  'nb.chaosPair.title.binary': 'The two-body control: two runs, one nudge',
+  'nb.chaosPair.title.triple': 'Three bodies, two runs, one nudge',
+  'nb.chaosPair.interval': 'Interval both runs cover',
+  'nb.chaosPair.intervalNote':
+    'Run A covered {a} and Run B {b}; the fit uses their overlap.',
+  'nb.chaosPair.step': 'Measured integration step',
+  'nb.chaosPair.stepNote':
+    'The mean of {n} steps the engine actually took, with {integrator} \u2014 not the setting it was asked for.',
+  'nb.chaosPair.tau': 'e-folding time',
+  'nb.chaosPair.tauNote':
+    'Fitted between {from} and {to} simulated seconds, r\u00b2 {r2}. Outside that interval the separation is still the nudge, or has stopped growing.',
+  'nb.chaosPair.growth': 'Total growth factor',
+  'nb.chaosPair.behaviour': 'What the separation did',
+  'nb.chaosPair.behaviour.identical': 'nothing: the two runs stayed identical',
+  'nb.chaosPair.behaviour.bounded': 'stayed close, without growing',
+  'nb.chaosPair.behaviour.linear':
+    'grew in proportion to time, straight-line fit r\u00b2 {r2} \u2014 drift, not chaos',
+  'nb.chaosPair.behaviour.saturated':
+    'grew and then stopped, having run out of system to get further apart in',
+  'nb.chaosPair.behaviour.exponential': 'grew exponentially',
+  'nb.chaosPair.behaviour.insufficient':
+    'could not be classified from this run',
+  'nb.chaosPair.behaviour.none': 'was not measured',
+  'nb.chaosPair.controls': 'Effective numerical controls',
+  'nb.chaosPair.controlsResolved':
+    'Their e-folding times span {spread}%, so the answer is not a property of the arithmetic.',
+  'nb.chaosPair.controlsUnresolved':
+    'Not enough of them changed the arithmetic, so this measurement is numerically unresolved.',
+  'nb.chaosPair.figure': 'How far apart the two runs are',
+  'nb.chaosPair.axisX': 'Simulated seconds',
+  'nb.chaosPair.axisY': 'Separation between the runs',
+  'nb.chaosPair.series.separation': 'separation',
+  'nb.chaosPair.predicted': 'Before running it, I predicted: {prediction}',
+  'nb.chaosPair.evidence':
+    'Two runs of the same system from the same captured start, differing by {km} km along {axis} on {body} and by nothing else.',
+  'nb.chaosPair.evidenceNoPerturbation':
+    'Two runs of the same system from the same captured start, with nothing changed between them.',
+  'nb.chaosPair.evidenceExponential':
+    'The separation grew exponentially with an e-folding time of {tau} simulated seconds, over about {efolds} e-folds.',
+  'nb.chaosPair.evidenceOther': 'The separation {behaviour}.',
+  'nb.chaosPair.limit.cancelled':
+    'Stopped before it finished, so at least one run is shorter than it was asked to be.',
+  'nb.chaosPair.limit.interval':
+    'The two runs do not cover the same interval, so the fit is over less than either of them.',
+  'nb.chaosPair.limit.unresolved':
+    'Numerically UNRESOLVED: the repeats under different arithmetic do not agree, so this rate belongs to the computation until they do.',
+  'nb.chaosPair.limit.window':
+    'The rate was fitted between {from} and {to} simulated seconds and describes that interval, not the whole run.',
+  'nb.chaosPair.limit.estimate':
+    'A finite perturbation over a finite window gives an estimate of the divergence rate, not a Lyapunov exponent, which is a limit over infinite time.',
+  'nb.neckPair.title': 'One accessible region, two directions',
+  'nb.neckPair.constantA': 'Jacobi constant, direction A',
+  'nb.neckPair.constantB': 'Jacobi constant, direction B',
+  'nb.neckPair.constantNote':
+    'Equal by construction: C is fixed by where the tracer is and how fast it is going, and neither arm differs in either.',
+  'nb.neckPair.speed': 'Rotating-frame speed, both arms',
+  'nb.neckPair.speedNote': 'Sent out at {a}\u00b0 and {b}\u00b0.',
+  'nb.neckPair.closestA': 'Closest approach to L1, direction A',
+  'nb.neckPair.closestB': 'Closest approach to L1, direction B',
+  'nb.neckPair.closestNote':
+    'In units of the separation, in the rotating frame the overlay draws.',
+  'nb.neckPair.figure': 'Both paths, in the rotating frame',
+  'nb.neckPair.axisX': 'x (separations, rotating frame)',
+  'nb.neckPair.axisY': 'y (separations, rotating frame)',
+  'nb.neckPair.series.a': 'direction A ({deg}\u00b0)',
+  'nb.neckPair.series.b': 'direction B ({deg}\u00b0)',
+  'nb.neckPair.predicted': 'Before running it, I predicted: {prediction}',
+  'nb.neckPair.evidence':
+    'The same tracer, the same place, the same rotating-frame speed, sent out at {a}\u00b0 and at {b}\u00b0, watched for {periods} binary periods each.',
+  'nb.neckPair.crossed': 'Arm {which} crossed the L1 neck after {t}.',
+  'nb.neckPair.notCrossed':
+    'Arm {which} did not cross the L1 neck during this run.',
+  'nb.neckPair.limit.notControlled':
+    'The control failed: the two arms did not have the same accessible region, so their paths differ for a reason this activity was meant to exclude.',
+  'nb.neckPair.limit.cancelled':
+    'Stopped before it finished, so at least one arm was watched for less than the window.',
+  'nb.neckPair.limit.short':
+    'At least one arm was cut short. An arm that stopped early did not fail to cross; it was not watched long enough to say.',
+  'nb.neckPair.limit.window':
+    'This covers {periods} binary periods. "Did not cross during this run" is not "can never cross": an open neck says only that crossing is not forbidden, and a finite window cannot say more.',
+  'nb.neckPair.limit.stability':
+    'Nothing here is about stability. Whether either path would stay where it is if nudged is a separate question with its own evidence.',
 };

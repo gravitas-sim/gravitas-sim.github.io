@@ -77,15 +77,19 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The five points, the equilateral geometry of L4, and the ordering of the critical values. Brisk; the arithmetic is one line.',
       },
       {
-        steps: '10-12',
-        text: 'Open the L1 neck with a burn, predict what happens, then watch it possibly not happen. Budget time here and resist resolving the ambiguity - the ambiguity is the teaching.',
+        steps: '10-11',
+        text: 'Open the L1 neck with a burn, and predict what an open neck licenses. Everyone opens it differently, which is deliberate and is why the next two screens exist.',
       },
       {
-        steps: '13-15',
+        steps: '12-13',
+        text: 'The controlled version, and the heart of the second act: one tracer, one place, one speed, two directions, so the accessible region is identical by construction and the trajectory is the only thing left that can differ. About a minute of running. Budget time here and resist resolving the ambiguity beyond what the runs show - "did not cross in two periods" is the whole finding.',
+      },
+      {
+        steps: '14-16',
         text: 'Stability as a third question, the surprise that L4 and L5 are stable at maxima, and the Trojans. This is the part students remember.',
       },
       {
-        steps: '16-18',
+        steps: '17-19',
         text: 'Break the assumptions deliberately and watch the overlay refuse, then the eccentric case, then the three claims restated side by side. Leave time for the last screen.',
       },
     ],
@@ -152,8 +156,8 @@ export const INSTRUCTOR_CONTENT = {
     expectations: {
       5: 'Two readings of C agreeing to four or five figures. A difference in the fourth figure over a long run is the integrator; a large difference means something was changed between the readings.',
       10: 'C falls as the burn is applied and the shaded region visibly retreats. The neck opens when C passes 3.313. Students who see C rise have burned retrograde, which is a useful mistake to have made.',
-      12: 'Genuinely variable. Some burns send the tracer through the neck within an orbit, some leave it looping on the near side indefinitely, some send it out through L2 instead. All three are correct and the variation is the point.',
-      16: 'The overlay switches off and names the assumption: "this needs exactly two massive bodies" for an added star, or the tracer being heavy enough to move the others. Removing the change brings it straight back.',
+      13: 'About a minute of running, and the same answer for everybody, which is what separates this from screen 10. The control rows should read: both arms started at (0.600, 0.000) at a rotating-frame speed of 0.565, both with a Jacobi constant of 3.28426 - identical to every digit shown, because C is fixed by position and speed and neither differs - both with the L1 neck open and L2 still closed, and both integrated at the same measured step. Then the outcome rows diverge: 30 degrees crosses the neck 0.11 periods in and comes within 0.008 of L1; 130 degrees never crosses, never gets nearer than 0.172, and its x never passes the 0.600 it started at. The sentence to insist on is "same accessible region, different paths"; the sentence to catch is "B can never cross", which the window cannot support and the caveat says so.',
+      17: 'The overlay switches off and names the assumption: "this needs exactly two massive bodies" for an added star, or the tracer being heavy enough to move the others. Removing the change brings it straight back.',
     },
     modelNotes: `Two massive bodies on a circular orbit, integrated with Velocity Verlet rather
       than the catalogue\u2019s default symplectic Euler, because the lesson asks students to
@@ -337,6 +341,13 @@ export const INSTRUCTOR_CONTENT = {
       speed it arrived; in an inertial frame it leaves 78 per cent faster. Both numbers are on
       screen simultaneously, in two columns, and the lesson is the question of how they can both
       be true.
+      \n\nThe first pass is flown by hand, so students learn to read the instrument. The pair
+      is then run as one retained experiment: both sides at once, from the same starting
+      configuration, differing only in the sign of the impact parameter, with both results kept
+      on screen. That replaces the part of the lesson where students had to hold four numbers in
+      their heads while the panel showed four others - and it is what makes the central
+      comparison possible, because what they are being asked to notice is that the change in
+      VELOCITY is identical on both sides while the change in SPEED is not.
       \n\nThe first two thirds have no star in them, and that is the pedagogical spine rather
       than a simplification. With nothing else present the planet moves in a straight line, its
       frame is genuinely inertial, and the measured change in relative speed is three parts in
@@ -347,7 +358,10 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe isolated case is also the only one in which the momentum ledger is legible. On an
       orbit the planet's velocity changes far more from its own turning than from the
       spacecraft; in empty space the recoil is the only thing there is, so the panel can show
-      the two momentum changes agreeing to a part in 10^9 rather than assert that they do.`,
+      the two momentum changes agreeing rather than assert that they do. How closely depends on the
+      integration step, which the application sizes from the frame rate: a part in 10^9 at a fixed
+      step of 0.5, and a part in 10^5 on a machine busy enough to make its own step three times
+      coarser. Both are far tighter than the argument needs, and the lesson quotes a bound.`,
     priorKnowledge: [
       'That gravity pulls, and that a planet moves',
       'Reading a number off a panel',
@@ -376,6 +390,10 @@ export const INSTRUCTOR_CONTENT = {
         body: 'The largest possible velocity change is twice the approach speed, reached only by a full reversal. A heavier planet bends the path further and so gets closer to that ceiling; it cannot raise it. This is the reason assists are worth so much at Jupiter and so little at Mercury, and students almost always guess that mass sets the limit.',
       },
       {
+        heading: 'Frame-dependent speed, frame-independent everything else',
+        body: 'The fourteenth screen, and the sharpest statement of the lesson. Speed disagrees between the two columns. The CHANGE IN VELOCITY does not - it is the same vector in every inertial frame, which is why both passes report the same 4.28 km/s. Nor does the system\u2019s total momentum. The spacecraft has a finite mass here, so the planet recoils and "the planet\u2019s frame" strictly names one inertial frame before the encounter and a slightly different one after; the panel checks that the recoil equals the mass ratio times the spacecraft\u2019s own velocity change, which is momentum conservation written as a division. The unchanged relative speed is exact anyway, at any mass ratio, because the relative motion is a Kepler problem - and students who assume it is an approximation good to one part in a million have found a plausible wrong answer worth discussing.',
+      },
+      {
         heading: 'The planet pays, in momentum',
         body: 'Equal and opposite, always. The spacecraft here is an Earth mass rather than a tonne, chosen so the recoil is a readable number; the physics is identical and the size is not, and the lesson says so.',
       },
@@ -390,19 +408,23 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Voyager 2 arriving at Jupiter at 10 km/s and leaving at 26 with its engines off, then the stripped-down version on screen and why it has no star. Students commit to which side of the planet gains before running anything.',
       },
       {
-        steps: '4-6',
-        text: 'The gaining pass, about nine seconds of wall clock. Students record all four speeds and then face the central question. This is the part to slow down for.',
+        steps: '4-7',
+        text: 'The gaining pass, flown by hand, about nine seconds of wall clock. Students record all four speeds, face the central question, and are given the vector addition. This is the part to slow down for.',
       },
       {
-        steps: '7-9',
-        text: 'The vector addition in words, then the mirror-image pass on the other side, then why the loss is smaller than the gain - which is geometry rather than physics and catches almost everybody.',
+        steps: '8-10',
+        text: 'The retained comparison: both sides at once, about a minute of wall clock, both results kept on screen. Then three numbers off the table, then why the loss is smaller than the gain - which is geometry rather than physics and catches almost everybody.',
       },
       {
-        steps: '10-12',
-        text: 'The ceiling of twice the approach speed, then the recoil and the momentum ledger, then where the energy actually came from.',
+        steps: '11-14',
+        text: 'The ceiling of twice the approach speed, the recoil and the momentum ledger, where the energy actually came from, and then the sharpest screen in the lesson: whose frame, exactly, and what survives a change of one.',
       },
       {
-        steps: '13-16',
+        steps: '15-18',
+        text: 'Optional, about five minutes, three of them the sweep running. Five impact parameters on the gaining side, and the question of whether the biggest turn must give the biggest gain. Skip the whole block if the period is short; nothing after it depends on it.',
+      },
+      {
+        steps: '19-22',
         text: 'The same encounter with a star, the residuals it introduces, what they mean, and the three things the model leaves out.',
       },
     ],
@@ -424,8 +446,16 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Speeds "at infinity" are read at a stated distance and corrected for the potential there, because at the gate the spacecraft is still travelling 0.6 per cent faster than its asymptotic speed - ten times the accuracy the rest of the lesson works to. Both legs are read at the same distance so the correction is the same size on each.',
       },
       {
+        name: 'The retained comparison',
+        text: 'Runs both passes on the experiment bench and keeps both. Each arm rebuilds the encounter from the same starting configuration through the scenario\u2019s own builder, changing only the sign of the impact parameter, and both are measured at the same gate distance by the same recorder that measures a hand-flown pass - so the numbers in the table are the numbers in the panel. It reports the two speed changes separately and the velocity change once, because there is one of it, and its caveat states how closely the deflection, the closest approach and the velocity change agree before saying that the speed changes do not have to. About a minute of wall clock, measured.',
+      },
+      {
+        name: 'The optional impact-parameter sweep',
+        text: 'Five passes on the gaining side - 20, 30, 40, 60 and 90 - plotted as turn and signed speed change against impact parameter, points only. The range is chosen so every pass clears the planet: the closest passes 3.8 planet radii out, and the pass that would maximise the gain would pass inside the planet, which is why the sweep can show the approach to a turnover and not the turnover itself. About three minutes of wall clock, measured. The lesson labels it optional and nothing after it depends on it.',
+      },
+      {
         name: 'The A/B experiment bench',
-        text: 'Not required, but the natural extension: capture the start, record the gaining pass, restore, flip the impact parameter and record the losing one, then difference the two speeds on one time axis.',
+        text: 'The runner underneath both of the above, and available directly for anything else: capture the start, record one arm, restore exactly, change one variable and record the other.',
       },
     ],
     misconceptions: [
@@ -438,7 +468,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The gravity assist creates energy.',
         response:
-          'The momentum ledger at the eleventh screen is the answer, and it is worth reading aloud: the spacecraft gained exactly what the planet lost, to a part in a billion. The planet is slower by four millimetres per second.',
+          'The momentum ledger at the twelfth screen is the answer, and it is worth reading aloud: the spacecraft gained what the planet lost, to better than a hundredth of a per cent. The planet is slower by four millimetres per second.',
       },
       {
         claim:
@@ -449,18 +479,29 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A heavier planet would give a bigger boost without limit.',
         response:
-          'The tenth screen. The ceiling is twice the approach speed and mass cannot raise it; mass only decides how much of the ceiling a given pass reaches. Ask what would happen at a planet the spacecraft approached at 50 km/s.',
+          'The eleventh screen. The ceiling is twice the approach speed and mass cannot raise it; mass only decides how much of the ceiling a given pass reaches. Ask what would happen at a planet the spacecraft approached at 50 km/s.',
       },
       {
         claim: 'The gain and the loss should be equal and opposite.',
         response:
-          'The ninth screen, and a genuinely good wrong expectation. The change in VELOCITY is the same size both ways; the change in SPEED is not, because speed is the length of a vector sum. Worth drawing: same two arrows, two different angles between them.',
+          'The tenth screen, and a genuinely good wrong expectation. The change in VELOCITY is the same size both ways - the comparison table reports the two agreeing to a part in 10^13 - and the change in SPEED is not, because speed is the length of a vector sum. Worth drawing: same two arrows, two different angles between them.',
       },
       {
         claim:
           'The residual in the heliocentric case means the simulation is inaccurate.',
         response:
-          'The fifteenth screen exists for this. It is a physical effect - an accelerating frame and a third body - and halving the timestep does not shrink it. Students who have done the binary-stars investigation will reach for a convergence check here, which is exactly the right instinct applied to the wrong problem, and is worth praising and then redirecting.',
+          'The twenty-first screen exists for this. It is a physical effect - an accelerating frame and a third body - and halving the timestep does not shrink it. Students who have done the binary-stars investigation will reach for a convergence check here, which is exactly the right instinct applied to the wrong problem, and is worth praising and then redirecting.',
+      },
+      {
+        claim:
+          'The unchanged relative speed only works because the spacecraft is so much lighter than the planet.',
+        response:
+          'The fourteenth screen, and the most sophisticated wrong answer in the lesson - it is wrong for a good reason and worth taking seriously. The relative motion of two bodies is a Kepler problem in one coordinate, and it returns the same relative speed at the same separation for any pair of masses at all. What the finite mass does change is that the planet recoils, so "the planet\u2019s frame" names two slightly different inertial frames. Ask what the left-hand column would do if the spacecraft were as heavy as the planet: nothing.',
+      },
+      {
+        claim: 'Passing closer always gains more speed.',
+        response:
+          'True of every pass in the optional sweep, and not a rule - which is why the seventeenth screen asks it rather than telling them. Turning helps only until the relative velocity points along the planet\u2019s own motion; here that needs 131 degrees and the closest survivable pass manages 97, so the turnover is real and unreachable. Students who answer "the closest possible pass" have generalised correctly from their data and incorrectly from the physics, which is a useful thing to have done out loud.',
       },
     ],
     teachingNotes: [
@@ -468,7 +509,9 @@ export const INSTRUCTOR_CONTENT = {
       'The fourth screen is the one to run at the front of the room. Nine seconds of wall clock, and the moment to press "Planet’s frame" is right after the readings are taken: the same encounter redrawn as a hyperbola about a stationary planet makes the left-hand column obvious.',
       'The sixth screen is the hinge of the lesson. If a class is going to stall anywhere it is here, and the productive move is to ask what the spacecraft’s speed is "really" - which has no answer, and is the point.',
       'The tennis-ball-and-train analogy at the seventh screen is exact, not a loose comparison. A ball thrown at 10 m/s at a train approaching at 20 leaves the train at 10 m/s in the train’s frame and 50 m/s in the station’s. It is worth doing on the board with numbers.',
-      'The ninth screen catches almost everyone, including people who got everything before it right. Let them be wrong out loud before resolving it.',
+      'The tenth screen catches almost everyone, including people who got everything before it right. Let them be wrong out loud before resolving it.',
+      'The eighth screen runs for about a minute with nobody typing, which makes it the natural place to take the third screen\u2019s show of hands off the board and ask the room to commit again. Both results are kept, so nothing is lost by talking over it.',
+      'The optional sweep at the fifteenth screen runs for about three minutes. If you use it, set it going and teach something else - it needs no attention while it runs, and the four optional screens are written so a group that skips them loses nothing later.',
       'The heliocentric half is quick - the encounter takes a few seconds - so if time is short it is the part to compress rather than cut. The residual and what it means are worth more than the flyby itself.',
       'For a class that has done Planets in Binary Stars: the fifteenth screen is a deliberate counterpoint. There, a discrepancy that changed with the timestep meant the run was not converged. Here, a discrepancy that does not change with the timestep means the model is approximate. Telling those two apart is the transferable skill.',
     ],
@@ -480,18 +523,22 @@ export const INSTRUCTOR_CONTENT = {
       'The heliocentric residual is a third of a per cent. If you were designing a real mission, would that be good enough, and what would you do about it?',
     ],
     extensions: [
-      'Sweep the impact parameter through zero - try +80, +40, +20, then the negatives - and plot the speed change against it. The curve is not monotonic, and finding the impact parameter that maximises the gain is a nice piece of numerical experimentation.',
+      'The built-in sweep covers the gaining side. Run the same five magnitudes on the losing side by hand - -20, -30, -40, -60, -90 - and plot both branches on one axis. The two are not mirror images of each other, and the shape of the difference is the vector picture drawn out.',
+      'Work out where the gain would peak for this geometry: the turn that lines the outgoing relative velocity up with the planet\u2019s motion, which is 131 degrees here. Invert tan(delta/2) = mu / (b v^2) for the impact parameter that produces it, then compute the periapsis at that value and compare it with the planet\u2019s radius. The answer is why the sweep stops where it does.',
       'Work out the tennis-ball-and-train problem on paper for the actual numbers on screen: 2.83 km/s for the planet, 4.34 for the approach, 58.6 degrees of turn. The answer should be the number in the panel.',
-      'Use the A/B experiment bench to record the gaining and losing passes as two arms of one experiment and chart speed against simulated time.',
+      'The retained comparison keeps two passes. Use the A/B experiment bench directly to record them as a time series instead, and chart speed against simulated time rather than as a before and an after.',
       'Look up the Voyager 2 Jupiter encounter parameters and compute the deflection with the formula this lesson uses. Jupiter’s GM is 1.267e17 m^3/s^2 and the closest approach was about 722,000 km.',
       'For a class with trigonometry: derive the ceiling. Show that the change in velocity has magnitude 2 v sin(delta/2), and that this is maximised at delta = 180 degrees.',
     ],
     expectations: {
-      4: 'About nine seconds of wall clock. The trail bends visibly as the spacecraft rounds the planet, closest approach is 0.234 AU which is twelve planet radii, and the deflection is 58.6 degrees against a two-body prediction of 58.6 - they agree to a hundredth of a degree, which is worth pointing at. The "Planet’s frame" button is the moment: press it after the readings and the same path is redrawn as a clean hyperbola about a stationary planet.',
+      4: 'About nine seconds of wall clock. The trail bends visibly as the spacecraft rounds the planet, closest approach is 0.234 AU which is twelve planet radii, and the deflection is 58.63 degrees against a two-body prediction of 58.63 - they agree to a hundredth of a degree, which is worth pointing at. The "Planet\u2019s frame" button is the moment: press it after the readings and the same path is redrawn as a clean hyperbola about a stationary planet.',
       5: 'Relative to the planet, 4.343 km/s both before and after - the panel reports the change as roughly minus three parts in a hundred billion, which is zero. Relative to everything else, 3.32 km/s before and 5.89 after, a gain of 78 per cent. A student whose left column differs is reading the wrong column; the field check says so. A student whose right column shrank has the impact parameter negative.',
-      8: 'Identical left column, identical deflection magnitude, identical 0.234 AU closest approach. The right column now runs 3.32 to 1.64 km/s, a loss of 50 per cent. The asymmetry between a 2.57 gain and a 1.68 loss is the subject of the next screen and should not be resolved before students have noticed it.',
-      11: 'The planet slows by about 4.3 mm/s, which is 1.5 parts per million of its own 2.83 km/s. The ledger beneath reports the spacecraft gaining 2.17e-6 of momentum and the planet losing 2.17e-6, agreeing to about 1.4e-7 per cent. That agreement is nine orders of magnitude tighter than any plausible accumulated error, which is what lets the twelfth screen rule out the integrator as the source of the energy.',
-      14: 'A few seconds only. Relative to the star the spacecraft goes from about 13.7 to about 19.8 km/s, a gain of 45 per cent. Relative to the planet it goes from 8.48 to 8.51, a change of 0.34 per cent where the isolated version gave 3e-12. The measured deflection is 34.2 degrees against a two-body prediction of 36.3, a six per cent miss. Both residuals are physical. Reading the gate distance of 0.45 AU against the quoted Hill radius of 0.58 AU is worth doing with a class: the encounter is being measured only just inside the region where the planet is what matters.',
+      8: 'About a minute of wall clock for both passes, measured. The table fills with two columns and the same left column in each: 4.343 km/s in and out on both sides. The rows that matter are the last three. Change in speed: +2.57 km/s behind, -1.67 in front. Change in velocity: 4.28 km/s in both columns. Encounter: "read in and out" in both. The caveat beneath reports the two velocity changes agreeing to a part in 10^13, the deflections to a part in 10^12 and the closest approaches to a part in 10^12, and then says the speed changes are not mirror images and were never going to be. Do not resolve that before the tenth screen.',
+      9: 'A gain of about 2.57, a loss of about 1.67 and a velocity change of about 4.28, all in km/s. Two ways to get this wrong, and the field check catches both: reading the velocity-change row for both of the first two answers, which makes them equal, and entering the loss as a negative number. The ratio 1.67 / 2.57 is 0.65 and is worth writing on the board before the next screen.',
+      12: 'The planet slows by about 4.3 mm/s, which is 1.5 parts per million of its own 2.83 km/s. Expect the ledger figure to differ between machines and say so if it does: it is around 0.002 per cent on a laptop under load and four orders of magnitude smaller when the encounter is integrated in fine steps, because the application sizes its integration step from the frame rate and the residual is a finite-gate effect that shrinks with the step. Every one of those numbers is far tighter than anything the thirteenth screen needs, which is the point to make - not the digits.',
+      15: 'Optional, and about three minutes of wall clock, measured. Five passes, all reported as complete encounters. Turn: 96.6, 73.6, 58.6, 41.0 and 28.0 degrees at b = 20, 30, 40, 60 and 90. Speed change: 3.58, 3.05, 2.57, 1.90 and 1.34 km/s. Closest approach runs from 0.076 AU - about 3.8 planet radii - out to 0.70 AU. The plot draws points and no line, and the caveat states which pass turned most, which gained most, and that the answer is not a rule.',
+      16: 'Turn 96.6 degrees and speed change 3.58 km/s at b = 20; 3.05 km/s at b = 30. The field check catches the two common misreadings - reading the table upside down, so that the widest pass is entered as the closest, and reading the turn from the wrong row. The subtraction they will need next is 3.58 minus 3.05 against 96.6 minus 73.6: about 0.023 km/s per degree, against 0.043 per degree at the wide end.',
+      20: 'A few seconds only. Relative to the star the spacecraft goes from about 13.7 to about 19.8 km/s, a gain of 45 per cent. Relative to the planet it goes from 8.48 to 8.51, a change of 0.34 per cent where the isolated version gave 3e-12. The measured deflection is 34.2 degrees against a two-body prediction of 36.3, a six per cent miss. Both residuals are physical. Reading the gate distance of 0.45 AU against the quoted Hill radius of 0.58 AU is worth doing with a class: the encounter is being measured only just inside the region where the planet is what matters. The comparison and the sweep are deliberately not offered here - with a star present their two arms would differ in two ways rather than one.',
     },
     modelNotes: `The encounter is a Newtonian three-body problem in a plane - two bodies in the
       isolated scenario - integrated with Velocity Verlet rather than the catalogue's default
@@ -521,7 +568,26 @@ export const INSTRUCTOR_CONTENT = {
       orbital turning rather than by the spacecraft, which is why the momentum ledger is
       demonstrated in the isolated scenario and not there. The panel does not report a recoil
       with a star present, because the number would be almost entirely the planet going round a
-      corner.`,
+      corner. The retained comparison and the sweep are hidden there for the same class of
+      reason: their claim is that their arms differ in one input, and with a star present the
+      planet's frame is accelerating too.
+      \n\nBoth experiments run on the A/B bench, which rebuilds the world per arm through the
+      scenario's own builder rather than nudging the spacecraft mid-flight, photographs the
+      reader's world before the first build and restores it after the last. Every arm is
+      measured by the same recorder as a hand-flown pass, at the same gate on both legs, so a
+      number in a table and the same number in the panel mean the same thing. What the bench's
+      own metrics would give - a speed averaged over a run - is deliberately not used: it is not
+      a before and an after, and it would happily report a flyby that never completed. An arm
+      whose spacecraft never came back out past the gate is reported as an incomplete encounter
+      with no speeds at all, rather than as a flyby with small ones.
+      \n\nThe sweep's five values are bounded below by the planet, not by taste. Periapsis falls
+      with the impact parameter, and js/physics.js merges bodies whose centres come within the
+      sum of their drawn radii, 2.4 units here. At b = 20 the spacecraft passes 7.6 units out;
+      at b = 10 it would pass 2.1 units out and be swallowed. The impact parameter that would
+      maximise the gain is about 10.3, whose periapsis is 2.26 units - inside the collision
+      radius. So the turnover in gain against turn is real, is where the geometry says it is,
+      and cannot be reached in this laboratory: the sweep shows the approach to it and the
+      lesson says so rather than implying the curve rises for ever.`,
   },
 
   'binary-star-planets': {
@@ -2968,11 +3034,11 @@ export const INSTRUCTOR_CONTENT = {
       'If a class is comfortable with logarithms, step 17 is the place to slow down. The result that error reduction buys time only logarithmically is the single most useful thing in the lesson for anyone who will later meet weather models, ephemerides or orbit determination.',
     ],
     expectations: {
-      4: 'The separation should read exactly zero for the whole run and the instrument should report "the two runs are identical". Any nonzero value means a setting changed between the runs; the bench\u2019s own parameter-difference line will name it. This is also the moment to point out that the run is being compared on simulated time, not wall-clock time.',
-      8: 'A growth factor of order 100 over four or five orbits, a straight-line fit around r-squared 0.99, and no e-folding time. The instrument should say the separation is growing in proportion to time. Students often read the refusal as an error; it is the result.',
-      13: 'An e-folding time between about 6 and 8 simulated seconds, r-squared above 0.98, and total growth of six or seven orders of magnitude. The shaded band on the log plot marks the interval that was fitted, which typically starts around t = 6 and ends around t = 110.',
-      14: 'Expect tau near 6.9 s, r-squared near 0.99 and growth near 2 x 10^7. Values of tau outside 5 to 9 usually mean mismatched run lengths rather than a physics error. The field validation warns rather than blocks, so a student can record an unexpected number and discuss it.',
-      20: 'The three e-folding times should agree to within about twenty per cent and the verdict should read as resolved. Measured across three integrators and three timesteps this configuration gives 6.8 to 7.6 simulated seconds. If a student sees wild disagreement, check they changed only one numerical setting per repeat.',
+      4: 'About a minute of running from one button. The separation should read exactly zero for the whole run and the instrument should report "the two runs are identical". The section reports both intervals - 40.0 simulated seconds each, against 40 asked for - and says in as many words that nothing was changed between the runs. Any nonzero value means something was; the parameter-difference line will name it. This is also the moment to point out that the runs are compared on simulated time, not wall-clock time.',
+      8: 'A growth factor of order 100 over four or five orbits, a straight-line fit around r-squared 0.99, and no e-folding time. The instrument should say the separation is growing in proportion to time. Students often read the refusal as an error; it is the result. The section names the nudge - 1500 km along x - as the only difference between the runs, which is worth reading aloud before the result.',
+      13: 'The guided pair runs a defined forty seconds at a defined step, so this is now the same for everyone: an e-folding time of 8.33 simulated seconds, r-squared 0.991, growth about 220, fitted between t = 5.3 and t = 29.3. The shaded band on the log plot marks that interval. Reproducibility is the change worth noticing here - two students who disagree have loaded different scenarios, not made different measurements.',
+      14: 'Expect tau 8.3 s, r-squared 0.99 and growth about 220. Values of tau outside 7 to 9 mean the wrong run or the wrong scenario rather than a physics error. The field validation warns rather than blocks, so a student can record an unexpected number and discuss it.',
+      20: 'Two controls, about a minute each, and the three e-folding times should agree far better than the twenty per cent the verdict allows. Measured: 8.333 s at the shipped step with symplectic Euler, 8.322 s at half that step, 8.314 s with velocity Verlet - a spread of 0.1 per cent, reported as resolved. Two things to check if it does not read that way. Wild disagreement means something else changed as well, and the parameter diff will name it. A verdict that says the repeats did not change the arithmetic means the same control was run twice: the section refuses to count agreement between two identical calculations, which is a point worth making out loud. Note also that the step control halves the MEASURED step rather than the setting - this lab ships with no cap at all, so halving the setting would have halved nothing.',
       25: 'The e-folding time should be essentially unchanged by a smaller or larger perturbation; what moves is the time at which the two runs become visibly different, and it moves by ln(factor) times tau. A perturbation ten times smaller buys about sixteen extra seconds and no more.',
     },
     discussion: [

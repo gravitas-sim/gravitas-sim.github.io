@@ -7221,13 +7221,14 @@
      to work out which is which. */
   .rv-survey-schedule,
   .rv-survey-compare,
-  .binary-sweep {
+  .binary-sweep,
+  /* The assist lesson's two experiments: same furniture, same rule. */
+  .assist-experiment {
     border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
     padding-top: 0.5rem;
   }
 
-  .rv-survey-field select,
-  .binary-sweep-field select {
+  .rv-survey-field select {
     background: var(--input-bg, rgb(255 255 255 / 6%));
     border: 1px solid var(--border, rgb(255 255 255 / 15%));
     border-radius: 4px;
@@ -7261,18 +7262,14 @@
   }
 
   .rv-survey-note,
-  .rv-survey-compare-report,
-  .binary-sweep-status,
-  .binary-sweep-table {
+  .rv-survey-compare-report {
     font-size: 0.72rem;
     line-height: 1.4;
     margin: 0;
   }
 
   .rv-survey-note:empty,
-  .rv-survey-compare-report:empty,
-  .binary-sweep-status:empty,
-  .binary-sweep-table:empty {
+  .rv-survey-compare-report:empty {
     display: none;
   }
 

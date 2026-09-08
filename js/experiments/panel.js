@@ -27,6 +27,12 @@ import { METRIC_ARITY, SCALAR_METRICS } from './metrics.js';
 import { SWEEPABLE, parameterFor, sweepableScenarios } from './sweep.js';
 import { describeDiff } from './canonicalState.js';
 import { describePerturbation, systemExtent } from './perturbation.js';
+import * as CHAOS from './chaosPair.js';
+import { SETTINGS } from '../appState.js';
+import { state, onPhysicsStep, updatePhysicsSettings } from '../physics.js';
+import { getSimClock } from '../timeline.js';
+import { frameAdvance } from '../timestep.js';
+import { DT } from '../physics.js';
 
 const PANEL_ID = 'experimentPanel';
 
@@ -142,6 +148,29 @@ export function ensurePanel() {
         <button id="benchControl" class="ui-button" disabled>${esc(t('bench.action.asControl'))}</button>
       </div>
       <div id="benchControls" class="experiment-controls-list"></div>
+
+      <details class="experiment-section" id="benchChaosSection" hidden>
+        <summary>${esc(t('bench.chaos.title'))}</summary>
+        <p class="experiment-hint">${esc(t('bench.chaos.hint'))}</p>
+        <div class="experiment-row experiment-actions">
+          <button id="benchChaosRun" class="ui-button">${esc(t('bench.chaos.run'))}</button>
+          <button id="benchChaosSame" class="ui-button">${esc(t('bench.chaos.runSame'))}</button>
+          <button id="benchChaosCancel" class="ui-button" hidden>${esc(t('bench.chaos.cancel'))}</button>
+        </div>
+        <div class="experiment-row">
+          <label class="experiment-label" for="benchChaosControlPick">${esc(t('bench.chaos.control'))}</label>
+          <select id="benchChaosControlPick" class="experiment-input">
+            <option value="finerStep">${esc(t('bench.chaos.control.finerStep'))}</option>
+            <option value="altIntegrator">${esc(t('bench.chaos.control.altIntegrator'))}</option>
+          </select>
+          <button id="benchChaosControl" class="ui-button" disabled>${esc(t('bench.chaos.runControl'))}</button>
+        </div>
+        <p id="benchChaosStatus" class="experiment-hint" role="status" aria-live="polite"></p>
+        <div id="benchChaosReport" class="experiment-results"></div>
+        <div class="experiment-row experiment-actions">
+          <button id="benchChaosKeep" class="ui-button" disabled>${esc(t('nb.action.save'))}</button>
+        </div>
+      </details>
 
       <details class="experiment-section" id="benchSweepSection">
         <summary>${esc(t('sweep.title'))}</summary>
@@ -353,6 +382,7 @@ export function render() {
   renderMetrics(exp);
   renderPerturbation(exp);
   renderControls(exp);
+  renderChaosPair();
   renderSweepControls();
   renderSweepResults();
   renderReliability(exp, recording);
@@ -518,6 +548,517 @@ function renderControls(exp) {
  *
  * @returns {void}
  */
+// =============================================================================
+// The chaos lesson's controlled pair
+// -----------------------------------------------------------------------------
+// Nine manual steps, replaced by two buttons and nothing else. What the lesson
+// still asks a student to do is unchanged: predict first, press the button,
+// read the divergence instrument, and say what the evidence supports. What it
+// no longer asks them to do is assemble the apparatus, which taught nothing and
+// which they could get subtly wrong - two runs of different lengths, or a Run A
+// that began wherever the simulation had drifted to while they read the
+// instructions.
+//
+// Everything here runs on the bench's own capture, restore, perturbation and
+// recording. The two things it adds are the two the lesson needs and the bench
+// cannot supply: both runs over the same simulated interval, and the step the
+// engine actually took rather than the one the settings imply.
+// =============================================================================
+
+/** Set while the pair or a control is running. */
+let chaosRunning = false;
+/** Asked to stop. */
+let chaosCancelled = false;
+/** The last pair, as the lesson reports it. */
+let chaosPairResult = null;
+/**
+ * Every numerical control recorded against the current pair.
+ *
+ * Kept here rather than only on the bench experiment, because a control is a
+ * repeat and a repeat captures a fresh start - which gives the experiment a
+ * fresh, empty list of controls. Holding them here is what makes the second
+ * control the second control rather than the only one, and they are pushed
+ * back onto each new capture so the export carries them too.
+ */
+let chaosControls = [];
+
+/** @returns {boolean} Whether the chaos pair is running */
+export const isChaosPairRunning = () => chaosRunning;
+
+/** What the section is holding, for the lesson, the notebook and the tests. */
+export function chaosPairReport() {
+  return chaosPairResult ? JSON.parse(JSON.stringify(chaosPairResult)) : null;
+}
+
+/** For the lesson and the tests. @param {object} [opts] - `control` @returns {Promise<void>} */
+export const startChaosPair = opts => runChaosPair(opts);
+
+/** Ask a run in progress to stop after the arm it is on. */
+export function cancelChaosPair() {
+  if (chaosRunning) chaosCancelled = true;
+}
+
+/** @returns {?object} Which configuration this scenario is, if any */
+function chaosConfigFor(scenario) {
+  for (const [key, cfg] of Object.entries(CHAOS.CONFIGURATIONS)) {
+    if (cfg.scenario === scenario) return { key, ...cfg };
+  }
+  return null;
+}
+
+/**
+ * Record every step the engine takes, until told to stop.
+ *
+ * The whole point of the numerical control, and the one thing the settings
+ * cannot be asked for: js/timestep.js splits a frame into at most MAX_SUBSTEPS
+ * pieces no larger than max_timestep, so which knob binds depends on the
+ * scenario and the frame rate. What actually happened is what the steps say.
+ *
+ * @returns {{stop: Function}} Call stop() to finish and get the statistics
+ */
+function watchSteps() {
+  const dts = [];
+  const off = onPhysicsStep(dt => dts.push(dt));
+  return {
+    stop() {
+      off?.();
+      return CHAOS.stepStatistics(dts);
+    },
+  };
+}
+
+/**
+ * Run one arm for a fixed stretch of simulated time.
+ *
+ * @param {object} spec - label, span, and whether to perturb first
+ * @returns {Promise<?object>} What the arm did
+ */
+async function runChaosArm({ label, span, perturb }) {
+  bench.restoreInitialState({ keepSettings: true });
+  if (perturb) {
+    const applied = bench.applyPerturbation(perturb);
+    if (!applied.ok) return null;
+  }
+  const startClock = getSimClock();
+  const steps = watchSteps();
+  if (!bench.startRun(label)) {
+    steps.stop();
+    return null;
+  }
+  await new Promise(resolve => {
+    const tick = () => {
+      if (chaosCancelled) return resolve();
+      if (getSimClock() - startClock >= span) return resolve();
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  const stats = steps.stop();
+  const run = bench.stopRun();
+  return {
+    label,
+    // Simulated seconds the recorder saw, which is the axis the divergence
+    // analysis is drawn on - not the same thing as the frames it took.
+    span: run ? run.samples[run.samples.length - 1]?.t - run.samples[0]?.t : 0,
+    asked: span,
+    samples: run?.samples?.length ?? 0,
+    ...stats,
+    integrator: SETTINGS.integrator,
+    maxTimestep: SETTINGS.max_timestep,
+    simSpeed: SETTINGS.sim_speed,
+  };
+}
+
+/**
+ * Set the apparatus up and run both arms.
+ *
+ * @param {object} [opts] - `control`, the id of a numerical control to apply,
+ *   and `nudge`, false for the reproducibility control that changes nothing
+ * @returns {Promise<void>}
+ */
+async function runChaosPair(opts = {}) {
+  if (chaosRunning) return;
+  const scenario = bench.currentScenarioName();
+  const cfg = chaosConfigFor(scenario);
+  const status = $('benchChaosStatus');
+  if (!cfg) {
+    if (status) status.textContent = t('bench.chaos.wrongScenario');
+    return;
+  }
+
+  // Somebody else's work stays where it is. The bench holds one experiment at
+  // a time, so setting up here would discard whatever is in it; a reader with
+  // recorded runs of their own is told rather than overwritten.
+  const held = bench.activeExperiment();
+  const ours = held?.name === t(`bench.chaos.name.${cfg.key}`);
+  if (held && !ours && (held.runs?.A || held.runs?.B)) {
+    if (status) {
+      status.textContent = t('bench.chaos.benchBusy', { name: held.name });
+    }
+    return;
+  }
+
+  const control = opts.control
+    ? CHAOS.CONTROLS.find(c => c.id === opts.control)
+    : null;
+  if (opts.control && !control) return;
+  const nudge = opts.nudge !== false;
+
+  chaosRunning = true;
+  chaosCancelled = false;
+  for (const id of [
+    'benchChaosRun',
+    'benchChaosSame',
+    'benchChaosControl',
+    'benchChaosKeep',
+  ]) {
+    if ($(id)) $(id).disabled = true;
+  }
+  if ($('benchChaosCancel')) $('benchChaosCancel').hidden = false;
+
+  // Everything the run is about to change, put back whatever happens - a
+  // throw, or a reader pressing Stop halfway through arm B.
+  const savedSettings = { ...SETTINGS };
+  const savedPaused = state.paused;
+  let result = null;
+  let hurried = null;
+
+  try {
+    if (control) applyChaosControl(control, chaosPairResult?.a ?? null);
+    // Pin the step, then hurry the playback.
+    //
+    // The span is stated in simulated time, and how many animation frames that
+    // takes is the reader's playback speed - which is not a property of the
+    // experiment. Four orbits of the Binary Pair at its own speed is thirty
+    // thousand frames and ten minutes of waiting.
+    //
+    // The fix must not change the arithmetic. The engine splits a frame's
+    // advance into pieces no larger than max_timestep, up to a ceiling, so
+    // pinning the cap to what the step is ALREADY and then advancing more per
+    // frame gives more pieces of the same size: the same calculation, in
+    // fewer frames. Where a smaller cap is already in force - a numerical
+    // control has just halved one - it is kept.
+    hurried = pinStepAndHurry();
+    // A fresh pair is a fresh question: the controls recorded against the
+    // previous one were about a measurement that no longer exists.
+    if (!control) chaosControls = [];
+
+    bench.captureExperiment(t(`bench.chaos.name.${cfg.key}`));
+    bench.setRecordBodies(true);
+    for (const c of chaosControls) bench.addNumericalControl(c);
+    const exp = bench.activeExperiment();
+    // The bodies the divergence measure is about, and the quantities the
+    // lesson reads. Chosen here rather than by the student, because choosing
+    // them is apparatus rather than physics.
+    const bodies = bench.selectableBodies();
+    exp.objects = bodies.map(b => b.id);
+    exp.primary = bodies[0]?.id ?? null;
+    exp.metrics = ['separation', 'total_energy'];
+
+    const span = chaosSpanFor(cfg, bodies);
+    if (!(span > 0)) throw new Error('no span');
+
+    if (status) status.textContent = t('bench.chaos.running', { arm: 'A' });
+    const a = await runChaosArm({ label: 'A', span, perturb: null });
+
+    let b = null;
+    if (!chaosCancelled) {
+      if (status) status.textContent = t('bench.chaos.running', { arm: 'B' });
+      // The reproducibility control changes nothing at all, which is the one
+      // case where "what changed between the runs" should have nothing in it.
+      const target =
+        bodies.find(x => x.name === cfg.body) ?? bodies[bodies.length - 1];
+      b = await runChaosArm({
+        label: 'B',
+        span,
+        perturb:
+          nudge && target
+            ? { bodyId: target.id, axis: cfg.axis, km: cfg.km }
+            : null,
+      });
+    }
+
+    const { separationSeries, analyseDivergence } =
+      await import('../chaos/divergence.js');
+    const shape = run =>
+      (run?.samples || [])
+        .filter(sm => Array.isArray(sm.__bodies))
+        .map(sm => ({ t: sm.t, bodies: sm.__bodies }));
+    const runs = bench.activeExperiment()?.runs || {};
+    const both = shape(runs.A).length && shape(runs.B).length;
+    const verdict = both
+      ? analyseDivergence(separationSeries(shape(runs.A), shape(runs.B)).series)
+      : null;
+
+    result = {
+      configuration: cfg.key,
+      scenario,
+      nudged: nudge,
+      hurried,
+      a,
+      b,
+      interval: CHAOS.sameInterval(a, b),
+      perturbation: bench.activeExperiment()?.perturbation ?? null,
+      diff: bench.activeExperiment()?.diff ?? null,
+      verdict,
+      cancelled: chaosCancelled,
+      ranAt: new Date().toISOString(),
+      control: control?.id ?? null,
+    };
+
+    // A control is filed beside the main result rather than replacing it, and
+    // it is labelled with the step the engine actually took.
+    if (control && verdict && a) {
+      const baseline = chaosPairResult?.a ?? null;
+      const differs = CHAOS.controlDiffers(baseline, a);
+      chaosControls = [
+        ...chaosControls.filter(c => c.label !== CHAOS.controlLabel(a)),
+        {
+          label: CHAOS.controlLabel(a),
+          tau: verdict.tau,
+          behaviour: verdict.behaviour,
+          differs: differs.differs,
+          stepChange: differs.stepChange,
+          schemeChanged: differs.schemeChanged,
+        },
+      ];
+      for (const c of chaosControls) bench.addNumericalControl(c);
+      result.controlDiff = differs;
+      // A control repeats the measurement; it does not replace it. The pair
+      // on screen stays the one the lesson measured, and the repeat is filed
+      // beside it.
+      result.a = baseline ?? a;
+      result.b = chaosPairResult?.b ?? b;
+      result.verdict = chaosPairResult?.verdict ?? verdict;
+      result.perturbation =
+        chaosPairResult?.perturbation ?? result.perturbation;
+      result.interval = chaosPairResult?.interval ?? result.interval;
+      result.series = chaosPairResult?.series ?? null;
+    }
+    result.controls = [...chaosControls];
+    result.refinement = CHAOS.refinementReport(result.controls);
+    // The separation itself, thinned, so the notebook can draw the curve the
+    // instrument drew rather than a description of it.
+    if (both && !control) {
+      const full = separationSeries(shape(runs.A), shape(runs.B)).series;
+      const stride = Math.max(1, Math.ceil(full.length / 300));
+      result.series = full.filter((_, i) => i % stride === 0);
+    }
+  } catch (err) {
+    console.warn('[bench] the chaos pair did not finish:', err);
+  } finally {
+    try {
+      bench.restoreInitialState({ keepSettings: true });
+    } catch (err) {
+      console.warn('[bench] could not restore after the chaos pair:', err);
+    }
+    Object.assign(SETTINGS, savedSettings);
+    updatePhysicsSettings(SETTINGS);
+    state.paused = savedPaused;
+    chaosRunning = false;
+    for (const id of ['benchChaosRun', 'benchChaosSame', 'benchChaosControl']) {
+      if ($(id)) $(id).disabled = false;
+    }
+    if ($('benchChaosCancel')) $('benchChaosCancel').hidden = true;
+  }
+
+  if (result) chaosPairResult = result;
+  render();
+}
+
+/**
+ * How long both arms run for, in simulated time.
+ *
+ * Stated in the units the configuration thinks in - orbits for the binary,
+ * seconds for the triangle, which has no orbit to count once it comes apart -
+ * and converted here so both arms are asked for one number.
+ *
+ * @param {object} cfg - From CONFIGURATIONS
+ * @param {Array} bodies - The world's selectable bodies
+ * @returns {number} Simulated time units
+ */
+function chaosSpanFor(cfg, bodies) {
+  if (Number.isFinite(cfg.seconds)) return cfg.seconds;
+  if (!Number.isFinite(cfg.orbits) || bodies.length < 2) return 0;
+  const [p, q] = bodies;
+  const a = Math.hypot(p.pos.x - q.pos.x, p.pos.y - q.pos.y);
+  const n = Math.sqrt(
+    (SETTINGS.gravitational_constant * (p.mass + q.mass)) / a ** 3
+  );
+  return n > 0 ? (cfg.orbits * 2 * Math.PI) / n : 0;
+}
+
+/**
+ * How many times faster than the reader's own playback the arms are watched.
+ *
+ * Sixteen, and the ceiling is arithmetic rather than taste: js/timestep.js
+ * splits a frame into at most 64 pieces, and a numerical control may have
+ * already halved the piece size, so sixteen leaves a factor of two in hand.
+ */
+const HURRY = 16;
+
+/**
+ * Pin the integration step to what it already is, then advance faster.
+ *
+ * @returns {?object} What was pinned and by how much, for the record
+ */
+function pinStepAndHurry() {
+  const natural = frameAdvance(1 / 60, SETTINGS.sim_speed, DT);
+  if (!(natural > 0)) return null;
+  const cap =
+    SETTINGS.max_timestep > 0
+      ? Math.min(SETTINGS.max_timestep, natural)
+      : natural;
+  const before = { step: SETTINGS.max_timestep, simSpeed: SETTINGS.sim_speed };
+  SETTINGS.max_timestep = cap;
+  SETTINGS.sim_speed = SETTINGS.sim_speed * HURRY;
+  updatePhysicsSettings(SETTINGS);
+  return { ...before, pinnedStep: cap, factor: HURRY };
+}
+
+/**
+ * Apply one numerical control to the live settings.
+ *
+ * @param {object} control - From CONTROLS
+ * @returns {void}
+ */
+function applyChaosControl(control, baseline) {
+  const settings = SETTINGS;
+  if (control.setting === 'max_timestep') {
+    // Halve the step that was actually taken, not the setting.
+    //
+    // Two scenarios in this lesson, and the setting is the wrong lever in one
+    // of them: the Three-Body Sensitivity Lab ships max_timestep = 0, which
+    // means "do not cap", and half of nothing is nothing. Measured, the step
+    // it takes is a twelfth of a second, so the cap goes there instead - and
+    // where a real cap is already in force, halving it does what it says.
+    const measured = baseline?.mean;
+    const capped = settings.max_timestep > 0;
+    const from =
+      capped &&
+      (!Number.isFinite(measured) || settings.max_timestep <= measured)
+        ? settings.max_timestep
+        : measured;
+    if (Number.isFinite(from) && from > 0) {
+      settings.max_timestep = from * control.factor;
+    }
+  } else if (control.setting === 'integrator') {
+    const next = CHAOS.alternateIntegrator(settings.integrator);
+    if (next) settings.integrator = next;
+  }
+  updatePhysicsSettings(settings);
+}
+
+/** Draw the chaos section: what ran, over what, and whether it is resolved. */
+function renderChaosPair() {
+  const section = $('benchChaosSection');
+  if (!section) return;
+  const cfg = chaosConfigFor(bench.currentScenarioName());
+  section.hidden = !cfg;
+  if (!cfg) return;
+
+  const keep = $('benchChaosKeep');
+  if (keep) keep.disabled = chaosRunning || !chaosPairResult;
+  const control = $('benchChaosControl');
+  if (control) control.disabled = chaosRunning || !chaosPairResult;
+
+  const wrap = $('benchChaosReport');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const r = chaosPairResult;
+  if (!r) return;
+
+  const line = (text, cls = 'experiment-note') => {
+    const el = document.createElement('p');
+    el.className = cls;
+    el.textContent = text;
+    wrap.appendChild(el);
+  };
+
+  // What changed between the runs, said plainly and first. The bench's own
+  // parameter diff cannot see a perturbation - it is a coordinate inside the
+  // captured state, not a setting - so both are reported.
+  if (r.perturbation) {
+    line(
+      t('bench.chaos.changed', {
+        body: r.perturbation.bodyName || r.perturbation.bodyId,
+        axis: r.perturbation.axis,
+        km: num(r.perturbation.km),
+      })
+    );
+  } else if (r.nudged === false) {
+    line(t('bench.chaos.changedNothing'));
+  }
+  const settingsChanged = (r.diff?.variables || []).map(v => v.key).join(', ');
+  line(
+    settingsChanged
+      ? t('bench.chaos.settingsChanged', { keys: settingsChanged })
+      : t('bench.chaos.settingsSame')
+  );
+
+  // Both intervals, because the fit is over their overlap.
+  if (r.a && r.b) {
+    line(
+      t('bench.chaos.intervals', {
+        a: num(r.a.span),
+        b: num(r.b.span),
+        asked: num(r.a.asked),
+      }),
+      r.interval?.ok ? 'experiment-note' : 'experiment-warning'
+    );
+    // The step the engine took, measured. Not the setting, and not the
+    // playback speed: what the integrator did.
+    line(
+      t('bench.chaos.steps', {
+        mean: num(r.a.mean, 4),
+        min: num(r.a.min, 4),
+        max: num(r.a.max, 4),
+        n: r.a.steps ?? 0,
+        integrator: r.a.integrator,
+      }),
+      'experiment-hint'
+    );
+  }
+
+  // The divergence itself. The lesson's evidence, and not a reliability score:
+  // an e-folding time with the interval it was fitted over, or the reason
+  // there is not one.
+  if (r.verdict) {
+    line(
+      r.verdict.behaviour === 'exponential'
+        ? t('bench.chaos.exponential', {
+            tau: num(r.verdict.tau, 3),
+            r2: num(r.verdict.r2, 3),
+            from: num(r.verdict.window?.from),
+            to: num(r.verdict.window?.to),
+          })
+        : r.verdict.behaviour === 'insufficient'
+          ? t(`chaosW.reject.${r.verdict.reason || 'insufficient'}`)
+          : t(`chaosW.verdict.${r.verdict.behaviour}`, {
+              tau: num(r.verdict.tau, 3),
+              r2: num(r.verdict.r2, 3),
+            }),
+      'experiment-note'
+    );
+  }
+
+  // And whether it survived being computed differently.
+  const report = CHAOS.refinementReport(r.controls || []);
+  line(
+    report.resolved
+      ? t('bench.chaos.resolved', {
+          n: report.effective,
+          spread: num((report.spread ?? 0) * 100, 2),
+        })
+      : t(`bench.chaos.unresolved.${report.reason || 'need-two-estimates'}`, {
+          n: report.effective,
+          spread: num((report.spread ?? 0) * 100, 2),
+        }),
+    report.resolved ? 'experiment-note' : 'experiment-warning'
+  );
+  if (r.cancelled) line(t('bench.chaos.cancelled'), 'experiment-warning');
+}
+
 function renderSweepControls() {
   const scenarioSel = $('benchSweepScenario');
   const paramSel = $('benchSweepParam');
@@ -1212,6 +1753,24 @@ function wire() {
     bench.captureExperiment($('benchName').value);
     render();
     flash(t('bench.flash.captured'));
+  };
+
+  $('benchChaosRun').onclick = () => {
+    runChaosPair().catch(() => {});
+  };
+  $('benchChaosSame').onclick = () => {
+    runChaosPair({ nudge: false }).catch(() => {});
+  };
+  $('benchChaosCancel').onclick = () => cancelChaosPair();
+  $('benchChaosControl').onclick = () => {
+    runChaosPair({ control: $('benchChaosControlPick').value }).catch(() => {});
+  };
+  $('benchChaosKeep').onclick = () => {
+    const report = chaosPairReport();
+    if (!report) return;
+    keep((capture, provenance) =>
+      capture.fromChaosPair({ report, provenance })
+    );
   };
 
   $('benchRestore').onclick = () => {

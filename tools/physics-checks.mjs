@@ -5390,7 +5390,7 @@ export async function runChecks() {
       unit: 'fractional mismatch',
       tolerance: 0,
       toleranceKind: 'bound',
-      why: 'The answer to "where did the energy come from", and the reason the lesson can rule out numerical error as the source: the two momentum changes agree to about a part in 10^9. A bound at 1e-5 is four orders looser than that and still far tighter than any accumulated drift could sneak through.',
+      why: 'The answer to "where did the energy come from", and the reason the lesson can rule out numerical error as the source: at the fixed step this harness uses the two momentum changes agree to about a part in 10^9. A bound at 1e-5 is four orders looser than that and still far tighter than any accumulated drift could sneak through. In the browser the figure is larger - the application sizes its step from the frame rate, and on a loaded machine the encounter is integrated in steps three times this one - which is why the lesson quotes a bound rather than a digit.',
     });
 
     add({

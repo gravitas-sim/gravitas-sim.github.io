@@ -1,7 +1,8 @@
 // =============================================================================
 // Where Does a Gravity Assist Get Its Speed?
 // -----------------------------------------------------------------------------
-// The least intuitive easy thing in orbital mechanics, in sixteen screens.
+// The least intuitive easy thing in orbital mechanics, in eighteen screens and
+// four optional ones.
 //
 // The whole lesson is one juxtaposition, and the panel is built to put it on
 // screen in two columns rather than one list:
@@ -30,10 +31,30 @@
 // an orbit the planet's velocity changes by 0.34 units per encounter from its
 // own orbital turning and by 5e-7 from the spacecraft; in empty space the
 // second number is the only one there is, so the momentum ledger can be shown
-// balancing to a part in 10^9 instead of asserted.
+// balancing instead of asserted. How closely depends on the step: a part in
+// 10^9 when the encounter is integrated at a fixed 0.5, and a part in 10^5 on
+// a machine whose frame rate makes the application's own step three times
+// coarser. The lesson quotes a bound rather than a digit for that reason.
+//
+// Why the two passes are run together
+// -----------------------------------------------------------------------------
+// The comparison the lesson turns on is that the change in VELOCITY is the same
+// on both sides of the planet and the change in SPEED is not. That is a
+// comparison between two numbers, and until the panel kept both passes it was a
+// comparison a student had to make from memory: fly +40, write four figures
+// down, press Other side, watch the panel overwrite them, and try to remember
+// which was which. The retained comparison replaces that and nothing else - the
+// first flyby is still flown by hand, still watched, still read off the panel,
+// because that is where a student learns what the instrument is saying.
+//
+// The optional sweep after it asks the obvious follow-up - how much does
+// passing closer buy you - and answers it in a way that does not become a rule:
+// in this laboratory more turn does mean more gain, and the reason is that the
+// pass which would overshoot the optimum is a pass that hits the planet.
 //
 // Numbers in this file were measured through the engine, not derived and hoped
-// for. See tools/physics-checks.mjs, group "Gravity assist".
+// for. See tools/physics-checks.mjs, group "Gravity assist", and
+// e2e/assistExperiments.spec.js for the comparison and the sweep.
 // =============================================================================
 
 /** A rogue planet and a spacecraft, and nothing else in the universe. */
@@ -56,6 +77,8 @@ const GRAVITY_ASSIST = {
   title: 'Where Does a Gravity Assist Get Its Speed?',
   subtitle:
     'The same flyby, measured in two frames, with two different answers',
+  // The core is eighteen screens. The four optional ones add about five
+  // minutes, three of which is the sweep running while nobody types.
   duration: '15-20 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
@@ -64,13 +87,14 @@ const GRAVITY_ASSIST = {
   tags: ['spaceflight', 'orbits'],
   lock: { placement: true },
   summary:
-    'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, and find out why the two measurements disagree — and who actually paid.',
+    'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
   objectives: [
     'Predict whether a flyby gains or loses speed from which side of the planet it passes',
     'State what a gravity assist changes and what it cannot change, in the planet’s frame and in an inertial one',
     'Explain the speed change as the rotation of one vector added to another, rather than as a push',
     'Identify where the energy comes from, and show the momentum ledger balancing',
     'Say why the planet’s frame is exactly inertial with no star and only approximately so with one',
+    'Distinguish a frame-dependent speed from the quantities the system conserves in every frame',
   ],
   steps: [
     // --- Part 1: the puzzle --------------------------------------------------
@@ -266,30 +290,113 @@ const GRAVITY_ASSIST = {
     {
       sid: 'the-other-side',
       type: 'explore',
-      title: 'Now the other side',
+      title: 'Now the other side — both at once',
       setup: ISOLATED,
+      // Requires the prediction, not the first flyby: the point of collecting
+      // it at the third screen is that it is collected before any evidence,
+      // and a subset of this lesson that runs the comparison without it has
+      // turned an experiment into a demonstration.
+      requires: ['which-side-gains'],
       body: `If the gain comes from adding a rotated vector, then rotating it the
              other way should subtract instead.
-             \n\nPress <strong>Other side</strong>. That flips the impact
-             parameter to −40: same planet, same approach, same closest
-             approach distance, mirror-image pass. Fly it again.`,
+             \n\nYou could press <strong>Other side</strong> and fly it again —
+             but then the numbers you just wrote down would be off the screen
+             while you read the new ones, and the comparison you are about to
+             make is between two of them at once.
+             \n\nSo open <strong>Both sides, kept side by side</strong> under
+             the panel and press <strong>Run both passes</strong>. It flies
+             <strong>+40</strong> and <strong>−40</strong>, rebuilding the
+             encounter from the same starting configuration each time so the
+             sign of the impact parameter is the only thing that differs, and
+             keeps both. It takes about <strong>a minute</strong>.`,
       checklist: [
-        'Check the left column again — it should be unchanged, and the same as last time',
-        'Read the right column',
-        'Compare the size of the loss with the size of the gain you measured before',
+        'Watch the two passes run, and read the table when it settles',
+        'Find the row that is the same in both columns, and the row that is not',
+        'Check the closest-approach row: the two passes came equally close',
+        'Read the "Encounter" row at the bottom — both should say they were read in and out',
       ],
-      tip: 'The deflection angle is identical on both sides: 58.6 degrees. Only its direction differs.',
+      tip: 'The deflection is identical on both sides: 58.63 degrees. Only its direction differs, and the table shows both.',
+    },
+    {
+      sid: 'read-the-comparison',
+      type: 'measure',
+      title: 'Two passes, three numbers',
+      // Reads the retained table, so the table has to exist.
+      requires: ['the-other-side'],
+      body: `Read these off the comparison table. The <em>change in speed</em>
+             row is signed: one column gained and the other lost. The
+             <em>change in velocity</em> row is a length, so it has no sign, and
+             it is the row worth looking at twice.`,
+      fields: [
+        {
+          id: 'abGain',
+          label: 'Speed gained, passing behind',
+          unit: 'km/s',
+          hint: 'km/s',
+        },
+        {
+          id: 'abLoss',
+          label: 'Speed lost, passing in front (as a positive number)',
+          unit: 'km/s',
+          hint: 'km/s',
+        },
+        {
+          id: 'abDeltaV',
+          label: 'Change in velocity — either column',
+          unit: 'km/s',
+          hint: 'km/s',
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.abGain) || !Number.isFinite(v.abLoss)) {
+          return null;
+        }
+        if (v.abLoss < 0) {
+          return {
+            level: 'warn',
+            message:
+              'Enter the loss as a positive number — how much speed it lost. The sign is in the question, not in the answer.',
+          };
+        }
+        if (Math.abs(v.abLoss - v.abGain) < 0.05) {
+          return {
+            level: 'warn',
+            message:
+              'Those two came out the same size. Check you have read the "change in speed" row and not the "change in velocity" row: it is the velocity change that matches on both sides.',
+          };
+        }
+        if (
+          Number.isFinite(v.abDeltaV) &&
+          v.abDeltaV < Math.max(v.abGain, v.abLoss)
+        ) {
+          return {
+            level: 'warn',
+            message:
+              'The change in velocity should be the largest of the three. It is the length of the arrow between the before and after velocities, and neither speed changed by that much.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'A gain of about 2.6 and a loss of about 1.7 — not mirror images — and one velocity change of about 4.3 shared by both. The next screen is why.',
+        };
+      },
+      tip: 'The caveat under the table reports how closely the two velocity changes agree. In the isolated lab it is a few parts in 10¹³, which is the integrator rather than the physics.',
     },
     {
       sid: 'why-not-mirror-image',
       type: 'question',
       kind: 'choice',
       title: 'Why is the loss smaller than the gain?',
-      body: `Passing behind, the spacecraft went from 3.32 to 5.89 km/s: a gain
-             of 2.57. Passing in front, it went from 3.32 to 1.64: a loss of
-             1.68.
-             \n\nSame planet, same approach speed, same deflection angle,
-             mirror-image geometry — and the two changes are not the same size.`,
+      body: `Both columns are still on screen, which is the point of running
+             them together. Passing behind, the spacecraft went from 3.32 to
+             5.89 km/s: a gain of 2.57. Passing in front, it went from 3.32 to
+             1.64: a loss of 1.67.
+             \n\nSame planet, same approach speed, same closest approach to
+             within a part in 10¹², same deflection to within a part in 10¹²,
+             mirror-image geometry — and the two changes are not the same
+             size. The table reports all four of those agreements, so the
+             asymmetry cannot be blamed on any of them.`,
       prompt: 'The best explanation is:',
       options: [
         'The simulation loses a little energy on the losing pass',
@@ -303,8 +410,9 @@ const GRAVITY_ASSIST = {
                 so its magnitude is identical. But speed is the <em>length</em> of
                 the resulting sum, and adding a fixed-length vector at different
                 angles to another one does not change that length symmetrically.
-                Check the closest-approach readout if you doubt the fourth
-                option: it is 0.234 AU on both passes.`,
+                Check the closest-approach row if you doubt the fourth
+                option: it is 0.234 AU on both passes, and the table says how
+                closely.`,
     },
     {
       sid: 'the-ceiling',
@@ -391,7 +499,7 @@ const GRAVITY_ASSIST = {
       body: `The spacecraft's kinetic energy went up by a factor of three. The
              planet slowed by about four millimetres per second — one part in a
              million of its own speed — and the two momentum changes match to
-             better than a millionth of a per cent.`,
+             better than a hundredth of a per cent.`,
       prompt:
         'In this isolated system, the spacecraft’s extra energy came from:',
       options: [
@@ -406,8 +514,202 @@ const GRAVITY_ASSIST = {
                 change in a very large kinetic energy is a large fractional
                 change in a very small one. The fourth option is worth ruling
                 out rather than dismissing — the panel shows the two momentum
-                changes agreeing to a part in 10⁹, which is far tighter than any
-                accumulated error could be.`,
+                changes agreeing to better than a hundredth of a per cent,
+                which is far tighter than accumulated error could be. What is
+                left is not error either: the readings are taken at a finite
+                distance, where the two bodies are still very slightly pulling
+                on each other, so the figure is smaller on a machine that can
+                integrate the encounter in finer steps. Yours will not be the
+                same as your neighbour's, and both of them rule out the fourth
+                option.`,
+    },
+
+    {
+      sid: 'the-planets-frame-is-two-frames',
+      type: 'question',
+      kind: 'choice',
+      title: 'Whose frame, exactly?',
+      body: `One loose end, and it is the interesting kind.
+             \n\nThe whole lesson rests on the left-hand column: the speed
+             relative to the planet does not change. But the planet you are
+             measuring against is not the same planet before and after — it
+             recoiled. The comparison's caveat says by how much: about four
+             millimetres per second, which is exactly one millionth of the
+             spacecraft's own velocity change, because the spacecraft is one
+             millionth of the planet's mass.
+             \n\nSo "the planet's frame" names one inertial frame on the way
+             in and a slightly different one on the way out.`,
+      prompt: 'Given that, the unchanged speed in the left-hand column is:',
+      options: [
+        'An approximation, good to about one part in a million because the spacecraft is light',
+        'Exact anyway — the speed of one body relative to another returns to its old value at the same separation, whatever the two masses are',
+        'Wrong, and the panel should be measuring against the barycentre instead',
+        'Exact only because the spacecraft is much lighter than the planet',
+      ],
+      answer: 1,
+      because: `Exact, and not because the spacecraft is light. Two bodies
+                falling towards each other and separating again form a Kepler
+                problem in their <em>relative</em> coordinate, and that problem
+                returns the same relative speed at the same separation for any
+                pair of masses at all. Make the spacecraft as heavy as the
+                planet and the left column still would not move.
+                \n\nWhat the finite mass changes is which frames you are
+                naming. It is worth being precise about what survives the
+                change of frame and what does not: <strong>speed</strong> is
+                frame-dependent and disagrees between the columns; the
+                <strong>change in velocity</strong> is the same vector in every
+                inertial frame, which is why both passes report the same one;
+                and the system's <strong>total momentum</strong> is conserved,
+                which is the row the panel calls the ledger.`,
+      tip: 'The panel checks this rather than asserting it: the planet\u2019s velocity change divided by the spacecraft\u2019s should equal the mass ratio, and the caveat says whether it does.',
+    },
+
+    // --- Part 4 (optional): how much does closeness buy? ---------------------
+    {
+      sid: 'sweep-the-impact-parameter',
+      type: 'explore',
+      title: 'Optional: how much does passing closer buy you?',
+      setup: ISOLATED,
+      requires: ['which-side-gains'],
+      body: `<strong>Optional, and it takes about three minutes.</strong> Skip
+             it if the session is short; nothing after this depends on it.
+             \n\nEverything so far used one impact parameter. Open
+             <strong>Optional: sweep how close it passes</strong> and press
+             <strong>Run the sweep</strong>. It flies five passes on the gaining
+             side — <strong>20, 30, 40, 60 and 90</strong> — holding the
+             approach speed, the planet, the spacecraft, the integrator and the
+             gate, and varying nothing else.
+             \n\nThe closest of them passes 0.076 AU from the planet, which is
+             about three and a half planet radii. Closer than that and the pass
+             stops being a flyby and becomes a collision, which is why the
+             sweep stops where it does rather than at zero.`,
+      checklist: [
+        'Predict, before it finishes: does passing closer always gain more speed?',
+        'Read the turn column: it should grow steadily as the pass gets closer',
+        'Read the speed-change column beside it',
+        'Look at the plot: open circles are the turn, filled squares are the speed change',
+      ],
+      tip: 'Stop is there if you need it. A stopped sweep keeps the passes it flew and marks the ones it never reached, rather than reporting four points as five.',
+    },
+    {
+      sid: 'read-the-sweep',
+      type: 'measure',
+      title: 'Optional: read the five',
+      requires: ['sweep-the-impact-parameter'],
+      body: `Two rows from the table, and one subtraction you will need on the
+             next screen.`,
+      fields: [
+        {
+          id: 'sweepTurn20',
+          label: 'Turn at the closest pass, b = 20',
+          unit: '°',
+          hint: 'degrees',
+        },
+        {
+          id: 'sweepGain20',
+          label: 'Speed change at b = 20',
+          unit: 'km/s',
+          hint: 'km/s',
+        },
+        {
+          id: 'sweepGain30',
+          label: 'Speed change at b = 30',
+          unit: 'km/s',
+          hint: 'km/s',
+        },
+      ],
+      validate: v => {
+        if (
+          !Number.isFinite(v.sweepGain20) ||
+          !Number.isFinite(v.sweepGain30)
+        ) {
+          return null;
+        }
+        if (v.sweepGain20 <= v.sweepGain30) {
+          return {
+            level: 'warn',
+            message:
+              'The closer pass should have gained more, not less. Check which row is which: 20 is the top row and it is the closest pass, not the widest.',
+          };
+        }
+        if (Number.isFinite(v.sweepTurn20) && v.sweepTurn20 < 60) {
+          return {
+            level: 'warn',
+            message:
+              'That looks like the turn at a wider pass. At b = 20 the spacecraft is turned by about 97 degrees.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Halving the impact parameter from 40 to 20 turned the spacecraft half as far again and bought about a kilometre per second. Whether the next halving would buy as much is the question.',
+        };
+      },
+    },
+    {
+      sid: 'strongest-turn-biggest-gain',
+      type: 'question',
+      kind: 'choice',
+      title: 'Optional: does the biggest turn always win?',
+      requires: ['read-the-sweep'],
+      body: `In your five passes the closest one turned the most and gained the
+             most. The obvious conclusion is that a bigger turn always means a
+             bigger gain.
+             \n\nBefore you accept it, look at what the turn is <em>for</em>.
+             The encounter rotates the spacecraft's velocity relative to the
+             planet, and then that rotated vector is added to the planet's own.
+             The sum is longest when the two point the same way.`,
+      prompt: 'So the largest possible gain from this planet would come from:',
+      options: [
+        'The closest possible pass, since that turns the velocity furthest',
+        'The pass that turns the relative velocity until it points along the planet’s own direction of travel — and no further',
+        'The widest pass, since a gentle turn wastes less speed',
+        'Any pass; the gain depends only on the approach speed',
+      ],
+      answer: 1,
+      because: `The second. Turning helps only while it is bringing the relative
+                velocity round towards the planet's direction of travel; keep
+                turning past that alignment and the two vectors start to
+                disagree again and the sum shortens. Here the incoming relative
+                velocity is 131 degrees away from the planet's motion, so
+                <strong>131 degrees</strong> is the turn that would be worth
+                most — and the closest pass the planet survives manages about
+                97. The hill has a top and this laboratory cannot reach it: the
+                pass that would turn 131 degrees passes 0.02 AU out, which is
+                inside the planet.
+                \n\nSo your five points are all on the rising side of a curve
+                that does turn over. That the biggest turn won here is a fact
+                about this geometry, not a rule about flybys.`,
+      tip: 'The caveat under the plot says the same thing, and says it whichever way your five came out.',
+    },
+    {
+      sid: 'explain-the-sweep',
+      type: 'question',
+      kind: 'short',
+      title: 'Optional: say it with your own numbers',
+      requires: ['read-the-sweep'],
+      body: `Your table has five turns and five speed changes. Work out roughly
+             how much speed each extra degree of turn bought, between the two
+             widest passes and then between the two closest ones.`,
+      prompt:
+        'Using those two figures, explain in two or three sentences why the sweep is evidence that a turnover exists, even though none of your five passes is past it.',
+      rubric: `Full credit for reading the DIMINISHING RETURN off their own
+               numbers and connecting it to the vector picture. Between b = 90
+               and b = 60 the gain rises about 0.043 km/s per degree of extra
+               turn; between b = 30 and b = 20 it rises about 0.023 km/s per
+               degree — roughly half as much for each degree bought. A quantity
+               whose increments are shrinking towards zero is approaching a
+               maximum, and the vector picture says where: at the turn that
+               lines the relative velocity up with the planet's motion, 131
+               degrees here.
+               \n\nCredit also for noticing that the five points alone cannot
+               locate the turnover, only show the approach to it. Common wrong
+               answers: "the gain is levelling off, so it must stay flat" (a
+               curve with a maximum falls after it, and the geometry says this
+               one does); "the closest pass gained most, so closer is always
+               better" (true of these five and of nothing beyond them); and
+               treating the turnover as a numerical artefact rather than as
+               geometry - halving the timestep would not move it.`,
     },
 
     // --- Part 4: the version with a Sun --------------------------------------
@@ -486,6 +788,9 @@ const GRAVITY_ASSIST = {
              planet's frame is genuinely inertial.
              \n· The gain is the rotation of one vector added to another, and it
              is capped at twice the approach speed however heavy the planet is.
+             \n· The two sides change the velocity by the same amount and the
+             speed by different amounts, and the first of those is the same in
+             every frame while the second is not.
              \n· The planet pays, in momentum, exactly what the spacecraft gains.
              \n· With a star present all of that is still true and none of it is
              exact any more, and the size of the error is a thing you can read

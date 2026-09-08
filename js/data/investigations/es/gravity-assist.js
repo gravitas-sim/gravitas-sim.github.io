@@ -21,13 +21,14 @@ export default {
   duration: '15-20 min',
   level: 'Astronomía introductoria',
   summary:
-    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
+    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
   objectives: [
     'Predecir si un sobrevuelo gana o pierde velocidad según por qué lado del planeta pase',
     'Decir qué cambia y qué no puede cambiar una asistencia gravitatoria, en el sistema del planeta y en uno inercial',
     'Explicar el cambio de velocidad como la rotación de un vector sumado a otro, y no como un empujón',
     'Identificar de dónde sale la energía y mostrar que el balance de momento lineal cuadra',
     'Decir por qué el sistema del planeta es exactamente inercial sin estrella y solo aproximadamente con una',
+    'Distinguir una rapidez que depende del sistema de referencia de las magnitudes que el conjunto conserva en todos ellos',
   ],
   steps: [
     {
@@ -160,26 +161,59 @@ export default {
       tip: 'Por eso la maniobra se explica a veces como hacer rebotar una pelota de tenis en un tren en marcha. La pelota se marcha del tren a la velocidad con la que llegó, en el sistema del tren; en el de la estación se marcha mucho más rápido.',
     },
     {
-      title: 'Ahora el otro lado',
+      title: 'Ahora el otro lado, los dos a la vez',
       body: `Si la ganancia viene de sumar un vector rotado, entonces rotarlo
              hacia el otro lado debería restar en vez de sumar.
-             \n\nPulsa <strong>El otro lado</strong>. Eso invierte el parámetro
-             de impacto a −40: mismo planeta, misma aproximación, misma distancia
-             de máximo acercamiento, paso especular. Lánzala otra vez.`,
+             \n\nPodrías pulsar <strong>El otro lado</strong> y lanzarla otra
+             vez, pero entonces los números que acabas de anotar estarían fuera
+             de la pantalla mientras lees los nuevos, y la comparación que vas a
+             hacer es entre dos de ellos a la vez.
+             \n\nAsí que abre <strong>Los dos lados, guardados uno al lado del
+             otro</strong> bajo el panel y pulsa <strong>Ejecutar los dos
+             pasos</strong>. Lanza <strong>+40</strong> y <strong>−40</strong>,
+             reconstruyendo el encuentro desde la misma configuración de partida
+             cada vez para que el signo del parámetro de impacto sea lo único que
+             cambia, y conserva los dos. Tarda alrededor de <strong>un
+             minuto</strong>.`,
       checklist: [
-        'Vuelve a comprobar la columna izquierda: debería estar igual, y ser la misma que antes',
-        'Lee la columna derecha',
-        'Compara el tamaño de la pérdida con el de la ganancia que mediste antes',
+        'Observa cómo se ejecutan los dos pasos y lee la tabla cuando se estabilice',
+        'Busca la fila que es igual en las dos columnas, y la fila que no lo es',
+        'Comprueba la fila de máxima aproximación: los dos pasos se acercaron igual',
+        'Lee la fila «Encuentro» del final: los dos deberían decir que se midieron a la entrada y a la salida',
       ],
-      tip: 'El ángulo de desviación es idéntico por los dos lados: 58,6 grados. Solo cambia su sentido.',
+      tip: 'La desviación es idéntica por los dos lados: 58,63 grados. Solo cambia su sentido, y la tabla muestra los dos.',
+    },
+    {
+      title: 'Dos pasos, tres números',
+      body: `Lee esto en la tabla de comparación. La fila de <em>cambio de
+             rapidez</em> lleva signo: una columna ganó y la otra perdió. La
+             fila de <em>cambio de velocidad</em> es una longitud, así que no
+             tiene signo, y es la fila que merece mirarse dos veces.`,
+      fields: [
+        { label: 'Rapidez ganada pasando por detrás', hint: 'km/s' },
+        {
+          label: 'Rapidez perdida pasando por delante (como número positivo)',
+          hint: 'km/s',
+        },
+        {
+          label: 'Cambio de velocidad, en cualquiera de las columnas',
+          hint: 'km/s',
+        },
+      ],
+      tip: 'La advertencia bajo la tabla dice con qué precisión coinciden los dos cambios de velocidad. En el laboratorio aislado son unas pocas partes en 10¹³, que es el integrador y no la física.',
     },
     {
       title: '¿Por qué la pérdida es menor que la ganancia?',
-      body: `Pasando por detrás, la nave fue de 3,32 a 5,89 km/s: una ganancia de
-             2,57. Pasando por delante, fue de 3,32 a 1,64: una pérdida de 1,68.
-             \n\nMismo planeta, misma velocidad de aproximación, mismo ángulo de
-             desviación, geometría especular, y los dos cambios no son del mismo
-             tamaño.`,
+      body: `Las dos columnas siguen en pantalla, que es para lo que sirve
+             ejecutarlas juntas. Pasando por detrás, la nave fue de 3,32 a 5,89
+             km/s: una ganancia de 2,57. Pasando por delante, fue de 3,32 a
+             1,64: una pérdida de 1,67.
+             \n\nMismo planeta, misma velocidad de aproximación, misma máxima
+             aproximación con un error de una parte en 10¹², misma desviación
+             con un error de una parte en 10¹², geometría especular, y los dos
+             cambios no son del mismo tamaño. La tabla informa de esas cuatro
+             coincidencias, así que la asimetría no se puede achacar a ninguna
+             de ellas.`,
       prompt: 'La mejor explicación es:',
       options: [
         'La simulación pierde algo de energía en el paso perdedor',
@@ -192,8 +226,9 @@ export default {
                 vector, así que su módulo es idéntico. Pero la rapidez es la
                 <em>longitud</em> de la suma resultante, y sumar un vector de
                 longitud fija a otro con ángulos distintos no cambia esa longitud
-                de forma simétrica. Si dudas de la cuarta opción, mira el máximo
-                acercamiento: es de 0,234 AU en los dos pasos.`,
+                de forma simétrica. Si dudas de la cuarta opción, mira la fila
+                de máxima aproximación: es de 0,234 AU en los dos pasos, y la
+                tabla dice con qué precisión.`,
     },
     {
       title: '¿Cuánto hay que llevarse?',
@@ -249,7 +284,7 @@ export default {
       body: `La energía cinética de la nave se multiplicó por tres. El planeta se
              frenó unos cuatro milímetros por segundo -una parte en un millón de
              su propia velocidad- y los dos cambios de momento lineal coinciden
-             con una diferencia menor que una millonésima de por ciento.`,
+             con una diferencia menor que una centésima de por ciento.`,
       prompt: 'En este sistema aislado, la energía extra de la nave salió de:',
       options: [
         'De ninguna parte: las asistencias gravitatorias crean energía de verdad',
@@ -262,8 +297,137 @@ export default {
                 cambio fraccionario diminuto en una energía cinética enorme es un
                 cambio fraccionario enorme en una diminuta. La cuarta opción
                 merece descartarse y no solo ignorarse: el panel muestra los dos
-                cambios de momento coincidiendo con una parte en 10⁹, mucho más
-                ajustado de lo que podría ser cualquier error acumulado.`,
+                cambios de momento coincidiendo con una diferencia menor que una
+                centésima de por ciento, mucho más ajustado de lo que podría ser
+                cualquier error acumulado. Lo que queda tampoco es error: las
+                lecturas se toman a distancia finita, donde los dos cuerpos
+                todavía se atraen muy ligeramente, así que la cifra es menor en
+                una máquina que puede integrar el encuentro con pasos más finos.
+                La tuya no será la misma que la de tu vecino, y las dos
+                descartan la cuarta opción.`,
+    },
+    {
+      title: '¿El sistema de quién, exactamente?',
+      body: `Un cabo suelto, y del tipo interesante.
+             \n\nToda la lección se apoya en la columna izquierda: la rapidez
+             relativa al planeta no cambia. Pero el planeta contra el que mides
+             no es el mismo planeta antes y después: retrocedió. La advertencia
+             de la comparación dice cuánto: unos cuatro milímetros por segundo,
+             que es exactamente una millonésima del propio cambio de velocidad
+             de la nave, porque la nave es una millonésima de la masa del
+             planeta.
+             \n\nAsí que «el sistema del planeta» nombra un sistema inercial a
+             la entrada y otro ligeramente distinto a la salida.`,
+      prompt: 'Dicho eso, la rapidez invariable de la columna izquierda es:',
+      options: [
+        'Una aproximación, buena hasta una parte en un millón porque la nave es ligera',
+        'Exacta de todos modos: la rapidez de un cuerpo respecto de otro vuelve a su valor anterior a la misma separación, sean cuales sean las dos masas',
+        'Incorrecta, y el panel debería medir respecto del baricentro',
+        'Exacta solo porque la nave es mucho más ligera que el planeta',
+      ],
+      because: `Exacta, y no porque la nave sea ligera. Dos cuerpos que caen el
+                uno hacia el otro y vuelven a separarse forman un problema de
+                Kepler en su coordenada <em>relativa</em>, y ese problema
+                devuelve la misma rapidez relativa a la misma separación para
+                cualquier par de masas. Haz la nave tan pesada como el planeta y
+                la columna izquierda seguiría sin moverse.
+                \n\nLo que cambia la masa finita es qué sistemas estás
+                nombrando. Vale la pena ser preciso sobre qué sobrevive al
+                cambio de sistema y qué no: la <strong>rapidez</strong> depende
+                del sistema y las dos columnas no coinciden; el <strong>cambio
+                de velocidad</strong> es el mismo vector en todo sistema
+                inercial, que es por lo que los dos pasos dan el mismo; y el
+                <strong>momento lineal total</strong> del conjunto se conserva,
+                que es la fila que el panel llama el balance.`,
+      tip: 'El panel lo comprueba en vez de afirmarlo: el cambio de velocidad del planeta dividido por el de la nave debería ser igual a la razón de masas, y la advertencia dice si lo es.',
+    },
+    {
+      title: 'Opcional: ¿cuánto compra pasar más cerca?',
+      body: `<strong>Opcional, y lleva unos tres minutos.</strong> Sáltalo si la
+             sesión es corta; nada de lo que sigue depende de esto.
+             \n\nTodo lo anterior usó un solo parámetro de impacto. Abre
+             <strong>Opcional: barrer lo cerca que pasa</strong> y pulsa
+             <strong>Ejecutar el barrido</strong>. Lanza cinco pasos por el lado
+             que gana -<strong>20, 30, 40, 60 y 90</strong>- manteniendo fijos
+             la velocidad de aproximación, el planeta, la nave, el integrador y
+             el umbral de medida, y sin variar nada más.
+             \n\nEl más cercano de ellos pasa a 0,076 AU del planeta, unos tres
+             radios y medio del planeta. Más cerca de eso y el paso deja de ser
+             un sobrevuelo y pasa a ser una colisión, y por eso el barrido para
+             donde para y no en cero.`,
+      checklist: [
+        'Predice, antes de que termine: ¿pasar más cerca gana siempre más rapidez?',
+        'Lee la columna del giro: debería crecer sin pausa según el paso se acerca',
+        'Lee la columna de cambio de rapidez que tiene al lado',
+        'Mira la gráfica: los círculos huecos son el giro y los cuadrados rellenos el cambio de rapidez',
+      ],
+      tip: 'Detener está ahí si lo necesitas. Un barrido detenido conserva los pasos que voló y marca los que nunca alcanzó, en lugar de presentar cuatro puntos como cinco.',
+    },
+    {
+      title: 'Opcional: lee los cinco',
+      body: `Dos filas de la tabla y una resta que necesitarás en la pantalla
+             siguiente.`,
+      fields: [
+        { label: 'Giro en el paso más cercano, b = 20', hint: 'grados' },
+        { label: 'Cambio de rapidez en b = 20', hint: 'km/s' },
+        { label: 'Cambio de rapidez en b = 30', hint: 'km/s' },
+      ],
+    },
+    {
+      title: 'Opcional: ¿gana siempre el giro mayor?',
+      body: `En tus cinco pasos, el más cercano giró más y ganó más. La
+             conclusión evidente es que un giro mayor siempre significa una
+             ganancia mayor.
+             \n\nAntes de aceptarla, mira para qué <em>sirve</em> el giro. El
+             encuentro rota la velocidad de la nave relativa al planeta, y luego
+             ese vector rotado se suma a la propia velocidad del planeta. La suma
+             es más larga cuando los dos apuntan en la misma dirección.`,
+      prompt: 'Así que la mayor ganancia posible con este planeta vendría de:',
+      options: [
+        'El paso más cercano posible, ya que es el que más gira la velocidad',
+        'El paso que gira la velocidad relativa hasta que apunta en la dirección en que se mueve el planeta, y ni un grado más',
+        'El paso más ancho, ya que un giro suave desperdicia menos rapidez',
+        'Cualquier paso; la ganancia depende solo de la velocidad de aproximación',
+      ],
+      because: `La segunda. Girar solo ayuda mientras lleva la velocidad relativa
+                hacia la dirección en que viaja el planeta; sigue girando más
+                allá de esa alineación y los dos vectores vuelven a discrepar y
+                la suma se acorta. Aquí la velocidad relativa entrante está a 131
+                grados del movimiento del planeta, así que <strong>131
+                grados</strong> es el giro que más valdría, y el paso más cercano
+                que el planeta sobrevive alcanza unos 97. La loma tiene cima y
+                este laboratorio no puede llegar a ella: el paso que giraría 131
+                grados pasa a 0,02 AU, que es por dentro del planeta.
+                \n\nAsí que tus cinco puntos están todos en la ladera
+                ascendente de una curva que sí se da la vuelta. Que aquí ganara
+                el giro mayor es un hecho sobre esta geometría, no una regla
+                sobre los sobrevuelos.`,
+      tip: 'La advertencia bajo la gráfica dice lo mismo, y lo dice salgan como salgan tus cinco.',
+    },
+    {
+      title: 'Opcional: dilo con tus propios números',
+      body: `Tu tabla tiene cinco giros y cinco cambios de rapidez. Calcula
+             aproximadamente cuánta rapidez compró cada grado extra de giro,
+             entre los dos pasos más anchos y luego entre los dos más cercanos.`,
+      prompt:
+        'Con esas dos cifras, explica en dos o tres frases por qué el barrido es evidencia de que existe un punto de retorno, aunque ninguno de tus cinco pasos esté más allá de él.',
+      rubric: `Crédito completo por leer el RENDIMIENTO DECRECIENTE en sus propios
+               números y conectarlo con la imagen vectorial. Entre b = 90 y
+               b = 60 la ganancia sube unos 0,043 km/s por grado extra de giro;
+               entre b = 30 y b = 20 sube unos 0,023 km/s por grado, la mitad
+               por cada grado comprado. Una magnitud cuyos incrementos se
+               encogen hacia cero se acerca a un máximo, y la imagen vectorial
+               dice dónde: en el giro que alinea la velocidad relativa con el
+               movimiento del planeta, 131 grados aquí.
+               \n\nCrédito también por notar que los cinco puntos por sí solos
+               no pueden localizar el punto de retorno, solo mostrar el
+               acercamiento. Respuestas erróneas habituales: «la ganancia se
+               está aplanando, así que se quedará plana» (una curva con máximo
+               baja después de él, y la geometría dice que esta lo hace); «el
+               paso más cercano ganó más, así que más cerca siempre es mejor»
+               (cierto de estos cinco y de nada más allá); y tratar el punto de
+               retorno como un artefacto numérico y no como geometría: reducir
+               el paso a la mitad no lo movería.`,
     },
     {
       title: 'Ahora vuelve a poner una estrella',
@@ -328,6 +492,9 @@ export default {
              respecto de todo salvo del planeta; pasando por delante, la pierde.
              \n· Respecto del planeta no cambia nada, y de forma exacta cuando su
              sistema de referencia es de verdad inercial.
+             \n· Los dos lados cambian la velocidad en la misma cantidad y la
+             rapidez en cantidades distintas, y lo primero es igual en todos los
+             sistemas de referencia mientras que lo segundo no.
              \n· La ganancia es la rotación de un vector sumado a otro, y está
              limitada al doble de la velocidad de aproximación por muy pesado que
              sea el planeta.

@@ -307,8 +307,21 @@ export function validateSweepSpec(spec) {
   if (lo < def.min || hi > def.max) {
     return fail('outOfRange', { min: def.min, max: def.max });
   }
-  if (def.exclude && lo < def.exclude.to && hi > def.exclude.from) {
-    return fail('crossesExcluded', def.exclude);
+  // A range is refused if it crosses the excluded neighbourhood at all,
+  // because dividing it up would put trials inside. An explicit list is
+  // checked value by value instead: the caller has named its points, and the
+  // gravity-assist comparison names +40 and -40 - two perfectly good flybys
+  // whose SPAN contains a collision that neither of them is.
+  if (def.exclude) {
+    if (explicit) {
+      const inside = explicit.filter(
+        v => v > def.exclude.from && v < def.exclude.to
+      );
+      if (inside.length)
+        return fail('valueExcluded', { ...def.exclude, inside });
+    } else if (lo < def.exclude.to && hi > def.exclude.from) {
+      return fail('crossesExcluded', def.exclude);
+    }
   }
   if (!(spec.duration >= MIN_DURATION) || !(spec.duration <= MAX_DURATION)) {
     return fail('duration', { min: MIN_DURATION, max: MAX_DURATION });

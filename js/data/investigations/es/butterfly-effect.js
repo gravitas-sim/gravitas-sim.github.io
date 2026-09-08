@@ -102,18 +102,27 @@ export default {
       body: `Ejecuta el experimento idéntico dos veces, sin cambiar
              <em>nada</em> entre una y otra.
 
-             \n\nGraba la ejecución A durante unos cuarenta segundos. Pulsa
-             <strong>Volver al inicio</strong>. Graba la ejecución B durante
-             aproximadamente lo mismo, otra vez sin cambiar nada.
+             \n\nAbre el <strong>Banco A/B</strong> y busca <em>El par
+             controlado de la lección</em>. Pulsa <strong>Ejecutarlo dos veces,
+             sin cambios</strong>. Captura el inicio, graba la ejecución A
+             durante cuarenta segundos simulados, vuelve a ese mismo inicio y
+             graba la ejecución B durante los mismos cuarenta: el experimento
+             que habrías hecho a mano, hecho igual las dos veces.
+
+             \n\nEso importa más de lo que parece. Dos ejecuciones de distinta
+             duración solo se solapan donde las dos tienen datos, y una
+             ejecución A que empezó donde fuera que hubiese derivado la
+             simulación mientras leías no es el mismo inicio que el de la B. La
+             seccion informa de los dos intervalos para que veas que coinciden.
 
              \n\nEl instrumento de abajo mide la distancia entre las dos
              ejecuciones: cuán separadas están las dos versiones del sistema,
              sumando sobre las tres estrellas, en cada instante de tiempo
              simulado.`,
       checklist: [
-        'Captura el inicio y graba la ejecución A',
-        'Vuelve al inicio',
-        'Graba la ejecución B sin cambiar nada',
+        'Pulsa «Ejecutarlo dos veces, sin cambios» y espera alrededor de un minuto',
+        'Lee la línea que dice qué cambió entre las ejecuciones',
+        'Comprueba que las dos ejecuciones cubrieron el mismo intervalo',
         'Lee la separación que informa el instrumento',
       ],
       rubric: `La separación debería ser exactamente cero durante toda la
@@ -188,20 +197,22 @@ export default {
     },
     {
       title: 'Mide el binario',
-      body: `Hazlo. Captura, ejecución A, vuelve al inicio, empuja una estrella
-             1500 km en x, ejecución B.
+      body: `Hazlo. En el Banco A/B, pulsa <strong>Preparar y ejecutar los
+             dos</strong>: captura, ejecución A, vuelta al inicio, empujón de
+             1500 km en x a una estrella, ejecución B, cuatro órbitas cada una y
+             sobre el mismo intervalo.
 
-             \n\nEl control de perturbación del banco aplica el empujón por ti y
-             registra exactamente qué cambió, de modo que el número no es algo
-             que debas recordar después: queda guardado con el experimento y se
-             imprime en tu informe.
+             \n\nEl empujón se aplica y se registra por ti, de modo que el
+             número no es algo que debas recordar después. Queda guardado con el
+             experimento, se imprime en la sección como <em>qué cambió entre las
+             ejecuciones</em> y pasa a tu informe.
 
              \n\nFíjate en dos cosas del instrumento: la forma de la separación en
              la gráfica <strong>lineal</strong>, y lo que hace en la
              <strong>logarítmica</strong>.`,
       checklist: [
-        'Aplica la perturbación de 1500 km a una estrella',
-        'Graba ambas ejecuciones durante al menos cuatro órbitas',
+        'Pulsa «Preparar y ejecutar los dos» y deja que grabe cuatro órbitas cada una',
+        'Lee qué cambió entre las ejecuciones: debería ser el empujón y nada más',
         'Lee el factor de crecimiento y el r² de la recta',
         'Anota si el instrumento da un tiempo de crecimiento',
       ],
@@ -291,30 +302,33 @@ export default {
     },
     {
       title: 'Mide el triple',
-      body: `Ejecútalo. Captura el inicio, graba la ejecución A unos cuarenta
-             segundos, vuelve al inicio, aplica la misma perturbación de 1500 km a
-             <strong>Alfa</strong> y graba la ejecución B durante aproximadamente
-             lo mismo.
+      body: `Ejecútalo. <strong>Preparar y ejecutar los dos</strong> otra vez:
+             la misma accion, en un escenario con una estrella mas. Cuarenta
+             segundos simulados cada una, los mismos 1500 km aplicados a
+             <strong>Alfa</strong> y nada mas distinto entre las dos
+             ejecuciones.
 
-             \n\nEsta vez fíjate sobre todo en la gráfica logarítmica. En la
-             lineal no pasa casi nada y después pasa todo de golpe. En la
-             logarítmica esos mismos datos son una recta, y una recta en una
-             gráfica logarítmica es el aspecto que tiene el crecimiento
-             exponencial.`,
+             \n\nTarda alrededor de un minuto. Esta vez fíjate sobre todo en la
+             gráfica logarítmica. En la lineal no pasa casi nada y después pasa
+             todo de golpe. En la logarítmica esos mismos datos son una recta, y
+             una recta en una gráfica logarítmica es el aspecto que tiene el
+             crecimiento exponencial.`,
       checklist: [
-        'Captura el inicio y graba la ejecución A',
-        'Vuelve al inicio y perturba Alfa 1500 km',
-        'Graba la ejecución B',
+        'Pulsa «Preparar y ejecutar los dos» y espera alrededor de un minuto',
+        'Comprueba que las dos ejecuciones cubrieron los mismos cuarenta segundos',
         'Lee el tiempo de crecimiento y el intervalo ajustado',
+        'Lee el paso medido, que necesitarás en el acto 4',
       ],
-      rubric: `Espera un tiempo de crecimiento de aproximadamente 6 a 8 segundos
-               simulados, un ajuste log-lineal con r² por encima de 0,98 y un
-               crecimiento total de seis o siete órdenes de magnitud. La
-               puntuación completa exige el tiempo de crecimiento con su
-               intervalo ajustado, no sólo «divergió». Un estudiante que informe
-               de un valor muy fuera de 5–9 s probablemente ha grabado ejecuciones
-               de duraciones muy distintas; el banco informa del solapamiento que
-               realmente usó.`,
+      rubric: `El par guiado ejecuta unos cuarenta segundos definidos con un
+               paso definido, asi que todo el mundo deberia obtener la misma
+               respuesta: un tiempo de crecimiento de unos <strong>8,3 segundos
+               simulados</strong>, un ajuste log-lineal con r² de alrededor de
+               0,99, ajustado entre unos 5 y 29 segundos, y un crecimiento total
+               de unos 220. La puntuación completa exige el tiempo de
+               crecimiento con su intervalo ajustado, no sólo «divergió». Un
+               estudiante que informe de un valor muy fuera de 7–9 s ha leído la
+               ejecución o el escenario equivocados; la sección informa del
+               intervalo y del paso que realmente usó.`,
     },
     {
       title: 'Anota lo que mediste',
@@ -323,13 +337,13 @@ export default {
         {
           label: 'tiempo de crecimiento',
           unit: 'segundos simulados',
-          hint: '6,9',
+          hint: '8,3',
         },
         { label: 'calidad del ajuste r²', unit: '', hint: '0,99' },
         {
           label: 'factor de crecimiento total',
           unit: '× la separación inicial',
-          hint: '2e7',
+          hint: '220',
         },
       ],
     },
@@ -366,10 +380,10 @@ export default {
       prompt:
         'Con tu τ, ¿cuánto tiempo es eso aproximadamente, en segundos simulados?',
       unit: 'segundos simulados',
-      because: `Unos 11,5 τ, así que con τ ≈ 6,9 s son aproximadamente 80 segundos
-                simulados: tres rotaciones del triángulo. Todo lo que sabías sobre
-                dónde estarían las estrellas desaparece en tres vueltas, a partir
-                de un error inicial del ancho de un país.`,
+      because: `Unos 11,5 τ, así que con τ ≈ 8,3 s son aproximadamente 95
+                segundos simulados: tres vueltas y media del triángulo. Todo lo
+                que sabías sobre dónde estarían las estrellas desaparece en tres
+                vueltas, a partir de un error inicial del ancho de un país.`,
     },
     {
       title: 'Comprar más tiempo',
@@ -378,7 +392,7 @@ export default {
       prompt: '¿Cuánto más dura tu predicción?',
       options: [
         'mil veces más',
-        'unos siete τ más: unos cincuenta segundos extra',
+        'unos siete τ más: unos sesenta segundos extra',
         'unos mil τ más',
         'nada: la mejora se borra inmediatamente',
       ],
@@ -430,35 +444,50 @@ export default {
     },
     {
       title: 'El control numérico',
-      body: `Repite la comparación de tres cuerpos dos veces más:
+      body: `Repite la comparación de tres cuerpos dos veces más. Elige un
+             <strong>control numérico</strong> y pulsa <strong>Repetir como
+             control</strong>; luego elige el otro y vuelve a pulsarlo.
 
-             \n\n<strong>Una con un paso temporal menor.</strong> En Ajustes, pon
-             la velocidad de simulación a la mitad de lo que estaba. Eso reduce a
-             la mitad el paso que da el integrador en cada fotograma.
+             \n\n<strong>La mitad del paso maximo.</strong> No la mitad de la
+             velocidad de reproducción: esa era la instrucción que daba antes
+             esta lección y no era fiable. El motor divide el avance de cada
+             fotograma en un numero maximo de trozos, ninguno mayor que un tope,
+             y cual de esos dos límites manda depende del escenario: donde el
+             tope no es el que manda, reducir la velocidad a la mitad reduce el
+             numero de trozos y deja su tamaño igual. Asi que el control reduce
+             a la mitad el paso que se <em>midio</em> que daba el motor, y la
+             sección informa de la medida nueva junto a la vieja. Miralo:
+             deberia ser la mitad.
 
-             \n\n<strong>Otra con un integrador distinto.</strong> En Ajustes,
-             cambia de Euler simpléctico a Verlet de velocidades, o a RK4.
+             \n\n<strong>Otro integrador.</strong> De Euler simpléctico a Verlet
+             de velocidades, o de Verlet a RK4: la misma comparación física,
+             calculada con otro esquema.
 
-             \n\nCada vez, usa la acción <strong>registrar como control
-             numérico</strong> del banco, que guarda el tiempo de crecimiento bajo
-             una etiqueta en lugar de sobrescribir tu resultado principal. El
-             instrumento informa entonces de si las tres respuestas coinciden.`,
+             \n\nCada repetición se archiva junto a tu resultado principal en
+             lugar de sustituirlo, etiquetada con el paso que realmente dio. La
+             sección dice entonces si las respuestas coinciden, y si las
+             repeticiones cambiaron de verdad la aritmética, que es lo que un
+             control tiene que hacer antes de que su acuerdo signifique algo.`,
       checklist: [
-        'Repite la comparación a la mitad de velocidad de simulación',
-        'Repítela con otro integrador',
-        'Registra cada una como control numérico',
-        'Lee el veredicto de refinamiento',
+        'Ejecuta el control «la mitad del paso maximo» y comprueba que el paso medido se redujo de verdad a la mitad',
+        'Ejecuta el control «otro integrador»',
+        'Lee los tres tiempos de crecimiento y lo separados que están',
+        'Lee el veredicto, y fíjate en que trata de la aritmética y no de la física',
       ],
       rubric: `Los tres tiempos de crecimiento deberían coincidir dentro de un
-               veinte por ciento aproximadamente, y el instrumento debería
-               informar del resultado como resuelto. Los valores medidos para esta
-               configuración con tres integradores y tres pasos temporales van de
-               6,8 a 7,6 segundos simulados. La puntuación completa exige informar
-               de la dispersión y extraer la conclusión: la divergencia es una
-               propiedad del sistema de tres cuerpos y no del integrador. Un
-               estudiante cuyos valores discrepen enormemente probablemente ha
-               cambiado otra cosa al mismo tiempo; la comparación de parámetros
-               del banco lo nombrará.`,
+               veinte por ciento aproximadamente, y la sección debería informar
+               del resultado como resuelto. Medidos con los controles guiados:
+               8,333 s con el paso de serie y Euler simpléctico, 8,322 s con la
+               mitad de ese paso y 8,314 s con Verlet de velocidades, una
+               dispersión del 0,1 por ciento. La puntuación completa exige
+               informar de la dispersión y extraer la conclusión: la divergencia
+               es una propiedad del sistema de tres cuerpos y no del integrador.
+               Dos cosas que vigilar. Un estudiante cuyos valores discrepen
+               enormemente ha cambiado algo más, y la comparación de parámetros
+               lo nombrará. Un estudiante que haya ejecutado dos veces el mismo
+               control tiene dos números que coinciden y ningún control: la
+               sección lo dice con todas las letras, porque el acuerdo entre dos
+               cálculos idénticos no es evidencia.`,
     },
     {
       title: 'Leer el veredicto',

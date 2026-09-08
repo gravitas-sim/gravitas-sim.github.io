@@ -223,13 +223,29 @@ function summarize(w) {
 
   let deflection = null;
   let probeDeltaP = null;
+  let deltaV = null;
   if (before && after) {
     deflection = measuredDeflection(before.rel, after.rel);
     const m = w.probe.mass;
-    probeDeltaP = {
-      x: m * (after.inertial.x - before.inertial.x),
-      y: m * (after.inertial.y - before.inertial.y),
+    // The change in the spacecraft's velocity, which is the same vector in
+    // every inertial frame. Computed here rather than by each reader, because
+    // it is the one quantity the two frames and the two passes have to agree
+    // about, and three definitions of it would be three chances to disagree.
+    deltaV = {
+      x: after.inertial.x - before.inertial.x,
+      y: after.inertial.y - before.inertial.y,
     };
+    probeDeltaP = { x: m * deltaV.x, y: m * deltaV.y };
+  }
+
+  // The momentum ledger, as a fraction. The panel used to compute this inline
+  // and the experiments would have had to compute it again; one encounter has
+  // one answer, so it is computed once, here, beside the numbers it is about.
+  let ledgerMismatch = null;
+  if (probeDeltaP) {
+    const probeP = Math.hypot(probeDeltaP.x, probeDeltaP.y);
+    const planetP = Math.hypot(planetDeltaP.x, planetDeltaP.y);
+    ledgerMismatch = probeP > 0 ? Math.abs(planetP - probeP) / probeP : null;
   }
 
   return {
@@ -254,6 +270,24 @@ function summarize(w) {
     inertialAfter: after?.inertialSpeed ?? null,
     speedChange:
       before && after ? after.inertialSpeed - before.inertialSpeed : null,
+    // Frame-independent, unlike the speed change above it. Every inertial
+    // observer measures this same vector, which is why the gaining pass and
+    // the losing one agree about it and disagree about everything else.
+    deltaV,
+    deltaVMagnitude: deltaV ? Math.hypot(deltaV.x, deltaV.y) : null,
+    // The claim the isolated lab exists to support, as a number: how much the
+    // speed relative to the planet changed, as a fraction of what it was.
+    relativeResidual:
+      before?.vInf && after?.vInf
+        ? (after.vInf - before.vInf) / before.vInf
+        : null,
+    ledgerMismatch,
+    massRatio: w.planetMass0 > 0 ? w.probe.mass / w.planetMass0 : null,
+    // Whether there is a whole encounter here: an inbound reading, an outbound
+    // one, and a spacecraft that survived to give them. Anything less is not a
+    // measurement of a flyby, and every reader of this record needs to be able
+    // to say so without reassembling the test.
+    complete: Boolean(before && after && !w.lost),
     planetDeltaV,
     planetDeltaVMagnitude: Math.hypot(planetDeltaV.x, planetDeltaV.y),
     planetDeltaP,

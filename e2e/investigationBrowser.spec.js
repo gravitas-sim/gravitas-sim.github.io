@@ -49,6 +49,34 @@ const lessonCount = page =>
     return MANIFEST.length;
   });
 
+/**
+ * The ids the catalogue itself says belong to a length bucket.
+ *
+ * Derived rather than written down, for the reason the bucket exists: a
+ * lesson's slot is read off its declared duration, so any lesson that gets
+ * longer or shorter moves between slots. A test that listed the short ones by
+ * name would fail the next time one of them grew - which is the catalogue
+ * working, not the filter breaking.
+ *
+ * @param {object} page - Playwright page
+ * @param {string} want - One of LENGTH
+ * @param {?string} subject - A tag to intersect with, or null
+ * @returns {Promise<Array<string>>} The ids, in catalogue order
+ */
+const idsOfLength = (page, want, subject = null) =>
+  page.evaluate(
+    async ([length, tag]) => {
+      const { MANIFEST } = await import('/js/data/investigations/registry.js');
+      const { lengthOf } = await import('/js/data/investigations/sequences.js');
+      const { BROWSE_META } =
+        await import('/js/data/investigations/browseData.js');
+      return MANIFEST.filter(e => lengthOf(e) === length)
+        .filter(e => !tag || (BROWSE_META[e.id]?.tags || []).includes(tag))
+        .map(e => e.id);
+    },
+    [want, subject]
+  );
+
 /** The lesson ids currently in the grid, in order. */
 const shownIds = page =>
   page
@@ -212,10 +240,10 @@ test.describe('filtering', () => {
     await expect.poll(() => shownIds(page)).toHaveLength(9);
 
     // Each menu only narrows: adding one never brings a lesson back.
+    const shortOrbits = await idsOfLength(page, 'demo', 'orbits');
+    expect(shortOrbits.length).toBeGreaterThan(1);
     await page.locator('#investigationFilterLength').selectOption('demo');
-    await expect
-      .poll(() => shownIds(page))
-      .toEqual(['gravity-assist', 'hohmann-transfer', 'lagrange-points']);
+    await expect.poll(() => shownIds(page)).toEqual(shortOrbits);
 
     const clear = page.locator('#investigationFilterClear');
     await expect(clear).toBeVisible();
@@ -236,6 +264,8 @@ test.describe('filtering', () => {
     await page.locator('#investigationFilterSubject').selectOption('galaxies');
     await page.locator('#investigationFilterLength').selectOption('demo');
 
+    const short = await idsOfLength(page, 'demo');
+    expect(short.length).toBeGreaterThan(1);
     await expect.poll(() => shownIds(page)).toHaveLength(0);
     const empty = page.locator('#investigationEmpty');
     await expect(empty).toBeVisible();
@@ -243,12 +273,10 @@ test.describe('filtering', () => {
     // Names the filter to drop and how many lessons come back, rather than
     // leaving the reader to work out which of two menus is the problem.
     await expect(action).toContainText('subject');
-    await expect(action).toContainText('3');
+    await expect(action).toContainText(String(short.length));
 
     await action.click();
-    await expect
-      .poll(() => shownIds(page))
-      .toEqual(['gravity-assist', 'hohmann-transfer', 'lagrange-points']);
+    await expect.poll(() => shownIds(page)).toEqual(short);
     await expect(empty).toBeHidden();
   });
 
@@ -339,9 +367,10 @@ test.describe('everyone can use it', () => {
     await expect(page.locator('#investigationBrowser')).toBeVisible();
 
     // A menu is operable without a pointer.
+    const short = await idsOfLength(page, 'demo');
     await page.locator('#investigationFilterLength').focus();
     await page.locator('#investigationFilterLength').selectOption('demo');
-    await expect.poll(() => shownIds(page)).toHaveLength(3);
+    await expect.poll(() => shownIds(page)).toHaveLength(short.length);
 
     // And a card can be reached and opened with the keyboard alone.
     await page.locator('#investigationList .inv-card').first().focus();

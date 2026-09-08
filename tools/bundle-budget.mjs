@@ -77,7 +77,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 2900,
+    limit: 3030,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -147,7 +147,46 @@ const BUDGETS = [
       "did NOT move: its share of this work is the sweep section's styling, " +
       "and the section is built out of the panel system's existing classes " +
       'so that share is three merged selectors and nothing else. 829.9 KB ' +
-      'before, 830.0 KB after, against an untouched 830.0 limit.',
+      'before, 830.0 KB after, against an untouched 830.0 limit.\n\n' +
+      'Raised from 2900 to 2960 for the gravity-assist lesson\u2019s retained ' +
+      'comparison and its optional sweep, itemised from two fresh builds: ' +
+      '2886.6 KB before, 2948.8 KB after. The English lesson chunk went ' +
+      '19.8 to 31.8 KB and its Spanish shadow 19.3 to 29.7 - six new screens ' +
+      'and three rewritten ones - and the instructor guide entry took ' +
+      'instructorPortal.js from 313.0 to 322.0 KB. The two deferred prose ' +
+      'catalogues grew 9.7 and 9.2 KB, and are counted twice because ' +
+      'validationWorker.js bundles both of them as well: that one chunk ' +
+      'accounts for 18.9 KB of the total on its own. The rest is ' +
+      'js/experiments/assistSweep.js, js/experiments/frameRate.js, the ' +
+      "panel's two sections and the notebook capture. A lesson and an " +
+      'instrument is what the paragraph at the top of this reason says this ' +
+      'budget is loose for.\n\n' +
+      'The initial download went DOWN across this work, 829.96 KB to ' +
+      '829.90, and its limit was NOT touched. The new sections are built out ' +
+      "of the panel system's existing classes, so their whole share of the " +
+      'stylesheet is one selector added to an existing rule - and three dead ' +
+      'selectors left behind by the binary sweep (.binary-sweep-field, ' +
+      '.binary-sweep-status, .binary-sweep-table, none of them on any element ' +
+      'in index.html) were deleted in the same change, which more than paid ' +
+      'for it.\n\n' +
+      'Raised from 2960 to 3030 for the controlled pairs in the chaos and ' +
+      'Lagrange lessons: 2949.4 KB before, 3012.3 KB after, both from fresh ' +
+      'builds. The Butterfly Effect lesson chunk went 19.8 to 32.0 KB and its ' +
+      'Spanish shadow 19.3 to 30.0 - the guided actions replaced nine manual ' +
+      'steps of prose with a longer explanation of what the numerical control ' +
+      'now does and why the old instruction was wrong - and Where Can It Get ' +
+      'To? went 16.3 to 20.0 and 17.0 to 20.8 for two new screens. The two ' +
+      'deferred prose catalogues grew 12.3 and 11.6 KB and are counted twice, ' +
+      'because validationWorker.js bundles both: that chunk alone accounts ' +
+      'for 24.2 KB of the total. The rest is js/experiments/neckPair.js, ' +
+      "js/experiments/chaosPair.js, the two panels' sections and the notebook " +
+      'captures. Two lessons and an instrument is what the paragraph at the ' +
+      'top of this reason says this budget is loose for.\n\n' +
+      'The initial download did NOT move and its limit was NOT touched: ' +
+      '829.9 KB before and after. Neither section brought any styling of its ' +
+      "own - the Lagrange one reuses the assist sections' rule and the chaos " +
+      "one is built from the bench panel's existing classes - so the " +
+      'stylesheet is byte for byte what it was.',
   },
 ];
 

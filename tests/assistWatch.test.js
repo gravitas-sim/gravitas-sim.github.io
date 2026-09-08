@@ -191,6 +191,101 @@ describe('what it measures', () => {
   });
 });
 
+// One encounter has one set of numbers. The panel, the retained comparison,
+// the sweep, the notebook and the exports all read this summary, so a second
+// definition of any of these anywhere else would be a second answer waiting to
+// disagree with them - which is why they are computed here and not there.
+describe('the one definition of an encounter', () => {
+  /**
+   * A complete flyby: out at the distance it came in at, turned by a radian.
+   *
+   * `recoil` slows the planet before the outbound reading. It is off by
+   * default because it moves the relative speed by about the same fraction -
+   * the reading is taken against the planet, and a planet that has changed
+   * velocity is a different thing to read against - and only one test here is
+   * about the planet.
+   */
+  const flyby = ({ recoil = 0 } = {}) => {
+    const h = harness({ gate: 1000 });
+    place(h, -200, 40, 0.5, 0);
+    place(h, 400, 40, 0.5, 0);
+    h.planet.vel.x = 0.3 - recoil;
+    place(h, 1200, -40, 0.3 + 0.2 * Math.cos(1), 0.2 * Math.sin(1));
+    return currentAssist();
+  };
+
+  test('the velocity change is a vector and a length, and both are reported', () => {
+    const r = flyby();
+    expect(r.deltaV).not.toBeNull();
+    expect(r.deltaVMagnitude).toBeCloseTo(
+      Math.hypot(r.deltaV.x, r.deltaV.y),
+      12
+    );
+    // It is the difference of the two inertial velocities and nothing else.
+    expect(r.deltaV.x).toBeCloseTo(
+      r.after.inertial.x - r.before.inertial.x,
+      12
+    );
+    expect(r.deltaV.y).toBeCloseTo(
+      r.after.inertial.y - r.before.inertial.y,
+      12
+    );
+    // And the probe's momentum change is that vector times its mass, so the
+    // two cannot drift apart.
+    expect(r.probeDeltaP.x).toBeCloseTo(r.probeMass * r.deltaV.x, 15);
+  });
+
+  test('the relative-speed residual is a fraction, signed', () => {
+    const r = flyby();
+    expect(r.relativeResidual).toBeCloseTo(
+      (r.vInfAfter - r.vInfBefore) / r.vInfBefore,
+      12
+    );
+    expect(Math.abs(r.relativeResidual)).toBeLessThan(1e-6);
+  });
+
+  test('the momentum ledger is computed once, here', () => {
+    const r = flyby({ recoil: 4e-7 });
+    const probe = Math.hypot(r.probeDeltaP.x, r.probeDeltaP.y);
+    const planet = Math.hypot(r.planetDeltaP.x, r.planetDeltaP.y);
+    expect(r.ledgerMismatch).toBeCloseTo(Math.abs(planet - probe) / probe, 12);
+    expect(r.massRatio).toBeCloseTo(r.probeMass / r.planetMass, 15);
+  });
+
+  test('"complete" means read in, read out, and still there', () => {
+    const r = flyby();
+    expect(r.complete).toBe(true);
+    expect(r.phase).toBe(PHASE.DONE);
+  });
+
+  test('half an encounter reports nothing that looks like a measurement', () => {
+    const h = harness({ gate: 1000 });
+    place(h, -200, 40, 0.5, 0);
+    const r = currentAssist();
+    expect(r.complete).toBe(false);
+    expect(r.deltaV).toBeNull();
+    expect(r.deltaVMagnitude).toBeNull();
+    expect(r.relativeResidual).toBeNull();
+    expect(r.ledgerMismatch).toBeNull();
+    expect(r.speedChange).toBeNull();
+  });
+
+  test('a lost spacecraft is not complete however far it got', () => {
+    const h = harness({ gate: 1000 });
+    place(h, -200, 40, 0.5, 0);
+    place(h, 400, 40, 0.5, 0);
+    place(h, 1200, -40, 0.3 + 0.2 * Math.cos(1), 0.2 * Math.sin(1));
+    expect(currentAssist().complete).toBe(true);
+    // The same encounter, with the probe destroyed on the way out.
+    const g = harness({ gate: 1000 });
+    place(g, -200, 40, 0.5, 0);
+    g.probe.alive = false;
+    g.tick();
+    expect(currentAssist().lost).toBe(true);
+    expect(currentAssist().complete).toBe(false);
+  });
+});
+
 describe('the planet pays for it', () => {
   test('its velocity change is recorded against where it started', () => {
     const h = harness();

@@ -14,7 +14,7 @@ export default {
   title: '¿Hasta dónde puede llegar?',
   subtitle:
     'Regiones prohibidas, cinco puntos de equilibrio y un número conservado',
-  duration: '20-25 min',
+  duration: '25-30 min',
   level: 'Astronomía introductoria',
   summary:
     'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
@@ -167,6 +167,7 @@ export default {
         'Anota la constante de Jacobi antes de ningún impulso',
         'Aplica un impulso y mira cómo baja C y encoge el sombreado',
         'Sigue hasta que el panel diga que el cuello de L1 está abierto',
+        'Fíjate en que el cuello se abrió con una C concreta, y en que llegaste ahí a tu manera',
       ],
       tip: 'El panel te dice cuánto más tiene que bajar C para que se abra la siguiente puerta.',
     },
@@ -174,7 +175,12 @@ export default {
       title: 'El cuello está abierto. ¿Y ahora?',
       body: `El muro entre las dos estrellas ha desaparecido. Al trazador se le
              permite energéticamente estar en cualquier punto de la región de la
-             otra estrella.`,
+             otra estrella.
+             \n\nEn la pantalla siguiente lanzarás el mismo trazador desde el
+             mismo sitio a la misma rapidez, dos veces, en dos direcciones
+             distintas. Los dos tendrán exactamente la misma constante de
+             Jacobi, asi que a los dos se les permitirá estar exactamente en los
+             mismos sitios.`,
       prompt: 'Con el cuello de L1 abierto, el trazador…',
       options: [
         'cruzará a la región de la otra estrella, ya que nada se lo impide',
@@ -186,17 +192,66 @@ export default {
         'Esta es la distinción para cuya mala lectura existe todo el diagrama. Un cuello abierto es un hueco en un muro, no una ruta a través de él. La curva de velocidad cero dice dónde no puede estar el trazador; no dice absolutamente nada sobre adónde va. Un trazador puede orbitar para siempre a un lado de una abertura que nunca usa, y la única forma de averiguarlo es integrar la trayectoria y mirar.',
     },
     {
-      title: 'Míralo no cruzar',
-      body: `Déjalo correr con el cuello abierto. Mira la estela.
-             \n\nSegún dónde y con cuánta fuerza hayas empujado, el trazador puede
-             pasar, dar la vuelta o merodear alrededor del cuello mucho tiempo sin
-             usarlo. Las tres cosas son compatibles con el diagrama, porque el
-             diagrama nunca fue una predicción sobre el camino.`,
-      checklist: [
-        'Deja correr con el cuello abierto y mira la estela un rato',
-        'Fíjate en si el trazador cruza de verdad',
-        'Deshaz el impulso y prueba otro empuje para comparar',
+      title: '¿Mismo permiso, misma ruta?',
+      body: `Dos trazadores, desde el mismo punto, a la misma rapidez en el
+             sistema rotante, lanzados en dos direcciones distintas. Sus
+             constantes de Jacobi son idénticas -C depende de dónde estás y a
+             qué rapidez vas, y ninguna de las dos cosas difiere-, asi que la
+             región prohibida sombreada es la misma imagen para los dos, con el
+             mismo cuello abierto dentro.`,
+      prompt: 'Dos inicios con la misma región accesible…',
+      options: [
+        'seguirán el mismo camino, ya que los dos disponen de la misma región',
+        'seguirán caminos distintos, pero los dos usarán el cuello antes o después',
+        'seguirán caminos distintos, y no hay garantía de que ninguno use el cuello',
+        'seguirán caminos distintos solo si sus rapideces difieren',
       ],
+      because: `Caminos distintos, y sin garantía sobre el cuello. La región
+                prohibida es una afirmación sobre dónde <em>no puede</em> estar
+                el trazador, y dos estados con la misma C tienen la misma, pero
+                la trayectoria la decide la dirección de marcha, que el diagrama
+                no contiene. Comprométete antes de ejecutarlo: la pantalla
+                siguiente son las dos ejecuciones, y una de ellas se comporta de
+                forma muy distinta de la otra.`,
+      tip: 'Lo que hayas predicho se guarda, acertado o no. Lo que te pide la pantalla siguiente es leer lo que pasó de verdad y decir si apoya tu respuesta.',
+    },
+    {
+      title: 'Mira cómo uno cruza y el otro no',
+      body: `En el panel de tres cuerpos, abre <strong>Dos direcciones, una
+             misma región accesible</strong> y pulsa <strong>Ejecutar las dos
+             direcciones</strong>. Tarda alrededor de un minuto.
+
+             \n\nDevuelve el trazador a un inicio declarado -0,6 separaciones
+             hacia fuera, en reposo en el sistema rotante- y luego le da la misma
+             rapidez dos veces, a <strong>30°</strong> y a <strong>130°</strong>.
+             Todo lo demás se mantiene fijo: las estrellas, sus masas, su órbita
+             circular, el integrador, el paso y dos periodos binarios de
+             observación cada uno.
+
+             \n\nLee la tabla desde arriba. Las cinco primeras filas son el
+             control: mismo sitio, misma rapidez, misma constante de Jacobi hasta
+             el último dígito, mismo cuello abierto, mismo paso medido. Las filas
+             siguientes son lo que pasó, y no coinciden.`,
+      checklist: [
+        'Comprueba la fila de la constante de Jacobi: los dos números deberían ser idénticos',
+        'Comprueba la fila del cuello de L1: abierto para los dos',
+        'Lee si cada dirección cruzó, y cuándo',
+        'Lee lo cerca que llegó de L1 la que no cruzó',
+        'Di si eso apoya lo que predijiste en la pantalla anterior',
+      ],
+      rubric: `Los dos brazos deberían informar de la misma constante de Jacobi
+               -3,28426, en todos los dígitos que se muestran- y de un cuello de
+               L1 abierto con L2 todavía cerrado. La dirección A cruza el cuello
+               a la décima parte de un periodo y vuelve; la dirección B nunca se
+               acerca a L1 más de 0,17 de la separación en dos periodos
+               completos, y su x nunca pasa de donde empezó. Puntuación completa
+               por leer primero las filas de control y solo después el
+               resultado, y por enunciar la conclusión en la forma que la
+               evidencia admite: misma región accesible, caminos distintos. Un
+               estudiante que escriba «B nunca puede cruzar» se ha excedido
+               exactamente en la distancia de la que trata esta actividad: la
+               ventana son dos periodos, y la advertencia bajo la tabla lo dice.`,
+      tip: 'Todo se dibuja y se cita en el sistema rotante, el mismo en el que se dibuja la región sombreada, asi que los caminos y los muros están en las mismas coordenadas.',
     },
     {
       title: 'Una tercera pregunta',

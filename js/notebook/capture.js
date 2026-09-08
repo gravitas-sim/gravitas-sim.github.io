@@ -889,3 +889,626 @@ export function fromReliability({
     },
   });
 }
+
+/**
+ * The gravity-assist lesson's two-pass comparison.
+ *
+ * Recorded as one entry rather than two, because the whole point of the
+ * experiment is the pair: an entry per pass would keep both sets of numbers
+ * and lose the comparison between them, which is the thing that was measured.
+ *
+ * The quantities chosen are the ones that carry the argument. The velocity
+ * change appears once, not twice, because it is the same on both sides and
+ * saying so is the finding. The two speed changes appear separately, because
+ * they are not, and reporting a single magnitude would assert a symmetry the
+ * lesson exists to deny.
+ *
+ * @param {object} args - report, prediction, provenance
+ * @returns {?object} The entry, or null if there is nothing to record
+ */
+export function fromAssistComparison({
+  report,
+  prediction = '',
+  provenance = {},
+}) {
+  const gaining = report?.gaining ?? null;
+  const losing = report?.losing ?? null;
+  if (!gaining && !losing) return null;
+  const held = report.held || {};
+  const sides = report.sides || null;
+  const audit = report.audit || null;
+
+  const quantities = [];
+  const speed = (label, value, note) =>
+    quantities.push(
+      quantity({
+        label,
+        value,
+        unit: t('nb.assist.unit.speed'),
+        kind: KIND.MEASURED,
+        ...(note ? { note } : {}),
+      })
+    );
+
+  if (gaining?.usable) {
+    speed(t('nb.assist.ab.gain'), gaining.speedChange);
+    speed(
+      t('nb.assist.ab.deltaV'),
+      gaining.deltaVMagnitude,
+      t('nb.assist.ab.deltaVNote')
+    );
+  }
+  if (losing?.usable) speed(t('nb.assist.ab.loss'), losing.speedChange);
+  if (gaining?.usable) {
+    quantities.push(
+      quantity({
+        label: t('nb.assist.ab.relResidual'),
+        value: (gaining.relativeResidual ?? 0) * 100,
+        unit: '%',
+        kind: KIND.MEASURED,
+        note: t('nb.assist.ab.relResidualNote'),
+      })
+    );
+  }
+  if (audit) {
+    quantities.push(
+      quantity({
+        label: t('nb.assist.ab.recoil'),
+        value: audit.planetRecoil,
+        unit: t('nb.assist.unit.simVelocity'),
+        kind: KIND.MEASURED,
+        note: t('nb.assist.ab.recoilNote', {
+          ratio: audit.recoilRatio,
+          mass: audit.massRatio,
+        }),
+      })
+    );
+  }
+  // Counted and named, so an entry made from one usable pass cannot read as an
+  // entry made from two.
+  const missing = [gaining, losing].filter(enc => enc && !enc.usable);
+  if (missing.length) {
+    quantities.push(
+      quantity({
+        label: t('nb.assist.incomplete'),
+        value: missing.length,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t('nb.assist.incompleteNote'),
+      })
+    );
+  }
+
+  // Speed before and after, in both frames, for both passes. Four points per
+  // series and no line: these are two readings, not a time series, and a line
+  // between them would draw an encounter nobody sampled.
+  const fig = figure({
+    title: t('nb.assist.ab.figure'),
+    xLabel: t('nb.assist.ab.axisX'),
+    yLabel: t('nb.assist.ab.axisY'),
+    series: [
+      ['gaining', gaining],
+      ['losing', losing],
+    ]
+      .filter(([, enc]) => enc?.usable)
+      .flatMap(([which, enc]) => [
+        figureSeries({
+          label: t(`nb.assist.ab.series.${which}.planet`),
+          kind: KIND.MEASURED,
+          style: 'points',
+          points: [
+            [0, enc.relBefore],
+            [1, enc.relAfter],
+          ],
+        }),
+        figureSeries({
+          label: t(`nb.assist.ab.series.${which}.inertial`),
+          kind: KIND.MEASURED,
+          style: 'points',
+          points: [
+            [0, enc.inertBefore],
+            [1, enc.inertAfter],
+          ],
+        }),
+      ]),
+  });
+
+  const flags = [];
+  if (report.cancelled) flags.push('cancelled');
+  if (missing.length) flags.push('failed-trials');
+
+  return buildEntry({
+    source: SOURCE.BENCH_COMPARISON,
+    title: t('nb.assist.ab.title'),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: provenance.scenario ?? report.scenario ?? 'Gravity Assist Lab',
+      seed: provenance.seed ?? report.seed ?? null,
+      // What the passes were actually integrated at, from the experiment's own
+      // record rather than from whatever the panel shows now.
+      integrator: provenance.integrator ?? held.integrator ?? null,
+      timestep: provenance.timestep ?? report.numerics?.step ?? null,
+      simSpeed: provenance.simSpeed ?? held.simSpeed ?? null,
+      substeps: provenance.substeps ?? report.numerics?.substeps ?? null,
+      flags: [...(provenance.flags || []), ...flags],
+    }),
+    prose: {
+      claim: prediction ? t('nb.assist.predicted', { prediction }) : '',
+      evidence: [
+        t('nb.assist.ab.evidence'),
+        ...[
+          ['gaining', gaining],
+          ['losing', losing],
+        ]
+          .filter(([, enc]) => enc)
+          .map(([which, enc]) =>
+            t('nb.assist.ab.line', {
+              which: t(`nb.assist.ab.which.${which}`),
+              b: enc.value,
+              outcome: t(`assist.encounter.${enc.outcome}`),
+              turn: Number(Math.abs(enc.deflectionDeg ?? 0)).toFixed(2),
+              change: Number(enc.speedChange ?? 0).toFixed(4),
+            })
+          ),
+      ].join('\n'),
+      // Ordered so the two that describe a broken run come first. The field
+      // has a length limit, and a limitation that gets clipped off the end is
+      // a limitation nobody reads - so the ones that say "this did not happen"
+      // are never the ones at risk.
+      limitations: [
+        ...(missing.length
+          ? [t('nb.assist.limit.incomplete', { n: missing.length })]
+          : []),
+        ...(report.cancelled ? [t('nb.assist.limit.cancelled')] : []),
+        // Only when there are two passes to compare. With one, a ratio would
+        // be a number invented out of a missing measurement.
+        ...(sides
+          ? [
+              t('nb.assist.ab.limit.notMirrored', {
+                ratio: Number(sides.speedChangeRatio ?? 0).toFixed(2),
+              }),
+            ]
+          : []),
+        t('nb.assist.ab.limit.recoil'),
+        t('nb.assist.limit.gate', { gate: report.gate ?? held.gate ?? 0 }),
+        t('nb.assist.limit.held', {
+          vinf: held.vInfinity ?? 0,
+          seed: report.seed ?? '',
+        }),
+      ].join('\n'),
+    },
+  });
+}
+
+/**
+ * The gravity-assist lesson's impact-parameter sweep.
+ *
+ * Two quantities per pass and no fit. The question the lesson asks of these
+ * five points - does the biggest turn also gain the most - is answered by
+ * which point is highest, and a curve through five samples would answer a
+ * question nobody asked and answer it with more confidence than five points
+ * can support.
+ *
+ * @param {object} args - report, prediction, provenance
+ * @returns {?object} The entry, or null if there is nothing to record
+ */
+export function fromAssistSweep({ report, prediction = '', provenance = {} }) {
+  if (!report?.encounters?.length) return null;
+  const held = report.held || {};
+  const usable = report.encounters.filter(enc => enc.usable);
+  const missing = report.encounters.filter(enc => !enc.usable);
+  const verdict = report.verdict || null;
+
+  const quantities = [
+    quantity({
+      label: t('nb.assist.sweep.passes'),
+      value: report.encounters.length,
+      unit: '',
+      kind: KIND.MEASURED,
+      note: t('nb.assist.sweep.passesNote', { n: usable.length }),
+    }),
+  ];
+  if (verdict) {
+    quantities.push(
+      quantity({
+        label: t('nb.assist.sweep.mostTurned'),
+        value: verdict.mostTurned,
+        unit: t('nb.assist.unit.simUnits'),
+        kind: KIND.MEASURED,
+      }),
+      quantity({
+        label: t('nb.assist.sweep.mostGained'),
+        value: verdict.mostGained,
+        unit: t('nb.assist.unit.simUnits'),
+        kind: KIND.MEASURED,
+        note: verdict.same
+          ? t('nb.assist.sweep.sameNote')
+          : t('nb.assist.sweep.differentNote'),
+      })
+    );
+  }
+  if (missing.length) {
+    quantities.push(
+      quantity({
+        label: t('nb.assist.incomplete'),
+        value: missing.length,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t('nb.assist.incompleteNote'),
+      })
+    );
+  }
+
+  const fig = figure({
+    title: t('nb.assist.sweep.figure'),
+    xLabel: t('nb.assist.sweep.axisX'),
+    yLabel: t('nb.assist.sweep.axisY'),
+    series: [
+      figureSeries({
+        label: t('nb.assist.sweep.series.turn'),
+        kind: KIND.MEASURED,
+        style: 'points',
+        points: usable
+          .map(enc => [Math.abs(enc.value), Math.abs(enc.deflectionDeg)])
+          .sort((a, b) => a[0] - b[0]),
+      }),
+      figureSeries({
+        label: t('nb.assist.sweep.series.gain'),
+        kind: KIND.MEASURED,
+        style: 'points',
+        points: usable
+          .map(enc => [Math.abs(enc.value), enc.speedChange])
+          .sort((a, b) => a[0] - b[0]),
+      }),
+    ],
+  });
+
+  const flags = [];
+  if (report.cancelled) flags.push('cancelled');
+  if (missing.length) flags.push('failed-trials');
+
+  return buildEntry({
+    source: SOURCE.BENCH_SWEEP,
+    title: t('nb.assist.sweep.title'),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: provenance.scenario ?? report.scenario ?? 'Gravity Assist Lab',
+      seed: provenance.seed ?? report.seed ?? null,
+      integrator: provenance.integrator ?? held.integrator ?? null,
+      timestep: provenance.timestep ?? report.numerics?.step ?? null,
+      simSpeed: provenance.simSpeed ?? held.simSpeed ?? null,
+      substeps: provenance.substeps ?? report.numerics?.substeps ?? null,
+      flags: [...(provenance.flags || []), ...flags],
+    }),
+    prose: {
+      claim: prediction ? t('nb.assist.predicted', { prediction }) : '',
+      evidence: [
+        t('nb.assist.sweep.evidence'),
+        ...report.encounters.map(enc =>
+          t('nb.assist.sweep.line', {
+            b: enc.value,
+            outcome: t(`assist.encounter.${enc.outcome}`),
+            turn: Number(Math.abs(enc.deflectionDeg ?? 0)).toFixed(2),
+            change: Number(enc.speedChange ?? 0).toFixed(4),
+          })
+        ),
+      ].join('\n'),
+      // Same ordering rule as the comparison above, and for the same reason.
+      limitations: [
+        ...(missing.length
+          ? [t('nb.assist.limit.incomplete', { n: missing.length })]
+          : []),
+        ...(report.cancelled ? [t('nb.assist.limit.cancelled')] : []),
+        t('nb.assist.sweep.limit.oneSide'),
+        t('nb.assist.sweep.limit.notALaw'),
+        t('nb.assist.limit.gate', { gate: report.gate ?? held.gate ?? 0 }),
+        t('nb.assist.limit.held', {
+          vinf: held.vInfinity ?? 0,
+          seed: report.seed ?? '',
+        }),
+      ].join('\n'),
+    },
+  });
+}
+
+/**
+ * The chaos lesson's controlled pair, and whether it survived refinement.
+ *
+ * The divergence result and the refinement verdict are kept as separate
+ * quantities, and the second never stands in for the first. A resolved
+ * refinement says the arithmetic is not the cause; it says nothing about
+ * whether anything diverged. An entry that reported only "resolved" would be
+ * an entry about the integrator.
+ *
+ * @param {object} args - report, prediction, provenance
+ * @returns {?object} The entry, or null if there is nothing to record
+ */
+export function fromChaosPair({ report, prediction = '', provenance = {} }) {
+  if (!report?.a || !report?.b) return null;
+  const v = report.verdict || null;
+  const exponential = v?.behaviour === 'exponential';
+
+  const quantities = [
+    quantity({
+      label: t('nb.chaosPair.interval'),
+      value: Math.min(report.a.span ?? 0, report.b.span ?? 0),
+      unit: t('nb.chaosPair.simSeconds'),
+      kind: KIND.MEASURED,
+      note: t('nb.chaosPair.intervalNote', {
+        a: Number(report.a.span ?? 0).toFixed(1),
+        b: Number(report.b.span ?? 0).toFixed(1),
+      }),
+    }),
+    // The step the engine took, not the one the settings asked for. The whole
+    // numerical control rests on this being a measurement.
+    quantity({
+      label: t('nb.chaosPair.step'),
+      value: report.a.mean,
+      unit: t('nb.chaosPair.simSeconds'),
+      kind: KIND.MEASURED,
+      note: t('nb.chaosPair.stepNote', {
+        n: report.a.steps ?? 0,
+        integrator: report.a.integrator ?? '?',
+      }),
+    }),
+  ];
+
+  if (exponential) {
+    quantities.push(
+      quantity({
+        label: t('nb.chaosPair.tau'),
+        value: v.tau,
+        unit: t('nb.chaosPair.simSeconds'),
+        kind: KIND.MEASURED,
+        note: t('nb.chaosPair.tauNote', {
+          r2: Number(v.r2 ?? 0).toFixed(3),
+          from: Number(v.window?.from ?? 0).toFixed(1),
+          to: Number(v.window?.to ?? 0).toFixed(1),
+        }),
+      }),
+      quantity({
+        label: t('nb.chaosPair.growth'),
+        value: v.growth,
+        unit: '',
+        kind: KIND.MEASURED,
+      })
+    );
+  } else if (v) {
+    // The two-body counterexample lands here, and it is a result: the
+    // instrument measured growth and refused to call it exponential.
+    quantities.push(
+      quantity({
+        label: t('nb.chaosPair.behaviour'),
+        value: 0,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t(`nb.chaosPair.behaviour.${v.behaviour}`, {
+          r2: Number(v.linearR2 ?? 0).toFixed(3),
+        }),
+      })
+    );
+  }
+
+  const refinement = report.refinement || null;
+  if (refinement) {
+    quantities.push(
+      quantity({
+        label: t('nb.chaosPair.controls'),
+        value: refinement.effective ?? 0,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: refinement.resolved
+          ? t('nb.chaosPair.controlsResolved', {
+              spread: Number((refinement.spread ?? 0) * 100).toFixed(1),
+            })
+          : t('nb.chaosPair.controlsUnresolved'),
+      })
+    );
+  }
+
+  const fig = figure({
+    title: t('nb.chaosPair.figure'),
+    xLabel: t('nb.chaosPair.axisX'),
+    yLabel: t('nb.chaosPair.axisY'),
+    series: [
+      figureSeries({
+        label: t('nb.chaosPair.series.separation'),
+        kind: KIND.MEASURED,
+        style: 'line',
+        points: (report.series || []).map(p => [p.t, p.d]),
+      }),
+    ],
+  });
+
+  const flags = [];
+  if (report.cancelled) flags.push('cancelled');
+  if (refinement && !refinement.resolved) flags.push('unresolved');
+  if (report.interval && !report.interval.ok) flags.push('interval-mismatch');
+
+  return buildEntry({
+    source: SOURCE.BENCH_COMPARISON,
+    title: t(`nb.chaosPair.title.${report.configuration || 'triple'}`),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: provenance.scenario ?? report.scenario ?? null,
+      integrator: provenance.integrator ?? report.a.integrator ?? null,
+      timestep: provenance.timestep ?? report.a.maxTimestep ?? null,
+      simSpeed: provenance.simSpeed ?? report.a.simSpeed ?? null,
+      flags: [...(provenance.flags || []), ...flags],
+    }),
+    prose: {
+      claim: prediction ? t('nb.chaosPair.predicted', { prediction }) : '',
+      evidence: [
+        report.perturbation
+          ? t('nb.chaosPair.evidence', {
+              km: report.perturbation.km,
+              axis: report.perturbation.axis,
+              body: report.perturbation.bodyName ?? '',
+            })
+          : t('nb.chaosPair.evidenceNoPerturbation'),
+        exponential
+          ? t('nb.chaosPair.evidenceExponential', {
+              tau: Number(v.tau).toFixed(2),
+              efolds: Number(v.efolds ?? 0).toFixed(1),
+            })
+          : t('nb.chaosPair.evidenceOther', {
+              behaviour: t(`nb.chaosPair.behaviour.${v?.behaviour || 'none'}`, {
+                r2: Number(v?.linearR2 ?? 0).toFixed(3),
+              }),
+            }),
+      ].join('\n'),
+      limitations: [
+        // Ordered so the ones that describe a broken run come first: the
+        // field has a length limit and a clipped limitation is unread.
+        ...(report.cancelled ? [t('nb.chaosPair.limit.cancelled')] : []),
+        ...(report.interval && !report.interval.ok
+          ? [t('nb.chaosPair.limit.interval')]
+          : []),
+        ...(refinement && !refinement.resolved
+          ? [t('nb.chaosPair.limit.unresolved')]
+          : []),
+        ...(exponential
+          ? [
+              t('nb.chaosPair.limit.window', {
+                from: Number(v.window?.from ?? 0).toFixed(1),
+                to: Number(v.window?.to ?? 0).toFixed(1),
+              }),
+            ]
+          : []),
+        t('nb.chaosPair.limit.estimate'),
+      ].join('\n'),
+    },
+  });
+}
+
+/**
+ * The Lagrange lesson's controlled pair: one accessible region, two paths.
+ *
+ * The entry is arranged so the control comes before the result. If the two
+ * arms did not have the same Jacobi constant, or the neck was not open, then
+ * the two paths differ for a reason the activity was built to exclude, and
+ * saying that first is the difference between evidence and a picture.
+ *
+ * @param {object} args - report, prediction, provenance
+ * @returns {?object} The entry, or null if there is nothing to record
+ */
+export function fromNeckPair({ report, prediction = '', provenance = {} }) {
+  const a = report?.a ?? null;
+  const b = report?.b ?? null;
+  if (!a?.conditions || !b?.conditions) return null;
+  const c = report.comparison || null;
+  const held = report.held || {};
+
+  const quantities = [
+    quantity({
+      label: t('nb.neckPair.constantA'),
+      value: a.conditions.C,
+      unit: '',
+      kind: KIND.MEASURED,
+      note: t('nb.neckPair.constantNote'),
+    }),
+    quantity({
+      label: t('nb.neckPair.constantB'),
+      value: b.conditions.C,
+      unit: '',
+      kind: KIND.MEASURED,
+    }),
+    quantity({
+      label: t('nb.neckPair.speed'),
+      value: a.conditions.speed,
+      unit: '',
+      kind: KIND.MEASURED,
+      note: t('nb.neckPair.speedNote', {
+        a: Number(a.conditions.appliedDirection ?? 0).toFixed(1),
+        b: Number(b.conditions.appliedDirection ?? 0).toFixed(1),
+      }),
+    }),
+    quantity({
+      label: t('nb.neckPair.closestA'),
+      value: a.path?.closestToL1 ?? null,
+      unit: '',
+      kind: KIND.MEASURED,
+      note: t('nb.neckPair.closestNote'),
+    }),
+    quantity({
+      label: t('nb.neckPair.closestB'),
+      value: b.path?.closestToL1 ?? null,
+      unit: '',
+      kind: KIND.MEASURED,
+    }),
+  ];
+
+  // Both paths in the rotating frame, which is the frame the claim is made in
+  // and the frame the overlay draws. Points, not a fitted anything.
+  const fig = figure({
+    title: t('nb.neckPair.figure'),
+    xLabel: t('nb.neckPair.axisX'),
+    yLabel: t('nb.neckPair.axisY'),
+    series: [
+      ['a', a],
+      ['b', b],
+    ].map(([which, arm]) =>
+      figureSeries({
+        label: t(`nb.neckPair.series.${which}`, {
+          deg: Number(arm.conditions.direction ?? 0).toFixed(0),
+        }),
+        kind: KIND.MEASURED,
+        style: 'points',
+        points: (arm.samples || []).map(p => [p.x, p.y]),
+      })
+    ),
+  });
+
+  const flags = [];
+  if (report.cancelled) flags.push('cancelled');
+  if (c && !c.region.ok) flags.push('not-controlled');
+  if (c && !c.bothComplete) flags.push('window-incomplete');
+
+  return buildEntry({
+    source: SOURCE.BENCH_COMPARISON,
+    title: t('nb.neckPair.title'),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: provenance.scenario ?? report.scenario ?? null,
+      integrator: provenance.integrator ?? held.integrator ?? null,
+      timestep: provenance.timestep ?? held.maxTimestep ?? null,
+      simSpeed: provenance.simSpeed ?? held.simSpeed ?? null,
+      flags: [...(provenance.flags || []), ...flags],
+    }),
+    prose: {
+      claim: prediction ? t('nb.neckPair.predicted', { prediction }) : '',
+      evidence: [
+        t('nb.neckPair.evidence', {
+          periods: report.periods ?? 0,
+          a: Number(a.conditions.direction ?? 0).toFixed(0),
+          b: Number(b.conditions.direction ?? 0).toFixed(0),
+        }),
+        t(a.path?.crossed ? 'nb.neckPair.crossed' : 'nb.neckPair.notCrossed', {
+          which: 'A',
+          t: Number(a.path?.firstCrossing ?? 0).toFixed(1),
+        }),
+        t(b.path?.crossed ? 'nb.neckPair.crossed' : 'nb.neckPair.notCrossed', {
+          which: 'B',
+          t: Number(b.path?.firstCrossing ?? 0).toFixed(1),
+        }),
+      ].join('\n'),
+      limitations: [
+        ...(c && !c.region.ok ? [t('nb.neckPair.limit.notControlled')] : []),
+        ...(report.cancelled ? [t('nb.neckPair.limit.cancelled')] : []),
+        ...(c && !c.bothComplete ? [t('nb.neckPair.limit.short')] : []),
+        // The one that is always true, and the one the lesson exists to stop
+        // a reader losing.
+        t('nb.neckPair.limit.window', { periods: report.periods ?? 0 }),
+        t('nb.neckPair.limit.stability'),
+      ].join('\n'),
+    },
+  });
+}

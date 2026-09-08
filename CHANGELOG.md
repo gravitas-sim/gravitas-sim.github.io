@@ -15,6 +15,39 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
 
 ### Added
 
+- **Controlled A/B activities in two more investigations.** _The Butterfly
+  Effect in Space_ replaces nine manual bench steps with one action that
+  captures the start, selects the bodies and metrics, records Run A, returns,
+  applies the 1,500 km nudge and records Run B — both arms over the same
+  simulated interval, with the perturbation named as the only difference. Its
+  numerical controls now halve the step the engine was **measured** taking
+  rather than the playback speed, which in this laboratory changed nothing at
+  all, and a repeat that did not change the arithmetic is refused as evidence.
+  _Where Can It Get To?_ gains a short controlled pair: one tracer, one place,
+  one rotating-frame speed, two directions — so the Jacobi constant and the
+  whole accessible region are identical by construction and the trajectory is
+  the only thing that can differ. One direction crosses the L1 neck a tenth of
+  a period in; the other never comes near it in two binary periods, and the
+  panel says that "did not cross during this run" is not "can never cross".
+  Both activities keep the student's prediction whether or not it was right,
+  refuse to overwrite an experiment somebody else recorded, and restore the
+  world and every setting after a cancellation.
+- **Parameter sweeps in two investigations, replacing what was repetitive
+  rather than what was instructive.** In _Planets in Binary Stars_, five
+  starting radii over the same twenty-period window, each watched by the
+  binary watcher and reported as a physical outcome - still there, ejected,
+  hit a star, window not finished - with periods done against periods asked
+  on every row, and one trial re-runnable at half the step. In _Where Does a
+  Gravity Assist Get Its Speed?_, both sides of the planet run as one retained
+  A/B comparison so the two results sit on screen together, and an optional
+  five-value sweep of the impact parameter on the gaining side. Both are built
+  on the A/B bench: the world is captured before the first trial and restored
+  after the last, cancellation keeps what it measured, and each trial is read
+  by the same recorder that reads a hand-flown pass, so a mean speed is never
+  offered as evidence about an encounter. In each lesson the hand-run examples
+  stay and come first, the prediction is a prerequisite of the run, the plots
+  are points with no curve through them, and results go into the notebook with
+  the seed and the settings they actually ran at.
 - **A new investigation, "Can You Detect This Planet?"** A 15-to-20-minute
   lesson about observational design rather than about physics: students plan two
   radial-velocity runs of the same star, with the same instrument and the same
@@ -43,7 +76,7 @@ which deploys straight to <https://gravitas-sim.online>. `CITATION.cff` and
   off.
 - **An investigation authoring toolchain.** `npm run author:check` validates
   every lesson and every one of the
-  <!--fact:investigationSteps-->501<!--/fact--> steps; `npm run author:new`
+  <!--fact:investigationSteps-->508<!--/fact--> steps; `npm run author:new`
   scaffolds a lesson with its translation shadow and instructor stub;
   `?author=<lesson>&step=<n>` opens any step with diagnostics without touching
   a student's saved progress; and a browser walker exercises every step of

@@ -229,6 +229,33 @@ describe('refusing a sweep that cannot mean anything', () => {
     ).toBe(true);
   });
 
+  test('an explicit list is checked value by value, not by its span', () => {
+    // The gravity-assist comparison is +40 and -40: two perfectly good flybys
+    // whose span contains a collision that neither of them is. A span check
+    // refuses the pair, which is the wrong answer to the right question.
+    const listed = values =>
+      validateSweepSpec(
+        spec({
+          scenario: 'Gravity Assist Lab',
+          parameter: 'assist_impact_parameter',
+          values,
+        })
+      );
+    expect(listed([-40, 40]).ok).toBe(true);
+    expect(planValues({ values: [40, -40] })).toEqual([-40, 40]);
+
+    // And a listed value that IS inside the band is still refused, named.
+    const refused = listed([40, 0, -40]);
+    expect(refused.ok).toBe(false);
+    expect(refused.reason).toBe('valueExcluded');
+    expect(refused.detail.inside).toEqual([0]);
+    expect(listed([-40, 4, 40]).detail.inside).toEqual([4]);
+
+    // The exclusion is open at its ends: the boundary itself is offered.
+    const def = parameterFor('Gravity Assist Lab', 'assist_impact_parameter');
+    expect(listed([def.exclude.to, 40]).ok).toBe(true);
+  });
+
   test('a zero-width range, no metrics, and a silly duration are all refused', () => {
     expect(validateSweepSpec(spec({ from: 0.1, to: 0.1 })).reason).toBe(
       'rangeEmpty'

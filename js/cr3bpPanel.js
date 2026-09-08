@@ -47,7 +47,12 @@ import {
   comets,
   world_to_screen,
   getPhysicsSetting,
+  state,
+  onPhysicsStep,
+  updatePhysicsSettings,
 } from './physics.js';
+import { getSimClock } from './timeline.js';
+import * as CHAOS_STEPS from './experiments/chaosPair.js';
 import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name } from './appState.js';
@@ -411,10 +416,39 @@ function mount() {
         <p class="experiment-hint">${esc(t('cr3bp.claims.reachable'))}</p>
         <p class="experiment-hint">${esc(t('cr3bp.claims.stable'))}</p>
       </details>
+
+      <details id="cr3bpPairSection" class="assist-experiment" hidden>
+        <summary>${esc(t('cr3bp.pair.title'))}</summary>
+        <p class="obs-panel-hint">${esc(t('cr3bp.pair.hint'))}</p>
+        <div class="pause-event-actions">
+          <button id="cr3bpPairRun" class="obs-panel-btn" type="button">${esc(t('cr3bp.pair.run'))}</button>
+          <button id="cr3bpPairCancel" class="obs-panel-btn" type="button" hidden>${esc(t('cr3bp.pair.cancel'))}</button>
+          <button id="cr3bpPairKeep" class="obs-panel-btn" type="button" disabled>${esc(t('cr3bp.pair.keep'))}</button>
+        </div>
+        <p id="cr3bpPairStatus" class="obs-panel-hint" role="status"></p>
+        <div id="cr3bpPairTable"></div>
+        <p id="cr3bpPairCaveat" class="obs-panel-hint"></p>
+      </details>
     </div>`;
   document.body.appendChild(root);
   $('cr3bpClose').onclick = () => setCr3bpEnabled(false);
-  onLocaleChange(() => render());
+  $('cr3bpPairRun').onclick = () => {
+    runNeckPair().catch(() => {});
+  };
+  $('cr3bpPairCancel').onclick = () => cancelNeckPair();
+  $('cr3bpPairKeep').onclick = async () => {
+    const report = neckPairReport();
+    if (!report) return;
+    const { captureToNotebook } = await import('./notebookBridge.js');
+    await captureToNotebook((capture, provenance) =>
+      capture.fromNeckPair({ report, provenance })
+    );
+  };
+  onLocaleChange(() => {
+    render();
+    // The pair's table is built from strings too.
+    renderPair();
+  });
 }
 
 /** Redraw the readout. */
@@ -427,6 +461,10 @@ function render() {
   const validity = $('cr3bpValidity');
   const out = $('cr3bpReadout');
   out.innerHTML = '';
+
+  // Which world is loaded decides whether the controlled pair is offered, and
+  // that is true whether or not the rest of the readout can be drawn.
+  renderPairVisibility(system);
 
   if (!system?.verdict.ok) {
     // The claims are switched off rather than qualified into meaninglessness.
@@ -515,6 +553,508 @@ function render() {
     'experiment-hint'
   );
 }
+
+// =============================================================================
+// The controlled pair
+// -----------------------------------------------------------------------------
+// Same tracer, same place, same rotating-frame speed, same Jacobi constant,
+// same open neck, two directions. It runs on the A/B bench - the same capture,
+// restore and record the other lessons use - so the two arms are two runs of
+// one experiment and can be exported as such, and it samples the tracer in the
+// rotating frame while they run, because that is the frame the overlay draws
+// in and the frame the lesson's claim is made in.
+//
+// Scoped to accessibility against trajectory and to nothing else. Whether
+// either path is STABLE is the lesson's third question and has its own screens;
+// two runs over two binary periods cannot answer it and this section does not
+// mention it.
+// =============================================================================
+
+/** What the bench calls the experiment this section owns. */
+const PAIR_EXPERIMENT = 'Neck pair';
+
+/** True while either arm is running. */
+let pairRunning = false;
+/** Asked to stop. */
+let pairCancelled = false;
+/** The two arms, once they have run. */
+let pairArms = null;
+/** What they were run at. */
+let pairConfig = null;
+
+/** @returns {boolean} Whether a controlled pair is running */
+export const isNeckPairRunning = () => pairRunning;
+
+/** What the section is holding, for the notebook, the export and the tests. */
+export function neckPairReport() {
+  if (!pairArms) return null;
+  return {
+    ...pairConfig,
+    a: pairArms.a ? JSON.parse(JSON.stringify(pairArms.a)) : null,
+    b: pairArms.b ? JSON.parse(JSON.stringify(pairArms.b)) : null,
+    comparison: pairArms.comparison
+      ? { ...pairArms.comparison, region: { ...pairArms.comparison.region } }
+      : null,
+  };
+}
+
+/** For the lesson and the tests: run the pair as the button does. */
+export const startNeckPair = () => runNeckPair();
+
+/** Ask the run in progress to stop after the arm it is on. */
+export function cancelNeckPair() {
+  if (pairRunning) pairCancelled = true;
+}
+
+/**
+ * Everything both arms hold fixed, read once and recorded with the result.
+ *
+ * @returns {object} The held configuration
+ */
+function heldFixed() {
+  return {
+    scenario: current_scenario_name,
+    primaryMass: SETTINGS.lagrange_primary_mass,
+    secondaryMass: SETTINGS.lagrange_secondary_mass,
+    separation: SETTINGS.lagrange_separation,
+    tracerFraction: SETTINGS.lagrange_tracer_fraction,
+    integrator: SETTINGS.integrator,
+    maxTimestep: SETTINGS.max_timestep,
+    simSpeed: SETTINGS.sim_speed,
+    gravitationalConstant: SETTINGS.gravitational_constant,
+  };
+}
+
+/**
+ * Run one arm: place the tracer, record, and watch it in the rotating frame.
+ *
+ * @param {object} deps - bench, neck module, label, direction, window
+ * @returns {Promise<?object>} The arm, or null if it could not be set up
+ */
+async function runArm({ bench, neck, label, direction, span, speed }) {
+  // Back to the captured start. startRun() restores too, but only when the
+  // clock has moved off the capture - so doing it here is what makes the
+  // velocity assignment below survive into the run rather than being undone
+  // by a restore the recorder does after it.
+  bench.restoreInitialState({ keepSettings: true });
+
+  const system = readSystem();
+  if (!system?.verdict.ok || !system.tracer) return null;
+  const world = inertialVelocityFor(system, neck.velocityFor(direction, speed));
+  if (!world) return null;
+  system.tracer.vel.x = world.x;
+  system.tracer.vel.y = world.y;
+
+  // Read back rather than assume: what the tracer has is what went through the
+  // world's units and came back, and the initial conditions the panel reports
+  // are the ones it actually has.
+  const applied = tracerState(readSystem());
+  const conditions = neck.initialConditions(applied, system.mu, direction);
+
+  const dts = [];
+  const offSteps = onPhysicsStep(dt => dts.push(dt));
+  const samples = [];
+  const sample = () => {
+    const now = readSystem();
+    const st = now?.verdict.ok ? tracerState(now) : null;
+    if (st) samples.push({ t: getSimClock(), x: st.x, y: st.y });
+  };
+  sample();
+
+  if (!bench.startRun(label)) return null;
+  const startedAt = samples.length ? samples[0].t : getSimClock();
+  await new Promise(resolve => {
+    // Every fourth frame. readSystem() re-derives the pair's orbital elements
+    // and re-checks the model's assumptions, which is the right thing to do
+    // once and an expensive thing to do sixty times a second: sampling every
+    // frame took two minutes an arm and produced two and a half thousand
+    // points for a figure that holds a few hundred. Six hundred points still
+    // resolve a crossing that lasts a twentieth of the window.
+    let frame = 0;
+    const tick = () => {
+      if (pairCancelled) return resolve();
+      if (++frame % 4 === 0) sample();
+      const covered = getSimClock() - startedAt;
+      if (covered >= span) {
+        sample();
+        return resolve();
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  bench.stopRun();
+  offSteps?.();
+
+  return {
+    label,
+    conditions,
+    // The step the engine actually took, so a reader can see that the two arms
+    // were computed the same way and that watching this faster than real time
+    // did not coarsen it. Measured for the same reason the chaos lesson
+    // measures it: the frame's advance is split into at most a fixed number of
+    // substeps no larger than the cap, and which limit binds is not something
+    // the settings say.
+    steps: CHAOS_STEPS.stepStatistics(dts),
+    path: neck.describePath(samples, system.mu, { asked: span }),
+    // Kept whole so the notebook can draw the two paths in the same frame the
+    // overlay uses. Thinned: a two-period run is a couple of thousand frames
+    // and the notebook's figure holds a few hundred points.
+    samples: thin(samples, 240),
+  };
+}
+
+/**
+ * Every nth sample, keeping the first and the last.
+ *
+ * @param {Array} list - The samples
+ * @param {number} want - About how many to keep
+ * @returns {Array} The thinned list
+ */
+function thin(list, want) {
+  if (list.length <= want) return [...list];
+  const step = Math.ceil(list.length / want);
+  const out = list.filter((_, i) => i % step === 0);
+  if (out[out.length - 1] !== list[list.length - 1]) {
+    out.push(list[list.length - 1]);
+  }
+  return out;
+}
+
+/**
+ * Run both arms, holding everything but the direction.
+ *
+ * @returns {Promise<void>}
+ */
+async function runNeckPair() {
+  if (pairRunning) return;
+  const status = $('cr3bpPairStatus');
+  const system = readSystem();
+  if (!system?.verdict.ok) {
+    if (status) status.textContent = t('cr3bp.pair.invalid');
+    return;
+  }
+
+  const [{ bench }, neck] = await Promise.all([
+    import('./experimentsBridge.js').then(m => m.ensureBench()),
+    import('./experiments/neckPair.js'),
+  ]);
+
+  // Somebody else's work stays where it is. The bench holds one experiment at
+  // a time, so capturing here would discard whatever is in it; a reader who
+  // has recorded runs of their own is told rather than overwritten.
+  const held = bench.activeExperiment();
+  if (held && held.name !== PAIR_EXPERIMENT && (held.runs?.A || held.runs?.B)) {
+    if (status)
+      status.textContent = t('cr3bp.pair.benchBusy', { name: held.name });
+    return;
+  }
+
+  // Back to a stated start before anything is captured.
+  //
+  // The screen before this one has the reader pushing the tracer around until
+  // the neck opens, which is the right way to meet the idea and the wrong
+  // place to start a controlled experiment from: everyone's tracer is
+  // somewhere different, and the two directions below were validated at one
+  // particular place. So the tracer is put back, the status line says so, and
+  // both arms then differ in one thing rather than in two.
+  //
+  // These four are laboratory variables, which is what makes this work: the
+  // scenario carries them across a rebuild of itself rather than re-stamping
+  // its own.
+  SETTINGS.lagrange_tracer_x = neck.BASELINE.position.x;
+  SETTINGS.lagrange_tracer_y = neck.BASELINE.position.y;
+  SETTINGS.lagrange_tracer_vx = 0;
+  SETTINGS.lagrange_tracer_vy = 0;
+  window.dispatchEvent(new CustomEvent('gravitasRequestRebuild'));
+
+  const rebuilt = readSystem();
+  const span = neck.windowFor(rebuilt, SETTINGS.gravitational_constant);
+  if (!rebuilt?.verdict.ok || !(span > 0)) {
+    if (status) status.textContent = t('cr3bp.pair.invalid');
+    return;
+  }
+
+  pairRunning = true;
+  pairCancelled = false;
+  renderPairVisibility(null);
+  const run = $('cr3bpPairRun');
+  const cancel = $('cr3bpPairCancel');
+  const keep = $('cr3bpPairKeep');
+  if (run) run.disabled = true;
+  if (keep) keep.disabled = true;
+  if (cancel) cancel.hidden = false;
+
+  // Everything the pair is about to change, so it can be put back whatever
+  // happens - including a reader pressing Stop halfway through arm B.
+  const savedPaused = state.paused;
+  const savedSpeed = SETTINGS.sim_speed;
+  const speed = neck.BASELINE.speed;
+
+  // Watched faster than real time, and the step is unaffected.
+  //
+  // Two binary periods is two and a half thousand animation frames at the
+  // scenario's own playback speed, which is four minutes of waiting for an
+  // activity the lesson calls short. Raising the speed advances more simulated
+  // time per frame, and the engine then splits that frame into more substeps
+  // rather than bigger ones: at this scenario's cap of 0.3 the substep goes
+  // from 0.278 to 0.294, which is a two per cent change in the arithmetic for
+  // a fourfold saving in wall clock. Measured per arm and reported, rather
+  // than asserted - and well short of the substep ceiling, past which the
+  // step WOULD grow.
+  SETTINGS.sim_speed = Math.min(savedSpeed * 4, 120);
+  updatePhysicsSettings(SETTINGS);
+  let arms = null;
+  try {
+    bench.captureExperiment(PAIR_EXPERIMENT);
+    bench.setRecordBodies(true);
+    if (status) {
+      status.textContent = `${t('cr3bp.pair.reset', {
+        x: fmtPair(neck.BASELINE.position.x, 3),
+        y: fmtPair(neck.BASELINE.position.y, 3),
+      })} ${t('cr3bp.pair.running', { done: 1 })}`;
+    }
+    const a = await runArm({
+      bench,
+      neck,
+      label: 'A',
+      direction: neck.DIRECTIONS.a,
+      span,
+      speed,
+    });
+    let b = null;
+    if (!pairCancelled) {
+      if (status) status.textContent = t('cr3bp.pair.running', { done: 2 });
+      b = await runArm({
+        bench,
+        neck,
+        label: 'B',
+        direction: neck.DIRECTIONS.b,
+        span,
+        speed,
+      });
+    }
+    arms = { a, b, comparison: neck.comparePaths(a, b) };
+  } catch (err) {
+    console.warn('[cr3bp] the controlled pair did not finish:', err);
+  } finally {
+    // The world the reader was looking at, whatever happened above: the
+    // captured start, not wherever arm B stopped.
+    try {
+      bench.restoreInitialState({ keepSettings: true });
+    } catch (err) {
+      console.warn('[cr3bp] could not restore after the pair:', err);
+    }
+    SETTINGS.sim_speed = savedSpeed;
+    updatePhysicsSettings(SETTINGS);
+    state.paused = savedPaused;
+    pairRunning = false;
+    if (run) run.disabled = false;
+    if (cancel) cancel.hidden = true;
+  }
+
+  if (arms) {
+    pairArms = arms;
+    pairConfig = {
+      scenario: current_scenario_name,
+      speed,
+      periods: neck.BASELINE.periods,
+      span,
+      directions: { a: neck.DIRECTIONS.a, b: neck.DIRECTIONS.b },
+      mu: rebuilt.mu,
+      held: {
+        ...heldFixed(),
+        simSpeed: savedSpeed,
+        watchedAt: SETTINGS.sim_speed,
+      },
+      cancelled: pairCancelled,
+      ranAt: new Date().toISOString(),
+    };
+  }
+  renderPair();
+  render();
+}
+
+/**
+ * Show the section only where its premise holds.
+ *
+ * One valid restricted three-body system with a tracer in it. Anywhere else
+ * there is nothing to hold fixed and no neck to be open, and a section
+ * offering the activity would be offering an experiment that cannot be run.
+ *
+ * @param {?object} system - From readSystem()
+ * @returns {void}
+ */
+function renderPairVisibility(system) {
+  const section = $('cr3bpPairSection');
+  if (!section) return;
+  // Never while it is running.
+  //
+  // js/world/build.js announces a rebuild before it has placed the bodies, so
+  // for the length of one event the world is empty and readSystem() refuses
+  // it. This section starts its own arms with a rebuild, so hiding on that
+  // event took the Stop button off the screen the instant it was needed and
+  // did not put it back until the run had finished on its own.
+  if (pairRunning) {
+    section.hidden = false;
+    return;
+  }
+  section.hidden = !(system?.verdict.ok && system.tracer);
+}
+
+/** Draw the pair: both sets of initial conditions, and what each path did. */
+function renderPair() {
+  renderPairVisibility(readSystem());
+
+  const status = $('cr3bpPairStatus');
+  if (status && !pairRunning && pairArms) {
+    status.textContent = t('cr3bp.pair.done', {
+      periods: pairConfig?.periods ?? 0,
+    });
+  }
+
+  const wrap = $('cr3bpPairTable');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  if (!pairArms) {
+    renderPairCaveat();
+    return;
+  }
+
+  const arms = [pairArms.a, pairArms.b];
+  const table = document.createElement('table');
+  table.className = 'experiment-table';
+  const head = document.createElement('tr');
+  for (const label of [
+    '',
+    t('cr3bp.pair.col.a', { deg: fmtPair(pairConfig?.directions?.a) }),
+    t('cr3bp.pair.col.b', { deg: fmtPair(pairConfig?.directions?.b) }),
+  ]) {
+    const th = document.createElement('th');
+    th.textContent = label;
+    head.appendChild(th);
+  }
+  table.appendChild(head);
+
+  const row = (label, read) => {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.scope = 'row';
+    th.textContent = label;
+    tr.appendChild(th);
+    for (const arm of arms) {
+      const td = document.createElement('td');
+      td.textContent = arm ? read(arm) : '—';
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+    return tr;
+  };
+
+  // The initial conditions first, because the whole activity is the claim that
+  // they differ in one thing.
+  row(t('cr3bp.pair.row.start'), arm =>
+    arm.conditions
+      ? `(${fmtPair(arm.conditions.x, 4)}, ${fmtPair(arm.conditions.y, 4)})`
+      : '—'
+  );
+  row(t('cr3bp.pair.row.speed'), arm =>
+    arm.conditions ? fmtPair(arm.conditions.speed, 5) : '—'
+  );
+  row(t('cr3bp.pair.row.direction'), arm =>
+    arm.conditions ? `${fmtPair(arm.conditions.appliedDirection, 4)}°` : '—'
+  );
+  row(t('cr3bp.pair.row.jacobi'), arm =>
+    arm.conditions ? fmtPair(arm.conditions.C, 7) : '—'
+  );
+  row(t('cr3bp.pair.row.neck'), arm =>
+    arm.conditions
+      ? t(arm.conditions.l1Open ? 'cr3bp.pair.open' : 'cr3bp.pair.closed')
+      : '—'
+  );
+  // Then what happened, which is the part that differs.
+  row(t('cr3bp.pair.row.crossed'), arm =>
+    arm.path
+      ? arm.path.crossed
+        ? t('cr3bp.pair.crossedAt', {
+            // In binary periods: the window is quoted in them and a raw
+            // simulated-time figure is a number with no scale beside it.
+            t: fmtPair(
+              (arm.path.firstCrossing * (pairConfig?.periods ?? 1)) /
+                (pairConfig?.span || 1),
+              2
+            ),
+          })
+        : t('cr3bp.pair.notCrossed')
+      : '—'
+  );
+  row(t('cr3bp.pair.row.closest'), arm =>
+    arm.path ? fmtPair(arm.path.closestToL1, 3) : '—'
+  );
+  row(t('cr3bp.pair.row.reach'), arm =>
+    arm.path?.xRange
+      ? `${fmtPair(arm.path.xRange[0], 3)} … ${fmtPair(arm.path.xRange[1], 3)}`
+      : '—'
+  );
+  row(t('cr3bp.pair.row.watched'), arm =>
+    arm.path
+      ? t(arm.path.complete ? 'cr3bp.pair.whole' : 'cr3bp.pair.short')
+      : '—'
+  );
+  // Last, and it is the control on the control: two arms computed with
+  // different steps would not be one experiment with one variable.
+  row(t('cr3bp.pair.row.step'), arm =>
+    Number.isFinite(arm.steps?.mean)
+      ? `${fmtPair(arm.steps.mean, 3)} × ${arm.steps.steps}`
+      : '—'
+  );
+
+  wrap.appendChild(table);
+  renderPairCaveat();
+}
+
+/** Everything that has to be said beside the pair. */
+function renderPairCaveat() {
+  const el = $('cr3bpPairCaveat');
+  if (!el) return;
+  if (!pairArms?.comparison) {
+    el.textContent = '';
+    if ($('cr3bpPairKeep')) $('cr3bpPairKeep').disabled = true;
+    return;
+  }
+  const c = pairArms.comparison;
+  const parts = [];
+
+  // The control, first: whether the two arms really did have the same
+  // accessible region. If they did not, nothing below is evidence of anything.
+  parts.push(
+    c.region.ok
+      ? t('cr3bp.pair.caveat.controlled', {
+          d: (c.region.relative ?? 0).toExponential(1),
+        })
+      : t(`cr3bp.pair.caveat.${c.region.reason}`)
+  );
+
+  if (pairConfig?.cancelled) parts.push(t('cr3bp.pair.caveat.cancelled'));
+
+  parts.push(
+    t(`cr3bp.pair.conclusion.${c.conclusion}`, {
+      periods: pairConfig?.periods ?? 0,
+    })
+  );
+
+  // The one that is always true, whichever way the two paths came out.
+  parts.push(
+    t('cr3bp.pair.caveat.window', { periods: pairConfig?.periods ?? 0 })
+  );
+
+  el.textContent = parts.join(' ');
+  if ($('cr3bpPairKeep')) $('cr3bpPairKeep').disabled = pairRunning;
+}
+
+/** The section's one number formatter. */
+const fmtPair = (v, sig = 3) =>
+  Number.isFinite(v) ? formatNumber(v, { sig }) : '—';
 
 /**
  * Draw the forbidden region and the equilibria over the simulation.

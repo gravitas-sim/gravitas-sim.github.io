@@ -1,16 +1,31 @@
 // =============================================================================
 // Where Can It Get To?
 // -----------------------------------------------------------------------------
-// The circular restricted three-body problem in eighteen screens, built around
+// The circular restricted three-body problem in nineteen screens, built around
 // one question a student can answer by looking: given how fast this thing is
 // going, where is it forbidden to be?
 //
 // The lesson is arranged so that the three claims that look alike are met one
 // at a time and never together. Screens 1-9 are entirely about energy: the
-// forbidden region, the Jacobi constant, the necks opening. Screen 10 puts a
-// tracer in an open neck and lets it not go through, which is the only honest
+// forbidden region, the Jacobi constant, the necks opening. Screens 10-13 put
+// a tracer in an open neck and let it not go through, which is the only honest
 // way to teach that accessible is not reachable. Screens 14-16 are stability,
 // introduced last and explicitly as a third thing.
+//
+// Why screens 12 and 13 are a controlled pair
+// -----------------------------------------------------------------------------
+// Screen 10 has the reader push the tracer around until the neck opens, which
+// is the right way to meet the idea and a bad way to establish it: everyone
+// ends up somewhere different, so what they see is an anecdote and no two
+// anecdotes are comparable. Screens 12 and 13 are the same claim as an
+// experiment. One tracer, one place, one speed, two directions - which fixes
+// the Jacobi constant and therefore the whole accessible region, and leaves
+// the trajectory as the only thing that can differ. At 30 degrees it crosses
+// the neck a tenth of a period in; at 130 it never comes within 0.17 of L1 in
+// two full periods. Both are allowed everywhere the other is.
+//
+// The activity is scoped to accessibility against trajectory and says nothing
+// about stability, which is screens 14-16 and a different kind of evidence.
 //
 // The sign convention is the other pedagogical hazard. C rises as the tracer
 // slows, so every graph in a student's head is upside down, and the lesson
@@ -30,7 +45,9 @@ const LAGRANGE_POINTS = {
   thumbnail: 'images/scenarios/lagrange-point-lab.webp',
   title: 'Where Can It Get To?',
   subtitle: 'Forbidden regions, five balance points, and one conserved number',
-  duration: '20-25 min',
+  // Two screens longer than it was, and one of them runs for about a minute
+  // while nobody types.
+  duration: '25-30 min',
   level: 'Introductory astronomy',
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalogue rather than free text, so a filter can offer
@@ -217,15 +234,20 @@ const LAGRANGE_POINTS = {
         'Note the Jacobi constant before any burn',
         'Apply a burn and watch C fall and the shading shrink',
         'Keep going until the panel says the L1 neck is open',
+        'Note that the neck opened at a particular C, and that you got there your own way',
       ],
-      tip: 'The panel tells you how much further C has to fall before the next gate opens.',
+      tip: 'The panel tells you how much further C has to fall before the next gate opens. Everybody in the room will have opened the neck from a slightly different push, which is exactly why the next screen but one runs a controlled version.',
     },
     {
       sid: 'accessible-not-reachable',
       type: 'predict',
       title: 'The neck is open. Now what?',
       body: `The wall between the two stars has gone. The tracer is
-             energetically permitted to be anywhere in the other star's region.`,
+             energetically permitted to be anywhere in the other star's region.
+             \n\nOn the next screen you will send the same tracer out from the
+             same place at the same speed, twice, in two different directions.
+             Both will have exactly the same Jacobi constant, so both will be
+             allowed in exactly the same places.`,
       prompt: 'With the L1 neck open, the tracer will…',
       options: [
         'cross to the other star’s region, since nothing forbids it',
@@ -238,19 +260,73 @@ const LAGRANGE_POINTS = {
         'This is the distinction the whole diagram exists to be misread about. An open neck is a gap in a wall, not a route through it. The zero-velocity curve says where the tracer cannot be; it says nothing at all about where it goes. A tracer can orbit for ever on one side of an opening it never happens to use, and the only way to find out is to integrate the trajectory and look.',
     },
     {
+      sid: 'predict-same-region-same-path',
+      type: 'predict',
+      title: 'Same permission, same route?',
+      setup: LAB,
+      body: `Two tracers, from the same point, at the same speed in the rotating
+             frame, sent out in two different directions. Their Jacobi constants
+             are identical — C depends on where you are and how fast you are
+             going, and neither of those differs — so the shaded forbidden
+             region is the same picture for both, with the same open neck in it.`,
+      prompt: 'Two starts with the same accessible region will…',
+      options: [
+        'follow the same path, since the same region is available to both',
+        'follow different paths, but both use the neck sooner or later',
+        'follow different paths, and there is no guarantee either uses the neck at all',
+        'follow different paths only if their speeds differ',
+      ],
+      answer: 2,
+      because: `Different paths, with no guarantee about the neck. The forbidden
+                region is a statement about where the tracer <em>cannot</em> be,
+                and two states with the same C have the same one — but the
+                trajectory is decided by the direction of travel, which the
+                diagram does not contain. Commit to that before you run it: the
+                next screen is the two runs, and one of them behaves very
+                differently from the other.`,
+      tip: 'Whatever you predicted is kept, right or wrong. What the next screen asks you to do is read what actually happened and say whether it supports your answer.',
+    },
+    {
       sid: 'watch-it-not-cross',
       type: 'explore',
-      title: 'Watch it not cross',
-      body: `Let it run with the neck open. Watch the trail.
-             \n\nDepending on where and how hard you pushed, the tracer may go
-             through, loop back, or wander around the neck for a long time
-             without using it. All three are consistent with the diagram,
-             because the diagram was never a prediction about the path.`,
+      title: 'Watch one cross and one not',
+      setup: LAB,
+      // Reads the prediction's own claim back against evidence.
+      requires: ['predict-same-region-same-path'],
+      body: `In the three-body panel, open <strong>Two directions, one
+             accessible region</strong> and press <strong>Run both
+             directions</strong>. It takes about a minute.
+
+             \n\nIt puts the tracer back to a stated start — 0.6 separations
+             out, at rest in the rotating frame — and then gives it the same
+             speed twice, at <strong>30°</strong> and at <strong>130°</strong>.
+             Everything else is held: the stars, their masses, their circular
+             orbit, the integrator, the step, and two binary periods of watching
+             each.
+
+             \n\nRead the table from the top. The first five rows are the
+             control: same place, same speed, same Jacobi constant to the last
+             digit, same open neck, same measured step. The rows after them are
+             what happened, and they do not match.`,
       checklist: [
-        'Run with the neck open and watch the trail for a while',
-        'Note whether the tracer actually crosses',
-        'Undo the burn and try a different push to compare',
+        'Check the Jacobi constant row: the two numbers should be identical',
+        'Check the L1 neck row: open for both',
+        'Read whether each direction crossed, and when',
+        'Read how close the one that did not got to L1',
+        'Say whether that supports what you predicted on the last screen',
       ],
+      rubric: `Both arms should report the same Jacobi constant — 3.28426, to
+               every digit shown — and an open L1 neck with L2 still closed.
+               Direction A crosses the neck about a tenth of a period in and
+               comes back; direction B never gets closer to L1 than 0.17 of the
+               separation in two full periods, and its x never goes past where
+               it started. Full credit for reading the control rows first and
+               only then the outcome, and for stating the conclusion in the
+               form the evidence supports: same accessible region, different
+               paths. A student who writes "B can never cross" has overreached
+               by exactly the distance this activity is about — the window is
+               two periods, and the caveat under the table says so.`,
+      tip: 'Everything is drawn and quoted in the rotating frame, the same one the shaded region is drawn in, so the paths and the walls are in the same coordinates.',
     },
 
     // --- Part 3: stability, the third question --------------------------------

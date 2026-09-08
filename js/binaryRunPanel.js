@@ -491,36 +491,16 @@ function heldFixed() {
 /**
  * How much simulated time a frame really advances, against what it should.
  *
- * Measured rather than predicted. The runner sizes its frame budget from the
- * arithmetic - one sixtieth of a second at the current speed - and in these
- * scenarios the engine advances about a quarter of that, so a budget taken
- * from the arithmetic cut every trial off long before its window finished and
- * the sweep reported five incomplete observations. Ten frames is enough to see
- * the rate and short enough that nobody notices it happening.
+ * The measurement lives in js/experiments/frameRate.js, because the assist
+ * lesson's sweep needs the same one and two copies of it would be two things
+ * to keep in step. What is local is only which settings and which world.
  *
  * @returns {Promise<number>} How many times slower the world is than the plan
  */
 async function measureFrameRatio() {
-  const timestep = await import('./timestep.js');
-  const { getSimClock } = await import('./timeline.js');
-  const { DT } = await import('./physics.js');
-  const wanted = timestep.frameAdvance(1 / 60, SETTINGS.sim_speed, DT);
-  if (!(wanted > 0)) return 1;
-
-  const wasPaused = state.paused;
-  state.paused = false;
-  const before = getSimClock();
-  const frames = 10;
-  await new Promise(resolve => {
-    let n = 0;
-    const tick = () =>
-      ++n >= frames ? resolve() : requestAnimationFrame(tick);
-    requestAnimationFrame(tick);
-  });
-  const advanced = (getSimClock() - before) / frames;
-  state.paused = wasPaused;
-  if (!(advanced > 0)) return 1;
-  return Math.max(1, wanted / advanced);
+  const { measureFrameRatio: measure } =
+    await import('./experiments/frameRate.js');
+  return measure({ settings: SETTINGS, state });
 }
 
 /** @returns {number} The binary period of the pair now on screen */

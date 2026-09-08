@@ -104,6 +104,173 @@ export const ES_DEFERRED = {
     'La velocidad respecto del planeta cambió un {residual}% en este encuentro, y en la versión aislada no cambia nada en absoluto. Ese residuo es la aproximación: el planeta acelera, así que su sistema no es inercial, y la estrella también tira de la nave. Las lecturas se tomaron a {gate} AU, frente a un radio de Hill de {hill} AU: la distancia más allá de la cual lo que la nave orbita de verdad es la estrella y no el planeta. Esto es la aproximación de cónicas empalmadas, y es la que usan de verdad quienes diseñan misiones.',
   'assist.hint':
     'Las dos columnas describen el mismo encuentro en los mismos dos instantes. La de la izquierda no puede cambiar, porque en el sistema del propio planeta este no realiza trabajo sobre la nave. La de la derecha cambia porque se ha rotado un vector de longitud fija y luego se ha sumado a la velocidad del planeta. No se crea nada: el planeta se frena exactamente en el momento lineal que gana la nave.',
+  // --- La comparacion guardada y el barrido opcional -----------------------
+  'assist.exp.cancel': 'Detener',
+  'assist.exp.keep': 'Guardar en el cuaderno',
+  'assist.exp.running': 'Paso {done} de {total}\u2026',
+  'assist.exp.refused': 'No se inicio ({reason}).',
+  'assist.ab.title': 'Los dos lados, guardados uno al lado del otro',
+  'assist.ab.hint':
+    'El mismo encuentro dos veces, con +40 y \u221240, reconstruido cada vez desde la misma configuracion de partida para que el signo del parametro de impacto sea la unica diferencia entre ellos.',
+  'assist.ab.run': 'Ejecutar los dos pasos',
+  'assist.ab.done': '{done} de 2 pasos medidos, {seconds}s.',
+  'assist.ab.col.gaining': 'Por detras ({b})',
+  'assist.ab.col.losing': 'Por delante ({b})',
+  'assist.ab.row.side': 'Paso',
+  'assist.ab.row.closest': 'Maxima aproximacion',
+  'assist.ab.row.deflection': 'Desviacion',
+  'assist.ab.row.relBefore': 'Sistema del planeta, antes',
+  'assist.ab.row.relAfter': 'Sistema del planeta, despues',
+  'assist.ab.row.inertBefore': 'Sistema inercial, antes',
+  'assist.ab.row.inertAfter': 'Sistema inercial, despues',
+  'assist.ab.row.speedChange': 'Cambio de rapidez',
+  'assist.ab.row.deltaV': 'Cambio de velocidad',
+  'assist.ab.row.encounter': 'Encuentro',
+  'assist.encounter.complete': 'medido a la entrada y a la salida',
+  'assist.encounter.incomplete': 'nunca volvio a salir: no medido',
+  'assist.encounter.noBefore': 'empezo dentro del umbral: sin lectura previa',
+  'assist.encounter.lost': 'la nave se perdio',
+  'assist.encounter.notRun': 'no se ejecuto',
+  'assist.ab.caveat.incomplete':
+    '{n} de los dos pasos no produjo un encuentro completo ({which}), asi que nada de su columna es un antes y un despues.',
+  'assist.ab.caveat.cancelled':
+    'Esto se detuvo antes de terminar, asi que los pasos que nunca se ejecutaron aparecen marcados como tales en lugar de omitirse.',
+  'assist.ab.caveat.deltaV':
+    'Los dos pasos cambiaron la velocidad en la misma cantidad hasta un {percent}%, giraron el mismo angulo hasta un {deflection}% y se acercaron igual hasta un {closest}%. Eso es la imagen especular haciendo lo que debe hacer una imagen especular.',
+  'assist.ab.caveat.notMirrored':
+    'Los cambios de RAPIDEZ no son simetricos y nunca iban a serlo: {gain} km/s ganados frente a {loss} km/s perdidos, una razon de {ratio}. La rapidez es la longitud de una suma vectorial, y sumar un vector de longitud fija con dos angulos distintos no alarga y acorta esa suma en la misma medida.',
+  'assist.ab.caveat.recoil':
+    'La nave tiene masa, asi que el planeta retrocedio {recoil} mm/s. Ese retroceso es {ratio} del propio cambio de velocidad de la nave, frente a una razon de masas de {mass}: los dos {agree}, que es la conservacion del momento escrita como una division.',
+  'assist.ab.caveat.agree': 'coinciden con un error menor del uno por ciento',
+  'assist.ab.caveat.disagree': 'no coinciden, lo que merece investigarse',
+  'assist.ab.caveat.conserved':
+    'Asi que \u00abel sistema del planeta\u00bb nombra dos sistemas, no uno: uno antes del encuentro y otro despues, separados por ese retroceso. Lo que sobrevive al cambio no es la rapidez de la nave, que depende del sistema, sino el momento lineal del conjunto (equilibrado hasta un {ledger}%) y la rapidez relativa al planeta (cambiada un {residual}%).',
+  'assist.ab.caveat.held':
+    'Fijo en los dos pasos: velocidad de aproximacion {vinf} km/s, lecturas tomadas a {gate} UA en ambos tramos, paso de integracion {step}, semilla {seed}.',
+  'assist.sweep.title': 'Opcional: barrer lo cerca que pasa',
+  'assist.sweep.hint':
+    'Cinco pasos por el lado que gana, de 20 a 90, con la velocidad de aproximacion y todo lo demas fijo. Los cinco libran al planeta por al menos tres de sus radios.',
+  'assist.sweep.run': 'Ejecutar el barrido',
+  'assist.sweep.done': '{n} pasos, {seconds}s.',
+  'assist.sweep.col.b': 'Parametro de impacto',
+  'assist.sweep.col.deflection': 'Desviacion',
+  'assist.sweep.col.speedChange': 'Cambio de rapidez',
+  'assist.sweep.col.closest': 'Maxima aproximacion',
+  'assist.sweep.col.encounter': 'Encuentro',
+  'assist.sweep.plot.turn': 'giro (\u00b0)',
+  'assist.sweep.plot.gain': 'cambio de rapidez (km/s)',
+  'assist.sweep.plot.axis': 'Parametro de impacto',
+  'assist.sweep.caveat.incomplete':
+    '{n} de los pasos no produjo un encuentro completo ({which}) y quedan fuera de la grafica en lugar de dibujarse en un valor que nunca midieron.',
+  'assist.sweep.caveat.sameTrial':
+    'En estos {n} pasos, el giro mayor y la mayor ganancia de rapidez son el mismo paso, en {b}.',
+  'assist.sweep.caveat.differentTrials':
+    'El giro mayor fue en {turned} y la mayor ganancia de rapidez en {gained}. No son el mismo paso.',
+  'assist.sweep.caveat.notALaw':
+    'Ninguna de las dos respuestas es una regla. Girar la velocidad relativa solo ayuda mientras se la lleva hacia la direccion en que se mueve el planeta; girala mas alla y la ganancia vuelve a caer. En este laboratorio ese giro optimo ronda los 131\u00b0 y el paso mas cercano que el planeta sobrevive alcanza unos 97\u00b0, asi que el barrido nunca llega al otro lado de la loma.',
+  'assist.sweep.caveat.held':
+    'Fijo en todos los pasos: velocidad de aproximacion {vinf} km/s, paso de integracion {step}, semilla {seed}. Solo cambio el parametro de impacto.',
+  // --- El par controlado de la leccion del caos ----------------------------
+  'bench.chaos.title': 'El par controlado de la leccion',
+  'bench.chaos.hint':
+    'Prepara la comparacion y ejecuta los dos brazos sobre el mismo tramo de tiempo simulado: capturar, Ejecucion A, volver al inicio, el empujon, Ejecucion B. Todo lo que hace es lo que habrias hecho a mano, en el mismo orden.',
+  'bench.chaos.run': 'Preparar y ejecutar los dos',
+  'bench.chaos.runSame': 'Ejecutarlo dos veces, sin cambios',
+  'bench.chaos.changedNothing':
+    'No se cambio nada entre las ejecuciones: este es el control de reproducibilidad, y la separacion que informa es lo que hace el motor con la misma entrada.',
+  'bench.chaos.cancel': 'Detener',
+  'bench.chaos.control': 'Control numerico',
+  'bench.chaos.control.finerStep': 'la mitad del paso maximo',
+  'bench.chaos.control.altIntegrator': 'otro integrador',
+  'bench.chaos.runControl': 'Repetir como control',
+  'bench.chaos.name.binary': 'Par de control binario',
+  'bench.chaos.name.triple': 'Par de tres cuerpos',
+  'bench.chaos.wrongScenario':
+    'Esto es para los dos escenarios de la leccion del caos. Carga el Par Binario o el Laboratorio de Sensibilidad de Tres Cuerpos.',
+  'bench.chaos.benchBusy':
+    'El banco tiene \u00ab{name}\u00bb con ejecuciones grabadas. Guardalo o captura un inicio nuevo antes de ejecutar esto, para no perder nada tuyo.',
+  'bench.chaos.running': 'Grabando la ejecucion {arm}\u2026',
+  'bench.chaos.changed':
+    'Lo que cambio entre las ejecuciones: {body} se movio {km} km a lo largo de {axis}, y nada mas.',
+  'bench.chaos.settingsChanged':
+    'Ajustes que tambien difieren entre las ejecuciones: {keys}. Eso es mas de una variable, y la comparacion no puede separarlas.',
+  'bench.chaos.settingsSame':
+    'Ningun ajuste difiere entre las dos ejecuciones, asi que el empujon es la unica diferencia.',
+  'bench.chaos.intervals':
+    'La ejecucion A cubrio {a} segundos simulados y la B {b}, frente a los {asked} pedidos. El ajuste usa su solape.',
+  'bench.chaos.steps':
+    'Paso medido: {mean} de media, de {min} a {max}, en {n} pasos, con {integrator}. Medido y no tomado de los ajustes, porque el motor divide cada fotograma en un numero maximo de subpasos y cual de los dos limites manda depende del escenario.',
+  'bench.chaos.exponential':
+    'Exponencial: tiempo de e-plegado {tau} segundos simulados, r\u00b2 {r2}, ajustado entre {from} y {to}.',
+  'bench.chaos.resolved':
+    'Resuelto: {n} controles que de verdad lo calcularon de otra manera coinciden en un {spread}%.',
+  'bench.chaos.unresolved.need-two-estimates':
+    'Todavia no resuelto: hacen falta dos repeticiones que calculen la respuesta de otra manera, y hay {n} hasta ahora. Hasta entonces la divergencia es un numero que produjo este integrador.',
+  'bench.chaos.unresolved.controlsIneffective':
+    'No resuelto: las repeticiones no cambiaron de verdad la aritmetica -el paso medido y el integrador salieron iguales-, asi que coinciden con el original por un motivo que no vale nada.',
+  'bench.chaos.unresolved.behaviour-changed':
+    'NO RESUELTO: las repeticiones ni siquiera coincidieron en que tipo de crecimiento es este. El informe honesto es que esta medida no esta resuelta numericamente, no un numero menor.',
+  'bench.chaos.unresolved.timescale-moved':
+    'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
+  'bench.chaos.cancelled':
+    'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
+
+  // --- El par controlado de la leccion de Lagrange -------------------------
+  'cr3bp.pair.title': 'Dos direcciones, una misma region accesible',
+  'cr3bp.pair.hint':
+    'El mismo trazador, en el mismo sitio, a la misma rapidez en el sistema rotante, lanzado en dos direcciones. Misma constante de Jacobi, mismo cuello abierto, todo lo demas fijo. Dos periodos binarios cada uno.',
+  'cr3bp.pair.run': 'Ejecutar las dos direcciones',
+  'cr3bp.pair.cancel': 'Detener',
+  'cr3bp.pair.keep': 'Guardar en el cuaderno',
+  'cr3bp.pair.invalid':
+    'Esto necesita un problema restringido de tres cuerpos valido con un trazador dentro.',
+  'cr3bp.pair.benchBusy':
+    'El banco tiene \u00ab{name}\u00bb con ejecuciones grabadas. Guardalo o captura un inicio nuevo primero, para no perder nada tuyo.',
+  'cr3bp.pair.reset':
+    'Trazador devuelto a ({x}, {y}) en reposo en el sistema rotante, para que las dos direcciones empiecen desde el mismo sitio declarado.',
+  'cr3bp.pair.running': 'Ejecutando la direccion {done} de 2\u2026',
+  'cr3bp.pair.done':
+    'Las dos direcciones, {periods} periodos binarios cada una.',
+  'cr3bp.pair.col.a': 'A ({deg}\u00b0)',
+  'cr3bp.pair.col.b': 'B ({deg}\u00b0)',
+  'cr3bp.pair.row.start': 'Empezo en',
+  'cr3bp.pair.row.speed': 'Rapidez en el sistema rotante',
+  'cr3bp.pair.row.direction': 'Direccion',
+  'cr3bp.pair.row.jacobi': 'Constante de Jacobi',
+  'cr3bp.pair.row.neck': 'Cuello de L1',
+  'cr3bp.pair.row.crossed': '\u00bfLo cruzo?',
+  'cr3bp.pair.row.closest': 'Lo mas cerca que estuvo de L1',
+  'cr3bp.pair.row.reach': 'x alcanzada',
+  'cr3bp.pair.row.watched': 'Observado',
+  'cr3bp.pair.row.step': 'Paso medido',
+  'cr3bp.pair.open': 'abierto',
+  'cr3bp.pair.closed': 'cerrado',
+  'cr3bp.pair.crossedAt': 'si, tras {t} periodos',
+  'cr3bp.pair.notCrossed': 'no durante esta ejecucion',
+  'cr3bp.pair.whole': 'toda la ventana',
+  'cr3bp.pair.short': 'cortado antes',
+  'cr3bp.pair.caveat.controlled':
+    'Los dos brazos tuvieron la misma constante de Jacobi con un error de {d} y el mismo cuello abierto, asi que tenian permitido estar exactamente en los mismos sitios.',
+  'cr3bp.pair.caveat.missingArm':
+    'Uno de los dos brazos no se ejecuto, asi que no hay nada que comparar.',
+  'cr3bp.pair.caveat.constantsDiffer':
+    'Los dos brazos no salieron con la misma constante de Jacobi, asi que no tenian permitidos los mismos sitios y nada de lo de abajo es evidencia sobre trayectorias.',
+  'cr3bp.pair.caveat.neckClosed':
+    'El cuello de L1 no estaba abierto para los dos brazos, asi que \u00abno paso\u00bb es una afirmacion sobre un muro y no sobre un camino.',
+  'cr3bp.pair.caveat.exteriorOpen':
+    'El cuello de L2 tambien estaba abierto, asi que el trazador no estaba confinado a las regiones de las dos estrellas y \u00abno uso el cuello de L1\u00bb habla de un hueco entre varios.',
+  'cr3bp.pair.caveat.cancelled':
+    'Esto se detuvo antes de terminar, asi que al menos un brazo se observo menos de la ventana completa.',
+  'cr3bp.pair.caveat.window':
+    'Todo esto se refiere a {periods} periodos binarios. Un camino que no uso el cuello en ese tiempo puede usarlo en el siguiente.',
+  'cr3bp.pair.conclusion.notControlled':
+    'El control fallo, asi que de estas dos ejecuciones no se sigue ninguna conclusion sobre caminos.',
+  'cr3bp.pair.conclusion.windowIncomplete':
+    'Al menos un brazo se corto antes, asi que no es que no cruzara: no se observo lo suficiente para decirlo.',
+  'cr3bp.pair.conclusion.sameRegionDifferentPaths':
+    'Misma region accesible, caminos distintos: que es justo la cuestion. Donde tenia PERMITIDO ir el trazador era identico en los dos brazos por construccion, y a donde FUE no lo era.',
+  'cr3bp.pair.conclusion.sameRegionSimilarPaths':
+    'Estos dos salieron parecidos, y eso vale: el diagrama no prohibe que dos direcciones se comporten igual, ni tampoco lo exige. Nada de aqui dice que los caminos tuvieran que coincidir.',
   'binaryRun.planetA': 'Inicio del planeta (a / a_binaria)',
   'binaryRun.periods': 'Periodos binarios a integrar',
   'binaryRun.timestep': 'Paso de integración',
@@ -443,6 +610,8 @@ export const ES_DEFERRED = {
     'Fuera del rango en el que este parametro esta definido aqui, que es de {min} a {max}.',
   'sweep.reason.crossesExcluded':
     'Ese rango pasa por {from} a {to}, donde el escenario no describe un sobrevuelo en absoluto.',
+  'sweep.reason.valueExcluded':
+    'Estos valores caen entre {from} y {to}, donde el escenario no describe ningun sobrevuelo: {inside}.',
   'sweep.reason.duration':
     'El tiempo simulado por prueba debe estar entre {min} y {max}.',
   'sweep.reason.noMetrics': 'Elige al menos una magnitud que medir.',
@@ -1973,4 +2142,160 @@ export const ES_DEFERRED = {
     'El ensayo en {value} dio otro resultado con la mitad del paso, asi que ninguna de las dos ejecuciones lo ha medido.',
   'nb.binarySweep.limit.noRecheck':
     'Ningun ensayo se repitio con un paso menor, asi que no se ha demostrado que ninguno de estos resultados sea independiente del tamano del paso.',
+  // --- La comparacion y el barrido de asistencia gravitatoria, en el cuaderno
+  'nb.assist.unit.speed': 'unidades de velocidad de simulacion',
+  'nb.assist.unit.simVelocity': 'unidades de velocidad de simulacion',
+  'nb.assist.unit.simUnits': 'unidades de simulacion',
+  'nb.assist.predicted': 'Antes de ejecutarlo, predije: {prediction}',
+  'nb.assist.incomplete': 'Pasos sin encuentro completo',
+  'nb.assist.incompleteNote':
+    'Sin lectura de salida no hay un antes y un despues, asi que nada de ese paso es evidencia.',
+  'nb.assist.limit.gate':
+    'Ambas lecturas se tomaron a {gate} unidades del planeta y se corrigieron a la rapidez en el infinito por igual, asi que las diferencias son lo que esto mide.',
+  'nb.assist.limit.held':
+    'Solo cambio el parametro de impacto: velocidad de aproximacion {vinf}, integrador y paso, semilla {seed}.',
+  'nb.assist.limit.incomplete':
+    '{n} paso(s) no produjo un encuentro completo; se informan, no se descartan.',
+  'nb.assist.limit.cancelled':
+    'Se detuvo antes de terminar, asi que no cubre los valores que se le pidieron.',
+  'nb.assist.ab.title': 'El mismo sobrevuelo por los dos lados del planeta',
+  'nb.assist.ab.gain': 'Cambio de rapidez pasando por detras',
+  'nb.assist.ab.loss': 'Cambio de rapidez pasando por delante',
+  'nb.assist.ab.deltaV': 'Cambio de velocidad, en cualquiera de los dos lados',
+  'nb.assist.ab.deltaVNote':
+    'El mismo en ambos lados, porque es la misma rotacion de un vector de la misma longitud. Tambien es el mismo en todo sistema inercial, a diferencia del cambio de rapidez.',
+  'nb.assist.ab.relResidual': 'Cambio de rapidez relativa al planeta',
+  'nb.assist.ab.relResidualNote':
+    'Cero dentro de la precision del integrador, y exactamente cero en el problema de dos cuerpos: el encuentro puede girar la velocidad relativa y no puede alargarla.',
+  'nb.assist.ab.recoil': 'El retroceso del planeta',
+  'nb.assist.ab.recoilNote':
+    'Es {ratio} del propio cambio de velocidad de la nave, frente a una razon de masas de {mass}.',
+  'nb.assist.ab.figure': 'Rapidez antes y despues, en los dos sistemas',
+  'nb.assist.ab.axisX': '0 = antes del encuentro, 1 = despues',
+  'nb.assist.ab.axisY': 'Rapidez (unidades de velocidad de simulacion)',
+  'nb.assist.ab.series.gaining.planet': 'por detras: relativa al planeta',
+  'nb.assist.ab.series.gaining.inertial': 'por detras: inercial',
+  'nb.assist.ab.series.losing.planet': 'por delante: relativa al planeta',
+  'nb.assist.ab.series.losing.inertial': 'por delante: inercial',
+  'nb.assist.ab.which.gaining': 'por detras',
+  'nb.assist.ab.which.losing': 'por delante',
+  'nb.assist.ab.evidence':
+    'Dos pasos del mismo encuentro, reconstruidos desde la misma configuracion de partida, que solo difieren en el signo del parametro de impacto:',
+  'nb.assist.ab.line':
+    '  {which} (b = {b}): {outcome}, giro de {turn}\u00b0, cambio de rapidez {change}',
+  'nb.assist.ab.limit.notMirrored':
+    'La ganancia y la perdida no son del mismo tamano \u2014 la perdida es {ratio} de la ganancia \u2014 y nada exige que lo sean. Los dos pasos cambiaron la VELOCIDAD por igual; la rapidez es la longitud de una suma, y las longitudes no se suman y se restan de forma simetrica.',
+  'nb.assist.ab.limit.recoil':
+    'La nave tiene masa, asi que el planeta retrocede: \u00abel sistema del planeta\u00bb es un sistema inercial antes del encuentro y otro algo distinto despues. La rapidez relativa se mantiene igualmente \u2014 dos cuerpos, con cualquier razon de masas \u2014 y el conjunto conserva el momento lineal total en todo sistema.',
+  'nb.assist.sweep.title': 'Cinco parametros de impacto por el lado que gana',
+  'nb.assist.sweep.passes': 'Pasos ejecutados',
+  'nb.assist.sweep.passesNote':
+    '{n} de ellos produjeron un encuentro completo.',
+  'nb.assist.sweep.mostTurned': 'Parametro de impacto que mas giro',
+  'nb.assist.sweep.mostGained': 'Parametro de impacto que mas rapidez gano',
+  'nb.assist.sweep.sameNote':
+    'El mismo paso giro mas y gano mas, en este rango.',
+  'nb.assist.sweep.differentNote':
+    'El paso que mas gano no es el que mas giro.',
+  'nb.assist.sweep.figure':
+    'Giro y cambio de rapidez frente al parametro de impacto',
+  'nb.assist.sweep.axisX': 'Parametro de impacto (unidades de simulacion)',
+  'nb.assist.sweep.axisY': 'Grados, y unidades de velocidad de simulacion',
+  'nb.assist.sweep.series.turn': 'desviacion (grados)',
+  'nb.assist.sweep.series.gain':
+    'cambio de rapidez (unidades de velocidad de simulacion)',
+  'nb.assist.sweep.evidence':
+    'Un lado del planeta, cinco distancias, todo lo demas fijo:',
+  'nb.assist.sweep.line':
+    '  b = {b}: {outcome}, giro de {turn}\u00b0, cambio de rapidez {change}',
+  'nb.assist.sweep.limit.oneSide':
+    'Los cinco pasos son por el lado que gana; el barrido no dice nada del lado que pierde.',
+  'nb.assist.sweep.limit.notALaw':
+    'Que aqui mas giro diera mas rapidez es un hecho sobre esta geometria, no una regla. La ganancia crece solo mientras el giro lleva la velocidad relativa hacia la direccion en que se mueve el planeta; pasado eso, cae. Aqui el giro optimo es inalcanzable: el paso que lo produciria choca con el planeta.',
+  // --- El par del caos y el par del cuello, en el cuaderno -----------------
+  'nb.chaosPair.simSeconds': 'segundos simulados',
+  'nb.chaosPair.title.binary':
+    'El control de dos cuerpos: dos ejecuciones, un empujon',
+  'nb.chaosPair.title.triple': 'Tres cuerpos, dos ejecuciones, un empujon',
+  'nb.chaosPair.interval': 'Intervalo que cubren las dos ejecuciones',
+  'nb.chaosPair.intervalNote':
+    'La ejecucion A cubrio {a} y la B {b}; el ajuste usa su solape.',
+  'nb.chaosPair.step': 'Paso de integracion medido',
+  'nb.chaosPair.stepNote':
+    'La media de los {n} pasos que dio realmente el motor, con {integrator}, no el ajuste que se le pidio.',
+  'nb.chaosPair.tau': 'Tiempo de e-plegado',
+  'nb.chaosPair.tauNote':
+    'Ajustado entre {from} y {to} segundos simulados, r\u00b2 {r2}. Fuera de ese intervalo la separacion sigue siendo el empujon, o ha dejado de crecer.',
+  'nb.chaosPair.growth': 'Factor de crecimiento total',
+  'nb.chaosPair.behaviour': 'Que hizo la separacion',
+  'nb.chaosPair.behaviour.identical':
+    'nada: las dos ejecuciones siguieron identicas',
+  'nb.chaosPair.behaviour.bounded': 'se mantuvo cerca, sin crecer',
+  'nb.chaosPair.behaviour.linear':
+    'crecio en proporcion al tiempo, ajuste recto r\u00b2 {r2}: deriva, no caos',
+  'nb.chaosPair.behaviour.saturated':
+    'crecio y luego paro, al quedarse sin sistema del que separarse mas',
+  'nb.chaosPair.behaviour.exponential': 'crecio exponencialmente',
+  'nb.chaosPair.behaviour.insufficient':
+    'no se pudo clasificar con esta ejecucion',
+  'nb.chaosPair.behaviour.none': 'no se midio',
+  'nb.chaosPair.controls': 'Controles numericos efectivos',
+  'nb.chaosPair.controlsResolved':
+    'Sus tiempos de e-plegado abarcan un {spread}%, asi que la respuesta no es una propiedad de la aritmetica.',
+  'nb.chaosPair.controlsUnresolved':
+    'No cambiaron la aritmetica los suficientes, asi que esta medida no esta resuelta numericamente.',
+  'nb.chaosPair.figure': 'Lo separadas que estan las dos ejecuciones',
+  'nb.chaosPair.axisX': 'Segundos simulados',
+  'nb.chaosPair.axisY': 'Separacion entre las ejecuciones',
+  'nb.chaosPair.series.separation': 'separacion',
+  'nb.chaosPair.predicted': 'Antes de ejecutarlo, predije: {prediction}',
+  'nb.chaosPair.evidence':
+    'Dos ejecuciones del mismo sistema desde el mismo inicio capturado, que difieren en {km} km a lo largo de {axis} en {body} y en nada mas.',
+  'nb.chaosPair.evidenceNoPerturbation':
+    'Dos ejecuciones del mismo sistema desde el mismo inicio capturado, sin nada cambiado entre ellas.',
+  'nb.chaosPair.evidenceExponential':
+    'La separacion crecio exponencialmente con un tiempo de e-plegado de {tau} segundos simulados, a lo largo de unos {efolds} e-plegados.',
+  'nb.chaosPair.evidenceOther': 'La separacion {behaviour}.',
+  'nb.chaosPair.limit.cancelled':
+    'Se detuvo antes de terminar, asi que al menos una ejecucion es mas corta de lo que se le pidio.',
+  'nb.chaosPair.limit.interval':
+    'Las dos ejecuciones no cubren el mismo intervalo, asi que el ajuste abarca menos que cualquiera de ellas.',
+  'nb.chaosPair.limit.unresolved':
+    'NO RESUELTO numericamente: las repeticiones con otra aritmetica no coinciden, asi que esta tasa pertenece al calculo hasta que lo hagan.',
+  'nb.chaosPair.limit.window':
+    'La tasa se ajusto entre {from} y {to} segundos simulados y describe ese intervalo, no toda la ejecucion.',
+  'nb.chaosPair.limit.estimate':
+    'Una perturbacion finita en una ventana finita da una estimacion de la tasa de divergencia, no un exponente de Lyapunov, que es un limite a tiempo infinito.',
+  'nb.neckPair.title': 'Una region accesible, dos direcciones',
+  'nb.neckPair.constantA': 'Constante de Jacobi, direccion A',
+  'nb.neckPair.constantB': 'Constante de Jacobi, direccion B',
+  'nb.neckPair.constantNote':
+    'Iguales por construccion: C queda fijada por donde esta el trazador y a que rapidez va, y los dos brazos no difieren en ninguna de las dos cosas.',
+  'nb.neckPair.speed': 'Rapidez en el sistema rotante, los dos brazos',
+  'nb.neckPair.speedNote': 'Lanzados a {a}\u00b0 y a {b}\u00b0.',
+  'nb.neckPair.closestA': 'Maxima aproximacion a L1, direccion A',
+  'nb.neckPair.closestB': 'Maxima aproximacion a L1, direccion B',
+  'nb.neckPair.closestNote':
+    'En unidades de la separacion, en el sistema rotante que dibuja la superposicion.',
+  'nb.neckPair.figure': 'Los dos caminos, en el sistema rotante',
+  'nb.neckPair.axisX': 'x (separaciones, sistema rotante)',
+  'nb.neckPair.axisY': 'y (separaciones, sistema rotante)',
+  'nb.neckPair.series.a': 'direccion A ({deg}\u00b0)',
+  'nb.neckPair.series.b': 'direccion B ({deg}\u00b0)',
+  'nb.neckPair.predicted': 'Antes de ejecutarlo, predije: {prediction}',
+  'nb.neckPair.evidence':
+    'El mismo trazador, el mismo sitio, la misma rapidez en el sistema rotante, lanzado a {a}\u00b0 y a {b}\u00b0, observado {periods} periodos binarios cada uno.',
+  'nb.neckPair.crossed': 'El brazo {which} cruzo el cuello de L1 tras {t}.',
+  'nb.neckPair.notCrossed':
+    'El brazo {which} no cruzo el cuello de L1 durante esta ejecucion.',
+  'nb.neckPair.limit.notControlled':
+    'El control fallo: los dos brazos no tenian la misma region accesible, asi que sus caminos difieren por un motivo que esta actividad debia excluir.',
+  'nb.neckPair.limit.cancelled':
+    'Se detuvo antes de terminar, asi que al menos un brazo se observo menos que la ventana.',
+  'nb.neckPair.limit.short':
+    'Al menos un brazo se corto antes. Un brazo que paro pronto no es que no cruzara: no se observo lo suficiente para decirlo.',
+  'nb.neckPair.limit.window':
+    'Esto abarca {periods} periodos binarios. \u00abNo cruzo durante esta ejecucion\u00bb no es \u00abnunca puede cruzar\u00bb: un cuello abierto solo dice que cruzar no esta prohibido, y una ventana finita no puede decir mas.',
+  'nb.neckPair.limit.stability':
+    'Nada de esto trata de la estabilidad. Si cualquiera de los dos caminos se quedaria donde esta al recibir un empujon es una pregunta aparte con su propia evidencia.',
 };

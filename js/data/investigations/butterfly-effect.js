@@ -139,17 +139,26 @@ const BUTTERFLY_EFFECT = {
       body: `Run the identical experiment twice, changing <em>nothing</em>
              between the runs.
 
-             \n\nRecord Run A for about forty seconds. Press
-             <strong>Return to start</strong>. Record Run B for about the same
-             length, again changing nothing.
+             \n\nOpen the <strong>A/B Bench</strong> and find <em>The lesson's
+             controlled pair</em>. Press <strong>Run it twice,
+             unchanged</strong>. It captures the start, records Run A for forty
+             simulated seconds, returns to that same start, and records Run B
+             over the same forty — which is the experiment you would have run by
+             hand, done the same way twice.
+
+             \n\nThat matters more than it sounds. Two runs of different
+             lengths only overlap where they both have data, and a Run A that
+             began wherever the simulation had drifted to while you were reading
+             is not the same start as Run B's. The section reports both
+             intervals so you can see they match.
 
              \n\nThe instrument below measures the distance between the two runs
              — how far apart the two versions of the system are, adding up over
              all three stars, at each moment of simulated time.`,
       checklist: [
-        'Capture the start and record Run A',
-        'Return to start',
-        'Record Run B without changing anything',
+        'Press "Run it twice, unchanged" and wait about a minute',
+        'Read the line that says what changed between the runs',
+        'Check that both runs covered the same interval',
         'Read the separation the instrument reports',
       ],
       rubric: `The separation should be exactly zero for the whole run, and the
@@ -158,9 +167,10 @@ const BUTTERFLY_EFFECT = {
                engine is deterministic, so any difference seen later in the
                lesson has a cause that can be pointed at. Partial credit for
                reporting zero without connecting it to what follows. If a
-               student reports a nonzero separation here, the likely cause is
-               that they changed a setting between the runs; the bench's own
-               "what changed between the runs" line will say so.`,
+               student reports a nonzero separation here, something was changed
+               between the runs; the section's own "what changed between the
+               runs" line will say what, and for this control it should say
+               that nothing was.`,
     },
     {
       sid: 'what-zero-proves',
@@ -248,20 +258,21 @@ const BUTTERFLY_EFFECT = {
       type: 'explore',
       title: 'Measure the binary',
       tool: { id: 'chaos-divergence' },
-      body: `Do it. Capture, Run A, return to start, nudge one star by 1,500 km
-             along x, Run B.
+      body: `Do it. In the A/B Bench, press <strong>Set up and run
+             both</strong>: capture, Run A, return to start, nudge one star by
+             1,500 km along x, Run B — four orbits each, over the same interval.
 
-             \n\nThe bench's perturbation control does the nudge for you and
-             records exactly what it changed, so the number is not something you
-             have to remember afterwards — it is stored with the experiment and
-             printed in your report.
+             \n\nThe nudge is applied and recorded for you, so the number is not
+             something you have to remember afterwards. It is stored with the
+             experiment, printed in the section as <em>what changed between the
+             runs</em>, and carried into your report.
 
              \n\nWatch two things on the instrument: the shape of the separation
              on the <strong>linear</strong> plot, and what it does on the
              <strong>logarithmic</strong> one.`,
       checklist: [
-        'Apply the 1,500 km perturbation to one star',
-        'Record both runs over at least four orbits',
+        'Press "Set up and run both" and let it record four orbits each',
+        'Read what changed between the runs — it should be the nudge and nothing else',
         'Read the growth factor and the straight-line r²',
         'Note whether the instrument gives an e-folding time',
       ],
@@ -379,27 +390,31 @@ const BUTTERFLY_EFFECT = {
       type: 'explore',
       title: 'Measure the triple',
       tool: { id: 'chaos-divergence' },
-      body: `Run it. Capture the start, record Run A for about forty seconds,
-             return to start, apply the same 1,500 km perturbation to
-             <strong>Alpha</strong>, and record Run B for about the same length.
+      body: `Run it. <strong>Set up and run both</strong> again — the same
+             action, in a scenario with one more star in it. Forty simulated
+             seconds each, the same 1,500 km applied to <strong>Alpha</strong>,
+             and nothing else different between the two runs.
 
-             \n\nThis time watch the logarithmic plot in particular. On the
-             linear plot almost nothing happens and then everything happens at
-             once. On the log plot the same data is a straight line, and a
-             straight line on a log plot is what exponential growth looks like.`,
+             \n\nIt takes about a minute. This time watch the logarithmic plot
+             in particular. On the linear plot almost nothing happens and then
+             everything happens at once. On the log plot the same data is a
+             straight line, and a straight line on a log plot is what
+             exponential growth looks like.`,
       checklist: [
-        'Capture the start and record Run A',
-        'Return to start and perturb Alpha by 1,500 km',
-        'Record Run B',
+        'Press "Set up and run both" and wait about a minute',
+        'Check that both runs covered the same forty seconds',
         'Read the e-folding time and the fitted interval',
+        'Read the measured step, which you will need in Act 4',
       ],
-      rubric: `Expect an e-folding time of roughly 6 to 8 simulated seconds, a
-               log-linear fit with r² above 0.98, and a total growth of six or
-               seven orders of magnitude. Full credit requires the e-folding
+      rubric: `The guided pair runs a defined forty seconds at a defined step,
+               so everyone should get the same answer: an e-folding time of
+               about <strong>8.3 simulated seconds</strong>, a log-linear fit
+               with r² about 0.99, fitted between roughly 5 and 29 seconds, and
+               a total growth of about 220. Full credit requires the e-folding
                time with its fitted interval, not just "it diverged". A student
-               who reports a value far outside 5–9 s has probably recorded runs
-               of very different lengths; the bench reports the overlap it
-               actually used.`,
+               who reports a value far outside 7–9 s has read the wrong run or
+               the wrong scenario; the section reports the interval and the step
+               it actually used.`,
     },
     {
       sid: 'write-down-what-you-measured',
@@ -413,14 +428,14 @@ const BUTTERFLY_EFFECT = {
           id: 'tau',
           label: 'e-folding time',
           unit: 'simulated seconds',
-          hint: '6.9',
+          hint: '8.3',
         },
         { id: 'r2', label: 'fit quality r²', unit: '', hint: '0.99' },
         {
           id: 'growth',
           label: 'total growth factor',
           unit: '× the starting separation',
-          hint: '2e7',
+          hint: '220',
         },
       ],
       validate: v => {
@@ -435,7 +450,7 @@ const BUTTERFLY_EFFECT = {
           return {
             level: 'warn',
             message:
-              'That is a long way from what this configuration gives. Check that both runs cover a similar stretch of simulated time — the instrument reports the overlap it used.',
+              'That is a long way from what this configuration gives. Check that both runs cover a similar stretch of simulated time — the section reports the interval each one covered.',
           };
         }
         if (Number.isFinite(v.r2) && v.r2 < 0.9) {
@@ -448,7 +463,7 @@ const BUTTERFLY_EFFECT = {
         return {
           level: 'ok',
           message:
-            'That is the range this configuration gives. Theory predicts 6.0 s for the unstable mode; a finite perturbation measured over a finite window comes out a little longer.',
+            'That is the range this configuration gives. Theory predicts 6.0 s for the unstable mode; a finite perturbation measured over a finite window comes out longer, and the guided pair gives about 8.3 s every time it is run.',
         };
       },
     },
@@ -492,19 +507,21 @@ const BUTTERFLY_EFFECT = {
              \n\nThat is a growth factor of 100,000, and ln(100,000) ≈ 11.5.`,
       prompt: 'Using your τ, roughly how long is that, in simulated seconds?',
       unit: 'simulated seconds',
-      answer: 79,
+      // 11.5 tau, and tau is now a number every student gets: the guided pair
+      // runs a defined interval at a defined step, so 8.3 s is reproducible
+      // rather than a range. 11.5 x 8.3 = 95.
+      answer: 95,
       // Absolute, in simulated seconds, and sized to the measurement it is
-      // built on. The step says "using your tau", and the lesson's own rubric
-      // puts tau anywhere between 6 and 8 seconds; 11.5 tau is therefore
-      // anywhere between 69 and 92. This was 0.35 - written as though it were
-      // thirty-five percent - which accepted 78.65 to 79.35 and failed almost
-      // every student who did exactly what the step asked. Thirteen covers the
-      // whole of the stated band, 11.5 x 6 = 69 through 11.5 x 8 = 92.
-      tolerance: 13,
-      because: `About 11.5 τ, so with τ ≈ 6.9 s that is roughly 80 simulated
-                seconds — three rotations of the triangle. Everything you knew
-                about where the stars would be is gone in three turns, from a
-                starting error the width of a country.`,
+      // built on. The step says "using your tau", and the guided pair puts tau
+      // at 8.3; twelve covers a student who read 7.2 or 9.3 off the panel and
+      // did the arithmetic correctly, and still rejects anyone out by a factor
+      // of two. It is not a percentage: `tolerance` in js/answerCheck.js is a
+      // distance from the answer.
+      tolerance: 12,
+      because: `About 11.5 τ, so with τ ≈ 8.3 s that is roughly 95 simulated
+                seconds — three and a half rotations of the triangle.
+                Everything you knew about where the stars would be is gone in
+                three turns, from a starting error the width of a country.`,
     },
     {
       sid: 'buying-more-time',
@@ -519,7 +536,7 @@ const BUTTERFLY_EFFECT = {
       prompt: 'How much longer does your prediction stay good?',
       options: [
         'a thousand times longer',
-        'about seven τ longer — roughly fifty extra seconds',
+        'about seven τ longer — roughly sixty extra seconds',
         'about a thousand τ longer',
         'no longer at all: the improvement is wiped out immediately',
       ],
@@ -583,34 +600,48 @@ const BUTTERFLY_EFFECT = {
       type: 'explore',
       title: 'The numerical control',
       tool: { id: 'chaos-divergence' },
-      body: `Repeat the three-body comparison twice more:
+      body: `Repeat the three-body comparison twice more. Choose a
+             <strong>numerical control</strong> and press <strong>Repeat as a
+             control</strong>, then choose the other one and press it again.
 
-             \n\n<strong>Once with a smaller timestep.</strong> In Settings, set
-             the simulation speed to half what it was. That halves the step the
-             integrator takes each frame.
+             \n\n<strong>Half the largest step.</strong> Not half the playback
+             speed — that is the instruction this lesson used to give and it was
+             not reliable. The engine splits each frame's advance into at most a
+             fixed number of pieces, no larger than a cap, and which of those
+             two limits binds depends on the scenario: where the cap is not the
+             binding one, halving the speed halves the number of pieces and
+             leaves their size alone. So the control halves the step the engine
+             was <em>measured</em> taking, and the section reports the new
+             measurement beside the old one. Look at it: it should be half.
 
-             \n\n<strong>Once with a different integrator.</strong> In Settings,
-             switch from Symplectic Euler to Velocity Verlet, or to RK4.
+             \n\n<strong>A different integrator.</strong> Symplectic Euler to
+             Velocity Verlet, or Verlet to RK4 — the same physical comparison,
+             computed by a different scheme.
 
-             \n\nEach time, use the bench's <strong>record as numerical
-             control</strong> action, which stores the e-folding time under a
-             label instead of overwriting your main result. The instrument then
-             reports whether the three answers agree.`,
+             \n\nEach repeat is filed beside your main result rather than
+             replacing it, labelled with the step it actually took. The section
+             then says whether the answers agree — and whether the repeats
+             changed the arithmetic at all, which is the thing a control has to
+             do before its agreement means anything.`,
       checklist: [
-        'Repeat the comparison at half the simulation speed',
-        'Repeat it with a different integrator',
-        'Record each as a numerical control',
-        'Read the refinement verdict',
+        'Run the "half the largest step" control, and check the measured step really did halve',
+        'Run the "a different integrator" control',
+        'Read the three e-folding times and how far apart they are',
+        'Read the verdict, and note that it is about the arithmetic and not about the physics',
       ],
       rubric: `All three e-folding times should agree to within about twenty per
-               cent, and the instrument should report the result as resolved.
-               Measured values for this configuration across three integrators
-               and three timesteps span 6.8 to 7.6 simulated seconds. Full
+               cent, and the section should report the result as resolved.
+               Measured through the guided controls: 8.333 s at the shipped
+               step with Symplectic Euler, 8.322 s at half that step, and
+               8.314 s with Velocity Verlet — a spread of 0.1 per cent. Full
                credit requires reporting the spread and drawing the conclusion:
                the divergence is a property of the three-body system, not of the
-               integrator. A student whose values disagree wildly has probably
-               changed something else at the same time; the bench's parameter
-               diff will name it.`,
+               integrator. Two things to watch for. A student whose values
+               disagree wildly has changed something else as well, and the
+               parameter diff will name it. A student who ran the same control
+               twice has two agreeing numbers and no control: the section says
+               so in as many words, because agreement between two identical
+               calculations is not evidence.`,
     },
     {
       sid: 'reading-the-verdict',
@@ -635,7 +666,14 @@ const BUTTERFLY_EFFECT = {
                 resolved it, and the right response is a smaller timestep until
                 they agree — or an honest statement that they do not. This is
                 not hypothetical: two of the configurations considered for this
-                lab behaved exactly that way and were rejected for it.`,
+                lab behaved exactly that way and were rejected for it.
+                \n\nOne thing this verdict is not. The bench has a separate
+                <em>reliability check</em> that reports whether a run's
+                aggregate quantities survive refinement, and it is a useful
+                thing that answers a different question. It cannot tell you that
+                a separation grew exponentially, and a lesson that quoted it in
+                place of an e-folding time would have reported that the
+                arithmetic is sound and called it evidence of chaos.`,
     },
     // --- Act 5: what chaos is not ------------------------------------------
     {

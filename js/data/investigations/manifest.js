@@ -226,11 +226,11 @@ export const MANIFEST = [
     duration: '15-20 min',
     level: 'Introductory astronomy',
     summary:
-      'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, and find out why the two measurements disagree — and who actually paid.',
+      'Voyager 2 arrived at Jupiter travelling ten kilometres a second and left travelling twenty-six. Jupiter did not burn any fuel for it. Fly the same manoeuvre yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
     thumbnail: 'images/scenarios/gravity-assist-lab.webp',
-    stepCount: 16,
-    gradedCount: 8,
-    objectiveCount: 5,
+    stepCount: 22,
+    gradedCount: 13,
+    objectiveCount: 6,
   },
   {
     id: 'hohmann-transfer',
@@ -250,13 +250,13 @@ export const MANIFEST = [
     title: 'Where Can It Get To?',
     subtitle:
       'Forbidden regions, five balance points, and one conserved number',
-    duration: '20-25 min',
+    duration: '25-30 min',
     level: 'Introductory astronomy',
     summary:
       'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
     thumbnail: 'images/scenarios/lagrange-point-lab.webp',
-    stepCount: 18,
-    gradedCount: 7,
+    stepCount: 19,
+    gradedCount: 8,
     objectiveCount: 6,
   },
 ];
