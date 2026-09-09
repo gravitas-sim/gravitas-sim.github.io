@@ -158,7 +158,11 @@ test.describe('the space bar', () => {
         },
       });
       window.dispatchEvent(
-        new KeyboardEvent('keydown', { key: ' ', code: 'Space', bubbles: true })
+        new window.KeyboardEvent('keydown', {
+          key: ' ',
+          code: 'Space',
+          bubbles: true,
+        })
       );
       await new Promise(r => window.setTimeout(r, 50));
       if (original) Object.defineProperty(ui.state, 'paused', original);
