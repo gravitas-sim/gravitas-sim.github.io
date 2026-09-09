@@ -124,6 +124,83 @@ test.describe('the scenario gallery', () => {
   });
 });
 
+test.describe('the space bar', () => {
+  test('pauses the simulation, and resumes it', async ({ page, app }) => {
+    await app.boot();
+    const paused = () =>
+      page.evaluate(async () => (await import('/js/ui.js')).state.paused);
+
+    expect(await paused()).toBe(false);
+    await page.keyboard.press('Space');
+    expect(await paused()).toBe(true);
+    await page.keyboard.press('Space');
+    expect(await paused()).toBe(false);
+  });
+
+  test('exactly one handler answers it', async ({ page, app }) => {
+    // The bug this is here for: js/ui.js and js/controls.js both bound space,
+    // so a single press toggled `paused` twice and the key did nothing at all.
+    // Counting the writes is what distinguishes a working space bar from two
+    // broken ones, which is why this checks the cause and the test above
+    // checks the effect.
+    await app.boot();
+    const writes = await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const seen = [];
+      let value = ui.state.paused;
+      const original = Object.getOwnPropertyDescriptor(ui.state, 'paused');
+      Object.defineProperty(ui.state, 'paused', {
+        configurable: true,
+        get: () => value,
+        set(next) {
+          seen.push(next);
+          value = next;
+        },
+      });
+      window.dispatchEvent(
+        new KeyboardEvent('keydown', { key: ' ', code: 'Space', bubbles: true })
+      );
+      await new Promise(r => window.setTimeout(r, 50));
+      if (original) Object.defineProperty(ui.state, 'paused', original);
+      return seen;
+    });
+    expect(writes).toEqual([true]);
+  });
+
+  test('the transport button follows the key', async ({ page, app }) => {
+    // The handler that was cancelling the other one did not refresh the
+    // transport bar, so even when it did win the button disagreed with the
+    // simulation. The surviving one does.
+    await app.boot();
+    const label = () =>
+      page.evaluate(() => {
+        const btn = document.getElementById('timelinePlay');
+        return btn?.getAttribute('aria-label') || btn?.title || '';
+      });
+    const before = await label();
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(150);
+    expect(await label()).not.toBe(before);
+  });
+
+  test('but not while a field has the focus', async ({ page, app }) => {
+    await app.boot();
+    // A space typed into a search box is a space, not a pause.
+    await page.evaluate(() => {
+      const input = document.createElement('input');
+      input.id = 'spaceProbe';
+      document.body.appendChild(input);
+      input.focus();
+    });
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(100);
+    expect(
+      await page.evaluate(async () => (await import('/js/ui.js')).state.paused)
+    ).toBe(false);
+    await page.evaluate(() => document.getElementById('spaceProbe')?.remove());
+  });
+});
+
 test.describe('the transport controls', () => {
   test(
     'pause stops the clock and resume starts it again',

@@ -6053,10 +6053,19 @@ window.addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
 
   const panSpeed = 40 / state.zoom;
-  if (e.key === ' ') {
-    state.paused = !state.paused;
-    e.preventDefault();
-  } else if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a')
+  // Space is deliberately not here.
+  //
+  // It was, and js/controls.js registers it as a shortcut as well, so one press
+  // ran both: this handler set paused true and the registered one set it
+  // straight back. Two correct toggles, one keypress, and a space bar that did
+  // nothing at all.
+  //
+  // The registered one is the one to keep. It resumes from a scrubbed timeline
+  // before pausing and calls refreshTransport(), so the button on the transport
+  // bar changes with the state - neither of which this branch did - and being
+  // in the registry is also what puts it in the shortcuts overlay. The registry
+  // calls preventDefault() before it runs, so the page still does not scroll.
+  if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a')
     state.pan.x += panSpeed;
   else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd')
     state.pan.x -= panSpeed;
