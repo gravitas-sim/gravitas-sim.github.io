@@ -134,6 +134,26 @@ const DEBRIS_RADIUS = 2;
 const MAX_STAR_MASS_BEFORE_BH = 20.0;
 
 /**
+ * The radius a newly placed body of each type is built with.
+ *
+ * Exported so the placement preview can draw a marker the size of the thing it
+ * is promising, at the level of detail the renderer would use for it. Reading
+ * the constants is the only way to be sure the two agree: constructing a
+ * throwaway body to measure would draw a name out of the seeded generator and
+ * make the world depend on how many times somebody hovered the canvas.
+ */
+export const NOMINAL_RADIUS = Object.freeze({
+  Star: STAR_OBJ_RADIUS,
+  Planet: PLANET_RADIUS,
+  GasGiant: GAS_GIANT_RADIUS,
+  Asteroid: ASTEROID_RADIUS,
+  Comet: ASTEROID_RADIUS * 0.8,
+  WhiteDwarf: WHITE_DWARF_RADIUS,
+  NeutronStar: NEUTRON_STAR_RADIUS,
+  BlackHole: BH_RADIUS_BASE,
+});
+
+/**
  * The mass at which a star collapses to a black hole, in solar masses.
  *
  * A setting rather than the bare constant, because `max_star_mass_before_bh`
@@ -1089,7 +1109,7 @@ const clearCachedGravity = () => {
 // collisions and merging, and inflating that to make planets visible would let
 // the Sun swallow Mercury for cosmetic reasons. Zoom in and the dot grows into
 // the body's true relative size; zoom out and it holds at a visible minimum.
-const DRAW_MIN_RADIUS_PX = 2.75;
+export const DRAW_MIN_RADIUS_PX = 2.75;
 
 // In a crowded scenario the floor works against itself: a thousand bodies each
 // held at 2.75px turns a galaxy into a single blob, where the point is the

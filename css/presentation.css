@@ -395,8 +395,8 @@
   }
 
   .lecture-btn:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
   }
 
   /* Disabled is carried by opacity *and* by the cursor and the aria state, not

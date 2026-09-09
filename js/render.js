@@ -36,6 +36,8 @@ import {
   minInteractionDistance,
   getSimulationTime,
   conservationDrift,
+  NOMINAL_RADIUS,
+  DRAW_MIN_RADIUS_PX,
 } from './physics.js';
 import { hexToRgb, debugLog } from './utils.js';
 import {
@@ -45,6 +47,7 @@ import {
   generateStarfield as buildStarfield,
   indexStarfield,
 } from './starfield.js';
+import { LOD_POINT_MAX_PX } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { updateCanvasSummary } from './canvasSummary.js';
@@ -1902,6 +1905,149 @@ function renderAimLine(preview) {
   }
 }
 
+/**
+ * Which token carries a type's colour.
+ *
+ * The same eight hues the object glyphs and the canvas labels use, so the
+ * marker under the pointer is recognisably the thing the picker showed and the
+ * thing that will appear when the button is released.
+ */
+const PREVIEW_HUE = Object.freeze({
+  Star: '--hue-star',
+  Planet: '--hue-planet',
+  GasGiant: '--hue-gasgiant',
+  Asteroid: '--hue-asteroid',
+  Comet: '--hue-comet',
+  WhiteDwarf: '--hue-dwarf',
+  NeutronStar: '--hue-neutron',
+  BlackHole: '--hue-blackhole',
+});
+
+/** Cached, because a token read is a getComputedStyle on every frame. */
+let previewHueCache = new Map();
+onThemeChange(() => {
+  previewHueCache = new Map();
+});
+
+/** The current theme's colour for an object type. */
+function previewHue(type) {
+  const token = PREVIEW_HUE[type] || '--accent';
+  if (!previewHueCache.has(token)) {
+    previewHueCache.set(token, readToken(token) || '#9ad8ff');
+  }
+  return previewHueCache.get(token);
+}
+
+/**
+ * Draw where the object will appear, as the object.
+ *
+ * The preview used to begin at an unmarked point on a dashed line, so the one
+ * thing a reader wanted to know before letting go - what am I about to create,
+ * and exactly where - was the one thing not shown. This marks the start with a
+ * disc the size the body will actually be drawn at, in the type's own colour,
+ * and follows the same level of detail the renderer would: below a few pixels
+ * it is a point, because that is what the body will be.
+ *
+ * @param {{x: number, y: number}} at - Start point in screen pixels
+ */
+function drawPreviewStart(at) {
+  const type = SETTINGS.input_object_type;
+  const hue = previewHue(type);
+  // The radius the body will be drawn at, which is not its physical radius:
+  // small bodies have a floor so they stay visible, and the preview has to
+  // agree with what appears or it is a promise the renderer breaks.
+  const world = NOMINAL_RADIUS[type] ?? NOMINAL_RADIUS.Planet;
+  const screenR = Math.max(DRAW_MIN_RADIUS_PX, world * state.zoom);
+
+  ctx.save();
+  // A dark casing first, so the marker is visible over a white dwarf or a
+  // daylight background as well as over empty sky.
+  ctx.beginPath();
+  ctx.arc(at.x, at.y, screenR + 2, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  if (screenR <= LOD_POINT_MAX_PX) {
+    // Point level: a dot, plus a ring so the reader can find it.
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, screenR, 0, 2 * Math.PI);
+    ctx.fillStyle = hue;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, screenR + 5, 0, 2 * Math.PI);
+    ctx.strokeStyle = hue;
+    ctx.globalAlpha = 0.55;
+    ctx.lineWidth = 1.25;
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, screenR, 0, 2 * Math.PI);
+    ctx.globalAlpha = 0.35;
+    ctx.fillStyle = hue;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = hue;
+    ctx.lineWidth = 1.75;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/**
+ * The drag, as an arrow.
+ *
+ * Drawn twice - a dark wide stroke and a light narrow one over it - so it holds
+ * up against a star, a daylight theme and empty sky without needing to know
+ * which it is on. A single translucent white line disappeared over anything
+ * bright, and the direction of the throw is the whole content of the gesture.
+ *
+ * @param {{x: number, y: number}} from - Start, screen pixels
+ * @param {{x: number, y: number}} to - Current pointer, screen pixels
+ */
+function drawVelocityArrow(from, to) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const len = Math.hypot(dx, dy);
+  if (len < 6) return;
+
+  const ux = dx / len;
+  const uy = dy / len;
+  const head = Math.min(14, Math.max(7, len * 0.22));
+  const tip = { x: to.x, y: to.y };
+  const back = { x: to.x - ux * head, y: to.y - uy * head };
+  const wing = head * 0.55;
+
+  const stroke = (colour, width) => {
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(from.x, from.y);
+    ctx.lineTo(back.x, back.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(tip.x, tip.y);
+    ctx.lineTo(back.x - uy * wing, back.y + ux * wing);
+    ctx.lineTo(back.x + uy * wing, back.y - ux * wing);
+    ctx.closePath();
+    ctx.stroke();
+  };
+
+  ctx.save();
+  stroke('rgba(0, 0, 0, 0.6)', 5);
+  stroke('rgba(255, 255, 255, 0.95)', 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.beginPath();
+  ctx.moveTo(tip.x, tip.y);
+  ctx.lineTo(back.x - uy * wing, back.y + ux * wing);
+  ctx.lineTo(back.x + uy * wing, back.y - ux * wing);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 // Render orbit preview using screen-space points and dashed line
 function renderOrbitPreview(preview) {
   if (!preview || !Array.isArray(preview.points) || preview.points.length < 2)
@@ -1965,6 +2111,14 @@ function renderOrbitPreview(preview) {
       ctx.restore();
     }
   }
+
+  // Last, over the path: what is being placed, and which way it is being
+  // thrown. Both are what the reader is deciding about.
+  const start = world_to_screen(preview.points[0]);
+  if (state.holdCurrent) {
+    drawVelocityArrow(start, world_to_screen(state.holdCurrent));
+  }
+  drawPreviewStart(start);
 }
 
 // Performance monitoring

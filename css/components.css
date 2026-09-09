@@ -228,7 +228,7 @@
     textarea,
     [tabindex]
   ):focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
@@ -444,7 +444,7 @@
   }
 
   input[type='range']:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
   }
 
@@ -523,10 +523,12 @@
       transform var(--duration-slow) var(--ease-out);
 
     /* The rail can outgrow short viewports once every group is present, so it
-       scrolls internally rather than running off the bottom of the screen. */
+       scrolls internally rather than running off the bottom of the screen -
+       and it stops short of the transport bar, which is drawn on top of it and
+       was hiding whichever control landed in the last 48 pixels. */
     top: var(--space-4);
     right: var(--space-4);
-    max-height: calc(100vh - var(--space-8));
+    max-height: calc(100vh - var(--space-8) - var(--transport-space));
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -715,7 +717,7 @@
     border-color: var(--accent);
   }
   .obs-panel-btn:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
   }
 
@@ -909,7 +911,7 @@
     font-variant-numeric: tabular-nums;
   }
   .astrometry-distance-input:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
   }
   .astrometry-distance-note {
@@ -957,7 +959,7 @@
     min-height: 24px;
   }
   .obs-control-slider:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
   }
   .obs-control-help {
@@ -1316,7 +1318,7 @@
       right: var(--space-3);
       left: var(--space-3);
       width: auto;
-      max-height: calc(100vh - var(--space-10) - 64px);
+      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space));
 
       opacity: 0;
       visibility: hidden;
@@ -1969,6 +1971,8 @@
     transition: transform var(--duration) var(--ease);
   }
 
+  /* White rather than var(--focus-ring): the skip link's own background is
+     the accent colour, and an accent ring on it would be invisible. */
   .skip-link:focus-visible {
     transform: translateY(0);
     outline: 2px solid var(--text-primary);
@@ -2986,7 +2990,7 @@
     text-overflow: ellipsis;
   }
   #shareUrl:focus {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 1px;
   }
   .share-link-row .ui-button {
@@ -3042,7 +3046,7 @@
     color: var(--text-primary);
   }
   #shareSeed:focus {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 1px;
   }
   .share-seed-row .ui-button {
@@ -3222,7 +3226,7 @@
     font-size: var(--text-sm);
   }
   .inv-search-input:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 1px;
     border-color: var(--accent-line);
   }
@@ -3264,7 +3268,7 @@
     font-size: var(--text-sm);
   }
   .inv-filter select:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 1px;
   }
   .inv-filter-clear {
@@ -3401,7 +3405,7 @@
     text-decoration-color: currentcolor;
   }
   .inv-seq-open:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -4032,7 +4036,7 @@
   .inv-answer-num:focus,
   .inv-field input:focus,
   #investigationName:focus {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: 1px;
   }
 
@@ -6224,7 +6228,7 @@
     box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3));
   }
   .inspector-tab:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: var(--focus-ring);
     outline-offset: -2px;
   }
 
@@ -6583,7 +6587,7 @@
 }
 
 .inspector-pin:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--focus-ring);
   outline-offset: 2px;
 }
 

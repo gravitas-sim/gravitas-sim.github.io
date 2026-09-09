@@ -2394,6 +2394,35 @@
       </div>
     </div>
 
+    <!--
+      Placement status. Shown only while placement is armed, and never over the
+      transport bar, the lesson sheet or an observing panel: the whole point is
+      that it tells you what the next click will do without taking anything
+      away from you. js/ui.js fills in the type and toggles [hidden].
+
+      It exists because arming was previously invisible from the canvas. On a
+      phone the rail dismisses itself once a type is chosen, which left the
+      reader looking at an unchanged screen that would nonetheless create a
+      black hole on the next tap.
+    -->
+    <div
+      id="placementStatus"
+      class="placement-status"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="placement-status-glyph" aria-hidden="true"></span>
+      <span class="placement-status-text">
+        <span class="placement-status-type"></span>
+        <span class="placement-status-hint">
+          <span data-i18n="placement.place">Click or drag to place</span>
+          <span class="placement-status-sep" aria-hidden="true">·</span>
+          <span data-i18n="placement.cancel">Esc to cancel</span>
+        </span>
+      </span>
+    </div>
+
     <!-- Transport bar: playback and timeline scrubbing -->
     <div
       id="timelineBar"

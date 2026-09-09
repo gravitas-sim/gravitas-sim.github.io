@@ -104,6 +104,7 @@ import {
 } from './astrometry.js';
 import { lastEvent } from './pauseAtEvent.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
+import { glyphMarkup } from './objectGlyphs.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { SCENARIO_TAGS } from './data/scenarioTags.js';
 import { applyPreset } from './scenarios.js';
@@ -2005,7 +2006,7 @@ const handleRefreshChart = () => {
 const handleExportChart = () => {
   const dataUrl = exportChart();
   if (!dataUrl) {
-    alert('Chart is not ready yet.');
+    toast(t('chart.notReady'));
     return;
   }
 
@@ -2020,7 +2021,7 @@ const handleExportChart = () => {
     debugLog('Energy chart exported successfully');
   } catch (error) {
     console.error('Failed to export energy chart:', error);
-    alert('Failed to export chart. Please try again.');
+    toast(t('chart.exportFailed'));
   }
 };
 
@@ -3766,6 +3767,18 @@ const setInspectorSuppressed = value => {
 // from here on a link has to carry the bodies themselves.
 window.addEventListener('gravitasObjectPlaced', markWorldTouched);
 
+// What just happened, said once, without taking the canvas away.
+//
+// A toast rather than an alert: an alert would stop the world, need dismissing
+// and be read out as a dialog, all to confirm something the reader did on
+// purpose. This is a brief line plus a polite live-region announcement, which
+// is what makes the creation perceivable to somebody who cannot see the canvas
+// it happened on.
+window.addEventListener('gravitasObjectPlaced', event => {
+  const type = typeKeyOf(event.detail?.object);
+  if (type) toast(t('placement.added', { type: typeName(type) }));
+});
+
 // Which law governs a galaxy's outskirts is chosen in the rotation-curve panel,
 // which writes it into the physics module. SETTINGS is a separate object, and
 // it is the one the share codec and the A/B bench read - so without this the
@@ -5171,10 +5184,10 @@ const save_simulation_state = () => {
       objects: allBodies().map(o => o.get_state()),
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(savedState));
-    alert('Simulation state saved!');
+    toast(t('state.saved'));
   } catch (e) {
     console.error('Error saving state:', e);
-    alert('Failed to save simulation state.');
+    toast(t('state.saveFailed'));
   }
 };
 
@@ -5188,7 +5201,7 @@ const load_simulation_state = () => {
 
   const savedJSON = localStorage.getItem(SAVE_KEY);
   if (!savedJSON) {
-    alert('No saved state found.');
+    toast(t('state.none'));
     return;
   }
   try {
@@ -5203,12 +5216,12 @@ const load_simulation_state = () => {
     // it, so sharing it has to carry the bodies themselves.
     markWorldTouched();
     window.dispatchEvent(new CustomEvent('gravitasSimulationReset'));
-    alert('Simulation state loaded!');
+    toast(t('state.loaded'));
     state.paused = false;
     updateSpeedDisplay();
   } catch (e) {
     console.error('Error loading state:', e);
-    alert('Failed to load state.');
+    toast(t('state.loadFailed'));
   }
 };
 
@@ -5560,7 +5573,7 @@ const takeScreenshot = () => {
       link.click();
     } catch (error) {
       console.error('Screenshot failed:', error);
-      alert('Screenshot failed. Please try again.');
+      toast(t('capture.screenshotFailed'));
     } finally {
       // A recording holds capture mode on for its whole length. A still taken
       // during one must not switch the burnt-in caption and clock off in the
@@ -5574,19 +5587,57 @@ const takeScreenshot = () => {
   requestAnimationFrame(() => requestAnimationFrame(capture));
 };
 
-// Object type cycling functionality
+// The eight things a reader can add. The picture for each is in
+// js/objectGlyphs.js; these once carried an emoji apiece, which the operating
+// system drew - eight different pictures on three platforms, eight different
+// widths, and a gemstone standing in for a white dwarf.
 const objectTypes = [
-  { type: 'Star', emoji: '⭐', label: 'objectType.stars' },
-  { type: 'Planet', emoji: '🌍', label: 'objectType.rockyPlanets' },
-  { type: 'GasGiant', emoji: '🪐', label: 'objectType.gasGiants' },
-  // Asteroids and comets both used the comet emoji, which in a list of eight
-  // is two rows that look the same.
-  { type: 'Asteroid', emoji: '🪨', label: 'objectType.asteroids' },
-  { type: 'Comet', emoji: '☄️', label: 'objectType.comets' },
-  { type: 'WhiteDwarf', emoji: '💎', label: 'objectType.whiteDwarfs' },
-  { type: 'NeutronStar', emoji: '⚡', label: 'objectType.neutronStars' },
-  { type: 'BlackHole', emoji: '⚫', label: 'objectType.blackHoles' },
+  { type: 'Star', label: 'objectType.stars' },
+  { type: 'Planet', label: 'objectType.rockyPlanets' },
+  { type: 'GasGiant', label: 'objectType.gasGiants' },
+  { type: 'Asteroid', label: 'objectType.asteroids' },
+  { type: 'Comet', label: 'objectType.comets' },
+  { type: 'WhiteDwarf', label: 'objectType.whiteDwarfs' },
+  { type: 'NeutronStar', label: 'objectType.neutronStars' },
+  { type: 'BlackHole', label: 'objectType.blackHoles' },
 ];
+
+/** Singular names, for a status line or an announcement. */
+const OBJECT_NAME_KEY = Object.freeze({
+  Star: 'objectName.star',
+  Planet: 'objectName.planet',
+  GasGiant: 'objectName.gasGiant',
+  Asteroid: 'objectName.asteroid',
+  Comet: 'objectName.comet',
+  WhiteDwarf: 'objectName.whiteDwarf',
+  NeutronStar: 'objectName.neutronStar',
+  BlackHole: 'objectName.blackHole',
+});
+
+/** The name of a type on its own: 'Comet', not 'Add Comets'. */
+const typeName = type => t(OBJECT_NAME_KEY[type] || 'objectName.star');
+
+/**
+ * Which of the eight an object is.
+ *
+ * By instanceof rather than by obj_type or constructor.name: only four of the
+ * eight classes pass an obj_type to the base constructor, and constructor.name
+ * is whatever the minifier decided in the production build.
+ *
+ * @param {object} obj - A physics body
+ * @returns {?string} A type key, or null for something not on the list
+ */
+const typeKeyOf = obj => {
+  if (obj instanceof Comet) return 'Comet';
+  if (obj instanceof Planet) return 'Planet';
+  if (obj instanceof GasGiant) return 'GasGiant';
+  if (obj instanceof StarObject) return 'Star';
+  if (obj instanceof Asteroid) return 'Asteroid';
+  if (obj instanceof NeutronStar) return 'NeutronStar';
+  if (obj instanceof WhiteDwarf) return 'WhiteDwarf';
+  if (obj instanceof BlackHole) return 'BlackHole';
+  return null;
+};
 
 let currentTypeIndex = 0;
 
@@ -5630,14 +5681,24 @@ const updateObjectTypeButton = () => {
   // let you choose among them read as though that type were already committed.
   // The emoji still tracks the selection, so the current choice is visible
   // without the caption claiming to be it.
-  btn.innerHTML = `${currentType.emoji} ${
-    armed ? t('rail.objectType.placing') : t('rail.objectType.choose')
-  }`;
+  btn.innerHTML = `${glyphMarkup(currentType.type)}<span></span>`;
+  btn.querySelector('span').textContent = armed
+    ? t('rail.objectType.placing')
+    : t('rail.objectType.choose');
   btn.classList.toggle('is-armed', armed);
   btn.setAttribute('aria-pressed', String(armed));
+  // Both captions were English regardless of locale, and the glyph is
+  // aria-hidden, so armed the control has to name its type in the accessible
+  // name rather than only in the picture.
   btn.title = armed
-    ? `${t(currentType.label)}: click the canvas to place one, or press Escape to stop.`
-    : 'Choose what to add, then click the canvas to place it';
+    ? t('rail.objectType.armedHint', { type: t(currentType.label) })
+    : t('rail.objectType.hint');
+  btn.setAttribute(
+    'aria-label',
+    armed
+      ? t('rail.objectType.armedHint', { type: t(currentType.label) })
+      : t('rail.objectType.label')
+  );
   SETTINGS.input_object_type = currentType.type;
 };
 
@@ -6708,10 +6769,79 @@ const setAddArmed = on => {
     state.isHolding = false;
   }
   updateObjectTypeButton();
+  syncPlacementStatus();
 };
 
 /** Whether a press on empty canvas should create something. */
 const placementArmed = () => addArmed && SETTINGS.interactive_add !== false;
+
+/**
+ * Keep the on-canvas placement status matching whether placement is armed.
+ *
+ * The rail's button already changes when a type is chosen, but on a narrow
+ * screen the rail dismisses itself the moment the choice is made, and on a wide
+ * one the button is in the far corner from where the reader is about to click.
+ * Either way the canvas itself said nothing about being armed, and the next
+ * tap made a black hole.
+ */
+// The bar it is measured against moves with the window.
+window.addEventListener('resize', () => positionPlacementStatus());
+window.addEventListener('orientationchange', () => positionPlacementStatus());
+
+// The status carries a translated type name, so it is rebuilt when the reader
+// changes language mid-placement rather than being left in the old one.
+onLocaleChange(() => syncPlacementStatus());
+
+function syncPlacementStatus() {
+  const el = document.getElementById('placementStatus');
+  if (!el) return;
+  const armed = placementArmed();
+  el.hidden = !armed;
+  if (!armed) return;
+  const type = objectTypes[currentTypeIndex].type;
+  const glyph = el.querySelector('.placement-status-glyph');
+  if (glyph) glyph.innerHTML = glyphMarkup(type);
+  const name = el.querySelector('.placement-status-type');
+  if (name) name.textContent = typeName(type);
+  positionPlacementStatus();
+}
+
+/** How far the status sits from whatever is below it. */
+const STATUS_GAP = 8;
+
+/**
+ * Put the status above the transport bar, by measuring the bar.
+ *
+ * A CSS offset cannot do this. The bar's own distance from the bottom is not
+ * one number - it changes at the tablet breakpoint and again in an embed - and
+ * a status positioned from a guessed constant overlapped the bar by twenty
+ * pixels at 768x1024, which is precisely the kind of thing this pass exists to
+ * stop doing. So it is measured, the way the object picker is.
+ *
+ * If there is no room above the bar - a very short window, a lecture display
+ * scaled down - the status goes to the top edge instead of on top of the
+ * controls.
+ */
+function positionPlacementStatus() {
+  const el = document.getElementById('placementStatus');
+  if (!el || el.hidden) return;
+
+  const vh = window.innerHeight || 0;
+  const bar = document.getElementById('timelineBar');
+  const barRect = bar?.getBoundingClientRect();
+  const floor = barRect && barRect.height > 0 ? barRect.top : vh;
+
+  el.style.top = '';
+  el.style.bottom = `${Math.max(STATUS_GAP, vh - floor + STATUS_GAP)}px`;
+
+  // Would it be off the top? Then there is no room above the bar, and the top
+  // edge is the one place left that is neither a control nor the cursor.
+  const rect = el.getBoundingClientRect();
+  if (rect.top < STATUS_GAP) {
+    el.style.bottom = 'auto';
+    el.style.top = `${STATUS_GAP}px`;
+  }
+}
 
 /**
  * Match the add control to whether placement is allowed at all.
@@ -6752,9 +6882,9 @@ const buildObjectPicker = () => {
       String(index === currentTypeIndex && addArmed)
     );
     item.dataset.objectType = entry.type;
-    item.innerHTML =
-      `<span class="object-picker-emoji" aria-hidden="true">${entry.emoji}</span>` +
-      `<span class="object-picker-name"></span>`;
+    // The glyph is our own constant markup; the name is a translated string and
+    // goes in as text.
+    item.innerHTML = `${glyphMarkup(entry.type)}<span class="object-picker-name"></span>`;
     item.querySelector('.object-picker-name').textContent = t(entry.label);
     item.onclick = () => {
       currentTypeIndex = index;
@@ -6763,6 +6893,12 @@ const buildObjectPicker = () => {
       // Narrow screens only, and only now that a choice has been made: the
       // canvas is what the reader needs next, and the rail is covering it.
       dismissRailAfterChoice();
+      // Choosing with the keyboard used to drop focus onto <body>, because the
+      // item that had it was inside the popover that just closed. Escape
+      // already gave focus back; a choice has to as well - and only when the
+      // trigger is still on screen, which on a narrow window it is not.
+      const trigger = document.getElementById('objectTypeBtn');
+      if (trigger && trigger.offsetParent !== null) trigger.focus();
     };
     list.appendChild(item);
   });

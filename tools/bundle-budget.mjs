@@ -84,7 +84,19 @@ const BUDGETS = [
       'own stylesheet and linked only from that page instead of being ' +
       'concatenated into css/app.css, which is the half of this budget that ' +
       'the page would otherwise have grown. A document page can be as large ' +
-      'as it needs to be; what it may not do is charge the simulation for it.',
+      'as it needs to be; what it may not do is charge the simulation for it. ' +
+      'The UI-coherence pass is the first thing to have done exactly that. ' +
+      'It needed 6.2 KB it did not have: the eight object-type glyphs, the ' +
+      'on-canvas placement status, the placement marker and velocity arrow ' +
+      'and the strings for all of it came to 6.7 KB of eager JavaScript and ' +
+      '1.9 KB of CSS, which took the initial download to 836.2 KB - over. ' +
+      'Nothing was raised. What paid for it was js/welcome.js: eleven ' +
+      'kilobytes of front door - entry cards, featured scenarios, audience ' +
+      'copy, resource links - downloaded by every visitor in order to run ' +
+      'isWelcomeSeen(), which reads one key out of localStorage. Those four ' +
+      'small functions are js/welcomeGate.js now, js/main.js imports the ' +
+      'layer itself only when it is about to be shown, and a returning ' +
+      'visitor never fetches it. 824.7 KB against an untouched 830.0 limit.',
   },
   {
     id: 'deferred',

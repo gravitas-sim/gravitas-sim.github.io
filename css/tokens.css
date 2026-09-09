@@ -121,12 +121,30 @@
     --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
     --shadow-glow: 0 0 0 1px var(--accent-line), 0 8px 32px rgba(0, 0, 0, 0.5);
 
+    /* --- Focus ----------------------------------------------------------
+       One ring, declared once. It was written out at each of the twenty-odd
+       places that needed it, which is how three of them drifted: a 3px ring on
+       the lecture buttons, a hardcoded #00aaff on the settings info icons, and
+       two rules that used :focus rather than :focus-visible and so drew a ring
+       around anything clicked with a mouse. */
+    --focus-ring-width: 2px;
+    --focus-ring-color: var(--accent);
+    --focus-ring: var(--focus-ring-width) solid var(--focus-ring-color);
+    --focus-ring-offset: 2px;
+
     /* --- Motion --------------------------------------------------------- */
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --duration-fast: 120ms;
     --duration: 200ms;
     --duration-slow: 320ms;
+
+    /* The room the transport bar occupies at the bottom of the window: its own
+       offset, its height and a gap. Anything that grows downward has to stop
+       here or it ends up underneath the playback controls - which is what the
+       control rail did on a short window, putting Add object below a bar drawn
+       on top of it. */
+    --transport-space: 72px;
 
     /* --- Z-index scale --------------------------------------------------
        Replaces the previous ad-hoc range (1 .. 10000). Anything that needs
@@ -294,6 +312,76 @@
       --duration-fast: 1ms;
       --duration: 1ms;
       --duration-slow: 1ms;
+    }
+  }
+}
+
+/* =============================================================================
+   Reduced transparency
+   -----------------------------------------------------------------------------
+   Twenty-seven surfaces in this interface are frosted glass: a background
+   blended toward transparent over a backdrop-filter blur. It reads well, and
+   for some readers it does not read at all - a blurred simulation moving behind
+   a panel is exactly the visual noise `prefers-reduced-transparency` exists to
+   turn off, and it is set by the same accessibility settings that turn off
+   motion.
+
+   The blur goes entirely, and every glass surface becomes the opaque token it
+   was already blended from. Nothing moves and nothing resizes: the panels are
+   in the same places, they are simply solid. The selector list is the set of
+   rules that declare a backdrop-filter, which is what makes it complete rather
+   than a sample - a surface added later should be added here too.
+
+   In `overrides`, the last layer, so it wins over the component rules it is
+   correcting without any rule here needing !important except the blur itself,
+   which several rules set on the same element at different specificities.
+   ========================================================================== */
+@layer overrides {
+  @media (prefers-reduced-transparency: reduce) {
+    * {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .ui-container,
+    .timeline-bar,
+    .object-picker,
+    .placement-status,
+    .obs-panel,
+    .light-curve-container,
+    .sonification-panel,
+    .scenario-info-content,
+    .shortcut-overlay,
+    .transformation-notification,
+    .recording-badge,
+    .mobile-menu-toggle,
+    .floating-close-chip,
+    .footer-button,
+    .insp-pin,
+    .inv-card-clock,
+    .attribution,
+    .doc-top,
+    #overlay,
+    #overlay .overlay-panel,
+    #overlayStats,
+    #objectInspector,
+    #settingsPanel,
+    #scenarioListModal,
+    #closeScenarioList,
+    #investigationBrowser,
+    #investigationFinish,
+    #shareModal,
+    #dataExport,
+    #mobileInstructions {
+      background: var(--surface-1);
+    }
+
+    /* The three that sit directly on the canvas rather than inside a panel
+       read better against the page ground than against a panel one. */
+    #overlay,
+    #overlayStats,
+    .attribution {
+      background: var(--surface-0);
     }
   }
 }

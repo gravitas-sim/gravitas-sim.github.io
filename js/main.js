@@ -26,7 +26,23 @@ import {
 import { initExportBridge } from './exportBridge.js';
 import { watchForManeuver } from './maneuverBridge.js';
 import { watchForInvestigations } from './investigationsLoader.js';
-import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
+import { shouldShowWelcome } from './welcomeGate.js';
+
+/**
+ * Load the front door, once, and wire its own listeners the first time.
+ *
+ * Both entry points - the automatic first visit and the footer's reopen
+ * button - go through here, so the module is fetched at most once and
+ * initWelcome() runs at most once however they are used or in what order.
+ */
+let welcomeModule = null;
+async function loadWelcome() {
+  if (!welcomeModule) {
+    welcomeModule = await import('./welcome.js');
+    welcomeModule.initWelcome();
+  }
+  return welcomeModule;
+}
 import { initScenarioBrowser } from './scenarioBrowser.js';
 import { initI18n, getLocale, onLocaleChange } from './i18n/index.js';
 import { initI18nDom } from './i18n/dom.js';
@@ -105,7 +121,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // only once they enter: splash straight to welcome, with no flash of a
     // control rail in between, and nothing underneath competing for attention.
     if (frontDoorPending) {
-      openWelcome({ automatic: true, onEnter: revealInterface });
+      // Fetched now rather than at start-up: eleven kilobytes of entry cards,
+      // featured scenarios and audience copy that a returning visitor never
+      // sees. Whether it is needed was decided by js/welcomeGate.js, which is
+      // four functions and a storage key.
+      //
+      // If it cannot be fetched the reader gets the sandbox rather than a
+      // blank screen behind a removed splash. A front door that fails to load
+      // is a missing introduction; an interface that never appears is a broken
+      // application.
+      loadWelcome()
+        .then(mod =>
+          mod.openWelcome({ automatic: true, onEnter: revealInterface })
+        )
+        .catch(err => {
+          console.warn('Front door unavailable:', err);
+          revealInterface();
+        });
     } else {
       revealInterface();
     }
@@ -253,7 +285,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const { SETTINGS } = await import('./ui.js');
         SETTINGS.planet_base_color = randomColor();
         SETTINGS.star_base_color = randomColor();
-        alert('🎨 Colors randomized! Check the settings panel.');
+        const { toast } = await import('./notify.js');
+        const { t } = await import('./i18n/index.js');
+        toast(t('easter.colorsRandomised'));
       }
       settingsClickCount = 0;
     }, 500);
@@ -371,7 +405,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.
     watchForInvestigations();
-    initWelcome();
+    // The reopen button waits for its own module rather than pulling it into
+    // start-up: it is in the footer, and most visits never touch it.
+    document
+      .getElementById('aboutGravitasBtn')
+      ?.addEventListener('click', event => {
+        event.preventDefault();
+        loadWelcome()
+          .then(mod => mod.openWelcome({ automatic: false }))
+          .catch(err => console.warn('Front door unavailable:', err));
+      });
     // The gallery does not load scenarios itself: it hands the chosen key to
     // the one authoritative loader, the same one the front door's featured
     // cards use.

@@ -879,7 +879,7 @@
     font-family: 'Roboto Mono', monospace;
     font-size: 14px;
     color: var(--primary-color);
-    text-shadow: 0 0 10px var(--primary-color);
+
     min-width: 50px;
     text-align: center;
     font-weight: bold;
@@ -963,20 +963,22 @@
     filter: blur(10px);
   }
 
+  /* A panel heading, on the type scale, in tokens.
+     -----------------------------------------------------------------------
+     It was 28px centred accent-coloured text under a 20-pixel glow of
+     hardcoded #00aaff, on a gradient and a border of two more shades of the
+     same hardcoded blue - four separate blues, none of them the theme's, on
+     the largest piece of text in the interface. In Spanish it wrapped to two
+     lines and took a fifth of a phone screen to say "Settings". */
   .settings-header {
-    padding: 25px 30px;
-    text-align: center;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--primary-color);
-    background: linear-gradient(
-      135deg,
-      rgba(0, 170, 255, 0.1),
-      rgba(0, 170, 255, 0.05)
-    );
-    border-bottom: 1px solid rgba(0, 170, 255, 0.2);
-    border-radius: 20px 20px 0 0;
-    text-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+    padding: var(--space-4) var(--space-5);
+    text-align: left;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .settings-content {
@@ -1171,9 +1173,8 @@
   .setting-separator h3 {
     margin: 0;
     color: var(--secondary-color);
-    font-size: 18px;
+    font-size: var(--text-md);
     white-space: nowrap;
-    text-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
   }
   .setting-separator .line {
     width: 100%;
@@ -1292,7 +1293,7 @@
     background-color: var(--panel-bg);
     border: 1px solid var(--primary-color);
     border-radius: 10px;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+    box-shadow: var(--shadow-lg);
     z-index: 1001;
     display: flex;
     flex-direction: column;
@@ -1824,14 +1825,14 @@
   .sonification-toggle:hover {
     border-color: rgba(79, 172, 254, 0.8);
     background: rgba(79, 172, 254, 0.25);
-    box-shadow: 0 0 10px rgba(79, 172, 254, 0.35);
+    box-shadow: 0 0 0 1px var(--accent-line);
   }
 
   .sonification-toggle[data-state='active'] {
     background: rgba(79, 172, 254, 0.25);
     border-color: rgba(79, 172, 254, 0.9);
     color: #fff;
-    box-shadow: 0 0 12px rgba(79, 172, 254, 0.45);
+    box-shadow: 0 0 0 1px var(--accent);
   }
 
   .sonification-toggle[data-state='disabled'] {
@@ -1892,9 +1893,11 @@
     text-shadow: none !important;
   }
 
-  .scenario-info-close:focus {
-    outline: 2px solid var(--primary-color) !important;
-    outline-offset: 2px !important;
+  /* :focus-visible, not :focus - this drew a ring around the close button
+     every time it was clicked with a mouse. */
+  .scenario-info-close:focus-visible {
+    outline: var(--focus-ring) !important;
+    outline-offset: var(--focus-ring-offset) !important;
   }
 
   .scenario-info-body {
@@ -2117,9 +2120,9 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 
-  .setting-info-icon:focus {
-    outline: 2px solid #00aaff;
-    outline-offset: 2px;
+  .setting-info-icon:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
   }
 
   .setting-label-container {
