@@ -109,6 +109,12 @@ export function summaryText() {
   // wants numbers should be told they exist and where.
   parts.push(t('summary.readoutPointer'));
 
+  // And the one thing the drawing is not telling the truth about. The canvas
+  // carries a one-line disclosure beside the scale bar; a reader who cannot
+  // see the canvas gets the whole explanation, because for them this is the
+  // only place it appears.
+  parts.push(t('canvas.sizeDisclosure.detail'));
+
   return parts.join(' ');
 }
 

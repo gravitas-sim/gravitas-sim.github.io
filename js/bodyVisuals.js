@@ -30,6 +30,227 @@
 // quantised inputs so the cache cannot grow without bound.
 // =============================================================================
 
+// --- Four radii, and which is which ------------------------------------------
+//
+// A body in Gravitas has four sizes, and confusing any two of them causes a
+// different bug. They are separated here so that every caller has to say which
+// one it wants.
+//
+//   1. The MODEL radius, `obj.radius`. What the simulation runs on: collisions,
+//      merging, Roche limits, the geometric part of a transit, the hit test's
+//      floor. Nothing in this file may change it, and nothing here returns it.
+//
+//   2. The ANALYTIC radius. What a body physically is, in kilometres or solar
+//      radii, derived from mass by js/lightCurve.js and js/habitability.js and
+//      reported by the inspector. It has nothing to do with either of the two
+//      below. A transit depth is (Rp/Rs)^2 from *these* numbers, which is why
+//      changing the drawing cannot change a light curve.
+//
+//   3. The DISPLAY radius, below. What is drawn, and only what is drawn.
+//
+//   4. The HIT radius, also below. How close a click has to be. Deliberately
+//      independent of the display radius: an Earth eight times smaller than
+//      its star still has to be selectable, and inflating the drawing to make
+//      it clickable is how the sizes got misleading in the first place.
+//
+// Why the display radius is not the model radius
+// -----------------------------------------------------------------------------
+// The model radii are Star 10, GasGiant 8, Planet 5. Drawn literally that makes
+// a Sun-like star twice the radius of an Earth-like planet and barely wider
+// than a Jupiter, which is not a compression of reality - it is a different
+// claim about it. The real ratios are about 109:1 and 9.7:1.
+//
+// They cannot be drawn literally either. At the Solar System's own framing an
+// Earth beside a visible Sun is a fraction of a pixel, which is why the model
+// radii were flattened in the first place. So the policy here is an explicit,
+// documented compression: one factor per family, applied everywhere, chosen so
+// that the hierarchy a reader sees is the right shape even though the numbers
+// are not the right numbers.
+//
+// Why factors and not one exponent
+// -----------------------------------------------------------------------------
+// A single power law on the true physical radius cannot hit both targets. To
+// bring 109:1 down to 8:1 needs an exponent of 0.44, and 9.7^0.44 is 2.7 - a
+// Jupiter under three times smaller than the Sun, outside the range this is
+// aiming for. The two ratios have to be set independently, which is what a
+// per-family factor does. The cost is that the mapping is a policy rather than
+// a formula, so it is written out in full and tested against its own targets.
+
+/**
+ * Displayed radius as a fraction of the model radius, by family.
+ *
+ * Applied to `obj.radius`, so a heavier planet is still drawn larger than a
+ * lighter one: the compression changes the ratios *between* families and
+ * leaves the ordering *within* one alone.
+ *
+ * Calibrated on the Solar System, whose own model radii are Sol 15, Earth 5,
+ * Jupiter 8 - a Sun three times an Earth and under twice a Jupiter, against
+ * real ratios of 109 and 9.7. The targets are 8 and 4, which is what these
+ * factors give exactly:
+ *
+ *     Sol      15 x 1.000 = 15.00
+ *     Jupiter   8 x 0.469 =  3.75      Sol : Jupiter = 4.0   (real 9.7)
+ *     Earth     5 x 0.375 =  1.88      Sol : Earth   = 8.0   (real 109)
+ *                                      Jupiter : Earth = 2.0 (real 11.2)
+ *
+ * Stars are left at 1.000 deliberately. The hierarchy could have been widened
+ * by growing the star instead of shrinking the planets, and it would have been
+ * the wrong choice: a Sol drawn half again as wide reaches a third of the way
+ * to Mercury in the scenario that names them both. Nothing that was on the
+ * screen yesterday is larger today.
+ */
+export const DISPLAY_FACTOR = Object.freeze({
+  Star: 1.0,
+  GasGiant: 0.469,
+  Planet: 0.375,
+  // Smaller than a star, as required, and as reality insists rather more
+  // strongly: a white dwarf is about one hundredth of a solar radius.
+  WhiteDwarf: 0.28,
+  // Below the visibility floor at any ordinary zoom, and meant to be. A
+  // neutron star is twenty kilometres across.
+  NeutronStar: 0.3,
+  // The small solid bodies share the rocky-planet factor rather than carrying
+  // invented ones of their own. All three are far below the floor at any zoom
+  // a whole system is viewed at, so the factor decides only their ordering
+  // against the planets, and the planet factor is the honest answer to that.
+  Asteroid: 0.375,
+  Comet: 0.375,
+  Debris: 0.375,
+  // A galaxy is already drawn as a diffuse patch at its own scale, and a black
+  // hole's horizon has its own documented illustrative policy in js/physics.js
+  // - it is drawn far larger than any real horizon so that the thing the
+  // scenario is about is visible at all. Neither belongs to the star/planet
+  // hierarchy this is correcting, so neither is touched.
+  Galaxy: 1,
+  BlackHole: 1,
+});
+
+/** The factor for a family, defaulting to no change for anything unlisted. */
+export const displayFactorFor = type => DISPLAY_FACTOR[type] ?? 1;
+
+/**
+ * The display radius, in world units, before any floor.
+ *
+ * Pure: it reads its arguments and returns a number. It is never handed a body
+ * and can therefore never modify one.
+ *
+ * @param {number} modelRadius - obj.radius, in simulation units
+ * @param {string} type - A family name from DISPLAY_FACTOR
+ * @returns {number} World units
+ */
+export function displayRadius(modelRadius, type) {
+  const r = Number(modelRadius);
+  if (!Number.isFinite(r) || r <= 0) return 0;
+  return r * displayFactorFor(type);
+}
+
+/**
+ * The smallest a body is ever drawn, in screen pixels of radius.
+ *
+ * Below this a body is a fraction of a pixel and simply vanishes, which at the
+ * Solar System's own framing is every planet. The floor is a drawing decision:
+ * it never reaches the model radius, the hit test or a saved state.
+ */
+export const DISPLAY_MIN_PX = 2.75;
+
+/**
+ * The floor in a crowded field.
+ *
+ * A thousand bodies each held at two and a half pixels is not a galaxy, it is
+ * a disc of paste. Dense scenes get a smaller floor so the structure survives.
+ */
+export const DISPLAY_MIN_PX_CROWDED = 1.35;
+
+/** Where the crowded floor starts and finishes taking over. */
+export const CROWD_SOFT_START = 200;
+export const CROWD_SOFT_END = 340;
+
+/**
+ * The floor for a scene with this many bodies in it.
+ *
+ * Ramped rather than switched. The floor used to change the moment a body
+ * count crossed a threshold, so a collision that took a scene from 251 bodies
+ * to 249 doubled the size of everything on screen between one frame and the
+ * next. Interpolating across a band means the same event moves every body by a
+ * fraction of a pixel.
+ *
+ * @param {number} bodyCount - Live bodies on screen
+ * @returns {number} Floor in screen pixels of radius
+ */
+export function markerFloorPx(bodyCount) {
+  const n = Number(bodyCount);
+  if (!Number.isFinite(n) || n <= CROWD_SOFT_START) return DISPLAY_MIN_PX;
+  if (n >= CROWD_SOFT_END) return DISPLAY_MIN_PX_CROWDED;
+  const t = (n - CROWD_SOFT_START) / (CROWD_SOFT_END - CROWD_SOFT_START);
+  // Smoothstep, so the ramp has no corner at either end either.
+  const e = t * t * (3 - 2 * t);
+  return DISPLAY_MIN_PX + (DISPLAY_MIN_PX_CROWDED - DISPLAY_MIN_PX) * e;
+}
+
+/**
+ * What a body is actually drawn at, in world units, floor included.
+ *
+ * Continuous in the zoom: `max` has a corner where the floor engages but never
+ * a step, so a body being zoomed toward grows smoothly out of its marker
+ * instead of popping.
+ *
+ * @param {number} modelRadius - obj.radius
+ * @param {string} type - A family name
+ * @param {number} zoom - Pixels per world unit
+ * @param {number} [bodyCount] - Live bodies, for the crowded floor
+ * @returns {number} World units
+ */
+export function drawnRadius(modelRadius, type, zoom, bodyCount = 0) {
+  const z = Number(zoom) > 0 ? Number(zoom) : 1;
+  const wanted = displayRadius(modelRadius, type);
+  const floor = markerFloorPx(bodyCount) / z;
+  return wanted > floor ? wanted : floor;
+}
+
+/** The same thing in screen pixels, which is what a LOD decision wants. */
+export function drawnRadiusPx(modelRadius, type, zoom, bodyCount = 0) {
+  const z = Number(zoom) > 0 ? Number(zoom) : 1;
+  return drawnRadius(modelRadius, type, z, bodyCount) * z;
+}
+
+/**
+ * How close a click has to land, in screen pixels of radius.
+ *
+ * Unchanged by the display policy, and that is the point. These were already
+ * independent of the drawing, which is why shrinking the drawing did not have
+ * to make anything harder to select.
+ */
+export const HIT_MIN_PX = Object.freeze({
+  BlackHole: 14,
+  Star: 12,
+  GasGiant: 12,
+  Planet: 10,
+  NeutronStar: 10,
+  WhiteDwarf: 10,
+  Asteroid: 8,
+  Comet: 8,
+  Galaxy: 16,
+});
+
+/**
+ * The radius a click has to fall inside, in world units.
+ *
+ * The model radius or the pixel floor, whichever is larger - never the display
+ * radius. A body drawn at the marker floor is still selected by its own model
+ * size if that is bigger.
+ *
+ * @param {number} modelRadius - obj.radius
+ * @param {string} type - A family name
+ * @param {number} zoom - Pixels per world unit
+ * @returns {number} World units
+ */
+export function hitRadius(modelRadius, type, zoom) {
+  const z = Number(zoom) > 0 ? Number(zoom) : 1;
+  const r = Number(modelRadius);
+  const floor = (HIT_MIN_PX[type] ?? 10) / z;
+  return Number.isFinite(r) && r > floor ? r : floor;
+}
+
 // --- Level of detail ---------------------------------------------------------
 
 /** What a body is worth drawing at a given size on screen. */
@@ -173,6 +394,7 @@ export function silhouetteFor(seed, points = 9, wobble = 0.22) {
 export function clearVisualCaches() {
   silhouettes.clear();
   sprites.clear();
+  ringCache.clear();
 }
 
 // --- Light ---------------------------------------------------------------------
@@ -382,6 +604,152 @@ export function dustTailDirection(cometPos, starPos, vel, curve = 1) {
   const y = ion.y * (1 - t) + trail.y * t;
   const d = Math.hypot(x, y);
   return d > 0 ? { x: x / d, y: y / d } : ion;
+}
+
+// --- Ring systems ------------------------------------------------------------
+//
+// A quarter of procedurally generated gas giants get rings. That number is a
+// choice about variety, not a claim about nature: nobody knows what fraction
+// of giant exoplanets carry a Saturn-like system, the one candidate detection
+// is disputed, and four planets out of four in our own outer system have rings
+// of some kind while only one of them is prominent. A quarter puts a ringed
+// giant in most generated systems without making rings the default, and the
+// model documentation says exactly this.
+//
+// Everything about a ring system comes from the body's own visual seed, so it
+// is the same after a reset, a reload, a share link, a screenshot and an A/B
+// run - and it is computed once and memoised, never in a draw call.
+//
+// None of it touches physics. The rings extend to two and a half planetary
+// radii and the planet's model radius does not change, so gravity, collisions,
+// the Roche limit, transit depth, the hit test and every measurement see the
+// planet they always saw.
+
+/** How many generated giants are ringed. Variety, not an occurrence rate. */
+export const RING_FRACTION = 0.25;
+
+/**
+ * Whether a generated gas giant has rings.
+ *
+ * @param {number} seed - From visualSeed
+ * @returns {boolean} True for about a quarter of seeds
+ */
+export const hasRingsForSeed = seed => hash01(seed, 40) < RING_FRACTION;
+
+/** Inner edge, as a multiple of the displayed planetary radius. */
+export const RING_INNER_MIN = 1.25;
+export const RING_INNER_MAX = 1.5;
+/** Outer edge, likewise. */
+export const RING_OUTER_MIN = 1.9;
+export const RING_OUTER_MAX = 2.6;
+
+/**
+ * How flat the projected ellipse is: the minor axis over the major.
+ *
+ * One is face-on and zero is exactly edge-on. The floor is not zero because a
+ * system drawn as a one-pixel line carries no information; the ceiling is not
+ * one because a ring system that is always face-on stops reading as a disc in
+ * three dimensions. Real Saturn seen from Earth runs from 0 to about 0.45.
+ */
+export const RING_FLATTEN_MIN = 0.12;
+export const RING_FLATTEN_MAX = 0.58;
+
+const ringCache = new Map();
+
+/**
+ * A ring system's geometry, in multiples of the displayed planetary radius.
+ *
+ * Returned in *multiples* rather than world units so the same object survives
+ * a zoom, a quality-tier change and the marker floor: the caller multiplies by
+ * whatever the planet is being drawn at this frame. That is also what keeps
+ * the rings tied to the displayed disc rather than to the model radius, so a
+ * planet drawn at three eighths of its model size does not wear rings sized
+ * for the other three eighths.
+ *
+ * @param {number} seed - From visualSeed
+ * @param {object} [overrides] - Authored values, in multiples of the radius
+ * @returns {object} Ring geometry
+ */
+export function ringGeometryFor(seed, overrides = {}) {
+  const key = `${seed >>> 0}:${JSON.stringify(overrides)}`;
+  const hit = ringCache.get(key);
+  if (hit) return hit;
+
+  const u = n => hash01(seed, n);
+  const lerpU = (n, a, b) => a + (b - a) * u(n);
+
+  const inner = overrides.inner ?? lerpU(41, RING_INNER_MIN, RING_INNER_MAX);
+  const outer = overrides.outer ?? lerpU(42, RING_OUTER_MIN, RING_OUTER_MAX);
+  // Biased toward the middle of the range: u^0.7 spends less of its time near
+  // zero than u does, so nearly edge-on systems happen without being common.
+  const flatten =
+    overrides.flatten ??
+    RING_FLATTEN_MIN +
+      (RING_FLATTEN_MAX - RING_FLATTEN_MIN) * Math.pow(u(43), 0.7);
+  // Any position angle. A ring system has no preferred direction on the sky,
+  // and eight generated giants all tilted the same way looks like a template.
+  const angle = overrides.angle ?? u(44) * Math.PI;
+  // Which side of the disc the viewer is on, and therefore which half of the
+  // ellipse is in front of the planet.
+  const tiltSign = overrides.tiltSign ?? (u(45) < 0.5 ? -1 : 1);
+  const opacity = overrides.opacity ?? 0.38 + u(46) * 0.3;
+
+  // Bands. Concentric annuli of differing brightness with translucent gaps
+  // between them, rather than one solid ellipse: it is what a ring system
+  // looks like, and it is also what keeps a large one from reading as a
+  // painted-on hoop.
+  const bandCount = 3 + Math.floor(u(47) * 3); // 3, 4 or 5
+  const span = outer - inner;
+  const bands = [];
+  for (let i = 0; i < bandCount; i++) {
+    const t0 = i / bandCount;
+    const t1 = (i + 1) / bandCount;
+    // A gap at the outer edge of each band, wide enough to see. Narrower gaps
+    // were tried first and the whole system read as one solid grey ellipse at
+    // the size a reader actually looks at a giant.
+    const gap = 0.2 + u(50 + i) * 0.2;
+    bands.push({
+      r0: inner + span * t0,
+      r1: inner + span * (t1 - (t1 - t0) * gap),
+      alpha: 0.34 + u(60 + i) * 0.5,
+    });
+  }
+
+  // A Cassini-like division: one wider gap somewhere in the middle third,
+  // present on most systems but not all.
+  const cassini =
+    u(48) < 0.7
+      ? (() => {
+          const at = inner + span * (0.42 + u(49) * 0.24);
+          const w = span * (0.08 + u(51) * 0.06);
+          return { r0: at, r1: at + w };
+        })()
+      : null;
+
+  // Icy grey through to warm tan. Narrow on purpose: rings are dusty water ice
+  // and rock, and a saturated one would look like a decal.
+  const warmth = u(52);
+  const tint = {
+    r: Math.round(206 + warmth * 34),
+    g: Math.round(202 + warmth * 20),
+    b: Math.round(198 - warmth * 34),
+  };
+
+  const geometry = Object.freeze({
+    inner,
+    outer,
+    flatten,
+    angle,
+    tiltSign,
+    opacity,
+    bands: Object.freeze(bands.map(b => Object.freeze(b))),
+    cassini: cassini ? Object.freeze(cassini) : null,
+    tint: Object.freeze(tint),
+  });
+
+  if (ringCache.size > 256) ringCache.clear();
+  ringCache.set(key, geometry);
+  return geometry;
 }
 
 // --- Sprite cache -----------------------------------------------------------------

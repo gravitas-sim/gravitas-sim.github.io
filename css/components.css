@@ -523,12 +523,15 @@
       transform var(--duration-slow) var(--ease-out);
 
     /* The rail can outgrow short viewports once every group is present, so it
-       scrolls internally rather than running off the bottom of the screen -
-       and it stops short of the transport bar, which is drawn on top of it and
-       was hiding whichever control landed in the last 48 pixels. */
+       scrolls internally rather than running off the bottom of the screen.
+       No transport-bar reservation here: at this width the rail is a column at
+       the right edge and the bar is a centred pill that ends well short of it,
+       so the two never meet. Reserving the space anyway made the rail scroll
+       before its own open section fitted, which is the one thing the accordion
+       exists to avoid - see the tablet rule further down, where they do meet. */
     top: var(--space-4);
     right: var(--space-4);
-    max-height: calc(100vh - var(--space-8) - var(--transport-space));
+    max-height: calc(100vh - var(--space-8));
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -1318,6 +1321,10 @@
       right: var(--space-3);
       left: var(--space-3);
       width: auto;
+      /* Here the rail is a full-width sheet and the transport bar is drawn on
+         top of its lower edge, so whichever control landed in the last fifty
+         pixels was underneath the playback controls. This is the width where
+         the reservation is needed and the only one where it is. */
       max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space));
 
       opacity: 0;

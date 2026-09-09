@@ -65,7 +65,11 @@ on it is read from the catalogue and the validation results when it loads.
 what it approximates, and what is only drawn. Worth reading before assigning
 anything: the engine is Newtonian and two-dimensional, mergers are perfectly
 inelastic, the gravitational-wave inspiral is phenomenological, and the jets are
-cosmetic.
+cosmetic. Body sizes are drawn on a compressed scale and the canvas says so — a
+Sun-like star is about eight times an Earth-like planet on screen against a real
+ratio of 109, so read radii from the inspector and never off the picture. The
+model page sets out the four different radii a body has under _Displayed
+sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
 of <!--fact:physicsChecks-->243<!--/fact--> checks with measured error against a
@@ -170,7 +174,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->2926<!--/fact--> strings, and
+of <!--fact:uiStrings-->2932<!--/fact--> strings, and
 all <!--fact:investigations-->18<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot

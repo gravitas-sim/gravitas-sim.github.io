@@ -47,7 +47,7 @@ import {
   generateStarfield as buildStarfield,
   indexStarfield,
 } from './starfield.js';
-import { LOD_POINT_MAX_PX } from './bodyVisuals.js';
+import { LOD_POINT_MAX_PX, hitRadius } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { updateCanvasSummary } from './canvasSummary.js';
@@ -1182,8 +1182,20 @@ const drawScene = () => {
     const hoveredObject = findObjectAtPosition(worldPos);
     if (hoveredObject) {
       // Draw enhanced circle in world coordinates (canvas is already transformed)
+      //
+      // Drawn around the *hit* radius rather than the body, which is the whole
+      // point of it: a rocky planet is drawn at three eighths of the size the
+      // simulation gives it, so on a small body this ring is how a reader
+      // finds the thing at all - and putting it where the click target
+      // actually ends means the ring is a true statement about what pressing
+      // here will select, instead of an approximation that got looser the
+      // moment the drawing was compressed.
       const obj_pos = hoveredObject.object.pos;
-      const baseRadius = hoveredObject.object.radius;
+      const baseRadius = hitRadius(
+        hoveredObject.object.radius,
+        hoveredObject.type,
+        state.zoom
+      );
       const hoverRadius = baseRadius + 12 / state.zoom;
 
       // Create pulsing animation

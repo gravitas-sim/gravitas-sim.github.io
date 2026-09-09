@@ -647,6 +647,12 @@ export const ES = {
   'inspector.stat.orbitalPeriod': 'Período orbital',
   'inspector.stat.position': 'Posición',
   'inspector.stat.pulsar': 'Púlsar',
+  'inspector.stat.rings': 'Sistema de anillos',
+  'inspector.rings.visible': 'Visible',
+  'inspector.tip.radius':
+    'El radio físico, y con el que funciona la simulación: las colisiones, las fusiones, los límites de Roche y la geometría del tránsito usan este número. No es el tamaño con el que se dibuja el cuerpo. Los diámetros del lienzo usan una escala ilustrativa comprimida para que una estrella, un gigante gaseoso y un planeta rocoso quepan en una misma imagen; lee los radios aquí, nunca del dibujo.',
+  'inspector.tip.rings':
+    'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
   'inspector.stat.schwarzschildRadius': 'Radio de Schwarzschild',
   'inspector.stat.spectralType': 'Tipo espectral',
@@ -1139,6 +1145,9 @@ export const ES = {
   'state.none': 'No hay ningún estado guardado',
   'state.loaded': 'Estado de la simulación cargado',
   'state.loadFailed': 'No se pudo cargar el estado guardado',
+  'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
+  'canvas.sizeDisclosure.detail':
+    'Los diámetros del lienzo son ilustrativos y usan una escala comprimida. No deduzcas proporciones físicas de tamaño a partir del dibujo; usa el inspector y las mediciones de las investigaciones para los radios numéricos.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',

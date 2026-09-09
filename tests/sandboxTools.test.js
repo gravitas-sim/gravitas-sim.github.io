@@ -356,12 +356,16 @@ describe('the canvas instrumentation', () => {
     setCaptureMode(false);
   });
 
-  test('draws a scale bar and nothing else, normally', () => {
+  test('draws a scale bar and its disclosure, and nothing else', () => {
     const ctx = recordingContext();
     drawInstrumentation(ctx, canvas, settings, 1, 0, []);
-    // The scale bar labels itself with a distance, and that is the only text.
-    expect(ctx.text.length).toBe(1);
+    // Two lines. The bar labels itself with a distance, and underneath it the
+    // canvas admits that the bodies are not drawn to the same scale the bar
+    // measures. The second line is here rather than in the interface so that
+    // it is inside every screenshot and every recording.
+    expect(ctx.text.length).toBe(2);
     expect(ctx.text[0]).toMatch(/AU|km|m\b/);
+    expect(ctx.text[1].toLowerCase()).toContain('enlarged for visibility');
     // No panel: nothing rounded was filled behind anything.
     expect(ctx.calls.some(c => c[0] === 'roundRect')).toBe(false);
   });

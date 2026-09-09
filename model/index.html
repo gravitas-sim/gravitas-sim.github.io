@@ -102,6 +102,7 @@
           <li><a href="#blackholes">Black holes</a></li>
           <li><a href="#spacetime">The spacetime view</a></li>
           <li><a href="#visual">Visual effects</a></li>
+          <li><a href="#sizes">Displayed sizes</a></li>
           <li><a href="#other">Other educational models</a></li>
           <li><a href="#trust">What should I trust this to show?</a></li>
           <li><a href="#validation">Validation: what has been checked</a></li>
@@ -689,10 +690,24 @@
             <tr>
               <td>Object sizes and colors</td>
               <td>
-                Drawn sizes are fixed per object type so that a planet is
-                visible beside a star. Stellar colors follow temperature, which
-                is physically motivated, but the disk sizes on screen are not to
-                scale with each other or with the orbits.
+                Drawn diameters use a compressed scale so that a planet is
+                visible beside a star; they are not to scale with each other or
+                with the orbits. Stellar colors follow temperature, which is
+                physically motivated. See
+                <a href="#sizes">Displayed sizes</a> for the four different
+                radii a body has and which of them the drawing uses.
+              </td>
+            </tr>
+            <tr>
+              <td>Planetary rings</td>
+              <td>
+                A projected disk of concentric bands drawn around about a
+                quarter of generated gas giants, with the far half behind the
+                planet and the near half in front of it. The fraction is a
+                choice about visual variety, not a measured occurrence rate;
+                see <a href="#sizes">Displayed sizes</a>. Rings carry no mass
+                and take no part in gravity, collisions, transit depth, the
+                Roche limit or the hit test.
               </td>
             </tr>
             <tr>
@@ -713,6 +728,198 @@
           </tbody>
         </table>
       </div>
+
+      <h2 id="sizes">Displayed sizes</h2>
+      <p><span class="doc-badge is-illustrative">Illustrative</span></p>
+      <p>
+        A body in Gravitas has four different sizes. They are easy to confuse
+        and confusing any two of them causes a different kind of error, so this
+        section names all four and says which one the drawing uses.
+      </p>
+
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Radius</th>
+              <th scope="col">What it is, and what depends on it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Analytic (physical) radius</strong></td>
+              <td>
+                What the body physically is, in kilometres or solar radii,
+                derived from its mass by the mass&ndash;radius relations in
+                <code>js/lightCurve.js</code> and <code>js/habitability.js</code>,
+                or taken from an explicit <code>radiusInSuns</code>,
+                <code>radiusInEarths</code> or <code>radiusInJupiters</code>
+                where a scenario names a real object. This is the number the
+                inspector reports and the number a transit depth is computed
+                from. It is the only one of the four that is a claim about
+                nature.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Model radius</strong></td>
+              <td>
+                <code>object.radius</code>, in simulation length units. What the
+                simulation runs on: contact and separation in
+                <code>handle_collisions</code>, merging, tidal disruption and
+                Roche-limit thresholds, the geometric overlap during a transit,
+                and the floor of the hit target. It is itself a compressed
+                stand-in &mdash; the Sun is 15 units and the Earth 5 &mdash; so
+                it is not a physical radius either, and nothing measured is
+                reported in it.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Canvas display radius</strong></td>
+              <td>
+                What is drawn, and only what is drawn. The model radius times a
+                per-family factor from <code>DISPLAY_FACTOR</code> in
+                <code>js/bodyVisuals.js</code>. Nothing reads it except the draw
+                paths.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Minimum marker and hit-target radii</strong></td>
+              <td>
+                Two independent floors in screen pixels. A body smaller than the
+                marker floor is drawn at the floor so that it does not vanish;
+                a click within the hit radius selects it. The hit radius is
+                computed from the <em>model</em> radius and is unaffected by the
+                display factor, which is what lets a planet be drawn eight times
+                smaller than its star without becoming eight times harder to
+                select.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Why the drawing is compressed</h3>
+      <p>
+        The real ratios cannot be drawn. The Sun&rsquo;s radius is about 109
+        times the Earth&rsquo;s and about 9.7 times Jupiter&rsquo;s; at a zoom
+        where the Sun is a visible disc, an Earth drawn to scale beside it is a
+        fraction of a pixel. That is why the model radii were flattened in the
+        first place &mdash; but flattened as far as they were, they made a
+        different and equally wrong claim: a star twice the radius of a rocky
+        planet and barely wider than a gas giant.
+      </p>
+      <p>
+        The drawing now applies one documented compression across every
+        scenario. Stars are unchanged; everything else is reduced against them.
+      </p>
+
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col">Comparison</th>
+              <th scope="col">Real</th>
+              <th scope="col">Drawn before</th>
+              <th scope="col">Drawn now</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sun-like star : Earth-like planet</td>
+              <td>109 : 1</td>
+              <td>3.0 : 1</td>
+              <td>8.0 : 1</td>
+            </tr>
+            <tr>
+              <td>Sun-like star : Jupiter-like giant</td>
+              <td>9.7 : 1</td>
+              <td>1.9 : 1</td>
+              <td>4.0 : 1</td>
+            </tr>
+            <tr>
+              <td>Jupiter-like giant : Earth-like planet</td>
+              <td>11.2 : 1</td>
+              <td>1.6 : 1</td>
+              <td>2.0 : 1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        These are the ratios at a zoom where nothing is held at the marker
+        floor. Zoomed out far enough that a planet would be a fraction of a
+        pixel, it is drawn at the floor instead and the ratio compresses further
+        &mdash; which is a statement about what is visible, not about what is
+        true. White dwarfs are drawn smaller than ordinary stars; neutron stars,
+        comets, asteroids and distant planets sit on the marker floor at any
+        ordinary zoom, because at their real relative sizes they would not be
+        there at all. A black hole&rsquo;s drawn horizon keeps its own
+        illustrative policy described under
+        <a href="#blackholes">Black holes</a>: it is far larger than any real
+        horizon, so that the thing a scenario is about is visible.
+      </p>
+      <p>
+        A single power law cannot produce both targets. Bringing 109 : 1 down to
+        8 : 1 needs an exponent of 0.44, and 9.7 raised to 0.44 is 2.7 &mdash; a
+        Jupiter under three times smaller than the Sun. The two ratios have to
+        be set independently, which is why the policy is a table of per-family
+        factors rather than a formula, and why the table is written out in full
+        and tested against its own targets in
+        <code>tests/displayScale.test.js</code>.
+      </p>
+      <p>
+        The canvas says so. A line beside the scale bar reads &ldquo;Body sizes
+        enlarged for visibility&rdquo;, and it is drawn on the canvas rather
+        than in the interface so that it appears in every screenshot and every
+        recording. The full wording &mdash; that canvas diameters are
+        illustrative, that physical size ratios must not be inferred from the
+        drawing, and that the inspector and the investigation measurements carry
+        the numerical radii &mdash; is in the canvas description that assistive
+        technology reads, and in the Radius tooltip in the object inspector. The
+        scale <em>bar</em> is a separate matter and remains an honest statement
+        about distance in the current view; some scenarios are themselves scale
+        models or teaching constructions, so no claim is made that every drawn
+        distance is physical either.
+      </p>
+
+      <h3>Rings</h3>
+      <p>
+        About a quarter of procedurally generated gas giants are drawn with a
+        ring system. <strong>That fraction is a choice about visual variety and
+        not an asserted occurrence rate.</strong> Nobody knows what share of
+        giant exoplanets carry prominent rings; the one candidate detection is
+        disputed, and in our own outer system four giants out of four have rings
+        of some kind while only one of them is prominent. A quarter puts a
+        ringed giant in most generated systems without making rings the default.
+      </p>
+      <p>
+        Which giants, and what their rings look like, comes from each
+        body&rsquo;s own visual seed, which is derived from its id. Presence,
+        position angle, inclination, inner and outer radii, band structure,
+        colour and opacity are all fixed the moment the body exists and are
+        identical after a reset, a replay, a save and reload, a shared
+        configuration, a screenshot and an A/B run. Nothing about a ring is
+        drawn from <code>Math.random()</code>. A scenario has the last word:
+        Saturn is ringed in the Solar System, the other three giants there are
+        explicitly not, and any authored scenario may force rings on or off and
+        may set their extent, angle and opacity.
+      </p>
+      <p>
+        Rings are drawn as a projected disk rather than an ellipse behind the
+        planet: the far half first, then the opaque planetary disc, then the
+        near half, so the rings visibly pass behind and in front. Inner edges
+        run between 1.25 and 1.5 displayed planetary radii and outer edges
+        between 1.9 and 2.6, with several restrained bands, translucent gaps, an
+        optional Cassini-like division and a subtle planet shadow. Those
+        dimensions are illustrative and purely visual: they do not change the
+        planet&rsquo;s model or physical radius, its gravity, its collisions,
+        its transit depth, its Roche calculation, its hit target or any
+        measurement, and atmospheres, selection rings and labels stay attached
+        to the planetary disc rather than expanding to enclose the rings. A
+        giant too small on screen for the bands to be legible is drawn without
+        rings rather than with visual noise.
+      </p>
 
       <h2 id="other">Other educational models</h2>
       <p>

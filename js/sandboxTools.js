@@ -719,6 +719,23 @@ export function drawInstrumentation(
       ctx.fillStyle = TOOL_INK;
       ctx.fillText(readings.join('   '), pad + 2 + barW + 64, barY);
     }
+
+    // What the scale bar does not say.
+    //
+    // The bar is honest about distance. The bodies are not honest about size,
+    // and cannot be: at a scale where the Sun is a visible disc an Earth is a
+    // fraction of a pixel, so every body in Gravitas is drawn on a compressed
+    // scale that keeps the hierarchy readable and abandons the ratios. That is
+    // a defensible thing to do and an indefensible thing to do silently, so it
+    // is said here - on the canvas, beside the instrument that establishes the
+    // other scale, and therefore inside every screenshot and every recording.
+    //
+    // The full explanation, and the pointer to where the real numbers are, is
+    // in the canvas description that assistive technology reads and in the
+    // model documentation. One line is all this has room for.
+    ctx.font = `10px ${INSTRUMENT_MONO}`;
+    ctx.fillStyle = 'rgba(200, 214, 235, 0.62)';
+    ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14);
   } else if (readings.length) {
     ctx.fillStyle = TOOL_INK;
     ctx.fillText(readings.join('   '), pad + 2, barY);

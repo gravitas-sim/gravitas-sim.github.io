@@ -36,7 +36,7 @@ import {
   setStateReference,
 } from '../js/physics.js';
 import { setTier } from '../js/quality.js';
-import { clearVisualCaches } from '../js/bodyVisuals.js';
+import { clearVisualCaches, displayFactorFor } from '../js/bodyVisuals.js';
 import { auToSim } from '../js/units.js';
 
 /**
@@ -138,13 +138,43 @@ function sunAt(x = 0, y = 0) {
   return star;
 }
 
-/** Draw a body at a chosen on-screen size by setting the zoom to suit. */
+/**
+ * Which family a body belongs to, for the display policy.
+ *
+ * constructor.name is fine here and nowhere else: these tests run the sources
+ * through Jest, not the minified bundle, and the production code that needs
+ * the same answer is handed it as a literal.
+ */
+const familyOf = body =>
+  ({ StarObject: 'Star' })[body.constructor.name] ?? body.constructor.name;
+
+/**
+ * Draw a body at a chosen on-screen size by setting the zoom to suit.
+ *
+ * `px` is the size the body is *drawn* at, which since the displayed-size
+ * policy landed is no longer its model radius times the zoom - a planet is
+ * drawn at three eighths of its model radius. Asking for 6 has always meant
+ * "six pixels of drawn body", and it still does; the arithmetic that gets
+ * there now goes through the same factor the renderer uses.
+ */
 function drawAtScreenRadius(body, px) {
-  view.zoom = px / body.radius;
+  view.zoom = px / (body.radius * displayFactorFor(familyOf(body)));
   const ctx = recorder();
   body.draw(ctx);
   return ctx;
 }
+
+/** How many ring arcs a recorded draw contains. A ring arc sweeps half an
+ *  ellipse; the planet's own bands and caps are full ones. */
+const ringArcCount = ctx =>
+  ctx.calls.filter(
+    c =>
+      c.name === 'ellipse' &&
+      Math.abs(Math.abs(c.args[6] - c.args[5]) - Math.PI) < 1e-6
+  ).length;
+
+/** The radius a body is actually drawn at, in world units. */
+const drawnWorldRadius = body => body.radius * displayFactorFor(familyOf(body));
 
 describe('detail follows size', () => {
   test('a planet under a few pixels draws a dot and nothing else', () => {
@@ -298,7 +328,7 @@ describe('the same body draws the same way twice', () => {
     expect(shape(b)).toEqual(shape(a));
   });
 
-  test("a gas giant's rings have a fixed tilt", () => {
+  test("a gas giant's rings have a fixed geometry", () => {
     const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
     g.hasRings = true;
     const first = g.ringGeometry();
@@ -309,8 +339,15 @@ describe('the same body draws the same way twice', () => {
     const h = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
     h.hasRings = true;
     expect(h.ringGeometry().angle).not.toBe(first.angle);
-    // Within thirty degrees of the equator, as a ring system is.
-    expect(Math.abs(first.angle)).toBeLessThanOrEqual(Math.PI / 6);
+
+    // A position angle anywhere on the sky - a ring system has no preferred
+    // direction - with the *inclination* carried separately by the projected
+    // flattening. The two used to be one number, which is why every generated
+    // system was tilted the same way.
+    expect(first.angle).toBeGreaterThanOrEqual(0);
+    expect(first.angle).toBeLessThanOrEqual(Math.PI);
+    expect(first.flatten).toBeGreaterThan(0);
+    expect(first.flatten).toBeLessThan(1);
     expect(first.inner).toBeLessThan(first.outer);
   });
 
@@ -324,10 +361,102 @@ describe('the same body draws the same way twice', () => {
     // Two ring passes: one before the body's own arc and one after it.
     expect(rotates.length).toBeGreaterThanOrEqual(2);
     const bodyArc = ctx.calls.findIndex(
-      c => c.name === 'arc' && Math.abs(c.args[2] - g.radius) < 1e-9
+      c => c.name === 'arc' && Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
     );
     expect(bodyArc).toBeGreaterThan(rotates[0]);
     expect(rotates[rotates.length - 1]).toBeGreaterThan(bodyArc);
+  });
+
+  test('the planet that covers the far half is opaque', () => {
+    // The occlusion is exact rather than approximate only if the disc drawn
+    // between the two ring passes lets nothing through. A translucent planet
+    // would show the far ring crossing its face, which is the one thing a
+    // projected disk must not do.
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = true;
+    const ctx = drawAtScreenRadius(g, 60);
+    const bodyArc = ctx.calls.findIndex(
+      c => c.name === 'arc' && Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
+    );
+    // The far-ring pass lowers the alpha and rotates the frame; both are undone
+    // before the planet is filled, or the disc would be translucent and tilted.
+    // Balanced save/restore is what guarantees it.
+    const restores = ctx.calls
+      .slice(0, bodyArc)
+      .filter(c => c.name === 'restore').length;
+    const saves = ctx.calls
+      .slice(0, bodyArc)
+      .filter(c => c.name === 'save').length;
+    expect(saves).toBeGreaterThan(0);
+    expect(restores).toBe(saves);
+  });
+
+  test('both halves span the geometry they were given', () => {
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = true;
+    const geo = g.ringGeometry();
+    const pr = drawnWorldRadius(g);
+    const ctx = drawAtScreenRadius(g, 60);
+    // Ring arcs sweep exactly half the ellipse; the planet's own bands and
+    // polar caps are full ellipses, and are not what this is measuring.
+    const ringArcs = ctx.calls.filter(
+      c =>
+        c.name === 'ellipse' &&
+        Math.abs(Math.abs(c.args[6] - c.args[5]) - Math.PI) < 1e-6
+    );
+    const radii = ringArcs.map(c => c.args[2] / pr);
+    expect(radii.length).toBeGreaterThan(4);
+    // Nothing inside the planet, nothing past the stated outer edge.
+    expect(Math.min(...radii)).toBeGreaterThanOrEqual(geo.inner - 1e-6);
+    expect(Math.max(...radii)).toBeLessThanOrEqual(geo.outer + 1e-6);
+    // And the two halves are drawn from opposite ends of the parameterisation.
+    const starts = new Set(
+      ctx.calls
+        .filter(c => c.name === 'ellipse')
+        .map(c => Number(c.args[5]).toFixed(4))
+    );
+    expect(starts.size).toBeGreaterThanOrEqual(2);
+  });
+
+  test('a giant too small for rings is drawn without them', () => {
+    // Four grey pixels beside three coloured ones is noise, not a ring system.
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = true;
+    expect(ringArcCount(drawAtScreenRadius(g, 2))).toBe(0);
+    expect(ringArcCount(drawAtScreenRadius(g, 60))).toBeGreaterThan(0);
+  });
+
+  test('a medium giant gets two plain arcs, a large one gets bands', () => {
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = true;
+    const count = px => ringArcCount(drawAtScreenRadius(g, px));
+    const medium = count(7);
+    const large = count(60);
+    expect(medium).toBeGreaterThan(0);
+    expect(large).toBeGreaterThan(medium);
+  });
+
+  test('the low quality tier drops to the simple treatment', () => {
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = true;
+    setTier('full');
+    const full = ringArcCount(drawAtScreenRadius(g, 60));
+    setTier('low');
+    const low = ringArcCount(drawAtScreenRadius(g, 60));
+    setTier('full');
+    expect(low).toBeLessThan(full);
+    expect(low).toBeGreaterThan(0);
+  });
+
+  test('an unringed giant draws no rings at all', () => {
+    const g = new GasGiant({ x: 300, y: 0 }, { x: 0, y: 0 }, 4);
+    g.hasRings = false;
+    const ctx = drawAtScreenRadius(g, 60);
+    expect(
+      ctx.calls.some(
+        c => c.name === 'ellipse' && c.args[2] > drawnWorldRadius(g) * 1.2
+      )
+    ).toBe(false);
   });
 });
 

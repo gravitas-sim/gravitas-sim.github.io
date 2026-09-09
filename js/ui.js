@@ -662,6 +662,7 @@ const getStarInfo = star => {
       },
       {
         label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
         value: `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`,
       },
       {
@@ -758,6 +759,7 @@ const getPlanetInfo = planet => {
       },
       {
         label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
         value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
       { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
@@ -835,6 +837,7 @@ const getGasGiantInfo = gasGiant => {
       },
       {
         label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
         value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
       },
       { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
@@ -851,6 +854,15 @@ const getGasGiantInfo = gasGiant => {
         value: formatOrbitalPeriod(orbitalPeriodDays),
       },
       { label: t('inspector.stat.type'), value: displayType },
+      ...(gasGiant.hasRings
+        ? [
+            {
+              label: t('inspector.stat.rings'),
+              value: t('inspector.rings.visible'),
+              tooltipKey: 'rings',
+            },
+          ]
+        : []),
       {
         label: t('inspector.stat.position'),
         value: `(${gasGiant.pos.x.toFixed(1)}, ${gasGiant.pos.y.toFixed(1)})`,
@@ -899,7 +911,11 @@ const getAsteroidInfo = asteroid => {
         label: t('inspector.stat.mass'),
         value: `${earthHTML(formatNumber(massInEarths, { sig: 4 }))} (${withUnit(massInKg, 'kg')})`,
       },
-      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
+      {
+        label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
+        value: withUnit(radiusInKm, 'km'),
+      },
       { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
       {
         label: t('inspector.stat.surfaceGravity'),
@@ -951,7 +967,11 @@ const getNeutronStarInfo = neutronStar => {
         label: t('inspector.stat.mass'),
         value: solarHTML(formatNumber(massInSuns)),
       },
-      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
+      {
+        label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
+        value: withUnit(radiusInKm, 'km'),
+      },
       {
         label: t('inspector.stat.density'),
         value: withUnit(density, 'mass/unit²'),
@@ -1001,6 +1021,7 @@ const getWhiteDwarfInfo = whiteDwarf => {
       },
       {
         label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
         value: withUnit(radiusInEarths, 'R⊕'),
       },
       {
@@ -1094,7 +1115,11 @@ const getCometInfo = comet => {
     title: comet.name || 'Comet',
     stats: [
       { label: t('inspector.stat.mass'), value: withUnit(massInComets, 'C') },
-      { label: t('inspector.stat.radius'), value: withUnit(radiusInKm, 'km') },
+      {
+        label: t('inspector.stat.radius'),
+        tooltipKey: 'radius',
+        value: withUnit(radiusInKm, 'km'),
+      },
       {
         label: t('inspector.stat.density'),
         value: withUnit(density, 'mass/unit²'),
@@ -2675,7 +2700,7 @@ const buildInspectorView = (object, type, info) => {
     key: `s${i}`,
     label: String(stat.label).replace(/:\s*$/, ''),
     value: stat.value,
-    tooltip: getStatTooltip(stat.label, type),
+    tooltip: getStatTooltip(stat.label, type, stat.tooltipKey),
   }));
 
   // While a frame is active, the world-frame speed above is true but not what
@@ -7556,9 +7581,20 @@ export {
 // (Removed unused placeWithSeparation helper)
 
 // Helper: Get tooltip text for object properties
-function getStatTooltip(statLabel, _objectType) {
+function getStatTooltip(statLabel, _objectType, key) {
+  // A few rows carry a stable key rather than relying on their English label.
+  // The table below is keyed by that label, which means it has never produced
+  // a tooltip in Spanish at all; the keyed rows are translated properly, and
+  // the rest are a pre-existing gap this pass did not widen.
+  if (key === 'radius') return t('inspector.tip.radius');
+  if (key === 'rings') return t('inspector.tip.rings');
   const tooltips = {
     Mass: 'Total mass. Determines gravitational strength and orbital dynamics.',
+    // Superseded by inspector.tip.radius for every row that carries the key.
+    // It used to say "Affects collision detection and visual appearance",
+    // which put the two on the same footing - and they are not on the same
+    // footing: the number here drives the physics, and what is drawn is a
+    // compressed illustration of it.
     Radius: 'Physical size. Affects collision detection and visual appearance.',
     Position: 'Current location in simulation space (x, y coordinates).',
     Velocity:

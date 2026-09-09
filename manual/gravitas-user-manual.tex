@@ -226,6 +226,45 @@ elements of its path about whatever it is actually orbiting --- semi-major axis,
 eccentricity, period, periapsis and apoapsis --- and its kinetic, potential and
 total energy.
 
+\subsection{Why the bodies are not to scale}
+
+The bodies are drawn on a compressed scale, and the canvas says so: a line
+beside the scale bar reads \emph{Body sizes enlarged for visibility}. It is
+drawn on the canvas rather than in the interface, so it is in every screenshot
+and every recording you make.
+
+The real ratios cannot be drawn. The Sun's radius is about 109 times the
+Earth's; at a zoom where the Sun is a visible disc, an Earth drawn to scale
+beside it is a fraction of a pixel. Gravitas compresses the hierarchy instead,
+by one documented policy applied to every scenario: a Sun-like star is drawn
+about eight times the radius of an Earth-like planet and four times a
+Jupiter-like giant, against real ratios of 109 and 9.7. Gas giants are visibly
+larger than rocky planets, white dwarfs smaller than ordinary stars, and
+neutron stars, comets, asteroids and distant planets sit at a minimum marker
+size because at their true relative sizes they would not be visible at all.
+
+Read sizes from the inspector and from the investigation measurements, never
+off the drawing. The number in the inspector is the physical radius; what is on
+the canvas is an illustration of it. The scale \emph{bar} is a different
+matter and is an honest statement about distance in the current view --- though
+some scenarios are themselves scale models or teaching constructions, so not
+every drawn distance is physical either. The model page at \url{https://gravitas-sim.online/model/} sets all of this out under
+\emph{Displayed sizes}, including the four different radii a body has and
+which of them each part of the simulation uses.
+
+A body is no harder to select for being drawn small: the click target is
+computed from the body's own size and a minimum in screen pixels, and has
+nothing to do with how large the body appears.
+
+About a quarter of procedurally generated gas giants are drawn with a ring
+system. That fraction is a choice about visual variety, not a claim about how
+common rings are among giant exoplanets, which nobody knows. Which giants get
+them, and what the rings look like, is fixed by each body's own seed, so it is
+the same after a reset, a reload, a shared link or a screenshot; scenarios may
+force rings on or off, and Saturn is ringed in the Solar System. Rings are
+drawn only: they have no mass and take no part in gravity, collisions, transit
+depth or any measurement.
+
 \subsection{Vectors and the potential well}
 
 For the selected body, Gravitas can draw its velocity, its total acceleration,
@@ -255,7 +294,12 @@ angle controls, and every open panel re-measures from the new direction.
 \begin{description}[style=nextline,leftmargin=1em]
   \item[Transit light curve] Brightness against time for the starlight reaching
   the observer. A planet crossing its star carves a dip; the depth gives the
-  planet's radius, and limb darkening is included, so the dip is not flat.
+  planet's radius, and limb darkening is included, so the dip is not flat. The
+  depth is $(R_p/R_s)^2$ computed from the \emph{physical} radii --- the ones
+  the inspector reports, derived from mass --- and not from the enlarged
+  markers on the canvas. A planet drawn an eighth of its star's width does not
+  produce a dip of one sixty-fourth; measure the depth from the curve and check
+  it against the inspector's radii, never against the picture.
   \item[Radial velocity] The star's motion toward and away from the observer, as
   a spectrograph measures it. The wobble gives a planet mass --- times the sine
   of the inclination, which is where the $\sin i$ degeneracy stops being a

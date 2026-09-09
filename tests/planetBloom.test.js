@@ -15,6 +15,7 @@
 import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
 import { Planet, setStateReference } from '../js/physics.js';
 import { setTier } from '../js/quality.js';
+import { displayRadius } from '../js/bodyVisuals.js';
 
 /** Records the gradients painted into the bloom layer. */
 function bloomRecorder() {
@@ -131,11 +132,15 @@ describe('the bloom pass', () => {
     expect(stops[stops.length - 1].color).toMatch(/,\s*0\)$/);
   });
 
-  test('paints where the planet is, at the size it used to', () => {
+  test('paints where the planet is, at the size it is drawn', () => {
     const planet = new Planet({ x: 30, y: -12 }, { x: 0, y: 0 });
     planet.draw(nullContext());
     const bloom = recorder.gradients[0];
-    expect(bloom.r).toBeCloseTo(planet.radius * view.zoom * 2.5, 6);
+    // The drawn radius, not the model radius. A halo two and a half times a
+    // size the planet is no longer drawn at is a halo with nothing inside it.
+    const drawn = displayRadius(planet.radius, 'Planet');
+    expect(bloom.r).toBeCloseTo(drawn * view.zoom * 2.5, 6);
+    expect(drawn).toBeLessThan(planet.radius);
   });
 
   test('does nothing at the low quality tier', () => {

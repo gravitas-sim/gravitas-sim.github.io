@@ -83,6 +83,39 @@ const SCENES = [
     zoom: 16,
     centreOn: 'gasgiant',
   },
+  // Saturn, which is the ring system everyone already has a picture of, and
+  // the one an authored scenario forces on. Framed close enough to see the
+  // bands, the division and the disc passing in front of the far half.
+  {
+    id: 'saturn',
+    scenario: 'Solar System',
+    steps: 200,
+    zoom: 20,
+    centreOnName: 'Saturn',
+  },
+  // A transit scene: a hot Jupiter against its star, which is the case where
+  // the difference between the drawn marker and the analytic radius ratio
+  // matters most - the light curve's depth comes from the second and a reader
+  // will try to read it off the first.
+  {
+    id: 'transit',
+    scenario: 'Transit Lab',
+    steps: 120,
+    zoom: 60,
+  },
+  // A generated system, for the ring fraction and the range of orientations.
+  // Nothing here is authored, so every ring in it was decided by a body's own
+  // seed - which is also what makes this picture reproducible.
+  {
+    id: 'generated-giants',
+    // Supermassive BH rather than a busy exoplanet catalogue: a crowded field
+    // deliberately drops to the simplified treatment, which is correct and is
+    // the wrong picture for judging the detailed one.
+    scenario: 'Supermassive BH',
+    steps: 150,
+    zoom: 22,
+    centreOnRinged: true,
+  },
 ];
 
 async function main() {
@@ -187,6 +220,16 @@ async function main() {
           const g =
             physics.gas_giants.find(b => b.alive) || physics.gas_giants[0];
           if (g) centre = { x: g.pos.x, y: g.pos.y };
+        } else if (scene.centreOnRinged) {
+          const ringed = physics.gas_giants.find(g => g.hasRings);
+          if (ringed) centre = { x: ringed.pos.x, y: ringed.pos.y };
+        } else if (scene.centreOnName) {
+          const named = [
+            ...physics.gas_giants,
+            ...physics.planets,
+            ...physics.stars,
+          ].find(b => b.name === scene.centreOnName);
+          if (named) centre = { x: named.pos.x, y: named.pos.y };
         }
 
         ui.state.zoom = scene.zoom;

@@ -52,6 +52,14 @@ import {
   ionTailDirection,
   dustTailDirection,
   spriteFor,
+  drawnRadius,
+  displayRadius,
+  markerFloorPx,
+  hitRadius,
+  DISPLAY_MIN_PX,
+  CROWD_SOFT_START,
+  hasRingsForSeed,
+  ringGeometryFor,
 } from './bodyVisuals.js';
 import { stellarPropertiesFor, relativeInsolation } from './habitability.js';
 
@@ -1095,29 +1103,31 @@ const clearCachedGravity = () => {
   cachedGravityDirty = false;
 };
 
-// Click hit-radius minimums scaled by 1/state.zoom
-
-// Screen-space floor for drawing a body, in pixels of radius.
+// --- The four radii ----------------------------------------------------------
 //
-// At true Solar System scale Neptune sits 78x further out than Mercury, so no
-// single zoom shows the whole system with everything visible: zoomed out far
-// enough to see Neptune, Earth's 7-unit radius covers less than a pixel and the
-// planets vanish. Clicking already had this problem and already solved it with
-// CLICK_MIN_RADIUS, so drawing uses the same trick.
+// `obj.radius` is the model radius. It decides collisions, merging, Roche
+// limits, the geometric part of a transit and the floor of the hit test, and
+// nothing below changes it.
 //
-// This is deliberately a *drawing* floor only. The world radius is what decides
-// collisions and merging, and inflating that to make planets visible would let
-// the Sun swallow Mercury for cosmetic reasons. Zoom in and the dot grows into
-// the body's true relative size; zoom out and it holds at a visible minimum.
-export const DRAW_MIN_RADIUS_PX = 2.75;
+// What a body is *drawn* at is a different number, and js/bodyVisuals.js owns
+// the policy: a per-family compression that gives a Sun-like star eight times
+// the displayed radius of an Earth-like planet and four times a Jupiter,
+// against model radii that made those ratios 3 and 1.9 and real ones of 109
+// and 9.7. Read the long comment at the top of that module before changing any
+// of it; the short version is that the drawing is illustrative, says so on the
+// canvas, and must never leak into a measurement.
+//
+// How close a click has to land is a third number, also in that module, and is
+// deliberately unrelated to the second. A planet drawn eight times smaller
+// than its star is not eight times harder to select.
 
-// In a crowded scenario the floor works against itself: a thousand bodies each
-// held at 2.75px turns a galaxy into a single blob, where the point is the
-// structure. Dense fields get a smaller floor, so they read as a field of
-// specks while an eight-planet system still reads as eight planets.
-const CROWDED_COUNT = 250;
-const DRAW_MIN_RADIUS_PX_CROWDED = 1.35;
+/**
+ * Re-exported so js/render.js can size the placement preview the same way.
+ * The value itself lives with the policy.
+ */
+export { DISPLAY_MIN_PX as DRAW_MIN_RADIUS_PX };
 
+/** How many bodies are on screen, for the crowded-field marker floor. */
 let liveBodyCount = 0;
 
 /** Record how many bodies are on screen, for the crowding rule above. */
@@ -1125,38 +1135,43 @@ const setLiveBodyCount = n => {
   liveBodyCount = n;
 };
 
+/** The current marker floor in screen pixels. Exported for the tests. */
+export const currentMarkerFloorPx = () => markerFloorPx(liveBodyCount);
+
 /**
  * Radius to draw a body at, in world units.
- * @param {Object} obj - Body with a radius
+ *
+ * @param {Object} obj - Body with a model radius
+ * @param {string} type - Which family, for the display policy
  * @returns {number} Radius to draw, never below a few screen pixels
  */
-const drawRadius = obj => {
-  const z = (state && state.zoom) || 1;
-  const px =
-    liveBodyCount > CROWDED_COUNT
-      ? DRAW_MIN_RADIUS_PX_CROWDED
-      : DRAW_MIN_RADIUS_PX;
-  const floor = px / z;
-  return obj.radius > floor ? obj.radius : floor;
-};
+const drawRadius = (obj, type) =>
+  drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
 
 /**
  * How much detail this body is worth, at its current size on screen.
  *
  * One call, so every family draws at the same thresholds and a reader zooming
  * out watches the whole scene simplify together rather than one class at a
- * time. `radius` here is the physical radius: the screen-space floor is a
- * drawing decision (see drawRadius) and a body held at the floor is still a
- * point, not a detailed sphere.
+ * time.
+ *
+ * Measured on the *display* radius before the floor, which is the size the
+ * body is about to be drawn at, and deliberately not on the model radius. When
+ * the two were the same number this distinction did not exist; now that a
+ * planet is drawn at three eighths of its model radius, asking the model would
+ * put surface marks and cloud bands on a body occupying three pixels. Before
+ * the floor, because a body held at the floor is a marker standing in for
+ * something too small to see, and drawing weather on it would be a fiction.
  *
  * @param {Object} obj - Body with a radius
+ * @param {string} type - Which family, for the display policy
  * @returns {string} One of LOD
  */
-const lodOf = obj => {
+const lodOf = (obj, type) => {
   const z = (state && state.zoom) || 1;
-  return lodFor(obj.radius * z, {
+  return lodFor(displayRadius(obj.radius, type) * z, {
     tier: currentTier(),
-    crowded: liveBodyCount > CROWDED_COUNT,
+    crowded: liveBodyCount > CROWD_SOFT_START,
   });
 };
 
@@ -1238,17 +1253,10 @@ const CORONA_SCALE = 1.9;
 /** `rgba(...)` from a channel triple and an alpha. Avoids a template per call site. */
 const rgba = (c, a) => `rgba(${c.r},${c.g},${c.b},${a})`;
 
-const CLICK_MIN_RADIUS = {
-  BlackHole: 14,
-  Star: 12,
-  GasGiant: 12,
-  Planet: 10,
-  NeutronStar: 10,
-  WhiteDwarf: 10,
-  Asteroid: 8,
-  Comet: 8,
-  Galaxy: 16,
-};
+// The click minimums moved to js/bodyVisuals.js, beside the display policy and
+// pointedly separate from it: hitRadius() takes the *model* radius, so a body
+// drawn at three eighths of it is exactly as easy to select as it was before.
+// They are the same numbers they have always been.
 
 // Function to update physics settings
 const updatePhysicsSettings = settings => {
@@ -3105,9 +3113,9 @@ class Planet extends PhysicsObject {
       }
     }
 
-    const r = drawRadius(this);
+    const r = drawRadius(this, 'Planet');
     const z = (state && state.zoom) || 1;
-    const level = lodOf(this);
+    const level = lodOf(this, 'Planet');
     const litColor = compute_dynamic_color(baseColor, this.pos, bh_list);
 
     ctx.fillStyle = litColor;
@@ -3149,7 +3157,8 @@ class Planet extends PhysicsObject {
     // it lists the bloom canvas among the passes that tier exists to skip.
     try {
       if (currentTier() !== 'low' && typeof window !== 'undefined') {
-        const screenR = this.radius * state.zoom;
+        // The halo follows the drawn body, not the model radius.
+        const screenR = r * state.zoom;
         if (screenR > 1 && window.bloomCtx) {
           const { x: screenX, y: screenY } = world_to_screen(world_pos);
           const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
@@ -3178,9 +3187,18 @@ class Planet extends PhysicsObject {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = this.radius * state.zoom;
+    // Two different sizes, on purpose.
+    //
+    // The offset follows the *drawn* body, so a label sits just off the disc
+    // the reader can see. Whether to label at all follows the *model* radius,
+    // which is the size this decision has always been made on: gating on the
+    // drawn size instead would have taken the names off every planet in the
+    // Solar System the moment the displayed-size policy shrank them, which is
+    // a labelling change nobody asked for.
+    const screen_radius = r * state.zoom;
+    const label_size = this.radius * state.zoom;
 
-    if (screen_radius > 4) {
+    if (label_size > 4) {
       const label_y_offset = screen_radius + 10;
       ctx.font = '10px Roboto Mono';
       ctx.fillStyle = '#fff';
@@ -3307,6 +3325,10 @@ class Planet extends PhysicsObject {
   }
 
   drawEarth(ctx, world_pos) {
+    // Everything here is proportioned to the drawn disc rather than to the
+    // model radius: a continent sized to a radius the body is no longer drawn
+    // at is a continent that covers the planet.
+    const r = drawRadius(this, 'Planet');
     // Draw Earth with realistic appearance - blue oceans with green continents
     const gradient = ctx.createRadialGradient(
       world_pos.x,
@@ -3314,7 +3336,7 @@ class Planet extends PhysicsObject {
       0,
       world_pos.x,
       world_pos.y,
-      this.radius
+      r
     );
 
     // Base ocean color
@@ -3324,20 +3346,26 @@ class Planet extends PhysicsObject {
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(
+      world_pos.x,
+      world_pos.y,
+      drawRadius(this, 'Planet'),
+      0,
+      2 * Math.PI
+    );
     ctx.fill();
 
     // Add continent-like features (simplified)
-    if (this.radius * state.zoom > 8) {
+    if (r * state.zoom > 8) {
       // Draw some green "continents" as simple shapes
       ctx.fillStyle = '#2D5A2D'; // Dark green for continents
 
       // North America-like shape
       ctx.beginPath();
       ctx.arc(
-        world_pos.x - this.radius * 0.3,
-        world_pos.y - this.radius * 0.4,
-        this.radius * 0.25,
+        world_pos.x - r * 0.3,
+        world_pos.y - r * 0.4,
+        r * 0.25,
         0,
         2 * Math.PI
       );
@@ -3346,9 +3374,9 @@ class Planet extends PhysicsObject {
       // Europe/Asia-like shape
       ctx.beginPath();
       ctx.arc(
-        world_pos.x + this.radius * 0.2,
-        world_pos.y - this.radius * 0.3,
-        this.radius * 0.3,
+        world_pos.x + r * 0.2,
+        world_pos.y - r * 0.3,
+        r * 0.3,
         0,
         2 * Math.PI
       );
@@ -3357,9 +3385,9 @@ class Planet extends PhysicsObject {
       // Africa-like shape
       ctx.beginPath();
       ctx.arc(
-        world_pos.x + this.radius * 0.1,
-        world_pos.y + this.radius * 0.2,
-        this.radius * 0.2,
+        world_pos.x + r * 0.1,
+        world_pos.y + r * 0.2,
+        r * 0.2,
         0,
         2 * Math.PI
       );
@@ -3368,9 +3396,9 @@ class Planet extends PhysicsObject {
       // South America-like shape
       ctx.beginPath();
       ctx.arc(
-        world_pos.x - this.radius * 0.4,
-        world_pos.y + this.radius * 0.3,
-        this.radius * 0.15,
+        world_pos.x - r * 0.4,
+        world_pos.y + r * 0.3,
+        r * 0.15,
         0,
         2 * Math.PI
       );
@@ -3381,11 +3409,18 @@ class Planet extends PhysicsObject {
     ctx.strokeStyle = 'rgba(135, 206, 235, 0.3)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this) + 1, 0, 2 * Math.PI);
+    ctx.arc(
+      world_pos.x,
+      world_pos.y,
+      drawRadius(this, 'Planet') + 1,
+      0,
+      2 * Math.PI
+    );
     ctx.stroke();
   }
 
   drawMoon(ctx, world_pos) {
+    const r = drawRadius(this, 'Planet');
     // Draw Moon with realistic gray appearance and mock craters
     const gradient = ctx.createRadialGradient(
       world_pos.x,
@@ -3393,7 +3428,7 @@ class Planet extends PhysicsObject {
       0,
       world_pos.x,
       world_pos.y,
-      this.radius
+      r
     );
 
     // Moon surface gradient
@@ -3403,11 +3438,17 @@ class Planet extends PhysicsObject {
 
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(
+      world_pos.x,
+      world_pos.y,
+      drawRadius(this, 'Planet'),
+      0,
+      2 * Math.PI
+    );
     ctx.fill();
 
     // Add mock craters if zoomed in enough
-    if (this.radius * state.zoom > 6) {
+    if (r * state.zoom > 6) {
       ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
 
       // Draw several craters of different sizes
@@ -3423,9 +3464,9 @@ class Planet extends PhysicsObject {
       craters.forEach(crater => {
         ctx.beginPath();
         ctx.arc(
-          world_pos.x + crater.x * this.radius,
-          world_pos.y + crater.y * this.radius,
-          crater.r * this.radius,
+          world_pos.x + crater.x * r,
+          world_pos.y + crater.y * r,
+          crater.r * r,
           0,
           2 * Math.PI
         );
@@ -3434,17 +3475,17 @@ class Planet extends PhysicsObject {
     }
 
     // Add subtle surface texture
-    if (this.radius * state.zoom > 4) {
+    if (r * state.zoom > 4) {
       ctx.strokeStyle = 'rgba(100, 100, 100, 0.2)';
       ctx.lineWidth = 0.5;
 
       // Draw some subtle lines to simulate lunar surface features
       for (let i = 0; i < 3; i++) {
         const angle = (i * Math.PI) / 3;
-        const x1 = world_pos.x + Math.cos(angle) * this.radius * 0.8;
-        const y1 = world_pos.y + Math.sin(angle) * this.radius * 0.8;
-        const x2 = world_pos.x + Math.cos(angle) * this.radius;
-        const y2 = world_pos.y + Math.sin(angle) * this.radius;
+        const x1 = world_pos.x + Math.cos(angle) * r * 0.8;
+        const y1 = world_pos.y + Math.sin(angle) * r * 0.8;
+        const x2 = world_pos.x + Math.cos(angle) * r;
+        const y2 = world_pos.y + Math.sin(angle) * r;
 
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -3534,40 +3575,153 @@ class GasGiant extends PhysicsObject {
     this.intact = true;
     this.name = getRandomName('gasGiants');
 
-    // Saturn-like rings: default off; scenarios can enable selectively
-    // Rings stay opt-in: a scenario that means a ringed giant sets hasRings on
-    // it. Giving every gas giant rings would be inventing a fact about most of
-    // them, and the brief for this pass asks for restraint rather than
-    // decoration. What has changed is that the geometry is no longer drawn
-    // from Math.random - see ringGeometry() - so a scenario that does ask for
-    // rings gets the same rings every time it is rebuilt, and a hand-placed
-    // giant gets rings that survive a reload.
-    this.hasRings = false;
+    // Rings, for about a quarter of generated giants.
+    //
+    // From this body's own visual seed, which comes from its id, so the answer
+    // survives a reset, a reload, a share link, a screenshot and an A/B run.
+    // Never from Math.random: a hand-placed giant is built outside the seeded
+    // section of world building, and the old code gave it a different tilt on
+    // every load.
+    //
+    // A scenario that means something else says so afterwards - js/world/build
+    // sets this true for Saturn and false for the other Solar System giants,
+    // and either assignment overwrites what the constructor decided. The
+    // fraction is a choice about visual variety and is documented as one;
+    // nobody knows what share of giant exoplanets carry rings.
+    this.hasRings = hasRingsForSeed(visualSeed(this));
   }
 
   /**
-   * The ring geometry, derived once from this body's own visual seed.
+   * This body's ring geometry, in multiples of its displayed radius.
    *
-   * Deterministic and memoised. The parameters used to come from Math.random
-   * in the constructor, which is seeded during world building and is not
-   * seeded for a body somebody dropped on the canvas - so a hand-placed ringed
-   * giant had a different tilt after every reload, and no share link could
-   * reproduce it.
+   * The shape itself is js/bodyVisuals.js's; this only supplies the seed and
+   * translates whatever the scenario authored. Multiples rather than world
+   * units so the rings follow the drawn disc through a zoom, a quality tier
+   * and the marker floor.
    *
-   * @returns {{inner: number, outer: number, angle: number, opacity: number}}
-   *   Ring geometry in world units and radians
+   * Authored values are read as multiples of the planet's *model* radius,
+   * because that is what a scenario writing `radius * 1.3` meant, and are
+   * re-applied to the displayed radius so the author's proportion survives the
+   * displayed-size policy.
+   *
+   * @returns {object} From ringGeometryFor
    */
   ringGeometry() {
     if (this._rings) return this._rings;
-    const seed = visualSeed(this);
-    this._rings = {
-      inner: this.radius * (1.2 + hash01(seed, 1) * 0.3),
-      outer: this.radius * (1.7 + hash01(seed, 2) * 0.8),
-      // Within thirty degrees of the equator, the way a real ring system sits.
-      angle: (hash01(seed, 3) - 0.5) * (Math.PI / 3),
-      opacity: 0.4 + hash01(seed, 4) * 0.4,
-    };
+    const authored = {};
+    if (Number.isFinite(this.ringInnerRadius) && this.radius > 0) {
+      authored.inner = this.ringInnerRadius / this.radius;
+    }
+    if (Number.isFinite(this.ringOuterRadius) && this.radius > 0) {
+      authored.outer = this.ringOuterRadius / this.radius;
+    }
+    if (Number.isFinite(this.ringAngle)) authored.angle = this.ringAngle;
+    if (Number.isFinite(this.ringOpacity)) authored.opacity = this.ringOpacity;
+    this._rings = ringGeometryFor(visualSeed(this), authored);
     return this._rings;
+  }
+
+  /**
+   * One half of the ring system, as concentric projected ellipses.
+   *
+   * The disk is drawn in two passes with the planet between them, which is the
+   * whole of what makes it read as a disk rather than as a hoop painted on the
+   * sky: the far half goes down first, the opaque planet covers the part of it
+   * that crosses the disc, and the near half goes over the top. The planet
+   * fill is opaque, so the occlusion is exact rather than approximate.
+   *
+   * Bands, gaps and an optional Cassini-like division, all from the cached
+   * geometry: no gradients, no allocation beyond the paths themselves, and
+   * nothing random.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Target
+   * @param {{x: number, y: number}} at - Planet centre, world coordinates
+   * @param {number} pr - The planet's displayed radius, world units
+   * @param {boolean} near - The half in front of the planet
+   * @param {boolean} detailed - Bands and a division, rather than one annulus
+   */
+  drawRingHalf(ctx, at, pr, near, detailed) {
+    const g = this.ringGeometry();
+    // Which half of the parameterised ellipse faces the viewer depends on
+    // which side of the ring plane the viewer is on, which is what tiltSign
+    // records. Flipping it swaps front and back, and is the difference between
+    // a ring that passes in front of the planet and one that does not.
+    const front = g.tiltSign > 0;
+    const t0 = near === front ? 0 : Math.PI;
+
+    ctx.save();
+    ctx.translate(at.x, at.y);
+    ctx.rotate(g.angle);
+    ctx.globalAlpha = g.opacity;
+
+    const arcs = detailed
+      ? g.bands
+      : [{ r0: g.inner, r1: g.outer, alpha: 0.8 }];
+
+    for (const band of arcs) {
+      const r1 = band.r1 * pr;
+      const r0 = band.r0 * pr;
+      // A band narrower than a fraction of a pixel is not a band.
+      if (r1 - r0 <= 0) continue;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, t0, t0 + Math.PI, false);
+      ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, t0 + Math.PI, t0, true);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(${g.tint.r},${g.tint.g},${g.tint.b},${band.alpha.toFixed(3)})`;
+      ctx.fill('evenodd');
+    }
+
+    // The division, drawn as a hole rather than as a line: it is a gap in the
+    // rings, and a dark stroke over them would read as a wire.
+    if (detailed && g.cassini) {
+      const r1 = g.cassini.r1 * pr;
+      const r0 = g.cassini.r0 * pr;
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, t0, t0 + Math.PI, false);
+      ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, t0 + Math.PI, t0, true);
+      ctx.closePath();
+      ctx.fill('evenodd');
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  /**
+   * The planet's shadow, falling across the rings away from the star.
+   *
+   * A wedge, not a radiative-transfer calculation, and it claims no more than
+   * that: the rings are darker on the side the planet is between them and the
+   * light. Drawn only when there is a light to be away from and only at the
+   * size where it is legible.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Target
+   * @param {{x: number, y: number}} at - Planet centre, world coordinates
+   * @param {number} pr - Displayed planetary radius
+   * @param {{x: number, y: number}} light - Unit vector toward the light
+   */
+  drawRingShadow(ctx, at, pr, light) {
+    const g = this.ringGeometry();
+    const away = Math.atan2(-light.y, -light.x) - g.angle;
+    const half = 0.42; // radians either side: a shadow, not a sector chart
+
+    ctx.save();
+    ctx.translate(at.x, at.y);
+    ctx.rotate(g.angle);
+    ctx.globalAlpha = 0.55 * g.opacity;
+    ctx.globalCompositeOperation = 'destination-out';
+    const r1 = g.outer * pr;
+    const r0 = g.inner * pr;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r1, r1 * g.flatten, 0, away - half, away + half, false);
+    ctx.ellipse(0, 0, r0, r0 * g.flatten, 0, away + half, away - half, true);
+    ctx.closePath();
+    ctx.fill('evenodd');
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   calculateGiantType() {
@@ -3587,49 +3741,30 @@ class GasGiant extends PhysicsObject {
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
 
-    // Draw rings if present - BACK ARC ONLY FIRST
-    if (this.hasRings) {
-      const rings = this.ringGeometry();
-      ctx.save();
-      ctx.translate(world_pos.x, world_pos.y);
-      ctx.rotate(rings.angle);
-      ctx.globalAlpha = rings.opacity;
+    // The drawn radius, and how much of the system is worth showing at it.
+    // Everything below is proportioned to this rather than to the model
+    // radius, rings included.
+    const gr = drawRadius(this, 'GasGiant');
+    const gz = (state && state.zoom) || 1;
+    const glevel = lodOf(this, 'GasGiant');
+    const grPx = gr * gz;
 
-      // The dividing line between front and back is where the Y coordinate in the ring's local frame is zero
-      // For an ellipse, this is at angles theta1 = 0 and theta2 = PI
-      // But after rotation, these become theta1 = -angle and theta2 = PI - angle
-      // We'll use these as the split points
-      const theta1 = -rings.angle;
-      const theta2 = Math.PI - rings.angle;
+    // Rings, when there is room for them to be rings.
+    //
+    // A ring system on a body a few pixels across is four grey pixels beside
+    // three coloured ones, which is noise rather than information - so below
+    // the shaded threshold they are simply not drawn, and in a crowded field
+    // they are not drawn at all. Between the two, a single annulus each side;
+    // above it, the bands and the division.
+    const ringsVisible =
+      this.hasRings && lodAtLeast(glevel, LOD.SHADED) && grPx >= 5;
+    const ringsDetailed =
+      ringsVisible && lodAtLeast(glevel, LOD.DETAILED) && grPx >= 9;
 
-      // Draw back arc (behind planet): from theta1 to theta2
-      ctx.beginPath();
-      ctx.ellipse(
-        0,
-        0,
-        rings.outer,
-        rings.outer * 0.32,
-        0,
-        theta1,
-        theta2,
-        false
-      );
-      ctx.ellipse(
-        0,
-        0,
-        rings.inner,
-        rings.inner * 0.32,
-        0,
-        theta2,
-        theta1,
-        true
-      );
-      ctx.closePath();
-      ctx.fillStyle = `rgba(180,200,255,${rings.opacity})`;
-      ctx.fill('evenodd');
-      ctx.globalAlpha = 1.0;
-      ctx.restore();
-    }
+    // The far half first, so the planet can cover the part of it that crosses
+    // the disc.
+    if (ringsVisible)
+      this.drawRingHalf(ctx, world_pos, gr, false, ringsDetailed);
 
     // Draw the gas giant sphere (this will occlude the back portion of the ring)
     let baseColor;
@@ -3651,10 +3786,6 @@ class GasGiant extends PhysicsObject {
         baseColor = '#87CEEB';
         break;
     }
-
-    const gr = drawRadius(this);
-    const gz = (state && state.zoom) || 1;
-    const glevel = lodOf(this);
 
     ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
     ctx.beginPath();
@@ -3691,7 +3822,7 @@ class GasGiant extends PhysicsObject {
       ctx.restore();
     }
 
-    if (lodAtLeast(glevel, LOD.DETAILED) && this.radius * gz > 4) {
+    if (lodAtLeast(glevel, LOD.DETAILED) && gr * gz > 4) {
       // Clipped to the disc, for the reason above: the band ellipses are wider
       // and taller than the sphere at the latitudes they sit at, so without
       // this the outer ones hang off the limb.
@@ -3725,17 +3856,25 @@ class GasGiant extends PhysicsObject {
           break;
       }
 
+      // A band has to reach the limb, or it is a lozenge floating on the face.
+      // These ellipses are wider than the disc on purpose and the clip above
+      // trims them to it, which is what makes each one span the full width of
+      // the sphere at its own latitude. They used to be sized from the model
+      // radius, which over-spanned by so much that every band ran together
+      // into a wash; sized from the drawn radius they have to be widened
+      // deliberately instead of by accident.
       const numBands = this.massInJupiters > 3 ? 4 : 2;
+      const BAND_OVERSPAN = 1.15;
       for (let i = 0; i < numBands; i++) {
-        const bandOffset = (i - (numBands - 1) / 2) * (this.radius * 0.4);
-        const bandWidth = this.radius * 0.15;
+        const bandOffset = (i - (numBands - 1) / 2) * (gr * 0.4);
+        const bandWidth = gr * 0.15;
 
         ctx.fillStyle = bandColor;
         ctx.beginPath();
         ctx.ellipse(
           world_pos.x,
           world_pos.y + bandOffset,
-          this.radius * 0.9,
+          gr * BAND_OVERSPAN,
           bandWidth,
           0,
           0,
@@ -3748,7 +3887,7 @@ class GasGiant extends PhysicsObject {
         ctx.ellipse(
           world_pos.x,
           world_pos.y + bandOffset - bandWidth * 0.3,
-          this.radius * 0.85,
+          gr * BAND_OVERSPAN * 0.94,
           bandWidth * 0.4,
           0,
           0,
@@ -3757,23 +3896,24 @@ class GasGiant extends PhysicsObject {
         ctx.fill();
       }
 
+      // Polar caps, likewise trimmed to the limb rather than sitting inside it.
       if (this.massInJupiters > 2) {
         ctx.fillStyle = bandColor;
         ctx.beginPath();
         ctx.ellipse(
           world_pos.x,
-          world_pos.y - this.radius * 0.7,
-          this.radius * 0.3,
-          this.radius * 0.2,
+          world_pos.y - gr * 0.8,
+          gr * 0.7,
+          gr * 0.28,
           0,
           0,
           2 * Math.PI
         );
         ctx.ellipse(
           world_pos.x,
-          world_pos.y + this.radius * 0.7,
-          this.radius * 0.3,
-          this.radius * 0.2,
+          world_pos.y + gr * 0.8,
+          gr * 0.7,
+          gr * 0.28,
           0,
           0,
           2 * Math.PI
@@ -3787,9 +3927,18 @@ class GasGiant extends PhysicsObject {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = this.radius * state.zoom;
+    // Two different sizes, on purpose.
+    //
+    // The offset follows the *drawn* body, so a label sits just off the disc
+    // the reader can see. Whether to label at all follows the *model* radius,
+    // which is the size this decision has always been made on: gating on the
+    // drawn size instead would have taken the names off every planet in the
+    // Solar System the moment the displayed-size policy shrank them, which is
+    // a labelling change nobody asked for.
+    const screen_radius = gr * state.zoom;
+    const label_size = this.radius * state.zoom;
 
-    if (screen_radius > 6) {
+    if (label_size > 6) {
       const label_y_offset = screen_radius + 12;
       ctx.font = '11px Roboto Mono';
       ctx.fillStyle = '#fff';
@@ -3819,43 +3968,23 @@ class GasGiant extends PhysicsObject {
     }
     ctx.restore();
 
-    // Draw the front arc of the ring AFTER the planet (so it appears in front)
-    if (this.hasRings) {
-      const rings = this.ringGeometry();
-      ctx.save();
-      ctx.translate(world_pos.x, world_pos.y);
-      ctx.rotate(rings.angle);
-      ctx.globalAlpha = rings.opacity;
-
-      const theta1 = -rings.angle;
-      const theta2 = Math.PI - rings.angle;
-      // Draw front arc (in front of planet): from theta2 to theta1
-      ctx.beginPath();
-      ctx.ellipse(
-        0,
-        0,
-        rings.outer,
-        rings.outer * 0.32,
-        0,
-        theta2,
-        theta1,
-        false
-      );
-      ctx.ellipse(
-        0,
-        0,
-        rings.inner,
-        rings.inner * 0.32,
-        0,
-        theta1,
-        theta2,
-        true
-      );
-      ctx.closePath();
-      ctx.fillStyle = `rgba(180,200,255,${rings.opacity})`;
-      ctx.fill('evenodd');
-      ctx.globalAlpha = 1.0;
-      ctx.restore();
+    // ...and the near half over the top, which is what makes the disk read as
+    // a disk passing behind and in front rather than as a hoop drawn on the
+    // sky. Then the planet's own shadow across it, where there is a star to
+    // cast one.
+    if (ringsVisible) {
+      this.drawRingHalf(ctx, world_pos, gr, true, ringsDetailed);
+      if (ringsDetailed) {
+        const rsun = dominantStarFor(world_pos);
+        if (rsun) {
+          this.drawRingShadow(
+            ctx,
+            world_pos,
+            gr,
+            lightDirection(world_pos, rsun.pos)
+          );
+        }
+      }
     }
   }
 
@@ -3970,8 +4099,8 @@ class Asteroid extends PhysicsObject {
    */
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const r = drawRadius(this);
-    const level = lodOf(this);
+    const r = drawRadius(this, 'Asteroid');
+    const level = lodOf(this, 'Asteroid');
 
     ctx.fillStyle = '#8B4513';
 
@@ -4053,7 +4182,13 @@ class Debris extends PhysicsObject {
       b: 0,
     });
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(
+      world_pos.x,
+      world_pos.y,
+      drawRadius(this, 'Debris'),
+      0,
+      2 * Math.PI
+    );
     ctx.fill();
   }
 }
@@ -4841,7 +4976,7 @@ class BlackHole {
     // Deliberately not drawn at 1.5 radii as a photon ring: this engine is
     // Newtonian and does not compute one, and a ring drawn there would be a
     // claim the model page does not make.
-    const bhLevel = lodOf(this);
+    const bhLevel = lodOf(this, 'BlackHole');
     if (lodAtLeast(bhLevel, LOD.SHADED)) {
       ctx.strokeStyle = 'rgba(200,210,235,0.55)';
       ctx.lineWidth = Math.min(1.5 / state.zoom, world_radius * 0.06);
@@ -5082,10 +5217,10 @@ class StarObject extends PhysicsObject {
 
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    const r = drawRadius(this);
+    const r = drawRadius(this, 'Star');
     const z = (state && state.zoom) || 1;
-    const screenR = this.radius * z;
-    const level = lodOf(this);
+    const screenR = r * z;
+    const level = lodOf(this, 'Star');
 
     // Colour from the temperature, not from the mass directly.
     //
@@ -5204,9 +5339,18 @@ class StarObject extends PhysicsObject {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = this.radius * state.zoom;
+    // Two different sizes, on purpose.
+    //
+    // The offset follows the *drawn* body, so a label sits just off the disc
+    // the reader can see. Whether to label at all follows the *model* radius,
+    // which is the size this decision has always been made on: gating on the
+    // drawn size instead would have taken the names off every planet in the
+    // Solar System the moment the displayed-size policy shrank them, which is
+    // a labelling change nobody asked for.
+    const screen_radius = r * state.zoom;
+    const label_size = this.radius * state.zoom;
 
-    if (screen_radius > 5) {
+    if (label_size > 5) {
       const label_y_offset = screen_radius + 12;
       ctx.font = '12px Roboto Mono';
       ctx.fillStyle = '#fff';
@@ -5317,6 +5461,10 @@ class NeutronStar extends PhysicsObject {
 
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    // The drawn radius, which everything below is proportioned to. A neutron
+    // star is twenty kilometres across, so this is the marker floor at any
+    // zoom a scenario is actually viewed at.
+    const nsR = drawRadius(this, 'NeutronStar');
 
     // Pulsar effect
     this.pulsar_phase += 0.1;
@@ -5339,7 +5487,7 @@ class NeutronStar extends PhysicsObject {
       b: 255,
     });
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, nsR, 0, 2 * Math.PI);
     ctx.fill();
 
     // The magnetosphere ring: the cue that says "neutron star" rather than
@@ -5350,11 +5498,10 @@ class NeutronStar extends PhysicsObject {
     // Gated on the level of detail like everything else, and its reach is
     // capped: magnetic_field_strength is unbounded in the constructor, and a
     // strongly magnetised star drew a ring several times its own size.
-    const nsLevel = lodOf(this);
-    if (lodAtLeast(nsLevel, LOD.SHADED) && this.radius * state.zoom > 2) {
+    const nsLevel = lodOf(this, 'NeutronStar');
+    if (lodAtLeast(nsLevel, LOD.SHADED) && nsR * state.zoom > 2) {
       const field_radius =
-        drawRadius(this) *
-        Math.min(3.0, 2 + (this.magnetic_field_strength || 0));
+        nsR * Math.min(3.0, 2 + (this.magnetic_field_strength || 0));
       const field_intensity = pulse_intensity * 0.3;
 
       ctx.strokeStyle = `rgba(0, 255, 255, ${field_intensity})`;
@@ -5365,9 +5512,9 @@ class NeutronStar extends PhysicsObject {
     }
 
     // Pulsar beams (only if isPulsar)
-    if (this.isPulsar && this.radius * state.zoom > 1) {
-      const beam_length = this.radius * 8;
-      const beam_width = Math.max(0.5 / state.zoom, this.radius * 0.3);
+    if (this.isPulsar && nsR * state.zoom > 1) {
+      const beam_length = nsR * 8;
+      const beam_width = Math.max(0.5 / state.zoom, nsR * 0.3);
 
       ctx.strokeStyle = `rgba(255, 255, 255, ${pulse_intensity * 0.8})`;
       ctx.lineWidth = beam_width;
@@ -5376,8 +5523,8 @@ class NeutronStar extends PhysicsObject {
       // Two beams at opposing angles
       for (let i = 0; i < 2; i++) {
         const angle = this.pulsar_phase + i * Math.PI;
-        const beam_start_x = world_pos.x + Math.cos(angle) * this.radius;
-        const beam_start_y = world_pos.y + Math.sin(angle) * this.radius;
+        const beam_start_x = world_pos.x + Math.cos(angle) * nsR;
+        const beam_start_y = world_pos.y + Math.sin(angle) * nsR;
         const beam_end_x = world_pos.x + Math.cos(angle) * beam_length;
         const beam_end_y = world_pos.y + Math.sin(angle) * beam_length;
 
@@ -5392,9 +5539,18 @@ class NeutronStar extends PhysicsObject {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = this.radius * state.zoom;
+    // Two different sizes, on purpose.
+    //
+    // The offset follows the *drawn* body, so a label sits just off the disc
+    // the reader can see. Whether to label at all follows the *model* radius,
+    // which is the size this decision has always been made on: gating on the
+    // drawn size instead would have taken the names off every planet in the
+    // Solar System the moment the displayed-size policy shrank them, which is
+    // a labelling change nobody asked for.
+    const screen_radius = nsR * state.zoom;
+    const label_size = this.radius * state.zoom;
 
-    if (screen_radius > 2) {
+    if (label_size > 2) {
       const label_y_offset = screen_radius * 8 + 12;
       ctx.font = '12px Roboto Mono';
       ctx.fillStyle = '#fff';
@@ -5480,9 +5636,9 @@ class WhiteDwarf extends PhysicsObject {
       200.0,
       { r: 255, g: 255, b: 255 }
     );
-    const wdR = drawRadius(this);
+    const wdR = drawRadius(this, 'WhiteDwarf');
     const wdZ = (state && state.zoom) || 1;
-    const wdLevel = lodOf(this);
+    const wdLevel = lodOf(this, 'WhiteDwarf');
 
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, wdR, 0, 2 * Math.PI);
@@ -5494,7 +5650,7 @@ class WhiteDwarf extends PhysicsObject {
     // dwarf is two and a half times the body and reads as a small star rather
     // than as the Earth-sized cinder it is. Capped, and skipped entirely at
     // the point level where a halo is one lighter ring of pixels.
-    if (lodAtLeast(wdLevel, LOD.SHADED) && this.radius * wdZ > 3) {
+    if (lodAtLeast(wdLevel, LOD.SHADED) && wdR * wdZ > 3) {
       const glow_radius =
         wdR * Math.min(2.0, 1.3 + (this.temperature || 0) / 40000);
       const glow_intensity = Math.min(0.32, (this.temperature / 20000) * 0.3);
@@ -5533,9 +5689,18 @@ class WhiteDwarf extends PhysicsObject {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const true_screen_pos = world_to_screen(world_pos);
-    const screen_radius = this.radius * state.zoom;
+    // Two different sizes, on purpose.
+    //
+    // The offset follows the *drawn* body, so a label sits just off the disc
+    // the reader can see. Whether to label at all follows the *model* radius,
+    // which is the size this decision has always been made on: gating on the
+    // drawn size instead would have taken the names off every planet in the
+    // Solar System the moment the displayed-size policy shrank them, which is
+    // a labelling change nobody asked for.
+    const screen_radius = wdR * state.zoom;
+    const label_size = this.radius * state.zoom;
 
-    if (screen_radius > 3) {
+    if (label_size > 3) {
       const label_y_offset = screen_radius * 2 + 12;
       ctx.font = '12px Roboto Mono';
       ctx.fillStyle = '#fff';
@@ -5624,7 +5789,7 @@ class Galaxy extends PhysicsObject {
 
   draw(ctx) {
     const { x, y } = this.pos;
-    const r = drawRadius(this);
+    const r = drawRadius(this, 'Galaxy');
 
     ctx.save();
     ctx.translate(x, y);
@@ -5830,10 +5995,7 @@ const findObjectAtPosition = worldPos => {
   for (const bh of bh_list) {
     const dx = worldPos.x - bh.pos.x;
     const dy = worldPos.y - bh.pos.y;
-    const clickRadius = Math.max(
-      bh.radius,
-      CLICK_MIN_RADIUS.BlackHole / state.zoom
-    );
+    const clickRadius = hitRadius(bh.radius, 'BlackHole', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
     }
@@ -5845,10 +6007,7 @@ const findObjectAtPosition = worldPos => {
     if (!g.alive) continue;
     const dx = worldPos.x - g.pos.x;
     const dy = worldPos.y - g.pos.y;
-    const clickRadius = Math.max(
-      g.radius,
-      CLICK_MIN_RADIUS.Galaxy / state.zoom
-    );
+    const clickRadius = hitRadius(g.radius, 'Galaxy', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: g, type: 'Galaxy' };
     }
@@ -5859,10 +6018,7 @@ const findObjectAtPosition = worldPos => {
     if (!star.alive) continue;
     const dx = worldPos.x - star.pos.x;
     const dy = worldPos.y - star.pos.y;
-    const clickRadius = Math.max(
-      star.radius,
-      CLICK_MIN_RADIUS.Star / state.zoom
-    );
+    const clickRadius = hitRadius(star.radius, 'Star', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: star, type: 'Star' };
     }
@@ -5873,10 +6029,7 @@ const findObjectAtPosition = worldPos => {
     if (!ns.alive) continue;
     const dx = worldPos.x - ns.pos.x;
     const dy = worldPos.y - ns.pos.y;
-    const clickRadius = Math.max(
-      ns.radius,
-      CLICK_MIN_RADIUS.NeutronStar / state.zoom
-    );
+    const clickRadius = hitRadius(ns.radius, 'NeutronStar', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: ns, type: 'NeutronStar' };
     }
@@ -5887,10 +6040,7 @@ const findObjectAtPosition = worldPos => {
     if (!wd.alive) continue;
     const dx = worldPos.x - wd.pos.x;
     const dy = worldPos.y - wd.pos.y;
-    const clickRadius = Math.max(
-      wd.radius,
-      CLICK_MIN_RADIUS.WhiteDwarf / state.zoom
-    );
+    const clickRadius = hitRadius(wd.radius, 'WhiteDwarf', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: wd, type: 'WhiteDwarf' };
     }
@@ -5901,10 +6051,7 @@ const findObjectAtPosition = worldPos => {
     if (!gasGiant.alive) continue;
     const dx = worldPos.x - gasGiant.pos.x;
     const dy = worldPos.y - gasGiant.pos.y;
-    const clickRadius = Math.max(
-      gasGiant.radius,
-      CLICK_MIN_RADIUS.GasGiant / state.zoom
-    );
+    const clickRadius = hitRadius(gasGiant.radius, 'GasGiant', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: gasGiant, type: 'GasGiant' };
     }
@@ -5915,10 +6062,7 @@ const findObjectAtPosition = worldPos => {
     if (!planet.alive) continue;
     const dx = worldPos.x - planet.pos.x;
     const dy = worldPos.y - planet.pos.y;
-    const clickRadius = Math.max(
-      planet.radius,
-      CLICK_MIN_RADIUS.Planet / state.zoom
-    );
+    const clickRadius = hitRadius(planet.radius, 'Planet', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: planet, type: 'Planet' };
     }
@@ -5932,15 +6076,13 @@ const findObjectAtPosition = worldPos => {
   // hand-placed comet was pushed into `asteroids`. Once that was corrected the
   // branch became unreachable and comets stopped being selectable at all: a
   // reader could place one and then not click it, inspect it, follow it or
-  // frame on it. CLICK_MIN_RADIUS.Comet has been declared and unused since.
+  // frame on it. The comet entry in HIT_MIN_PX was declared and unused until
+  // then.
   for (const comet of comets) {
     if (!comet.alive) continue;
     const dx = worldPos.x - comet.pos.x;
     const dy = worldPos.y - comet.pos.y;
-    const clickRadius = Math.max(
-      comet.radius,
-      CLICK_MIN_RADIUS.Comet / state.zoom
-    );
+    const clickRadius = hitRadius(comet.radius, 'Comet', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: comet, type: 'Comet' };
     }
@@ -5951,10 +6093,7 @@ const findObjectAtPosition = worldPos => {
     if (!asteroid.alive) continue;
     const dx = worldPos.x - asteroid.pos.x;
     const dy = worldPos.y - asteroid.pos.y;
-    const clickRadius = Math.max(
-      asteroid.radius,
-      CLICK_MIN_RADIUS.Asteroid / state.zoom
-    );
+    const clickRadius = hitRadius(asteroid.radius, 'Asteroid', state.zoom);
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: asteroid, type: 'Asteroid' };
     }
@@ -6021,9 +6160,9 @@ class Comet extends PhysicsObject {
    */
   draw(ctx) {
     const world_pos = this.pos;
-    const r = drawRadius(this);
+    const r = drawRadius(this, 'Comet');
     const z = (state && state.zoom) || 1;
-    const level = lodOf(this);
+    const level = lodOf(this, 'Comet');
 
     // Where the light is, which is what a comet's appearance is entirely about.
     // The tails are not exhaust: the ion tail is blown radially outward by the

@@ -250,15 +250,60 @@ for (const vp of VIEWPORTS) {
       expect(status.y + status.height).toBeLessThanOrEqual(vp.height + 1);
     });
 
-    test('the control rail stops above the transport bar', async ({
+    test('no rail control ends up under the transport bar', async ({
       page,
       app,
     }) => {
+      // The control, not the panel. The first version of this compared the two
+      // boxes, which is both too strict and too weak: too strict because the
+      // rail's translucent sheet may perfectly well pass under a floating pill,
+      // and too weak because a control scrolled to the bottom of the rail can
+      // sit under that pill while the boxes still look fine at some other
+      // scroll position. What matters is whether a reader can see and press
+      // the thing they are reaching for.
       await app.boot();
       await openRail(page);
-      const rail = await page.locator('#mainControls').boundingBox();
-      const bar = await page.locator('#timelineBar').boundingBox();
-      expect(boxesOverlap(rail, bar)).toBe(false);
+      // The tallest section, which is what pushes the rail into the bar.
+      await page.locator('#railTools').click();
+      await page.waitForTimeout(200);
+
+      const obscured = await page.evaluate(() => {
+        const rail = document.getElementById('mainControls');
+        const bar = document
+          .getElementById('timelineBar')
+          .getBoundingClientRect();
+        const seen = new Set();
+        const collect = () => {
+          const rr = rail.getBoundingClientRect();
+          for (const el of rail.querySelectorAll('button')) {
+            if (!el.offsetParent) continue;
+            const b = el.getBoundingClientRect();
+            if (b.width === 0 || b.height === 0) continue;
+            // Only the part of the control actually inside the rail's own
+            // scroll viewport counts as on screen.
+            const top = Math.max(b.y, rr.y);
+            const bottom = Math.min(b.bottom, rr.bottom);
+            if (bottom - top < b.height * 0.5) continue;
+            if (
+              b.x < bar.right &&
+              b.right > bar.x &&
+              top < bar.bottom &&
+              bottom > bar.y
+            ) {
+              seen.add(el.id || el.textContent.trim().slice(0, 20));
+            }
+          }
+        };
+        // Both ends of the scroll, so neither the first control nor the last
+        // can hide behind the bar.
+        rail.scrollTop = 0;
+        collect();
+        rail.scrollTop = rail.scrollHeight;
+        collect();
+        return [...seen];
+      });
+
+      expect(obscured).toEqual([]);
     });
 
     test('nothing scrolls sideways', async ({ page, app }) => {
