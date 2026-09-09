@@ -41,6 +41,69 @@ describe('reading a list of times', () => {
     expect(out.rejected).toEqual(['oops', '-3', 'NaN']);
   });
 
+  test('the canonical syntax round-trips through the formatter', () => {
+    // What formatEpochList() writes has to be what parseEpochList() reads, or
+    // the panel prints lists its own field will not accept.
+    const offsets = [0, 0.4, 1.1, 2.6, 10.000001];
+    const text = formatEpochList(offsets);
+    expect(text).toBe('0, 0.4, 1.1, 2.6, 10.000001');
+    const back = parseEpochList(text);
+    expect(back.ok).toBe(true);
+    expect(back.problems).toEqual([]);
+    expect(back.offsets).toEqual(offsets);
+  });
+
+  test('every canonical separator is accepted', () => {
+    for (const text of [
+      '0, 1.5, 2.5',
+      '0 1.5 2.5',
+      '0;1.5;2.5',
+      '0\n1.5\n2.5',
+      '  0 ,  1.5 ;\n 2.5  ',
+    ]) {
+      const out = parseEpochList(text);
+      expect(out.ok).toBe(true);
+      expect(out.offsets).toEqual([0, 1.5, 2.5]);
+    }
+  });
+
+  test('a pasted column of numbers is a schedule', () => {
+    const out = parseEpochList('0\n0.4\n1.1\n2.6\n');
+    expect(out.ok).toBe(true);
+    expect(out.offsets).toEqual([0, 0.4, 1.1, 2.6]);
+  });
+
+  test('a comma between digits is refused, and nothing is read from it', () => {
+    // The contradiction: this used to report a fatal problem AND hand back
+    // [0, 1, 2], so whether the reader got their own schedule depended on
+    // which half of the result the caller looked at.
+    const compact = parseEpochList('0,1,2');
+    expect(compact.ok).toBe(false);
+    expect(compact.offsets).toEqual([]);
+    expect(compact.problems.map(p => p.id)).toEqual([
+      SCHEDULE_PROBLEM.DECIMAL_COMMA,
+    ]);
+
+    // And the decimal-comma reading, which is the same input class.
+    const decimals = parseEpochList('0,5 1,5');
+    expect(decimals.ok).toBe(false);
+    expect(decimals.offsets).toEqual([]);
+    expect(decimals.problems[0].id).toBe(SCHEDULE_PROBLEM.DECIMAL_COMMA);
+    expect(decimals.problems[0].count).toBe(2);
+  });
+
+  test('dot decimals are read exactly, however they are separated', () => {
+    expect(parseEpochList('0.5, 1.5').offsets).toEqual([0.5, 1.5]);
+    expect(parseEpochList('0.5 1.5').offsets).toEqual([0.5, 1.5]);
+  });
+
+  test('a comma not between digits is still a separator', () => {
+    // Trailing and doubled commas are ordinary typing, not ambiguity.
+    const out = parseEpochList('0, 1.5, , 2.5,');
+    expect(out.ok).toBe(true);
+    expect(out.offsets).toEqual([0, 1.5, 2.5]);
+  });
+
   test('times are sorted and coincident ones are merged', () => {
     const out = parseEpochList('3 1 2 1');
     expect(out.offsets).toEqual([1, 2, 3]);

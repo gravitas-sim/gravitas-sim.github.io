@@ -262,7 +262,61 @@ describe('the export', () => {
     });
     expect(out.recording.cadenceDays).toBeGreaterThan(0);
     expect(out.recording.sigma).toBe(2);
-    expect(out.recording.plannedEpochs).toBe(24);
+  });
+
+  test('the planned count is the schedule’s, not the number of rows', () => {
+    // A recording that does not declare its programme cannot have one
+    // invented from how many rows it happens to hold: a run stopped early has
+    // fewer rows than it planned, and calling that number "planned" describes
+    // a shorter programme than the one that was run.
+    loadRecording(recording({ n: 18 }));
+    expect(exportReport().recording.plannedEpochs).toBeNull();
+
+    // One that does declare it reports what it declared, whatever came back.
+    loadRecording({ ...recording({ n: 18 }), plannedEpochs: 24 });
+    expect(exportReport().recording.plannedEpochs).toBe(24);
+    expect(exportReport().recording.epochs.attempted).toBe(18);
+
+    // And the older payload shape, which carried it under the schedule.
+    const older = recording({ n: 18 });
+    loadRecording({
+      ...older,
+      config: { ...older.config, scheduleEpochs: 24 },
+    });
+    expect(exportReport().recording.plannedEpochs).toBe(24);
+  });
+
+  test('missed epochs are counted as missed, not as observations', () => {
+    const base = recording({ n: 12 });
+    // Three the telescope never took: the schedule wanted them and nobody was
+    // observing, so the rows exist and carry no velocity.
+    const points = base.points.map((pt, i) =>
+      i >= 9 ? { ...pt, rv: null, sigma: null, missed: true } : pt
+    );
+    loadRecording({ ...base, points, plannedEpochs: 12 });
+    const epochs = exportReport().recording.epochs;
+
+    expect(epochs.count).toBe(9);
+    expect(epochs.attempted).toBe(12);
+    expect(epochs.missed).toBe(3);
+    expect(epochs.unusable).toBe(0);
+    // The span is of the observations, and stops at the last one taken.
+    expect(epochs.lastDay).toBeCloseTo(base.points[8].day, 9);
+    // The schedule reached further, and that is beside it under its own name.
+    expect(epochs.scheduledSpanDays).toBeGreaterThan(epochs.spanDays);
+  });
+
+  test('a row with no velocity that was not missed is unusable, not observed', () => {
+    const base = recording({ n: 6 });
+    const points = base.points.map((pt, i) =>
+      i === 2 ? { ...pt, rv: null, sigma: null } : pt
+    );
+    loadRecording({ ...base, points });
+    const epochs = exportReport().recording.epochs;
+    expect(epochs.count).toBe(5);
+    expect(epochs.attempted).toBe(6);
+    expect(epochs.missed).toBe(0);
+    expect(epochs.unusable).toBe(1);
   });
 
   test('it includes the search bounds when a search was run', () => {

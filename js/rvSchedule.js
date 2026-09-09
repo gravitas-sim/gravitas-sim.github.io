@@ -140,14 +140,33 @@ const clampNum = (v, lo, hi, fallback) => {
 /**
  * Read a list of observation times.
  *
- * Accepts whatever a reader is likely to paste: commas, spaces, newlines,
- * semicolons. Everything unreadable is returned in `rejected` rather than
- * dropped, so the panel can say "three of those were not numbers" instead of
- * silently observing on a shorter schedule than the reader typed.
+ * The canonical syntax, which is what formatEpochList() writes and what the
+ * field's placeholder shows:
  *
- * Times are days from the start of the run, and they are sorted and
- * de-duplicated: a schedule is a set of instants, and two epochs at the same
- * instant are one observation however they were typed.
+ *   0, 0.4, 1.1, 2.6
+ *
+ * Times are days from the start of the run. Decimals are written with a DOT.
+ * Separators are whitespace, newlines, semicolons, or a comma followed by a
+ * space - so a pasted column of numbers works, and so does the list this
+ * module prints.
+ *
+ * The one thing refused is a comma directly between two digits, and it is
+ * refused rather than guessed at because it cannot be read: in "0,5 1,5" the
+ * commas are either two decimal points, giving two observations at 0.5 and
+ * 1.5, or two separators, giving four at 0, 5, 1 and 5. Both readings are
+ * ordinary, they differ by a factor of ten in when the telescope looks, and no
+ * amount of context distinguishes them. So the parse stops there: it returns
+ * no offsets at all and says why. It used to flag the ambiguity AND return the
+ * separator reading's offsets, which is the worst of the three options - a
+ * caller that looked at the offsets and not at the problems observed a
+ * schedule the reader had not typed.
+ *
+ * Everything else unreadable is returned in `rejected` rather than dropped, so
+ * the panel can say "three of those were not numbers" instead of silently
+ * observing on a shorter schedule than the reader typed.
+ *
+ * Times are sorted and de-duplicated: a schedule is a set of instants, and two
+ * epochs at the same instant are one observation however they were typed.
  *
  * @param {string} text - As typed
  * @returns {{ok: boolean, offsets: Array<number>, rejected: Array<string>,
@@ -158,16 +177,30 @@ export function parseEpochList(text) {
   const problems = [];
   const note = (id, extra = {}) => problems.push({ id, ...extra });
 
-  // A comma separates times here, in every language this ships in, so a
-  // decimal comma is ambiguous rather than merely unusual: "0,5 1,5" would
-  // silently become three observations at 0, 1 and 5 instead of two at 0.5 and
-  // 1.5. Caught before the split, which is the only point at which the
-  // evidence still exists, and refused rather than guessed at.
+  // A comma directly between two digits, which cannot be read. Caught before
+  // the split, which is the only point at which the evidence still exists.
+  //
+  // The parse then STOPS. Returning the separator reading's offsets beside the
+  // complaint was the contradiction this grammar had: parseEpochList('0,1,2')
+  // reported a fatal problem and handed back [0, 1, 2], so whether the reader
+  // got the schedule they typed depended on which half of the result the
+  // caller happened to read. There is no schedule here to return.
   const decimalCommas = raw.match(/\d,\d/g) || [];
   if (decimalCommas.length) {
     note(SCHEDULE_PROBLEM.DECIMAL_COMMA, { count: decimalCommas.length });
+    return {
+      ok: false,
+      offsets: [],
+      rejected: [],
+      duplicates: 0,
+      discarded: 0,
+      problems,
+    };
   }
 
+  // Whitespace, newlines and semicolons separate; so does a comma, which after
+  // the check above can only be the canonical "comma space" or a comma against
+  // something that is not a digit.
   const tokens = raw.split(/[\s,;]+/).filter(Boolean);
   const offsets = [];
   const rejected = [];
@@ -245,6 +278,12 @@ export function parseEpochList(text) {
 
 /**
  * Render a list of times for the text field.
+ *
+ * Writes the canonical syntax parseEpochList() documents: dot decimals,
+ * separated by a comma AND a space. The space is not decoration - a comma
+ * against a digit on both sides is the one thing the parser refuses, so a
+ * formatter that emitted "0,0.4,1.1" would print lists its own parser would
+ * not read.
  *
  * Six decimals by default rather than three, and trailing zeros trimmed. The
  * field is a round trip - the panel writes a plan into it and reads the plan

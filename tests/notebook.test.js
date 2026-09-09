@@ -1381,16 +1381,40 @@ describe('provenance belongs to the recording, not to the world on screen', () =
     expect(p.displayFrame).toBe('world');
   });
 
-  test('a recording that carries nothing falls back to the live world', async () => {
+  test('a recording that carries nothing leaves the world’s counters unknown', async () => {
     const { fromRvFit } = await import('../js/notebook/capture.js');
     const entry = fromRvFit({
       analysis: rvAnalysis(),
       report: { recording: {} },
-      provenance: { scenario: 'Solar System', worldGeneration: 3 },
+      provenance: {
+        scenario: 'Solar System',
+        worldGeneration: 3,
+        interventionEpoch: 5,
+      },
     });
-    // Filling a gap is not the same as overwriting a fact.
+    // A label the live world can supply, because the scenario on screen is
+    // what the reading is of. Filling a gap is not the same as overwriting a
+    // fact.
     expect(entry.snapshot.provenance.scenario).toBe('Solar System');
-    expect(entry.snapshot.provenance.worldGeneration).toBe(3);
+
+    // The two world counters are not labels. They say how many times the world
+    // had been rebuilt and interfered with WHEN THE SAMPLES WERE TAKEN, and
+    // the present's answer is a different fact under the same name: a
+    // recording made before five burns would be filed as though it had been
+    // made after them. A recording too old to say leaves them unknown.
+    expect(entry.snapshot.provenance.worldGeneration).toBeNull();
+    expect(entry.snapshot.provenance.interventionEpoch).toBeNull();
+  });
+
+  test('a recording that does carry them keeps its own, not the world’s', async () => {
+    const { fromRvFit } = await import('../js/notebook/capture.js');
+    const entry = fromRvFit({
+      analysis: rvAnalysis(),
+      report: { recording: { worldGeneration: 2, interventionEpoch: 1 } },
+      provenance: { worldGeneration: 9, interventionEpoch: 7 },
+    });
+    expect(entry.snapshot.provenance.worldGeneration).toBe(2);
+    expect(entry.snapshot.provenance.interventionEpoch).toBe(1);
   });
 
   test('the schedule and the analysis seed travel with the entry', async () => {

@@ -46,8 +46,14 @@ async function startSurvey(page, { cadence, baseline, sigma, seed }) {
  * to be generous enough for the longest schedule here on a machine that is
  * running several browsers at once. It is not a hang detector; the assertion
  * below is.
+ *
+ * Sixty seconds rather than thirty, measured: at six local workers this file
+ * reached seven of the eight measurements in thirty and failed - the run was
+ * progressing the whole time, just slower than a wall clock the simulation
+ * knows nothing about. Doubling the budget changes no assertion and still
+ * fails a genuinely hung run, thirty seconds later.
  */
-async function collect(page, app, n, timeout = 30000) {
+async function collect(page, app, n, timeout = 60000) {
   await expect
     .poll(
       async () =>
@@ -63,7 +69,7 @@ async function collect(page, app, n, timeout = 30000) {
 
 /** Record a short run and return once there is something to analyse. */
 async function record(page, app, opts = {}) {
-  const { points = 8, collectTimeout = 30000, ...schedule } = opts;
+  const { points = 8, collectTimeout = 60000, ...schedule } = opts;
   await openRv(page, app);
   await startSurvey(page, {
     cadence: 0.05,

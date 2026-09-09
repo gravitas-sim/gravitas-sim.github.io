@@ -261,9 +261,24 @@ export function exportReport() {
       cadenceDays: source.config?.cadenceDays ?? null,
       baselineDays: source.config?.baselineDays ?? null,
       sigma: source.config?.sigma ?? null,
-      plannedEpochs: source.points.length,
+      // How many the schedule meant to take, which is not how many rows came
+      // back. `source.points.length` is the number of rows the recording
+      // currently holds: for a run that was stopped early, or one whose
+      // observing was suspended, that is smaller than the programme - and
+      // reporting it as "planned" describes a shorter programme than the one
+      // that was run. Null when a recording is too old to say.
+      plannedEpochs:
+        source.plannedEpochs ?? source.config?.scheduleEpochs ?? null,
       recordedAt: source.recordedAt ?? null,
       worldGeneration: source.worldGeneration ?? null,
+      /**
+       * The world's intervention count when the samples were taken.
+       *
+       * Null for a recording that predates this being carried, and null is
+       * what has to reach the notebook: filling it from the live world would
+       * attribute every burn made since the recording to the recording.
+       */
+      interventionEpoch: source.interventionEpoch ?? null,
       // When the telescope looked, as opposed to how precisely. Null for a
       // plain cadence run: it had no plan beyond its spacing, and naming a
       // shape it never had would be worse than saying nothing.
@@ -332,22 +347,73 @@ let uncertaintyFor = null;
  * the moment somebody analysed it. Both used to reach a notebook entry as one
  * number, and it was the second one.
  *
+ * What counts as an observation
+ * -----------------------------------------------------------------------------
+ * A row, not a measurement. A schedule that came due while nobody was
+ * observing still writes a row - deliberately, because a file that omits it
+ * says the programme was shorter than it was - and that row carries the day
+ * the telescope was SUPPOSED to look and no velocity at all. Counting it as an
+ * observation put "twelve observations" on an entry built from eight, and made
+ * the span run to an epoch at which nothing was measured.
+ *
+ * So `count` is real, finite readings and nothing else, and the rest are
+ * beside it under their own names. They mean different things and a reader
+ * comparing two recordings needs all of them:
+ *
+ *   attempted   rows the recording holds: epochs the run actually reached
+ *   count       of those, the ones that produced a finite velocity
+ *   missed      of those, the ones nobody was observing for
+ *   unusable    of those, the ones with no velocity for some other reason
+ *
+ * The span is over the observations, because it is the span of the
+ * observations; the schedule's own reach is beside it under its own name.
+ *
  * @param {Array<object>} points - The recording's measurements
  * @returns {?object} The span, or null with nothing to span
  */
 function epochSpan(points) {
-  const days = (points || [])
+  const rows = Array.isArray(points) ? points : [];
+  const attempted = rows.length;
+  if (!attempted) return null;
+
+  // Number(null) is 0, which is finite, so a missed row's absent velocity
+  // would read as a measurement of zero metres per second. Nulls are checked
+  // for before anything is coerced; the coercion itself stays, because an
+  // older recording read back from a file may carry its numbers as strings.
+  const hasReading = p =>
+    !p.missed &&
+    p.rv !== null &&
+    p.rv !== undefined &&
+    Number.isFinite(Number(p.rv));
+  const observed = rows
+    .filter(hasReading)
     .map(p => Number(p.day))
     .filter(Number.isFinite)
     .sort((a, b) => a - b);
-  if (!days.length) return null;
+  const scheduled = rows
+    .map(p => Number(p.day))
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+  const missed = rows.filter(p => p.missed).length;
+
   return {
-    count: days.length,
-    firstDay: days[0],
-    lastDay: days[days.length - 1],
-    spanDays: days[days.length - 1] - days[0],
+    /** Real, finite observations. This is what `observedEpochs` means. */
+    count: observed.length,
+    firstDay: observed.length ? observed[0] : null,
+    lastDay: observed.length ? observed[observed.length - 1] : null,
+    spanDays: observed.length
+      ? observed[observed.length - 1] - observed[0]
+      : null,
     /** Named, because "3.5" is not a time until it has one. */
     unit: 'days',
+    // --- and the counts that are not observations ------------------------
+    attempted,
+    missed,
+    unusable: attempted - observed.length - missed,
+    /** How far the schedule reached, whether or not it measured anything. */
+    scheduledSpanDays: scheduled.length
+      ? scheduled[scheduled.length - 1] - scheduled[0]
+      : null,
   };
 }
 

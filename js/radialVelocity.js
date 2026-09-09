@@ -296,6 +296,18 @@ function recordingPayload(run) {
     // presented as the historical one is not.
     numerical: p.numerical ?? null,
     worldGeneration: p.worldGeneration ?? null,
+    // The same argument, and this one was being dropped here. The intervention
+    // epoch counts the burns, drags and mass edits the world has had; a
+    // recording made before three of them is different evidence from one made
+    // after. captureProvenance() froze it and this rebuilt the payload without
+    // it, so by the time the notebook asked, the only value anywhere was the
+    // live world's - and a recording taken at epoch 2 was filed as though it
+    // had been taken at epoch 5.
+    interventionEpoch: p.interventionEpoch ?? null,
+    // How many observations the schedule was going to make, from the schedule
+    // rather than from how many rows came back. A run stopped early has fewer
+    // rows than it planned, and that difference is the interesting part.
+    plannedEpochs: Number.isFinite(run.planned) ? run.planned : null,
     recordedAt: p.startedAt ?? null,
     openedAt: new Date().toISOString(),
     truth: p.truth ?? null,

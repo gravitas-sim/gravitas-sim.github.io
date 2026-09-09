@@ -77,7 +77,23 @@ const ABSORB_BUFFER = 6;
 // scenario can lower it to suit its own scale.
 const MIN_INTERACTION_DISTANCE = 5.0;
 
-/** @returns {number} The softening floor currently in force */
+/**
+ * The softening floor currently in force.
+ *
+ * The one authority on the question, and exported because there was briefly a
+ * second. `min_interaction_distance` is zero in DEFAULT_SETTINGS and zero here
+ * means "no scenario has an opinion, use the default" - it does not mean "no
+ * floor". js/cr3bpPanel.js read the raw setting and took the zero at face
+ * value, so a compact system sitting well inside the five-unit default was
+ * validated as Newtonian while the engine was clamping every force in it.
+ *
+ * Anything that needs to know what the force law is actually doing - the
+ * integrator, the potential, or a teaching overlay deciding whether its
+ * closed-form claims hold - asks this. Nothing re-reads the setting and
+ * nothing else carries the fallback.
+ *
+ * @returns {number} The floor, in simulation length units
+ */
 const minInteractionDistance = () => {
   const v = physicsSettings.min_interaction_distance;
   return Number.isFinite(v) && v > 0 ? v : MIN_INTERACTION_DISTANCE;

@@ -1975,8 +1975,10 @@ export const ES_DEFERRED = {
   'rvsched.gaps': 'Huecos (dias, desde-hasta)',
   'rvsched.problem.unreadable':
     'No se pudieron leer {count} entradas y se ignoraron: {list}.',
+  'rvsched.epochList.help':
+    'Dias desde el inicio, separados por una coma y un espacio, o uno por linea. Los decimales llevan punto: escribe 0.5, no 0,5.',
   'rvsched.problem.decimalComma':
-    'La coma separa un tiempo del siguiente, asi que una coma decimal no se distingue de una lista: escribe 0.5, no 0,5. {count} entradas parecen comas decimales.',
+    'Una coma entre dos digitos puede ser un punto decimal o un separador, y \u00ab0,5 1,5\u00bb significa dos observaciones o cuatro. No se ha leido nada de esta lista. Escribe los decimales con punto y separa los tiempos con una coma y un espacio: 0.5, 1.5. {count} entradas parecen comas decimales.',
   'rvsched.problem.negative':
     '{count} tiempos son anteriores al inicio de la campana y no se pueden observar: {list}.',
   'rvsched.problem.duplicate':

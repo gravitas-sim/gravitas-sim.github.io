@@ -257,9 +257,10 @@ jobs:
     # Measured rather than guessed, twice, because the first two guesses were
     # wrong in both directions.
     #
-    # The unsharded job kept exceeding 25 minutes. Four shards fitted but only
-    # just - 19.8 minutes against a 20-minute step cap - and six then produced
-    # a shard that went over it, because sharding divides by TEST COUNT and
+    # The unsharded job kept exceeding 25 minutes. A four-way split fitted but
+    # only just - 19.8 minutes against a 20-minute step cap - and the six-way
+    # one then produced a shard that went over it, because sharding divides by
+    # TEST COUNT and
     # says nothing about duration. What actually sets the floor is one file:
     # tests inside a spec run serially, and chaos.spec.js alone is about twelve
     # minutes locally, so whichever shard holds most of it cannot finish faster
@@ -274,10 +275,10 @@ jobs:
     # caught, at a third again its expected duration.
     timeout-minutes: 40
     strategy:
-      # One shard failing must not cancel the other three. A cancelled shard
+      # One shard failing must not cancel the other five. A cancelled shard
       # tells you nothing about the tests it did not reach, and the whole point
       # of splitting the suite is to find out what is broken in one run rather
-      # than three.
+      # than six.
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4, 5, 6]
@@ -332,8 +333,8 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          # Uniquely named, or the four shards overwrite one another and the
-          # merge has one quarter of the run to work with.
+          # Uniquely named, or the six shards overwrite one another and the
+          # merge has one sixth of the run to work with.
           name: blob-report-sources-${{ matrix.shard }}
           path: blob-report
           retention-days: 7
@@ -591,13 +592,13 @@ jobs:
         run: |
           echo "checks:        ${{ needs.checks.result }}"
           echo "build:         ${{ needs.build.result }}"
-          # One result for the whole matrix: GitHub rolls the four source
+          # One result for the whole matrix: GitHub rolls the six source
           # shards up into this, and it is 'success' only when every one of
           # them succeeded. A shard that failed, was cancelled or never ran
           # makes it something else, and `require` below refuses all three -
           # so a shard whose report never arrived cannot be mistaken for a
           # shard that passed.
-          echo "e2e (4 shards): ${{ needs.e2e.result }}"
+          echo "e2e (6 shards): ${{ needs.e2e.result }}"
           echo "accessibility: ${{ needs.accessibility.result }}"
           echo "e2e-build:     ${{ needs.e2e-build.result }}"
           echo "cross-browser: ${{ needs.cross-browser.result }}"
@@ -640,7 +641,7 @@ jobs:
 
           require checks        "${{ needs.checks.result }}"
           require build         "${{ needs.build.result }}"
-          require e2e           "${{ needs.e2e.result }}"   # all four shards
+          require e2e           "${{ needs.e2e.result }}"   # all six shards
           require accessibility "${{ needs.accessibility.result }}"
           require e2e-build     "${{ needs.e2e-build.result }}"
 

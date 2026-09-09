@@ -74,9 +74,9 @@ those tests take, and the floor is set by a single file: tests inside one spec
 run serially, and `chaos.spec.js` alone is about twelve minutes locally. No
 number of shards gets below that.
 
-Measured, twice. Four shards on CI: 16.3, 15.5, 11.1, 19.8 minutes - the last
-against a 20-minute step cap, which is luck rather than headroom. Six shards:
-one of them went over it. Locally the six-way split is 14.9 minutes at its
+Measured, twice. A four-way split on CI: 16.3, 15.5, 11.1, 19.8 minutes - the
+last against a 20-minute step cap, which is luck rather than headroom. The
+six-way split, which is what runs now: one of them went over that cap. Locally the six-way split is 14.9 minutes at its
 worst and CI runs this workload about 1.4 times slower, so the real figure is
 around 21.
 
@@ -90,7 +90,7 @@ live simulation, so workers on the same machine compete for the same CPU and
 each one gets slower; the parallelism that helps is across machines.
 
 Each shard writes a **blob report** and uploads it under its own name. A
-separate job merges the four into one HTML report with every trace and
+separate job merges the six into one HTML report with every trace and
 screenshot in it, and runs whether the shards passed or not — a report is most
 wanted when they did not. That job decides nothing: the deployment gate requires
 the shard matrix itself, so a shard that failed, was cancelled, or never

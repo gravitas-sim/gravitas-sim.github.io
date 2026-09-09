@@ -11,10 +11,37 @@
 // is. Doing that here rather than inside the helpers is what lets the helpers
 // be tested against fixed inputs - and what makes it impossible for a stored
 // entry to hold a reference to a body that is about to be rebuilt.
+//
+// What "at the moment of the click" means here
+// -----------------------------------------------------------------------------
+// A capture is atomic or it is a lie. The reader presses Keep at an instant,
+// and the entry claims to describe that instant: this clock, this world
+// generation, this observer geometry, this analysis. Everything on the path
+// from the press to the snapshot therefore happens with no await in it -
+// liveProvenance() is synchronous over statically imported modules, and the
+// panel copies its own result with snapshot() before calling. Only after both
+// are in hand does anything get fetched.
 // =============================================================================
 
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+// Statically imported, and that is the point of this module's existence.
+//
+// Everything the provenance is read from has to be readable WITHOUT an await,
+// because the whole correctness argument below is that the reading happens in
+// the same task as the click. A dynamic import cannot promise that: even a
+// warm module cache resolves on a later microtask, and by then a running
+// simulation has advanced. All eight of these are in the start-up graph
+// already - the renderer, the controls and the inspector reach every one of
+// them - so naming them here costs the initial download nothing.
+import { getWorldGeneration, getInterventionEpoch } from './physics.js';
+import { getSimClock } from './timeline.js';
+import { qualityReport } from './quality.js';
+import { frameMode, frameObjectId } from './referenceFrame.js';
+import { observerGeometry } from './observerGeometry.js';
+import { SETTINGS } from './appState.js';
+import { timeUnitSeconds } from './units.js';
+import { SECONDS_PER_DAY } from './constants.js';
 
 let loading = null;
 
@@ -109,12 +136,19 @@ export function resolveScenario(settings) {
 /**
  * Everything about the running simulation an entry should record.
  *
- * Atomic, and that is why it is shaped this way. The first version awaited six
- * dynamic imports and *then* read the clock, the world generation and the
- * geometry - so on a cold cache the world advanced by however long the imports
- * took between the reader pressing save and the numbers being read, and the
- * entry recorded a moment that was not the moment. The imports resolve first;
- * every read below happens in one synchronous block with no await in it.
+ * Synchronous, and that is the whole of its correctness. A reader presses Keep
+ * at a moment; the entry has to describe that moment. This function contains
+ * no await, reads only from modules that are already resolved, and is called
+ * before anything else in the capture path yields - so between the click and
+ * these reads the browser has run no other task and the world cannot have
+ * moved.
+ *
+ * It used to await eight dynamic imports first. On a warm cache that is a
+ * microtask or two, on a cold one it is a network fetch, and in both cases the
+ * animation loop gets a turn: the clock, the world generation, the observer
+ * geometry and the intervention epoch were all read from a world that had
+ * carried on without the reader. The entry then described a moment nobody had
+ * asked about, and nothing on it said so.
  *
  * On the clock
  * -----------------------------------------------------------------------------
@@ -127,31 +161,19 @@ export function resolveScenario(settings) {
  * keeps its real name, and the factor is recorded so a reader can redo it.
  *
  * @param {object} [extra] - Fields the caller knows and this cannot
- * @returns {Promise<object>} Fields for provenanceOf()
+ * @returns {object} Fields for provenanceOf()
  */
-export async function liveProvenance(extra = {}) {
-  const [physics, timeline, quality, frame, observer, state, units, constants] =
-    await Promise.all([
-      import('./physics.js'),
-      import('./timeline.js'),
-      import('./quality.js'),
-      import('./referenceFrame.js'),
-      import('./observerGeometry.js'),
-      import('./appState.js'),
-      import('./units.js'),
-      import('./constants.js'),
-    ]);
-
+export function liveProvenance(extra = {}) {
   // --- One synchronous block. Nothing below awaits. -------------------------
-  const settings = state.SETTINGS || {};
-  const clockUnits = timeline.getSimClock();
-  const unitSeconds = units.timeUnitSeconds();
-  const geometry = observer.observerGeometry();
-  const worldGeneration = physics.getWorldGeneration();
-  const interventionEpoch = physics.getInterventionEpoch?.() ?? null;
-  const frameMode = frame.frameMode();
-  const frameObject = frame.frameObjectId();
-  const qualityNow = quality.qualityReport();
+  const settings = SETTINGS || {};
+  const clockUnits = getSimClock();
+  const unitSeconds = timeUnitSeconds();
+  const geometry = observerGeometry();
+  const worldGeneration = getWorldGeneration();
+  const interventionEpoch = getInterventionEpoch?.() ?? null;
+  const mode = frameMode();
+  const frameObject = frameObjectId();
+  const qualityNow = qualityReport();
   const revision = buildRevision();
   const scenario = resolveScenario(settings);
   const integrator = settings.integrator ?? null;
@@ -166,7 +188,7 @@ export async function liveProvenance(extra = {}) {
     /** The raw clock, under its real name. */
     simTimeUnits: Number.isFinite(clockUnits) ? clockUnits : null,
     simTimeSeconds: seconds,
-    simTimeDays: seconds === null ? null : seconds / constants.SECONDS_PER_DAY,
+    simTimeDays: seconds === null ? null : seconds / SECONDS_PER_DAY,
     /** So the conversion above can be checked, and redone. */
     timeUnitSeconds: unitSeconds,
     worldGeneration,
@@ -179,7 +201,7 @@ export async function liveProvenance(extra = {}) {
     // Mode plus the object it is centred on, because "object" alone does not
     // say which object and two readings taken in different object frames are
     // not comparable.
-    referenceFrame: frameObject ? `${frameMode}:${frameObject}` : frameMode,
+    referenceFrame: frameObject ? `${mode}:${frameObject}` : mode,
     observer: {
       positionAngleDeg: geometry.positionAngleDeg,
       inclinationDeg: geometry.inclinationDeg,
@@ -187,6 +209,55 @@ export async function liveProvenance(extra = {}) {
     quality: qualityNow,
     ...extra,
   };
+}
+
+/**
+ * A detached copy of whatever a panel is about to hand the notebook.
+ *
+ * The other half of the atomicity argument. Reading the provenance in the
+ * click's own task is no use if the evidence beside it is a live object the
+ * panel will overwrite while the notebook loads - a bench comparison, an RV
+ * analysis, the sweep the reader is about to run again. Panels copy their
+ * source here, at click time, and the copy is what the entry is built from.
+ *
+ * Written out rather than delegated to structuredClone or a JSON round trip,
+ * and both alternatives were tried:
+ *
+ *   JSON turns Infinity and NaN into null and drops undefined. An uncertainty
+ *   bound of Infinity is a real thing for a poorly constrained fit to report,
+ *   and "null" is how this codebase says unknown - so the round trip quietly
+ *   converts a measured non-finite result into a missing one.
+ *
+ *   structuredClone keeps those, and is not everywhere: it is absent from the
+ *   test environment, so the code that ran under test was the fallback and the
+ *   code that shipped was not. One implementation, exercised by both.
+ *
+ * Cycles are tracked because a report that contains one should be copied, not
+ * hang. Functions are passed through by reference: nothing here puts one in a
+ * snapshot, and a caller that needs to pass one - bench.metricLabel is the
+ * case - passes it beside the snapshot rather than inside it.
+ *
+ * @template T
+ * @param {T} value - The panel's own result
+ * @param {WeakMap} [seen] - Internal, for cycles
+ * @returns {T} A copy that nothing else holds
+ */
+export function snapshot(value, seen = new WeakMap()) {
+  if (value === null || typeof value !== 'object') return value;
+  if (seen.has(value)) return seen.get(value);
+  if (value instanceof Date) return new Date(value.getTime());
+  if (Array.isArray(value)) {
+    const out = [];
+    seen.set(value, out);
+    for (const item of value) out.push(snapshot(item, seen));
+    return out;
+  }
+  const out = {};
+  seen.set(value, out);
+  for (const [key, item] of Object.entries(value)) {
+    out[key] = snapshot(item, seen);
+  }
+  return out;
 }
 
 /**
@@ -239,11 +310,20 @@ export function watchForNotebook() {
  * @param {Function} make - (capture, provenance) => entry|null
  * @returns {Promise<boolean>} Whether anything was captured
  */
-export async function captureToNotebook(make) {
-  const { panel, capture } = await ensureNotebook();
-  const provenance = await liveProvenance();
-  const entry = make(capture, provenance);
-  if (!entry) return false;
-  panel.offerDraft(entry);
-  return true;
+export function captureToNotebook(make) {
+  // Deliberately not an `async function`. Everything above the first await
+  // runs in the caller's own task, which is the click's task, and the
+  // provenance is read there - before the notebook chunk is fetched, before
+  // the panel is mounted, and before the animation loop gets another turn.
+  //
+  // `make` is called afterwards, and that is safe on one condition the callers
+  // meet: what it closes over has already been copied. See snapshot().
+  const provenance = liveProvenance();
+  return (async () => {
+    const { panel, capture } = await ensureNotebook();
+    const entry = make(capture, provenance);
+    if (!entry) return false;
+    panel.offerDraft(entry);
+    return true;
+  })();
 }

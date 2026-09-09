@@ -1951,8 +1951,10 @@ export const EN_DEFERRED = {
   'rvsched.gaps': 'Gaps (days, from-to)',
   'rvsched.problem.unreadable':
     '{count} entries could not be read and were ignored: {list}.',
+  'rvsched.epochList.help':
+    'Days from the start, separated by a comma and a space, or one per line. Decimals use a dot: write 0.5, not 0,5.',
   'rvsched.problem.decimalComma':
-    'A comma separates one time from the next, so a decimal comma cannot be told from a list: write 0.5, not 0,5. {count} entries look like decimal commas.',
+    'A comma between two digits could be a decimal point or a separator, and \u201c0,5 1,5\u201d means either two observations or four. Nothing was read from this list. Write decimals with a dot and separate times with a comma and a space: 0.5, 1.5. {count} entries look like decimal commas.',
   'rvsched.problem.negative':
     '{count} times are before the run starts and cannot be observed: {list}.',
   'rvsched.problem.duplicate':

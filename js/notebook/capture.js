@@ -51,8 +51,18 @@ function recordedProvenance(rec, report) {
   put('scenario', rec.scenario);
   put('target', rec.target);
   put('seed', rec.seed);
-  put('worldGeneration', rec.worldGeneration);
-  put('interventionEpoch', rec.interventionEpoch);
+  // Assigned rather than put(), and the difference is the whole point.
+  //
+  // put() leaves a key alone when the recording does not carry it, and the
+  // live world's value then survives from liveProvenance() into the entry. For
+  // a recording that is never right: these two count how much the world had
+  // been rebuilt and interfered with WHEN THE SAMPLES WERE TAKEN, and the
+  // present's answer is a different fact wearing the same name. A recording
+  // made before three burns was being filed as though it had been made after
+  // them. Old recordings that cannot say leave it null, which is what this
+  // codebase means by unknown.
+  out.worldGeneration = rec.worldGeneration ?? null;
+  out.interventionEpoch = rec.interventionEpoch ?? null;
   // The direction the star was watched from when the samples were taken, not
   // wherever the sliders happen to be now. `observer` is what the workspace
   // reports; `geometry` is the older payload shape, kept so a saved recording

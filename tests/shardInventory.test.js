@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 // The shards add up to the suite
 // -----------------------------------------------------------------------------
 // The source browser suite runs as six shards across six runners because it
-// stopped fitting in one job. That is only a safe change while the four of them
+// stopped fitting in one job. That is only a safe change while the six of them
 // between them run every test the single job ran, once each: a sharding mistake
 // - a stale total, a filter applied on one side only - would quietly stop
 // running some tests, and every shard would still be green.

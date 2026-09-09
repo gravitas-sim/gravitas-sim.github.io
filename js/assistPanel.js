@@ -35,6 +35,7 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { MONO } from './widgetCanvas.js';
+import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { simToAu, velocityUnitToMs } from './units.js';
 import { SOLAR_MASS_UNIT as SOLAR_MASS } from './physics.js';
 import { t, onLocaleChange } from './i18n/index.js';
@@ -1156,18 +1157,20 @@ export function initAssist() {
   // Into the notebook: the passes, what was held, the seed, the settings they
   // were actually integrated at, and the limits that outlive them. Dynamic, so
   // a reader who never keeps anything never downloads the notebook.
+  //
+  // Read and copied before anything is awaited, so the entry describes the
+  // passes that were on screen when the button was pressed rather than
+  // whatever the panel holds by the time the notebook has loaded.
   e.compareKeep?.addEventListener('click', async () => {
-    const report = assistComparisonReport();
+    const report = snapshot(assistComparisonReport());
     if (!report) return;
-    const { captureToNotebook } = await import('./notebookBridge.js');
     await captureToNotebook((capture, provenance) =>
       capture.fromAssistComparison({ report, provenance })
     );
   });
   e.sweepKeep?.addEventListener('click', async () => {
-    const report = assistSweepReport();
+    const report = snapshot(assistSweepReport());
     if (!report) return;
-    const { captureToNotebook } = await import('./notebookBridge.js');
     await captureToNotebook((capture, provenance) =>
       capture.fromAssistSweep({ report, provenance })
     );

@@ -37,6 +37,7 @@ import { formatNumber } from './format.js';
 import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
 import { MC_LIMITS, runMonteCarlo } from './rvUncertainty.js';
 import { t, onLocaleChange } from './i18n/index.js';
+import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 let enabled = false;
@@ -301,17 +302,23 @@ export function initRvWorkspacePanel() {
     render();
   });
 
-  // Dynamic, so the notebook and its PDF writer stay out of this chunk as well
-  // as out of the start-up path: a student who never keeps a fit never
-  // downloads either.
+  // The bridge is imported at the top of this module rather than here, and the
+  // notebook itself is still not: the bridge is the two-kilobyte rail button
+  // that is in the start-up graph anyway, and everything heavy - the panel, the
+  // capture helpers, the PDF writer - stays behind its ensureNotebook().
+  //
+  // What the static import buys is that the reading below happens in the
+  // click's own task, before anything is awaited. Between a press and a
+  // dynamic import resolving, a reader can refit, reveal the truth, re-run the
+  // Monte Carlo or start another recording, and every one of those rewrites
+  // the objects these two calls return.
   e.notebook?.addEventListener('click', async () => {
-    const { captureToNotebook } = await import('./notebookBridge.js');
+    const kept = {
+      analysis: snapshot(analysis()),
+      report: snapshot(exportReport()),
+    };
     const saved = await captureToNotebook((capture, provenance) =>
-      capture.fromRvFit({
-        analysis: analysis(),
-        report: exportReport(),
-        provenance,
-      })
+      capture.fromRvFit({ ...kept, provenance })
     );
     if (!saved && e.status) e.status.textContent = t('nb.nothingToSave');
   });

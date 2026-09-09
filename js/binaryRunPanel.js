@@ -44,6 +44,7 @@ import {
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { MONO } from './widgetCanvas.js';
+import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
@@ -914,9 +915,10 @@ export function initBinaryRun() {
   // limitation that outlives all of them. Dynamic, so a reader who never keeps
   // anything never downloads the notebook.
   e.sweepKeep?.addEventListener('click', async () => {
-    const report = binarySweepReport();
+    // Copied in the click's own task: a reader can start another sweep, or a
+    // recheck, while the notebook chunk is still being fetched.
+    const report = snapshot(binarySweepReport());
     if (!report) return;
-    const { captureToNotebook } = await import('./notebookBridge.js');
     await captureToNotebook((capture, provenance) =>
       capture.fromBinarySweep({ report, provenance })
     );

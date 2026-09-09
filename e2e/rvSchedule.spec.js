@@ -296,49 +296,69 @@ test.describe('both arms have one lifecycle', () => {
     // two recordings do not differ in how long anybody was watching.
     test.setTimeout(180000);
     await openRv(page, app);
-    await page.locator('#rvSurveyBaseline').fill('2');
+    const baselineDays = 2;
+    const epochs = 12;
+    await page.locator('#rvSurveyBaseline').fill(String(baselineDays));
     await page.locator('#rvSurveyCompareEnabled').check();
     await page.locator('#rvSurveyShapeB').selectOption('irregular');
-    await page.locator('#rvSurveyEpochs').fill('12');
+    await page.locator('#rvSurveyEpochs').fill(String(epochs));
     await page.locator('#rvSurveyEpochs').blur();
 
     await expect
       .poll(async () => (await state(page)).taken, { timeout: 60000 })
       .toBeGreaterThanOrEqual(2);
 
-    // Closed, and then time passes.
+    // Closed, and then SIMULATED time passes.
+    //
+    // Two seconds of wall clock was the wait here, and what has to elapse is
+    // more than one epoch spacing of simulated days - which is a different
+    // quantity, and how many days two seconds buys depends on how busy the
+    // machine is. Run this file on its own and it passed; run it beside its
+    // eighteen neighbours at six workers and the simulation advanced less than
+    // one spacing in the two seconds, no epoch fell due, and the test failed
+    // for a reason that had nothing to do with what it checks. So it waits for
+    // the thing it actually needs.
+    const spacing = baselineDays / epochs;
+    const clock = () =>
+      page.evaluate(async () => {
+        const { getSimClock } = await import('/js/timeline.js');
+        const { timeUnitSeconds } = await import('/js/units.js');
+        return (getSimClock() * timeUnitSeconds()) / 86400;
+      });
+    const closedAt = await clock();
     await page.locator('#rvClose').click();
-    await page.waitForTimeout(2000);
+    await expect
+      .poll(async () => (await clock()) - closedAt, { timeout: 60000 })
+      .toBeGreaterThan(spacing * 1.5);
     await page.locator('#toggleRadialVelocity').click();
     await expect(page.locator('#rvContainer')).toBeVisible();
 
     // Both arms recorded the epochs that fell due while nobody was watching as
     // missed, rather than one of them inventing values across the closure.
+    // Read once the resumed run has recorded what it missed. The comparison
+    // is read defensively - null while a run is being rebuilt - and the poll
+    // is what waits for it rather than a sleep.
+    const readMissed = () =>
+      page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        const cmp = rv.radialVelocityComparison();
+        const missedIn = ms => ms.filter(m => m.missed).length;
+        return {
+          a: missedIn(rv.radialVelocitySurvey().measurements),
+          b: cmp ? missedIn(cmp.second.measurements) : null,
+        };
+      });
     await expect
       .poll(
-        async () =>
-          page.evaluate(async () => {
-            const rv = await import('/js/radialVelocity.js');
-            const cmp = rv.radialVelocityComparison();
-            const missedIn = ms => ms.filter(m => m.missed).length;
-            return {
-              a: missedIn(rv.radialVelocitySurvey().measurements),
-              b: missedIn(cmp.second.measurements),
-            };
-          }),
+        async () => {
+          const m = await readMissed();
+          return m.a > 0 && m.b > 0;
+        },
         { timeout: 60000 }
       )
-      .toEqual(expect.objectContaining({ a: expect.any(Number) }));
+      .toBe(true);
 
-    const missed = await page.evaluate(async () => {
-      const rv = await import('/js/radialVelocity.js');
-      const cmp = rv.radialVelocityComparison();
-      const missedIn = ms => ms.filter(m => m.missed).length;
-      return {
-        a: missedIn(rv.radialVelocitySurvey().measurements),
-        b: missedIn(cmp.second.measurements),
-      };
-    });
+    const missed = await readMissed();
     expect(missed.a).toBeGreaterThan(0);
     expect(missed.b).toBeGreaterThan(0);
   });

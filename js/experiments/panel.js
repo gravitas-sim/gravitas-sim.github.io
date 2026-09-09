@@ -31,6 +31,7 @@ import * as CHAOS from './chaosPair.js';
 import { SETTINGS } from '../appState.js';
 import { state, onPhysicsStep, updatePhysicsSettings } from '../physics.js';
 import { getSimClock } from '../timeline.js';
+import { captureToNotebook, snapshot } from '../notebookBridge.js';
 import { frameAdvance } from '../timestep.js';
 import { DT } from '../physics.js';
 
@@ -1766,7 +1767,9 @@ function wire() {
     runChaosPair({ control: $('benchChaosControlPick').value }).catch(() => {});
   };
   $('benchChaosKeep').onclick = () => {
-    const report = chaosPairReport();
+    // Already a copy - chaosPairReport() returns one - and snapshotted again
+    // so the rule is the same at every one of these buttons.
+    const report = snapshot(chaosPairReport());
     if (!report) return;
     keep((capture, provenance) =>
       capture.fromChaosPair({ report, provenance })
@@ -1913,37 +1916,55 @@ function wire() {
   // The three notebook buttons. Dynamic imports so the notebook, its PDF
   // writer and its prose stay out of the bench's chunk as well as out of the
   // start-up path: keeping a result is a separate decision from producing one.
-  $('benchNotebook').onclick = () =>
+  //
+  // Each of these reads the bench and copies what it read before anything is
+  // awaited. The bench's active experiment is mutable module state: recording
+  // a run, restoring the start, sweeping, cancelling a sweep or capturing a
+  // new experiment all rewrite it, and any of those can happen between the
+  // press and the notebook chunk arriving. Reading it inside the callback -
+  // which runs after the load - was reading whatever the bench had become.
+  //
+  // `bench.metricLabel` is passed as it stands, deliberately: it is a pure
+  // lookup from a metric id to a label, not state, and a copy of a function is
+  // not a thing snapshot() will make.
+  $('benchNotebook').onclick = () => {
+    const kept = {
+      experiment: snapshot(bench.activeExperiment()),
+      comparison: snapshot(bench.compare()),
+    };
     keep((capture, provenance) =>
       capture.fromBenchComparison({
-        experiment: bench.activeExperiment(),
-        comparison: bench.compare(),
+        ...kept,
         labelFor: bench.metricLabel,
         provenance,
       })
     );
-  $('benchSweepNotebook').onclick = () =>
+  };
+  $('benchSweepNotebook').onclick = () => {
+    const sweep = snapshot(bench.latestSweep());
     keep((capture, provenance) =>
-      capture.fromSweep({
-        sweep: bench.latestSweep(),
-        labelFor: bench.metricLabel,
-        provenance,
-      })
+      capture.fromSweep({ sweep, labelFor: bench.metricLabel, provenance })
     );
-  $('benchReliabilityNotebook').onclick = () =>
+  };
+  $('benchReliabilityNotebook').onclick = () => {
+    const exp = bench.activeExperiment();
+    const report = snapshot(exp?.reliability);
+    // The experiment's own scenario and seed, read now, so a rebuild between
+    // the press and the save cannot relabel a finished check.
+    const scenario = exp?.provenance?.scenario ?? null;
+    const seed = exp?.provenance?.seed ?? null;
     keep((capture, provenance) =>
       capture.fromReliability({
-        report: bench.activeExperiment()?.reliability,
+        report,
         labelFor: bench.metricLabel,
         provenance: {
           ...provenance,
-          scenario:
-            bench.activeExperiment()?.provenance?.scenario ??
-            provenance.scenario,
-          seed: bench.activeExperiment()?.provenance?.seed ?? provenance.seed,
+          scenario: scenario ?? provenance.scenario,
+          seed: seed ?? provenance.seed,
         },
       })
     );
+  };
 
   $('benchExportCsv').onclick = () => download('csv');
   $('benchExportJson').onclick = () => download('json');
@@ -1975,11 +1996,14 @@ function tickStatus() {
 /**
  * Hand a result to the evidence notebook.
  *
+ * `make` must close over data that has already been copied - see the callers,
+ * which snapshot at click time. The bridge reads the provenance synchronously
+ * before it fetches anything; this exists only to report the refusal.
+ *
  * @param {Function} make - (capture, provenance) => entry|null
  * @returns {Promise<void>}
  */
 async function keep(make) {
-  const { captureToNotebook } = await import('../notebookBridge.js');
   const saved = await captureToNotebook(make);
   if (!saved) bench.say(t('nb.nothingToSave'));
 }

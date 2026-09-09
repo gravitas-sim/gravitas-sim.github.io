@@ -50,8 +50,10 @@ import {
   state,
   onPhysicsStep,
   updatePhysicsSettings,
+  minInteractionDistance,
 } from './physics.js';
 import { getSimClock } from './timeline.js';
+import { captureToNotebook, snapshot } from './notebookBridge.js';
 import * as CHAOS_STEPS from './experiments/chaosPair.js';
 import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
@@ -129,11 +131,16 @@ const lightBodies = () =>
  * softening floor is likewise not a modification until something comes inside
  * it, so the closest distance in play is measured and handed over with it.
  *
+ * Exported so the floor it reports can be checked against the one the engine
+ * applies. That agreement is the whole of this function's correctness, and it
+ * was wrong: a test that can only reach it through the panel's rendering
+ * cannot say so.
+ *
  * @param {Array<object>} massive - The two heavy bodies
  * @param {?object} tracer - The light third body
  * @returns {object} {extraPotential, softening, minDistance}
  */
-function activeForceLaw(massive, tracer) {
+export function activeForceLaw(massive, tracer) {
   const mode = getPhysicsSetting('galaxy_gravity');
   let extraPotential = null;
   if (mode === 'halo' && Number(getPhysicsSetting('halo_v_flat')) > 0) {
@@ -161,7 +168,17 @@ function activeForceLaw(massive, tracer) {
 
   return {
     extraPotential,
-    softening: Number(getPhysicsSetting('min_interaction_distance')) || 0,
+    // The floor the engine is ACTUALLY applying, from the engine.
+    //
+    // This used to read the setting and coerce it: `Number(setting) || 0`.
+    // But `min_interaction_distance` is 0 in DEFAULT_SETTINGS and zero there
+    // means "this scenario has no opinion, use the default", not "no floor" -
+    // js/physics.js turns it into five units before integrating anything. So
+    // the overlay's check saw a softening of zero, found nothing to complain
+    // about, and pronounced a compact system Newtonian while every force in it
+    // was being clamped. One authority now, and it is the one the integrator
+    // uses.
+    softening: minInteractionDistance(),
     minDistance: finite.length ? Math.min(...finite) : Infinity,
   };
 }
@@ -437,9 +454,10 @@ function mount() {
   };
   $('cr3bpPairCancel').onclick = () => cancelNeckPair();
   $('cr3bpPairKeep').onclick = async () => {
-    const report = neckPairReport();
+    // Copied before anything is awaited, for the same reason as everywhere
+    // else: the pair can be re-run while the notebook is loading.
+    const report = snapshot(neckPairReport());
     if (!report) return;
-    const { captureToNotebook } = await import('./notebookBridge.js');
     await captureToNotebook((capture, provenance) =>
       capture.fromNeckPair({ report, provenance })
     );

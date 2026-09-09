@@ -66,6 +66,7 @@ import {
   updatePhysicsSettings,
 } from '../physics.js';
 import { pristineSettingsFor } from '../shareState.js';
+import { createPhaseSampler } from './phaseSampler.js';
 import { timeUnitSeconds } from '../units.js';
 import { t } from '../i18n/index.js';
 import { toast } from '../controls.js';
@@ -503,67 +504,48 @@ async function runReliabilityPhase(cfg) {
   const samples = [];
   const baselineBodies = selectableBodies().length;
 
-  // Frames that ACTUALLY advanced the simulation, and every rAF tick.
-  //
-  // These were one number, and counting rAF ticks assumes each one stepped the
-  // world. A backgrounded tab, a paused simulation or a frame that produced no
-  // step all tick without advancing the clock, so a run stopped after N ticks
-  // having covered less simulated time than it was asked for - and reported
-  // the requested duration as though it had been achieved. Both phases still
-  // take exactly N advancing frames, which is what keeps their durations
-  // identical and the comparison admissible.
-  let frames = 0;
-  let ticks = 0;
-  let stalled = 0;
-  let lastClock = startClock;
-  let sampleCapHit = false;
+  /** One sample of the world as it stands. */
+  const take = () => {
+    const bodies = (current.objects || []).map(bodyById).filter(Boolean);
+    const primary = current.primary !== null ? bodyById(current.primary) : null;
+    samples.push(
+      sampleFrame({
+        t: getSimulationTime(),
+        bodies,
+        primary,
+        conserved: conservedQuantities(),
+        drift: conservationDrift(),
+        secondsPerUnit: timeUnitSeconds(),
+        metrics: current.metrics,
+      })
+    );
+  };
+
+  // What to sample and when to stop is a policy, and it is in
+  // js/experiments/phaseSampler.js so it can be tested against a scripted
+  // clock. All this loop does is read the clock and do as it is told.
+  const sampler = createPhaseSampler({
+    frames: cfg.frames,
+    maxSamples: MAX_SAMPLES,
+  });
+  sampler.start(startClock);
+  take();
+
   await new Promise(resolve => {
     const tick = () => {
-      if (cfg.abort.cancelled) return resolve();
-
-      const clock = getSimulationTime();
-      const bodies = (current.objects || []).map(bodyById).filter(Boolean);
-      const primary =
-        current.primary !== null ? bodyById(current.primary) : null;
-      samples.push(
-        sampleFrame({
-          t: clock,
-          bodies,
-          primary,
-          conserved: conservedQuantities(),
-          drift: conservationDrift(),
-          secondsPerUnit: timeUnitSeconds(),
-          metrics: current.metrics,
-        })
-      );
-
-      ticks++;
-      if (clock > lastClock) {
-        frames++;
-        lastClock = clock;
-      } else {
-        stalled++;
-      }
-
-      if (samples.length >= MAX_SAMPLES) {
-        sampleCapHit = true;
-        return resolve();
-      }
-      if (frames >= cfg.frames) return resolve();
-      // A world that is not advancing at all would otherwise spin here for
-      // ever. Ten ticks per requested frame is generous enough that an
-      // ordinary slow machine never reaches it and tight enough that a paused
-      // run gives up rather than hanging; the run then reports what it got.
-      if (ticks >= cfg.frames * 10 + 120) return resolve();
-
+      const step = sampler.tick(getSimulationTime(), cfg.abort.cancelled);
+      if (step.sample) take();
+      if (step.done) return resolve();
       cfg.onProgress?.({
         phase: cfg.phaseIndex,
-        fraction: frames / cfg.frames,
+        fraction: sampler.report().fraction,
       });
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
   });
+
+  const run = sampler.report();
 
   host.setFixedStep?.(0);
   if (state) state.paused = true;
@@ -576,14 +558,25 @@ async function runReliabilityPhase(cfg) {
     duration: getSimulationTime() - startClock,
     /** What was asked for, beside what was achieved. */
     requestedFrames: cfg.frames,
-    advancedFrames: frames,
-    ticks,
+    advancedFrames: run.advancedFrames,
+    ticks: run.ticks,
     /** rAF ticks that moved no simulated time: a paused or throttled tab. */
-    stalledFrames: stalled,
+    stalledFrames: run.stalledFrames,
     /** True when the sample cap ended the run before the duration did. */
-    sampleCapHit,
+    sampleCapHit: run.sampleCapHit,
+    /**
+     * True when the clock stopped advancing and the tick ceiling ended it.
+     *
+     * Kept apart from sampleCapHit because they used to be the same thing: a
+     * stalled run sampled every tick, filled the buffer with repeats of one
+     * instant, and was reported as having measured too much rather than as
+     * having measured nothing.
+     */
+    stalledOut: run.stalledOut,
+    /** complete | sampleCapped | stalled | cancelled. */
+    outcome: run.outcome,
     /** Whether the phase covered the simulated time it was asked for. */
-    complete: frames >= cfg.frames && !sampleCapHit,
+    complete: run.complete,
     samples,
     results: reduceRun(samples, current.metrics, secondsPerDay),
     wallMs: performance.now() - startedAt,
