@@ -212,8 +212,15 @@ const BUDGETS = [
       'opened the sandbox downloaded the card titles, durations and step ' +
       'counts of eighteen lessons in order to call one setter. It is a ' +
       'dynamic import now. Those 17.7 KB moved from the start-up path into ' +
-      'this budget, which is why this number went up and the one above went ' +
-      'DOWN: 829.0 KB before the rendering work, 823.0 KB after it.',
+      'this budget, and the one above went DOWN: 829.0 KB before the ' +
+      'rendering work, 823.3 KB after it.\n\n' +
+      'To be exact about what this raise is and is not: the 17.7 KB took the ' +
+      'deferred total to 3028.6 KB, which is 1.4 KB under the old 3030 ' +
+      'limit, not over it. The raise did not rescue a failing check - it ' +
+      'bought margin that a budget sitting at 99.95 per cent of itself did ' +
+      'not have, on a number that only ever moves in the direction this ' +
+      'project wants it to. The measured figure is unchanged by the starfield ' +
+      'work, which is entirely eager: 3028.6 KB, 51.4 KB of room.',
   },
 ];
 

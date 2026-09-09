@@ -240,7 +240,15 @@ describe('what the tier actually changes', () => {
     setTier('low');
     const off = renderOverrides();
     expect(off.trail_length).toBeLessThan(15);
-    expect(off.star_density).toBeLessThan(3000);
+  });
+
+  test('the tier does not also override star_density', () => {
+    // The low tier reduces the sky through STARS_PER_MEGAPIXEL in
+    // js/starfield.js, where it scales with the window too. star_density is
+    // now read as a proportion of whatever that gives, so an override here
+    // would multiply the two reductions together.
+    setTier('low');
+    expect(renderOverrides()).not.toHaveProperty('star_density');
   });
 
   test('the low tier switches off the full-screen effects', () => {

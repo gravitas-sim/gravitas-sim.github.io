@@ -178,9 +178,9 @@ reader's document: it is what a share link serialises, what a saved state
 restores and what the A/B bench hashes to decide whether two runs differ, so a
 teacher on a slow laptop would have exported a capped world to a class on
 faster machines. `star_density` and `trail_length` were in this list too and
-are not population at all; they are read at draw time and have moved to the
-effects override below, which is the only place an override actually reaches
-them.
+are not population at all; they are read at draw time. `trail_length` moved to
+the effects override below, which is the only place an override actually
+reaches it, and the sky moved further still — see **The sky** below.
 
 Only for scenarios that use the generic generator. A scenario with
 `placement: 'Empty'` places every body by hand — the resonance systems,
@@ -200,10 +200,26 @@ version of the lesson, it is a wrong one. Measured:
 | Kessler Cascade | Random | 301 | 61 |
 
 **Effects off** — object lensing, lensing quality, gravitational-wave overlay,
-the accretion disc, plus `star_density` 2500 and `trail_length` 8. Each is a full-screen or per-body pass an integrated GPU
+the accretion disc, plus `trail_length` 8. Each is a full-screen or per-body pass an integrated GPU
 pays for in fill rate. Applied as a read-time override, never written into
 `SETTINGS`: writing them would destroy the reader's own choice the first time a
 machine dipped below the threshold.
+
+**The sky** — the background starfield is generated per square pixel rather
+than as a fixed count, at 2600 stars per megapixel at the full tier and 1000 at
+the low one (`STARS_PER_MEGAPIXEL` in `js/starfield.js`). Because the low tier
+also renders into a backing store at 0.7 scale, the two compound: a 1440x900
+window gets 3370 stars at the full tier and 635 at the low one. The field is
+pre-rendered onto three parallax layers and blitted, so its per-frame cost is
+three `drawImage` calls plus at most 48 animated stars — none of which are
+animated when the reader has asked for reduced motion.
+
+`star_density` is the reader's own control over that, read as a proportion of
+the density above rather than as a literal count: the default 10000 means "what
+this window would choose", 5000 halves it, 0 empties the sky. It is deliberately
+*not* in the effects override, because the tier already reaches the sky through
+`STARS_PER_MEGAPIXEL` and overriding both would multiply the two reductions
+together.
 
 ### The tier is the reader's, not the scenario's
 

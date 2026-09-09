@@ -54,6 +54,7 @@
     "check:architecture:report": "node tools/check-architecture.mjs --report",
     "serve:dist": "node tools/static-server.mjs --root dist --port 4173",
     "e2e": "playwright test",
+    "e2e:release": "playwright test --workers=2 --retries=0",
     "e2e:dist": "GRAVITAS_E2E_TARGET=dist GRAVITAS_E2E_PORT=4174 playwright test",
     "e2e:all": "npm run e2e && npm run e2e:dist",
     "e2e:browsers": "GRAVITAS_E2E_BROWSERS=all playwright test",

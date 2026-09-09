@@ -115,7 +115,17 @@ step('scenario stability', ['npm', 'run', 'validate:scenarios'], {
   slow: true,
 });
 step('bundle budget', ['npm', 'run', 'budget:check'], { slow: true });
-step('browser suite (sources)', ['npm', 'run', 'e2e'], { slow: true });
+// Two workers, no retries. Not a weaker run than CI's - a stricter one, and a
+// fairer one. `npm run e2e` leaves the worker count to Playwright, which takes
+// half the machine's cores; on a developer laptop that is six browsers, six
+// dev-server clients and six canvases competing for one GPU, and the specs
+// that lose that competition are the long physics ones (chaos, resonance,
+// lessonEventWatch) timing out on a wait that would have resolved. That is
+// contention this harness invented, not a defect in the software being
+// released, and a release gate that reports it as one is a gate people learn
+// to ignore. CI runs two workers for the same reason. Retries stay at zero
+// here, where CI allows one: a release candidate should pass first time.
+step('browser suite (sources)', ['npm', 'run', 'e2e:release'], { slow: true });
 step('browser suite (production build)', ['npm', 'run', 'e2e:dist'], {
   slow: true,
 });

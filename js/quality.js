@@ -311,14 +311,19 @@ export function renderOverrides() {
     lensing_quality: 'off',
     show_gravitational_waves: false,
     show_accretion_disk: false,
-    // Presentation, not population. Both of these were once returned from
+    // Presentation, not population. This was once returned from
     // populationCaps(), which applied its result by writing into the live
     // SETTINGS - so a slow machine permanently rewrote the reader's own
     // settings, and those rewritten values then travelled out in share links,
-    // saved states and the A/B bench's canonical hash. Neither key is read
-    // during construction at all, so a read-time override here is both the
-    // correct place and the only one that has any effect.
-    star_density: 2500,
+    // saved states and the A/B bench's canonical hash. It is not read during
+    // construction at all, so a read-time override here is both the correct
+    // place and the only one that has any effect.
+    //
+    // star_density was here too and is deliberately not any more. The tier now
+    // reaches the sky through js/starfield.js's STARS_PER_MEGAPIXEL, which is
+    // a better lever - it scales with the window as well as the tier - and
+    // star_density has become a proportion of that. Two reductions for one
+    // purpose would compound into an almost empty sky.
     trail_length: 8,
   };
 }

@@ -108,6 +108,7 @@ async function main() {
           const render = await import('/js/render.js');
           const physics = await import('/js/physics.js');
           const quality = await import('/js/quality.js');
+          const starfield = await import('/js/starfield.js');
 
           ui.SETTINGS.preset_scenario = scene.scenario;
           ui.initialize_simulation({ seed: 'starfield-probe' });
@@ -172,14 +173,14 @@ async function main() {
             paints,
             elapsedMs: total,
             // The count the field was actually generated with, which is not
-            // SETTINGS.star_density: js/quality.js overrides it at the low
-            // tier, and a tier change regenerates the field through
-            // resizeCanvas(). Reading the setting reports 10,000 for a field
-            // that holds 2,500.
-            stars:
-              quality.renderOverrides()?.star_density ??
-              ui.SETTINGS.star_density ??
-              null,
+            // SETTINGS.star_density: that is now a proportion, and the count
+            // itself comes from the window size and the tier.
+            stars: starfield.starCountFor(
+              document.getElementById('starfieldCanvas').width,
+              document.getElementById('starfieldCanvas').height,
+              quality.currentTier(),
+              ui.SETTINGS.star_density
+            ),
           };
         },
         { scene, tier, seconds }
