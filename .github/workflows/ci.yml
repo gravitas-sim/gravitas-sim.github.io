@@ -155,6 +155,13 @@ jobs:
       - name: Service worker manifest is current
         run: npm run sw:check
 
+      # The showcase page's six demonstration links, which are share payloads
+      # generated from the spec in js/data/teaching.js. Stale ones would open
+      # the wrong scenario, or a scenario that no longer exists, from a page
+      # written for people evaluating whether to adopt this.
+      - name: Teaching demonstration links are current
+        run: npm run teaching:check
+
       # Import cycles and layer violations. The graph had eleven cycles before
       # the state was pulled out of ui.js and every one of them ran through a
       # coordinator, which meant the renderer's dependencies included the

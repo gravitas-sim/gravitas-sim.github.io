@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teaching with Gravitas</title>
+    <meta
+      name="description"
+      content="How Gravitas is used in an introductory astronomy course: guided investigations, an evidence notebook, controlled experiments, and six demonstrations you can run in the page."
+    />
+    <link rel="canonical" href="https://gravitas-sim.online/teaching/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Teaching with Gravitas" />
+    <meta
+      property="og:description"
+      content="Guided investigations, an evidence notebook, controlled experiments, and six demonstrations you can run in the page."
+    />
+    <meta
+      property="og:url"
+      content="https://gravitas-sim.online/teaching/"
+    />
+    <meta
+      property="og:image"
+      content="https://gravitas-sim.online/social-card.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#07080f" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/css/tokens.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/components.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <!-- Page-specific, and linked only here. The showcase page's layout would
+         otherwise be concatenated into css/app.css, which every visitor to the
+         simulation downloads before anything is drawn. -->
+    <link rel="stylesheet" href="/css/teaching.css" />
+    <script>
+      try {
+        const t = localStorage.getItem('gravitas_theme');
+        if (
+          t &&
+          t !== 'midnight' &&
+          ['deep', 'observatory', 'daylight'].includes(t)
+        ) {
+          document.documentElement.setAttribute('data-theme', t);
+          document.documentElement.style.colorScheme =
+            t === 'daylight' ? 'light' : 'dark';
+        }
+      } catch (e) {
+        /* storage unavailable; the default theme is correct */
+      }
+    </script>
+  </head>
+  <body class="doc-page">
+    <a class="doc-skip" href="#main" data-i18n="teach.skip">Skip to content</a>
+
+    <header class="doc-top">
+      <a class="doc-brand" href="/">GRAVITAS <span>simulation</span></a>
+      <nav class="doc-nav" aria-label="Site">
+        <a href="/" data-i18n="teach.nav.simulation">Simulation</a>
+        <a href="/model/" data-i18n="teach.nav.model">The model</a>
+        <a href="/validation/" data-i18n="teach.nav.validation">Validation</a>
+        <a href="/teaching/" aria-current="page" data-i18n="teach.nav.teaching"
+          >Teaching</a
+        >
+        <a href="/instructors/" data-i18n="teach.nav.instructors">Instructors</a>
+      </nav>
+      <div
+        class="teach-lang"
+        id="teachLang"
+        role="group"
+        data-i18n-aria-label="teach.lang.label"
+        aria-label="Language"
+      ></div>
+    </header>
+
+    <!-- Announcements for a reader who cannot see a figure appear. -->
+    <p
+      id="teachLive"
+      class="visually-hidden"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></p>
+
+    <main class="doc-main is-wide" id="main">
+      <div class="doc-hero">
+        <p class="doc-eyebrow" data-i18n="teach.eyebrow">
+          For instructors and adopters
+        </p>
+        <h1 data-i18n="teach.title">Teaching with Gravitas</h1>
+        <p class="doc-lede" data-i18n="teach.lede">
+          Gravitas is a browser-based gravitational simulator built for
+          teaching.
+        </p>
+      </div>
+
+      <ul class="doc-glance" id="teachGlance"></ul>
+      <p class="teach-fineprint" data-i18n="teach.glance.note">
+        Every number on this page is read from the catalogue and the validation
+        results when the page loads.
+      </p>
+
+      <nav class="doc-toc" aria-labelledby="tocHeading">
+        <h2 id="tocHeading" data-i18n="teach.toc">On this page</h2>
+        <ol>
+          <li><a href="#cycle" data-i18n="teach.section.cycle">The cycle</a></li>
+          <li>
+            <a href="#journey" data-i18n="teach.section.journey">The journey</a>
+          </li>
+          <li>
+            <a href="#instruments" data-i18n="teach.section.instruments"
+              >Instruments</a
+            >
+          </li>
+          <li><a href="#demos" data-i18n="teach.section.demos">Demonstrations</a></li>
+          <li>
+            <a href="#patterns" data-i18n="teach.section.patterns">In a course</a>
+          </li>
+          <li><a href="#access" data-i18n="teach.section.access">Access</a></li>
+          <li>
+            <a href="#evidence" data-i18n="teach.section.evidence">The physics</a>
+          </li>
+        </ol>
+      </nav>
+
+      <h2 id="cycle" data-i18n="teach.section.cycle">
+        The cycle a student works through
+      </h2>
+      <p data-i18n="teach.cycle.intro"></p>
+      <ol class="teach-cycle" id="teachCycle"></ol>
+
+      <h2 id="journey" data-i18n="teach.section.journey">
+        From a prediction to a submitted report
+      </h2>
+      <p data-i18n="teach.journey.intro"></p>
+      <ol class="teach-journey" id="teachJourney"></ol>
+
+      <h2 id="instruments" data-i18n="teach.section.instruments">
+        What each instrument is for
+      </h2>
+      <p data-i18n="teach.instruments.intro"></p>
+      <div class="teach-instruments" id="teachInstruments"></div>
+
+      <h2 id="demos" data-i18n="teach.section.demos">
+        Six demonstrations you can run here
+      </h2>
+      <p data-i18n="teach.demos.intro"></p>
+      <p class="doc-note" data-i18n="teach.demos.note"></p>
+      <div class="teach-demos" id="teachDemos"></div>
+      <div class="teach-sequence">
+        <button type="button" class="ui-button" id="teachCopySequence">
+          Copy all six as a lecture sequence
+        </button>
+        <p class="teach-fineprint" data-i18n="teach.demos.sequence.note"></p>
+        <pre class="teach-sequence-text" id="teachSequenceText" hidden></pre>
+      </div>
+
+      <h2 id="patterns" data-i18n="teach.section.patterns">
+        Five ways to use it in a course
+      </h2>
+      <p data-i18n="teach.patterns.intro"></p>
+      <div class="teach-patterns" id="teachPatterns"></div>
+
+      <h2 id="access" data-i18n="teach.section.access">
+        Access, language and reproducibility
+      </h2>
+      <p data-i18n="teach.access.intro"></p>
+      <div class="teach-access">
+        <section class="doc-feature" aria-labelledby="accessKeyboard">
+          <h3 id="accessKeyboard" data-i18n="teach.access.keyboard.title">
+            Keyboard and screen reader
+          </h3>
+          <p data-i18n="teach.access.keyboard.text"></p>
+        </section>
+        <section class="doc-feature" aria-labelledby="accessMotion">
+          <h3 id="accessMotion" data-i18n="teach.access.motion.title">
+            Motion and theme
+          </h3>
+          <p data-i18n="teach.access.motion.text"></p>
+        </section>
+        <section class="doc-feature" aria-labelledby="accessLanguage">
+          <h3 id="accessLanguage" data-i18n="teach.access.language.title">
+            Spanish
+          </h3>
+          <p data-i18n="teach.access.language.text"></p>
+        </section>
+        <section class="doc-feature" aria-labelledby="accessOffline">
+          <h3 id="accessOffline" data-i18n="teach.access.offline.title">
+            Network, cost and privacy
+          </h3>
+          <p data-i18n="teach.access.offline.text"></p>
+        </section>
+        <section class="doc-feature" aria-labelledby="accessLinks">
+          <h3 id="accessLinks" data-i18n="teach.access.reproducible.title">
+            Reproducible links
+          </h3>
+          <p data-i18n="teach.access.reproducible.text"></p>
+        </section>
+      </div>
+
+      <h2 id="evidence" data-i18n="teach.section.evidence">
+        Where to check the physics
+      </h2>
+      <p data-i18n="teach.evidence.intro"></p>
+      <p class="teach-checks" id="teachChecks"></p>
+      <div class="teach-evidences" id="teachEvidence"></div>
+    </main>
+
+    <footer class="doc-foot">
+      <a href="/" data-i18n="teach.foot.home">Gravitas</a>
+      <span class="doc-foot-sep">·</span>
+      <a href="/model/" data-i18n="teach.foot.model">The model</a>
+      <span class="doc-foot-sep">·</span>
+      <a href="/validation/" data-i18n="teach.foot.validation">Validation</a>
+      <span class="doc-foot-sep">·</span>
+      <a href="/instructors/" data-i18n="teach.foot.instructors">Instructors</a>
+      <span class="doc-foot-sep">·</span>
+      <a
+        href="https://github.com/gravitas-sim/gravitas-sim.github.io"
+        rel="noopener"
+        data-i18n="teach.foot.source"
+        >Source</a
+      >
+      <span class="doc-foot-sep">·</span>
+      <span data-i18n="teach.foot.licence">MIT licensed</span>
+    </footer>
+
+    <script type="module">
+      import { initTeachingPage } from '/js/teachingPage.js';
+      initTeachingPage();
+    </script>
+  </body>
+</html>

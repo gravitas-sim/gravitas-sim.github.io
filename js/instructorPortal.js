@@ -346,6 +346,16 @@ function renderDashboard() {
     general.append(card);
   }
 
+  const teachingCard = document.createElement('article');
+  teachingCard.className = 'res-card';
+  teachingCard.innerHTML = `
+    <h3>Teaching with Gravitas</h3>
+    <p>The instructional cycle, six demonstrations you can run in the page, and
+       five course-use patterns. Public and translated: this is the page to send
+       a colleague, a department or a curriculum committee.</p>
+    <a class="ui-button" href="/teaching/">Open the showcase page</a>`;
+  general.append(teachingCard);
+
   const modelCard = document.createElement('article');
   modelCard.className = 'res-card';
   modelCard.innerHTML = `

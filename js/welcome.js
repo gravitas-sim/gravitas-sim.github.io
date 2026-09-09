@@ -385,6 +385,10 @@ function build() {
         and approximations are documented in public.
       </p>
       <div class="wel-links">
+        <a class="wel-link" href="${RESOURCE_LINKS.teaching.href}">
+          <span class="wel-link-label">${escape(t(RESOURCE_LINKS.teaching.label))}</span>
+          <span class="wel-link-note">${escape(t(RESOURCE_LINKS.teaching.note))}</span>
+        </a>
         <a class="wel-link" href="${RESOURCE_LINKS.instructors.href}">
           <span class="wel-link-label">${escape(t(RESOURCE_LINKS.instructors.label))}</span>
           <span class="wel-link-note">${escape(t(RESOURCE_LINKS.instructors.note))}</span>

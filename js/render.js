@@ -14,6 +14,7 @@ import {
   stars,
   gas_giants,
   asteroids,
+  comets,
   debris,
   particles,
   neutron_stars,
@@ -674,6 +675,7 @@ const drawScene = () => {
       ...planets,
       ...gas_giants,
       ...asteroids,
+      ...comets,
       ...stars,
       ...neutron_stars,
       ...white_dwarfs,
@@ -815,6 +817,11 @@ const drawScene = () => {
     ...galaxies,
     ...debris,
     ...asteroids,
+    // Comets after the rocks and before the planets: a comet's tail is a wide
+    // translucent wedge, and drawing it over a planet would tint the planet.
+    // This collection was missing entirely, which is why the Solar System's ten
+    // comets and every hand-placed one were never painted.
+    ...comets,
     ...planets,
     ...gas_giants,
     ...stars,
@@ -1463,6 +1470,7 @@ function readoutHtml(drawn) {
     ['readout.count.planets', planets.length],
     ['readout.count.gasGiants', gas_giants.length],
     ['readout.count.asteroids', asteroids.length],
+    ['readout.count.comets', comets.length],
     ['readout.count.stars', stars.length],
     ['readout.count.neutronStars', neutron_stars.length],
     ['readout.count.whiteDwarfs', white_dwarfs.length],

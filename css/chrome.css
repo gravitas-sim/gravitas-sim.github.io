@@ -1640,21 +1640,39 @@
     cursor: crosshair;
   }
 
+  /* The picker is a top-layer popover, and it is a child of <body> rather than
+     of the rail. It has to be.
+     -----------------------------------------------------------------------
+     It used to be an absolutely positioned descendant of `.object-add`, which
+     is inside `.ui-container`. That element scrolls its own overflow - it has
+     to, or the rail runs off the bottom of a short window - and an overflow
+     container clips its absolutely positioned descendants. So the picker was
+     cut off whenever the rail was scrolled, whenever the window was short, and
+     whenever the button sat near the bottom of the rail. The fix is not to stop
+     the rail scrolling; it is for the popover not to live inside it.
+
+     js/ui.js moves this element to <body> at start-up and positions it from the
+     trigger's getBoundingClientRect() on every open, on resize, on orientation
+     change and on any scroll that could have moved the button. Everything below
+     is the part CSS can own: the box, and the internal scrolling that a
+     viewport-bounded max-height needs. `left`, `top` and `max-height` are set
+     by that code and deliberately not here. */
   .object-picker {
-    position: absolute;
+    position: fixed;
     left: 0;
-    /* Wider than the rail button it hangs off. Constrained to the viewport as
-       well, because the rail is near the left edge on a phone and a popover
-       sized purely to its content would run off the right of a 320px screen. */
+    top: 0;
     right: auto;
+    bottom: auto;
     width: max-content;
-    /* `min-width: 100%` would win outright - a min always beats a max - and on
-       a tablet the rail is the full width of the window, which gave a 712px
-       popover holding eight short rows. Capped against the trigger instead, so
-       it still lines up with a narrow rail without inheriting a wide one. */
-    min-width: min(100%, 240px);
+    /* A plain minimum now that it no longer has a parent to measure against:
+       `min-width: 100%` used to resolve to the rail's width, which on a tablet
+       is the whole window. */
+    min-width: 200px;
     max-width: min(260px, calc(100vw - var(--space-6)));
-    bottom: calc(100% + var(--space-2));
+    /* Taller than the room beside the trigger and it scrolls inside itself
+       rather than off the screen. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
     /* Above the rail it belongs to, below a modal. */
     z-index: var(--z-inspector);
     padding: var(--space-2);

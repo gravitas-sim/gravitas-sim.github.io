@@ -111,6 +111,7 @@ test.describe('the document pages', () => {
   for (const [name, path] of [
     ['the model page', '/model/'],
     ['the instructor area', '/instructors/'],
+    ['the teaching page', '/teaching/'],
   ]) {
     test(
       `${name} loads and is styled`,

@@ -34,6 +34,7 @@ import {
   loadInvestigation,
   gradedSteps,
   seriesPosition,
+  lessonCatalogueReady,
 } from './data/investigations/registry.js';
 // Search, filters and the curated orders. Both read the same generated
 // manifest the cards do, so there is one list of lessons and not three.
@@ -3084,6 +3085,22 @@ export function openBrowser() {
   if (!els.browser) return;
   browserLastFocus = document.activeElement;
   renderBrowser();
+  // And again once the catalogue for this language has arrived, if it had not.
+  //
+  // The panel opens immediately - waiting on a fetch before showing anything
+  // would be a worse trade than a grid that fills in - but a reader who chose
+  // Spanish before the lesson system was ever loaded would otherwise be left
+  // looking at English titles until they touched a filter. Resolved already in
+  // the common cases: English, or any second open.
+  lessonCatalogueReady()
+    .then(() => {
+      if (els.browser && !els.browser.classList.contains('hidden')) {
+        renderBrowser();
+      }
+    })
+    .catch(() => {
+      /* the English catalogue is already on screen; that is the fallback */
+    });
   els.browser.classList.remove('hidden');
   // Both of them. #investigationBrowserScroll is the list, but the element that
   // actually scrolls is #investigationBrowserContent, and resetting only the

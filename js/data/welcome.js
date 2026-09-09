@@ -90,6 +90,11 @@ export const AUDIENCES = [
  * resource the deployment does not have is worse than one that stays quiet.
  */
 export const RESOURCE_LINKS = {
+  teaching: {
+    href: '/teaching/',
+    label: 'welcomeLink.teaching.label',
+    note: 'welcomeLink.teaching.note',
+  },
   model: {
     href: '/model/',
     label: 'welcomeLink.model.label',

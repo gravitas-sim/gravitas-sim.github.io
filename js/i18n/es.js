@@ -698,6 +698,7 @@ export const ES = {
   'readout.count.planets': 'Planetas',
   'readout.count.gasGiants': 'Gigantes gaseosos',
   'readout.count.asteroids': 'Asteroides',
+  'readout.count.comets': 'Cometas',
   'readout.count.stars': 'Estrellas',
   'readout.count.neutronStars': 'Estrellas de neutrones',
   'readout.count.whiteDwarfs': 'Enanas blancas',
@@ -1329,6 +1330,9 @@ export const ES = {
   'welcomeAudience.curious.title': 'Para curiosos',
   'welcomeAudience.curious.text':
     'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
+  'welcomeLink.teaching.label': 'Enseñar con Gravitas',
+  'welcomeLink.teaching.note':
+    'Cómo se usa en un curso, con seis demostraciones que puede ejecutar.',
   'welcomeLink.model.label': 'Cómo modela Gravitas el universo',
   'welcomeLink.model.note':
     'Qué se calcula, qué se aproxima y qué solo se dibuja.',

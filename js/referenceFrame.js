@@ -118,6 +118,37 @@ export function resetFrame() {
 }
 
 /**
+ * Move an object frame from a body that no longer exists onto what replaced it.
+ *
+ * A reader watching a binary from one of its black holes is watching a place,
+ * not an id. When the two merge, that black hole stops existing and
+ * resolveFrameOrigin() correctly answers "there is no origin" - at which point
+ * the view snaps back to the world origin, tens of thousands of units away in a
+ * scenario like Binary BH. That snap is the one visible symptom of a merger for
+ * anyone in an object frame, and it happens at exactly the moment they were
+ * watching for.
+ *
+ * The merger product is the honest continuation of both progenitors: it carries
+ * their combined mass and sits at their combined position. Following it keeps
+ * the camera where the reader put it.
+ *
+ * A no-op for anyone in the world or barycenter frame, which is the majority
+ * and which must not be disturbed by a merger somewhere in the scene.
+ *
+ * @param {Array<number>} fromIds - The ids that have gone
+ * @param {?number} toId - What replaced them, if anything
+ * @returns {boolean} True if the frame was moved
+ */
+export function transferFrame(fromIds, toId) {
+  if (frame.mode !== OBJECT) return false;
+  if (!Array.isArray(fromIds) || !fromIds.includes(frame.objectId))
+    return false;
+  if (toId === null || toId === undefined) return false;
+  setFrame(OBJECT, toId);
+  return true;
+}
+
+/**
  * Subscribe to frame changes.
  *
  * @param {Function} fn - Called with the new frame state

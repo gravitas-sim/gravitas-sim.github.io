@@ -30,9 +30,11 @@ import { initWelcome, openWelcome, shouldShowWelcome } from './welcome.js';
 import { initScenarioBrowser } from './scenarioBrowser.js';
 import { initI18n, getLocale, onLocaleChange } from './i18n/index.js';
 import { initI18nDom } from './i18n/dom.js';
+import { createDoubleTapRecognizer } from './gestures.js';
+import { setRequestedLessonLocale } from './lessonLocale.js';
+import { resetFollowCamera } from './followCamera.js';
 import { initLocalePicker } from './i18n/picker.js';
 import { initBottomDock } from './bottomDock.js';
-import { setLessonLocale } from './data/investigations/registry.js';
 import { initEmbedMode, initEmbedChrome } from './embed.js';
 import { initLecture } from './lecture.js';
 
@@ -257,18 +259,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
   });
 
-  // Mobile double-tap handling for reset view
-  let lastTap = 0;
-  canvas.addEventListener('touchend', _e => {
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - lastTap;
-    if (tapLength < 500 && tapLength > 0) {
-      // Double tap detected - reset view
+  // Double-tap the canvas to reset the view.
+  //
+  // What was here recognised nothing: any two touchend events under 500ms
+  // apart reset the zoom and the pan. Ending a pinch fires two of those
+  // milliseconds apart, so every pinch snapped the view home - the "the view
+  // jumps" report, on a touchscreen. So did a drag then a tap, a placement
+  // then a tap, and two fingers touching at once. The recogniser in
+  // js/gestures.js requires two actual taps: one finger, brief, still, close
+  // together in space as well as in time.
+  const doubleTap = createDoubleTapRecognizer({
+    onDoubleTap: () => {
       state.zoom = 1.0;
       state.pan = { x: 0.0, y: 0.0 };
-    }
-    lastTap = currentTime;
+      // A deliberate camera command, so Follow mode starts a fresh camera
+      // rather than reading the reset as a drag to be preserved.
+      resetFollowCamera(state);
+    },
   });
+  canvas.addEventListener('touchstart', e => doubleTap.start(e), {
+    passive: true,
+  });
+  canvas.addEventListener('touchmove', e => doubleTap.move(e), {
+    passive: true,
+  });
+  canvas.addEventListener('touchend', e => doubleTap.end(e), { passive: true });
+  canvas.addEventListener('touchcancel', () => doubleTap.cancel(), {
+    passive: true,
+  });
+  // Placing a body is an interaction of its own. The long press that arms it is
+  // already too long to be a tap, but the release that drops the object must
+  // not pair with whatever comes next either.
+  window.addEventListener('gravitasPlacementArmed', () => doubleTap.cancel());
+  window.addEventListener('gravitasObjectPlaced', () => doubleTap.cancel());
 
   // Initialize with error handling
   try {
@@ -313,8 +336,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // The lesson registry imports nothing, so it cannot read the locale for
     // itself; the two are connected here. Lessons are content and are fetched
     // in the language the interface is in, one lesson at a time.
-    setLessonLocale(getLocale());
-    onLocaleChange(setLessonLocale);
+    //
+    // Imported dynamically, and that is not a style choice. A static import of
+    // `setLessonLocale` pulls in the registry, and the registry pulls in the
+    // English lesson manifest - sixteen kilobytes of card titles, durations and
+    // step counts in the start-up download of a visitor who opens the sandbox
+    // and never touches a lesson. That is precisely what the comment eight
+    // lines below promises does not happen, and it had been happening since
+    // the locale wiring was added.
+    //
+    // Nothing waits on this. The registry is needed the first time a lesson is
+    // opened, which is many seconds of human time after the promise settles,
+    // and the failure case is a lesson served in English rather than a broken
+    // interface.
+    // One synchronous assignment, and no import at all.
+    //
+    // This used to be a static import of setLessonLocale, which dragged the
+    // whole English lesson manifest into the start-up download of a visitor
+    // who opens the sandbox and never touches a lesson. Making it a dynamic
+    // import fixed the download and broke the language: assigning the locale
+    // behind a module load left a window in which the next lesson was fetched
+    // in the language the reader had just left, which e2e/assignment.spec.js
+    // caught. And it still fetched the registry on every boot, which was the
+    // saving only half made.
+    //
+    // So the direction is inverted. The choice is recorded here, for free; the
+    // registry reads it when something else loads it, and registers itself so
+    // that later changes reach it directly. Nothing is fetched on account of
+    // this line, at boot or on a language change.
+    setRequestedLessonLocale(getLocale());
+    onLocaleChange(setRequestedLessonLocale);
     initLecture();
     initEmbedChrome();
     // Not initInvestigations(): the lesson system is half the bundle and is

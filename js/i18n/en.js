@@ -481,6 +481,7 @@ export const EN = {
   'readout.count.planets': 'Planets',
   'readout.count.gasGiants': 'Gas Giants',
   'readout.count.asteroids': 'Asteroids',
+  'readout.count.comets': 'Comets',
   'readout.count.stars': 'Stars',
   'readout.count.neutronStars': 'Neutron Stars',
   'readout.count.whiteDwarfs': 'White Dwarfs',
@@ -1338,6 +1339,9 @@ export const EN = {
   'welcomeAudience.curious.title': 'For the curious',
   'welcomeAudience.curious.text':
     'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
+  'welcomeLink.teaching.label': 'Teaching with Gravitas',
+  'welcomeLink.teaching.note':
+    'How it is used in a course, with six demonstrations you can run.',
   'welcomeLink.model.label': 'How Gravitas models the universe',
   'welcomeLink.model.note':
     'What is calculated, what is approximated, and what is only drawn.',

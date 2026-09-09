@@ -8,6 +8,14 @@
 //   npm run perf                     the default scenario set
 //   npm run perf -- "Star Cluster"   one or more scenarios by name
 //   npm run perf -- --seconds 8      longer sample
+//   npm run perf -- --tier low       pin the quality tier
+//   npm run perf -- --json out.json  also write the numbers, for a comparison
+//
+// The tier flag matters for a rendering change. Left to itself the tier is a
+// measurement of the machine, so a before-and-after pair taken on 'auto' can
+// differ because one run happened to demote and the other did not. Pinning it
+// makes the two comparable, and makes it possible to answer the only question
+// that really gates a visual change: did the slow path get slower.
 //
 // It measures by wrapping the renderer's own entry points rather than by
 // sampling a profiler, so the numbers line up with the functions in render.js
@@ -18,6 +26,7 @@
 // =============================================================================
 
 import { chromium } from 'playwright';
+import { writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
@@ -44,7 +53,19 @@ async function main() {
   const args = process.argv.slice(2);
   const si = args.indexOf('--seconds');
   const seconds = si >= 0 ? Number(args[si + 1]) : 5;
-  const wanted = args.filter((a, i) => !a.startsWith('--') && i !== si + 1);
+  const ti = args.indexOf('--tier');
+  const tier = ti >= 0 ? String(args[ti + 1]) : 'auto';
+  if (!['auto', 'low', 'full'].includes(tier)) {
+    throw new Error(`--tier ${tier} is not auto, low or full`);
+  }
+  const ji = args.indexOf('--json');
+  const jsonPath = ji >= 0 ? String(args[ji + 1]) : null;
+  const valueIndexes = new Set(
+    [si, ti, ji].filter(i => i >= 0).map(i => i + 1)
+  );
+  const wanted = args.filter(
+    (a, i) => !a.startsWith('--') && !valueIndexes.has(i)
+  );
   const scenarios = wanted.length ? wanted : DEFAULT_SCENARIOS;
 
   const server = await serveStatic({ root: ROOT, port: PORT });
@@ -83,7 +104,8 @@ async function main() {
   });
 
   console.log(
-    `\nFrame-time probe: ${seconds}s per scenario at 1440x900, headless Chromium\n`
+    `\nFrame-time probe: ${seconds}s per scenario at 1440x900, headless ` +
+      `Chromium, quality tier ${tier}\n`
   );
   console.log(
     `${pad('scenario', 24)} ${pad('fps', 7)} ${pad('frame', 9)} ${pad('starfield', 11)} ${pad('star%', 7)} ${pad('scene', 9)} ${pad('bloom', 9)} bloom%`
@@ -93,13 +115,20 @@ async function main() {
   const results = [];
   for (const key of scenarios) {
     const row = await page.evaluate(
-      async ({ key, seconds }) => {
+      async ({ key, seconds, tier }) => {
         const ui = await import('/js/ui.js');
         const render = await import('/js/render.js');
+        const quality = await import('/js/quality.js');
 
         ui.SETTINGS.preset_scenario = key;
         ui.initialize_simulation({ seed: 'perf-probe' });
         ui.state.paused = false;
+        // After the build, because apply_preset resets the settings. 'auto'
+        // is the reader's own default and is left to the sampler.
+        if (tier !== 'auto') {
+          ui.SETTINGS.quality_tier = tier;
+          quality.setTier(tier);
+        }
 
         // The renderer keeps its own per-phase counters, off by default.
         render.perf.reset();
@@ -136,7 +165,7 @@ async function main() {
           bodies: (await import('/js/physics.js')).allBodies?.().length ?? 0,
         };
       },
-      { key, seconds }
+      { key, seconds, tier }
     );
 
     results.push(row);
@@ -191,6 +220,17 @@ async function main() {
     `\nPaused: ${idle.fps.toFixed(1)} fps loop, ${ms(idle.drawMs)} drawing per frame, ` +
       `starfield repainted on ${idle.scenePct.toFixed(0)}% of frames`
   );
+
+  if (jsonPath) {
+    // Written for a before-and-after comparison rather than for a dashboard:
+    // the numbers as measured, with the tier they were measured at, because a
+    // pair taken at different tiers is not a comparison of anything.
+    await writeFile(
+      jsonPath,
+      `${JSON.stringify({ tier, seconds, results, idle }, null, 2)}\n`
+    );
+    console.log(`\nWrote ${jsonPath}`);
+  }
 
   await browser.close();
   server.close();

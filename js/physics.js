@@ -11,7 +11,7 @@ import {
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
 } from './constants.js';
-import { setSimGravitationalConstant } from './units.js';
+import { setSimGravitationalConstant, simToAu } from './units.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { formatNumber, withUnit } from './format.js';
 import { forEachCandidatePair } from './spatialHash.js';
@@ -29,6 +29,31 @@ import {
 import { recordBarycenter, clearFrameHistory } from './referenceFrame.js';
 import { haloAcceleration } from './darkMatter.js';
 import { a0InSimUnits, mondVector } from './mond.js';
+// The render tier, for the passes a body can skip on a slow machine. Services
+// sit below the engine, so this is a downward import like the two above it.
+import { currentTier } from './quality.js';
+import { followCamera, resetFollowCamera } from './followCamera.js';
+// The shared drawing policy: level of detail, deterministic per-object
+// variation, star colour, light direction and comet-tail geometry. Pure
+// arithmetic, so all of it is tested without a canvas - see
+// tests/bodyVisuals.test.js.
+import {
+  LOD,
+  lodFor,
+  lodAtLeast,
+  visualSeed,
+  hash01,
+  silhouetteFor,
+  lightDirection,
+  dominantLight,
+  starColor,
+  scaleRgb,
+  tailActivity,
+  ionTailDirection,
+  dustTailDirection,
+  spriteFor,
+} from './bodyVisuals.js';
+import { stellarPropertiesFor, relativeInsolation } from './habitability.js';
 
 // Import the getRandomName function from ui.js
 // import { getRandomName } from './ui.js';
@@ -1094,6 +1119,104 @@ const drawRadius = obj => {
   const floor = px / z;
   return obj.radius > floor ? obj.radius : floor;
 };
+
+/**
+ * How much detail this body is worth, at its current size on screen.
+ *
+ * One call, so every family draws at the same thresholds and a reader zooming
+ * out watches the whole scene simplify together rather than one class at a
+ * time. `radius` here is the physical radius: the screen-space floor is a
+ * drawing decision (see drawRadius) and a body held at the floor is still a
+ * point, not a detailed sphere.
+ *
+ * @param {Object} obj - Body with a radius
+ * @returns {string} One of LOD
+ */
+const lodOf = obj => {
+  const z = (state && state.zoom) || 1;
+  return lodFor(obj.radius * z, {
+    tier: currentTier(),
+    crowded: liveBodyCount > CROWDED_COUNT,
+  });
+};
+
+/**
+ * The luminous bodies in the scene, as light sources, recomputed once a frame.
+ *
+ * Positions are held by reference, so a moving star needs no refresh; what is
+ * cached is the array and the luminosity, which is the part that would
+ * otherwise be recomputed once per lit body per frame. A hundred planets in a
+ * two-star system asked for this two hundred times a frame before it was
+ * memoised.
+ *
+ * @returns {Array<{pos: Object, luminosity: number}>} Sources, possibly empty
+ */
+let lightCacheFrame = -1;
+let lightCacheList = [];
+const luminousSources = () => {
+  const frame = (state && state.frame_count) || 0;
+  if (frame === lightCacheFrame && lightCacheList.length === stars.length) {
+    return lightCacheList;
+  }
+  lightCacheFrame = frame;
+  lightCacheList = [];
+  for (const star of stars) {
+    if (!star || star.alive === false) continue;
+    const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
+    if (!(props.luminositySolar > 0)) continue;
+    lightCacheList.push({
+      pos: star.pos,
+      luminosity: props.luminositySolar,
+      teffK: props.teffK,
+      star,
+    });
+  }
+  return lightCacheList;
+};
+
+/**
+ * The star that lights this body, or null in a scene with none.
+ * @param {{x: number, y: number}} pos - Where the light is received
+ * @returns {?Object} A light source
+ */
+const dominantStarFor = pos => dominantLight(pos, luminousSources());
+
+/**
+ * Does the reader want animation held still?
+ *
+ * Read through matchMedia rather than from a setting, because it is an
+ * operating-system preference and the rest of the interface already honours it
+ * that way (see the reduced-motion block in css/tokens.css). Cached: matchMedia
+ * is not free and this is asked once per pulsar per frame.
+ *
+ * @returns {boolean} True when animation should be held
+ */
+let reducedMotionQuery = null;
+const prefersReducedMotion = () => {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  if (!reducedMotionQuery) {
+    try {
+      reducedMotionQuery = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      );
+    } catch {
+      return false;
+    }
+  }
+  return Boolean(reducedMotionQuery.matches);
+};
+
+/**
+ * How far a star's corona reaches, in stellar radii.
+ *
+ * Was three, at more than twice this alpha. A corona that wide is not a
+ * corona; it is a glow that hides whatever is orbiting inside it, and on a
+ * zoomed-in star it covered the inner planets entirely.
+ */
+const CORONA_SCALE = 1.9;
+
+/** `rgba(...)` from a channel triple and an alpha. Avoids a template per call site. */
+const rgba = (c, a) => `rgba(${c.r},${c.g},${c.b},${a})`;
 
 const CLICK_MIN_RADIUS = {
   BlackHole: 14,
@@ -2503,11 +2626,19 @@ const updatePhysics = dt => {
           });
 
           // Emit clean merge event tag (BH-BH)
+          //
+          // `resultId` is the point of this payload for anything holding on to
+          // a progenitor. Without it a listener could tell that two black holes
+          // had gone but not what replaced them, so a reader watching from one
+          // of them - an object reference frame, or the inspector - had nothing
+          // to move to and fell back to the world origin, which reads as the
+          // view jumping at the exact moment the merger happens.
           const evt = {
             type: 'merge',
             time: performance.now(),
             primaryId: bh1.id,
             secondaryId: bh2.id,
+            resultId: new_black_hole.id,
             mergedMass: new_black_hole.mass,
             position: { x: new_pos.x, y: new_pos.y },
           };
@@ -2628,15 +2759,22 @@ const updatePhysics = dt => {
     ap => ap.alive && !is_offscreen(ap.pos, 2.0)
   );
 
-  // Follow mode logic - matching original exactly
+  // Follow mode logic
   let target = null;
   if (physicsSettings.follow_mode !== 'None') {
+    // Every option the settings menu offers. Four of them - Asteroid, Comet,
+    // NeutronStar, WhiteDwarf - were listed in the control and missing from
+    // this map, so choosing one silently followed nothing at all.
     const follow_map = {
       Galaxy: galaxies,
       BlackHole: bh_list,
       Planet: planets,
       GasGiant: gas_giants,
       Star: stars,
+      Asteroid: asteroids,
+      Comet: comets,
+      NeutronStar: neutron_stars,
+      WhiteDwarf: white_dwarfs,
     };
     const target_list = follow_map[physicsSettings.follow_mode];
     if (target_list && target_list.length > 0) {
@@ -2655,15 +2793,32 @@ const updatePhysics = dt => {
       }
     }
   }
-  if (target && state) {
-    // Follow moves the camera; a reference frame moves the coordinates. They
-    // compose, so the pan that centers the target has to be measured in the
-    // frame the target is being drawn in, not in world coordinates. Without
-    // this, turning on a frame while following sends the camera off by however
-    // far the frame's origin sits from the world origin.
-    const off = state.frameOffset || { x: 0, y: 0 };
-    state.pan.x = -(target.pos.x - off.x) * state.zoom;
-    state.pan.y = (target.pos.y - off.y) * state.zoom;
+  if (state) {
+    // What is being followed, as an identity rather than an object: switching
+    // from one black hole to another, or to the centre of mass of a pair, is a
+    // new camera and must not inherit the previous one's manual offset.
+    const followKey = target
+      ? `${physicsSettings.follow_mode}:${target.id ?? 'com'}`
+      : null;
+    if (state.followTarget !== followKey) {
+      resetFollowCamera(state);
+      state.followTarget = followKey;
+    }
+
+    if (target) {
+      const applied = followCamera({
+        targetPos: target.pos,
+        frameOffset: state.frameOffset,
+        zoom: state.zoom,
+        pan: state.pan,
+        lastApplied: state.followPan,
+        offset: state.followOffset,
+      });
+      state.pan.x = applied.pan.x;
+      state.pan.y = applied.pan.y;
+      state.followOffset = applied.offset;
+      state.followPan = { x: applied.pan.x, y: applied.pan.y };
+    }
   }
 
   // Update energy history for all objects (sample every 10 frames for performance)
@@ -2930,101 +3085,74 @@ class Planet extends PhysicsObject {
       }
     }
 
-    ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
+    const r = drawRadius(this);
+    const z = (state && state.zoom) || 1;
+    const level = lodOf(this);
+    const litColor = compute_dynamic_color(baseColor, this.pos, bh_list);
+
+    ctx.fillStyle = litColor;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
     ctx.fill();
 
-    // Add soft bloom to offscreen bloom canvas
+    // Everything from here to the label is inside the limb.
+    //
+    // The bands and the polar caps below used to be drawn as full-width
+    // rectangles across the body: correct in the middle, and running past the
+    // circle at the top and bottom of each one, so a planet had two tabs
+    // sticking out of its side. Clipping to the disc is what makes them
+    // markings on a sphere rather than stripes behind one - and it is one
+    // clip for the whole group rather than one path per marking.
+    if (lodAtLeast(level, LOD.SHADED)) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
+      ctx.clip();
+      this.drawSurface(ctx, world_pos, r, z, level, baseColor);
+      ctx.restore();
+    }
+
+    // Soft bloom, into the offscreen layer js/render.js composites additively.
+    //
+    // One pass. There used to be two consecutive blocks here, identical in
+    // geometry and differing only in colour: the first in the planet's own
+    // base colour at 0.15/0.06, the second in a fixed pale blue at 0.35/0.15.
+    // Added together, the fixed blue was more than twice the weight of the
+    // planet's own colour, so a red planet and a blue one wore the same halo -
+    // and every planet paid for two full-size radial gradients a frame to be
+    // told the wrong colour. The alphas below are the two sets summed, so the
+    // brightness is what it always was; only the hue is now correct.
+    //
+    // Reading window.bloomCtx is what arms the composite (see the getter in
+    // js/render.js), so the tier check has to come first: at the low tier the
+    // layer must not be touched at all, which is what js/quality.js means when
+    // it lists the bloom canvas among the passes that tier exists to skip.
     try {
-      const { x: screenX, y: screenY } = world_to_screen(world_pos);
-      const screenR = this.radius * state.zoom;
-      const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
-      if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
-        const grad = window.bloomCtx.createRadialGradient(
-          screenX,
-          screenY,
-          0,
-          screenX,
-          screenY,
-          screenR * 2.5
-        );
-        grad.addColorStop(
-          0,
-          `rgba(${rgbPlanet.r},${rgbPlanet.g},${rgbPlanet.b},0.15)`
-        );
-        grad.addColorStop(
-          0.6,
-          `rgba(${rgbPlanet.r},${rgbPlanet.g},${rgbPlanet.b},0.06)`
-        );
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        window.bloomCtx.fillStyle = grad;
-        window.bloomCtx.beginPath();
-        window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
-        window.bloomCtx.fill();
+      if (currentTier() !== 'low' && typeof window !== 'undefined') {
+        const screenR = this.radius * state.zoom;
+        if (screenR > 1 && window.bloomCtx) {
+          const { x: screenX, y: screenY } = world_to_screen(world_pos);
+          const rgbPlanet = hexToRgb(baseColor) || { r: 200, g: 220, b: 255 };
+          const { r, g, b } = rgbPlanet;
+          const grad = window.bloomCtx.createRadialGradient(
+            screenX,
+            screenY,
+            0,
+            screenX,
+            screenY,
+            screenR * 2.5
+          );
+          grad.addColorStop(0, `rgba(${r},${g},${b},0.5)`);
+          grad.addColorStop(0.6, `rgba(${r},${g},${b},0.21)`);
+          grad.addColorStop(1, 'rgba(0,0,0,0)');
+          window.bloomCtx.fillStyle = grad;
+          window.bloomCtx.beginPath();
+          window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
+          window.bloomCtx.fill();
+        }
       }
     } catch {
       // no-op
-    }
-
-    // Add soft bloom to offscreen bloom canvas
-    try {
-      const { x: screenX, y: screenY } = world_to_screen(world_pos);
-      const screenR = this.radius * state.zoom;
-      const color = { r: 210, g: 230, b: 255 };
-      if (screenR > 1 && typeof window !== 'undefined' && window.bloomCtx) {
-        const grad = window.bloomCtx.createRadialGradient(
-          screenX,
-          screenY,
-          0,
-          screenX,
-          screenY,
-          screenR * 2.5
-        );
-        grad.addColorStop(0, `rgba(${color.r},${color.g},${color.b},0.35)`);
-        grad.addColorStop(0.6, `rgba(${color.r},${color.g},${color.b},0.15)`);
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        window.bloomCtx.fillStyle = grad;
-        window.bloomCtx.beginPath();
-        window.bloomCtx.arc(screenX, screenY, screenR * 2.5, 0, 2 * Math.PI);
-        window.bloomCtx.fill();
-      }
-    } catch {
-      // no-op
-    }
-
-    if (this.density === 'gaseous' && this.radius * state.zoom > 3) {
-      ctx.fillStyle = 'rgba(135, 206, 235, 0.6)';
-      const band_height = Math.max(1 / state.zoom, this.radius * 0.2);
-      ctx.fillRect(
-        world_pos.x - this.radius,
-        world_pos.y - this.radius / 2 - band_height / 2,
-        this.radius * 2,
-        band_height
-      );
-      ctx.fillRect(
-        world_pos.x - this.radius,
-        world_pos.y + this.radius / 2 - band_height / 2,
-        this.radius * 2,
-        band_height
-      );
-    }
-
-    if (this.density === 'icy' && this.radius * state.zoom > 3) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-      const cap_height = Math.max(1 / state.zoom, this.radius * 0.15);
-      ctx.fillRect(
-        world_pos.x - this.radius,
-        world_pos.y - this.radius - cap_height,
-        this.radius * 2,
-        cap_height
-      );
-      ctx.fillRect(
-        world_pos.x - this.radius,
-        world_pos.y + this.radius,
-        this.radius * 2,
-        cap_height
-      );
     }
 
     ctx.save();
@@ -3059,6 +3187,103 @@ class Planet extends PhysicsObject {
       }
     }
     ctx.restore();
+  }
+
+  /**
+   * What is drawn on the planet's face, inside the limb.
+   *
+   * The caller has already clipped to the disc, which is what lets everything
+   * here be simple shapes: a band is a rectangle and the clip makes it a band
+   * on a sphere. Ordered cheapest first, so the level of detail can stop
+   * partway rather than needing a separate code path per level.
+   *
+   * @param {CanvasRenderingContext2D} ctx - Clipped, world-transformed context
+   * @param {{x: number, y: number}} at - Centre, world units
+   * @param {number} r - Drawn radius, world units
+   * @param {number} z - Zoom
+   * @param {string} level - From lodOf
+   * @param {string} baseColor - The planet's own colour
+   */
+  drawSurface(ctx, at, r, z, level, baseColor) {
+    // --- one shading pass: which side the light is on ---------------------
+    //
+    // From the star that actually lights this planet, so the terminator turns
+    // as it orbits and two planets on opposite sides of a star are lit from
+    // opposite sides. A scene with no luminous body gets the fixed fallback
+    // from js/bodyVisuals.js rather than an invented sun.
+    const sun = dominantStarFor(at);
+    const light = lightDirection(at, sun ? sun.pos : null);
+    const shade = ctx.createRadialGradient(
+      at.x + light.x * r * 0.55,
+      at.y + light.y * r * 0.55,
+      r * 0.1,
+      at.x,
+      at.y,
+      r * 1.05
+    );
+    shade.addColorStop(0, 'rgba(255,255,255,0.22)');
+    shade.addColorStop(0.45, 'rgba(255,255,255,0)');
+    shade.addColorStop(1, 'rgba(0,0,0,0.42)');
+    ctx.fillStyle = shade;
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
+    ctx.fill();
+
+    if (!lodAtLeast(level, LOD.DETAILED)) return;
+
+    // --- body-specific detail ---------------------------------------------
+    if (this.density === 'gaseous') {
+      ctx.fillStyle = 'rgba(135, 206, 235, 0.45)';
+      const band = Math.max(1 / z, r * 0.18);
+      ctx.fillRect(at.x - r, at.y - r * 0.5 - band / 2, r * 2, band);
+      ctx.fillRect(at.x - r, at.y + r * 0.5 - band / 2, r * 2, band);
+    } else if (this.density === 'icy') {
+      // Polar caps. Drawn as squat ellipses rather than rectangles so the clip
+      // has something cap-shaped to trim, which reads as a pole rather than as
+      // a flat lid.
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+      const cap = r * 0.42;
+      for (const sign of [-1, 1]) {
+        ctx.beginPath();
+        ctx.ellipse(
+          at.x,
+          at.y + sign * r * 0.92,
+          r * 0.95,
+          cap,
+          0,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+      }
+    } else {
+      // Rocky: a few maria, in fixed places on this planet forever. The
+      // positions come from the object's own id through js/bodyVisuals.js, so
+      // the same world rebuilt from the same seed - or reopened from a share
+      // link - has the same planet with the same markings, and no draw path
+      // has to call Math.random.
+      const seed = visualSeed(this);
+      const dark = hexToRgb(baseColor) || { r: 140, g: 140, b: 150 };
+      const spot = scaleRgb(dark, 0.72);
+      ctx.fillStyle = rgba(spot, 0.5);
+      const marks = 3;
+      for (let i = 0; i < marks; i++) {
+        const a = hash01(seed, 10 + i) * Math.PI * 2;
+        const d = (0.15 + hash01(seed, 20 + i) * 0.55) * r;
+        const rad = (0.16 + hash01(seed, 30 + i) * 0.2) * r;
+        ctx.beginPath();
+        ctx.ellipse(
+          at.x + Math.cos(a) * d,
+          at.y + Math.sin(a) * d,
+          rad,
+          rad * (0.6 + hash01(seed, 40 + i) * 0.5),
+          a,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+      }
+    }
   }
 
   drawEarth(ctx, world_pos) {
@@ -3290,16 +3515,39 @@ class GasGiant extends PhysicsObject {
     this.name = getRandomName('gasGiants');
 
     // Saturn-like rings: default off; scenarios can enable selectively
+    // Rings stay opt-in: a scenario that means a ringed giant sets hasRings on
+    // it. Giving every gas giant rings would be inventing a fact about most of
+    // them, and the brief for this pass asks for restraint rather than
+    // decoration. What has changed is that the geometry is no longer drawn
+    // from Math.random - see ringGeometry() - so a scenario that does ask for
+    // rings gets the same rings every time it is rebuilt, and a hand-placed
+    // giant gets rings that survive a reload.
     this.hasRings = false;
-    if (this.hasRings) {
-      // Ring size: inner radius 1.2-1.5x planet, outer 1.7-2.5x planet
-      this.ringInnerRadius = this.radius * (1.2 + Math.random() * 0.3);
-      this.ringOuterRadius = this.radius * (1.7 + Math.random() * 0.8);
-      // Ring orientation: random tilt (within ±30 degrees of equator)
-      this.ringAngle = (Math.random() - 0.5) * (Math.PI / 3); // -π/6 to +π/6
-      // Ring opacity: varies from planet to planet (0.4 to 0.8) - increased for better visibility
-      this.ringOpacity = 0.4 + Math.random() * 0.4;
-    }
+  }
+
+  /**
+   * The ring geometry, derived once from this body's own visual seed.
+   *
+   * Deterministic and memoised. The parameters used to come from Math.random
+   * in the constructor, which is seeded during world building and is not
+   * seeded for a body somebody dropped on the canvas - so a hand-placed ringed
+   * giant had a different tilt after every reload, and no share link could
+   * reproduce it.
+   *
+   * @returns {{inner: number, outer: number, angle: number, opacity: number}}
+   *   Ring geometry in world units and radians
+   */
+  ringGeometry() {
+    if (this._rings) return this._rings;
+    const seed = visualSeed(this);
+    this._rings = {
+      inner: this.radius * (1.2 + hash01(seed, 1) * 0.3),
+      outer: this.radius * (1.7 + hash01(seed, 2) * 0.8),
+      // Within thirty degrees of the equator, the way a real ring system sits.
+      angle: (hash01(seed, 3) - 0.5) * (Math.PI / 3),
+      opacity: 0.4 + hash01(seed, 4) * 0.4,
+    };
+    return this._rings;
   }
 
   calculateGiantType() {
@@ -3321,25 +3569,26 @@ class GasGiant extends PhysicsObject {
 
     // Draw rings if present - BACK ARC ONLY FIRST
     if (this.hasRings) {
+      const rings = this.ringGeometry();
       ctx.save();
       ctx.translate(world_pos.x, world_pos.y);
-      ctx.rotate(this.ringAngle);
-      ctx.globalAlpha = this.ringOpacity;
+      ctx.rotate(rings.angle);
+      ctx.globalAlpha = rings.opacity;
 
       // The dividing line between front and back is where the Y coordinate in the ring's local frame is zero
       // For an ellipse, this is at angles theta1 = 0 and theta2 = PI
-      // But after rotation, these become theta1 = -this.ringAngle and theta2 = PI - this.ringAngle
+      // But after rotation, these become theta1 = -angle and theta2 = PI - angle
       // We'll use these as the split points
-      const theta1 = -this.ringAngle;
-      const theta2 = Math.PI - this.ringAngle;
+      const theta1 = -rings.angle;
+      const theta2 = Math.PI - rings.angle;
 
       // Draw back arc (behind planet): from theta1 to theta2
       ctx.beginPath();
       ctx.ellipse(
         0,
         0,
-        this.ringOuterRadius,
-        this.ringOuterRadius * 0.32,
+        rings.outer,
+        rings.outer * 0.32,
         0,
         theta1,
         theta2,
@@ -3348,15 +3597,15 @@ class GasGiant extends PhysicsObject {
       ctx.ellipse(
         0,
         0,
-        this.ringInnerRadius,
-        this.ringInnerRadius * 0.32,
+        rings.inner,
+        rings.inner * 0.32,
         0,
         theta2,
         theta1,
         true
       );
       ctx.closePath();
-      ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
+      ctx.fillStyle = `rgba(180,200,255,${rings.opacity})`;
       ctx.fill('evenodd');
       ctx.globalAlpha = 1.0;
       ctx.restore();
@@ -3383,12 +3632,54 @@ class GasGiant extends PhysicsObject {
         break;
     }
 
+    const gr = drawRadius(this);
+    const gz = (state && state.zoom) || 1;
+    const glevel = lodOf(this);
+
     ctx.fillStyle = compute_dynamic_color(baseColor, this.pos, bh_list);
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
     ctx.fill();
 
-    if (this.radius * state.zoom > 4) {
+    // Spherical shading, and the clip that makes the bands below belong to the
+    // sphere rather than lie across it. One clip for the whole face: the bands
+    // were ellipses wider than the body, so their ends were cut by nothing and
+    // a gas giant had two lozenges floating over its silhouette.
+    if (lodAtLeast(glevel, LOD.SHADED)) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+      ctx.clip();
+
+      const gsun = dominantStarFor(world_pos);
+      const glight = lightDirection(world_pos, gsun ? gsun.pos : null);
+      const gshade = ctx.createRadialGradient(
+        world_pos.x + glight.x * gr * 0.5,
+        world_pos.y + glight.y * gr * 0.5,
+        gr * 0.08,
+        world_pos.x,
+        world_pos.y,
+        gr * 1.05
+      );
+      gshade.addColorStop(0, 'rgba(255,255,255,0.18)');
+      gshade.addColorStop(0.4, 'rgba(255,255,255,0)');
+      gshade.addColorStop(1, 'rgba(0,0,0,0.45)');
+      ctx.fillStyle = gshade;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (lodAtLeast(glevel, LOD.DETAILED) && this.radius * gz > 4) {
+      // Clipped to the disc, for the reason above: the band ellipses are wider
+      // and taller than the sphere at the latitudes they sit at, so without
+      // this the outer ones hang off the limb.
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+      ctx.clip();
+
       let bandColor, highlightColor;
       switch (this.giantType) {
         case 'brown_dwarf':
@@ -3469,9 +3760,9 @@ class GasGiant extends PhysicsObject {
         );
         ctx.fill();
       }
-    }
 
-    // (Front ring arc intentionally omitted; the planet occludes the near side.)
+      ctx.restore();
+    }
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -3510,20 +3801,21 @@ class GasGiant extends PhysicsObject {
 
     // Draw the front arc of the ring AFTER the planet (so it appears in front)
     if (this.hasRings) {
+      const rings = this.ringGeometry();
       ctx.save();
       ctx.translate(world_pos.x, world_pos.y);
-      ctx.rotate(this.ringAngle);
-      ctx.globalAlpha = this.ringOpacity;
+      ctx.rotate(rings.angle);
+      ctx.globalAlpha = rings.opacity;
 
-      const theta1 = -this.ringAngle;
-      const theta2 = Math.PI - this.ringAngle;
+      const theta1 = -rings.angle;
+      const theta2 = Math.PI - rings.angle;
       // Draw front arc (in front of planet): from theta2 to theta1
       ctx.beginPath();
       ctx.ellipse(
         0,
         0,
-        this.ringOuterRadius,
-        this.ringOuterRadius * 0.32,
+        rings.outer,
+        rings.outer * 0.32,
         0,
         theta2,
         theta1,
@@ -3532,15 +3824,15 @@ class GasGiant extends PhysicsObject {
       ctx.ellipse(
         0,
         0,
-        this.ringInnerRadius,
-        this.ringInnerRadius * 0.32,
+        rings.inner,
+        rings.inner * 0.32,
         0,
         theta1,
         theta2,
         true
       );
       ctx.closePath();
-      ctx.fillStyle = `rgba(180,200,255,${this.ringOpacity})`;
+      ctx.fillStyle = `rgba(180,200,255,${rings.opacity})`;
       ctx.fill('evenodd');
       ctx.globalAlpha = 1.0;
       ctx.restore();
@@ -3639,12 +3931,74 @@ class Asteroid extends PhysicsObject {
     this.name = getRandomName('asteroids');
   }
 
+  /**
+   * A rock.
+   *
+   * A circle until it is big enough on screen for a shape to read, then a
+   * deterministic irregular outline - because an asteroid is not round, and at
+   * twenty pixels a perfect disc is the one thing it certainly is not. The
+   * outline comes from this body's own visual seed, so the same rock has the
+   * same shape in every session and in every share link, and the vertices are
+   * cached rather than rebuilt per frame.
+   *
+   * In a crowded field it stays a dot however large it is: js/bodyVisuals.js
+   * caps the level of detail there, and a belt of two hundred rocks each
+   * stroking a nine-vertex path is two hundred paths a frame to draw something
+   * the reader sees as a haze.
+   *
+   * @param {CanvasRenderingContext2D} ctx - World-transformed context
+   */
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
+    const r = drawRadius(this);
+    const level = lodOf(this);
+
     ctx.fillStyle = '#8B4513';
+
+    if (!lodAtLeast(level, LOD.DETAILED)) {
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
+      ctx.fill();
+      return;
+    }
+
+    const shape = silhouetteFor(visualSeed(this));
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    for (let i = 0; i < shape.length; i++) {
+      const a = (i / shape.length) * Math.PI * 2;
+      const rr = r * shape[i];
+      const x = world_pos.x + Math.cos(a) * rr;
+      const y = world_pos.y + Math.sin(a) * rr;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
     ctx.fill();
+
+    // One shading pass, from the same light every other body uses.
+    const sun = dominantStarFor(world_pos);
+    const light = lightDirection(world_pos, sun ? sun.pos : null);
+    ctx.save();
+    ctx.clip();
+    const shade = ctx.createRadialGradient(
+      world_pos.x + light.x * r * 0.6,
+      world_pos.y + light.y * r * 0.6,
+      r * 0.1,
+      world_pos.x,
+      world_pos.y,
+      r * 1.2
+    );
+    shade.addColorStop(0, 'rgba(255,235,205,0.35)');
+    shade.addColorStop(0.5, 'rgba(255,255,255,0)');
+    shade.addColorStop(1, 'rgba(0,0,0,0.45)');
+    ctx.fillStyle = shade;
+    ctx.fillRect(
+      world_pos.x - r * 1.3,
+      world_pos.y - r * 1.3,
+      r * 2.6,
+      r * 2.6
+    );
+    ctx.restore();
   }
 }
 
@@ -4446,12 +4800,37 @@ class BlackHole {
       ctx.fill();
     }
 
+    // The event horizon: flat, featureless black, drawn over everything the
+    // accretion flow put down. This is the object; the rest is material near
+    // it.
     ctx.fillStyle = '#000000';
     ctx.beginPath();
     ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
     ctx.fill();
 
-    if (physicsSettings.show_bh_jets) {
+    // And a hairline on it, which is the point of this change.
+    //
+    // Black on a near-black sky has no edge, so the brightest thing near the
+    // centre - the inner lip of the accretion gradient at about 1.2 radii -
+    // was reading as the boundary of the black hole. It is not: it is hot gas
+    // outside the horizon, and a student who takes the glow for the object has
+    // been taught that a black hole is a bright thing. One thin ring at
+    // exactly `radius` says where the horizon is and separates it from the
+    // flow around it without adding another glow to the picture.
+    //
+    // Deliberately not drawn at 1.5 radii as a photon ring: this engine is
+    // Newtonian and does not compute one, and a ring drawn there would be a
+    // claim the model page does not make.
+    const bhLevel = lodOf(this);
+    if (lodAtLeast(bhLevel, LOD.SHADED)) {
+      ctx.strokeStyle = 'rgba(200,210,235,0.55)';
+      ctx.lineWidth = Math.min(1.5 / state.zoom, world_radius * 0.06);
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
+      ctx.stroke();
+    }
+
+    if (physicsSettings.show_bh_jets && lodAtLeast(bhLevel, LOD.SHADED)) {
       // --- Realistic, dynamic jet rendering (many thin lines, volumetric) ---
       const jet_length = world_radius * (11 + this.jet_intensity * 3.5); // Moderately longer jet
       const jet_base_width = Math.max(
@@ -4683,34 +5062,120 @@ class StarObject extends PhysicsObject {
 
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
-    // Use custom baseColor if set, otherwise use computed color
-    const starColor = this.baseColor || getStarColor(this.massInSuns);
-    const rgb = hexToRgb(starColor) || { r: 255, g: 220, b: 160 };
-    // Core
-    ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
-    ctx.fill();
-    // Soft bloom to offscreen canvas for compositing
-    try {
-      const { x: screenX, y: screenY } = world_to_screen(world_pos);
-      const screenR = this.radius * state.zoom;
-      if (screenR > 2 && typeof window !== 'undefined' && window.bloomCtx) {
-        const grad = window.bloomCtx.createRadialGradient(
-          screenX,
-          screenY,
+    const r = drawRadius(this);
+    const z = (state && state.zoom) || 1;
+    const screenR = this.radius * z;
+    const level = lodOf(this);
+
+    // Colour from the temperature, not from the mass directly.
+    //
+    // The two agree for a main-sequence star, because the temperature is
+    // estimated from the mass when a star does not carry one - but a star that
+    // DOES carry one, which is every star a scenario builds from real data, was
+    // being coloured from a mass-to-colour table that knew nothing about it.
+    // stellarPropertiesFor is the same function the habitable-zone ring and the
+    // light curve read, so the colour on screen and the physics in the panels
+    // now come from one number. An explicit baseColor still wins: a scenario
+    // that names a colour means it.
+    // Memoised on the star, keyed on the mass it was computed from.
+    //
+    // The colour only changes when the star does, which is on accretion or a
+    // merger - not sixty times a second. A cluster of five hundred stars was
+    // otherwise running stellarPropertiesFor, which allocates, once per star
+    // per frame to arrive at the same answer it gave on the previous one.
+    if (
+      !this._visual ||
+      this._visual.mass !== this.mass ||
+      this._visual.base !== this.baseColor
+    ) {
+      const props = stellarPropertiesFor(this, SOLAR_MASS_UNIT);
+      this._visual = {
+        mass: this.mass,
+        base: this.baseColor,
+        rgb: this.baseColor
+          ? hexToRgb(this.baseColor) || starColor(props.teffK)
+          : starColor(props.teffK),
+      };
+    }
+    const rgb = this._visual.rgb;
+
+    if (level === LOD.POINT) {
+      // A crisp, high-contrast dot and nothing else. No gradient, no bloom: at
+      // three pixels a corona is one lighter ring of pixels that reads as blur.
+      ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
+      ctx.fill();
+    } else {
+      // A limb-darkened disc from a cached sprite. The sprite is radially
+      // symmetric, so the render pass's flipped Y axis does not matter, and it
+      // is keyed on colour and size buckets - a cluster of similar stars shares
+      // one rather than building a gradient each, every frame.
+      const disc = spriteFor('star-disc', rgb, screenR, (sctx, size, c) => {
+        const half = size / 2;
+        const g = sctx.createRadialGradient(half, half, 0, half, half, half);
+        // A compact bright core rather than a uniformly blazing disc: real
+        // stars are brightest at the centre of the visible disc and fall off
+        // toward the limb, and the flat fill made every star a sticker.
+        g.addColorStop(
           0,
-          screenX,
-          screenY,
-          screenR * 3
+          `rgb(${Math.min(255, c.r + 40)},${Math.min(255, c.g + 35)},${Math.min(255, c.b + 30)})`
         );
-        grad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},0.35)`);
-        grad.addColorStop(0.5, `rgba(${rgb.r},${rgb.g},${rgb.b},0.15)`);
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        window.bloomCtx.fillStyle = grad;
-        window.bloomCtx.beginPath();
-        window.bloomCtx.arc(screenX, screenY, screenR * 3, 0, 2 * Math.PI);
-        window.bloomCtx.fill();
+        g.addColorStop(0.55, `rgb(${c.r},${c.g},${c.b})`);
+        const limb = scaleRgb(c, 0.82);
+        g.addColorStop(0.94, `rgb(${limb.r},${limb.g},${limb.b})`);
+        g.addColorStop(1, `rgba(${limb.r},${limb.g},${limb.b},0)`);
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(half, half, half, 0, 2 * Math.PI);
+        sctx.fill();
+      });
+      if (disc) {
+        ctx.drawImage(disc, world_pos.x - r, world_pos.y - r, r * 2, r * 2);
+      } else {
+        ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+        ctx.beginPath();
+        ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    // The corona, into the offscreen layer js/render.js composites additively.
+    //
+    // Tighter than what was here: the old bloom ran to three times the stellar
+    // radius at 0.35 alpha, which on a zoomed-in star swallowed everything
+    // near it and made a planet at half an astronomical unit look like it was
+    // inside the photosphere. Restrained, and cached as a sprite rather than
+    // built as a gradient per star per frame.
+    try {
+      if (
+        lodAtLeast(level, LOD.SHADED) &&
+        screenR > 2 &&
+        typeof window !== 'undefined' &&
+        window.bloomCtx
+      ) {
+        const coronaR = screenR * CORONA_SCALE;
+        const halo = spriteFor('star-corona', rgb, coronaR, (sctx, size, c) => {
+          const half = size / 2;
+          const g = sctx.createRadialGradient(half, half, 0, half, half, half);
+          g.addColorStop(0, `rgba(${c.r},${c.g},${c.b},0.34)`);
+          g.addColorStop(0.35, `rgba(${c.r},${c.g},${c.b},0.16)`);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          sctx.fillStyle = g;
+          sctx.beginPath();
+          sctx.arc(half, half, half, 0, 2 * Math.PI);
+          sctx.fill();
+        });
+        const { x: screenX, y: screenY } = world_to_screen(world_pos);
+        if (halo) {
+          window.bloomCtx.drawImage(
+            halo,
+            screenX - coronaR,
+            screenY - coronaR,
+            coronaR * 2,
+            coronaR * 2
+          );
+        }
       }
     } catch {
       // no-op
@@ -4835,8 +5300,17 @@ class NeutronStar extends PhysicsObject {
 
     // Pulsar effect
     this.pulsar_phase += 0.1;
-    const pulse_intensity =
-      0.5 + 0.5 * Math.sin(this.pulsar_phase / this.pulsar_period);
+    // The pulse, held still when the reader has asked for that.
+    //
+    // A pulsar beam sweeping at a few hertz is exactly the kind of repeating
+    // motion prefers-reduced-motion exists for, and it is the only animation
+    // in the body drawing that runs on its own whether or not the simulation
+    // is playing. Held at its mid-brightness rather than switched off: the
+    // beam is what says "this is a pulsar", and removing it would remove the
+    // information along with the movement.
+    const pulse_intensity = prefersReducedMotion()
+      ? 0.65
+      : 0.5 + 0.5 * Math.sin(this.pulsar_phase / this.pulsar_period);
 
     // Core
     ctx.fillStyle = compute_dynamic_color('#E6E6FA', this.pos, bh_list, 300.0, {
@@ -4848,9 +5322,19 @@ class NeutronStar extends PhysicsObject {
     ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
     ctx.fill();
 
-    // Magnetic field visualization
-    if (this.radius * state.zoom > 2) {
-      const field_radius = this.radius * (2 + this.magnetic_field_strength);
+    // The magnetosphere ring: the cue that says "neutron star" rather than
+    // "white dwarf". Both are small, bright and dense; this is a stated
+    // boundary at a distance rather than a glow, which is the visual
+    // difference between a magnetic field and an atmosphere.
+    //
+    // Gated on the level of detail like everything else, and its reach is
+    // capped: magnetic_field_strength is unbounded in the constructor, and a
+    // strongly magnetised star drew a ring several times its own size.
+    const nsLevel = lodOf(this);
+    if (lodAtLeast(nsLevel, LOD.SHADED) && this.radius * state.zoom > 2) {
+      const field_radius =
+        drawRadius(this) *
+        Math.min(3.0, 2 + (this.magnetic_field_strength || 0));
       const field_intensity = pulse_intensity * 0.3;
 
       ctx.strokeStyle = `rgba(0, 255, 255, ${field_intensity})`;
@@ -4976,19 +5460,29 @@ class WhiteDwarf extends PhysicsObject {
       200.0,
       { r: 255, g: 255, b: 255 }
     );
+    const wdR = drawRadius(this);
+    const wdZ = (state && state.zoom) || 1;
+    const wdLevel = lodOf(this);
+
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, drawRadius(this), 0, 2 * Math.PI);
+    ctx.arc(world_pos.x, world_pos.y, wdR, 0, 2 * Math.PI);
     ctx.fill();
 
-    // Glow effect based on temperature
-    if (this.radius * state.zoom > 3) {
-      const glow_radius = this.radius * (1.5 + this.temperature / 20000);
-      const glow_intensity = (this.temperature / 20000) * 0.4;
+    // Glow, bounded and gated.
+    //
+    // The reach used to be 1.5 + T/20000 stellar radii, which for a hot young
+    // dwarf is two and a half times the body and reads as a small star rather
+    // than as the Earth-sized cinder it is. Capped, and skipped entirely at
+    // the point level where a halo is one lighter ring of pixels.
+    if (lodAtLeast(wdLevel, LOD.SHADED) && this.radius * wdZ > 3) {
+      const glow_radius =
+        wdR * Math.min(2.0, 1.3 + (this.temperature || 0) / 40000);
+      const glow_intensity = Math.min(0.32, (this.temperature / 20000) * 0.3);
 
       const grad = ctx.createRadialGradient(
         world_pos.x,
         world_pos.y,
-        this.radius,
+        wdR,
         world_pos.x,
         world_pos.y,
         glow_radius
@@ -5000,6 +5494,19 @@ class WhiteDwarf extends PhysicsObject {
       ctx.beginPath();
       ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
       ctx.fill();
+    }
+
+    // The cue that says "white dwarf" rather than "small hot star": a hard,
+    // bright edge. A degenerate body has no atmosphere to soften its limb, and
+    // this is the one place a picture can say that without making the object
+    // bigger than it is. One screen pixel wide at any zoom, so it does not
+    // grow into a second disc.
+    if (lodAtLeast(wdLevel, LOD.DETAILED)) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+      ctx.lineWidth = 1 / wdZ;
+      ctx.beginPath();
+      ctx.arc(world_pos.x, world_pos.y, wdR * 0.94, 0, 2 * Math.PI);
+      ctx.stroke();
     }
 
     // Label
@@ -5397,7 +5904,29 @@ const findObjectAtPosition = worldPos => {
     }
   }
 
-  // Check asteroids (including comets)
+  // Comets, before asteroids because that is the order they are drawn in and a
+  // hit test should return whatever is on top.
+  //
+  // This loop is new. There used to be only the asteroid loop below, which
+  // ended with `if (asteroid instanceof Comet)` - a leftover from when a
+  // hand-placed comet was pushed into `asteroids`. Once that was corrected the
+  // branch became unreachable and comets stopped being selectable at all: a
+  // reader could place one and then not click it, inspect it, follow it or
+  // frame on it. CLICK_MIN_RADIUS.Comet has been declared and unused since.
+  for (const comet of comets) {
+    if (!comet.alive) continue;
+    const dx = worldPos.x - comet.pos.x;
+    const dy = worldPos.y - comet.pos.y;
+    const clickRadius = Math.max(
+      comet.radius,
+      CLICK_MIN_RADIUS.Comet / state.zoom
+    );
+    if (dx * dx + dy * dy < clickRadius * clickRadius) {
+      return { object: comet, type: 'Comet' };
+    }
+  }
+
+  // Check asteroids
   for (const asteroid of asteroids) {
     if (!asteroid.alive) continue;
     const dx = worldPos.x - asteroid.pos.x;
@@ -5407,12 +5936,7 @@ const findObjectAtPosition = worldPos => {
       CLICK_MIN_RADIUS.Asteroid / state.zoom
     );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
-      // Determine if it's a comet or regular asteroid
-      if (asteroid instanceof Comet) {
-        return { object: asteroid, type: 'Comet' };
-      } else {
-        return { object: asteroid, type: 'Asteroid' };
-      }
+      return { object: asteroid, type: 'Asteroid' };
     }
   }
 
@@ -5455,62 +5979,72 @@ class Comet extends PhysicsObject {
     }
   }
 
+  /**
+   * Draw the nucleus, the coma and the tail.
+   *
+   * In world coordinates, like every other body: the render pass has already
+   * applied the pan, the zoom and the reference-frame offset to the context.
+   * This used to convert to screen coordinates first and then draw through that
+   * transform, which puts a comet at roughly (zoom * pos + pan + half a canvas)
+   * instead of at pos. Nothing caught it because js/render.js never called this
+   * at all - `comets` was not among the collections it drew - so the Solar
+   * System's ten comets and every hand-placed one were simply absent.
+   *
+   * The nucleus is held at the shared screen-space floor, the same way an
+   * asteroid's is. A comet's physical radius is a fraction of a world unit and
+   * covers well under a pixel at any zoom a scenario opens at, so without the
+   * floor a placed comet is invisible and unclickable. The floor is a drawing
+   * decision only: `this.radius` is what collisions, tidal disruption and the
+   * inspector read, and it is untouched.
+   *
+   * @param {CanvasRenderingContext2D} ctx - The world-transformed context
+   */
   draw(ctx) {
-    const true_screen_pos = world_to_screen(this.pos);
-    const screen_radius = this.radius * state.zoom;
+    const world_pos = this.pos;
+    const r = drawRadius(this);
+    const z = (state && state.zoom) || 1;
+    const level = lodOf(this);
+
+    // Where the light is, which is what a comet's appearance is entirely about.
+    // The tails are not exhaust: the ion tail is blown radially outward by the
+    // stellar wind and points away from the star whichever way the comet is
+    // travelling, and there is no coma at all until something warms the ice.
+    const sun = dominantStarFor(world_pos);
+    const activity = sun
+      ? tailActivity(
+          relativeInsolation(
+            sun.luminosity,
+            simToAu(
+              Math.hypot(world_pos.x - sun.pos.x, world_pos.y - sun.pos.y)
+            )
+          )
+        )
+      : 0;
 
     ctx.save();
 
-    // Draw comet tail (opposite to velocity direction)
-    if (screen_radius > 1) {
-      const speed = Math.hypot(this.vel.x, this.vel.y);
-      if (speed > 0.1) {
-        const tailDirection = {
-          x: -this.vel.x / speed,
-          y: -this.vel.y / speed,
-        };
-        const tailLength = Math.min(this.tailLength * state.zoom, 100);
-
-        // Draw tail gradient
-        const gradient = ctx.createLinearGradient(
-          true_screen_pos.x,
-          true_screen_pos.y,
-          true_screen_pos.x + tailDirection.x * tailLength,
-          true_screen_pos.y + tailDirection.y * tailLength
-        );
-        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-        gradient.addColorStop(0.3, 'rgba(200, 255, 255, 0.6)');
-        gradient.addColorStop(0.7, 'rgba(150, 200, 255, 0.3)');
-        gradient.addColorStop(1, 'transparent');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(
-          true_screen_pos.x,
-          true_screen_pos.y,
-          screen_radius * 2,
-          0,
-          2 * Math.PI
-        );
-        ctx.fill();
-      }
+    if (activity > 0 && lodAtLeast(level, LOD.SHADED)) {
+      this.drawTails(ctx, world_pos, r, z, sun, activity);
+      this.drawComa(ctx, world_pos, r, activity);
     }
 
-    // Draw comet nucleus
-    ctx.fillStyle = '#f0f0f0';
+    // The nucleus. Always drawn, at the shared screen-space floor, so a comet
+    // in the outer system is a visible speck rather than nothing - which is
+    // what it looks like through a telescope, and what makes it clickable.
+    ctx.fillStyle = activity > 0 ? '#f4f4ef' : '#cfd3d8';
     ctx.beginPath();
-    ctx.arc(
-      true_screen_pos.x,
-      true_screen_pos.y,
-      screen_radius,
-      0,
-      2 * Math.PI
-    );
+    ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
     ctx.fill();
 
-    // Draw label if large enough
-    if (screen_radius > 3) {
-      const label_y_offset = screen_radius + 12;
+    ctx.restore();
+
+    // The label is text, and text has to be drawn in screen space or the
+    // render pass's flipped Y axis renders it upside down. Same shape as the
+    // planet's and the star's: reset the transform, draw, put it back.
+    if (r * z > 4) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const true_screen_pos = world_to_screen(world_pos);
       ctx.font = '10px Roboto Mono';
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'center';
@@ -5520,10 +6054,154 @@ class Comet extends PhysicsObject {
       ctx.fillText(
         withUnit(formatNumber(this.massInComets), 'C'),
         true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
+        true_screen_pos.y + r * z + 12
       );
+      ctx.restore();
     }
-    ctx.restore();
+  }
+
+  /**
+   * The coma: the halo of gas and dust boiled off the nucleus.
+   *
+   * Grows with activity, so the same comet swells as it comes in and shrinks
+   * as it leaves. Drawn as a single radial gradient rather than a sprite
+   * because its radius changes continuously with activity, which is exactly
+   * the case a size-bucketed sprite cache serves badly.
+   *
+   * @param {CanvasRenderingContext2D} ctx - World-transformed context
+   * @param {{x: number, y: number}} at - The nucleus
+   * @param {number} r - Drawn nucleus radius, world units
+   * @param {number} activity - 0 to 1
+   */
+  drawComa(ctx, at, r, activity) {
+    const coma = r * (1.6 + 4.5 * activity);
+    const grad = ctx.createRadialGradient(
+      at.x,
+      at.y,
+      r * 0.5,
+      at.x,
+      at.y,
+      coma
+    );
+    grad.addColorStop(0, `rgba(214,244,255,${0.5 * activity})`);
+    grad.addColorStop(0.45, `rgba(170,225,245,${0.22 * activity})`);
+    grad.addColorStop(1, 'rgba(150,200,255,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, coma, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
+  /**
+   * The two tails.
+   *
+   * A comet has two, they point in different directions, and telling them
+   * apart is most of what there is to learn from the picture:
+   *
+   *   The ion tail is gas, ionised and swept straight out by the stellar wind.
+   *   It is narrow, blue, and points directly away from the star - which means
+   *   that on the way out of the system it leads rather than follows. This is
+   *   the part the old drawing had backwards: it pointed the tail opposite the
+   *   comet's velocity, which is the picture students already hold and which
+   *   the real geometry contradicts.
+   *
+   *   The dust tail is grains, heavy enough that the wind only nudges them.
+   *   They leave with the nucleus's own orbital motion and fall behind, so the
+   *   tail lies between anti-solar and the orbital trail and curves along the
+   *   orbit. Broader, yellower, and drawn as an arc so the curve reads.
+   *
+   * Geometry from js/bodyVisuals.js, which is where it is tested.
+   *
+   * @param {CanvasRenderingContext2D} ctx - World-transformed context
+   * @param {{x: number, y: number}} at - The nucleus
+   * @param {number} r - Drawn nucleus radius, world units
+   * @param {number} z - Current zoom
+   * @param {Object} sun - The dominant light source
+   * @param {number} activity - 0 to 1
+   */
+  drawTails(ctx, at, r, z, sun, activity) {
+    // `tailLength` was written as screen pixels at zoom 1, so it carries over
+    // to world units one for one. Capped so a zoomed-in comet does not streak
+    // across the whole canvas, floored so a zoomed-out one is not swallowed by
+    // its own nucleus.
+    const len = Math.max(
+      Math.min(this.tailLength, 140 / z) * activity,
+      r * 4 * activity
+    );
+    if (!(len > 0)) return;
+
+    const ion = ionTailDirection(at, sun.pos, this.vel);
+    if (!ion) return;
+
+    // --- the ion tail: straight, narrow, away from the star ---
+    const ionEnd = { x: at.x + ion.x * len, y: at.y + ion.y * len };
+    const ionGrad = ctx.createLinearGradient(at.x, at.y, ionEnd.x, ionEnd.y);
+    ionGrad.addColorStop(0, `rgba(190,235,255,${0.55 * activity})`);
+    ionGrad.addColorStop(0.4, `rgba(140,200,255,${0.28 * activity})`);
+    ionGrad.addColorStop(1, 'rgba(120,170,255,0)');
+    const halfWidth = r * 0.9;
+    ctx.fillStyle = ionGrad;
+    ctx.beginPath();
+    ctx.moveTo(at.x - ion.y * halfWidth, at.y + ion.x * halfWidth);
+    ctx.lineTo(ionEnd.x, ionEnd.y);
+    ctx.lineTo(at.x + ion.y * halfWidth, at.y - ion.x * halfWidth);
+    ctx.closePath();
+    ctx.fill();
+
+    // --- the dust tail: broader, yellower, curved along the orbit ---
+    // Sampled rather than drawn as one wedge, because the whole point is that
+    // it bends: each step asks bodyVisuals for the direction at that fraction
+    // of the way out and walks along it.
+    const dustLen = len * 0.8;
+    const steps = 6;
+    const spine = [];
+    let px = at.x;
+    let py = at.y;
+    for (let i = 1; i <= steps; i++) {
+      const f = i / steps;
+      const dir = dustTailDirection(at, sun.pos, this.vel, f);
+      if (!dir) break;
+      px += (dir.x * dustLen) / steps;
+      py += (dir.y * dustLen) / steps;
+      spine.push({ x: px, y: py, f });
+    }
+    if (spine.length < 2) return;
+
+    const dustGrad = ctx.createLinearGradient(
+      at.x,
+      at.y,
+      spine[spine.length - 1].x,
+      spine[spine.length - 1].y
+    );
+    dustGrad.addColorStop(0, `rgba(255,238,205,${0.4 * activity})`);
+    dustGrad.addColorStop(0.5, `rgba(240,215,170,${0.18 * activity})`);
+    dustGrad.addColorStop(1, 'rgba(220,200,160,0)');
+
+    // One closed path down one edge and back up the other, widening with
+    // distance the way a real dust fan does.
+    const widthAt = f => r * (1.1 + 2.6 * f);
+    ctx.fillStyle = dustGrad;
+    ctx.beginPath();
+    ctx.moveTo(at.x, at.y);
+    for (const pt of spine) {
+      const prev = spine[spine.indexOf(pt) - 1] || at;
+      const tx = pt.x - prev.x;
+      const ty = pt.y - prev.y;
+      const d = Math.hypot(tx, ty) || 1;
+      const w = widthAt(pt.f);
+      ctx.lineTo(pt.x - (ty / d) * w, pt.y + (tx / d) * w);
+    }
+    for (let i = spine.length - 1; i >= 0; i--) {
+      const pt = spine[i];
+      const prev = spine[i - 1] || at;
+      const tx = pt.x - prev.x;
+      const ty = pt.y - prev.y;
+      const d = Math.hypot(tx, ty) || 1;
+      const w = widthAt(pt.f);
+      ctx.lineTo(pt.x + (ty / d) * w, pt.y - (tx / d) * w);
+    }
+    ctx.closePath();
+    ctx.fill();
   }
 
   tidal_mass_loss(bh_list, dt) {
@@ -6927,6 +7605,10 @@ const handle_gas_giant_merging = () => {
               time: performance.now(),
               primaryId: gasGiant1.id,
               secondaryId: gasGiant2.id,
+              // A gas-giant merger can produce a star instead of a gas giant,
+              // so this is whatever was actually created rather than a
+              // type-specific id.
+              resultId: new_object ? new_object.id : null,
               mergedMass: new_mass,
               position: { x: new_pos.x, y: new_pos.y },
             };

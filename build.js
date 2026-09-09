@@ -41,7 +41,17 @@ const STATIC_FILES = [
 const STATIC_DIRS = ['images', 'notebooks', 'vendor'];
 
 // Static document pages outside the single-page app.
-const DOC_PAGES = ['model', 'instructors', 'validation'];
+const DOC_PAGES = ['model', 'instructors', 'validation', 'teaching'];
+
+/**
+ * Stylesheets that belong to one document page and to nothing else.
+ *
+ * css/app.css is the initial download of the simulation itself, and the budget
+ * on that number is the tightest one this project has. A showcase page's grids
+ * have no business in it, so they are built to their own file and linked only
+ * from the page that needs them.
+ */
+const PAGE_STYLESHEETS = ['css/teaching.css'];
 
 async function buildCss() {
   // tokens → styles → components → page, matching the cascade-layer order.
@@ -76,6 +86,23 @@ async function buildCss() {
     legalComments: 'none',
   });
   await writeFile(path.join(OUT, 'css', 'app.css'), result.code);
+
+  // Built here because this is where CSS is minified, and deliberately NOT
+  // added to the number returned. What this function reports is the initial
+  // download's stylesheet, which the budget is set against; a sheet that only
+  // one document page links cannot make a first-time visitor to the simulation
+  // wait, and counting it would say it does.
+  for (const file of PAGE_STYLESHEETS) {
+    if (!existsSync(file)) continue;
+    const one = await esbuild.transform(await readFile(file, 'utf8'), {
+      loader: 'css',
+      minify: true,
+      keepNames: true,
+      legalComments: 'none',
+    });
+    await writeFile(path.join(OUT, file), one.code);
+  }
+
   return result.code.length;
 }
 
@@ -157,6 +184,31 @@ function summarizeBundle(metafile) {
   walk(entryFile);
 
   const size = f => outputs[f].bytes;
+
+  // `node build.js --eager` lists what is actually in the start-up download,
+  // largest first, with the biggest source module inside each chunk. The
+  // budget says how much room is left; this says where it went, which is the
+  // question you have when there is none.
+  if (process.argv.includes('--eager')) {
+    const rows = [...eager]
+      .map(f => {
+        const inputs = Object.entries(outputs[f].inputs || {})
+          .map(([name, v]) => ({ name, bytes: v.bytesInOutput || 0 }))
+          .sort((a, b) => b.bytes - a.bytes);
+        return { file: f, bytes: size(f), top: inputs.slice(0, 4) };
+      })
+      .sort((a, b) => b.bytes - a.bytes);
+    console.log('\nEager chunks, largest first:');
+    for (const r of rows.slice(0, 12)) {
+      console.log(`  ${(r.bytes / 1024).toFixed(1).padStart(8)} KB  ${r.file}`);
+      for (const i of r.top) {
+        console.log(
+          `             ${(i.bytes / 1024).toFixed(1).padStart(7)} KB  ${i.name}`
+        );
+      }
+    }
+  }
+
   const deferred = Object.keys(outputs).filter(f => !eager.has(f));
   return {
     initial: [...eager].reduce((a, f) => a + size(f), 0),
@@ -276,6 +328,25 @@ async function buildDocPages() {
       format: 'esm',
       target: ['es2022'],
       outfile: path.join(OUT, 'js', 'validationWorker.js'),
+      legalComments: 'none',
+    });
+  }
+
+  // The showcase page's own bundle, for the same reason as the portal's: it
+  // shares the lesson manifest with the application and none of the simulation,
+  // and a marketing page must not be able to grow the start-up download.
+  if (existsSync('js/teachingPage.js')) {
+    await esbuild.build({
+      entryPoints: ['js/teachingPage.js'],
+      bundle: true,
+      minify: true,
+      // physics.js branches on constructor.name in fifteen places. Without
+      // this, minification renames the classes and every one of those branches
+      // is false in production and true in development.
+      keepNames: true,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, 'js', 'teachingPage.js'),
       legalComments: 'none',
     });
   }

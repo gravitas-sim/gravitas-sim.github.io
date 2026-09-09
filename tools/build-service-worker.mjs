@@ -33,7 +33,8 @@
  * Out:
  *   js/data/investigations/es/*.js       runtime-cached; see below
  *   the user manual PDF                  a download, not part of the shell
- *   model/, instructors/, validation/    separate document pages, runtime-cached
+ *   model/, instructors/,                separate document pages, runtime-cached
+ *     validation/, teaching/
  *   notebooks/                           downloads
  *   social-card.png                      only ever fetched by a link unfurler
  *

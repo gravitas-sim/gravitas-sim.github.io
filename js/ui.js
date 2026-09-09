@@ -80,6 +80,7 @@ import {
   resolveFrameOrigin,
   frameState,
   onFrameChange,
+  transferFrame,
 } from './referenceFrame.js';
 import {
   getPositionAngle,
@@ -180,6 +181,7 @@ import {
   current_scenario_name,
   setScenarioName as setCurrentScenarioName,
 } from './appState.js';
+import { resetFollowCamera } from './followCamera.js';
 
 // No global annotation helpers in clean state
 // Return attractors sorted by gravitational influence m/r^2
@@ -1139,6 +1141,42 @@ const isObjectStillInSimulation = object => {
     white_dwarfs.includes(object)
   );
 };
+
+/**
+ * Carry a reader's viewpoint across a merger.
+ *
+ * Two things can be pointed at a body that a merger removes: the reference
+ * frame, and the inspector. Both used to be dropped - the frame back to the
+ * world origin, which in Binary BH is a jump of tens of thousands of units, and
+ * the inspector closed on the next update because its object was no longer in
+ * the simulation. In both cases the reader was watching that body precisely
+ * because it was about to merge, so the moment of interest is the moment the
+ * interface stopped following it.
+ *
+ * The merger product is what both should move to: it is the same mass in the
+ * same place, one body instead of two. Readers in the world or barycenter
+ * frame see nothing change, which is checked in tests/mergeFrameTransfer.js.
+ */
+if (typeof window !== 'undefined') {
+  window.addEventListener('gravitasMerge', event => {
+    const { primaryId, secondaryId, resultId } = event.detail || {};
+    if (resultId === null || resultId === undefined) return;
+    const gone = [primaryId, secondaryId];
+
+    transferFrame(gone, resultId);
+
+    const selected = state.selectedObject;
+    if (selected?.object && gone.includes(selected.object.id)) {
+      const product = allBodies().find(b => b && b.id === resultId);
+      // Re-selected rather than merely re-pointed: the product can be a
+      // different kind of body from either progenitor - two gas giants can
+      // ignite into a star - and the inspector renders by type.
+      if (product) {
+        showObjectInspector(product, product.obj_type);
+      }
+    }
+  });
+}
 
 /**
  * Show the object inspector modal with detailed information about a physics object
@@ -5943,6 +5981,7 @@ window.addEventListener('keydown', e => {
   else if (e.key.toLowerCase() === 'home') {
     state.zoom = 1.0;
     state.pan = { x: 0, y: 0 };
+    resetFollowCamera(state);
   } else if (e.key === '-' || e.key === '_') {
     SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, -1);
     updateSpeedDisplay();
@@ -6231,6 +6270,12 @@ document.getElementById('resetViewBtn').onclick = () => {
     ...gas_giants,
     ...planets,
     ...asteroids,
+    // Comets belong here for the same reason asteroids do: they are bodies a
+    // reader placed or a scenario built, and a view that frames everything
+    // except them frames the wrong thing. Debris and particles stay out - they
+    // are ejecta, they scatter, and including them would zoom the view out to
+    // fit a spray of fragments.
+    ...comets,
   ].filter(obj => obj.alive);
 
   if (allObjects.length > 0) {
@@ -6282,6 +6327,10 @@ document.getElementById('resetViewBtn').onclick = () => {
     state.zoom = 1.0;
     state.pan = { x: 0.0, y: 0.0 };
   }
+  // Reset view is a command, not a drag. Without this, Follow mode's next step
+  // would measure the difference it just made and fold it into the very offset
+  // this button exists to clear.
+  resetFollowCamera(state);
 };
 
 // Screenshot functionality
@@ -6512,8 +6561,95 @@ syncToolButtons();
 const objectPicker = document.getElementById('objectTypePicker');
 const objectAddWrap = document.getElementById('objectAdd');
 
+// The picker is moved out of the rail and parented to <body>.
+//
+// It is written inside `.object-add` in index.html, which is where it belongs
+// semantically and where a reader of the markup expects it. It cannot stay
+// there at run time: `.ui-container` scrolls its own overflow, and an overflow
+// container clips absolutely positioned descendants, so the popover was cut off
+// whenever the rail was scrolled or the window was short. Reparenting once at
+// start-up - rather than on every open - keeps the DOM stable, keeps focus
+// order predictable, and means nothing has to be un-done on close.
+//
+// `aria-controls`, `aria-labelledby` and `aria-expanded` are all id-based, so
+// none of them cares where the element lives.
+if (objectPicker && document.body) document.body.appendChild(objectPicker);
+
+/** Gap between the trigger and the popover, and from the viewport edge, in px. */
+const PICKER_GAP = 8;
+
+/** Below this, a side is too shallow to be worth opening into. */
+const PICKER_MIN_USABLE = 140;
+
+/**
+ * Put the open picker beside its trigger, inside the viewport.
+ *
+ * Measured from the trigger's getBoundingClientRect() every time, because the
+ * trigger moves: the rail scrolls, the window resizes, a phone rotates, and on
+ * a narrow layout the rail slides in and out. Flips above or below depending on
+ * which side has room, and caps its height so a long list scrolls internally
+ * instead of running off the screen.
+ */
+const positionObjectPicker = () => {
+  const btn = document.getElementById('objectTypeBtn');
+  if (!objectPicker || objectPicker.hidden || !btn) return;
+
+  const rect = btn.getBoundingClientRect();
+  // clientWidth/clientHeight rather than innerWidth/innerHeight: these exclude
+  // a classic scrollbar, which is the difference between "inside the viewport"
+  // and "under the scrollbar" on a desktop browser that has one.
+  const vw = document.documentElement.clientWidth || window.innerWidth;
+  const vh = document.documentElement.clientHeight || window.innerHeight;
+
+  const above = rect.top - PICKER_GAP;
+  const below = vh - rect.bottom - PICKER_GAP;
+
+  // Measure unconstrained first: how tall it wants to be decides which side it
+  // can use, and a max-height left over from the last placement would answer
+  // the wrong question.
+  objectPicker.style.maxHeight = 'none';
+  const natural = objectPicker.offsetHeight;
+
+  // Above by preference - that is where it has always opened, and the button
+  // sits low in the rail - unless it fits below and does not fit above.
+  const openUp = natural <= above || above >= below;
+  const side = Math.max(0, openUp ? above : below);
+  // On a viewport too short for either side, stop trying to dodge the trigger
+  // and use the whole window: overlapping the button is a great deal better
+  // than a popover the reader cannot see or scroll.
+  // Never taller than the viewport, whichever side it opens into. The side
+  // measurement alone is not enough: the trigger can be scrolled out of the
+  // rail's visible box, in which case its rect reports a position below the
+  // window and "the space above it" is larger than the window is.
+  const viewportCap = Math.max(0, vh - PICKER_GAP * 2);
+  const cap = Math.min(
+    side >= PICKER_MIN_USABLE ? side : viewportCap,
+    viewportCap
+  );
+  objectPicker.style.maxHeight = `${Math.round(cap)}px`;
+
+  const height = objectPicker.offsetHeight;
+  const width = objectPicker.offsetWidth;
+
+  const left = Math.min(
+    Math.max(PICKER_GAP, rect.left),
+    Math.max(PICKER_GAP, vw - width - PICKER_GAP)
+  );
+  let top = openUp ? rect.top - PICKER_GAP - height : rect.bottom + PICKER_GAP;
+  top = Math.min(
+    Math.max(PICKER_GAP, top),
+    Math.max(PICKER_GAP, vh - height - PICKER_GAP)
+  );
+
+  objectPicker.style.left = `${Math.round(left)}px`;
+  objectPicker.style.top = `${Math.round(top)}px`;
+};
+
 /** Is placement currently armed, and with which type. */
 let addArmed = false;
+
+/** True while the picker is on screen. */
+const objectPickerOpen = () => Boolean(objectPicker && !objectPicker.hidden);
 
 const closeObjectPicker = () => {
   if (!objectPicker) return;
@@ -6522,6 +6658,39 @@ const closeObjectPicker = () => {
     .getElementById('objectTypeBtn')
     ?.setAttribute('aria-expanded', 'false');
 };
+
+/**
+ * Close the narrow-screen rail, now that the reader has chosen something.
+ *
+ * The rail's own "any button dismisses me" rule no longer fires for
+ * `#objectTypeBtn`, because that button opens a menu rather than running a
+ * command. Choosing from that menu is the command, so this is where the
+ * dismissal moved to. It reads the DOM rather than closing over the rail's own
+ * helper because that helper is defined a few hundred lines further down, with
+ * the rest of the narrow-screen menu.
+ *
+ * A no-op on a wide screen: the rail is not in the `is-open` state there.
+ */
+const dismissRailAfterChoice = () => {
+  const rail = document.querySelector('.ui-container');
+  if (!rail || !rail.classList.contains('is-open')) return;
+  rail.classList.remove('is-open');
+  const toggle = document.getElementById('mobileMenuToggle');
+  if (toggle) {
+    toggle.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+};
+
+// The trigger moves with the rail and with the window, so the popover follows
+// it. `true` on the scroll listener is the capture phase: the rail is the
+// element that actually scrolls, and a scroll event on it does not bubble.
+const repositionIfOpen = () => {
+  if (objectPickerOpen()) positionObjectPicker();
+};
+window.addEventListener('resize', repositionIfOpen);
+window.addEventListener('orientationchange', repositionIfOpen);
+window.addEventListener('scroll', repositionIfOpen, true);
 
 /**
  * Arm or disarm placement.
@@ -6591,6 +6760,9 @@ const buildObjectPicker = () => {
       currentTypeIndex = index;
       setAddArmed(true);
       closeObjectPicker();
+      // Narrow screens only, and only now that a choice has been made: the
+      // canvas is what the reader needs next, and the rail is covering it.
+      dismissRailAfterChoice();
     };
     list.appendChild(item);
   });
@@ -6604,6 +6776,7 @@ const buildObjectPicker = () => {
   stop.onclick = () => {
     setAddArmed(false);
     closeObjectPicker();
+    dismissRailAfterChoice();
   };
   objectPicker.appendChild(stop);
 };
@@ -6624,23 +6797,81 @@ document.getElementById('objectTypeBtn').onclick = event => {
   document
     .getElementById('objectTypeBtn')
     ?.setAttribute('aria-expanded', String(opening));
-  if (opening) objectPicker.querySelector('.object-picker-item')?.focus();
+  if (opening) {
+    // Placed before focus: focusing an item inside a popover that is still at
+    // its last position scrolls the page to wherever that was.
+    positionObjectPicker();
+    objectPicker.querySelector('.object-picker-item')?.focus();
+  }
 };
 
 document.addEventListener('click', event => {
-  if (!objectPicker || objectPicker.hidden) return;
-  if (!objectAddWrap?.contains(event.target)) closeObjectPicker();
+  if (!objectPickerOpen()) return;
+  // Two containers now, because the popover is no longer inside the rail: a
+  // click on the trigger is handled above, and a click inside the popover is a
+  // choice, not an outside click.
+  if (objectAddWrap?.contains(event.target)) return;
+  if (objectPicker.contains(event.target)) return;
+  closeObjectPicker();
 });
 
-document.addEventListener('keydown', event => {
-  if (event.key !== 'Escape') return;
-  if (objectPicker && !objectPicker.hidden) {
-    closeObjectPicker();
-    document.getElementById('objectTypeBtn')?.focus();
-    return;
-  }
-  if (addArmed) setAddArmed(false);
-});
+/**
+ * Arrow keys inside the picker.
+ *
+ * It carries role="menu" and its rows carry role="menuitemradio", which is a
+ * promise that Up and Down move between them. Tab still works and still leaves
+ * the popover, which is what a reader who wants out expects; this only adds
+ * the movement the roles advertise.
+ */
+if (objectPicker) {
+  objectPicker.addEventListener('keydown', event => {
+    const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    const items = [
+      ...objectPicker.querySelectorAll(
+        '.object-picker-item, .object-picker-stop'
+      ),
+    ];
+    if (!items.length) return;
+    const at = items.indexOf(document.activeElement);
+    let next;
+    if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = items.length - 1;
+    else if (event.key === 'ArrowDown')
+      next = at < 0 ? 0 : (at + 1) % items.length;
+    else
+      next = at < 0 ? items.length - 1 : (at - 1 + items.length) % items.length;
+    event.preventDefault();
+    items[next].focus();
+  });
+}
+
+// Capture phase, and it stops the event when it handles it.
+//
+// Escape is also a registered shortcut, and that shortcut broadcasts
+// `gravitasEscape`, which among other things closes the narrow-screen rail. In
+// the bubble phase both ran: the picker closed and returned focus to its
+// trigger, and the rail then closed around that trigger, leaving the focus on
+// an element the reader cannot see or reach. Escape should close the topmost
+// thing and stop there, and while this popover is open, it is the topmost
+// thing.
+document.addEventListener(
+  'keydown',
+  event => {
+    if (event.key !== 'Escape') return;
+    if (objectPickerOpen()) {
+      closeObjectPicker();
+      document.getElementById('objectTypeBtn')?.focus();
+      event.stopPropagation();
+      event.preventDefault();
+      return;
+    }
+    // Disarming does not swallow the key: nothing is on screen to dismiss, and
+    // a reader pressing Escape with a panel open as well means both.
+    if (addArmed) setAddArmed(false);
+  },
+  true
+);
 
 // Mobile instructions close button
 document.getElementById('closeMobileInstructions').onclick = () => {
@@ -6669,17 +6900,29 @@ if (mobileMenuToggle && uiRail) {
     mobileMenuToggle.setAttribute('aria-expanded', String(open));
   });
 
-  // Any control in the rail dismisses the menu once it has run.
+  // Any control in the rail dismisses the menu once it has run - with one
+  // exception, and it is the reason the narrow-screen picker was unusable.
+  //
+  // `#objectTypeBtn` does not run a command; it opens a menu, and the choice
+  // the reader came to make is in that menu. Closing the rail on the press that
+  // opens it took the picker off the screen before a single object type could
+  // be read, let alone chosen. Picking a type then closes both deliberately,
+  // from the item's own handler.
   uiRail.addEventListener('click', e => {
-    if (e.target.closest('button') && uiRail.classList.contains('is-open')) {
-      closeRail();
-    }
+    if (!uiRail.classList.contains('is-open')) return;
+    if (!e.target.closest('button')) return;
+    if (e.target.closest('#objectTypeBtn')) return;
+    closeRail();
   });
 
   document.addEventListener('click', e => {
     if (!uiRail.classList.contains('is-open')) return;
     if (mobileMenuToggle.contains(e.target) || uiRail.contains(e.target))
       return;
+    // The picker is parented to <body>, so it is outside the rail in the DOM
+    // and would otherwise read as an outside click - closing the rail, and with
+    // it the arming the reader was in the middle of.
+    if (objectPicker && objectPicker.contains(e.target)) return;
     closeRail();
   });
 
@@ -6853,7 +7096,13 @@ canvas.addEventListener(
       // 340x697 rect swallowed 78% of the screen and the canvas was mostly
       // untouchable. elementFromPoint only reports what is actually hit-
       // testable, so a hidden panel no longer blocks anything.
-      const hit = document.elementFromPoint(touchStartPos.x, touchStartPos.y);
+      //
+      // clientX/clientY, not the converted point: elementFromPoint is a DOM
+      // API and takes CSS pixels. Handing it canvas pixels asked about a
+      // different place on the screen whenever the backing store and the CSS
+      // box differ, which is exactly what the low quality tier does - it
+      // renders the canvas at 0.7 scale.
+      const hit = document.elementFromPoint(touch.clientX, touch.clientY);
       if (
         hit &&
         hit !== canvas &&
@@ -6977,9 +7226,19 @@ canvas.addEventListener(
         let newZoom = oldZoom * limitedZoomFactor;
         newZoom = Math.max(0.01, Math.min(newZoom, 100));
 
-        // Zoom towards the center of the two touches
-        const centerX = (touch1.clientX + touch2.clientX) / 2;
-        const centerY = (touch1.clientY + touch2.clientY) / 2;
+        // Zoom towards the centre of the two touches, in canvas pixels.
+        //
+        // Both halves of an anchored zoom have to be in the same space:
+        // screen_to_world and worldToScreen speak canvas pixels, and clientX
+        // is CSS pixels. Averaging the raw values and subtracting the result
+        // from a worldToScreen output mixed the two, so at the low quality
+        // tier - where the canvas backing store is 0.7 of its CSS box - the
+        // anchor sat about 40% away from the fingers and the view slid out
+        // from under the pinch on every move event.
+        const p1 = canvasPoint(touch1);
+        const p2 = canvasPoint(touch2);
+        const centerX = (p1.x + p2.x) / 2;
+        const centerY = (p1.y + p2.y) / 2;
 
         // Get the world position at the center of the pinch
         const worldPos = screen_to_world({ x: centerX, y: centerY });
@@ -7017,10 +7276,13 @@ canvas.addEventListener(
       if (state.adding_mass) {
         // Add object with velocity
         const touch = e.changedTouches[0];
-        const add_end_world = screen_to_world({
-          x: touch.clientX,
-          y: touch.clientY,
-        });
+        // Through canvasPoint, like the press that started this drag and like
+        // every mouse path. Passing clientX straight to screen_to_world - which
+        // expects canvas pixels - put the release somewhere else entirely at
+        // the low tier, so the placed body got the wrong velocity, and on a
+        // page where the canvas is not flush with the viewport it was wrong at
+        // every tier.
+        const add_end_world = screen_to_world(canvasPoint(touch));
 
         // Validate both start and end world coordinates
         if (
@@ -7242,6 +7504,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Reset view to default
       state.zoom = 1.0;
       state.pan = { x: 0.0, y: 0.0 };
+      resetFollowCamera(state);
 
       // Hide inspector and scenario info
       hideObjectInspector && hideObjectInspector();

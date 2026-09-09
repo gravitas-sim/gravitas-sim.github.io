@@ -169,6 +169,19 @@ const SURFACES = [
     expect: 'main, body',
     standalone: true,
   },
+  {
+    // The showcase page tells its readers it is checked with axe-core in
+    // continuous integration. That sentence is only true while this entry
+    // exists, which is the reason it is here rather than a nice-to-have.
+    name: 'teaching page',
+    open: async ({ page }) => {
+      await page.goto('/teaching/', { waitUntil: 'domcontentloaded' });
+    },
+    // The generated sections, not `main`: the page's own module fills them, and
+    // running axe over the empty shell would check the chrome and nothing else.
+    expect: '#teachDemos article',
+    standalone: true,
+  },
 ];
 
 /** The two extremes of the palette. Midnight is the default. */

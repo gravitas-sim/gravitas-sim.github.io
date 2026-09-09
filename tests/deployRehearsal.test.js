@@ -61,7 +61,7 @@ describe('the sequence the deploy job runs', () => {
   });
 
   test('it changes exactly the files it is allowed to change', () => {
-    // The whole defect in one assertion. These four are the deploy's own work;
+    // The whole defect in one assertion. These are the deploy's own work;
     // anything else differing is the contamination the guard is for.
     expect(result.changed).toEqual(
       [
@@ -69,6 +69,7 @@ describe('the sequence the deploy job runs', () => {
         'instructors/index.html',
         'model/index.html',
         'sw-manifest.js',
+        'teaching/index.html',
       ].sort()
     );
     for (const file of result.changed) {

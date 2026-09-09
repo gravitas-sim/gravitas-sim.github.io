@@ -8,7 +8,7 @@ simulation cannot offer regardless of effort.
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over 13 surfaces × 2 languages × 2 themes — 52 runs |
+| `e2e/accessibility.spec.js` | axe-core over 14 surfaces × 2 languages × 2 themes — 56 runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -19,7 +19,7 @@ a real defect with a real fix.
 The surfaces: the front door, the sandbox, the settings rail, the scenario
 gallery, the object inspector, the investigations browser, an open
 investigation, the share dialog, the A/B bench, the observing panels, lecture
-mode, the model page and the instructor portal.
+mode, the model page, the instructor portal and the teaching page.
 
 Both languages, because a Spanish string is often longer than its English
 original and because `lang` has to follow the interface or a screen reader

@@ -17,6 +17,7 @@ import {
   clearObjectEnergyHistory,
 } from './physics.js';
 import { state, SETTINGS } from './appState.js';
+import { resetFollowCamera } from './followCamera.js';
 import { renderEventMarker } from './pauseAtEventPanel.js';
 import { toast, announce } from './notify.js';
 export { toast, announce };
@@ -500,6 +501,8 @@ function setupShortcuts() {
     run: () => {
       state.zoom = 1.0;
       state.pan = { x: 0, y: 0 };
+      // Deliberate, so Follow mode re-centres instead of reading it as a drag.
+      resetFollowCamera(state);
       toast(t('toast.view.reset'));
     },
   });

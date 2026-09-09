@@ -32,6 +32,15 @@
 import { MANIFEST as MANIFEST_EN } from './manifest.js';
 import { gradedSteps, positionIn } from './catalogue.js';
 import { mergeTranslation } from './i18n.js';
+// Two hundred bytes that hold one string and import nothing. The registry
+// cannot read the interface's locale - it deliberately imports no i18n - but it
+// can read what the application asked for, which is what lets this module be
+// loaded on demand without a window in which lessons come back in the wrong
+// language. See js/lessonLocale.js.
+import {
+  requestedLessonLocale,
+  registerLessonLocaleSink,
+} from '../../lessonLocale.js';
 
 export { gradedSteps };
 
@@ -129,8 +138,19 @@ const loaded = new Map();
 /** In-flight requests, so two rapid clicks share one network fetch. */
 const pending = new Map();
 
-/** The locale lessons are fetched in. Set by the application at start-up. */
-let lessonLocale = 'en';
+/**
+ * The locale lessons are fetched in.
+ *
+ * Initialised from what the application has already asked for rather than from
+ * a hardcoded 'en'. This module is loaded on demand, so by the time it exists
+ * the reader may have chosen a language several seconds ago; starting in
+ * English and waiting to be told would serve one lesson in the wrong language
+ * for every switch made before the first lesson was opened.
+ */
+let lessonLocale = requestedLessonLocale() || 'en';
+
+/** The in-flight catalogue fetch, if there is one. See lessonCatalogueReady. */
+let manifestLoad = null;
 
 /**
  * Choose the language lessons are loaded in.
@@ -147,7 +167,7 @@ export function setLessonLocale(locale) {
   // The catalogue follows the lessons. Fetched rather than bundled, so a
   // reader who never switches language never pays for the other one.
   const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
-  return load()
+  manifestLoad = load()
     .then(mod => {
       // A second change while this one was in flight wins.
       if (MANIFESTS[lessonLocale] === load) MANIFEST = mod.MANIFEST;
@@ -157,10 +177,44 @@ export function setLessonLocale(locale) {
       MANIFEST = MANIFEST_EN;
       return MANIFEST;
     });
+  return manifestLoad;
 }
 
 /** @returns {string} The language lessons are currently loaded in */
 export const getLessonLocale = () => lessonLocale;
+
+/**
+ * Resolves when MANIFEST holds the catalogue for the current language.
+ *
+ * The card-level catalogue is one file per language and is fetched, so there
+ * is always a moment after a language change when MANIFEST is still the
+ * previous language's. That moment used to fall while nobody was looking: the
+ * application told this module the locale at start-up, seconds before anybody
+ * opened the browser.
+ *
+ * Now that this module is loaded on demand, the fetch starts when the reader
+ * opens the browser and the first render can lose the race - a grid of English
+ * titles for a reader who chose Spanish. Anything that renders from MANIFEST
+ * awaits this first. It is already resolved in the overwhelmingly common case
+ * of English, or of a second open.
+ *
+ * @returns {Promise<Array>} The manifest for the current language
+ */
+export function lessonCatalogueReady() {
+  return manifestLoad || Promise.resolve(MANIFEST);
+}
+
+// And fetch the card-level catalogue for that language, now, without waiting to
+// be told. The lesson bodies are already correct - `lessonLocale` above decides
+// those - but the browser's cards come from a per-language manifest, and a
+// reader who chose Spanish before this module existed should not see a grid of
+// English titles until something else happens to call setLessonLocale.
+if (lessonLocale !== 'en') setLessonLocale(lessonLocale);
+
+// And from here on, a language change reaches this module directly rather than
+// through another import. Registered last, so a change that arrives during
+// module evaluation is not applied to a half-built registry.
+registerLessonLocaleSink(setLessonLocale);
 
 /** @returns {Array<string>} Every lesson id, in catalogue order */
 export const investigationIds = () => MANIFEST.map(m => m.id);

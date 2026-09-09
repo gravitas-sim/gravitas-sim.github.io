@@ -58,6 +58,23 @@ const LAYERS = [
       /^js\/theme\.js$/,
       /^js\/i18n\//,
       /^js\/spatialHash\.js$/,
+      // Pure geometry over values handed in: the follow camera's arithmetic and
+      // the touch-gesture state machine. Neither reaches for the view state,
+      // the DOM or a clock of its own, which is what makes both of them
+      // testable without a browser - and what puts them here rather than in
+      // the feature layer the catch-all pattern would otherwise assign.
+      /^js\/followCamera\.js$/,
+      /^js\/gestures\.js$/,
+      // The drawing policy - level of detail, deterministic per-object
+      // variation, star colour, tail geometry. Values in, values out; the one
+      // exception is the sprite cache, which creates an offscreen canvas and
+      // no more, the same way js/i18n/dom.js is a leaf that happens to touch
+      // the DOM. Down here because every body class in the engine reads it.
+      /^js\/bodyVisuals\.js$/,
+      // One string and two functions, imported by both the coordinator and the
+      // lesson registry so that a deferred registry can read the language the
+      // application already chose. Imports nothing itself.
+      /^js\/lessonLocale\.js$/,
     ],
   },
   {

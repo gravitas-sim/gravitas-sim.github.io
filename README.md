@@ -52,6 +52,14 @@ common wrong turns — plus an adopter's guide and a curriculum map, all rebuilt
 from the lessons themselves on every release so a key cannot disagree with the
 lesson it answers. See [Instructor resources](#instructor-resources).
 
+**A showcase page for instructors** at
+[/teaching/](https://gravitas-sim.online/teaching/): the predict-test-measure-
+revise-explain cycle the investigations are built on, how a student gets from a
+prediction to a submitted report, what each instrument is for, five realistic
+course-use patterns, and six demonstrations that open a real reproducible state
+as an embedded figure. Public, indexed, and in English and Spanish; every count
+on it is read from the catalogue and the validation results when it loads.
+
 **A public account of the model** at
 [/model/](https://gravitas-sim.online/model/): what the simulation calculates,
 what it approximates, and what is only drawn. Worth reading before assigning
@@ -162,7 +170,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->2902<!--/fact--> strings, and
+of <!--fact:uiStrings-->2905<!--/fact--> strings, and
 all <!--fact:investigations-->18<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -263,6 +271,7 @@ js/
   i18n/             the message catalogs and the locale machinery
   *Widgets.js       the instruments lessons measure with
 model/              the public physics-model page
+teaching/           the public showcase page for instructors
 instructors/        the instructor area
 manual/             LaTeX source for the user manual PDF
 notebooks/          the Colab notebook that reads an exported CSV
@@ -421,6 +430,11 @@ student who finds the URL. It is not protection against a determined attacker
 with the ciphertext, and the page says so.
 
 Instructors can request the passphrase through the contact link on that page.
+
+Nothing on [/teaching/](https://gravitas-sim.online/teaching/) is behind it. That
+page is the one to send to a colleague, a department or a curriculum committee:
+it describes how the investigations work and lets a reader run six of the
+demonstrations without installing, registering or asking anyone for anything.
 
 ---
 

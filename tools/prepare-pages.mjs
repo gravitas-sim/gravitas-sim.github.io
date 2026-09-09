@@ -48,6 +48,7 @@ export const STAMPED_PAGES = Object.freeze([
   'index.html',
   'model/index.html',
   'instructors/index.html',
+  'teaching/index.html',
 ]);
 
 /**

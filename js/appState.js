@@ -281,6 +281,15 @@ export const state = {
   // world-to-screen conversion subtracts it, so choosing a frame moves the
   // picture without touching the user's own pan. Zero is the world frame.
   frameOffset: { x: 0.0, y: 0.0 },
+  // Follow mode's bookkeeping. `followOffset` is how far the reader has moved
+  // the camera away from the followed body and wants to stay; `followPan` is
+  // the pan the follow step last wrote, so anything that differs next step was
+  // somebody else's input; `followTarget` is what is being followed, so a
+  // change of target starts a fresh camera. See js/followCamera.js. None of
+  // these is a setting and none travels in a share link.
+  followOffset: { x: 0.0, y: 0.0 },
+  followPan: null,
+  followTarget: null,
   paused: false,
   mouse: { x: -1000, y: -1000, down: false }, // Initialize mouse off-screen to prevent accidental object detection
   // Hold-to-add state

@@ -72,12 +72,24 @@ const BUDGETS = [
       'builder behind it arrive on the first press of the export button, and ' +
       'the twelve kilobytes of prose those panels needed moved into a second ' +
       'catalogue that registers itself when they load. 868 KB back to 828 KB, ' +
-      'against a baseline of 821.8 KB before the work started.',
+      'against a baseline of 821.8 KB before the work started.\n\n' +
+      'NOT raised for /teaching/, which is worth recording because it is a ' +
+      'whole public page: 828.6 KB before it, 829.0 KB after. Its share of ' +
+      'this number is four hundred and sixty bytes, and all of it is the two ' +
+      'front-door strings that link to it. Everything else about the page is ' +
+      'outside the entry graph by construction - js/teachingPage.js is compiled ' +
+      'to its own file the way the instructor portal and the validation page ' +
+      'are, its hundred-odd strings are in js/i18n/en.teaching.js rather than ' +
+      "in the application's catalogue, and css/teaching.css is built to its " +
+      'own stylesheet and linked only from that page instead of being ' +
+      'concatenated into css/app.css, which is the half of this budget that ' +
+      'the page would otherwise have grown. A document page can be as large ' +
+      'as it needs to be; what it may not do is charge the simulation for it.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3030,
+    limit: 3080,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -186,7 +198,22 @@ const BUDGETS = [
       '829.9 KB before and after. Neither section brought any styling of its ' +
       "own - the Lagrange one reuses the assist sections' rule and the chaos " +
       "one is built from the bench panel's existing classes - so the " +
-      'stylesheet is byte for byte what it was.',
+      'stylesheet is byte for byte what it was.\n\n' +
+      'Raised from 3030 to 3080 for the body-rendering pass, and this one is ' +
+      'the trade the initial budget asks for, made in the right direction. ' +
+      'The level-of-detail system, the deterministic visual seeds, the two ' +
+      'comet tails, the clipped planet and gas-giant surfaces and the ' +
+      'compact-object cues put about twelve kilobytes into js/physics.js and ' +
+      'three into js/bodyVisuals.js, all of it eager, which took the initial ' +
+      'download to 840.7 KB - over. Nothing was raised to absorb that. What ' +
+      'paid for it was a leak found while looking for the room: js/main.js ' +
+      'statically imported setLessonLocale from the lesson registry, which ' +
+      'pulls in the 12.5 KB English lesson manifest, so every visitor who ' +
+      'opened the sandbox downloaded the card titles, durations and step ' +
+      'counts of eighteen lessons in order to call one setter. It is a ' +
+      'dynamic import now. Those 17.7 KB moved from the start-up path into ' +
+      'this budget, which is why this number went up and the one above went ' +
+      'DOWN: 829.0 KB before the rendering work, 823.0 KB after it.',
   },
 ];
 
