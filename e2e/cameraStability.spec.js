@@ -222,6 +222,20 @@ for (const tier of ['full', 'low']) {
 test('two unrelated touches do not reset the view', async ({ page, app }) => {
   await app.boot();
   await app.setPaused(true);
+  // An empty world, so the touchstart handler's hit test has nothing to walk.
+  //
+  // The recogniser measures a real 250ms tap threshold against the page's own
+  // clock, and everything the application does synchronously between the down
+  // and the up counts against it - the hit test over every body most of all.
+  // On a saturated runner that was enough to lose the gesture, which made this
+  // a report on the machine rather than on the wiring. The thresholds
+  // themselves are covered against an injected clock in tests/doubleTap.test.js.
+  await page.evaluate(async () => {
+    const ui = await import('/js/ui.js');
+    ui.SETTINGS.preset_scenario = 'Empty';
+    ui.initialize_simulation({ seed: 'tap' });
+    ui.state.paused = true;
+  });
   const { box } = await canvasPoints(page);
 
   await page.evaluate(async () => {
@@ -263,6 +277,20 @@ test('two real taps in the same place still reset the view', async ({
   // The gesture is kept, not removed: this is the other half of the change.
   await app.boot();
   await app.setPaused(true);
+  // An empty world, so the touchstart handler's hit test has nothing to walk.
+  //
+  // The recogniser measures a real 250ms tap threshold against the page's own
+  // clock, and everything the application does synchronously between the down
+  // and the up counts against it - the hit test over every body most of all.
+  // On a saturated runner that was enough to lose the gesture, which made this
+  // a report on the machine rather than on the wiring. The thresholds
+  // themselves are covered against an injected clock in tests/doubleTap.test.js.
+  await page.evaluate(async () => {
+    const ui = await import('/js/ui.js');
+    ui.SETTINGS.preset_scenario = 'Empty';
+    ui.initialize_simulation({ seed: 'tap' });
+    ui.state.paused = true;
+  });
   const { cx, cy } = await canvasPoints(page);
 
   await page.evaluate(async () => {
@@ -373,15 +401,40 @@ test('a drag while Follow mode is on is kept, and following continues', async ({
   page,
   app,
 }) => {
+  // Driven by a fixed number of fixed-size steps rather than by wall-clock
+  // frames.
+  //
+  // Two earlier versions of this test were reports on how loaded the runner
+  // was. Follow mode resets the manual offset when the followed thing changes,
+  // which is correct, and on a slow machine each frame covers more simulated
+  // time - enough for Binary BH's pair to merge, or for a planet to be
+  // absorbed, either of which legitimately changes the target mid-test. And
+  // "the camera is still moving" needs the target to have moved, which a
+  // wall-clock wait does not guarantee either.
+  //
+  // updatePhysics is where the follow step lives, so calling it directly
+  // exercises exactly the code under test, and a small step over a short span
+  // cannot merge anything.
   await app.boot();
-  await app.loadScenario('Binary BH', 'follow-offset');
+  await app.loadScenario('Solar System', 'follow-offset');
+  await app.setPaused(true);
+
+  const step = (n, dt = 0.01) =>
+    page.evaluate(
+      async ([count, size]) => {
+        const physics = await import('/js/physics.js');
+        for (let i = 0; i < count; i++) physics.updatePhysics(size);
+      },
+      [n, dt]
+    );
+
   await page.evaluate(async () => {
     const ui = await import('/js/ui.js');
     const physics = await import('/js/physics.js');
-    ui.SETTINGS.follow_mode = 'BlackHole';
+    ui.SETTINGS.follow_mode = 'Planet';
     physics.updatePhysicsSettings(ui.SETTINGS);
   });
-  await app.waitForFrames(20);
+  await step(20);
 
   /** Follow mode's accumulated manual offset. */
   const followOffset = () =>
@@ -392,6 +445,11 @@ test('a drag while Follow mode is on is kept, and following continues', async ({
 
   // Following, and nothing has been dragged yet.
   expect(await followOffset()).toEqual({ x: 0, y: 0 });
+  const bodies = await page.evaluate(async () => {
+    const physics = await import('/js/physics.js');
+    return physics.planets.length;
+  });
+  expect(bodies).toBeGreaterThan(1);
 
   // A drag: the same thing the pointer handlers do.
   await page.evaluate(async () => {
@@ -401,19 +459,27 @@ test('a drag while Follow mode is on is kept, and following continues', async ({
   });
 
   const dragged = await camera(page);
-  await app.waitForFrames(30);
+  await step(120);
   const later = await camera(page);
 
-  // The offset survived thirty steps. Before this change the very next one
-  // overwrote it outright, so the view fought the reader and snapped back.
-  // Asserted on the offset rather than on the pan: the black holes are moving
-  // the whole time, so the pan legitimately is too.
+  // The offset survived a hundred and twenty steps. Before this change the
+  // very next one overwrote it outright, so the view fought the reader and
+  // snapped back. Asserted on the offset rather than on the pan: the planets
+  // are moving the whole time, so the pan legitimately is too.
   const offset = await followOffset();
   expect(offset.x).toBeCloseTo(90, 6);
   expect(offset.y).toBeCloseTo(-45, 6);
 
-  // And it is still following: the camera keeps moving with the black holes
-  // rather than sitting where the drag left it.
+  // The target is the same one, so nothing was reset along the way.
+  expect(
+    await page.evaluate(async () => {
+      const physics = await import('/js/physics.js');
+      return physics.planets.length;
+    })
+  ).toBe(bodies);
+
+  // And it is still following: the camera keeps moving with the planets rather
+  // than sitting where the drag left it.
   expect(later).not.toEqual(dragged);
 
   // Reset view is a command, and clears the offset rather than absorbing it.
