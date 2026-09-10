@@ -13,7 +13,7 @@
 export default {
   title: 'Un universo de estrellas',
   subtitle:
-    'Tamaño, color y el diagrama H-R, a partir de siete estrellas modeladas',
+    'Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas',
   duration: '70-90 min',
   level: 'Astronomía introductoria',
   summary:
@@ -147,10 +147,10 @@ export default {
     },
     {
       title: 'Estrellas que están modeladas de verdad',
-      body: 'Hasta ahora cada punto lo elegías tú. Vuelve a <strong>Una estrella modelada</strong> y la lectura cambia de naturaleza: ahora hay una masa, una edad, una fase y una vida, porque un cálculo publicado de evolución estelar puso esta estrella aquí y sabe cómo llegó.\n\nHay siete incluidas, de 0,2, 0,5, 1, 2, 5, 10 y 20 masas solares, todas con la composición del Sol y sin rotación. Recórrelas y mira dónde se sitúa cada una.',
+      body: 'Hasta ahora cada punto lo elegías tú. Vuelve a <strong>Una estrella modelada</strong> y la lectura cambia de naturaleza: ahora hay una masa, una edad, una fase y una vida, porque un cálculo publicado de evolución estelar puso esta estrella aquí y sabe cómo llegó.\n\nHay ocho incluidas, de 0,2, 0,5, 1, 2, 5, 10, 20 y 40 masas solares, todas con la composición del Sol y sin rotación. Recórrelas y mira dónde se sitúa cada una.',
       checklist: [
         'Pulsa «Cambiar de modo» hasta que la lectura diga «Una estrella modelada»',
-        'Mueve el deslizador «Estrella modelada» de 0,2 M☉ a 20 M☉, paso a paso',
+        'Mueve el deslizador «Estrella modelada» de 0,2 M☉ a 40 M☉, paso a paso',
         'Observa cómo el marcador sube y va hacia la izquierda según crece la masa',
         'Lee la masa, la edad y la fase en la lista en cada parada',
         'Fíjate en que la banda que trazan los marcadores es la zona sombreada de la secuencia principal',
@@ -178,14 +178,14 @@ export default {
       tip: 'Cien elevado a 3,5 es diez elevado a siete, que son diez millones: bastante cerca de nueve millones para una relación tan aproximada.',
     },
     {
-      title: 'Las siete, en una comparación',
-      body: 'Comprueba la tendencia en todo el conjunto y no solo en sus dos extremos. Vuelve al laboratorio, recorre el deslizador de masa por los siete modelos y anota la luminosidad de las estrellas de 1, 5 y 20 masas solares.\n\nEsto es una comparación controlada: cada estrella está a mitad de su vida en la secuencia principal, todos los modelos tienen la misma composición y ninguna rotación, y lo único que cambia es la masa.',
+      title: 'Las ocho, en una comparación',
+      body: 'Comprueba la tendencia en todo el conjunto y no solo en sus dos extremos. Vuelve al laboratorio, recorre el deslizador de masa por los ocho modelos y anota la luminosidad de las estrellas de 1, 5 y 20 masas solares.\n\nEsto es una comparación controlada: cada estrella está a mitad de su vida en la secuencia principal, todos los modelos tienen la misma composición y ninguna rotación, y lo único que cambia es la masa.',
       fields: [null, null, null],
       tip: 'El banco que ejecuta experimentos A/B en Gravitas mide órbitas, no estrellas, así que esta comparación se hace directamente sobre los modelos. Las notas del profesorado explican por qué las dos cosas no se pueden unir.',
     },
     {
       title: 'Qué cubre la tendencia y qué no',
-      body: 'Has medido una relación muy pronunciada entre masa y luminosidad, y la has medido sobre siete estrellas que estaban haciendo todas lo mismo: fusionar hidrógeno en el núcleo, a mitad de su vida.\n\nLa gigante del paso 4 tenía una masa de casi exactamente una masa solar y emitía 58 luminosidades solares, cincuenta veces lo que da la relación de la secuencia principal para esa masa.',
+      body: 'Has medido una relación muy pronunciada entre masa y luminosidad, y la has medido sobre ocho estrellas que estaban haciendo todas lo mismo: fusionar hidrógeno en el núcleo, a mitad de su vida.\n\nLa gigante del paso 4 tenía una masa de casi exactamente una masa solar y emitía 58 luminosidades solares, cincuenta veces lo que da la relación de la secuencia principal para esa masa.',
       prompt:
         'En dos o tres frases: ¿qué es la secuencia principal, y por qué la relación masa-luminosidad que has medido no se aplica a esa gigante?',
       tip: 'La palabra «secuencia» también es un accidente histórico. Es una secuencia en masa, no en el tiempo: ninguna estrella la recorre.',
@@ -277,7 +277,7 @@ export default {
     },
     {
       title: 'Cuatrocientas estrellas',
-      body: 'Una población sintética: cuatrocientas estrellas extraídas de una distribución publicada de masas de nacimiento, repartidas por los últimos diez mil millones de años, cada una situada sobre las mismas siete trazas que has estado usando. Es reproducible a partir de su semilla y no es un sondeo: nada en ella se ha observado y ninguna de sus estrellas es real.\n\nEl histograma las cuenta por tipo espectral: O y B son las calientes, luego A, F, G —el Sol es una G— y después K y las frías enanas M.\n\nCuenta los dos tipos más comunes.',
+      body: 'Una población sintética: cuatrocientas estrellas extraídas de una distribución publicada de masas de nacimiento, repartidas por los últimos diez mil millones de años, cada una situada sobre las mismas trazas que has estado usando, las que van de 0,2 a 20 masas solares, que es el rango en el que se muestrea la función de masas. Es reproducible a partir de su semilla y no es un sondeo: nada en ella se ha observado y ninguna de sus estrellas es real.\n\nEl histograma las cuenta por tipo espectral: O y B son las calientes, luego A, F, G —el Sol es una G— y después K y las frías enanas M.\n\nCuenta los dos tipos más comunes.',
       fields: [
         { label: 'Cuántas son de tipo M' },
         { label: 'Cuántas son de tipo K' },
@@ -304,7 +304,7 @@ export default {
     },
     {
       title: 'Rompe una regla',
-      body: 'Dos afirmaciones que suenan razonables y son las dos falsas:\n\n<strong>«Las estrellas rojas son pequeñas.»</strong>\n\n<strong>«Las estrellas más calientes son más luminosas.»</strong>\n\nElige una de las dos y rómpela con el laboratorio. Vale cualquiera de los siete modelos a cualquier edad, y también el cursor libre, aunque si usas el cursor libre recuerda qué establece y qué no: enseña que una temperatura y una luminosidad <em>podrían</em> ir juntas, no que alguna estrella concreta lo haga.\n\nAnota las dos estrellas que hayas usado y guarda la comparación en el cuaderno como prueba.',
+      body: 'Dos afirmaciones que suenan razonables y son las dos falsas:\n\n<strong>«Las estrellas rojas son pequeñas.»</strong>\n\n<strong>«Las estrellas más calientes son más luminosas.»</strong>\n\nElige una de las dos y rómpela con el laboratorio. Vale cualquiera de los ocho modelos a cualquier edad, y también el cursor libre, aunque si usas el cursor libre recuerda qué establece y qué no: enseña que una temperatura y una luminosidad <em>podrían</em> ir juntas, no que alguna estrella concreta lo haga.\n\nAnota las dos estrellas que hayas usado y guarda la comparación en el cuaderno como prueba.',
       fields: [
         { label: 'Temperatura de la estrella A' },
         { label: 'Luminosidad de la estrella A' },

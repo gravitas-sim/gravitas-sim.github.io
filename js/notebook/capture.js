@@ -1786,6 +1786,21 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
   if (snapshot.pinned.length && snapshot.sizeMode === 'fit') {
     limitations.push(t('nb.stellar.limit.fitted'));
   }
+  // A reading taken from the evolutionary playback carries two more things a
+  // reader needs: which stage it was at, and - where the star has ended -
+  // whether the endpoint came from the track or from somebody's published
+  // prescription. Without the second, a remnant mass in a notebook is a
+  // number with no author.
+  if (snapshot.stage && snapshot.stage !== 'track') {
+    limitations.push(t(`nb.stellar.limit.stage.${snapshot.stage}`));
+  }
+  if (snapshot.endpointKind && !snapshot.endpointFromTrack) {
+    limitations.push(
+      t('nb.stellar.limit.endpointQuoted', {
+        cite: snapshot.endpointSource ?? '—',
+      })
+    );
+  }
 
   return buildEntry({
     source: SOURCE.STELLAR_LAB,
@@ -1812,6 +1827,10 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
       flags: [
         modelled ? 'stellar-track' : 'hypothetical-point',
         ...(snapshot.ambiguous ? ['ambiguous'] : []),
+        ...(snapshot.stage ? [`stage:${snapshot.stage}`] : []),
+        ...(snapshot.pace ? [`paced-by:${snapshot.pace}`] : []),
+        ...(snapshot.sizeMode ? [`sizes:${snapshot.sizeMode}`] : []),
+        ...(snapshot.endpointKind ? [`ends-as:${snapshot.endpointKind}`] : []),
       ],
     }),
     prose: { limitations: limitations.join('\n') },

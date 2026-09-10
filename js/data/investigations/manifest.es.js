@@ -282,7 +282,7 @@ export const MANIFEST = [
     id: 'a-universe-of-stars',
     title: 'Un universo de estrellas',
     subtitle:
-      'Tamaño, color y el diagrama H-R, a partir de siete estrellas modeladas',
+      'Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas',
     duration: '70-90 min',
     level: 'Astronomía introductoria',
     summary:

@@ -36,6 +36,7 @@ import { CHAOS_WIDGETS } from './chaosWidgets.js';
 import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
 import { GW_WIDGETS } from './gwWidgets.js';
 import { STELLAR_WIDGETS } from './stellarWidgets.js';
+import { STELLAR_EVOLUTION_WIDGETS } from './stellarEvolutionWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalogue,
 // because nothing in the start-up path can reach one: this registry is
@@ -69,6 +70,7 @@ const WIDGETS = [
   ...RESONANCE_WIDGETS,
   ...GW_WIDGETS,
   ...STELLAR_WIDGETS,
+  ...STELLAR_EVOLUTION_WIDGETS,
 ];
 
 /**

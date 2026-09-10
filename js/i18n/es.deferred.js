@@ -2897,9 +2897,135 @@ export const ES_DEFERRED = {
   // ---------------------------------------------------------------------------
   // El Laboratorio Estelar (js/stellarWidgets.js, js/stellarLab.js)
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // La reproducción evolutiva (js/stellarEvolutionWidgets.js)
+  // ---------------------------------------------------------------------------
+  'stelE.title': 'Una estrella, de principio a fin',
+  'stelE.note':
+    'Una traza evolutiva publicada, reproducida. La edad manda sobre todo lo demás: temperatura, radio, luminosidad, color, masa actual y fase salen del mismo punto de la misma traza. La nube del principio y el remanente del final son ilustraciones a ambos lados de lo que el modelo cubre de verdad, y las dos lo dicen.',
+  'stelE.panel.diagram': 'por dónde ha pasado',
+  'stelE.panel.stage': 'la estrella ahora',
+  'stelE.axis.hotter': '← más caliente',
+  'stelE.control.track': 'Estrella',
+  'stelE.control.position': 'A lo largo de su vida',
+  'stelE.control.speed': 'Velocidad de reproducción',
+  'stelE.preset.mass': '{m} M☉',
+  'stelE.action.play': 'Reproducir',
+  'stelE.action.pause': 'Pausar',
+  'stelE.action.restart': 'Volver al principio',
+  'stelE.action.prev': 'Fase anterior',
+  'stelE.action.next': 'Fase siguiente',
+  'stelE.action.pace': 'Cambiar lo que marca el cursor',
+  'stelE.action.interior': 'Esquema del interior',
+  'stelE.action.ghost': 'Guardar esta traza para comparar',
+  'stelE.action.capture': 'Guardar en el cuaderno',
+  'stelE.stage.cloud': 'antes de la traza',
+  'stelE.stage.remnant': 'después de la traza',
+  'stelE.stage.cloudCaption':
+    'Una ilustración. Sin temperatura, sin radio y sin edad: el modelo no describe esto.',
+  'stelE.action.size': 'Tamaño real, o ajustar al recuadro',
+  'stelE.stage.fitCaption':
+    'Ampliada {n} para llenar el recuadro. El tamaño aquí no significa nada; cambia a escala real para ver crecer la estrella.',
+  'stelE.row.phaseNote': 'Sobre esta fase',
+  'stelE.phaseNote.pre-main-sequence':
+    'Brilla antes de fusionar nada. Un objeto en contracción radia la energía gravitatoria que libera al encogerse, y de ahí viene esta luz. Que empiece la fusión no es lo mismo que llegar a la secuencia principal: el deuterio arde antes y brevemente, y la secuencia principal empieza solo cuando la fusión de hidrógeno en el núcleo es lo bastante estable para sostener la estrella por sí sola.',
+  'stelE.phaseNote.main-sequence':
+    'No es un punto fijo. Una estrella se vuelve más brillante y se hincha despacio a lo largo de su vida en la secuencia principal según se acumula helio en el núcleo; la línea de abajo dice cuánto se ha movido esta.',
+  'stelE.phaseNote.red-giant-branch':
+    'Lo que se agotó fue el hidrógeno del NÚCLEO, no el hidrógeno de la estrella. Casi todo sigue ahí, en la envoltura, y lo que la estrella quema ahora es una capa de hidrógeno alrededor del núcleo agotado, que es por lo que brilla mucho más que en la secuencia principal.',
+  'stelE.phaseNote.post-agb-and-cooling':
+    'La envoltura se ha ido, alejándose como una nebulosa planetaria: un nombre puesto antes de que nadie supiera qué eran, y que no tiene nada que ver con planetas. Es gas corriente, iluminado por el núcleo desnudo, y se dispersa mucho antes de que el núcleo termine de enfriarse. Aquí no se modela cuándo se vuelve visible ni durante cuánto tiempo.',
+  'stelE.row.drift': 'Se ha movido',
+  'stelE.value.drift':
+    '{lum} la luminosidad que tenía al llegar, y {teff} en temperatura superficial.',
+  'stelE.row.sizeMode': 'La imagen',
+  'stelE.value.sizeTrue':
+    'Una escala para toda la vida, fijada por lo mayor que llega a ser esta estrella ({peak}). Por eso es un punto durante casi toda ella.',
+  'stelE.value.sizeFit':
+    'Cada momento ampliado hasta llenar el recuadro, para que el color y la fase se vean. En este modo los tamaños NO son comparables entre momentos.',
+  'stelE.stage.caption':
+    'Una escala para toda la vida: el {frac} de los {peak} que alcanza en su punto mayor.',
+  'stelE.stage.tinyCaption':
+    'Dibujada como marcador: a la escala que esta estrella alcanza más tarde ({peak}), ahora no llega a un píxel.',
+  'stelE.row.star': 'La estrella',
+  'stelE.value.star':
+    'Un modelo de {m} M☉, seguido desde antes de ser una estrella',
+  'stelE.row.stage': 'Etapa',
+  'stelE.value.cloud':
+    'Una nube en contracción, dibujada como ilustración. Las trazas incluidas empiezan en un objeto que ya tiene fotosfera, así que nada anterior a ese punto está modelado aquí.',
+  'stelE.row.noNumbers': 'Por qué no hay números',
+  'stelE.value.noNumbers':
+    'Poner una nube a una temperatura y una luminosidad concretas sería inventarlas. La traza cuantitativa empieza cuando el modelo tiene una fotosfera que informar, y ahí se rellena la lectura.',
+  'stelE.row.age': 'Edad',
+  'stelE.row.phase': 'Fase',
+  'stelE.row.teff': 'Temperatura superficial',
+  'stelE.row.luminosity': 'Luminosidad',
+  'stelE.row.radius': 'Radio',
+  'stelE.row.mass': 'Masa',
+  'stelE.value.mass':
+    '{now} ahora, {born} al nacer: {lost} perdidas por su viento',
+  'stelE.row.spectral': 'Tipo espectral',
+  'stelE.row.pace': 'El cursor',
+  'stelE.value.paceTime':
+    'Marcado por el tiempo, de forma logarítmica. Lo que ha avanzado es lo que ha avanzado la vida, así que casi todo es la secuencia principal.',
+  'stelE.value.pacePhase':
+    'Marcado por las muestras de la propia traza, de modo que todas las fases son alcanzables. NO es un reloj: movimientos iguales no son tiempos iguales, y la línea de abajo dice cuánto.',
+  'stelE.row.thisPhase': 'Esta fase',
+  'stelE.value.thisPhase':
+    'Dura de verdad {real} —el {life} de la vida de la estrella— y se lleva el {share} de la reproducción.',
+  'stelE.row.interior': 'El interior',
+  'stelE.value.interior':
+    'Un esquema de qué proceso está liberando la energía. Las trazas incluidas son magnitudes de superficie y no llevan ninguna estructura radial, así que los tamaños de estas capas están elegidos para verse y no significan nada.',
+  'stelE.row.ghost': 'Comparada con',
+  'stelE.value.ghost':
+    'La traza de {m} M☉, discontinua. No tiene cursor propio.',
+  'stelE.row.endsAs': 'Termina como',
+  'stelE.remnant.white-dwarf': 'una enana blanca',
+  'stelE.remnant.neutron-star': 'una estrella de neutrones',
+  'stelE.remnant.black-hole': 'un agujero negro',
+  'stelE.remnant.uncertain': 'una estrella de neutrones o un agujero negro',
+  'stelE.remnant.unfinished': 'todavía nada: el modelo se detiene antes',
+  'stelE.remnant.white-dwarf.caption':
+    'El núcleo desnudo, enfriándose. Tiene fotosfera, así que conserva su sitio en el diagrama.',
+  'stelE.remnant.neutron-star.caption':
+    'Unos 20 km de diámetro. Sin fotosfera en el sentido habitual, así que no se dibuja en el diagrama.',
+  'stelE.remnant.black-hole.caption':
+    'Sin superficie y sin temperatura que dibujar. La traza termina y esta ficha toma el relevo.',
+  'stelE.remnant.uncertain.caption':
+    'Cuál de los dos depende del modelo de explosión. Se muestran ambos como posibles porque las fuentes lo hacen.',
+  'stelE.remnant.unfinished.caption':
+    'La traza se detiene mientras la estrella todavía fusiona hidrógeno. No hay final que mostrar.',
+  'stelE.row.howKnown': 'Cómo se sabe esto',
+  'stelE.value.fromTrack':
+    'De la propia traza: MIST siguió a esta estrella hasta una enana blanca en enfriamiento, así que la masa y la posición son resultados del modelo y no una receta aparte.',
+  'stelE.value.fromPrescription':
+    'No sale de la traza. Esta se detiene en {phase} con {mass} restantes, y lo que sigue es un resultado publicado citado para una estrella de esta masa: {cite}. Aquí no se ha calculado nada.',
+  'stelE.row.remnantMass': 'Lo que queda',
+  'stelE.value.remnantRange':
+    '{m}, con las fuentes abarcando de {lo} a {hi} M☉',
+  'stelE.value.remnantUnknown':
+    'Entre {lo} y {hi} M☉, según explote o no la estrella',
+  'stelE.row.supernova': '¿Una supernova visible?',
+  'stelE.supernova.expected':
+    'Se espera. Es el rango de masa que explota con más fiabilidad.',
+  'stelE.supernova.uncertain':
+    'Depende del modelo. Algunos motores hacen explotar una estrella de esta masa y otros no.',
+  'stelE.supernova.unlikely':
+    'Probablemente no. A esta masa la vía más probable a un agujero negro es una explosión fallida: la envoltura no sale despedida, cae hacia dentro. Un agujero negro no exige una supernova brillante.',
+  'stelE.supernova.none': 'No. Aquí no explota nada.',
+  'stelE.row.offDiagram': 'Por qué se detiene la traza',
+  'stelE.value.offDiagram':
+    'Este remanente no tiene fotosfera, así que no tiene temperatura ni luminosidad que dibujar. La línea del diagrama termina donde termina el modelo, en vez de prolongarse hasta un punto inventado.',
+  'stelE.row.transient': 'La explosión dibujada aquí',
+  'stelE.value.transient':
+    'Una ilustración de un suceso, no un cálculo de él, y se mantiene fuera del diagrama a propósito: el brillo de una supernova es un transitorio que dura semanas y no es la traza fotosférica de la estrella. Lo que tarda en pantalla no guarda relación con lo que dura la explosión, con cuánto tiempo se ve, ni con lo que tardan los restos en dispersarse.',
+  'stelE.row.returned': 'Devuelto al espacio',
+  'stelE.value.returned':
+    '{mass} al final de la traza. Lo que añada una explosión no está en el modelo y no se cuenta aquí.',
+  'stelE.row.endNote': 'Con más detalle',
   'stelW.lab.title': 'Laboratorio estelar',
   'stelW.lab.note':
-    'Siete estrellas modeladas en un diagrama de Hertzsprung-Russell, y un cursor que puedes poner donde quieras. La temperatura crece hacia la izquierda: es un accidente histórico y pilla a todo el mundo una vez.',
+    'Ocho estrellas modeladas en un diagrama de Hertzsprung-Russell, y un cursor que puedes poner donde quieras. La temperatura crece hacia la izquierda: es un accidente histórico y pilla a todo el mundo una vez.',
   'stelW.panel.hr': 'temperatura y luminosidad',
   'stelW.panel.preview': 'esta estrella',
   'stelW.panel.compare': 'estrellas fijadas',
@@ -3078,6 +3204,12 @@ export const ES_DEFERRED = {
     'Esto es una temperatura y una luminosidad que alguien eligió, y el radio que implican. No tiene masa, ni edad, ni vida, porque un punto de este diagrama no determina ninguna de ellas.',
   'nb.stellar.limit.ambiguous':
     '{n} modelos del paquete pasan cerca de este punto y no son el mismo objeto. Nada en esta lectura identifica cuál es, si es alguno.',
+  'nb.stellar.limit.stage.cloud':
+    'Tomada antes de que empiece la traza. La nube en contracción es una ilustración sin temperatura, radio ni edad modelados.',
+  'nb.stellar.limit.stage.remnant':
+    'Tomada después de que termine la traza. Lo que llegó a ser la estrella se describe abajo en vez de calcularse aquí.',
+  'nb.stellar.limit.endpointQuoted':
+    'El final no sale de la traza. Es un resultado publicado citado para una estrella de esta masa: {cite}. Nada en Gravitas lo ha calculado.',
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
 };

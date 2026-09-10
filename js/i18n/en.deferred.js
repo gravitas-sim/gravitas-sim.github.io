@@ -2862,9 +2862,132 @@ export const EN_DEFERRED = {
   // ---------------------------------------------------------------------------
   // The Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
   // ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // The evolutionary playback (js/stellarEvolutionWidgets.js)
+  // ---------------------------------------------------------------------------
+  'stelE.title': 'A star, from start to finish',
+  'stelE.note':
+    'One published evolutionary track, played through. The age drives everything else — temperature, radius, luminosity, colour, current mass and phase all come from the same point on the same track. The cloud at the start and the remnant at the end are illustrations either side of what the model actually covers, and both say so.',
+  'stelE.panel.diagram': 'where it has been',
+  'stelE.panel.stage': 'the star now',
+  'stelE.axis.hotter': '← hotter',
+  'stelE.control.track': 'Star',
+  'stelE.control.position': 'Through its life',
+  'stelE.control.speed': 'Playback speed',
+  'stelE.preset.mass': '{m} M☉',
+  'stelE.action.play': 'Play',
+  'stelE.action.pause': 'Pause',
+  'stelE.action.restart': 'Back to the start',
+  'stelE.action.prev': 'Previous phase',
+  'stelE.action.next': 'Next phase',
+  'stelE.action.pace': 'Change what the playhead paces',
+  'stelE.action.interior': 'Interior schematic',
+  'stelE.action.ghost': 'Keep this track to compare',
+  'stelE.action.capture': 'Save to notebook',
+  'stelE.stage.cloud': 'before the track',
+  'stelE.stage.remnant': 'after the track',
+  'stelE.stage.cloudCaption':
+    'An illustration. No temperature, no radius, no age — the model does not describe this.',
+  'stelE.action.size': 'True size, or fit the box',
+  'stelE.stage.fitCaption':
+    'Enlarged {n} to fill the box. The size here means nothing; switch to true scale to see the star grow.',
+  'stelE.row.phaseNote': 'About this phase',
+  'stelE.phaseNote.pre-main-sequence':
+    'It is shining before it is fusing anything. A contracting object radiates the gravitational energy it releases as it shrinks, and that is where this light comes from. Fusion starting is not the same event as arriving on the main sequence: deuterium burns earlier and briefly, and the main sequence begins only when hydrogen fusion in the core is steady enough to hold the star up on its own.',
+  'stelE.phaseNote.main-sequence':
+    'Not one fixed point. A star brightens and swells slowly across its main-sequence life as helium builds in its core — the line below says by how much this one has moved so far.',
+  'stelE.phaseNote.red-giant-branch':
+    'What ran out was hydrogen in the CORE, not hydrogen in the star. Most of it is still there, in the envelope, and a shell of it around the spent core is what the star is burning now — which is why it is far brighter than it was on the main sequence.',
+  'stelE.phaseNote.post-agb-and-cooling':
+    'The envelope has gone, expanding away as a planetary nebula — a name given before anyone knew what these were, and nothing to do with planets. It is ordinary gas, lit by the exposed core, and it disperses long before the core has finished cooling. Nothing here models when it becomes visible or for how long.',
+  'stelE.row.drift': 'Moved so far',
+  'stelE.value.drift':
+    '{lum} the luminosity it had on arrival, and {teff} in surface temperature.',
+  'stelE.row.sizeMode': 'The picture',
+  'stelE.value.sizeTrue':
+    'One scale for the whole life, set by the largest this star ever gets ({peak}). That is why it is a speck for most of it.',
+  'stelE.value.sizeFit':
+    'Each moment enlarged to fill the box, so the colour and the phase stay legible. Sizes are NOT comparable between moments in this mode.',
+  'stelE.stage.caption':
+    'One scale for the whole life: {frac} of the {peak} it reaches at its largest.',
+  'stelE.stage.tinyCaption':
+    'Drawn as a marker: at the scale this star reaches later ({peak}), it is under a pixel now.',
+  'stelE.row.star': 'The star',
+  'stelE.value.star': 'A {m} M☉ model, followed from before it was a star',
+  'stelE.row.stage': 'Stage',
+  'stelE.value.cloud':
+    'A collapsing cloud, drawn as an illustration. The bundled tracks begin at an object that already has a photosphere, so nothing before that point is modelled here.',
+  'stelE.row.noNumbers': 'Why there are no numbers',
+  'stelE.value.noNumbers':
+    'Putting a cloud at a precise temperature and luminosity would be inventing them. The quantitative track begins when the model has a photosphere to report, and the readout fills in there.',
+  'stelE.row.age': 'Age',
+  'stelE.row.phase': 'Phase',
+  'stelE.row.teff': 'Surface temperature',
+  'stelE.row.luminosity': 'Luminosity',
+  'stelE.row.radius': 'Radius',
+  'stelE.row.mass': 'Mass',
+  'stelE.value.mass': '{now} now, {born} at birth — {lost} lost to its wind',
+  'stelE.row.spectral': 'Spectral type',
+  'stelE.row.pace': 'The playhead',
+  'stelE.value.paceTime':
+    'Paced by time, logarithmically. How far it has travelled is how far through the life it is — so nearly all of it is the main sequence.',
+  'stelE.value.pacePhase':
+    'Paced by the track’s own samples, so every phase is reachable. It is NOT a clock: equal moves are not equal times, and the line below says by how much.',
+  'stelE.row.thisPhase': 'This phase',
+  'stelE.value.thisPhase':
+    'Really lasts {real} — {life} of the star’s life — and gets {share} of the playback.',
+  'stelE.row.interior': 'The interior',
+  'stelE.value.interior':
+    'A schematic of which process is releasing the energy. The bundled tracks are surface quantities and carry no radial structure at all, so the sizes of these shells are chosen to be legible and mean nothing.',
+  'stelE.row.ghost': 'Compared with',
+  'stelE.value.ghost':
+    'The {m} M☉ track, dashed. It has no playhead of its own.',
+  'stelE.row.endsAs': 'Ends as',
+  'stelE.remnant.white-dwarf': 'a white dwarf',
+  'stelE.remnant.neutron-star': 'a neutron star',
+  'stelE.remnant.black-hole': 'a black hole',
+  'stelE.remnant.uncertain': 'a neutron star or a black hole',
+  'stelE.remnant.unfinished': 'nothing yet — the model stops first',
+  'stelE.remnant.white-dwarf.caption':
+    'The exposed core, cooling. It has a photosphere, so it keeps its place on the diagram.',
+  'stelE.remnant.neutron-star.caption':
+    'About 20 km across. No photosphere in the ordinary sense, so it is not plotted on the diagram.',
+  'stelE.remnant.black-hole.caption':
+    'No surface and no temperature to plot. The track ends and this card takes over.',
+  'stelE.remnant.uncertain.caption':
+    'Which one depends on the explosion model. Both are shown as possible because the sources are.',
+  'stelE.remnant.unfinished.caption':
+    'The track stops while the star is still fusing hydrogen. There is no endpoint to show.',
+  'stelE.row.howKnown': 'How this is known',
+  'stelE.value.fromTrack':
+    'From the track itself: MIST followed this star all the way to a cooling white dwarf, so the mass and the position are model outputs and not a separate prescription.',
+  'stelE.value.fromPrescription':
+    'Not from the track. It stops at {phase} with {mass} left, and what follows is a published result quoted for a star of this mass: {cite}. Nothing here computed it.',
+  'stelE.row.remnantMass': 'What is left',
+  'stelE.value.remnantRange': '{m}, with the sources spanning {lo} to {hi} M☉',
+  'stelE.value.remnantUnknown':
+    'Somewhere between {lo} and {hi} M☉, depending on whether the star explodes at all',
+  'stelE.row.supernova': 'A visible supernova?',
+  'stelE.supernova.expected':
+    'Expected. This is the mass range that explodes most reliably.',
+  'stelE.supernova.uncertain':
+    'Model-dependent. Some engines explode a star of this mass and some do not.',
+  'stelE.supernova.unlikely':
+    'Probably not. At this mass the likeliest route to a black hole is a failed explosion — the envelope is not expelled, it falls in. A black hole does not require a bright supernova.',
+  'stelE.supernova.none': 'No. Nothing here explodes.',
+  'stelE.row.offDiagram': 'Why the track stops',
+  'stelE.value.offDiagram':
+    'This remnant has no photosphere, so it has no temperature or luminosity to plot. The line on the diagram ends where the model ends rather than being continued to an invented point.',
+  'stelE.row.transient': 'The explosion drawn here',
+  'stelE.value.transient':
+    'An illustration of an event, not a calculation of one, and it is kept off the diagram on purpose: a supernova’s brightness is a transient lasting weeks and is not the star’s photospheric track. How long it takes on screen has no relation to how long the explosion lasts, how long it stays visible, or how long the ejecta take to disperse.',
+  'stelE.row.returned': 'Returned to space',
+  'stelE.value.returned':
+    '{mass} by the end of the track. Whatever an explosion adds to that is not in the model and is not counted here.',
+  'stelE.row.endNote': 'In more detail',
   'stelW.lab.title': 'Stellar Lab',
   'stelW.lab.note':
-    'Seven modelled stars on a Hertzsprung–Russell diagram, and a cursor you can put anywhere. Temperature increases to the left — that is a historical accident and it catches everybody once.',
+    'Eight modelled stars on a Hertzsprung–Russell diagram, and a cursor you can put anywhere. Temperature increases to the left — that is a historical accident and it catches everybody once.',
   'stelW.panel.hr': 'temperature and luminosity',
   'stelW.panel.preview': 'this star',
   'stelW.panel.compare': 'pinned stars',
@@ -3040,6 +3163,12 @@ export const EN_DEFERRED = {
     'This is a temperature and a luminosity somebody chose, and the radius they imply. It has no mass, no age and no lifetime, because a point on this diagram does not determine any of them.',
   'nb.stellar.limit.ambiguous':
     '{n} bundled models pass close to this point and they are not the same object. Nothing in this reading identifies which, if any, it is.',
+  'nb.stellar.limit.stage.cloud':
+    'Taken before the track begins. The collapsing cloud is an illustration with no modelled temperature, radius or age.',
+  'nb.stellar.limit.stage.remnant':
+    'Taken after the track ends. What the star became is described below rather than computed here.',
+  'nb.stellar.limit.endpointQuoted':
+    'The endpoint is not from the track. It is a published result quoted for a star of this mass: {cite}. Nothing in Gravitas computed it.',
   'nb.stellar.limit.fitted':
     'The comparison was drawn with each star fitted to its own box, so the apparent sizes in it are not comparable.',
 };

@@ -6,7 +6,7 @@
 // a synthetic population, shown twice.
 //
 // Everything they draw comes from js/stellarLab.js, which comes from
-// js/stellar/, which comes from seven MIST tracks. No relation is implemented
+// js/stellar/, which comes from eight MIST tracks. No relation is implemented
 // twice: the radius on the property card, the size of the disc in the preview
 // and the position of the point on the diagram are three readings of the same
 // number.
@@ -364,7 +364,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
     }
   }
 
-  // The seven tracks, faint, with the one in hand picked out.
+  // Every track, faint, with the one in hand picked out.
   for (const id of trackIds()) {
     const s = trackSamples(id);
     if (!s) continue;

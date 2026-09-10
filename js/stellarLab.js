@@ -14,7 +14,7 @@
 //            reported, because a point on this diagram does not fix any of
 //            them. The lab offers nearby models instead, as a list, and
 //            nothing snaps.
-//   'model'  a point on one of the seven bundled tracks, at an age. Mass,
+//   'model'  a point on one of the eight bundled tracks, at an age. Mass,
 //            phase, age and lifetime are all real and all reported.
 //
 // The distinction is the point. A student who can put a cursor anywhere and

@@ -63,6 +63,7 @@ import {
 } from '../js/stellarWidgets.js';
 import { getWidget } from '../js/widgets.js';
 import { mulberry32 } from '../js/rng.js';
+import { trackIds } from '../js/stellar/tracks.js';
 import { radiusFromLuminosityAndTemperature } from '../js/stellar/geometry.js';
 
 /** A canvas whose every 2D method exists and does nothing. */
@@ -167,10 +168,11 @@ describe('the diagram runs the way an H-R diagram runs', () => {
   });
 
   test('the main-sequence region is traced from the tracks themselves', () => {
-    // Fourteen points: a zero-age and a terminal-age point per track, so it
-    // cannot drift away from the models plotted on top of it.
+    // Two points per track - a zero-age and a terminal-age one - so it cannot
+    // drift away from the models plotted on top of it, and it grows when the
+    // bundle does.
     const ms = regions().find(r => r.key === 'main-sequence');
-    expect(ms.points.length).toBe(14);
+    expect(ms.points.length).toBe(trackIds().length * 2);
   });
 
   test('inRange says what is on the plot', () => {

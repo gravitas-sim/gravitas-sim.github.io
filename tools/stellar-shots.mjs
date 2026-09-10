@@ -111,6 +111,56 @@ const SHOTS = [
     },
     values: { size: 0, order: 0, sun: 0 },
   },
+  // The evolutionary playback, at the moments worth having a picture of.
+  {
+    id: 'evol-sun-main-sequence',
+    widget: 'stellar-evolution',
+    spec: { interior: true },
+    track: 'm100',
+    values: { position: 0.1 },
+  },
+  {
+    id: 'evol-sun-giant',
+    widget: 'stellar-evolution',
+    spec: { interior: true },
+    track: 'm100',
+    values: { position: 0.2 },
+  },
+  {
+    id: 'evol-sun-white-dwarf',
+    widget: 'stellar-evolution',
+    spec: { interior: false },
+    track: 'm100',
+    values: { position: 1 },
+  },
+  {
+    id: 'evol-cloud',
+    widget: 'stellar-evolution',
+    spec: {},
+    track: 'm100',
+    values: { position: 0.02 },
+  },
+  {
+    id: 'evol-neutron-star',
+    widget: 'stellar-evolution',
+    spec: {},
+    track: 'm1000',
+    values: { position: 1 },
+  },
+  {
+    id: 'evol-black-hole',
+    widget: 'stellar-evolution',
+    spec: {},
+    track: 'm4000',
+    values: { position: 1 },
+  },
+  {
+    id: 'evol-uncertain',
+    widget: 'stellar-evolution',
+    spec: {},
+    track: 'm2000',
+    values: { position: 1 },
+  },
   {
     id: 'lesson-two-reds',
     widget: 'stellar-compare',
@@ -193,18 +243,20 @@ for (const shot of SHOTS) {
     if (spec.teff) values.teff = Math.log10(spec.teff);
     if (spec.lum) values.lum = Math.log10(spec.lum);
 
+    // reset() re-seats the instrument from the step's spec, and choosing a
+    // different star restarts an evolutionary playback. The values are the
+    // point of the shot, so they go on afterwards and the draw follows them.
     w.reset?.(values, { autorun: false, spec: stepSpec });
-    // reset() re-seats the lab from the spec; the values above are the point
-    // of the shot, so they go on afterwards and the draw follows them.
-    if (spec.track || spec.age !== undefined || spec.teff) {
-      if (spec.track) {
-        const { TRACK_IDS } = await import('/js/data/stellar/mistTracks.js');
-        values.track = TRACK_IDS.indexOf(spec.track);
-      }
-      if (spec.age !== undefined) values.age = spec.age;
-      if (spec.teff) values.teff = Math.log10(spec.teff);
-      if (spec.lum) values.lum = Math.log10(spec.lum);
+    Object.assign(values, spec.values || {});
+    if (spec.track) {
+      const { TRACK_IDS } = await import('/js/data/stellar/mistTracks.js');
+      values.track = TRACK_IDS.indexOf(spec.track);
+      w.reset?.(values, { autorun: false, spec: stepSpec });
+      Object.assign(values, spec.values || {});
     }
+    if (spec.age !== undefined) values.age = spec.age;
+    if (spec.teff) values.teff = Math.log10(spec.teff);
+    if (spec.lum) values.lum = Math.log10(spec.lum);
     w.draw(canvas, values, undefined, stepSpec);
     rows.innerHTML = w
       .readout(values, undefined, stepSpec)

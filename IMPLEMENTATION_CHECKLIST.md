@@ -504,6 +504,109 @@ screen.
   is not one of its runs. Forcing it in was the alternative and the package
   explicitly rules that out. The instructor notes say so in as many words.
 
+### B4 - evolutionary playback and endpoints: done
+
+`js/stellar/evolution.js` owns the playhead, `js/stellar/endpoints.js` owns
+what happens after a track stops, and `js/stellarEvolutionWidgets.js` draws
+them. One age drives every linked view.
+
+- [x] Mass selection, physical age and phase, play/pause, scrubber, previous
+      and next phase, restart, an H-R trace, a linked appearance and readout,
+      an optional interior schematic, and a second track pinned as a ghost.
+- [x] Two pacings, both labelled, with a **duration summary**: for the current
+      phase the readout prints the real length beside the share of the
+      playback it gets. On a solar-mass star the thermally-pulsing AGB is
+      0.01% of the life and 45% of the phase-paced playhead, and it says so.
+- [x] The stellar clock never touches the N-body clock. A test reads the
+      imports of all three modules and fails on `physics.js`, `timeline.js` or
+      anything matching `collision`.
+- [x] Deterministic: the trace is recomputed between the start and the
+      playhead rather than accumulated, and the shells are seeded on the track
+      id. Seeking backwards shortens the trace and removes the shells. A test
+      plays to a position and seeks to the same one and compares.
+- [x] Reduced motion: nothing autoplays, and the cloud and the transient draw
+      at a fixed moment. Every stage stays reachable by the playhead and the
+      phase buttons.
+- [x] True-size and fitted preview modes, with the magnification stated in the
+      second and the fraction of the star's own peak radius in the first.
+
+**An eighth track, and why**
+
+- [x] 40 M☉ added to the bundle. Explodability is not monotonic in mass:
+      Sukhbold et al. (2016) find interleaved islands of explosion and
+      collapse, so a black hole asserted from a mass cut would teach the
+      opposite of the literature. 10 M☉ is where the models agree it explodes,
+      40 is where they agree it does not, and **20 is left explicitly
+      uncertain** because it is.
+- [x] The mass column had to change encoding: it was an int16 at scale 1000
+      and 40 M☉ overflows it. It is stored as a fraction of the initial mass
+      now, bounded 0-1 for any star however heavy, and multiplied back at
+      decode. A test walks every track asserting the first sample equals the
+      initial mass and that mass never increases.
+
+**Endpoints, kept separate from the tracks**
+
+- [x] Three tracks reach a white dwarf and their remnant masses are their own
+      last samples (0.54, 0.59, 0.89 M☉). Every other endpoint is a published
+      result quoted for the nearest modelled progenitor, and `fromTrack` is the
+      flag that separates the two. Both are asserted for every entry.
+- [x] No formula from initial mass to remnant mass anywhere. Progenitor mass is
+      never quoted as remnant mass - a test checks it on every entry.
+- [x] A black hole is not required to have a bright supernova: the 40 M☉ entry
+      says a failed explosion is the likelier route, and a test asserts its
+      `supernova` is not `expected`.
+- [x] Nothing without a photosphere is plotted. A neutron star and a black hole
+      end the line where the model ends and get a card; no log(0), no invented
+      temperature, and the illustrative explosion is kept off the diagram
+      because a supernova's brightness is a transient and not a photospheric
+      track.
+- [x] The 0.2 and 0.5 M☉ tracks claim no endpoint at all, and the 0.2 entry
+      says no star of that mass has finished its main sequence anywhere.
+
+**Four things the phase readout now says that it did not**
+
+- [x] Pre-main-sequence light comes from contraction, and fusion starting is
+      not the same event as arriving on the main sequence.
+- [x] The main sequence is not one immutable point - the readout prints how far
+      this star has already moved along it.
+- [x] What ran out at the end of the main sequence was hydrogen in the _core_,
+      not hydrogen in the star.
+- [x] A planetary nebula is expelled gas, has nothing to do with planets, and
+      its visibility does not coincide with the first instant of envelope loss.
+
+**Checks at this stage**
+
+| Check                                                      | Result                                                                                                |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `tests/stellarEvolution.test.js`                           | 54 passed                                                                                             |
+| `jest` (whole suite)                                       | 4471 of 4472; the one failure is the widget-lesson coupling, which B5 closes                          |
+| `budget:check`                                             | initial **825.8** of an untouched 830.0; deferred 3513.5 of 3560.0 (raised from 3500 with accounting) |
+| `tools/stellar-shots.mjs`                                  | 20 captures including all four endpoint kinds, no page errors                                         |
+| `lint`, `format:check`, `check-architecture` (257 modules) | green                                                                                                 |
+
+**Fixed from the captures rather than from a test**
+
+- [x] The timeline strip was drawn over the diagram's axis labels; it has its
+      own band now.
+- [x] At true scale a main-sequence star is a speck for most of its life, which
+      is honest and made the panel useless. There is a fitted mode now, and the
+      true-scale caption says what fraction of the star's own peak it is at.
+- [x] Three captions were clipped at three lines. The stage measures its
+      caption first and lays the picture out in what is left.
+
+**Honest remaining limitations of B4**
+
+- The interior schematic knows which process is burning and nothing else. Its
+  shell radii are chosen for legibility and are labelled as meaningless.
+- The 40 M☉ track stops during helium ignition, earlier than the 10 and 20 M☉
+  tracks stop, so the gap between where the model ends and where the star ends
+  is widest exactly where the endpoint is least directly supported. The
+  readout states the phase and the remaining mass at the stop.
+- The size mode and the interior toggle live on the step's tool spec, so they
+  persist for the session but are not written into saved progress the way the
+  slider values are.
+- No lesson uses this instrument yet. That is B5.
+
 ---
 
 ## Deferred checks

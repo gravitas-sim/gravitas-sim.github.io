@@ -1,7 +1,7 @@
 // =============================================================================
 // Querying the bundled MIST evolutionary tracks
 // -----------------------------------------------------------------------------
-// Seven tracks, and the four questions anything wants to ask them: what is this
+// Eight tracks, and the four questions anything wants to ask them: what is this
 // star like at this age, what is it like at this named point, what range does
 // the track cover, and what does a main-sequence star of this mass look like.
 //

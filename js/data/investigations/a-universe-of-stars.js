@@ -2,7 +2,7 @@
 // A universe of stars: size, color, and the H-R diagram
 // -----------------------------------------------------------------------------
 // Twenty-eight steps on the Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
-// and the seven bundled MIST tracks behind it. No calculus, and no arithmetic
+// and the eight bundled MIST tracks behind it. No calculus, and no arithmetic
 // the readout does not already do.
 //
 // The line this lesson has to hold
@@ -16,7 +16,7 @@
 //
 // Steps 7 to 11 work entirely in the second mode, and none of them asks for a
 // mass, an age or a lifetime, because the diagram does not carry one: at
-// 4500 K and 100 solar luminosities six of the seven bundled tracks pass
+// 4500 K and 100 solar luminosities six of the eight bundled tracks pass
 // close, at ages from ten thousand years to 1.3 billion. Step 21 makes the
 // ambiguity the subject rather than a caveat. Nothing here is graded on a
 // cursor position.
@@ -56,7 +56,7 @@ const A_UNIVERSE_OF_STARS = {
   id: 'a-universe-of-stars',
   thumbnail: 'images/scenarios/stellar-nursery.webp',
   title: 'A Universe of Stars',
-  subtitle: 'Size, colour and the H-R diagram, from seven modelled stars',
+  subtitle: 'Size, colour and the H-R diagram, from eight modelled stars',
   duration: '70-90 min',
   level: 'Introductory astronomy',
   tags: ['stars', 'observing'],
@@ -514,12 +514,12 @@ const A_UNIVERSE_OF_STARS = {
              character: now there is a mass, an age, a phase and a lifetime,
              because a published stellar-evolution calculation put this star
              here and knows how it got there.
-             \n\nSeven of them are bundled, at 0.2, 0.5, 1, 2, 5, 10 and 20
-             solar masses, all with the Sun&rsquo;s composition and no
+             \n\nEight of them are bundled, at 0.2, 0.5, 1, 2, 5, 10, 20 and
+             40 solar masses, all with the Sun&rsquo;s composition and no
              rotation. Step through them and watch where each one sits.`,
       checklist: [
         'Press "Switch mode" until the readout says "A modelled star"',
-        'Move the "Modelled star" slider from 0.2 M☉ up to 20 M☉, one step at a time',
+        'Move the "Modelled star" slider from 0.2 M☉ up to 40 M☉, one step at a time',
         'Watch the marker travel up and to the left as the mass rises',
         'Read the mass, the age and the phase in the list at each stop',
         'Notice that the band the markers trace out is the shaded main-sequence region',
@@ -597,9 +597,9 @@ const A_UNIVERSE_OF_STARS = {
     {
       sid: 'the-whole-sequence',
       type: 'measure',
-      title: 'All seven, in one comparison',
+      title: 'All eight, in one comparison',
       body: `Check the trend across the whole set rather than at its two ends.
-             Go back to the lab, step the mass slider through all seven models,
+             Go back to the lab, step the mass slider through all eight models,
              and record the luminosity of the 1, 5 and 20 solar-mass stars.
              \n\nThis is a controlled comparison: every star is at the middle
              of its main-sequence life, every model has the same composition
@@ -648,7 +648,7 @@ const A_UNIVERSE_OF_STARS = {
       title: 'What the trend does and does not cover',
       kind: 'short',
       body: `You have measured a steep relationship between mass and luminosity
-             — and you measured it on seven stars that were all doing the same
+             — and you measured it on eight stars that were all doing the same
              thing: fusing hydrogen in their cores, in the middle of their
              lives.
              \n\nThe giant in step 4 had a mass of almost exactly one solar
@@ -974,8 +974,9 @@ const A_UNIVERSE_OF_STARS = {
       title: 'Four hundred stars',
       body: `A synthetic population: four hundred stars drawn from a published
              distribution of birth masses, spread over the last ten billion
-             years, each one placed on the same seven tracks you have been
-             using. It is reproducible from its seed, and it is not a survey —
+             years, each one placed on the same tracks you have been using —
+             the ones between 0.2 and 20 solar masses, which is the range the
+             mass function is sampled over. It is reproducible from its seed, and it is not a survey —
              nothing in it was observed and no star in it is real.
              \n\nThe histogram counts them by spectral type: O and B are the
              hot ones, then A, F, G — the Sun is a G — then K and the cool
@@ -1085,7 +1086,7 @@ const A_UNIVERSE_OF_STARS = {
       body: `Two statements that sound reasonable and are both false:
              \n\n<strong>&ldquo;Red stars are small.&rdquo;</strong>
              \n\n<strong>&ldquo;Hotter stars are more luminous.&rdquo;</strong>
-             \n\nPick either one and break it with the lab. Any of the seven
+             \n\nPick either one and break it with the lab. Any of the eight
              models at any age is fair, and so is the free cursor — though if
              you use the free cursor, remember what it does and does not
              establish: it shows a temperature and a luminosity <em>could</em>

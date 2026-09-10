@@ -276,7 +276,7 @@ export const MANIFEST = [
   {
     id: 'a-universe-of-stars',
     title: 'A Universe of Stars',
-    subtitle: 'Size, colour and the H-R diagram, from seven modelled stars',
+    subtitle: 'Size, colour and the H-R diagram, from eight modelled stars',
     duration: '70-90 min',
     level: 'Introductory astronomy',
     summary:

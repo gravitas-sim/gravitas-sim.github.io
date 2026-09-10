@@ -797,8 +797,8 @@
           <dd>
             A star placed on an evolutionary track carries the temperature,
             luminosity and mass that track has at that age. Seven tracks are
-            bundled: 0.2, 0.5, 1, 2, 5, 10 and 20 solar masses, from MIST v1.2
-            at solar composition with no rotation.
+            bundled: 0.2, 0.5, 1, 2, 5, 10, 20 and 40 solar masses, from MIST
+            v1.2 at solar composition with no rotation.
           </dd>
           <dt>Estimated</dt>
           <dd>
@@ -896,6 +896,115 @@
         polynomial; and the transit-photometry model declines on a pulsating
         giant, whose radius is not a constant over an observation.
       </p>
+      <div class="doc-feature">
+        <h3>Evolutionary playback</h3>
+        <p>
+          The same tracks, played through instead of scrubbed. One age drives
+          every linked view &mdash; temperature, radius, luminosity, colour,
+          current mass and phase all come from the same position on the same
+          track, so they cannot disagree about what the star is doing.
+        </p>
+        <dl>
+          <dt>Two clocks, and why the difference matters</dt>
+          <dd>
+            Paced by time, the playhead is logarithmic in age and how far it has
+            travelled is how far through the life the star is. Paced by phase,
+            it runs along the track&rsquo;s own stored samples so that every
+            stage is reachable, and it stops being a clock. The readout always
+            says which is in force, and for the current phase it prints the real
+            duration beside the share of the playback it is getting: on a
+            solar-mass star the thermally-pulsing AGB lasts 1.4 million years, a
+            hundredth of a per cent of the life, and takes 45 per cent of the
+            phase-paced playhead. A viewer who is not told that will read the
+            animation as a claim about duration.
+          </dd>
+          <dt>Neither end of the playback is the model</dt>
+          <dd>
+            Before the track there is a contracting cloud, drawn as an
+            illustration with no temperature, no radius and no age, because
+            MIST&rsquo;s pre-main-sequence tracks begin at an object that
+            already has a photosphere and a cloud does not. After it there is a
+            remnant card. Both are labelled, and the quantitative readout is
+            blank in the first and replaced in the second.
+          </dd>
+          <dt>The interior is a diagram, not a structure</dt>
+          <dd>
+            The optional schematic shows which process is releasing the energy
+            &mdash; core hydrogen, a hydrogen shell, core helium &mdash; which
+            the track&rsquo;s phase does determine. The radii of its shells do
+            not: the bundled tracks are surface quantities and carry no radial
+            structure at all. The panel says so wherever it is shown.
+          </dd>
+          <dt>Nothing accumulates</dt>
+          <dd>
+            The path drawn on the diagram is recomputed from the track between
+            its start and the playhead rather than appended to as time passes,
+            and the shells of expelled material come from a seeded generator
+            keyed on the track. So seeking backwards shortens the path and
+            removes the shells rather than leaving them behind, and two runs of
+            the same playback draw the same picture. There are no particles with
+            lives of their own anywhere in it.
+          </dd>
+          <dt>It never touches the simulation</dt>
+          <dd>
+            A stellar lifetime is billions of years and the sandbox clock counts
+            days; integrating orbits across one would not be slow, it would be
+            meaningless. The playback advances an age along a published track
+            and the N-body engine does not know it happened. The star renderer
+            is shared; the collision and merger routines beside it are not
+            reachable from here, which a test asserts by reading the imports.
+          </dd>
+        </dl>
+      </div>
+      <div class="doc-feature">
+        <h3>What each modelled star ends as</h3>
+        <p>
+          <span class="doc-badge is-simulated">Simulated elsewhere</span>
+          Three of the bundled tracks answer this themselves: 1, 2 and 5 solar
+          masses run through to a cooling white dwarf, and the remnant masses
+          &mdash; 0.54, 0.59 and 0.89 solar &mdash; are the tracks&rsquo; own
+          last samples rather than a separate calculation. The rest stop while
+          the star is still burning, and what happens afterwards is quoted from
+          published work in <code>js/stellar/endpoints.js</code>, which is a
+          separate module so that the two kinds of statement cannot be confused.
+          Every entry carries a <code>fromTrack</code> flag saying which it is.
+        </p>
+        <dl>
+          <dt>Why there is a 40 solar-mass track</dt>
+          <dd>
+            Because whether a massive star explodes is not a monotonic function
+            of its mass, and a black hole asserted from a mass cut would teach
+            the opposite of what the literature says.
+            <a href="https://ui.adsabs.harvard.edu/abs/2016ApJ...821...38S"
+              >Sukhbold et al. (2016)</a
+            >
+            find interleaved islands of explosion and collapse. So the neutron
+            star here comes from the 10 solar-mass track, where the models agree
+            it explodes; the 20 solar-mass case is left explicitly uncertain,
+            because it is; and the black hole comes from a 40 solar-mass track,
+            where they agree again.
+          </dd>
+          <dt>What a remnant is not given</dt>
+          <dd>
+            A place on the H&ndash;R diagram, unless it has a photosphere. A
+            white dwarf keeps one because MIST followed it there. A neutron star
+            and a black hole get neither a temperature nor a luminosity: the
+            track ends where the model ends and a card describes the remnant in
+            words beside it. Nothing is plotted at log(0) and no
+            supernova&rsquo;s transient brightness is drawn as if it were the
+            progenitor&rsquo;s photospheric track.
+          </dd>
+          <dt>What is deliberately absent</dt>
+          <dd>
+            A formula from initial mass to remnant mass. Each entry is one
+            representative outcome for one modelled star, with the range its
+            source reports, and nothing interpolates between them. Progenitor
+            mass is never quoted as remnant mass. The mass a star returns to
+            space is only what the track itself recorded losing &mdash; whatever
+            an explosion ejects is not in the model and is not counted.
+          </dd>
+        </dl>
+      </div>
       <div class="doc-feature">
         <h3>The Stellar Lab</h3>
         <p>

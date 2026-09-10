@@ -185,9 +185,11 @@ describe('the bundled tracks are the published ones, reduced', () => {
     expect(PROVENANCE.notModelled.join(' ')).toMatch(/core collapse/i);
   });
 
-  test('the seven masses are the seven asked for', () => {
+  test('the eight masses are the eight asked for', () => {
+    // 40 is here for one reason: it is where the published explodability
+    // studies agree on a black hole. See js/stellar/endpoints.js.
     expect(trackIds().map(id => TRACKS[id].initialMassSun)).toEqual([
-      0.2, 0.5, 1, 2, 5, 10, 20,
+      0.2, 0.5, 1, 2, 5, 10, 20, 40,
     ]);
   });
 

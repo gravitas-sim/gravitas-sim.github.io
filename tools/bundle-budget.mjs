@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3500,
+    limit: 3560,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -311,7 +311,18 @@ const BUDGETS = [
       '\n\nThe initial download did NOT move and its limit was NOT touched: ' +
       '825.7 KB before the lesson and 825.8 after, against 830.0. The hundred ' +
       'bytes are the lesson id in the manifest and its two tags in the browse ' +
-      'metadata.',
+      'metadata.' +
+      '\n\nRaised from 3500 to 3560 for the evolutionary playback: 3466.3 to ' +
+      '3505.1 KB. Fifteen of the thirty-nine is the playback widget, thirteen ' +
+      'is a hundred and thirty labels in two languages, six is the endpoint ' +
+      'prescriptions and their citations, and four is an eighth MIST track. ' +
+      'That last one is the only entry here that is data rather than code, ' +
+      'and it is there because a black hole asserted from a mass cut would ' +
+      'be teaching the opposite of what the sources say: the 40 solar-mass ' +
+      'track is where they agree, and it cost 3.8 KB to stop guessing.\n\n' +
+      'The initial download did NOT move and its limit was NOT touched: ' +
+      '825.8 KB either side, against 830.0. Every module above is reachable ' +
+      'only through js/widgets.js.',
   },
 ];
 

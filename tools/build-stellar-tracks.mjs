@@ -73,8 +73,15 @@ const GRID = {
 };
 
 /**
- * The seven masses, in units of a hundredth of a solar mass, which is how MIST
+ * The eight masses, in units of a hundredth of a solar mass, which is how MIST
  * names its files. Every one is a grid point: none of these is interpolated.
+ *
+ * The 40 solar-mass track is here for one reason: an endpoint. The published
+ * explodability studies put 10 solar masses confidently among the stars that
+ * explode and leave a neutron star, and 20 near a boundary where the answer
+ * depends on which engine is used - which is worth teaching, but is not a
+ * black hole. 40 is where those studies agree, so it is what the black-hole
+ * pathway is built on rather than an assertion with no track behind it.
  */
 const MASSES = [
   { file: '00020M', massSun: 0.2, id: 'm020' },
@@ -84,6 +91,7 @@ const MASSES = [
   { file: '00500M', massSun: 5, id: 'm500' },
   { file: '01000M', massSun: 10, id: 'm1000' },
   { file: '02000M', massSun: 20, id: 'm2000' },
+  { file: '04000M', massSun: 40, id: 'm4000' },
 ];
 
 /** Zero-based indices of the columns this bundle keeps. */
@@ -490,9 +498,14 @@ async function build({ offline }) {
         AGE_SCALE,
         32
       ),
-      massSun: encode(
-        sample.map(r => r[COL.mass]),
-        1000
+      // A fraction of the initial mass rather than a mass. Bounded between 0
+      // and 1 for every track however heavy, so adding a 40 solar-mass star
+      // does not overflow a column scaled for a 20 solar-mass one - which it
+      // did. At this scale the resolution is 3e-5 of the initial mass, which
+      // for the heaviest track is about a thousandth of a solar mass.
+      massFraction: encode(
+        sample.map(r => r[COL.mass] / track.initialMass),
+        30000
       ),
       logL: encode(
         sample.map(r => r[COL.logL]),
@@ -615,6 +628,19 @@ export const PROVENANCE = ${JSON.stringify(provenance, null, 2)};
 export const TRACKS = ${JSON.stringify(tracks, null, 2)};
 
 /**
+ * Turn a fraction column back into the quantity it is a fraction of.
+ *
+ * @param {Float64Array} column - Fractions
+ * @param {number} of - What they are fractions of
+ * @returns {Float64Array} The quantity
+ */
+function scaleColumn(column, of) {
+  const out = new Float64Array(column.length);
+  for (let i = 0; i < column.length; i++) out[i] = column[i] * of;
+  return out;
+}
+
+/**
  * Decode one column of one track.
  *
  * @param {object} column - One of the encoded column objects on a track
@@ -660,7 +686,7 @@ export function decodeTrack(id) {
     eeps: spec.eeps,
     thinning: spec.thinning,
     logAgeYr: decodeColumn(spec.logAge),
-    massSun: decodeColumn(spec.massSun),
+    massSun: scaleColumn(decodeColumn(spec.massFraction), spec.initialMassSun),
     logL: decodeColumn(spec.logL),
     logTeff: decodeColumn(spec.logTeff),
     phase: decodeColumn(spec.phase),
