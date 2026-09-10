@@ -3410,6 +3410,234 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modelled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
   },
+  'a-universe-of-stars': {
+    topic:
+      'Mass, radius, temperature and luminosity as four separate quantities; the H-R diagram; the main sequence and what lies off it; selection effects',
+    difficulty:
+      'Introductory, conceptual. The only arithmetic is a ratio and a square root',
+    placement:
+      'Seventy to ninety minutes, and it can be the first lesson of a stars unit: nothing before it is required beyond the idea that a hotter thing glows differently from a cooler one. It pairs naturally before any lesson on stellar death and after any lesson that has used the word "star" loosely. No calculus. Nothing in it needs sound.',
+    overview: `Students meet three unlabelled stars, guess what the picture can tell them, and then
+      spend twenty-seven screens taking the guess apart. The instrument is the Stellar Lab and the
+      stars are seven published MIST evolutionary tracks, so every number a student reads is a
+      model output rather than a textbook value the lesson made up.
+      \n\nThe spine is that mass, radius, temperature and luminosity are four things. Students
+      arrive believing they are roughly one thing called "bigness", and the opening screen is
+      built so that the three stars break every version of that: the largest of them is neither
+      the hottest nor the most luminous, and has a fifth of the mass of the star beside it.
+      Screens 4 to 11 establish the one relation that does connect three of the four - luminosity
+      is area times how hard the surface radiates - and use it in both directions.
+      \n\nThe second spine is the difference between a position and a star. Screens 7 to 11 work
+      in the lab's free-cursor mode, where a student places a point and gets a radius and nothing
+      else: no mass, no age, no lifetime, because a point on an H-R diagram does not carry them.
+      At 4,500 K and 100 solar luminosities six of the seven bundled tracks pass close, at ages
+      from ten thousand years to 1.3 billion, and the lab names all six and refuses to choose.
+      No screen grades a cursor position as an identified star.
+      \n\nThe third is that the main-sequence relations are about a stage, not about stars.
+      Screen 15 measures the mass-luminosity slope on seven stars all doing the same thing;
+      screen 16 asks why it fails for a giant of the same mass; screens 17 to 21 are the
+      counterexamples. The word "giant" is introduced as a stage in a life and never as a synonym
+      for a heavy star - the red giant on screen 18 has less mass than the Sun.
+      \n\nThe last two screens are a selection effect, done by counting the same synthetic
+      population twice.`,
+    priorKnowledge: [
+      'That stars are objects of different sizes and temperatures, and that hotter things glow bluer',
+      'Reading a point off a graph; willingness to be shown a logarithmic axis rather than fear of one',
+      'That the area of a sphere grows with the square of its radius',
+      'No calculus, no algebra beyond a ratio and a square root. Every relationship is measured rather than derived.',
+    ],
+    keyConcepts: [
+      {
+        heading: 'Four quantities, not one',
+        body: 'Mass is how much material; radius is how big; temperature is how hot the surface is; luminosity is how much light leaves per second. Students reliably collapse these into a single axis of "big and bright and heavy". The lesson separates them by counterexample rather than by definition: a red giant that is four hundred times the radius of a red dwarf at the same temperature, and a white dwarf hotter than any main-sequence star in the set while putting out one and a half solar luminosities.',
+      },
+      {
+        heading: 'Apparent brightness is not luminosity',
+        body: 'Luminosity is a property of the star; apparent brightness is a property of the arrangement of the star, the observer and the distance between them. The lab is explicit that brightness on screen carries no information at all - a star a hundred thousand times fainter than the Sun is drawn just as brightly, because otherwise it would be invisible - and the caption under the preview says so. Screens 24 to 26 turn the distinction into the whole point.',
+      },
+      {
+        heading: 'The Stefan-Boltzmann relation, used both ways',
+        body: 'L over L-sun equals R over R-sun squared times T over 5772 K to the fourth. This is not a fitted law; it is what an effective temperature means, and it is exact. The lesson uses it forwards on screen 6 (same temperature, so the luminosity ratio is the radius ratio squared) and backwards on screens 9, 10 and 21 (a temperature and a luminosity determine a radius, whether or not any star is there).',
+      },
+      {
+        heading: 'The main sequence is a stage, not a class',
+        body: 'Stars occupy a narrow band on the diagram while they fuse hydrogen in the core, because for that mechanism the mass largely fixes the temperature and the luminosity. Two consequences students miss: the band is a sequence in mass and not in time, so no star travels along it; and any relation fitted to it - including the mass-luminosity slope of screen 15 - has no reason to hold for a star doing something else.',
+      },
+      {
+        heading: 'Why the heavy ones go first',
+        body: 'Lifetime is fuel divided by the rate it is spent. Fuel goes as the mass and the rate goes as the luminosity, which goes as roughly mass to the 3.5, so lifetime goes as mass to the minus 2.5. The bundled models give 8.7 million years at 20 solar masses and 1.1 trillion at 0.2, a factor of 130,000. Students who predict that more fuel means a longer life are reasoning correctly from an incomplete premise, which is worth saying out loud.',
+      },
+      {
+        heading: 'Selection effects',
+        body: 'A sample chosen by brightness is a sample chosen by luminosity, and luminosity varies over a vastly wider range than the numbers of stars do. The synthetic population is two thirds M dwarfs and its bright subset contains none at all. This is the same mechanism behind survivorship bias in any field, and it is worth naming as such - the lesson deliberately places every star at the same distance so that distance cannot be blamed.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-6',
+        title: 'Four words that are not synonyms',
+        detail:
+          'The opening prediction is designed so that every "they go together" answer is wrong about these particular stars. Do not resolve it early; screen 2 reveals the numbers and screens 4 to 6 build the relation that explains them. Screen 3 is free exploration of colour and is deliberately ungraded.',
+      },
+      {
+        steps: '7-11',
+        title: 'The diagram, and what a point on it means',
+        detail:
+          'All five screens are in free-cursor mode. Expect the reversed temperature axis to catch most of the room on screen 7; the validation catches a student who moved the wrong way and says why. Screen 11 turns on the constant-radius guides, which are straight lines on these axes - worth showing on the board as log L = 2 log R + 4 log T.',
+      },
+      {
+        steps: '12-16',
+        title: 'The main sequence, and its limits',
+        detail:
+          'Screens 13 and 15 are the quantitative core. Screen 16 is a short written answer and the first place the lesson checks whether "main sequence" has landed as a stage rather than a category. If time is short, screen 15 can be demonstrated from the front rather than done individually.',
+      },
+      {
+        steps: '17-21',
+        title: 'Everything that is not on the main sequence',
+        detail:
+          'The strongest fifteen minutes in the lesson. Screen 17 has two stars of identical colour differing by a factor of 426 in radius. Screen 20 needs the age slider paced by phase, which the step sets automatically; the tip invites students to switch it back and watch the whole post-main-sequence collapse into a sliver.',
+      },
+      {
+        steps: '22-23',
+        title: 'Why the big ones go first',
+        detail:
+          "Screen 22 is a prediction most students get wrong for a good reason, and the discussion is better if they commit first. Screen 23 carries the lesson's one genuinely unverifiable number and says so: no 0.2 solar-mass star has ever finished its main sequence anywhere.",
+      },
+      {
+        steps: '24-26',
+        title: 'A population, counted twice',
+        detail:
+          'Both screens use one population and one histogram; only the cut changes. The written answer on screen 26 is the one worth collecting - see the rubric, and in particular the wrong answer it rejects.',
+      },
+      {
+        steps: '27-28',
+        title: 'The challenge and the argument',
+        detail:
+          'Screen 27 is open and accepts either counterexample; the validation recognises both and nudges a student whose two stars break neither rule. Screen 28 puts the step 1 prediction back on screen and is the summative piece.',
+      },
+    ],
+    features: [
+      {
+        heading: 'The two modes are two kinds of claim',
+        body: 'In "a modelled star" the readout carries a mass, an age, a phase and a lifetime, because a track supplies them. In "a point you chose" it carries a radius and explicitly nothing else. Students can move freely between them and the lab never quietly converts one into the other: adopting a nearby model is a separate, deliberate button.',
+      },
+      {
+        heading: 'Everything on the canvas is also in the list',
+        body: 'Every measurement the lesson asks for can be read from the rows beneath the canvas, which is what makes the whole lesson completable without interpreting a picture. Colour is never graded, and the one screen about colour asks what changed rather than what shade it is.',
+      },
+      {
+        heading: 'The age slider has two pacings',
+        body: 'Paced by time it is honest about how long phases last, and useless for reaching them - the whole red-giant branch of a solar-mass star is two thousandths of its travel. Paced by phase every stage is reachable and the handle is no longer a clock. The readout says which is in force, and screens 20 and 23 deliberately use different ones.',
+      },
+      {
+        heading: 'True sizes, or fitted sizes, never both',
+        body: 'On the comparison stage "true relative sizes" uses one scale, so a dwarf beside a supergiant is genuinely sub-pixel and is drawn as a labelled marker rather than inflated. "Fit each star" magnifies each into its own box and prints the magnification under each one. The caption states which mode is in force.',
+      },
+      {
+        heading: 'The population is synthetic and says so',
+        body: 'Four hundred stars from a Kroupa (2001) mass function and a constant star-formation rate over ten billion years, reproducible from a seed. Stars that had already left the main sequence are dropped rather than guessed at, and the count of dropped stars is reported. It is not a survey and the readout says what it omits: dust, binaries, and any composition but solar.',
+      },
+    ],
+    expectations: {
+      2: 'Near 3,373 K, 4,298 K and 16,596 K. The order on the stage is by radius, so the temperatures are deliberately not in stage order - students who read them off in the order shown will get them out of sequence, which is the intended stumble.',
+      3: 'Deep red at the cool end through white to blue-white at the hot end. Do not grade the colour words; the observation that matters is that only one control moved.',
+      4: 'Both stars near 4,300 K; luminosities of about 0.18 and 62 solar, a ratio near 345.',
+      6: 'Radii 0.78 and 14.3 solar, a ratio of about 18.4. The square root of 345 is 18.6; the small discrepancy is the 26 K difference in temperature and is worth mentioning if a student notices it.',
+      7: 'Anywhere within about 15 per cent of 10,000 K and 100 solar luminosities. The common failure is moving right to get hotter.',
+      8: 'A radius of 1.00 solar, give or take the precision of the placement.',
+      9: 'About 100 solar radii. Four decades of luminosity at fixed temperature is two decades of radius, every time.',
+      11: 'Any two points on the 1 R-sun guide. A good pair might be 3,000 K at 0.073 L-sun and 12,000 K at 18.7 L-sun: the temperature ratio is 4 and the luminosity ratio is 256, which is 4 to the fourth.',
+      13: 'Luminosities of about 0.0066 and 58,550 solar, a ratio near nine million, for a mass ratio of 100.',
+      15: 'About 1.2, 726 and 58,550 solar luminosities, giving a slope near 3.6 between the ends.',
+      18: 'Radii 0.24 and 101.6 solar, a ratio of 426; luminosities 0.0066 and 1,146 solar, a ratio of about 173,000. The square of 426 is 181,000 and the gap is the 40 K difference in temperature.',
+      19: 'About 1,070 solar radii and a current mass near 14, from an initial 20. The mass loss is the number students skip past; it is worth stopping on.',
+      20: 'About 47,600 K, 1.6 solar luminosities and 0.018 solar radii - roughly twice the radius of the Earth, holding 0.54 solar masses.',
+      23: 'About 1,140,000, 9,880 and 8.7 million years for 0.2, 1 and 20 solar masses. Students often mis-key the trillion; the validation accepts billions and says so.',
+      24: '227 M, 93 K, 21 G out of 351 placed. Not one O and not one B: the sample drew a few and they had already left the main sequence.',
+      25: 'Sixteen stars kept, of which 8 F, 6 G, 2 A, and no K or M at all.',
+      27: 'Any pair where the hotter star is the fainter, or where the cooler star exceeds ten solar radii. The end of the 1 solar-mass track and the end of the 20 solar-mass track each supply one in a single click.',
+    },
+    misconceptions: [
+      {
+        claim:
+          'Bigger stars are hotter, brighter and heavier - it is all one scale.',
+        response:
+          'The single most common starting position, and the opening screen is built to break it: the largest of the three stars is the coolest but one, has a twelfth of the luminosity of the star beside it and a fifth of its mass. Keep referring back to screen 1 rather than asserting the distinction abstractly.',
+      },
+      {
+        claim: 'A giant is a very massive star.',
+        response:
+          'The red giant on screen 18 has 0.97 solar masses - less than the Sun, because it has already blown some away - and it is 426 times the radius of the 0.2 solar-mass dwarf beside it. "Giant" is a luminosity classification attached to a stage of a life. The lesson never uses it as a synonym for heavy, and it is worth saying explicitly that the same star was an ordinary main-sequence star for ten billion years.',
+      },
+      {
+        claim: 'Red stars are small and cool; blue stars are big and hot.',
+        response:
+          'Half right and therefore durable. Red does mean a cool surface, and blue a hot one, but neither says anything about size: the two red stars on screen 17 differ by a factor of 426 in radius. Screen 27 asks students to break this rule themselves, which works better than being told.',
+      },
+      {
+        claim: 'The main sequence is where a star travels as it ages.',
+        response:
+          'The word "sequence" invites this and the diagram appears to confirm it. It is a sequence in mass, not in time: a star sits at essentially one place on it for its whole main-sequence life and then leaves sideways. Screens 12 and 20 make the contrast visible - the marker barely moves for ten billion years and then crosses the diagram in a hundred million.',
+      },
+      {
+        claim: 'A star with more mass has more fuel, so it lasts longer.',
+        response:
+          'A correct inference from an incomplete premise, and worth treating as such rather than as an error. The missing half is the rate: luminosity rises far faster than mass does, so the extra fuel is spent disproportionately faster. Screen 22 asks for the prediction before screen 23 supplies the numbers, and the discussion is much better in that order.',
+      },
+      {
+        claim: 'The bright stars in a catalogue are the ones that are closest.',
+        response:
+          'True of some real catalogues and false of the model on screens 24 to 26, where every star is placed at the same distance and the M dwarfs still all vanish. This is the wrong answer the screen 26 rubric explicitly rejects, and it is worth pre-empting: the effect being demonstrated is selection on luminosity, and distance has been removed on purpose so that it cannot be the explanation.',
+      },
+      {
+        claim: 'A point on the H-R diagram tells you what kind of star it is.',
+        response:
+          'It tells you the radius, exactly, and it constrains the kind loosely. It does not give a mass or an age: at 4,500 K and 100 solar luminosities six of the seven bundled tracks pass close, at ages spanning five orders of magnitude. Screens 7 to 11 are all in the mode that makes this explicit, and no screen in the lesson grades a cursor position as an identified star.',
+      },
+    ],
+    teachingNotes: [
+      'Screen 1 is worth protecting. Its value depends on students committing before any number is on screen, and the stage deliberately hides the numbers. If a student asks which is which, the honest answer is "that is screen 2".',
+      'The reversed temperature axis needs saying out loud once, at screen 7, and then leaving alone. The validation on that screen catches a student who moved the wrong way and tells them why, which is more effective than a warning in advance.',
+      'Screens 7 to 11 never ask for a mass or an age, and that absence is deliberate. If a student asks what star is at their cursor, the lab has a "find nearby models" answer that lists all of them without choosing - use it, because the list is the lesson.',
+      'Screen 15 is where the A/B experiment bench would normally go. It does not apply here: that bench varies initial conditions of an N-body simulation and measures orbital outcomes, and there is no sense in which a stellar evolutionary track is one of its runs. The comparison is run on the models directly instead, and it is still a controlled comparison - one variable, six held fixed by construction.',
+      'Screen 20 switches the age slider to phase pacing on its own. Some students will notice the handle stops meaning time; that is the right thing to notice, the readout says it in as many words, and the tip invites them to switch back and see the difference.',
+      'Screen 23 contains the one number in the lesson that cannot be checked against anything: a 1.1 trillion year main-sequence lifetime, eighty times the current age of the Universe. Say plainly that it is a model integrated forward and that no such star has finished, anywhere. It is a good place to talk about what a prediction is.',
+      'Screens 24 and 25 look at one population twice. If students think the second view is a new sample, the point is lost - the readout says "351 placed from 400 drawn" in both, and pointing at that number is the quickest fix.',
+      'Screen 27 accepts either counterexample and recognises both automatically. Students who use the free cursor should be reminded what it establishes: that a temperature and a luminosity could coexist, not that any star has them.',
+      'If ninety minutes is not available, screens 3, 9 and 19 can be demonstrated from the front, and screen 11 can be dropped entirely without breaking anything later.',
+    ],
+    discussion: [
+      'The three stars on screen 1 were chosen so that no single word describes which is "biggest". If you had to rank them, what would you rank them by, and would anyone else have picked the same quantity?',
+      'The lesson keeps saying the main-sequence relations only apply to main-sequence stars. How would you know, looking at a real star through a real telescope, whether it was on the main sequence?',
+      'Every star in the population on screen 24 was placed at the same distance. Real ones are not. Does that make the selection effect weaker or stronger, and why?',
+      'A 0.2 solar-mass star is predicted to live for 1.1 trillion years. What would it take to check that? Is there any observation that could show the prediction is wrong?',
+      'The Sun is used as the unit for mass, radius and luminosity throughout. After screen 24, is the Sun a typical star? What is it typical of?',
+    ],
+    extensions: [
+      'Have students find the two bundled tracks that cross on the diagram - the same position, two different masses at two different ages - and write down what an observer would have to measure to tell them apart.',
+      'Take the mass-luminosity slope from screen 15 and predict the main-sequence lifetime of a 3 solar-mass star before checking it against the 2 and 5 solar-mass models. The prediction should land between them; ask why interpolating a lifetime is safer than interpolating a phase.',
+      'Set the population threshold slider to several values and record how the fraction of M dwarfs in the surviving sample changes. Plot it. The shape of that curve is the selection effect made quantitative.',
+      "Compare the lab's modelled Sun at 4.6 billion years against the real Sun's measured temperature and luminosity, and discuss what a one per cent disagreement between a model and a measurement does and does not mean.",
+    ],
+    modelNotes: `Seven MIST v1.2 evolutionary tracks at solar composition with no rotation, computed
+      with MESA and published by the MIST project; cite Dotter (2016) and Choi et al. (2016). Gravitas
+      did not compute them and could not. What Gravitas did was reduce them from about 7,700 rows of
+      77 columns to about 2,300 rows of four, keeping the ten primary equivalent evolutionary points
+      exactly and bounding the thinning at 0.004 dex in luminosity.
+      \n\nWhere the tracks stop matters for this lesson. 0.2 and 0.5 solar masses stop at the end of
+      core hydrogen burning because MESA stopped them there; 1, 2 and 5 run to a cooling white dwarf;
+      10 and 20 stop at carbon ignition, before core collapse, as red supergiants of 609 and 1,070
+      solar radii. The supergiant on screen 19 is therefore the last state the model has, not a final
+      state of the star, and the readout says so.
+      \n\nRotation, binarity, magnetic fields, mass transfer and any composition but solar are absent.
+      So is core collapse and everything after it. Radii are never tabulated: they are computed from
+      the temperature and the luminosity by the Stefan-Boltzmann relation, which is exact and which
+      the same code path supplies to the transit model and the habitable-zone ring, so those three
+      cannot disagree about how big a star is.
+      \n\nThe synthetic population is a Kroupa (2001) broken power law between 0.2 and 20 solar
+      masses with a constant star-formation rate over ten billion years, seeded and reproducible. It
+      is not a survey and no star in it is real.`,
+  },
   'listening-to-spacetime': {
     topic:
       'Gravitational waves from a compact binary: the chirp, what it constrains, and where a leading-order model stops',

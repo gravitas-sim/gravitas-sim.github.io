@@ -1762,6 +1762,12 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
   });
 
   const limitations = [];
+  // The grid is named whatever the cursor was doing, because a capture that
+  // carries pinned stars carries modelled stars, and an entry that does not
+  // say which models is a set of numbers with no provenance.
+  if (!modelled && snapshot.pinned.length) {
+    limitations.push(t('nb.stellar.limit.model', { grid: snapshot.grid }));
+  }
   if (modelled) {
     limitations.push(t('nb.stellar.limit.model', { grid: snapshot.grid }));
     if (snapshot.trackComplete === false) {
@@ -1783,7 +1789,15 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
 
   return buildEntry({
     source: SOURCE.STELLAR_LAB,
-    title: modelled ? t('nb.stellar.title.model') : t('nb.stellar.title.point'),
+    // Titled by what the reading is chiefly of. A capture taken with stars on
+    // the comparison stage is about those stars, and calling it "a point on
+    // the H-R diagram" because the cursor happened to be in free mode
+    // describes the wrong half of the panel.
+    title: snapshot.pinned.length
+      ? t('nb.stellar.title.comparison', { n: snapshot.pinned.length })
+      : modelled
+        ? t('nb.stellar.title.model')
+        : t('nb.stellar.title.point'),
     quantities,
     provenance: provenanceOf({
       ...provenance,
@@ -1794,6 +1808,7 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
         radius: 'solar, photospheric',
         mass: 'solar',
       },
+      grid: snapshot.grid,
       flags: [
         modelled ? 'stellar-track' : 'hypothetical-point',
         ...(snapshot.ambiguous ? ['ambiguous'] : []),

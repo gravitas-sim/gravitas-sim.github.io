@@ -40,6 +40,7 @@ import {
   radiusFromLuminosityAndTemperature,
   luminosityClass,
 } from './geometry.js';
+import { clamp } from '../utils.js';
 
 export { PROVENANCE as TRACK_PROVENANCE, TRACK_IDS };
 
@@ -242,6 +243,66 @@ export function stateAtAge(id, ageYr) {
  * @param {string} eepName - One of the names in the track's `eeps`
  * @returns {?object} A stellar state, or null if the track lacks that point
  */
+/**
+ * The star at a position along the track's own samples.
+ *
+ * The other way to move along a track. `stateAtAge` walks it in years, which
+ * is what a clock does and what a lesson about how long a phase lasts needs.
+ * This walks it in stored rows, which is what an eye needs: the thinning kept
+ * rows where the star changes fastest and dropped them where it does not, so
+ * uniform motion along the rows is close to uniform motion along the track's
+ * own shape. On a solar-mass star the red-giant branch is two thousandths of
+ * the age slider's travel and a fifth of this one.
+ *
+ * Interpolation is between adjacent stored rows of one track and nothing else.
+ * Two different tracks' row numbers have no relationship to each other and
+ * this never crosses between them.
+ *
+ * @param {string} id - Track id
+ * @param {number} position - 0 to 1 along the stored samples
+ * @returns {?object} The shared stellar state, or null for an unknown track
+ */
+export function stateAtSample(id, position) {
+  if (!TRACKS[id]) return null;
+  const t = structureOf(id);
+  const exact = clamp(position, 0, 1) * (t.count - 1);
+  const i = Math.min(t.count - 2, Math.floor(exact));
+  const f = t.count > 1 ? exact - i : 0;
+  const mix = (a, b) => a + (b - a) * f;
+  return stateFrom(t, {
+    ageYr: 10 ** mix(t.logAgeYr[i], t.logAgeYr[i + 1]),
+    logL: mix(t.logL[i], t.logL[i + 1]),
+    logTeff: mix(t.logTeff[i], t.logTeff[i + 1]),
+    massSun: mix(t.massSun[i], t.massSun[i + 1]),
+    seg: segmentAt(t, f < 0.5 ? i : i + 1),
+  });
+}
+
+/**
+ * Where along the stored samples a given age falls.
+ *
+ * @param {string} id - Track id
+ * @param {number} ageYr - An age in years
+ * @returns {number} 0 to 1 along the stored samples
+ */
+export function sampleAtAge(id, ageYr) {
+  if (!TRACKS[id]) return 0;
+  const t = structureOf(id);
+  const target = Math.log10(Math.max(ageYr, 1));
+  let lo = 0;
+  let hi = t.count - 1;
+  if (target <= t.logAgeYr[0]) return 0;
+  if (target >= t.logAgeYr[hi]) return 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (t.logAgeYr[mid] <= target) lo = mid;
+    else hi = mid;
+  }
+  const span = t.logAgeYr[hi] - t.logAgeYr[lo];
+  const f = span > 0 ? (target - t.logAgeYr[lo]) / span : 0;
+  return (lo + f) / (t.count - 1);
+}
+
 export function stateAtEep(id, eepName) {
   if (!TRACKS[id]) return null;
   const t = structureOf(id);

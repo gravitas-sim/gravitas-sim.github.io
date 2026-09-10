@@ -92,6 +92,7 @@ const LOADERS = {
   'hohmann-transfer': () => import('./hohmann-transfer.js'),
   'lagrange-points': () => import('./lagrange-points.js'),
   'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
+  'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
 };
 
 /**
@@ -125,6 +126,7 @@ const TRANSLATIONS = {
     'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
     'lagrange-points': () => import('./es/lagrange-points.js'),
     'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
+    'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
   },
 };
 

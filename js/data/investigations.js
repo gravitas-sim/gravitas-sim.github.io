@@ -67,6 +67,7 @@ import GRAVITY_ASSIST from './investigations/gravity-assist.js';
 import HOHMANN_TRANSFER from './investigations/hohmann-transfer.js';
 import LAGRANGE_POINTS from './investigations/lagrange-points.js';
 import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
+import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import { gradedSteps, positionIn } from './investigations/catalogue.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
@@ -103,6 +104,7 @@ export const INVESTIGATIONS = [
   HOHMANN_TRANSFER,
   LAGRANGE_POINTS,
   LISTENING_TO_SPACETIME,
+  A_UNIVERSE_OF_STARS,
 ];
 
 /**

@@ -34,6 +34,8 @@ import {
   fluxAt,
 } from '../js/stellar/population.js';
 import {
+  PACE,
+  setPace,
   MODE,
   SIZE_MODE,
   MAX_PINNED,
@@ -298,6 +300,110 @@ describe('the two modes', () => {
     const a = ageForFraction('m100', 0.5) / ageForFraction('m100', 0.4);
     const b = ageForFraction('m100', 0.8) / ageForFraction('m100', 0.7);
     expect(a).toBeCloseTo(b, 6);
+  });
+});
+
+describe('the two pacings of the age slider', () => {
+  const phasesUnder = pace => {
+    const seen = new Set();
+    for (let i = 0; i <= 200; i++) {
+      const l = createLab({ trackId: 'm100', pace });
+      l.ageFraction = i / 200;
+      seen.add(selection(l).phase);
+    }
+    return seen;
+  };
+
+  test('paced by time, a solar-mass track is almost entirely two phases', () => {
+    // Which is true, and is exactly why the other pacing exists.
+    const seen = phasesUnder(PACE.TIME);
+    expect(seen.has('main-sequence')).toBe(true);
+    expect(seen.has('pre-main-sequence')).toBe(true);
+    expect(seen.size).toBeLessThan(5);
+  });
+
+  test('paced by the samples, every phase of that track is reachable', () => {
+    const seen = phasesUnder(PACE.PHASE);
+    for (const phase of [
+      'main-sequence',
+      'red-giant-branch',
+      'core-helium-burning',
+      'thermally-pulsing-agb',
+      'post-agb-and-cooling',
+    ]) {
+      expect(seen).toContain(phase);
+    }
+  });
+
+  test('the age reported is the real age either way', () => {
+    // The handle changes meaning; the number beside it does not.
+    for (const pace of [PACE.TIME, PACE.PHASE]) {
+      const l = createLab({ trackId: 'm100', pace });
+      let last = 0;
+      for (let i = 0; i <= 50; i++) {
+        l.ageFraction = i / 50;
+        const age = selection(l).ageYr;
+        expect(age).toBeGreaterThanOrEqual(last * 0.999999);
+        last = age;
+      }
+      expect(last / 1e9).toBeGreaterThan(10);
+    }
+  });
+
+  test('switching pacing keeps you looking at the same star', () => {
+    const l = createLab({ trackId: 'm100', pace: PACE.PHASE });
+    l.ageFraction = 0.62;
+    const before = selection(l);
+    setPace(l, PACE.TIME);
+    const after = selection(l);
+    expect(after.ageYr / before.ageYr).toBeCloseTo(1, 2);
+    setPace(l, PACE.PHASE);
+    expect(selection(l).ageYr / before.ageYr).toBeCloseTo(1, 2);
+  });
+
+  test('switching to the pacing already set does nothing', () => {
+    const l = createLab({ trackId: 'm100', pace: PACE.TIME });
+    const at = l.ageFraction;
+    setPace(l, PACE.TIME);
+    expect(l.ageFraction).toBe(at);
+  });
+
+  test('the lab says which pacing the handle is on, in both', () => {
+    const w = getWidget('stellar-lab');
+    for (const [pace, wanted] of [
+      [PACE.TIME, /how far through/i],
+      [PACE.PHASE, /NOT a clock/],
+    ]) {
+      resetLabForTests();
+      const spec = { pace };
+      const v = defaults(w);
+      w.reset(v, { spec });
+      const row = w
+        .readout(v, undefined, spec)
+        .find(r => r.label === 'The age slider');
+      expect(row.value).toMatch(wanted);
+    }
+  });
+
+  test('the switch is offered only where a step allows it', () => {
+    const w = getWidget('stellar-lab');
+    expect(w.actions({}).some(a => a.id === 'pace')).toBe(false);
+    expect(w.actions({ paceControl: true }).some(a => a.id === 'pace')).toBe(
+      true
+    );
+  });
+
+  test('and using it moves the slider to match', () => {
+    resetLabForTests();
+    const w = getWidget('stellar-lab');
+    const spec = { pace: PACE.TIME, paceControl: true };
+    const v = defaults(w);
+    w.reset(v, { spec });
+    const before = activeLab().ageFraction;
+    w.act('pace', v, spec);
+    expect(activeLab().pace).toBe(PACE.PHASE);
+    expect(v.age).toBe(activeLab().ageFraction);
+    expect(v.age).not.toBe(before);
   });
 });
 
@@ -592,8 +698,10 @@ describe('pointing at the diagram', () => {
 
   test('the lab declares the hook and the two axes the arrows step', () => {
     expect(typeof w().pick).toBe('function');
-    expect(w().pickAxes).toEqual({ x: 'teff', y: 'lum' });
-    for (const id of Object.values(w().pickAxes)) {
+    // flipX because temperature increases to the LEFT: without it the arrow
+    // keys would move the cursor the opposite way to the picture.
+    expect(w().pickAxes).toEqual({ x: 'teff', y: 'lum', flipX: true });
+    for (const id of [w().pickAxes.x, w().pickAxes.y]) {
       expect(w().controls.some(c => c.id === id)).toBe(true);
     }
   });

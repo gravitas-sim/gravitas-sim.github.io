@@ -88,4 +88,8 @@ export const BROWSE_META = {
     tags: ['compact-objects', 'gravity', 'observing'],
     numericCount: 0,
   },
+  'a-universe-of-stars': {
+    tags: ['observing', 'stars'],
+    numericCount: 0,
+  },
 };

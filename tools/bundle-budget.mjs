@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3420,
+    limit: 3500,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -300,7 +300,18 @@ const BUDGETS = [
       'the light-curve controls, all of which outlived their markup. ' +
       'tools/ has no dead-CSS check; the sweep that found them was a scan ' +
       'for class names no .js, .html or .mjs in the tree mentions, either ' +
-      'literally or as a template-assembled prefix.',
+      'literally or as a template-assembled prefix.' +
+      '\n\nRaised from 3420 to 3500 for the lesson the lab exists to serve: ' +
+      '3382.6 to 3464.2 KB. Twenty-eight steps of English are 44.2 KB and ' +
+      'their Spanish shadow 27.6 KB, in two chunks neither of which a visitor ' +
+      'fetches unless they open this lesson; the instructor guide is another ' +
+      '22.5 KB of source inside the portal chunk, where every other guide ' +
+      'already lives. A lesson is the first thing the paragraph at the top of ' +
+      'this reason says this budget is loose for, and this is the twentieth.' +
+      '\n\nThe initial download did NOT move and its limit was NOT touched: ' +
+      '825.7 KB before the lesson and 825.8 after, against 830.0. The hundred ' +
+      'bytes are the lesson id in the manifest and its two tags in the browse ' +
+      'metadata.',
   },
 ];
 

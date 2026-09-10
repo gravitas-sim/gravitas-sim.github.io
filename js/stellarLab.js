@@ -27,6 +27,8 @@ import {
   trackBounds,
   trackSamples,
   stateAtAge,
+  stateAtSample,
+  sampleAtAge,
   mainSequenceAt,
   nearestTrack,
 } from './stellar/tracks.js';
@@ -83,6 +85,7 @@ export function createLab({
   sizeMode = SIZE_MODE.TRUE,
   guides = false,
   regions = true,
+  pace = PACE.TIME,
   populationSeed = 'stellar-population-1',
   populationCount = 400,
 } = {}) {
@@ -102,13 +105,14 @@ export function createLab({
      */
     ageFraction:
       ageFraction === null
-        ? midMainSequenceFraction(id)
+        ? midMainSequenceFraction(id, pace)
         : clamp(ageFraction, 0, 1),
     teffK,
     luminositySun,
     sizeMode,
     guides,
     regions,
+    pace,
     pinned: [],
     populationSeed,
     populationCount,
@@ -131,11 +135,30 @@ export function createLab({
  * @param {string} trackId - Which track
  * @returns {number} A fraction, 0 to 1
  */
-export function midMainSequenceFraction(trackId) {
+/**
+ * The two ways the age slider can be paced.
+ *
+ * TIME is logarithmic in years, so how far the handle has travelled is how far
+ * through the star's life it is. It is the honest one for "how long did that
+ * last", and it is useless for looking at anything after the main sequence: on
+ * a solar-mass track the whole red-giant branch is two thousandths of its
+ * travel.
+ *
+ * PHASE is uniform along the track's stored samples, which the reduction put
+ * where the star changes fastest. Every phase becomes reachable, and the cost
+ * is that the handle no longer measures time. Any view using it has to say so,
+ * and the readout does.
+ */
+export const PACE = Object.freeze({ TIME: 'time', PHASE: 'phase' });
+
+export function midMainSequenceFraction(trackId, pace = PACE.TIME) {
   const b = trackBounds(trackId);
   const ms = b?.segments.find(x => x.key === 'main-sequence');
   if (!ms) return 0.5;
-  return fractionForAge(trackId, ms.startYr + 0.5 * ms.durationYr);
+  const ageYr = ms.startYr + 0.5 * ms.durationYr;
+  return pace === PACE.PHASE
+    ? sampleAtAge(trackId, ageYr)
+    : fractionForAge(trackId, ageYr);
 }
 
 /**
@@ -186,8 +209,14 @@ export function selection(state) {
       label: 'free',
     });
   }
-  const ageYr = ageForFraction(state.trackId, state.ageFraction);
-  const s = stateAtAge(state.trackId, ageYr);
+  const s =
+    state.pace === PACE.PHASE
+      ? stateAtSample(state.trackId, state.ageFraction)
+      : stateAtAge(
+          state.trackId,
+          ageForFraction(state.trackId, state.ageFraction)
+        );
+  const ageYr = s ? s.ageYr : ageForFraction(state.trackId, state.ageFraction);
   if (!s) {
     return Object.freeze({
       source: 'model',
@@ -251,6 +280,29 @@ export function adoptModel(state, match) {
   state.ageFraction = fractionForAge(match.trackId, match.ageYr);
   state.generation++;
   return true;
+}
+
+/**
+ * Switch how the age slider is paced, keeping the star where it is.
+ *
+ * The handle means a different thing in each pacing, so the fraction is
+ * re-derived from the age rather than carried across: a student who was
+ * looking at a red giant is still looking at that red giant afterwards.
+ *
+ * @param {object} state - Lab state
+ * @param {string} pace - PACE.TIME or PACE.PHASE
+ */
+export function setPace(state, pace) {
+  if (pace === state.pace) return;
+  const now = selection(state);
+  state.pace = pace;
+  if (Number.isFinite(now.ageYr)) {
+    state.ageFraction =
+      pace === PACE.PHASE
+        ? sampleAtAge(state.trackId, now.ageYr)
+        : fractionForAge(state.trackId, now.ageYr);
+  }
+  state.generation++;
 }
 
 /** Switch between the two ways of choosing, carrying the position across. */

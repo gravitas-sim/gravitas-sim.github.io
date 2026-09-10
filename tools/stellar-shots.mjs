@@ -83,6 +83,43 @@ const SHOTS = [
     widget: 'stellar-population',
     values: { view: 1, threshold: -4 },
   },
+  // The three the lesson opens on, and the pair it turns on.
+  {
+    id: 'lesson-opening-trio',
+    widget: 'stellar-compare',
+    spec: {
+      pace: 'phase',
+      anonymous: true,
+      pins: [
+        { track: 'm020' },
+        { track: 'm500' },
+        { track: 'm100', ageYr: 1.129e10 },
+      ],
+    },
+    values: { size: 0, order: 0, sun: 0 },
+  },
+  {
+    id: 'lesson-trio-revealed',
+    widget: 'stellar-compare',
+    spec: {
+      pace: 'phase',
+      pins: [
+        { track: 'm020' },
+        { track: 'm500' },
+        { track: 'm100', ageYr: 1.129e10 },
+      ],
+    },
+    values: { size: 0, order: 0, sun: 0 },
+  },
+  {
+    id: 'lesson-two-reds',
+    widget: 'stellar-compare',
+    spec: {
+      pace: 'phase',
+      pins: [{ track: 'm020' }, { track: 'm100', at: 0.206 }],
+    },
+    values: { size: 0, order: 0, sun: 0 },
+  },
 ];
 
 const args = process.argv.slice(2);

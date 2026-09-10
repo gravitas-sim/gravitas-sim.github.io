@@ -2954,6 +2954,12 @@ export const ES_DEFERRED = {
   'stelW.value.mass': '{now} ahora, {born} al nacer',
   'stelW.row.age': 'Edad',
   'stelW.row.phase': 'Fase',
+  'stelW.action.pace': 'Cambiar lo que marca el deslizador de edad',
+  'stelW.row.pace': 'El deslizador de edad',
+  'stelW.value.paceTime':
+    'Marcado por el tiempo, de forma logarítmica. Lo que ha avanzado el mando es lo que ha avanzado la vida de la estrella, así que casi todo su recorrido es la secuencia principal y todo lo posterior queda comprimido en el último tramo.',
+  'stelW.value.pacePhase':
+    'Marcado por las muestras de la propia traza, de modo que todas las fases son alcanzables. Aquí el mando NO es un reloj: movimientos iguales no son tiempos iguales. La edad que aparece al lado sí es la real.',
   'stelW.row.mainSequence': 'Secuencia principal',
   'stelW.value.mainSequence': '{total} en total, {left} por delante',
   'stelW.value.none': 'nada',
@@ -2994,8 +3000,14 @@ export const ES_DEFERRED = {
     'Hasta cuatro estrellas fijadas, dibujadas en una escala común o cada una ampliada hasta llenar su recuadro. No son la misma imagen, y el pie dice cuál estás viendo.',
   'stelW.compare.empty':
     'Aún no hay ninguna fijada. Fija una estrella en el laboratorio de arriba.',
+  'stelW.compare.anonymous': 'estrella {n}',
+  'stelW.value.anonymous':
+    'Ocultos en este paso, los {n}. Se te pide que juzgues a ojo primero.',
   'stelW.compare.sun': 'el Sol',
   'stelW.compare.magnified': 'ampliada {n}',
+  'stelW.compare.subPixelShort': 'menos de 1 px',
+  'stelW.row.subPixel': 'La más pequeña',
+  'stelW.row.withheld': 'Los números',
   'stelW.compare.subPixel': 'más pequeña que un píxel aquí',
   'stelW.compare.trueNote':
     'Una sola escala para todas. Lo que aparece como marcador es de verdad demasiado pequeño para verse junto a las demás.',
@@ -3044,6 +3056,7 @@ export const ES_DEFERRED = {
     'Las estrellas que han dejado la secuencia principal, el polvo interestelar, las binarias y cualquier composición que no sea solar. Las cuatro cosas importan en un sondeo real y ninguna está aquí.',
   // La evidencia del Laboratorio Estelar
   'nb.source.stellar-lab': 'Laboratorio estelar',
+  'nb.stellar.title.comparison': '{n} estrellas comparadas',
   'nb.stellar.title.model': 'Una estrella modelada',
   'nb.stellar.title.point': 'Un punto del diagrama H-R',
   'nb.stellar.teff': 'Temperatura efectiva',

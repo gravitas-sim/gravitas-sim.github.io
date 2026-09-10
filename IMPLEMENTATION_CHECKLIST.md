@@ -413,6 +413,97 @@ and `dibujo`/`dibujo` decided one at a time from its own sentence.
   reading of the diagram directly above it.
 - Nothing in the lab ages a star yet. Evolutionary playback is B4.
 
+### B3 - "A universe of stars": done
+
+`js/data/investigations/a-universe-of-stars.js`, 28 steps, and its Spanish
+shadow. Five predictions, thirteen measurements, four written answers, an open
+challenge and a summative argument that puts the step 1 prediction back on
+screen.
+
+- [x] Every number the lesson asserts was read out of the models first, not
+      recalled. Several were wrong on the first draft and were corrected
+      against the tracks: the giant is 52x the main-sequence luminosity at its
+      mass, not 300x; at 1 L(sun) the diagram runs 3.70 to 0.037 solar radii
+      between 3,000 and 30,000 K, not 1.2 to 0.012.
+- [x] The opening trio was **redesigned** after checking it. The obvious choice - 0.2, 1 and 20 solar masses - has the largest star also the hottest and
+      the most luminous, so every "they go together" answer would have been
+      right about those three. It is now a red dwarf, a 5 solar-mass B star and
+      a red giant: the largest is neither the hottest nor the brightest, and
+      has a fifth of the middle star's mass.
+- [x] Steps 7-11 are all free-cursor and none of them asks for a mass, an age
+      or a lifetime. No step grades a cursor position as an identified star.
+- [x] EN/ES: 100% of translatable strings differ from the English, with units
+      and bare numerals deliberately left untranslated rather than counted as
+      translated.
+- [x] Instructor guide: 6 key concepts, 7 flow blocks covering all 28 steps
+      exactly once, 5 features, 7 misconceptions, 9 teaching notes, 5
+      discussion questions, 4 extensions, expectations for all 15 measurement
+      steps, and model notes naming where the tracks stop.
+- [x] Registered in the loader, the barrel, both manifests and the browse
+      metadata; linked from `/model/#stars` and from the teaching page's
+      instrument list.
+
+**What the lesson needed that the lab did not have**
+
+- [x] **Two pacings for the age slider.** Paced logarithmically in time, the
+      whole red-giant branch of a solar-mass track is 1 sample in 200 of the
+      slider's travel and the lesson's giant steps were unreachable. There is
+      now a second pacing, uniform along the track's own stored samples, under
+      which all eight phases are reachable (RGB 22 samples, He-ignition 9,
+      core-He 9, TP-AGB 90, post-AGB 40). The readout says which is in force
+      and that the phase pacing is not a clock. `stateAtSample` and
+      `sampleAtAge` in `js/stellar/tracks.js`; `PACE` and `setPace` in the lab.
+- [x] Steps can seed the comparison stage (`pins`) and withhold its numbers
+      (`anonymous`), which is what makes step 1 a prediction rather than a
+      reading.
+- [x] The comparison stage and the population view can now capture to the
+      notebook; only the lab could before, so four steps had a capture button
+      that did not exist.
+
+**Defects found by the browser walk, not by a unit test**
+
+- [x] Seeded pins pinned the _free cursor_ rather than the modelled star
+      whenever an earlier step had left the lab in free mode - so step 6's two
+      stars were both the Sun. `seedPins` now pins as a modelled star and
+      restores the mode.
+- [x] The step's pacing was applied _after_ its pins, so a pin given as a
+      fraction was resolved against the wrong mapping.
+- [x] Arrow keys moved the cursor the opposite way to the picture: left made
+      the star cooler on a diagram whose left-hand side is the hot one. The
+      runner's `pickAxes` now takes `flipX`.
+- [x] A notebook entry from the comparison stage was titled "a point on the
+      H-R diagram" and named no model at all. It is titled by what was
+      captured and always names the grid.
+- [x] The per-star "smaller than a pixel here" caption is wider than a slot on
+      a narrow canvas and collided with its neighbours; it is a two-word mark
+      now, with the sentence in the readout. An HTML entity in it was being
+      drawn literally on the canvas.
+
+**Checks at this stage**
+
+| Check                                                                    | Result                                                                                                |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `e2e/stellarLesson.spec.js`                                              | 9 passed - full 28-step walk, keyboard, pointer, Spanish, phone width, save/resume, evidence export   |
+| `e2e/gwLesson.spec.js`, `investigations`, `instruments`, `accessibility` | 104 passed, no regression from the runner change                                                      |
+| `jest` (whole suite)                                                     | 4418 passed, 0 failed                                                                                 |
+| `budget:check`                                                           | initial **825.8** of an untouched 830.0; deferred 3466.3 of 3500.0 (raised from 3420 with accounting) |
+| `build-investigation-manifest`, `sw:manifest`                            | regenerated, current                                                                                  |
+
+**Honest remaining limitations of B3**
+
+- Step validators are functions, so their feedback messages are not reachable
+  by the translation shadow and a Spanish student sees English validation
+  text. This is a property of the lesson framework and is true of every
+  existing lesson, not something this one introduced.
+- The phase pacing gives the thermally-pulsing AGB 45% of the slider, because
+  that is where the reduction kept the most rows. It is reachable, which it
+  was not, but it is over-represented relative to the eye's interest in it.
+- Step 15's "bounded mass comparison using the existing experimental
+  framework" is run on the models directly. The A/B bench varies initial
+  conditions of an N-body run and measures orbital outcomes; a stellar track
+  is not one of its runs. Forcing it in was the alternative and the package
+  explicitly rules that out. The instructor notes say so in as many words.
+
 ---
 
 ## Deferred checks

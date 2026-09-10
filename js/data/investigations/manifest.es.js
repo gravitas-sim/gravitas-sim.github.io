@@ -278,4 +278,18 @@ export const MANIFEST = [
     gradedCount: 15,
     objectiveCount: 8,
   },
+  {
+    id: 'a-universe-of-stars',
+    title: 'Un universo de estrellas',
+    subtitle:
+      'Tamaño, color y el diagrama H-R, a partir de siete estrellas modeladas',
+    duration: '70-90 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de veintiocho pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
+    thumbnail: 'images/scenarios/stellar-nursery.webp',
+    stepCount: 28,
+    gradedCount: 25,
+    objectiveCount: 7,
+  },
 ];

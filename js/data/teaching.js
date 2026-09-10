@@ -85,6 +85,7 @@ export const INSTRUMENTS = Object.freeze([
   { id: 'pause', href: null },
   { id: 'reliability', href: '/model/#gravity' },
   { id: 'uncertainty', href: null },
+  { id: 'stellarLab', href: '/model/#stars' },
 ]);
 
 /**

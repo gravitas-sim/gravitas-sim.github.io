@@ -2032,12 +2032,18 @@ function wireToolPointer(widget, spec, applied) {
     canvas.addEventListener(end, () => (dragging = false), { signal });
   }
 
+  // An axis can run backwards on the canvas - the H-R diagram's temperature
+  // increases to the LEFT - and the arrow keys have to follow the picture
+  // rather than the slider, or pressing left makes the star cooler on a
+  // diagram whose left-hand side is the hot one.
   const axes = widget.pickAxes || {};
+  const xWay = axes.flipX ? -1 : 1;
+  const yWay = axes.flipY ? -1 : 1;
   const STEPS = {
-    ArrowLeft: [axes.x, -1],
-    ArrowRight: [axes.x, 1],
-    ArrowDown: [axes.y, -1],
-    ArrowUp: [axes.y, 1],
+    ArrowLeft: [axes.x, -xWay],
+    ArrowRight: [axes.x, xWay],
+    ArrowDown: [axes.y, -yWay],
+    ArrowUp: [axes.y, yWay],
   };
   canvas.addEventListener(
     'keydown',

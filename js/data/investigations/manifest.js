@@ -273,4 +273,17 @@ export const MANIFEST = [
     gradedCount: 15,
     objectiveCount: 8,
   },
+  {
+    id: 'a-universe-of-stars',
+    title: 'A Universe of Stars',
+    subtitle: 'Size, colour and the H-R diagram, from seven modelled stars',
+    duration: '70-90 min',
+    level: 'Introductory astronomy',
+    summary:
+      'Three stars, no labels, and a guess about which is biggest. Over twenty-eight steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+    thumbnail: 'images/scenarios/stellar-nursery.webp',
+    stepCount: 28,
+    gradedCount: 25,
+    objectiveCount: 7,
+  },
 ];

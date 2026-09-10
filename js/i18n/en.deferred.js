@@ -2919,6 +2919,12 @@ export const EN_DEFERRED = {
   'stelW.value.mass': '{now} now, {born} at birth',
   'stelW.row.age': 'Age',
   'stelW.row.phase': 'Phase',
+  'stelW.action.pace': 'Change what the age slider paces',
+  'stelW.row.pace': 'The age slider',
+  'stelW.value.paceTime':
+    'Paced by time, logarithmically. How far the handle has moved is how far through the star’s life it is — so almost all of its travel is the main sequence, and everything after it is squeezed into the last sliver.',
+  'stelW.value.pacePhase':
+    'Paced by the track’s own samples, so every phase is reachable. The handle is NOT a clock here: equal moves are not equal times. The age beside it is the real one.',
   'stelW.row.mainSequence': 'Main sequence',
   'stelW.value.mainSequence': '{total} in total, {left} still to come',
   'stelW.value.none': 'none',
@@ -2956,8 +2962,14 @@ export const EN_DEFERRED = {
   'stelW.compare.note':
     'Up to four pinned stars, drawn either on one common scale or each enlarged to fill its own box. The two are not the same picture and the caption says which you are looking at.',
   'stelW.compare.empty': 'Nothing pinned yet. Pin a star in the lab above.',
+  'stelW.compare.anonymous': 'star {n}',
+  'stelW.value.anonymous':
+    'Withheld for this step — all {n} of them. You are being asked to judge by eye first.',
   'stelW.compare.sun': 'the Sun',
   'stelW.compare.magnified': 'enlarged {n}',
+  'stelW.compare.subPixelShort': 'under 1 px',
+  'stelW.row.subPixel': 'The smallest',
+  'stelW.row.withheld': 'The numbers',
   'stelW.compare.subPixel': 'smaller than a pixel here',
   'stelW.compare.trueNote':
     'One scale for every star. Something drawn as a marker is genuinely too small to see beside the others.',
@@ -3006,6 +3018,7 @@ export const EN_DEFERRED = {
     'Stars that have left the main sequence, interstellar dust, binaries, and any composition but solar. All four matter for a real survey and none of them is here.',
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
+  'nb.stellar.title.comparison': '{n} stars compared',
   'nb.stellar.title.model': 'A modelled star',
   'nb.stellar.title.point': 'A point on the H–R diagram',
   'nb.stellar.teff': 'Effective temperature',

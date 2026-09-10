@@ -40,27 +40,36 @@ import {
   xForTemperature,
   yForLuminosity,
 } from './stellar/hr.js';
-import { trackIds, trackSamples, trackBounds } from './stellar/tracks.js';
+import {
+  sampleAtAge,
+  stateAtSample,
+  trackBounds,
+  trackIds,
+  trackSamples,
+} from './stellar/tracks.js';
 import { countByType, fluxAt } from './stellar/population.js';
 import {
-  MODE,
-  SIZE_MODE,
   MAX_PINNED,
+  MODE,
   ORBIT_REFERENCES,
+  PACE,
+  SIZE_MODE,
+  adoptModel,
+  ageForFraction,
+  brightOf,
+  comparison,
   createLab,
+  fractionForAge,
+  midMainSequenceFraction,
+  pin,
+  populationOf,
   selection,
   setCursor,
   setMode,
-  adoptModel,
-  pin,
-  unpin,
-  comparison,
-  trueScaleFor,
-  populationOf,
-  brightOf,
+  setPace,
   snapshotOf,
-  ageForFraction,
-  fractionForAge,
+  trueScaleFor,
+  unpin,
 } from './stellarLab.js';
 
 // -----------------------------------------------------------------------------
@@ -136,13 +145,17 @@ function ensureLab(spec = {}) {
       populationCount: spec.populationCount || 400,
       guides: Boolean(spec.guides),
       regions: spec.regions !== false,
+      pace: spec.pace || PACE.TIME,
     });
+    if (spec.pins) seedPins(lab, spec.pins);
     stampedSpec = JSON.stringify([
       spec.mode,
       spec.guides,
       spec.regions,
       spec.populationSeed,
       spec.populationCount,
+      spec.pins,
+      spec.pace,
     ]);
     return lab;
   }
@@ -152,9 +165,13 @@ function ensureLab(spec = {}) {
     spec.regions,
     spec.populationSeed,
     spec.populationCount,
+    spec.pins,
+    spec.pace,
   ]);
   if (key !== stampedSpec) {
     stampedSpec = key;
+    if (spec.pace && spec.pace !== lab.pace) setPace(lab, spec.pace);
+    if (spec.pins) seedPins(lab, spec.pins);
     if (spec.mode && spec.mode !== lab.mode) setMode(lab, spec.mode);
     if (spec.guides !== undefined) lab.guides = Boolean(spec.guides);
     if (spec.regions !== undefined) lab.regions = spec.regions !== false;
@@ -168,6 +185,51 @@ function ensureLab(spec = {}) {
 export function resetLabForTests() {
   lab = null;
   stampedSpec = '';
+}
+
+/**
+ * Put the stars a step wants onto the comparison stage.
+ *
+ * A step that declares `pins` is setting up a comparison the student is about
+ * to be asked about, so its list replaces whatever was there - it is the
+ * step's stage, not the student's. Steps that want the student's own pins say
+ * nothing and keep them, which is the ordinary case.
+ *
+ * @param {object} state - The lab
+ * @param {Array<{track: string, age: number}>} pins - What to put on the stage
+ */
+function seedPins(state, pins) {
+  unpin(state, true);
+  const previous = {
+    trackId: state.trackId,
+    ageFraction: state.ageFraction,
+    mode: state.mode,
+  };
+  // A step's pins name tracks, so they are pinned as modelled stars whatever
+  // mode the student left the lab in. Pinning while the lab is on the free
+  // cursor pinned the cursor instead - once per entry, all identical.
+  if (state.mode !== MODE.MODEL) setMode(state, MODE.MODEL);
+  for (const want of pins) {
+    state.trackId = want.track;
+    // Three ways to say where on the track, in order of how a lesson tends to
+    // mean it. An age in years is the one that survives a change of pacing,
+    // which is why it is what the lesson uses for anything off the main
+    // sequence; a bare track means the middle of its main sequence.
+    if (Number.isFinite(want.ageYr)) {
+      state.ageFraction =
+        state.pace === PACE.PHASE
+          ? sampleAtAge(want.track, want.ageYr)
+          : fractionForAge(want.track, want.ageYr);
+    } else if (Number.isFinite(want.at)) {
+      state.ageFraction = want.at;
+    } else {
+      state.ageFraction = midMainSequenceFraction(want.track, state.pace);
+    }
+    pin(state);
+  }
+  state.trackId = previous.trackId;
+  state.ageFraction = previous.ageFraction;
+  if (state.mode !== previous.mode) setMode(state, previous.mode);
 }
 
 /** The live lab, for tests and for a bridge. @returns {?object} state */
@@ -470,6 +532,12 @@ function drawStar(g, cx, cy, radiusPx, teffK, colors) {
   return false;
 }
 
+/** The age at a slider position, under whichever pacing the lab is using. */
+function sampleAgeFor(state, fraction) {
+  const at = stateAtSample(state.trackId, fraction);
+  return at ? at.ageYr : NaN;
+}
+
 /** The plot rectangle the H-R diagram was last drawn in. @type {?object} */
 let lastPlot = null;
 
@@ -681,7 +749,13 @@ const STELLAR_LAB = {
       step: 0.002,
       value: 0.947,
       decimals: 3,
-      format: v => years(ageForFraction(lab?.trackId ?? 'm100', v)),
+      // Read from the lab rather than recomputed: under phase pacing the
+      // handle is not a logarithmic age, and printing one here would be a
+      // number that does not match the readout underneath.
+      format: v =>
+        lab && lab.pace === PACE.PHASE
+          ? years(sampleAgeFor(lab, v))
+          : years(ageForFraction(lab?.trackId ?? 'm100', v)),
     },
     {
       id: 'teff',
@@ -740,6 +814,14 @@ const STELLAR_LAB = {
         },
       },
     ];
+    if (spec.paceControl) {
+      list.push({
+        id: 'pace',
+        get label() {
+          return t('stelW.action.pace');
+        },
+      });
+    }
     if (spec.compare !== false) {
       list.push({
         id: 'pin',
@@ -779,7 +861,9 @@ const STELLAR_LAB = {
   },
 
   // Arrow keys step these two, so the diagram is drivable without a mouse.
-  pickAxes: { x: 'teff', y: 'lum' },
+  // flipX because temperature increases to the left here: left has to mean
+  // hotter for the keys as well as for the eye.
+  pickAxes: { x: 'teff', y: 'lum', flipX: true },
 
   /**
    * Move the cursor to a point on the diagram.
@@ -811,7 +895,12 @@ const STELLAR_LAB = {
 
   act(id, v, spec = {}) {
     const state = syncFromValues(v, spec);
-    if (id === 'mode') {
+    if (id === 'pace') {
+      setPace(state, state.pace === PACE.PHASE ? PACE.TIME : PACE.PHASE);
+      // The handle means a different thing now, so it moves to wherever the
+      // star it was already showing sits under the new pacing.
+      v.age = state.ageFraction;
+    } else if (id === 'mode') {
       setMode(state, state.mode === MODE.FREE ? MODE.MODEL : MODE.FREE);
     } else if (id === 'guides') {
       state.guides = !state.guides;
@@ -905,6 +994,14 @@ const STELLAR_LAB = {
       rows.push({
         label: t('stelW.row.phase'),
         value: t(`stellar.phase.${sel.phase}`),
+      });
+      rows.push({
+        label: t('stelW.row.pace'),
+        value: t(
+          state.pace === PACE.PHASE
+            ? 'stelW.value.pacePhase'
+            : 'stelW.value.paceTime'
+        ),
       });
       rows.push({
         label: t('stelW.row.mainSequence'),
@@ -1048,18 +1145,30 @@ const STELLAR_COMPARE = {
       format: v => t(v >= 0.5 ? 'stelW.on' : 'stelW.off'),
     },
   ],
-  actions: [
-    {
-      id: 'clear',
-      get label() {
-        return t('stelW.action.clear');
+  actions(spec = {}) {
+    const list = [
+      {
+        id: 'clear',
+        get label() {
+          return t('stelW.action.clear');
+        },
       },
-    },
-  ],
+    ];
+    if (spec.capture) {
+      list.push({
+        id: 'capture',
+        get label() {
+          return t('stelW.action.capture');
+        },
+      });
+    }
+    return list;
+  },
 
   act(id, v, spec = {}) {
     const state = ensureLab(spec);
     if (id === 'clear') unpin(state, true);
+    else if (id === 'capture') captureLab(state);
   },
 
   draw(canvas, v, _ctx, spec = {}) {
@@ -1136,8 +1245,15 @@ const STELLAR_COMPARE = {
       g.fillStyle = colors.muted;
       g.textAlign = 'center';
       g.textBaseline = 'top';
+      // A step can ask for the stars to be unlabelled: the opening prediction
+      // shows three of them and asks which is hottest before any number is on
+      // screen to read it off.
       g.fillText(
-        star.isSun ? t('stelW.compare.sun') : `${solar(star.radiusSun, 'R☉')}`,
+        star.isSun
+          ? t('stelW.compare.sun')
+          : spec.anonymous
+            ? t('stelW.compare.anonymous', { n: i + 1 })
+            : `${solar(star.radiusSun, 'R☉')}`,
         cx,
         labelTop
       );
@@ -1152,7 +1268,9 @@ const STELLAR_COMPARE = {
           labelTop + 11
         );
       } else if (!drewDisc) {
-        g.fillText(t('stelW.compare.subPixel'), cx, labelTop + 11);
+        // A slot is a quarter of a narrow canvas, so this has to be a mark
+        // rather than a sentence. The sentence is in the readout.
+        g.fillText(t('stelW.compare.subPixelShort'), cx, labelTop + 11);
       }
       g.restore();
     });
@@ -1229,6 +1347,27 @@ const STELLAR_COMPARE = {
         ),
       },
     ];
+    if (spec.anonymous) {
+      // Withheld on purpose, and said once rather than once per star.
+      out.push({
+        label: t('stelW.row.withheld'),
+        value: t('stelW.value.anonymous', { n: rows.length }),
+        emphasis: true,
+      });
+      return out;
+    }
+    // Whether anything is drawn as a marker is a fact about the radii, not
+    // about the canvas: on a stage a couple of hundred pixels across, a star
+    // under a two-hundredth of the largest cannot reach one pixel.
+    const radii = rows.map(r => r.radiusSun).filter(Number.isFinite);
+    const extreme =
+      radii.length > 1 && Math.min(...radii) / Math.max(...radii) < 1 / 200;
+    if (state.sizeMode === SIZE_MODE.TRUE && extreme) {
+      out.push({
+        label: t('stelW.row.subPixel'),
+        value: t('stelW.compare.subPixel'),
+      });
+    }
     rows.forEach((r, i) => {
       out.push({
         label: t('stelW.row.star', { n: i + 1 }),
@@ -1286,7 +1425,25 @@ const STELLAR_POPULATION = {
       format: v => (10 ** v).toExponential(1),
     },
   ],
-  actions: [],
+  actions(spec = {}) {
+    return spec.capture
+      ? [
+          {
+            id: 'capture',
+            get label() {
+              return t('stelW.action.capture');
+            },
+          },
+        ]
+      : [];
+  },
+
+  act(id, v, spec = {}) {
+    const state = ensureLab(spec);
+    state.thresholdFlux = 10 ** (v.threshold ?? -4);
+    state.populationView = v.view >= 0.5 ? 'bright' : 'all';
+    if (id === 'capture') captureLab(state);
+  },
 
   draw(canvas, v, _ctx, spec = {}) {
     const state = ensureLab(spec);
