@@ -163,6 +163,7 @@ import {
   watchSonification,
 } from './audio.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { stellarStateFor, spectralType } from './stellar/state.js';
 import {
   initChart,
   updateChart,
@@ -516,7 +517,12 @@ if (typeof window !== 'undefined') {
 // Object inspection functions - copied from working original file
 const PLANET_RADIUS = 5; // From physics.js
 const GAS_GIANT_RADIUS = 8; // From physics.js
-const STAR_OBJ_RADIUS = 20; // From physics.js
+// 10, matching physics.js. It said 20 here, and had since the inspector was
+// copied out of the original file, so every star's radius row was reported at
+// half its real value in both solar radii and kilometres - and the surface
+// gravity and escape velocity derived from it were wrong by four and by the
+// square root of two. The other four constants in this block do match.
+const STAR_OBJ_RADIUS = 10; // From physics.js
 const NEUTRON_STAR_RADIUS = 3; // From physics.js
 const WHITE_DWARF_RADIUS = 8; // From physics.js
 const ASTEROID_RADIUS = 2; // From physics.js
@@ -623,89 +629,122 @@ const formatOrbitalPeriod = days => {
 };
 
 const getStarInfo = star => {
-  const massInSuns = star.massInSuns || star.mass / SOLAR_MASS_UNIT;
-  const radiusInSuns = star.radius / STAR_OBJ_RADIUS;
-  const radiusInKm = radiusInSuns * 696340; // Solar radius in km
-  const massInKg = massInSuns * 1.989e30; // Solar mass in kg
+  // One description, shared with the renderer, the habitable-zone ring and the
+  // light curve. This function used to compute its own temperature from a
+  // linear fit in mass, its own luminosity from a single power law and its own
+  // spectral type from mass thresholds, and it ignored every measured value a
+  // star carried - so TRAPPIST-1's card said 3350 K while the habitable zone
+  // drawn around it in the same frame used its measured 2566 K.
+  const state = stellarStateFor(star, SOLAR_MASS_UNIT);
+  const massInSuns = state.currentMassSun;
+  const massInKg = massInSuns * 1.989e30;
 
-  // Real surface temperature estimate based on mass
-  const surfaceTemperature = 3000 + (massInSuns - 0.2) * 4000; // K
+  // Two radii, and they are not the same thing. The photospheric radius is
+  // physical and comes from the luminosity and the temperature; the simulation
+  // radius is what collisions use and is a made-up scale. The card shows the
+  // physical one, because that is what "radius" means about a star.
+  const radiusInSuns = state.radiusSun;
+  const radiusInKm = radiusInSuns * 696340;
+  const radiusInM = radiusInKm * 1000;
 
-  // Real luminosity in solar units
-  const luminosity = Math.pow(massInSuns, 3.5); // Solar luminosity units
-
-  // Real surface gravity (m/s²)
   const G = 6.6743e-11;
-  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
-
-  // Real escape velocity (m/s)
-  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-
-  // Real orbital period at 1 AU (if applicable)
+  const surfaceGravity = (G * massInKg) / (radiusInM * radiusInM);
+  const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
   const orbitalPeriodDays = realOrbitalPeriodDays(star);
+  const type = spectralType(state.teffK);
 
-  // Calculate stellar age based on mass and main sequence lifetime
-  // More massive stars have shorter lifetimes
-  // Use a deterministic calculation based on mass for consistent age
-  const mainSequenceLifetime = Math.pow(massInSuns, -2.5) * 10; // Billion years, rough approximation
-  const age = mainSequenceLifetime * 0.3; // Assume star is 30% through its main sequence lifetime
+  /** Mark a number the model guessed rather than was told. */
+  const maybe = (field, text) =>
+    state.estimatedFields.includes(field)
+      ? `${text} <span class="inspector-estimated">${t('inspector.estimated')}</span>`
+      : text;
 
-  let spectralType = 'M';
-  if (massInSuns > 2.1) spectralType = 'O';
-  else if (massInSuns > 1.4) spectralType = 'B';
-  else if (massInSuns > 1.04) spectralType = 'A';
-  else if (massInSuns > 0.8) spectralType = 'F';
-  else if (massInSuns > 0.45) spectralType = 'G';
-  else if (massInSuns > 0.08) spectralType = 'K';
+  const stats = [
+    {
+      label: t('inspector.stat.mass'),
+      value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(massInKg, 'kg')})`,
+    },
+    {
+      label: t('inspector.stat.radius'),
+      tooltipKey: 'radius',
+      value: maybe(
+        'radiusSun',
+        `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`
+      ),
+    },
+    {
+      label: t('inspector.stat.surfaceTemperature'),
+      value: maybe('teffK', withUnit(state.teffK, 'K')),
+    },
+    {
+      label: t('inspector.stat.luminosity'),
+      value: maybe(
+        'luminositySun',
+        solarHTML(formatNumber(state.luminositySun), 'L')
+      ),
+    },
+    {
+      label: t('inspector.stat.surfaceGravity'),
+      value: withUnit(surfaceGravity, 'm/s²'),
+    },
+    {
+      label: t('inspector.stat.escapeVelocity'),
+      value: withUnit(escapeVelocity / 1000, 'km/s'),
+    },
+    { label: t('inspector.stat.spectralType'), value: type },
+  ];
+
+  // Only where the star is actually on the main sequence. A red giant has a
+  // main-sequence lifetime in its past, and printing one as though it were
+  // ahead of the star is the kind of small false statement this pass exists to
+  // remove.
+  if (state.phase === 'main-sequence' || state.phase === 'unknown') {
+    stats.push({
+      label: t('inspector.stat.lifespan'),
+      value: maybe(
+        'luminositySun',
+        withUnit(state.mainSequenceYr / 1e9, 'billion years')
+      ),
+    });
+  } else {
+    stats.push({
+      label: t('inspector.stat.phase'),
+      value: t(`stellar.phase.${state.phase}`),
+    });
+  }
+
+  if (Number.isFinite(state.ageYr)) {
+    stats.push({
+      label: t('inspector.stat.age'),
+      value: withUnit(state.ageYr / 1e6, 'million years'),
+    });
+  }
+
+  stats.push(
+    {
+      label: t('inspector.stat.orbitalPeriod'),
+      value: formatOrbitalPeriod(orbitalPeriodDays),
+    },
+    {
+      label: t('inspector.stat.position'),
+      value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})`,
+    },
+    {
+      label: t('inspector.stat.velocity'),
+      value: formatSpeed(Math.hypot(star.vel.x, star.vel.y)),
+    }
+  );
 
   return {
     icon: '⭐',
     title: star.name || 'Star',
-    stats: [
-      {
-        label: t('inspector.stat.mass'),
-        value: `${solarHTML(formatNumber(massInSuns))} (${withUnit(massInKg, 'kg')})`,
-      },
-      {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`,
-      },
-      {
-        label: t('inspector.stat.surfaceTemperature'),
-        value: withUnit(surfaceTemperature, 'K'),
-      },
-      {
-        label: t('inspector.stat.luminosity'),
-        value: solarHTML(formatNumber(luminosity), 'L'),
-      },
-      {
-        label: t('inspector.stat.surfaceGravity'),
-        value: withUnit(surfaceGravity, 'm/s²'),
-      },
-      {
-        label: t('inspector.stat.escapeVelocity'),
-        value: withUnit(escapeVelocity / 1000, 'km/s'),
-      },
-      { label: t('inspector.stat.spectralType'), value: spectralType },
-      {
-        label: t('inspector.stat.lifespan'),
-        value: withUnit(age, 'billion years'),
-      },
-      {
-        label: t('inspector.stat.orbitalPeriod'),
-        value: formatOrbitalPeriod(orbitalPeriodDays),
-      },
-      {
-        label: t('inspector.stat.position'),
-        value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})`,
-      },
-      {
-        label: t('inspector.stat.velocity'),
-        value: formatSpeed(Math.hypot(star.vel.x, star.vel.y)),
-      },
-    ],
-    description: `A ${spectralType}-type star with ${massInSuns > 3 ? 'high' : massInSuns > 0.8 ? 'moderate' : 'low'} mass. ${massInSuns > 20 ? 'This massive star will likely end its life as a black hole.' : massInSuns > 8 ? 'This star will become a neutron star or black hole.' : 'This star will become a white dwarf.'}`,
+    stats,
+    description: t(
+      state.estimated
+        ? 'inspector.star.describedFromMass'
+        : 'inspector.star.describedFromModel',
+      { type, class: t(`stellar.class.${state.luminosityClass}`) }
+    ),
   };
 };
 

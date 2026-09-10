@@ -223,6 +223,28 @@ const BODY_FIELDS = [
   'massInSuns',
   'massInEarths',
   'baseColor',
+  // The modelled stellar properties. Every one is null on a star nobody has
+  // modelled - which is every star the sandbox generates - and packBody drops
+  // nulls, so this costs a generated star nothing and only a star built from a
+  // catalogue or an evolutionary track pays for them.
+  //
+  // Additive and optional, so no version bump: a link made before these
+  // existed simply has none of them and restores with nulls, which is the
+  // correct description of a star nobody modelled. A link made after them and
+  // opened by a build that predates them would have them dropped by that
+  // build's own allowlist, losing the modelling and keeping the star. Neither
+  // direction can produce a wrong number, which is the test for whether a
+  // field needs a version.
+  //
+  // `initialMassInSuns` is deliberately absent: nothing in the sandbox changes
+  // a star's mass in place - a merger builds a new object - so it is exactly
+  // `massInSuns` on restore, and set_state fills it in from there.
+  'temperature',
+  'luminosityInSuns',
+  'radiusInSuns',
+  'spectralType',
+  'stellarPhase',
+  'ageYr',
 ];
 
 /**

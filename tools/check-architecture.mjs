@@ -103,6 +103,11 @@ const LAYERS = [
       // seeded noise and an overlap. Numbers in, numbers out, and the ones the
       // validation tests import directly - the same standing as js/orbital.js.
       /^js\/gw\//,
+      // The stellar model: the Stefan-Boltzmann relation, the main-sequence
+      // estimates, the shared description of a star, and the query layer over
+      // the bundled MIST tracks. Pure functions over numbers, and the thing
+      // js/habitability.js and the inspector both have to agree with.
+      /^js\/stellar\//,
       /^js\/data\//,
     ],
   },

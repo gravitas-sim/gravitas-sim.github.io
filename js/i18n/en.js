@@ -429,11 +429,6 @@ export const EN = {
   },
 
   // --- Data export -----------------------------------------------------------
-  'export.empty': 'There is nothing recorded to export yet.',
-  'export.failed': 'Could not build that file.',
-  'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
-  'export.truncated':
-    'Exported the first {n} rows: the recording was larger than one file.',
 
   // --- Scenario card and sonification ----------------------------------------
   'scenarioCard.notice.mergingDisabled': 'Object merging is disabled',
@@ -1103,8 +1098,6 @@ export const EN = {
   'rail.sub.share': 'Capture',
 
   // --- The lesson engine's own chrome ---------------------------------------
-  'inv.link.unknown': 'That investigation link does not match a lesson.',
-  'inv.load.failed': 'That lesson could not be loaded. Try again.',
   // --- Shortcuts, panels and the rest of the interface -----------------------
   'shortcut.pause': 'Pause / resume',
   'shortcut.stepBack': 'Step back one recorded frame',
@@ -1141,12 +1134,6 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'activity.error.noActivity':
-    'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
-  'activity.error.noFormat':
-    'That activity has no “{id}” format. Choose one from the teaching page.',
-  'activity.error.notUsable':
-    'That activity could not be opened: the investigation behind it has changed too much. Open the full investigation instead.',
   'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
   'canvas.sizeDisclosure.detail':
     'Canvas diameters are illustrative and use a compressed scale. Do not infer physical size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
@@ -1261,11 +1248,7 @@ export const EN = {
   'rv.survey.enable': 'Synthetic observing run',
   'rv.survey.velocityLabel': 'Radial velocity',
   'rv.survey.measurementsLabel': 'Measurements',
-  'welcome.scenarioGone': 'That scenario is no longer available.',
-  'welcome.shownAgain': 'It will be shown again next time',
-  'welcome.showAgain': 'Show this again on my next visit',
   'astrometry.keepObserving': 'Keep observing…',
-  'export.downloadCsv': 'Download CSV',
   'lightCurve.relativeBrightness': 'Relative Brightness',
   'frame.barycenter': 'Barycenter',
   'chrome.canvas.label': 'Gravitational simulation',
@@ -1336,37 +1319,6 @@ export const EN = {
   'tutorial.done': 'You are set',
 
   // --- The front door --------------------------------------------------------
-  'welcomeCard.sandbox.eyebrow': 'Free exploration',
-  'welcomeCard.sandbox.title': 'Sandbox',
-  'welcomeCard.sandbox.text':
-    'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
-  'welcomeCard.sandbox.cta': 'Enter the sandbox',
-  'welcomeCard.investigations.eyebrow': 'Guided lessons',
-  'welcomeCard.investigations.title': 'Investigations',
-  'welcomeCard.investigations.text':
-    'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
-  'welcomeCard.investigations.cta': 'Browse investigations',
-  'welcomeCard.instructors.eyebrow': 'For teaching',
-  'welcomeCard.instructors.title': 'Instructors',
-  'welcomeCard.instructors.text':
-    'Instructor guides, learning objectives, answer keys and a curriculum map for introductory astronomy courses.',
-  'welcomeCard.instructors.cta': 'Instructor resources',
-  'welcomeAudience.students.title': 'For students',
-  'welcomeAudience.students.text':
-    'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
-  'welcomeAudience.instructors.title': 'For instructors',
-  'welcomeAudience.instructors.text':
-    'Six guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
-  'welcomeAudience.curious.title': 'For the curious',
-  'welcomeAudience.curious.text':
-    'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
-  'welcomeLink.teaching.label': 'Teaching with Gravitas',
-  'welcomeLink.teaching.note':
-    'How it is used in a course, with six demonstrations you can run.',
-  'welcomeLink.model.label': 'How Gravitas models the universe',
-  'welcomeLink.model.note':
-    'What is calculated, what is approximated, and what is only drawn.',
-  'welcomeLink.instructors.note': 'Guides, answer keys and a curriculum map.',
 
   // --- Lesson instruments ----------------------------------------------------
   // The labels, axis titles and preset names on the widgets embedded in the
@@ -1398,13 +1350,6 @@ export const EN = {
   'energyChart.totalEnergy': 'Total Energy',
 
   // --- Tidal comparison table ------------------------------------------------
-  'tideP.moonOnEarth': 'the Moon, on the Earth',
-  'tideP.sunOnEarth': 'the Sun, on the Earth',
-  'tideP.earthOnMoon': 'the Earth, on the Moon',
-  'tideP.jupiterOnIo': 'Jupiter, on Io',
-  'tideP.starOnHotJupiter': 'a Sun-like star, on a hot Jupiter at 0.05 AU',
-  'tideP.bhOnSunFar': 'a 10 M☉ black hole, on the Sun at one AU',
-  'tideP.bhOnSunNear': 'the same black hole, on the Sun at three million km',
 
   // --- Lesson panel chrome ---------------------------------------------------
   // Kepler's Laws steps 5 and 10 are their own step types - an ellipse the
@@ -1639,4 +1584,25 @@ export const EN = {
   'sound.state.blocked': 'blocked by the browser',
   'sound.state.ready': 'on, nothing playing',
   'sound.state.playing': 'playing',
+  // ---------------------------------------------------------------------------
+  // The shared stellar description (js/stellar/, the inspector)
+  // ---------------------------------------------------------------------------
+  'inspector.estimated': '(estimated)',
+  'inspector.stat.phase': 'Evolutionary phase',
+  'inspector.stat.age': 'Age',
+  'inspector.star.describedFromMass':
+    'A {type}-type star. Everything on this card except the mass was estimated from that mass on the assumption that the star is on the main sequence, because nothing has told the simulation otherwise.',
+  'inspector.star.describedFromModel':
+    'A {type}-type {class}. Its temperature and luminosity were supplied by a model or a catalogue rather than guessed from its mass, and its radius follows from the two.',
+  // The luminosity class words. Eager, unlike the phase names beside them in
+  // the deferred catalogue: every star's inspector card names its class, and
+  // the first click of a session must not show a message id. A phase name is
+  // only read for a star something has modelled, which cannot happen before
+  // the deferred catalogue has loaded.
+  'stellar.class.supergiant': 'supergiant',
+  'stellar.class.giant': 'giant',
+  'stellar.class.subgiant': 'subgiant',
+  'stellar.class.dwarf': 'main-sequence star',
+  'stellar.class.degenerate': 'degenerate remnant',
+  'stellar.class.unknown': 'star',
 };

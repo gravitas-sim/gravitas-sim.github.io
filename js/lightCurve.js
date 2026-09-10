@@ -45,6 +45,7 @@ import { timeUnitSeconds } from './units.js';
 // Aliased: `t` is already the chart palette in this module, and a translator
 // called on a colour object is a crash rather than a wrong word.
 import { t as translate } from './i18n/index.js';
+import { stellarStateFor } from './stellar/state.js';
 
 let enabled = false;
 // The observer used to live here. It now lives in js/observerGeometry.js,
@@ -330,23 +331,31 @@ export function isLightCurveEnabled() {
 
 // ── Physical radius helpers ─────────────────────────────────────────
 
+/**
+ * The photospheric radius, in solar radii.
+ *
+ * From the shared description rather than from a local mass-radius power law.
+ * The two disagreed: this module used M^0.8 and the habitable-zone ring used a
+ * temperature and a luminosity, so a transit depth and a zone drawn around the
+ * same star were computed from two different stars. The shared description
+ * derives the radius from the luminosity and the temperature by the
+ * Stefan-Boltzmann relation, which is exact, and falls back to a main-sequence
+ * estimate only when there is nothing but a mass - and says which it did.
+ *
+ * @param {Object} star - A simulation star
+ * @returns {number} Radius in solar radii
+ */
 function stellarPhysicalRadius(star) {
-  // An explicit radius always wins: the mass-radius relation below is a
-  // main-sequence approximation, and a scenario that names a real star knows
-  // better than it does.
-  if (Number.isFinite(star.radiusInSuns) && star.radiusInSuns > 0) {
-    return star.radiusInSuns;
-  }
-  const m = star.massInSuns || 1;
-  return Math.pow(Math.max(0.1, m), 0.8); // solar radii, MS approx
+  return stellarStateFor(star, 1000).radiusSun;
 }
 
+/**
+ * Bolometric luminosity in solar units, from the same description.
+ * @param {Object} star - A simulation star
+ * @returns {number} Luminosity in solar units
+ */
 function stellarLuminosity(star) {
-  if (Number.isFinite(star.luminosityInSuns) && star.luminosityInSuns > 0) {
-    return star.luminosityInSuns;
-  }
-  const m = star.massInSuns || 1;
-  return Math.pow(Math.max(0.1, m), 3.5);
+  return stellarStateFor(star, 1000).luminositySun;
 }
 
 function physicalRadiusRatio(obj, Rs_phys) {

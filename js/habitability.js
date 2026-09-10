@@ -228,72 +228,44 @@ export function habitableZoneStatus(distanceAU, bounds) {
 }
 
 // --- Stars whose luminosity nobody measured ----------------------------------
+//
+// These three moved to js/stellar/, which is where the one description of a
+// star lives now. They are re-exported here because three of this module's
+// callers reach for them by this name and because the habitable-zone model is
+// where the main-sequence assumption behind them is most consequential - a zone
+// drawn around a red giant from a main-sequence luminosity would be a picture
+// of nothing.
 
-/**
- * A luminosity for a star that does not carry one.
- *
- * An approximation, and labeled as one. The main-sequence mass-luminosity
- * relation is a broken power law rather than a single exponent, so the
- * piecewise form below is used; it is still only good to a factor of order two
- * for the lowest masses, and it says nothing at all about a star that has left
- * the main sequence. Any star with a measured luminosity should use it instead.
- *
- * @param {number} massSolar - Stellar mass in solar masses
- * @returns {number} Estimated luminosity in solar units
- */
-export function estimateLuminosityFromMass(massSolar) {
-  const m = Number(massSolar);
-  if (!(m > 0)) return NaN;
-  if (m < 0.43) return 0.23 * m ** 2.3;
-  if (m < 2) return m ** 4;
-  if (m < 55) return 1.4 * m ** 3.5;
-  return 32000 * m;
-}
-
-/**
- * An effective temperature for a star that does not carry one.
- * @param {number} massSolar - Stellar mass in solar masses
- * @returns {number} Estimated effective temperature in K
- */
-export function estimateTeffFromMass(massSolar) {
-  const m = Number(massSolar);
-  if (!(m > 0)) return NaN;
-  // A rough main-sequence fit, adequate for placing a zone but no more.
-  return 5780 * m ** 0.55;
-}
+export {
+  estimateLuminosityFromMass,
+  estimateTeffFromMass,
+} from './stellar/mainSequence.js';
+import { stellarStateFor } from './stellar/state.js';
 
 /**
  * Read the properties the habitable-zone model needs off a simulation star.
  *
- * Measured values win. A star built by a scenario from real data carries
- * luminosityInSuns and temperature; a star a user dropped on the canvas carries
- * only a mass, and gets estimates.
+ * A thin adapter over js/stellar/state.js, kept at this name and shape because
+ * the lighting model, the star renderer and the habitable-zone ring all call it
+ * and none of them wants the whole state object. Everything it reports comes
+ * from the shared description, so a star cannot be one temperature here and a
+ * different one in the inspector, which is what used to happen.
  *
  * @param {Object} star - A simulation star object
  * @param {number} solarMassUnit - Mass units in one solar mass
  * @returns {Object} luminositySolar, teffK, and whether either was estimated
  */
 export function stellarPropertiesFor(star, solarMassUnit = 1000) {
-  const massSolar =
-    Number.isFinite(star?.massInSuns) && star.massInSuns > 0
-      ? star.massInSuns
-      : (star?.mass ?? 0) / solarMassUnit;
-
-  const measuredL =
-    Number.isFinite(star?.luminosityInSuns) && star.luminosityInSuns > 0
-      ? star.luminosityInSuns
-      : null;
-  const measuredT =
-    Number.isFinite(star?.temperature) && star.temperature > 0
-      ? star.temperature
-      : null;
-
+  const state = stellarStateFor(star, solarMassUnit);
   return {
-    massSolar,
-    luminositySolar: measuredL ?? estimateLuminosityFromMass(massSolar),
-    teffK: measuredT ?? estimateTeffFromMass(massSolar),
-    luminosityEstimated: measuredL === null,
-    teffEstimated: measuredT === null,
+    massSolar: state.currentMassSun,
+    luminositySolar: state.luminositySun,
+    teffK: state.teffK,
+    radiusSolar: state.radiusSun,
+    luminosityEstimated: state.estimatedFields.includes('luminositySun'),
+    teffEstimated: state.estimatedFields.includes('teffK'),
+    /** The shared description this came out of, for a caller that wants it all. */
+    state,
   };
 }
 

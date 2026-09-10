@@ -191,7 +191,7 @@ Not started. Recorded here so the dependency order is not lost.
 
 | Prompt | Deliverable | Depends on |
 |--------|-------------|------------|
-| B1 | Shared stellar-state representation and curated MIST subset | - |
+| B1 | Shared stellar-state representation and curated MIST subset | **done** |
 | B2 | Stellar Lab: H-R diagram, appearance, comparison, population | B1 |
 | B3 | 28-step "A universe of stars" | B2 |
 | B4 | Evolutionary playback and endpoint visuals | B2 |
@@ -199,6 +199,103 @@ Not started. Recorded here so the dependency order is not lost.
 
 After B3, the first stellar investigation must be walked from launch through
 evidence export before B4 begins.
+
+### B1 - the shared stellar foundation: done
+
+**The data.** `tools/build-stellar-tracks.mjs` reduces seven MIST v1.2 tracks -
+0.2, 0.5, 1, 2, 5, 10 and 20 solar masses at solar composition with no rotation
+- from ~7,700 rows of 77 columns to 2,316 rows of four, into
+`js/data/stellar/mistTracks.js` (49 KB, deferred). Every mass is a grid point,
+so nothing is interpolated at build time. The source URL, its SHA-256, the
+composition, the rotation prescription, the citation MIST asks for and the
+redistribution position are all recorded. `npm run stellar:check` verifies the
+committed module and, where the 100 MB source is cached, regenerates it byte
+for byte.
+
+- The ten primary equivalent evolutionary points are pinned, so the named phase
+  boundaries are exactly MIST's. Thinning is bounded at 0.004 dex and the worst
+  error it introduced is recorded per track.
+- The build **measures** the Stefan-Boltzmann closure across all 7,654 source
+  rows before licensing itself to derive the radius rather than store it: the
+  implied solar temperature is 5772.16 K with a spread of 4e-11 K.
+- It refuses to write if the reduction loses too much, if a primary EEP is
+  thinned away, if the cached download's checksum is wrong, or if the
+  Stefan-Boltzmann closure moves.
+
+**The API.** `js/stellar/geometry.js` (the exact relation, three ways),
+`js/stellar/mainSequence.js` (the estimates, labelled as estimates),
+`js/stellar/tracks.js` (`stateAtAge`, `stateAtEep`, `mainSequenceAt`,
+`trackBounds`, `trackSamples`, `nearestTrack`) and `js/stellar/state.js` (the
+shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
+`spectralType`). All domain-layer and pure.
+
+**The integration.**
+
+- `js/habitability.js` `stellarPropertiesFor` is now an adapter over the shared
+  description and reports the radius too.
+- `js/lightCurve.js` no longer has its own mass-radius power law.
+- The inspector's star card is rebuilt on the shared description: measured
+  values are used where they exist and guessed ones are marked *(estimated)*.
+- The star constructor no longer invents a `baseColor`, so an authored colour
+  is distinguishable from a generated one - and a generated star is coloured by
+  its temperature, in the 2D renderer, the trails and the 3D view.
+- The colour memo is keyed on the temperature, so a temperature change at
+  fixed mass repaints.
+- Six modelled fields are persisted and carried in a share link, additively:
+  an older link restores with nulls, which is the right description of a star
+  nobody modelled.
+- No stellar aging in the sandbox. Nothing advances a star's age on the
+  simulation clock.
+
+**Defects found and fixed on the way**
+
+- `js/ui.js` declared `STAR_OBJ_RADIUS = 20` against `js/physics.js`'s 10, so
+  every star's radius row was half its real value and the surface gravity and
+  escape velocity derived from it were wrong by four and by root two. The Sun's
+  card now reads 1.00 R☉, 274 m/s² and 617 km/s, all of which are right.
+- The inspector ignored every measured value a star carried. TRAPPIST-1's card
+  said 3350 K while the habitable-zone ring drawn around it in the same frame
+  used its measured 2566 K. Both now say 2570 K.
+- Spectral type came from mass thresholds, so a 3000 K solar-mass red giant was
+  a G star. It comes from temperature now.
+- **Debt paid:** `e2e/golden/world-construction.json` had been stale since
+  `6b19b22`, which flipped the default of `show_conservation_diagnostics` and
+  changed the settings digest of 52 of 59 scenarios. It went unnoticed because
+  that commit's gate was deferred. Regenerated; the only field that moved is
+  the settings hash, and every body count, mass, momentum and camera is
+  identical.
+
+**Checks run**
+
+| Check | Result |
+|-------|--------|
+| `jest` | 4323 passed, 122 suites (94 of them new here) |
+| `tools/validate-physics.mjs` | 243 checks, 243 passed |
+| `e2e` inspector, displayedSizes, observing, sandbox, sharing, scenarioContract, worldConstruction | 70 passed |
+| `stellar:check`, `gw:check` | both regenerate byte for byte |
+| `lint`, `format:check`, `check-architecture` (248 modules), `check-links`, `docs:check` | green |
+| `budget:check` | initial **830.0 of 830.0 KB**, deferred 3286.2 of 3350.0 |
+
+**Warning for B2: the initial download has zero headroom.** It was paid for by
+moving 63 strings out of the eager catalogue - the front door, the export
+dialog, the activity bridge, the tidal model and the stellar phase names - and
+there is nothing cheap left. The next eager byte needs a deferral first. The
+identified candidate is `js/scenarioBrowser.js` (4.9 KB eager, opened from a
+button, already imported by two deferred modules); deferring it means main.js
+wiring a lazy handler for the gallery button.
+
+**Honest limitations of B1**
+
+- The 1 solar-mass track is a grid model, not a solar-calibrated one: at
+  4.57 Gyr it gives 1.108 L☉ and 5849 K rather than exactly 1 and 5772.
+- The helium flash and the thermal pulses are traversed faster than a stored
+  age can resolve. 212, 201 and 105 samples on the 1, 2 and 5 solar-mass tracks
+  cannot be addressed by age; `trackBounds().unreachableByAge` reports the
+  count and `stateAtEep` reaches them.
+- MIST states a citation requirement and no explicit redistribution licence.
+  The bundle is a heavily reduced derived subset, fully attributed, and the
+  build reproduces it from their download in one command.
+- Nothing yet *uses* the tracks in the interface. That is B2.
 
 ---
 
@@ -248,4 +345,5 @@ Checks run at this point, with results:
 `npm run release:check`. To be run at the final integration checkpoint after
 package B.
 
-Next action: package B, prompt 1 - the shared stellar-model foundation.
+Next action: package B, prompt 2 - the Stellar Lab. Its first task is finding
+room in the initial download; see the warning under B1.

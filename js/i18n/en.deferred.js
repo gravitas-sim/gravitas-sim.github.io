@@ -2776,4 +2776,85 @@ export const EN_DEFERRED = {
   'gwW.row.notDetection': 'What that is not',
   'gwW.value.notDetection':
     'A normalised overlap, and nothing more. It is not a signal-to-noise ratio, a probability, or evidence that anything was detected — establishing that needs a template bank, a background estimate and a trials factor, none of which are here.',
+
+  // ---------------------------------------------------------------------------
+  // More prose moved out of the start-up download
+  // ---------------------------------------------------------------------------
+  // The front door, the tidal-disruption model, the activity bridge, the export
+  // dialog and the lesson engine are all loaded on demand, so their strings
+  // were downloaded by every visitor in order not to be read. The stellar phase
+  // and class names went with them: they are read only when an inspector card
+  // is built for a star, and the inspector primes this catalogue first.
+  'export.empty': 'There is nothing recorded to export yet.',
+  'export.failed': 'Could not build that file.',
+  'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
+  'export.truncated':
+    'Exported the first {n} rows: the recording was larger than one file.',
+  'inv.link.unknown': 'That investigation link does not match a lesson.',
+  'inv.load.failed': 'That lesson could not be loaded. Try again.',
+  'activity.error.noActivity':
+    'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
+  'activity.error.noFormat':
+    'That activity has no “{id}” format. Choose one from the teaching page.',
+  'activity.error.notUsable':
+    'That activity could not be opened: the investigation behind it has changed too much. Open the full investigation instead.',
+  'welcome.scenarioGone': 'That scenario is no longer available.',
+  'welcome.shownAgain': 'It will be shown again next time',
+  'welcome.showAgain': 'Show this again on my next visit',
+  'export.downloadCsv': 'Download CSV',
+  'welcomeCard.sandbox.eyebrow': 'Free exploration',
+  'welcomeCard.sandbox.title': 'Sandbox',
+  'welcomeCard.sandbox.text':
+    'Build a system from nothing, or load one of the built-in scenarios and change it. Drag to place an object; the drag sets its velocity.',
+  'welcomeCard.sandbox.cta': 'Enter the sandbox',
+  'welcomeCard.investigations.eyebrow': 'Guided lessons',
+  'welcomeCard.investigations.title': 'Investigations',
+  'welcomeCard.investigations.text':
+    'Structured astronomy activities inside the simulation: predict, experiment, measure, answer, and export a lab report.',
+  'welcomeCard.investigations.cta': 'Browse investigations',
+  'welcomeCard.instructors.eyebrow': 'For teaching',
+  'welcomeCard.instructors.title': 'Instructors',
+  'welcomeCard.instructors.text':
+    'Instructor guides, learning objectives, answer keys and a curriculum map for introductory astronomy courses.',
+  'welcomeCard.instructors.cta': 'Instructor resources',
+  'welcomeAudience.students.title': 'For students',
+  'welcomeAudience.students.text':
+    'See the relationships an equation describes. Move a planet outward and watch its year lengthen; stretch an orbit and watch the starlight swing.',
+  'welcomeAudience.instructors.title': 'For instructors',
+  'welcomeAudience.instructors.text':
+    'Six guided investigations for introductory and general-education astronomy, with instructor guides, answer keys and shareable simulation links.',
+  'welcomeAudience.curious.title': 'For the curious',
+  'welcomeAudience.curious.text':
+    'No account, no install, nothing to read first. Load a black-hole merger and watch it, or start from empty space and see what gravity does.',
+  'welcomeLink.teaching.label': 'Teaching with Gravitas',
+  'welcomeLink.teaching.note':
+    'How it is used in a course, with six demonstrations you can run.',
+  'welcomeLink.model.label': 'How Gravitas models the universe',
+  'welcomeLink.model.note':
+    'What is calculated, what is approximated, and what is only drawn.',
+  'welcomeLink.instructors.note': 'Guides, answer keys and a curriculum map.',
+  'tideP.moonOnEarth': 'the Moon, on the Earth',
+  'tideP.sunOnEarth': 'the Sun, on the Earth',
+  'tideP.earthOnMoon': 'the Earth, on the Moon',
+  'tideP.jupiterOnIo': 'Jupiter, on Io',
+  'tideP.starOnHotJupiter': 'a Sun-like star, on a hot Jupiter at 0.05 AU',
+  'tideP.bhOnSunFar': 'a 10 M☉ black hole, on the Sun at one AU',
+  'tideP.bhOnSunNear': 'the same black hole, on the Sun at three million km',
+  'stellar.phase.pre-main-sequence': 'Pre-main-sequence',
+  'stellar.phase.main-sequence': 'Main sequence',
+  'stellar.phase.red-giant-branch': 'Red giant branch',
+  'stellar.phase.post-main-sequence-expansion':
+    'Expanding after the main sequence',
+  'stellar.phase.helium-ignition': 'Helium ignition',
+  'stellar.phase.core-helium-burning': 'Core helium burning',
+  'stellar.phase.early-asymptotic-giant-branch':
+    'Early asymptotic giant branch',
+  'stellar.phase.thermally-pulsing-agb':
+    'Thermally pulsing asymptotic giant branch',
+  'stellar.phase.advanced-burning': 'Advanced burning',
+  'stellar.phase.post-agb-and-cooling': 'Exposed core, cooling',
+  'stellar.phase.white-dwarf': 'White dwarf',
+  'stellar.phase.neutron-star': 'Neutron star',
+  'stellar.phase.black-hole': 'Black hole',
+  'stellar.phase.unknown': 'Not modelled',
 };

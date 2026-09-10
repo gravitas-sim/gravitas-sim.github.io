@@ -2810,4 +2810,86 @@ export const ES_DEFERRED = {
   'gwW.row.notDetection': 'Lo que eso no es',
   'gwW.value.notDetection':
     'Un solapamiento normalizado, y nada mas. No es una relacion senal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimacion del fondo y un factor de ensayos, y aqui no hay ninguno.',
+
+  // ---------------------------------------------------------------------------
+  // Mas textos sacados de la descarga inicial. Vease en.deferred.js.
+  // ---------------------------------------------------------------------------
+  'export.empty': 'Todavía no hay nada registrado que exportar.',
+  'export.failed': 'No se pudo generar ese archivo.',
+  'export.done': {
+    one: 'Se exportó {n} fila.',
+    other: 'Se exportaron {n} filas.',
+  },
+  'export.truncated':
+    'Se exportaron las primeras {n} filas: la grabación no cabía en un solo archivo.',
+  'inv.link.unknown':
+    'Ese enlace de investigación no corresponde a ninguna lección.',
+  'inv.load.failed': 'No se pudo cargar esa lección. Inténtalo de nuevo.',
+  'activity.error.noActivity':
+    'No existe ninguna actividad de clase llamada «{id}». La página de enseñanza indica las que hay.',
+  'activity.error.noFormat':
+    'Esa actividad no tiene un formato «{id}». Elige uno en la página de enseñanza.',
+  'activity.error.notUsable':
+    'No se pudo abrir esa actividad: la investigación en la que se basa ha cambiado demasiado. Abre la investigación completa.',
+  'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
+  'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
+  'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
+  'export.downloadCsv': 'Descargar CSV',
+  'welcomeCard.sandbox.eyebrow': 'Exploración libre',
+  'welcomeCard.sandbox.title': 'Laboratorio',
+  'welcomeCard.sandbox.text':
+    'Construye un sistema desde cero, o carga uno de los escenarios incluidos y cámbialo. Arrastra para colocar un objeto; el arrastre fija su velocidad.',
+  'welcomeCard.sandbox.cta': 'Entrar en el laboratorio',
+  'welcomeCard.investigations.eyebrow': 'Lecciones guiadas',
+  'welcomeCard.investigations.title': 'Investigaciones',
+  'welcomeCard.investigations.text':
+    'Actividades de astronomía estructuradas dentro de la simulación: predice, experimenta, mide, responde y exporta un informe de laboratorio.',
+  'welcomeCard.investigations.cta': 'Ver las investigaciones',
+  'welcomeCard.instructors.eyebrow': 'Para enseñar',
+  'welcomeCard.instructors.title': 'Profesorado',
+  'welcomeCard.instructors.text':
+    'Guías docentes, objetivos de aprendizaje, soluciones y un mapa curricular para cursos de astronomía introductoria.',
+  'welcomeCard.instructors.cta': 'Recursos para el profesorado',
+  'welcomeAudience.students.title': 'Para estudiantes',
+  'welcomeAudience.students.text':
+    'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
+  'welcomeAudience.instructors.title': 'Para el profesorado',
+  'welcomeAudience.instructors.text':
+    'Seis investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
+  'welcomeAudience.curious.title': 'Para curiosos',
+  'welcomeAudience.curious.text':
+    'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
+  'welcomeLink.teaching.label': 'Enseñar con Gravitas',
+  'welcomeLink.teaching.note':
+    'Cómo se usa en un curso, con seis demostraciones que puede ejecutar.',
+  'welcomeLink.model.label': 'Cómo modela Gravitas el universo',
+  'welcomeLink.model.note':
+    'Qué se calcula, qué se aproxima y qué solo se dibuja.',
+  'welcomeLink.instructors.note': 'Guías, soluciones y un mapa curricular.',
+  'tideP.moonOnEarth': 'la Luna, sobre la Tierra',
+  'tideP.sunOnEarth': 'el Sol, sobre la Tierra',
+  'tideP.earthOnMoon': 'la Tierra, sobre la Luna',
+  'tideP.jupiterOnIo': 'Júpiter, sobre Ío',
+  'tideP.starOnHotJupiter':
+    'una estrella parecida al Sol, sobre un júpiter caliente a 0,05 UA',
+  'tideP.bhOnSunFar': 'un agujero negro de 10 M☉, sobre el Sol a una UA',
+  'tideP.bhOnSunNear':
+    'el mismo agujero negro, sobre el Sol a tres millones de km',
+  'stellar.phase.pre-main-sequence': 'Presecuencia principal',
+  'stellar.phase.main-sequence': 'Secuencia principal',
+  'stellar.phase.red-giant-branch': 'Rama de las gigantes rojas',
+  'stellar.phase.post-main-sequence-expansion':
+    'Expansión tras la secuencia principal',
+  'stellar.phase.helium-ignition': 'Ignición del helio',
+  'stellar.phase.core-helium-burning': 'Combustión de helio en el núcleo',
+  'stellar.phase.early-asymptotic-giant-branch':
+    'Rama asintótica gigante temprana',
+  'stellar.phase.thermally-pulsing-agb':
+    'Rama asintótica gigante con pulsos térmicos',
+  'stellar.phase.advanced-burning': 'Combustión avanzada',
+  'stellar.phase.post-agb-and-cooling': 'Núcleo expuesto, enfriándose',
+  'stellar.phase.white-dwarf': 'Enana blanca',
+  'stellar.phase.neutron-star': 'Estrella de neutrones',
+  'stellar.phase.black-hole': 'Agujero negro',
+  'stellar.phase.unknown': 'Sin modelar',
 };

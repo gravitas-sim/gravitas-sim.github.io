@@ -47,7 +47,7 @@ import {
   generateStarfield as buildStarfield,
   indexStarfield,
 } from './starfield.js';
-import { LOD_POINT_MAX_PX, hitRadius } from './bodyVisuals.js';
+import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { updateCanvasSummary } from './canvasSummary.js';
@@ -771,6 +771,27 @@ const framedTrailView = [];
  * @param {number} newestTick - Tick the shifts are indexed against
  * @returns {Array} The trail itself in the world frame, or a reused view
  */
+/**
+ * A hex colour for a star's trail, from the same temperature its disc uses.
+ *
+ * Memoised on the star beside the disc's own cache, because this runs for every
+ * star on every frame and stellarPropertiesFor allocates.
+ *
+ * @param {Object} star - A StarObject
+ * @returns {?string} A hex colour, or null when the star has no usable state
+ */
+function trailColorForStar(star) {
+  const teff = star._visual?.teff;
+  if (star._trailColor && star._trailColorFor === teff) return star._trailColor;
+  const { teffK } = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
+  const rgb = starColor(teffK);
+  if (!rgb) return null;
+  const hex = n => n.toString(16).padStart(2, '0');
+  star._trailColor = `#${hex(rgb.r)}${hex(rgb.g)}${hex(rgb.b)}`;
+  star._trailColorFor = teff;
+  return star._trailColor;
+}
+
 function framedTrail(trail, shifts, newestTick) {
   if (!shifts) return trail;
 
@@ -911,8 +932,13 @@ const drawScene = () => {
     ].forEach(obj => {
       const trail = framedTrail(obj.trail, shifts, newestTick);
       if (obj.alive && trail.length > 1) {
+        // A star with no authored colour is coloured by its temperature, the
+        // same way its disc is. Without this branch the trails of every
+        // generated star fell through to the settings default and a field of
+        // stars of every temperature trailed one shade of blue.
         const baseColor =
           obj.baseColor ||
+          (obj.obj_type === 'StarObject' ? trailColorForStar(obj) : null) ||
           SETTINGS[`${obj.obj_type.toLowerCase()}_base_color`] ||
           '#6495ed';
         // trail_colour_mode 'speed' maps each trail point's recorded velocity

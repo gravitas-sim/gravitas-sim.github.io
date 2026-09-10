@@ -21,7 +21,6 @@ import {
   debugLog,
   hexToRgb,
   computeDynamicColor,
-  getStarColor,
   worldToScreen,
   screenToWorld,
   isOffscreen,
@@ -5274,12 +5273,36 @@ class StarObject extends PhysicsObject {
 
     super(pos, vel, finalMassInSuns * SOLAR_MASS_UNIT, radius, 'StarObject');
     this.massInSuns = finalMassInSuns;
-    this.baseColor = getStarColor(this.massInSuns);
+    // Null, deliberately. A colour here would be indistinguishable from one a
+    // scenario chose on purpose, and that is exactly the distinction the
+    // drawing has to make: an authored colour must survive, and a generated one
+    // must give way to the star's temperature. The constructor used to fill
+    // this in from the mass, which meant the temperature branch below was
+    // unreachable and a star built from a real catalogue at 2566 K was drawn
+    // the colour of a 0.09 solar-mass main-sequence star.
+    //
+    // Every reader falls back: the draw path colours from the temperature, the
+    // trail renderer does the same, and js/view3d.js derives from the mass.
+    this.baseColor = null;
     this.intact = true;
     this.name = getRandomName('stars');
-    this.temperature = null; // Will be set for specific stars
-    this.spectralType = null; // Will be set for specific stars
-    this.age = null; // Will be set for specific stars
+    // The modelled properties. Null means nobody supplied one, which is the
+    // common case: js/stellar/state.js then estimates from the mass and says
+    // that it did. A scenario built from a catalogue fills them in, and a
+    // future evolutionary track will too.
+    this.temperature = null;
+    this.spectralType = null;
+    this.age = null;
+    /** Bolometric luminosity in solar units, where something knows it. */
+    this.luminosityInSuns = null;
+    /** Photospheric radius in solar radii. NOT the collision radius above. */
+    this.radiusInSuns = null;
+    /** One of js/stellar/state.js PHASES, where something knows it. */
+    this.stellarPhase = null;
+    /** Age in years, on the stellar clock, which is not the simulation's. */
+    this.ageYr = null;
+    /** Mass this star was born with, in solar masses. */
+    this.initialMassInSuns = finalMassInSuns;
     // Per-star toggle for rendering habitable (Goldilocks) zone rings
     this.showHabitableZone = false;
   }
@@ -5310,12 +5333,21 @@ class StarObject extends PhysicsObject {
     if (
       !this._visual ||
       this._visual.mass !== this.mass ||
-      this._visual.base !== this.baseColor
+      this._visual.base !== this.baseColor ||
+      this._visual.teff !== this.temperature ||
+      this._visual.lum !== this.luminosityInSuns
     ) {
       const props = stellarPropertiesFor(this, SOLAR_MASS_UNIT);
       this._visual = {
         mass: this.mass,
         base: this.baseColor,
+        // The temperature is part of the key, not just an input. Without it a
+        // star whose temperature changed while its mass did not kept the
+        // colour it was memoised with - which is every star in an evolutionary
+        // track, where the mass barely moves and the temperature moves by a
+        // factor of ten.
+        teff: this.temperature,
+        lum: this.luminosityInSuns,
         rgb: this.baseColor
           ? hexToRgb(this.baseColor) || starColor(props.teffK)
           : starColor(props.teffK),
@@ -5491,16 +5523,42 @@ class StarObject extends PhysicsObject {
     return {
       ...baseState,
       massInSuns: this.massInSuns,
+      initialMassInSuns: this.initialMassInSuns,
+      // Null where nobody chose one. That is the difference between "this star
+      // is orange because a scenario said so" and "this star is orange because
+      // it is cool", and a saved state that wrote the second as the first
+      // would freeze a derived colour into an authored one.
       baseColor: this.baseColor,
       showHabitableZone: this.showHabitableZone,
+      // The modelled properties, each null unless something supplied it. An
+      // older save has none of these and restores with nulls, which is exactly
+      // what a star that nobody modelled should carry.
+      temperature: this.temperature,
+      luminosityInSuns: this.luminosityInSuns,
+      radiusInSuns: this.radiusInSuns,
+      spectralType: this.spectralType,
+      stellarPhase: this.stellarPhase,
+      ageYr: this.ageYr,
     };
   }
 
   set_state(s) {
     super.set_state(s);
     this.massInSuns = s.massInSuns;
-    this.baseColor = s.baseColor;
+    this.initialMassInSuns = s.initialMassInSuns ?? s.massInSuns;
+    this.baseColor = s.baseColor ?? null;
     this.showHabitableZone = !!s.showHabitableZone;
+    // `?? null` rather than a bare assignment: a state written before these
+    // existed has them undefined, and undefined is not the same as "nobody
+    // knows" to a function that checks Number.isFinite.
+    this.temperature = s.temperature ?? null;
+    this.luminosityInSuns = s.luminosityInSuns ?? null;
+    this.radiusInSuns = s.radiusInSuns ?? null;
+    this.spectralType = s.spectralType ?? null;
+    this.stellarPhase = s.stellarPhase ?? null;
+    this.ageYr = s.ageYr ?? null;
+    // The memo is keyed on all of these; drop it so the next draw rebuilds.
+    this._visual = null;
   }
 }
 

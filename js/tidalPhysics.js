@@ -40,6 +40,14 @@ import {
 import { scientific, withUnit } from './format.js';
 import { t } from './i18n/index.js';
 
+// This module's prose lives in the deferred half of the catalogue - see the
+// note in js/i18n/en.deferred.js. Registered from here rather than left to the
+// caller, because nothing in the start-up path can reach this module and a
+// reader who does reach it must not see message ids.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
+
 export { G_SI, SOLAR_MASS_KG, SOLAR_RADIUS_M, EARTH_MASS_KG, EARTH_RADIUS_M };
 export { JUPITER_MASS_KG, JUPITER_RADIUS_M, AU_METERS, C_SI };
 

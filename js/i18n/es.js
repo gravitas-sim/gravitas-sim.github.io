@@ -798,14 +798,6 @@ export const ES = {
   'export.dataExportContent.2':
     'Las columnas llevan sus unidades en el nombre: distancias en AU, tiempos en días, velocidades en km/s y energías en julios. Las posiciones se registran diez veces por segundo de tiempo real, y el historial guarda los últimos cientos de fotogramas.',
   'export.dataExportNotebook': 'Abrir en Colab el cuaderno que lo acompaña',
-  'export.empty': 'Todavía no hay nada registrado que exportar.',
-  'export.failed': 'No se pudo generar ese archivo.',
-  'export.done': {
-    one: 'Se exportó {n} fila.',
-    other: 'Se exportaron {n} filas.',
-  },
-  'export.truncated':
-    'Se exportaron las primeras {n} filas: la grabación no cabía en un solo archivo.',
 
   // --- Themes ----------------------------------------------------------------
   'theme.midnight.label': 'Medianoche',
@@ -1089,9 +1081,6 @@ export const ES = {
   'rail.sub.share': 'Capturar',
 
   // --- The lesson engine's own chrome ---------------------------------------
-  'inv.link.unknown':
-    'Ese enlace de investigación no corresponde a ninguna lección.',
-  'inv.load.failed': 'No se pudo cargar esa lección. Inténtalo de nuevo.',
   // --- Shortcuts, panels and the rest of the interface -----------------------
   'shortcut.pause': 'Pausar / reanudar',
   'shortcut.stepBack': 'Retroceder un fotograma grabado',
@@ -1129,12 +1118,6 @@ export const ES = {
   'inv.browser.activities':
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
-  'activity.error.noActivity':
-    'No existe ninguna actividad de clase llamada «{id}». La página de enseñanza indica las que hay.',
-  'activity.error.noFormat':
-    'Esa actividad no tiene un formato «{id}». Elige uno en la página de enseñanza.',
-  'activity.error.notUsable':
-    'No se pudo abrir esa actividad: la investigación en la que se basa ha cambiado demasiado. Abre la investigación completa.',
   'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
   'canvas.sizeDisclosure.detail':
     'Los diámetros del lienzo son ilustrativos y usan una escala comprimida. No deduzcas proporciones físicas de tamaño a partir del dibujo; usa el inspector y las mediciones de las investigaciones para los radios numéricos.',
@@ -1252,11 +1235,7 @@ export const ES = {
   'rv.survey.enable': 'Campaña de observación sintética',
   'rv.survey.velocityLabel': 'Velocidad radial',
   'rv.survey.measurementsLabel': 'Medidas',
-  'welcome.scenarioGone': 'Ese escenario ya no está disponible.',
-  'welcome.shownAgain': 'Se volverá a mostrar la próxima vez',
-  'welcome.showAgain': 'Mostrar esto de nuevo en mi próxima visita',
   'astrometry.keepObserving': 'Sigue observando…',
-  'export.downloadCsv': 'Descargar CSV',
   'lightCurve.relativeBrightness': 'Brillo relativo',
   'frame.barycenter': 'Baricentro',
   'chrome.canvas.label': 'Simulación gravitatoria',
@@ -1327,37 +1306,6 @@ export const ES = {
   'tutorial.done': 'Ya está',
 
   // --- The front door --------------------------------------------------------
-  'welcomeCard.sandbox.eyebrow': 'Exploración libre',
-  'welcomeCard.sandbox.title': 'Laboratorio',
-  'welcomeCard.sandbox.text':
-    'Construye un sistema desde cero, o carga uno de los escenarios incluidos y cámbialo. Arrastra para colocar un objeto; el arrastre fija su velocidad.',
-  'welcomeCard.sandbox.cta': 'Entrar en el laboratorio',
-  'welcomeCard.investigations.eyebrow': 'Lecciones guiadas',
-  'welcomeCard.investigations.title': 'Investigaciones',
-  'welcomeCard.investigations.text':
-    'Actividades de astronomía estructuradas dentro de la simulación: predice, experimenta, mide, responde y exporta un informe de laboratorio.',
-  'welcomeCard.investigations.cta': 'Ver las investigaciones',
-  'welcomeCard.instructors.eyebrow': 'Para enseñar',
-  'welcomeCard.instructors.title': 'Profesorado',
-  'welcomeCard.instructors.text':
-    'Guías docentes, objetivos de aprendizaje, soluciones y un mapa curricular para cursos de astronomía introductoria.',
-  'welcomeCard.instructors.cta': 'Recursos para el profesorado',
-  'welcomeAudience.students.title': 'Para estudiantes',
-  'welcomeAudience.students.text':
-    'Ve las relaciones que describe una ecuación. Aleja un planeta y observa cómo se alarga su año; estira una órbita y observa cómo oscila la luz estelar.',
-  'welcomeAudience.instructors.title': 'Para el profesorado',
-  'welcomeAudience.instructors.text':
-    'Seis investigaciones guiadas para astronomía introductoria y de formación general, con guías docentes, soluciones y enlaces de simulación que se pueden compartir.',
-  'welcomeAudience.curious.title': 'Para curiosos',
-  'welcomeAudience.curious.text':
-    'Sin cuenta, sin instalación, sin nada que leer antes. Carga una fusión de agujeros negros y obsérvala, o parte del espacio vacío y mira qué hace la gravedad.',
-  'welcomeLink.teaching.label': 'Enseñar con Gravitas',
-  'welcomeLink.teaching.note':
-    'Cómo se usa en un curso, con seis demostraciones que puede ejecutar.',
-  'welcomeLink.model.label': 'Cómo modela Gravitas el universo',
-  'welcomeLink.model.note':
-    'Qué se calcula, qué se aproxima y qué solo se dibuja.',
-  'welcomeLink.instructors.note': 'Guías, soluciones y un mapa curricular.',
 
   // --- Lesson instruments ----------------------------------------------------
   // Los rótulos, títulos de ejes y nombres de ajustes de los instrumentos
@@ -1389,15 +1337,6 @@ export const ES = {
   'energyChart.totalEnergy': 'Energía total',
 
   // --- Tidal comparison table ------------------------------------------------
-  'tideP.moonOnEarth': 'la Luna, sobre la Tierra',
-  'tideP.sunOnEarth': 'el Sol, sobre la Tierra',
-  'tideP.earthOnMoon': 'la Tierra, sobre la Luna',
-  'tideP.jupiterOnIo': 'Júpiter, sobre Ío',
-  'tideP.starOnHotJupiter':
-    'una estrella parecida al Sol, sobre un júpiter caliente a 0,05 UA',
-  'tideP.bhOnSunFar': 'un agujero negro de 10 M☉, sobre el Sol a una UA',
-  'tideP.bhOnSunNear':
-    'el mismo agujero negro, sobre el Sol a tres millones de km',
 
   // --- Lesson panel chrome ---------------------------------------------------
   'inv.action.restart': 'Reiniciar',
@@ -1628,4 +1567,21 @@ export const ES = {
   'sound.state.blocked': 'bloqueado por el navegador',
   'sound.state.ready': 'encendido, nada sonando',
   'sound.state.playing': 'sonando',
+  // ---------------------------------------------------------------------------
+  // La descripcion estelar compartida
+  // ---------------------------------------------------------------------------
+  'inspector.estimated': '(estimado)',
+  'inspector.stat.phase': 'Fase evolutiva',
+  'inspector.stat.age': 'Edad',
+  'inspector.star.describedFromMass':
+    'Una estrella de tipo {type}. Todo lo de esta ficha salvo la masa se estimó a partir de esa masa suponiendo que la estrella está en la secuencia principal, porque nada le ha dicho otra cosa a la simulación.',
+  'inspector.star.describedFromModel':
+    'Un {class} de tipo {type}. Su temperatura y su luminosidad vienen de un modelo o de un catálogo en vez de estimarse de la masa, y el radio se deduce de ambas.',
+  // Las clases de luminosidad. Vease en.js.
+  'stellar.class.supergiant': 'supergigante',
+  'stellar.class.giant': 'gigante',
+  'stellar.class.subgiant': 'subgigante',
+  'stellar.class.dwarf': 'estrella de secuencia principal',
+  'stellar.class.degenerate': 'remanente degenerado',
+  'stellar.class.unknown': 'estrella',
 };

@@ -18,7 +18,25 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { getStarColor } from './utils.js';
+import { starColor } from './bodyVisuals.js';
+import { estimateTeffFromMass } from './stellar/mainSequence.js';
+
+/**
+ * A star's colour from its temperature, or from its mass where it has none.
+ * @param {Object} obj - A star-like body
+ * @returns {?string} A hex colour, or null when there is nothing to go on
+ */
+function starHexFor(obj) {
+  const teff = Number.isFinite(obj?.temperature)
+    ? obj.temperature
+    : Number.isFinite(obj?.massInSuns)
+      ? estimateTeffFromMass(obj.massInSuns)
+      : null;
+  if (!(teff > 0)) return null;
+  const rgb = starColor(teff);
+  const hex = n => n.toString(16).padStart(2, '0');
+  return `#${hex(rgb.r)}${hex(rgb.g)}${hex(rgb.b)}`;
+}
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
@@ -765,11 +783,11 @@ function getStyleForObject(obj) {
   if (!obj) return fallback;
   switch (obj.obj_type) {
     case 'StarObject': {
-      const starHex =
-        obj.baseColor ||
-        (typeof obj.massInSuns === 'number'
-          ? getStarColor(obj.massInSuns)
-          : '#ffd89c');
+      // The same order the 2D renderer uses: an authored colour wins, then the
+      // star's temperature, and the mass table only where there is no mass to
+      // estimate a temperature from. The three views have to agree about what
+      // colour a star is.
+      const starHex = obj.baseColor || starHexFor(obj) || '#ffd89c';
       return {
         color: starHex,
         emissive: starHex,

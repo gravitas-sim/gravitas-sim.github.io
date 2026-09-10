@@ -304,9 +304,30 @@ describe('the catalogue split', () => {
     // JavaScript after ensureDeferredMessages() resolves - the button's own
     // labels, which are read at start-up, stayed in the eager half and are
     // checked for below.
+    // The front door (welcome*, welcomeCard, welcomeAudience, welcomeLink), the
+    // export dialog, the activity bridge and the tidal-disruption model joined
+    // the list when the stellar foundation needed room in the start-up
+    // download. All four are loaded on demand and none of them can be reached
+    // from the entry graph; js/main.js awaits this catalogue before it shows
+    // the front door, so a first visit never paints a message id.
+    // stellar.phase.* is here for the same reason: a phase name is read only
+    // for a star something has modelled, which cannot happen before a deferred
+    // panel has loaded. The luminosity-class words stayed behind - the
+    // inspector prints one on every star's card - and are checked for below.
     const allowed =
-      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
+      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stellar\.phase)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
+
+    // The words the inspector prints on every star card stayed eager.
+    for (const id of [
+      'stellar.class.dwarf',
+      'stellar.class.giant',
+      'stellar.class.supergiant',
+      'stellar.class.degenerate',
+    ]) {
+      expect(EN_BASE[id]).toBeTruthy();
+      expect(EN_DEFERRED[id]).toBeUndefined();
+    }
 
     // The speaker button's own labels are read before any panel is open, so
     // they must not have gone with the panel's prose.

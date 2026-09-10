@@ -103,6 +103,7 @@
             <a href="#gravitational-waves">The gravitational-wave lab</a>
           </li>
           <li><a href="#blackholes">Black holes</a></li>
+          <li><a href="#stars">Stars: how hot, how bright, how big</a></li>
           <li><a href="#spacetime">The spacetime view</a></li>
           <li><a href="#visual">Visual effects</a></li>
           <li>
@@ -768,6 +769,143 @@
           true Schwarzschild radius grows in direct proportion to mass and, for
           a stellar-mass black hole, would be far too small to see. The number
           in the inspector is the real one.
+        </p>
+      </div>
+
+      <h2 id="stars">Stars: how hot, how bright, how big</h2>
+      <p>
+        <span class="doc-badge is-analytic">Analytic</span>
+        <span class="doc-badge is-approximate">Approximated</span>
+      </p>
+      <p>
+        Every star in Gravitas is described by one shared model, and the model
+        says on every number how it arrived at it. There are three ways it can
+        know something.
+      </p>
+      <div class="doc-feature">
+        <h3>Three kinds of number</h3>
+        <dl>
+          <dt>Declared</dt>
+          <dd>
+            A scenario built from a catalogue supplies a measured temperature,
+            luminosity or radius. TRAPPIST-1 carries 2566&nbsp;K, 0.000553
+            solar luminosities and 0.1192 solar radii, and nothing overwrites
+            them.
+          </dd>
+          <dt>Modelled</dt>
+          <dd>
+            A star placed on an evolutionary track carries the temperature,
+            luminosity and mass that track has at that age. Seven tracks are
+            bundled: 0.2, 0.5, 1, 2, 5, 10 and 20 solar masses, from MIST
+            v1.2 at solar composition with no rotation.
+          </dd>
+          <dt>Estimated</dt>
+          <dd>
+            A star the sandbox generated is a mass and nothing else, so its
+            temperature and luminosity come from main-sequence relations in
+            that mass. This is the common case, it is a guess, and the
+            inspector marks each guessed number
+            <em>(estimated)</em> rather than printing it like a measurement.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        Whichever of the three it is, the radius follows from the other two by
+        the Stefan&ndash;Boltzmann relation
+        <code
+          >L / L<sub>&#9737;</sub> = (R / R<sub>&#9737;</sub>)&sup2; (T<sub
+            >eff</sub
+          >
+          / 5772&nbsp;K)<sup>4</sup></code
+        >, which is exact &mdash; it is the definition of effective temperature.
+        One relation, one place, so the transit depth, the habitable-zone ring
+        and the inspector card cannot disagree about how big a star is. They
+        used to: three modules each had their own mass&ndash;radius power law.
+      </p>
+      <div class="doc-feature">
+        <h3>The bundled evolutionary tracks</h3>
+        <p>
+          <span class="doc-badge is-simulated">Simulated elsewhere</span>
+          MIST v1.2, [Fe/H] = 0, [&alpha;/Fe] = 0, v/v<sub>crit</sub> = 0,
+          computed with MESA and published by
+          <a href="https://mist.science/">the MIST project</a>. Cite
+          <a href="https://ui.adsabs.harvard.edu/abs/2016ApJS..222....8D"
+            >Dotter (2016), ApJS 222, 8</a
+          >
+          and
+          <a href="https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C"
+            >Choi et al. (2016), ApJ 823, 102</a
+          >. Gravitas did not compute these and could not: they are the output
+          of a stellar-structure code integrating a star for up to a trillion
+          years.
+        </p>
+        <p>
+          What Gravitas did is reduce them, from about 7,700 rows of 77 columns
+          to about 2,300 rows of four, and record how. The ten primary
+          equivalent evolutionary points are kept exactly, so the named phase
+          boundaries are where MIST put them, and the thinning between them is
+          bounded at 0.004 dex in luminosity and half that in temperature. The
+          worst error the reduction introduced is recorded on every track. The
+          build script reproduces the whole bundle from the published 100&nbsp;MB
+          download in one command, and verifies its checksum.
+        </p>
+        <dl>
+          <dt>Where the tracks stop</dt>
+          <dd>
+            0.2 and 0.5 solar masses stop at the end of core hydrogen burning,
+            because MESA stopped them there &mdash; after 1.1 trillion and 96
+            billion years respectively. Those figures are model
+            <em>predictions</em> about stars far younger than their own
+            lifetimes, and no such star has finished one. 1, 2 and 5 solar
+            masses run through to a cooling white dwarf. 10 and 20 solar masses
+            stop at carbon ignition, before core collapse: they end as red
+            supergiants of 609 and 1,070 solar radii, and what happens next is
+            not in this model.
+          </dd>
+          <dt>What is not modelled</dt>
+          <dd>
+            Rotation, binarity, magnetic fields, and any composition but solar.
+            Core collapse, supernovae and remnant formation. White-dwarf cooling
+            beyond the first few million years.
+          </dd>
+          <dt>What an age query cannot reach</dt>
+          <dd>
+            The helium flash and the thermal pulses on the asymptotic giant
+            branch pass in centuries at an age of a billion years, closer
+            together than any stored age can separate. Those points are reached
+            by evolutionary point and by index instead, and each track records
+            how many of its samples an age query cannot address.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        The main-sequence estimates are the crude part and are labelled as such
+        wherever they appear. The mass&ndash;luminosity relation is the usual
+        broken power law, and the lifetime that follows from it is fuel divided
+        by the rate it burns at. Compared against the tracks it is fair in the
+        middle and poor at the bottom: for a 0.2 solar-mass star the estimate
+        gives 350 billion years and the integrated model gives 1.1 trillion,
+        because a fully convective star burns very nearly all of its hydrogen
+        rather than the tenth a fixed core fraction assumes.
+      </p>
+      <p>
+        Two tools now say when they do not apply. The habitable-zone
+        parameterisation is fitted for main-sequence stars between 2600 and
+        7200&nbsp;K, so it declines for a red giant rather than extrapolating a
+        polynomial; and the transit-photometry model declines on a pulsating
+        giant, whose radius is not a constant over an observation.
+      </p>
+      <div class="doc-note">
+        <p>
+          <strong>Good for:</strong> the difference between mass, temperature,
+          luminosity and radius; reading an H&ndash;R diagram; why massive stars
+          live briefly; comparing modelled stars against each other.
+          <br />
+          <strong>Not for:</strong> stellar interiors, nucleosynthesis yields,
+          asteroseismology, non-solar compositions, or the fate of any
+          individual real star. And nothing here ages a star in the ordinary
+          sandbox: a sandbox star's properties do not change as the simulation
+          runs.
         </p>
       </div>
 

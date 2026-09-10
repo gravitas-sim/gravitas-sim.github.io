@@ -56,3 +56,7 @@ manual/gravitas-user-manual.pdf
 # Cached GWOSC downloads for tools/build-gw-data.mjs. The processed result
 # is committed; the 1.4 MB of source text is not.
 .gw-cache/
+
+# Cached MIST downloads for tools/build-stellar-tracks.mjs. The reduced result
+# is committed; the 100 MB source grid is not.
+.mist-cache/

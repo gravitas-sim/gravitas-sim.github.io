@@ -7718,3 +7718,19 @@
     margin: var(--space-2) 0 0;
   }
 }
+
+@layer components {
+  /* A number the model guessed rather than was told.
+     -------------------------------------------------------------------------
+     Every star the sandbox generates is a mass and nothing else, so its
+     temperature, luminosity and radius are all main-sequence estimates. That
+     is fine, and it is not fine to print them looking like measurements. The
+     word is the signal; the smaller, dimmer type is a reinforcement, not the
+     only difference. */
+  .inspector-estimated {
+    margin-left: 0.4em;
+    font-size: var(--text-2xs);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+}

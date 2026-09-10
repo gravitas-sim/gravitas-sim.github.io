@@ -38,7 +38,17 @@ import { shouldShowWelcome } from './welcomeGate.js';
 let welcomeModule = null;
 async function loadWelcome() {
   if (!welcomeModule) {
-    welcomeModule = await import('./welcome.js');
+    // Both, and in this order. The front door's prose is in the deferred half
+    // of the catalogue, and awaiting it here is what stops the first paint of
+    // a first visit being a grid of message ids. The module registers it too,
+    // for a caller that arrives another way.
+    const [mod] = await Promise.all([
+      import('./welcome.js'),
+      import('./i18n/deferredMessages.js').then(m =>
+        m.ensureDeferredMessages().catch(() => {})
+      ),
+    ]);
+    welcomeModule = mod;
     welcomeModule.initWelcome();
   }
   return welcomeModule;
