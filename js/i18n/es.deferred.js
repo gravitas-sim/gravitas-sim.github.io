@@ -747,6 +747,8 @@ export const ES_DEFERRED = {
   // runs. The dozen that stay in the base catalogue are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
+  'inv.tool.pickable':
+    'Un diagrama al que puedes apuntar. Haz clic o arrastra para mover el cursor; las flechas también lo mueven, y los deslizadores de abajo hacen lo mismo con números.',
   'inv.error.scenario': 'No se pudo cargar el escenario de este paso.',
   'inv.plot.placeholder': 'Los valores que introduzcas aparecen aquí',
   'inv.plot.title': 'Tus medidas',
@@ -2303,23 +2305,23 @@ export const ES_DEFERRED = {
   // ---------------------------------------------------------------------------
   // El laboratorio de ondas gravitacionales (js/gwWidgets.js, js/gwLab.js)
   // ---------------------------------------------------------------------------
-  'gwW.lab.title': 'Laboratorio de observacion de ondas gravitacionales',
+  'gwW.lab.title': 'Laboratorio de observación de ondas gravitacionales',
   'gwW.lab.note':
-    'Un modelo de dos objetos compactos que caen en espiral, y la deformacion que registraria un detector. Solo espiral a orden principal: se detiene antes de la fusion, y la lectura dice donde.',
+    'Un modelo de dos objetos compactos que caen en espiral, y la deformación que registraría un detector. Solo espiral a orden principal: se detiene antes de la fusión, y la lectura dice dónde.',
   'gwW.control.m1': 'Primera masa',
   'gwW.control.m2': 'Segunda masa',
   'gwW.control.distance': 'Distancia',
-  'gwW.control.inclination': 'Angulo de vision',
-  'gwW.control.cursor': 'Posicion en la senal',
+  'gwW.control.inclination': 'Ángulo de visión',
+  'gwW.control.cursor': 'Posición en la señal',
   'gwW.preset.bbh': 'Dos agujeros negros',
   'gwW.preset.bbh.note':
-    'Treinta y seis y veintinueve masas solares a 410 megaparsecs: la escala de la primera deteccion. Toda la espiral por encima de 20 Hz dura menos de un segundo.',
+    'Treinta y seis y veintinueve masas solares a 410 megaparsecs: la escala de la primera detección. Toda la espiral por encima de 20 Hz dura menos de un segundo.',
   'gwW.preset.bns': 'Dos estrellas de neutrones',
   'gwW.preset.bns.note':
-    'Dos estrellas de 1,4 masas solares a 40 megaparsecs. Desde 20 Hz esta binaria radia mas de dos minutos, asi que el laboratorio modela los ultimos ocho segundos y lo dice.',
+    'Dos estrellas de 1,4 masas solares a 40 megaparsecs. Desde 20 Hz esta binaria radia más de dos minutos, así que el laboratorio modela los últimos ocho segundos y lo dice.',
   'gwW.preset.nsbh': 'Estrella de neutrones y agujero negro',
   'gwW.preset.nsbh.note':
-    'Una estrella de neutrones de 1,4 masas solares con un agujero negro de diez. Todo lo distinto de esta senal viene de las masas: el modelo no tiene mareas, ni disrupcion, ni posfusion que anadir.',
+    'Una estrella de neutrones de 1,4 masas solares con un agujero negro de diez. Todo lo distinto de esta señal viene de las masas: el modelo no tiene mareas, ni disrupción, ni posfusión que añadir.',
   'gwW.action.play': 'Reproducir / pausar',
   'gwW.action.replay': 'Repetir',
   'gwW.action.noise': 'Ruido del detector',
@@ -2327,80 +2329,80 @@ export const ES_DEFERRED = {
   'gwW.action.pin': 'Fijar como A',
   'gwW.action.unpin': 'Borrar A',
   'gwW.panel.source': 'fuente (esquema)',
-  'gwW.panel.strain': 'deformacion en el detector',
+  'gwW.panel.strain': 'deformación en el detector',
   'gwW.panel.local': 'unos pocos ciclos, de cerca',
   'gwW.panel.frequency': 'frecuencia de la onda',
   'gwW.panel.ring': 'masas de prueba libres en el detector',
   'gwW.axis.strain': 'h (×10⁻²¹)',
   'gwW.axis.frequency': 'Hz',
-  'gwW.axis.merger': 'fusion',
-  'gwW.plot.isco': 'aqui se detiene el modelo',
+  'gwW.axis.merger': 'fusión',
+  'gwW.plot.isco': 'aquí se detiene el modelo',
   'gwW.local.span': '{ms} ms de ancho',
   'gwW.source.notToScale':
-    'esquema: la separacion esta modelada, los tamanos no',
+    'esquema: la separación está modelada, los tamaños no',
   'gwW.overlay.legend':
-    'Cada anillo es una cresta, donde estaria ahora tras salir de la fuente. Los de fuera salieron antes, cuando la orbita era mas lenta, y por eso estan mas separados. Distancias comprimidas, amplitud exagerada, propagacion ralentizada y reescalada segun sube la frecuencia. El centro se omite: una formula de campo lejano no lo describe.',
+    'Cada anillo es una cresta, donde estaría ahora tras salir de la fuente. Los de fuera salieron antes, cuando la órbita era más lenta, y por eso están más separados. Distancias comprimidas, amplitud exagerada, propagación ralentizada y reescalada según sube la frecuencia. El centro se omite: una fórmula de campo lejano no lo describe.',
   'gwW.overlay.legendStill':
-    'Quietos. Cada anillo es una cresta, donde estaria ahora tras salir de la fuente. Los de fuera salieron antes, cuando la orbita era mas lenta, y por eso estan mas separados. Distancias comprimidas, amplitud exagerada. El centro se omite: una formula de campo lejano no lo describe.',
+    'Quietos. Cada anillo es una cresta, donde estaría ahora tras salir de la fuente. Los de fuera salieron antes, cuando la órbita era más lenta, y por eso están más separados. Distancias comprimidas, amplitud exagerada. El centro se omite: una fórmula de campo lejano no lo describe.',
   'gwW.ring.amplified':
-    'estiramiento y compresion, transversales al paso de la onda. Amplificado: el efecto real es una parte en 10²¹.',
+    'estiramiento y compresión, transversales al paso de la onda. Amplificado: el efecto real es una parte en 10²¹.',
   'gwW.row.chirpMass': 'Masa de chirrido',
   'gwW.row.now': 'En el cursor',
-  'gwW.value.now': '{freq}, {toMerger} antes de la fusion',
-  'gwW.row.strainNow': 'Deformacion ahora',
-  'gwW.row.separation': 'Separacion',
+  'gwW.value.now': '{freq}, {toMerger} antes de la fusión',
+  'gwW.row.strainNow': 'Deformación ahora',
+  'gwW.row.separation': 'Separación',
   'gwW.value.separation': '{rs} radios de Schwarzschild',
   'gwW.row.velocity': 'Velocidad orbital',
   'gwW.fidelity.good':
-    'v/c = {v}. Bien dentro de donde vale esta aproximacion.',
+    'v/c = {v}. Bien dentro de donde vale esta aproximación.',
   'gwW.fidelity.fair':
-    'v/c = {v}. Los terminos que este modelo descarta ya son grandes aqui.',
+    'v/c = {v}. Los términos que este modelo descarta ya son grandes aquí.',
   'gwW.fidelity.poor':
-    'v/c = {v}. Demasiado rapido para esta aproximacion: lee la forma, no los numeros.',
-  'gwW.fidelity.unknown': 'v/c no esta definida aqui.',
+    'v/c = {v}. Demasiado rápido para esta aproximación: lee la forma, no los números.',
+  'gwW.fidelity.unknown': 'v/c no está definida aquí.',
   'gwW.row.window': 'Modelado',
   'gwW.value.windowWhole':
     '{window}, {cycles} ciclos de onda: toda la espiral desde 20 Hz.',
   'gwW.value.windowExcerpt':
-    'Los ultimos {window} de la espiral, {cycles} ciclos de onda, desde {from}. Toda ella desde 20 Hz seria {full} y {fullCycles} ciclos.',
-  'gwW.row.stops': 'Donde se detiene',
+    'Los últimos {window} de la espiral, {cycles} ciclos de onda, desde {from}. Toda ella desde 20 Hz sería {full} y {fullCycles} ciclos.',
+  'gwW.row.stops': 'Dónde se detiene',
   'gwW.value.stops':
-    '{isco}, la orbita circular estable mas interna. Este modelo no tiene fusion ni oscilacion final, y no se extrapola mas alla.',
+    '{isco}, la órbita circular estable más interna. Este modelo no tiene fusión ni oscilación final, y no se extrapola más allá.',
   'gwW.row.effectiveDistance': 'Distancia',
   'gwW.value.effectiveDistance':
     '{d} Mpc. Un solo detector ve la amplitud de una fuente a {eff} Mpc vista de frente.',
   'gwW.row.noise': 'Ruido',
   'gwW.value.noise':
-    'Simulado, a partir de la curva de diseno de Advanced LIGO. Semilla {seed}: no cambia cuando cambias un parametro.',
+    'Simulado, a partir de la curva de diseño de Advanced LIGO. Semilla {seed}: no cambia cuando cambias un parámetro.',
   'gwW.row.comparison': 'Frente a A',
   'gwW.value.controlled': 'Cambio una sola cosa: {changed}.',
   'gwW.value.uncontrolled':
-    'Cambio mas de una cosa: {changed}. Nada de esto puede decir cual lo hizo.',
-  'gwW.value.identical': 'Identico a A.',
+    'Cambió más de una cosa: {changed}. Nada de esto puede decir cuál lo hizo.',
+  'gwW.value.identical': 'Idéntico a A.',
   'gwW.field.m1': 'primera masa',
   'gwW.field.m2': 'segunda masa',
   'gwW.field.distanceMpc': 'distancia',
-  'gwW.field.inclinationDeg': 'angulo de vision',
+  'gwW.field.inclinationDeg': 'ángulo de visión',
   'gwW.row.audio': 'Sonido',
-  'gwW.row.playback': 'Reproduccion',
-  'gwW.value.playback': '{speed} s de senal por segundo en pantalla',
-  'gwW.real.title': 'GW150914, tal como se publico',
+  'gwW.row.playback': 'Reproducción',
+  'gwW.value.playback': '{speed} s de señal por segundo en pantalla',
+  'gwW.real.title': 'GW150914, tal como se publicó',
   'gwW.real.note':
-    'Deformacion medida por los dos detectores de LIGO, publicada con el articulo del descubrimiento. La colaboracion la filtro en banda de 35 a 350 Hz antes de publicarla; aqui no se le ha hecho nada mas.',
+    'Deformación medida por los dos detectores de LIGO, publicada con el artículo del descubrimiento. La colaboración la filtro en banda de 35 a 350 Hz antes de publicarla; aquí no se le ha hecho nada más.',
   'gwW.control.shift': 'Desplazar Livingston',
   'gwW.control.invert': 'Signo de Livingston',
   'gwW.value.inverted': 'invertido',
-  'gwW.value.asPublished': 'como se publico',
-  'gwW.real.preset.published': 'Tal como se publico',
+  'gwW.value.asPublished': 'como se publicó',
+  'gwW.real.preset.published': 'Tal como se publicó',
   'gwW.real.preset.published.note':
     'Ambas trazas exactamente como se publicaron. No se parecen, y ese es el punto de partida, no un problema.',
   'gwW.real.preset.aligned': 'Desplazado e invertido',
   'gwW.real.preset.aligned.note':
-    'Livingston adelantado 6,9 ms y con el signo cambiado. Las dos cosas son fisicas: la onda cruzo la Tierra, y los brazos de los dos detectores estan girados uno respecto al otro.',
+    'Livingston adelantado 6,9 ms y con el signo cambiado. Las dos cosas son físicas: la onda cruzó la Tierra, y los brazos de los dos detectores están girados uno respecto al otro.',
   'gwW.real.trace.obsH': 'Hanford, medido',
   'gwW.real.trace.obsL': 'Livingston, medido',
   'gwW.real.trace.recH':
-    'Hanford, la onda de relatividad numerica de la colaboracion',
+    'Hanford, la onda de relatividad numérica de la colaboración',
   'gwW.real.trace.resH': 'Hanford, medido menos la onda',
   'gwW.real.axis': 'segundos tras GPS 1126259462  ({a}-{b})',
   'gwW.real.row.event': 'Evento',
@@ -2408,68 +2410,68 @@ export const ES_DEFERRED = {
   'gwW.real.row.doi': 'DOI',
   'gwW.real.row.filtering': 'Ya filtrado',
   'gwW.real.value.filtering':
-    'Filtrado en banda de 35 a 350 Hz y con muescas en las lineas del instrumento, por la colaboracion, antes de publicarse.',
+    'Filtrado en banda de 35 a 350 Hz y con muescas en las líneas del instrumento, por la colaboración, antes de publicarse.',
   'gwW.real.row.applied': 'Has aplicado',
   'gwW.real.value.applied': '{shift} ms a Livingston, {sign}',
   'gwW.real.row.measured': 'Mejor coincidencia',
   'gwW.real.value.measured':
-    'Las dos trazas encajan mejor con {lag} ms de diferencia y el signo cambiado (correlacion {r}).',
+    'Las dos trazas encajan mejor con {lag} ms de diferencia y el signo cambiado (correlación {r}).',
   'gwW.real.row.agreement': 'Acuerdo',
   'gwW.real.value.agreement':
     'La medida y la onda correlacionan en {r}, sin desplazamiento entre ellas.',
   'gwW.real.row.residual': 'Lo que queda',
   'gwW.real.value.residual':
-    'Ruido. Suena igual de fuerte antes de que llegue la senal que despues, y asi es como se sabe.',
+    'Ruido. Suena igual de fuerte antes de que llegue la señal que después, y así es como se sabe.',
   'gwW.real.row.licence': 'Licencia',
   'gwW.action.listen': 'Escuchar',
-  'gwW.row.mapping': 'Lo que estas oyendo',
+  'gwW.row.mapping': 'Lo que estás oyendo',
   'gwW.value.mapping.rate':
-    'Reproducido {speed} mas rapido de lo que ocurrio, asi que toda frecuencia es {speed} mas alta: de {low} a {high}. El chirrido mantiene su forma: barre un factor de {sweep}, igual que la senal real.',
+    'Reproducido {speed} más rápido de lo que ocurrió, así que toda frecuencia es {speed} más alta: de {low} a {high}. El chirrido mantiene su forma: barre un factor de {sweep}, igual que la señal real.',
   'gwW.value.mapping.shift':
-    'Estirado para durar {speed} mas y luego desplazado {shift} Hz hacia arriba: de {low} a {high}. El desplazamiento lo hace audible pero aplana el chirrido: ahora barre un factor de {sweep} donde la senal real barre {trueSweep}.',
+    'Estirado para durar {speed} más y luego desplazado {shift} Hz hacia arriba: de {low} a {high}. El desplazamiento lo hace audible pero aplana el chirrido: ahora barre un factor de {sweep} donde la señal real barre {trueSweep}.',
   'gwW.row.notSound': 'Lo que no es',
   'gwW.value.notSound':
     'Esto son datos convertidos en sonido. Las ondas gravitacionales no son sonido, y entre la fuente y nosotros no hay nada por lo que el sonido pueda viajar.',
-  'gwW.audio.playing': 'Reproduciendo la senal modelada: de {low} a {high}.',
+  'gwW.audio.playing': 'Reproduciendo la señal modelada: de {low} a {high}.',
   'gwW.audio.stopped': 'Detenido.',
   'gwW.audio.refused.muted':
-    'El sonido esta apagado. Enciendelo con el altavoz de la parte superior y vuelve a pulsar Escuchar.',
+    'El sonido está apagado. Enciéndelo con el altavoz de la parte superior y vuelve a pulsar Escuchar.',
   'gwW.audio.refused.unsupported':
-    'Este navegador no da salida de audio a la pagina. Todo en esta leccion puede hacerse desde las graficas.',
+    'Este navegador no da salida de audio a la página. Todo en esta lección puede hacerse desde las gráficas.',
   'gwW.audio.refused.empty': 'No hay nada en esta ventana que reproducir.',
   // ---------------------------------------------------------------------------
   // El panel de sonido (js/ui.js)
   // ---------------------------------------------------------------------------
   'sound.title': 'Sonido',
   'sound.state.long.unsupported':
-    'Este navegador no da salida de audio a la pagina.',
-  'sound.state.long.muted': 'Apagado. Nada en esta pagina puede sonar.',
+    'Este navegador no da salida de audio a la página.',
+  'sound.state.long.muted': 'Apagado. Nada en esta página puede sonar.',
   'sound.state.long.blocked':
-    'Encendido, pero el navegador aun no ha dejado que la pagina inicie el audio. Pulsa algun boton de la pagina y vuelve a intentarlo.',
+    'Encendido, pero el navegador aún no ha dejado que la página inicie el audio. Pulsa algún botón de la página y vuelve a intentarlo.',
   'sound.state.long.ready':
-    'Encendido, y no suena nada. Es lo normal: el sonido esta permitido, no iniciado.',
+    'Encendido, y no suena nada. Es lo normal: el sonido está permitido, no iniciado.',
   'sound.state.long.playing': 'Encendido, y ahora mismo suena algo.',
   'sound.permission':
-    'Encender el sonido da permiso a la pagina para producirlo. No significa que algo este sonando: el simulador esta en silencio cuando nada orbita, y el laboratorio solo suena cuando se lo pides.',
+    'Encender el sonido da permiso a la página para producirlo. No significa que algo esté sonando: el simulador está en silencio cuando nada orbita, y el laboratorio solo suena cuando se lo pides.',
   'sound.turnOn': 'Encender el sonido',
   'sound.turnOff': 'Apagar el sonido',
   'sound.row.mode': 'Modo',
   'sound.row.now': 'Ahora mismo',
   'sound.row.volume': 'Volumen',
-  'sound.mode.sandbox': 'Sonidos de la simulacion',
-  'sound.mode.signal': 'Senal de onda gravitacional',
+  'sound.mode.sandbox': 'Sonidos de la simulación',
+  'sound.mode.signal': 'Señal de onda gravitacional',
   'sound.now.nothing': 'Nada',
-  'sound.now.sandbox': 'Cuerpos en orbita, como tonos',
-  'sound.now.signal': 'Una senal de onda gravitacional, {seconds} s',
+  'sound.now.sandbox': 'Cuerpos en órbita, como tonos',
+  'sound.now.signal': 'Una señal de onda gravitacional, {seconds} s',
   'sound.preview': 'Reproducir un ejemplo',
   'sound.stop': 'Detener',
   'sound.preview.note':
-    'El ejemplo es un chirrido modelado de agujeros negros, desplazado hacia arriba para que lo reproduzca el altavoz de un portatil. No es el sonido propio de la simulacion, ni una grabacion de nada.',
-  'sound.lesson.link': 'Escuchar el espacio-tiempo: descubrir una fusion',
+    'El ejemplo es un chirrido modelado de agujeros negros, desplazado hacia arriba para que lo reproduzca el altavoz de un portátil. No es el sonido propio de la simulación, ni una grabación de nada.',
+  'sound.lesson.link': 'Escuchar el espacio-tiempo: descubrir una fusión',
   'sound.shortcut': 'Silenciar o activar el sonido',
 
   // ---------------------------------------------------------------------------
-  // Textos de instrumentos sacados de la descarga inicial. Vease en.deferred.js.
+  // Textos de instrumentos sacados de la descarga inicial. Véase en.deferred.js.
   // ---------------------------------------------------------------------------
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
@@ -2745,7 +2747,7 @@ export const ES_DEFERRED = {
     'Este encuadre, como fracción de un píxel de TESS',
   'gwW.source.short': 'esquema, no a escala',
   'gwW.ring.short': 'amplificado',
-  'gwW.row.overlay': 'El patron de ondas',
+  'gwW.row.overlay': 'El patrón de ondas',
   'gwW.row.ring': 'Las masas de prueba',
   // La evidencia del laboratorio de ondas gravitacionales
   'nb.source.gw-observation': 'Observacion de onda gravitacional',
@@ -2806,13 +2808,13 @@ export const ES_DEFERRED = {
   'gwW.action.capture': 'Guardar en el cuaderno',
   'gwW.row.similarity': 'Similitud con A',
   'gwW.value.similarity': '{value} sobre 1',
-  'gwW.value.similarity.none': 'Fija primero una senal como A.',
+  'gwW.value.similarity.none': 'Fija primero una señal como A.',
   'gwW.row.notDetection': 'Lo que eso no es',
   'gwW.value.notDetection':
-    'Un solapamiento normalizado, y nada mas. No es una relacion senal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimacion del fondo y un factor de ensayos, y aqui no hay ninguno.',
+    'Un solapamiento normalizado, y nada más. No es una relación señal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimación del fondo y un factor de ensayos, y aquí no hay ninguno.',
 
   // ---------------------------------------------------------------------------
-  // Mas textos sacados de la descarga inicial. Vease en.deferred.js.
+  // Más textos sacados de la descarga inicial. Véase en.deferred.js.
   // ---------------------------------------------------------------------------
   'export.empty': 'Todavía no hay nada registrado que exportar.',
   'export.failed': 'No se pudo generar ese archivo.',
@@ -2892,4 +2894,177 @@ export const ES_DEFERRED = {
   'stellar.phase.neutron-star': 'Estrella de neutrones',
   'stellar.phase.black-hole': 'Agujero negro',
   'stellar.phase.unknown': 'Sin modelar',
+  // ---------------------------------------------------------------------------
+  // El Laboratorio Estelar (js/stellarWidgets.js, js/stellarLab.js)
+  // ---------------------------------------------------------------------------
+  'stelW.lab.title': 'Laboratorio estelar',
+  'stelW.lab.note':
+    'Siete estrellas modeladas en un diagrama de Hertzsprung-Russell, y un cursor que puedes poner donde quieras. La temperatura crece hacia la izquierda: es un accidente histórico y pilla a todo el mundo una vez.',
+  'stelW.panel.hr': 'temperatura y luminosidad',
+  'stelW.panel.preview': 'esta estrella',
+  'stelW.panel.compare': 'estrellas fijadas',
+  'stelW.panel.population': 'una muestra sintética',
+  'stelW.panel.counts': 'cuántas de cada, todas y brillantes',
+  'stelW.axis.hotter': '← más caliente',
+  'stelW.axis.cooler': 'más fría →',
+  'stelW.axis.luminosity': 'luminosidad, L☉',
+  'stelW.control.track': 'Estrella modelada',
+  'stelW.control.age': 'Edad a lo largo de la traza',
+  'stelW.control.teff': 'Temperatura',
+  'stelW.control.lum': 'Luminosidad',
+  'stelW.control.order': 'Ordenar por',
+  'stelW.control.size': 'Tamaños',
+  'stelW.control.sun': 'Mostrar el Sol',
+  'stelW.control.view': 'Mostrando',
+  'stelW.control.threshold': 'Corte de brillo',
+  'stelW.preset.mass': '{m} M☉',
+  'stelW.preset.note.m020':
+    'Una enana roja pequeña. Modelada hasta el final de la combustión de hidrógeno en el núcleo, que el modelo sitúa en 1,1 billones de años: una predicción sobre una estrella mucho más joven que su propia vida.',
+  'stelW.preset.note.m050':
+    'Media masa solar. También modelada solo hasta el final de la combustión de hidrógeno en el núcleo, a los 96 mil millones de años.',
+  'stelW.preset.note.m100':
+    'Una estrella de masa solar, hasta una enana blanca en enfriamiento. Diez mil millones de años en la secuencia principal y unos mil quinientos millones después.',
+  'stelW.preset.note.m200':
+    'El doble que el Sol. Una décima parte de la vida en la secuencia principal, y deja una enana blanca más pesada.',
+  'stelW.preset.note.m500':
+    'Cinco masas solares. Cien millones de años en la secuencia principal, y una enana blanca de 0,89 masas solares al final.',
+  'stelW.preset.note.m1000':
+    'Diez masas solares. El modelo se detiene al encenderse el carbono, con la estrella convertida en una supergigante roja de 609 radios solares y casi seis décimas de masa solar ya perdidas por su viento.',
+  'stelW.preset.note.m2000':
+    'Veinte masas solares. Nueve millones de años, seis masas solares perdidas, y el modelo se detiene antes del colapso del núcleo con la estrella midiendo 1.070 radios solares.',
+  'stelW.action.mode': 'Cambiar de modo',
+  'stelW.action.guides': 'Líneas de radio constante',
+  'stelW.action.regions': 'Regiones',
+  'stelW.action.pin': 'Fijar esta estrella',
+  'stelW.action.unpin': 'Quitar la última',
+  'stelW.action.clear': 'Quitar todas',
+  'stelW.action.adopt': 'Usar el modelo más cercano',
+  'stelW.action.capture': 'Guardar en el cuaderno',
+  'stelW.mode.model': 'Una estrella modelada',
+  'stelW.mode.free': 'Un punto que elegiste',
+  'stelW.row.mode': 'Modo',
+  'stelW.row.teff': 'Temperatura superficial',
+  'stelW.row.luminosity': 'Luminosidad',
+  'stelW.row.radius': 'Radio',
+  'stelW.value.radius':
+    '{r}, deducido exactamente de la temperatura y la luminosidad',
+  'stelW.row.spectral': 'Tipo espectral',
+  'stelW.row.class': 'Clase de tamaño',
+  'stelW.row.mass': 'Masa',
+  'stelW.value.mass': '{now} ahora, {born} al nacer',
+  'stelW.row.age': 'Edad',
+  'stelW.row.phase': 'Fase',
+  'stelW.row.mainSequence': 'Secuencia principal',
+  'stelW.value.mainSequence': '{total} en total, {left} por delante',
+  'stelW.value.none': 'nada',
+  'stelW.row.trackEnds': 'El modelo se detiene',
+  'stelW.value.trackEnds': 'a los {age}, porque {why}',
+  'stelW.ends.tams':
+    'la estrella llega al final de la combustión de hidrógeno en el núcleo y MESA dejó de seguirla',
+  'stelW.ends.carbon-burning':
+    'se enciende el carbono, y lo que pasa después no está en este modelo',
+  'stelW.ends.wd-cooling':
+    'la estrella se ha convertido en una enana blanca en enfriamiento',
+  'stelW.row.hypothetical': 'Qué es esto',
+  'stelW.value.hypothetical':
+    'Una temperatura y una luminosidad que elegiste, y el radio que implican. No una masa, ni una edad, ni una vida: un punto de este diagrama no fija ninguna de esas cosas, y el mismo punto puede ser varias estrellas completamente distintas.',
+  'stelW.row.nearby': 'Modelos cercanos',
+  'stelW.value.nearbyOne': 'Un modelo pasa cerca: {list}',
+  'stelW.value.nearbyMany':
+    '{n} modelos pasan cerca, y no son el mismo objeto: {list}{more}. Nada de esto puede decirte cuál es: eso es lo que significa que un punto no fija una masa.',
+  'stelW.value.nearbyMore': ', y {n} más',
+  'stelW.value.nearbyItem': '{m} M☉, {phase}, a los {age}',
+  'stelW.value.nearbyNone':
+    'Ningún modelo del paquete pasa cerca de este punto. Eso no significa que no pueda haber ahí ninguna estrella.',
+  'stelW.row.outside': 'Fuera del gráfico',
+  'stelW.value.outside':
+    'Este punto queda fuera del rango dibujado. Los números siguen valiendo; el marcador está en el borde.',
+  'stelW.row.pinned': 'Fijadas',
+  'stelW.value.pinned': '{n} de {max}',
+  'stelW.row.guides': 'Líneas de radio constante',
+  'stelW.value.guides':
+    'Rectas en estos ejes, porque log L = 2 log R + 4 log T. Por eso el diagrama separa gigantes de enanas.',
+  'stelW.row.regions': 'Regiones',
+  'stelW.value.regions':
+    'Aproximadas, y sombreadas en vez de delimitadas a propósito. Una estrella no es gigante por cruzar una línea; la región resume donde acaban las estrellas grandes.',
+  'stelW.preview.exposure':
+    'el color es de la estrella; el brillo en pantalla no',
+  'stelW.compare.title': 'Comparar estrellas',
+  'stelW.compare.note':
+    'Hasta cuatro estrellas fijadas, dibujadas en una escala común o cada una ampliada hasta llenar su recuadro. No son la misma imagen, y el pie dice cuál estás viendo.',
+  'stelW.compare.empty':
+    'Aún no hay ninguna fijada. Fija una estrella en el laboratorio de arriba.',
+  'stelW.compare.sun': 'el Sol',
+  'stelW.compare.magnified': 'ampliada {n}',
+  'stelW.compare.subPixel': 'más pequeña que un píxel aquí',
+  'stelW.compare.trueNote':
+    'Una sola escala para todas. Lo que aparece como marcador es de verdad demasiado pequeño para verse junto a las demás.',
+  'stelW.compare.fitNote':
+    'Cada estrella ampliada hasta llenar su recuadro. Los tamaños aparentes NO son comparables: la ampliación aparece bajo cada una.',
+  'stelW.order.radiusSun': 'radio',
+  'stelW.order.teffK': 'temperatura',
+  'stelW.order.luminositySun': 'luminosidad',
+  'stelW.order.massSun': 'masa',
+  'stelW.size.true': 'relativos reales',
+  'stelW.size.fit': 'ajustar cada uno',
+  'stelW.size.true.long': 'Tamaños relativos reales, una escala común',
+  'stelW.size.fit.long':
+    'Cada estrella ajustada a su recuadro; los tamaños no son comparables',
+  'stelW.on': 'sí',
+  'stelW.off': 'no',
+  'stelW.row.orderedBy': 'Ordenado por',
+  'stelW.row.sizeMode': 'Tamaños',
+  'stelW.row.star': 'Estrella {n}',
+  'stelW.value.star': '{teff}, {lum}, {radius}, {mass}: {ratio} la más pequeña',
+  'stelW.value.unknownMass': 'masa desconocida',
+  'stelW.orbit.mercury': 'órbita de Mercurio',
+  'stelW.orbit.earth': 'órbita de la Tierra',
+  'stelW.orbit.mars': 'órbita de Marte',
+  'stelW.orbit.jupiter': 'órbita de Júpiter',
+  'stelW.pop.title': 'Una población sintética',
+  'stelW.pop.note':
+    'Unos cientos de estrellas modelo extraídas de una distribución de masas declarada y una historia de formación estelar declarada. No es un sondeo, no está observada, y ninguna de sus estrellas es real.',
+  'stelW.pop.row.synthetic': 'Qué es esto',
+  'stelW.pop.value.synthetic':
+    'Una muestra de un modelo, generada a partir de una semilla. Cada estrella está sobre las mismas trazas que usa el laboratorio.',
+  'stelW.pop.row.sample': 'La muestra',
+  'stelW.pop.value.sample':
+    '{n} estrellas colocadas de {requested} extraídas. {evolved} ya habían dejado la secuencia principal y se descartaron en vez de inventarlas. Semilla {seed}.',
+  'stelW.pop.row.imf': 'Masas extraídas de',
+  'stelW.pop.value.imf':
+    '{ref}, entre 0,2 y 20 masas solares, con una tasa de formación estelar constante durante los últimos diez mil millones de años.',
+  'stelW.pop.row.threshold': 'El subconjunto brillante',
+  'stelW.pop.value.threshold':
+    'Todas las estrellas puestas a {d} pc; quedarse con las que superan {f} de flujo relativo deja {kept} de {total}.',
+  'stelW.pop.row.type': 'Tipo {type}',
+  'stelW.pop.value.type':
+    '{all} en la muestra ({allPct}%), {bright} en el subconjunto brillante ({brightPct}%)',
+  'stelW.pop.row.limits': 'Qué deja fuera',
+  'stelW.pop.value.limits':
+    'Las estrellas que han dejado la secuencia principal, el polvo interestelar, las binarias y cualquier composición que no sea solar. Las cuatro cosas importan en un sondeo real y ninguna está aquí.',
+  // La evidencia del Laboratorio Estelar
+  'nb.source.stellar-lab': 'Laboratorio estelar',
+  'nb.stellar.title.model': 'Una estrella modelada',
+  'nb.stellar.title.point': 'Un punto del diagrama H-R',
+  'nb.stellar.teff': 'Temperatura efectiva',
+  'nb.stellar.luminosity': 'Luminosidad bolométrica',
+  'nb.stellar.radius': 'Radio fotosférico',
+  'nb.stellar.radiusNote':
+    'deducido de la temperatura y la luminosidad por la relación de Stefan-Boltzmann, que es exacta',
+  'nb.stellar.mass': 'Masa actual',
+  'nb.stellar.initialMass': 'Masa inicial',
+  'nb.stellar.age': 'Edad',
+  'nb.stellar.mainSequence': 'Vida total en la secuencia principal',
+  'nb.stellar.pinnedRadius': 'Estrella fijada {n}: radio',
+  'nb.stellar.pinnedTeff': 'Estrella fijada {n}: temperatura',
+  'nb.stellar.limit.model':
+    'Un modelo, no una observación: {grid}. Sin rotación, sin binaridad, sin campos magnéticos y con una sola composición.',
+  'nb.stellar.limit.incomplete':
+    'La traza no llega al final de la vida de la estrella: {why}.',
+  'nb.stellar.limit.hypothetical':
+    'Esto es una temperatura y una luminosidad que alguien eligió, y el radio que implican. No tiene masa, ni edad, ni vida, porque un punto de este diagrama no determina ninguna de ellas.',
+  'nb.stellar.limit.ambiguous':
+    '{n} modelos del paquete pasan cerca de este punto y no son el mismo objeto. Nada en esta lectura identifica cuál es, si es alguno.',
+  'nb.stellar.limit.fitted':
+    'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
 };

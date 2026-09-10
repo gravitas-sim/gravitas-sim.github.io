@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3350,
+    limit: 3420,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -280,7 +280,27 @@ const BUDGETS = [
       '828.6 KB before the lesson and 829.0 KB after, against 830.0. The four ' +
       'hundred bytes are the lesson id in the manifest and its subject tag in ' +
       'the browse metadata, which is the whole of a nineteenth lesson\u2019s ' +
-      'share of what a first-time visitor downloads.',
+      'share of what a first-time visitor downloads.' +
+      '\n\nRaised from 3350 to 3420 for the stellar model and the Stellar ' +
+      'Lab: 3280.2 to 3382.6 KB, measured from a fresh build either side. ' +
+      'The 102.4 KB is accounted for down to the kilobyte. Fifty-five and a ' +
+      'half of it is the model - 46.2 KB of that a single file, the seven ' +
+      'thinned MIST tracks in js/data/stellar/mistTracks.js, which is a ' +
+      'dataset rather than code and is the reason the tracks were thinned at ' +
+      'all. Twenty-seven is the lab itself, two thirds of it the three ' +
+      'widgets. The remaining twenty is a hundred and seventy labels in each ' +
+      'of two languages, in the deferred half of the catalogue where every ' +
+      'other instrument\u2019s prose lives.\n\n' +
+      'The initial download went DOWN, from 830.0 to 825.7 KB against a limit ' +
+      'that has not moved. The lab itself is reachable only through ' +
+      'js/widgets.js and cost the start-up path five bytes; what bought the ' +
+      'rest was 6.3 KB of stylesheet for classes no HTML or script names any ' +
+      'more - the old .sonification-panel among them, replaced by the speaker ' +
+      'popover, and the mobile object-type rail, the energy-stats block and ' +
+      'the light-curve controls, all of which outlived their markup. ' +
+      'tools/ has no dead-CSS check; the sweep that found them was a scan ' +
+      'for class names no .js, .html or .mjs in the tree mentions, either ' +
+      'literally or as a template-assembled prefix.',
   },
 ];
 

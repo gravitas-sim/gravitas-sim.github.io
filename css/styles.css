@@ -645,43 +645,6 @@
     }
   }
 
-  /* Mobile object type controls */
-  .mobile-object-type-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    width: 100%;
-  }
-
-  .mobile-object-type-controls .object-type-nav {
-    flex: 0 0 auto;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    font-size: 14px;
-    border-radius: 8px;
-    background: rgba(34, 34, 34, 0.8);
-    border: 1px solid rgba(0, 170, 255, 0.2);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .mobile-object-type-controls .object-type-nav:hover {
-    background: rgba(0, 170, 255, 0.2);
-    border-color: rgba(0, 170, 255, 0.4);
-  }
-
-  .mobile-object-type-controls #mobileObjectTypeBtn {
-    flex: 1;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
   /* Responsive breakpoints */
   @media (max-width: 1200px) {
     .ui-container {
@@ -1018,11 +981,6 @@
     }
   }
 
-  .setting-item,
-  .setting-special-button {
-    display: contents;
-  }
-
   .setting-label {
     justify-self: end;
     text-align: right;
@@ -1161,31 +1119,6 @@
   .setting-control input[type='color']::-webkit-color-swatch {
     border-radius: 6px;
     border: none;
-  }
-
-  .setting-separator {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin: 20px 0;
-  }
-  .setting-separator h3 {
-    margin: 0;
-    color: var(--secondary-color);
-    font-size: var(--text-md);
-    white-space: nowrap;
-  }
-  .setting-separator .line {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--separator-color),
-      transparent
-    );
-    box-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
   }
 
   .settings-footer {
@@ -1779,33 +1712,6 @@
     justify-content: flex-end;
   }
 
-  .sonification-panel {
-    margin-top: 36px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    pointer-events: auto;
-    opacity: 0;
-    transform: translateY(-6px);
-    transition:
-      opacity 0.35s ease,
-      transform 0.35s ease;
-  }
-
-  .sonification-panel.showUI {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  #overlay.minimized .sonification-panel {
-    display: none;
-  }
-
   .sonification-toggle {
     background: rgba(79, 172, 254, 0.12);
     border: 1px solid rgba(79, 172, 254, 0.45);
@@ -1839,13 +1745,6 @@
     opacity: 0.5;
     cursor: not-allowed;
     box-shadow: none;
-  }
-
-  .sonification-description {
-    margin: 0;
-    font-size: 12px;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.9);
   }
 
   .overlay-stats {
@@ -2263,36 +2162,6 @@
     height: 300px;
   }
 
-  .export-button,
-  .clear-button {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .export-button:hover {
-    background: rgba(0, 122, 204, 0.8);
-    border-color: rgba(0, 122, 204, 0.5);
-  }
-
-  .clear-button:hover {
-    background: rgba(255, 59, 48, 0.8);
-    border-color: rgba(255, 59, 48, 0.5);
-  }
-
-  .export-button span,
-  .clear-button span {
-    font-size: 12px;
-  }
-
   /* Refresh button specific styling */
   #refreshEnergyChart {
     background: rgba(0, 255, 136, 0.2);
@@ -2323,38 +2192,6 @@
     50% {
       box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
     }
-  }
-
-  /* Energy tab styles */
-  /* TODO: REMOVE - Energy stats styles to be replaced */
-  .energy-stats-container {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-
-  .energy-stats-header h3 {
-    margin: 0 0 15px 0;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-  }
-
-  .energy-stat-label {
-    font-size: 11px;
-    color: #aaa;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .energy-stat-value {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    font-family: 'Courier New', monospace;
   }
 
   /* Responsive design for energy tab */
@@ -2683,37 +2520,6 @@
   .light-curve-btn:hover {
     background: rgba(0, 120, 255, 0.3) !important;
     transform: none !important;
-  }
-
-  .light-curve-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 6px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    flex-shrink: 0;
-    background: rgba(0, 0, 0, 0.15);
-  }
-
-  .light-curve-angle-label {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
-    white-space: nowrap;
-    min-width: 110px;
-  }
-
-  .light-curve-controls input[type='range'] {
-    flex: 1;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(79, 172, 254, 0.2);
-    accent-color: #4facfe;
-    cursor: pointer;
-    padding: 0 !important;
-    margin: 0;
-    box-shadow: none !important;
-    border: none !important;
-    min-width: 0;
   }
 
   .light-curve-stage {

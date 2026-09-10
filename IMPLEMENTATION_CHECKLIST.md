@@ -39,17 +39,17 @@ real control, a real measurement, or a real dataset.
 
 ### Acceptance criteria
 
-| # | Criterion | Where it is checked |
-|---|-----------|---------------------|
-| A1 | Waveform model reproduces published closed-form limits (chirp mass, `f(tau)`, ISCO, amplitude scaling) against independently computed reference values | `tests/gwWaveform.test.js` |
-| A2 | Sandbox physics, sandbox audio and merger ripples are unchanged and still labelled illustrative | `tools/physics-checks.mjs`, `tests/` |
-| A3 | One canonical timeline drives plots, audio, source phase and captures | `tests/gwTimeline.test.js` |
-| A4 | Audio is generated from the signal at a signal sample rate, never from the animation loop | `tests/gwAudio.test.js` |
-| A5 | No audio without an explicit user gesture; no duplicate merger audio | `e2e/gwAudio.spec.js` |
-| A6 | Wave overlay is transverse, phase-tied to the timeline, and bounded in cost | `tests/gwOverlay.test.js` |
-| A7 | Real GW150914 data is bundled with full provenance and verified checksums | `tools/build-gw-data.mjs --check` |
-| A8 | The 24-step lesson completes in EN and ES, by keyboard, with audio off | `e2e/gwLesson.spec.js` |
-| A9 | Budgets hold without being raised for anything that should have been deferred | `npm run budget:check` |
+| #   | Criterion                                                                                                                                              | Where it is checked                  |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| A1  | Waveform model reproduces published closed-form limits (chirp mass, `f(tau)`, ISCO, amplitude scaling) against independently computed reference values | `tests/gwWaveform.test.js`           |
+| A2  | Sandbox physics, sandbox audio and merger ripples are unchanged and still labelled illustrative                                                        | `tools/physics-checks.mjs`, `tests/` |
+| A3  | One canonical timeline drives plots, audio, source phase and captures                                                                                  | `tests/gwTimeline.test.js`           |
+| A4  | Audio is generated from the signal at a signal sample rate, never from the animation loop                                                              | `tests/gwAudio.test.js`              |
+| A5  | No audio without an explicit user gesture; no duplicate merger audio                                                                                   | `e2e/gwAudio.spec.js`                |
+| A6  | Wave overlay is transverse, phase-tied to the timeline, and bounded in cost                                                                            | `tests/gwOverlay.test.js`            |
+| A7  | Real GW150914 data is bundled with full provenance and verified checksums                                                                              | `tools/build-gw-data.mjs --check`    |
+| A8  | The 24-step lesson completes in EN and ES, by keyboard, with audio off                                                                                 | `e2e/gwLesson.spec.js`               |
+| A9  | Budgets hold without being raised for anything that should have been deferred                                                                          | `npm run budget:check`               |
 
 ### Stage 1 - Audit and scientific contract
 
@@ -120,7 +120,7 @@ real control, a real measurement, or a real dataset.
       cannot draw both ends of a 26-fold frequency sweep - either the early
       wavelengths are wider than the picture or the late ones are finer than a
       pixel. The speed is recomputed from the frequency at the playhead and the
-      legend says the propagation is slowed *and rescaled*. The within-frame
+      legend says the propagation is slowed _and rescaled_. The within-frame
       physics is untouched
 
 ### Stage 4 - Audio that explains itself
@@ -189,13 +189,13 @@ real control, a real measurement, or a real dataset.
 
 Not started. Recorded here so the dependency order is not lost.
 
-| Prompt | Deliverable | Depends on |
-|--------|-------------|------------|
-| B1 | Shared stellar-state representation and curated MIST subset | **done** |
-| B2 | Stellar Lab: H-R diagram, appearance, comparison, population | B1 |
-| B3 | 28-step "A universe of stars" | B2 |
-| B4 | Evolutionary playback and endpoint visuals | B2 |
-| B5 | 34-step "Lives of stars" | B4 |
+| Prompt | Deliverable                                                  | Depends on |
+| ------ | ------------------------------------------------------------ | ---------- |
+| B1     | Shared stellar-state representation and curated MIST subset  | **done**   |
+| B2     | Stellar Lab: H-R diagram, appearance, comparison, population | **done**   |
+| B3     | 28-step "A universe of stars"                                | B2         |
+| B4     | Evolutionary playback and endpoint visuals                   | B2         |
+| B5     | 34-step "Lives of stars"                                     | B4         |
 
 After B3, the first stellar investigation must be walked from launch through
 evidence export before B4 begins.
@@ -204,13 +204,14 @@ evidence export before B4 begins.
 
 **The data.** `tools/build-stellar-tracks.mjs` reduces seven MIST v1.2 tracks -
 0.2, 0.5, 1, 2, 5, 10 and 20 solar masses at solar composition with no rotation
+
 - from ~7,700 rows of 77 columns to 2,316 rows of four, into
-`js/data/stellar/mistTracks.js` (49 KB, deferred). Every mass is a grid point,
-so nothing is interpolated at build time. The source URL, its SHA-256, the
-composition, the rotation prescription, the citation MIST asks for and the
-redistribution position are all recorded. `npm run stellar:check` verifies the
-committed module and, where the 100 MB source is cached, regenerates it byte
-for byte.
+  `js/data/stellar/mistTracks.js` (49 KB, deferred). Every mass is a grid point,
+  so nothing is interpolated at build time. The source URL, its SHA-256, the
+  composition, the rotation prescription, the citation MIST asks for and the
+  redistribution position are all recorded. `npm run stellar:check` verifies the
+  committed module and, where the 100 MB source is cached, regenerates it byte
+  for byte.
 
 - The ten primary equivalent evolutionary points are pinned, so the named phase
   boundaries are exactly MIST's. Thinning is bounded at 0.004 dex and the worst
@@ -235,7 +236,7 @@ shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
   description and reports the radius too.
 - `js/lightCurve.js` no longer has its own mass-radius power law.
 - The inspector's star card is rebuilt on the shared description: measured
-  values are used where they exist and guessed ones are marked *(estimated)*.
+  values are used where they exist and guessed ones are marked _(estimated)_.
 - The star constructor no longer invents a `baseColor`, so an authored colour
   is distinguishable from a generated one - and a generated star is coloured by
   its temperature, in the 2D renderer, the trails and the 3D view.
@@ -267,14 +268,14 @@ shared description, `supportsHabitableZone`, `supportsTransitPhotometry`,
 
 **Checks run**
 
-| Check | Result |
-|-------|--------|
-| `jest` | 4323 passed, 122 suites (94 of them new here) |
-| `tools/validate-physics.mjs` | 243 checks, 243 passed |
-| `e2e` inspector, displayedSizes, observing, sandbox, sharing, scenarioContract, worldConstruction | 70 passed |
-| `stellar:check`, `gw:check` | both regenerate byte for byte |
-| `lint`, `format:check`, `check-architecture` (248 modules), `check-links`, `docs:check` | green |
-| `budget:check` | initial **830.0 of 830.0 KB**, deferred 3286.2 of 3350.0 |
+| Check                                                                                             | Result                                                   |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `jest`                                                                                            | 4323 passed, 122 suites (94 of them new here)            |
+| `tools/validate-physics.mjs`                                                                      | 243 checks, 243 passed                                   |
+| `e2e` inspector, displayedSizes, observing, sandbox, sharing, scenarioContract, worldConstruction | 70 passed                                                |
+| `stellar:check`, `gw:check`                                                                       | both regenerate byte for byte                            |
+| `lint`, `format:check`, `check-architecture` (248 modules), `check-links`, `docs:check`           | green                                                    |
+| `budget:check`                                                                                    | initial **830.0 of 830.0 KB**, deferred 3286.2 of 3350.0 |
 
 **Warning for B2: the initial download has zero headroom.** It was paid for by
 moving 63 strings out of the eager catalogue - the front door, the export
@@ -295,7 +296,122 @@ wiring a lazy handler for the gallery button.
 - MIST states a citation requirement and no explicit redistribution licence.
   The bundle is a heavily reduced derived subset, fully attributed, and the
   build reproduces it from their download in one command.
-- Nothing yet *uses* the tracks in the interface. That is B2.
+- Nothing yet _uses_ the tracks in the interface. That is B2.
+
+### B2 - the Stellar Lab: done
+
+**The instrument.** Three widgets, all deferred, all reachable only through
+`js/widgets.js`:
+
+- [x] `stellar-lab` - the H-R diagram with the seven tracks on it, and a
+      preview of the selected star beside it. Temperature increases to the
+      left; both axes logarithmic; the reversal is explained in the widget's
+      own note rather than in a tour that has to be dismissed.
+- [x] `stellar-compare` - up to four pinned stars, ordered by radius,
+      temperature, luminosity or mass, with the numerical ratio against the
+      smallest and the Sun as an optional reference.
+- [x] `stellar-population` - a reproducible synthetic population and the same
+      population above a flux cut, over one histogram.
+
+**The two modes are two different kinds of claim.**
+
+- [x] _Explore modelled stars_: mass, phase, age, total main-sequence lifetime
+      and time remaining, all from the track.
+- [x] _Explore temperature and luminosity_: a point the student chose, its
+      radius from Stefan-Boltzmann, and **no mass, no age, no lifetime**.
+      Where several models pass close, all of them are named - at 4500 K and
+      100 L(sun) six do, from 10.6 kyr to 1.32 Gyr - and the lab says it cannot
+      choose between them. Adopting one is a separate deliberate action;
+      asking to see them does not move the point.
+- [x] `js/stellar/hr.js` - axis geometry, constant-radius guides (straight
+      lines on these axes, and tested to be straight), regions traced from the
+      tracks' own ZAMS and TAMS points, and `hypotheticalAt` which returns
+      `massSun: null` by construction.
+- [x] `js/stellar/population.js` - Kroupa (2001) IMF, constant SFR over 10 Gyr,
+      seeded and reproducible. 351 of 400 placed; 49 had left the main sequence
+      and are dropped rather than guessed at, and the count is reported.
+      All: 64.7% M, 26.5% K. Above 1e-4 relative flux at 100 pc: 16 stars,
+      12.5% A, 50% F, 37.5% G, **no K and no M**. That gap is the lesson.
+
+**Two defects found and fixed while wiring it, both worth naming:**
+
+- [x] The lab was rebuilt whenever a step's spec differed, which threw away the
+      pinned stars. A lesson that pins on one step and compares three steps
+      later would have lost them. There is now one lab per page.
+- [x] The step's declared mode was re-stamped on every `reset()`, so a student
+      who switched to the free cursor was switched back the moment they moved
+      a slider. The step now says where to start, not where to stay. Same shape
+      as the scenario-preset re-stamping bug.
+
+**Dragging, and its keyboard equal.** The widget contract was canvas + sliders
+
+- readout, with no pointer input at all. Rather than substitute sliders for the
+  dragging B2 asks for, `js/investigations.js` gained an opt-in `pick` hook:
+
+* [x] A widget that declares `pick` gets pointer-down/move on its canvas,
+      routed through the same `applied()` path a slider uses - so the sliders
+      move to match, the value is remembered with the step, and the redraw is
+      the same one. Every other widget in the catalogue is untouched.
+* [x] The canvas becomes focusable and the arrow keys step the two controls the
+      widget names in `pickAxes` (shift for the coarse move), so the diagram is
+      drivable without a mouse. The sliders remain the numeric entry.
+* [x] A click in _modelled_ mode is refused rather than dragging the star off
+      its track.
+
+**Checks at this stage**
+
+| Check                                                      | Result                                                             |
+| ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| `tests/stellarLab.test.js`                                 | 66 passed                                                          |
+| `jest` (whole suite)                                       | 4388 of 4389; the one failure is below                             |
+| `budget:check`                                             | initial **825.7** of an untouched 830.0; deferred 3386.7 of 3420.0 |
+| `lint`, `format:check`, `check-architecture` (252 modules) | green                                                              |
+| `tools/stellar-shots.mjs`                                  | 10 captures, no page errors                                        |
+
+**The one failing test, and why it is left failing.**
+`tests/investigationIntegrity.test.js` requires every registered widget to be
+used by some lesson. The three stellar widgets are not, until B3 writes the
+lesson that uses them. Weakening that check to get a green run is exactly what
+this package's instructions forbid, so it stays red for this one commit and B3
+turns it green.
+
+**Fixed while verifying, from the captures rather than from a test**
+
+- [x] The preview caption and the comparison note were single unwrapped lines
+      drawn wider than their panels, printing over the axis labels. Both wrap
+      now, and the comparison stage budgets its height from the note's measured
+      size instead of a constant.
+- [x] The Solar System orbit labels were all drawn on one horizontal line and
+      collided. Each now sits on its own arc, and one that would still overlap
+      is dropped rather than printed illegibly.
+- [x] The "N models pass close" readout listed four of them without saying so,
+      and the four were often the same mass four times. It now prefers one per
+      distinct mass and says how many more there are.
+
+**Spanish, corrected across package A as well as B.** 266 catalogue strings I
+wrote for `gwW`, `sound`, `stelW` and `nb.stellar` had no diacritics at all,
+while 652 lines of the same file have them. 116 values were corrected - the
+unambiguous words from a table, and every `esta`/`esta`, `cual`/`cual`,
+`si`/`si`, `aun`/`aun`, `publico`/`publico`, `orbita`/`orbita`, `este`/`este`
+and `dibujo`/`dibujo` decided one at a time from its own sentence.
+
+- **Pre-existing, not fixed, reported:** other families in
+  `js/i18n/es.deferred.js` have the same gap - lines 2001-2400 are almost
+  entirely unaccented. Those are not this package's strings and rewriting them
+  silently would be scope this package was not given. There is no check that
+  would catch it; adding one would fail on that existing text.
+
+**Honest remaining limitations of B2**
+
+- Pinned comparisons persist across steps and across a lesson session, but not
+  across a page reload: the widget contract persists numeric control values
+  only, and a pinned list is not one.
+- The population histogram is linear, so two A stars beside 227 M dwarfs are a
+  hairline. The counts are printed above each bar. That is the shape of the
+  fact, but it is a chart that has to be read as much as looked at.
+- The population's scatter panel has no axis titles of its own; it borrows the
+  reading of the diagram directly above it.
+- Nothing in the lab ages a star yet. Evolutionary playback is B4.
 
 ---
 
@@ -315,16 +431,16 @@ Nothing in this package is to be pushed or deployed.
 
 Checks run at this point, with results:
 
-| Check | Result |
-|-------|--------|
-| `jest` (whole suite) | 4229 passed, 120 suites |
-| `tools/validate-physics.mjs` | 243 checks, 243 passed |
-| `tools/scenario-stability.mjs` | 12 scenarios, all conserved |
-| `e2e/gwLesson.spec.js` | 13 passed |
-| `e2e/gwAudio.spec.js` | 15 passed |
-| `e2e/teaching.spec.js` | 21 passed |
-| `budget:check` | initial 829.0 of 830.0 KB (untouched limit); deferred 3280.2 of 3350.0 |
-| `lint`, `format:check`, `check-architecture` (243 modules), `check-links`, `docs:check`, `gw:check`, `teaching:check`, `activities:check`, `manifest`, `manual` | all green |
+| Check                                                                                                                                                           | Result                                                                 |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `jest` (whole suite)                                                                                                                                            | 4229 passed, 120 suites                                                |
+| `tools/validate-physics.mjs`                                                                                                                                    | 243 checks, 243 passed                                                 |
+| `tools/scenario-stability.mjs`                                                                                                                                  | 12 scenarios, all conserved                                            |
+| `e2e/gwLesson.spec.js`                                                                                                                                          | 13 passed                                                              |
+| `e2e/gwAudio.spec.js`                                                                                                                                           | 15 passed                                                              |
+| `e2e/teaching.spec.js`                                                                                                                                          | 21 passed                                                              |
+| `budget:check`                                                                                                                                                  | initial 829.0 of 830.0 KB (untouched limit); deferred 3280.2 of 3350.0 |
+| `lint`, `format:check`, `check-architecture` (243 modules), `check-links`, `docs:check`, `gw:check`, `teaching:check`, `activities:check`, `manifest`, `manual` | all green                                                              |
 
 **Honest remaining limitations of package A**
 

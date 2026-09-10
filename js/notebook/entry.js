@@ -60,6 +60,7 @@ export const SOURCE = Object.freeze({
   BENCH_RELIABILITY: 'bench-reliability',
   BENCH_SWEEP: 'bench-sweep',
   GW_OBSERVATION: 'gw-observation',
+  STELLAR_LAB: 'stellar-lab',
 });
 
 /** The sources this build can capture from. */
@@ -69,6 +70,7 @@ export const SOURCES = [
   SOURCE.BENCH_RELIABILITY,
   SOURCE.BENCH_SWEEP,
   SOURCE.GW_OBSERVATION,
+  SOURCE.STELLAR_LAB,
 ];
 
 /** How long a student's prose may be, per field. */

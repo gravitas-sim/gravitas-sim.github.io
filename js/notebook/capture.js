@@ -1713,3 +1713,92 @@ export function fromGwObservation({
     },
   });
 }
+
+/**
+ * A reading from the Stellar Lab.
+ *
+ * The distinction this entry has to keep is the one the lab is built around: a
+ * point somebody chose on a diagram is not a star. A free-cursor reading
+ * carries a temperature, a luminosity and the radius they imply, and no mass,
+ * no age and no lifetime, because those are not determined - and it says so in
+ * its limitations rather than leaving the absence to be noticed. A modelled
+ * reading carries all of them and names the track and the grid.
+ *
+ * @param {object} spec
+ * @param {object} spec.snapshot - From js/stellarLab.js snapshotOf()
+ * @param {object} [spec.provenance] - The live world's provenance
+ * @returns {?object} A notebook entry
+ */
+export function fromStellarObservation({ snapshot, provenance = {} }) {
+  if (!snapshot) return null;
+  const modelled = snapshot.source === 'model';
+  const kind = modelled ? KIND.ANALYTIC : KIND.MEASURED;
+  const quantities = [];
+  const add = (label, value, unit, note = '', k = kind) => {
+    if (!Number.isFinite(value)) return;
+    quantities.push(quantity({ label, value, unit, kind: k, note }));
+  };
+
+  add(t('nb.stellar.teff'), snapshot.teffK, 'K');
+  add(t('nb.stellar.luminosity'), snapshot.luminositySun, 'L☉');
+  add(
+    t('nb.stellar.radius'),
+    snapshot.radiusSun,
+    'R☉',
+    t('nb.stellar.radiusNote'),
+    KIND.ANALYTIC
+  );
+  if (modelled) {
+    add(t('nb.stellar.mass'), snapshot.massSun, 'M☉');
+    add(t('nb.stellar.initialMass'), snapshot.initialMassSun, 'M☉');
+    add(t('nb.stellar.age'), snapshot.ageYr, 'yr');
+    add(t('nb.stellar.mainSequence'), snapshot.mainSequenceYr, 'yr');
+  }
+
+  // Every pinned star, so a ratio written in the prose can be checked.
+  snapshot.pinned.forEach((p, i) => {
+    add(t('nb.stellar.pinnedRadius', { n: i + 1 }), p.radiusSun, 'R☉');
+    add(t('nb.stellar.pinnedTeff', { n: i + 1 }), p.teffK, 'K');
+  });
+
+  const limitations = [];
+  if (modelled) {
+    limitations.push(t('nb.stellar.limit.model', { grid: snapshot.grid }));
+    if (snapshot.trackComplete === false) {
+      limitations.push(
+        t('nb.stellar.limit.incomplete', { why: snapshot.trackEndsBecause })
+      );
+    }
+  } else {
+    limitations.push(t('nb.stellar.limit.hypothetical'));
+    if (snapshot.ambiguous) {
+      limitations.push(
+        t('nb.stellar.limit.ambiguous', { n: snapshot.nearbyCount })
+      );
+    }
+  }
+  if (snapshot.pinned.length && snapshot.sizeMode === 'fit') {
+    limitations.push(t('nb.stellar.limit.fitted'));
+  }
+
+  return buildEntry({
+    source: SOURCE.STELLAR_LAB,
+    title: modelled ? t('nb.stellar.title.model') : t('nb.stellar.title.point'),
+    quantities,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: 'stellar lab',
+      units: {
+        temperature: 'K',
+        luminosity: 'solar',
+        radius: 'solar, photospheric',
+        mass: 'solar',
+      },
+      flags: [
+        modelled ? 'stellar-track' : 'hypothetical-point',
+        ...(snapshot.ambiguous ? ['ambiguous'] : []),
+      ],
+    }),
+    prose: { limitations: limitations.join('\n') },
+  });
+}

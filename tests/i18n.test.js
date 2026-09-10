@@ -315,7 +315,7 @@ describe('the catalogue split', () => {
     // panel has loaded. The luminosity-class words stayed behind - the
     // inspector prints one on every star's card - and are checked for below.
     const allowed =
-      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stellar\.phase)\./;
+      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stellar\.phase)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The words the inspector prints on every star card stayed eager.

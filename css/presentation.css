@@ -140,10 +140,6 @@
      transport bar's labels are what overflow first, so they go and the icons
      stay. */
   @media (max-width: 560px) {
-    body.presentation-embed .timeline-bar .timeline-label,
-    body.presentation-embed .timeline-bar .timeline-clock-label {
-      display: none;
-    }
     body.presentation-embed .timeline-bar {
       padding: var(--space-1) var(--space-2);
     }
@@ -270,12 +266,6 @@
     text-shadow: none;
   }
 
-  /* Except the two that are meant to recede, which get the secondary token
-     rather than losing the distinction altogether. */
-  body.presentation-lecture #overlay .separator-line {
-    background: var(--border-subtle);
-  }
-
   /* The scenario card is the title of the slide, and at projection distance it
      is the single most important piece of text on the screen. */
   /* The card is normally centred in the band between the readout and the rail
@@ -312,12 +302,6 @@
   body.presentation-lecture #objectInspector {
     font-size: var(--text-base);
     min-width: 24rem;
-  }
-
-  body.presentation-lecture #objectInspector .stat-value,
-  body.presentation-lecture #objectInspector .inspector-value {
-    font-size: var(--text-md);
-    font-variant-numeric: tabular-nums;
   }
 
   /* Settings and the gallery stay reachable during a lecture - a question from

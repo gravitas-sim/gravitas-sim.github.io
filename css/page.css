@@ -668,10 +668,6 @@
    ============================================================================ */
 
 @layer components {
-  .val-kind-analytic {
-    --val-kind: var(--accent);
-  }
-
   /* --- Headline verdict --------------------------------------------------- */
 
   /* The page is wide for its tables and its chart; its prose is not. */
@@ -1222,10 +1218,6 @@
   .val-bar-exact {
     font-size: var(--text-xs);
     color: var(--text-tertiary, var(--text-secondary));
-  }
-
-  .val-verdict-cell {
-    text-align: right;
   }
 
   .val-pill {

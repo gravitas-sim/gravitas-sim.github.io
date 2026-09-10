@@ -741,6 +741,8 @@ export const EN_DEFERRED = {
   // runs. The dozen that stay in the base catalogue are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
+  'inv.tool.pickable':
+    'Diagram you can point at. Click or drag to move the cursor; the arrow keys move it too, and the sliders below do the same thing with numbers.',
   'inv.error.scenario': 'Could not load this step’s scenario.',
   'inv.plot.placeholder': 'Values you enter appear here',
   'inv.plot.title': 'Your measurements',
@@ -2857,4 +2859,174 @@ export const EN_DEFERRED = {
   'stellar.phase.neutron-star': 'Neutron star',
   'stellar.phase.black-hole': 'Black hole',
   'stellar.phase.unknown': 'Not modelled',
+  // ---------------------------------------------------------------------------
+  // The Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
+  // ---------------------------------------------------------------------------
+  'stelW.lab.title': 'Stellar Lab',
+  'stelW.lab.note':
+    'Seven modelled stars on a Hertzsprung–Russell diagram, and a cursor you can put anywhere. Temperature increases to the left — that is a historical accident and it catches everybody once.',
+  'stelW.panel.hr': 'temperature and luminosity',
+  'stelW.panel.preview': 'this star',
+  'stelW.panel.compare': 'pinned stars',
+  'stelW.panel.population': 'a synthetic sample',
+  'stelW.panel.counts': 'how many of each, all and bright',
+  'stelW.axis.hotter': '← hotter',
+  'stelW.axis.cooler': 'cooler →',
+  'stelW.axis.luminosity': 'luminosity, L☉',
+  'stelW.control.track': 'Modelled star',
+  'stelW.control.age': 'Age along the track',
+  'stelW.control.teff': 'Temperature',
+  'stelW.control.lum': 'Luminosity',
+  'stelW.control.order': 'Order by',
+  'stelW.control.size': 'Sizes',
+  'stelW.control.sun': 'Show the Sun',
+  'stelW.control.view': 'Showing',
+  'stelW.control.threshold': 'Brightness cut',
+  'stelW.preset.mass': '{m} M☉',
+  'stelW.preset.note.m020':
+    'A small red dwarf. Modelled to the end of core hydrogen burning, which the model puts at 1.1 trillion years — a prediction about a star far younger than its own lifetime.',
+  'stelW.preset.note.m050':
+    'Half a solar mass. Also modelled only to the end of core hydrogen burning, at 96 billion years.',
+  'stelW.preset.note.m100':
+    'A solar-mass star, all the way to a cooling white dwarf. Ten billion years on the main sequence and about a billion and a half after it.',
+  'stelW.preset.note.m200':
+    'Twice the Sun. A tenth of the main-sequence lifetime, and it leaves a heavier white dwarf.',
+  'stelW.preset.note.m500':
+    'Five solar masses. A hundred million years on the main sequence, and a 0.89 solar-mass white dwarf at the end.',
+  'stelW.preset.note.m1000':
+    'Ten solar masses. The model stops at carbon ignition, with the star a red supergiant of 609 solar radii and nearly six-tenths of a solar mass already lost to its wind.',
+  'stelW.preset.note.m2000':
+    'Twenty solar masses. Nine million years, six solar masses lost, and the model stops before core collapse with the star 1,070 solar radii across.',
+  'stelW.action.mode': 'Switch mode',
+  'stelW.action.guides': 'Constant-radius lines',
+  'stelW.action.regions': 'Regions',
+  'stelW.action.pin': 'Pin this star',
+  'stelW.action.unpin': 'Unpin the last',
+  'stelW.action.clear': 'Clear all',
+  'stelW.action.adopt': 'Use the nearest model',
+  'stelW.action.capture': 'Save to notebook',
+  'stelW.mode.model': 'A modelled star',
+  'stelW.mode.free': 'A point you chose',
+  'stelW.row.mode': 'Mode',
+  'stelW.row.teff': 'Surface temperature',
+  'stelW.row.luminosity': 'Luminosity',
+  'stelW.row.radius': 'Radius',
+  'stelW.value.radius':
+    '{r} — from the temperature and the luminosity, exactly',
+  'stelW.row.spectral': 'Spectral type',
+  'stelW.row.class': 'Size class',
+  'stelW.row.mass': 'Mass',
+  'stelW.value.mass': '{now} now, {born} at birth',
+  'stelW.row.age': 'Age',
+  'stelW.row.phase': 'Phase',
+  'stelW.row.mainSequence': 'Main sequence',
+  'stelW.value.mainSequence': '{total} in total, {left} still to come',
+  'stelW.value.none': 'none',
+  'stelW.row.trackEnds': 'The model stops',
+  'stelW.value.trackEnds': 'at {age}, because {why}',
+  'stelW.ends.tams':
+    'the star reaches the end of core hydrogen burning and MESA stopped following it',
+  'stelW.ends.carbon-burning':
+    'carbon ignites, and what happens after that is not in this model',
+  'stelW.ends.wd-cooling': 'the star has become a cooling white dwarf',
+  'stelW.row.hypothetical': 'What this is',
+  'stelW.value.hypothetical':
+    'A temperature and a luminosity you chose, and the radius they imply. Not a mass, an age or a lifetime: a point on this diagram does not fix any of those, and the same point can be several completely different stars.',
+  'stelW.row.nearby': 'Models near here',
+  'stelW.value.nearbyOne': 'One model passes close: {list}',
+  'stelW.value.nearbyMany':
+    '{n} models pass close, and they are not the same object: {list}{more}. Nothing here can tell you which — that is what "a point does not fix a mass" means.',
+  'stelW.value.nearbyMore': ', and {n} more',
+  'stelW.value.nearbyItem': '{m} M☉, {phase}, at {age}',
+  'stelW.value.nearbyNone':
+    'No bundled model passes near this point. That does not mean no star could be here.',
+  'stelW.row.outside': 'Off the plot',
+  'stelW.value.outside':
+    'This point is outside the range drawn. The numbers still hold; the marker is at the edge.',
+  'stelW.row.pinned': 'Pinned',
+  'stelW.value.pinned': '{n} of {max}',
+  'stelW.row.guides': 'Constant-radius lines',
+  'stelW.value.guides':
+    'Straight on these axes, because log L = 2 log R + 4 log T. That is why the diagram separates giants from dwarfs at all.',
+  'stelW.row.regions': 'Regions',
+  'stelW.value.regions':
+    'Approximate, and shaded rather than outlined on purpose. A star is not a giant because it crossed a line; the region is a summary of where large stars end up.',
+  'stelW.preview.exposure': 'colour is the star’s; brightness on screen is not',
+  'stelW.compare.title': 'Comparing stars',
+  'stelW.compare.note':
+    'Up to four pinned stars, drawn either on one common scale or each enlarged to fill its own box. The two are not the same picture and the caption says which you are looking at.',
+  'stelW.compare.empty': 'Nothing pinned yet. Pin a star in the lab above.',
+  'stelW.compare.sun': 'the Sun',
+  'stelW.compare.magnified': 'enlarged {n}',
+  'stelW.compare.subPixel': 'smaller than a pixel here',
+  'stelW.compare.trueNote':
+    'One scale for every star. Something drawn as a marker is genuinely too small to see beside the others.',
+  'stelW.compare.fitNote':
+    'Each star enlarged to fill its box. Apparent sizes here are NOT comparable — the magnification is printed under each one.',
+  'stelW.order.radiusSun': 'radius',
+  'stelW.order.teffK': 'temperature',
+  'stelW.order.luminositySun': 'luminosity',
+  'stelW.order.massSun': 'mass',
+  'stelW.size.true': 'true relative',
+  'stelW.size.fit': 'fit each',
+  'stelW.size.true.long': 'True relative sizes, one common scale',
+  'stelW.size.fit.long':
+    'Each star fitted to its own box; sizes not comparable',
+  'stelW.on': 'yes',
+  'stelW.off': 'no',
+  'stelW.row.orderedBy': 'Ordered by',
+  'stelW.row.sizeMode': 'Sizes',
+  'stelW.row.star': 'Star {n}',
+  'stelW.value.star': '{teff}, {lum}, {radius}, {mass} — {ratio} the smallest',
+  'stelW.value.unknownMass': 'mass unknown',
+  'stelW.orbit.mercury': 'Mercury’s orbit',
+  'stelW.orbit.earth': 'Earth’s orbit',
+  'stelW.orbit.mars': 'Mars’s orbit',
+  'stelW.orbit.jupiter': 'Jupiter’s orbit',
+  'stelW.pop.title': 'A synthetic population',
+  'stelW.pop.note':
+    'A few hundred model stars drawn from a stated mass distribution and a stated star-formation history. Not a survey, not observed, and no star in it is a real star.',
+  'stelW.pop.row.synthetic': 'What this is',
+  'stelW.pop.value.synthetic':
+    'A sample of a model, generated from a seed. Every star sits on the same bundled tracks the lab uses.',
+  'stelW.pop.row.sample': 'The sample',
+  'stelW.pop.value.sample':
+    '{n} stars placed from {requested} drawn. {evolved} had already left the main sequence and were dropped rather than guessed at. Seed {seed}.',
+  'stelW.pop.row.imf': 'Masses drawn from',
+  'stelW.pop.value.imf':
+    '{ref}, over 0.2 to 20 solar masses, with a constant star-formation rate over the last ten billion years.',
+  'stelW.pop.row.threshold': 'The bright subset',
+  'stelW.pop.value.threshold':
+    'Every star placed at {d} pc; keeping those above {f} in relative flux leaves {kept} of {total}.',
+  'stelW.pop.row.type': 'Type {type}',
+  'stelW.pop.value.type':
+    '{all} in the sample ({allPct}%), {bright} in the bright subset ({brightPct}%)',
+  'stelW.pop.row.limits': 'What it leaves out',
+  'stelW.pop.value.limits':
+    'Stars that have left the main sequence, interstellar dust, binaries, and any composition but solar. All four matter for a real survey and none of them is here.',
+  // The Stellar Lab's evidence
+  'nb.source.stellar-lab': 'Stellar Lab',
+  'nb.stellar.title.model': 'A modelled star',
+  'nb.stellar.title.point': 'A point on the H–R diagram',
+  'nb.stellar.teff': 'Effective temperature',
+  'nb.stellar.luminosity': 'Bolometric luminosity',
+  'nb.stellar.radius': 'Photospheric radius',
+  'nb.stellar.radiusNote':
+    'derived from the temperature and the luminosity by the Stefan-Boltzmann relation, which is exact',
+  'nb.stellar.mass': 'Current mass',
+  'nb.stellar.initialMass': 'Initial mass',
+  'nb.stellar.age': 'Age',
+  'nb.stellar.mainSequence': 'Total main-sequence lifetime',
+  'nb.stellar.pinnedRadius': 'Pinned star {n}: radius',
+  'nb.stellar.pinnedTeff': 'Pinned star {n}: temperature',
+  'nb.stellar.limit.model':
+    'A model, not an observation: {grid}. No rotation, no binarity, no magnetic fields, and one composition.',
+  'nb.stellar.limit.incomplete':
+    'The track does not run to the end of the star’s life: {why}.',
+  'nb.stellar.limit.hypothetical':
+    'This is a temperature and a luminosity somebody chose, and the radius they imply. It has no mass, no age and no lifetime, because a point on this diagram does not determine any of them.',
+  'nb.stellar.limit.ambiguous':
+    '{n} bundled models pass close to this point and they are not the same object. Nothing in this reading identifies which, if any, it is.',
+  'nb.stellar.limit.fitted':
+    'The comparison was drawn with each star fitted to its own box, so the apparent sizes in it are not comparable.',
 };

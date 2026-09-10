@@ -47,6 +47,7 @@ import {
   dominantLight,
   starColor,
   scaleRgb,
+  paintStarDisc,
   tailActivity,
   ionTailDirection,
   dustTailDirection,
@@ -5367,25 +5368,9 @@ class StarObject extends PhysicsObject {
       // symmetric, so the render pass's flipped Y axis does not matter, and it
       // is keyed on colour and size buckets - a cluster of similar stars shares
       // one rather than building a gradient each, every frame.
-      const disc = spriteFor('star-disc', rgb, screenR, (sctx, size, c) => {
-        const half = size / 2;
-        const g = sctx.createRadialGradient(half, half, 0, half, half, half);
-        // A compact bright core rather than a uniformly blazing disc: real
-        // stars are brightest at the centre of the visible disc and fall off
-        // toward the limb, and the flat fill made every star a sticker.
-        g.addColorStop(
-          0,
-          `rgb(${Math.min(255, c.r + 40)},${Math.min(255, c.g + 35)},${Math.min(255, c.b + 30)})`
-        );
-        g.addColorStop(0.55, `rgb(${c.r},${c.g},${c.b})`);
-        const limb = scaleRgb(c, 0.82);
-        g.addColorStop(0.94, `rgb(${limb.r},${limb.g},${limb.b})`);
-        g.addColorStop(1, `rgba(${limb.r},${limb.g},${limb.b},0)`);
-        sctx.fillStyle = g;
-        sctx.beginPath();
-        sctx.arc(half, half, half, 0, 2 * Math.PI);
-        sctx.fill();
-      });
+      // The painter is in js/bodyVisuals.js so that the Stellar Lab's preview
+      // and this draw the same star.
+      const disc = spriteFor('star-disc', rgb, screenR, paintStarDisc);
       if (disc) {
         ctx.drawImage(disc, world_pos.x - r, world_pos.y - r, r * 2, r * 2);
       } else {

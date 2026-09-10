@@ -165,6 +165,8 @@ let plotTransformed = false;
 let plotLog = false;
 let toolValues = {};
 let toolFrame = null;
+/** Cancels the current step's canvas listeners. @type {AbortController|null} */
+let toolPointer = null;
 let lastToolHtml = '';
 let lightCurveOpenedByLesson = false;
 // Which step's declarative setup the world on screen was built from.
@@ -1901,6 +1903,8 @@ function syncToolPanel(step) {
       applied();
     });
   });
+  wireToolPointer(widget, spec, applied);
+
   els.toolActions.querySelectorAll('[data-tool-action]').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
@@ -1952,6 +1956,110 @@ function startToolLoop(widget, toolSpec) {
 function stopToolLoop() {
   if (toolFrame !== null) cancelAnimationFrame(toolFrame);
   toolFrame = null;
+  toolPointer?.abort();
+  toolPointer = null;
+}
+
+/**
+ * Let a widget be driven by pointing at its canvas, if it asks to be.
+ *
+ * Opt-in, and gated on the widget declaring `pick`: every other instrument in
+ * the catalogue is a canvas with sliders under it and stays exactly that. The
+ * hook is handed a position in CSS pixels and the size it was measured
+ * against, writes whatever it likes into the values, and then goes through
+ * paintTool like a slider does - so the sliders move to match, the setting is
+ * remembered with the step, and the redraw is the same one.
+ *
+ * The keyboard half is not a courtesy. A diagram you can only drive by
+ * dragging is a diagram some students cannot drive, so a widget that declares
+ * `pick` also names which two controls the arrow keys should step, and the
+ * canvas becomes focusable. The sliders remain, and are the numeric entry.
+ *
+ * @param {Object} widget - The widget being shown
+ * @param {Object} spec - The step's tool spec
+ * @param {Function} applied - The runner's own "a control moved" path
+ */
+function wireToolPointer(widget, spec, applied) {
+  const canvas = els.toolCanvas;
+  if (!canvas || typeof widget.pick !== 'function') {
+    canvas?.removeAttribute('tabindex');
+    canvas?.removeAttribute('role');
+    canvas?.removeAttribute('aria-label');
+    return;
+  }
+  toolPointer = new window.AbortController();
+  const { signal } = toolPointer;
+  canvas.tabIndex = 0;
+  canvas.setAttribute('role', 'application');
+  canvas.setAttribute('aria-label', t('inv.tool.pickable'));
+
+  const at = event => {
+    const box = canvas.getBoundingClientRect();
+    return {
+      x: event.clientX - box.left,
+      y: event.clientY - box.top,
+      width: box.width,
+      height: box.height,
+    };
+  };
+  const send = event => {
+    if (widget.pick(toolValues, at(event), spec)) {
+      els.toolPresetNote.textContent = '';
+      applied();
+    }
+  };
+
+  let dragging = false;
+  canvas.addEventListener(
+    'pointerdown',
+    event => {
+      dragging = true;
+      canvas.setPointerCapture?.(event.pointerId);
+      canvas.focus({ preventScroll: true });
+      send(event);
+      event.preventDefault();
+    },
+    { signal }
+  );
+  canvas.addEventListener(
+    'pointermove',
+    event => {
+      if (dragging) send(event);
+    },
+    { signal }
+  );
+  for (const end of ['pointerup', 'pointercancel']) {
+    canvas.addEventListener(end, () => (dragging = false), { signal });
+  }
+
+  const axes = widget.pickAxes || {};
+  const STEPS = {
+    ArrowLeft: [axes.x, -1],
+    ArrowRight: [axes.x, 1],
+    ArrowDown: [axes.y, -1],
+    ArrowUp: [axes.y, 1],
+  };
+  canvas.addEventListener(
+    'keydown',
+    event => {
+      const move = STEPS[event.key];
+      if (!move || !move[0]) return;
+      const control = widget.controls.find(c => c.id === move[0]);
+      if (!control) return;
+      // Shift is the coarse move, the way it is on a slider.
+      const by = control.step * move[1] * (event.shiftKey ? 10 : 1);
+      const next = Math.min(
+        control.max,
+        Math.max(control.min, Number(toolValues[control.id]) + by)
+      );
+      if (next === toolValues[control.id]) return;
+      toolValues[control.id] = next;
+      els.toolPresetNote.textContent = '';
+      applied();
+      event.preventDefault();
+    },
+    { signal }
+  );
 }
 
 /**

@@ -769,6 +769,41 @@ export function ringGeometryFor(seed, overrides = {}) {
 const sprites = new Map();
 const SPRITE_CAP = 96;
 
+/**
+ * Paint a limb-darkened stellar disc into a square surface.
+ *
+ * Here rather than in js/physics.js because two things draw a star now: the
+ * simulation, and the Stellar Lab's preview. A second implementation would be
+ * a second answer to "what does a star look like", and the whole point of the
+ * lab is that the star it shows is the star the simulation would show at that
+ * temperature.
+ *
+ * A compact bright core rather than a uniformly blazing disc: real stars are
+ * brightest at the centre of the visible disc and fall off towards the limb,
+ * and a flat fill makes every star a sticker.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Target, with the disc filling it
+ * @param {number} size - Width and height of the square, pixels
+ * @param {{r: number, g: number, b: number}} rgb - The photosphere's colour
+ * @returns {void}
+ */
+export function paintStarDisc(ctx, size, rgb) {
+  const half = size / 2;
+  const g = ctx.createRadialGradient(half, half, 0, half, half, half);
+  g.addColorStop(
+    0,
+    `rgb(${Math.min(255, rgb.r + 40)},${Math.min(255, rgb.g + 35)},${Math.min(255, rgb.b + 30)})`
+  );
+  g.addColorStop(0.55, `rgb(${rgb.r},${rgb.g},${rgb.b})`);
+  const limb = scaleRgb(rgb, 0.82);
+  g.addColorStop(0.94, `rgb(${limb.r},${limb.g},${limb.b})`);
+  g.addColorStop(1, `rgba(${limb.r},${limb.g},${limb.b},0)`);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(half, half, half, 0, 2 * Math.PI);
+  ctx.fill();
+}
+
 /** The size bucket a radius falls in: powers of two from 8 to 256 pixels. */
 export function spriteSize(radiusPx) {
   const wanted = Math.max(8, Math.min(256, Math.ceil(radiusPx * 2)));
