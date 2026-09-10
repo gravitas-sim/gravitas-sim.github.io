@@ -100,6 +100,19 @@ export const assignmentInUrl = () =>
 export const assignmentInHash = () => /^#a\d+[zr]./.test(location.hash || '');
 
 /**
+ * Does the address bar name a classroom activity?
+ *
+ * `#activity=orbital-speed/guided`. Short and readable on purpose - it goes on
+ * a slide and into an LMS - and resolved into an ordinary assignment when it is
+ * opened. The predicate lives here beside the other one, so the bridge that
+ * knows how to do that stays out of the start-up graph.
+ *
+ * @returns {boolean} True for an activity fragment
+ */
+export const activityInHash = () =>
+  /^#activity=[a-z0-9-]+(\/[a-z0-9-]+)?$/i.test(location.hash || '');
+
+/**
  * Open whatever assignment the address bar names, now or later.
  *
  * The predicates live here and the machinery does not: keeping the bridge out
@@ -127,13 +140,23 @@ export function watchForAssignments() {
         console.warn('That assignment link could not be opened:', err)
       );
 
+  const openActivity = () =>
+    ensureInvestigations()
+      .then(() => import('./activities/activityBridge.js'))
+      .then(m => m.openActivityFromUrl())
+      .catch(err =>
+        console.warn('That activity link could not be opened:', err)
+      );
+
   if (assignmentInHash()) open();
+  else if (activityInHash()) openActivity();
 
   let last = location.hash;
   window.addEventListener('hashchange', () => {
     if (location.hash === last) return;
     last = location.hash;
     if (assignmentInHash()) open();
+    else if (activityInHash()) openActivity();
   });
 }
 

@@ -2642,6 +2642,32 @@
               <span aria-hidden="true">·</span>
               <a href="/instructors/">Instructor resources</a>
             </p>
+            <!--
+              The other door into the same content. These are the complete
+              topics; a classroom activity is one of them cut to a teaching
+              format and a length. Said in a sentence rather than as a bare
+              link, because "Classroom activities" on its own does not tell an
+              instructor how it differs from the grid underneath it.
+            -->
+            <p class="inv-browser-links">
+              <!--
+                The sentence and the link are separate elements on purpose. A
+                data-i18n on the paragraph sets its textContent, which deletes
+                any child it contains - so putting one on a <p> that wraps an
+                <a> removes the link the moment the page translates itself.
+              -->
+              <span data-i18n="inv.browser.activities"
+                >Short on time? Classroom activities are prepared teaching
+                formats — a five-minute demonstration, a twenty-minute
+                activity, a full lab — cut from these same
+                investigations.</span
+              >
+              <a
+                href="/teaching/#activities"
+                data-i18n="inv.browser.activities.link"
+                >See the classroom activities</a
+              >
+            </p>
           </div>
           <button
             id="investigationBrowserClose"

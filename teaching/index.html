@@ -113,6 +113,11 @@
               >Instruments</a
             >
           </li>
+          <li>
+            <a href="#activities" data-i18n="activities.heading"
+              >Classroom activities</a
+            >
+          </li>
           <li><a href="#demos" data-i18n="teach.section.demos">Demonstrations</a></li>
           <li>
             <a href="#patterns" data-i18n="teach.section.patterns">In a course</a>
@@ -141,6 +146,31 @@
       </h2>
       <p data-i18n="teach.instruments.intro"></p>
       <div class="teach-instruments" id="teachInstruments"></div>
+
+      <!--
+        Classroom activities. One activity in three teaching formats, each of
+        which opens a real investigation cut to length by the assignment
+        machinery in js/assignments/ - not a second lesson runner and not a
+        copy of the catalogue. js/teachingPage.js fills this in from
+        js/data/activities.js, which is loaded on demand.
+      -->
+      <h2 id="activities" data-i18n="activities.heading">
+        Classroom activities
+      </h2>
+      <p data-i18n="activities.lede"></p>
+      <p
+        class="doc-note teach-activity-fallback"
+        id="activityFallback"
+        role="status"
+        hidden
+      ></p>
+      <div class="teach-activities" id="teachActivities"></div>
+      <p class="teach-fineprint">
+        <span data-i18n="activities.vs.investigations"></span>
+        <a href="/#investigationBrowser" data-i18n="activities.browse"
+          >Browse all investigations</a
+        >
+      </p>
 
       <h2 id="demos" data-i18n="teach.section.demos">
         Six demonstrations you can run here

@@ -385,3 +385,111 @@
     }
   }
 }
+
+@layer components {
+  /* --- Classroom activities --------------------------------------------------
+     One activity, three formats. The formats differ in kind rather than in
+     degree - who runs it, how long it takes, what a student produces - so they
+     are told apart by their headings and their prose, never by colour or an
+     icon alone. */
+  .teach-activity {
+    padding: var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .teach-activity-title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-lg);
+  }
+  .teach-activity-question {
+    margin: 0 0 var(--space-4);
+    color: var(--text-secondary);
+  }
+  .teach-activity-fields {
+    margin: 0 0 var(--space-4);
+  }
+  .teach-activity-field {
+    margin-bottom: var(--space-3);
+  }
+  .teach-activity-field dt {
+    margin-bottom: 3px;
+    color: var(--text-muted);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .teach-activity-field dd {
+    margin: 0;
+  }
+  .teach-activity-objectives {
+    margin: 0 0 var(--space-5);
+    padding-left: var(--space-5);
+  }
+  .teach-activity-objectives li {
+    margin-bottom: var(--space-2);
+  }
+  .teach-activity-formats {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin-bottom: var(--space-5);
+  }
+  /* The heading spans the grid rather than sitting in the first column. */
+  .teach-activity-formats > h3 {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: var(--text-base);
+  }
+  .teach-activity-format {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-4);
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+  }
+  /* The format a link asked for. A border and a heading, not a colour: the
+     distinction has to survive a monochrome print and a screen reader, and
+     aria-current carries it for the second. */
+  .teach-activity-format.is-selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-line);
+  }
+  .teach-activity-format h4 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-base);
+  }
+  .teach-activity-duration {
+    margin: 0 0 2px;
+  }
+  .teach-activity-closing {
+    color: var(--text-secondary);
+  }
+  .teach-activity-launch {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  /* Instructor materials, kept visibly apart from the student buttons above. */
+  .teach-activity-instructor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .teach-activity-instructor .teach-fineprint {
+    flex-basis: 100%;
+    margin: 0;
+  }
+  .teach-activity-fallback {
+    border-left: 3px solid var(--warning);
+  }
+
+  @media (max-width: 600px) {
+    .teach-activity-formats {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -27,6 +27,7 @@
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",
     "teaching:check": "node tools/build-teaching-demos.mjs --check",
+    "activities:check": "node tools/check-activities.mjs",
     "docs:facts": "node tools/docs-facts.mjs",
     "docs:sync": "node tools/docs-facts.mjs --sync",
     "docs:check": "node tools/docs-facts.mjs --check",

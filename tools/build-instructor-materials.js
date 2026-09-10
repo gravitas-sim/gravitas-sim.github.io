@@ -48,6 +48,10 @@ import {
   adoptersGuide,
   curriculumMap,
 } from '../js/instructorDocs.js';
+import { activityGuide, activityWorksheet } from '../js/activityDocs.js';
+import { ACTIVITIES } from '../js/data/activities.js';
+import { EN_TEACHING } from '../js/i18n/en.teaching.js';
+import { plainText as plainTextOf } from '../js/answerKey.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'instructors');
@@ -211,6 +215,39 @@ async function main() {
     null,
     curriculumMap(INVESTIGATIONS, { version })
   );
+
+  // Classroom activities. One guide per activity covering all three formats,
+  // and a worksheet for each format that has students writing something down -
+  // generated from the resolved steps, so paper and screen agree on the order
+  // and the wording. No separate answer key: the investigation's own covers
+  // every question these formats contain, and a second copy would be a second
+  // thing to keep correct.
+  for (const activity of ACTIVITIES) {
+    const lesson = INVESTIGATIONS.find(l => l.id === activity.lesson);
+    if (!lesson) continue;
+    const name = slug(
+      plainTextOf(EN_TEACHING[activity.titleId] || activity.id)
+    );
+    add(
+      `activity-${activity.id}-guide`,
+      `${name} - Classroom Activity Guide.pdf`,
+      'guide',
+      activity.lesson,
+      activityGuide(activity, lesson, EN_TEACHING, { version })
+    );
+    for (const format of activity.formats) {
+      // A demonstration is projected and answered aloud; a worksheet for it
+      // would be a page of blank boxes nobody fills in.
+      if (format.context === 'projection') continue;
+      add(
+        `activity-${activity.id}-${format.id}-worksheet`,
+        `${name} - ${plainTextOf(EN_TEACHING[format.nameId])} Worksheet.pdf`,
+        'worksheet',
+        activity.lesson,
+        activityWorksheet(activity, format, lesson, EN_TEACHING, { version })
+      );
+    }
+  }
 
   for (const inv of INVESTIGATIONS) {
     const s = slug(inv.title);

@@ -1145,6 +1145,15 @@ export const ES = {
   'state.none': 'No hay ningún estado guardado',
   'state.loaded': 'Estado de la simulación cargado',
   'state.loadFailed': 'No se pudo cargar el estado guardado',
+  'inv.browser.activities':
+    '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
+  'inv.browser.activities.link': 'Ver las actividades de clase',
+  'activity.error.noActivity':
+    'No existe ninguna actividad de clase llamada «{id}». La página de enseñanza indica las que hay.',
+  'activity.error.noFormat':
+    'Esa actividad no tiene un formato «{id}». Elige uno en la página de enseñanza.',
+  'activity.error.notUsable':
+    'No se pudo abrir esa actividad: la investigación en la que se basa ha cambiado demasiado. Abre la investigación completa.',
   'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
   'canvas.sizeDisclosure.detail':
     'Los diámetros del lienzo son ilustrativos y usan una escala comprimida. No deduzcas proporciones físicas de tamaño a partir del dibujo; usa el inspector y las mediciones de las investigaciones para los radios numéricos.',

@@ -485,6 +485,191 @@ export function lessonsFitting(fit, entries = manifest()) {
   return entries.filter(entry => lengthOf(entry) === fit);
 }
 
+// --- Classroom activities -----------------------------------------------------
+//
+// Two entry points into one body of content. The investigations are the whole
+// topics, browsable by subject; an activity is a prepared teaching format,
+// chosen by objective and by how long the class is. This section is the second
+// door, and it says so, with a link to the first.
+//
+// The definitions are imported on demand. They are prose for instructors and
+// they are not needed to paint anything above this section, so they stay out of
+// the page's first parse - and out of the sandbox's start-up graph entirely,
+// which is the same bargain the lesson registry makes.
+
+/** The definitions, once. */
+let activityData = null;
+let activityRoute = null;
+/** Bound from js/activities/activities.js once it has loaded. */
+let routeTo = () => '';
+
+/** A definition list row, for the audience and prerequisite blocks. */
+function activityField(labelId, text) {
+  return el('div', {
+    className: 'teach-activity-field',
+    children: [el('dt', { text: tr(labelId) }), el('dd', { text })],
+  });
+}
+
+/** One format: what it is for, how long it is thought to take, and a way in. */
+function formatCard(activity, format, active) {
+  const launch = el('a', {
+    className: 'ui-button is-primary teach-activity-launch',
+    text: tr('activities.launch'),
+    attrs: {
+      href: `/${routeTo(activity.id, format.id)}#activity=${encodeURIComponent(
+        `${activity.id}/${format.id}`
+      )}`,
+      // Named in full for a screen reader, because "Start" three times in a
+      // row is three identical links to anyone not reading the heading above
+      // each one.
+      'aria-label': tr('activities.launch.label', {
+        format: tr(format.nameId),
+        activity: tr(activity.titleId),
+      }),
+    },
+  });
+
+  const card = el('article', {
+    className: `teach-activity-format${active ? ' is-selected' : ''}`,
+    children: [
+      el('h4', { text: tr(format.nameId) }),
+      // The duration and the audience are text, not a colour or an icon: this
+      // is a choice between three things that differ in kind, and it has to
+      // survive being read aloud.
+      el('p', {
+        className: 'teach-activity-duration',
+        children: [
+          el('strong', { text: tr(format.durationId) }),
+          el('span', { text: ` · ${tr(format.forId)}` }),
+        ],
+      }),
+      el('p', {
+        className: 'teach-fineprint',
+        text: tr('activities.estimate'),
+      }),
+      el('p', { text: tr(format.introId) }),
+      el('p', {
+        className: 'teach-activity-closing',
+        text: tr(format.closingId),
+      }),
+      launch,
+    ],
+  });
+  if (active) card.setAttribute('aria-current', 'true');
+  return card;
+}
+
+/** The landing view for one activity. */
+function activityCard(activity, activeFormat) {
+  const objectives = el('ul', {
+    className: 'teach-activity-objectives',
+    children: activity.objectiveIds.map(id => el('li', { text: tr(id) })),
+  });
+
+  const formats = el('div', {
+    className: 'teach-activity-formats',
+    children: [
+      el('h3', { text: tr('activities.formats.heading') }),
+      ...activity.formats.map(format =>
+        formatCard(activity, format, format === activeFormat)
+      ),
+    ],
+  });
+
+  return el('article', {
+    className: 'teach-activity',
+    children: [
+      el('h3', {
+        className: 'teach-activity-title',
+        text: tr(activity.titleId),
+      }),
+      el('p', {
+        className: 'teach-activity-question',
+        text: tr(activity.questionId),
+      }),
+      el('dl', {
+        className: 'teach-activity-fields',
+        children: [
+          activityField('activities.audience', tr(activity.audienceId)),
+          activityField(
+            'activities.prerequisites',
+            tr(activity.prerequisitesId)
+          ),
+        ],
+      }),
+      el('h4', { text: tr('activities.objectives') }),
+      objectives,
+      formats,
+      // Kept apart from the student buttons above, and labelled, because the
+      // difference between the two matters and a row of similar links does not
+      // convey it.
+      el('div', {
+        className: 'teach-activity-instructor',
+        children: [
+          el('a', {
+            className: 'ui-button is-quiet',
+            text: tr('activities.instructor'),
+            attrs: { href: '/instructors/' },
+          }),
+          el('a', {
+            className: 'ui-button is-quiet',
+            text: tr('activities.fullLesson'),
+            attrs: {
+              href: `/#investigation=${encodeURIComponent(activity.lesson)}`,
+            },
+          }),
+          el('p', {
+            className: 'teach-fineprint',
+            text: tr('activities.instructor.note'),
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+/**
+ * Draw the activities, and say something useful when a link names one that is
+ * not there.
+ *
+ * A bad ?activity= must not open an empty lesson and must not quietly open a
+ * different one. It shows the list with a line explaining what was asked for
+ * and not found, which is both the fallback and the answer.
+ */
+function renderActivities() {
+  const host = document.getElementById('teachActivities');
+  const fallback = document.getElementById('activityFallback');
+  if (!host || !activityData) return;
+  host.replaceChildren();
+
+  const { ACTIVITIES } = activityData;
+  const route = activityRoute || { activity: null, format: null, reason: null };
+
+  if (fallback) {
+    if (route.reason === 'no-activity') {
+      fallback.textContent = tr('activities.fallback.activity', {
+        id: route.requested.activity,
+      });
+      fallback.hidden = false;
+    } else if (route.reason === 'no-format') {
+      fallback.textContent = tr('activities.fallback.format', {
+        id: route.requested.format,
+      });
+      fallback.hidden = false;
+    } else {
+      fallback.textContent = '';
+      fallback.hidden = true;
+    }
+  }
+
+  for (const activity of ACTIVITIES) {
+    host.append(
+      activityCard(activity, route.activity === activity ? route.format : null)
+    );
+  }
+}
+
 function renderPatterns() {
   const grid = $('teachPatterns');
   if (!grid) return;
@@ -632,6 +817,7 @@ function renderAll() {
   renderJourney();
   renderInstruments();
   renderDemos();
+  renderActivities();
   renderPatterns();
   renderEvidence();
 }
@@ -640,6 +826,23 @@ function renderAll() {
 export async function initTeachingPage() {
   setLanguage(preferred());
   renderAll();
+
+  // On demand: instructor prose that nothing above this section needs, and
+  // that the sandbox never loads at all.
+  try {
+    const [data, logic] = await Promise.all([
+      import('./data/activities.js'),
+      import('./activities/activities.js'),
+    ]);
+    activityData = data;
+    activityRoute = logic.routeFor(location.search);
+    routeTo = logic.routeTo;
+    renderActivities();
+  } catch (err) {
+    // A section that will not load is a missing section, not a broken page.
+    console.warn('Classroom activities unavailable:', err);
+  }
+
   // After the first paint. The results are one number in a strip of five and
   // one line at the bottom; nothing above them should wait on a fetch.
   validationSummary = await loadValidation();

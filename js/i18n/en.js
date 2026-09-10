@@ -1157,6 +1157,15 @@ export const EN = {
   'state.none': 'No saved state found',
   'state.loaded': 'Simulation state loaded',
   'state.loadFailed': 'Could not load the saved state',
+  'inv.browser.activities':
+    'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
+  'inv.browser.activities.link': 'See the classroom activities',
+  'activity.error.noActivity':
+    'There is no classroom activity called “{id}”. The teaching page lists the ones that exist.',
+  'activity.error.noFormat':
+    'That activity has no “{id}” format. Choose one from the teaching page.',
+  'activity.error.notUsable':
+    'That activity could not be opened: the investigation behind it has changed too much. Open the full investigation instead.',
   'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
   'canvas.sizeDisclosure.detail':
     'Canvas diameters are illustrative and use a compressed scale. Do not infer physical size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
