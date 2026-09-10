@@ -28,6 +28,8 @@
     "teaching:data": "node tools/build-teaching-demos.mjs",
     "teaching:check": "node tools/build-teaching-demos.mjs --check",
     "activities:check": "node tools/check-activities.mjs",
+    "gw:data": "node tools/build-gw-data.mjs",
+    "gw:check": "node tools/build-gw-data.mjs --check --offline",
     "docs:facts": "node tools/docs-facts.mjs",
     "docs:sync": "node tools/docs-facts.mjs --sync",
     "docs:check": "node tools/docs-facts.mjs --check",

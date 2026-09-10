@@ -18,6 +18,9 @@ export default [
         console: 'readonly',
         Buffer: 'readonly',
         URL: 'readonly',
+        // Node's own since 18. tools/build-gw-data.mjs downloads the published
+        // GWOSC figure data with it rather than shelling out to curl.
+        fetch: 'readonly',
         window: 'readonly',
         document: 'readonly',
         localStorage: 'readonly',

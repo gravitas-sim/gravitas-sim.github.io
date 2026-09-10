@@ -99,6 +99,10 @@ const LAYERS = [
       /^js\/chaos\//,
       /^js\/experiments\/align\.js$/,
       /^js\/resonance\//,
+      // The gravitational-wave model: closed-form waveforms, a transform,
+      // seeded noise and an overlap. Numbers in, numbers out, and the ones the
+      // validation tests import directly - the same standing as js/orbital.js.
+      /^js\/gw\//,
       /^js\/data\//,
     ],
   },

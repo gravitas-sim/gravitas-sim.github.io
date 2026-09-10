@@ -52,3 +52,7 @@ manual/*.toc
 manual/*.xdv
 manual/gravitas-user-manual.pdf
 .build-report.json
+
+# Cached GWOSC downloads for tools/build-gw-data.mjs. The processed result
+# is committed; the 1.4 MB of source text is not.
+.gw-cache/
