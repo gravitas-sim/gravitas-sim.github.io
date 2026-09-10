@@ -1,3 +1,28 @@
+// =============================================================================
+// The sandbox's sound
+// -----------------------------------------------------------------------------
+// This is sonification: orbital frequency mapped to pitch and then *quantized
+// onto a minor pentatonic scale* (MUSICAL_SCALE, quantizeMidi), so that an
+// arbitrary collection of orbits sounds like music instead of like a siren.
+// The collision and merger sounds are designed envelopes. None of it is a
+// frequency the simulation computed, and nothing in the interface may describe
+// it as a gravitational-wave signal.
+//
+// The gravitational-wave lab's audio is a different thing entirely - a buffer
+// filled from a computed waveform, in js/gwAudio.js. The two share this file's
+// AudioContext and nothing else, and they are mutually exclusive: while signal
+// audio is playing the sandbox voices are ducked to silence and the collision
+// and merger sounds do not fire, so a student never hears a designed bass drop
+// underneath a chirp they are being asked to listen to.
+//
+// The graph
+// -----------------------------------------------------------------------------
+//   destination
+//     outputGain      the mute and the volume. One place, both buses.
+//       masterGain    the sonification voices and the event sounds
+//       signalGain    the lab's waveform audio (js/gwAudio.js writes here)
+// =============================================================================
+
 import {
   bh_list,
   planets,
@@ -44,12 +69,80 @@ const getNow = () =>
 
 let audioCtx = null;
 let masterGain = null;
+let outputGain = null;
+let signalGain = null;
 let voices = [];
 let muted = true;
 let lastRippleSeen = 0;
 let lastVoiceRefresh = 0;
 let cachedVoiceTargets = [];
 const voiceStates = [];
+/** 0 to 1. Applied at outputGain, so it governs both buses. */
+let volume = 0.65;
+/** True while the gravitational-wave lab is playing a waveform. */
+let signalActive = false;
+/** The loudest voice gain at the last update, for "is anything audible". */
+let voiceActivity = 0;
+/** Above this a voice is doing something a listener would notice. */
+const AUDIBLE_GAIN = 0.002;
+/** Listeners for any change a speaker control would want to redraw for. */
+const watchers = new Set();
+
+/**
+ * Recently announced mergers, so one merger makes one sound.
+ *
+ * A black-hole merger reaches this file twice: js/physics.js pushes an entry
+ * into `gravity_ripples` and, four lines later, dispatches `gravitasMerge`.
+ * Both used to call triggerBassDrop, so one merger played two overlapping bass
+ * drops. Deduplicating on position and time rather than removing one of the
+ * two paths, because the two paths do not cover the same set of events - a
+ * gas-giant merge dispatches the event and pushes no ripple - and because it
+ * keeps working if a third source is added later.
+ */
+const announced = [];
+const ANNOUNCE_WINDOW_MS = 250;
+
+/**
+ * Whether this merger has already been heard.
+ * @param {object} detail - A ripple or a merge event
+ * @returns {boolean} True if a sound for it has already been made
+ */
+function alreadyAnnounced(detail) {
+  const now = getNow();
+  while (announced.length && now - announced[0].at > ANNOUNCE_WINDOW_MS) {
+    announced.shift();
+  }
+  const x = detail?.position?.x ?? detail?.x;
+  const y = detail?.position?.y ?? detail?.y;
+  const hasPlace = Number.isFinite(x) && Number.isFinite(y);
+  for (const a of announced) {
+    if (!hasPlace || !a.hasPlace) continue;
+    if (Math.abs(a.x - x) < 2 && Math.abs(a.y - y) < 2) return true;
+  }
+  announced.push({ at: now, x, y, hasPlace });
+  return false;
+}
+
+/** Tell anyone drawing a speaker control that something changed. */
+const notify = () => {
+  for (const fn of watchers) {
+    try {
+      fn(getSonificationState());
+    } catch {
+      // A broken listener must not silence the simulation.
+    }
+  }
+};
+
+/**
+ * Watch for changes to the sound's state.
+ * @param {Function} fn - Called with the state
+ * @returns {Function} Unsubscribe
+ */
+export function watchSonification(fn) {
+  watchers.add(fn);
+  return () => watchers.delete(fn);
+}
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const freqToMidi = freq => 69 + 12 * Math.log2(freq / 440);
@@ -130,9 +223,15 @@ const ensureAudioContext = () => {
 
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    outputGain = audioCtx.createGain();
+    outputGain.gain.value = 0.0001;
+    outputGain.connect(audioCtx.destination);
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.0001;
-    masterGain.connect(audioCtx.destination);
+    masterGain.gain.value = 1;
+    masterGain.connect(outputGain);
+    signalGain = audioCtx.createGain();
+    signalGain.gain.value = 1;
+    signalGain.connect(outputGain);
 
     voices = VOICE_CONFIGS.map((config, idx) => {
       const osc = audioCtx.createOscillator();
@@ -172,12 +271,38 @@ const ensureAudioContext = () => {
   return true;
 };
 
-const getSonificationState = () => ({
-  muted,
-  supported: hasAudioSupport(),
-  enabled: !muted && !!audioCtx && audioCtx.state !== 'closed',
-  contextState: audioCtx?.state ?? 'suspended',
-});
+/**
+ * Everything a speaker control has to tell the reader apart.
+ *
+ * `enabled` is not `playing`. An AudioContext existing is not a sound: a
+ * student who presses the speaker on a paused, empty sandbox has permitted
+ * audio and will hear nothing, and an icon that claims otherwise is lying to
+ * them. `blocked` is the browser's autoplay policy - permitted here, refused
+ * there - which is a different state again and has a different remedy.
+ *
+ * @returns {object} The state
+ */
+const getSonificationState = () => {
+  const supported = Boolean(hasAudioSupport());
+  const contextState = audioCtx?.state ?? null;
+  const permitted = !muted;
+  const live = permitted && !!audioCtx && contextState === 'running';
+  return {
+    supported,
+    muted,
+    permitted,
+    contextState,
+    /** Permitted, but the browser has not let the context start. */
+    blocked: permitted && !!audioCtx && contextState === 'suspended',
+    /** Which of the two things the sound would be. */
+    mode: signalActive ? 'signal' : 'sandbox',
+    /** Whether anything is actually making a sound right now. */
+    playing: live && (signalActive || voiceActivity > AUDIBLE_GAIN),
+    volume,
+    /** Kept for callers that predate the fuller state. */
+    enabled: permitted && !!audioCtx && contextState !== 'closed',
+  };
+};
 
 const setSonificationMuted = (nextMuted = true) => {
   const targetMuted = !!nextMuted;
@@ -190,18 +315,68 @@ const setSonificationMuted = (nextMuted = true) => {
   }
 
   muted = targetMuted;
+  applyOutputGain();
+  notify();
+  return getSonificationState();
+};
 
+/** Ramp the output to the current mute and volume. Never a step: steps click. */
+function applyOutputGain() {
+  if (!outputGain || !audioCtx) return;
+  const now = audioCtx.currentTime;
+  outputGain.gain.cancelScheduledValues(now);
+  const target = muted ? 0.0001 : Math.max(0.0001, volume);
+  outputGain.gain.linearRampToValueAtTime(target, now + (muted ? 0.15 : 0.4));
+}
+
+/**
+ * Set the output volume, 0 to 1.
+ * @param {number} next - The wanted volume
+ * @returns {object} The state
+ */
+const setSonificationVolume = next => {
+  volume = Math.min(1, Math.max(0, Number(next) || 0));
+  applyOutputGain();
+  notify();
+  return getSonificationState();
+};
+
+/**
+ * The bus the gravitational-wave lab writes into.
+ *
+ * Exposed rather than letting that module make its own context: two contexts
+ * means two mute buttons, and one of them would be the wrong one.
+ *
+ * @returns {?GainNode} The bus, or null if audio has never been enabled
+ */
+const signalBus = () => signalGain;
+
+/** The shared context, or null. @returns {?AudioContext} It */
+const audioContext = () => audioCtx;
+
+/**
+ * Duck the sandbox while the lab plays a waveform, and un-duck afterwards.
+ *
+ * Also suppresses the collision and merger sounds for the duration: those are
+ * designed envelopes, and hearing one over a chirp a student is being asked to
+ * listen to would be actively misleading about what they were hearing.
+ *
+ * @param {boolean} on - Whether signal audio is playing
+ * @returns {void}
+ */
+const setSignalAudioActive = on => {
+  const next = Boolean(on);
+  if (next === signalActive) return;
+  signalActive = next;
   if (masterGain && audioCtx) {
     const now = audioCtx.currentTime;
     masterGain.gain.cancelScheduledValues(now);
-    const targetGain = muted ? 0.0001 : 0.65;
     masterGain.gain.linearRampToValueAtTime(
-      targetGain,
-      now + (muted ? 0.15 : 0.4)
+      signalActive ? 0.0001 : 1,
+      now + 0.25
     );
   }
-
-  return getSonificationState();
+  notify();
 };
 
 const toggleSonification = () => setSonificationMuted(!muted);
@@ -258,6 +433,7 @@ const updateVoices = targets => {
     return;
   }
   const now = audioCtx.currentTime;
+  let loudest = 0;
 
   voices.forEach((voice, idx) => {
     const target = targets[idx];
@@ -299,11 +475,18 @@ const updateVoices = targets => {
       Math.max(0.0001, smoothedGain),
       now + 0.18
     );
+    if (smoothedGain > loudest) loudest = smoothedGain;
   });
+  // Only the boolean matters to a speaker control, and only a change to it is
+  // worth a repaint: this runs on every frame.
+  const wasAudible = voiceActivity > AUDIBLE_GAIN;
+  voiceActivity = loudest;
+  if (wasAudible !== loudest > AUDIBLE_GAIN) notify();
 };
 
 const triggerBassDrop = detail => {
-  if (!audioCtx || muted) return;
+  if (!audioCtx || muted || signalActive) return;
+  if (alreadyAnnounced(detail)) return;
 
   const massProfile = getMassProfile(resolveDetailMass(detail));
   const isKilonova = detail?.kilonova === true;
@@ -390,7 +573,7 @@ const triggerBassDrop = detail => {
 };
 
 const triggerCollisionChime = detail => {
-  if (!audioCtx || muted) return;
+  if (!audioCtx || muted || signalActive) return;
 
   const relativeSpeed = Math.max(detail?.relativeSpeed || 4, 2);
   const massProfile = getMassProfile(resolveDetailMass(detail));
@@ -457,6 +640,10 @@ const updateSonification = (timestamp = getNow()) => {
   if (!audioCtx || !voices.length) {
     return;
   }
+  if (signalActive) {
+    voiceActivity = 0;
+    return;
+  }
 
   if (timestamp - lastVoiceRefresh > VOICE_REFRESH_MS) {
     cachedVoiceTargets = mapOrbitersToVoices();
@@ -484,6 +671,10 @@ export {
   updateSonification,
   toggleSonification,
   setSonificationMuted,
+  setSonificationVolume,
   getSonificationState,
   ensureAudioContext,
+  signalBus,
+  audioContext,
+  setSignalAudioActive,
 };

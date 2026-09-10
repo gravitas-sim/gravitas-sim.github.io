@@ -49,6 +49,7 @@ import {
   themeHint,
 } from './theme.js';
 import { t } from './i18n/index.js';
+import { setSonificationMuted, getSonificationState } from './audio.js';
 import {
   initShortcuts,
   registerShortcut,
@@ -551,6 +552,22 @@ function setupShortcuts() {
     run: () => {
       const id = cycleTheme();
       toast(t('toast.theme.changed', { theme: themeLabel(id) }));
+    },
+  });
+  // Mute stays one keystroke away now that the speaker button opens a panel
+  // instead of toggling. A reader who wants silence in a hurry should not have
+  // to open a dialog to get it.
+  registerShortcut({
+    keys: 'M',
+    match: 'm',
+    group: 'View',
+    label: t('sound.shortcut'),
+    run: () => {
+      const next = setSonificationMuted(!getSonificationState().muted);
+      if (next.muted) {
+        window.dispatchEvent(new CustomEvent('gravitasStopSignalAudio'));
+      }
+      toast(t(`sound.state.long.${next.muted ? 'muted' : 'ready'}`));
     },
   });
   registerShortcut({

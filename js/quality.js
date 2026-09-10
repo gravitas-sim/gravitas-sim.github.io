@@ -327,3 +327,30 @@ export function renderOverrides() {
     trail_length: 8,
   };
 }
+
+// -----------------------------------------------------------------------------
+// The other preference a drawing has to respect
+// -----------------------------------------------------------------------------
+
+/** The media query, made once. Null where matchMedia is not available. */
+let motionQuery;
+
+/**
+ * Whether the reader has asked for less motion.
+ *
+ * Here rather than in a drawing module because it is the same kind of fact as
+ * the tier: a property of the machine and the person at it, which several
+ * unrelated things have to consult. Live rather than cached, because the
+ * preference can be changed while the page is open.
+ *
+ * @returns {boolean} True when prefers-reduced-motion is set to reduce
+ */
+export function prefersReducedMotion() {
+  if (motionQuery === undefined) {
+    motionQuery =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)')
+        : null;
+  }
+  return Boolean(motionQuery?.matches);
+}

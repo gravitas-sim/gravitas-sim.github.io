@@ -1522,3 +1522,194 @@ export function fromNeckPair({ report, prediction = '', provenance = {} }) {
     },
   });
 }
+
+/**
+ * A reading from the gravitational-wave lab, or from the published data.
+ *
+ * Two kinds of thing come through here and the entry has to keep them apart.
+ * A modelled signal is a *model*, so its numbers are ANALYTIC and its
+ * limitations name the approximation and where it stops. The GW150914 traces
+ * are a *measurement*, so theirs are MEASURED and their limitations name the
+ * filtering the collaboration applied before publishing. Nothing about the two
+ * is merged, and a reader of the report can tell which they have.
+ *
+ * @param {object} spec
+ * @param {object} spec.snapshot - From js/gwLab.js snapshotOf(), or a data card
+ * @param {Array<Array<number>>} [spec.envelope] - [[t, h], ...], already thinned
+ * @param {object} [spec.comparison] - From js/gwLab.js comparison()
+ * @param {?number} [spec.similarity] - A normalised overlap, never an SNR
+ * @param {object} [spec.dataProvenance] - PROVENANCE from a bundled dataset
+ * @param {string} [spec.prediction] - What the student said before looking
+ * @param {object} [spec.provenance] - The live world's provenance
+ * @returns {?object} A notebook entry
+ */
+export function fromGwObservation({
+  snapshot,
+  envelope = null,
+  comparison = null,
+  similarity = null,
+  dataProvenance = null,
+  prediction = '',
+  provenance = {},
+}) {
+  if (!snapshot) return null;
+  const measured = Boolean(dataProvenance);
+  const kind = measured ? KIND.MEASURED : KIND.ANALYTIC;
+  const quantities = [];
+
+  const add = (label, value, unit, note = '') => {
+    if (value === null || value === undefined || !Number.isFinite(value))
+      return;
+    quantities.push(quantity({ label, value, unit, kind, note }));
+  };
+
+  if (!measured) {
+    add(t('nb.gw.m1'), snapshot.m1, 'M☉', t('nb.gw.detectorFrame'));
+    add(t('nb.gw.m2'), snapshot.m2, 'M☉', t('nb.gw.detectorFrame'));
+    add(
+      t('nb.gw.chirpMass'),
+      snapshot.chirpMassSun,
+      'M☉',
+      t('nb.gw.detectorFrame')
+    );
+    add(t('nb.gw.distance'), snapshot.distanceMpc, 'Mpc');
+    add(t('nb.gw.inclination'), snapshot.inclinationDeg, '°');
+    add(
+      t('nb.gw.effectiveDistance'),
+      snapshot.effectiveDistanceMpc,
+      'Mpc',
+      t('nb.gw.effectiveDistanceNote')
+    );
+    add(t('nb.gw.frequency'), snapshot.frequencyAtCursorHz, 'Hz');
+    add(t('nb.gw.toMerger'), snapshot.cursorSecondsToMerger, 's');
+    add(t('nb.gw.strain'), snapshot.strainAtCursor, '');
+    add(t('nb.gw.peakStrain'), snapshot.peakStrain, '');
+    add(t('nb.gw.separation'), snapshot.separationRsAtCursor, 'Rs');
+    add(t('nb.gw.velocity'), snapshot.vOverCAtCursor, 'v/c');
+    add(t('nb.gw.isco'), snapshot.iscoHz, 'Hz');
+    add(t('nb.gw.windowSeconds'), snapshot.windowSeconds, 's');
+    add(t('nb.gw.cycles'), snapshot.cyclesInWindow, '');
+  }
+  if (similarity !== null && Number.isFinite(similarity)) {
+    quantities.push(
+      quantity({
+        label: t('nb.gw.similarity'),
+        value: similarity,
+        unit: '',
+        kind: KIND.MEASURED,
+        note: t('nb.gw.similarityNote'),
+      })
+    );
+  }
+
+  const limitations = [];
+  if (measured) {
+    limitations.push(
+      t('nb.gw.limit.published', {
+        paper: dataProvenance.paper,
+        doi: dataProvenance.doi,
+      })
+    );
+    limitations.push(t('nb.gw.limit.filtered'));
+    limitations.push(t('nb.gw.limit.noise'));
+  } else {
+    limitations.push(t('nb.gw.limit.model'));
+    limitations.push(
+      t('nb.gw.limit.isco', { isco: Math.round(snapshot.iscoHz) })
+    );
+    if (snapshot.excerpted) {
+      limitations.push(
+        t('nb.gw.limit.excerpt', {
+          window: Number(snapshot.windowSeconds).toFixed(1),
+          full: Number(snapshot.fullBandSeconds).toFixed(0),
+        })
+      );
+    }
+    if (
+      snapshot.fidelityAtCursor === 'poor' ||
+      snapshot.fidelityAtCursor === 'fair'
+    ) {
+      limitations.push(
+        t('nb.gw.limit.velocity', {
+          v: Number(snapshot.vOverCAtCursor).toFixed(2),
+        })
+      );
+    }
+    limitations.push(t('nb.gw.limit.response'));
+    if (snapshot.noise) {
+      limitations.push(
+        t('nb.gw.limit.noise.synthetic', { seed: snapshot.noise.seed })
+      );
+    }
+  }
+  if (comparison && !comparison.controlled && comparison.changed.length > 1) {
+    limitations.push(t('nb.gw.limit.uncontrolled'));
+  }
+  if (similarity !== null) limitations.push(t('nb.gw.limit.similarity'));
+
+  const evidence = [];
+  if (comparison) {
+    evidence.push(
+      comparison.changed.length
+        ? t('nb.gw.evidence.changed', {
+            changed: comparison.changed.join(', '),
+            held: comparison.held.join(', ') || '—',
+          })
+        : t('nb.gw.evidence.identical')
+    );
+  }
+  if (prediction) evidence.push(t('nb.gw.evidence.prediction', { prediction }));
+
+  // The figure is built here rather than handed in, so that its point cap and
+  // its kind tag are the ones every other capture uses.
+  const fig =
+    envelope && envelope.length
+      ? figure({
+          title: t('nb.gw.figure.title'),
+          xLabel: t('nb.gw.figure.x'),
+          yLabel: t('nb.gw.figure.y'),
+          series: [
+            figureSeries({
+              label: measured
+                ? t('nb.gw.figure.measured')
+                : t('nb.gw.figure.model'),
+              kind,
+              style: 'line',
+              points: envelope,
+            }),
+          ],
+        })
+      : null;
+
+  return buildEntry({
+    source: SOURCE.GW_OBSERVATION,
+    title: measured
+      ? t('nb.gw.title.data', { event: dataProvenance.event })
+      : t('nb.gw.title.model'),
+    quantities,
+    figure: fig,
+    provenance: provenanceOf({
+      ...provenance,
+      ...(measured
+        ? {
+            scenario: dataProvenance.event,
+            units: { strain: 'dimensionless' },
+            recordedAt: dataProvenance.detectedAt,
+            flags: ['real-data'],
+          }
+        : {
+            scenario: 'gravitational-wave lab',
+            units: { strain: 'dimensionless', mass: 'detector-frame M☉' },
+            flags: [
+              'model',
+              ...(snapshot.excerpted ? ['excerpt'] : []),
+              ...(snapshot.noise ? ['synthetic-noise'] : []),
+            ],
+          }),
+    }),
+    prose: {
+      evidence: evidence.join('\n'),
+      limitations: limitations.join('\n'),
+    },
+  });
+}

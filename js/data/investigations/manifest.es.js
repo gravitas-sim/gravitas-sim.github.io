@@ -264,4 +264,18 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 6,
   },
+  {
+    id: 'listening-to-spacetime',
+    title: 'Escuchar el espacio-tiempo',
+    subtitle:
+      'Averigua qué produjo una señal y compárala luego con la cosa real',
+    duration: '60-75 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. A lo largo de veinticuatro pasos averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, y terminas comparando tu respuesta con lo que dos detectores en Luisiana y Washington registraron de verdad en septiembre de 2015. Puedes hacerlo todo con el sonido apagado.',
+    thumbnail: 'images/scenarios/gw150914.webp',
+    stepCount: 24,
+    gradedCount: 15,
+    objectiveCount: 8,
+  },
 ];

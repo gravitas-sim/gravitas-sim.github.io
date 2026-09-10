@@ -91,6 +91,7 @@ const LOADERS = {
   'gravity-assist': () => import('./gravity-assist.js'),
   'hohmann-transfer': () => import('./hohmann-transfer.js'),
   'lagrange-points': () => import('./lagrange-points.js'),
+  'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
 };
 
 /**
@@ -123,6 +124,7 @@ const TRANSLATIONS = {
     'gravity-assist': () => import('./es/gravity-assist.js'),
     'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
     'lagrange-points': () => import('./es/lagrange-points.js'),
+    'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
   },
 };
 

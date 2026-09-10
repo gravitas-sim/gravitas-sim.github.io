@@ -84,4 +84,8 @@ export const BROWSE_META = {
     tags: ['gravity', 'orbits', 'spaceflight'],
     numericCount: 1,
   },
+  'listening-to-spacetime': {
+    tags: ['compact-objects', 'gravity', 'observing'],
+    numericCount: 0,
+  },
 };

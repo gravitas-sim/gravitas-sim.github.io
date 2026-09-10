@@ -212,11 +212,13 @@
     --badge-simulated: #6fd08a;
     --badge-approximate: #f2a65a;
     --badge-illustrative: #c58cf0;
+    --badge-measured: #5ec8d8;
   }
   :root[data-theme='daylight'] {
     --badge-simulated: #10714a;
     --badge-approximate: #96530b;
     --badge-illustrative: #6b3fa0;
+    --badge-measured: #0e6472;
   }
   .doc-badge {
     display: inline-block;
@@ -243,6 +245,13 @@
   }
   .doc-badge.is-absent {
     color: var(--text-secondary);
+  }
+  /* The only badge on this page that means "somebody else measured this".
+     There is exactly one thing in the application it applies to - the
+     published GW150914 traces - and it is worth being visibly different from
+     the four kinds of thing Gravitas computes for itself. */
+  .doc-badge.is-measured {
+    color: var(--badge-measured);
   }
 
   /* --- Feature blocks ---------------------------------------------------- */

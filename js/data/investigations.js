@@ -66,6 +66,7 @@ import BINARY_PLANETS from './investigations/binary-star-planets.js';
 import GRAVITY_ASSIST from './investigations/gravity-assist.js';
 import HOHMANN_TRANSFER from './investigations/hohmann-transfer.js';
 import LAGRANGE_POINTS from './investigations/lagrange-points.js';
+import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import { gradedSteps, positionIn } from './investigations/catalogue.js';
 
 // Order matters: the browser lists them in this order, and the three exoplanet
@@ -101,6 +102,7 @@ export const INVESTIGATIONS = [
   GRAVITY_ASSIST,
   HOHMANN_TRANSFER,
   LAGRANGE_POINTS,
+  LISTENING_TO_SPACETIME,
 ];
 
 /**

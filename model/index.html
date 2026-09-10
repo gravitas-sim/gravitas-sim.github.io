@@ -99,6 +99,9 @@
           <li><a href="#frames">Reference frames</a></li>
           <li><a href="#collisions">Collisions and mergers</a></li>
           <li><a href="#inspiral">Gravitational-wave inspiral</a></li>
+          <li>
+            <a href="#gravitational-waves">The gravitational-wave lab</a>
+          </li>
           <li><a href="#blackholes">Black holes</a></li>
           <li><a href="#spacetime">The spacetime view</a></li>
           <li><a href="#visual">Visual effects</a></li>
@@ -515,6 +518,157 @@
           <strong>Not for:</strong> gravitational-waveform prediction,
           strong-field numerical relativity, or anything resembling parameter
           estimation from a signal.
+        </p>
+      </div>
+
+      <h2 id="gravitational-waves">The gravitational-wave lab</h2>
+      <p><span class="doc-badge is-approximate">Approximated</span></p>
+      <p>
+        Everything in the section above is the sandbox. The gravitational-wave
+        lab, which the lesson
+        <em>Listening to spacetime</em> uses, is a separate thing built to a
+        different standard, and the two are kept apart everywhere they appear.
+        The sandbox spirals a binary in with a damping constant; the lab
+        computes a waveform.
+      </p>
+      <div class="doc-feature">
+        <h3>What the lab computes</h3>
+        <dl>
+          <dt>The model</dt>
+          <dd>
+            The leading-order (quadrupole, 0PN) inspiral of two point masses on
+            circular orbits. Peters (1964), Phys. Rev. 136, B1224 for the
+            radiation reaction; Maggiore, <em>Gravitational Waves Vol. 1</em>
+            (2008) sections 4.1.2 and 4.1.3 for the closed-form frequency,
+            phase and amplitude; Sathyaprakash and Schutz, Living Rev.
+            Relativity 12, 2 (2009) for the detector conventions.
+          </dd>
+          <dt>Not included</dt>
+          <dd>
+            Spin, eccentricity, tides, precession, higher multipoles, and every
+            post-Newtonian correction beyond the leading term. There is no
+            merger and no ringdown.
+          </dd>
+          <dt>Where it stops</dt>
+          <dd>
+            At the Schwarzschild innermost stable circular orbit of the total
+            mass, 4397 Hz divided by the total mass in solar masses. It is never
+            extrapolated past that point. For a 65-solar-mass binary that is
+            67.7 Hz, which is well below the frequencies LIGO recorded from
+            GW150914 &mdash; so an inspiral-only model covers only the beginning
+            of that event, and the lab says so rather than filling the gap.
+          </dd>
+          <dt>How far it can be trusted before then</dt>
+          <dd>
+            The lab displays the orbital velocity parameter
+            <code>v/c = (&pi;GMf/c&sup3;)<sup>1/3</sup></code>, which is 0.408
+            at the innermost stable orbit. The terms the model drops enter at
+            relative order <code>(v/c)&sup2;</code>. A 65-solar-mass binary is
+            already at 0.27 when it enters a ground-based detector's band, so
+            for a heavy black-hole binary there is no frequency inside that band
+            at which this model is quantitatively reliable. A pair of neutron
+            stars is, up to about 185 Hz.
+          </dd>
+          <dt>Masses and distance</dt>
+          <dd>
+            Masses are detector-frame (redshifted) masses throughout, because
+            that is what the waveform depends on. No cosmology is assumed
+            anywhere and no source-frame mass is inferred from a distance.
+            Distance is luminosity distance; strain is exactly inversely
+            proportional to it.
+          </dd>
+          <dt>Detector response</dt>
+          <dd>
+            The source is placed directly overhead with polarization angle zero,
+            so <code>F<sub>+</sub> = 1</code>, <code>F<sub>&times;</sub> = 0</code>
+            and the plotted strain is the plus polarization. The cross
+            polarization is computed and plotted separately because it is
+            physical. The effective distance
+            <code>D/((1 + cos&sup2;&iota;)/2)</code> is reported beside the true
+            one, which is the whole of the distance&ndash;inclination degeneracy.
+          </dd>
+        </dl>
+      </div>
+      <p>
+        The schematic source beside the plots is
+        <span class="doc-badge is-illustrative">Illustrative</span>. The
+        separation is computed &mdash; Kepler's third law at the modelled
+        frequency &mdash; but the picture is not to scale, the bodies are drawn
+        far larger than they are, the wavefront rings carry an exaggerated
+        amplitude at a compressed and slowed propagation scale, and the near
+        field is masked because the far-field expression that sets those
+        amplitudes does not describe it. A ring of test masses appears in its
+        own inset with the wave arriving out of the page, so the deformation
+        drawn is transverse by construction; a detector is never drawn beside
+        the binary.
+      </p>
+      <p>
+        Audio from the lab is the computed waveform, filled from the same
+        timeline at the audio device's sample rate. It is not quantized onto a
+        musical scale &mdash; that is the sandbox's sonification, which is a
+        designed thing and is labelled as one. A chirp that ends at 68 Hz has to
+        be moved to be audible on a laptop speaker, and the interface prints
+        exactly what was done: the speed factor, any constant frequency shift,
+        and by how much a shift flattened the chirp relative to the real signal.
+      </p>
+      <p>
+        Simulated detector noise is coloured to a published analytic fit to the
+        Advanced LIGO zero-detuning high-power design curve (LIGO-T0900288), in
+        the form given by Ajith (2011), arXiv:1107.1267. It is seeded, so it is
+        reproducible and does not change when a parameter changes. It is a
+        design curve and not the noise any detector had.
+      </p>
+      <p>
+        Comparing two signals reports a <strong>similarity</strong>: a
+        normalised, noise-weighted overlap maximised over time and phase, from 0
+        to 1. It is the same inner product a matched filter is built on and it
+        is not a signal-to-noise ratio, a false-alarm rate, a detection
+        significance or a probability. Establishing any of those needs a
+        template bank, a background estimate and a trials factor, none of which
+        are here.
+      </p>
+      <div class="doc-feature">
+        <h3>The GW150914 data</h3>
+        <p>
+          <span class="doc-badge is-measured">Measured</span> The figure data
+          published with
+          <a href="https://arxiv.org/abs/1602.03837"
+            >Abbott et al. (2016), Phys. Rev. Lett. 116, 061102</a
+          >, released by the Gravitational Wave Open Science Center under
+          <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>:
+          the observed strain from both detectors, the collaboration's
+          numerical-relativity reconstruction, the residual, and the published
+          Keplerian separation and post-Newtonian velocity.
+        </p>
+        <p>
+          Reproduced, not reprocessed. It was decimated from 16384 Hz and
+          quantized to 16 bits, with the resulting error recorded per trace, and
+          nothing else was done to it: no time shift, no sign inversion, no
+          filtering and no alignment. The collaboration band-passed it to
+          35&ndash;350 Hz and notched the instrument lines before publishing,
+          which the interface states wherever the traces are drawn. The relative
+          shift and sign between Hanford and Livingston are measured by the
+          build and recorded as findings rather than applied, because the lesson
+          asks a student to find them.
+        </p>
+        <p>
+          The energy an inspiral loses in this application is never a computed
+          gravitational-wave luminosity. In the sandbox it is a damping constant;
+          in the lab it is the leading-order radiation-reaction rate, which is a
+          real calculation but not a measurement of anything.
+        </p>
+      </div>
+      <div class="doc-note">
+        <p>
+          <strong>Good for:</strong> the chirp and why it rises, the chirp mass
+          as the quantity an inspiral constrains, the
+          distance&ndash;inclination degeneracy, what a detector band does to
+          what you can see, and the difference between a measurement, a model
+          and an illustration.
+          <br />
+          <strong>Not for:</strong> merger or ringdown waveforms, parameter
+          estimation, detection statistics, neutron-star post-merger physics, or
+          anything that depends on spin, tides or eccentricity.
         </p>
       </div>
 
@@ -1568,7 +1722,7 @@
         Each guided investigation relies on a different part of the model. This
         table is generated from the same <code>modelNotes</code> field that the
         instructor guide prints, so it covers every one of the
-        <!--fact:investigations-->18<!--/fact--> lessons and cannot fall behind
+        <!--fact:investigations-->19<!--/fact--> lessons and cannot fall behind
         them. It listed six of the twelve when it was maintained by hand.
       </p>
       <div class="doc-table-wrap">
@@ -1651,6 +1805,10 @@
             <tr>
               <td>Where Can It Get To?</td>
               <td>Two massive bodies on a circular orbit, integrated with Velocity Verlet rather than the catalogue’s default symplectic Euler, because the lesson asks students to watch a conserved quantity hold and first-order drift would make that a claim about the integrator. Measured eccentricity is 2.4e-9 and the tracer is a billionth of the pair. The world is built to the convention the analysis uses: barycentre at the origin, heavier body at -mu, lighter at 1-mu, so the overlay and the simulation agree about where everything is. The tracer is placed and launched in the rotating frame and converted, which is what makes its Jacobi constant a chosen quantity rather than an accident of the setup. The effective potential is sampled on a 220-square grid in the rotating frame’s own coordinates. That grid depends on the mass ratio and nothing else, so it survives a moving camera and a moving tracer and is computed once; the per-frame cost is one comparison per cell. e2e/cr3bp.spec.js bisects the tracer’s speed for the value at which the L1 neck opens and recovers the closed form’s C1 to six decimal places.</td>
+            </tr>
+            <tr>
+              <td>Listening to Spacetime</td>
+              <td>The lab computes a leading-order quadrupole inspiral of two point masses on circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the closed forms - with no spin, no eccentricity, no tides and no higher post-Newtonian terms. Masses are detector-frame throughout and no cosmology is assumed anywhere. It is terminated at the Schwarzschild innermost stable circular orbit of the total mass, 4397 Hz divided by the total mass in solar masses, and is never extrapolated past it. The interface reports the orbital velocity parameter with a three-band verdict, because the terms the model drops enter at the square of that number and there is no frequency at which the approximation simply stops being valid. The detector response places the source directly overhead with polarization angle zero, so the plotted strain is the plus polarization alone and the distance-inclination degeneracy appears in its simplest form. Synthetic noise is coloured to a published analytic fit to the Advanced LIGO zero-detuning high-power design curve and seeded, so it is reproducible and does not change under a parameter sweep. The GW150914 traces are the figure data published with Abbott et al. (2016), Phys. Rev. Lett. 116, 061102, doi:10.1103/PhysRevLett.116.061102, released by the Gravitational Wave Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to 16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and sign are measured by the build and recorded, not applied. None of this is the ordinary sandbox. Its inspirals run on a damping constant and its sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full specification, including what is deliberately absent, is at https://gravitas-sim.online/model/#gravitational-waves.</td>
             </tr>
           <!--/fact-block-->
           </tbody>

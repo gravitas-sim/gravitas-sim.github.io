@@ -62,6 +62,15 @@ import {
   A0_GALACTIC,
 } from './mond.js';
 
+// This family's labels are in the deferred half of the catalogue. Registered
+// from here as well as from js/widgets.js, because a lesson, a share link, an
+// authoring preview or a test can import this file directly and never go
+// through the registry - and a readout that prints its own message ids because
+// of who called it is a bug in the widget, not in the caller.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
+
 // The same fixed dark palette the black hole and tidal panels use, and for the
 // same reason: these are pictures of space and plots over it, and theme-coloured
 // ink on them was unreadable in the two light themes.

@@ -1836,3 +1836,143 @@
     color: var(--text-primary);
   }
 }
+
+/* The sound panel.
+   -------------------------------------------------------------------------
+   A fixed-position popover moved to <body> by js/ui.js, for the same reason
+   the object picker is: the readout scrolls its own overflow and would clip
+   an absolutely positioned descendant. `left`, `top` and `max-height` are set
+   from the trigger's rectangle by that code and deliberately not here. */
+.sound-panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: max-content;
+  min-width: 250px;
+  max-width: min(320px, calc(100vw - var(--space-6)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: var(--z-inspector);
+  padding: var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.sound-panel-title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.sound-panel-state {
+  margin: 0 0 var(--space-2);
+  color: var(--text-secondary);
+}
+
+.sound-panel-switch {
+  width: 100%;
+  padding: var(--space-2);
+  margin-bottom: var(--space-2);
+  font: inherit;
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.sound-panel-switch[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.sound-panel-note {
+  margin: 0 0 var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.sound-panel-rows {
+  margin: 0 0 var(--space-2);
+}
+
+.sound-panel-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 2px 0;
+}
+
+.sound-panel-row dt {
+  color: var(--text-muted);
+  flex: 0 0 auto;
+}
+
+.sound-panel-row dd {
+  margin: 0;
+  text-align: right;
+  min-width: 0;
+}
+
+.sound-panel-volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.sound-panel-volume input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sound-panel-volume output {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.sound-panel-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.sound-panel-btn {
+  flex: 1 1 0;
+  /* A finger target, not a mouse one: this panel is reachable on a phone. */
+  min-height: 36px;
+  padding: var(--space-1) var(--space-2);
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.sound-panel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sound-panel-link {
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+/* The speaker's own glyph carries the state, so the button needs a way to show
+   "permitted but silent" as distinct from "playing". Colour is never the only
+   difference: the glyph itself changes, and so does the accessible name. */
+.sonification-toggle[data-state='playing'] {
+  color: var(--accent);
+}
+
+.sonification-toggle[data-state='blocked'] {
+  color: var(--warn, #f2a65a);
+}

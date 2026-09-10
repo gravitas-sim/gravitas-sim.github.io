@@ -43,6 +43,7 @@ import {
   separationInSchwarzschildRadii,
   velocityParameter,
   fidelityBand,
+  T_SUN as T_SUN_S,
 } from './waveform.js';
 
 /** How many points an envelope bucket is evaluated at when it holds under a cycle. */
@@ -177,6 +178,25 @@ export function modelTimeline({
     return { min, max };
   };
 
+  /**
+   * The moment at which the wave phase had a given value.
+   *
+   * The exact inverse of phaseAt(), which the wave overlay needs: a wavefront
+   * drawn at a screen radius has to carry the phase that was *emitted* when the
+   * light-travel time to that radius began, and finding those emission moments
+   * by searching the timeline would be both slower and approximate.
+   *
+   * @param {number} phi - A phase, radians, negative before coalescence
+   * @returns {number} The time on this timeline, or NaN if it is outside it
+   */
+  const timeAtPhase = phi => {
+    if (!(phi <= 0) || !Number.isFinite(phi)) return NaN;
+    const theta = mc * T_SUN_S;
+    const tau = 5 * theta * Math.pow(-phi / 2, 8 / 5);
+    const t = -tau;
+    return inRange(t) ? t : NaN;
+  };
+
   /** The instantaneous frequency sampled uniformly across a window. */
   const frequencyTrack = (from, to, buckets) => {
     const n = Math.max(1, Math.floor(buckets));
@@ -255,6 +275,7 @@ export function modelTimeline({
         ? fidelityBand(velocityParameter(f, totalMass))
         : 'unknown';
     },
+    timeAtPhase,
     envelope,
     frequencyTrack,
     meta,
@@ -373,6 +394,7 @@ export function sampledTimeline({
     orbitalPhaseAtTime: () => NaN,
     velocityAtTime: () => NaN,
     fidelityAtTime: () => 'unknown',
+    timeAtPhase: () => NaN,
     envelope,
     frequencyTrack: (from, to, buckets) => {
       const b = Math.max(1, Math.floor(buckets));

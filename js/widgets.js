@@ -34,6 +34,7 @@ import { TIDAL_WIDGETS } from './tidalWidgets.js';
 import { DARK_MATTER_WIDGETS } from './darkMatterWidgets.js';
 import { CHAOS_WIDGETS } from './chaosWidgets.js';
 import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
+import { GW_WIDGETS } from './gwWidgets.js';
 
 // Every widget family's prose lives in the deferred half of the catalogue,
 // because nothing in the start-up path can reach one: this registry is
@@ -65,6 +66,7 @@ const WIDGETS = [
   ...DARK_MATTER_WIDGETS,
   ...CHAOS_WIDGETS,
   ...RESONANCE_WIDGETS,
+  ...GW_WIDGETS,
 ];
 
 /**

@@ -1966,12 +1966,25 @@ function paintTool({ quiet = false } = {}) {
   const id = stepId(stepIndex);
 
   for (const c of widget.controls) {
+    const value = Number(toolValues[c.id]);
     const out = els.toolControls.querySelector(`[data-tool-out="${c.id}"]`);
     if (out) {
-      const value = Number(toolValues[c.id]);
       out.textContent = c.format
         ? c.format(value)
         : `${value.toFixed(c.decimals ?? 2)}${c.unit ? ` ${c.unit}` : ''}`;
+    }
+    // An animated widget can move its own controls - a playhead advancing
+    // along a timeline is a control the student can also drag - and until this
+    // was here the number beside the slider tracked while the thumb sat still.
+    // Never while the control has focus: writing a value into an input a
+    // student is dragging fights them for it.
+    const input = els.toolControls.querySelector(`[data-tool="${c.id}"]`);
+    if (
+      input &&
+      input !== document.activeElement &&
+      input.value !== String(value)
+    ) {
+      input.value = String(value);
     }
     if (!quiet) responses[`${id}:tool:${c.id}`] = String(toolValues[c.id]);
   }

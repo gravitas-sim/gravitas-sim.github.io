@@ -47,7 +47,7 @@ import { createHash } from 'node:crypto';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as prettier from 'prettier';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -543,14 +543,114 @@ async function prettierOptions() {
   }
 }
 
+/**
+ * Check the committed module without the sources.
+ *
+ * The cache is gitignored - 1.4 MB of source text does not belong in the
+ * repository - so a fresh clone cannot regenerate. That must not mean the
+ * check is skipped: what can still be verified without the originals is that
+ * the file is complete, internally consistent and honest about itself, and
+ * that is most of what this check is for. The full comparison runs whenever
+ * the cache is there, and `--verify-sources` re-downloads to confirm that the
+ * recorded checksums still describe what the archive is serving.
+ *
+ * @returns {Promise<string[]>} Problems found, empty when there are none
+ */
+async function structuralCheck() {
+  const problems = [];
+  if (!existsSync(OUT)) return ['js/data/gw/gw150914.js is missing'];
+  const mod = await import(pathToFileURL(OUT).href);
+  const { PROVENANCE, TRACES, decodeTrace } = mod;
+
+  for (const field of [
+    'event',
+    'doi',
+    'license',
+    'attribution',
+    'baseUrl',
+    'gpsEpoch',
+  ]) {
+    if (!PROVENANCE?.[field]) problems.push(`provenance is missing ${field}`);
+  }
+  if (!Array.isArray(PROVENANCE?.inputs) || !PROVENANCE.inputs.length) {
+    problems.push('provenance records no input files');
+  }
+  for (const input of PROVENANCE?.inputs || []) {
+    if (!/^[0-9a-f]{64}$/.test(input.sha256 || '')) {
+      problems.push(`${input.file}: no SHA-256 recorded`);
+    }
+    if (!String(input.url || '').startsWith(BASE)) {
+      problems.push(`${input.file}: URL is not the published one`);
+    }
+  }
+  const ids = SOURCES.map(s => s.id);
+  for (const id of ids)
+    if (!TRACES?.[id]) problems.push(`trace ${id} is missing`);
+  for (const id of Object.keys(TRACES || {})) {
+    if (!ids.includes(id))
+      problems.push(`trace ${id} is not one this tool writes`);
+  }
+  for (const [id, spec] of Object.entries(TRACES || {})) {
+    let decoded;
+    try {
+      decoded = decodeTrace(id);
+    } catch (err) {
+      problems.push(`${id}: will not decode (${err.message})`);
+      continue;
+    }
+    if (decoded.values.length !== spec.count) {
+      problems.push(
+        `${id}: says ${spec.count} samples, decodes ${decoded.values.length}`
+      );
+    }
+    if (!decoded.values.every(Number.isFinite)) {
+      problems.push(`${id}: decodes to something that is not a number`);
+    }
+    const scale = spec.unitScale || 1;
+    let lo = Infinity;
+    let hi = -Infinity;
+    for (const v of decoded.values) {
+      if (v < lo) lo = v;
+      if (v > hi) hi = v;
+    }
+    // Within a quantization step of the recorded range, in the trace's own
+    // published units.
+    const slack =
+      (spec.quantizationError || 0) * 2 + Math.abs(spec.max - spec.min) * 1e-4;
+    if (
+      Math.abs(lo / scale - spec.min) > slack ||
+      Math.abs(hi / scale - spec.max) > slack
+    ) {
+      problems.push(`${id}: decoded range does not match the recorded one`);
+    }
+  }
+  return problems;
+}
+
 const args = process.argv.slice(2);
 const check = args.includes('--check');
 const offline = args.includes('--offline');
+const verifySources = args.includes('--verify-sources');
+const haveCache = SOURCES.every(s => existsSync(path.join(CACHE, s.file)));
 
 try {
-  const next = await build({ offline });
   if (check) {
-    const current = existsSync(OUT) ? await readFile(OUT, 'utf8') : '';
+    const problems = await structuralCheck();
+    if (problems.length) {
+      console.error('GW150914 data has problems:');
+      for (const p of problems) console.error(`  ${p}`);
+      process.exit(1);
+    }
+    if (!haveCache && offline && !verifySources) {
+      console.log(
+        'GW150914 data is complete and internally consistent.\n' +
+          `  The sources are not cached, so it was not regenerated. Run \`npm run gw:data\`\n` +
+          '  once to populate .gw-cache from gwosc.org, then this check compares byte for byte.'
+      );
+      process.exit(0);
+    }
+    const next = await build({ offline: offline && !verifySources });
+    const current = await readFile(OUT, 'utf8');
     if (current !== next) {
       console.error(
         'js/data/gw/gw150914.js is not what tools/build-gw-data.mjs would write.\n' +
@@ -558,8 +658,9 @@ try {
       );
       process.exit(1);
     }
-    console.log('GW150914 data is current.');
+    console.log('GW150914 data is current, and regenerates byte for byte.');
   } else {
+    const next = await build({ offline });
     await mkdir(path.dirname(OUT), { recursive: true });
     await writeFile(OUT, next);
     console.log(

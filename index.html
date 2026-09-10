@@ -1722,14 +1722,24 @@
           >
         </span>
         <div class="readout-head-actions">
+          <!--
+            The speaker. It opens a panel rather than toggling directly,
+            because there are now two entirely different things it can be
+            playing - the sandbox's designed sonification, and a computed
+            gravitational-wave signal - and a single icon cannot say which,
+            nor whether anything is audible at all. Mute stays one keystroke
+            away on M, and the first control inside the panel is the switch.
+          -->
           <button
             id="sonificationToggle"
             class="readout-icon-btn sonification-toggle"
-            aria-pressed="false"
-            title="Enable procedural sonification: orbital motion, gravitational-wave frequencies and collision signatures become live audio."
-            data-i18n-title="readout.sonificationToggle.hint"
-            data-i18n-aria-label="readout.sonificationToggle.label"
-            aria-label="Sound"
+            aria-expanded="false"
+            aria-haspopup="dialog"
+            aria-controls="soundPanel"
+            title="Sound settings"
+            data-i18n-title="sound.button.hint"
+            data-i18n-aria-label="sound.button.label"
+            aria-label="Sound settings"
           >
             <span class="readout-icon-glyph" aria-hidden="true">🔇</span>
           </button>
@@ -2392,6 +2402,69 @@
           hidden
         ></div>
       </div>
+    </div>
+
+    <!--
+      The sound panel. Moved to <body> at start-up and positioned from the
+      speaker button, for the same reason the object picker is: the readout is
+      an overflow container and clips its absolutely positioned descendants.
+    -->
+    <div
+      id="soundPanel"
+      class="sound-panel"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="soundPanelTitle"
+      hidden
+    >
+      <h2 id="soundPanelTitle" class="sound-panel-title"></h2>
+      <p id="soundPanelState" class="sound-panel-state" aria-live="polite"></p>
+      <button
+        id="soundPanelToggle"
+        type="button"
+        class="sound-panel-switch"
+        aria-pressed="false"
+      ></button>
+      <p id="soundPanelPermission" class="sound-panel-note"></p>
+      <dl class="sound-panel-rows">
+        <div class="sound-panel-row">
+          <dt id="soundPanelModeLabel"></dt>
+          <dd id="soundPanelMode"></dd>
+        </div>
+        <div class="sound-panel-row">
+          <dt id="soundPanelNowLabel"></dt>
+          <dd id="soundPanelNow"></dd>
+        </div>
+      </dl>
+      <label class="sound-panel-volume" for="soundPanelVolume">
+        <span id="soundPanelVolumeLabel"></span>
+        <input
+          id="soundPanelVolume"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="0.65"
+        />
+        <output id="soundPanelVolumeOut">65%</output>
+      </label>
+      <div class="sound-panel-actions">
+        <button
+          id="soundPanelPreview"
+          type="button"
+          class="sound-panel-btn"
+        ></button>
+        <button id="soundPanelStop" type="button" class="sound-panel-btn"></button>
+      </div>
+      <p id="soundPanelPreviewNote" class="sound-panel-note"></p>
+      <p class="sound-panel-link">
+        <!--
+          The href is set from js/ui.js along with the label. A static
+          "#investigation=..." here is a route rather than an anchor, and
+          tools/check-links.mjs is right to say that no element has that id.
+        -->
+        <a id="soundPanelLesson"></a>
+      </p>
     </div>
 
     <!--

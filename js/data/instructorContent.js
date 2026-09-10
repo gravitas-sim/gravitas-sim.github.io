@@ -3410,6 +3410,214 @@ export const INSTRUCTOR_CONTENT = {
     modelNotes:
       'Three of the four scenarios are built from published elements in js/resonance/systems.js, which is also what the validation suite reads, so a scenario and its check cannot quote different numbers. Pluto and Neptune and Jupiter Trojans are at true scale: 1 length unit is 0.01 AU and 1000 mass units is a solar mass, as everywhere else in Gravitas. The Galilean scenario is a scale model with distances multiplied by 100 and, by Newtonian scale invariance with masses unchanged, durations multiplied by 1000; the instruments convert back and the scenario summary says so. Two documented departures from reality: Gravitas is two-dimensional, so Pluto’s 17-degree inclination is projected away, which brings the modelled minimum Pluto–Neptune separation down from the observed 17.2 AU to 16.6; and Jupiter’s orbit is circularised in the Trojan scenario, because the triangular points are exact equilibria only for a circular secondary. The Galilean moons are placed from their published periods rather than their published distances, because the resonance is a statement about mean motions and the two published quantities disagree at the 0.1% level in a point-mass model - the difference is Jupiter’s oblateness, which Gravitas does not model. Pluto is placed at the exact 3:2 rather than its observed semi-major axis for the same kind of reason: the 0.2% difference is taken up in reality by the precession of Pluto’s perihelion. All four scenarios use Velocity Verlet with a capped substep, because a resonant angle is a secular quantity accumulated over hundreds of orbits and symplectic Euler at the same step reports a Laplace libration amplitude a third of the converged value. Thirty-two checks in the "Orbital resonance" group of tools/physics-checks.mjs hold every number quoted above to a published value or to a refinement test.',
   },
+  'listening-to-spacetime': {
+    topic:
+      'Gravitational waves from a compact binary: the chirp, what it constrains, and where a leading-order model stops',
+    difficulty:
+      'Introductory, conceptual, with arithmetic no harder than a ratio',
+    placement:
+      'Sixty to seventy-five minutes, after students have met orbits and ideally after Black Holes by the Numbers. It is the only lesson in the catalogue that puts a measurement, a model and an illustration on the same screen and asks students to tell them apart, so it works well late in a course as a lesson about evidence as much as about gravity. No calculus. Audio is offered four times and required never.',
+    overview: `Students are shown a signal with no label on it and asked what could have made it,
+      and then spend twenty-two screens finding out whether they were right. The instrument
+      computes a real waveform in real units; the last four screens compare it against the data
+      LIGO published for GW150914.
+      \n\nThe spine is a distinction that the subject makes very easy to lose. Three things on
+      screen would all answer to "gravitational wave": the sandbox animation behind the panel,
+      which spirals in because of a damping constant somebody chose; the schematic source inside
+      it, which is a drawing at a compressed scale; and the plots, which are a calculation.
+      Screen 2 names all three and no later screen lets them blur.
+      \n\nThe second spine is where a model stops. The leading-order inspiral this lab computes
+      is terminated at the innermost stable circular orbit and never extrapolated past it, which
+      for a GW150914-like binary is 67.6 Hz - far below the 250 Hz the detectors actually saw.
+      Screen 18 asks students to notice that and screen 22 shows them what fills the gap: the
+      collaboration's own numerical-relativity waveform, clearly labelled as somebody else's
+      calculation. A model that says where it stops is the thing being taught.
+      \n\nThe third is experimental control. Screens 11, 15, 20 and 23 are comparisons, and the
+      panel refuses to pretend: it names the variables that changed and says plainly when more
+      than one did.`,
+    priorKnowledge: [
+      'That gravity holds things in orbit, and that a closer orbit is a faster one',
+      'Reading a graph with a logarithmic axis, or willingness to be shown',
+      'Helpful but not required: having met the idea of a wave having a frequency and an amplitude',
+      'No calculus, no vectors, no complex numbers. Every relationship in the lesson is measured rather than derived',
+    ],
+    keyConcepts: [
+      {
+        heading: 'A binary that loses energy speeds up',
+        body: 'The single most counter-intuitive fact in the lesson, and screen 4 asks students to commit to an answer before they see it. Radiating energy away means falling closer together, and closer together means going round faster. Students who reason "losing energy means slowing down" are reasoning correctly about a car and incorrectly about an orbit, and the difference is worth drawing out rather than correcting.',
+      },
+      {
+        heading: 'The wave frequency is twice the orbital frequency',
+        body: 'Screen 6 has students count it rather than be told it. The reason is a symmetry: half a turn of the binary leaves an arrangement indistinguishable from the one it started in, so the wave repeats twice per orbit. This factor of two is the origin of most of the arithmetic confusion in the subject, and a class that has counted it does not lose it.',
+      },
+      {
+        heading: 'The chirp mass, not the masses',
+        body: 'Screen 13 sets up two binaries with very different component masses and nearly the same signal. To leading order the inspiral depends on one combination of the two masses and not on either separately, which is why a real detection reports a chirp mass to three figures and the individual masses to one. This is a fact about what an observation can constrain, and it is the lesson’s best example of that idea.',
+      },
+      {
+        heading: 'Amplitude does not determine distance',
+        body: 'Screen 16 has students find the distance-inclination degeneracy for themselves: a face-on binary at 800 Mpc produces exactly the strain of an edge-on one at 400. The readout reports the effective distance beside the true one so the two can be compared. This is why gravitational-wave distances come with wide error bars and why a network of detectors is worth building.',
+      },
+      {
+        heading: 'A high similarity is not a detection',
+        body: 'Screen 20 lets students score a wrong template against a buried signal and see how well it still does. The number the panel reports is a normalised overlap - the same inner product a real search uses - and it is deliberately never called a signal-to-noise ratio. Turning it into a claim needs a template bank, a background estimate and a trials factor, none of which are here, and saying so is the point.',
+      },
+      {
+        heading: 'Where the model stops, and what fills the gap',
+        body: 'The lab terminates at the Schwarzschild innermost stable circular orbit and reports the orbital velocity parameter throughout, which is already 0.27 when a heavy binary enters the band. The dropped post-Newtonian terms grow as the square of that. Screens 18 and 22 make the boundary the subject rather than an apology for it.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-3',
+        text: 'An unlabelled signal, a prediction about what made it, then the reveal and the three-kinds-of-picture screen. Screen 2 is the one to slow down on: if a class leaves without the distinction between the animation, the schematic and the plots, the rest lands differently. Screen 3 is controls practice and can be brisk.',
+      },
+      {
+        steps: '4-9',
+        text: 'The chirp, measured. A prediction, the wave overlay, the two-per-orbit count, two frequency readings, a saved evidence capture at 50 Hz, and a written explanation. The counting exercise at screen 6 takes longer than it looks and is worth the time.',
+      },
+      {
+        steps: '10-13',
+        text: 'Mass. A prediction about time in band, the first controlled comparison, a three-way table, and the chirp-mass surprise. Screen 13 lands best if students have not been told the answer at screen 11.',
+      },
+      {
+        steps: '14-16',
+        text: 'Distance and geometry. The vertical scale is pinned across screens 15 and 16 so the comparison is honest; screen 16 is where the degeneracy appears and it is the hardest idea in the lesson.',
+      },
+      {
+        steps: '17-18',
+        text: 'The three presets side by side, then the limits screen. Screen 18 is a multiple-choice question but it is really the conceptual close of the model half.',
+      },
+      {
+        steps: '19-20',
+        text: 'Noise, and what a similarity number is and is not. Expect this pair to generate the most discussion in the room.',
+      },
+      {
+        steps: '21-22',
+        text: 'The real data. Students find the seven-millisecond shift and the sign flip themselves before the readout confirms them, then see the residual. Do not shortcut the finding.',
+      },
+      {
+        steps: '23-24',
+        text: 'The open challenge and the written conclusion. Budget fifteen minutes: the challenge is the only screen with no right answer and it is where the experimental-control habit either shows up or does not.',
+      },
+    ],
+    features: [
+      {
+        name: 'The gravitational-wave lab',
+        text: 'Computes a leading-order quasi-circular inspiral in physical units from the two masses, the distance and the viewing angle. One timeline drives the schematic source, both plots, the audio and every capture, so nothing on screen can disagree with anything else. It reports the chirp mass, the frequency and separation at the playhead, the orbital velocity parameter with a plain-language verdict on how much the approximation has dropped, where the model stops and why, and both the true and effective distances.',
+      },
+      {
+        name: 'The wave overlay and the test-mass ring',
+        text: 'Each ring is a wave crest placed by emission history, so the outer ones are further apart because they left when the binary was turning more slowly. The near field is masked because a far-field formula does not describe it. The ring of test masses is a separate inset with the wave arriving out of the page, which is the only honest way to draw a transverse deformation without implying a detector is parked next to the binary.',
+      },
+      {
+        name: 'Seeded detector noise',
+        text: 'Coloured to the published Advanced LIGO design curve and drawn from a fixed seed, so it does not change when a student changes a mass. A separate control redraws it deliberately. It is a design curve rather than the noise any detector had, and the readout says so.',
+      },
+      {
+        name: 'The published GW150914 traces',
+        text: 'The figure data from Abbott et al. (2016), reproduced under CC BY 4.0 and not reprocessed. The observed strain from both detectors, the collaboration’s numerical-relativity waveform and the residual. No time shift and no sign inversion were applied to the stored data; the panel applies what a student asks for and records it, which is what makes screen 21 a finding rather than a demonstration.',
+      },
+      {
+        name: 'Evidence capture',
+        text: 'Available on screens 8, 15, 20, 23 and 24. A capture records the numbers, the settings they were taken under and the model’s own limitations together, so a claim written in the notebook can be checked against the reading it came from.',
+      },
+    ],
+    misconceptions: [
+      {
+        claim: 'Gravitational waves are a kind of sound.',
+        response:
+          'They are not, and there is nothing between here and the source for sound to travel through. Everything audible in this lesson is data converted into sound, and the panel prints exactly what was done to make it audible - the speed factor, any frequency shift, and by how much the shift flattened the chirp. Students who reach for "we heard the black holes" should be asked what the microphone was.',
+      },
+      {
+        claim:
+          'The signal gets faster because the black holes are being pulled harder.',
+        response:
+          'True but not the mechanism, and it hides the step that matters. The binary radiates energy, so the separation shrinks; a smaller orbit has a shorter period; the wave frequency is twice the orbital frequency. Ask for the separation to appear in the answer - the readout gives it in Schwarzschild radii on every screen.',
+      },
+      {
+        claim: 'A louder signal means a closer source.',
+        response:
+          'Only at fixed inclination, which is exactly what nobody knows in advance. Screen 16 shows a face-on binary at 800 Mpc and an edge-on one at 400 producing identical strain. This is the misconception most likely to survive the lesson if screen 16 is rushed.',
+      },
+      {
+        claim: 'The three presets show what a neutron star sounds like.',
+        response:
+          'They show what three different pairs of masses sound like. This model has no tides, no disruption and no post-merger behaviour, so a neutron-star preset is a mass choice and nothing more - and the lesson says so on the screen where the choice is made. Nothing in a gravitational wave says what the objects were made of.',
+      },
+      {
+        claim: 'The model shows the merger.',
+        response:
+          'It stops at 67.6 Hz for the black-hole preset, which is well before the loudest part of what the detectors recorded. The merger and ringdown on screen 22 are the collaboration’s numerical-relativity waveform, not this model extrapolated. Students who think they have watched a merger have watched the first act of one.',
+      },
+      {
+        claim: 'A template that matches means the signal has been detected.',
+        response:
+          'Screen 20 is built to break this. A wrong-mass template still scores well, and a correct template scores well against a signal buried in noise. The number is a similarity and the lesson never calls it anything else; a detection claim needs a background estimate the lab does not have.',
+      },
+    ],
+    teachingNotes: [
+      'The whole lesson can be completed with the sound off, and this is tested rather than asserted. Say so at the start: students on a shared machine or with hearing loss should not be wondering whether they are missing the point of the exercise. The frequency plot carries the same information as the pitch.',
+      'Screen 6 - counting orbits against wave peaks - reliably takes twice as long as it looks. The reliable method is to note where the small body starts, step the playhead until it returns, and count peaks over that same interval. Students who count peaks over a longer interval than orbits get three or four per orbit and conclude the relationship is not two.',
+      'On screen 11 the panel will say that two things changed when a student moves both masses, and it is right. That is a good moment to discuss what "holding the mass ratio fixed" actually controls, rather than a message to work around.',
+      'Screen 21 works best if nobody says the answer. Let a class hunt for the alignment; the shift comes out near seven milliseconds and the sign must be flipped, and both are physical. The readout has the measured values but they are phrased as a check, not as an instruction.',
+      'The lab reports the orbital velocity parameter with a verdict attached, and for a heavy black-hole binary it never reaches the reliable band inside LIGO’s frequency range. This is a real property of the approximation and not a defect of the software. A class that asks about it has found the most sophisticated point in the lesson.',
+      'The GW150914 comparison is the only real data in the catalogue. If a class has time for one digression, the acknowledgement line in the readout - the Gravitational Wave Open Science Center - is worth a minute: this data is public because a collaboration decided it should be.',
+    ],
+    discussion: [
+      'The model refuses to say what happens after 67.6 Hz. Is a model that stops more useful than one that guesses?',
+      'The signal constrains the chirp mass tightly and the individual masses loosely. What does that tell you about what an observation is?',
+      'Two detectors saw GW150914 and disagreed by seven milliseconds. What would one detector alone have been able to claim?',
+      'A wrong template still scores 0.6. What would you need to add before a number like that could support a discovery?',
+      'Nothing in a gravitational wave says what the objects were made of. How did anyone establish that GW170817 involved neutron stars?',
+    ],
+    extensions: [
+      'Have students work out how long a 1.4 + 1.4 solar-mass binary spends between 20 Hz and 40 Hz, then between 200 Hz and 400 Hz, using the lab’s own readout. The same octave takes very different times, which is the chirp in one comparison.',
+      'Set two binaries with the same chirp mass and different total masses and find the frequency at which their signals visibly part company. That frequency is a rough measure of how much information the merger carries that the inspiral does not.',
+      'Use the similarity control to find the largest chirp-mass error a template can have and still score above 0.9. That number is roughly how finely a real template bank has to be spaced.',
+      'Read the model page section on gravitational waves alongside the lesson and identify each of its stated limitations in the interface.',
+    ],
+    expectations: {
+      3: 'Everything moving together: the playhead, the two bodies in the schematic, both plots and the readout. A student who reports one of them lagging has found a bug worth hearing about.',
+      5: 'Rings that are further apart at the edge of the picture than near the centre, and a masked region in the middle. The test-mass ring stretches across the page and squeezes at right angles to that, alternately.',
+      6: 'Two wave peaks per orbit, within counting error. Anything between about 1.7 and 2.3 is a successful count; the validator says so and asks for a recount outside that.',
+      7: 'Roughly 20 Hz near the start and 60-67 Hz near the end for the default black-hole preset, a factor of about three. The time before merger falls from about 0.85 s to under 0.05 s.',
+      8: 'At 50 Hz the readout gives about 0.14 s before merger, a separation near 3.9 Schwarzschild radii and an orbital velocity parameter around 0.36. The saved notebook entry should carry the model’s limitations alongside those numbers.',
+      11: 'Halving both masses roughly triples the time in band and roughly doubles the frequency at which the model stops. The panel will report two changes rather than one, which is correct and worth discussing.',
+      12: 'The lighter pair stays in band longest and reaches the highest frequency; the heavier pair does neither. For 18 + 14.4, 36 + 29 and 60 + 48 solar masses the model stops at about 135, 68 and 41 Hz respectively, and the whole inspiral from 20 Hz lasts roughly 2.7 s, 0.85 s and 0.39 s.',
+      13: 'Chirp masses within about a solar mass of each other - near 28 for both pairs - despite total masses of 65 and 69.4 and mass ratios of 1.24 and 2.6. The two traces should be hard to tell apart over most of the window.',
+      15: 'Peak strain halving each time the distance doubles, so a ratio near 2.0, and the frequency at which the model stops identical at all three distances. A student who gets a ratio near 4 has assumed an inverse-square law.',
+      16: 'Edge-on about half the amplitude of face-on, and an effective distance of about 800 Mpc for a source at 400. The number to draw out is that the effective distance is what a single detector measures.',
+      17: 'Three very different windows from the same equations: the black-hole pair stops at 68 Hz after 0.8 s, the neutron-star pair at 1.57 kHz after 158 s of which the lab models the last eight, and the mixed pair at 386 Hz after 35 s. Chirp masses of about 28, 1.2 and 3.0 solar masses.',
+      19: 'At 410 Mpc the signal is clearly visible above the simulated noise; by 2000 Mpc it is not findable by eye in the time series. Pressing New noise changes the grey trace and leaves the blue one exactly where it was.',
+      20: 'The correct template near 0.9 or above, the wrong-mass template somewhere around 0.3 to 0.6, and the distant case still scoring high because the overlap is blind to amplitude. That last one is the finding: similarity does not fall with distance, which is precisely why it cannot be a detection statistic.',
+      21: 'A shift near 7 ms with the sign flipped, at which the two traces visibly line up. The readout reports -7.3 ms and a correlation of -0.76 as measured from the published files.',
+      22: 'The measurement and the reconstruction agreeing closely through the last cycles, and a residual that is as loud before the signal arrives as after it. The rapid die-away at the end is the ringdown and this lesson’s own model does not produce it.',
+      23: 'Any controlled comparison with one variable and a saved capture. Distance and viewing angle change amplitude alone; mass changes the shape as well, so a mass change is two effects and a good answer says so.',
+    },
+    modelNotes: `The lab computes a leading-order quadrupole inspiral of two point masses on
+      circular orbits - Peters (1964) for the radiation reaction, Maggiore chapter 4 for the
+      closed forms - with no spin, no eccentricity, no tides and no higher post-Newtonian terms.
+      Masses are detector-frame throughout and no cosmology is assumed anywhere.
+      \n\nIt is terminated at the Schwarzschild innermost stable circular orbit of the total mass,
+      4397 Hz divided by the total mass in solar masses, and is never extrapolated past it. The
+      interface reports the orbital velocity parameter with a three-band verdict, because the
+      terms the model drops enter at the square of that number and there is no frequency at which
+      the approximation simply stops being valid.
+      \n\nThe detector response places the source directly overhead with polarization angle zero,
+      so the plotted strain is the plus polarization alone and the distance-inclination degeneracy
+      appears in its simplest form. Synthetic noise is coloured to a published analytic fit to the
+      Advanced LIGO zero-detuning high-power design curve and seeded, so it is reproducible and
+      does not change under a parameter sweep.
+      \n\nThe GW150914 traces are the figure data published with Abbott et al. (2016), Phys. Rev.
+      Lett. 116, 061102, doi:10.1103/PhysRevLett.116.061102, released by the Gravitational Wave
+      Open Science Center under CC BY 4.0. They were decimated from 16384 Hz and quantized to
+      16 bits; nothing was shifted, inverted, filtered or aligned. The Hanford-Livingston lag and
+      sign are measured by the build and recorded, not applied.
+      \n\nNone of this is the ordinary sandbox. Its inspirals run on a damping constant and its
+      sounds are quantized onto a musical scale, and the lesson says so on screen 2. The full
+      specification, including what is deliberately absent, is at ${MODEL_PAGE}#gravitational-waves.`,
+  },
 };
 
 /** @returns {Object|null} The instructor content for an investigation id */

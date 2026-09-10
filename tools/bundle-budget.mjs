@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3080,
+    limit: 3350,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -232,7 +232,55 @@ const BUDGETS = [
       'bought margin that a budget sitting at 99.95 per cent of itself did ' +
       'not have, on a number that only ever moves in the direction this ' +
       'project wants it to. The measured figure is unchanged by the starfield ' +
-      'work, which is entirely eager: 3028.6 KB, 51.4 KB of room.',
+      'work, which is entirely eager: 3028.6 KB, 51.4 KB of room.\n\n' +
+      'Raised from 3080 to 3250 for the gravitational-wave work, and this ' +
+      'one is itemised in two halves because two different things happened.\n\n' +
+      'The first half is a debt. Three commits went in with the release gate ' +
+      'deferred - the teaching-data validation fix, the classroom activities ' +
+      'and the conservation-diagnostics pass - and nobody ran this check ' +
+      'against them. Measured from a fresh build at each commit: 3044.1 KB at ' +
+      '34bd6f4, the last green gate, and 3103.5 KB three commits later. That ' +
+      '59.4 KB was already over the 3080 limit before the work below started, ' +
+      'and it is recorded here rather than folded silently into the new ' +
+      'number. It is two lessons\u2019 worth of activity content, guides and ' +
+      'worksheets in two languages, which is what this budget is loose for; ' +
+      'the omission was running the check, not the content.\n\n' +
+      'The second half is the gravitational-wave lab: 3103.5 to 3189.2 KB. ' +
+      'The waveform model, the timeline, the transform, the seeded noise and ' +
+      'the overlap are about 14 KB; the lab panel, its drawing and its state ' +
+      'about 22 KB; the bundled GW150914 figure data 23 KB, which is eight ' +
+      'published traces at 4096 Hz and is the only reason anything in this ' +
+      'feature can be called a measurement; and the prose about 20 KB across ' +
+      'two catalogues. A lesson and an instrument is what the paragraph at ' +
+      'the top of this reason says this budget is loose for, and the 24-step ' +
+      'lesson itself is still to come, which is what the headroom is for.\n\n' +
+      'The trade the initial budget demands was made, and it more than paid ' +
+      'for itself. The speaker panel, its styling and its state machine added ' +
+      'about 7.5 KB of eager JavaScript and CSS, which would have taken the ' +
+      'start-up download from 833.8 to 841.3 KB. Nothing was raised. What ' +
+      'paid for it was thirteen kilobytes of instrument labels - the ' +
+      'dark-matter, transit and black-hole widget families, 243 strings in ' +
+      'two languages - which were in the start-up catalogue and could not be ' +
+      'rendered from it: all three modules are reachable only through ' +
+      'js/widgets.js, which only the lazy lesson engine imports. Each now ' +
+      'calls ensureDeferredMessages() itself, the way chaosW and resW already ' +
+      'did. The initial download is 828.6 KB against an untouched 830.0 ' +
+      'limit - lower than the 828.5 KB it was at the last green gate to ' +
+      'within a tenth of a kilobyte, across a feature that added a panel, a ' +
+      'popover, two instruments and a bundled dataset.\n\n' +
+      'Raised again from 3250 to 3350 for the lesson those two instruments ' +
+      'exist to serve: 3189.2 to 3280.2 KB, measured from a fresh build. ' +
+      'Twenty-four steps of English and their Spanish shadow are about 60 KB ' +
+      'between the two lesson chunks; the instructor guide entry is about ' +
+      '18 KB inside the portal chunk, which is where every other guide already ' +
+      'lives; the notebook capture helper and the gravitational-wave evidence ' +
+      'strings are the rest. A lesson is the first thing the paragraph at the ' +
+      'top of this reason says this budget is loose for.\n\n' +
+      'The initial download did NOT move and its limit was NOT touched: ' +
+      '828.6 KB before the lesson and 829.0 KB after, against 830.0. The four ' +
+      'hundred bytes are the lesson id in the manifest and its subject tag in ' +
+      'the browse metadata, which is the whole of a nineteenth lesson\u2019s ' +
+      'share of what a first-time visitor downloads.',
   },
 ];
 

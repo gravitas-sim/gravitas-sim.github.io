@@ -259,4 +259,18 @@ export const MANIFEST = [
     gradedCount: 8,
     objectiveCount: 6,
   },
+  {
+    id: 'listening-to-spacetime',
+    title: 'Listening to Spacetime',
+    subtitle:
+      'Work out what made a signal, then check it against the real thing',
+    duration: '60-75 min',
+    level: 'Introductory astronomy',
+    summary:
+      'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. Over twenty-four steps you work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, and finish by comparing your answer with what two detectors in Louisiana and Washington actually recorded in September 2015. You can do all of it with the sound off.',
+    thumbnail: 'images/scenarios/gw150914.webp',
+    stepCount: 24,
+    gradedCount: 15,
+    objectiveCount: 8,
+  },
 ];

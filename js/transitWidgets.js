@@ -17,6 +17,15 @@ import { withUnit } from './format.js';
 import { token, surface } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 
+// This family's labels are in the deferred half of the catalogue. Registered
+// from here as well as from js/widgets.js, because a lesson, a share link, an
+// authoring preview or a test can import this file directly and never go
+// through the registry - and a readout that prints its own message ids because
+// of who called it is a bug in the widget, not in the caller.
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+
+ensureDeferredMessages().catch(() => {});
+
 // Quadratic limb darkening, solar values in the optical (Claret 2000). The same
 // coefficients the live light curve uses, so a shape worked out here matches a
 // shape measured there.

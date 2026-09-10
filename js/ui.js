@@ -156,7 +156,13 @@ const apply_preset = () => {
   applyPreset(SETTINGS, DEFAULT_SETTINGS, state);
 };
 import { generateStarfield } from './render.js';
-import { toggleSonification, getSonificationState } from './audio.js';
+import {
+  toggleSonification,
+  getSonificationState,
+  setSonificationVolume,
+  watchSonification,
+} from './audio.js';
+import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import {
   initChart,
   updateChart,
@@ -3633,54 +3639,337 @@ const show_enhanced_scenario_info = scenarioName => {
   }
 };
 
-// The sound control is an icon button in the readout's header rather than the
-// panel-with-a-paragraph it used to be. The paragraph explained a feature that
-// is off by default and stays off for almost everybody, and it was the first
-// third of the one panel that shows live numbers. The explanation now lives in
-// the button's tooltip, where an explanation of a control belongs.
+// =============================================================================
+// The speaker, and what it is honest about
+// -----------------------------------------------------------------------------
+// A speaker icon has to answer three different questions and used to answer
+// one. Is sound permitted? Is anything audible right now? And which of the two
+// entirely different things this application can play would it be - the
+// sandbox's designed sonification, or a computed gravitational-wave signal?
+//
+// An AudioContext existing is not a sound. A reader who presses the speaker on
+// a paused, empty sandbox has permitted audio and will hear nothing, and an
+// icon that switches to a loudspeaker at that moment has told them something
+// false. So the glyph distinguishes muted, permitted-but-silent, and actually
+// playing, and the panel behind it spells out the rest: which mode, what is
+// playing, the volume, a labelled example to check the speakers with, and a
+// link to the lesson the signal audio belongs to.
+//
+// Mute stays one keystroke away on M rather than one click, because the button
+// now opens the panel. The panel's first control is the switch.
+// =============================================================================
+
+const SOUND_GLYPH = { off: '🔇', ready: '🔈', playing: '🔊', blocked: '🔇' };
+
+/** Where a lesson route hangs off. The sandbox is the site root. */
+const LESSON_ROUTE_BASE = '/';
+
+/**
+ * Which of the six states the sound is in.
+ * @returns {string} One of unsupported, blocked, muted, ready, playing
+ */
+function soundStatusKey() {
+  const s = getSonificationState();
+  if (!s.supported) return 'unsupported';
+  if (s.muted) return 'muted';
+  if (s.blocked) return 'blocked';
+  return s.playing ? 'playing' : 'ready';
+}
+
 const refreshSonificationToggle = () => {
   const toggle = document.getElementById('sonificationToggle');
-  if (!toggle) {
-    return;
-  }
+  if (!toggle) return;
   const glyph = toggle.querySelector('.readout-icon-glyph') || toggle;
+  const status = soundStatusKey();
 
-  const { muted, supported } = getSonificationState();
-  if (!supported) {
-    glyph.textContent = '🔇';
+  if (status === 'unsupported') {
+    glyph.textContent = SOUND_GLYPH.off;
     toggle.disabled = true;
     toggle.dataset.state = 'disabled';
-    toggle.title = t('readout.sonification.unavailable');
-    toggle.setAttribute('aria-label', t('readout.sonification.unavailable'));
-    toggle.setAttribute('aria-pressed', 'false');
+    toggle.title = t('sound.state.unsupported');
+    toggle.setAttribute('aria-label', t('sound.state.unsupported'));
     return;
   }
 
   toggle.disabled = false;
-  glyph.textContent = muted ? '🔇' : '🔊';
-  toggle.dataset.state = muted ? 'muted' : 'active';
-  toggle.title = muted
-    ? t('readout.sonification.off.hint')
-    : t('readout.sonification.on.hint');
-  toggle.setAttribute(
-    'aria-label',
-    muted ? t('readout.sonification.off') : t('readout.sonification.on')
-  );
-  toggle.setAttribute('aria-pressed', (!muted).toString());
+  glyph.textContent =
+    status === 'playing'
+      ? SOUND_GLYPH.playing
+      : status === 'ready'
+        ? SOUND_GLYPH.ready
+        : SOUND_GLYPH.off;
+  toggle.dataset.state = status;
+  const label = t('sound.button.labelled', {
+    state: t(`sound.state.${status}`),
+  });
+  toggle.title = label;
+  toggle.setAttribute('aria-label', label);
+  refreshSoundPanel();
 };
+
+/** Fill the panel from the current state. Cheap; called on every change. */
+function refreshSoundPanel() {
+  const panel = document.getElementById('soundPanel');
+  if (!panel || panel.hidden) return;
+  const s = getSonificationState();
+  const status = soundStatusKey();
+  const set = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  };
+  /**
+   * A deferred string, or nothing.
+   *
+   * t() answers with the id when a message is missing, which is the right
+   * behaviour for a developer and the wrong thing to put in front of a reader.
+   * The panel's prose is in the deferred half of the catalogue and can be a
+   * moment behind the panel itself, so an unresolved id becomes an empty
+   * paragraph that fills in when the catalogue lands - and the paragraph is
+   * hidden while it is empty, rather than leaving a gap.
+   */
+  const phrase = key => {
+    const value = t(key);
+    return value === key ? '' : value;
+  };
+  const phraseVars = (key, vars) => {
+    const value = t(key, vars);
+    return value === key ? '' : value;
+  };
+  const prose = (id, key) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = phrase(key);
+    el.hidden = !el.textContent;
+  };
+  // The panel's own prose lives in the deferred catalogue and is written from
+  // here rather than through data-i18n, so that it is never on screen as a
+  // message id while that catalogue is still arriving.
+  set('soundPanelTitle', phrase('sound.title'));
+  prose('soundPanelPermission', 'sound.permission');
+  prose('soundPanelPreviewNote', 'sound.preview.note');
+  set('soundPanelModeLabel', phrase('sound.row.mode'));
+  set('soundPanelNowLabel', phrase('sound.row.now'));
+  set('soundPanelVolumeLabel', phrase('sound.row.volume'));
+  const lesson = document.getElementById('soundPanelLesson');
+  if (lesson) {
+    lesson.textContent = phrase('sound.lesson.link');
+    // A route, not an anchor, so it is set here rather than in the markup.
+    lesson.href = `${LESSON_ROUTE_BASE}#investigation=listening-to-spacetime`;
+    lesson.hidden = !lesson.textContent;
+  }
+  set('soundPanelState', phrase(`sound.state.long.${status}`));
+  set('soundPanelMode', phrase(`sound.mode.${s.mode}`));
+
+  const audio = signalAudioState();
+  set(
+    'soundPanelNow',
+    audio.playing
+      ? phraseVars('sound.now.signal', {
+          seconds: audio.nowPlaying?.seconds.toFixed(1) ?? '?',
+        })
+      : s.playing
+        ? phrase('sound.now.sandbox')
+        : phrase('sound.now.nothing')
+  );
+
+  const toggle = document.getElementById('soundPanelToggle');
+  if (toggle) {
+    toggle.textContent = s.muted
+      ? phrase('sound.turnOn')
+      : phrase('sound.turnOff');
+    toggle.setAttribute('aria-pressed', String(!s.muted));
+    toggle.disabled = !s.supported;
+  }
+  const preview = document.getElementById('soundPanelPreview');
+  if (preview) {
+    preview.textContent = phrase('sound.preview');
+    preview.disabled = !s.supported || s.muted;
+  }
+  const stop = document.getElementById('soundPanelStop');
+  if (stop) {
+    stop.textContent = phrase('sound.stop');
+    stop.disabled = !audio.playing;
+  }
+  const vol = document.getElementById('soundPanelVolume');
+  const volOut = document.getElementById('soundPanelVolumeOut');
+  if (vol && document.activeElement !== vol) vol.value = String(s.volume);
+  if (volOut) volOut.textContent = `${Math.round(s.volume * 100)}%`;
+}
+
+/** Put the panel under its trigger, inside the viewport. */
+function positionSoundPanel() {
+  const panel = document.getElementById('soundPanel');
+  const btn = document.getElementById('sonificationToggle');
+  if (!panel || !btn || panel.hidden) return;
+  const r = btn.getBoundingClientRect();
+  const w = panel.offsetWidth || 280;
+  const left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left));
+  panel.style.left = `${left}px`;
+  panel.style.top = `${Math.min(window.innerHeight - 40, r.bottom + 6)}px`;
+  panel.style.maxHeight = `${Math.max(160, window.innerHeight - r.bottom - 20)}px`;
+}
+
+const soundPanelOpen = () => {
+  const p = document.getElementById('soundPanel');
+  return Boolean(p && !p.hidden);
+};
+
+function closeSoundPanel({ restoreFocus = false } = {}) {
+  const panel = document.getElementById('soundPanel');
+  if (!panel || panel.hidden) return;
+  panel.hidden = true;
+  document
+    .getElementById('sonificationToggle')
+    ?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) document.getElementById('sonificationToggle')?.focus();
+}
+
+function openSoundPanel() {
+  const panel = document.getElementById('soundPanel');
+  if (!panel) return;
+  // The panel's prose is deferred. Fetch it on the first open and repaint when
+  // it lands; until then the labels below render in English from the fallback.
+  ensureDeferredMessages()
+    .then(() => refreshSoundPanel())
+    .catch(() => {});
+  panel.hidden = false;
+  document
+    .getElementById('sonificationToggle')
+    ?.setAttribute('aria-expanded', 'true');
+  refreshSoundPanel();
+  positionSoundPanel();
+  document.getElementById('soundPanelToggle')?.focus();
+}
 
 const sonificationToggleBtn = document.getElementById('sonificationToggle');
 if (sonificationToggleBtn) {
+  const panel = document.getElementById('soundPanel');
+  // To <body>, for the same reason the object picker goes there: the readout
+  // scrolls its own overflow and would clip this.
+  if (panel && panel.parentElement !== document.body) {
+    document.body.appendChild(panel);
+  }
   refreshSonificationToggle();
+  watchSonification(() => refreshSonificationToggle());
+
+  // Fetch the panel's prose the moment the reader shows an interest in the
+  // button, so that a click finds it already there. One small chunk, once, and
+  // only for somebody who was about to open it.
+  const primeSoundStrings = () => {
+    ensureDeferredMessages()
+      .then(() => refreshSoundPanel())
+      .catch(() => {});
+  };
+  sonificationToggleBtn.addEventListener('pointerenter', primeSoundStrings, {
+    once: true,
+    passive: true,
+  });
+  sonificationToggleBtn.addEventListener('focus', primeSoundStrings, {
+    once: true,
+  });
+
   sonificationToggleBtn.addEventListener('click', e => {
     e.preventDefault();
     e.stopPropagation();
+    if (soundPanelOpen()) closeSoundPanel({ restoreFocus: true });
+    else openSoundPanel();
+  });
+
+  document.getElementById('soundPanelToggle')?.addEventListener('click', () => {
     toggleSonification();
+    if (getSonificationState().muted) stopSignalAudio();
     refreshSonificationToggle();
+  });
+
+  document.getElementById('soundPanelVolume')?.addEventListener('input', e => {
+    setSonificationVolume(Number(e.target.value));
+  });
+
+  document.getElementById('soundPanelStop')?.addEventListener('click', () => {
+    stopSignalAudio();
+    refreshSonificationToggle();
+  });
+
+  document
+    .getElementById('soundPanelPreview')
+    ?.addEventListener('click', () => {
+      playSoundExample();
+    });
+
+  document.addEventListener('click', event => {
+    if (!soundPanelOpen()) return;
+    if (sonificationToggleBtn.contains(event.target)) return;
+    if (document.getElementById('soundPanel')?.contains(event.target)) return;
+    closeSoundPanel();
+  });
+
+  document.getElementById('soundPanel')?.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+      closeSoundPanel({ restoreFocus: true });
+    }
+  });
+
+  window.addEventListener('resize', positionSoundPanel, { passive: true });
+  window.addEventListener('scroll', positionSoundPanel, {
+    passive: true,
+    capture: true,
   });
 } else {
   console.warn('Sonification toggle button not found');
 }
+
+/**
+ * A short, quiet, clearly labelled example.
+ *
+ * It is a modelled black-hole chirp rather than a beep, because a beep tells a
+ * reader nothing about what this application would play and because the panel
+ * has to link somewhere. The panel says in words that it is a model and not
+ * the simulation's own sound. Loaded on demand: nothing about the lab is in
+ * the start-up download.
+ */
+async function playSoundExample() {
+  try {
+    const [{ modelTimeline }, { play }, { audioPlanFor }] = await Promise.all([
+      import('./gw/timeline.js'),
+      import('./gwAudio.js'),
+      import('./gwLab.js'),
+    ]);
+    const tl = modelTimeline({
+      m1: 36,
+      m2: 29,
+      distanceMpc: 410,
+      inclinationDeg: 0,
+      fStart: 20,
+      id: 'sound-example',
+    });
+    const plan = audioPlanFor(tl);
+    play(tl, {
+      mode: plan.mode,
+      speed: plan.speed,
+      shiftHz: plan.shiftHz,
+      gain: 0.22,
+      label: 'example',
+    });
+  } catch {
+    // The example is a convenience. A failed import must not break the panel.
+  }
+  refreshSonificationToggle();
+}
+
+// The signal player talks to this control through window events rather than an
+// import, in both directions. Importing js/gwAudio.js here to subscribe would
+// fetch its chunk - and the waveform model behind it - on every page load, for
+// a control most readers never open.
+let lastSignalAudio = { playing: false, nowPlaying: null, mapping: null };
+const signalAudioState = () => lastSignalAudio;
+const stopSignalAudio = () => {
+  window.dispatchEvent(new CustomEvent('gravitasStopSignalAudio'));
+};
+window.addEventListener('gravitasSignalAudio', event => {
+  lastSignalAudio = event.detail || lastSignalAudio;
+  refreshSonificationToggle();
+});
 
 /**
  * Build the world, then hand it a fresh identity.

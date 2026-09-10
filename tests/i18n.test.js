@@ -294,9 +294,31 @@ describe('the catalogue split', () => {
     // in the start-up half is rv.survey.enable, which is the label on the
     // checkbox that does the switching, and the two chart dataset labels,
     // which are written whenever the chart is built and not only during a run.
+    // dmW, bhW and transitW joined the list when their thirteen kilobytes of
+    // instrument labels were moved out of the start-up download to pay for the
+    // gravitational-wave lab. Nothing in the entry graph reaches those three
+    // modules; each now registers this catalogue itself, the way chaosW and
+    // resW already did.
+    // gwW is the gravitational-wave lab, which is a widget family like the
+    // rest. sound.* is the *body* of the speaker panel, which is written from
+    // JavaScript after ensureDeferredMessages() resolves - the button's own
+    // labels, which are read at start-up, stayed in the eager half and are
+    // checked for below.
     const allowed =
-      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
+      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
+
+    // The speaker button's own labels are read before any panel is open, so
+    // they must not have gone with the panel's prose.
+    for (const id of [
+      'sound.button.label',
+      'sound.button.labelled',
+      'sound.state.muted',
+      'sound.state.playing',
+    ]) {
+      expect(EN_BASE[id]).toBeTruthy();
+      expect(EN_DEFERRED[id]).toBeUndefined();
+    }
 
     // ...and the three that must NOT have gone with them.
     for (const id of [
