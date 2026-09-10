@@ -191,8 +191,67 @@ export function renderDetails(view) {
     renderMass(view.mass) +
     renderProps(view.groups) +
     renderOverlays(view.overlays ?? []) +
+    renderAppearance(view.appearance) +
     renderAbout(view.about)
   );
+}
+
+/**
+ * "Appearance and environment", for a black hole.
+ *
+ * A disclosure rather than a row of controls, because it is not what most
+ * people open the inspector for and because everything in it is a display
+ * choice. That distinction is the point of the block: the numbers above it are
+ * computed from the object's mass, and nothing in here can change one of them.
+ *
+ * @param {?object} a - From buildInspectorView, or null for anything else
+ * @returns {string} HTML
+ */
+function renderAppearance(a) {
+  if (!a) return '';
+  const options = a.environments
+    .map(
+      e =>
+        `<option value="${escapeHtml(e.value)}"${
+          e.value === a.environment ? ' selected' : ''
+        }>${escapeHtml(e.label)}</option>`
+    )
+    .join('');
+  return `
+    <details class="insp-appearance">
+      <summary>${escapeHtml(a.title)}</summary>
+      <p class="insp-appearance-note">${escapeHtml(a.note)}</p>
+      <div class="insp-toggle-row">
+        <label for="bhEnvironment">${escapeHtml(a.environmentLabel)}</label>
+        <select id="bhEnvironment" class="ui-select">${options}</select>
+      </div>
+      <div class="insp-toggle-row">
+        <label for="bhInclination">${escapeHtml(a.inclinationLabel)}</label>
+        <input
+          type="range"
+          id="bhInclination"
+          min="0"
+          max="90"
+          step="1"
+          value="${a.inclinationDeg}"
+          aria-describedby="bhInclinationOut"
+        />
+        <output id="bhInclinationOut">${a.inclinationDeg}&deg;</output>
+      </div>
+      <div class="insp-toggle-row">
+        <span id="bhExplainLabel">${escapeHtml(a.explainLabel)}</span>
+        <button
+          type="button"
+          id="bhExplain"
+          class="toggle-button"
+          data-state="${a.explain ? 'on' : 'off'}"
+          role="switch"
+          aria-checked="${a.explain ? 'true' : 'false'}"
+          aria-labelledby="bhExplainLabel"
+        >${a.explain ? 'On' : 'Off'}</button>
+      </div>
+      <p class="insp-appearance-note">${escapeHtml(a.scaleNote)}</p>
+    </details>`;
 }
 
 /**

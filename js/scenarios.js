@@ -107,6 +107,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
 
   if (ps === 'Binary BH') {
     Object.assign(SETTINGS, {
+      // Matter is present in this scenario, so the holes are given a disk. No jets: nothing here says these are launching one.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 62,
       num_black_holes: 2,
       bh_behavior: 'Orbiting',
       use_individual_bh_masses: true,
@@ -217,6 +220,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Galactic Center') {
     Object.assign(SETTINGS, {
+      // An active nucleus: a feeding supermassive hole with a collimated outflow.
+      bh_environment: 'jet',
+      bh_disk_inclination: 25,
       num_black_holes: 1,
       bh_mass: 4000,
       bh_behavior: 'Static',
@@ -299,6 +305,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     // star on a plunging orbit whose closest approach falls inside the tidal
     // radius, so the existing mass-loss code has something to act on.
     Object.assign(SETTINGS, {
+      // A star has been pulled apart and its debris forms a disk. Jetted disruptions exist and are rare, so none is drawn.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 40,
       num_black_holes: 1,
       bh_mass: 2000,
       num_stars: 1,
@@ -338,6 +347,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Galactic Collision') {
     Object.assign(SETTINGS, {
+      // Gas driven inwards by the collision feeds both nuclei.
+      bh_environment: 'jet',
+      bh_disk_inclination: 55,
       num_black_holes: 2,
       bh_mass: 900,
       bh_behavior: 'Orbiting',
@@ -422,6 +434,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Supermassive BH') {
     Object.assign(SETTINGS, {
+      // Drawn as a feeding hole because that is what the scenario is for.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 70,
       num_black_holes: 1,
       bh_mass: 80,
       num_planets: 50,
@@ -481,6 +496,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Sagittarius A*') {
     Object.assign(SETTINGS, {
+      // The real Sgr A* accretes at a tiny fraction of the Eddington rate and shows no large-scale jet, so it gets a faint disk and no outflow. It is the nearest thing to a quiescent supermassive hole that is still worth drawing.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 30,
       num_black_holes: 1,
       bh_mass: 4000, // Reduced from 4 million to 4000 for better gameplay
       bh_behavior: 'Static',
@@ -639,6 +657,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'Quasar Cannon') {
     Object.assign(SETTINGS, {
+      // A quasar is this: a supermassive hole accreting hard, with a jet.
+      bh_environment: 'jet',
+      bh_disk_inclination: 68,
       num_black_holes: 1,
       bh_mass: 1e9,
       num_stars: 50,
@@ -659,6 +680,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'The Pinwheel Galaxy Core') {
     Object.assign(SETTINGS, {
+      // Gas-rich nucleus.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 35,
       num_black_holes: 2,
       use_individual_bh_masses: true,
       bh_masses: [1e5, 1e5],
@@ -772,6 +796,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     state.zoom = 0.3;
   } else if (ps === 'Hungry Hungry Holes') {
     Object.assign(SETTINGS, {
+      // The scenario is about accretion; the holes are drawn accreting.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 50,
       num_black_holes: 4,
       use_individual_bh_masses: true,
       bh_masses: [50, 50, 50, 50],
@@ -1157,6 +1184,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     // orbit radii are worked out from the black hole's drawn size rather than
     // fixed, so the picture holds together at any mass.
     Object.assign(SETTINGS, {
+      // A laboratory scenario whose point is the disk.
+      bh_environment: 'accreting',
+      bh_disk_inclination: 62,
       num_black_holes: 1,
       bh_mass: 10,
       bh_behavior: 'Static',
@@ -1679,6 +1709,9 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, state) => {
     });
   } else if (ps === 'GW150914') {
     Object.assign(SETTINGS, {
+      // Two black holes merging in vacuum. Stated explicitly rather than left to a default: this event emitted gravitational waves and no light, and nothing here should suggest otherwise.
+      bh_environment: 'quiescent',
+      bh_disk_inclination: 62,
       num_black_holes: 2,
       bh_behavior: 'Orbiting',
       use_individual_bh_masses: true,

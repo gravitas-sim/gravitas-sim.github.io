@@ -557,6 +557,23 @@ export const EN = {
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
+  // The black hole's "Appearance and environment" disclosure. Everything in it
+  // is a display choice; the rows above it are computed from the mass.
+  'inspector.bh.appearance': 'Appearance and environment',
+  'inspector.bh.appearanceNote':
+    'How this black hole is drawn. None of it changes the object: the mass, the Schwarzschild radius and everything else above are computed from the mass alone, and nothing here can move a body or alter an orbit.',
+  'inspector.bh.environment': 'Surroundings',
+  'inspector.bh.env.quiescent': 'Quiescent — nothing luminous',
+  'inspector.bh.env.accreting': 'Accreting — a disk',
+  'inspector.bh.env.jet': 'Accreting with jets',
+  'inspector.bh.inclination': 'Disk tilt',
+  'inspector.bh.explain': 'Explain this view',
+  'inspector.bh.scaleNote':
+    'The drawn size is compressed so a black hole is visible beside a planet, and the disk and jets are drawn at a compressed scale too. A real horizon at this mass would be far smaller than the dot on screen, and the jets far longer. The colours are illustrative: no temperature or observing band is modelled.',
+  'inspector.bh.label.horizon': 'Event horizon',
+  'inspector.bh.label.disk': 'Accretion disk',
+  'inspector.bh.label.approaching': 'Approaching side',
+  'inspector.bh.label.jet': 'Jet',
   'inspector.stat.schwarzschildRadius': 'Schwarzschild Radius',
   'inspector.stat.spectralType': 'Spectral Type',
   'inspector.stat.speed': 'Speed',

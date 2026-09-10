@@ -245,6 +245,17 @@ const BODY_FIELDS = [
   'spectralType',
   'stellarPhase',
   'ageYr',
+  // How a black hole is drawn: its environment, the disk's inclination and
+  // position angle, the flow direction and the jet strength. Six small values
+  // on one object type and absent everywhere else, so nothing but a black hole
+  // pays for them.
+  //
+  // Additive and optional, like the stellar fields above. A link made before
+  // this existed carries no appearance, and set_state gives that black hole a
+  // deterministic one from its id - or converts an explicit jet_orientation if
+  // the link had one, which is the documented path for older links.
+  'appearance',
+  'jet_orientation',
 ];
 
 /**

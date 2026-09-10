@@ -683,17 +683,37 @@ export const buildWorld = ctx => {
     }
   }
 
-  // Add black holes
+  // Add black holes.
+  //
+  // The scenario says what their surroundings are doing. It is a stated
+  // property, not something inferred from mass: a quiescent supermassive hole
+  // is dark and a feeding stellar-mass one is bright, and the old code showed
+  // a disk on everything because a display toggle was on.
+  const bhLook = {
+    environment: SETTINGS.bh_environment,
+    inclinationDeg: SETTINGS.bh_disk_inclination,
+  };
+  // The orientation is keyed on the black hole's index in this world, not on
+  // its object id: ids come from a counter that keeps climbing across scenario
+  // loads, so the same scenario drew its disk at a different angle every time
+  // it was opened.
+  const born = (mass, index) => {
+    const bh = new BlackHole({ x: 0, y: 0 }, mass * SOLAR_MASS_UNIT);
+    bh.setAppearance({
+      ...bhLook,
+      seed: `bh:${index}`,
+      positionAngleDeg: (index * 53 + 18) % 360,
+      spin: index % 2 === 0 ? 1 : -1,
+    });
+    return bh;
+  };
   if (SETTINGS.use_individual_bh_masses && SETTINGS.bh_masses.length > 0) {
     for (let i = 0; i < SETTINGS.num_black_holes; i++) {
-      const mass = SETTINGS.bh_masses[i] || SETTINGS.bh_mass;
-      bh_list.push(new BlackHole({ x: 0, y: 0 }, mass * SOLAR_MASS_UNIT));
+      bh_list.push(born(SETTINGS.bh_masses[i] || SETTINGS.bh_mass, i));
     }
   } else {
     for (let i = 0; i < SETTINGS.num_black_holes; i++) {
-      bh_list.push(
-        new BlackHole({ x: 0, y: 0 }, SETTINGS.bh_mass * SOLAR_MASS_UNIT)
-      );
+      bh_list.push(born(SETTINGS.bh_mass, i));
     }
   }
 

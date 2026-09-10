@@ -14,6 +14,7 @@ import {
 import { setSimGravitationalConstant, simToAu } from './units.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { formatNumber, withUnit } from './format.js';
+import { t } from './i18n/index.js';
 import { forEachCandidatePair } from './spatialHash.js';
 import {
   drawSolarLabel,
@@ -31,6 +32,28 @@ import { a0InSimUnits, mondVector } from './mond.js';
 // The render tier, for the passes a body can skip on a slow machine. Services
 // sit below the engine, so this is a downward import like the two above it.
 import { currentTier } from './quality.js';
+import { ENVIRONMENT, createAppearance } from './blackHole/appearance.js';
+// Fetched the first time a black hole is drawn, not at start-up. A scenario
+// with no black holes in it never asks for the renderer at all, and the four
+// kilobytes it costs stay out of everyone else's initial download. Until it
+// arrives the object is drawn as the simple mark the far level of detail uses,
+// which is a frame or two on a cold load and nothing on a warm one.
+let blackHoleRenderer = null;
+let blackHoleRendererPending = false;
+const ensureBlackHoleRenderer = () => {
+  if (blackHoleRenderer || blackHoleRendererPending) return blackHoleRenderer;
+  blackHoleRendererPending = true;
+  import('./blackHole/render.js')
+    .then(m => {
+      blackHoleRenderer = m;
+    })
+    .catch(() => {
+      // Leave it null: the simple mark is a complete, honest drawing of a
+      // black hole and the sandbox keeps working without the rest.
+      blackHoleRendererPending = false;
+    });
+  return null;
+};
 import { followCamera, resetFollowCamera } from './followCamera.js';
 // The shared drawing policy: level of detail, deterministic per-object
 // variation, star colour, light direction and comet-tail geometry. Pure
@@ -430,6 +453,41 @@ const resetSimulationTime = () => {
 const setSimulationTime = t => {
   simulationTime = Number.isFinite(t) && t >= 0 ? t : 0;
 };
+
+/**
+ * The clock the black-hole drawing animates against.
+ *
+ * The simulated clock, so a paused world draws the same frame for as long as
+ * it stays paused and two runs of one scenario draw the same picture at the
+ * same time. It used to be Date.now(), which meant the flow kept turning while
+ * the simulation was frozen and no two screenshots ever matched.
+ *
+ * Under reduced motion it returns a constant: the picture is complete and
+ * legible, it simply does not move.
+ *
+ * @returns {number} Seconds
+ */
+const visualClockSeconds = () =>
+  prefersReducedMotion() ? 0 : getSimulationTime();
+
+/**
+ * An appearance for a black hole that has not got one.
+ *
+ * Old saves and any object built before appearances existed. Deterministic
+ * from the id, so restoring the same save twice draws the same picture, and
+ * quiescent, because a hole whose environment nobody stated has not been said
+ * to be accreting.
+ *
+ * @param {number} id - The object's id
+ * @returns {object} An appearance
+ */
+const defaultAppearance = id =>
+  createAppearance({
+    seed: `bh:${id}`,
+    positionAngleDeg: (id * 47) % 360,
+    spin: id % 2 === 0 ? 1 : -1,
+    environment: ENVIRONMENT.QUIESCENT,
+  });
 
 // =============================================================================
 // Absorption by a black hole
@@ -4313,9 +4371,12 @@ class AccretionDiskParticle extends PhysicsObject {
       this.absorbed = true;
       this.alive = false;
 
-      // Add mass to black hole and trigger accretion effects
-      this.parentBlackHole.mass += this.mass;
-      this.parentBlackHole.updateRadius();
+      // It does NOT add its mass to the black hole, and this is a deliberate
+      // correction rather than an oversight. These tracers are decoration: how
+      // many exist depends on a rendering setting, so a hole that ate them grew
+      // at a rate set by the quality tier. A black hole in the sandbox gains
+      // mass by absorbing a modelled body, through handle_collisions, and by
+      // nothing else. See MODEL.md and /model/#black-holes.
 
       // Trigger standard accretion intensity increase
       this.parentBlackHole.accretion_intensity = Math.min(
@@ -4578,69 +4639,61 @@ class BlackHole {
     this.time_since_last_particle = 0;
     this.merger_boost_timer = 0; // Timer for enhanced effects after mergers
     this.merger_particle_boost = 1.0; // Multiplier for particle generation after mergers
-    // Assign a random jet orientation if not provided
-    this.jet_orientation =
-      jet_orientation !== null ? jet_orientation : Math.random() * 2 * Math.PI;
-    // Generate initial accretion disk particles for all black holes
-    this.generateInitialDiskParticles();
+
+    // How this object is drawn. Not physics: see js/blackHole/appearance.js.
+    //
+    // Derived from the object's own id rather than drawn from Math.random(),
+    // because Math.random() is the seeded stream while a world is being built
+    // (js/rng.js withSeed patches it), so a *visual* choice used to consume
+    // physics randomness and shift every body placed afterwards.
+    //
+    // `jet_orientation` is kept and honoured where a scenario or an old save
+    // supplied one: it becomes the disk's position angle, which is the same
+    // quantity it always meant on screen, and the jets come out along that
+    // disk's normal instead of being an angle of their own.
+    this.jet_orientation = jet_orientation;
+    this.appearance = createAppearance({
+      seed: `bh:${this.id}`,
+      positionAngleDeg:
+        jet_orientation !== null
+          ? ((jet_orientation * 180) / Math.PI + 90) % 360
+          : (this.id * 47) % 360,
+      inclinationDeg: 62,
+      spin: this.id % 2 === 0 ? 1 : -1,
+      environment: ENVIRONMENT.QUIESCENT,
+    });
   }
 
   /**
-   * Generate initial accretion disk particles for new black holes
+   * The decorative accretion tracers are gone.
+   *
+   * They used to be created here, in the constructor, whenever the
+   * `show_accretion_disk` *display* setting was on: thirty to sixty
+   * PhysicsObjects per hole, each drawing several values from Math.random() -
+   * which is the seeded stream while a world is being built - and each adding
+   * its mass to the hole when it fell in. So a rendering toggle changed the
+   * bodies a seed produced, and the quality tier set how fast a black hole
+   * grew.
+   *
+   * What replaced them is a drawing: js/blackHole/render.js paints the flow
+   * from the object's appearance and the clock it is handed, with no objects,
+   * no mass and no calls to the global generator. Real accretion is unchanged
+   * and still happens where it always did, in handle_collisions.
+   *
+   * The class and the arrays remain for saves that still carry particles.
    */
-  generateInitialDiskParticles() {
-    // Only generate if accretion disk is enabled
-    if (!physicsSettings || !physicsSettings.show_accretion_disk) return;
-
-    // Generate 30-60 initial particles based on black hole mass
-    const massInSuns = this.mass / SOLAR_MASS_UNIT;
-    const baseParticles = 30;
-    const massBonus = Math.floor(massInSuns * 2); // More particles for more massive black holes
-    const totalParticles = Math.min(baseParticles + massBonus, 60);
-
-    for (let i = 0; i < totalParticles; i++) {
-      this.generateInitialDiskParticle();
-    }
-
-    // Set initial accretion intensity to show the disk is active
-    this.accretion_intensity = 0.2;
-    this.disk_growth = 0.3;
-  }
 
   /**
-   * Generate a single initial disk particle with slightly different properties
+   * Change how this object is drawn. Never how it moves.
+   *
+   * The position angle and the seed are kept unless the caller replaces them,
+   * so a scenario can say "accreting, seen at 20 degrees" without disturbing
+   * the deterministic orientation the object was given at birth.
+   *
+   * @param {object} patch - Any subset of an appearance
    */
-  generateInitialDiskParticle() {
-    const disk_radius = this.radius * (1.5 + Math.random() * 3.0); // 1.5-4.5 times radius
-    const angle = Math.random() * 2 * Math.PI;
-
-    const pos = {
-      x: this.pos.x + disk_radius * Math.cos(angle),
-      y: this.pos.y + disk_radius * Math.sin(angle),
-    };
-
-    // Standard orbital velocity for stable disk formation
-    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.4; // Standard rotation speed
-    const tangent_angle = angle + Math.PI / 2;
-    const vel = {
-      x: orbital_speed * Math.cos(tangent_angle),
-      y: orbital_speed * Math.sin(tangent_angle),
-    };
-
-    const particle = new AccretionDiskParticle(pos, vel, this);
-
-    // ENHANCED: Set initial orbital properties to ensure consistent rotation
-    particle.orbital_velocity = orbital_speed;
-    particle.spiral_factor = Math.random() * 0.2; // Small initial spiral factor
-
-    // Give initial particles longer lifetimes and varied temperatures
-    particle.initial_temperature = 2000 + Math.random() * 6000; // 2000-8000K
-    particle.temperature = particle.initial_temperature;
-    particle.lifetime = 90 + Math.random() * 120; // 90-210 seconds
-    particle.brightness_multiplier = 0.8 + Math.random() * 0.4; // 0.8-1.2x brightness
-
-    this.disk_particles.push(particle);
-    accretion_disk_particles.push(particle);
+  setAppearance(patch = {}) {
+    this.appearance = createAppearance({ ...this.appearance, ...patch });
   }
 
   updateRadius() {
@@ -4745,11 +4798,13 @@ class BlackHole {
       this.merger_boost_timer = 20.0; // 20 seconds of enhanced effects
       this.merger_particle_boost = 1.0 + mass_ratio * 5; // Up to 5x more particles
 
-      // Create merger particles - reasonable amount
-      const merger_particles = Math.floor(mass_ratio * 200) + 20;
-      for (let i = 0; i < merger_particles; i++) {
-        this.generateEnhancedMergerParticle();
-      }
+      // No burst of particles. Two black holes merging in vacuum emit
+      // gravitational waves and no light: there is nothing there to shine.
+      // The old code spawned up to two hundred and twenty luminous tracers on
+      // every merge, each of which then added its mass to the remnant, so a
+      // vacuum merger produced both a flare and a mass gain that came from the
+      // renderer. A scenario that wants a gas-rich merger says so by setting
+      // its holes' environment; see js/blackHole/appearance.js.
     }
 
     this.time_since_last_accretion += dt;
@@ -4858,340 +4913,86 @@ class BlackHole {
     accretion_disk_particles.push(particle);
   }
 
-  /**
-   * Generate enhanced merger particles with more dramatic effects
-   */
-  generateEnhancedMergerParticle() {
-    const disk_radius = this.radius * (0.8 + Math.random() * 2.5); // Even closer to black hole for more dramatic effects
-    const angle = Math.random() * 2 * Math.PI;
-
-    const pos = {
-      x: this.pos.x + disk_radius * Math.cos(angle),
-      y: this.pos.y + disk_radius * Math.sin(angle),
-    };
-
-    // Standard orbital velocity for merger particles
-    const orbital_speed = Math.sqrt(this.mass / disk_radius) * 0.6; // Standard rotation speed
-    const tangent_angle = angle + Math.PI / 2;
-    const vel = {
-      x: orbital_speed * Math.cos(tangent_angle),
-      y: orbital_speed * Math.sin(tangent_angle),
-    };
-
-    const particle = new AccretionDiskParticle(pos, vel, this);
-
-    // ENHANCED: Set strong initial orbital properties for merger particles
-    particle.orbital_velocity = orbital_speed;
-    particle.spiral_factor = 0.5 + Math.random() * 0.5; // Higher initial spiral factor for merger particles
-
-    // Enhanced properties for merger particles
-    particle.initial_temperature = 3000 + Math.random() * 7000; // Start hotter
-    particle.temperature = particle.initial_temperature;
-    particle.lifetime = 90 + Math.random() * 180; // Even longer lifetime
-    particle.brightness_multiplier = 1.5 + Math.random() * 0.5; // Start brighter
-
-    this.disk_particles.push(particle);
-    accretion_disk_particles.push(particle);
-  }
-
-  /**
-   * Draw accretion disk particles instead of gradient effect
-   */
-  drawDiskParticles(ctx) {
-    if (
-      !physicsSettings.show_accretion_disk ||
-      !physicsSettings.realistic_disk_physics
-    )
-      return;
-
-    for (const particle of this.disk_particles) {
-      particle.draw(ctx);
-    }
-  }
-
   draw(ctx) {
     const world_pos = this.pos; // Use direct world coordinates since canvas is already transformed
     const world_radius = this.radius;
 
-    if (physicsSettings.show_accretion_disk) {
-      // Draw disk particles for more realistic disk behavior
-      this.drawDiskParticles(ctx);
-
-      // Enhanced gradient backdrop with more dramatic effects
-      const base_disk_radius = world_radius * 3.0; // Increased from 2.5
-      const growth_factor = 1.0 + this.disk_growth * 0.8; // Increased from 0.6
-      const disk_radius = base_disk_radius * growth_factor;
-
-      if (disk_radius > world_radius) {
-        const base_intensity = physicsSettings.realistic_disk_physics
-          ? 0.15 + this.accretion_intensity * 0.4 // Increased backdrop intensity
-          : 0.4 + this.accretion_intensity * 0.8; // Increased full intensity
-
-        const inner_radius = world_radius * (1.3 + this.disk_growth * 0.4); // Increased from 1.2 and 0.3
-        const inner_grad = ctx.createRadialGradient(
-          world_pos.x,
-          world_pos.y,
-          world_radius * 1.1,
-          world_pos.x,
-          world_pos.y,
-          inner_radius
-        );
-        const inner_intensity =
-          base_intensity * (0.9 + this.accretion_intensity * 0.4); // Increased from 0.8 and 0.3
-        const opacity_multiplier = physicsSettings.realistic_disk_physics
-          ? 0.6
-          : 1.0; // Increased from 0.4 and 0.9
-
-        // Enhanced color progression with more dramatic heating effects
-        inner_grad.addColorStop(
-          0,
-          `rgba(255, 255, 255, ${inner_intensity * opacity_multiplier * 0.8})` // Brighter white center
-        );
-        inner_grad.addColorStop(
-          0.2,
-          `rgba(255, 255, 200, ${inner_intensity * opacity_multiplier})`
-        );
-        inner_grad.addColorStop(
-          0.4,
-          `rgba(255, 220, 100, ${inner_intensity * opacity_multiplier * 0.9})`
-        );
-        inner_grad.addColorStop(
-          0.7,
-          `rgba(255, 180, 50, ${inner_intensity * opacity_multiplier * 0.7})`
-        );
-        inner_grad.addColorStop(
-          1,
-          `rgba(255, 140, 0, ${inner_intensity * opacity_multiplier * 0.4})`
-        );
-        ctx.fillStyle = inner_grad;
-        ctx.beginPath();
-        ctx.arc(world_pos.x, world_pos.y, inner_radius, 0, 2 * Math.PI);
-        ctx.fill();
-
-        const outer_grad = ctx.createRadialGradient(
-          world_pos.x,
-          world_pos.y,
-          inner_radius,
-          world_pos.x,
-          world_pos.y,
-          disk_radius
-        );
-
-        // Enhanced outer gradient with more dramatic colors
-        outer_grad.addColorStop(
-          0,
-          `rgba(255, 200, 80, ${base_intensity * opacity_multiplier * 0.7})` // Brighter transition
-        );
-        outer_grad.addColorStop(
-          0.3,
-          `rgba(255, 160, 40, ${base_intensity * opacity_multiplier * 0.6})`
-        );
-        outer_grad.addColorStop(
-          0.6,
-          `rgba(255, 120, 20, ${base_intensity * opacity_multiplier * 0.4})`
-        );
-        outer_grad.addColorStop(
-          0.9,
-          `rgba(255, 80, 0, ${base_intensity * opacity_multiplier * 0.2})`
-        );
-        outer_grad.addColorStop(1, `rgba(255, 50, 0, 0)`);
-        ctx.fillStyle = outer_grad;
-        ctx.beginPath();
-        ctx.arc(world_pos.x, world_pos.y, disk_radius, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
-
-    if (physicsSettings.show_bh_glow) {
-      const glow_radius = world_radius * (2.2 + this.disk_growth * 0.5); // Increased from 1.8 and 0.4
-      const glow_intensity = 0.5 + this.accretion_intensity * 0.4; // Increased from 0.4 and 0.3
-      const grad = ctx.createRadialGradient(
-        world_pos.x,
-        world_pos.y,
-        world_radius,
-        world_pos.x,
-        world_pos.y,
-        glow_radius
-      );
-
-      // Enhanced glow colors
-      grad.addColorStop(0, `rgba(220, 220, 255, ${glow_intensity * 0.8})`);
-      grad.addColorStop(0.5, `rgba(200, 200, 255, ${glow_intensity * 0.4})`);
-      grad.addColorStop(1, `rgba(180, 180, 255, 0)`);
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(world_pos.x, world_pos.y, glow_radius, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-
-    // The event horizon: flat, featureless black, drawn over everything the
-    // accretion flow put down. This is the object; the rest is material near
-    // it.
-    ctx.fillStyle = '#000000';
-    ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
-    ctx.fill();
-
-    // And a hairline on it, which is the point of this change.
+    // Everything visual lives in js/blackHole/render.js, which is handed a
+    // position, a drawn radius, this object's appearance and a clock. It reads
+    // no settings and no state of its own, so what is drawn here is entirely
+    // determined by those four things - which is what makes the picture
+    // reproducible and what keeps a rendering choice from reaching the
+    // integrator.
     //
-    // Black on a near-black sky has no edge, so the brightest thing near the
-    // centre - the inner lip of the accretion gradient at about 1.2 radii -
-    // was reading as the boundary of the black hole. It is not: it is hot gas
-    // outside the horizon, and a student who takes the glow for the object has
-    // been taught that a black hole is a bright thing. One thin ring at
-    // exactly `radius` says where the horizon is and separates it from the
-    // flow around it without adding another glow to the picture.
-    //
-    // Deliberately not drawn at 1.5 radii as a photon ring: this engine is
-    // Newtonian and does not compute one, and a ring drawn there would be a
-    // claim the model page does not make.
+    // The three global toggles stay visibility controls and nothing more:
+    // `show_accretion_disk` and `show_bh_jets` can hide what the object's
+    // environment would otherwise show, and neither can conjure a disk onto a
+    // quiescent hole. Whether a black hole HAS a disk is a property of the
+    // scenario, not of the renderer.
     const bhLevel = lodOf(this, 'BlackHole');
-    if (lodAtLeast(bhLevel, LOD.SHADED)) {
-      ctx.strokeStyle = 'rgba(200,210,235,0.55)';
-      ctx.lineWidth = Math.min(1.5 / state.zoom, world_radius * 0.06);
+    const wanted = this.appearance || defaultAppearance(this.id);
+    const shown = {
+      ...wanted,
+      environment: physicsSettings.show_accretion_disk
+        ? wanted.environment
+        : ENVIRONMENT.QUIESCENT,
+      jetStrength: physicsSettings.show_bh_jets ? wanted.jetStrength : 0,
+    };
+
+    const renderer = ensureBlackHoleRenderer();
+    if (renderer && lodAtLeast(bhLevel, LOD.SHADED)) {
+      renderer.drawBlackHole(ctx, {
+        at: world_pos,
+        unit: world_radius,
+        appearance: shown,
+        // The simulation's own clock, so pausing freezes the flow and two runs
+        // of the same scenario draw the same frame. Never Date.now().
+        time: visualClockSeconds(),
+        tier: lodAtLeast(bhLevel, LOD.DETAILED) ? 'full' : 'low',
+        alpha: 1,
+        outline: true,
+      });
+    } else {
+      // Far away or on the low tier: a recognisable mark and nothing else.
+      ctx.save();
+      ctx.fillStyle = '#000000';
       ctx.beginPath();
       ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(200,210,235,0.55)';
+      ctx.lineWidth = Math.max(0.3, world_radius * 0.08);
       ctx.stroke();
+      ctx.restore();
     }
 
-    if (physicsSettings.show_bh_jets && lodAtLeast(bhLevel, LOD.SHADED)) {
-      // --- Realistic, dynamic jet rendering (many thin lines, volumetric) ---
-      const jet_length = world_radius * (11 + this.jet_intensity * 3.5); // Moderately longer jet
-      const jet_base_width = Math.max(
-        1.5 / state.zoom,
-        world_radius * (0.18 + this.jet_intensity * 0.12)
-      );
-      const jet_tip_width = jet_base_width * 2.2;
-      const jet_intensity = 0.7 + this.jet_intensity * 0.5;
-      const time = Date.now() * 0.001;
-      const precession_angle = Math.sin(time * 0.25 + this.pos.x * 0.13) * 0.09;
-      const flicker = 0.85 + 0.35 * Math.sin(time * 10 + this.pos.y * 0.3);
-      const jet_colors = [
-        { stop: 0, color: [255, 255, 200], alpha: 1.0 },
-        { stop: 0.15, color: [255, 240, 160], alpha: 0.85 },
-        { stop: 0.35, color: [255, 220, 100], alpha: 0.65 },
-        { stop: 0.6, color: [200, 200, 255], alpha: 0.35 },
-        { stop: 0.85, color: [150, 170, 255], alpha: 0.13 },
-        { stop: 1, color: [100, 140, 255], alpha: 0.0 },
-      ];
-      for (let i = 0; i < 2; i++) {
-        const base_angle = this.jet_orientation + i * Math.PI;
-        const angle = base_angle + precession_angle;
-        // Draw the main jet beam as a polygon with gradient
-        ctx.save();
+    // "Explain this view": labels on the parts of the picture. Off unless
+    // asked for, because a diagram covered in captions is not a sandbox.
+    if (
+      renderer &&
+      physicsSettings.bh_explain_view &&
+      lodAtLeast(bhLevel, LOD.SHADED)
+    ) {
+      ctx.save();
+      ctx.font = `${Math.max(9, world_radius * 0.22)}px ui-monospace, monospace`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      for (const mark of renderer.annotations(shown, world_radius)) {
+        const x = world_pos.x + mark.x;
+        const y = world_pos.y + mark.y;
+        ctx.strokeStyle = 'rgba(160,200,255,0.75)';
+        ctx.lineWidth = Math.max(0.4, world_radius * 0.02);
         ctx.beginPath();
-        const base_x = world_pos.x + Math.sin(angle) * world_radius;
-        const base_y = world_pos.y + Math.cos(angle) * world_radius;
-        const tip_x =
-          world_pos.x + Math.sin(angle) * (world_radius + jet_length);
-        const tip_y =
-          world_pos.y + Math.cos(angle) * (world_radius + jet_length);
-        const perp = { x: Math.cos(angle), y: -Math.sin(angle) };
-        ctx.moveTo(
-          base_x - perp.x * jet_base_width,
-          base_y - perp.y * jet_base_width
-        );
-        ctx.lineTo(
-          tip_x - perp.x * jet_tip_width,
-          tip_y - perp.y * jet_tip_width
-        );
-        ctx.lineTo(
-          tip_x + perp.x * jet_tip_width,
-          tip_y + perp.y * jet_tip_width
-        );
-        ctx.lineTo(
-          base_x + perp.x * jet_base_width,
-          base_y + perp.y * jet_base_width
-        );
-        ctx.closePath();
-        const grad = ctx.createLinearGradient(base_x, base_y, tip_x, tip_y);
-        for (const stop of jet_colors) {
-          // Use the provided alpha for a more gradual fade
-          const alpha = stop.alpha * jet_intensity * flicker;
-          grad.addColorStop(
-            stop.stop,
-            `rgba(${stop.color[0]},${stop.color[1]},${stop.color[2]},${alpha})`
-          );
-        }
-        ctx.globalAlpha = 0.85;
-        ctx.fillStyle = grad;
-        ctx.filter = 'blur(0.5px)';
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.filter = 'none';
-        ctx.restore();
-        // --- Jet lines: many, very thin, volumetric, flickering ---
-        const numLines = 90;
-        for (let i = 0; i < numLines; i++) {
-          // t: 0 (base) to 1 (tip), randomize for volumetric fill
-          const t = Math.random();
-          // Random offset from center axis for volumetric effect
-          const width = jet_base_width * (1 - t) + jet_tip_width * t;
-          const offset = (Math.random() - 0.5) * width * 1.1;
-          // Flicker: only draw if random threshold is met (rapid flutter)
-          if (Math.random() > 0.38 + 0.55 * Math.sin(time * 16 + t * 10 + i))
-            continue;
-          // Position along jet, offset from axis
-          const px =
-            world_pos.x +
-            Math.sin(angle) * (world_radius + t * jet_length) +
-            perp.x * offset;
-          const py =
-            world_pos.y +
-            Math.cos(angle) * (world_radius + t * jet_length) +
-            perp.y * offset;
-          // Line direction: mostly along jet, but with small random angular spread
-          const angleSpread = angle + (Math.random() - 0.5) * 0.18;
-          // Line length tapers and flutters
-          const lineLen = width * (1.2 + 0.7 * Math.sin(time * 12 + t * 8 + i));
-          // Color: interpolate between stops
-          let color = [255, 255, 200];
-          if (t > 0.6) color = [180, 200, 255];
-          else if (t > 0.25) color = [255, 220, 100];
-          // Opacity fades with distance
-          const alpha = Math.max(
-            0.03,
-            Math.min(0.18, jet_intensity * (1 - t * 0.4) * flicker)
-          );
-          ctx.save();
-          ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
-          ctx.lineWidth = Math.max(0.5, width * 0.09); // much thinner lines
-          ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.lineTo(
-            px + Math.sin(angleSpread) * lineLen,
-            py + Math.cos(angleSpread) * lineLen
-          );
-          ctx.stroke();
-          ctx.restore();
-        }
-        // Jet tip shock (subtle, fading away gradually)
-        const tip_shock_radius =
-          jet_tip_width * (1.2 + 0.3 * Math.sin(time * 2 + i));
-        const tip_grad = ctx.createRadialGradient(
-          tip_x,
-          tip_y,
-          0,
-          tip_x,
-          tip_y,
-          tip_shock_radius
-        );
-        tip_grad.addColorStop(0, `rgba(180,200,255,${0.3 * flicker})`);
-        tip_grad.addColorStop(0.3, `rgba(120,160,255,${0.15 * flicker})`);
-        tip_grad.addColorStop(0.7, `rgba(100,140,255,${0.05 * flicker})`);
-        tip_grad.addColorStop(1, `rgba(100,140,255,0)`);
-        ctx.save();
-        ctx.globalAlpha = 0.4;
+        ctx.arc(x, y, mark.r * 0.35, 0, 2 * Math.PI);
+        ctx.stroke();
         ctx.beginPath();
-        ctx.arc(tip_x, tip_y, tip_shock_radius, 0, 2 * Math.PI);
-        ctx.fillStyle = tip_grad;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.restore();
+        ctx.moveTo(x + mark.r * 0.35, y);
+        ctx.lineTo(x + mark.r * 0.9, y);
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(210,230,255,0.95)';
+        ctx.fillText(t(`inspector.bh.label.${mark.key}`), x + mark.r * 1.0, y);
       }
+      ctx.restore();
     }
-
-    // ... label code ...
 
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -5236,6 +5037,12 @@ class BlackHole {
       jet_intensity: this.jet_intensity,
       disk_growth: this.disk_growth,
       time_since_last_accretion: this.time_since_last_accretion,
+      // How it is drawn, carried so a shared link shows what its author saw.
+      // Four small numbers and two short strings; `jet_orientation` goes with
+      // them because older links carry one and it is what the position angle
+      // is converted from.
+      appearance: this.appearance ? { ...this.appearance } : null,
+      jet_orientation: this.jet_orientation,
     };
   }
 
@@ -5254,6 +5061,28 @@ class BlackHole {
     this.jet_intensity = s.jet_intensity || 0.0;
     this.disk_growth = s.disk_growth || 0.0;
     this.time_since_last_accretion = s.time_since_last_accretion || 0.0;
+
+    // Appearance, in order of preference: what the state carries, then an old
+    // link's explicit jet angle converted the documented way, then a
+    // deterministic default from the id. A state that predates appearances
+    // therefore restores to something stable rather than to something new on
+    // every load, and one that carried a jet direction keeps pointing where it
+    // pointed - the jets now come out along the disk's normal, so that angle
+    // becomes the disk's position angle, turned by ninety degrees.
+    if (s.appearance) {
+      this.appearance = createAppearance(s.appearance);
+      this.jet_orientation = s.jet_orientation ?? null;
+    } else if (Number.isFinite(s.jet_orientation)) {
+      this.jet_orientation = s.jet_orientation;
+      this.appearance = createAppearance({
+        seed: `bh:${this.id}`,
+        positionAngleDeg: ((s.jet_orientation * 180) / Math.PI + 90) % 360,
+        spin: this.id % 2 === 0 ? 1 : -1,
+        environment: ENVIRONMENT.QUIESCENT,
+      });
+    } else {
+      this.appearance = defaultAppearance(this.id);
+    }
     this.updateRadius();
   }
 }

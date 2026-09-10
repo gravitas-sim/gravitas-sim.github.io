@@ -71,6 +71,12 @@ const LAYERS = [
       // no more, the same way js/i18n/dom.js is a leaf that happens to touch
       // the DOM. Down here because every body class in the engine reads it.
       /^js\/bodyVisuals\.js$/,
+      // What a black hole looks like, and the code that draws it. The same
+      // standing as bodyVisuals above: pure geometry over values handed in,
+      // plus one module whose only side effect is painting into a context it
+      // was given. No application state, no clock of its own - the time it
+      // animates against is passed in - and nothing in it can move a body.
+      /^js\/blackHole\//,
       // One string and two functions, imported by both the coordinator and the
       // lesson registry so that a deferred registry can read the language the
       // application already chose. Imports nothing itself.

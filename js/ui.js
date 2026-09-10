@@ -13,6 +13,7 @@ import {
   EARTH_MASSES_PER_JUPITER_MASS,
 } from './constants.js';
 import { formatNumber, withUnit } from './format.js';
+import { ENVIRONMENT, ENVIRONMENTS } from './blackHole/appearance.js';
 import {
   screen_to_world,
   bh_list,
@@ -2657,7 +2658,52 @@ const objectInfoFor = (object, type) => {
  * an extra click target on a header row that no longer exists. One button, one
  * handler, one place.
  */
+/**
+ * The black hole's appearance controls.
+ *
+ * Every one of them writes to the object's appearance and nothing else. There
+ * is deliberately no path from here to a mass, a position or a velocity: the
+ * whole point of the separation this block belongs to is that a viewing
+ * choice cannot become a physical one.
+ */
+const wireBlackHoleAppearance = () => {
+  const bh = state.selectedObject?.object;
+  const isHole = state.selectedObject?.type === 'BlackHole';
+
+  const env = document.getElementById('bhEnvironment');
+  if (env && isHole && bh) {
+    env.onchange = () => {
+      bh.setAppearance({ environment: env.value });
+    };
+  }
+
+  const tilt = document.getElementById('bhInclination');
+  const tiltOut = document.getElementById('bhInclinationOut');
+  if (tilt && isHole && bh) {
+    tilt.oninput = () => {
+      const deg = Number(tilt.value);
+      bh.setAppearance({ inclinationDeg: deg });
+      if (tiltOut) tiltOut.textContent = `${deg}\u00b0`;
+    };
+  }
+
+  const explain = document.getElementById('bhExplain');
+  if (explain) {
+    explain.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const next = !SETTINGS.bh_explain_view;
+      SETTINGS.bh_explain_view = next;
+      explain.setAttribute('data-state', next ? 'on' : 'off');
+      explain.setAttribute('aria-checked', next ? 'true' : 'false');
+      explain.textContent = next ? 'On' : 'Off';
+    };
+  }
+};
+
 const wireInspectorOverlayToggles = () => {
+  wireBlackHoleAppearance();
+
   const hzBtn = document.getElementById('hzToggleBtn');
   if (hzBtn) {
     hzBtn.onclick = event => {
@@ -2859,7 +2905,38 @@ const buildInspectorView = (object, type, info) => {
     mass: massControlModel(object, type),
     groups,
     overlays,
+    appearance: type === 'BlackHole' ? appearanceModel(object) : null,
     about: info.description || '',
+  };
+};
+
+/**
+ * The "Appearance and environment" block, for a black hole.
+ *
+ * Everything in it is a display choice, which is the reason it is a separate
+ * disclosure rather than more rows in the table above: the numbers up there -
+ * the Schwarzschild radius, the density, the Hawking temperature - are
+ * computed from the mass, and nothing offered here can change one of them.
+ *
+ * @param {object} bh - The selected black hole
+ * @returns {object} The model js/objectInspector.js renders
+ */
+const appearanceModel = bh => {
+  const a = bh.appearance || {};
+  return {
+    title: t('inspector.bh.appearance'),
+    note: t('inspector.bh.appearanceNote'),
+    environmentLabel: t('inspector.bh.environment'),
+    environment: a.environment || ENVIRONMENT.QUIESCENT,
+    environments: ENVIRONMENTS.map(value => ({
+      value,
+      label: t(`inspector.bh.env.${value}`),
+    })),
+    inclinationLabel: t('inspector.bh.inclination'),
+    inclinationDeg: Math.round(a.inclinationDeg ?? 62),
+    explainLabel: t('inspector.bh.explain'),
+    explain: Boolean(SETTINGS.bh_explain_view),
+    scaleNote: t('inspector.bh.scaleNote'),
   };
 };
 
@@ -7480,7 +7557,7 @@ if (closeScenarioInfoBtn) {
  * @param {string} key - A key of SCENARIO_INFO
  * @returns {boolean} True if the scenario existed and was loaded
  */
-export function loadScenarioByKey(key) {
+export function loadScenarioByKey(key, options = {}) {
   if (!key || !SCENARIO_INFO[key]) {
     console.warn(`Unknown scenario key: ${key}`);
     return false;
@@ -7489,7 +7566,11 @@ export function loadScenarioByKey(key) {
   // The rebuild raises the scenario card itself, through apply_preset, so this
   // must not call show_enhanced_scenario_info() as well: a second call stacks a
   // second 18-second auto-hide timer on the same element.
-  initialize_simulation();
+  //
+  // `options` is passed straight through, so a caller that needs the same
+  // world twice - the browser tests that check a display setting cannot change
+  // one - can name the seed instead of getting a fresh one each time.
+  initialize_simulation(options);
   // The small transient readout over the canvas. It refuses to fire before the
   // user has interacted and in the first few hundred frames, which is what
   // keeps it off the screen during start-up.

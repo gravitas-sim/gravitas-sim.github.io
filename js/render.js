@@ -1191,7 +1191,11 @@ const drawScene = () => {
 
   particles.forEach(p => p.draw(ctx));
 
-  // Draw accretion disk particles (they are drawn by black holes but also independently for cleanup)
+  // Accretion tracers, drawn once. They used to be drawn here AND by their
+  // parent black hole, so every one of them was painted twice - which on an
+  // additive blend is not a subtle difference. Nothing creates them any more
+  // (js/blackHole/render.js draws the flow instead), but a restored save can
+  // still carry some, so the loop stays and is now the only place they appear.
   accretion_disk_particles.forEach(ap => {
     if (ap.alive) ap.draw(ctx);
   });

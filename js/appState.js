@@ -207,6 +207,17 @@ export const DEFAULT_SETTINGS = {
   sim_size: 'Large',
   star_density: 10000,
   input_object_type: 'Star',
+  // What a black hole's surroundings are doing, which is a property of the
+  // scenario and not of its mass: 'quiescent', 'accreting' or 'jet'. A
+  // quiescent hole is dark. See js/blackHole/appearance.js.
+  bh_environment: 'quiescent',
+  // The "Explain this view" overlay: labels on the dark region, the disk, the
+  // approaching side and the jet. Off during ordinary exploration.
+  bh_explain_view: false,
+  // How steeply the disk is tilted towards the viewer, in degrees. Purely a
+  // drawing choice: it is not the plane the engine integrates in, and moving
+  // it never moves a body.
+  bh_disk_inclination: 62,
   show_bh_glow: true,
   show_accretion_disk: true,
   realistic_disk_physics: true,

@@ -642,6 +642,23 @@ export const ES = {
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
+  // El bloque «Aspecto y entorno» del agujero negro. Todo lo que contiene es
+  // una decisión de dibujo; las filas de arriba se calculan a partir de la masa.
+  'inspector.bh.appearance': 'Aspecto y entorno',
+  'inspector.bh.appearanceNote':
+    'Cómo se dibuja este agujero negro. Nada de esto cambia el objeto: la masa, el radio de Schwarzschild y todo lo demás de arriba se calculan solo a partir de la masa, y nada de aquí puede mover un cuerpo ni alterar una órbita.',
+  'inspector.bh.environment': 'Entorno',
+  'inspector.bh.env.quiescent': 'En reposo: nada luminoso',
+  'inspector.bh.env.accreting': 'Acretando: con disco',
+  'inspector.bh.env.jet': 'Acretando con chorros',
+  'inspector.bh.inclination': 'Inclinación del disco',
+  'inspector.bh.explain': 'Explicar esta vista',
+  'inspector.bh.scaleNote':
+    'El tamaño dibujado está comprimido para que un agujero negro se vea junto a un planeta, y el disco y los chorros también se dibujan a escala comprimida. Un horizonte real con esta masa sería mucho menor que el punto de la pantalla, y los chorros mucho más largos. Los colores son ilustrativos: no se modela ninguna temperatura ni banda de observación.',
+  'inspector.bh.label.horizon': 'Horizonte de sucesos',
+  'inspector.bh.label.disk': 'Disco de acreción',
+  'inspector.bh.label.approaching': 'Lado que se acerca',
+  'inspector.bh.label.jet': 'Chorro',
   'inspector.stat.schwarzschildRadius': 'Radio de Schwarzschild',
   'inspector.stat.spectralType': 'Tipo espectral',
   'inspector.stat.speed': 'Rapidez',

@@ -687,6 +687,108 @@ naming a limitation of the models.
   instructor-guide generation. Neither stellar lesson was cut into an activity
   format, which the prompt explicitly said not to do as part of this task.
 
+## Package C - Black holes: rendering, and the physics it was touching
+
+### Done
+
+**The audit found every reported problem still present**, plus two more:
+
+- [x] Jets used `Math.random()` (ninety lines per jet per frame) and
+      `Date.now()`, so the picture never repeated and kept moving while paused.
+- [x] The disk was a radial gradient with no orientation at all, the jets had
+      their own stored angle, and the Doppler shading assumed a third viewing
+      direction. Nothing agreed with anything.
+- [x] Decorative tracers were created **in the constructor** whenever the
+      `show_accretion_disk` display setting was on - thirty to sixty per hole,
+      each drawing several values from `Math.random()`, which `withSeed()`
+      patches to the seeded stream while a world is built. A rendering toggle
+      changed the bodies a seed produced.
+- [x] Those tracers added their mass to the hole when absorbed, so the quality
+      tier set how fast a black hole grew.
+- [x] They were drawn twice: once by the parent and once by the global loop.
+- [x] **Also found:** a merger spawned up to 220 more of them, so two black
+      holes merging in vacuum produced both a flare and a mass gain that came
+      from the renderer.
+- [x] **Also found:** the emissivity normalisation took a square root of a
+      quantity that was already one, so the profile was about twice what it
+      should be and clamped flat across the whole inner disk.
+
+**The correction, treated as a scientific one and not hidden**
+
+- [x] Decorative tracers are gone. Nothing creates them; the flow is drawn.
+      Real accretion is untouched and still runs through
+      `check_absorption` into `absorb_into_black_hole`, which is the only path
+      that ever should have moved mass.
+- [x] `js/blackHole/appearance.js` holds one configuration per object, and the
+      projected disk, the bright side and the jet axis are all derived from it.
+- [x] Motion comes from the simulated clock. Pausing freezes it; reduced motion
+      holds it at zero.
+- [x] No physics baseline was regenerated to hide the change: all 243 physics
+      checks and all 12 stability scenarios pass unmodified, and the golden
+      world file was not touched. The scenarios it could have moved contain no
+      black holes, which is why.
+
+**Radii kept distinct**
+
+- [x] The physical Schwarzschild radius comes from the existing
+      `schwarzschildRadiusM` in `js/blackHolePhysics.js` - no second formula
+      was added - and a test asserts it is linear in mass.
+- [x] The interaction/capture radius (`obj.radius`) is unchanged, so no
+      scenario's collisions moved.
+- [x] The drawn size is compressed and the inspector says so.
+- [x] The outline is at the drawn edge and is described as a boundary and a
+      selection aid. There is no bright ring at a multiple of it labelled a
+      photon sphere.
+
+**What is drawn**
+
+- [x] Two elliptical half-annuli either side of the horizon, so the far side
+      passes behind it and the near side in front. Smooth radial gradient in a
+      scaled context, because flat strips read as concentric rings.
+- [x] A thin-disk-inspired profile that is zero at the inner edge and peaks at
+      (7/6)^2 times it, tied to the non-rotating ISCO at 6 gravitational radii.
+- [x] Doppler brightening as a gradient along the major axis, which is exactly
+      what `cos(phi)` is in projection. It does not rotate with the material -
+      an earlier version did, which is wrong.
+- [x] Narrow jets with a soft sheath and deterministic knots at close zoom,
+      launched from outside the horizon, unequal in brightness by inclination.
+- [x] Environments per scenario: 3 jet-producing, 9 accreting, the rest
+      quiescent. GW150914 is explicitly quiescent.
+
+**Checks**
+
+| Check                               | Result                                                                                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/blackHoleAppearance.test.js` | 39 passed                                                                                                                              |
+| `tests/blackHoleSeparation.test.js` | 12 passed                                                                                                                              |
+| `e2e/blackHole.spec.js`             | 10 passed                                                                                                                              |
+| `jest` (whole suite)                | **4545 passed, 0 failed**                                                                                                              |
+| `validate:physics`                  | 243 of 243, unchanged                                                                                                                  |
+| `scenario-stability`                | 12 scenarios, unchanged                                                                                                                |
+| `budget:check`                      | initial **829.8** of an untouched 830.0; deferred 3608.4 of an untouched 3650.0                                                        |
+| `tools/blackhole-profile.mjs`       | Quasar Cannon 0.240 to **0.050** ms, Triple BH 0.735 to **0.102** ms, Black Hole Lab 0.198 to **0.107** ms, GW150914 0.080 to 0.073 ms |
+
+**How the budget was met without raising it.** The two new modules are 6 KB
+minified and the initial download went 2.6 KB over. Rather than raise the
+limit, the renderer is now fetched on the first frame that draws a black hole:
+a scenario with none never asks for it, and until it arrives the object is the
+same simple mark the far level of detail uses. 829.8 of 830.0.
+
+**Honest remaining limitations**
+
+- **No lensing.** The far side passes behind the dark region rather than being
+  bent above and below it. A defensible approximation did not fit this pass and
+  no decorative arc pretends otherwise; the model page says so.
+- The Doppler contrast and the jet beaming are **bounded illustrations**, not
+  computed factors. The engine has no velocity in units of c, and both say so
+  where they are defined and in the documentation.
+- The colours are illustrative. No temperature and no observing band is
+  modelled anywhere.
+- The interior of the disk has no vertical structure: at high inclination it is
+  a flat annulus, not a torus with thickness.
+- `AccretionDiskParticle` still exists and is still drawn if a restored save
+  carries one. Nothing creates it.
+
 ---
 
 ## Deferred checks
