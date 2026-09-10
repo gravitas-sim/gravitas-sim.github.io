@@ -142,7 +142,8 @@ export const ES_TEACHING = {
   'teach.demo.open': 'Abrir a tamaño completo',
   'teach.demo.lesson': 'La investigación completa',
   'teach.demo.frameTitle': '{name}, ejecutándose en Gravitas',
-  'teach.demo.meta': '{duration} · {steps} pasos · {graded} calificados',
+  'teach.demo.meta':
+    'Investigación completa: {duration} · {steps} pasos · {graded} calificados',
   'teach.demo.opened': 'La figura de {name} está cargada y en pausa.',
   'teach.demo.closed': 'Se cerró la figura de {name}.',
   'teach.demos.sequence': 'Copiar las seis como secuencia de clase',

@@ -31,7 +31,14 @@
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
-import * as prettier from 'prettier';
+import * as prettierNamespace from 'prettier';
+
+// Prettier's exports arrive in two shapes: under `default` through Jest's ESM
+// interop and at the top level under Node's own loader. Both are real, so this
+// picks whichever actually has format() rather than arguing with either.
+const prettier = prettierNamespace.format
+  ? prettierNamespace
+  : prettierNamespace.default;
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -41,10 +48,33 @@ const OUT = resolve(REPO, 'js/data/teachingGenerated.js');
 const { DEMOS } = await import(`${REPO}/js/data/teaching.js`);
 const { SCENARIO_INFO } = await import(`${REPO}/js/data/scenarioInfo.js`);
 const { DEFAULT_SETTINGS } = await import(`${REPO}/js/appState.js`);
-const { buildPayload, encodePayload } = await import(
+const { buildPayload, encodePayload, decodePayload } = await import(
   `${REPO}/js/shareState.js`
 );
 const { parseSeed } = await import(`${REPO}/js/rng.js`);
+
+/**
+ * The repository's Prettier settings.
+ *
+ * Read from .prettierrc.json rather than through prettier.resolveConfig(),
+ * which is missing from the build Jest loads - so a formatting check that
+ * relied on it worked from the command line and threw inside a test. There is
+ * exactly one config file here and it is JSON, so reading it is both simpler
+ * and the same answer in every runtime.
+ *
+ * @returns {Promise<Object>} Options for prettier.format
+ */
+let cachedPrettierOptions = null;
+async function prettierOptions() {
+  if (cachedPrettierOptions) return cachedPrettierOptions;
+  try {
+    const text = await readFile(resolve(REPO, '.prettierrc.json'), 'utf8');
+    cachedPrettierOptions = JSON.parse(text);
+  } catch {
+    cachedPrettierOptions = {};
+  }
+  return cachedPrettierOptions;
+}
 
 /**
  * The payload a demonstration describes.
@@ -159,8 +189,151 @@ ${lines.join('\n')}
 /** How many scenarios js/data/scenarioInfo.js describes. */
 export const SCENARIO_COUNT = ${Object.keys(SCENARIO_INFO).length};
 `;
-  const options = (await prettier.resolveConfig(OUT)) || {};
-  return prettier.format(raw, { ...options, filepath: OUT });
+  const options = await prettierOptions();
+  return prettier.format(raw, { ...options, filepath: OUT, parser: 'babel' });
+}
+
+/**
+ * Everything wrong with a checked-in generated file, as sentences.
+ *
+ * Why this is not a byte comparison
+ * -----------------------------------------------------------------------------
+ * It was one, and the header above already explained why that was the wrong
+ * test - two Node versions can disagree about whether a sixty-byte payload is
+ * worth deflating, and both answers are correct links - and then compared bytes
+ * anyway. On Node 24.19.0 the zlib behind CompressionStream emits a different
+ * (equally valid) deflate stream from the one on 24.4.0, so `npm run
+ * teaching:check` failed on a file that was not stale by any meaning of the
+ * word: all six links decoded to exactly the payloads the spec describes.
+ *
+ * Regenerating until one machine agrees would only move the failure to the next
+ * machine. So this compares what a link is *for*: the set of demonstrations,
+ * that every link decodes at all, and that what it decodes to is precisely the
+ * payload the spec asks for - scenario, seed, forced settings, paused state and
+ * schema version. An encoding that differs byte for byte and means the same
+ * thing passes. An encoding that means anything else does not, whatever it
+ * looks like.
+ *
+ * Structure and formatting are fileProblemsWith()'s business, deliberately:
+ * they are properties of the file, and this is a question about the links.
+ *
+ * @param {Object} generated - The checked-in module's exports
+ * @param {Array} demos - The spec
+ * @returns {Promise<string[]>} Empty when the links say what the spec says
+ */
+export async function stalenessOf(generated, demos = DEMOS) {
+  const problems = [];
+  const links = generated?.DEMO_LINKS;
+
+  if (!links || typeof links !== 'object') {
+    problems.push('the file exports no DEMO_LINKS object');
+    return problems;
+  }
+
+  // --- The set of demonstrations ------------------------------------------
+  const wanted = demos.map(d => d.id);
+  const found = Object.keys(links);
+  for (const id of wanted) {
+    if (!found.includes(id)) problems.push(`"${id}" has no link`);
+  }
+  for (const id of found) {
+    if (!wanted.includes(id)) {
+      problems.push(`"${id}" has a link but is not a demonstration any more`);
+    }
+  }
+
+  // --- What each link means ------------------------------------------------
+  for (const demo of demos) {
+    const fragment = links[demo.id];
+    if (typeof fragment !== 'string' || !fragment) continue;
+
+    let decoded;
+    try {
+      decoded = await decodePayload(fragment);
+    } catch (err) {
+      problems.push(`"${demo.id}" does not decode: ${err.message}`);
+      continue;
+    }
+
+    const expected = payloadFor(demo);
+    // Compared key by key rather than as two JSON strings: key order is not
+    // meaning, and a failure should name the field that differs rather than
+    // print two base64 blobs and leave the reader to diff them.
+    const keys = new Set([...Object.keys(expected), ...Object.keys(decoded)]);
+    for (const key of keys) {
+      const a = JSON.stringify(expected[key]);
+      const b = JSON.stringify(decoded[key]);
+      if (a !== b) {
+        problems.push(
+          `"${demo.id}" decodes to ${key}=${b ?? 'nothing'}, but the spec says ${a ?? 'nothing'}`
+        );
+      }
+    }
+  }
+
+  // --- The scenario count ---------------------------------------------------
+  const count = Object.keys(SCENARIO_INFO).length;
+  if (generated.SCENARIO_COUNT !== count) {
+    problems.push(
+      `SCENARIO_COUNT is ${generated.SCENARIO_COUNT}, but there are ${count} scenarios`
+    );
+  }
+
+  return problems;
+}
+
+/**
+ * Everything wrong with the generated file *as a file*.
+ *
+ * Separate from what the links mean, because these are different questions
+ * with different answers: a file can hold six perfectly good links and still
+ * have lost its banner, and it can be beautifully formatted and name the wrong
+ * scenario. This half is about the artifact - it is a checked-in source file
+ * that `npm run format:check` reads like any other, and it should go on
+ * looking like something a generator wrote.
+ *
+ * `formatChecked` is false when the runtime's Prettier cannot parse: Jest
+ * loads the standalone bundle, which ships without parsers. Saying so beats a
+ * silent skip, and the command line - the only caller that gates anything -
+ * runs under Node, where it is always true.
+ *
+ * @param {string} text - The checked-in file, verbatim
+ * @returns {Promise<{problems: string[], formatChecked: boolean}>} What is wrong
+ */
+export async function fileProblemsWith(text) {
+  const problems = [];
+  if (typeof text !== 'string' || !text.length) {
+    return { problems: ['the file is empty'], formatChecked: false };
+  }
+
+  if (!text.includes('GENERATED, do not edit')) {
+    problems.push('the file has lost its generated-file banner');
+  }
+  if (!text.includes('Object.freeze(')) {
+    problems.push('DEMO_LINKS is no longer frozen');
+  }
+  if (!/export const SCENARIO_COUNT = \d+;/.test(text)) {
+    problems.push('SCENARIO_COUNT is missing or is not a plain number');
+  }
+
+  let formatChecked = false;
+  try {
+    const options = await prettierOptions();
+    const formatted = await prettier.format(text, {
+      ...options,
+      filepath: OUT,
+    });
+    formatChecked = true;
+    if (formatted !== text) {
+      problems.push(
+        'the file is not formatted the way Prettier would write it'
+      );
+    }
+  } catch {
+    // No parser in this runtime. Reported through formatChecked, not hidden.
+  }
+
+  return { problems, formatChecked };
 }
 
 // Only when run directly: importing this from a test must not write a file or
@@ -187,16 +360,39 @@ async function main() {
   const existing = await readFile(OUT, 'utf8').catch(() => null);
 
   if (check) {
-    if (existing === text) {
-      console.log(
-        `js/data/teachingGenerated.js is up to date (${DEMOS.length} links).`
-      );
-    } else {
+    if (existing === null) {
       console.error(
-        'js/data/teachingGenerated.js is stale. Run `npm run teaching:data`.'
+        'js/data/teachingGenerated.js does not exist. Run `npm run teaching:data`.'
       );
       process.exit(1);
     }
+    let generated;
+    try {
+      generated = await import(`${OUT}?check=${Date.now()}`);
+    } catch (err) {
+      console.error(
+        `js/data/teachingGenerated.js will not load: ${err.message}`
+      );
+      process.exit(1);
+    }
+    const stale = await stalenessOf(generated);
+    const file = await fileProblemsWith(existing);
+    const all = [...stale, ...file.problems];
+    if (all.length) {
+      console.error('js/data/teachingGenerated.js does not match the spec:\n');
+      for (const p of all) console.error(`  - ${p}`);
+      console.error('\nRun `npm run teaching:data`.');
+      process.exit(1);
+    }
+    if (!file.formatChecked) {
+      console.warn(
+        'note: this runtime has no Prettier parser, so formatting was not checked.'
+      );
+    }
+    console.log(
+      `js/data/teachingGenerated.js is current (${DEMOS.length} links, ` +
+        `each decoding to the payload the spec describes).`
+    );
   } else if (existing === text) {
     console.log(
       `js/data/teachingGenerated.js unchanged (${DEMOS.length} links).`

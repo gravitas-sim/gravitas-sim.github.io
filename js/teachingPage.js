@@ -379,9 +379,15 @@ function demoCard(demo) {
     className: 'teach-demo-head',
     children: [el('h3', { text: name })],
   });
-  if (meta) {
-    header.append(
-      el('p', {
+
+  // The duration, the step count and the marked count belong to the full
+  // investigation, not to this demonstration - a demonstration is a paused
+  // world somebody looks at for as long as the point takes to land, and it has
+  // no duration to state. Under the title they read as the demonstration's
+  // own, which is a figure this page has no business inventing, so they sit
+  // beneath the link they describe and say whose they are.
+  const investigationMeta = meta
+    ? el('p', {
         className: 'teach-demo-meta',
         text: tr('teach.demo.meta', {
           duration: meta.duration,
@@ -389,8 +395,7 @@ function demoCard(demo) {
           graded: meta.gradedCount,
         }),
       })
-    );
-  }
+    : null;
 
   return el('article', {
     className: 'teach-demo',
@@ -412,6 +417,7 @@ function demoCard(demo) {
         ],
       }),
       actions,
+      ...(investigationMeta ? [investigationMeta] : []),
       figure,
     ],
   });

@@ -29,8 +29,8 @@
 // ordinary application in a new tab. There is no second pathway into the
 // simulation and this page contains no physics.
 //
-// The fragments themselves are generated: `npm run teaching:links` writes
-// js/data/teachingLinks.js from the `state` blocks below, and
+// The fragments themselves are generated: `npm run teaching:data` writes
+// js/data/teachingGenerated.js from the `state` blocks below, and
 // tests/teaching.test.js decodes every one of them and checks it says what the
 // spec says. See tools/build-teaching-demos.mjs.
 //

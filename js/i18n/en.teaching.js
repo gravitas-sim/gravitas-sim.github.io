@@ -159,7 +159,8 @@ export const EN_TEACHING = {
   'teach.demo.open': 'Open full size',
   'teach.demo.lesson': 'The full investigation',
   'teach.demo.frameTitle': '{name}, running in Gravitas',
-  'teach.demo.meta': '{duration} · {steps} steps · {graded} marked',
+  'teach.demo.meta':
+    'Full investigation: {duration} · {steps} steps · {graded} marked',
   'teach.demo.opened': 'The figure for {name} is now loaded and paused.',
   'teach.demo.closed': 'The figure for {name} has been closed.',
   'teach.demos.sequence': 'Copy all six as a lecture sequence',

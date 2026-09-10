@@ -129,6 +129,45 @@ test.describe('the demonstrations', () => {
     }
   });
 
+  test("the duration and step count are the investigation's, and say so", async ({
+    page,
+  }) => {
+    // These numbers come from the full investigation, not from the
+    // demonstration. Under the card's title they read as the
+    // demonstration's own - a duration this page has no way of knowing and no
+    // business inventing - so they are labelled and sit with the link they
+    // describe.
+    await openTeaching(page);
+    const card = page.locator('#teachDemos article').first();
+    const meta = card.locator('.teach-demo-meta');
+    await expect(meta).toHaveCount(1);
+    await expect(meta).toContainText(/full investigation/i);
+
+    // Not in the header, where it was; after the actions, beside the link.
+    expect(await meta.evaluate(n => n.closest('header') !== null)).toBe(false);
+    const order = await card.evaluate(article => {
+      const kids = [...article.children];
+      return {
+        actions: kids.findIndex(n =>
+          n.classList.contains('teach-demo-actions')
+        ),
+        meta: kids.findIndex(n => n.classList.contains('teach-demo-meta')),
+      };
+    });
+    expect(order.meta).toBeGreaterThan(order.actions);
+  });
+
+  test('and it is labelled in Spanish too', async ({ page }) => {
+    await openTeaching(page);
+    // Through the page's own switch, which is what a reader uses.
+    await page.locator('#teachLang button', { hasText: 'Español' }).click();
+    const meta = page
+      .locator('#teachDemos article')
+      .first()
+      .locator('.teach-demo-meta');
+    await expect(meta).toContainText(/investigaci\u00f3n completa/i);
+  });
+
   test('nothing is running until a reader asks for it', async ({ page }) => {
     await openTeaching(page);
     // Six iframes booting six simulations on load would be six canvases and
