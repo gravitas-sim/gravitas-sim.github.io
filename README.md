@@ -104,8 +104,12 @@ degrees of parallel anywhere.
 
 **A choice of integrator.** Symplectic Euler (the default, and what every
 scenario is tuned against), Velocity Verlet, or RK4, switchable while the
-simulation runs, with live energy and angular-momentum drift readouts beside
-them. Each scheme's convergence order and its bounded-versus-secular energy
+simulation runs. Live energy and angular-momentum drift are measured
+continuously and available to the investigations, the reliability check and
+the evidence exports; the on-screen **Conservation check** that displays them
+is off by default and turned on under Settings → Numerical accuracy, because
+three bare percentages in the corner of a first visit were read as a fault
+report by people who had not asked for one. Each scheme's convergence order and its bounded-versus-secular energy
 behaviour are measured in the validation suite rather than asserted.
 
 **Three observing panels, one observer.** A transit light curve, a radial-velocity
@@ -174,7 +178,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->2937<!--/fact--> strings, and
+of <!--fact:uiStrings-->2948<!--/fact--> strings, and
 all <!--fact:investigations-->18<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot

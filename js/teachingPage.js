@@ -515,7 +515,7 @@ function activityField(labelId, text) {
 function formatCard(activity, format, active) {
   const launch = el('a', {
     className: 'ui-button is-primary teach-activity-launch',
-    text: tr('activities.launch'),
+    text: tr('teach.activities.launch'),
     attrs: {
       href: `/${routeTo(activity.id, format.id)}#activity=${encodeURIComponent(
         `${activity.id}/${format.id}`
@@ -523,7 +523,7 @@ function formatCard(activity, format, active) {
       // Named in full for a screen reader, because "Start" three times in a
       // row is three identical links to anyone not reading the heading above
       // each one.
-      'aria-label': tr('activities.launch.label', {
+      'aria-label': tr('teach.activities.launch.label', {
         format: tr(format.nameId),
         activity: tr(activity.titleId),
       }),
@@ -540,13 +540,15 @@ function formatCard(activity, format, active) {
       el('p', {
         className: 'teach-activity-duration',
         children: [
-          el('strong', { text: tr(format.durationId) }),
+          el('strong', {
+            text: tr('teach.activity.duration', { n: format.minutes }),
+          }),
           el('span', { text: ` · ${tr(format.forId)}` }),
         ],
       }),
       el('p', {
         className: 'teach-fineprint',
-        text: tr('activities.estimate'),
+        text: tr('teach.activities.estimate'),
       }),
       el('p', { text: tr(format.introId) }),
       el('p', {
@@ -570,7 +572,7 @@ function activityCard(activity, activeFormat) {
   const formats = el('div', {
     className: 'teach-activity-formats',
     children: [
-      el('h3', { text: tr('activities.formats.heading') }),
+      el('h3', { text: tr('teach.activities.formats.heading') }),
       ...activity.formats.map(format =>
         formatCard(activity, format, format === activeFormat)
       ),
@@ -591,14 +593,14 @@ function activityCard(activity, activeFormat) {
       el('dl', {
         className: 'teach-activity-fields',
         children: [
-          activityField('activities.audience', tr(activity.audienceId)),
+          activityField('teach.activities.audience', tr(activity.audienceId)),
           activityField(
-            'activities.prerequisites',
+            'teach.activities.prerequisites',
             tr(activity.prerequisitesId)
           ),
         ],
       }),
-      el('h4', { text: tr('activities.objectives') }),
+      el('h4', { text: tr('teach.activities.objectives') }),
       objectives,
       formats,
       // Kept apart from the student buttons above, and labelled, because the
@@ -609,19 +611,19 @@ function activityCard(activity, activeFormat) {
         children: [
           el('a', {
             className: 'ui-button is-quiet',
-            text: tr('activities.instructor'),
+            text: tr('teach.activities.instructor'),
             attrs: { href: '/instructors/' },
           }),
           el('a', {
             className: 'ui-button is-quiet',
-            text: tr('activities.fullLesson'),
+            text: tr('teach.activities.fullLesson'),
             attrs: {
               href: `/#investigation=${encodeURIComponent(activity.lesson)}`,
             },
           }),
           el('p', {
             className: 'teach-fineprint',
-            text: tr('activities.instructor.note'),
+            text: tr('teach.activities.instructor.note'),
           }),
         ],
       }),
@@ -648,12 +650,12 @@ function renderActivities() {
 
   if (fallback) {
     if (route.reason === 'no-activity') {
-      fallback.textContent = tr('activities.fallback.activity', {
+      fallback.textContent = tr('teach.activities.fallback.activity', {
         id: route.requested.activity,
       });
       fallback.hidden = false;
     } else if (route.reason === 'no-format') {
-      fallback.textContent = tr('activities.fallback.format', {
+      fallback.textContent = tr('teach.activities.fallback.format', {
         id: route.requested.format,
       });
       fallback.hidden = false;

@@ -134,9 +134,18 @@ describe('the page asks for messages that exist', () => {
     const used = new Set([
       ...[...html.matchAll(/data-i18n(?:-[a-z-]+)?="([^"]+)"/g)].map(m => m[1]),
     ]);
-    for (const file of ['js/teachingPage.js', 'js/teaching/i18n.js']) {
+    for (const file of [
+      'js/teachingPage.js',
+      'js/teaching/i18n.js',
+      // The classroom activities name their strings from their definition
+      // rather than from the renderer, which is what lets the renderer stay
+      // one loop over whatever is defined.
+      'js/data/activities.js',
+    ]) {
       const src = readFileSync(path.join(REPO, file), 'utf8');
-      for (const m of src.matchAll(/'(teach\.[\w.]+)'/g)) used.add(m[1]);
+      // Hyphens included: an activity id is a slug, and the pattern that
+      // predates them stopped at the first one and matched nothing.
+      for (const m of src.matchAll(/'(teach\.[\w.-]+)'/g)) used.add(m[1]);
       // Ids assembled from the structure: `teach.cycle.${id}.verb` and friends.
       for (const m of src.matchAll(/`(teach\.\w+)\.\$\{[\w.]+\}\.(\w+)`/g)) {
         used.add(`${m[1]}.*.${m[2]}`);
@@ -204,7 +213,15 @@ describe('the page states nothing it is not entitled to state', () => {
         // The demonstration prose says physical things - "one per cent", "the
         // fourth decimal place" - and the placeholders are filled at render
         // time. What is banned is a digit standing for a size of the catalogue.
-        /\b\d+\b/.test(text) && !id.startsWith('teach.demo.')
+        //
+        // An activity's closing carries the same kind of number: "set the
+        // eccentricity to 0.7" is an instruction about the physics, not a
+        // count of anything. Its *duration* is not exempt and does not need to
+        // be - it is teach.activity.duration with {n} substituted from the
+        // format's own `minutes`, so the number lives once, in the data.
+        /\b\d+\b/.test(text) &&
+        !id.startsWith('teach.demo.') &&
+        !/^teach\.activity\..*\.closing$/.test(id)
     );
     expect(numbers.map(([id]) => id)).toEqual([]);
   });

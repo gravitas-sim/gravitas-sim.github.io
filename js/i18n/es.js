@@ -331,6 +331,22 @@ export const ES = {
 
   // --- Settings: sections ----------------------------------------------------
   'settings.section.simulation': 'Simulación',
+  'settings.section.accuracy': 'Precisión numérica',
+  'readout.conservation.title': 'Comprobación de conservación',
+  'readout.drift.energyChange': 'Cambio de energía',
+  'readout.drift.angularChange': 'Cambio del momento angular',
+  'readout.drift.since': 'Referencia tomada en',
+  'readout.conservation.what': '¿Qué significa esto?',
+  'readout.conservation.explain':
+    'Estos valores muestran cuánto han cambiado la energía y el momento angular del sistema seguido desde la medición de referencia. En un sistema aislado, sin colisiones ni pérdidas de energía impuestas, los cambios pueden ayudar a revelar el error numérico. En otros escenarios, también pueden reflejar cambios incorporados en el modelo.',
+  'readout.conservation.doThis':
+    'Para distinguir ambas cosas en un sistema cerrado, repite el mismo experimento desde las mismas condiciones iniciales con un paso de integración menor, usando la comprobación de fiabilidad numérica del banco de experimentos, y compara el resultado en el mismo intervalo simulado. Si el cambio disminuye al reducir el paso, era numérico.',
+  'readout.conservation.notSpeed':
+    'Cambiar la velocidad de reproducción no equivale necesariamente a cambiar el paso de integración: la comprobación de fiabilidad reduce el paso a la mitad, que no es lo mismo que hacer correr la simulación más despacio.',
+  'readout.conservation.closed':
+    'En este escenario nada elimina energía ni momento angular por construcción, así que un cambio aquí es numérico.',
+  'readout.conservation.illConditioned':
+    'El total de referencia era casi cero en comparación con las magnitudes que lo componen, así que un porcentaje resultaría engañoso. Se muestra el cambio en sí, en unidades de simulación.',
   'settings.section.performance': 'Rendimiento',
   'settings.section.visuals': 'Aspecto visual',
   'settings.section.black-holes': 'Agujeros negros',
@@ -1100,7 +1116,7 @@ export const ES = {
   'readout.count.empty': 'Todavía no hay nada en la simulación',
   'readout.integrator': 'Integrador',
   'readout.drift.energy': 'Deriva de energía',
-  'readout.drift.angular': 'Deriva de mom. angular',
+  'readout.drift.angular': 'Deriva del momento angular',
   'rail.sub.measure': 'Medir',
   'rail.sub.instruments': 'Instrumentos',
   'rail.sub.instruments.label': 'Paneles de análisis',

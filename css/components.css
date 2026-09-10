@@ -7672,3 +7672,49 @@
     font-size: 0.88em;
   }
 }
+
+@layer components {
+  /* --- Conservation check ------------------------------------------------
+     Grouped and labelled. It used to be three unlabelled rows in the corner of
+     every first visit; it is now off by default and, when asked for, arrives
+     as a named block with its explanation reachable from the keyboard. */
+  .readout-conservation {
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-subtle);
+  }
+  .readout-conservation-title {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .readout-caveats {
+    margin: var(--space-1) 0 0;
+    padding-left: 1.1em;
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+  }
+  .readout-caveats li {
+    margin-bottom: 2px;
+  }
+  /* A <details>, not a title attribute: an explanation that only appears on
+     hover is unreachable by keyboard and unreachable on a touch screen. */
+  .readout-conservation-help {
+    margin-top: var(--space-2);
+    font-size: var(--text-2xs);
+    color: var(--text-secondary);
+  }
+  .readout-conservation-help > summary {
+    cursor: pointer;
+    color: var(--accent);
+  }
+  .readout-conservation-help > summary:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+  .readout-conservation-help p {
+    margin: var(--space-2) 0 0;
+  }
+}

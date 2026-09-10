@@ -63,14 +63,14 @@ export const ACTIVITIES = Object.freeze([
     // Message ids rather than prose: everything a student or instructor reads
     // is in js/i18n/en.teaching.js and its Spanish shadow, like the rest of
     // the page this appears on.
-    titleId: 'activity.orbital-speed.title',
-    questionId: 'activity.orbital-speed.question',
-    audienceId: 'activity.orbital-speed.audience',
-    prerequisitesId: 'activity.orbital-speed.prerequisites',
+    titleId: 'teach.activity.orbital-speed.title',
+    questionId: 'teach.activity.orbital-speed.question',
+    audienceId: 'teach.activity.orbital-speed.audience',
+    prerequisitesId: 'teach.activity.orbital-speed.prerequisites',
     objectiveIds: Object.freeze([
-      'activity.orbital-speed.objective.1',
-      'activity.orbital-speed.objective.2',
-      'activity.orbital-speed.objective.3',
+      'teach.activity.orbital-speed.objective.1',
+      'teach.activity.orbital-speed.objective.2',
+      'teach.activity.orbital-speed.objective.3',
     ]),
 
     // --- What is true of the scenario, and what is therefore claimable ------
@@ -96,13 +96,13 @@ export const ACTIVITIES = Object.freeze([
         id: 'demonstration',
         /** Stable, and stable is the point: it is the progress namespace. */
         assignmentId: 'act-orbital-speed-demo',
-        nameId: 'activity.format.demonstration',
-        forId: 'activity.orbital-speed.demonstration.for',
-        /** An estimate. See the header. */
+        nameId: 'teach.activity.format.demonstration',
+        forId: 'teach.activity.orbital-speed.demonstration.for',
+        /** An estimate, and the only place the number lives: the text beside
+         *  it is teach.activity.duration with this substituted in. */
         minutes: 5,
-        durationId: 'activity.orbital-speed.demonstration.duration',
-        introId: 'activity.orbital-speed.demonstration.intro',
-        closingId: 'activity.orbital-speed.demonstration.closing',
+        introId: 'teach.activity.orbital-speed.demonstration.intro',
+        closingId: 'teach.activity.orbital-speed.demonstration.closing',
         /** Projected by an instructor, answered aloud by the room. */
         context: 'projection',
         /**
@@ -125,12 +125,11 @@ export const ACTIVITIES = Object.freeze([
       Object.freeze({
         id: 'guided',
         assignmentId: 'act-orbital-speed-guided',
-        nameId: 'activity.format.guided',
-        forId: 'activity.orbital-speed.guided.for',
+        nameId: 'teach.activity.format.guided',
+        forId: 'teach.activity.orbital-speed.guided.for',
         minutes: 20,
-        durationId: 'activity.orbital-speed.guided.duration',
-        introId: 'activity.orbital-speed.guided.intro',
-        closingId: 'activity.orbital-speed.guided.closing',
+        introId: 'teach.activity.orbital-speed.guided.intro',
+        closingId: 'teach.activity.orbital-speed.guided.closing',
         context: 'individual',
         /**
          * Shape the orbit, predict, watch, see the areas, measure the two
@@ -154,12 +153,11 @@ export const ACTIVITIES = Object.freeze([
       Object.freeze({
         id: 'lab',
         assignmentId: 'act-orbital-speed-lab',
-        nameId: 'activity.format.lab',
-        forId: 'activity.orbital-speed.lab.for',
+        nameId: 'teach.activity.format.lab',
+        forId: 'teach.activity.orbital-speed.lab.for',
         minutes: 50,
-        durationId: 'activity.orbital-speed.lab.duration',
-        introId: 'activity.orbital-speed.lab.intro',
-        closingId: 'activity.orbital-speed.lab.closing',
+        introId: 'teach.activity.orbital-speed.lab.intro',
+        closingId: 'teach.activity.orbital-speed.lab.closing',
         context: 'lab',
         /**
          * The whole first-and-second-law arc, plus the transfer step at the

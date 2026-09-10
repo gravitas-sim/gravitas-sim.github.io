@@ -61,10 +61,10 @@ describe('the catalogue is one honest activity', () => {
         activity.audienceId,
         activity.prerequisitesId,
         ...activity.objectiveIds,
+        'teach.activity.duration',
         ...activity.formats.flatMap(f => [
           f.nameId,
           f.forId,
-          f.durationId,
           f.introId,
           f.closingId,
         ]),
@@ -79,10 +79,14 @@ describe('the catalogue is one honest activity', () => {
   test('the durations read as estimates, in both languages', () => {
     // The one thing that must not be presented as fact: none of these has been
     // timed with a class.
+    for (const cat of [EN_TEACHING, ES_TEACHING]) {
+      expect(cat['teach.activity.duration']).toMatch(/about|unos|aproximad/i);
+      // And the number is substituted, never written into the sentence, so it
+      // cannot drift from the format's own `minutes`.
+      expect(cat['teach.activity.duration']).toContain('{n}');
+    }
     for (const { format } of allFormats()) {
-      for (const cat of [EN_TEACHING, ES_TEACHING]) {
-        expect(cat[format.durationId]).toMatch(/about|unos|aproximad/i);
-      }
+      expect(Number.isFinite(format.minutes)).toBe(true);
     }
   });
 });

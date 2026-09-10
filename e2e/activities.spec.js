@@ -238,7 +238,7 @@ test.describe('the two doors', () => {
     await page.goto(`${TEACHING}#activities`);
     await page.waitForSelector('#teachActivities article');
     // Out to the whole catalogue...
-    const browse = page.locator('a[data-i18n="activities.browse"]');
+    const browse = page.locator('a[data-i18n="teach.activities.browse"]');
     await expect(browse).toHaveAttribute('href', /investigationBrowser/);
     // ...and to the investigation this activity is cut from.
     await expect(

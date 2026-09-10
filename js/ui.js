@@ -3976,6 +3976,11 @@ const setting_items = [
     type: 'option',
     options: INTEGRATORS,
   },
+  // Its own section, named for what it is. It sat unlabelled under
+  // "Simulation" beside the integrator, which is where somebody looking for it
+  // would never think to look and where somebody not looking for it kept
+  // finding it.
+  { labelId: 'settings.section.accuracy', type: 'separator' },
   {
     labelId: 'settings.label.showConservationDiagnostics',
     key: 'show_conservation_diagnostics',

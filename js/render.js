@@ -1596,10 +1596,10 @@ const drawScene = () => {
   }
 
   if (SETTINGS.show_dynamic_overlays) {
-    overlayDiv.innerHTML = readoutHtml(drawnVectors);
+    writeReadout(readoutHtml(drawnVectors));
     paintReadoutStatus();
   } else {
-    overlayDiv.innerHTML = '';
+    writeReadout('');
   }
 
   // The same facts as text, for the description the canvas points at. Called
@@ -1766,10 +1766,18 @@ function readoutHtml(drawn) {
     );
   }
 
-  // --- How well the integration is holding up ------------------------------
-  // Off unless asked for, in Settings. It is a statement about the numerical
-  // method rather than about the scenario, which is why it is the last thing
-  // here and nothing at all by default.
+  // --- Conservation check ---------------------------------------------------
+  //
+  // Off unless asked for, in Settings > Numerical accuracy. What is printed
+  // here is a statement about a numerical method, and three bare percentages
+  // in the corner of a first visit were read as a fault report by people who
+  // had not asked for one - including in the scenarios where a large change is
+  // the model working correctly rather than the integrator failing.
+  //
+  // So when it is on it arrives as a labelled group with the explanation
+  // attached, the reasons this particular scene is not closed listed beside
+  // it, the moment the reference was taken, and - where a percentage would be
+  // meaningless - an honest gap instead of a large number.
   if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
     const drift = conservationDrift();
     if (drift) {
@@ -1777,6 +1785,13 @@ function readoutHtml(drawn) {
         !Number.isFinite(v)
           ? '\u2014'
           : `${v >= 0 ? '+' : ''}${v.toPrecision(3)}%`;
+      // An absolute change, for the case where a relative one cannot be
+      // formed. Two significant figures: it is an order-of-magnitude fact.
+      const abs = v =>
+        !Number.isFinite(v)
+          ? '\u2014'
+          : `${v >= 0 ? '+' : ''}${v.toPrecision(2)}`;
+
       const rows = [
         [
           t('readout.integrator'),
@@ -1786,29 +1801,159 @@ function readoutHtml(drawn) {
               .replace(/[^a-z0-9]+/g, '-')}`
           ),
         ],
-        [t('readout.drift.energy'), pct(drift.energyDrift)],
-        [t('readout.drift.angular'), pct(drift.angularDrift)],
       ];
+
+      // Energy and angular momentum, each either as a percentage of the
+      // reference or - when the reference was itself the near-cancellation of
+      // much larger terms - as the change itself, said plainly.
+      rows.push(
+        drift.energyConditioned
+          ? [t('readout.drift.energy'), pct(drift.energyDrift)]
+          : [t('readout.drift.energyChange'), abs(drift.energyChange)]
+      );
+      rows.push(
+        drift.angularConditioned
+          ? [t('readout.drift.angular'), pct(drift.angularDrift)]
+          : [t('readout.drift.angularChange'), abs(drift.angularChange)]
+      );
+
+      // When the reference was taken. A drift figure with no interval attached
+      // is not a measurement, and a reader who rebaselines has to be able to
+      // see that they did.
+      rows.push([t('readout.drift.since'), formatTime(drift.baselineTime)]);
+
+      const illConditioned =
+        !drift.energyConditioned || !drift.angularConditioned;
+
       sections.push(
-        // The caveat is a sibling of the list, not a child of it. A <dl> may
-        // only contain dt, dd and div, and a stray <p> inside one makes the
-        // whole list unparseable to a screen reader that walks it as a
-        // definition list - which is exactly what it is being used as.
-        `<dl class="readout-metrics is-diagnostics">${rows
-          .map(
-            ([k, v]) =>
-              `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
-          )
-          .join('')}</dl>${
-          drift.caveats.length
-            ? `<p class="readout-caveat">${escapeHtml(t(drift.caveats[0]))}</p>`
-            : ''
-        }`
+        // <details> rather than a title attribute: an explanation reachable
+        // only by hovering is unreachable by keyboard and unreachable on a
+        // touch screen, and this one is the difference between a number and a
+        // number somebody can act on.
+        `<div class="readout-conservation">
+           <h3 class="readout-conservation-title">${escapeHtml(t('readout.conservation.title'))}</h3>
+           <dl class="readout-metrics is-diagnostics">${rows
+             .map(
+               ([k, v]) =>
+                 `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
+             )
+             .join('')}</dl>${
+             illConditioned
+               ? `<p class="readout-caveat">${escapeHtml(t('readout.conservation.illConditioned'))}</p>`
+               : ''
+           }${
+             // Every reason, not the first one. A scene can have a static hole
+             // and imposed decay and merging at once, and naming one of the
+             // three invites the reader to blame the integrator for the other
+             // two.
+             drift.caveats.length
+               ? `<ul class="readout-caveats">${drift.caveats
+                   .map(c => `<li>${escapeHtml(t(c))}</li>`)
+                   .join('')}</ul>`
+               : `<p class="readout-caveat">${escapeHtml(t('readout.conservation.closed'))}</p>`
+           }
+         </div>`
       );
     }
   }
 
   return sections.join('');
+}
+
+/**
+ * Whether the reader has opened the conservation explanation.
+ *
+ * Module state rather than DOM state, because the DOM state does not survive:
+ * the readout is rebuilt from a string, and anything the reader did to the old
+ * elements went with them.
+ */
+let conservationHelpOpen = false;
+
+/** The markup currently in the panel, so an identical frame writes nothing. */
+let lastReadoutHtml = null;
+
+/**
+ * Put the readout on screen, without destroying what the reader was doing.
+ *
+ * This used to be `innerHTML = ...` once a frame. That is fine for a list of
+ * numbers and fatal for anything interactive: the <details> holding the
+ * explanation was recreated sixty times a second, so it snapped shut the
+ * instant it was opened and focus never survived long enough to press it. The
+ * disclosure was unreachable by keyboard in the most literal way.
+ *
+ * Three things fix it. Most frames write nothing at all, because the markup is
+ * identical. When it does change - a drift figure ticking a few times a second
+ * - the open state is carried across, and the focus is put back if it was on
+ * the summary. Together those make the explanation behave like an element
+ * rather than like a repainted picture of one.
+ *
+ * @param {string} html - The readout's markup, or '' to clear it
+ */
+function writeReadout(html) {
+  const volatileHost = readoutVolatileHost();
+  if (html !== lastReadoutHtml) {
+    lastReadoutHtml = html;
+    volatileHost.innerHTML = html;
+  }
+  syncConservationHelp(Boolean(html) && html.includes('readout-conservation'));
+}
+
+/** The child that holds the numbers, created once. */
+function readoutVolatileHost() {
+  let host = overlayDiv.querySelector('.readout-volatile');
+  if (!host) {
+    overlayDiv.replaceChildren();
+    host = document.createElement('div');
+    host.className = 'readout-volatile';
+    overlayDiv.append(host);
+  }
+  return host;
+}
+
+/**
+ * The explanation, built once and kept.
+ *
+ * Deliberately NOT part of the markup above. That string is rebuilt whenever
+ * any number in it changes, which for a live drift figure is several times a
+ * second, and an element replaced several times a second cannot be clicked:
+ * the press lands on a node that has already been detached. Keyboard focus had
+ * the same problem. So the interactive part is a real element with a lifetime,
+ * and only the numbers are repainted.
+ *
+ * @param {boolean} wanted - True when the conservation block is on screen
+ */
+function syncConservationHelp(wanted) {
+  let details = overlayDiv.querySelector('.readout-conservation-help');
+  if (!wanted) {
+    details?.remove();
+    return;
+  }
+  if (!details) {
+    details = document.createElement('details');
+    details.className = 'readout-conservation-help';
+    details.addEventListener('toggle', () => {
+      conservationHelpOpen = details.open;
+    });
+    overlayDiv.append(details);
+  }
+  // Rebuilt only when the language changed, so the element itself survives.
+  const wantKey = t('readout.conservation.what');
+  if (details.dataset.key !== wantKey) {
+    details.dataset.key = wantKey;
+    const summary = document.createElement('summary');
+    summary.textContent = wantKey;
+    details.replaceChildren(summary);
+    for (const id of [
+      'readout.conservation.explain',
+      'readout.conservation.doThis',
+      'readout.conservation.notSpeed',
+    ]) {
+      const p = document.createElement('p');
+      p.textContent = t(id);
+      details.append(p);
+    }
+  }
+  details.open = conservationHelpOpen;
 }
 
 /** Text into markup. Every value above is a number or a translated string. */

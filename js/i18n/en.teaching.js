@@ -163,67 +163,66 @@ export const EN_TEACHING = {
   // investigation. Durations are estimates and say so: none of these has been
   // timed with a class, and a number presented as fact would be a small lie
   // told to somebody planning a lesson around it.
-  'activities.heading': 'Classroom activities',
-  'activities.lede':
+  'teach.activities.heading': 'Classroom activities',
+  'teach.activities.lede':
     'Prepared teaching formats, chosen by what you want students to do and how long you have. Each one opens a real investigation cut to length — the same steps, the same measurements, the same evidence in the notebook.',
-  'activities.vs.investigations':
+  'teach.activities.vs.investigations':
     'Looking for the whole topic instead? The investigations are the complete lessons, browsable by subject.',
-  'activities.browse': 'Browse all investigations',
-  'activities.fallback.activity':
+  'teach.activities.browse': 'Browse all investigations',
+  'teach.activities.fallback.activity':
     'There is no classroom activity called “{id}”. The ones that exist are below.',
-  'activities.fallback.format':
+  'teach.activities.fallback.format':
     'There is no “{id}” format for this activity. Its formats are below.',
-  'activities.formats.heading': 'Formats',
-  'activities.launch': 'Start',
-  'activities.launch.label': 'Start the {format} format of {activity}',
-  'activities.instructor': 'Instructor materials',
-  'activities.instructor.note':
+  'teach.activities.formats.heading': 'Formats',
+  'teach.activities.launch': 'Start',
+  'teach.activities.launch.label': 'Start the {format} format of {activity}',
+  'teach.activities.instructor': 'Instructor materials',
+  'teach.activities.instructor.note':
     'Presenter notes, expected reasoning, misconceptions and a rubric. Kept separate from what students see.',
-  'activities.fullLesson': 'Open the full investigation',
-  'activities.audience': 'Who it is for',
-  'activities.prerequisites': 'Assumed beforehand',
-  'activities.objectives': 'By the end, students can',
-  'activities.estimate': 'Estimated, not yet timed with a class',
-  'activities.steps.count': '{n} steps',
+  'teach.activities.fullLesson': 'Open the full investigation',
+  'teach.activities.audience': 'Who it is for',
+  'teach.activities.prerequisites': 'Assumed beforehand',
+  'teach.activities.objectives': 'By the end, students can',
+  'teach.activities.estimate': 'Estimated, not yet timed with a class',
 
-  'activity.format.demonstration': 'Demonstration',
-  'activity.format.guided': 'Guided activity',
-  'activity.format.lab': 'Full lab',
+  'teach.activity.duration': 'about {n} minutes',
+  'teach.activity.format.demonstration': 'Demonstration',
+  'teach.activity.format.guided': 'Guided activity',
+  'teach.activity.format.lab': 'Full lab',
 
-  'activity.orbital-speed.title':
+  'teach.activity.orbital-speed.title':
     'Orbital motion: why do planets change speed?',
-  'activity.orbital-speed.question':
+  'teach.activity.orbital-speed.question':
     'A planet on a fixed elliptical orbit speeds up and slows down, with nothing pushing it and no fuel burnt. What is being traded, and what is conserved?',
-  'activity.orbital-speed.audience':
+  'teach.activity.orbital-speed.audience':
     'Introductory astronomy or algebra-based physics. Works with a whole class projected, with pairs at machines, or as a lab period.',
-  'activity.orbital-speed.prerequisites':
+  'teach.activity.orbital-speed.prerequisites':
     'Students should know that gravity pulls two masses together and weakens with distance. No calculus, no prior work on ellipses, and no angular momentum required — the activity builds it.',
-  'activity.orbital-speed.objective.1':
+  'teach.activity.orbital-speed.objective.1':
     'Predict where on an elliptical orbit a planet moves fastest, and say why',
-  'activity.orbital-speed.objective.2':
+  'teach.activity.orbital-speed.objective.2':
     'Measure speed and distance at closest and furthest approach and state the relationship between them',
-  'activity.orbital-speed.objective.3':
+  'teach.activity.orbital-speed.objective.3':
     'Explain the speed change in terms of a conserved quantity, and identify what gravity does and does not do to it',
 
-  'activity.orbital-speed.demonstration.for': 'Projected, instructor-led',
-  'activity.orbital-speed.demonstration.duration': 'about 5 minutes',
-  'activity.orbital-speed.demonstration.intro':
+  'teach.activity.orbital-speed.demonstration.for': 'Projected, instructor-led',
+  'teach.activity.orbital-speed.demonstration.intro':
     'A prediction, the motion, and the reason — in the time it takes to change topic. Ask the room to commit to an answer before anything moves; the equal-area slices at the end are the payoff.',
-  'activity.orbital-speed.demonstration.closing':
+  'teach.activity.orbital-speed.demonstration.closing':
     'Close by asking the room what would have to be true for a planet to move at a constant speed. The answer — a circular orbit, where the distance never changes — is the one that shows they have the idea rather than the phrase.',
 
-  'activity.orbital-speed.guided.for': 'One student or a pair, at a machine',
-  'activity.orbital-speed.guided.duration': 'about 20 minutes',
-  'activity.orbital-speed.guided.intro':
+  'teach.activity.orbital-speed.guided.for':
+    'One student or a pair, at a machine',
+  'teach.activity.orbital-speed.guided.intro':
     'Shape the orbit yourself, commit to a prediction, then let the simulation stop at the two moments that settle it. The measurements attach to your notebook as you take them.',
-  'activity.orbital-speed.guided.closing':
+  'teach.activity.orbital-speed.guided.closing':
     'For a transfer: set the eccentricity slider to 0.7 and predict the speed ratio before measuring it again. A rounder orbit should give a ratio nearer one — say why before you check.',
 
-  'activity.orbital-speed.lab.for': 'A full period, individually or in pairs',
-  'activity.orbital-speed.lab.duration': 'about 50 minutes',
-  'activity.orbital-speed.lab.intro':
+  'teach.activity.orbital-speed.lab.for':
+    'A full period, individually or in pairs',
+  'teach.activity.orbital-speed.lab.intro':
     'The whole argument, measured rather than asserted: where the star sits, how the shape is defined, two orbits compared under control, the speeds at both extremes, and where the reasoning stops working.',
-  'activity.orbital-speed.lab.closing':
+  'teach.activity.orbital-speed.lab.closing':
     'The comparison is controlled because both orbiters go round the same star with the same semi-major axis, so eccentricity is the only thing that differs. The final step asks where that description fails — a pair of comparable masses, where neither body simply orbits the other.',
   'teach.demo.frameTitle': '{name}, running in Gravitas',
   'teach.demo.meta':

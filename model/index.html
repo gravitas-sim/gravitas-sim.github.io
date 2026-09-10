@@ -102,6 +102,9 @@
           <li><a href="#blackholes">Black holes</a></li>
           <li><a href="#spacetime">The spacetime view</a></li>
           <li><a href="#visual">Visual effects</a></li>
+          <li>
+            <a href="#conservation">The conservation check</a>
+          </li>
           <li><a href="#sizes">Displayed sizes</a></li>
           <li><a href="#other">Other educational models</a></li>
           <li><a href="#trust">What should I trust this to show?</a></li>
@@ -729,6 +732,80 @@
         </table>
       </div>
 
+      <h2 id="conservation">The conservation check</h2>
+      <p><span class="doc-badge is-illustrative">Diagnostic</span></p>
+      <p>
+        Gravitas measures the total energy and total angular momentum of the
+        bodies it is integrating, continuously, and compares them against a
+        reference taken when the world was built. Those numbers are always
+        computed: the validation suite, the numerical reliability check, several
+        investigations and the evidence exports all read them.
+      </p>
+      <p>
+        <strong>Displaying them is off by default.</strong> They used to sit in
+        the corner of every first visit as three unlabelled rows &mdash; an
+        integrator&rsquo;s name, an energy drift, an angular-momentum drift
+        &mdash; with nothing saying what they meant or what to do about them. A
+        reader who has not been told otherwise reads a drift as a fault, and in
+        a scenario with a static black hole or imposed orbital decay reads a
+        large one as a fault too, when it is the model doing exactly what it was
+        built to do. Turn them on under <em>Settings &rarr; Numerical
+        accuracy</em>; the five scenarios whose lessons are about the
+        integration turn them on themselves.
+      </p>
+      <p>
+        When shown, the values arrive grouped under &ldquo;Conservation
+        check&rdquo; with the reasons <em>this</em> scene is not closed listed
+        beside them &mdash; a static hole, one-way gravity, a halo or MOND
+        field, imposed orbital decay, merging, tidal stripping &mdash; and with
+        the moment the reference was taken. A change under any of those is the
+        model, not the method. Note in particular that an energy decrease in an
+        inspiral scenario is an <em>imposed</em> decay rate, not a computed
+        gravitational-wave luminosity; nothing in this simulation calculates
+        radiated energy.
+      </p>
+      <h3>What a student can do with it</h3>
+      <p>
+        In a closed system, a change is numerical error, and the way to
+        establish that is to refine the integration and see whether it shrinks:
+        run the same experiment from the same initial conditions with a smaller
+        step, using the numerical reliability check in the experiment bench, and
+        compare over the same simulated interval. Changing the playback speed is
+        <em>not</em> the same thing &mdash; halving the frame advance also
+        halves the simulated time each frame covers, so the step barely moves.
+        The reliability check halves the substep cap instead, which is what
+        actually refines the integration. Gravitas never changes the integrator,
+        the step or any physical setting on its own to make a number look
+        better.
+      </p>
+      <h3>When a percentage is not available</h3>
+      <p>
+        A relative drift is a change divided by a reference, and that division
+        is meaningless when the reference is itself the near-cancellation of
+        much larger quantities: a marginally bound pair has a total energy near
+        zero with large kinetic and potential terms, and a system whose bodies
+        circulate in opposite senses can have a total angular momentum near zero
+        with large individual contributions. Dividing by those produces an
+        enormous figure that says more about the cancellation than about the
+        integrator.
+      </p>
+      <p>
+        So each total is compared with the sum of the magnitudes that produced
+        it, and a percentage is offered only when the total is at least one part
+        in a thousand of that scale. Below it, the change itself is shown in
+        simulation units with an explanation, rather than a large percentage.
+        The rule is a conditioning test rather than a list of scenarios: an
+        empty sandbox, a marginally bound pair and a counter-rotating system all
+        fail it for the same reason, and a new scenario that does the same will
+        fail it without anybody adding a case.
+      </p>
+      <p>
+        The reference is taken when a world is built, and can be retaken
+        deliberately. It is never reset on its own to make a large change
+        disappear, and the reference time is shown beside the values so that a
+        retaken one is visible.
+      </p>
+
       <h2 id="sizes">Displayed sizes</h2>
       <p><span class="doc-badge is-illustrative">Illustrative</span></p>
       <p>
@@ -1074,8 +1151,9 @@
                 Because the modification is applied to the total field rather
                 than pair by pair, the force between two bodies is no longer
                 derived from a potential in the usual way and momentum is not
-                conserved for an isolated pair. The conservation readout reports
-                this as a caveat whenever MOND is running.
+                conserved for an isolated pair. The conservation check reports
+                this as a caveat whenever MOND is running &mdash; see
+                <a href="#conservation">the conservation check</a>.
               </td>
             </tr>
             <tr>

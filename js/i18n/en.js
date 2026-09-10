@@ -580,6 +580,22 @@ export const EN = {
   // is built from the setting's key, which is the name the physics engine and
   // every saved link already use, so it is stable against any rewording.
   'settings.section.simulation': 'Simulation',
+  'settings.section.accuracy': 'Numerical accuracy',
+  'readout.conservation.title': 'Conservation check',
+  'readout.drift.energyChange': 'Energy change',
+  'readout.drift.angularChange': 'Angular momentum change',
+  'readout.drift.since': 'Reference taken at',
+  'readout.conservation.what': 'What does this mean?',
+  'readout.conservation.explain':
+    'These values show how the tracked system\u2019s energy and angular momentum have changed since the reference measurement. In an isolated system without collisions or imposed energy loss, changes can help reveal numerical error. In other scenarios, they can also reflect changes built into the model.',
+  'readout.conservation.doThis':
+    'To tell the two apart in a closed system, run the same experiment again from the same initial conditions with a smaller integration step, using the Numerical reliability check in the experiment bench, and compare the result over the same simulated interval. If the change shrinks with the step, it was numerical.',
+  'readout.conservation.notSpeed':
+    'Changing the playback speed is not necessarily changing the integration step: the reliability check halves the step itself, which is not the same thing as running the simulation slower.',
+  'readout.conservation.closed':
+    'Nothing in this scenario removes energy or angular momentum by construction, so a change here is a numerical one.',
+  'readout.conservation.illConditioned':
+    'The reference total was close to zero compared with the quantities that make it up, so a percentage of it would be misleading. The change itself is shown instead, in simulation units.',
   'settings.section.performance': 'Performance',
   'settings.section.visuals': 'Visuals',
   'settings.section.black-holes': 'Black Holes',
@@ -1114,7 +1130,7 @@ export const EN = {
   'readout.count.empty': 'Nothing in the simulation yet',
   'readout.integrator': 'Integrator',
   'readout.drift.energy': 'Energy drift',
-  'readout.drift.angular': 'Ang. momentum drift',
+  'readout.drift.angular': 'Angular momentum drift',
   'rail.sub.measure': 'Measure',
   'rail.sub.instruments': 'Instruments',
   'rail.sub.instruments.label': 'Analysis panels',

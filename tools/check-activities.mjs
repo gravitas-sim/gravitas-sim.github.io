@@ -46,15 +46,27 @@ function messageIds(activity) {
     ...activity.objectiveIds,
   ];
   for (const format of activity.formats) {
-    ids.push(
-      format.nameId,
-      format.forId,
-      format.durationId,
-      format.introId,
-      format.closingId
-    );
+    ids.push(format.nameId, format.forId, format.introId, format.closingId);
   }
   return ids;
+}
+
+// The duration text is one template with the minutes substituted in, so this
+// is checked once rather than once per format. It has to read as an estimate:
+// none of these has been timed with a class.
+for (const [lang, cat] of [
+  ['English', EN_TEACHING],
+  ['Spanish', ES_TEACHING],
+]) {
+  const text = cat['teach.activity.duration'];
+  if (typeof text !== 'string') {
+    note('durations', `no ${lang} teach.activity.duration`);
+  } else if (!/about|approx|estimate|~|unos|aproximad|estimac/i.test(text)) {
+    note(
+      'durations',
+      `the ${lang} duration "${text}" does not read as an estimate`
+    );
+  }
 }
 
 const seenActivities = new Set();
@@ -137,16 +149,6 @@ for (const activity of ACTIVITIES) {
     // The duration has to read as an estimate in both languages. A number
     // presented as fact is the one thing the brief for this was explicit
     // about, and it is cheap to check.
-    for (const [lang, cat] of [
-      ['English', EN_TEACHING],
-      ['Spanish', ES_TEACHING],
-    ]) {
-      const text = cat[format.durationId];
-      if (typeof text !== 'string') continue;
-      if (!/about|approx|estimate|~|unos|aproximad|estimac/i.test(text)) {
-        note(fw, `the ${lang} duration "${text}" does not read as an estimate`);
-      }
-    }
   }
 
   // The claims the formats are entitled to make, against the lesson that

@@ -67,8 +67,24 @@ export const DEFAULT_SETTINGS = {
   // are the two facts a screenshot most often has to carry.
   show_scale_bar: true,
   show_elapsed_time: true,
-  // The conservation readout. On, and quiet: three short lines in the corner.
-  show_conservation_diagnostics: true,
+  // The conservation check. OFF by default, and this is a presentation choice
+  // rather than a retreat from the numbers.
+  //
+  // The three lines it printed - the integrator's name, an energy drift and an
+  // angular-momentum drift - are a statement about a numerical method, and
+  // they were in the corner of every first visit with nothing to say what they
+  // meant or what to do about them. A reader who has not been told otherwise
+  // reads "-0.03% energy drift" as a fault, and in a scenario with a static
+  // black hole or imposed orbital decay reads a large one as a fault too, when
+  // it is the model doing exactly what it was built to do.
+  //
+  // Nothing is calculated less often. conservationDrift() is unchanged, the
+  // validation suite, the reliability check, the investigations and the
+  // evidence exports all read it exactly as before, and Settings >
+  // Numerical accuracy turns the display back on. Five scenarios that are
+  // *about* the integration set it themselves, and a saved state or share
+  // link that carries it keeps it.
+  show_conservation_diagnostics: false,
   // The numerical scheme. Symplectic Euler is the default and must stay it:
   // every scenario in the catalog was laid out and timed against its error.
   integrator: 'Symplectic Euler',

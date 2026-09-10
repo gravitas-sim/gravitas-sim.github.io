@@ -27,6 +27,15 @@ import { resolvedSteps } from './activities/activities.js';
 const section = (doc, n, title) =>
   doc.heading(`${n}. ${title}`, { size: 12.5, spaceBefore: 20, keepWith: 46 });
 
+/** The estimated duration, from the one number that holds it. */
+const duration = (messages, format) =>
+  plainText(
+    String(messages['teach.activity.duration'] || '{n} min').replace(
+      '{n}',
+      String(format.minutes)
+    )
+  );
+
 /** The English text of a message id, for a document that is always English. */
 const say = (messages, id) => plainText(messages[id] || id);
 
@@ -69,9 +78,7 @@ export function activityGuide(
       [
         'Formats',
         activity.formats
-          .map(
-            f => `${say(messages, f.nameId)} (${say(messages, f.durationId)})`
-          )
+          .map(f => `${say(messages, f.nameId)} (${duration(messages, f)})`)
           .join('; '),
       ],
     ],
@@ -113,7 +120,7 @@ export function activityGuide(
       columns: ['', ''],
       widths: [1, 2.6],
       rows: [
-        ['Estimated time', `${say(messages, format.durationId)} (estimate)`],
+        ['Estimated time', `${duration(messages, format)} (estimate)`],
         ['For', say(messages, format.forId)],
         [
           'Steps',

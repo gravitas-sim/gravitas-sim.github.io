@@ -700,10 +700,27 @@ const conservedQuantities = () => {
 
   let energy = 0;
   let angular = 0;
+  // The size of the terms the totals are made of, accumulated alongside them.
+  //
+  // A total can be small because nothing is happening or because two large
+  // numbers nearly cancelled, and a percentage cannot tell those apart: a
+  // marginally bound system has kinetic and potential energies of the same
+  // magnitude and opposite sign, so its total is near zero and a relative
+  // drift figure divides by nearly nothing. These scales are what let the
+  // caller notice that before printing 40,000%.
+  //
+  // They cost two additions per body inside a loop that already does the
+  // multiplications, and they change no total.
+  let energyScale = 0;
+  let angularScale = 0;
   for (let i = 0; i < n; i++) {
     const b = bodies[i];
-    energy += 0.5 * mass[i] * (b.vel.x * b.vel.x + b.vel.y * b.vel.y);
-    angular += mass[i] * ((px[i] - ox) * b.vel.y - (py[i] - oy) * b.vel.x);
+    const kinetic = 0.5 * mass[i] * (b.vel.x * b.vel.x + b.vel.y * b.vel.y);
+    const spin = mass[i] * ((px[i] - ox) * b.vel.y - (py[i] - oy) * b.vel.x);
+    energy += kinetic;
+    angular += spin;
+    energyScale += kinetic;
+    angularScale += Math.abs(spin);
     const gmi = G * mass[i];
     let pot = 0;
     for (let j = i + 1; j < n; j++) {
@@ -713,9 +730,43 @@ const conservedQuantities = () => {
       if (r2 > 0) pot -= mass[j] / Math.sqrt(r2);
     }
     energy += gmi * pot;
+    energyScale += Math.abs(gmi * pot);
   }
-  return { energy, angular, count: n };
+  return { energy, angular, energyScale, angularScale, count: n };
 };
+
+/**
+ * Is a relative drift figure meaningful against this baseline?
+ *
+ * A percentage of a total that is itself the difference of two much larger
+ * numbers is an amplified rounding error wearing a per-cent sign. The test is
+ * conditioning, not size: a baseline is usable when it is not vanishingly
+ * small compared with the terms that produced it.
+ *
+ * The threshold is one part in a thousand, and it is chosen rather than tuned.
+ * Below it, a change of one part in a thousand of the *terms* - which is a
+ * perfectly ordinary amount of integration error over a long run - moves the
+ * reported percentage by 100% or more, so the figure says more about the
+ * cancellation than about the integrator. Above it the amplification is at
+ * most a thousandfold and the number still means something.
+ *
+ * This is deliberately not a list of scenarios. A marginally bound pair, a
+ * system whose net angular momentum happens to cancel, and an empty sandbox
+ * all fail it for the same reason, and a new scenario that does the same will
+ * fail it without anybody adding a case.
+ */
+const CONDITION_FLOOR = 1e-3;
+
+/**
+ * @param {number} total - The baseline total
+ * @param {number} scale - The sum of the magnitudes it was built from
+ * @returns {boolean} True when a percentage of `total` is worth printing
+ */
+const wellConditioned = (total, scale) =>
+  Number.isFinite(total) &&
+  Number.isFinite(scale) &&
+  scale > 0 &&
+  Math.abs(total) >= CONDITION_FLOOR * scale;
 
 let conservationBaseline = null;
 
@@ -734,6 +785,9 @@ const resetConservationBaseline = () => {
   conservationBaseline = {
     energy: now.energy,
     angular: now.angular,
+    // Kept so the drift figure can tell a small total from a cancelled one.
+    energyScale: now.energyScale,
+    angularScale: now.angularScale,
     count: now.count,
     atTime: simulationTime,
   };
@@ -868,15 +922,30 @@ const conservationDrift = (fresh = false) => {
   const now = cachedConservedQuantities(fresh);
   const e0 = conservationBaseline.energy;
   const l0 = conservationBaseline.angular;
+  // Conditioned against the baseline's own scale, not the current one: the
+  // question is whether the number being divided by was ever a usable
+  // denominator.
+  const energyOk = wellConditioned(e0, conservationBaseline.energyScale);
+  const angularOk = wellConditioned(l0, conservationBaseline.angularScale);
   return {
     energy: now.energy,
     angular: now.angular,
     baselineEnergy: e0,
     baselineAngular: l0,
-    energyDrift: e0 !== 0 ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
-    angularDrift: l0 !== 0 ? (100 * (now.angular - l0)) / Math.abs(l0) : NaN,
+    // NaN where a percentage would be an amplified cancellation rather than a
+    // measurement. The absolute changes below are always available, and are
+    // what a caller should show instead of an enormous figure.
+    energyDrift: energyOk ? (100 * (now.energy - e0)) / Math.abs(e0) : NaN,
+    angularDrift: angularOk ? (100 * (now.angular - l0)) / Math.abs(l0) : NaN,
+    energyChange: now.energy - e0,
+    angularChange: now.angular - l0,
+    energyConditioned: energyOk,
+    angularConditioned: angularOk,
+    energyScale: conservationBaseline.energyScale,
+    angularScale: conservationBaseline.angularScale,
     count: now.count,
     baselineCount: conservationBaseline.count,
+    baselineTime: conservationBaseline.atTime,
     elapsed: simulationTime - conservationBaseline.atTime,
     integrator: activeIntegrator(),
     caveats: conservationCaveats(),

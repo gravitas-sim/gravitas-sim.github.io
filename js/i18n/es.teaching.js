@@ -142,70 +142,67 @@ export const ES_TEACHING = {
   'teach.demo.open': 'Abrir a tamaño completo',
   'teach.demo.lesson': 'La investigación completa',
   // --- Actividades de clase ---------------------------------------------------
-  'activities.heading': 'Actividades de clase',
-  'activities.lede':
+  'teach.activities.heading': 'Actividades de clase',
+  'teach.activities.lede':
     'Formatos de enseñanza preparados, elegidos por lo que quieres que hagan los estudiantes y por el tiempo del que dispones. Cada uno abre una investigación real recortada a su duración: los mismos pasos, las mismas mediciones, las mismas pruebas en el cuaderno.',
-  'activities.vs.investigations':
+  'teach.activities.vs.investigations':
     '¿Buscas el tema completo? Las investigaciones son las lecciones íntegras, y se pueden explorar por materia.',
-  'activities.browse': 'Ver todas las investigaciones',
-  'activities.fallback.activity':
+  'teach.activities.browse': 'Ver todas las investigaciones',
+  'teach.activities.fallback.activity':
     'No existe ninguna actividad de clase llamada «{id}». Estas son las que hay.',
-  'activities.fallback.format':
+  'teach.activities.fallback.format':
     'Esta actividad no tiene un formato «{id}». Estos son sus formatos.',
-  'activities.formats.heading': 'Formatos',
-  'activities.launch': 'Empezar',
-  'activities.launch.label': 'Empezar el formato {format} de {activity}',
-  'activities.instructor': 'Materiales para el profesorado',
-  'activities.instructor.note':
+  'teach.activities.formats.heading': 'Formatos',
+  'teach.activities.launch': 'Empezar',
+  'teach.activities.launch.label': 'Empezar el formato {format} de {activity}',
+  'teach.activities.instructor': 'Materiales para el profesorado',
+  'teach.activities.instructor.note':
     'Notas para quien presenta, razonamiento esperado, ideas erróneas y una rúbrica. Separados de lo que ve el alumnado.',
-  'activities.fullLesson': 'Abrir la investigación completa',
-  'activities.audience': 'Para quién es',
-  'activities.prerequisites': 'Se da por sabido',
-  'activities.objectives': 'Al terminar, el alumnado sabrá',
-  'activities.estimate': 'Estimación: aún no cronometrada con una clase',
-  'activities.steps.count': '{n} pasos',
+  'teach.activities.fullLesson': 'Abrir la investigación completa',
+  'teach.activities.audience': 'Para quién es',
+  'teach.activities.prerequisites': 'Se da por sabido',
+  'teach.activities.objectives': 'Al terminar, el alumnado sabrá',
+  'teach.activities.estimate': 'Estimación: aún no cronometrada con una clase',
 
-  'activity.format.demonstration': 'Demostración',
-  'activity.format.guided': 'Actividad guiada',
-  'activity.format.lab': 'Práctica completa',
+  'teach.activity.duration': 'unos {n} minutos',
+  'teach.activity.format.demonstration': 'Demostración',
+  'teach.activity.format.guided': 'Actividad guiada',
+  'teach.activity.format.lab': 'Práctica completa',
 
-  'activity.orbital-speed.title':
+  'teach.activity.orbital-speed.title':
     'Movimiento orbital: ¿por qué cambian de velocidad los planetas?',
-  'activity.orbital-speed.question':
+  'teach.activity.orbital-speed.question':
     'Un planeta en una órbita elíptica fija acelera y frena, sin que nada lo empuje y sin quemar combustible. ¿Qué se intercambia y qué se conserva?',
-  'activity.orbital-speed.audience':
+  'teach.activity.orbital-speed.audience':
     'Astronomía introductoria o física con álgebra. Sirve proyectada ante toda la clase, por parejas frente a un ordenador o como sesión de práctica.',
-  'activity.orbital-speed.prerequisites':
+  'teach.activity.orbital-speed.prerequisites':
     'Basta con saber que la gravedad atrae dos masas y se debilita con la distancia. No hace falta cálculo, ni haber trabajado antes con elipses, ni conocer el momento angular: la actividad lo construye.',
-  'activity.orbital-speed.objective.1':
+  'teach.activity.orbital-speed.objective.1':
     'Predecir en qué punto de una órbita elíptica se mueve más rápido un planeta, y explicar por qué',
-  'activity.orbital-speed.objective.2':
+  'teach.activity.orbital-speed.objective.2':
     'Medir la velocidad y la distancia en el punto más cercano y en el más lejano, y enunciar la relación entre ambas',
-  'activity.orbital-speed.objective.3':
+  'teach.activity.orbital-speed.objective.3':
     'Explicar el cambio de velocidad mediante una magnitud conservada, e identificar qué le hace y qué no le hace la gravedad',
 
-  'activity.orbital-speed.demonstration.for':
+  'teach.activity.orbital-speed.demonstration.for':
     'Proyectada, dirigida por el profesorado',
-  'activity.orbital-speed.demonstration.duration': 'unos 5 minutos',
-  'activity.orbital-speed.demonstration.intro':
+  'teach.activity.orbital-speed.demonstration.intro':
     'Una predicción, el movimiento y la razón, en lo que se tarda en cambiar de tema. Pide a la clase que se moje antes de que nada se mueva; las porciones de área igual del final son la recompensa.',
-  'activity.orbital-speed.demonstration.closing':
+  'teach.activity.orbital-speed.demonstration.closing':
     'Cierra preguntando qué tendría que pasar para que un planeta se moviera a velocidad constante. La respuesta —una órbita circular, donde la distancia nunca cambia— es la que demuestra que han entendido la idea y no solo la frase.',
 
-  'activity.orbital-speed.guided.for':
+  'teach.activity.orbital-speed.guided.for':
     'Una persona o una pareja, frente a un ordenador',
-  'activity.orbital-speed.guided.duration': 'unos 20 minutos',
-  'activity.orbital-speed.guided.intro':
+  'teach.activity.orbital-speed.guided.intro':
     'Dale forma tú a la órbita, comprométete con una predicción y deja que la simulación se detenga en los dos momentos que la resuelven. Las mediciones se adjuntan al cuaderno según las tomas.',
-  'activity.orbital-speed.guided.closing':
+  'teach.activity.orbital-speed.guided.closing':
     'Para transferir lo aprendido: pon la excentricidad en 0,7 y predice la razón de velocidades antes de volver a medirla. Una órbita más redonda debería dar una razón más cercana a uno; explica por qué antes de comprobarlo.',
 
-  'activity.orbital-speed.lab.for':
+  'teach.activity.orbital-speed.lab.for':
     'Una sesión completa, individualmente o por parejas',
-  'activity.orbital-speed.lab.duration': 'unos 50 minutos',
-  'activity.orbital-speed.lab.intro':
+  'teach.activity.orbital-speed.lab.intro':
     'El argumento entero, medido en vez de afirmado: dónde está la estrella, cómo se define la forma, dos órbitas comparadas de forma controlada, las velocidades en ambos extremos y dónde deja de funcionar el razonamiento.',
-  'activity.orbital-speed.lab.closing':
+  'teach.activity.orbital-speed.lab.closing':
     'La comparación es controlada porque ambos cuerpos giran alrededor de la misma estrella con el mismo semieje mayor, así que la excentricidad es lo único que cambia. El último paso pregunta dónde falla esa descripción: en un par de masas comparables, donde ninguno de los dos cuerpos orbita simplemente al otro.',
   'teach.demo.frameTitle': '{name}, ejecutándose en Gravitas',
   'teach.demo.meta':
