@@ -1604,6 +1604,7 @@ export const ES_DEFERRED = {
   'inv.tag.resonance': 'Resonancia',
   'inv.tag.solar-system': 'El sistema solar',
   'inv.tag.spaceflight': 'Vuelo espacial',
+  'inv.tag.stellar-evolution': 'Evolución estelar',
   'inv.tag.stars': 'Estrellas',
 
   'inv.empty.search': 'Nada coincide con «{query}».',

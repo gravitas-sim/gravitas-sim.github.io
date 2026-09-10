@@ -42,14 +42,18 @@ async function openLesson(page, app, { locale, narrow = false } = {}) {
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();
 }
 
-// "Step 3 of 28" in English, "Paso 3 de 28" in Spanish: pulled positionally so
-// the Spanish walk does not silently read zero.
-const progressNumbers = async page => {
-  const text = await page.locator('#investigationProgressText').innerText();
+// `#investigationProgressText` counts steps VISITED, not the step showing, so
+// it never goes down when a student walks backwards. The step heading is the
+// one that does. Both are pulled positionally rather than by the word between
+// the numbers, so the Spanish walk does not silently read zero.
+const counterNumbers = async page => {
+  const text = await page
+    .locator('#investigationBody .inv-step-count')
+    .innerText();
   return [...text.matchAll(/\d+/g)].map(m => Number(m[0]));
 };
-const stepNumber = async page => (await progressNumbers(page))[0] ?? 0;
-const stepTotal = async page => (await progressNumbers(page))[1] ?? 0;
+const stepNumber = async page => (await counterNumbers(page))[0] ?? 0;
+const stepTotal = async page => (await counterNumbers(page))[1] ?? 0;
 
 /**
  * Values that satisfy every validator in the lesson, by field id.

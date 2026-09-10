@@ -116,7 +116,18 @@ export function stageAt(state, at = state.position) {
     return { stage: STAGE.CLOUD, within: p / s.cloud, trackFraction: 0 };
   }
   const afterCloud = p - s.cloud;
-  if (afterCloud < s.track) {
+  // A track with no endpoint has no remnant stage to reach, however far the
+  // playhead is dragged: the 0.2 solar-mass model stops on its main sequence
+  // and there is nothing after it to show.
+  if (s.remnant <= 0) {
+    const f = s.track > 0 ? Math.min(1, afterCloud / s.track) : 1;
+    return { stage: STAGE.TRACK, within: f, trackFraction: f };
+  }
+  // The boundary belongs to the remnant. Without the tolerance the position
+  // that "next phase" seeks to - cloud plus track, in floating point - lands
+  // an ulp short of it, and pressing the button to the end stopped one step
+  // before the thing it was pressing towards.
+  if (afterCloud < s.track - 1e-9) {
     const f = s.track > 0 ? afterCloud / s.track : 0;
     return { stage: STAGE.TRACK, within: f, trackFraction: f };
   }

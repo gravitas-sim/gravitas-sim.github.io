@@ -292,4 +292,17 @@ export const MANIFEST = [
     gradedCount: 25,
     objectiveCount: 7,
   },
+  {
+    id: 'lives-of-stars',
+    title: 'Vidas de las estrellas',
+    subtitle: 'De las nubes a los restos cósmicos, por ocho trazas publicadas',
+    duration: '80-100 min',
+    level: 'Astronomía introductoria',
+    summary:
+      'Una estrella no es tanto una cosa como un proceso que lleva su tiempo. A lo largo de treinta y cuatro pasos sigues tres de ellos desde una nube en contracción hasta lo que dejan atrás: una estrella de masa solar hasta una enana blanca, una de diez masas solares hasta una estrella de neutrones y una de cuarenta hasta un agujero negro, leyendo cada etapa en el mismo diagrama y las mismas trazas publicadas. También conocerás a la estrella que no hace nada de esto: una enana roja que seguirá quemando hidrógeno cuando el Universo tenga cien veces su edad actual.',
+    thumbnail: 'images/scenarios/stellar-graveyard.webp',
+    stepCount: 34,
+    gradedCount: 29,
+    objectiveCount: 7,
+  },
 ];

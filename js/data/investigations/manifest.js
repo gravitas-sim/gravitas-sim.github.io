@@ -286,4 +286,17 @@ export const MANIFEST = [
     gradedCount: 25,
     objectiveCount: 7,
   },
+  {
+    id: 'lives-of-stars',
+    title: 'Lives of Stars',
+    subtitle: 'From clouds to cosmic remnants, along eight published tracks',
+    duration: '80-100 min',
+    level: 'Introductory astronomy',
+    summary:
+      'A star is not a thing so much as a process that takes a while. Over thirty-four steps you follow three of them from a contracting cloud to what they leave behind — a solar-mass star to a white dwarf, a ten solar-mass star to a neutron star, and a forty solar-mass star to a black hole — reading every stage off the same diagram and the same published tracks. You will also meet the star that does none of this: a red dwarf that will still be burning hydrogen when the Universe is a hundred times its present age.',
+    thumbnail: 'images/scenarios/stellar-graveyard.webp',
+    stepCount: 34,
+    gradedCount: 29,
+    objectiveCount: 7,
+  },
 ];

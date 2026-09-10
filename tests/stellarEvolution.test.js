@@ -243,11 +243,31 @@ describe('one age drives everything', () => {
     expect(frameOf(p).onDiagram).toBe(false);
   });
 
-  test('a star with no endpoint gets no remnant stage', () => {
+  test('a star with no endpoint gets no remnant stage, at any position', () => {
+    // 0.2 solar masses stops on the main sequence: there is nothing after it,
+    // however far the playhead is dragged.
     const p = createPlayback({ trackId: 'm020' });
-    seek(p, 1);
-    // 0.2 solar masses stops on the main sequence: there is nothing after it.
     expect(trackEndsAt('m020')).toBe(1);
+    for (const at of [0.5, 0.9, 0.999, 1]) {
+      seek(p, at);
+      expect(stageAt(p).stage).toBe(STAGE.TRACK);
+      expect(frameOf(p).endpoint.kind).toBe('unfinished');
+    }
+  });
+
+  test('stepping to the last stop really reaches the remnant', () => {
+    // The stop "next phase" seeks to is cloud plus track in floating point,
+    // which lands an ulp short of the boundary. It used to stop one step
+    // before the thing it was stepping towards.
+    for (const id of ['m100', 'm1000', 'm4000']) {
+      const p = createPlayback({ trackId: id, pace: PACE.PHASE });
+      let last = null;
+      let k;
+      let guard = 0;
+      while ((k = stepPhase(p, 1)) && guard++ < 30) last = k;
+      expect(last).toBe(STAGE.REMNANT);
+      expect(stageAt(p).stage).toBe(STAGE.REMNANT);
+    }
   });
 
   test('a black hole is not put on the diagram', () => {

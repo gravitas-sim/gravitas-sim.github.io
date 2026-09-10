@@ -92,4 +92,8 @@ export const BROWSE_META = {
     tags: ['observing', 'stars'],
     numericCount: 0,
   },
+  'lives-of-stars': {
+    tags: ['stars', 'stellar-evolution'],
+    numericCount: 0,
+  },
 };

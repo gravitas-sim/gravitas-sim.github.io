@@ -607,6 +607,86 @@ them. One age drives every linked view.
   slider values are.
 - No lesson uses this instrument yet. That is B5.
 
+### B5 - "Lives of stars": done
+
+`js/data/investigations/lives-of-stars.js`, 34 steps, and its Spanish shadow.
+Seven predictions, fifteen measurements, six written or chosen answers, four
+guided explorations, an open challenge and a summative argument that requires
+naming a limitation of the models.
+
+- [x] Four masses followed end to end: a solar-mass star to a white dwarf, 10
+      to a neutron star, 40 to a black hole, and a red dwarf that does none of
+      it. The H-R diagram is the organising view throughout, with exactly three
+      exceptions named as exceptions each time - the cloud, the explosion and
+      the black hole.
+- [x] Every number checked against the models before it was written. Two first
+      drafts were wrong: the pre-main-sequence star is 56x the Sun's output at
+      the model's first sample, not half, and the giant's mass at the tip is
+      0.95 rather than 0.97.
+- [x] **Step 32 was rewritten after checking it.** The draft had D as the
+      ambiguous case; the models say A is - five of them pass close to
+      3,300 K / 1,100 L(sun), at four stages and two masses - while D has
+      exactly one. C is the interesting middle: the mass is pinned and the
+      stage is not.
+- [x] All ten named misconceptions are addressed by a specific step, and the
+      instructor guide carries nine of them with responses.
+- [x] Nothing depends on waiting: every phase is one button away, the age is a
+      typed number as well as a slider, and reduced motion turns autoplay off
+      entirely. An e2e test completes eight steps under reduced motion and
+      asserts the playhead does not move on its own.
+- [x] EN/ES: 100% of translatable strings differ from the English.
+- [x] Instructor guide: 6 key concepts, 6 flow blocks covering all 34 steps
+      exactly once, 5 features, 9 misconceptions, 9 teaching notes, 5
+      discussion questions, 4 extensions, expectations for all 15 measurement
+      steps, and model notes naming both the tracks and the endpoint sources.
+- [x] Reciprocal links between the two stellar lessons, plus links from
+      `/model/#stars` and the teaching page's instrument card.
+
+**Two defects the walkthrough found, both real**
+
+- [x] **The last phase step never reached the remnant.** "Next phase" seeks to
+      cloud-plus-track, which in floating point is one ulp below the boundary,
+      so pressing the button to the end stopped one step short of the thing it
+      was stepping towards. `stageAt` now gives the boundary to the remnant.
+- [x] **A step's declared star lost to the remembered slider.** `spec.track`
+      was applied by `ensurePlay` and then immediately overwritten by
+      `syncFromValues` reading the control's persisted value - so step 22,
+      which asks for a red dwarf, showed a solar-mass cloud. The step's choice
+      now sets the control.
+- [x] Also fixed: an unfinished track could report a remnant stage at the very
+      end of the playhead, which would have given the 0.2 M(sun) model an
+      endpoint it does not have.
+
+**And one wrong assumption in the test harness itself**
+
+- [x] `#investigationProgressText` counts steps _visited_, not the step
+      showing, so it never decreases when a student walks backwards. Both
+      stellar e2e specs read the step heading now. The B3 spec had the same
+      bug and never exercised backward navigation, so it had passed.
+
+**Checks at this stage**
+
+| Check                                                      | Result                                                                                                                                                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `e2e/livesOfStars.spec.js`                                 | 13 passed - full 34-step walk, phase buttons, track switching, replay, Spanish, reduced motion, phone width, save/resume/backwards, evidence export, and the first stellar lesson still running |
+| `e2e/stellarLesson.spec.js`                                | 9 passed, unchanged by any of this                                                                                                                                                              |
+| `jest` (whole suite)                                       | **4494 passed, 0 failed** - the widget-lesson coupling check is green again now that the playback is used by a lesson                                                                           |
+| `budget:check`                                             | initial **825.8** of an untouched 830.0; deferred 3602.1 of 3650.0 (raised from 3560 with accounting)                                                                                           |
+| `lint`, `format:check`, `check-architecture` (259 modules) | green                                                                                                                                                                                           |
+
+**Honest remaining limitations of B5**
+
+- Step validators are functions, so their feedback is not reachable by the
+  translation shadow and a Spanish student sees English validation text. True
+  of every lesson in the catalogue, not introduced here.
+- The lesson asserts a number of facts that are not in the models and are
+  stated in prose instead: what happens between carbon ignition and core
+  collapse, why iron ends the sequence, what a pulsar needs. Each is flagged
+  in the step that makes it, but none is checkable from inside the lab.
+- The classroom-activity infrastructure was reused only through the existing
+  instructor-guide generation. Neither stellar lesson was cut into an activity
+  format, which the prompt explicitly said not to do as part of this task.
+
 ---
 
 ## Deferred checks

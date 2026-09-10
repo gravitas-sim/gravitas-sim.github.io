@@ -1169,7 +1169,7 @@ const A_UNIVERSE_OF_STARS = {
         ],
         capture: true,
       }),
-      tip: 'Your notebook has the measurements in it, with the model each one came from. Open it in another tab if you want to quote a number exactly.',
+      tip: 'Your notebook has the measurements in it, with the model each one came from. Open it in another tab if you want to quote a number exactly. If you want to see these stars change rather than compare them, "Lives of Stars" follows four of them from a collapsing cloud to what they leave behind.',
     },
   ],
 };

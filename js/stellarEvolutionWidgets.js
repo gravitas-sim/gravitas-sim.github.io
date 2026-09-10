@@ -110,16 +110,23 @@ let ghostTrackId = null;
 
 /** Make sure the playback exists and carries the step's settings. */
 function ensurePlay(spec = {}) {
+  const key = JSON.stringify([
+    spec.track,
+    spec.pace,
+    spec.ghost,
+    spec.phase,
+    spec.at,
+  ]);
   if (!play) {
     play = createPlayback({
       trackId: spec.track || 'm100',
       pace: spec.pace || PACE.PHASE,
     });
-    stampedSpec = JSON.stringify([spec.track, spec.pace, spec.ghost]);
     ghostTrackId = spec.ghost || null;
+    parkAt(play, spec);
+    stampedSpec = key;
     return play;
   }
-  const key = JSON.stringify([spec.track, spec.pace, spec.ghost]);
   if (key !== stampedSpec) {
     stampedSpec = key;
     // Stamped when the step changes, not on every redraw: a viewer who
@@ -131,8 +138,35 @@ function ensurePlay(spec = {}) {
     }
     if (spec.pace && spec.pace !== play.pace) setPace(play, spec.pace);
     if (spec.ghost !== undefined) ghostTrackId = spec.ghost || null;
+    parkAt(play, spec);
   }
   return play;
+}
+
+/**
+ * Put the playhead where a step wants it to open.
+ *
+ * By phase name rather than by a number wherever possible: the position of a
+ * phase on the playhead depends on the pacing, so a step that hard-coded 0.2
+ * would land somewhere else the moment a viewer switched clocks. A step that
+ * genuinely wants a fraction can still say `at`.
+ *
+ * @param {object} state - Playback state
+ * @param {object} spec - The step's tool spec
+ */
+function parkAt(state, spec) {
+  if (spec.phase) {
+    const mark = phaseMarks(state).find(m => m.key === spec.phase);
+    if (mark) {
+      seek(state, mark.at);
+      return;
+    }
+    // A phase this track does not have is a boundary state, not a silent
+    // no-op: park at the end, where the readout says where the model stopped.
+    if (spec.phase === 'end') seek(state, 1);
+    return;
+  }
+  if (Number.isFinite(spec.at)) seek(state, spec.at);
 }
 
 /** The live playback, for tests. @returns {?object} state */
@@ -893,7 +927,18 @@ const STELLAR_EVOLUTION = {
   },
 
   reset(v, { autorun = false, spec = {} } = {}) {
-    const state = syncFromValues(v, spec);
+    const state = ensurePlay(spec);
+    // A step that names a star wins over whatever the slider was carrying.
+    // Without this the control's remembered value is read back a moment later
+    // by syncFromValues, which switches the track away again and restarts the
+    // playhead - so a step asking for a red dwarf showed a solar-mass cloud.
+    if (spec.track) {
+      const index = TRACK_LIST().indexOf(spec.track);
+      if (index >= 0) v.track = index;
+    }
+    // Where the step parked it wins too, and the slider moves to match.
+    if (spec.phase || Number.isFinite(spec.at)) v.position = state.position;
+    syncFromValues(v, spec);
     // A step can ask for the playback to sit still. Reduced motion does the
     // same thing: the whole life stays reachable by the playhead and by the
     // phase buttons, and nothing moves on its own.
@@ -1153,6 +1198,10 @@ function remnantRows(state, f) {
     },
   ];
   // Where the number came from is as much of the answer as the number.
+  if (end.kind === 'unfinished') {
+    rows.push({ label: t('stelE.row.endNote'), value: end.note });
+    return rows;
+  }
   rows.push({
     label: t('stelE.row.howKnown'),
     value: end.fromTrack

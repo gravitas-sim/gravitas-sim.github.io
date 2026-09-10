@@ -125,7 +125,7 @@ export const ES_TEACHING = {
     'Repetir la misma medición con un paso temporal menor o con otro integrador y ver si la respuesta se mueve. Un resultado que cambia al reducir el paso a la mitad es un resultado sobre la aritmética, y se le enseña al estudiantado a distinguir una cosa de la otra.',
   'teach.instruments.stellarLab.name': 'El laboratorio estelar',
   'teach.instruments.stellarLab.text':
-    'Un diagrama H-R con ocho trazas evolutivas publicadas de MIST, un escenario de comparación que dibuja las estrellas fijadas a tamaños relativos reales y una población sintética reproducible. Es donde se imparte «Un universo de estrellas», y mantiene separadas dos cosas que el alumnado confunde: una estrella modelada, que tiene masa y edad, y un punto del diagrama, que tiene radio y nada más.',
+    'Un diagrama H-R con ocho trazas evolutivas publicadas de MIST, un escenario de comparación que dibuja las estrellas fijadas a tamaños relativos reales y una población sintética reproducible. Es donde se imparten «Un universo de estrellas» y «Vidas de las estrellas», y mantiene separadas dos cosas que el alumnado confunde: una estrella modelada, que tiene masa y edad, y un punto del diagrama, que tiene radio y nada más.',
   'teach.instruments.uncertainty.name': 'Análisis de incertidumbre',
   'teach.instruments.uncertainty.text':
     'Las mediciones vienen con la dispersión que las produjo, y los ajustes reportan sus parámetros con intervalos en lugar de como números sueltos. Se le pregunta al estudiantado hasta dónde vale su número, no solo cuál es.',

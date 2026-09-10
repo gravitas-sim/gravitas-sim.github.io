@@ -142,7 +142,7 @@ export const EN_TEACHING = {
     'Re-run the same measurement with a smaller timestep or a different integrator and see whether the answer moves. A result that changes when the step is halved is a result about the arithmetic, and students are shown how to tell the two apart.',
   'teach.instruments.stellarLab.name': 'The Stellar Lab',
   'teach.instruments.stellarLab.text':
-    'An H-R diagram carrying eight published MIST evolutionary tracks, a comparison stage that draws pinned stars at true relative sizes, and a reproducible synthetic population. It is where “A Universe of Stars” is taught, and it keeps apart two things students merge: a modelled star, which has a mass and an age, and a point on the diagram, which has a radius and nothing else.',
+    'An H-R diagram carrying eight published MIST evolutionary tracks, a comparison stage that draws pinned stars at true relative sizes, and a reproducible synthetic population. It is where “A Universe of Stars” and “Lives of Stars” are taught, and it keeps apart two things students merge: a modelled star, which has a mass and an age, and a point on the diagram, which has a radius and nothing else.',
   'teach.instruments.uncertainty.name': 'Uncertainty analysis',
   'teach.instruments.uncertainty.text':
     'Measurements come with the spread that produced them, and fits report their parameters with intervals rather than as single numbers. A student is asked what their number is good to, not only what it is.',

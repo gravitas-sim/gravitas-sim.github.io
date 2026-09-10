@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3560,
+    limit: 3650,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -322,7 +322,16 @@ const BUDGETS = [
       'track is where they agree, and it cost 3.8 KB to stop guessing.\n\n' +
       'The initial download did NOT move and its limit was NOT touched: ' +
       '825.8 KB either side, against 830.0. Every module above is reachable ' +
-      'only through js/widgets.js.',
+      'only through js/widgets.js.' +
+      '\n\nRaised from 3560 to 3650 for the second stellar lesson: 3513.5 to ' +
+      '3601.9 KB. Fifty of the eighty-eight is thirty-four steps of English, ' +
+      'thirty-five is their Spanish shadow, and twenty-two is the instructor ' +
+      'guide inside the portal chunk. Neither lesson chunk is fetched unless ' +
+      'somebody opens that lesson. This is the twenty-first, and a lesson is ' +
+      'the first thing the paragraph at the top of this reason says this ' +
+      'budget is loose for.\n\n' +
+      'The initial download did NOT move and its limit was NOT touched: ' +
+      '825.8 KB either side, against 830.0.',
   },
 ];
 
