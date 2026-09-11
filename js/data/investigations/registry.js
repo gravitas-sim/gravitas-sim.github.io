@@ -91,6 +91,8 @@ const LOADERS = {
   'gravity-assist': () => import('./gravity-assist.js'),
   'hohmann-transfer': () => import('./hohmann-transfer.js'),
   'lagrange-points': () => import('./lagrange-points.js'),
+  'what-is-a-gravitational-wave': () =>
+    import('./what-is-a-gravitational-wave.js'),
   'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
   'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
   'lives-of-stars': () => import('./lives-of-stars.js'),
@@ -126,6 +128,8 @@ const TRANSLATIONS = {
     'gravity-assist': () => import('./es/gravity-assist.js'),
     'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
     'lagrange-points': () => import('./es/lagrange-points.js'),
+    'what-is-a-gravitational-wave': () =>
+      import('./es/what-is-a-gravitational-wave.js'),
     'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
     'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
     'lives-of-stars': () => import('./es/lives-of-stars.js'),

@@ -264,7 +264,13 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'To go further out, point outward and thrust.',
         response:
-          'A radial burn exerts no torque and so cannot change the angular momentum, which is what sets how far the orbit reaches on the far side. It makes the orbit eccentric for very little gain in size. Have students preview a radial burn at the third screen and read the angular-momentum row: it does not move.',
+          'A radial burn does raise the far side - just very inefficiently, and it drops the near side by nearly as much, so what you buy is eccentricity rather than size. Have students preview a radial burn at the third screen and read two rows together: the angular momentum does not move (a radial push exerts no torque) while the apoapsis rises anyway (it still adds energy). Those two rows side by side are also the answer to the tempting half-truth below.',
+      },
+      {
+        claim:
+          'Angular momentum is what decides how far out an orbit reaches, so a burn that does not change it cannot raise the apoapsis.',
+        response:
+          'Half right, and the wrong half is the one students carry away. Where an orbit turns around depends on its energy and its angular momentum together - the turning points are the two roots of the effective-potential equation, and both quantities appear in it. Fix the angular momentum and add energy, as a radial burn does, and the apoapsis goes up while the periapsis comes down: same angular momentum, bigger and much more eccentric orbit. What makes the transverse burn the right tool is not that it is the only one that can raise the apoapsis but that it is far better at it: spent along the direction of travel it buys the most energy per unit of Δv, and it raises the angular momentum too, so the orbit grows instead of stretching. The third screen shows both halves at once.',
       },
       {
         claim: 'The orbit changes where the burn happens.',
@@ -803,16 +809,16 @@ export const INSTRUCTOR_CONTENT = {
       6: 'Twenty periods completed, farthest out about 0.62 separations, zero close encounters, energy drift about 0.00017%. A student reporting fewer than twenty periods has the starting radius wrong - the panel prints the value it actually used. A farthest-out figure above 2 usually means they have read the row in AU rather than in separations.',
       9: 'The planet at 0.30 separations is ejected after about 2.5 binary periods, following one close pass with the companion. Energy drift around 0.0005%, comfortably inside the screen, so this is a physical result and not a numerical one. The run ends itself once the planet is unbound and past ten separations. Exact timing varies with the step: at a timestep of 1.0 it leaves around 2.5 periods and at 0.25 nearer 5, which is expected in a chaotic system and is the subject of step 19 - the runs must agree on whether, not on when.',
       10: 'About 2.5 binary periods and one close encounter. Any answer of twenty periods means the planet did not leave; check the starting radius. The encounter count is the interesting number here, because the circumbinary case at step 24 records zero and loses its planet anyway.',
+      15: 'The sweep takes four to seven minutes for five trials of twenty periods. Expect 0.12 through 0.22 to survive the window and 0.30 to be ejected after about five periods, with a farthest distance of ten separations and a handful of close passes. The exact ejection time is not reproducible between machines and does not need to be.',
+      16: 'Four survived; the largest surviving radius is 0.22 and the smallest ejecting one is 0.30. A class that reads 0.22 as "the boundary" has read a gap between two samples as a measurement, which is what the next question is for.',
+      18: 'The re-run at the change of outcome with half the step gives the same answer, so the ejection is not an artefact of the step. If it disagrees, that is the better lesson: neither run has measured that configuration.',
       21: 'At 0.50 separations the planet starts about 1 AU from the companion, which is not really an orbit at all. At a timestep of 1.0 the drift is about 0.18%, past the 0.1% screen, and the panel refuses to name an outcome; the eccentricity readout comes out above 100, which is a useful thing for students to see a number do. The first halving is the instructive part: the drift goes to 0.17%, essentially unchanged, and is still refused. The second, to a timestep of 0.25, takes it to 0.0023% and produces an answer - the planet collided with a star after 0.010 binary periods. Two points to draw out: resolving an encounter is not a matter of doing gradually better, and the outcome turned out to be a collision rather than the ejection most students will have assumed. This is the blunt demonstration; the subtle one is next.',
       22: 'This is the run to do at the front of the room. At 0.25 separations with a timestep of 1.0 the planet survives all twenty periods while the encounter counter climbs into the dozens - around seventy by the end - and the drift readout sits at about 0.00018%. At a timestep of 0.25 the same configuration is ejected, after roughly thirteen periods, with drift near 0.0000034%. Both runs pass the energy screen and they disagree. Wall clock is about half a minute, one minute and two minutes for the three timesteps; consider splitting them across groups.',
       23: 'Drift about 0.00018% at a timestep of 1.0 and about 0.0000034% at 0.25 - both several orders of magnitude inside the screen. The third field has no single right answer and is meant to be uncomfortable: students who ran all three steps will usually find two agreeing and one not, and the point is that "two out of three" is not how convergence works. Take the count they report and ask what it would take to make it three.',
       29: 'At 4.0 separations the planet holds its ring for all forty binary periods, with a farthest-out figure of about 4.03 and zero encounters. At 2.0 it is ejected after about 3.4 periods, still with zero encounters and a closest approach of about 0.22 separations - it never comes near either star. Energy drift is around 0.0007% in both, so neither result is numerical. Each run is about half a minute.',
       30: 'About 3.4 binary periods, zero close encounters, drift about 0.0007%. The zero is the point of the step. A student reporting a nonzero encounter count has the radius smaller than 2.0.',
-      34: 'Both should report that the planet survived the integration, which is not what the fit predicts. What separates them from the genuine survivor at 4.0 is the farthest-out figure: about 14 separations from the run at 3.0 and about 25 from the run at 2.5, against 4.03 for the 4.0 run. Those excursions are the answer to step 28 - the planets are being pumped outward and forty periods is not long enough to see where it ends. Expect some students to assume they have made a mistake; tell them in advance that this is the intended result.',
-      15: 'The sweep takes four to seven minutes for five trials of twenty periods. Expect 0.12 through 0.22 to survive the window and 0.30 to be ejected after about five periods, with a farthest distance of ten separations and a handful of close passes. The exact ejection time is not reproducible between machines and does not need to be.',
-      16: 'Four survived; the largest surviving radius is 0.22 and the smallest ejecting one is 0.30. A class that reads 0.22 as "the boundary" has read a gap between two samples as a measurement, which is what the next question is for.',
-      18: 'The re-run at the change of outcome with half the step gives the same answer, so the ejection is not an artefact of the step. If it disagrees, that is the better lesson: neither run has measured that configuration.',
       33: 'Optional, eight to twelve minutes. Expect the outer radii to hold and the inner ones to be disrupted, with the change not falling neatly at the published 3.61 - which is the disagreement the next two screens are about.',
+      34: 'Both should report that the planet survived the integration, which is not what the fit predicts. What separates them from the genuine survivor at 4.0 is the farthest-out figure: about 14 separations from the run at 3.0 and about 25 from the run at 2.5, against 4.03 for the 4.0 run. Those excursions are the answer to step 28 - the planets are being pumped outward and forty periods is not long enough to see where it ends. Expect some students to assume they have made a mistake; tell them in advance that this is the intended result.',
     },
     modelNotes: `The three bodies are integrated as a Newtonian point-mass system in a plane, with
       Velocity Verlet rather than the catalogue's default symplectic Euler. That choice is part of
@@ -1224,22 +1230,33 @@ export const INSTRUCTOR_CONTENT = {
       simulation speeds consecutive frames can be an appreciable fraction of an orbit apart. The
       panel detects this and says so, because a straight line drawn across a quarter of a cycle
       flattens the extremes. At the default speed the frames are far finer than the cadence and
-      the interpolation is exact to well under a metre per second.`,
+      the interpolation is exact to well under a metre per second.
+
+      The folded panel is folded on the true period, which a real survey does not know. It is an
+      explanatory diagram and not part of the detection procedure, and the lesson says so on the
+      screen where it first appears; finding the period is itself most of the work in practice.
+
+      The star on the canvas is in genuine barycentric motion, and the live readout gives its
+      phase and the velocity a spectrograph would report at that instant. That is the link
+      between the planner, which works in days since the run began, and the orbit, which is a
+      place the star is in - without it a student can read a coverage figure without ever
+      seeing that a phase is somewhere the star has been.`,
     // Keyed to the steps where a student is looking at something: the three
     // explore screens, the two measure screens and the live run. Guidance on
     // the graded questions is in teachingNotes, because an expectation on a
     // pure-question screen is a mistake the tests catch.
     expectations: {
-      3: 'Schedule A, seed 1, 8 m/s. The left panel shows twelve points tracing one full sine cycle; the right panel has at least one point in every phase bin. The readout gives phase coverage 10 of 10, scatter about 55.8 m/s against an expected 8, and chi-square per degree of freedom about 48.7. With the uncertainty dragged to zero the points sit exactly on the dashed curve, which is worth doing once with the class.',
+      1: 'Have them actually select the star before going on: the instruments measure whichever star is selected, and a run planned against nothing is the commonest way this lesson stalls.',
+      3: 'Schedule A, seed 1, 8 m/s. The left panel shows twelve points tracing one full sine cycle; the right panel has at least one point in every phase bin. The readout gives phase coverage 10 of 10, scatter about 55.8 m/s against an expected 8, and chi-square per degree of freedom about 48.7. With the uncertainty dragged to zero the points sit exactly on the dashed curve, which is worth doing once with the class. Schedule A covers 9 or 10 of the ten phase bins. The readout underneath gives the live star\'s phase, which is what a phase bin is a bin of - worth pointing at, because students read "phase coverage" as an abstraction otherwise.',
       4: 'Coverage 10 of 10, scatter about 55.8 m/s, chi-square per degree of freedom about 48.7. A student reporting coverage below 10 has not loaded the preset; one reporting a chi-square near 1 has left the uncertainty far too high. The field check warns below 5.',
-      7: 'Schedule B. The left panel spans 38.7 days and looks almost flat; the folded panel shows all twelve points stacked in two adjacent bins. Coverage drops to 2 of 10 and chi-square per degree of freedom to about 1.9. Moving the cadence to 3.0 or 4.2 restores most of the coverage immediately, which is the cleanest way to show that the failure is the cadence and nothing else.',
+      7: 'Schedule B. The left panel spans 38.7 days and looks almost flat; the folded panel shows all twelve points stacked in two adjacent bins. Coverage drops to 2 of 10 and chi-square per degree of freedom to about 1.9. Moving the cadence to 3.0 or 4.2 restores most of the coverage immediately, which is the cleanest way to show that the failure is the cadence and nothing else. Schedule B covers 2 bins of ten. Be exact about what is controlled: same star, same planet, same instrument precision, same twelve nights, same random draw. Only the cadence differs, so every conclusion here is a conclusion about cadence.',
       8: 'Coverage 2 of 10, scatter about 11 m/s, chi-square per degree of freedom about 1.9. The scatter being close to the 8 m/s error bar is the whole result. Setting the uncertainty to zero here is worth doing: the run still fails, which separates "noisy" from "uninformative".',
       10: 'The Neptune preset at 8 m/s gives K near 7.3 m/s, full phase coverage and chi-square per degree of freedom near 1.7 - a perfect schedule that still fails. Switching to 1 m/s leaves the planet and the schedule untouched and takes chi-square per degree of freedom to about 22.8.',
+      12: 'The live panel completes Schedule A in about thirteen seconds of wall clock at normal speed, laying down twelve points on the dashed overlay. Untick the overlay and what is left is what an observer has. If a student runs the simulation fast, the panel warns that the frames are too coarse for the cadence and the extremes may be flattened; that warning is real and the answer is to slow down and restart.',
       17: 'The instrument opens on HAT-P-7 b: a measured depth of 5,900 ppm, a four-hour transit, six hundred of them, and a depth-over-noise of about 587. The green depth line sits far beyond every noise bar. Dragging the transit count down barely moves the ratio, because at six hundred transits almost the entire remaining budget is the persistent term - the white and within-transit rows are both well under one part per million. This is the floor-limited case, and it is worth naming as such before the ground-based one arrives.',
       19: 'The same planet from three nights on the ground: white noise about 260 ppm, the within-transit term about 1,440, the persistent term 120, and a ratio of about 4. Dragging the transit count to 300 takes it to about 31 - a real factor of eight, not the factor of ten a pure square-root law would give, because part of the budget was already persistent. Keep dragging and it approaches 49 and stops. Both halves matter: more observing does help, and it stops helping, and the ceiling row says where before any nights are spent.',
       22: 'About 587 with Kepler and about 4 from three nights on the ground, a factor of 150 on the same planet. The largest ground-based term is the within-transit bar at about 1,440 ppm after three transits. A student who reports the two ratios the other way round has read the columns backwards; the field check says so.',
       24: 'Pi Mensae c about 10.5, TOI-700 d about 2.7, the Earth twin about 0.6. Two things to draw out. The Earth twin has by far the longest transit - thirteen hours against under two for TOI-700 d - and it is still the least detectable, which cuts against the intuition that a longer transit is an easier one. And two hundred transits take it to about 2.5 against a ceiling of 2.8, so even unlimited TESS observing of this system does not produce a detection: the honest answer, and a more useful one than implying it is a few more sectors away.',
-      12: 'The live panel completes Schedule A in about thirteen seconds of wall clock at normal speed, laying down twelve points on the dashed overlay. Untick the overlay and what is left is what an observer has. If a student runs the simulation fast, the panel warns that the frames are too coarse for the cadence and the extremes may be flattened; that warning is real and the answer is to slow down and restart.',
     },
   },
 
@@ -1835,16 +1852,36 @@ export const INSTRUCTOR_CONTENT = {
       'Ask why the mass–luminosity relation is useful and what it had to be calibrated against.',
       'For students ready for it: why does the relative orbit have a semi-major axis equal to the sum of the two individual orbits?',
     ],
-    modelNotes: `The binary panels are analytic rather than integrated: circular two-body orbits
-      evaluated in closed form. That is deliberate. The stopwatch must read exactly 4.00 years for
-      the arithmetic on the next screen to work, and an integrator that lost a percent per lap would
-      quietly break the measurement the whole lesson builds toward. The Sirius panel solves Kepler’s
-      equation so the plotted epochs are correctly spaced in time. The main simulation behind the
-      lesson is the usual Newtonian N-body model in two dimensions.`,
+    modelNotes: `Two different things are on screen at once and the lesson depends on students
+      not confusing them.
+
+      The pair on the main canvas is integrated. They are ordinary bodies moved by the same
+      Newtonian N-body engine that runs the rest of the sandbox, nothing prescribes their positions,
+      and that is what lets the lesson call its result a measurement: a student times an orbit the
+      engine produced and puts it into Newton’s form of Kepler’s third law, which tests the law
+      rather than restating a number the lesson wrote down for itself. They are set up on circular
+      orbits carrying zero net momentum, so the balance point stays where it is drawn instead of
+      sliding off the view, and they are drawn at a fixed size rather than scaled by mass - discs
+      that grew with mass would answer "which is heavier" from the picture and skip the reasoning
+      the see-saw screens exist for.
+
+      The panel diagrams are analytic: circular two-body orbits evaluated in closed form, with the
+      stopwatch reading against the panel’s own clock. The Sirius panel solves Kepler’s equation so
+      the plotted epochs are correctly spaced in time, and its dots are real astrometry rather than
+      anything this application computed - screen 31 says so to the student.
+
+      Two restrictions bite on the result. The staged orbits are circular and seen face-on. A real
+      binary is eccentric, so the "a" in the formula is the semi-major axis and not whatever
+      separation you happen to catch; and a real orbit is tilted, so a measured separation is a
+      projection of the true one. Both travel with the notebook entry as limitations, and screen 32
+      is the natural place to raise them if nobody has.`,
     expectations: {
+      4: 'Two stars of 2 M☉ each, 4.00 AU apart, read off their cards on the canvas. The point of asking is that they are equal: everything the next few screens conclude about the balance point follows from that, and a student who has not checked will not notice when it stops being true on screen 9.',
+      6: 'Both arms read 2.00 AU. Worth saying out loud that the cross is drawn by the renderer from where the two stars are at that instant rather than placed there by the lesson - it is a measurement of the pair, which is why it stays still while they swing round it.',
+      9: 'At 4 M☉ and 1 M☉ the arms are 0.80 and 3.20 AU, a ratio of 4.00 against a mass ratio of 4.00. Expect somebody to ask why the pair restarts when they move a slider: because a star whose mass changed mid-orbit would be on a path that no longer closes, so the pair is restood rather than edited. That is worth two minutes.',
       20: 'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
-      23: 'The mystery pair is 4 AU apart, read from the AU rings. Star A sits on the 1 AU ring, Star B on the 3 AU ring.',
-      24: 'One lap takes 4.00 years on the stopwatch.',
+      23: 'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Both are read off the canvas, and the inspector is deliberately closed on this screen so the masses cannot simply be looked up.',
+      24: 'One lap takes about 4 years. Capture this orbit records the separation, both arm lengths and the timing into the notebook, and marks the period as student-timed - a period taken from the model instead is recorded as a prediction, which is the distinction that entry exists to keep.',
       25: 'a³ = 64, P² = 16, so the total is 4 solar masses. A student who uses one star’s barycenter distance instead of the separation gets 0.5 and is told so.',
       29: 'The 3:1 distance ratio splits 4 solar masses into 3 and 1. Star A, on the smaller circle, is the heavier one.',
       33: 'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
@@ -2008,10 +2045,28 @@ export const INSTRUCTOR_CONTENT = {
       horizon radius, average density, Hawking temperature and evaporation lifetime are analytic
       Schwarzschild expressions evaluated for display. Every result assumes a non-rotating, uncharged
       black hole, which the lesson states. Real astrophysical black holes rotate, which changes the
-      horizon geometry but none of the trends taught here. See ${MODEL_PAGE} for the full statement.`,
+      horizon geometry but none of the trends taught here. See ${MODEL_PAGE} for the full statement.
+
+      What is on the canvas, and what is not. The lesson stands up its own black hole with four
+      bodies in orbit, and those orbits are integrated: outside the horizon the field is
+      Newtonian to the accuracy this sandbox works at, so the engine is entitled to move them
+      and a student is entitled to measure what it does. Orbit radii are set in multiples of
+      the hole's own drawn horizon and never inside three of them, which is the innermost
+      stable circular orbit - an orbit drawn inside the horizon would be one that cannot
+      exist. Screen 13 replaces that arrangement with the controlled comparison: a star and a
+      hole of eight solar masses each, with a body on the same orbit around each.
+
+      Everything about Hawking radiation is a closed-form calculation in a panel, and screen
+      19 says so to the student. The Newtonian sandbox knows nothing about quantum fields,
+      temperature or evaporation; nothing on the canvas is evaporating and nothing there could
+      tell you if it were. The same goes for the interior: the dark disc is a boundary drawn
+      at a display scale, and the physical size is only ever quoted in kilometres beside it.`,
     expectations: {
-      6: 'Three trials at 5, 10 and 20 solar masses give 14.8, 29.5 and 59.1 km. The points fall on a straight line through the origin.',
+      3: "The card gives 10 M☉ and a Schwarzschild radius of 29.5 km, so 59.1 km right across. The labels on the canvas are the renderer's own: they name the dark region, the disk and the jets, which are what such a system looks like from outside. None of them is the black hole, and it is worth saying that out loud.",
+      4: 'The readout puts the two scales side by side on purpose: about 16 world units drawn, 59.1 km real. The drawn size is whatever lets four orbits fit in a window and carries no information. Students who try to measure the horizon off the screen are doing the thing this screen exists to stop.',
+      6: 'Three trials at 5, 10 and 20 solar masses give 14.8, 29.5 and 59.1 km. The points fall on a straight line through the origin. 5, 10 and 20 M☉ give 14.8, 29.5 and 59.1 km. The hole on the canvas changes with the slider and its orbiters change with it, which is the consequence the graph is about.',
       11: 'Squeezing one solar mass: the Sun today gives 0.2% of light speed, Earth-sized 2.2%, 30 km gives 31%, 6 km gives 70%, and 2.95 km gives exactly 100%.',
+      13: "Both orbiters have the same period, to as many figures as the readout gives. That is the whole demonstration: eight solar masses is eight solar masses, and at the same distance the orbit is the same orbit whether the centre is a star or a hole. Expect at least one student to predict the black hole's orbiter will be faster or will spiral in; neither happens, and the reason is that a black hole is not a stronger kind of gravity.",
       15: 'The density marker moves down the ladder as mass rises. At 10 solar masses it sits near nuclear density; at a million it is ten powers of ten lower.',
       20: 'The thermometer level falls with mass. Sagittarius A* comes out at 1.4×10⁻¹⁴ K, far below the coldest temperature ever produced in a laboratory.',
       23: 'The lifetime bar for a 10 solar mass hole reaches 70 zeros against the universe’s 10.',
@@ -2235,11 +2290,24 @@ export const INSTRUCTOR_CONTENT = {
       effective temperatures between 2600 and 7200 K.
       \n\nSystem parameters for HD 209458 are stored in js/data/exoplanetSystems.js and shared
       by the scenario, the widgets and the tests, so a change in one place cannot leave the
-      lesson disagreeing with the instrument.`,
+      lesson disagreeing with the instrument.
+
+      The star on the canvas is in genuine barycentric motion - the transit scenarios pin theirs,
+      and a radial-velocity panel pointed at a pinned star would teach that planets do not move
+      their stars. Every live reading in this lesson comes from js/radialVelocity.js measuring
+      that motion, and the readout refuses to report a velocity for a pinned star rather than
+      returning an artefact that looks like a measurement.
+
+      The catalogue steps later in the lesson are observations of real systems and are labelled
+      as such. The inclination and mass panels are analytic aids: they compute from published
+      formulae and are not readings taken from the scene.`,
     expectations: {
-      12: 'The curve repeats every 3.52 days. Students reading between successive peaks typically land between 3.3 and 3.8; anything in that range is a good measurement off a live plot. The published period is 3.5247 days.',
+      9: "The live readout pairs the star's place in its orbit with what a spectrograph would read there. The sign is the thing to draw out: negative means approaching, which is the opposite of what most students guess, and it is a convention about wavelength rather than a fact about the star.",
+      10: 'The instrument measures whichever star is selected, so this is the screen to make sure they have selected one. The readout underneath gives the phase and the reading together, which is the pairing the rest of the lesson relies on.',
+      12: 'The curve repeats every 3.52 days. Students reading between successive peaks typically land between 3.3 and 3.8; anything in that range is a good measurement off a live plot. The published period is 3.5247 days. The event watch stops the run at the most positive radial velocity. Two stops bracket one period: about 3.5 days. While it is stopped, ask which way the star is actually moving on the canvas and whether the sign agrees - that is the point of stopping rather than reading it off a graph.',
       14: 'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 13.',
       16: 'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 17 students match this instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
+      19: "The observer has been swung to 90 degrees on the live system: one controlled change, nothing about the star or planet touched. The panel's inclination presets are the analytic version of the same idea, and the two should be read together rather than confused - the panel tilts a model, the observer angle moves where we are standing.",
       31: 'The characterization panel reports HD 209458 b at 1.38 Jupiter radii, 0.69 Jupiter masses and a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 32 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
     },
   },
@@ -2906,22 +2974,36 @@ export const INSTRUCTOR_CONTENT = {
       analytically rather than integrating, so the timing of an eccentric year and the fraction spent
       inside the zone are exact. Nothing in this investigation models a climate: the zone is a
       statement about incident starlight against limits from a published model, and the lesson is
-      careful to say so.`,
+      careful to say so.
+
+      Both habitable-zone scenarios put their planets on circles, deliberately: circles keep the
+      insolation measurement clean, and the real eccentricities of Earth and Mars would change
+      nothing about the argument. That leaves the screens about a planet whose distance changes
+      round its year with nothing live to point at, so screen 27 stands up one of its own -
+      Wanderer, on a genuine ellipse of eccentricity 0.45, moved by the same gravity solver as
+      everything else. The screen says so, and the scene is named again on screen 29 when the
+      subject changes to TRAPPIST-1.
+
+      Where a planet sits relative to the zone is computed by habitableZoneBounds() and
+      habitableZoneStatus(), the same two functions the ring on the canvas is drawn with, so the
+      lesson and the picture cannot disagree about where the edges are. Being in the zone is a
+      statement about incoming starlight and nothing else: it is not evidence of water, of an
+      atmosphere, or of anything living, and the lesson is careful never to say otherwise.`,
     expectations: {
+      21: "The inner edge visibly jumps inward from 0.98 to 0.75 AU while the outer barely moves, 1.69 to 1.77. Venus at 0.72 AU is still outside it, by about 0.03 AU. The census of the Solar System does not change: Earth and Mars, on either definition. Venus is now inside the optimistic zone at 0.72 AU against an inner edge of 0.75. Nothing about Venus changed - the definition did. That is the screen's whole point, and the readout says which definition is in force so the change is attributable.",
       4: 'At 0.5, 1 and 2 AU the panel reads 4.00, 1.00 and 0.25 Earths. These are exact by construction, not rounded.',
       5: 'The three pairs should be (0.5, 4), (1, 1) and (2, 0.25). The validator confirms starlight × distance² is constant and says the relationship has appeared in the student’s own numbers; it warns if the rows do not sit on one curve, which almost always means a value was read at the wrong distance.',
       7: 'The shell areas read 1×, 4×, 9× and 16× at 1, 2, 3 and 4 AU, and the third line of the readout gives 1, 0.25, 0.111 and 0.063 Earths. The last line never changes: the total energy crossing the shell is the same at every distance.',
       10: 'At a fixed 1 AU: the red dwarf gives 0.0015 Earths, the orange dwarf 0.34, the Sun 1.00, the brighter star 5.1. The starlight equals the luminosity exactly, because the distance is 1 AU.',
       12: 'Conservative zones: red dwarf 0.042 to 0.080 AU, Sun 0.98 to 1.69 AU, brighter star 2.11 to 3.58 AU. A factor of about fifty between the extremes.',
-      15: 'The ring runs from 0.98 to 1.69 AU. Venus at 0.72 AU sits inside the inner edge and Ceres at 2.77 AU well beyond the outer one, so Earth and Mars are the two worlds inside. Mars being inside is the point of the screen and is worth waiting for a student to notice.',
+      15: 'The ring runs from 0.98 to 1.69 AU. Venus at 0.72 AU sits inside the inner edge and Ceres at 2.77 AU well beyond the outer one, so Earth and Mars are the two worlds inside. Mars being inside is the point of the screen and is worth waiting for a student to notice. Venus at 0.72 AU is inside the inner edge, Earth at 1.00 is comfortably in, Mars at 1.52 is just inside the outer edge on the conservative definition, and Ceres at 2.77 is far outside. Have them click each and read the distance and insolation rather than being told: the numbers come from the same functions that draw the ring.',
       19: 'Around the Sun the conservative zone is 0.98 to 1.69 AU and the optimistic zone is 0.75 to 1.77 AU. The inner edge moves much further than the outer one, which surprises most students.',
-      21: 'The inner edge visibly jumps inward from 0.98 to 0.75 AU while the outer barely moves, 1.69 to 1.77. Venus at 0.72 AU is still outside it, by about 0.03 AU. The census of the Solar System does not change: Earth and Mars, on either definition.',
       24: 'On a circular orbit the starlight graph is a flat line. That is the observation the next prediction depends on.',
       26: 'At a = 1.2 AU and e = 0.45 the planet swings between 0.66 and 1.74 AU, receiving 2.30 and 0.33 Earths. The starlight peak is narrow and the trough is wide, because the planet moves fastest at periapsis.',
-      27: 'At e = 0.45 the planet spends about 56% of its year inside the conservative zone; at e = 0.3 about 78%; on a circular orbit at the same semi-major axis, 100%.',
+      27: 'At e = 0.45 the planet spends about 56% of its year inside the conservative zone; at e = 0.3 about 78%; on a circular orbit at the same semi-major axis, 100%. Wanderer swings between 0.66 AU at closest approach and 1.74 AU at furthest, so its starlight varies by a factor of about seven over one year. Arm the watch at periapsis, read the insolation, then let it run to apoapsis and read it again. Being inside the zone for part of a year is not the same as being habitable, and the next screen is where to say so.',
       30: 'Insolations: b 4.18, c 2.22, d 1.11, e 0.65, f 0.37, g 0.25, h 0.14 Earths. The conservative zone runs 0.0254 to 0.0499 AU, putting e, f and g inside. Switching to optimistic brings d in as well.',
-      31: 'The whole system fits inside the ring plus a little either side. Orbital periods from the inspector: b about 1.5 days, c 2.4, d 4.0, e 6.1, f 9.2, g 12.4, h 18.8. TRAPPIST-1b completes about twelve laps for each one of h.',
-      32: 'e 0.65, f 0.37, g 0.25 Earths, with the zone running 0.0254 to 0.0499 AU. The validator accepts anything within five percent and names the specific fields that are off, so a student who has read the wrong row is told which one rather than being given the value.',
+      31: 'The whole system fits inside the ring plus a little either side. Orbital periods from the inspector: b about 1.5 days, c 2.4, d 4.0, e 6.1, f 9.2, g 12.4, h 18.8. TRAPPIST-1b completes about twelve laps for each one of h. Seven planets on their real orbits, with the zone drawn at the same scale. The caution printed on the ring matters: TRAPPIST-1 at 2,566 K is below the temperature range the published fit covers, so the model is evaluated at its own lower limit rather than extrapolated.',
+      32: 'e 0.65, f 0.37, g 0.25 Earths, with the zone running 0.0254 to 0.0499 AU. The validator accepts anything within five percent and names the specific fields that are off, so a student who has read the wrong row is told which one rather than being given the value. TRAPPIST-1e receives about 0.65 Earths, f about 0.38, g about 0.26. Selecting each planet gives the same numbers from the same code that draws the ring, so a student can check the instrument against the world it describes.',
       34: 'All three candidates receive close to one Earth of starlight and all three are inside the zone. The differences are atmosphere, size and stellar activity.',
     },
   },
@@ -3646,8 +3728,18 @@ export const INSTRUCTOR_CONTENT = {
       'Seventy to ninety minutes, and it can be the first lesson of a stars unit: nothing before it is required beyond the idea that a hotter thing glows differently from a cooler one. It pairs naturally before any lesson on stellar death and after any lesson that has used the word "star" loosely. No calculus. Nothing in it needs sound.',
     overview: `Students meet three unlabelled stars, guess what the picture can tell them, and then
       spend twenty-seven screens taking the guess apart. The instrument is the Stellar Lab and the
-      stars are seven published MIST evolutionary tracks, so every number a student reads is a
+      stars are eight published MIST evolutionary tracks, so every number a student reads is a
       model output rather than a textbook value the lesson made up.
+      \n\nThe stars are on the main canvas, not only in the panel. Every screen stands the
+      objects it is about in the sandbox itself, where they can be clicked, inspected and
+      compared, and the instrument beside the text is a second view of the same objects rather
+      than a picture of different ones. Two things follow that are worth saying to a class. The
+      stars do not move and are not orbiting each other - they are a display, and the stellar
+      model owns them, so the N-body integrator is not also evolving them. And the sizes on
+      screen are compressed by default: the ordering by size is right, the ratios are not, and
+      the True scale button shows the honest picture, in which a red dwarf beside a supergiant is
+      too small to see. That is the moment the lesson's whole point about size lands, and the
+      object list under the readout is how a student selects what they can no longer see.
       \n\nThe spine is that mass, radius, temperature and luminosity are four things. Students
       arrive believing they are roughly one thing called "bigness", and the opening screen is
       built so that the three stars break every version of that: the largest of them is neither
@@ -3865,13 +3957,187 @@ export const INSTRUCTOR_CONTENT = {
       masses with a constant star-formation rate over ten billion years, seeded and reproducible. It
       is not a survey and no star in it is real.`,
   },
+  'what-is-a-gravitational-wave': {
+    topic:
+      'What a gravitational wave is: what emits one, what it does on arrival, and how an instrument notices',
+    difficulty:
+      'Beginner. No prior physics, and the only arithmetic is a ratio',
+    placement:
+      'Thirty to forty minutes, and it can be the first thing a class ever does on this subject: it assumes only that things orbit. It is the first of a pair - Listening to Spacetime follows it and goes considerably further - but neither requires the other to have been completed, and this one is self-contained. It works as a single lesson, as the opening of a two-lesson unit, or as a remedial half-hour for students who found the advanced lesson too fast. Nothing in it needs sound.',
+    overview: `Twenty-four short screens, built around two objects standing on the main canvas rather
+      than a curve in a panel. The binary is a pair of selectable bodies driven by the same model
+      the waveform is drawn from, so a student can click each object, read its mass, and watch the
+      separation shrink while the plot beside it rises.
+      \n\nThe spine is a sequence of three questions. What has to be happening at the source -
+      answered on screen 4, where a pulsating sphere is the instructive wrong answer. What arrives
+      - screens 8 to 13, the stretch and squeeze at right angles, and the size of it. And how an
+      instrument could possibly notice - screen 22, where the L-shape stops being arbitrary.
+      \n\nRunning underneath is the distinction the whole subject needs and that the sequel
+      assumes: an illustration, a model and an observation are three different things. This lesson
+      names all three on the screens where they first appear, and the last screen asks a student to
+      say which is which.`,
+    priorKnowledge: [
+      'That planets and moons go round things',
+      'That light takes time to travel',
+      'Nothing else. Strain, frequency and the speed of light are all introduced here',
+    ],
+    keyConcepts: [
+      {
+        heading:
+          'A field is already there; a wave is a change in it that travels',
+        body: 'Screen 3 draws the line the whole lesson depends on. Every mass curves the space around it and that curvature sits there whether or not anything is watching; a gravitational wave is a change in that curvature moving outwards at the speed of light. Students who arrive thinking "gravitational wave" is a fancier name for gravity will read every later screen wrongly, so it is worth hearing the distinction back from them in their own words before going on.',
+      },
+      {
+        heading: 'A source must be non-spherical and changing',
+        body: 'Screen 4 offers a pulsating sphere as the deliberate wrong answer, and it catches most classes. The sphere really is moving - every part of it accelerating in and out - and it radiates nothing, because from outside nothing about it changes. The rule is not "moving mass radiates" but "the arrangement of the mass has to look different from outside, and has to keep changing". A perfectly round spinning star is the same trap in another costume.',
+      },
+      {
+        heading: 'The effect is transverse, and it alternates',
+        body: 'Screens 9 to 11 build this in three moves: stretched one way means squeezed at right angles at the same instant, half a cycle later the two swap, and the markers themselves go nowhere. That last point is the one that makes a detector make sense - what changes is the distance between things, not the position of anything - and it is also the point students most often skip past, because a ring turning into an oval looks like the ring is being blown outwards.',
+      },
+      {
+        heading: 'Strain is a fraction, and the fraction is about 10⁻²¹',
+        body: 'Screen 13 gives the only vocabulary the lesson needs: how much a length changed, divided by how long it was. Screen 12 supplies the scale, and the scale is the reason the subject took a century - the Earth-Sun distance changing by about the width of an atom. Students who leave with strain as a fraction rather than a distance can read a published figure; students who leave thinking it is a number of metres cannot.',
+      },
+      {
+        heading: 'The wave frequency is twice the orbital frequency',
+        body: 'Screen 6 reasons it out and screen 16 has students count it on the canvas rather than be told. The cause is a symmetry: swap two identical objects and the arrangement is the one you started with, so half a turn is a full wave cycle. This factor of two is the origin of most of the arithmetic confusion in the subject later on, and a class that has counted it once does not lose it.',
+      },
+      {
+        heading: 'An interferometer measures a difference, not a length',
+        body: 'Screen 22 pays off screen 9. Because a passing wave stretches one direction while squeezing the perpendicular one, an L-shaped instrument has one arm growing while the other shrinks, in the same moment - so what has to be measured is the difference between two arms rather than the absolute length of either. That is a far easier measurement to make well, and the shape of the instrument follows directly from the shape of the effect.',
+      },
+    ],
+    flow: [
+      {
+        steps: '1-4',
+        title: 'What has to be happening',
+        detail:
+          'Screen 1 is a prediction and is designed to be got wrong; do not resolve it early, and make sure it is written down, because screen 24 comes back to it. Screen 4 is the conceptual core of this quarter: the pulsating sphere emits nothing, and students who answer "B, because it is moving" have exposed the misconception the screen exists for. Spend a minute there.',
+      },
+      {
+        steps: '5-7',
+        title: 'The source and its rhythm',
+        detail:
+          'Screen 6 is the one to slow down on. Students reliably answer "a full orbit"; the half-orbit answer, and the reason for it - two identical objects swapped over look the same - is what makes the factor of two on screen 16 land rather than being a fact to memorise. Screen 7 introduces the ring overlay and says plainly that the speed is slowed and the rings are not matter.',
+      },
+      {
+        steps: '8-14',
+        title: 'What arrives',
+        detail:
+          'The physical heart of the lesson. Screen 11 is the one students most often need help with: the markers are not carried along, and the water-cork analogy is the one place a water analogy helps. Screen 12 is where the exaggeration is admitted, and it is worth pausing on the atom-across-an-astronomical-unit comparison. Screen 14 heads off "we heard the black holes" before anybody says it.',
+      },
+      {
+        steps: '15-19',
+        title: 'Shrinking orbits and the chirp',
+        detail:
+          'Screen 16 is the only counting exercise and it is worth the time: students count orbits on the canvas and peaks on the plot themselves and get two. Screen 17 draws the line between the energy argument and the sandbox\u2019s own illustrative damping, which matters because the rest of Gravitas uses the latter. Screen 19 establishes that the plot ends because the model was switched off, not because anything happened.',
+      },
+      {
+        steps: '20-22',
+        title: 'Other pairs, distance, and a measurement',
+        detail:
+          'Screen 21 is a clean controlled comparison - only the distance moves, and the frequency does not - and its validator checks the factor of two. Screen 22 is the payoff: the L-shape follows from the transverse stretch and squeeze the students have already watched, and the published trace is the first and only observation in the lesson.',
+      },
+      {
+        steps: '23-24',
+        title: 'Their own experiment, and the story',
+        detail:
+          'Screen 23 is deliberately open and deliberately small: one variable, two readings, and a statement of what was held fixed. Screen 24 is the assessment. Read the revisit of screen 1 as carefully as the explanation - a student who can say why their first answer was wrong has done the lesson.',
+      },
+    ],
+    features: [
+      'The binary is on the main canvas and selectable throughout; the instrument beside the text is a second view of the same objects',
+      'Controls are introduced one at a time - the mass and distance sliders do not appear until the screens that use them',
+      'Every screen is completable with the sound off; Listen is offered three times and required never',
+    ],
+    misconceptions: [
+      {
+        claim: 'Anything that moves emits gravitational waves.',
+        response:
+          'The pulsating sphere on screen 4 is the counterexample, and it is worth drawing on the board: every part of it is accelerating and it emits nothing, because from outside it never looks any different. The rule is a changing, non-spherical arrangement of mass. A perfectly round spinning star emits nothing either.',
+      },
+      {
+        claim: 'The wave pushes things outwards as it passes.',
+        response:
+          'Screen 11. Have students follow one marker for a whole cycle and see it return. What travels is the disturbance; what changes is the distance between things, and that distinction is the entire basis of how a detector works.',
+      },
+      {
+        claim: 'We heard the black holes.',
+        response:
+          'Screen 14. The application converts a changing signal into a sound on the student\u2019s own machine; a microphone at the source would hear nothing, because sound needs a material and there is none. Ask what the microphone would be sitting in.',
+      },
+      {
+        claim: 'The ring picture shows how big the effect is.',
+        response:
+          'It shows the shape of the effect at an enormous exaggeration, and screen 12 says by how much. The real change would move a marker by far less than the width of one atom of the screen. Students who leave with the picture but not the scale have half the idea.',
+      },
+      {
+        claim: 'The plot stops because the black holes merged there.',
+        response:
+          'Screen 19. The plot stops because the calculation stops being reliable - there is no merger in it and no ringing afterwards. This is the same point Listening to Spacetime makes at greater length, and it is the most transferable habit in either lesson: a model that says where it stops is more useful than one that does not.',
+      },
+    ],
+    expectations: {
+      2: 'Two cards, giving 36 and 29 solar masses. Students often expect a photograph and are surprised there is none; that surprise is the screen working. Worth saying out loud that the separation on the canvas is to scale in Schwarzschild radii while the two discs are fixed-size markers - the picture is honest about the geometry and silent about the sizes.',
+      5: 'The arrangement changing rather than either object moving. Ask what is the same about the two paused moments - the same two objects, the same separation - and what differs, which is only the orientation of the pair.',
+      7: 'Rings more widely spaced further out, because they left when the orbit was slower. A student who says the wave is speeding up has it backwards and is worth catching here.',
+      8: 'The ring becoming an oval and turning over. Expect at least one student to think the ring is the orbit seen from above; the body text says it is not, and it is worth repeating.',
+      10: 'Two different numbers - whichever direction they recorded first, the other one half a cycle later. The value that matters is not which is which but that they differ; a pair of identical answers means the scrubber was moved a whole cycle rather than half, and the validator says so. Worth adding out loud: between the two stops there is an instant when the ring is a perfect circle and nothing is happening to it, which is not a gap in the wave but the moment it passes through zero.',
+      11: 'A marker that returns to where it started. If it does not, the student is watching the whole ring rather than one dot.',
+      12: 'Nothing measurable - this screen is a statement, not a task. The number to leave them with is one part in 10²¹, and the atom-across-an-astronomical-unit comparison is the one most students remember.',
+      13: 'A practice answer of 0.0001 and a real one around 10⁻²¹. The common error is reading "Strain now", which passes through zero twice a cycle; the validator rejects anything above 10⁻¹⁵ and says why.',
+      16: 'About two peaks per orbit, and the validator accepts 1.6 to 2.4 because it is a hand count. Students who get four have counted zero crossings rather than peaks.',
+      20: 'Two neutron stars of 1.4 solar masses each, and a signal that stays in band far longer than the black-hole pair. The limit to state: the model treats both objects as points and says nothing about composition or about what happens when neutron stars touch.',
+      21: 'Amplitude halving each time the distance doubles, and the frequency identical at all three. Only the distance moved, which is what makes it an experiment.',
+      22: 'A trace that is unmistakably noisier than anything else in the lesson, with a recognisable rise in it. Ask which of the three kinds of picture it is, and then ask the same about the ring overlay on the previous screen.',
+      23: 'One variable, two readings, and a ratio. The half students forget is saying what they held fixed; the validator prompts for it and it is worth insisting on.',
+    },
+    discussion: [
+      'Screen 4, out loud and before the reveal: why does a pulsating sphere emit nothing when every part of it is accelerating? Push until somebody says "because it looks the same from out here".',
+      'After screen 12: given the effect is one part in 10²¹, why did anybody bother trying? What would you need to believe about your instrument before you believed the result?',
+      'After screen 14: what is the honest way to describe playing a gravitational wave as a sound, in one sentence, to somebody who has not done this lesson?',
+      'After screen 22: three pictures - the ring overlay, the model plot, and the published trace. Which is which, and how would a reader who arrived at that screen cold be able to tell?',
+    ],
+    extensions: [
+      'Have students estimate the strain from a source they invent - two people running round each other - and find out how many orders of magnitude short of measurable it is. The answer is comically large and makes the point better than any statement.',
+      'Screen 21 changes the distance. Ask what would happen to the *duration* in band if the masses changed instead, then have them check it on screen 20 with the neutron-star preset.',
+      'For a class with some trigonometry: the wave frequency is twice the orbital frequency for equal masses on a circle. Ask what would have to be different about the source for that to fail.',
+      'Listening to Spacetime is the direct continuation and starts where screen 22 finishes.',
+    ],
+    modelNotes: `Everything quantitative here comes from the same leading-order inspiral model the
+      advanced lesson uses: two point masses on a slowly shrinking circular orbit, radiating at the
+      quadrupole order. It is real arithmetic in real units, it is valid over a stated range, and it
+      is terminated at the innermost stable circular orbit rather than extrapolated - which screen
+      19 makes a teaching point of rather than hiding.
+      \n\nWhat is illustration, stated plainly because students will ask. The two discs on the
+      canvas are fixed-size markers, not sized bodies: their separation is to scale in Schwarzschild
+      radii of the total mass and their diameters are not to scale at all, because a horizon and a
+      neutron-star surface are not the same kind of quantity. The rings leaving the pair mark wave
+      crests and travel far slower than light so that there is something to see. The marker ring's
+      deformation is exaggerated by an enormous factor, which screen 12 both admits and quantifies.
+      \n\nWhat is measurement: the GW150914 strain on screen 22, published by the collaboration,
+      band-passed and whitened before display. Nothing else in the lesson is data.
+      \n\nThe model says nothing about composition and nothing about mergers. Screen 20 says so
+      where a student is most likely to over-read the neutron-star comparison, and the distance
+      treatment on screen 21 is a simple inverse scaling with no cosmological redshift in it.`,
+    teachingNotes: `Two things reliably take longer than expected. Screen 4, because the pulsating
+      sphere is genuinely counter-intuitive and worth arguing about, and screen 6, because the
+      half-orbit answer needs to be seen rather than asserted - have a student step the playhead
+      themselves at the front.
+      \n\nIf time is short, screens 15 and 20 can be dropped without breaking the thread. Screens
+      4, 11, 12 and 19 cannot: they carry the four ideas that make the sequel possible.
+      \n\nFor a class going straight on to Listening to Spacetime, the natural break is after
+      screen 22. The last two screens make a good opener for the second session, because screen 24
+      asks students to tell the whole story in their own words before anybody adds to it.`,
+  },
   'listening-to-spacetime': {
     topic:
       'Gravitational waves from a compact binary: the chirp, what it constrains, and where a leading-order model stops',
     difficulty:
       'Introductory, conceptual, with arithmetic no harder than a ratio',
     placement:
-      'Sixty to seventy-five minutes, after students have met orbits and ideally after Black Holes by the Numbers. It is the only lesson in the catalogue that puts a measurement, a model and an illustration on the same screen and asks students to tell them apart, so it works well late in a course as a lesson about evidence as much as about gravity. No calculus. Audio is offered four times and required never.',
+      'Sixty to seventy-five minutes, after students have met orbits and ideally after Black Holes by the Numbers. It is the only lesson in the catalogue that puts a measurement, a model and an illustration on the same screen and asks students to tell them apart, so it works well late in a course as a lesson about evidence as much as about gravity. No calculus. Audio is offered four times and required never. It is the more advanced of a planned pair: a beginner lesson, \u201cWhat Is a Gravitational Wave?\u201d, is intended to come before it and is not written yet, so nothing here depends on it. Where a class has not met the idea at all, spend five minutes on screen 2 - the three things on screen that all answer to the phrase - before starting, and treat that as the missing prerequisite.',
     overview: `Students are shown a signal with no label on it and asked what could have made it,
       and then spend twenty-two screens finding out whether they were right. The instrument
       computes a real waveform in real units; the last four screens compare it against the data
@@ -3980,6 +4246,26 @@ export const INSTRUCTOR_CONTENT = {
     ],
     misconceptions: [
       {
+        claim: 'The signal on the first screen is a recording of a real event.',
+        response:
+          'It is computed on the student\u2019s own machine, from the masses shown, in the second or so before the screen appears. Screen 1 now says so in as many words, before the prediction, because a lesson that lets a student believe for twenty screens that they are examining data and then corrects it at the end has taught them the wrong lesson about where evidence comes from. Nothing in screens 1 to 20 is evidence that any event occurred anywhere. The only measured data in the lesson is the GW150914 strain that arrives on screen 21, and it is labelled as such.',
+      },
+      {
+        claim: 'The sandbox behind the panel is not a calculation of anything.',
+        response:
+          'Too broad, and the lesson used to say it. The black holes\u2019 <em>motion</em> is a genuine Newtonian N-body calculation, the same integrator every other body gets. What is not calculated is the <em>inspiral</em>: Newtonian gravity radiates nothing and would leave that pair circling for ever, so the simulation shrinks the orbit by a small factor each step, at a rate chosen to look right rather than derived from how fast a binary actually radiates. Three separate statements, and students need all three: the orbit is calculated, the decay is an illustration, and the waveform in the panel comes from neither of them - it is computed independently from the masses.',
+      },
+      {
+        claim: 'A chirp means a black-hole merger was detected.',
+        response:
+          'Three claims stacked, and only the middle one survives. A rising chirp is good evidence that <em>two compact objects were spiralling together</em>, and it fixes their chirp mass. It does not say what they are made of - two black holes, two neutron stars and a mixed pair all chirp, and what separates them here is the chirp mass and the frequency where the model stops. It does not establish a detection either: screen 20 has students score a wrong-mass template highly against buried noise, and the tip there names the three things a real search adds that this lab does not have. Ask a student who writes "we detected a merger" which of the three - composition, detection, or the merger itself - the lesson actually showed them.',
+      },
+      {
+        claim: 'The plot ends because that is where the black holes merged.',
+        response:
+          'It ends because the model is switched off there. "Where it stops" is the innermost stable circular orbit for that combined mass, which is the boundary of the assumption the whole waveform rests on - two bodies on a slowly shrinking circular orbit. Nothing past it has been calculated: there is no merger in these plots, no ringdown, and the last visible cycle is not the binary\u2019s last. "Time before merger" is of the same kind - the model extrapolating its own countdown to zero separation under an approximation it has already stopped satisfying. Screen 22 is where a merger actually appears, and it is the collaboration\u2019s numerical-relativity waveform rather than this model pushed past its boundary.',
+      },
+      {
         claim: 'Gravitational waves are a kind of sound.',
         response:
           'They are not, and there is nothing between here and the source for sound to travel through. Everything audible in this lesson is data converted into sound, and the panel prints exactly what was done to make it audible - the speed factor, any frequency shift, and by how much the shift flattened the chirp. Students who reach for "we heard the black holes" should be asked what the microphone was.',
@@ -4033,6 +4319,7 @@ export const INSTRUCTOR_CONTENT = {
       'Read the model page section on gravitational waves alongside the lesson and identify each of its stated limitations in the interface.',
     ],
     expectations: {
+      2: 'That there are three different objects on screen and only one of them is a calculation of a gravitational wave. Worth spending a minute on the sandbox specifically, because the honest description has two halves: the black holes\u2019 <em>motion</em> is a genuine Newtonian N-body calculation, and their <em>spiralling in</em> is not — Newtonian gravity radiates nothing, so the inspiral is a damping constant chosen so a merger happens while somebody is watching. Students who hear only "it is not real" draw the wrong conclusion, that the sandbox is a cartoon throughout. Students who hear only "it is a simulation" draw the other wrong one, that the merger rate on screen means something. Neither the orbit nor the damping produces the waveform in the panel, which is computed separately from the masses.',
       3: 'Everything moving together: the playhead, the two bodies in the schematic, both plots and the readout. A student who reports one of them lagging has found a bug worth hearing about.',
       5: 'Rings that are further apart at the edge of the picture than near the centre, and a masked region in the middle. The test-mass ring stretches across the page and squeezes at right angles to that, alternately.',
       6: 'Two wave peaks per orbit, within counting error. Anything between about 1.7 and 2.3 is a successful count; the validator says so and asks for a recount outside that.',
@@ -4041,7 +4328,7 @@ export const INSTRUCTOR_CONTENT = {
       11: 'Halving both masses roughly triples the time in band and roughly doubles the frequency at which the model stops. The panel will report two changes rather than one, which is correct and worth discussing.',
       12: 'The lighter pair stays in band longest and reaches the highest frequency; the heavier pair does neither. For 18 + 14.4, 36 + 29 and 60 + 48 solar masses the model stops at about 135, 68 and 41 Hz respectively, and the whole inspiral from 20 Hz lasts roughly 2.7 s, 0.85 s and 0.39 s.',
       13: 'Chirp masses within about a solar mass of each other - near 28 for both pairs - despite total masses of 65 and 69.4 and mass ratios of 1.24 and 2.6. The two traces should be hard to tell apart over most of the window.',
-      15: 'Peak strain halving each time the distance doubles, so a ratio near 2.0, and the frequency at which the model stops identical at all three distances. A student who gets a ratio near 4 has assumed an inverse-square law.',
+      15: 'Strain amplitude halving each time the distance doubles, so a ratio near 2.0, and the frequency at which the model stops identical at all three distances. Two things to watch for. Students reach for the "Strain now" row, which is the instantaneous signed value and passes through zero twice a cycle: the step says to use "Strain amplitude" and the validator rejects a zero or negative entry with that explanation. And if they are listening, the loudness is scaled against one fixed reference pinned by the step, so the three distances really do differ by ear - the amplitude ratio is 1 : 0.5 : 0.25, which is NOT a ratio of perceived loudness and should not be described as one.',
       16: 'Edge-on about half the amplitude of face-on, and an effective distance of about 800 Mpc for a source at 400. The number to draw out is that the effective distance is what a single detector measures.',
       17: 'Three very different windows from the same equations: the black-hole pair stops at 68 Hz after 0.8 s, the neutron-star pair at 1.57 kHz after 158 s of which the lab models the last eight, and the mixed pair at 386 Hz after 35 s. Chirp masses of about 28, 1.2 and 3.0 solar masses.',
       19: 'At 410 Mpc the signal is clearly visible above the simulated noise; by 2000 Mpc it is not findable by eye in the time series. Pressing New noise changes the grey trace and leaves the blue one exactly where it was.',

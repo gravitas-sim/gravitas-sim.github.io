@@ -158,13 +158,30 @@ describe('instructor content lines up with the lessons', () => {
         const step = inv.steps[Number(num) - 1];
         expect(step).toBeTruthy();
         // Expectations exist for screens where a student observes something:
-        // measurements, activities, and reading screens that carry a live
-        // instrument. A pure-text screen has nothing to observe, so an
+        // measurements, activities, and reading screens that put something in
+        // front of them. A pure-text screen has nothing to observe, so an
         // expectation attached to one is a mistake in the guide.
+        //
+        // "In front of them" is a panel instrument, a live probe readout, or
+        // something drawn on the main scene. The last two were added when
+        // lessons started using the canvas as the instrument: a reading screen
+        // that draws a binary's balance point and prints both arm lengths is
+        // exactly the kind of screen a guide should say what to expect on, and
+        // the rule used to call it a pure-text screen because it had no `tool`.
+        //
+        // A graded question can be observable too, and the black-hole lesson's
+        // equal-mass comparison is the case: the screen stages a star and a
+        // hole of the same mass side by side and asks what that implies. What
+        // a guide needs to say about it is what the two orbits do, which is an
+        // expectation in every sense.
+        const showsSomething = Boolean(
+          step.tool || step.probe || step.stage || step.showBarycentre
+        );
         const observable =
           step.type === 'measure' ||
           step.type === 'explore' ||
-          (step.type === 'read' && Boolean(step.tool));
+          ((step.type === 'read' || step.type === 'question') &&
+            showsSomething);
         expect(observable).toBe(true);
         expect(text.length).toBeGreaterThan(30);
       }

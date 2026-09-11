@@ -549,6 +549,32 @@ function calculateBrightness() {
         flux -= w * transitDip(k, b, Rs_sim, Rp_sim, sep);
       }
 
+      // Where this body is against the star's disc, right now, recorded for
+      // whoever asks. Computed here rather than re-derived by a caller because
+      // the observer's line of sight, the foreshortening and the two visual
+      // radii all live in this function - a second copy of that arithmetic
+      // would be a second thing that could disagree with the curve.
+      lastGeometry.set(obj, {
+        name: obj.name || null,
+        starName: star.name || null,
+        // In front of the star, behind it, or off to one side.
+        inFront: losDepth > 0,
+        // Sky-plane separation in stellar radii: 0 is dead centre, 1 is the
+        // limb, and anything past 1 + k has the planet clear of the disc.
+        impact: b,
+        radiusRatio: Rp_sim / Rs_sim,
+        // The four states the lesson names, decided by one number so the
+        // labels and the curve cannot disagree about which one is showing.
+        phase:
+          losDepth <= 0
+            ? 'behind or beside the star'
+            : b <= 1 - Rp_sim / Rs_sim
+              ? 'fully on the disc'
+              : b < 1 + Rp_sim / Rs_sim
+                ? 'crossing the limb'
+                : 'clear of the disc',
+      });
+
       // ── Secondary eclipse (occultation) ──
       let occ = 0;
       if (losDepth < 0 && sep < Rs_sim + Rp_sim) {
@@ -730,6 +756,30 @@ function addTransit(first, last, baseline, noise) {
  * @property {Array} log - The counted transits, each with its sequence number
  * @property {Object|null} last - The most recent complete transit
  */
+/**
+ * Where each transiting body sits against its star, as of the last frame.
+ *
+ * A WeakMap so a body that leaves the world takes its entry with it.
+ */
+const lastGeometry = new WeakMap();
+
+/**
+ * The live transit geometry for one body.
+ *
+ * What "Transit Photometry" needs to tie the dot on the canvas to the dip on
+ * the plot: whether the planet is in front, how far from the centre of the
+ * disc it is in stellar radii, and which of the four named states it is in.
+ * Undefined until a frame has been computed for that body, and stale if the
+ * simulation is paused - which is what a reader wants, because a paused frame
+ * is the one they are looking at.
+ *
+ * @param {object} body - The transiting body
+ * @returns {?object} {inFront, impact, radiusRatio, phase, name, starName}
+ */
+export function transitGeometry(body) {
+  return body ? (lastGeometry.get(body) ?? null) : null;
+}
+
 export function transitAnalysis() {
   return {
     baseline: analysis.baseline,

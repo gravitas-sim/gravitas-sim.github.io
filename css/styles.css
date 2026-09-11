@@ -2133,33 +2133,11 @@
     }
   }
 
-  /* Energy tab styles */
-  /* TODO: REMOVE - Energy tab styles to be replaced */
-
-  /* Current Energy Values Display */
-  .energy-chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-
   .energy-chart-header h3 {
     margin: 0;
     color: #fff;
     font-size: 16px;
     font-weight: 600;
-  }
-
-  .energy-chart-controls {
-    display: flex;
-    gap: 8px;
-  }
-
-  .energy-chart-wrapper {
-    position: relative;
-    width: 100%;
-    height: 300px;
   }
 
   /* Refresh button specific styling */
@@ -2645,29 +2623,6 @@
      query. That trade-off is written down in ACCESSIBILITY.md.
      ======================================================================== */
   @media (prefers-reduced-motion: reduce) {
-    /* The decorative loops stop. */
-    .demo-pulse,
-    [class*='sparkle'],
-    .pulse,
-    .spinner,
-    .loading-spinner {
-      animation: none !important;
-    }
-
-    /* Entrances become instant rather than being removed: the element still
-       has to end up at its final opacity, and cancelling the animation that
-       sets it would leave it invisible. */
-    #splash,
-    #splash .splash-wordmark,
-    #overlay,
-    #scenarioInfoBox,
-    #scenarioInfoDisplay,
-    .simulation-container,
-    .scenario-menu {
-      animation-duration: 1ms !important;
-      animation-delay: 0ms !important;
-    }
-
     /* Anything left that repeats forever runs once and stops. */
     *,
     *::before,

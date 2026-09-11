@@ -629,6 +629,7 @@ export const ES = {
   'inspector.stat.hawkingLifetime': 'Vida de Hawking',
   'inspector.stat.hawkingTemperature': 'Temperatura de Hawking',
   'inspector.stat.iscoPeriod': 'Período en la ISCO',
+  'inspector.stat.lifespan.hypothetical': 'este modelo no la fija',
   'inspector.stat.lifespan': 'Vida estimada',
   'inspector.stat.luminosity': 'Luminosidad',
   'inspector.stat.mass': 'Masa',
@@ -1211,6 +1212,8 @@ export const ES = {
   'pauseEvent.kind.separationInward': 'Cruce hacia dentro por…',
   'pauseEvent.kind.separationOutward': 'Cruce hacia fuera por…',
   'pauseEvent.kind.transit': 'Siguiente punto medio de tránsito',
+  'pauseEvent.kind.rvMinimum': 'Velocidad radial en su valor más negativo',
+  'pauseEvent.kind.rvMaximum': 'Velocidad radial en su valor más positivo',
   'pauseEvent.body': 'Cuerpo',
   'pauseEvent.primary': 'Alrededor de',
   'pauseEvent.separation': 'Separación',
@@ -1369,204 +1372,19 @@ export const ES = {
   'inv.backup.restore.hint':
     'Carga respuestas desde un archivo que guardaste antes.',
   'inv.probe.title': 'Lectura en vivo',
+  'inv.stage.fit': 'Encuadrar la comparación',
+  'inv.stage.follow': 'Ir a la seleccionada',
+  'inv.stage.scale': 'Escala real',
+  'inv.stage.scale.true':
+    'Escala real: los tamaños ya están en proporción, y las estrellas más pequeñas quedan por debajo de lo que el lienzo puede dibujar. Selecciónalas en la lista.',
+  'inv.stage.scale.display':
+    'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
+  'inv.stage.nothingSelected':
+    'Selecciona antes una estrella, en el lienzo o en la lista.',
+  'inv.objects.title': 'Objetos de esta actividad',
+  'inv.objects.label':
+    'Objetos de esta actividad: selecciona uno para inspeccionarlo',
   'objectType.stars': 'Añadir estrellas',
-
-  // --- Words a lesson computes ----------------------------------------------
-  // Probe rows and answer-checking messages come out of functions inside the
-  // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js
-  // looks them up by what they say. See that file.
-  'lessonFn.distancesHaveToBePositiveNumbers38':
-    'Las distancias tienen que ser números positivos.',
-  'lessonFn.closestApproachIsLargerThanFurthest70':
-    'El máximo acercamiento es mayor que la distancia máxima: parecen intercambiados.',
-  'lessonFn.eccentric9': 'Excéntrico',
-  'lessonFn.semiMajorAxis15': 'semieje mayor',
-  'lessonFn.clickAPlanetToSelectIt27': 'Pulsa un planeta para seleccionarlo',
-  'lessonFn.body4': 'Cuerpo',
-  'lessonFn.noOrbitFound14': 'no se encontró órbita',
-  'lessonFn.selected8': 'Seleccionado',
-  'lessonFn.eccentricityE14': 'Excentricidad e',
-  'lessonFn.closestPeriapsis19': 'Mínima (periastro)',
-  'lessonFn.furthestApoapsis19': 'Máxima (apoastro)',
-  'lessonFn.currentSpeed13': 'Velocidad actual',
-  'lessonFn.selectTheEccentricOrbiter28': 'Selecciona el Orbitador Excéntrico',
-  'lessonFn.distanceFromStar18': 'Distancia a la estrella',
-  'lessonFn.speedNow9': 'Velocidad ahora',
-  'lessonFn.speedsHaveToBePositiveRead77':
-    'Las velocidades tienen que ser positivas. Lee el valor «Velocidad ahora», que es un módulo.',
-  'lessonFn.yourClosestSpeedIsLowerThan181':
-    'Tu velocidad «mínima» es menor que tu velocidad «máxima». Eso está al revés para cualquier órbita ligada. Comprueba qué lectura tomaste dónde, usando la distancia para distinguirlas.',
-  'lessonFn.selectAPlanet15': 'Selecciona un planeta',
-  'lessonFn.atAnExtreme14': '¿En un extremo?',
-  'lessonFn.closestReadNow17': 'mínima: lee ahora',
-  'lessonFn.furthestReadNow18': 'máxima: lee ahora',
-  'lessonFn.inBetween10': 'en medio',
-  'lessonFn.closestThisOrbit18': 'Mínima en esta órbita',
-  'lessonFn.furthestThisOrbit19': 'Máxima en esta órbita',
-  'lessonFn.planet6': 'Planeta',
-  'lessonFn.distancesAndPeriodsMustBothBe44':
-    'Las distancias y los periodos tienen que ser positivos.',
-  'lessonFn.clickAPlanetToMeasureIt28': 'Pulsa un planeta para medirlo',
-  'lessonFn.bothValuesMustBePositive29':
-    'Ambos valores tienen que ser positivos.',
-  'lessonFn.clickAPlanetToReRead28': 'Pulsa un planeta para volver a leerlo',
-  'lessonFn.clickAPlanet14': 'Pulsa un planeta',
-  'lessonFn.noOrbit8': 'sin órbita',
-  'lessonFn.tooHigh8': 'demasiado alto',
-  'lessonFn.checkThatAAndPCame45':
-    'Comprueba que a y P vinieron del mismo planeta.',
-  'lessonFn.theSemiMajorAxisLooksToo112':
-    'El semieje mayor parece demasiado grande. Todas las órbitas de aquí están por debajo de 0,07 UA, así que el valor debería empezar por 0,0 algo.',
-  'lessonFn.thePeriodLooksTooSmallFor119':
-    'El periodo parece demasiado pequeño para estar en días. La lectura da días, y el año más corto de este sistema es de unos 1,5.',
-  'lessonFn.thePeriodLooksTooLargeFor79':
-    'El periodo parece demasiado grande para estar en días. El año más largo de aquí es de unos 19.',
-  'lessonFn.outByMoreThanAFactor97':
-    'Se desvía en más de un factor tres, lo que suele significar que a y P se leyeron de planetas distintos.',
-  'lessonFn.clickAPlanetToReadIt25': 'Pulsa un planeta para leerlo',
-  'lessonFn.notFound9': 'no encontrado',
-  'lessonFn.referenceFrame15': 'Sistema de referencia',
-  'lessonFn.worldNotSwitchedYet23': 'Mundo, todavía sin cambiar',
-  'lessonFn.marsDistanceFromEarth25': 'Marte: distancia a la Tierra',
-  'lessonFn.marsDirectionFromEarth26': 'Marte: dirección desde la Tierra',
-  'lessonFn.selectMars11': 'Selecciona Marte',
-  'lessonFn.world5': 'Mundo',
-  'lessonFn.aBody6': 'Un cuerpo',
-  'lessonFn.sunDistanceFromEarth24': 'Sol: distancia a la Tierra',
-  'lessonFn.sunDirectionFromEarth25': 'Sol: dirección desde la Tierra',
-  'lessonFn.baselineOutOfTransit24': 'Línea de base, fuera del tránsito',
-  'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
-  'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
-  'lessonFn.clock5': 'Reloj',
-  'lessonFn.theBottomOfATransitSits137':
-    'El fondo de un tránsito queda <em>por debajo</em> de la línea de base, así que la profundidad tiene que salir positiva. Comprueba que no los hayas intercambiado.',
-  'lessonFn.a20DipWouldBeA153':
-    'Una caída del 20 % sería un eclipse estelar, no un planeta. Si has introducido números como 98,2 y 100, introduce el brillo en sí y no un porcentaje de él.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'Eso es menos profundo de lo que este sistema puede producir. Asegúrate de que el valor del fondo viene de verdad del punto más bajo de una caída y no del hombro de entrada.',
-  'lessonFn.goodAbout18GivingA152':
-    'Bien: alrededor del 1,8 %, lo que da un cociente de radios cercano a 0,135. Quédate con ese número, porque el paso siguiente va a decirte que es un 10 % demasiado grande, y por qué.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Se esperaba algo cercano a 0,018 para este sistema. Lee la línea de base en un tramo plano bien alejado de cualquier caída, y el fondo en el punto más bajo de una.',
-  'lessonFn.theStarRadiusGoesInSolar93':
-    'El radio de la estrella va en radios solares, no en kilómetros ni en júpiteres. HD 209458 es 1,155 R☉.',
-  'lessonFn.theDepthIsAFractionNot65':
-    'La profundidad es una fracción, no un porcentaje: 1,8 % se introduce como 0,018.',
-  'lessonFn.thatIsItAbout138218':
-    'Eso es: unos 1,38 radios de Júpiter, o 15,5 radios terrestres. El valor publicado tras una década de tránsitos del Hubble es 1,38 R_Júpiter. Acabas de medir un planeta a 160 años luz observando cómo una estrella se atenuaba levemente.',
-  'lessonFn.tooLargeCheckThatYouDivided170':
-    'Demasiado grande. Comprueba que dividiste la profundidad entre 1,215 antes de tomar la raíz cuadrada y no después, y que la profundidad es la que mediste y no un porcentaje.',
-  'lessonFn.tooSmallTheMostCommonCause121':
-    'Demasiado pequeño. La causa más común es leer el fondo de la caída en el hombro de entrada en lugar de en el punto más bajo.',
-  'lessonFn.theSecondStampHasToCome78':
-    'La segunda marca tiene que ir después de la primera. Intercámbialas, o toma un par nuevo.',
-  'lessonFn.atLeastOneOrbitHasTo52':
-    'Tiene que pasar al menos una órbita entre dos tránsitos.',
-  'lessonFn.countTheGapsBetweenTheTransits65':
-    'Cuenta los huecos entre los tránsitos, no los tránsitos en sí.',
-  'lessonFn.about35DaysThePublished138':
-    'Unos 3,5 días. El periodo publicado de HD 209458 b es de 3,5247 días, conocido con precisión mejor que una décima de segundo tras dos décadas de tránsitos.',
-  'lessonFn.thatIsTwiceThePeriodA113':
-    'Eso es el doble del periodo: entre tus dos marcas pasó un tránsito que no se contó. Pon 2 en la casilla de órbitas.',
-  'lessonFn.thatIsAboutHalfThePeriod166':
-    'Eso es aproximadamente la mitad del periodo. Comprueba que ambas marcas se tomaron en el fondo de un tránsito y no una en un tránsito y otra en el eclipse secundario que hay en medio.',
-  'lessonFn.expectedSomethingNear35Days131':
-    'Se esperaba algo cercano a 3,5 días. Comprueba que el número de órbitas coincide con la diferencia entre los dos números de tránsito de la lectura.',
-  'lessonFn.thePeriodGoesInDaysNot102':
-    'El periodo va en días, no en años. Tres días y medio, no tres milésimas y media de año.',
-  'lessonFn.theMassGoesInSolarMasses58':
-    'La masa va en masas solares. HD 209458 tiene 1,148 de ellas.',
-  'lessonFn.about0047AuOneEighth372':
-    'Unas 0,047 UA: una octava parte de la distancia de Mercurio al Sol, y a unos nueve radios estelares. A 1450 K el lado diurno del planeta está lo bastante caliente para brillar con un rojo apagado por sí mismo. Nada de la teoría de formación planetaria anterior a 1995 ponía allí un gigante gaseoso, y averiguar cómo llegó sigue siendo una discusión activa entre la migración por el disco y la dispersión por otros planetas.',
-  'lessonFn.expectedRoughly0047AuCheck84':
-    'Se esperaban unas 0,047 UA. Comprueba que el periodo esté en días y la masa en masas solares.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Ambas profundidades son fracciones, no porcentajes: 1,1 % se introduce como 0,011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que no las hayas puesto en las casillas equivocadas.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'Ese es el resultado. La curva mezclada dice unos 12 radios terrestres; la corrección de aproximadamente ×1,28 lo devuelve a unos 15,5, que son los 1,38 radios de Júpiter que mediste antes de que estuviera la compañera. El contraste implicado debería caer cerca de Δm = 0,5, que es lo que la compañera es en realidad.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'El cociente es mayor de lo que esta compañera puede producir. Vuelve a leer la profundidad mezclada: debería estar cerca de 0,011, no cerca de la mitad del valor limpio.',
-  'lessonFn.expectedARatioNear163135':
-    'Se esperaba un cociente cercano a 1,63 y un radio corregido cercano a 15,5 R⊕. Comprueba que ambas profundidades vinieron del fondo de una caída y no de un hombro.',
-  'lessonFn.clickABodyInTheSimulation30': 'Pulsa un cuerpo en la simulación',
-  'lessonFn.nothingToOrbit16': 'nada que orbitar',
-  'lessonFn.distanceFromTheStar22': 'Distancia a la estrella',
-  'lessonFn.speed5': 'Velocidad',
-  'lessonFn.totalEnergy12': 'Energía total',
-  'lessonFn.belowZero10': 'por debajo de cero',
-  'lessonFn.aboveZero10': 'por encima de cero',
-  'lessonFn.boundOrUnbound16': 'Ligado o no ligado',
-  'lessonFn.boundItComesBack20': 'ligado: vuelve',
-  'lessonFn.unboundItIsLeaving22': 'no ligado: se marcha',
-  'lessonFn.furthestItGets16': 'hasta dónde llega',
-  'lessonFn.forThisPracticeRunPut293':
-    'Para este ensayo, pon 2 en ambas casillas. Después puedes experimentar con otros números.',
-  'lessonFn.222Is8And204':
-    '2 × 2 × 2 es 8, y 2 × 2 es 4, y 8 dividido entre 4 es 2. El par pesa <strong>2 masas solares</strong> entre los dos. Nadie fue hasta allí. Nadie pesó nada. Dos medidas de una órbita bastaron.',
-  'lessonFn.bothMeasurementsHaveToBePositive46':
-    'Ambas medidas tienen que ser números positivos.',
-  'lessonFn.thatLooksLikeOneStarS187':
-    'Eso parece la distancia de una estrella al punto de equilibrio y no la órbita entera. El tamaño de la órbita se mide de una estrella <em>a la otra</em>: suma ambas distancias.',
-  'lessonFn.checkTheOrbitSizeAgainstThe137':
-    'Comprueba el tamaño de la órbita con los anillos. La Estrella A está en un anillo y la Estrella B en otro, y el número que quieres es la suma de los dos.',
-  'lessonFn.checkThePeriodTimeStarA106':
-    'Comprueba el periodo. Cronometra la Estrella A desde la línea de puntos hasta que vuelva a cruzar la misma línea.',
-  'lessonFn.youHaveThemTheWrongWay130':
-    'Los tienes al revés. La Estrella A es la que se queda cerca del punto de equilibrio, lo que la convierte en la más pesada de las dos.',
-  'lessonFn.threeSolarMassesAndOneSolar125':
-    'Tres masas solares y una masa solar. Acabas de pesar dos estrellas individuales, por separado, usando una regla y un cronómetro.',
-  'lessonFn.theTwoAddUpCorrectlyBut126':
-    'Los dos suman correctamente, pero no en una proporción de tres a uno. Cuenta los bloques: tres del lado de la Estrella A por cada uno del lado de la Estrella B.',
-  'lessonFn.put3InBothBoxesThe65':
-    'Pon 3 en ambas casillas: el par está a 3 UA con un periodo de 3 años.',
-  'lessonFn.333Is27And102':
-    '3 × 3 × 3 es 27, y 3 × 3 es 9, y 27 dividido entre 9 es 3. Tres masas solares entre las dos.',
-  'lessonFn.isProportionalTo18': 'es proporcional a',
-  'lessonFn.howConcentratedIsThisThingOn63':
-    'cómo de concentrada está esta cosa, a la escala de su propio horizonte',
-  'lessonFn.whatEarthGets15': 'lo que recibe la Tierra',
-  'lessonFn.distancesAndStarlightAreBothPositive50':
-    'Las distancias y la luz estelar son ambas números positivos.',
-  'lessonFn.theseDoNotAllSitOn114':
-    'No todos caen sobre la misma relación. Comprueba que cada valor de luz estelar se leyó a la distancia que tiene al lado.',
-  'lessonFn.everyOneOfYourReadingsSatisfies123':
-    'Todas tus lecturas cumplen luz estelar × distancia × distancia = 1. Ese es el patrón, ya en tus propios números.',
-  'lessonFn.thoseMatchNowSayItIn298':
-    'Coinciden. Ahora dilo con palabras, y dilo con cuidado: e, f y g están dentro de la zona habitable modelada. Eso es una afirmación sobre sus órbitas y su estrella, y es lo correcto que decir. No es una afirmación de que ninguno de ellos tenga agua, atmósfera, o una superficie que nadie reconocería.',
-  'lessonFn.rotationCurve14': 'Curva de rotación',
-  'lessonFn.openThePanel14': 'abre el panel',
-  'lessonFn.bodiesPlotted14': 'Cuerpos representados',
-  'lessonFn.innermost9': 'El más interior',
-  'lessonFn.outermost9': 'El más exterior',
-  'lessonFn.fittedSlope12': 'Pendiente ajustada',
-  'lessonFn.proportionalToRadius22': 'proporcional al radio',
-  'lessonFn.halo4': 'Halo',
-  'lessonFn.outermostStar14': 'Estrella más exterior',
-  'lessonFn.slope5': 'Pendiente',
-  'lessonFn.luna4': 'Luna',
-  'lessonFn.bodiesOnScreen16': 'Cuerpos en pantalla',
-  'lessonFn.earthAndTheMoon19': 'la Tierra y la Luna',
-  'lessonFn.moonSDistanceNow19': 'Distancia de la Luna ahora',
-  'lessonFn.buildingTheSystem20': 'construyendo el sistema…',
-  'lessonFn.realSeparation15': 'Separación real',
-  'lessonFn.384400KmOnAverage22': '384 400 km, en promedio',
-  'lessonFn.distancesAndTidalStrengthsAreBoth56':
-    'Las distancias y las intensidades de marea son ambas números positivos.',
-  'lessonFn.theseDoNotAllSitOn185':
-    'No todos caen sobre una misma relación. La causa habitual es una intensidad leída a una distancia distinta de la que tiene al lado: comprueba cada fila con la posición del deslizador que la produjo.',
-  'lessonFn.massesAndTidalStrengthsAreBoth53':
-    'Las masas y las intensidades de marea son ambas números positivos.',
-  'lessonFn.stretchMassIsNotComingOut190':
-    'Estiramiento ÷ masa no sale igual en todas las filas. Comprueba que el deslizador de distancia se quedó quieto mientras cambiabas la masa: mover ambos a la vez oculta la relación que buscas.',
-  'lessonFn.bodiesBeingTracked20': 'Cuerpos seguidos',
-  'lessonFn.whatIsSimulated17': 'Qué se simula',
-  'lessonFn.newtonianGravityBetweenPointMasses38':
-    'Gravedad newtoniana entre masas puntuales',
-  'lessonFn.whatIsNot11': 'Qué no',
-  'lessonFn.fluidFlowPressureRadiation31':
-    'Flujo de fluidos, presión, radiación',
 
   // --- Answer feedback -------------------------------------------------------
   // --- El generador de tareas para clase --------------------------------------

@@ -74,7 +74,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     summary:
       'Kepler’s laws end with Newton’s correction, and this is what that correction is for. Watch two stars circle each other, find the balance point they are both going round, and use nothing but the size and the timing of their orbit to work out how much each one weighs. No telescope has ever put a star on a scale; this is how it is actually done.',
-    thumbnail: 'images/scenarios/binary-pair.webp',
+    thumbnail: 'images/investigations/weighing-stars.webp',
     stepCount: 35,
     gradedCount: 17,
     objectiveCount: 6,
@@ -87,7 +87,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     summary:
       'Change one thing about a black hole, its mass, and watch four completely different properties respond. Its event horizon grows in step with the mass. Its average density falls. It gets colder. It lives dramatically longer. Two of those four surprise almost everybody, and you will predict them before you measure them.',
-    thumbnail: 'images/scenarios/black-hole-lab.webp',
+    thumbnail: 'images/investigations/black-holes.webp',
     stepCount: 29,
     gradedCount: 17,
     objectiveCount: 5,
@@ -260,6 +260,21 @@ export const MANIFEST = [
     objectiveCount: 6,
   },
   {
+    id: 'what-is-a-gravitational-wave',
+    title: 'What Is a Gravitational Wave?',
+    subtitle:
+      'A first look at what moves, what travels and what a detector feels',
+    duration: '30-40 min',
+    level: 'Beginner, no physics background needed',
+    summary:
+      'Two objects circle each other on screen and emit no light at all. Over twenty-four short screens you work out what leaves them, what it does to anything it passes, and how an instrument could notice - and you learn to tell the three kinds of picture apart: the drawing, the calculation and the measurement. No equations, no prior physics, and it can be done with the sound off.',
+    thumbnail: 'images/investigations/what-is-a-gravitational-wave.webp',
+    series: 'Gravitational waves',
+    stepCount: 24,
+    gradedCount: 14,
+    objectiveCount: 6,
+  },
+  {
     id: 'listening-to-spacetime',
     title: 'Listening to Spacetime',
     subtitle:
@@ -268,7 +283,8 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     summary:
       'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. Over twenty-four steps you work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, and finish by comparing your answer with what two detectors in Louisiana and Washington actually recorded in September 2015. You can do all of it with the sound off.',
-    thumbnail: 'images/scenarios/gw150914.webp',
+    thumbnail: 'images/investigations/listening-to-spacetime.webp',
+    series: 'Gravitational waves',
     stepCount: 24,
     gradedCount: 15,
     objectiveCount: 8,
@@ -281,7 +297,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     summary:
       'Three stars, no labels, and a guess about which is biggest. Over twenty-eight steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
-    thumbnail: 'images/scenarios/stellar-nursery.webp',
+    thumbnail: 'images/investigations/a-universe-of-stars.webp',
     stepCount: 28,
     gradedCount: 25,
     objectiveCount: 7,
@@ -294,7 +310,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     summary:
       'A star is not a thing so much as a process that takes a while. Over thirty-four steps you follow three of them from a contracting cloud to what they leave behind — a solar-mass star to a white dwarf, a ten solar-mass star to a neutron star, and a forty solar-mass star to a black hole — reading every stage off the same diagram and the same published tracks. You will also meet the star that does none of this: a red dwarf that will still be burning hydrogen when the Universe is a hundred times its present age.',
-    thumbnail: 'images/scenarios/stellar-graveyard.webp',
+    thumbnail: 'images/investigations/lives-of-stars.webp',
     stepCount: 34,
     gradedCount: 29,
     objectiveCount: 7,

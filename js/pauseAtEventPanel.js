@@ -25,6 +25,7 @@ import {
 } from './physics.js';
 import { dominantPrimary } from './orbital.js';
 import { currentTimeDays, transitAnalysis } from './lightCurve.js';
+import { currentRadialVelocity } from './radialVelocity.js';
 import { auToSim, simToAu } from './units.js';
 import { formatNumber, withUnit } from './format.js';
 import {
@@ -137,6 +138,9 @@ const resolveBody = id =>
 function syncFields() {
   const e = cacheElements();
   const kind = e.kind?.value;
+  // A transit names one body; everything else names a pair. The two
+  // radial-velocity turning points name a pair too - the star and what it is
+  // orbiting - because the watch has to know which star the spectrograph is on.
   const needsPair = kind !== EVENT_KINDS.TRANSIT;
   const needsSeparation =
     kind === EVENT_KINDS.SEPARATION_INWARD ||
@@ -243,8 +247,24 @@ function watchDeps() {
     onStep: onPhysicsStep,
     G: () => getPhysicsSetting('gravitational_constant'),
     transitLog: () => transitAnalysis().log,
+    // How fast the line-of-sight velocity is changing, for the two
+    // radial-velocity turning points. Differenced from the reading the
+    // spectrograph itself reports rather than derived independently, so the
+    // watch fires at the turning point of the curve a student is looking at
+    // and not at the turning point of a second quantity that resembles it.
+    losRate: () => {
+      const now = currentRadialVelocity();
+      const t = currentTimeDays();
+      const prev = lastLos;
+      lastLos = Number.isFinite(now) ? { v: now, t } : null;
+      if (!prev || !Number.isFinite(now) || t === prev.t) return NaN;
+      return (now - prev.v) / (t - prev.t);
+    },
   };
 }
+
+/** The previous line-of-sight sample, for differencing. */
+let lastLos = null;
 
 /**
  * Show a spec in the form without arming it.

@@ -43,6 +43,8 @@ import { SETTINGS } from './appState.js';
 import { timeUnitSeconds } from './units.js';
 import { SECONDS_PER_DAY } from './constants.js';
 
+import { setCaptureSink } from './widgetRuntime.js';
+
 let loading = null;
 
 /**
@@ -327,3 +329,10 @@ export function captureToNotebook(make) {
     return true;
   })();
 }
+
+// The widget families call js/notebookCapture.js rather than importing this
+// module, because importing this module means importing js/physics.js and the
+// authoring CLI reads those widgets in a process with no DOM. Installing the
+// implementation here keeps the synchronous guarantee above: the seam calls
+// straight through, so `liveProvenance()` still runs in the click's own task.
+setCaptureSink(captureToNotebook);

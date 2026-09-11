@@ -27,6 +27,7 @@ import {
   setSignalAudioActive,
 } from './audio.js';
 import { renderAudio } from './gw/audioRender.js';
+import { setSignalAudio } from './widgetRuntime.js';
 
 /** The one thing playing, if anything is. */
 let source = null;
@@ -171,6 +172,11 @@ export function play(timeline, opts = {}) {
     kind: timeline.kind,
     id: timeline.id,
     label: opts.label || null,
+    // Who this playback belongs to. A sound describes one configuration of one
+    // instrument, so when that configuration changes the sound is out of date
+    // and has to go: the owner is what lets the caller notice without keeping
+    // a second copy of the state here.
+    owner: opts.owner || null,
     seconds: rendered.seconds,
     detector: timeline.meta?.detector || null,
     role: timeline.meta?.role || null,
@@ -181,10 +187,57 @@ export function play(timeline, opts = {}) {
   return { ok: true, mapping };
 }
 
-// The speaker control's stop button, which cannot call into here directly for
-// the same reason it cannot subscribe directly.
+/** @returns {?string} What the current playback belongs to */
+export const currentOwner = () => (source ? nowPlaying?.owner || null : null);
+
+/**
+ * Stop, but only if the playback belongs to `owner`.
+ *
+ * The lab uses this on every repaint: a sound started for one distance is
+ * wrong the moment the distance changes, and stopping unconditionally would
+ * also silence a different instrument that happened to be playing.
+ *
+ * @param {string} owner - The token given to play()
+ * @returns {boolean} Whether anything was stopped
+ */
+export function stopIfOwner(owner) {
+  if (!source || !owner || nowPlaying?.owner !== owner) return false;
+  stop();
+  return true;
+}
+
+/**
+ * Stop anything whose owner begins with `prefix`.
+ *
+ * The scope end: a lesson closing releases everything its instruments started,
+ * without needing to know which of them was sounding.
+ *
+ * @param {string} prefix - An owner prefix, such as 'gw-lab:'
+ * @returns {boolean} Whether anything was stopped
+ */
+export function stopIfOwnerStartsWith(prefix) {
+  const owner = currentOwner();
+  if (!owner || !prefix || !owner.startsWith(prefix)) return false;
+  stop();
+  return true;
+}
+
+// The one way in from the rest of the application, and deliberately the only
+// one: the speaker control's stop button, the lesson panel leaving a step or
+// closing, and a scenario rebuild all arrive here. None of them can import this
+// module - doing so would fetch the waveform model on every page load - and one
+// listener registered once at module load is what keeps that from becoming a
+// listener per lesson, per step, per rebuild.
+//
+// `detail.scope` narrows it to playback whose owner begins with that string, so
+// the lesson panel can release what a lesson started without silencing
+// something a reader started somewhere else. No scope means stop everything.
 if (typeof window !== 'undefined') {
-  window.addEventListener('gravitasStopSignalAudio', () => stop());
+  window.addEventListener('gravitasStopSignalAudio', event => {
+    const scope = event?.detail?.scope;
+    if (scope) stopIfOwnerStartsWith(scope);
+    else stop();
+  });
 }
 
 // Stop on a hidden tab. js/audio.js suspends the context, which pauses the
@@ -199,3 +252,17 @@ if (typeof document !== 'undefined') {
     { passive: true }
   );
 }
+
+// The lab's Listen button calls js/widgetRuntime.js rather than importing this
+// module, because importing this module means importing js/audio.js and then
+// js/physics.js, and the authoring CLI reads that widget in a process with no
+// DOM. Installing the implementation here is what connects the two.
+setSignalAudio({
+  play,
+  stop,
+  isPlaying,
+  currentMapping,
+  currentOwner,
+  stopIfOwner,
+  stopIfOwnerStartsWith,
+});

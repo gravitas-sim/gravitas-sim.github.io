@@ -39,6 +39,77 @@
 // tools/physics-checks.mjs.
 // =============================================================================
 
+/**
+ * The four moons this lesson is about, bound by exact name.
+ *
+ * Every instrument here - the period table, the conjunction map, the Laplace
+ * angle, the rotating frame - is about the same four bodies, and a reader had
+ * no way to point at one. The chips name them, so "Io laps Europa twice" is a
+ * claim about an object that can be selected and watched rather than a label
+ * on a plot.
+ */
+/**
+ * The four moons, the angle they make, and how long it has been watched.
+ *
+ * The lesson's instruments plot a resonant argument against time. What the
+ * plot could not say is *which bodies* the angle is made of, or how much of a
+ * claim a librating trace is: a curve that has stayed between two bounds for
+ * the last few minutes is evidence about the last few minutes.
+ *
+ * This reports both. The three mean longitudes come off the live bodies
+ * through the same resonanceElements() the recorder uses, the argument is the
+ * same laplaceArgument() the plot draws, and the last row says how long the
+ * window is - in Io orbits, which is the unit the resonance is counted in.
+ */
+const laplaceRows = ctx => {
+  const io = ctx.role('io');
+  const europa = ctx.role('europa');
+  const ganymede = ctx.role('ganymede');
+  // Whatever the moons are going round: the heaviest thing in the scene. It is
+  // called Jupiter here and something else in the other resonance scenarios,
+  // and picking it by mass means this readout does not have to be told.
+  const primary = (ctx.bodies || []).reduce(
+    (best, b) => (!best || b.mass > best.mass ? b : best),
+    null
+  );
+  if (!io || !europa || !ganymede || !primary) {
+    return [{ label: 'The three moons', value: 'not all on the canvas' }];
+  }
+  // Longitude measured straight off the positions. For these four the
+  // eccentricities are between 0.004 and 0.009, so the true longitude and the
+  // mean longitude the argument is properly built from agree to well under a
+  // degree - close enough to point at, and not close enough to compute with,
+  // which is why the instrument keeps its own history and this does not.
+  const lon = b =>
+    ((Math.atan2(b.pos.y - primary.pos.y, b.pos.x - primary.pos.x) * 180) /
+      Math.PI +
+      360) %
+    360;
+  const [a, b, c] = [lon(io), lon(europa), lon(ganymede)];
+  const phi = (((a - 3 * b + 2 * c) % 360) + 360) % 360;
+  return [
+    { label: 'Io, where it is now', value: `${a.toFixed(0)}°` },
+    { label: 'Europa', value: `${b.toFixed(0)}°` },
+    { label: 'Ganymede', value: `${c.toFixed(0)}°` },
+    {
+      label: 'Io − 3×Europa + 2×Ganymede',
+      value: `${phi.toFixed(0)}° — the angle the plot is drawing`,
+      emphasis: true,
+    },
+    {
+      label: 'What a librating trace is evidence of',
+      value: 'the window you have watched, and not a proof that it lasts',
+    },
+  ];
+};
+
+const GALILEANS = {
+  io: { name: 'Io' },
+  europa: { name: 'Europa' },
+  ganymede: { name: 'Ganymede' },
+  callisto: { name: 'Callisto' },
+};
+
 const WHEN_ORBITS_LOCK = {
   id: 'when-orbits-lock',
   thumbnail: 'images/scenarios/galilean-resonance.webp',
@@ -64,6 +135,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 1: periods, and the trap in them -------------------------------
     {
       sid: 'four-moons-and-a-suspicious',
+      bind: GALILEANS,
       type: 'read',
       title: 'Four moons and a suspicious coincidence',
       setup: {
@@ -99,6 +171,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'how-close-is-close',
+      bind: GALILEANS,
       type: 'predict',
       title: 'How close is close?',
       body: `Before measuring anything: Io and Europa are said to be in a 2:1
@@ -119,6 +192,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'measure-the-four-periods',
+      bind: GALILEANS,
       type: 'explore',
       title: 'Measure the four periods',
       // Step 1 paused it so the student could read without four moons moving
@@ -158,6 +232,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'write-down-the-ratios',
+      bind: GALILEANS,
       // Read off the instrument that step sets running.
       requires: ['measure-the-four-periods'],
       type: 'measure',
@@ -222,6 +297,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'which-is-the-impressive-one',
+      bind: GALILEANS,
       // "The three ratios you measured".
       requires: ['write-down-the-ratios'],
       type: 'question',
@@ -257,6 +333,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'what-a-resonance-actually-is',
+      bind: GALILEANS,
       type: 'read',
       title: 'What a resonance actually is',
       body: `Step back from the ratio and ask what the resonance is supposed to
@@ -286,6 +363,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 2: conjunctions -------------------------------------------------
     {
       sid: 'where-do-the-line-ups',
+      bind: GALILEANS,
       type: 'predict',
       title: 'Where do the line-ups happen?',
       setup: {
@@ -312,6 +390,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'watch-the-line-ups',
+      bind: GALILEANS,
       type: 'explore',
       title: 'Watch the line-ups',
       tool: { id: 'resonance-conjunctions', inner: 'Io', outer: 'Europa' },
@@ -336,6 +415,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'why-the-sky-is-the',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'Why the sky is the wrong place to look',
@@ -365,6 +445,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 3: the resonant angle -------------------------------------------
     {
       sid: 'the-resonant-angle',
+      bind: GALILEANS,
       type: 'read',
       title: 'The resonant angle',
       body: `Here is the construction. It looks arbitrary the first time and it
@@ -408,6 +489,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'the-laplace-argument',
+      bind: GALILEANS,
       type: 'predict',
       title: 'The Laplace argument',
       body: `For the three inner moons the right combination involves all three
@@ -435,6 +517,9 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'watch-the-laplace-argument',
+      bind: GALILEANS,
+      allowInspector: true,
+      probe: laplaceRows,
       type: 'explore',
       title: 'Watch the Laplace argument',
       tool: { id: 'resonance-angle', argument: 'laplace' },
@@ -476,6 +561,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'why-the-instrument-refuses',
+      bind: GALILEANS,
       type: 'read',
       title: 'Why the instrument refuses',
       body: `An instrument that always gives an answer is not measuring
@@ -507,6 +593,9 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-the-laplace-libration',
+      bind: GALILEANS,
+      allowInspector: true,
+      probe: laplaceRows,
       // Recorded off the angle instrument once it has reached its verdict,
       // which takes the run that step starts.
       requires: ['watch-the-laplace-argument'],
@@ -570,6 +659,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'what-180-means',
+      bind: GALILEANS,
       type: 'question',
       title: 'What 180° means',
       kind: 'numeric',
@@ -605,6 +695,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 4: breaking it, and the awkward case ----------------------------
     {
       sid: 'one-percent',
+      bind: GALILEANS,
       type: 'predict',
       title: 'One percent',
       body: `Next you will run the same four moons with a single number changed:
@@ -628,6 +719,9 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'break-it',
+      bind: GALILEANS,
+      allowInspector: true,
+      probe: laplaceRows,
       type: 'explore',
       title: 'Break it',
       setup: {
@@ -660,6 +754,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'what-the-pair-of-runs',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'What the pair of runs establishes',
@@ -688,6 +783,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'the-awkward-case',
+      bind: GALILEANS,
       type: 'explore',
       title: 'The awkward case',
       setup: {
@@ -730,6 +826,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'the-best-ratio-in-the',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'The best ratio in the system',
@@ -767,6 +864,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 5: Pluto --------------------------------------------------------
     {
       sid: 'the-orbit-that-crosses-and',
+      bind: GALILEANS,
       type: 'read',
       title: 'The orbit that crosses and never collides',
       setup: {
@@ -802,6 +900,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'measure-pluto-s-resonance',
+      bind: GALILEANS,
       type: 'explore',
       title: 'Measure Pluto’s resonance',
       setup: {
@@ -831,6 +930,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-pluto-s-libration',
+      bind: GALILEANS,
       // Read off the run that step starts.
       requires: ['measure-pluto-s-resonance'],
       type: 'measure',
@@ -898,6 +998,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'where-the-line-ups-happen',
+      bind: GALILEANS,
       type: 'explore',
       title: 'Where the line-ups happen',
       tool: {
@@ -923,6 +1024,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'why-180-protects-pluto',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'Why 180° protects Pluto',
@@ -966,6 +1068,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 6: the Trojans --------------------------------------------------
     {
       sid: 'sixty-degrees-ahead',
+      bind: GALILEANS,
       type: 'read',
       title: 'Sixty degrees ahead',
       setup: {
@@ -1000,6 +1103,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'the-rotating-frame',
+      bind: GALILEANS,
       type: 'explore',
       title: 'The rotating frame',
       setup: {
@@ -1045,6 +1149,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'record-the-tadpole',
+      bind: GALILEANS,
       // Read off the frame instrument that step sets running.
       requires: ['the-rotating-frame'],
       type: 'measure',
@@ -1115,6 +1220,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'two-equilibria-one-survivor',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'Two equilibria, one survivor',
@@ -1149,6 +1255,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'one-last-ratio',
+      bind: GALILEANS,
       type: 'explore',
       title: 'One last ratio',
       tool: {
@@ -1181,6 +1288,7 @@ const WHEN_ORBITS_LOCK = {
     // --- Act 7: what counts as evidence --------------------------------------
     {
       sid: 'what-you-can-and-cannot',
+      bind: GALILEANS,
       type: 'read',
       title: 'What you can and cannot conclude from a ratio',
       body: `Collect the four cases.
@@ -1213,6 +1321,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'the-report-you-would-write',
+      bind: GALILEANS,
       type: 'question',
       kind: 'choice',
       title: 'The report you would write',
@@ -1248,6 +1357,7 @@ const WHEN_ORBITS_LOCK = {
     },
     {
       sid: 'where-this-goes',
+      bind: GALILEANS,
       type: 'read',
       title: 'Where this goes',
       body: `Resonance is not a curiosity at the edge of the Solar System. It is

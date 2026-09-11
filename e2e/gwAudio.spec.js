@@ -355,3 +355,109 @@ test.describe('one merger, one sound', () => {
     expect(counted).toBeLessThanOrEqual(2);
   });
 });
+
+test.describe('a signal belongs to the step that started it', () => {
+  // The lab hands `play` an owner token so that the lesson panel can release
+  // what a lesson started without silencing something a reader started for
+  // themselves. Nothing below reaches into the lab's internals: the token is
+  // the public contract between js/gwWidgets.js and js/gwAudio.js, and these
+  // are the four ways playback is meant to end.
+
+  /** Start a signal, optionally as a lesson would. */
+  const playAs = (page, owner) =>
+    page.evaluate(async owner => {
+      const gw = await import('/js/gwAudio.js');
+      const { modelTimeline } = await import('/js/gw/timeline.js');
+      const tl = modelTimeline({
+        m1: 36,
+        m2: 29,
+        distanceMpc: 410,
+        inclinationDeg: 0,
+        fStart: 20,
+      });
+      return gw.play(tl, owner ? { owner } : {});
+    }, owner);
+
+  const playing = page =>
+    page.evaluate(async () => (await import('/js/gwAudio.js')).isPlaying());
+
+  /** Permit sound the way a reader does, without playing anything. */
+  const permit = async page => {
+    await speaker(page).click();
+    await page.locator('#soundPanelToggle').click();
+  };
+
+  test('releasing the lesson scope leaves a reader-started signal alone', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    await permit(page);
+    expect((await playAs(page, null)).ok).toBe(true);
+    await page.evaluate(() =>
+      window.dispatchEvent(
+        new window.CustomEvent('gravitasStopSignalAudio', {
+          detail: { scope: 'gw-lab:' },
+        })
+      )
+    );
+    expect(await playing(page)).toBe(true);
+  });
+
+  test('and does end one the lab started', async ({ page, app }) => {
+    await app.boot();
+    await permit(page);
+    expect((await playAs(page, 'gw-lab:test-distance:abc')).ok).toBe(true);
+    await page.evaluate(() =>
+      window.dispatchEvent(
+        new window.CustomEvent('gravitasStopSignalAudio', {
+          detail: { scope: 'gw-lab:' },
+        })
+      )
+    );
+    await expect.poll(() => playing(page)).toBe(false);
+    // The ordinary bus comes back with it, rather than staying ducked.
+    await expect
+      .poll(async () => (await controlState(page)).mode)
+      .toBe('Simulation sounds');
+  });
+
+  test('rebuilding the world ends it, whoever started it', async ({
+    page,
+    app,
+  }) => {
+    // Not scoped: the world the signal was a measurement of is being torn
+    // down, so it goes whether a lesson or a reader started it.
+    await app.boot();
+    await permit(page);
+    expect((await playAs(page, null)).ok).toBe(true);
+    await page.locator('#cleanSimBtn').click();
+    await expect.poll(() => playing(page)).toBe(false);
+  });
+
+  test('moving to the next step of a lesson ends it', async ({ page, app }) => {
+    await app.boot();
+    await permit(page);
+    await page.locator('#investigationsBtn').click();
+    const card = page.locator('[data-investigation="listening-to-spacetime"]');
+    await expect(card).toBeVisible();
+    await card.click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    expect((await playAs(page, 'gw-lab:step-one:abc')).ok).toBe(true);
+    await page.locator('#investigationNext').click();
+    await expect.poll(() => playing(page)).toBe(false);
+  });
+
+  test('and so does closing the lesson', async ({ page, app }) => {
+    await app.boot();
+    await permit(page);
+    await page.locator('#investigationsBtn').click();
+    const card = page.locator('[data-investigation="listening-to-spacetime"]');
+    await expect(card).toBeVisible();
+    await card.click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    expect((await playAs(page, 'gw-lab:step-one:abc')).ok).toBe(true);
+    await page.locator('#investigationClose').click();
+    await expect.poll(() => playing(page)).toBe(false);
+  });
+});

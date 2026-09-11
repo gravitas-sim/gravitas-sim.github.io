@@ -50,6 +50,7 @@ import {
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
+import { barycentreOf } from './lesson/barycentre.js';
 import { updateCanvasSummary } from './canvasSummary.js';
 import {
   getDragPreview,
@@ -1206,6 +1207,30 @@ const drawScene = () => {
 
   bh_list.forEach(bh => bh.draw(ctx));
 
+  // Which black hole is selected, marked as UI rather than as light.
+  //
+  // Every black hole used to be drawn with a pale ring at the edge of its
+  // silhouette, all the time and over the top of the foreground half of its
+  // disk. It was there so a dark object could be found, and it was read as
+  // something the object was emitting - which a horizon does not. The ring
+  // lives here now, where the hover ring above already lives: it appears for
+  // the one object the reader has chosen, it is dashed and one and a half
+  // screen pixels wide at any zoom, and it sits outside the silhouette rather
+  // than on it. Nothing in js/blackHole/render.js draws a boundary any more.
+  if (state.selectedObject?.type === 'BlackHole') {
+    const bh = state.selectedObject.object;
+    if (bh && bh.alive && bh.pos) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(150,195,255,0.8)';
+      ctx.lineWidth = 1.5 / state.zoom;
+      ctx.setLineDash([6 / state.zoom, 5 / state.zoom]);
+      ctx.beginPath();
+      ctx.arc(bh.pos.x, bh.pos.y, bh.radius + 7 / state.zoom, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
   // Draw enhanced hover effect for clickable objects - draw in world coordinates since canvas is already transformed
   if (!state.inspector_open && state.user_has_interacted) {
     const worldPos = screen_to_world(state.mouse);
@@ -1367,6 +1392,62 @@ const drawScene = () => {
         ctx.fillText(t('overlay.stableOrbit'), top.x, top.y - 8);
         ctx.restore();
       }
+    }
+  }
+
+  // The balance point, when a lesson step has asked for it.
+  //
+  // The overlay carries the ids of the bodies to average over and nothing
+  // else: the point is recomputed from those bodies every frame rather than
+  // written in by the lesson, because a student is being asked to watch it
+  // stay still while two stars swing round it, and a value pushed in at 4 Hz
+  // by the panel's tick would visibly jitter and would be a restatement of
+  // what the lesson expects rather than a measurement of what the engine did.
+  //
+  // Drawn in screen-space widths so it reads as an instrument laid over the
+  // scene rather than as an object in it - there is nothing at the barycentre
+  // of a binary, and a filled disc there would teach the opposite.
+  if (state.barycentreOverlay?.active) {
+    const ids = state.barycentreOverlay.ids || [];
+    const members = stars.filter(o => ids.includes(o.id));
+    const centre = members.length >= 2 ? barycentreOf(members) : null;
+    if (centre) {
+      state.barycentreOverlay.x = centre.x;
+      state.barycentreOverlay.y = centre.y;
+      state.barycentreOverlay.arms = members.map(o => ({
+        id: o.id,
+        name: o.name,
+        r: Math.hypot(o.pos.x - centre.x, o.pos.y - centre.y),
+      }));
+      state.barycentreOverlay.separation =
+        members.length === 2
+          ? Math.hypot(
+              members[0].pos.x - members[1].pos.x,
+              members[0].pos.y - members[1].pos.y
+            )
+          : 0;
+      const c = world_to_screen(centre);
+      ctx.save();
+      ctx.lineWidth = 1.25;
+      ctx.strokeStyle = 'rgba(255, 235, 150, 0.85)';
+      ctx.setLineDash([4, 4]);
+      for (const body of members) {
+        const p2 = world_to_screen(body.pos);
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      // A cross, not a marker: an aiming point rather than a body.
+      const ARM = 7;
+      ctx.beginPath();
+      ctx.moveTo(c.x - ARM, c.y);
+      ctx.lineTo(c.x + ARM, c.y);
+      ctx.moveTo(c.x, c.y - ARM);
+      ctx.lineTo(c.x, c.y + ARM);
+      ctx.stroke();
+      ctx.restore();
     }
   }
 

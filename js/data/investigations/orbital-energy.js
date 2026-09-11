@@ -16,6 +16,27 @@
 
 // Held still for the opening. The work of the first half is all in the panel,
 // and a simulation moving behind it is only something else to look at.
+/**
+ * The bodies each scene of this lesson is about, bound by exact name.
+ *
+ * The prose says "click the orange one", which is fine until somebody clicks
+ * the white one and has nothing on screen to correct them with. A binding puts
+ * both orbiters and the star in the panel's object list, which is also the only
+ * keyboard route to a selection.
+ */
+const ENERGY_BODIES = {
+  star: { name: 'Kepler Star' },
+  circular: { name: 'Circular Orbiter' },
+  eccentric: { name: 'Eccentric Orbiter' },
+};
+
+/** The visitor scene: two bound bodies and one that is not. */
+const VISITOR_BODIES = {
+  sun: { name: 'Sun' },
+  earth: { name: 'Earth' },
+  visitor: { name: "1I/'Oumuamua" },
+};
+
 const ENERGY_LAB = {
   scenario: "Kepler's 2nd Law",
   seed: 'energy-lab',
@@ -54,6 +75,43 @@ const energyProbe = ctx => {
           : 'unbound: it is leaving'
         : '-',
     },
+    // The two turning points, from the orbit the engine is actually on rather
+    // than from the shape it was set up with. A student stopping at periapsis
+    // can check the distance against this.
+    ...(el && el.bound
+      ? [
+          { label: 'Closest it gets', value: ctx.distance(el.a * (1 - el.e)) },
+          { label: 'Furthest it gets', value: ctx.distance(el.a * (1 + el.e)) },
+        ]
+      : []),
+    ...driftRows(ctx),
+  ];
+};
+
+/**
+ * How much the whole world's energy has moved since it was built.
+ *
+ * The distinction this lesson turns on. A total that changes because something
+ * fired an engine is physics; a total that changes because the integrator is
+ * approximating is not, and a lesson that shows a wobbling line without saying
+ * which it is teaches that energy is only roughly conserved.
+ *
+ * Shown as a percentage of the world's own energy, so the number means the
+ * same thing whatever the scenario. Anything under about a tenth of a percent
+ * over a few orbits is the arithmetic, not the physics.
+ */
+const driftRows = ctx => {
+  const c = ctx.conservation();
+  if (!c || !Number.isFinite(c.energyDrift)) return [];
+  const size = Math.abs(c.energyDrift);
+  return [
+    {
+      label: 'Whole-system energy, since this world was built',
+      value:
+        size < 0.001
+          ? 'unchanged to the precision worth quoting'
+          : `${c.energyDrift > 0 ? '+' : ''}${c.energyDrift.toFixed(3)}% — numerical drift, not physics`,
+    },
   ];
 };
 
@@ -84,6 +142,7 @@ const ENERGY = {
   steps: [
     {
       sid: 'how-hard-would-you-have',
+      bind: ENERGY_BODIES,
       type: 'read',
       title: 'How hard would you have to throw it?',
       body: `Throw a ball and it comes down. Throw it harder and it comes down
@@ -107,6 +166,7 @@ const ENERGY = {
     },
     {
       sid: 'load-it-lightly',
+      bind: ENERGY_BODIES,
       type: 'predict',
       title: 'Load it lightly',
       body: `The first shot leaves the mountaintop sideways at
@@ -126,6 +186,7 @@ const ENERGY = {
     },
     {
       sid: 'fire-it',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Fire it',
       body: `There is the shot. The green path is the cannonball, launched
@@ -144,6 +205,7 @@ const ENERGY = {
     },
     {
       sid: 'load-it-heavily',
+      bind: ENERGY_BODIES,
       type: 'predict',
       title: 'Load it heavily',
       body: `Now double the powder. This time the cannonball leaves at
@@ -161,6 +223,7 @@ const ENERGY = {
     },
     {
       sid: 'fire-it-again',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Fire it again',
       body: `The path has changed character. It is not a very big loop, it is
@@ -177,6 +240,7 @@ const ENERGY = {
     },
     {
       sid: 'find-the-dividing-line',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Find the dividing line',
       body: `Somewhere between 9 and 12 km/s the answer flips from
@@ -195,6 +259,7 @@ const ENERGY = {
     },
     {
       sid: 'where-is-the-line',
+      bind: ENERGY_BODIES,
       type: 'question',
       title: 'Where is the line?',
       kind: 'choice',
@@ -208,6 +273,7 @@ const ENERGY = {
     },
     {
       sid: 'what-is-actually-deciding-this',
+      bind: ENERGY_BODIES,
       type: 'read',
       title: 'What is actually deciding this?',
       body: `You could stop here with a rule of thumb: above 11.2 km/s it leaves,
@@ -233,6 +299,7 @@ const ENERGY = {
     },
     {
       sid: 'watch-the-total',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Watch the total',
       body: `The three bars at the bottom of the panel are those energies, with
@@ -254,6 +321,7 @@ const ENERGY = {
     },
     {
       sid: 'reading-the-sign',
+      bind: ENERGY_BODIES,
       type: 'question',
       title: 'Reading the sign',
       kind: 'choice',
@@ -272,6 +340,7 @@ const ENERGY = {
     },
     {
       sid: 'around-a-real-orbit',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Around a real orbit',
       body: `That was a launch. Now watch a whole orbit.
@@ -283,17 +352,29 @@ const ENERGY = {
       setup: ENERGY_ORBIT,
       tool: { id: 'live-energy' },
       probe: energyProbe,
+      allowInspector: true,
+      // The two turning points are where the trade is largest and hardest to
+      // catch by eye, so the reader can stop the run at one rather than trying
+      // to read a bar chart that is moving.
+      pauseAt: {
+        kind: 'periapsis',
+        body: 'Eccentric Orbiter',
+        primary: 'Kepler Star',
+      },
       checklist: [
-        'Click the orange Eccentric Orbiter in the simulation',
+        'Select the Eccentric Orbiter, from the canvas or the list below',
         'Watch the green line rise as it swings in close and fast',
         'Watch the blue line fall at the same moment',
         'Confirm the white total line stays flat while the other two move',
+        'Arm the event watch and let it stop the run at closest approach',
+        'Read the two energies there, then disarm and watch it climb back out',
         'Check that the total stays below the zero line the whole way round',
       ],
-      tip: 'This is the trade. Falling inwards converts energy of position into energy of motion, and climbing back out converts it straight back. Nothing is gained or lost, which is why the orbit repeats forever.',
+      tip: 'This is the trade. Falling inwards converts energy of position into energy of motion, and climbing back out converts it straight back. The last line of the readout is worth watching too: it is how far the whole system’s energy has moved since this world was built, and it is not physics — it is the arithmetic the simulation does between frames. If it stays near zero while the two bars swing wildly, that is the conservation law holding.',
     },
     {
       sid: 'what-stays-put',
+      bind: ENERGY_BODIES,
       type: 'question',
       title: 'What stays put',
       kind: 'choice',
@@ -312,6 +393,7 @@ const ENERGY = {
     },
     {
       sid: 'escape-speed',
+      bind: ENERGY_BODIES,
       type: 'read',
       title: 'Escape speed',
       body: `The dividing speed has a name: <strong>escape speed</strong>. It is
@@ -336,6 +418,7 @@ const ENERGY = {
     },
     {
       sid: 'a-common-misunderstanding',
+      bind: ENERGY_BODIES,
       type: 'question',
       title: 'A common misunderstanding',
       kind: 'choice',
@@ -355,6 +438,7 @@ const ENERGY = {
     },
     {
       sid: 'somewhere-else-entirely',
+      bind: ENERGY_BODIES,
       type: 'predict',
       title: 'Somewhere else entirely',
       body: `Everything so far has been about leaving Earth. Escape speed depends
@@ -368,6 +452,7 @@ const ENERGY = {
     },
     {
       sid: 'more-mass-harder-to-leave',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'More mass, harder to leave',
       body: `Here are four real bodies with their real escape speeds, all
@@ -386,6 +471,7 @@ const ENERGY = {
     },
     {
       sid: 'further-out-easier-to-leave',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Further out, easier to leave',
       body: `Now keep the bodies the same and change where you start from.
@@ -404,6 +490,7 @@ const ENERGY = {
     },
     {
       sid: 'starting-further-out',
+      bind: ENERGY_BODIES,
       type: 'question',
       title: 'Starting further out',
       kind: 'choice',
@@ -423,6 +510,7 @@ const ENERGY = {
     },
     {
       sid: 'three-shapes-one-law',
+      bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Three shapes, one law',
       body: `One last thing to look at before applying all this.
@@ -449,6 +537,7 @@ const ENERGY = {
     },
     {
       sid: 'something-that-came-from-outside',
+      bind: VISITOR_BODIES,
       type: 'read',
       title: 'Something that came from outside',
       body: `On 19 October 2017, a survey telescope in Hawaii picked up a faint
@@ -473,15 +562,18 @@ const ENERGY = {
     },
     {
       sid: 'check-it-yourself',
+      bind: VISITOR_BODIES,
       type: 'explore',
       title: 'Check it yourself',
       body: `Do not take anyone's word for it. You have a test now.
              \n\nClick the visitor and read the sign of its total energy. Then
              click Earth and read that one, and compare.`,
       probe: energyProbe,
+      allowInspector: true,
       checklist: [
-        'Click 1I/ʻOumuamua and read the sign of its total energy',
-        'Click Earth and read the sign of its total energy',
+        'Select 1I/ʻOumuamua, from the canvas or the list below',
+        'Read the sign of its total energy',
+        'Select Earth and read the sign of its total energy',
         'Watch the visitor swing round the Sun and start heading back out',
         'Confirm its path never closes, however long you watch',
       ],
@@ -489,6 +581,7 @@ const ENERGY = {
     },
     {
       sid: 'will-it-be-back',
+      bind: VISITOR_BODIES,
       type: 'question',
       title: 'Will it be back?',
       kind: 'short',
@@ -501,6 +594,7 @@ const ENERGY = {
     },
     {
       sid: 'what-you-worked-out',
+      bind: VISITOR_BODIES,
       type: 'read',
       title: 'What you worked out',
       body: `You started by firing a cannon and asking a question a child could

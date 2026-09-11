@@ -75,7 +75,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     summary:
       'Las leyes de Kepler terminan con la corrección de Newton, y para esto sirve esa corrección. Observa dos estrellas girando una alrededor de la otra, encuentra el punto de equilibrio que ambas rodean, y usa nada más que el tamaño y la duración de su órbita para deducir cuánto pesa cada una. Ningún telescopio ha puesto jamás una estrella en una balanza; así es como se hace de verdad.',
-    thumbnail: 'images/scenarios/binary-pair.webp',
+    thumbnail: 'images/investigations/weighing-stars.webp',
     stepCount: 35,
     gradedCount: 17,
     objectiveCount: 6,
@@ -89,7 +89,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     summary:
       'Cambia una sola cosa de un agujero negro, su masa, y observa cómo responden cuatro propiedades completamente distintas. Su horizonte de sucesos crece al mismo paso que la masa. Su densidad media baja. Se vuelve más frío. Vive muchísimo más. Dos de esas cuatro sorprenden a casi todo el mundo, y las predecirás antes de medirlas.',
-    thumbnail: 'images/scenarios/black-hole-lab.webp',
+    thumbnail: 'images/investigations/black-holes.webp',
     stepCount: 29,
     gradedCount: 17,
     objectiveCount: 5,
@@ -265,6 +265,21 @@ export const MANIFEST = [
     objectiveCount: 6,
   },
   {
+    id: 'what-is-a-gravitational-wave',
+    title: '¿Qué es una onda gravitacional?',
+    subtitle:
+      'Una primera mirada a qué se mueve, qué viaja y qué siente un detector',
+    duration: '30-40 min',
+    level: 'Principiante, sin conocimientos previos de física',
+    summary:
+      'Dos objetos giran uno alrededor del otro en pantalla y no emiten nada de luz. A lo largo de veinticuatro pasos cortos averiguas qué sale de ellos, qué le hace a todo lo que atraviesa y cómo podría notarlo un instrumento; y aprendes a distinguir los tres tipos de imagen: el dibujo, el cálculo y la medida. Sin ecuaciones, sin física previa, y se puede hacer con el sonido apagado.',
+    thumbnail: 'images/investigations/what-is-a-gravitational-wave.webp',
+    series: 'Gravitational waves',
+    stepCount: 24,
+    gradedCount: 14,
+    objectiveCount: 6,
+  },
+  {
     id: 'listening-to-spacetime',
     title: 'Escuchar el espacio-tiempo',
     subtitle:
@@ -273,7 +288,8 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     summary:
       'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. A lo largo de veinticuatro pasos averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, y terminas comparando tu respuesta con lo que dos detectores en Luisiana y Washington registraron de verdad en septiembre de 2015. Puedes hacerlo todo con el sonido apagado.',
-    thumbnail: 'images/scenarios/gw150914.webp',
+    thumbnail: 'images/investigations/listening-to-spacetime.webp',
+    series: 'Gravitational waves',
     stepCount: 24,
     gradedCount: 15,
     objectiveCount: 8,
@@ -287,7 +303,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     summary:
       'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de veintiocho pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
-    thumbnail: 'images/scenarios/stellar-nursery.webp',
+    thumbnail: 'images/investigations/a-universe-of-stars.webp',
     stepCount: 28,
     gradedCount: 25,
     objectiveCount: 7,
@@ -300,7 +316,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     summary:
       'Una estrella no es tanto una cosa como un proceso que lleva su tiempo. A lo largo de treinta y cuatro pasos sigues tres de ellos desde una nube en contracción hasta lo que dejan atrás: una estrella de masa solar hasta una enana blanca, una de diez masas solares hasta una estrella de neutrones y una de cuarenta hasta un agujero negro, leyendo cada etapa en el mismo diagrama y las mismas trazas publicadas. También conocerás a la estrella que no hace nada de esto: una enana roja que seguirá quemando hidrógeno cuando el Universo tenga cien veces su edad actual.',
-    thumbnail: 'images/scenarios/stellar-graveyard.webp',
+    thumbnail: 'images/investigations/lives-of-stars.webp',
     stepCount: 34,
     gradedCount: 29,
     objectiveCount: 7,

@@ -14,6 +14,83 @@
 
 // --- 9. Tides ------------------------------------------------------------------
 
+/**
+ * The bodies each half of this lesson is about, bound by exact name.
+ *
+ * The first half is the Earth and the Moon; the last four screens are a star
+ * being pulled apart by a black hole. The hole carries whatever name the world
+ * builder gave it, so it is bound by kind - there is exactly one, and matching
+ * on the class is honest where matching on a random name would be luck.
+ */
+const EARTH_MOON = {
+  earth: { name: 'Earth' },
+  moon: { name: 'Luna' },
+};
+
+/** The disruption scene: one doomed star and the hole doing the pulling. */
+const DISRUPTION = {
+  star: { name: 'Doomed star' },
+  hole: { kind: 'BlackHole' },
+};
+
+/**
+ * The difference in pull across a body, measured on the live scene.
+ *
+ * The whole lesson is about one quantity, and until now it existed only inside
+ * a panel diagram: a reader could see three arrows drawn for them but could
+ * not check the claim against the two bodies actually on the canvas.
+ *
+ * This computes it from the live positions and masses - GM/r² at the near
+ * side, at the centre and at the far side of the selected body - and reports
+ * the near and far differences. Those two are what makes two bulges rather
+ * than one, and they are the numbers the arrows are a picture of.
+ */
+const tideRows = (
+  ctx,
+  { onRole = 'earth', byRole = 'moon', trueRatio = null } = {}
+) => {
+  const on = ctx.role(onRole);
+  const by = ctx.role(byRole);
+  if (!on || !by) {
+    return [{ label: 'The pair', value: 'not both on the canvas' }];
+  }
+  const r = Math.hypot(by.pos.x - on.pos.x, by.pos.y - on.pos.y);
+  const R = on.radius || 1;
+  if (!(r > R)) return [{ label: 'The pair', value: 'too close to separate' }];
+  const g = d => (ctx.G * by.mass) / (d * d);
+  const centre = g(r);
+  const pct = d => `${((100 * (g(d) - centre)) / centre).toFixed(2)}%`;
+  const rows = [
+    {
+      label: `Pull on ${on.name}, at its centre`,
+      value: centre.toExponential(3),
+    },
+    { label: 'Near side, compared with the centre', value: pct(r - R) },
+    { label: 'Far side, compared with the centre', value: pct(r + R) },
+    {
+      label: 'Measured across the body as drawn',
+      value: `${on.name} is drawn ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
+    },
+  ];
+  // The two percentages above are honest arithmetic on what is on screen, and
+  // they are not the real numbers: this scenario draws the Earth far larger
+  // than scale so that it is visible at all, and the difference in pull across
+  // a body scales with its size. Quoting only the on-screen figure would teach
+  // a tide about sixty times too strong, so the true one is printed beside it.
+  if (trueRatio) {
+    rows.push({
+      label: 'The same subtraction at true scale',
+      value: trueRatio,
+      emphasis: true,
+    });
+  }
+  rows.push({
+    label: 'Which is why there are two bulges',
+    value: 'the near side is pulled towards it, the far side is left behind',
+  });
+  return rows;
+};
+
 const TIDES_EARTH_MOON = {
   scenario: 'Earth-Moon System',
   seed: 'tides-lab',
@@ -53,6 +130,7 @@ const TIDES = {
   steps: [
     {
       sid: 'twice-a-day-everywhere',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'Twice a day, everywhere',
       body: `Stand on almost any coast and the sea comes in and goes out roughly
@@ -87,6 +165,7 @@ const TIDES = {
 
     {
       sid: 'is-the-pull-the-same',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'Is the pull the same everywhere?',
       body: `The Earth is not a point. It is a ball 12,742 km across, and the
@@ -108,6 +187,16 @@ const TIDES = {
 
     {
       sid: 'three-points-three-pulls',
+      bind: EARTH_MOON,
+      allowInspector: true,
+      // The panel draws the arrows; this measures them, on the Earth and
+      // Moon actually on the canvas. A reader can check the diagram against
+      // the scene instead of taking it on trust.
+      probe: ctx =>
+        tideRows(ctx, {
+          trueRatio:
+            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the centre and the far side about 3.3% less',
+        }),
       type: 'read',
       title: 'Three points, three pulls',
       body: `The panel shows the Earth with an arrow leaving three places on it:
@@ -133,6 +222,7 @@ const TIDES = {
 
     {
       sid: 'how-different-are-they',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'How different are they?',
       kind: 'choice',
@@ -162,6 +252,7 @@ const TIDES = {
 
     {
       sid: 'so-why-two-bulges',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'So why two bulges?',
       body: `Everything you have seen so far points one way: toward the Moon.
@@ -185,6 +276,16 @@ const TIDES = {
 
     {
       sid: 'take-the-centre-away',
+      bind: EARTH_MOON,
+      allowInspector: true,
+      // The panel draws the arrows; this measures them, on the Earth and
+      // Moon actually on the canvas. A reader can check the diagram against
+      // the scene instead of taking it on trust.
+      probe: ctx =>
+        tideRows(ctx, {
+          trueRatio:
+            'the real Earth is 1.66% of the way to the Moon, so the near side feels about 3.3% more pull than the centre and the far side about 3.3% less',
+        }),
       type: 'read',
       title: 'Take the centre away',
       body: `Here is the move that makes tides make sense.
@@ -218,6 +319,7 @@ const TIDES = {
 
     {
       sid: 'what-the-far-side-arrow',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'What the far-side arrow means',
       kind: 'choice',
@@ -246,6 +348,7 @@ const TIDES = {
 
     {
       sid: 'what-a-tide-actually-is',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'What a tide actually is',
       body: `A definition worth memorising, because it is short and it is the
@@ -273,6 +376,7 @@ const TIDES = {
 
     {
       sid: 'bring-the-companion-closer',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'Bring the companion closer',
       body: `You are about to be handed a distance slider, and a graph that
@@ -293,6 +397,7 @@ const TIDES = {
 
     {
       sid: 'four-distances',
+      bind: EARTH_MOON,
       type: 'measure',
       title: 'Four distances',
       body: `The panel reports the tidal stretch as a multiple of the real lunar
@@ -398,6 +503,7 @@ const TIDES = {
 
     {
       sid: 'how-steeply-does-it-fall',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'How steeply does it fall?',
       kind: 'numeric',
@@ -424,6 +530,7 @@ const TIDES = {
 
     {
       sid: 'the-relationship-written-down',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'The relationship, written down',
       body: `You have measured it, so here it is in symbols. You are not being
@@ -451,6 +558,7 @@ const TIDES = {
 
     {
       sid: 'now-change-the-companion',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'Now change the companion',
       body: `Put the distance back where it started and change the other thing
@@ -471,6 +579,7 @@ const TIDES = {
 
     {
       sid: 'three-masses',
+      bind: EARTH_MOON,
       type: 'measure',
       title: 'Three masses',
       body: `The distance is now held at the Moon’s real distance and the mass
@@ -556,6 +665,7 @@ const TIDES = {
 
     {
       sid: 'what-the-mass-graph-says',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'What the mass graph says',
       kind: 'choice',
@@ -576,6 +686,7 @@ const TIDES = {
 
     {
       sid: 'the-sun-against-the-moon',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'The Sun against the Moon',
       body: `Two bodies raise measurable tides on the Earth, and they are wildly
@@ -598,6 +709,7 @@ const TIDES = {
 
     {
       sid: 'seven-real-tides-on-one',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'Seven real tides on one scale',
       body: `The panel lists seven real pairings, with the tide the first body
@@ -631,6 +743,7 @@ const TIDES = {
 
     {
       sid: 'locking-and-what-this-simulation',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'Locking, and what this simulation does not do',
       body: `You always see the same face of the Moon. That is not a
@@ -660,6 +773,7 @@ const TIDES = {
 
     {
       sid: 'say-it-in-your-own',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'Say it in your own words',
       kind: 'short',
@@ -674,6 +788,7 @@ const TIDES = {
 
     {
       sid: 'what-holds-a-moon-together',
+      bind: EARTH_MOON,
       type: 'predict',
       title: 'What holds a moon together?',
       body: `Everything so far has been about stretching. Nothing has broken.
@@ -698,6 +813,7 @@ const TIDES = {
 
     {
       sid: 'stretch-against-grip',
+      bind: EARTH_MOON,
       type: 'explore',
       title: 'Stretch against grip',
       body: `The panel takes a body the size of the Moon and lets you walk it in
@@ -731,6 +847,7 @@ const TIDES = {
 
     {
       sid: 'where-the-balance-tips',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'Where the balance tips',
       kind: 'numeric',
@@ -755,6 +872,7 @@ const TIDES = {
 
     {
       sid: 'the-roche-limit-and-why',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'The Roche limit, and why there are two of them',
       body: `The picture moves to Saturn, which is where this idea earns its
@@ -786,6 +904,7 @@ const TIDES = {
 
     {
       sid: 'change-what-the-moon-is',
+      bind: EARTH_MOON,
       type: 'explore',
       title: 'Change what the moon is made of',
       body: `Leave the distance alone for a moment and change the material
@@ -818,6 +937,7 @@ const TIDES = {
 
     {
       sid: 'not-one-distance',
+      bind: EARTH_MOON,
       type: 'question',
       title: 'Not one distance',
       kind: 'choice',
@@ -837,6 +957,7 @@ const TIDES = {
 
     {
       sid: 'what-a-roche-limit-does',
+      bind: EARTH_MOON,
       type: 'read',
       title: 'What a Roche limit does not tell you',
       body: `Four qualifications, because this is the idea in the lesson most
@@ -867,6 +988,7 @@ const TIDES = {
 
     {
       sid: 'the-extreme-case-running-live',
+      bind: DISRUPTION,
       type: 'explore',
       title: 'The extreme case, running live',
       body: `The simulation has switched to a scenario built around a
@@ -886,7 +1008,13 @@ const TIDES = {
              fact that closer passages do more damage, and the fact that the
              debris ends up on a spread of different orbits because different
              parts of the body were at different distances when it came apart.
-             That last one is the same subtraction you started the lesson with.`,
+             That last one is the same subtraction you started the lesson with.
+             \n\nThe readout below is that subtraction, on this scene: the pull
+             of the hole at the near side of the doomed star, at its centre and
+             at its far side. Watch the difference grow as the star falls in.
+             That difference is what tears it apart, and it is the only part of
+             the disruption this simulation actually computes.`,
+      allowInspector: true,
       checklist: [
         'Watch one body make a close pass and follow what comes off it',
         'Notice that bodies passing further out are left alone',
@@ -895,9 +1023,13 @@ const TIDES = {
       ],
       setup: TIDES_DISRUPTION,
       tip: 'Debris spreading along the orbit rather than falling in together is a real feature of tidal disruption: the near end of the object was on a slightly tighter orbit than the far end, so the pieces have slightly different periods.',
+      // The differential pull first, then what the model does and does not
+      // compute. Merged into one probe: two `probe` keys in one object mean
+      // the later one silently wins, and the measurement would vanish.
       probe: ctx => {
         const bodies = ctx.bodies || [];
         return [
+          ...tideRows(ctx, { onRole: 'star', byRole: 'hole' }),
           { label: 'Bodies being tracked', value: String(bodies.length) },
           {
             label: 'What is simulated',
@@ -910,6 +1042,7 @@ const TIDES = {
 
     {
       sid: 'a-star-and-a-black',
+      bind: DISRUPTION,
       type: 'read',
       title: 'A star, and a black hole that is too big',
       body: `Finish with the extreme case, done properly with numbers instead of
@@ -952,6 +1085,7 @@ const TIDES = {
 
     {
       sid: 'the-whole-lesson-in-three',
+      bind: DISRUPTION,
       type: 'question',
       title: 'The whole lesson in three sentences',
       kind: 'short',
@@ -965,6 +1099,7 @@ const TIDES = {
 
     {
       sid: 'what-you-worked-out',
+      bind: DISRUPTION,
       type: 'read',
       title: 'What you worked out',
       body: `<strong>A tide is a difference.</strong> Not a pull. Take the pull

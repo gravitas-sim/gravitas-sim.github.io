@@ -61,6 +61,84 @@ const HZ_TRAPPIST = {
 // previous step left it having been panned to.
 const HZ_TRAPPIST_RUN = { ...HZ_TRAPPIST };
 
+/** The four worlds the Solar System steps are about, bound by exact name. */
+const SOLAR_WORLDS = {
+  venus: { name: 'Venus' },
+  earth: { name: 'Earth' },
+  mars: { name: 'Mars' },
+  ceres: { name: 'Ceres' },
+};
+
+/**
+ * The three TRAPPIST-1 worlds this lesson reads, bound by their catalogue
+ * names as the scenario builds them.
+ *
+ * Only e, f and g: those are the ones the instrument reports and the ones the
+ * steps ask about, and binding all seven would put four roles in the panel's
+ * object list that no screen ever mentions.
+ */
+const TRAPPIST_WORLDS = {
+  e: { name: 'TRAPPIST-1e' },
+  f: { name: 'TRAPPIST-1f' },
+  g: { name: 'TRAPPIST-1g' },
+};
+
+/**
+ * A star with one planet on a genuinely elliptical orbit.
+ *
+ * Both habitable-zone scenarios put their planets on circles, deliberately -
+ * circles keep the insolation measurement clean. That leaves the part of this
+ * lesson about a planet whose distance changes round its year with nothing
+ * live to point at, so it stands one up: same star, one world, eccentricity
+ * 0.45, which is enough to carry it out of the zone and back in every year.
+ */
+const ECCENTRIC_WORLD = {
+  system: {
+    starName: 'Sun',
+    luminositySun: 1,
+    teffK: 5780,
+    planets: [
+      { name: 'Wanderer', role: 'wanderer', aAU: 1.2, ecc: 0.45, radius: 4.8 },
+    ],
+    fit: true,
+  },
+};
+
+/**
+ * Where a planet sits against its own star's zone, right now.
+ *
+ * Every number comes from ctx.habitability(), which calls the same two
+ * functions the ring on the canvas is drawn with and the hz-* panels quote. A
+ * lesson and the picture it points at cannot disagree about where the edges
+ * are, because one piece of code decides.
+ */
+const zoneRows = ctx => {
+  // Whatever the reader has selected, and failing that the first world this
+  // step bound - so the readout says something useful before the first click
+  // rather than an instruction, and switches to their choice the moment they
+  // make one.
+  const fallback = (ctx.roles() || []).map(r => ctx.role(r)).find(Boolean);
+  const h = ctx.habitability(ctx.selected || fallback);
+  if (!h) {
+    return [
+      { label: 'Selected', value: 'click a planet on the canvas to read it' },
+    ];
+  }
+  return [
+    { label: 'Planet', value: h.planet.name || 'unnamed' },
+    { label: 'Distance from its star', value: `${h.distanceAU.toFixed(3)} AU` },
+    {
+      label: 'Starlight it receives',
+      value: `${h.insolation.toFixed(2)} Earths`,
+    },
+    {
+      label: `Zone (${h.model})`,
+      value: `${h.bounds.innerAU.toFixed(2)} to ${h.bounds.outerAU.toFixed(2)} AU`,
+    },
+    { label: 'Which puts it', value: h.label },
+  ];
+};
+
 const GOLDILOCKS = {
   id: 'goldilocks-question',
   thumbnail: 'images/scenarios/habitable-zone-lab.webp',
@@ -457,12 +535,17 @@ const GOLDILOCKS = {
         'Find the outer edge: the dashed blue circle, labeled "maximum greenhouse".',
         'Watch one full lap of the inner worlds. Which ones stay inside the ring, and which never enter it?',
         'Notice that the ring does not move. It belongs to the star, not to any planet.',
+        'Click each world in turn and read its distance and its starlight below.',
       ],
+      allowInspector: true,
+      probe: zoneRows,
       setup: HZ_RINGS,
+      bind: SOLAR_WORLDS,
       tip: 'The ring is a calculation, not an object. There is nothing physically present at 0.98 AU; that is simply the distance at which the model says a runaway greenhouse begins for a planet of this type.',
     },
     {
       sid: 'reading-the-real-solar-system',
+      bind: SOLAR_WORLDS,
       type: 'question',
       title: 'Reading the real Solar System',
       kind: 'choice',
@@ -482,6 +565,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'the-mars-problem',
+      bind: SOLAR_WORLDS,
       type: 'question',
       title: 'The Mars problem',
       kind: 'short',
@@ -501,6 +585,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'the-two-edges',
+      bind: SOLAR_WORLDS,
       type: 'read',
       title: 'The two edges',
       body: `Why does the zone stop at each end?
@@ -532,6 +617,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'two-definitions-of-the-same',
+      bind: SOLAR_WORLDS,
       type: 'explore',
       title: 'Two definitions of the same zone',
       body: `Published habitable zones come in two flavors, and the difference
@@ -560,6 +646,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'what-actually-changed',
+      bind: SOLAR_WORLDS,
       type: 'question',
       title: 'What actually changed',
       kind: 'choice',
@@ -591,12 +678,20 @@ const GOLDILOCKS = {
         'Find the new inner edge and compare it with where Venus orbits, at 0.72 AU.',
         'Check the outer edge against Ceres at 2.77 AU.',
         'Count how many worlds are inside the ring now, and compare with the count you made on the conservative definition.',
+        'Select Venus and watch the readout: the same planet, the same distance, a different verdict.',
       ],
+      allowInspector: true,
+      // The definition change moves the ring on the canvas and the numbers in
+      // the readout together, because both are computed from the same setting
+      // by the same function. Nothing about Venus changed.
+      probe: zoneRows,
       setup: HZ_RINGS_WIDE,
+      bind: SOLAR_WORLDS,
       tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just inside its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
     },
     {
       sid: 'what-the-wider-band-bought',
+      bind: SOLAR_WORLDS,
       type: 'question',
       title: 'What the wider band bought',
       kind: 'choice',
@@ -616,6 +711,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'venus-by-the-rule-you',
+      bind: SOLAR_WORLDS,
       type: 'question',
       title: 'Venus, by the rule you already have',
       kind: 'numeric',
@@ -632,6 +728,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'a-year-on-a-circular',
+      bind: SOLAR_WORLDS,
       type: 'read',
       title: 'A year on a circular orbit',
       body: `One thing has been quietly assumed so far: that a planet has
@@ -654,6 +751,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'now-stretch-the-orbit',
+      bind: SOLAR_WORLDS,
       type: 'predict',
       title: 'Now stretch the orbit',
       body: `In a moment you will be able to raise the eccentricity, which
@@ -675,6 +773,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'run-an-eccentric-year',
+      bind: SOLAR_WORLDS,
       type: 'explore',
       title: 'Run an eccentric year',
       body: `Raise the eccentricity and watch both halves of the panel at once:
@@ -709,7 +808,19 @@ const GOLDILOCKS = {
              leave the ring at one end of its year and come back at the other,
              and watch the graph line cross out of the band at the same moment.
              \n\nThe readout now gives the fraction of the <em>year</em> spent
-             inside the zone.`,
+             inside the zone.
+             \n\nAnd on the canvas there is now a real one. <strong>Wanderer</strong>
+             is on a genuine ellipse — 1.2 AU across on average, eccentricity
+             0.45 — being moved by the same gravity solver as everything else in
+             Gravitas, not drawn along a path. Use the event watch to stop it at
+             its closest approach and again at its furthest, and read the
+             starlight it is getting at each. Those two numbers are the whole
+             point of this screen.`,
+      allowInspector: true,
+      stage: ECCENTRIC_WORLD,
+      // Its own turning points, armed by the reader rather than by the lesson.
+      pauseAt: { kind: 'periapsis', body: 'Wanderer', primary: 'Sun' },
+      probe: zoneRows,
       tool: {
         id: 'hz-orbit',
         values: { ecc: 0.45, semi: 1.2 },
@@ -727,6 +838,10 @@ const GOLDILOCKS = {
     },
     {
       sid: 'reading-the-fraction',
+      // Still the ellipse from the previous screen: this question is about
+      // that planet's year, so the planet stays on the canvas.
+      stage: ECCENTRIC_WORLD,
+      probe: zoneRows,
       type: 'question',
       title: 'Reading the fraction',
       kind: 'choice',
@@ -748,6 +863,12 @@ const GOLDILOCKS = {
     },
     {
       sid: 'a-real-system-forty-light',
+      bind: TRAPPIST_WORLDS,
+      // The subject changes here, so the scene is named rather than inherited:
+      // the previous screen staged its own ellipse, and inheriting that would
+      // leave a prediction about TRAPPIST-1 in front of a planet called
+      // Wanderer.
+      setup: HZ_TRAPPIST,
       type: 'predict',
       title: 'A real system, forty light years away',
       body: `Time to point all of this at a real object.
@@ -769,6 +890,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'all-seven-planets',
+      bind: TRAPPIST_WORLDS,
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
@@ -799,6 +921,8 @@ const GOLDILOCKS = {
     },
     {
       sid: 'watch-it-run',
+      bind: TRAPPIST_WORLDS,
+      probe: zoneRows,
       type: 'explore',
       title: 'Watch it run',
       body: `The diagram was a diagram. This is the simulation, with all seven
@@ -825,6 +949,12 @@ const GOLDILOCKS = {
     },
     {
       sid: 'take-the-readings-yourself',
+      bind: TRAPPIST_WORLDS,
+      allowInspector: true,
+      // The same numbers, from the same functions, for whichever planet is
+      // selected on the canvas: a student can check the instrument's list
+      // against the world it is describing rather than taking it on trust.
+      probe: zoneRows,
       type: 'measure',
       title: 'Take the readings yourself',
       body: `Rather than being told which planets fall where, read it off the
@@ -892,6 +1022,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'the-question-the-name-invites',
+      bind: TRAPPIST_WORLDS,
       type: 'question',
       title: 'The question the name invites',
       kind: 'choice',
@@ -911,6 +1042,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'three-planets-that-all-look',
+      bind: TRAPPIST_WORLDS,
       type: 'explore',
       title: 'Three planets that all look promising',
       body: `To see how much room that leaves, consider three planets that all
@@ -940,6 +1072,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'which-one-would-you-observe',
+      bind: TRAPPIST_WORLDS,
       type: 'question',
       title: 'Which one would you observe next?',
       kind: 'choice',
@@ -961,6 +1094,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'one-more-and-then-you',
+      bind: TRAPPIST_WORLDS,
       type: 'question',
       title: 'One more, and then you are done',
       kind: 'choice',
@@ -982,6 +1116,7 @@ const GOLDILOCKS = {
     },
     {
       sid: 'what-you-worked-out',
+      bind: TRAPPIST_WORLDS,
       type: 'read',
       title: 'What you worked out',
       body: `Starting from a planet and a star, you found all of this yourself:

@@ -59,18 +59,14 @@ export default {
     },
     {
       title: 'Obsérvalas',
-      body: 'Aquí están, con una estela detrás de cada una para que veas dónde ha estado.\n\nNo midas nada todavía. Solo observa unos segundos y fíjate en lo que hace cada estrella.',
-      tool: {
-        title: 'Dos estrellas',
-        note: 'Dos estrellas de igual masa, separadas cuatro UA. Las estelas muestran dónde ha estado cada una.',
-      },
+      body: 'Las dos estrellas están en el lienzo principal, con una estela detrás de cada una para que veas dónde ha estado. No son un dibujo: las mueve la simulación, la misma que hace funcionar todo lo demás en Gravitas.\n\nNo midas nada todavía. Observa unos segundos y fíjate en lo que hace cada estrella. Luego haz clic en una de ellas, o usa <strong>Objetos de esta actividad</strong> más abajo, y lee su ficha.',
       checklist: [
         'Observa hasta que cada estrella haya dado al menos una vuelta completa',
         'Sigue la Estrella A con la vista durante una vuelta entera',
         'Ahora sigue la Estrella B durante una vuelta entera',
-        'Pulsa Ejecutar / Pausar para congelar la imagen y mira las dos estelas',
+        'Selecciona cada estrella por turno y comprueba que las dos masas son de verdad iguales',
       ],
-      tip: 'Los botones Ejecutar / Pausar y Reiniciar están debajo de la imagen. Pausar suele ser la manera más fácil de mirar algo con detenimiento.',
+      tip: 'Los controles de velocidad y pausa son los del propio simulador, abajo en la ventana. Pausar suele ser la manera más fácil de mirar algo con detenimiento.',
     },
     {
       title: '¿Qué se movió?',
@@ -87,11 +83,7 @@ export default {
     },
     {
       title: '¿Alrededor de qué giran?',
-      body: 'Si ambas estrellas se mueven, y están siempre en lados opuestos la una de la otra, entonces hay un punto entre ellas que ninguna estrella visita nunca y que no se mueve en absoluto.\n\nEse punto tiene nombre. Es el <strong>baricentro</strong>, que no es más que una palabra técnica para el punto de equilibrio de las dos estrellas: el lugar donde el par se equilibraría si pudieras ponerlas en un balancín.\n\nAhora está marcado en la imagen con una cruz. Observa cómo las estrellas giran a su alrededor.',
-      tool: {
-        title: 'El punto de equilibrio',
-        note: 'La cruz es el baricentro: el punto de equilibrio de las dos estrellas. Ninguna estrella llega nunca hasta él, y él no se mueve nunca.',
-      },
+      body: 'Si ambas estrellas se mueven, y están siempre en lados opuestos la una de la otra, entonces hay un punto entre ellas que ninguna estrella visita nunca y que no se mueve en absoluto.\n\nEse punto tiene nombre. Es el <strong>baricentro</strong>, que no es más que una palabra técnica para el punto de equilibrio de las dos estrellas: el lugar donde el par se equilibraría si pudieras ponerlas en un balancín.\n\nAhora está marcado en el lienzo principal con una cruz, con una línea discontinua hasta cada estrella. Observa cómo las dos estrellas giran a su alrededor, y cómo la cruz se queda donde está.\n\nLa cruz está dibujada como un instrumento, no como un objeto: ahí no hay nada. Es un lugar, calculado a partir de dónde están las dos estrellas en este instante.',
       tip: 'Todo par en órbita del universo tiene uno de estos, incluidos la Tierra y la Luna. El baricentro Tierra-Luna está dentro de la Tierra, a unos mil seiscientos kilómetros bajo la superficie, y la Tierra gira a su alrededor una vez al mes.',
     },
     {
@@ -271,23 +263,19 @@ export default {
     },
     {
       title: 'Medida uno: ¿cómo de grande es la órbita?',
-      body: 'La imagen tiene ahora anillos dibujados, uno cada unidad astronómica, centrados en el punto de equilibrio. Son tu regla.\n\nPausa el sistema cuando las dos estrellas estén bien alineadas, y lee lo lejos que está cada estrella del centro. Después recuerda lo que dijo el paso anterior: el tamaño orbital <strong>a</strong> es la distancia de una estrella <em>a la otra</em>, así que suma las dos lecturas.',
-      tool: {
-        title: 'Mide la órbita',
-        note: 'Cada anillo está a una UA del punto de equilibrio. Pausa con el botón Ejecutar / Pausar para leer las posiciones.',
-      },
+      body: 'El par del lienzo es ahora otro distinto: dos estrellas cuyas masas no te han dicho. El punto de equilibrio está marcado, con una línea discontinua hasta cada estrella, y el panel mide esas dos líneas por ti mientras el par gira.\n\nPausa el simulador y léelas. Después recuerda lo que dijo el paso anterior: el tamaño orbital <strong>a</strong> es la distancia de una estrella <em>a la otra</em>, así que es la suma de las dos, que el panel también te da para que puedas comprobarlo.',
       checklist: [
-        'Pausa el sistema con el botón Ejecutar / Pausar',
-        'Lee en qué anillo está la Estrella A',
-        'Lee en qué anillo está la Estrella B',
-        'Súmalos para obtener la distancia de estrella a estrella',
+        'Pausa el simulador y mira las dos líneas discontinuas',
+        'Lee la distancia de la Estrella A al punto de equilibrio',
+        'Lee la distancia de la Estrella B al punto de equilibrio',
+        'Súmalas, y compruébalo con la cifra de estrella a estrella',
         'Vuelve a ponerlo en marcha y comprueba que tu lectura sigue valiendo una vuelta después',
       ],
-      tip: 'La Estrella A está en el anillo de 1 UA y la Estrella B en el de 3 UA, así que las dos estrellas están a 4 UA. Anótalo: a = 4 UA.',
+      tip: 'La Estrella A está a alrededor de 1 UA del punto de equilibrio y la Estrella B a unas 3 UA, así que las dos estrellas están a 4 UA. Anótalo: a = 4 UA. Las masas siguen ocultas: la ficha está cerrada en esta pantalla a propósito.',
     },
     {
       title: 'Medida dos: ¿cuánto dura una vuelta?',
-      body: 'Ahora cronométralo. Hay un cronómetro debajo de la imagen, y un reloj en la esquina que cuenta años simulados.\n\nPulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer. Aparecerá una línea de puntos en esa posición. Después espera, observa a la Estrella A dar la vuelta entera, y pulsa <strong>Parar</strong> en el momento en que vuelva a cruzar la línea.',
+      body: 'Ahora cronométralo. El panel tiene un cronómetro y un reloj que cuenta años simulados, y el par que cronometra es el del lienzo.\n\nPulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer. Aparecerá una línea de puntos en esa posición. Después espera, observa a la Estrella A dar la vuelta entera, y pulsa <strong>Parar</strong> en el momento en que vuelva a cruzar la línea.\n\nCuando estés conforme con el cronometraje, pulsa <strong>Capturar esta órbita</strong>. Eso guarda en tu cuaderno la separación que acabas de medir, las dos distancias al punto de equilibrio y tu cronometraje, y marca el periodo como cronometrado por ti y no tomado del modelo, que es la diferencia entre una medida y una predicción.',
       tool: {
         title: 'Cronometra una vuelta',
         note: 'Pulsa Marcar, espera a que la Estrella A vuelva a la línea de puntos, y pulsa Parar. El reloj corre en años simulados.',
@@ -298,6 +286,7 @@ export default {
         'Pulsa Parar cuando vuelva a cruzar la línea',
         'Lee el cronómetro: debería estar cerca de un número entero de años',
         'Si se te pasó, pulsa Marcar otra vez y vuelve a intentarlo',
+        'Pulsa Capturar esta órbita para poner la medida en tu cuaderno',
       ],
       tip: 'No tiene que ser perfecto. Cualquier valor entre 3,5 y 4,5 años te llevará a la respuesta correcta, porque la respuesta es un número entero.',
     },
@@ -327,18 +316,14 @@ export default {
     },
     {
       title: 'De vuelta al punto de equilibrio',
-      body: 'Los anillos están de vuelta. Esta vez léelos al revés: no para sumar las dos distancias, sino para compararlas.\n\n¿Qué estrella se queda más cerca del punto de equilibrio?',
-      tool: {
-        title: '¿Cuál se queda más cerca?',
-        note: 'Los anillos están separados una UA, centrados en el punto de equilibrio.',
-      },
+      body: 'El punto de equilibrio está otra vez en el lienzo. Esta vez lee las dos líneas discontinuas al revés: no para sumar las distancias, sino para compararlas.\n\n¿Qué estrella se queda más cerca del punto de equilibrio?',
       checklist: [
         'Lee la distancia de la Estrella A al punto de equilibrio',
         'Lee la distancia de la Estrella B al punto de equilibrio',
         'Calcula cuántas veces más lejos está la Estrella B',
         'Decide cuál de las dos tiene que ser la estrella más pesada',
       ],
-      tip: 'La Estrella A está en el anillo de 1 UA. La Estrella B está en el de 3 UA. La Estrella B recorre tres veces más distancia.',
+      tip: 'La Estrella A está a alrededor de 1 UA. La Estrella B está a unas 3 UA. La Estrella B recorre tres veces más distancia, así que la Estrella A tiene que ser tres veces más pesada.',
     },
     {
       title: 'Separarlas',
@@ -376,7 +361,7 @@ export default {
     },
     {
       title: 'Alguien hizo esto de verdad',
-      body: 'Sirio es la estrella más brillante del cielo nocturno. En 1844 Friedrich Bessel advirtió que no se movía en línea recta por el cielo: se bamboleaba. Concluyó que tenía que haber algo pesado a su lado que nadie podía ver. Dieciocho años después, un fabricante de telescopios que probaba una lente nueva lo encontró.\n\nEl panel muestra lo que los astrónomos han registrado desde entonces: la posición de la compañera tenue respecto a la estrella brillante, una vez cada cinco años. Avanza por las décadas y observa cómo la órbita aparece punto a punto.',
+      body: 'Sirio es la estrella más brillante del cielo nocturno. En 1844 Friedrich Bessel advirtió que no se movía en línea recta por el cielo: se bamboleaba. Concluyó que tenía que haber algo pesado a su lado que nadie podía ver. Dieciocho años después, un fabricante de telescopios que probaba una lente nueva lo encontró.\n\nEl panel muestra lo que los astrónomos han registrado desde entonces: la posición de la compañera tenue respecto a la estrella brillante, una vez cada cinco años. Avanza por las décadas y observa cómo la órbita aparece punto a punto.\n\nEstos puntos son de otra clase que todo lo demás de esta lección. Cada número que has medido hasta ahora salió de la simulación del lienzo, que sigue corriendo detrás de este panel y sigue siendo el par que pesaste. Estos son <strong>observaciones de una estrella real</strong>, hechas por telescopios reales a lo largo de ciento sesenta años. Nada de lo que hay en el lienzo es Sirio, y la simulación no tuvo parte alguna en producirlos.',
       checklist: [
         'Avanza hasta 1910 y observa lo poco que puede deducirse de tres puntos',
         'Avanza hasta 1925 y observa cómo empieza a formarse una curva',

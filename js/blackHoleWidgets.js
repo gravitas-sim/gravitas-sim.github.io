@@ -51,6 +51,7 @@ import {
 // through the registry - and a readout that prints its own message ids because
 // of who called it is a bug in the widget, not in the caller.
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { captureToNotebook } from './widgetRuntime.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -355,7 +356,7 @@ const SCALING = {
       decimals: 0,
     },
   ],
-  actions: [
+  actions: (spec = {}) => [
     {
       id: 'record',
       get label() {
@@ -368,6 +369,19 @@ const SCALING = {
         return t('bhW.clearTrials');
       },
     },
+    // Offered only where a step asks for it. What goes to the notebook is the
+    // run the student designed, and the entry is explicit that every radius in
+    // it was computed rather than measured.
+    ...(spec.capture
+      ? [
+          {
+            id: 'capture',
+            get label() {
+              return t('bhW.captureTrials');
+            },
+          },
+        ]
+      : []),
   ],
   reset(v, { spec = {} } = {}) {
     // Moving between the steps of one experiment keeps the table; arriving
@@ -377,6 +391,14 @@ const SCALING = {
     if (trials.session !== session) trials = { session, points: [] };
   },
   act(id, v) {
+    if (id === 'capture') {
+      if (!trials.points.length) return;
+      const points = trials.points.map(p => ({ ...p }));
+      captureToNotebook((capture, provenance) =>
+        capture.fromHorizonTrials({ trials: points, provenance })
+      ).catch(() => {});
+      return;
+    }
     if (id === 'clear') {
       trials.points = [];
       return;

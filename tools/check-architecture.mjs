@@ -81,6 +81,12 @@ const LAYERS = [
       // lesson registry so that a deferred registry can read the language the
       // application already chose. Imports nothing itself.
       /^js\/lessonLocale\.js$/,
+      // Which object a lesson means, and what it borrowed. Identity rules over
+      // values handed in - no object lists, no DOM, no clock - which is what
+      // lets the authoring tools and the tests reason about a lesson's
+      // bindings in plain Node. js/lessonScene.js is the half that knows where
+      // the bodies are, and it lives in the feature layer where it belongs.
+      /^js\/lesson\//,
     ],
   },
   {

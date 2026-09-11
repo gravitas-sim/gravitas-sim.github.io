@@ -41,6 +41,53 @@ const SCHEDULE_A = { cadence: 0.32, n: 12, sigma: 8, mp: 0.69, seed: 1 };
 /** Twelve measurements taken one orbit apart. */
 const SCHEDULE_B = { cadence: 3.52, n: 12, sigma: 8, mp: 0.69, seed: 1 };
 
+// The two schedules are a controlled comparison and it is worth being exact
+// about what is controlled. Same star, same planet (mp), same instrument
+// precision (sigma), same number of nights (n), same random draw (seed). One
+// thing differs: the cadence, and with it the baseline the twelve nights span.
+// Anything a student concludes from the two is a conclusion about cadence.
+
+/** The target, bound by exact name so a step can say which star it means. */
+const TARGET = {
+  star: { name: 'HD 209458' },
+  planet: { name: 'HD 209458 b' },
+};
+
+/**
+ * Where the target actually is, beside what the planner is assuming.
+ *
+ * The planner works in days since the run began and the canvas works in
+ * position, and until now nothing connected the two: a student could read
+ * "phase coverage 3 of 10" without ever seeing that a phase is a place the
+ * star is in its orbit. The first three rows are the live star; the last two
+ * are the schedule the panel is drawing.
+ */
+const targetRows = ctx => {
+  const now = ctx.rvNow();
+  if (!now) {
+    return [{ label: 'Target', value: 'select the star on the canvas' }];
+  }
+  const rows = [{ label: 'Target', value: now.name }];
+  if (now.held) {
+    rows.push({
+      label: 'Spectrograph',
+      value: 'this star is pinned, so there is no reflex motion to measure',
+    });
+    return rows;
+  }
+  rows.push(
+    {
+      label: 'Where it is in its orbit now',
+      value: `${now.phaseDeg.toFixed(0)}°`,
+    },
+    {
+      label: 'What a spectrograph reads now',
+      value: `${now.velocity.toFixed(1)} m/s — ${now.towards}`,
+    }
+  );
+  return rows;
+};
+
 const DETECT_THIS_PLANET = {
   id: 'detect-this-planet',
   thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
@@ -71,13 +118,22 @@ const DETECT_THIS_PLANET = {
     // --- Part 1: the question is about the schedule, not the planet ---------
     {
       sid: 'twelve-nights',
+      bind: TARGET,
+      allowInspector: true,
+      // The screen asks the reader to pick the target, so it shows them what
+      // they have picked. Every instrument later in the lesson measures
+      // whichever star is selected, and a run planned against nothing is the
+      // commonest way this lesson stalls.
+      probe: targetRows,
       type: 'read',
       title: 'Twelve nights',
       setup: RV_LAB,
       body: `You have been given twelve nights on a spectrograph. Not twelve
              consecutive nights necessarily - twelve nights, to use when you
              like, over as long a run as you care to ask for.
-             \n\nThe target is the star on screen. Somewhere around it, too faint
+             \n\nThe target is the star on screen — click it, or use
+             <strong>Objects in this activity</strong> below, so the instrument
+             knows which star you mean. Somewhere around it, too faint
              to see, there may or may not be a planet. Your twelve measurements
              of the star's velocity are all the evidence you are going to get.
              \n\nThe usual question is <em>is there a planet</em>. This lesson
@@ -88,6 +144,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'what-decides-whether-you-find',
+      bind: TARGET,
       type: 'predict',
       title: 'What decides whether you find it?',
       body: `Four things are obviously true of any observing run: how many
@@ -113,6 +170,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 2: a schedule that works --------------------------------------
     {
       sid: 'schedule-a-twelve-nights-one',
+      bind: TARGET,
       type: 'explore',
       title: 'Schedule A: twelve nights, one orbit',
       body: `This instrument plans a run and shows you what it would come home
@@ -131,13 +189,17 @@ const DETECT_THIS_PLANET = {
       },
       checklist: [
         'Read the phase coverage: how many of the ten bins of the cycle hold at least one measurement',
+        'Watch the star on the canvas and match its position to a phase in that folded panel',
         'Compare the scatter of the measurements with the scatter expected from noise alone',
         'Set the uncertainty to zero and watch the points fall exactly on the dashed curve',
       ],
-      tip: 'The right-hand panel is folded on the true period. A real survey does not know the period, which is part of why this is harder in practice than it looks here.',
+      allowInspector: true,
+      probe: targetRows,
+      tip: 'A "phase" is a place the star is in its orbit, not an abstraction: the readout below gives the phase the star is at right now, and the folded panel is the same axis. The right-hand panel is folded on the true period, which a real survey does not know — part of why this is harder in practice than it looks here.',
     },
     {
       sid: 'write-down-what-schedule-a',
+      bind: TARGET,
       type: 'measure',
       title: 'Write down what Schedule A got',
       body: `Put the instrument back on <strong>Schedule A: one cycle</strong>
@@ -190,6 +252,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'what-have-you-established',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'What have you established?',
@@ -222,6 +285,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 3: a schedule that fails --------------------------------------
     {
       sid: 'schedule-b-twelve-nights-thirty',
+      bind: TARGET,
       type: 'predict',
       title: 'Schedule B: twelve nights, thirty-nine days',
       body: `Now the second plan. The same star, the same instrument, the same
@@ -244,13 +308,25 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'the-same-planet-invisible',
+      bind: TARGET,
+      allowInspector: true,
+      probe: targetRows,
       type: 'explore',
       title: 'The same planet, invisible',
       body: `Switch the preset to <strong>Schedule B: one cycle apart</strong>.
              \n\nThe left panel now covers thirty-nine days instead of three and
              a half, and the twelve measurements are almost a flat line. The
              right panel shows why: fold them onto the cycle and they pile up in
-             two bins out of ten.`,
+             two bins out of ten.
+             \n\nBe exact about what has changed and what has not. Same star,
+             same planet, same instrument precision, same twelve nights, same
+             random draw. One thing differs: how far apart the nights are. So
+             anything you conclude from comparing these two runs is a conclusion
+             about <em>cadence</em>, and about nothing else.
+             \n\nThe star on the canvas has not changed either. Watch where it
+             is when each measurement would have been taken — a cadence of one
+             orbit means catching it at nearly the same place in its orbit every
+             time, which is why twelve measurements can tell you almost nothing.`,
       tool: {
         id: 'survey-schedule',
         values: SCHEDULE_B,
@@ -265,6 +341,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'write-down-what-schedule-b',
+      bind: TARGET,
       type: 'measure',
       title: 'Write down what Schedule B got',
       body: `With the preset on <strong>Schedule B</strong>, uncertainty 8 m/s
@@ -310,6 +387,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'why-it-failed',
+      bind: TARGET,
       type: 'question',
       kind: 'numeric',
       title: 'Why it failed',
@@ -333,6 +411,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 4: three knobs, not one ---------------------------------------
     {
       sid: 'the-third-knob',
+      bind: TARGET,
       type: 'explore',
       title: 'The third knob',
       body: `Cadence is one of three separate things, and it is worth seeing the
@@ -357,6 +436,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'ambiguous-evidence',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'Ambiguous evidence',
@@ -387,6 +467,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 5: the live star ----------------------------------------------
     {
       sid: 'do-it-to-the-real',
+      bind: TARGET,
       type: 'explore',
       title: 'Do it to the real star',
       setup: RV_LAB,
@@ -409,6 +490,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'take-the-data-with-you',
+      bind: TARGET,
       type: 'read',
       title: 'Take the data with you',
       body: `A run can be exported. Open <strong>Export data</strong> from the
@@ -427,6 +509,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 6: what a flat line means -------------------------------------
     {
       sid: 'the-limits-of-finding-nothing',
+      bind: TARGET,
       type: 'question',
       kind: 'short',
       title: 'The limits of finding nothing',
@@ -455,6 +538,7 @@ const DETECT_THIS_PLANET = {
     // --- Part 6: the other method, and its own version of the problem -------
     {
       sid: 'the-other-way-to-find-one',
+      bind: TARGET,
       type: 'read',
       title: 'The other way to find one',
       body: `Everything so far has watched the star move. There is a second
@@ -473,6 +557,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'how-deep-is-an-earth',
+      bind: TARGET,
       type: 'question',
       kind: 'numeric',
       title: 'How deep is an Earth?',
@@ -506,6 +591,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'the-noise-budget',
+      bind: TARGET,
       type: 'explore',
       title: 'What a transit is competing with',
       body: `A depth is only half the question. The other half is everything else
@@ -546,6 +632,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'the-same-planet-from-the-ground',
+      bind: TARGET,
       type: 'predict',
       title: 'The same planet, from the ground',
       body: `Take that identical planet — same star, same 5,900 ppm depth, same
@@ -572,6 +659,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'the-floor',
+      bind: TARGET,
       type: 'explore',
       title: 'How far can patience get you?',
       body: `Switch the instrument to <strong>Same planet, from the ground</strong>.
@@ -604,6 +692,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'white-noise-and-red-noise',
+      bind: TARGET,
       type: 'read',
       title: 'Three kinds of noise, three different answers',
       body: `Noise is usually taught as two kinds. It is more useful here as
@@ -635,6 +724,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'assumptions-of-the-model',
+      bind: TARGET,
       type: 'read',
       title: 'What this model is pretending',
       body: `The panel makes two assumptions about the middle term and they are
@@ -659,6 +749,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'read-two-budgets',
+      bind: TARGET,
       type: 'measure',
       title: 'Two budgets, side by side',
       body: `Read the depth-over-noise for two of the presets, and read the
@@ -707,6 +798,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'why-more-nights-do-not-help',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'Where does patience stop paying?',
@@ -734,6 +826,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'the-edge-of-what-tess-can-do',
+      bind: TARGET,
       type: 'explore',
       title: 'The edge of what a survey can do',
       body: `Now three real cases from TESS, in order of difficulty.
@@ -759,6 +852,7 @@ const DETECT_THIS_PLANET = {
     },
     {
       sid: 'what-would-it-take',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'What would it take?',
@@ -789,6 +883,7 @@ const DETECT_THIS_PLANET = {
 
     {
       sid: 'what-you-decided-before-you',
+      bind: TARGET,
       type: 'read',
       title: 'What you decided before you looked',
       body: `Two methods, and the same lesson twice.

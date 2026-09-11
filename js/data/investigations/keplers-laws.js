@@ -17,6 +17,38 @@ const fixed = (v, n = 3) => (Number.isFinite(v) ? v.toFixed(n) : '-');
 
 // --- 1. Kepler's Laws ---------------------------------------------------------
 
+/**
+ * The bodies each scene of this lesson is about, bound by exact name.
+ *
+ * The lesson always told a reader which body to click, in prose. That works
+ * until somebody clicks the wrong one, and then nothing on screen says which
+ * was meant. A binding puts the intended bodies in the panel's object list, so
+ * the answer to "which orbiter?" is a chip rather than a re-read - and the
+ * list is also the keyboard route to a selection, which prose is not.
+ */
+const KEPLER_PAIR = {
+  star: { name: 'Kepler Star' },
+  circular: { name: 'Circular Orbiter' },
+  eccentric: { name: 'Eccentric Orbiter' },
+};
+
+/** The Solar System steps: the star plus the planets worth measuring. */
+const SOLAR = {
+  sun: { name: 'Sun' },
+  mercury: { name: 'Mercury' },
+  earth: { name: 'Earth' },
+  jupiter: { name: 'Jupiter' },
+  saturn: { name: 'Saturn' },
+};
+
+/** TRAPPIST-1 and the three planets the weighing step uses. */
+const TRAPPIST_1 = {
+  star: { name: 'TRAPPIST-1' },
+  e: { name: 'TRAPPIST-1e' },
+  f: { name: 'TRAPPIST-1f' },
+  g: { name: 'TRAPPIST-1g' },
+};
+
 const KEPLER = {
   id: 'keplers-laws',
   thumbnail: 'images/scenarios/keplers-2nd-law.webp',
@@ -40,6 +72,7 @@ const KEPLER = {
   steps: [
     {
       sid: 'eight-minutes-of-arc',
+      bind: KEPLER_PAIR,
       type: 'read',
       title: 'Eight minutes of arc',
       body: `For most of recorded history orbits were circles. When observations
@@ -70,6 +103,7 @@ const KEPLER = {
     },
     {
       sid: 'what-you-are-looking-at',
+      bind: KEPLER_PAIR,
       type: 'read',
       title: 'What you are looking at',
       body: `A single star of one solar mass sits at the center of the view with
@@ -89,6 +123,7 @@ const KEPLER = {
     },
     {
       sid: 'where-is-the-star',
+      bind: KEPLER_PAIR,
       type: 'predict',
       title: 'Where is the star?',
       body: `An ellipse has a center and two foci. For a circle all three
@@ -109,6 +144,7 @@ const KEPLER = {
     },
     {
       sid: 'the-first-law-and-the',
+      bind: KEPLER_PAIR,
       type: 'read',
       title: 'The First Law, and the anatomy of an ellipse',
       body: `Kepler's <strong>first law</strong>: every planet moves on an
@@ -128,6 +164,7 @@ const KEPLER = {
     },
     {
       sid: 'change-the-shape',
+      bind: KEPLER_PAIR,
       type: 'ellipse',
       title: 'Change the shape',
       start: 0.017,
@@ -194,6 +231,7 @@ const KEPLER = {
     },
     {
       sid: 'what-sits-at-the-other',
+      bind: KEPLER_PAIR,
       type: 'question',
       title: 'What sits at the other focus?',
       kind: 'choice',
@@ -212,6 +250,7 @@ const KEPLER = {
     },
     {
       sid: 'measure-the-two-orbits',
+      bind: KEPLER_PAIR,
       type: 'measure',
       title: 'Measure the two orbits',
       body: `Click the <strong>Circular Orbiter</strong> and read its values from
@@ -293,6 +332,7 @@ const KEPLER = {
     },
     {
       sid: 'where-does-it-move-fastest',
+      bind: KEPLER_PAIR,
       type: 'predict',
       title: 'Where does it move fastest?',
       body: `Kepler's second law says a line drawn from the star to the planet
@@ -311,6 +351,7 @@ const KEPLER = {
     },
     {
       sid: 'watch-it-happen',
+      bind: KEPLER_PAIR,
       type: 'explore',
       title: 'Watch it happen',
       body: `Let the simulation run and keep the eccentric planet selected. The
@@ -337,6 +378,7 @@ const KEPLER = {
     },
     {
       sid: 'equal-areas-however-you-slice',
+      bind: KEPLER_PAIR,
       type: 'wedges',
       title: 'Equal areas, however you slice it',
       body: `The orbit on screen is cut into equal-time slices, and every slice
@@ -351,6 +393,7 @@ const KEPLER = {
     },
     {
       sid: 'fast-and-slow-in-numbers',
+      bind: KEPLER_PAIR,
       type: 'measure',
       title: 'Fast and slow, in numbers',
       body: `Now put numbers on it — and let the simulation find the two
@@ -492,6 +535,7 @@ const KEPLER = {
     },
     {
       sid: 'why-the-speed-changes',
+      bind: KEPLER_PAIR,
       type: 'question',
       title: 'Why the speed changes',
       kind: 'short',
@@ -505,6 +549,7 @@ const KEPLER = {
     },
     {
       sid: 'kepler-s-third-law',
+      bind: SOLAR,
       type: 'read',
       title: "Kepler's third law",
       body: `The first two laws describe a single orbit. The third relates
@@ -544,6 +589,7 @@ const KEPLER = {
     },
     {
       sid: 'measure-four-planets',
+      bind: SOLAR,
       type: 'measure',
       title: 'Measure four planets',
       body: `Click each planet in turn and record its semi-major axis and
@@ -670,6 +716,7 @@ const KEPLER = {
     },
     {
       sid: 'work-the-law-out-step',
+      bind: SOLAR,
       // The two values in the first two boxes are copied from the table the
       // student filled in there; without it this step asks them to copy numbers
       // they were never asked to write down.
@@ -748,6 +795,7 @@ const KEPLER = {
     },
     {
       sid: 'use-the-law',
+      bind: SOLAR,
       type: 'question',
       title: 'Use the law',
       kind: 'numeric',
@@ -806,6 +854,7 @@ const KEPLER = {
     },
     {
       sid: 'what-the-constant-depends-on',
+      bind: SOLAR,
       type: 'question',
       title: 'What the constant depends on',
       kind: 'choice',
@@ -825,6 +874,7 @@ const KEPLER = {
     },
     {
       sid: 'what-newton-added',
+      bind: TRAPPIST_1,
       type: 'read',
       title: 'What Newton added',
       body: `Kepler's three laws describe the Solar System, but they do not
@@ -858,6 +908,7 @@ const KEPLER = {
     },
     {
       sid: 'the-same-laws-forty-light',
+      bind: TRAPPIST_1,
       type: 'explore',
       showAreaSweep: true,
       title: 'The same laws, forty light years away',
@@ -900,6 +951,7 @@ const KEPLER = {
     },
     {
       sid: 'weigh-trappist-1-yourself',
+      bind: TRAPPIST_1,
       type: 'measure',
       title: 'Weigh TRAPPIST-1 yourself',
       body: `Pick any one of the seven planets, read its semi-major axis and
@@ -997,6 +1049,7 @@ const KEPLER = {
     },
     {
       sid: 'weighing-another-star',
+      bind: TRAPPIST_1,
       type: 'question',
       title: 'Weighing another star',
       kind: 'numeric',
@@ -1043,6 +1096,7 @@ const KEPLER = {
     },
     {
       sid: 'where-kepler-s-version-breaks',
+      bind: TRAPPIST_1,
       type: 'question',
       title: "Where Kepler's version breaks",
       kind: 'choice',
@@ -1061,6 +1115,7 @@ const KEPLER = {
     },
     {
       sid: 'where-this-leaves-you',
+      bind: TRAPPIST_1,
       type: 'read',
       title: 'Where this leaves you',
       body: `You have measured the shape of an orbit, watched a planet trade

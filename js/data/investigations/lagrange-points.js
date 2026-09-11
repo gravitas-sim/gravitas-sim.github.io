@@ -40,6 +40,60 @@ const LAB = {
   paused: false,
 };
 
+/**
+ * The restricted three-body cast, bound by exact name.
+ *
+ * The lesson is about where a third body can sit relative to two others, and
+ * the two others have to be identifiable for that to mean anything. The tracer
+ * is the one the reader moves.
+ */
+const RESTRICTED = {
+  primary: { name: 'Primary' },
+  secondary: { name: 'Secondary' },
+  tracer: { name: 'Tracer' },
+};
+
+/**
+ * Where the tracer is, and whether it is inside the neck.
+ *
+ * The lesson's claim is that an accessible region is not the same as a
+ * realized path. That is a statement about a boundary, and a reader could only
+ * see the boundary in a panel. This reports the tracer's distance from each
+ * star live, so "it is in the neck" and "it never crossed" become things
+ * observed on the scene rather than read off a plot.
+ */
+const neckRows = ctx => {
+  const tracer = ctx.role('tracer');
+  const primary = ctx.role('primary');
+  const secondary = ctx.role('secondary');
+  if (!tracer || !primary || !secondary) {
+    return [{ label: 'The tracer', value: 'not on the canvas' }];
+  }
+  const d = (a, b) => Math.hypot(a.pos.x - b.pos.x, a.pos.y - b.pos.y);
+  const sep = d(primary, secondary);
+  const toP = d(tracer, primary);
+  const toS = d(tracer, secondary);
+  return [
+    {
+      label: 'Tracer to the primary',
+      value: `${(toP / sep).toFixed(3)} separations`,
+    },
+    {
+      label: 'Tracer to the secondary',
+      value: `${(toS / sep).toFixed(3)} separations`,
+    },
+    {
+      label: 'Which side of the pair it is on',
+      value: toP < toS ? 'the primary’s' : 'the secondary’s',
+      emphasis: true,
+    },
+    {
+      label: 'What crossing would look like',
+      value: 'that answer changing while you watch',
+    },
+  ];
+};
+
 const LAGRANGE_POINTS = {
   id: 'lagrange-points',
   thumbnail: 'images/scenarios/lagrange-point-lab.webp',
@@ -68,6 +122,7 @@ const LAGRANGE_POINTS = {
     // --- Part 1: the setup ----------------------------------------------------
     {
       sid: 'two-stars-and-a-speck',
+      bind: RESTRICTED,
       type: 'read',
       title: 'Two stars and a speck',
       setup: LAB,
@@ -85,6 +140,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'the-rotating-frame',
+      bind: RESTRICTED,
       type: 'read',
       title: 'Ride along with them',
       body: `Watching from outside, the two stars go round and nothing stands
@@ -102,6 +158,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'predict-forbidden',
+      bind: RESTRICTED,
       type: 'predict',
       title: 'Is anywhere off limits?',
       body: `The tracer has some energy. Some places would need more energy than
@@ -122,6 +179,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'the-jacobi-constant',
+      bind: RESTRICTED,
       type: 'read',
       title: 'One number that does not change',
       body: `In the rotating frame there is a quantity that stays fixed along
@@ -140,6 +198,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'read-the-constant',
+      bind: RESTRICTED,
       type: 'measure',
       title: 'Read it',
       body: `Read the Jacobi constant from the panel, then use the speed control
@@ -152,6 +211,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'why-conserved-matters',
+      bind: RESTRICTED,
       type: 'question',
       kind: 'choice',
       title: 'Why one number is worth so much',
@@ -172,6 +232,7 @@ const LAGRANGE_POINTS = {
     // --- Part 2: the five points ----------------------------------------------
     {
       sid: 'five-places',
+      bind: RESTRICTED,
       type: 'read',
       title: 'Five places to stand still',
       body: `In the rotating frame there are exactly five points where a tracer
@@ -189,6 +250,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'l4-distance',
+      bind: RESTRICTED,
       type: 'question',
       kind: 'numeric',
       title: 'How far is L4 from each star?',
@@ -206,6 +268,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'critical-order',
+      bind: RESTRICTED,
       type: 'read',
       title: 'The walls open in a fixed order',
       body: `Each of the five points has its own Jacobi constant — the value a
@@ -221,6 +284,9 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'open-the-neck',
+      bind: RESTRICTED,
+      allowInspector: true,
+      probe: neckRows,
       type: 'explore',
       title: 'Open the neck',
       body: `The tracer starts nearly at rest in the rotating frame, so its C is
@@ -240,6 +306,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'accessible-not-reachable',
+      bind: RESTRICTED,
       type: 'predict',
       title: 'The neck is open. Now what?',
       body: `The wall between the two stars has gone. The tracer is
@@ -261,6 +328,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'predict-same-region-same-path',
+      bind: RESTRICTED,
       type: 'predict',
       title: 'Same permission, same route?',
       setup: LAB,
@@ -288,6 +356,9 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'watch-it-not-cross',
+      bind: RESTRICTED,
+      allowInspector: true,
+      probe: neckRows,
       type: 'explore',
       title: 'Watch one cross and one not',
       setup: LAB,
@@ -332,6 +403,7 @@ const LAGRANGE_POINTS = {
     // --- Part 3: stability, the third question --------------------------------
     {
       sid: 'stability-is-different',
+      bind: RESTRICTED,
       type: 'read',
       title: 'A third question',
       body: `So far there have been two questions that sound alike:
@@ -344,6 +416,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'predict-stability',
+      bind: RESTRICTED,
       type: 'predict',
       title: 'Which ones survive a nudge?',
       body: `L1, L2 and L3 sit on the line between the stars, at what are
@@ -362,6 +435,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'trojans',
+      bind: RESTRICTED,
       type: 'read',
       title: 'Which is why the Trojans exist',
       body: `Sun to Jupiter is a mass ratio of 0.000955, well under Routh's
@@ -379,6 +453,9 @@ const LAGRANGE_POINTS = {
     // --- Part 4: what it all rests on -----------------------------------------
     {
       sid: 'break-it',
+      bind: RESTRICTED,
+      allowInspector: true,
+      probe: neckRows,
       type: 'explore',
       title: 'Break it on purpose',
       body: `Everything you have read depends on assumptions the panel checks
@@ -395,6 +472,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'which-assumption',
+      bind: RESTRICTED,
       type: 'question',
       kind: 'choice',
       title: 'Which one breaks first?',
@@ -413,6 +491,7 @@ const LAGRANGE_POINTS = {
     },
     {
       sid: 'three-claims',
+      bind: RESTRICTED,
       type: 'read',
       title: 'Three claims, kept apart',
       body: `The thing worth carrying away is that these are three different

@@ -28,16 +28,43 @@
 // student to watch an animation run to completion.
 // =============================================================================
 
-/** A quiet backdrop. Nothing in this lesson is measured off the sandbox. */
-const LIFECYCLE_SANDBOX = {
-  scenario: 'Stellar Graveyard',
-  seed: 'lives-of-stars',
-  camera: { zoom: 1.1, pan: { x: 0, y: 0 } },
-  paused: true,
-};
+// This lesson stands its star on the main canvas and follows it there.
+//
+// It used to open a Stellar Graveyard, pause it, and say in a note that nothing
+// was measured off it - a backdrop. The protagonist is a body in the sandbox
+// now: `stage` puts it there, `bind` on the instrument joins it to the
+// playhead, and from then on the marker on the H-R diagram, the disc on the
+// canvas and the inspector card are three views of one model state. Nothing
+// rebuilds between steps that follow the same star, so its id, its selection
+// and any snapshot pinned beside it survive the whole of its life.
+//
+// A change of track is a change of star, and the scene says so by rebuilding:
+// the twenty-solar-mass model on screen 24 is not the Sun grown heavier, and
+// it would be a lie to keep the same object for it.
+
+/**
+ * One star, alone on the canvas, for the playhead to drive.
+ *
+ * The initial state hardly matters - `syncProtagonist` in
+ * js/stellarEvolutionWidgets.js overwrites it from the playback on the first
+ * frame - but it is declared from the same track so that the very first paint
+ * is already right rather than briefly wrong.
+ */
+const protagonist = (track, extra = {}) => ({
+  spacing: 95,
+  fit: true,
+  stars: [{ role: 'star', name: 'The star', track, at: 'ms' }],
+  ...extra,
+});
 
 /** The evolutionary playback, parked where a step wants it. */
-const evol = (extra = {}) => ({ id: 'stellar-evolution', ...extra });
+const evol = (extra = {}) => ({
+  id: 'stellar-evolution',
+  // Every evolution screen drives the star on the canvas, not a picture of
+  // one. See `protagonist` above.
+  bind: 'star',
+  ...extra,
+});
 
 /** The lab's diagram, for the recap and the classification steps. */
 const lab = (extra = {}) => ({ id: 'stellar-lab', ...extra });
@@ -47,7 +74,12 @@ const stage = (extra = {}) => ({ id: 'stellar-compare', ...extra });
 
 const LIVES_OF_STARS = {
   id: 'lives-of-stars',
-  thumbnail: 'images/scenarios/stellar-graveyard.webp',
+  // Its own card, drawn from the lesson's own opening stage by
+  // tools/generate-lesson-cards.mjs. It used to borrow the Stellar
+  // Graveyard's capture, which was honest while the lesson opened in that
+  // scenario; it stands its own star on the canvas now and loads no scenario
+  // at all, so that picture would advertise a system the reader never sees.
+  thumbnail: 'images/investigations/lives-of-stars.webp',
   title: 'Lives of Stars',
   subtitle: 'From clouds to cosmic remnants, along eight published tracks',
   duration: '80-100 min',
@@ -71,6 +103,7 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'three-futures',
+      stage: protagonist('m100'),
       type: 'predict',
       title: 'Three stars, three futures',
       body: `On the stage: a red dwarf of a fifth of a solar mass, a star like
@@ -89,7 +122,6 @@ const LIVES_OF_STARS = {
       answer: 2,
       because:
         'The heaviest one, by an enormous margin: its main sequence lasts 8.7 million years against the Sun&rsquo;s 9.9 billion and the red dwarf&rsquo;s 1.1 trillion. "Losing energy fastest" is the right reason - it is a hundred thousand times more luminous than the Sun, and light is fuel leaving. The answers about the other two are the two commonest wrong pictures and both get corrected later: the red dwarf does not burn out quickly, it barely changes at all, and the Sun does not explode.',
-      setup: LIFECYCLE_SANDBOX,
       tool: stage({
         pace: 'phase',
         pins: [{ track: 'm020' }, { track: 'm100' }, { track: 'm2000' }],
@@ -99,6 +131,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-cloud',
+      stage: protagonist('m100'),
       type: 'explore',
       title: 'Before the star',
       body: `Every star here begins in the same place: a cloud of gas, cold and
@@ -122,6 +155,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'predict-protostar-power',
+      stage: protagonist('m100'),
       type: 'predict',
       title: 'What is it running on?',
       body: `Press <strong>Next phase</strong> to reach the first point the
@@ -151,6 +185,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'contraction-luminosity',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Shrinking, and shining while it does',
       body: `Move the playhead across the pre-main-sequence stage and watch the
@@ -185,6 +220,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-pms-track',
+      stage: protagonist('m100'),
       type: 'question',
       title: 'Which way across the diagram?',
       kind: 'choice',
@@ -207,6 +243,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'arriving',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Arriving',
       body: `Press <strong>Next phase</strong>. The readout&rsquo;s phase
@@ -245,6 +282,7 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'the-sun-today',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'The Sun, today',
       body: `Set the age to 4.6 billion years — where the Sun is now. You can
@@ -279,6 +317,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'across-the-main-sequence',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Ten billion years, measured',
       body: `Now run to the end of the main sequence — press
@@ -327,6 +366,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'compare-young-and-old',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Then and now, side by side',
       body: `Two versions of the same star are on the comparison stage: the
@@ -368,6 +408,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'predict-what-runs-out',
+      stage: protagonist('m100'),
       type: 'predict',
       title: 'What exactly runs out?',
       body: `The main sequence ends. Something has been used up.
@@ -389,6 +430,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-interior',
+      stage: protagonist('m100'),
       type: 'explore',
       title: 'What is burning now',
       body: `Turn on the <strong>interior schematic</strong> and step forward
@@ -416,6 +458,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'core-in-envelope-out',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'The core shrinks, the star swells',
       body: `The two things happening at once are the hardest part of this
@@ -471,6 +514,7 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'predict-direction',
+      stage: protagonist('m100'),
       type: 'predict',
       title: 'Which way does it go?',
       body: `You have the numbers: cooler at the surface, far more luminous
@@ -492,6 +536,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'measure-the-giant',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'The giant, measured',
       body: `Park at the tip of the red-giant branch — the largest and coolest
@@ -534,6 +579,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'true-size-then-and-now',
+      stage: protagonist('m100'),
       type: 'explore',
       title: 'To scale',
       body: `Switch the star panel between <strong>true size</strong> and
@@ -555,6 +601,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'helium-and-the-loop',
+      stage: protagonist('m100'),
       type: 'question',
       title: 'It does not simply keep swelling',
       kind: 'choice',
@@ -577,6 +624,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-agb-and-the-wind',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Losing itself',
       body: `Step forward through the asymptotic giant branch. The star swells
@@ -628,6 +676,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'not-a-supernova',
+      stage: protagonist('m100'),
       type: 'predict',
       title: 'Is that an explosion?',
       body: `Half a star has just come off. That sounds violent.
@@ -648,6 +697,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'planetary-nebula',
+      stage: protagonist('m100'),
       type: 'read',
       title: 'A planetary nebula, which is not made of planets',
       body: `The envelope has gone. What is left in the middle is the exposed
@@ -668,6 +718,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'white-dwarf-cooling',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'The cinder',
       body: `Run to the end of the track. What is left is a white dwarf: the
@@ -702,6 +753,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'how-long-was-each-part',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'How long each part really took',
       body: `The playhead has spent about the same amount of screen time on
@@ -750,6 +802,7 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'predict-the-red-dwarf',
+      stage: protagonist('m020'),
       type: 'predict',
       title: 'The star that does none of this',
       body: `Switch to the 0.2 solar-mass model. It is on its main sequence,
@@ -767,12 +820,12 @@ const LIVES_OF_STARS = {
       answer: 1,
       because:
         'Almost nothing happens. Between 4.6 and 13.8 billion years its luminosity goes from 0.00478 to 0.00496 solar - under four per cent - and its radius from 0.221 to 0.224 solar radii. It is fully convective, so it can stir fresh hydrogen down into its core rather than being stuck with what is already there, and it burns what it has extraordinarily slowly. Its main sequence lasts 1.1 trillion years. The two wrong answers here are the two ways students are usually taught to think about small stars, and both give them the Sun&rsquo;s future.',
-      setup: LIFECYCLE_SANDBOX,
       tool: evol({ track: 'm020', phase: 'main-sequence' }),
       tip: 'Press "Next phase" and notice there is nowhere to go: this track has a pre-main sequence and a main sequence and then it stops.',
     },
     {
       sid: 'the-same-age',
+      stage: protagonist('m020'),
       type: 'measure',
       title: 'The same age, two stars',
       body: `A controlled comparison, and it is worth being clear which kind:
@@ -833,6 +886,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'predict-massive-lifetime',
+      stage: protagonist('m2000'),
       type: 'predict',
       title: 'Twenty solar masses',
       body: `Now the other end. Switch to the 20 solar-mass model and look at
@@ -855,6 +909,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'massive-versus-sun',
+      stage: protagonist('m2000'),
       type: 'measure',
       title: 'What that costs',
       body: `Put the two numbers side by side: how much more light, and how
@@ -897,6 +952,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'supergiant-and-burning',
+      stage: protagonist('m2000'),
       type: 'explore',
       title: 'A supergiant, and what is burning in it',
       body: `Follow the 20 solar-mass model past its main sequence with the
@@ -922,6 +978,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'why-iron-stops-it',
+      stage: protagonist('m2000'),
       type: 'question',
       title: 'Why it cannot keep going',
       kind: 'short',
@@ -942,6 +999,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'predict-core-and-envelope',
+      stage: protagonist('m1000'),
       type: 'predict',
       title: 'Two different fates in one star',
       body: `The core is about to collapse. The outer layers — most of the
@@ -963,6 +1021,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-neutron-star',
+      stage: protagonist('m1000'),
       type: 'measure',
       title: 'A neutron star, and how we know',
       body: `Run the 10 solar-mass model to the end. The track stops at carbon
@@ -1003,6 +1062,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'neutron-star-scale',
+      stage: protagonist('m1000'),
       type: 'question',
       title: 'How small, and why you might never see it',
       kind: 'choice',
@@ -1026,6 +1086,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-black-hole',
+      stage: protagonist('m4000'),
       type: 'measure',
       title: 'And one that probably does not explode',
       body: `Switch to the 40 solar-mass model and run it to the end.
@@ -1060,7 +1121,6 @@ const LIVES_OF_STARS = {
             'Three admissions: the track stopped earlier here than for any other massive star — during helium ignition, with 35 of the original 40 solar masses still present; the remnant mass is a range spanning a factor of three and not a number; and a bright supernova is not expected. At this mass the likeliest route to a black hole is a failed explosion, where the envelope is not expelled but falls in.',
         };
       },
-      setup: LIFECYCLE_SANDBOX,
       tool: evol({ track: 'm4000', phase: 'end', capture: true }),
       tip: 'Look at the diagram: the bright line stops where the model stops and nothing continues it. A black hole has no photosphere, so it has no temperature or luminosity to plot, and drawing it at log(0) or at an invented point would be a lie about what is known.',
     },
@@ -1070,6 +1130,7 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'read-the-descriptions',
+      stage: protagonist('m4000'),
       type: 'question',
       title: 'What is this one?',
       kind: 'choice',
@@ -1099,6 +1160,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'design-a-comparison',
+      stage: protagonist('m100'),
       type: 'measure',
       title: 'Your own comparison',
       body: `Choose two of the eight models and compare them — but choose
@@ -1151,6 +1213,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-lifecycle-argument',
+      stage: protagonist('m100'),
       type: 'question',
       title: 'Back to the three stars',
       kind: 'short',

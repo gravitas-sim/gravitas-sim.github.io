@@ -73,6 +73,50 @@ const timing = ctx => {
   return rows;
 };
 
+/**
+ * The two bodies this lesson watches, bound by exact name.
+ *
+ * The dot crossing the star and the dip on the plot are the same event seen
+ * twice, and until now nothing on screen said so: the reader was told to watch
+ * the canvas and then told to read the curve, with no way to check that the
+ * planet was actually in front when the dip happened. Binding names both, and
+ * `transitRows` below reports where the planet is against the disc at the
+ * instant the curve is being drawn.
+ */
+const TRANSIT_PAIR = {
+  star: { name: 'HD 209458' },
+  planet: { name: 'HD 209458 b' },
+};
+
+/**
+ * Where the planet is against the star's disc, and what the photometer sees.
+ *
+ * Every number comes from js/lightCurve.js - the module that computes the
+ * curve - rather than being re-derived here, so the label and the dip cannot
+ * disagree about whether a transit is happening.
+ */
+const transitRows = ctx => {
+  const planet = ctx.role('planet') || ctx.selected;
+  const g = ctx.transitGeometry(planet);
+  const rows = [{ label: 'Brightness now', value: ctx.flux().toFixed(6) }];
+  if (!g) {
+    rows.push({
+      label: 'The planet',
+      value: 'select it, and let a frame go by',
+    });
+    return rows;
+  }
+  rows.push(
+    { label: 'Planet', value: g.name || 'planet' },
+    { label: 'Where it is', value: g.phase, emphasis: true },
+    {
+      label: 'Distance from disc centre',
+      value: `${g.impact.toFixed(2)} stellar radii`,
+    }
+  );
+  return rows;
+};
+
 const TRANSITS = {
   id: 'transit-photometry',
   thumbnail: 'images/scenarios/transit-lab.webp',
@@ -100,6 +144,7 @@ const TRANSITS = {
   steps: [
     {
       sid: 'a-firefly-beside-a-lighthouse',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'A firefly beside a lighthouse',
       body: `There are more than six thousand confirmed planets around other
@@ -130,6 +175,7 @@ const TRANSITS = {
     },
     {
       sid: 'five-ways-to-find-a',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Five ways to find a planet you cannot see',
       body: `<strong>Radial velocity.</strong> A planet and its star both orbit
@@ -167,6 +213,7 @@ const TRANSITS = {
     },
     {
       sid: 'what-will-the-brightness-do',
+      bind: TRANSIT_PAIR,
       type: 'predict',
       title: 'What will the brightness do?',
       body: `The planet is about to cross in front of the star from your point of
@@ -186,6 +233,7 @@ const TRANSITS = {
     },
     {
       sid: 'your-first-transit',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Your first transit',
       body: `The <strong>Light Curve</strong> panel has opened on the right. It
@@ -203,10 +251,20 @@ const TRANSITS = {
              around the system. Try it: the transits move to a different moment
              but they never stop happening, because this simulation runs in a
              single plane and every orbit in it is edge-on. Real orbits are
-             tilted, and that changes everything: you will come back to it.`,
+             tilted, and that changes everything: you will come back to it.
+             \n\nWatch the two things together. The readout below names where
+             the planet is against the star at this instant - clear of the disc,
+             crossing the limb, or fully on it - beside the brightness the
+             photometer is recording at the same instant. The dot on the canvas
+             and the dip on the plot are one event described twice, and this is
+             how you can check that for yourself rather than being told.`,
       lightCurve: true,
       observerAngle: 0,
+      allowInspector: true,
       checklist: [
+        'Select the planet, from the canvas or the list below',
+        'Watch the readout change from "clear of the disc" to "crossing the limb"',
+        'Check that the brightness starts falling at the same moment',
         'Wait until at least two dips are on the plot',
         'Hover over the flat part of the curve and read the value in the tooltip',
         'Hover over the bottom of a dip and read that value too',
@@ -214,10 +272,15 @@ const TRANSITS = {
         'Notice the very slight rise and fall of the baseline between transits',
       ],
       tip: 'That slow baseline ripple is the planet’s phase curve: like the Moon, it shows us more or less of its lit side as it goes round. It is a real signal, roughly a hundred times smaller than the transit, and space telescopes measure it.',
-      probe: photometry,
+      // Both halves of the same instant: where the planet is against the disc,
+      // then what the photometer has recorded. Merged rather than replaced -
+      // two `probe` keys in one object mean the later one silently wins, which
+      // is how the geometry rows vanished the first time.
+      probe: ctx => [...transitRows(ctx), ...photometry(ctx)],
     },
     {
       sid: 'where-the-depth-comes-from',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Where the depth comes from',
       body: `A star is, to a photometer, a uniformly bright disk of radius
@@ -242,6 +305,7 @@ const TRANSITS = {
     },
     {
       sid: 'try-it-on-some-real',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Try it on some real planets',
       body: `The instrument on the right draws the silhouette to scale on the
@@ -265,6 +329,7 @@ const TRANSITS = {
     },
     {
       sid: 'from-a-depth-to-a',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'From a depth to a size',
       kind: 'numeric',
@@ -279,6 +344,7 @@ const TRANSITS = {
     },
     {
       sid: 'measure-the-dip',
+      bind: TRANSIT_PAIR,
       type: 'measure',
       title: 'Measure the dip',
       body: `Now do it for real, on the curve you have been watching.
@@ -368,6 +434,7 @@ const TRANSITS = {
     },
     {
       sid: 'why-that-radius-came-out',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Why that radius came out too big',
       body: `A star is not a uniformly bright disk. You are looking down through
@@ -419,6 +486,7 @@ const TRANSITS = {
     },
     {
       sid: 'correct-it-and-get-a',
+      bind: TRANSIT_PAIR,
       type: 'measure',
       title: 'Correct it, and get a real radius',
       body: `Divide out the limb darkening, then convert the ratio into a size.
@@ -502,6 +570,16 @@ const TRANSITS = {
     },
     {
       sid: 'the-shape-of-the-dip',
+      bind: TRANSIT_PAIR,
+      // Half a second of real time is not something a reader can study by
+      // watching for it. The watch stops the run as soon as a complete transit
+      // has been recorded, which puts the whole event on the plot behind them
+      // and lets them step back through it a frame at a time with the
+      // timeline controls - the geometry readout follows the frame they are
+      // standing on, so ingress, floor and egress become places to visit
+      // rather than moments to catch.
+      pauseAt: { kind: 'transit' },
+      probe: transitRows,
       type: 'read',
       title: 'The shape of the dip',
       body: `A transit is not a step function. It has four contact points, and
@@ -517,6 +595,12 @@ const TRANSITS = {
              where the planet is entirely on the disk. It is not flat: limb
              darkening curves it, deepest at mid-transit where the planet covers
              the brightest part of the star.
+             \n\nYou do not have to catch any of this by eye. Arm the event
+             watch below and the simulation stops the moment a complete transit
+             has been recorded. Then step backwards through it with the timeline
+             controls: the readout follows, so you can walk from "clear of the
+             disc" through "crossing the limb" to "fully on the disc" and back,
+             reading the brightness at each.
              \n\n<strong>Egress</strong> mirrors ingress.
              \n\nThe <strong>total duration</strong> depends on how fast the planet
              is moving and how long a chord it cuts across the disk. Combine the
@@ -527,6 +611,7 @@ const TRANSITS = {
     },
     {
       sid: 'reading-the-floor',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'Reading the floor',
       kind: 'choice',
@@ -545,6 +630,7 @@ const TRANSITS = {
     },
     {
       sid: 'the-angle-you-happen-to',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'The angle you happen to be standing at',
       body: `Everything so far assumed the planet crosses the middle of the star.
@@ -574,6 +660,7 @@ const TRANSITS = {
     },
     {
       sid: 'how-lucky-do-you-have',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'How lucky do you have to be?',
       kind: 'numeric',
@@ -592,6 +679,7 @@ const TRANSITS = {
     },
     {
       sid: 'what-the-method-misses',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'What the method misses',
       kind: 'short',
@@ -604,6 +692,7 @@ const TRANSITS = {
     },
     {
       sid: 'getting-the-period',
+      bind: TRANSIT_PAIR,
       type: 'predict',
       title: 'Getting the period',
       body: `So far you have used a single dip. The light curve has more in it
@@ -621,6 +710,7 @@ const TRANSITS = {
     },
     {
       sid: 'time-two-transits',
+      bind: TRANSIT_PAIR,
       type: 'measure',
       title: 'Time two transits',
       body: `The readout below numbers every complete transit and gives the
@@ -727,6 +817,7 @@ const TRANSITS = {
     },
     {
       sid: 'from-a-period-to-an',
+      bind: TRANSIT_PAIR,
       type: 'measure',
       title: 'From a period to an orbit',
       body: `A period and a stellar mass are enough to place the planet, through
@@ -821,6 +912,7 @@ const TRANSITS = {
     },
     {
       sid: 'what-a-transit-cannot-tell',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'What a transit cannot tell you',
       body: `You have a radius, a period and an orbit. You do not have a mass, and
@@ -849,6 +941,7 @@ const TRANSITS = {
     },
     {
       sid: 'the-planet-changes-size-with',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'The planet changes size with color',
       body: `Here is something the simple picture does not predict. Measure the
@@ -879,6 +972,7 @@ const TRANSITS = {
     },
     {
       sid: 'read-an-atmosphere',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Read an atmosphere',
       body: `The instrument plots transit depth against wavelength for a hot
@@ -903,6 +997,7 @@ const TRANSITS = {
     },
     {
       sid: 'why-the-depth-moves',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'Why the depth moves',
       kind: 'choice',
@@ -922,6 +1017,7 @@ const TRANSITS = {
     },
     {
       sid: 'things-that-are-not-planets',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Things that are not planets',
       body: `A dip in a light curve is a dip in a light curve. Several things that
@@ -949,6 +1045,7 @@ const TRANSITS = {
     },
     {
       sid: 'a-star-you-did-not',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'A star you did not know was there',
       body: `Suppose a fraction of the light in the aperture comes from a
@@ -987,6 +1084,7 @@ const TRANSITS = {
     },
     {
       sid: 'go-and-look',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Go and look',
       body: `Knowing that dilution matters does not tell you which stars are
@@ -1020,6 +1118,7 @@ const TRANSITS = {
     },
     {
       sid: 'now-measure-it',
+      bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Now measure it',
       body: `The same star and the same planet are back, with one change: a
@@ -1053,6 +1152,7 @@ const TRANSITS = {
     },
     {
       sid: 'recover-the-real-planet',
+      bind: TRANSIT_PAIR,
       // The clean depth and the blended depth, one from each of those two
       // measurements. Neither on its own recovers anything.
       requires: ['measure-the-dip', 'now-measure-it'],
@@ -1174,6 +1274,7 @@ const TRANSITS = {
     },
     {
       sid: 'what-it-does-to-a',
+      bind: TRANSIT_PAIR,
       type: 'question',
       title: 'What it does to a survey',
       kind: 'choice',
@@ -1195,6 +1296,7 @@ const TRANSITS = {
     },
     {
       sid: 'what-you-did-and-where',
+      bind: TRANSIT_PAIR,
       type: 'read',
       title: 'What you did, and where it goes next',
       body: `You measured a transit depth and turned it into a planet radius, and

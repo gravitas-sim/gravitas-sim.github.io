@@ -37,6 +37,13 @@ export const EVENT_KINDS = Object.freeze({
   SEPARATION_INWARD: 'separationInward',
   SEPARATION_OUTWARD: 'separationOutward',
   TRANSIT: 'transit',
+  // The turning points of the line-of-sight velocity: the moments a
+  // radial-velocity curve is at its trough and its peak. Not a place in the
+  // orbit the way periapsis is - where they fall depends on which way the
+  // observer is looking - which is exactly why a lesson wants to stop there
+  // and have a student compare the star's motion with the sign of the reading.
+  RV_MINIMUM: 'rvMinimum',
+  RV_MAXIMUM: 'rvMaximum',
 });
 
 /**
@@ -67,6 +74,18 @@ export const MIN_ECCENTRICITY = 1e-3;
  * @returns {?{value: number, rising: boolean}} The scalar, or null if not applicable
  */
 export function eventSignal(kind, state, separation = null) {
+  // The radial-velocity turning points are the one pair here that is not about
+  // the separation at all: the signal is the rate of change of the
+  // line-of-sight velocity, supplied by the caller as `vlosDot`, and it turns
+  // sign at a trough (rising) and at a peak (falling). Checked before the
+  // separation guard below, because a watch on the curve does not need r.
+  if (kind === EVENT_KINDS.RV_MINIMUM || kind === EVENT_KINDS.RV_MAXIMUM) {
+    if (!state || !Number.isFinite(state.vlosDot)) return null;
+    return {
+      value: state.vlosDot,
+      rising: kind === EVENT_KINDS.RV_MINIMUM,
+    };
+  }
   if (!state || !Number.isFinite(state.r)) return null;
   switch (kind) {
     // r is at a minimum when its rate passes from negative to positive.
@@ -314,6 +333,19 @@ function step() {
   if (!state) {
     disarm('targetGone');
     return;
+  }
+
+  // The radial-velocity turning points need one thing this module cannot work
+  // out for itself: which way the observer is looking. It comes in through the
+  // same dependency object as the clock and the body lookup, so this file goes
+  // on knowing nothing about spectrographs. A host that does not supply it
+  // simply cannot arm those two kinds, which eventSignal reports as an unknown
+  // kind below rather than firing on a signal it does not have.
+  if (
+    spec.kind === EVENT_KINDS.RV_MINIMUM ||
+    spec.kind === EVENT_KINDS.RV_MAXIMUM
+  ) {
+    state.vlosDot = deps.losRate ? deps.losRate(body, primary) : NaN;
   }
 
   const signal = eventSignal(spec.kind, state, spec.separation);

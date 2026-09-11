@@ -30,6 +30,88 @@
 // to make two measurements and notice that they disagree, which is all the
 // evidence itself does.
 
+/**
+ * The tracers each scene offers, bound by exact name.
+ *
+ * A rotation curve is a plot of what individual bodies are doing, and the
+ * lesson never let a reader look at one of them. Binding a handful of disc
+ * stars puts them in the panel's object list, so "the outer stars are moving
+ * too fast" becomes a body you can select and a speed you can read - which is
+ * the difference between being shown a curve and measuring one.
+ */
+const SOLAR_TRACERS = {
+  sun: { name: 'Sun' },
+  mercury: { name: 'Mercury' },
+  earth: { name: 'Earth' },
+  jupiter: { name: 'Jupiter' },
+  neptune: { name: 'Neptune' },
+};
+
+/**
+ * The cluster steps are deliberately not bound.
+ *
+ * Zwicky's argument is about the *spread* of a swarm's velocities, not about
+ * any one galaxy, and the panel measures the whole swarm. Putting a chip in
+ * the list for one of forty members would invite a reader to think the number
+ * came from it.
+ */
+
+const GALAXY_TRACERS = {
+  bulge: { name: 'Galactic bulge' },
+  inner: { name: 'Disc star 4' },
+  middle: { name: 'Disc star 20' },
+  outer: { name: 'Disc star 40' },
+};
+
+/**
+ * The selected tracer, and where it sits on the curve the panel is fitting.
+ *
+ * Every number is read live: the radius and speed off the body, the model's
+ * prediction off js/rotationCurve.js - the same state the plot is drawn from.
+ * The last row is the whole argument of the lesson in one line, for one star
+ * the reader chose themselves.
+ */
+const tracerRows = ctx => {
+  const b = ctx.selected;
+  if (!b) {
+    return [
+      { label: 'Tracer', value: 'select a disc star, on the canvas or below' },
+    ];
+  }
+  const rc = ctx.rotationCurve();
+  const centre = rc?.center;
+  if (!centre) return [{ label: 'Tracer', value: b.name || 'body' }];
+  const r = Math.hypot(b.pos.x - centre.x, b.pos.y - centre.y);
+  const v = Math.hypot(b.vel.x, b.vel.y);
+  // What the visible mass inside this radius would give, which is the dashed
+  // line on the plot. Computed from the same enclosed-mass the panel uses.
+  const inside = (rc.bodies || []).reduce(
+    (m, o) =>
+      Math.hypot(o.pos.x - centre.x, o.pos.y - centre.y) <= r
+        ? m + (o.mass || 0)
+        : m,
+    centre.mass || 0
+  );
+  const predicted = r > 0 ? Math.sqrt((ctx.G * inside) / r) : NaN;
+  return [
+    { label: 'Tracer', value: b.name || 'body' },
+    { label: 'Its distance from the centre', value: ctx.distance(r) },
+    { label: 'Its speed now', value: ctx.speed(v) },
+    {
+      label: 'Speed the visible mass alone would give',
+      value: Number.isFinite(predicted) ? ctx.speed(predicted) : '-',
+    },
+    {
+      label: 'Measured ÷ predicted',
+      value:
+        Number.isFinite(predicted) && predicted > 0
+          ? `${(v / predicted).toFixed(2)}×`
+          : '-',
+      emphasis: true,
+    },
+  ];
+};
+
 const DM_SOLAR = {
   scenario: 'Solar System',
   seed: 'missing-mass',
@@ -87,6 +169,7 @@ const DARK_MATTER = {
     // --- Part 1: what the shape of a curve is telling you --------------------
     {
       sid: 'two-ways-to-weigh-a',
+      bind: SOLAR_TRACERS,
       type: 'read',
       title: 'Two ways to weigh a thing you cannot touch',
       setup: DM_SOLAR,
@@ -107,6 +190,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'put-the-mass-somewhere',
+      bind: SOLAR_TRACERS,
       type: 'explore',
       title: 'Put the mass somewhere',
       tool: { id: 'dm-shapes' },
@@ -128,6 +212,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'which-arrangement-gives-a-flat',
+      bind: SOLAR_TRACERS,
       type: 'question',
       title: 'Which arrangement gives a flat curve?',
       kind: 'choice',
@@ -153,6 +238,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'the-solar-system-plotted',
+      bind: SOLAR_TRACERS,
       type: 'explore',
       title: 'The Solar System, plotted',
       body: `Now a real system, measured live. The panel is plotting one point for
@@ -196,6 +282,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'what-the-slope-means',
+      bind: SOLAR_TRACERS,
       type: 'question',
       title: 'What the slope means',
       kind: 'choice',
@@ -227,6 +314,7 @@ const DARK_MATTER = {
     // --- Part 2: turning a speed into a mass --------------------------------
     {
       sid: 'what-the-speed-tells-you',
+      bind: SOLAR_TRACERS,
       type: 'explore',
       title: 'What the speed tells you about the mass',
       tool: { id: 'dm-enclosed' },
@@ -251,6 +339,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'what-a-flat-curve-requires',
+      bind: SOLAR_TRACERS,
       type: 'question',
       title: 'What a flat curve requires',
       kind: 'choice',
@@ -279,6 +368,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'measure-the-enclosed-mass-yourself',
+      bind: SOLAR_TRACERS,
       type: 'measure',
       title: 'Measure the enclosed mass yourself',
       tool: { id: 'dm-enclosed', values: { shape: 1, radius: 5 } },
@@ -338,6 +428,7 @@ const DARK_MATTER = {
     // --- Part 3: the galaxy we expected, and the galaxy we found -------------
     {
       sid: 'now-a-galaxy',
+      bind: GALAXY_TRACERS,
       type: 'predict',
       title: 'Now a galaxy',
       setup: DM_EXPECTED,
@@ -364,6 +455,12 @@ const DARK_MATTER = {
     },
     {
       sid: 'measure-the-expected-curve',
+      bind: GALAXY_TRACERS,
+      allowInspector: true,
+      // The same readout on the scenario where the prediction holds, so the
+      // comparison two screens later is between two measurements the reader
+      // made the same way rather than between a measurement and a claim.
+      probe: tracerRows,
       type: 'measure',
       title: 'Measure the expected curve',
       body: `Read the panel. The shaded strip on the left of the plot is the
@@ -385,6 +482,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'what-rubin-and-ford-found',
+      bind: GALAXY_TRACERS,
       type: 'read',
       title: 'What Rubin and Ford found',
       setup: DM_OBSERVED,
@@ -404,11 +502,20 @@ const DARK_MATTER = {
     },
     {
       sid: 'measure-the-real-curve',
+      bind: GALAXY_TRACERS,
+      allowInspector: true,
       type: 'measure',
       title: 'Measure the real curve',
       body: `Record what the panel reports now. The visible mass is unchanged
              from the previous scenario, so any difference is in the motion and
-             not in the bookkeeping.`,
+             not in the bookkeeping.
+             \n\nBefore you write the numbers down, look at one star. Select an
+             outer disc star - from the canvas, or from the list below - and read
+             the last two lines of the readout: how fast it is actually moving,
+             and how fast the visible mass inside its orbit says it should be.
+             The ratio between those is the whole of this lesson, measured on one
+             object you chose rather than read off a curve somebody drew.`,
+      probe: tracerRows,
       fields: [
         { id: 'obs_slope', label: 'Outer slope (the exponent)', unit: '' },
         {
@@ -429,6 +536,7 @@ const DARK_MATTER = {
     // --- Part 4: do what the astronomers actually do -------------------------
     {
       sid: 'now-do-what-the-astronomers',
+      bind: GALAXY_TRACERS,
       type: 'read',
       title: 'Now do what the astronomers did',
       tool: { id: 'dm-fit', values: { haloVFlat: 0 } },
@@ -448,6 +556,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'try-it-with-stars-alone',
+      bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'Try it with stars alone',
       tool: {
@@ -471,6 +580,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'record-your-best-stars-only',
+      bind: GALAXY_TRACERS,
       // It records the best stars-only fit, which is the fit made there.
       requires: ['try-it-with-stars-alone'],
       type: 'measure',
@@ -502,6 +612,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'why-a-heavier-disc-cannot',
+      bind: GALAXY_TRACERS,
       type: 'question',
       title: 'Why a heavier disc cannot rescue it',
       kind: 'choice',
@@ -534,6 +645,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'now-add-the-halo',
+      bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'Now add the halo',
       tool: {
@@ -555,6 +667,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'record-the-fit-that-works',
+      bind: GALAXY_TRACERS,
       // It records the model that fitted, which is the one built there.
       requires: ['now-add-the-halo'],
       type: 'measure',
@@ -578,6 +691,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'how-much-of-it-is',
+      bind: GALAXY_TRACERS,
       type: 'question',
       title: 'How much of it is dark?',
       kind: 'numeric',
@@ -601,6 +715,7 @@ const DARK_MATTER = {
     // --- Part 5: what the halo actually does --------------------------------
     {
       sid: 'what-the-halo-is-holding',
+      bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'What the halo is holding',
       tool: { id: 'dm-flyby' },
@@ -621,6 +736,7 @@ const DARK_MATTER = {
     },
     {
       sid: 'take-the-halo-away-from',
+      bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'Take the halo away from the whole galaxy',
       setup: DM_OBSERVED,

@@ -134,6 +134,7 @@ import {
   recordingStatus,
   extensionFor,
 } from './capture.js';
+import { setBodySelector } from './widgetRuntime.js';
 import { withSeed, getWorldSeed, setWorldSeed, randomSeed } from './rng.js';
 import { orbitalElements, dominantPrimary } from './orbital.js';
 import { timeUnitSeconds, formatSpeed, formatDistance } from './units.js';
@@ -695,11 +696,25 @@ const getStarInfo = star => {
     { label: t('inspector.stat.spectralType'), value: type },
   ];
 
+  // Nor where a prescribed model is driving this star and has not supplied an
+  // age. That is a lesson's free H-R cursor: a temperature and a luminosity,
+  // which between them fix a radius and fix nothing else. The mass on this
+  // body is the mass it was built with, so a main-sequence lifetime computed
+  // from it is a true statement about a different object - a star that is not
+  // at 10,000 K and one solar luminosity. See js/lesson/starState.js.
+  const hypothetical =
+    star?.model_owned === true && !Number.isFinite(star.ageYr);
+
   // Only where the star is actually on the main sequence. A red giant has a
   // main-sequence lifetime in its past, and printing one as though it were
   // ahead of the star is the kind of small false statement this pass exists to
   // remove.
-  if (state.phase === 'main-sequence' || state.phase === 'unknown') {
+  if (hypothetical) {
+    stats.push({
+      label: t('inspector.stat.lifespan'),
+      value: t('inspector.stat.lifespan.hypothetical'),
+    });
+  } else if (state.phase === 'main-sequence' || state.phase === 'unknown') {
     stats.push({
       label: t('inspector.stat.lifespan'),
       value: maybe(
@@ -1559,6 +1574,17 @@ const showObjectInspector = (object, type) => {
   // changes whenever the selection does.
   paintFrameControls();
 };
+
+// One way to select a body, installed rather than imported.
+//
+// Selecting and inspecting are the same call here - showObjectInspector sets
+// state.selectedObject and opens the card in one go - and js/lessonScene.js
+// cannot import this module, because this module is the coordinator and that
+// one sits below it. So it goes through the port in js/widgetRuntime.js, the
+// way js/gwAudio.js installs its player there. What it buys is that a lesson's
+// accessible object list, a plot marker and a click on the canvas all take the
+// same path and cannot end up disagreeing about what is selected.
+setBodySelector(showObjectInspector);
 
 const hideObjectInspector = () => {
   const objectInspector = document.getElementById('objectInspector');
@@ -4103,6 +4129,10 @@ window.addEventListener('gravitasSignalAudio', event => {
  */
 
 const initialize_simulation = (options = {}) => {
+  // The world about to be torn down is the one anything currently playing was
+  // a measurement of. A chirp that outlives its binary is not a signal from
+  // the new scenario, so it goes before the new one is built.
+  stopSignalAudio();
   if (options.seed !== undefined) {
     setWorldSeed(options.seed);
   } else if (!options.keepSeed) {

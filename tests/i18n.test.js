@@ -314,8 +314,14 @@ describe('the catalogue split', () => {
     // for a star something has modelled, which cannot happen before a deferred
     // panel has loaded. The luminosity-class words stayed behind - the
     // inspector prints one on every star's card - and are checked for below.
+    // lessonFn.* is every sentence a lesson *computes* - probe rows and
+    // answer-checking messages, keyed by what they say. js/i18n/lesson.js is
+    // the only module that reads them and js/investigations.js is the only
+    // module that imports it, so a visitor who never opened a lesson was
+    // downloading 133 of them in order to render none. The loader awaits this
+    // catalogue before initInvestigations(), so the lookup cannot outrun it.
     const allowed =
-      /^(binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase)\./;
+      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
 
     // The words the inspector prints on every star card stayed eager.

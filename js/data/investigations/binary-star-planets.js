@@ -50,6 +50,60 @@ const P_LAB = {
   paused: false,
 };
 
+/**
+ * The three bodies each configuration is made of, bound by exact name.
+ *
+ * Both scenarios build the same cast - two stars and a planet - and differ in
+ * where the planet is put. That is precisely the thing a reader has to keep
+ * hold of while a sweep runs, so the chips name all three and selecting the
+ * planet is how they check which configuration is on screen.
+ */
+const BINARY_CAST = {
+  starA: { name: 'Star A' },
+  starB: { name: 'Star B' },
+  planet: { name: 'Planet' },
+};
+
+/**
+ * Which configuration is on the canvas, and whether the last run still
+ * describes it.
+ *
+ * Two things a reader could not previously see. The first is which of the
+ * bodies the panel is talking about - a sweep reports a number and the scene
+ * is three dots. The second is whether that number is still about this scene:
+ * results stay on screen after an intervention, and nothing said so.
+ */
+const runRows = ctx => {
+  const rows = [];
+  const roles = ctx.roles() || [];
+  const named = roles.map(r => ctx.role(r)?.name).filter(Boolean);
+  rows.push({
+    label: 'On the canvas',
+    value: named.length ? named.join(', ') : 'nothing bound yet',
+  });
+  const run = ctx.experiment();
+  if (!run) {
+    rows.push({ label: 'Last run', value: 'none yet' });
+    return rows;
+  }
+  const fresh = ctx.runMatchesScene(run);
+  rows.push({
+    label: 'Last run',
+    value: run.name || 'unnamed',
+  });
+  rows.push({
+    label: 'Does it still describe this scene?',
+    value:
+      fresh === null
+        ? 'cannot tell — it was recorded before runs carried a world stamp'
+        : fresh
+          ? 'yes'
+          : 'NO — the scene has been rebuilt since, so re-run before comparing',
+    emphasis: fresh === false,
+  });
+  return rows;
+};
+
 const BINARY_STAR_PLANETS = {
   id: 'binary-star-planets',
   thumbnail: 'images/scenarios/binary-planet-lab.webp',
@@ -75,6 +129,7 @@ const BINARY_STAR_PLANETS = {
     // --- Part 1: the system, and what a result here will mean ---------------
     {
       sid: 'two-suns',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'Two suns',
       setup: S_LAB,
@@ -93,6 +148,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'nothing-here-is-random',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'Nothing here is random',
       body: `The scenario next to this one in the gallery — "Binary Star System"
@@ -113,6 +169,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'before-you-run-anything',
+      bind: BINARY_CAST,
       type: 'predict',
       title: 'Before you run anything',
       body: `The stars are 10 AU apart on average and come within 6 AU of each
@@ -136,6 +193,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'what-survived-will-mean',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'What "survived" is going to mean',
       body: `One piece of vocabulary before any measuring, because it decides
@@ -156,6 +214,8 @@ const BINARY_STAR_PLANETS = {
     // --- Part 2: a planet around one star ------------------------------------
     {
       sid: 'run-the-default',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Run it as it stands',
       setup: S_LAB,
@@ -180,6 +240,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'what-the-quiet-run-did',
+      bind: BINARY_CAST,
       // "With the run finished, read four numbers off the panel" - the run
       // that step performs.
       requires: ['run-the-default'],
@@ -239,6 +300,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'why-so-quiet',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'Why was that so quiet?',
@@ -267,6 +329,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'move-it-out',
+      bind: BINARY_CAST,
       type: 'predict',
       title: 'Move it out',
       body: `Now double the planet's starting radius, to 0.30 of the separation
@@ -287,6 +350,8 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'run-it-at-030',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Run it at 0.30',
       setup: S_LAB,
@@ -304,6 +369,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'when-did-it-leave',
+      bind: BINARY_CAST,
       // Reads the 0.30 run off the panel.
       requires: ['run-it-at-030'],
       type: 'measure',
@@ -341,6 +407,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'ejected-means-what',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'What does "ejected" mean here?',
@@ -364,6 +431,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'work-out-the-boundary',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'numeric',
       title: 'Somebody has done this properly',
@@ -404,6 +472,7 @@ const BINARY_STAR_PLANETS = {
     },
     {
       sid: 'what-the-fit-assumes',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'What the fit assumes',
@@ -433,6 +502,7 @@ const BINARY_STAR_PLANETS = {
     // --- The sweep: the same run at five radii, without the typing ---------
     {
       sid: 'predict-the-sweep',
+      bind: BINARY_CAST,
       type: 'predict',
       title: 'Five radii at once',
       body: `You have run two configurations by hand and read four numbers off
@@ -468,6 +538,8 @@ The published boundary is at 0.177. Commit before you run it.`,
     },
     {
       sid: 'run-the-sweep',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Run the sweep',
       setup: S_LAB,
@@ -488,6 +560,7 @@ Watch what it reports as it goes. Each trial ends with an
     },
     {
       sid: 'read-the-sweep',
+      bind: BINARY_CAST,
       type: 'measure',
       title: 'Read the five trials',
       requires: ['run-the-sweep'],
@@ -539,6 +612,7 @@ Watch what it reports as it goes. Each trial ends with an
     },
     {
       sid: 'what-the-sweep-shows',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'What five points support',
@@ -564,6 +638,8 @@ Watch what it reports as it goes. Each trial ends with an
     },
     {
       sid: 'resolve-the-edge',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Is the edge real, or is it the arithmetic?',
       setup: S_LAB,
@@ -582,6 +658,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'is-it-resolved',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'What the recheck settles',
@@ -607,6 +684,7 @@ This is the same test you did by hand at 0.25, applied to the
 
     {
       sid: 'a-harder-question',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'A harder question than "what happened"',
       body: `Everything so far has taken the simulation at its word. It is time
@@ -624,6 +702,8 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'energy-drift-as-a-screen',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'The first check, and its limits',
       setup: S_LAB,
@@ -652,6 +732,8 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'the-case-that-matters',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Now the case that matters',
       setup: S_LAB,
@@ -671,6 +753,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'the-drift-was-tiny',
+      bind: BINARY_CAST,
       // Records what the 0.25 runs said.
       requires: ['the-case-that-matters'],
       type: 'measure',
@@ -716,6 +799,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'which-answer-is-right',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'Which answer is right?',
@@ -740,6 +824,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'convergence-is-the-test',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'Convergence is the test',
       body: `So the rule that actually applies, and it is not the one about
@@ -760,6 +845,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'report-it',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'short',
       title: 'Write the sentence',
@@ -803,6 +889,7 @@ This is the same test you did by hand at 0.25, applied to the
     // --- Part 4: a planet around both stars ----------------------------------
     {
       sid: 'around-both',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'Around both at once',
       setup: P_LAB,
@@ -819,6 +906,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'which-way-round',
+      bind: BINARY_CAST,
       type: 'predict',
       title: 'Which way round is the danger?',
       body: `For a planet around one star, the rule was "close in is safe, far
@@ -841,6 +929,8 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'run-the-circumbinary',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Four separations out, then two',
       setup: P_LAB,
@@ -865,6 +955,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'no-encounter-at-all',
+      bind: BINARY_CAST,
       // Reads the circumbinary run off the panel.
       requires: ['run-the-circumbinary'],
       type: 'measure',
@@ -908,6 +999,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'how-without-a-pass',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'How, with no close pass?',
@@ -934,6 +1026,7 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'circumbinary-boundary',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'numeric',
       title: 'The circumbinary boundary',
@@ -972,6 +1065,8 @@ This is the same test you did by hand at 0.25, applied to the
     },
     {
       sid: 'sweep-the-circumbinary',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Optional: the same sweep, out here',
       setup: P_LAB,
@@ -994,6 +1089,8 @@ The published boundary for this configuration is 3.61. Predict
     },
     {
       sid: 'where-the-fit-disagrees',
+      bind: BINARY_CAST,
+      probe: runRows,
       type: 'explore',
       title: 'Where the fit and the simulation disagree',
       setup: P_LAB,
@@ -1012,6 +1109,7 @@ The published boundary for this configuration is 3.61. Predict
     },
     {
       sid: 'who-is-wrong',
+      bind: BINARY_CAST,
       type: 'question',
       kind: 'choice',
       title: 'So who is wrong?',
@@ -1039,6 +1137,7 @@ The published boundary for this configuration is 3.61. Predict
     // --- Part 5: what a finite integration is worth --------------------------
     {
       sid: 'the-strongest-claim',
+      bind: BINARY_CAST,
       // The claim is about the planet at 0.15, which is the run recorded
       // there.
       requires: ['what-the-quiet-run-did'],
@@ -1067,6 +1166,7 @@ The published boundary for this configuration is 3.61. Predict
     },
     {
       sid: 'what-you-can-say',
+      bind: BINARY_CAST,
       type: 'read',
       title: 'What you can say, and what the model leaves out',
       body: `You have measured a good deal:

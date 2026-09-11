@@ -29,7 +29,15 @@ ensureDeferredMessages().catch(() => {});
 
 import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
 import { starColor, paintStarDisc } from './bodyVisuals.js';
-import { captureToNotebook } from './notebookBridge.js';
+// Through the seam, not the service: a widget definition is content, and the
+// authoring CLI reads these modules in a plain Node process with no DOM. See
+// js/widgetRuntime.js for why the direction matters.
+import { captureToNotebook } from './widgetRuntime.js';
+import {
+  applySelection,
+  nearestTrackByMass,
+  pointForStar,
+} from './lesson/starState.js';
 import {
   AXES,
   GUIDE_RADII,
@@ -713,8 +721,92 @@ function stack(rect, weights, gap = 6) {
 
 const TRACK_IDS = trackIds();
 
+// -----------------------------------------------------------------------------
+// The bound star: one object, on the canvas and on the diagram
+// -----------------------------------------------------------------------------
+//
+// A step that carries `bind: {star: ...}` and names that role in its tool spec
+// is saying that the point on this diagram and a star in the scene are the
+// same object. Two directions, and they are deliberately not symmetrical.
+//
+//   Selecting the star - by clicking it on the canvas, or from the lesson's
+//   object list - moves the diagram to where that star already is. Once, on
+//   the change of selection, because a reader who then drags the cursor means
+//   to and should not be dragged back.
+//
+//   Everything else is the model writing its answer onto the star. The lab is
+//   the state; the body on the canvas, the inspector card and the readout are
+//   three views of it. That is why the step declares the star under
+//   `prescribes`: the integrator is not also evolving it, so its temperature
+//   has exactly one author.
+//
+// A free-cursor point is a hypothetical star, and js/lesson/starState.js keeps
+// that honest. A temperature and a luminosity fix a radius; they fix nothing
+// about mass, age or remaining lifetime, so none of those is written, and any
+// left over from a modelled selection is taken back rather than left to be
+// read as though somebody had computed it.
+
+/** The catalogue the nearest-track lookup needs, built once. */
+const TRACK_MASSES = TRACK_IDS.map(id => ({
+  id,
+  initialMassSun: trackBounds(id)?.initialMassSun ?? NaN,
+}));
+
+/** Which selection the lab last pulled from, so a pull happens once. */
+let pulledFrom = null;
+
+/**
+ * Keep a bound star and the diagram showing the same thing.
+ *
+ * @param {object} state - The lab
+ * @param {?object} ctx - The lesson context, when the step gave the widget one
+ * @param {object} spec - The step's tool spec
+ * @returns {?object} The bound body, if there is one
+ */
+function syncBoundStar(state, ctx, spec = {}) {
+  const role = spec.bind;
+  if (!role || typeof ctx?.role !== 'function') return null;
+  const star = ctx.role(role);
+  if (!star) {
+    pulledFrom = null;
+    return null;
+  }
+  const selected = ctx.selected === star;
+  const key = `${star.id}`;
+  if (selected && pulledFrom !== key) {
+    pulledFrom = key;
+    const point = pointForStar(star);
+    if (point) {
+      const track = nearestTrackByMass(point.initialMassSun, TRACK_MASSES);
+      if (track && Number.isFinite(point.ageYr)) {
+        adoptModel(state, { trackId: track, ageYr: point.ageYr });
+      } else {
+        // No age means no track position anybody computed, so the honest
+        // answer is the free cursor at the two numbers the star does carry.
+        setMode(state, MODE.FREE);
+        setCursor(state, point.teffK, point.luminositySun);
+      }
+      return star;
+    }
+  }
+  if (!selected) pulledFrom = null;
+  // The model writes its answer onto the star, every frame and idempotently:
+  // applySelection touches nothing when the star already shows it.
+  applySelection(star, selection(state));
+  return star;
+}
+
+/** Forget which star the lab pulled from. Tests only. */
+export const resetBoundStarForTests = () => {
+  pulledFrom = null;
+};
+
 const STELLAR_LAB = {
   id: 'stellar-lab',
+  // Given the lesson context, so a step that binds a star can put the same
+  // object on the canvas and on the diagram. Steps that bind nothing are
+  // unaffected: syncBoundStar returns immediately without a `bind` in the spec.
+  live: true,
   get title() {
     return t('stelW.lab.title');
   },
@@ -920,8 +1012,9 @@ const STELLAR_LAB = {
     syncToValues(state, v);
   },
 
-  draw(canvas, v, _ctx, spec = {}) {
+  draw(canvas, v, ctx, spec = {}) {
     const state = syncFromValues(v, spec);
+    syncBoundStar(state, ctx, spec);
     const H = responsiveHeight(340, 250);
     const { ctx: g, w } = surface(canvas, H);
     const colors = palette();
@@ -950,10 +1043,20 @@ const STELLAR_LAB = {
     }
   },
 
-  readout(v, _ctx, spec = {}) {
+  readout(v, ctx, spec = {}) {
     const state = syncFromValues(v, spec);
+    const star = syncBoundStar(state, ctx, spec);
     const sel = selection(state);
     const rows = [];
+    if (star) {
+      // Named first, because the whole claim of a bound step is that this row
+      // and the point on the diagram are one object.
+      rows.push({
+        label: t('stelW.lab.row.boundStar'),
+        value: String(star.name ?? ''),
+        emphasis: true,
+      });
+    }
 
     rows.push({
       label: t('stelW.row.mode'),

@@ -545,6 +545,12 @@
             <option value="transit" data-i18n="pauseEvent.kind.transit">
               Next transit midpoint
             </option>
+            <option value="rvMinimum" data-i18n="pauseEvent.kind.rvMinimum">
+              Radial velocity at its most negative
+            </option>
+            <option value="rvMaximum" data-i18n="pauseEvent.kind.rvMaximum">
+              Radial velocity at its most positive
+            </option>
           </select>
         </label>
 
@@ -2454,7 +2460,11 @@
           type="button"
           class="sound-panel-btn"
         ></button>
-        <button id="soundPanelStop" type="button" class="sound-panel-btn"></button>
+        <button
+          id="soundPanelStop"
+          type="button"
+          class="sound-panel-btn"
+        ></button>
       </div>
       <p id="soundPanelPreviewNote" class="sound-panel-note"></p>
       <p class="sound-panel-link">
@@ -2731,9 +2741,8 @@
               -->
               <span data-i18n="inv.browser.activities"
                 >Short on time? Classroom activities are prepared teaching
-                formats — a five-minute demonstration, a twenty-minute
-                activity, a full lab — cut from these same
-                investigations.</span
+                formats — a five-minute demonstration, a twenty-minute activity,
+                a full lab — cut from these same investigations.</span
               >
               <a
                 href="/teaching/#activities"
@@ -2963,6 +2972,45 @@
       <div id="investigationProbeWrap" class="inv-probe-wrap" hidden="">
         <p class="inv-probe-title" data-i18n="inv.probe.title">Live readout</p>
         <div id="investigationProbe" class="inv-probe"></div>
+      </div>
+
+      <!-- The keyboard's way to do what a click on the canvas does. A step
+           that names objects gets a list of them here, in the same order the
+           canvas hit-testing walks, with the lesson's own word for each where
+           it has one. Direct manipulation had no keyboard equivalent at all
+           before this, which ACCESSIBILITY.md records as a known gap; this
+           closes it for the objects a lesson is actually about. -->
+      <div id="investigationObjectsWrap" class="inv-probe-wrap" hidden="">
+        <p class="inv-probe-title" data-i18n="inv.objects.title">
+          Objects in this activity
+        </p>
+        <div
+          id="investigationObjects"
+          class="inv-objects"
+          role="group"
+          data-i18n-aria-label="inv.objects.label"
+          aria-label="Objects in this activity"
+        ></div>
+        <!-- Camera and scale, for a step that stands objects on the canvas.
+             Both cameras act once, on request: a view that re-framed itself
+             every frame would take the scene back every time a reader looked
+             somewhere else. -->
+        <div id="investigationStageTools" class="inv-objects" hidden="">
+          <button type="button" id="investigationFit" class="inv-stage-btn">
+            <span data-i18n="inv.stage.fit">Fit comparison</span>
+          </button>
+          <button type="button" id="investigationFollow" class="inv-stage-btn">
+            <span data-i18n="inv.stage.follow">Follow selected</span>
+          </button>
+          <button
+            type="button"
+            id="investigationScale"
+            class="inv-stage-btn"
+            aria-pressed="false"
+          >
+            <span data-i18n="inv.stage.scale">True scale</span>
+          </button>
+        </div>
       </div>
 
       <!-- Progress safety. The save status is a standing statement rather than

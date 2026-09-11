@@ -64,6 +64,7 @@ import {
   conservationDrift,
   resetConservationBaseline,
   updatePhysicsSettings,
+  getWorldGeneration,
 } from '../physics.js';
 import { pristineSettingsFor } from '../shareState.js';
 import { createPhaseSampler } from './phaseSampler.js';
@@ -586,6 +587,12 @@ async function runReliabilityPhase(cfg) {
     integrator: drift.integrator,
     bodyCount: selectableBodies().length,
     baselineBodyCount: baselineBodies,
+    // Which world this was measured in. The engine bumps its generation on
+    // every rebuild, so a result carrying an old one is a result about a scene
+    // that is no longer on the canvas - which is the commonest way a sweep
+    // quietly becomes a lie: the reader changes something, the numbers stay on
+    // screen, and nothing says they are about the previous arrangement.
+    worldGeneration: getWorldGeneration(),
     perturbed: Boolean(current.perturbation),
   };
 }

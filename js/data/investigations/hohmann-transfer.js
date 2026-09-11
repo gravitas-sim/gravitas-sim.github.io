@@ -30,6 +30,57 @@ const LAB = {
   paused: false,
 };
 
+/**
+ * The three bodies a transfer is flown between, bound by exact name.
+ *
+ * A burn is planned on the spacecraft and judged by whether it arrives at the
+ * station. Both are named here, so selecting the thing a burn will be applied
+ * to is a chip rather than a hunt for the right dot.
+ */
+const TRANSFER = {
+  sun: { name: 'Sol' },
+  spacecraft: { name: 'Spacecraft' },
+  station: { name: 'Target Station' },
+};
+
+/**
+ * Where the spacecraft is and how fast, against where it is trying to get to.
+ *
+ * A burn is judged by an arrival, and until now the two numbers that decide
+ * that - the height the arc reaches and the speed there - had to be read off
+ * the inspector while the thing was moving. This reports them beside the
+ * station's own orbit, so "did the burn work" is a comparison a reader can
+ * make rather than a claim the lesson makes for them.
+ */
+const transferRows = ctx => {
+  const craft = ctx.role('spacecraft');
+  const station = ctx.role('station');
+  if (!craft) return [{ label: 'Spacecraft', value: 'not on the canvas' }];
+  const el = ctx.elements(craft);
+  const target = station ? ctx.elements(station) : null;
+  const rows = [
+    {
+      label: 'Spacecraft, distance from the star',
+      value: ctx.distance(el?.r ?? NaN),
+    },
+    { label: 'Its speed now', value: ctx.speed(el?.v ?? NaN) },
+  ];
+  if (el?.bound) {
+    rows.push(
+      { label: 'Top of its current arc', value: ctx.distance(el.apoapsis) },
+      { label: 'Bottom of it', value: ctx.distance(el.periapsis) }
+    );
+  }
+  if (target) {
+    rows.push({
+      label: 'The station orbits at',
+      value: ctx.distance(target.r),
+      emphasis: true,
+    });
+  }
+  return rows;
+};
+
 const HOHMANN_TRANSFER = {
   id: 'hohmann-transfer',
   thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
@@ -56,6 +107,7 @@ const HOHMANN_TRANSFER = {
     // --- Part 1: what a burn does ---------------------------------------------
     {
       sid: 'the-problem',
+      bind: TRANSFER,
       type: 'read',
       title: 'A spacecraft, a station, and no fuel to waste',
       setup: LAB,
@@ -74,6 +126,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'predict-point-at-it',
+      bind: TRANSFER,
       type: 'predict',
       title: 'Point at it and push?',
       body: `The station is directly outward from the star, further out than you
@@ -88,10 +141,11 @@ const HOHMANN_TRANSFER = {
       ],
       answer: 2,
       because:
-        'A radial push exerts no torque about the star, so it cannot change the angular momentum — and it is the angular momentum that sets how far out the orbit reaches on the far side. What it does change is the shape: the orbit becomes eccentric, swinging in closer on one side and out further on the other, for very little gain in size. It is the wrong direction to push.',
+        'It makes the orbit lopsided without making it much bigger. A radial push exerts no torque about the star, so the angular momentum is unchanged — but it does add energy, and where an orbit turns around depends on both. At fixed angular momentum, adding energy raises the far side and lowers the near side by almost as much: you get eccentricity rather than size. A transverse push of the same size raises the far side far more, because it adds energy along the direction you are already moving, which is where a given Δv buys the most of it, and it raises the angular momentum at the same time. Beware the shortcut that angular momentum alone decides how far out an orbit reaches — a radial burn does raise the apoapsis, just inefficiently, and it leaves the angular momentum exactly where it was.',
     },
     {
       sid: 'try-radial',
+      bind: TRANSFER,
       type: 'explore',
       title: 'Try it',
       body: `Open the manoeuvre planner on the <strong>Spacecraft</strong> and
@@ -109,12 +163,17 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'transverse-is-the-lever',
+      bind: TRANSFER,
       type: 'read',
       title: 'The lever is sideways',
       body: `A <strong>transverse</strong> burn — along the direction of travel,
              perpendicular to the line from the star — is the one that changes
-             the size of the orbit, because it is the one that changes the
-             angular momentum.
+             the size of the orbit. Both kinds of burn add energy, and the size
+             of an orbit is set by its energy alone; what makes the transverse
+             one the lever is that it spends the Δv along the direction you are
+             already moving, which is where it buys the most energy, and that it
+             raises the angular momentum at the same time so the extra energy
+             goes into a rounder, larger orbit rather than into eccentricity.
              \n\nAnd it changes the orbit <em>on the far side</em>. The point
              where you burn stays on the new orbit: you are still there, still
              at that distance, so that distance is still a point the orbit
@@ -125,6 +184,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'measure-the-orbits',
+      bind: TRANSFER,
       type: 'measure',
       title: 'Measure what you are starting with',
       body: `Select the <strong>Spacecraft</strong>, then the
@@ -138,6 +198,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'why-slower-further-out',
+      bind: TRANSFER,
       type: 'question',
       kind: 'choice',
       title: 'The station is slower',
@@ -159,6 +220,7 @@ const HOHMANN_TRANSFER = {
     // --- Part 2: the first burn ------------------------------------------------
     {
       sid: 'the-transfer-ellipse',
+      bind: TRANSFER,
       type: 'read',
       title: 'The cheapest path is an ellipse that touches both',
       body: `Here is the idea, and it is due to Walter Hohmann, who published it
@@ -175,6 +237,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'transfer-semi-major',
+      bind: TRANSFER,
       type: 'question',
       kind: 'numeric',
       title: 'How big is that ellipse?',
@@ -199,6 +262,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'vis-viva-departure',
+      bind: TRANSFER,
       type: 'question',
       kind: 'numeric',
       title: 'How fast do you have to be going?',
@@ -226,6 +290,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'first-burn-size',
+      bind: TRANSFER,
       type: 'question',
       kind: 'numeric',
       title: 'So how big is the first burn?',
@@ -247,6 +312,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'apply-the-first-burn',
+      bind: TRANSFER,
       // "Put your answer into the transverse box" - the answer worked out
       // there.
       requires: ['first-burn-size'],
@@ -268,6 +334,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'where-the-change-appeared',
+      bind: TRANSFER,
       // It compares the orbit before and after that burn.
       requires: ['apply-the-first-burn'],
       type: 'question',
@@ -290,6 +357,7 @@ const HOHMANN_TRANSFER = {
     // --- Part 3: the coast ------------------------------------------------------
     {
       sid: 'transfer-time',
+      bind: TRANSFER,
       type: 'question',
       kind: 'numeric',
       title: 'How long is the coast?',
@@ -316,6 +384,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'watch-the-coast',
+      bind: TRANSFER,
       // There is no transfer ellipse to coast along until that burn is made.
       requires: ['apply-the-first-burn'],
       type: 'explore',
@@ -327,14 +396,23 @@ const HOHMANN_TRANSFER = {
              time. Watch the speed readout in the inspector fall as it climbs —
              it arrives at the station's orbit doing about
              <strong>14.2 km/s</strong>.`,
+      // Arrival is the top of the transfer ellipse - an apoapsis - and it
+      // happens once, fourteen simulated months in. Reading a speed there by
+      // watching for it means either sitting through the coast or missing it,
+      // so the run is stopped at the point instead.
+      pauseAt: { kind: 'apoapsis', body: 'Spacecraft', primary: 'Sol' },
+      allowInspector: true,
+      probe: transferRows,
       checklist: [
-        'Watch the spacecraft climb to the top of its arc',
-        'Watch the speed fall as it climbs',
-        'Note the speed when it reaches 2.5 AU',
+        'Arm the event watch below, so the run stops at the top of the arc',
+        'Watch the spacecraft climb, and the speed fall as it climbs',
+        'Read the speed and the distance where it stopped',
+        'Check the distance against the station’s orbit at 2.5 AU',
       ],
     },
     {
       sid: 'predict-do-nothing',
+      bind: TRANSFER,
       type: 'predict',
       title: 'What if you do nothing?',
       body: `The spacecraft is at the station's orbital radius, at the top of
@@ -356,6 +434,7 @@ const HOHMANN_TRANSFER = {
     // --- Part 4: the second burn ------------------------------------------------
     {
       sid: 'second-burn-size',
+      bind: TRANSFER,
       type: 'question',
       kind: 'numeric',
       title: 'The burn everybody forgets',
@@ -380,6 +459,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'apply-the-second-burn',
+      bind: TRANSFER,
       // The second burn is made at apoapsis, which is where that coast ends.
       requires: ['watch-the-coast'],
       type: 'explore',
@@ -399,6 +479,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'total-cost',
+      bind: TRANSFER,
       // The two burns being added up.
       requires: ['first-burn-size', 'second-burn-size'],
       type: 'question',
@@ -418,6 +499,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'both-burns-forward',
+      bind: TRANSFER,
       type: 'question',
       kind: 'choice',
       title: 'Both burns were accelerations',
@@ -436,6 +518,7 @@ const HOHMANN_TRANSFER = {
     },
     {
       sid: 'when-this-is-true',
+      bind: TRANSFER,
       type: 'read',
       title: 'What this answer depended on',
       body: `Every number you computed was right, to a part in a thousand,

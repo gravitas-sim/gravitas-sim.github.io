@@ -12,6 +12,22 @@
 // and the tests use.
 // =============================================================================
 
+/**
+ * The three bodies this lesson is about, bound by exact name.
+ *
+ * The frame matters here more than in any other lesson in the catalogue: half
+ * of it is watched from outside and half from Earth, and "click Mars" means a
+ * different thing depending on which. Binding puts all three in the panel's
+ * object list, so a reader who has lost track of which body they are on can
+ * see it named rather than inferred from a moving dot - and can get back with
+ * one keypress.
+ */
+const INNER_PAIR = {
+  sun: { name: 'Sun' },
+  earth: { name: 'Earth' },
+  mars: { name: 'Mars' },
+};
+
 const RETROGRADE = {
   id: 'retrograde-motion',
   thumbnail: 'images/scenarios/retrograde-mars.webp',
@@ -37,6 +53,7 @@ const RETROGRADE = {
   steps: [
     {
       sid: 'the-wandering-stars',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'The wandering stars',
       body: `Almost everything in the night sky moves together. The stars turn
@@ -68,6 +85,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-you-are-looking-at',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'What you are looking at',
       body: `Three bodies, and nothing else. The <strong>Sun</strong> at the
@@ -84,6 +102,7 @@ const RETROGRADE = {
     },
     {
       sid: 'against-the-fixed-stars',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'Against the fixed stars',
       body: `Before you measure anything, be clear about what the measurement is.
@@ -102,6 +121,7 @@ const RETROGRADE = {
     },
     {
       sid: 'watch-from-outside-first',
+      bind: INNER_PAIR,
       type: 'explore',
       title: 'Watch from outside first',
       body: `Before changing anything, spend a moment on the view you already
@@ -130,6 +150,7 @@ const RETROGRADE = {
     },
     {
       sid: 'the-two-orbits',
+      bind: INNER_PAIR,
       type: 'measure',
       title: 'The two orbits',
       body: `Click <strong>Earth</strong> and read its orbital period from the
@@ -166,6 +187,7 @@ const RETROGRADE = {
     },
     {
       sid: 'which-one-is-faster',
+      bind: INNER_PAIR,
       // Answered off the periods measured there.
       requires: ['the-two-orbits'],
       type: 'question',
@@ -187,6 +209,7 @@ const RETROGRADE = {
     },
     {
       sid: 'how-fast-each-one-goes',
+      bind: INNER_PAIR,
       // It says "copy across the two periods you measured a moment ago".
       requires: ['the-two-orbits'],
       type: 'measure',
@@ -240,6 +263,7 @@ const RETROGRADE = {
     },
     {
       sid: 'the-synodic-period',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'The synodic period',
       body: `Two runners on a circular track, one faster than the other, meet
@@ -260,6 +284,7 @@ const RETROGRADE = {
     },
     {
       sid: 'how-often-does-earth-catch',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'How often does Earth catch up?',
       kind: 'numeric',
@@ -276,6 +301,7 @@ const RETROGRADE = {
     },
     {
       sid: 'a-lap-gained',
+      bind: INNER_PAIR,
       // Checked against the gain rate worked out there.
       requires: ['how-fast-each-one-goes'],
       type: 'question',
@@ -296,6 +322,7 @@ const RETROGRADE = {
     },
     {
       sid: 'before-you-look',
+      bind: INNER_PAIR,
       type: 'predict',
       title: 'Before you look',
       body: `You are about to change what the view is measured against. Right
@@ -320,6 +347,7 @@ const RETROGRADE = {
     },
     {
       sid: 'reference-frames',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'Reference frames',
       body: `A position is never a property of a body on its own. It is a
@@ -344,6 +372,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-the-trails-are-doing',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'What the trails are doing',
       body: `One detail matters for trusting what you are about to see.
@@ -362,6 +391,7 @@ const RETROGRADE = {
     },
     {
       sid: 'put-yourself-on-earth',
+      bind: INNER_PAIR,
       type: 'explore',
       title: 'Put yourself on Earth',
       body: `Click <strong>Earth</strong>, then switch its
@@ -402,6 +432,7 @@ const RETROGRADE = {
     },
     {
       sid: 'that-is-the-observation',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'That is the observation',
       body: `The loop on your screen is not a model of anything. It is what the
@@ -420,6 +451,7 @@ const RETROGRADE = {
     },
     {
       sid: 'catch-the-reversal',
+      bind: INNER_PAIR,
       type: 'measure',
       title: 'Catch the reversal',
       body: `The picture shows the loop; now put a number on it. With Earth's
@@ -465,6 +497,7 @@ const RETROGRADE = {
     },
     {
       sid: 'nearest-and-furthest',
+      bind: INNER_PAIR,
       type: 'measure',
       title: 'Nearest and furthest',
       body: `Keep Mars selected and watch <strong>Distance from Earth</strong>
@@ -497,6 +530,7 @@ const RETROGRADE = {
     },
     {
       sid: 'bright-and-backwards-together',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Bright and backwards together',
       kind: 'choice',
@@ -517,6 +551,7 @@ const RETROGRADE = {
     },
     {
       sid: 'when-does-it-reverse',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'When does it reverse?',
       kind: 'choice',
@@ -536,6 +571,7 @@ const RETROGRADE = {
     },
     {
       sid: 'overtaking-on-the-inside',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'Overtaking on the inside',
       body: `The mechanism is the one you know from a motorway.
@@ -554,6 +590,7 @@ const RETROGRADE = {
     },
     {
       sid: 'say-it-in-your-own',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Say it in your own words',
       kind: 'short',
@@ -566,6 +603,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-it-cost-to-explain',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'What it cost to explain this',
       body: `In a model where Earth sits still at the center and everything
@@ -590,6 +628,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-the-epicycle-was-really',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'What the epicycle was really tracking',
       kind: 'choice',
@@ -611,6 +650,7 @@ const RETROGRADE = {
     },
     {
       sid: 'counting-the-machinery',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Counting the machinery',
       kind: 'numeric',
@@ -629,6 +669,7 @@ const RETROGRADE = {
     },
     {
       sid: 'and-what-about-the-sun',
+      bind: INNER_PAIR,
       type: 'predict',
       title: 'And what about the Sun?',
       body: `Stay in Earth's frame. You have watched Mars, which loops. Now
@@ -647,6 +688,7 @@ const RETROGRADE = {
     },
     {
       sid: 'do-it-for-the-sun',
+      bind: INNER_PAIR,
       type: 'explore',
       title: 'Do it for the Sun',
       body: `Keep Earth's frame on and watch the <strong>Sun</strong> instead of
@@ -686,6 +728,7 @@ const RETROGRADE = {
     },
     {
       sid: 'which-one-is-moving',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Which one is moving?',
       kind: 'choice',
@@ -706,6 +749,7 @@ const RETROGRADE = {
     },
     {
       sid: 'frames-are-not-all-equal',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'Frames are not all equal',
       body: `Choosing a frame is free, but not consequence-free.
@@ -728,6 +772,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-actually-settled-it',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'What actually settled it',
       body: `If the loop does not decide between the two pictures, what did?
@@ -749,6 +794,7 @@ const RETROGRADE = {
     },
     {
       sid: 'why-tycho-found-nothing',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Why Tycho found nothing',
       kind: 'choice',
@@ -768,6 +814,7 @@ const RETROGRADE = {
     },
     {
       sid: 'how-long-does-a-loop',
+      bind: INNER_PAIR,
       type: 'measure',
       title: 'How long does a loop last?',
       body: `One last measurement, and it is a prediction you can check against
@@ -805,6 +852,7 @@ const RETROGRADE = {
     },
     {
       sid: 'mars-or-jupiter',
+      bind: INNER_PAIR,
       type: 'question',
       title: 'Mars or Jupiter?',
       kind: 'choice',
@@ -823,6 +871,7 @@ const RETROGRADE = {
     },
     {
       sid: 'what-you-did',
+      bind: INNER_PAIR,
       type: 'read',
       title: 'What you did',
       body: `You measured two orbital periods and computed a synodic period from

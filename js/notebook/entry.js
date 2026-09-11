@@ -61,6 +61,8 @@ export const SOURCE = Object.freeze({
   BENCH_SWEEP: 'bench-sweep',
   GW_OBSERVATION: 'gw-observation',
   STELLAR_LAB: 'stellar-lab',
+  BINARY_ORBIT: 'binary-orbit',
+  HORIZON_TRIALS: 'horizon-trials',
 });
 
 /** The sources this build can capture from. */
@@ -71,6 +73,8 @@ export const SOURCES = [
   SOURCE.BENCH_SWEEP,
   SOURCE.GW_OBSERVATION,
   SOURCE.STELLAR_LAB,
+  SOURCE.BINARY_ORBIT,
+  SOURCE.HORIZON_TRIALS,
 ];
 
 /** How long a student's prose may be, per field. */

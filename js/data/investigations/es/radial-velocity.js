@@ -105,14 +105,14 @@ export default {
     },
     {
       title: 'Hacia aquí, hacia allá, hacia aquí otra vez',
-      body: 'A la izquierda, la estrella recorre su pequeña órbita y una flecha muestra qué parte de su movimiento apunta hacia nosotros. A la derecha, esa cantidad se representa mientras la estrella da la vuelta.\n\nObserva qué ocurre en los dos puntos en los que la estrella se mueve justo de través respecto a tu vista.',
+      body: 'A la izquierda, la estrella recorre su pequeña órbita y una flecha muestra qué parte de su movimiento apunta hacia nosotros. A la derecha, esa cantidad se representa mientras la estrella da la vuelta.\n\nObserva qué ocurre en los dos puntos en los que la estrella se mueve justo de través respecto a tu vista.\n\nEl panel es un diagrama de la idea. Debajo está la misma magnitud para la estrella que está de verdad en el lienzo: dónde se encuentra HD 209458 en su órbita ahora mismo, y qué estaría leyendo en este instante un espectrógrafo apuntado hacia ella. Míralos juntos, y fíjate en que una lectura <em>negativa</em> significa que la estrella se acerca.',
       tool: {
         title: 'La parte que podemos medir',
       },
     },
     {
       title: 'Abre el instrumento real',
-      body: 'Ahora el sistema en vivo. Abre <strong>Velocidad radial</strong> en la lista de Herramientas de la derecha. Mide la estrella de esta simulación, igual que un espectrógrafo mide una real, y construye la curva a medida que avanza la órbita.\n\nDéjalo correr al menos dos ciclos completos antes de seguir. Una órbita tarda unos trece segundos.',
+      body: 'Ahora el sistema en vivo. Abre <strong>Velocidad radial</strong> en la lista de Herramientas de la derecha. Mide la estrella de esta simulación, igual que un espectrógrafo mide una real, y construye la curva a medida que avanza la órbita.\n\nDéjalo correr al menos dos ciclos completos antes de seguir. Una órbita tarda unos trece segundos.\n\nSelecciona la estrella en el lienzo si no lo está ya: el instrumento mide la estrella que hayas elegido, que es lo que lo convierte en un instrumento y no en una pantalla. La lectura de abajo empareja el punto en que está la curva con dónde está de verdad la estrella, para que puedas comprobar una cosa contra la otra.',
       tip: 'El panel informa de la velocidad relativa al propio centro de masas del sistema, así que la curva se sitúa en torno a cero.',
     },
     {
@@ -130,7 +130,7 @@ export default {
     },
     {
       title: 'Mide el periodo',
-      body: 'La curva se repite. Encuentra el tiempo entre dos puntos equivalentes, por ejemplo dos máximos sucesivos, y anótalo.\n\nEste es el periodo orbital del planeta, medido sin haber visto nunca el planeta.',
+      body: 'La curva se repite. Encuentra el tiempo entre dos puntos equivalentes, por ejemplo dos máximos sucesivos, y anótalo.\n\nEste es el periodo orbital del planeta, medido sin haber visto nunca el planeta.\n\nHay una manera de cazar un máximo exactamente. El vigilante de sucesos de abajo está puesto para detener la simulación en el momento en que la velocidad radial alcanza su valor más positivo: pulsa <strong>Armar</strong> y se detendrá ahí. Hazlo dos veces y el hueco entre las dos paradas es el periodo, leído del reloj en vez de estimado a ojo en una gráfica.\n\nMientras está detenido, mira el lienzo. ¿Hacia dónde se mueve realmente la estrella, y coincide con el signo de la lectura?',
       fields: [
         {
           label: 'Tiempo de un ciclo completo',
@@ -205,7 +205,7 @@ export default {
     },
     {
       title: 'El mismo planeta, cuatro ángulos de visión',
-      body: 'Recorre los ajustes de inclinación. La barra etiquetada <strong>masa real</strong> no se mueve nunca. La barra etiquetada <strong>la VR dice al menos</strong> encoge a medida que el sistema se inclina.\n\nA 30 grados el mismo planeta parece tener la mitad de su masa real. A 5 grados casi desaparece.',
+      body: 'Recorre los ajustes de inclinación. La barra etiquetada <strong>masa real</strong> no se mueve nunca. La barra etiquetada <strong>la VR dice al menos</strong> encoge a medida que el sistema se inclina.\n\nA 30 grados el mismo planeta parece tener la mitad de su masa real. A 5 grados casi desaparece.\n\nEl lienzo también ha cambiado. Se ha girado el observador hasta 90 grados, lo que para este sistema significa mirar la órbita desde otro lado: un solo cambio controlado, sin tocar nada de la estrella ni del planeta. Observa la lectura en vivo de abajo y compárala con la que tenías dos pantallas antes.',
       tool: {
         title: 'Inclínalo',
       },

@@ -79,26 +79,6 @@
     box-shadow: none;
   }
 
-  /* Primary action */
-  .ui-button.is-primary,
-  button.is-primary,
-  #settingsApply,
-  .settings-apply {
-    background: var(--accent);
-    border-color: transparent;
-    color: var(--accent-contrast);
-    font-weight: var(--weight-semibold);
-  }
-
-  .ui-button.is-primary:hover,
-  button.is-primary:hover,
-  #settingsApply:hover,
-  .settings-apply:hover {
-    background: var(--accent-strong);
-    border-color: transparent;
-    color: var(--accent-contrast);
-  }
-
   /* Quiet / icon-only */
   .ui-button.is-quiet,
   button.is-quiet {
@@ -4129,6 +4109,56 @@
     font-weight: var(--weight-semibold);
   }
 
+  /* --- Objects in this activity -------------------------------------------
+     The keyboard's way to do what a click on the canvas does. Reuses the
+     readout's own surface and title so it reads as part of the instrument
+     rather than as a second panel, and wraps rather than scrolls: a step
+     binds two or three objects, never twenty. */
+  /* The wrapper is .inv-probe-wrap, shared with the readout above: same
+     padding, same rule above it, same surface. Only the list itself is new. */
+  .inv-objects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  /* A selectable object, and the stage's own controls: same chip, and the
+     class is different so that ".inv-object" means one thing. */
+  .inv-object,
+  .inv-stage-btn {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: 4px var(--space-3);
+    min-height: 32px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    font-size: var(--text-xs);
+    cursor: pointer;
+  }
+  .inv-object:hover,
+  .inv-stage-btn:hover {
+    border-color: var(--accent);
+    color: var(--text-primary);
+  }
+  .inv-object[aria-pressed='true'],
+  .inv-stage-btn[aria-pressed='true'] {
+    border-color: var(--accent);
+    color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  .inv-object-role {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .inv-object[aria-pressed='true'] .inv-object-role {
+    color: var(--accent);
+  }
+
   /* --- Panel footer ------------------------------------------------------- */
   .inv-footer {
     display: flex;
@@ -4889,14 +4919,22 @@
     }
   }
   @media (max-width: 900px) {
-    /* The lesson is a bottom sheet at this width, so the light curve sits on
-       top of it rather than beside it. */
+    /* The lesson is a bottom sheet at this width, so the light curve goes to
+       the top of the viewport instead of stacking above the sheet.
+       
+       It used to sit at `transport-reserve + min(52vh, 420px)` from the
+       bottom, which is an estimate of how tall the sheet is - and the sheet is
+       not that tall. A step that carries a long body and an object list grows
+       past it, and the light curve then covered the list: on a 390-wide phone
+       the element under the first chip's centre was the light curve's own
+       observer controls, so a step telling the reader to select the planet
+       could not be done at all. Anchoring to the top needs no estimate of
+       anything, because nothing else is up there while a lesson is open. */
     body.investigation-open .light-curve-container {
       left: var(--space-2);
       right: var(--space-2);
-      bottom: calc(
-        var(--transport-reserve, 76px) + min(52vh, 420px) + var(--space-2)
-      );
+      top: var(--space-2);
+      bottom: auto;
       height: min(30vh, 210px);
     }
   }

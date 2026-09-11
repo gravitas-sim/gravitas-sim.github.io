@@ -544,6 +544,7 @@ export const EN = {
   'inspector.stat.hawkingLifetime': 'Hawking Lifetime',
   'inspector.stat.hawkingTemperature': 'Hawking Temperature',
   'inspector.stat.iscoPeriod': 'ISCO Period',
+  'inspector.stat.lifespan.hypothetical': 'not set by this model',
   'inspector.stat.lifespan': 'Lifespan',
   'inspector.stat.luminosity': 'Luminosity',
   'inspector.stat.mass': 'Mass',
@@ -1226,6 +1227,8 @@ export const EN = {
   'pauseEvent.kind.separationInward': 'Crossing inward through…',
   'pauseEvent.kind.separationOutward': 'Crossing outward through…',
   'pauseEvent.kind.transit': 'Next transit midpoint',
+  'pauseEvent.kind.rvMinimum': 'Radial velocity at its most negative',
+  'pauseEvent.kind.rvMaximum': 'Radial velocity at its most positive',
   'pauseEvent.body': 'Body',
   'pauseEvent.primary': 'Around',
   'pauseEvent.separation': 'Separation',
@@ -1386,202 +1389,18 @@ export const EN = {
   'inv.backup.restore': 'Restore progress backup',
   'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
   'inv.probe.title': 'Live readout',
+  'inv.stage.fit': 'Fit comparison',
+  'inv.stage.follow': 'Follow selected',
+  'inv.stage.scale': 'True scale',
+  'inv.stage.scale.true':
+    'True scale: sizes are now in proportion, and the smallest stars are below what the canvas can draw. Select them from the list.',
+  'inv.stage.scale.display':
+    'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
+  'inv.stage.nothingSelected':
+    'Select a star first, on the canvas or from the list.',
+  'inv.objects.title': 'Objects in this activity',
+  'inv.objects.label': 'Objects in this activity: select one to inspect it',
   'objectType.stars': 'Add Stars',
-
-  // --- Words a lesson computes ----------------------------------------------
-  // Probe rows and answer-checking messages come out of functions inside the
-  // lesson files, which a translation shadow cannot reach. js/i18n/lesson.js
-  // looks them up by what they say. See that file.
-  'lessonFn.distancesHaveToBePositiveNumbers38':
-    'Distances have to be positive numbers.',
-  'lessonFn.closestApproachIsLargerThanFurthest70':
-    'Closest approach is larger than furthest distance: these look swapped.',
-  'lessonFn.eccentric9': 'Eccentric',
-  'lessonFn.semiMajorAxis15': 'semi-major axis',
-  'lessonFn.clickAPlanetToSelectIt27': 'Click a planet to select it',
-  'lessonFn.body4': 'Body',
-  'lessonFn.noOrbitFound14': 'no orbit found',
-  'lessonFn.selected8': 'Selected',
-  'lessonFn.eccentricityE14': 'Eccentricity e',
-  'lessonFn.closestPeriapsis19': 'Closest (periapsis)',
-  'lessonFn.furthestApoapsis19': 'Furthest (apoapsis)',
-  'lessonFn.currentSpeed13': 'Current speed',
-  'lessonFn.selectTheEccentricOrbiter28': 'Select the Eccentric Orbiter',
-  'lessonFn.distanceFromStar18': 'Distance from star',
-  'lessonFn.speedNow9': 'Speed now',
-  'lessonFn.speedsHaveToBePositiveRead77':
-    'Speeds have to be positive. Read the "Speed now" value, which is a magnitude.',
-  'lessonFn.yourClosestSpeedIsLowerThan181':
-    'Your "closest" speed is lower than your "furthest" speed. That is the wrong way round for any bound orbit. Check which reading you took where, using the distance to tell them apart.',
-  'lessonFn.selectAPlanet15': 'Select a planet',
-  'lessonFn.atAnExtreme14': 'At an extreme?',
-  'lessonFn.closestReadNow17': 'closest: read now',
-  'lessonFn.furthestReadNow18': 'furthest: read now',
-  'lessonFn.inBetween10': 'in between',
-  'lessonFn.closestThisOrbit18': 'Closest this orbit',
-  'lessonFn.furthestThisOrbit19': 'Furthest this orbit',
-  'lessonFn.planet6': 'Planet',
-  'lessonFn.distancesAndPeriodsMustBothBe44':
-    'Distances and periods must both be positive.',
-  'lessonFn.clickAPlanetToMeasureIt28': 'Click a planet to measure it',
-  'lessonFn.bothValuesMustBePositive29': 'Both values must be positive.',
-  'lessonFn.clickAPlanetToReRead28': 'Click a planet to re-read it',
-  'lessonFn.clickAPlanet14': 'Click a planet',
-  'lessonFn.noOrbit8': 'no orbit',
-  'lessonFn.tooHigh8': 'too high',
-  'lessonFn.checkThatAAndPCame45':
-    'Check that a and P came from the same planet.',
-  'lessonFn.theSemiMajorAxisLooksToo112':
-    'The semi-major axis looks too large. Every orbit here is under 0.07 AU, so the value should start 0.0 something.',
-  'lessonFn.thePeriodLooksTooSmallFor119':
-    'The period looks too small for days. The readout gives days, and the shortest year in this system is about 1.5 of them.',
-  'lessonFn.thePeriodLooksTooLargeFor79':
-    'The period looks too large for days. The longest year here is about 19 of them.',
-  'lessonFn.outByMoreThanAFactor97':
-    'Out by more than a factor of three, which usually means a and P were read from different planets.',
-  'lessonFn.clickAPlanetToReadIt25': 'Click a planet to read it',
-  'lessonFn.notFound9': 'not found',
-  'lessonFn.referenceFrame15': 'Reference frame',
-  'lessonFn.worldNotSwitchedYet23': 'World, not switched yet',
-  'lessonFn.marsDistanceFromEarth25': 'Mars: distance from Earth',
-  'lessonFn.marsDirectionFromEarth26': 'Mars: direction from Earth',
-  'lessonFn.selectMars11': 'Select Mars',
-  'lessonFn.world5': 'World',
-  'lessonFn.aBody6': 'A body',
-  'lessonFn.sunDistanceFromEarth24': 'Sun: distance from Earth',
-  'lessonFn.sunDirectionFromEarth25': 'Sun: direction from Earth',
-  'lessonFn.baselineOutOfTransit24': 'Baseline, out of transit',
-  'lessonFn.completeTransitsRecorded26': 'Complete transits recorded',
-  'lessonFn.waitingForACompleteTransit30': 'Waiting for a complete transit',
-  'lessonFn.clock5': 'Clock',
-  'lessonFn.theBottomOfATransitSits137':
-    'The bottom of a transit sits <em>below</em> the baseline, so the depth has to come out positive. Check that you have not swapped the two.',
-  'lessonFn.a20DipWouldBeA153':
-    'A 20% dip would be a stellar eclipse, not a planet. If you entered numbers like 98.2 and 100, enter the brightness itself rather than a percentage of it.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'That is shallower than this system can produce. Make sure the bottom value really is from the lowest point of a dip and not from the shoulder on the way in.',
-  'lessonFn.goodAbout18GivingA152':
-    'Good: about 1.8%, giving a radius ratio near 0.135. Hold on to that number, because the next step is going to tell you it is about 10% too big, and why.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Expected somewhere near 0.018 for this system. Read the baseline from a flat stretch well away from any dip, and the bottom from the lowest point of one.',
-  'lessonFn.theStarRadiusGoesInSolar93':
-    'The star radius goes in solar radii, not in kilometers or in Jupiters. HD 209458 is 1.155 R☉.',
-  'lessonFn.theDepthIsAFractionNot65':
-    'The depth is a fraction, not a percentage: 1.8% goes in as 0.018.',
-  'lessonFn.thatIsItAbout138218':
-    'That is it: about 1.38 Jupiter radii, or 15.5 Earth radii. The published value from a decade of Hubble transits is 1.38 R_Jupiter. You just measured a planet 160 light years away by watching a star get slightly dimmer.',
-  'lessonFn.tooLargeCheckThatYouDivided170':
-    'Too large. Check that you divided the depth by 1.215 before taking the square root rather than after, and that the depth is the one you measured rather than a percentage.',
-  'lessonFn.tooSmallTheMostCommonCause121':
-    'Too small. The most common cause is reading the bottom of the dip from the ingress shoulder rather than the lowest point.',
-  'lessonFn.theSecondStampHasToCome78':
-    'The second stamp has to come after the first. Swap them, or take a fresh pair.',
-  'lessonFn.atLeastOneOrbitHasTo52':
-    'At least one orbit has to pass between two transits.',
-  'lessonFn.countTheGapsBetweenTheTransits65':
-    'Count the gaps between the transits, not the transits themselves.',
-  'lessonFn.about35DaysThePublished138':
-    'About 3.5 days. The published period of HD 209458 b is 3.5247 days, known to better than a tenth of a second from two decades of transits.',
-  'lessonFn.thatIsTwiceThePeriodA113':
-    'That is twice the period: a transit went by between your two stamps and was not counted. Put 2 in the orbits box.',
-  'lessonFn.thatIsAboutHalfThePeriod166':
-    'That is about half the period. Check that both stamps were taken at the bottom of a transit and not one at a transit and one at the secondary eclipse halfway between.',
-  'lessonFn.expectedSomethingNear35Days131':
-    'Expected something near 3.5 days. Check that the orbit count matches the difference between the two transit numbers in the readout.',
-  'lessonFn.thePeriodGoesInDaysNot102':
-    'The period goes in days, not years. Three and a half days, not three and a half thousandths of a year.',
-  'lessonFn.theMassGoesInSolarMasses58':
-    'The mass goes in solar masses. HD 209458 is 1.148 of them.',
-  'lessonFn.about0047AuOneEighth372':
-    'About 0.047 AU: one eighth of Mercury’s distance from the Sun, and roughly nine stellar radii out. At 1,450 K the planet’s day side is hot enough to glow dull red on its own. Nothing in planet formation theory before 1995 put a gas giant there, and working out how it arrived is still an active argument between migration through the disk and scattering off other planets.',
-  'lessonFn.expectedRoughly0047AuCheck84':
-    'Expected roughly 0.047 AU. Check the period is in days and the mass in solar masses.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Both depths are fractions, not percentages: 1.1% goes in as 0.011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'The blended depth has to be the <em>shallower</em> of the two. Check you have not put them in the wrong boxes.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'That is the result. The blended curve says about 12 Earth radii; the correction of roughly ×1.28 takes it back to about 15.5, which is the 1.38 Jupiter radii you measured before the companion was there. The implied contrast should land near Δm = 0.5, which is what the companion actually is.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'The ratio is larger than this companion can produce. Re-read the blended depth: it should be near 0.011, not near half the clean value.',
-  'lessonFn.expectedARatioNear163135':
-    'Expected a ratio near 1.63 and a corrected radius near 15.5 R⊕. Check both depths came from the bottom of a dip rather than a shoulder.',
-  'lessonFn.clickABodyInTheSimulation30': 'Click a body in the simulation',
-  'lessonFn.nothingToOrbit16': 'nothing to orbit',
-  'lessonFn.distanceFromTheStar22': 'Distance from the star',
-  'lessonFn.speed5': 'Speed',
-  'lessonFn.totalEnergy12': 'Total energy',
-  'lessonFn.belowZero10': 'below zero',
-  'lessonFn.aboveZero10': 'above zero',
-  'lessonFn.boundOrUnbound16': 'Bound or unbound',
-  'lessonFn.boundItComesBack20': 'bound: it comes back',
-  'lessonFn.unboundItIsLeaving22': 'unbound: it is leaving',
-  'lessonFn.furthestItGets16': 'furthest it gets',
-  'lessonFn.forThisPracticeRunPut293':
-    'For this practice run, put 2 in both boxes. You can experiment with other numbers afterwards.',
-  'lessonFn.222Is8And204':
-    '2 × 2 × 2 is 8, and 2 × 2 is 4, and 8 divided by 4 is 2. The pair weighs <strong>2 solar masses</strong> between them. Nobody went there. Nobody weighed anything. Two measurements of an orbit were enough.',
-  'lessonFn.bothMeasurementsHaveToBePositive46':
-    'Both measurements have to be positive numbers.',
-  'lessonFn.thatLooksLikeOneStarS187':
-    'That looks like one star’s distance from the balance point rather than the whole orbit. The orbit size is measured from one star <em>across to the other</em>: add both distances together.',
-  'lessonFn.checkTheOrbitSizeAgainstThe137':
-    'Check the orbit size against the rings. Star A sits on one ring and Star B on another, and the number you want is the two added together.',
-  'lessonFn.checkThePeriodTimeStarA106':
-    'Check the period. Time Star A from the dotted line all the way round until it crosses the same line again.',
-  'lessonFn.youHaveThemTheWrongWay130':
-    'You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two.',
-  'lessonFn.threeSolarMassesAndOneSolar125':
-    'Three solar masses and one solar mass. You have just weighed two individual stars, separately, using a ruler and a stopwatch.',
-  'lessonFn.theTwoAddUpCorrectlyBut126':
-    'The two add up correctly, but not in a three to one ratio. Count the blocks: three on Star A’s side for every one on Star B’s.',
-  'lessonFn.put3InBothBoxesThe65':
-    'Put 3 in both boxes: the pair is 3 AU apart with a 3 year period.',
-  'lessonFn.333Is27And102':
-    '3 × 3 × 3 is 27, and 3 × 3 is 9, and 27 divided by 9 is 3. Three solar masses between the two of them.',
-  'lessonFn.isProportionalTo18': 'is proportional to',
-  'lessonFn.howConcentratedIsThisThingOn63':
-    'how concentrated is this thing, on the scale of its own horizon',
-  'lessonFn.whatEarthGets15': 'what Earth gets',
-  'lessonFn.distancesAndStarlightAreBothPositive50':
-    'Distances and starlight are both positive numbers.',
-  'lessonFn.theseDoNotAllSitOn114':
-    'These do not all sit on the same relationship. Check that each starlight value was read at the distance beside it.',
-  'lessonFn.everyOneOfYourReadingsSatisfies123':
-    'Every one of your readings satisfies starlight x distance x distance = 1. That is the pattern, already in your own numbers.',
-  'lessonFn.thoseMatchNowSayItIn298':
-    'Those match. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
-  'lessonFn.rotationCurve14': 'Rotation curve',
-  'lessonFn.openThePanel14': 'open the panel',
-  'lessonFn.bodiesPlotted14': 'Bodies plotted',
-  'lessonFn.innermost9': 'Innermost',
-  'lessonFn.outermost9': 'Outermost',
-  'lessonFn.fittedSlope12': 'Fitted slope',
-  'lessonFn.proportionalToRadius22': 'proportional to radius',
-  'lessonFn.halo4': 'Halo',
-  'lessonFn.outermostStar14': 'Outermost star',
-  'lessonFn.slope5': 'Slope',
-  'lessonFn.luna4': 'Luna',
-  'lessonFn.bodiesOnScreen16': 'Bodies on screen',
-  'lessonFn.earthAndTheMoon19': 'Earth, and the Moon',
-  'lessonFn.moonSDistanceNow19': 'Moon’s distance now',
-  'lessonFn.buildingTheSystem20': 'building the system…',
-  'lessonFn.realSeparation15': 'Real separation',
-  'lessonFn.384400KmOnAverage22': '384,400 km, on average',
-  'lessonFn.distancesAndTidalStrengthsAreBoth56':
-    'Distances and tidal strengths are both positive numbers.',
-  'lessonFn.theseDoNotAllSitOn185':
-    'These do not all sit on one relationship. The usual cause is a strength read at a different distance from the one beside it: check each row against the slider position that produced it.',
-  'lessonFn.massesAndTidalStrengthsAreBoth53':
-    'Masses and tidal strengths are both positive numbers.',
-  'lessonFn.stretchMassIsNotComingOut190':
-    'Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for.',
-  'lessonFn.bodiesBeingTracked20': 'Bodies being tracked',
-  'lessonFn.whatIsSimulated17': 'What is simulated',
-  'lessonFn.newtonianGravityBetweenPointMasses38':
-    'Newtonian gravity between point masses',
-  'lessonFn.whatIsNot11': 'What is not',
-  'lessonFn.fluidFlowPressureRadiation31': 'Fluid flow, pressure, radiation',
 
   // --- Answer feedback -------------------------------------------------------
   // --- The classroom assignment builder ---------------------------------------

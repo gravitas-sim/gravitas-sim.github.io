@@ -52,17 +52,67 @@ import {
   signatureOf,
   snapshotOf,
   audioPlanFor,
+  referenceStrainFor,
 } from './gwLab.js';
 import { TRACES, PROVENANCE, decodeTrace } from './data/gw/gw150914.js';
 import { sampledTimeline } from './gw/timeline.js';
 import { similarity as overlapOf, sampleOnto } from './gw/match.js';
-import { captureToNotebook } from './notebookBridge.js';
+// Through the seam, not the service: a widget definition is content, and the
+// authoring CLI reads these modules in a plain Node process with no DOM. See
+// js/widgetRuntime.js for why the direction matters.
+import { captureToNotebook } from './widgetRuntime.js';
 import {
-  play as playSignal,
-  stop as stopSignal,
-  isPlaying,
-  currentMapping,
-} from './gwAudio.js';
+  playSignal,
+  stopSignal,
+  signalIsPlaying as isPlaying,
+  signalMapping as currentMapping,
+  signalOwner,
+  stopSignalIfOwner,
+} from './widgetRuntime.js';
+
+/**
+ * A token naming exactly what a playback describes.
+ *
+ * The lab's own signature covers the model and its parameters; the step id is
+ * added because the same signal in a different step is a different reading,
+ * and closing the lesson has to release both. Everything the lab starts is
+ * under one prefix so that a scope can be dropped in one call.
+ *
+ * @param {object} state - The lab
+ * @param {object} spec - The step's tool spec
+ * @returns {string} An owner token
+ */
+const audioOwnerFor = (state, spec = {}) =>
+  `gw-lab:${spec.stepId ?? spec.preset ?? 'free'}:${state.signature}`;
+
+/**
+ * Whether this step is a controlled comparison being listened to.
+ *
+ * Two listening modes, and they answer different questions. **Comparison**
+ * holds one reference amplitude fixed so that changing a parameter changes the
+ * loudness in proportion to the strain - that is the mode a distance
+ * comparison needs, and it is the default. **Peak-normalised** brings every
+ * signal to full scale, which is the right choice when the question is what a
+ * waveform sounds like rather than how loud it is, and a step asks for it
+ * explicitly.
+ *
+ * @param {object} spec - The step's tool spec
+ * @returns {boolean} True for the fixed-reference mode
+ */
+const comparisonListening = (spec = {}) => spec.listen !== 'peak';
+
+/**
+ * The strain that maps to full scale.
+ *
+ * @param {object} spec - The step's tool spec
+ * @returns {number} A strain
+ */
+function audioReferenceFor(spec = {}) {
+  if (Number.isFinite(spec.referenceStrain) && spec.referenceStrain > 0) {
+    return spec.referenceStrain;
+  }
+  return referenceStrainFor(spec.preset || 'bbh');
+}
 
 /** How many wavefront rings the overlay may draw. Bounded, deliberately. */
 const MAX_RINGS = 26;
@@ -870,6 +920,9 @@ function captureLab(state, spec) {
       similarity: sim,
       provenance,
       envelope: points,
+      // Only when something is actually sounding: a reading taken in silence
+      // has no loudness to describe.
+      audioMapping: isPlaying() ? currentMapping() : null,
     })
   ).catch(() => {});
 }
@@ -888,8 +941,47 @@ function stack(rect, weights, gap = 6) {
   return out;
 }
 
+// -----------------------------------------------------------------------------
+// The binary on the main canvas
+// -----------------------------------------------------------------------------
+//
+// A step that declares a `binary` stage and names it in the tool spec gets two
+// selectable compact objects in the sandbox whose separation and orbital phase
+// come from this timeline - the same one the waveform is plotted from. They
+// are not being integrated: js/lessonStage.js hands them to the model, so the
+// picture cannot drift away from the plot, and the sandbox is not quietly
+// asserting an orbit of its own beside a computed one.
+//
+// It is a schematic source reconstruction and the readout says so. The
+// separation is to scale in Schwarzschild radii of the total mass; the two
+// bodies are markers at a fixed size, because a horizon and a neutron-star
+// surface are not the same kind of quantity and drawing them to that scale
+// would smuggle in a claim about neutron-star radii.
+
+/**
+ * Put the staged binary where the model says it is, this frame.
+ *
+ * @param {object} state - The lab
+ * @param {?object} ctx - The lesson context, when the step gave the widget one
+ * @param {object} spec - The step's tool spec
+ * @returns {boolean} Whether the picture was driven
+ */
+function syncBinary(state, ctx, spec = {}) {
+  if (!spec.binary || typeof ctx?.placeBinary !== 'function') return false;
+  const tl = state.timeline;
+  if (!tl) return false;
+  const t = state.cursorT;
+  return ctx.placeBinary(tl.separationRsAtTime(t), tl.orbitalPhaseAtTime(t), {
+    m1: state.params.m1,
+    m2: state.params.m2,
+  });
+}
+
 const GW_LAB = {
   id: 'gw-lab',
+  // Given the lesson context, so a step that stages the binary can have the
+  // two objects on the canvas be the ones this timeline describes.
+  live: true,
   get title() {
     return t('gwW.lab.title');
   },
@@ -1080,12 +1172,19 @@ const GW_LAB = {
           mode: plan.mode,
           speed: plan.speed,
           shiftHz: plan.shiftHz,
-          // Fixed against this signal's own loudest moment rather than
-          // against the buffer, so that two distances are audibly different.
-          normalise: 'fixed',
-          referenceStrain:
-            (spec.referenceStrain ?? state.timeline.meta.peakStrain) * 1.05,
+          // One reference for the whole comparison, and deliberately not
+          // this signal's own peak: normalising against that made every
+          // distance sound identical, which removed the very ratio the step
+          // asks the student to hear. Order of preference - what the step
+          // pins, then the preset's reference at its default parameters. Both
+          // are independent of the controls, so loudness now tracks strain.
+          normalise: comparisonListening(spec) ? 'fixed' : 'peak',
+          referenceStrain: audioReferenceFor(spec),
           label: 'gw-lab',
+          // What this sound describes. The moment it stops being true - a
+          // different preset, a different distance, a different step - the
+          // repaint below notices and stops it.
+          owner: audioOwnerFor(state, spec),
         });
         audioNote = result.ok
           ? { key: 'gwW.audio.playing', vars: audioVars(plan) }
@@ -1104,8 +1203,22 @@ const GW_LAB = {
     v.cursor = cursorFraction(state);
   },
 
-  draw(canvas, v, _ctx, spec = {}) {
+  draw(canvas, v, ctx, spec = {}) {
     const state = ensureLab(v, spec);
+    syncBinary(state, ctx, spec);
+    // A sound describes one configuration. If the configuration has moved -
+    // another preset, another distance, another step - what is playing is
+    // describing something that is no longer on screen, so it stops. Scoped by
+    // owner, so a sound some other instrument started is left alone.
+    const owner = audioOwnerFor(state, spec);
+    const playingOwner = signalOwner();
+    if (
+      playingOwner &&
+      playingOwner.startsWith('gw-lab:') &&
+      playingOwner !== owner
+    ) {
+      stopSignalIfOwner(playingOwner);
+    }
     const view = spec.view || 'signal';
     const tall = view === 'both' || view === 'source';
     const H = responsiveHeight(tall ? 340 : 300, tall ? 250 : 210);
@@ -1148,8 +1261,9 @@ const GW_LAB = {
     drawFrequency(g, c, state, colors);
   },
 
-  readout(v, _ctx, spec = {}) {
+  readout(v, ctx, spec = {}) {
     const state = ensureLab(v, spec);
+    syncBinary(state, ctx, spec);
     const tl = state.timeline;
     const f = state.facts;
     const tNow = state.cursorT;
@@ -1168,9 +1282,22 @@ const GW_LAB = {
       }),
       emphasis: true,
     });
+    // Two different quantities, and the lesson used to ask for one and point
+    // at the other. The amplitude is the height of the oscillation at this
+    // moment - always positive, and what "peak strain" means. The signed value
+    // below it is where the wave happens to be within that oscillation, which
+    // passes through zero twice a cycle and is the wrong thing to write down
+    // as a peak.
+    rows.push({
+      label: t('gwW.row.strainAmplitude'),
+      value: strainText(tl.envelopeAtTime(tNow)),
+      emphasis: true,
+    });
     rows.push({
       label: t('gwW.row.strainNow'),
-      value: strainText(tl.strainAtTime(tNow)),
+      value: t('gwW.value.strainNow', {
+        strain: strainText(tl.strainAtTime(tNow)),
+      }),
     });
     rows.push({
       label: t('gwW.row.separation'),
@@ -1290,6 +1417,32 @@ const GW_LAB = {
         label: t('gwW.row.notSound'),
         value: t('gwW.value.notSound'),
       });
+      // How loudness was set, and what that does and does not mean. A
+      // comparison is only a comparison if the reader knows the reference did
+      // not move with the thing being compared.
+      const map = currentMapping();
+      rows.push({
+        label: t('gwW.row.loudness'),
+        value: t(
+          map.normalise === 'fixed'
+            ? 'gwW.value.loudness.fixed'
+            : 'gwW.value.loudness.peak',
+          {
+            percent: map.referenceStrain
+              ? `${((map.peakStrain / map.referenceStrain) * 100).toPrecision(3)}%`
+              : '—',
+          }
+        ),
+      });
+      // Said, not swallowed. A fixed reference cannot cover the whole range of
+      // the distance control - the closest setting is forty times louder than
+      // the default - so the engine clamps and this says it did.
+      if (map.clippedSamples > 0) {
+        rows.push({
+          label: t('gwW.row.clipped'),
+          value: t('gwW.value.clipped', { n: map.clippedSamples }),
+        });
+      }
     }
     rows.push({
       label: t('gwW.row.playback'),

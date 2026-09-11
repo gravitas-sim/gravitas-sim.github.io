@@ -84,8 +84,12 @@ export const BROWSE_META = {
     tags: ['gravity', 'orbits', 'spaceflight'],
     numericCount: 1,
   },
+  'what-is-a-gravitational-wave': {
+    tags: ['gravity', 'waves'],
+    numericCount: 0,
+  },
   'listening-to-spacetime': {
-    tags: ['compact-objects', 'gravity', 'observing'],
+    tags: ['compact-objects', 'gravity', 'observing', 'waves'],
     numericCount: 0,
   },
   'a-universe-of-stars': {

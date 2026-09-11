@@ -19,7 +19,7 @@ cache from the URLs below on its first run.
 
 The figure data behind:
 
-> B. P. Abbott *et al.* (LIGO Scientific Collaboration and Virgo
+> B. P. Abbott _et al._ (LIGO Scientific Collaboration and Virgo
 > Collaboration), **Observation of Gravitational Waves from a Binary Black Hole
 > Merger**, Phys. Rev. Lett. **116**, 061102 (2016).
 > [doi:10.1103/PhysRevLett.116.061102](https://doi.org/10.1103/PhysRevLett.116.061102),
@@ -38,13 +38,13 @@ Acknowledgement, reproduced in the application beside the data:
 
 ## What each trace is
 
-| Trace | File | What it is |
-|-------|------|------------|
-| `observed-H1`, `observed-L1` | `fig1-observed-{H,L}.txt` | Measured strain. Real data. |
-| `reconstruction-H1`, `reconstruction-L1` | `fig1-waveform-{H,L}.txt` | The collaboration's numerical-relativity waveform. A model, theirs, not ours. |
-| `residual-H1`, `residual-L1` | `fig1-residual-{H,L}.txt` | Data minus reconstruction. What is left is noise. |
-| `separation-H1` | `fig2-keplerian-separation-H.txt` | Effective black-hole separation in Schwarzschild radii. A published estimate. |
-| `velocity-H1` | `fig2-postNewtonian-velocity-H.txt` | Post-Newtonian relative velocity in units of *c*. A published estimate. |
+| Trace                                    | File                                | What it is                                                                    |
+| ---------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| `observed-H1`, `observed-L1`             | `fig1-observed-{H,L}.txt`           | Measured strain. Real data.                                                   |
+| `reconstruction-H1`, `reconstruction-L1` | `fig1-waveform-{H,L}.txt`           | The collaboration's numerical-relativity waveform. A model, theirs, not ours. |
+| `residual-H1`, `residual-L1`             | `fig1-residual-{H,L}.txt`           | Data minus reconstruction. What is left is noise.                             |
+| `separation-H1`                          | `fig2-keplerian-separation-H.txt`   | Effective black-hole separation in Schwarzschild radii. A published estimate. |
+| `velocity-H1`                            | `fig2-postNewtonian-velocity-H.txt` | Post-Newtonian relative velocity in units of _c_. A published estimate.       |
 
 The time axis on every trace is seconds after GPS 1126259462, which is
 2015-09-14 09:50:45 UTC — the axis the published figures use.
@@ -64,7 +64,7 @@ The time axis on every trace is seconds after GPS 1126259462, which is
    error is recorded per trace and is at worst 7e-5 in the published units.
 4. Base64 encoded, little-endian.
 
-## What was *not* done to it
+## What was _not_ done to it
 
 - No time shift between detectors.
 - No sign inversion.

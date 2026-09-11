@@ -14,16 +14,42 @@
 
 // --- 4. Weighing the stars ----------------------------------------------------
 
-const BINARY_LAB = {
-  scenario: 'Binary Pair',
-  seed: 'binary-lab',
-  camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
-  paused: false,
+// -----------------------------------------------------------------------------
+// The pair on the main canvas
+// -----------------------------------------------------------------------------
+// Two stars the engine really integrates, not a diagram of two stars. That
+// distinction is the whole reason this lesson can claim to be a measurement:
+// the period a student times and the separation they read are produced by the
+// same integrator the rest of the sandbox runs on, so putting them into
+// Newton's form of Kepler's third law tests the law rather than restating a
+// number the lesson wrote down for itself.
+//
+// One AU is 100 world units here, which is the sandbox's own convention, so
+// the four-AU pair the lesson has always used is 400 units across.
+const AU = 100;
+
+/** The equal pair the first half watches: nothing to infer, everything to see. */
+const EQUAL_PAIR = {
+  starPair: { m1: 2, m2: 2, separation: 4 * AU, fit: true },
+};
+
+/**
+ * The unequal pair the second half weighs.
+ *
+ * Three solar masses and one, four AU apart - the same numbers the panel
+ * instrument has always used for its mystery pair, so a student who worked
+ * through the old version of this lesson gets the same answer. The masses are
+ * not shown anywhere: the point is to arrive at them from the orbit.
+ */
+const MYSTERY_PAIR = {
+  starPair: { m1: 3, m2: 1, separation: 4 * AU, fit: true },
 };
 
 const WEIGHING = {
   id: 'weighing-stars',
-  thumbnail: 'images/scenarios/binary-pair.webp',
+  // Its own card: the lesson stands its own pair on the canvas and opens in
+  // no scenario, so there is no scenario capture it could honestly borrow.
+  thumbnail: 'images/investigations/weighing-stars.webp',
   title: 'Weighing the Stars',
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
   duration: '35-45 min',
@@ -46,6 +72,7 @@ const WEIGHING = {
   steps: [
     {
       sid: 'you-cannot-put-a-star',
+      stage: EQUAL_PAIR,
       type: 'read',
       title: 'You cannot put a star on a scale',
       body: `A bathroom scale works by pushing back. Stand on it, and it measures
@@ -64,10 +91,10 @@ const WEIGHING = {
              \n\nThis lesson is about pointing that instrument at a pair of
              stars.`,
       tip: 'Nothing here needs algebra. You will read two numbers off a screen and do one division.',
-      setup: BINARY_LAB,
     },
     {
       sid: 'how-would-you-do-it',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'How would you do it?',
       kind: 'choice',
@@ -87,6 +114,7 @@ const WEIGHING = {
     },
     {
       sid: 'two-stars-side-by-side',
+      stage: EQUAL_PAIR,
       type: 'predict',
       title: 'Two stars, side by side',
       body: `On screen are two stars of about the same size, close enough
@@ -107,32 +135,41 @@ const WEIGHING = {
     },
     {
       sid: 'watch-them',
+      stage: EQUAL_PAIR,
       type: 'explore',
       title: 'Watch them',
-      body: `Here they are, with a trail behind each one so you can see where it
-             has been.
-             \n\nDo not measure anything yet. Just watch for a few seconds and
-             pay attention to what each star is doing.`,
-      tool: {
-        id: 'binary',
-        values: { m1: 2, m2: 2 },
-        hide: ['m1', 'm2'],
-        presets: false,
-        barycenter: false,
-        rows: [],
-        title: 'Two stars',
-        note: 'Two stars of equal mass, four AU apart. The trails show where each one has been.',
-      },
+      allowInspector: true,
+      body: `The two stars are on the main canvas, with a trail behind each one
+             so you can see where it has been. They are not a diagram: the
+             simulation is moving them, the same one that runs everything else
+             in Gravitas.
+             \n\nDo not measure anything yet. Watch for a few seconds and pay
+             attention to what each star is doing. Then click one of them, or
+             use <strong>Objects in this activity</strong> below, and read its
+             card.`,
       checklist: [
         'Watch until each star has been all the way round at least once',
         'Follow Star A with your eye for one full lap',
         'Now follow Star B for one full lap',
-        'Press Run / Pause to freeze the picture and look at the two trails',
+        'Select each star in turn and check the two masses really are equal',
       ],
-      tip: 'The Run / Pause and Reset buttons are underneath the picture. Pausing is often the easiest way to look at something carefully.',
+      probe: ctx => {
+        const b = ctx.barycentre();
+        if (!b) return [{ label: 'The pair', value: 'not on the canvas yet' }];
+        return [
+          { label: 'Star A, mass', value: `${b.arms[0]?.massSun ?? '—'} M☉` },
+          { label: 'Star B, mass', value: `${b.arms[1]?.massSun ?? '—'} M☉` },
+          {
+            label: 'Star to star',
+            value: `${(b.separation / 100).toFixed(2)} AU`,
+          },
+        ];
+      },
+      tip: 'The speed and pause controls are the sandbox’s own, at the bottom of the window. Pausing is often the easiest way to look at something carefully.',
     },
     {
       sid: 'what-moved',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'What moved?',
       kind: 'choice',
@@ -151,6 +188,7 @@ const WEIGHING = {
     },
     {
       sid: 'what-are-they-going-round',
+      stage: EQUAL_PAIR,
       type: 'read',
       title: 'What are they going round?',
       body: `If both stars are moving, and they are always on opposite sides of
@@ -160,27 +198,31 @@ const WEIGHING = {
              which is just a technical word for the balance point of the two
              stars: the place where the pair would balance if you could put them
              on a see-saw.
-             \n\nIt is now marked on the picture with a cross. Watch the stars go
-             round it.`,
-      tool: {
-        id: 'binary',
-        values: { m1: 2, m2: 2 },
-        hide: ['m1', 'm2'],
-        presets: false,
-        barycenter: true,
-        rows: ['distances'],
-        title: 'The balance point',
-        note: 'The cross is the barycenter: the balance point of the two stars. Neither star ever reaches it, and it never moves.',
+             \n\nIt is now marked on the main canvas with a cross, with a
+             dashed line out to each star. Watch the two stars go round it, and
+             watch the cross stay where it is.
+             \n\nThe cross is drawn as an instrument, not as an object: there
+             is nothing there. It is a place, worked out from where the two
+             stars are at this instant.`,
+      showBarycentre: true,
+      probe: ctx => {
+        const b = ctx.barycentre();
+        if (!b) return [{ label: 'Balance point', value: 'no pair on screen' }];
+        return b.arms.map(arm => ({
+          label: `${arm.name} to the balance point`,
+          value: `${(arm.r / 100).toFixed(2)} AU`,
+        }));
       },
       tip: 'Every orbiting pair in the universe has one of these, including the Earth and the Moon. The Earth-Moon barycenter is inside the Earth, about a thousand miles below the surface, and the Earth swings round it once a month.',
     },
     {
       sid: 'where-does-it-sit',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'Where does it sit?',
       kind: 'choice',
       body: `These two stars have the same mass as each other. Look at where the
-             cross is, and at the two numbers under the picture.`,
+             cross is on the canvas, and at the two distances in the panel.`,
       prompt: 'With two equal stars, the barycenter sits…',
       options: [
         'right next to Star A',
@@ -194,6 +236,7 @@ const WEIGHING = {
     },
     {
       sid: 'make-one-of-them-heavier',
+      stage: EQUAL_PAIR,
       type: 'predict',
       title: 'Make one of them heavier',
       body: `Now for the interesting part. In the next step you will be able to
@@ -214,32 +257,64 @@ const WEIGHING = {
     },
     {
       sid: 'try-it',
+      stage: EQUAL_PAIR,
       type: 'explore',
       title: 'Try it',
-      body: `Both mass sliders are unlocked. Start with them equal, then drag
-             Star A’s mass up and watch the cross.
+      body: `Both mass sliders are unlocked, and they are the masses of the two
+             stars on the canvas. Start with them equal, then drag Star A’s mass
+             up and watch the cross move.
              \n\nGo to the extreme: put Star A at 4 solar masses and Star B at 1.
-             Look at the size of the two trails.`,
+             Look at the size of the two orbits.
+             \n\nOne thing to know about what the slider does. It does not make
+             a star heavier in mid-orbit - it starts the pair again with the new
+             masses. A star whose mass changed half way round would be on a path
+             that no longer closes, and you would be watching a slow spiral
+             while this lesson called it a circle.`,
+      showBarycentre: true,
+      allowInspector: true,
       tool: {
         id: 'binary',
         values: { m1: 2, m2: 2 },
+        // The sliders drive the pair on the canvas rather than a second pair
+        // drawn in the panel: same two stars, one set of masses.
+        scene: true,
         barycenter: true,
         rows: ['masses', 'distances', 'which'],
         presets: false,
         title: 'Change the masses',
-        note: 'Drag a mass slider and the picture starts again with the new masses. The cross is the balance point.',
+        note: 'These are the masses of the two stars on the canvas. Move one and the pair is restood with the new masses.',
       },
       checklist: [
         'Start with both stars at 2 M☉ and note the cross is in the middle',
-        'Raise Star A to 3 M☉ and watch the cross shift',
+        'Raise Star A to 3 M☉ and watch the cross shift on the canvas',
         'Set Star A to 4 M☉ and Star B to 1 M☉',
         'Note which star now makes the small circle and which makes the big one',
+        'Select the heavy star and check its card agrees with the slider',
         'Try it the other way round, with Star B the heavy one',
       ],
+      probe: ctx => {
+        const b = ctx.barycentre();
+        if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
+        const [a, bb] = b.arms;
+        const ratio = a && bb && a.r > 0 ? bb.r / a.r : null;
+        return [
+          { label: 'Star A arm', value: `${(a.r / 100).toFixed(2)} AU` },
+          { label: 'Star B arm', value: `${(bb.r / 100).toFixed(2)} AU` },
+          {
+            label: 'B’s arm ÷ A’s arm',
+            value: ratio ? ratio.toFixed(2) : '—',
+          },
+          {
+            label: 'A’s mass ÷ B’s mass',
+            value: bb?.massSun > 0 ? (a.massSun / bb.massSun).toFixed(2) : '—',
+          },
+        ];
+      },
       tip: 'The heavier star does not sit still. It still moves. It just moves in a much smaller circle, and it moves more slowly, because it has less far to go in the same amount of time.',
     },
     {
       sid: 'the-rule',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'The rule',
       kind: 'choice',
@@ -258,6 +333,7 @@ const WEIGHING = {
     },
     {
       sid: 'put-them-on-a-see',
+      stage: EQUAL_PAIR,
       type: 'explore',
       title: 'Put them on a see-saw',
       body: `Here is the same idea drawn as an actual see-saw, with the balance
@@ -276,6 +352,7 @@ const WEIGHING = {
     },
     {
       sid: 'reading-the-see-saw',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'Reading the see-saw',
       kind: 'choice',
@@ -294,6 +371,7 @@ const WEIGHING = {
     },
     {
       sid: 'writing-it-down',
+      stage: EQUAL_PAIR,
       type: 'read',
       title: 'Writing it down',
       body: `That is the whole of the first idea, and it can be written on one
@@ -312,6 +390,7 @@ const WEIGHING = {
     },
     {
       sid: 'one-more-to-be-sure',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'One more, to be sure',
       kind: 'choice',
@@ -330,6 +409,7 @@ const WEIGHING = {
     },
     {
       sid: 'what-kepler-found-and-what',
+      stage: EQUAL_PAIR,
       type: 'read',
       title: 'What Kepler found, and what Newton added',
       body: `In the Kepler investigation you measured the orbits of planets and
@@ -351,6 +431,7 @@ const WEIGHING = {
     },
     {
       sid: 'which-pair-is-quicker',
+      stage: EQUAL_PAIR,
       type: 'predict',
       title: 'Which pair is quicker?',
       body: `Next you will see two binary systems side by side. The two stars in
@@ -371,6 +452,7 @@ const WEIGHING = {
     },
     {
       sid: 'run-them-together',
+      stage: EQUAL_PAIR,
       type: 'explore',
       title: 'Run them together',
       body: `Both systems start at the same moment. The counter under each one
@@ -387,6 +469,7 @@ const WEIGHING = {
     },
     {
       sid: 'why-the-heavy-pair-wins',
+      stage: EQUAL_PAIR,
       type: 'question',
       title: 'Why the heavy pair wins',
       kind: 'choice',
@@ -404,6 +487,7 @@ const WEIGHING = {
     },
     {
       sid: 'newton-s-version-and-what',
+      stage: EQUAL_PAIR,
       type: 'read',
       title: 'Newton’s version, and what it is for',
       body: `Here is the relationship Newton found, written the way an astronomer
@@ -429,6 +513,7 @@ const WEIGHING = {
     },
     {
       sid: 'a-practice-run',
+      stage: EQUAL_PAIR,
       type: 'measure',
       title: 'A practice run',
       body: `Try the formula once on numbers chosen to be kind, before using it
@@ -482,6 +567,7 @@ const WEIGHING = {
     },
     {
       sid: 'the-mystery-pair',
+      stage: MYSTERY_PAIR,
       type: 'read',
       title: 'The mystery pair',
       body: `Now the real thing.
@@ -496,6 +582,7 @@ const WEIGHING = {
     },
     {
       sid: 'what-do-you-need-to',
+      stage: MYSTERY_PAIR,
       type: 'question',
       title: 'What do you need to measure?',
       kind: 'choice',
@@ -514,51 +601,67 @@ const WEIGHING = {
     },
     {
       sid: 'measurement-one-how-big-is',
+      stage: MYSTERY_PAIR,
       type: 'explore',
       title: 'Measurement one: how big is the orbit?',
-      body: `The picture now has rings drawn on it, one every astronomical unit,
-             centered on the balance point. They are your ruler.
-             \n\nPause the system when the two stars are lined up nicely, and
-             read off how far each star is from the center. Then remember what
-             the last step said: the orbit size <strong>a</strong> is the
-             distance from one star <em>across to the other</em>, so add the two
-             readings together.`,
-      tool: {
-        id: 'binary',
-        mystery: true,
-        grid: true,
-        barycenter: true,
-        hide: ['m1', 'm2'],
-        presets: false,
-        rows: [],
-        title: 'Measure the orbit',
-        note: 'Each ring is one AU from the balance point. Pause with the Run / Pause button to read the positions.',
+      body: `The pair on the canvas is a different one now: two stars whose
+             masses you have not been told. The balance point is marked, with a
+             dashed line out to each star, and the panel measures those two
+             lines for you as the pair goes round.
+             \n\nPause the sandbox and read them. Then remember what the last
+             step said: the orbit size <strong>a</strong> is the distance from
+             one star <em>across to the other</em>, so it is the two added
+             together - which the panel also gives you, so you can check.`,
+      showBarycentre: true,
+      allowInspector: false,
+      probe: ctx => {
+        const b = ctx.barycentre();
+        if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
+        return [
+          ...b.arms.map(arm => ({
+            label: `${arm.name} to the balance point`,
+            value: `${(arm.r / 100).toFixed(2)} AU`,
+          })),
+          {
+            label: 'Star to star (a)',
+            value: `${(b.separation / 100).toFixed(2)} AU`,
+          },
+        ];
       },
       checklist: [
-        'Pause the system with the Run / Pause button',
-        'Read which ring Star A is sitting on',
-        'Read which ring Star B is sitting on',
-        'Add the two together to get the star-to-star distance',
+        'Pause the sandbox and look at the two dashed lines',
+        'Read Star A’s distance from the balance point',
+        'Read Star B’s distance from the balance point',
+        'Add the two together, and check it against the star-to-star figure',
         'Start it running again and check your reading still holds a lap later',
       ],
-      tip: 'Star A is on the 1 AU ring and Star B is on the 3 AU ring, so the two stars are 4 AU apart. Write that down: a = 4 AU.',
+      tip: 'Star A is about 1 AU from the balance point and Star B about 3 AU, so the two stars are 4 AU apart. Write that down: a = 4 AU. The masses are still hidden - the inspector is closed on this screen on purpose.',
     },
     {
       sid: 'measurement-two-how-long-does',
+      stage: MYSTERY_PAIR,
       type: 'explore',
       title: 'Measurement two: how long does a lap take?',
-      body: `Now time it. There is a stopwatch under the picture, and a clock in
-             the corner counting simulated years.
+      body: `Now time it. The panel has a stopwatch and a clock counting
+             simulated years, and the pair it is timing is the one on the
+             canvas.
              \n\nPress <strong>Mark</strong> when Star A is somewhere easy to
              recognize. A dotted line appears through that position. Then wait,
              watch Star A come all the way round, and press <strong>Stop</strong>
-             the moment it crosses the line again.`,
+             the moment it crosses the line again.
+             \n\nWhen you are happy with the timing, press <strong>Capture this
+             orbit</strong>. That records the separation you just measured, both
+             arm lengths, and your timing, into your notebook - and it marks the
+             period as timed by you rather than taken from the model, which is
+             the difference between a measurement and a prediction.`,
+      showBarycentre: true,
       tool: {
         id: 'binary',
         mystery: true,
         grid: false,
         barycenter: true,
         timer: true,
+        capture: true,
         hide: ['m1', 'm2'],
         presets: false,
         rows: ['timer', 'clock'],
@@ -571,11 +674,13 @@ const WEIGHING = {
         'Press Stop as it crosses the line again',
         'Read the stopwatch: it should be close to a whole number of years',
         'If you missed it, press Mark again and have another go',
+        'Press Capture this orbit to put the measurement in your notebook',
       ],
       tip: 'It does not have to be perfect. Anything between about 3.5 and 4.5 years will get you to the right answer, because the answer is a whole number.',
     },
     {
       sid: 'weigh-the-pair',
+      stage: MYSTERY_PAIR,
       // "Put your two measurements in" - the separation and the period, one
       // from each of those two screens.
       requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
@@ -660,6 +765,7 @@ const WEIGHING = {
     },
     {
       sid: 'stop-and-look-at-what',
+      stage: MYSTERY_PAIR,
       type: 'read',
       title: 'Stop and look at what you just did',
       body: `You have the combined mass of two stars that nobody has ever been
@@ -676,21 +782,26 @@ const WEIGHING = {
     },
     {
       sid: 'back-to-the-balance-point',
+      stage: MYSTERY_PAIR,
       type: 'explore',
       title: 'Back to the balance point',
-      body: `The rings are back. This time read them the other way: not to add
-             the two distances up, but to compare them.
+      body: `The balance point is on the canvas again. This time read the two
+             dashed lines the other way: not to add the distances up, but to
+             compare them.
              \n\nWhich star stays closer to the balance point?`,
-      tool: {
-        id: 'binary',
-        mystery: true,
-        grid: true,
-        barycenter: true,
-        hide: ['m1', 'm2'],
-        presets: false,
-        rows: [],
-        title: 'Which one stays closer?',
-        note: 'The rings are one AU apart, centered on the balance point.',
+      showBarycentre: true,
+      probe: ctx => {
+        const b = ctx.barycentre();
+        if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
+        const [a, bb] = b.arms;
+        return [
+          { label: `${a.name} arm`, value: `${(a.r / 100).toFixed(2)} AU` },
+          { label: `${bb.name} arm`, value: `${(bb.r / 100).toFixed(2)} AU` },
+          {
+            label: 'How many times further out B is',
+            value: a.r > 0 ? (bb.r / a.r).toFixed(2) : '—',
+          },
+        ];
       },
       checklist: [
         'Read Star A’s distance from the balance point',
@@ -698,10 +809,11 @@ const WEIGHING = {
         'Work out how many times further out Star B is',
         'Decide which of the two must be the heavier star',
       ],
-      tip: 'Star A is on the 1 AU ring. Star B is on the 3 AU ring. Star B travels three times as far.',
+      tip: 'Star A is about 1 AU out. Star B is about 3 AU out. Star B travels three times as far, so Star A must be three times the heavier.',
     },
     {
       sid: 'splitting-them-up',
+      stage: MYSTERY_PAIR,
       type: 'question',
       title: 'Splitting them up',
       kind: 'choice',
@@ -720,6 +832,7 @@ const WEIGHING = {
     },
     {
       sid: 'now-weigh-each-one',
+      stage: MYSTERY_PAIR,
       // The four solar masses being shared out are the total weighed there.
       requires: ['weigh-the-pair'],
       type: 'measure',
@@ -790,6 +903,7 @@ const WEIGHING = {
     },
     {
       sid: 'the-answer',
+      stage: MYSTERY_PAIR,
       type: 'read',
       title: 'The answer',
       body: `The masses that were hidden all along:
@@ -806,6 +920,7 @@ const WEIGHING = {
     },
     {
       sid: 'somebody-really-did-this',
+      stage: MYSTERY_PAIR,
       type: 'explore',
       title: 'Somebody really did this',
       body: `Sirius is the brightest star in the night sky. In 1844 Friedrich
@@ -816,7 +931,14 @@ const WEIGHING = {
              \n\nThe panel shows what astronomers have recorded since: the
              position of the faint companion relative to the bright star, once
              every five years. Slide forward through the decades and watch the
-             orbit appear one dot at a time.`,
+             orbit appear one dot at a time.
+             \n\nThese dots are of a different kind from everything else in
+             this lesson. Every number you have measured so far came off the
+             simulation on the canvas, which is still running behind this panel
+             and is still the pair you weighed. These are <strong>observations
+             of a real star</strong>, made by real telescopes over a hundred and
+             sixty years. Nothing on the canvas is Sirius, and the simulation
+             had no part in producing them.`,
       tool: { id: 'visual-binary', values: { year: 1900 } },
       checklist: [
         'Slide up to 1910 and note how little you can tell from three dots',
@@ -829,6 +951,7 @@ const WEIGHING = {
     },
     {
       sid: 'and-stars-are-not-the',
+      stage: MYSTERY_PAIR,
       type: 'read',
       title: 'And stars are not the only things that do it',
       body: `One last thought, because it connects to something you may have met
@@ -859,6 +982,7 @@ const WEIGHING = {
     },
     {
       sid: 'one-on-your-own',
+      stage: MYSTERY_PAIR,
       type: 'measure',
       title: 'One on your own',
       body: `A new pair, not one you have seen. The two stars are
@@ -908,6 +1032,7 @@ const WEIGHING = {
     },
     {
       sid: 'and-which-one-is-heavier',
+      stage: MYSTERY_PAIR,
       type: 'question',
       title: 'And which one is heavier?',
       kind: 'choice',
@@ -926,6 +1051,7 @@ const WEIGHING = {
     },
     {
       sid: 'what-you-can-now-say',
+      stage: MYSTERY_PAIR,
       type: 'read',
       title: 'What you can now say',
       body: `In ordinary words, with nothing memorised:

@@ -47,6 +47,58 @@ const RV_LAB = {
   paused: false,
 };
 
+/**
+ * The target system, bound by exact name.
+ *
+ * A survey is planned against a star, and the schedule panel never said which.
+ * The chips name it, so a reader can select the target and see it move while
+ * the planner works out where in its orbit each night would fall.
+ */
+const TARGET = {
+  star: { name: 'HD 209458' },
+  planet: { name: 'HD 209458 b' },
+};
+
+/**
+ * Which configuration is on the canvas, and whether the last run still
+ * describes it.
+ *
+ * Two things a reader could not previously see. The first is which of the
+ * bodies the panel is talking about - a sweep reports a number and the scene
+ * is three dots. The second is whether that number is still about this scene:
+ * results stay on screen after an intervention, and nothing said so.
+ */
+const runRows = ctx => {
+  const rows = [];
+  const roles = ctx.roles() || [];
+  const named = roles.map(r => ctx.role(r)?.name).filter(Boolean);
+  rows.push({
+    label: 'On the canvas',
+    value: named.length ? named.join(', ') : 'nothing bound yet',
+  });
+  const run = ctx.experiment();
+  if (!run) {
+    rows.push({ label: 'Last run', value: 'none yet' });
+    return rows;
+  }
+  const fresh = ctx.runMatchesScene(run);
+  rows.push({
+    label: 'Last run',
+    value: run.name || 'unnamed',
+  });
+  rows.push({
+    label: 'Does it still describe this scene?',
+    value:
+      fresh === null
+        ? 'cannot tell — it was recorded before runs carried a world stamp'
+        : fresh
+          ? 'yes'
+          : 'NO — the scene has been rebuilt since, so re-run before comparing',
+    emphasis: fresh === false,
+  });
+  return rows;
+};
+
 const DESIGN_THE_SCHEDULE = {
   id: 'design-the-schedule',
   thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
@@ -73,6 +125,7 @@ const DESIGN_THE_SCHEDULE = {
     // --- Part 1: the plan is the experiment ---------------------------------
     {
       sid: 'eight-nights',
+      bind: TARGET,
       type: 'read',
       title: 'Eight nights',
       setup: RV_LAB,
@@ -92,6 +145,8 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'set-the-run-up',
+      bind: TARGET,
+      probe: runRows,
       type: 'explore',
       title: 'Set the run up',
       setup: RV_LAB,
@@ -112,6 +167,7 @@ const DESIGN_THE_SCHEDULE = {
     // --- Part 2: predict, and only then observe -----------------------------
     {
       sid: 'predict-the-comb',
+      bind: TARGET,
       type: 'predict',
       title: 'Before you observe',
       body: `Eight observations spread evenly across 24.673 days puts one every
@@ -139,6 +195,8 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'run-both-schedules',
+      bind: TARGET,
+      probe: runRows,
       type: 'explore',
       title: 'Run both schedules at once',
       setup: RV_LAB,
@@ -159,6 +217,7 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'read-the-comparison',
+      bind: TARGET,
       type: 'measure',
       title: 'Read the comparison',
       // The prediction is not optional scaffolding: reading these numbers
@@ -229,6 +288,7 @@ const DESIGN_THE_SCHEDULE = {
     // --- Part 3: what the difference is, and what it is not -----------------
     {
       sid: 'what-the-window-says',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'A window peak of 100%',
@@ -257,6 +317,7 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'is-irregular-better',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'So irregular schedules are better?',
@@ -283,6 +344,8 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'break-your-own-result',
+      bind: TARGET,
+      probe: runRows,
       type: 'explore',
       title: 'Break your own result',
       setup: RV_LAB,
@@ -302,6 +365,7 @@ const DESIGN_THE_SCHEDULE = {
     // --- Part 4: the run you actually get -----------------------------------
     {
       sid: 'predict-the-weather',
+      bind: TARGET,
       type: 'predict',
       title: 'Then it rains',
       body: `Real runs lose nights. Suppose the middle of your run is clouded
@@ -327,6 +391,8 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'lose-a-fortnight',
+      bind: TARGET,
+      probe: runRows,
       type: 'explore',
       title: 'Lose a fortnight',
       setup: RV_LAB,
@@ -345,6 +411,8 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'type-the-dates',
+      bind: TARGET,
+      probe: runRows,
       type: 'explore',
       title: 'Type the dates yourself',
       setup: RV_LAB,
@@ -365,6 +433,7 @@ const DESIGN_THE_SCHEDULE = {
     // --- Part 5: what a result has to carry ---------------------------------
     {
       sid: 'the-range-you-searched',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'The range you searched',
@@ -388,6 +457,7 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'what-travels-with-a-period',
+      bind: TARGET,
       type: 'question',
       kind: 'choice',
       title: 'What has to travel with a period',
@@ -413,6 +483,7 @@ const DESIGN_THE_SCHEDULE = {
     },
     {
       sid: 'what-you-decided',
+      bind: TARGET,
       type: 'read',
       title: 'What you decided before you looked',
       body: `Eight nights, one star, one instrument, one noise draw. The planet

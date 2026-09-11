@@ -352,6 +352,21 @@ export const state = {
     active: false,
     points: [],
   },
+  // The balance point two staged stars are both going round, drawn on the main
+  // scene when a lesson step asks for it. World coordinates, recomputed each
+  // frame from the live bodies rather than stored, so it is a measurement of
+  // where the pair actually is. `arms` carries each star's distance from it,
+  // which is what the readout quotes.
+  barycentreOverlay: {
+    active: false,
+    // Which bodies to average over. The renderer resolves these each frame;
+    // everything below is the answer it wrote back, for a readout to quote.
+    ids: [],
+    x: 0,
+    y: 0,
+    arms: [],
+    separation: 0,
+  },
   // Kepler's 2nd Law area sweep overlay
   areaSweepOverlay: {
     active: false,

@@ -101,7 +101,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks)',
-    limit: 3650,
+    limit: 3800,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -331,7 +331,13 @@ const BUDGETS = [
       'the first thing the paragraph at the top of this reason says this ' +
       'budget is loose for.\n\n' +
       'The initial download did NOT move and its limit was NOT touched: ' +
-      '825.8 KB either side, against 830.0.',
+      '825.8 KB either side, against 830.0.' +
+      '\n\nRaised from 3650 to 3760 for the beginner gravitational-wave lesson, and this one carries a deferral in the other direction. Measured from a fresh build at 418f142: 3608.4 to 3730.7 KB. Of the 122.3 KB, 37 is the lesson chunk itself and 28 its Spanish shadow - twenty-four screens of prose neither of which a visitor fetches unless they open the lesson - and 17 is the instructor guide inside the portal chunk where every other guide already lives. This is the twenty-second lesson, and a lesson is the first thing the paragraph at the top of this reason says this budget is loose for.' +
+      '\n\nThe remaining 12.6 KB arrived here on purpose, out of the budget above. lessonFn.* is every sentence a lesson computes - 133 probe rows and answer-checking messages, keyed by what they say - and it was in the start-up catalogue where nothing could render it: js/i18n/lesson.js is its only reader, js/investigations.js its only importer, and js/investigationsLoader.js already awaits the deferred catalogue before initInvestigations(). Every visitor was downloading all 133 in order to render none.' +
+      '\n\nSo the initial download went DOWN across this lesson, and below where it started: 829.8 KB at 418f142, 832.2 KB with the lesson in and the limit breached by 2.2, and 819.6 KB once lessonFn moved - against a limit that has not moved. A dead-CSS sweep was tried first and found nothing; the previous pass had already taken it.' +
+      '\n\nRaised from 3760 to 3800 for the main-scene pass over five existing lessons - Weighing the Stars, Black Holes by the Numbers, Finding Planets by Their Tug, The Goldilocks Question and Can You Detect This Planet? Measured from the previous entry: 3730.7 to 3768.1 KB. Most of the 37.4 is prose. The five lessons gained scene instructions, model-limit notes and probe readouts in English and again in Spanish; the instructor guides gained expectations for the new screens and a rewritten model-notes section each, inside the portal chunk where every other guide already lives; and the two new notebook entries - a binary orbit measured off the scene, and a run of horizon trials - brought about forty strings in each of two deferred catalogues, which validationWorker.js bundles as well and so counts twice.' +
+      '\n\nThe code is the small half. js/lesson/barycentre.js is 4.6 KB of pure arithmetic, and the four new stage kinds in js/lessonStage.js - a star pair, a black hole with orbiters, an equal-mass comparison and a star with elliptical planets - are about 9 KB between them. All of it is behind js/widgets.js and js/investigations.js, which only the lazy lesson engine imports.' +
+      '\n\nThe initial download was NOT raised and had room: 819.6 KB before this pass and 821.1 after, against an untouched 830.0. Its share is the barycentre overlay in js/render.js, one state slot, the probe-context accessors, and two options in the event-watch markup - the parts that genuinely have to be there before a lesson opens.',
   },
 ];
 

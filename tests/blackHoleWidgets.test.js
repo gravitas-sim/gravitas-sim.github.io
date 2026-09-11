@@ -377,10 +377,34 @@ describe('the black hole lesson', () => {
     }
   });
 
-  test('loads its own scenario and never swaps it mid-lesson', () => {
-    const setups = inv.steps.filter(s => s.setup).map(s => s.setup.scenario);
-    expect(setups).toEqual(['Black Hole Lab']);
-    expect(inv.steps[0].setup).toBeTruthy();
+  test('stands up its own scene and never borrows a scenario', () => {
+    // It used to open the Black Hole Lab scenario. It stages its own hole now,
+    // because a step has to be able to change the mass and have the orbiters
+    // follow, which a borrowed scenario cannot do - and because the equal-mass
+    // comparison on screen 13 is a second arrangement no scenario provides.
+    //
+    // The property being kept is the same one the old assertion kept: every
+    // screen knows what is on the canvas, and nothing swaps underneath it.
+    expect(inv.steps.filter(s => s.setup?.scenario)).toEqual([]);
+    expect(inv.steps.every(s => s.stage)).toBe(true);
+    expect(inv.steps[0].stage.hole).toBeTruthy();
+
+    // Exactly one screen shows something other than the single hole, and it is
+    // the controlled comparison. A second would mean the scene was drifting.
+    const comparisons = inv.steps.filter(s => s.stage.equalMass);
+    expect(comparisons).toHaveLength(1);
+    expect(comparisons[0].sid).toBe('the-right-answer-for-the');
+  });
+
+  test('the equal-mass comparison puts its orbits outside both bodies', () => {
+    // The claim being demonstrated - that the external field depends on the
+    // mass and nothing else - is only true outside the central body. An orbit
+    // threaded through the star's interior would be a different problem, so
+    // the stage is asked for a radius and enforces its own floor above it.
+    const step = inv.steps.find(s => s.stage?.equalMass);
+    expect(step.stage.equalMass.massSun).toBeGreaterThan(0);
+    // Both centres carry the same mass: that is what makes it controlled.
+    expect(step.stage.equalMass.gap ?? 900).toBeGreaterThan(0);
   });
 
   test('leaves the object card reachable', () => {

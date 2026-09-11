@@ -59,7 +59,7 @@ export default {
         'no haría nada, porque un empuje en dirección contraria a la estrella no puede cambiar una órbita',
       ],
       because:
-        'Un empuje radial no ejerce par respecto de la estrella, así que no puede cambiar el momento angular, y es el momento angular el que fija hasta dónde llega la órbita por el lado opuesto. Lo que sí cambia es la forma: la órbita se vuelve excéntrica, acercándose más por un lado y alejándose más por el otro, a cambio de muy poco tamaño. Es la dirección equivocada.',
+        'Deja la órbita desigual sin agrandarla apenas. Un empuje radial no ejerce par respecto de la estrella, así que el momento angular no cambia, pero sí añade energía, y dónde da la vuelta una órbita depende de las dos cosas. Con el momento angular fijo, añadir energía sube el lado lejano y baja el cercano casi otro tanto: obtienes excentricidad, no tamaño. Un empuje transversal del mismo tamaño sube mucho más el lado lejano, porque gasta el Δv en la dirección en la que ya te mueves, que es donde más energía compra, y de paso aumenta el momento angular. Cuidado con el atajo de que el momento angular por sí solo decide hasta dónde llega una órbita: un impulso radial sí sube el apoastro, solo que de forma ineficiente, y deja el momento angular exactamente donde estaba.',
     },
     {
       title: 'Pruébalo',
@@ -80,8 +80,13 @@ export default {
       title: 'La palanca va de lado',
       body: `Un impulso <strong>transversal</strong> —en el sentido del
              movimiento, perpendicular a la línea que va a la estrella— es el
-             que cambia el tamaño de la órbita, porque es el que cambia el
-             momento angular.
+             que cambia el tamaño de la órbita. Los dos tipos de impulso añaden
+             energía, y el tamaño de una órbita lo fija su energía sola; lo que
+             convierte al transversal en la palanca es que gasta el Δv en la
+             dirección en la que ya te mueves, que es donde más energía compra,
+             y que a la vez aumenta el momento angular, de modo que esa energía
+             de más va a una órbita mayor y más redonda en lugar de a
+             excentricidad.
              \n\nY cambia la órbita <em>por el lado opuesto</em>. El punto donde
              haces el impulso sigue estando en la órbita nueva: sigues ahí, a esa
              distancia, así que esa distancia sigue siendo un punto por el que

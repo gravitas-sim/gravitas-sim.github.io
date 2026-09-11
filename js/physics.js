@@ -1844,6 +1844,13 @@ const computeAccelerations = (objs, count, halo, allowCache, axOut, ayOut) => {
     axOut[i] = 0;
     ayOut[i] = 0;
     if (!obj.alive) continue;
+    // A body a prescribed model owns will not be moved by whatever comes out
+    // of here, so summing a force on it is arithmetic nobody reads. It stays a
+    // source - everything else still feels its gravity, which is what keeps
+    // the rest of the scene honest - but it is not a target. A lesson that
+    // stands a hundred display stars on the canvas therefore costs a hundred
+    // sources and no targets, instead of ten thousand pair terms a frame.
+    if (obj.model_owned) continue;
 
     if (halo) {
       const { ax, ay } = haloAcceleration(obj.pos, halo);
@@ -1901,6 +1908,10 @@ const computeAccelerations = (objs, count, halo, allowCache, axOut, ayOut) => {
  * @param {number} vy - Velocity, y
  */
 const writeState = (obj, px, py, vx, vy) => {
+  // A body a prescribed model owns is not the integrator's to move. This is
+  // the write path for Velocity Verlet and RK4; PhysicsObject.apply_step is
+  // the default's, and PhysicsObject.model_owned says why.
+  if (obj.model_owned) return;
   if (!isFinite(px) || !isFinite(py) || !isFinite(vx) || !isFinite(vy)) return;
   obj.pos.x = px;
   obj.pos.y = py;
@@ -2696,6 +2707,15 @@ const updatePhysics = dt => {
         if (bh_list[j].alive === false) continue;
         const bh1 = bh_list[i],
           bh2 = bh_list[j];
+        // A body a prescribed model owns is not the integrator's to evolve,
+        // and merging is evolution. A lesson that stands a binary on the
+        // canvas draws its components as fixed-size markers and moves them to
+        // the separation the waveform is plotted from, so they spend most of
+        // an inspiral inside each other's drawn radius - without this the
+        // engine merged them into one randomly named black hole a second
+        // after the lesson opened, on every step, in both gravitational-wave
+        // lessons.
+        if (bh1.model_owned || bh2.model_owned) continue;
         const dx = bh1.pos.x - bh2.pos.x,
           dy = bh1.pos.y - bh2.pos.y;
         if (dx * dx + dy * dy < (bh1.radius + bh2.radius) ** 2) {
@@ -3039,6 +3059,23 @@ class PhysicsObject {
    */
   constructor(pos, vel, mass, radius, obj_type = 'object') {
     this.id = PhysicsObject_id_counter++;
+    /**
+     * Whether a prescribed scientific model owns this body's state.
+     *
+     * False for everything the sandbox builds, which is the ordinary case: the
+     * N-body integrator moves it and that is the whole story. A lesson running
+     * a *prescribed-model* activity - a star walking an evolutionary track, a
+     * binary following a waveform - sets this on the bodies that model drives,
+     * and the integrator then leaves their position and velocity alone.
+     * Gravity from them is unchanged: they still pull on everything else, they
+     * simply are not pushed back, which is what "the model owns this" means.
+     *
+     * Two authors of one number is how a lesson ends up reporting a state no
+     * model computed and calling it physics. It is set and cleared through
+     * js/lessonScene.js rather than by hand, because a flag nobody clears is a
+     * body that never moves again.
+     */
+    this.model_owned = false;
     this.pos = { ...pos };
     this.vel = { ...vel };
     this.mass = parseFloat(mass);
@@ -3078,6 +3115,7 @@ class PhysicsObject {
    */
   apply_step(dt, ax, ay) {
     if (!this.alive) return;
+    if (this.model_owned) return;
     const vx = this.vel.x + ax * dt;
     const vy = this.vel.y + ay * dt;
     const px = this.pos.x + vx * dt;
@@ -4611,6 +4649,8 @@ class BlackHole {
     jet_orientation = null
   ) {
     this.id = PhysicsObject_id_counter++; // Add unique ID for energy tracking
+    // See PhysicsObject: a black hole is not one, and needs its own copy.
+    this.model_owned = false;
     this.pos = { ...pos };
     this.mass = parseFloat(mass);
     this.vel = { ...vel };
@@ -4950,18 +4990,18 @@ class BlackHole {
         time: visualClockSeconds(),
         tier: lodAtLeast(bhLevel, LOD.DETAILED) ? 'full' : 'low',
         alpha: 1,
-        outline: true,
       });
     } else {
-      // Far away or on the low tier: a recognisable mark and nothing else.
+      // Far away or on the low tier: the silhouette and nothing else. It used
+      // to carry a pale ring here too, and it is gone for the same reason it
+      // is gone from the renderer - a horizon does not glow at its edge. What
+      // finds a dark object is the hover and selection ring, which is drawn in
+      // js/render.js as UI, and the mass label below.
       ctx.save();
       ctx.fillStyle = '#000000';
       ctx.beginPath();
       ctx.arc(world_pos.x, world_pos.y, world_radius, 0, 2 * Math.PI);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(200,210,235,0.55)';
-      ctx.lineWidth = Math.max(0.3, world_radius * 0.08);
-      ctx.stroke();
       ctx.restore();
     }
 
@@ -4976,6 +5016,16 @@ class BlackHole {
       ctx.font = `${Math.max(9, world_radius * 0.22)}px ui-monospace, monospace`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
+      // The one boundary the picture is allowed to show, and only here: a
+      // dashed line on a labelled diagram, at the silhouette's edge. See
+      // drawHorizonBoundary in js/blackHole/render.js for why it is not drawn
+      // the rest of the time.
+      renderer.drawHorizonBoundary(
+        ctx,
+        world_pos,
+        world_radius,
+        1 / (state.zoom || 1)
+      );
       for (const mark of renderer.annotations(shown, world_radius)) {
         const x = world_pos.x + mark.x;
         const y = world_pos.y + mark.y;
@@ -5274,8 +5324,16 @@ class StarObject extends PhysicsObject {
       ctx.shadowColor = 'black';
       ctx.shadowBlur = 4;
 
-      // Show name for Solar System sun, mass for others
-      if (this.isSolarSystemSun) {
+      // Show name for Solar System sun, mass for others - unless a lesson has
+      // asked for neither. A step that puts three unlabelled stars up and asks
+      // a reader to judge them by eye is undone by a mass printed under each
+      // one, and that is the first screen of A Universe of Stars. The flag is
+      // set by js/lessonStage.js from the step's own declaration and cleared
+      // with the stage, so nothing else can leave a star anonymous.
+      if (this.anonymous) {
+        // Nothing. The lesson's object list still names it, so it is still
+        // selectable and still reachable from the keyboard.
+      } else if (this.isSolarSystemSun) {
         ctx.fillText(
           this.name,
           true_screen_pos.x,
@@ -6815,6 +6873,10 @@ const handle_star_merging = stars_list => {
       for (let j = i + 1; j < stars_list.length; j++) {
         const star2 = stars_list[j];
         if (!star2.alive) continue;
+        // Same rule as the black-hole loop above: what a prescribed model owns,
+        // the integrator does not merge. The neutron-star pair a lesson stages
+        // is the case this catches.
+        if (star1.model_owned || star2.model_owned) continue;
 
         const dx = star1.pos.x - star2.pos.x;
         const dy = star1.pos.y - star2.pos.y;
@@ -7436,6 +7498,12 @@ const check_stellar_collapse = () => {
   for (let i = stars.length - 1; i >= 0; i--) {
     const star = stars[i];
     if (!star.alive) continue;
+    // Not a star a prescribed model owns. "The model owns this" has to mean
+    // its evolution as well as its motion, or the sandbox's own rules keep
+    // acting on it: a lesson standing a forty-solar-mass track on the canvas
+    // had it collapse into a black hole two seconds later, which is the
+    // sandbox making a claim about a body it is only being asked to draw.
+    if (star.model_owned) continue;
 
     const massInSuns = star.mass / SOLAR_MASS_UNIT;
     if (massInSuns > maxStarMassBeforeBH()) {

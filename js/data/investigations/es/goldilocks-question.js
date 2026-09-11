@@ -208,7 +208,7 @@ export default {
     },
     {
       title: 'Ahora ponla alrededor del Sol real',
-      body: 'Basta de diagramas. La simulación que hay detrás de este panel es ahora el Sol con cuatro mundos reales a su alrededor: <strong>Venus</strong> a 0,72 UA, la <strong>Tierra</strong> a 1,00, <strong>Marte</strong> a 1,52 y <strong>Ceres</strong>, el mayor asteroide, a 2,77.\n\nEl anillo verde es la zona habitable, trazada a partir de la luminosidad y la temperatura propias del Sol por el mismo código que han estado usando los paneles. Aquí nada es un boceto. Tómate un momento y mira dónde cae cada mundo.',
+      body: 'Basta de diagramas. La simulación que hay detrás de este panel es ahora el Sol con cuatro mundos reales a su alrededor: <strong>Venus</strong> a 0,72 UA, la <strong>Tierra</strong> a 1,00, <strong>Marte</strong> a 1,52 y <strong>Ceres</strong>, el mayor asteroide, a 2,77.\n\nEl anillo verde es la zona habitable, trazada a partir de la luminosidad y la temperatura propias del Sol por el mismo código que han estado usando los paneles. Aquí nada es un boceto. Tómate un momento y mira dónde cae cada mundo.\n\nHaz clic en cada mundo por turno y lee debajo su distancia y la luz estelar que recibe. Los números salen de las mismas funciones con las que se dibuja el anillo, así que el instrumento y la imagen no pueden discrepar.',
       checklist: [
         'Encuentra el borde interior: el círculo naranja discontinuo, etiquetado «efecto invernadero desbocado».',
         'Encuentra el borde exterior: el círculo azul discontinuo, etiquetado «invernadero máximo».',
@@ -280,7 +280,7 @@ export default {
     },
     {
       title: 'La definición más amplia, en el Sol real',
-      body: 'De vuelta al Sistema Solar en vivo, con un cambio: la zona habitable se dibuja ahora con la definición <strong>optimista</strong>. La estrella no ha cambiado. Los planetas no han cambiado. Solo el supuesto sobre qué cuenta como borde.\n\nEl borde interior ha saltado de 0,98 UA hacia dentro, hasta <strong>0,75 UA</strong>, que es un movimiento grande en pantalla. El borde exterior apenas se ha desplazado, de 1,69 a 1,77 UA.\n\nMira con atención a Venus.',
+      body: 'De vuelta al Sistema Solar en vivo, con un cambio: la zona habitable se dibuja ahora con la definición <strong>optimista</strong>. La estrella no ha cambiado. Los planetas no han cambiado. Solo el supuesto sobre qué cuenta como borde.\n\nEl borde interior ha saltado de 0,98 UA hacia dentro, hasta <strong>0,75 UA</strong>, que es un movimiento grande en pantalla. El borde exterior apenas se ha desplazado, de 1,69 a 1,77 UA.\n\nMira con atención a Venus.\n\nSelecciona Venus y observa la lectura: el mismo planeta, la misma distancia, un veredicto distinto. Lo que cambió fue la definición, no Venus.',
       checklist: [
         'Encuentra el nuevo borde interior y compáralo con dónde orbita Venus, a 0,72 UA.',
         'Comprueba el borde exterior frente a Ceres, a 2,77 UA.',
@@ -349,7 +349,7 @@ export default {
     },
     {
       title: 'Cruzar los bordes',
-      body: 'Ahora la zona habitable está dibujada en ambas mitades del panel: como un anillo alrededor de la estrella, y como una banda horizontal en la gráfica. Son la misma información dos veces.\n\nEsta órbita concreta no se queda dentro de ella. Observa cómo el planeta abandona el anillo en un extremo de su año y vuelve en el otro, y observa cómo la línea de la gráfica sale de la banda en el mismo momento.\n\nLa lectura da ahora la fracción del <em>año</em> pasada dentro de la zona.',
+      body: 'Ahora la zona habitable está dibujada en ambas mitades del panel: como un anillo alrededor de la estrella, y como una banda horizontal en la gráfica. Son la misma información dos veces.\n\nEsta órbita concreta no se queda dentro de ella. Observa cómo el planeta abandona el anillo en un extremo de su año y vuelve en el otro, y observa cómo la línea de la gráfica sale de la banda en el mismo momento.\n\nLa lectura da ahora la fracción del <em>año</em> pasada dentro de la zona.\n\nY en el lienzo hay ahora uno de verdad. <strong>Wanderer</strong> va por una elipse auténtica —1,2 UA de media, excentricidad 0,45— movida por el mismo solucionador de gravedad que todo lo demás en Gravitas, no dibujada a lo largo de un camino. Usa el vigilante de sucesos para detenerla en su máximo acercamiento y otra vez en su punto más lejano, y lee la luz estelar que recibe en cada uno. Esos dos números son todo el sentido de esta pantalla.',
       tool: {
         title: 'Dentro y fuera de la zona',
         note: 'La línea discontinua es el borde interior, la punteada el exterior, tanto en la órbita como en la gráfica.',

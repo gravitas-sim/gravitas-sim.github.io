@@ -1550,6 +1550,10 @@ export function fromGwObservation({
   similarity = null,
   dataProvenance = null,
   prediction = '',
+  // How the sound was scaled, when the reading was taken while listening. A
+  // loudness is only evidence if the reference it was measured against is
+  // written down beside it.
+  audioMapping = null,
   provenance = {},
 }) {
   if (!snapshot) return null;
@@ -1681,6 +1685,37 @@ export function fromGwObservation({
         })
       : null;
 
+  if (audioMapping) {
+    add(
+      t('nb.gw.audioReference'),
+      audioMapping.referenceStrain,
+      '',
+      t('nb.gw.audioReferenceNote')
+    );
+    if (Number.isFinite(audioMapping.peakStrain)) {
+      add(
+        t('nb.gw.audioFraction'),
+        audioMapping.referenceStrain
+          ? audioMapping.peakStrain / audioMapping.referenceStrain
+          : NaN,
+        '',
+        t('nb.gw.audioFractionNote')
+      );
+    }
+    limitations.push(
+      t(
+        audioMapping.normalise === 'fixed'
+          ? 'nb.gw.limit.audioFixed'
+          : 'nb.gw.limit.audioPeak'
+      )
+    );
+    if (audioMapping.clippedSamples > 0) {
+      limitations.push(
+        t('nb.gw.limit.audioClipped', { n: audioMapping.clippedSamples })
+      );
+    }
+  }
+
   return buildEntry({
     source: SOURCE.GW_OBSERVATION,
     title: measured
@@ -1709,6 +1744,165 @@ export function fromGwObservation({
     }),
     prose: {
       evidence: evidence.join('\n'),
+      limitations: limitations.join('\n'),
+    },
+  });
+}
+
+/**
+ * A run of horizon-size trials.
+ *
+ * Every quantity here is ANALYTIC and the entry says so, because none of it
+ * was measured: a Schwarzschild radius is 2GM/c² evaluated for a mass the
+ * student chose, and the black hole on the canvas is drawn at a display scale
+ * that carries no length at all. What the student actually did was design the
+ * run - which masses, how many, spaced how - and that is what the entry
+ * records as evidence.
+ *
+ * @param {object} spec
+ * @param {Array<{mass: number, rsKm: number}>} spec.trials - The recorded points
+ * @param {string} [spec.prediction] - What the student said would happen
+ * @param {object} [spec.provenance] - The live world's provenance
+ * @returns {?object} A notebook entry
+ */
+export function fromHorizonTrials({
+  trials,
+  prediction = '',
+  provenance = {},
+}) {
+  if (!trials?.length) return null;
+  const quantities = trials.map((tr, i) =>
+    quantity({
+      label: t('nb.horizon.trial', { n: i + 1, mass: tr.mass }),
+      value: tr.rsKm,
+      unit: 'km',
+      kind: KIND.ANALYTIC,
+    })
+  );
+  // The relationship the run exists to find, stated as a number rather than
+  // left for the reader to eyeball off three points.
+  const first = trials[0];
+  const last = trials[trials.length - 1];
+  if (trials.length > 1 && first.mass > 0 && first.rsKm > 0) {
+    quantities.push(
+      quantity({
+        label: t('nb.horizon.ratio'),
+        value: last.rsKm / first.rsKm / (last.mass / first.mass),
+        unit: '',
+        kind: KIND.ANALYTIC,
+        note: t('nb.horizon.ratioNote'),
+      })
+    );
+  }
+  return buildEntry({
+    source: SOURCE.HORIZON_TRIALS,
+    title: t('nb.horizon.title'),
+    quantities,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: 'black-hole horizon trials',
+      units: { mass: 'M☉', length: 'km' },
+      flags: ['analytic'],
+    }),
+    prose: {
+      claim: prediction,
+      evidence: t('nb.horizon.evidence', { n: trials.length }),
+      limitations: [
+        t('nb.horizon.limit.analytic'),
+        t('nb.horizon.limit.drawn'),
+        t('nb.horizon.limit.nonrotating'),
+      ].join('\n'),
+    },
+  });
+}
+
+/**
+ * A binary orbit measured off the main scene.
+ *
+ * The evidence "Weighing the Stars" infers a mass from, and the entry has to
+ * keep three things apart that a bare list of numbers would blur.
+ *
+ * The separation and the arm lengths are MEASURED: they are distances between
+ * bodies the integrator is moving, read at the instant of the click. The
+ * period is measured too when a student timed it, and analytic when it was
+ * taken from the model - the caller says which, because a period nobody timed
+ * is not a measurement however right it is. The total mass is always ANALYTIC:
+ * nothing weighed it, Newton's form of Kepler's third law computed it from the
+ * other two, and that is the point of the lesson rather than an incidental.
+ *
+ * @param {object} spec
+ * @param {object} spec.snapshot - {separationAU, arms, periodYr, timed, totalMass, split}
+ * @param {string} [spec.prediction] - What the student said would happen
+ * @param {object} [spec.provenance] - The live world's provenance
+ * @returns {?object} A notebook entry
+ */
+export function fromBinaryOrbit({
+  snapshot,
+  prediction = '',
+  provenance = {},
+}) {
+  if (!snapshot) return null;
+  const quantities = [];
+  const add = (label, value, unit, kind = KIND.MEASURED, note = '') => {
+    if (!Number.isFinite(value)) return;
+    quantities.push(quantity({ label, value, unit, kind, note }));
+  };
+
+  add(t('nb.binary.separation'), snapshot.separationAU, 'AU');
+  (snapshot.arms || []).forEach(arm => {
+    add(t('nb.binary.arm', { star: arm.name }), arm.rAU, 'AU');
+  });
+  add(
+    t('nb.binary.period'),
+    snapshot.periodYr,
+    'yr',
+    snapshot.timed ? KIND.MEASURED : KIND.ANALYTIC,
+    snapshot.timed ? t('nb.binary.timedNote') : t('nb.binary.modelledNote')
+  );
+  add(
+    t('nb.binary.total'),
+    snapshot.totalMassSun,
+    'M☉',
+    KIND.ANALYTIC,
+    t('nb.binary.totalNote')
+  );
+  if (snapshot.split) {
+    add(
+      t('nb.binary.split', { star: snapshot.arms?.[0]?.name || 'A' }),
+      snapshot.split.m1,
+      'M☉',
+      KIND.ANALYTIC
+    );
+    add(
+      t('nb.binary.split', { star: snapshot.arms?.[1]?.name || 'B' }),
+      snapshot.split.m2,
+      'M☉',
+      KIND.ANALYTIC
+    );
+  }
+
+  const limitations = [
+    t('nb.binary.limit.circular'),
+    t('nb.binary.limit.faceOn'),
+  ];
+  if (!snapshot.timed) limitations.push(t('nb.binary.limit.untimed'));
+
+  return buildEntry({
+    source: SOURCE.BINARY_ORBIT,
+    title: t('nb.binary.title'),
+    quantities,
+    provenance: provenanceOf({
+      ...provenance,
+      scenario: 'binary orbit, staged',
+      units: { distance: 'AU', mass: 'M☉', time: 'yr' },
+      flags: [
+        'simulated',
+        ...(snapshot.timed ? ['student-timed'] : ['model-period']),
+      ],
+    }),
+    prose: {
+      claim: prediction,
+      evidence: t('nb.binary.evidence'),
       limitations: limitations.join('\n'),
     },
   });

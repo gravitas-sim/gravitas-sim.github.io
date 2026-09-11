@@ -71,6 +71,66 @@ const HELIOCENTRIC = {
   paused: false,
 };
 
+/**
+ * The three bodies an assist is made of, bound by exact name.
+ *
+ * The whole lesson is a comparison between what the spacecraft does relative
+ * to the planet and what it does relative to the star, and those are two
+ * frames on the same three objects. Naming them in the panel is how a reader
+ * keeps track of which one a readout is about.
+ */
+const ASSIST = {
+  spacecraft: { name: 'Spacecraft' },
+  planet: { name: 'Planet' },
+};
+
+/** The heliocentric frame adds the star the speed is measured against. */
+const ASSIST_SUN = {
+  star: { name: 'Star' },
+  spacecraft: { name: 'Spacecraft' },
+  planet: { name: 'Planet' },
+};
+
+/**
+ * Which configuration is on the canvas, and whether the last run still
+ * describes it.
+ *
+ * Two things a reader could not previously see. The first is which of the
+ * bodies the panel is talking about - a sweep reports a number and the scene
+ * is three dots. The second is whether that number is still about this scene:
+ * results stay on screen after an intervention, and nothing said so.
+ */
+const runRows = ctx => {
+  const rows = [];
+  const roles = ctx.roles() || [];
+  const named = roles.map(r => ctx.role(r)?.name).filter(Boolean);
+  rows.push({
+    label: 'On the canvas',
+    value: named.length ? named.join(', ') : 'nothing bound yet',
+  });
+  const run = ctx.experiment();
+  if (!run) {
+    rows.push({ label: 'Last run', value: 'none yet' });
+    return rows;
+  }
+  const fresh = ctx.runMatchesScene(run);
+  rows.push({
+    label: 'Last run',
+    value: run.name || 'unnamed',
+  });
+  rows.push({
+    label: 'Does it still describe this scene?',
+    value:
+      fresh === null
+        ? 'cannot tell — it was recorded before runs carried a world stamp'
+        : fresh
+          ? 'yes'
+          : 'NO — the scene has been rebuilt since, so re-run before comparing',
+    emphasis: fresh === false,
+  });
+  return rows;
+};
+
 const GRAVITY_ASSIST = {
   id: 'gravity-assist',
   thumbnail: 'images/scenarios/gravity-assist-lab.webp',
@@ -100,6 +160,7 @@ const GRAVITY_ASSIST = {
     // --- Part 1: the puzzle --------------------------------------------------
     {
       sid: 'voyager-left-faster',
+      bind: ASSIST,
       type: 'read',
       title: 'Voyager left faster than it arrived',
       setup: ISOLATED,
@@ -117,6 +178,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'the-simplest-possible-flyby',
+      bind: ASSIST,
       type: 'read',
       title: 'The simplest possible flyby',
       body: `On screen is the least cluttered version of that manoeuvre anybody
@@ -137,6 +199,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'which-side-gains',
+      bind: ASSIST,
       type: 'predict',
       title: 'Which side?',
       body: `The spacecraft can pass on either side of the planet: in front of
@@ -162,6 +225,8 @@ const GRAVITY_ASSIST = {
     // --- Part 2: the measurement ---------------------------------------------
     {
       sid: 'fly-the-gaining-pass',
+      bind: ASSIST,
+      probe: runRows,
       type: 'explore',
       title: 'Fly it',
       setup: ISOLATED,
@@ -182,6 +247,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'write-down-both-columns',
+      bind: ASSIST,
       type: 'measure',
       title: 'Both columns',
       body: `With the flyby finished, read four speeds off the panel. They are
@@ -244,6 +310,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'how-can-both-be-true',
+      bind: ASSIST,
       type: 'question',
       kind: 'choice',
       title: 'How can both of those be true?',
@@ -270,6 +337,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'the-vector-addition',
+      bind: ASSIST,
       type: 'read',
       title: 'It is one vector, rotated',
       body: `Here is the whole mechanism, and it is not a push.
@@ -289,6 +357,8 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'the-other-side',
+      bind: ASSIST,
+      probe: runRows,
       type: 'explore',
       title: 'Now the other side — both at once',
       setup: ISOLATED,
@@ -319,6 +389,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'read-the-comparison',
+      bind: ASSIST,
       type: 'measure',
       title: 'Two passes, three numbers',
       // Reads the retained table, so the table has to exist.
@@ -385,6 +456,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'why-not-mirror-image',
+      bind: ASSIST,
       type: 'question',
       kind: 'choice',
       title: 'Why is the loss smaller than the gain?',
@@ -416,6 +488,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'the-ceiling',
+      bind: ASSIST,
       type: 'question',
       kind: 'numeric',
       title: 'How much is there to take?',
@@ -455,6 +528,7 @@ const GRAVITY_ASSIST = {
     // --- Part 3: who paid ----------------------------------------------------
     {
       sid: 'who-paid',
+      bind: ASSIST,
       type: 'measure',
       title: 'Somebody paid for that',
       body: `Fly the gaining pass again with the impact parameter back at
@@ -493,6 +567,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'where-the-energy-came-from',
+      bind: ASSIST,
       type: 'question',
       kind: 'choice',
       title: 'So where did the energy come from?',
@@ -526,6 +601,7 @@ const GRAVITY_ASSIST = {
 
     {
       sid: 'the-planets-frame-is-two-frames',
+      bind: ASSIST,
       type: 'question',
       kind: 'choice',
       title: 'Whose frame, exactly?',
@@ -567,6 +643,8 @@ const GRAVITY_ASSIST = {
     // --- Part 4 (optional): how much does closeness buy? ---------------------
     {
       sid: 'sweep-the-impact-parameter',
+      bind: ASSIST,
+      probe: runRows,
       type: 'explore',
       title: 'Optional: how much does passing closer buy you?',
       setup: ISOLATED,
@@ -593,6 +671,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'read-the-sweep',
+      bind: ASSIST,
       type: 'measure',
       title: 'Optional: read the five',
       requires: ['sweep-the-impact-parameter'],
@@ -648,6 +727,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'strongest-turn-biggest-gain',
+      bind: ASSIST,
       type: 'question',
       kind: 'choice',
       title: 'Optional: does the biggest turn always win?',
@@ -684,6 +764,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'explain-the-sweep',
+      bind: ASSIST,
       type: 'question',
       kind: 'short',
       title: 'Optional: say it with your own numbers',
@@ -715,6 +796,7 @@ const GRAVITY_ASSIST = {
     // --- Part 4: the version with a Sun --------------------------------------
     {
       sid: 'now-with-a-sun',
+      bind: ASSIST_SUN,
       type: 'read',
       title: 'Now put a star back',
       setup: HELIOCENTRIC,
@@ -732,6 +814,8 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'fly-it-heliocentric',
+      bind: ASSIST_SUN,
+      probe: runRows,
       type: 'explore',
       title: 'Fly it, and watch the residual',
       setup: HELIOCENTRIC,
@@ -750,6 +834,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'what-the-residual-means',
+      bind: ASSIST_SUN,
       type: 'question',
       kind: 'choice',
       title: 'What is the residual telling you?',
@@ -779,6 +864,7 @@ const GRAVITY_ASSIST = {
     },
     {
       sid: 'what-this-leaves-out',
+      bind: ASSIST_SUN,
       type: 'read',
       title: 'What you measured, and what it leaves out',
       body: `You have measured a gravity assist twice over.

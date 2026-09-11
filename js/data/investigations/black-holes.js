@@ -14,19 +14,42 @@
 
 // --- 5. Black holes by the numbers -------------------------------------------
 
-const BH_LAB = {
-  scenario: 'Black Hole Lab',
-  seed: 'black-hole-lab',
-  camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
-  paused: false,
-};
+// -----------------------------------------------------------------------------
+// What is on the main canvas
+// -----------------------------------------------------------------------------
+// A black hole with four things in orbit around it, staged by the lesson rather
+// than borrowed from a scenario, so a step can change its mass and have the
+// scene follow. The orbits are placed in multiples of the hole's own drawn
+// horizon and never inside three of them, which is the innermost stable
+// circular orbit: an orbit drawn inside the horizon would be an orbit that
+// cannot exist.
+//
+// Engine-owned. Outside the horizon the field is Newtonian to the accuracy this
+// sandbox works at, so the integrator is entitled to move these bodies and the
+// lesson is entitled to measure what it does. Everything the lesson says about
+// the *inside* - and everything it says about Hawking radiation - comes from
+// closed-form panels instead, because the sandbox cannot compute any of it and
+// a picture that implied otherwise would be the lesson's worst failure.
+const HOLE = { hole: { massSun: 10, fit: true } };
+
+/**
+ * The controlled comparison: a star and a black hole of the same mass.
+ *
+ * Each has a body on the same circular orbit, at a radius outside both central
+ * objects. That last condition is what makes the comparison fair - the claim
+ * being demonstrated is only true outside the star, and an orbit threaded
+ * through the star's interior would be a different problem.
+ */
+const EQUAL_MASS = { equalMass: { massSun: 8, fit: true } };
 
 /** The instrument that draws one horizon at a scale that does not move. */
 const horizonTool = (extra = {}) => ({ id: 'bh-horizon', ...extra });
 
 const BLACK_HOLES = {
   id: 'black-holes',
-  thumbnail: 'images/scenarios/black-hole-lab.webp',
+  // Its own card: the lesson stands its own hole and orbiters on the canvas
+  // and opens in no scenario, so there is no scenario capture to borrow.
+  thumbnail: 'images/investigations/black-holes.webp',
   title: 'Black Holes by the Numbers',
   subtitle: 'Make a black hole bigger and discover some surprising rules',
   duration: '35-45 min',
@@ -51,6 +74,7 @@ const BLACK_HOLES = {
   steps: [
     {
       sid: 'not-a-hole-and-not',
+      stage: HOLE,
       type: 'read',
       title: 'Not a hole, and not a vacuum cleaner',
       body: `On screen is a black hole of ten solar masses, and four objects
@@ -69,10 +93,10 @@ const BLACK_HOLES = {
              \n\nThis investigation is about one question: what changes when you
              make that mass bigger?`,
       tip: 'Click the black hole to open its information card. Everything this lesson calculates is on that card too, worked out by the simulation from the same formulas.',
-      setup: BH_LAB,
     },
     {
       sid: 'what-could-size-even-mean',
+      stage: HOLE,
       type: 'question',
       title: 'What could "size" even mean?',
       kind: 'choice',
@@ -95,6 +119,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'the-event-horizon',
+      stage: HOLE,
       type: 'read',
       title: 'The event horizon',
       body: `The picture beside this one is a black hole drawn on its own. The
@@ -113,7 +138,32 @@ const BLACK_HOLES = {
              blue line, and its value is written underneath. Karl Schwarzschild
              worked it out in 1916, from Einstein's brand new theory, while
              serving in the German army on the Russian front. He died of an
-             illness a few months later.`,
+             illness a few months later.
+             \n\nThe black hole on the main canvas is the same one. Click it,
+             or use <strong>Objects in this activity</strong>, and its card
+             gives you the mass and the Schwarzschild radius that mass implies.
+             The labels now on the canvas name the parts of what the renderer
+             drew: the dark central region, the disk of material around it and,
+             where a scenario switches them on, the jets. Those are pictures of
+             what such a system looks like from outside. None of them is the
+             black hole.`,
+      explainView: true,
+      probe: ctx => {
+        const hole = ctx.role('hole');
+        if (!hole) return [{ label: 'The hole', value: 'not on the canvas' }];
+        const f = ctx.holeFacts(hole.massInSuns ?? 10);
+        return [
+          { label: 'Mass', value: `${(hole.massInSuns ?? 10).toFixed(1)} M☉` },
+          {
+            label: 'Schwarzschild radius',
+            value: `${f.rsKm.toFixed(1)} km`,
+          },
+          {
+            label: 'Right across the horizon',
+            value: `${(f.rsKm * 2).toFixed(1)} km`,
+          },
+        ];
+      },
       tool: horizonTool({
         values: { mass: 10 },
         hide: ['mass'],
@@ -126,6 +176,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'thirty-kilometers-is-not-very',
+      stage: HOLE,
       type: 'read',
       title: 'Thirty kilometers is not very much',
       body: `A ten solar mass black hole has a Schwarzschild radius of about
@@ -138,7 +189,33 @@ const BLACK_HOLES = {
              \n\nHold on to how strange that is. It has ten times as much
              material in it as the Sun. The Sun's radius is 696,000 kilometers.
              This is 30. Same kind of stuff, roughly ten times as much of it,
-             and it fits inside a medium sized city.`,
+             and it fits inside a medium sized city.
+             \n\nOne thing to be careful about, and it is the reason the panel
+             exists at all. The dark disc on the main canvas is <em>not</em>
+             drawn thirty kilometres wide. It is drawn at whatever size lets
+             four orbits fit in a window, which is a choice about the picture
+             and carries no information. The bars in the panel are the physical
+             comparison, drawn at one honest scale, and the two numbers below
+             say exactly how far apart the two pictures are.`,
+      probe: ctx => {
+        const hole = ctx.role('hole');
+        if (!hole) return [{ label: 'The hole', value: 'not on the canvas' }];
+        const f = ctx.holeFacts(hole.massInSuns ?? 10);
+        return [
+          {
+            label: 'Drawn on the canvas',
+            value: `${(hole.radius || 0).toFixed(0)} world units — a display choice, not a length`,
+          },
+          {
+            label: 'Actually, across the horizon',
+            value: `${(f.rsKm * 2).toFixed(1)} km`,
+          },
+          {
+            label: 'The Sun, for comparison',
+            value: '1,392,000 km across',
+          },
+        ];
+      },
       tool: horizonTool({
         values: { mass: 10 },
         hide: ['mass'],
@@ -150,6 +227,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'now-make-it-heavier',
+      stage: HOLE,
       type: 'predict',
       title: 'Now make it heavier',
       body: `You are about to be handed a mass slider. Before you touch it,
@@ -170,6 +248,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'three-measurements',
+      stage: HOLE,
       type: 'explore',
       title: 'Three measurements',
       body: `Here is the experiment. The slider sets the mass. The panel works
@@ -183,20 +262,40 @@ const BLACK_HOLES = {
         id: 'bh-scaling',
         session: 'rs-vs-m',
         values: { mass: 5 },
+        // The slider is the mass of the hole on the canvas as well as the
+        // subject of the graph, so a student sees the consequence of each
+        // trial in the scene they took it from.
+        scene: true,
+        capture: true,
         title: 'Mass against horizon size',
-        note: 'Set a mass, press Record, repeat. Clear trials starts the table again if you want to redo it.',
+        note: 'Set a mass, press Record, repeat. The mass is also the mass of the black hole on the canvas.',
       },
       checklist: [
         'Set the slider to 5 M☉ and press Record this trial',
+        'Watch the hole on the canvas change, and its orbiters with it',
         'Set it to 10 M☉ and press Record again',
         'Set it to 20 M☉ and press Record once more',
         'Read the three radii in the table under the graph',
         'Look at where the three points have landed',
+        'Press Capture these trials to put the run in your notebook',
       ],
+      probe: ctx => {
+        const hole = ctx.role('hole');
+        if (!hole) return [{ label: 'The hole', value: 'not on the canvas' }];
+        const m = hole.massInSuns ?? 10;
+        return [
+          { label: 'Hole on the canvas', value: `${m.toFixed(1)} M☉` },
+          {
+            label: 'Its Schwarzschild radius',
+            value: `${ctx.holeFacts(m).rsKm.toFixed(1)} km`,
+          },
+        ];
+      },
       tip: 'If you record the same mass twice it replaces the old value rather than adding a second point, so you cannot clutter the graph by mistake.',
     },
     {
       sid: 'what-did-doubling-do',
+      stage: HOLE,
       type: 'question',
       title: 'What did doubling do?',
       kind: 'choice',
@@ -222,6 +321,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'read-the-graph',
+      stage: HOLE,
       type: 'question',
       title: 'Read the graph',
       kind: 'choice',
@@ -247,6 +347,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'the-rule-you-just-found',
+      stage: HOLE,
       type: 'read',
       title: 'The rule you just found',
       body: `What you measured has a shorthand:
@@ -268,6 +369,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'squeezing-and-getting-away',
+      stage: HOLE,
       type: 'predict',
       title: 'Squeezing, and getting away',
       body: `Change of subject, briefly. Why is there a horizon at all?
@@ -290,6 +392,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'squeeze-the-sun',
+      stage: HOLE,
       type: 'explore',
       title: 'Squeeze the Sun',
       body: `The panel takes the Sun and squeezes it. Its mass never changes:
@@ -316,6 +419,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'the-last-squeeze',
+      stage: HOLE,
       type: 'question',
       title: 'The last squeeze',
       kind: 'choice',
@@ -340,6 +444,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'the-right-answer-for-the',
+      stage: EQUAL_MASS,
       type: 'question',
       title: 'The right answer for the wrong reason',
       kind: 'choice',
@@ -358,7 +463,40 @@ const BLACK_HOLES = {
              far that every direction leading away from the hole has stopped
              existing. Light does not fail to escape. There is no longer
              anywhere for it to escape to.
-             \n\nThat is as far as this lesson goes into it, and it is enough.`,
+             \n\nThat is as far as this lesson goes into it, and it is enough.
+             \n\nThe canvas has changed to make one part of that concrete.
+             There are now two systems on it, side by side: a black hole of
+             eight solar masses on the left, and an ordinary star of eight solar
+             masses on the right. Each has a small body in orbit at the same
+             distance from its centre.
+             \n\nWatch them for a few laps before you answer. Only one thing
+             differs between the two systems, and the orbits are the measurement.`,
+      checklist: [
+        'Watch both orbiters for several laps',
+        'Look for any difference in how fast the two go round',
+        'Select each central object and check the two masses really are equal',
+        'Say what that means about the gravity outside a black hole',
+      ],
+      probe: ctx => {
+        const rows = [];
+        for (const [role, label] of [
+          ['hole-orbiter', 'Orbiting the black hole'],
+          ['star-orbiter', 'Orbiting the star'],
+        ]) {
+          const body = ctx.role(role);
+          if (!body) continue;
+          const el = ctx.elements(body);
+          rows.push({
+            label,
+            value: el?.period ? `period ${ctx.time(el.period)}` : 'measuring…',
+          });
+        }
+        rows.push({
+          label: 'What differs between the two',
+          value: 'only what is at the centre',
+        });
+        return rows;
+      },
       prompt: 'Which of these statements about the event horizon is true?',
       options: [
         'It is a solid surface, and something crossing it would hit it',
@@ -368,10 +506,11 @@ const BLACK_HOLES = {
       ],
       answer: 2,
       because:
-        'A boundary, and nothing more solid than that. Two things to be clear about while you are here. There is nothing to hit: an astronaut crossing the horizon of a large black hole would notice nothing at all happening at that moment. And gravity does not switch on there. Gravity was already acting outside, which is why the four objects at the start of this lesson were in orbit, and it goes on acting inside; the horizon is simply where getting back out stops being possible.',
+        'A boundary, and nothing more solid than that. Two things to be clear about while you are here. There is nothing to hit: an astronaut crossing the horizon of a large black hole would notice nothing at all happening at that moment. And gravity does not switch on there — which is what the two systems on the canvas are for. Eight solar masses is eight solar masses, and at the same distance the orbit is the same orbit, whether the mass is a star you could stand on or a hole you could not. A black hole is not a stronger kind of gravity; it is the same gravity with the mass packed small enough that you can get very close to it. That is the whole difference, and it is why the orbiter on the left is not being dragged in.',
     },
     {
       sid: 'which-one-is-denser',
+      stage: HOLE,
       type: 'predict',
       title: 'Which one is denser?',
       body: `Back to the mass slider, and to a question that catches out almost
@@ -395,6 +534,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'mass-divided-by-volume',
+      stage: HOLE,
       type: 'explore',
       title: 'Mass divided by volume',
       body: `First, what is being measured. Density is mass divided by volume:
@@ -427,6 +567,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'which-way-did-it-go',
+      stage: HOLE,
       type: 'question',
       title: 'Which way did it go?',
       kind: 'choice',
@@ -452,6 +593,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'where-the-room-comes-from',
+      stage: HOLE,
       // "That is the rule you measured earlier" - the radius-mass rule from
       // those three measurements.
       requires: ['three-measurements'],
@@ -486,6 +628,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'which-one-is-hotter',
+      stage: HOLE,
       type: 'predict',
       title: 'Which one is hotter?',
       body: `A third property, and a third chance to be surprised.
@@ -508,6 +651,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'what-hawking-radiation-is-and',
+      stage: HOLE,
       type: 'read',
       title: 'What Hawking radiation is, and what to be careful about',
       body: `Keep this modest, because the honest version is quite technical.
@@ -524,11 +668,20 @@ const BLACK_HOLES = {
              \n\nOne more thing worth saying: this has never been observed. The
              temperatures involved are so low that no experiment can currently
              get anywhere near them, as the next screen will make painfully
-             clear.`,
+             clear.
+             \n\nAnd a note about what you are looking at. The black hole is
+             still on the canvas, and the simulation moving its orbiters is
+             Newtonian gravity - which knows nothing whatever about quantum
+             fields, temperature or evaporation. The panels on the next few
+             screens are <strong>calculations</strong>, evaluated from
+             Hawking's formulae, not readings taken from the scene. Nothing on
+             the canvas is evaporating, and nothing there could tell you if it
+             were.`,
       tip: 'Hawking regarded this as his most important result, and asked for the equation for a black hole’s entropy, which comes from the same work, to be carved on his memorial stone in Westminster Abbey.',
     },
     {
       sid: 'the-thermometer',
+      stage: HOLE,
       type: 'explore',
       title: 'The thermometer',
       body: `The panel is a thermometer, with familiar temperatures marked on
@@ -556,6 +709,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'colder-not-hotter',
+      stage: HOLE,
       type: 'question',
       title: 'Colder, not hotter',
       kind: 'choice',
@@ -580,6 +734,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'then-what-happens-to-it',
+      stage: HOLE,
       type: 'predict',
       title: 'Then what happens to it?',
       body: `Follow the logic. If a black hole radiates, then it is losing
@@ -602,6 +757,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'a-timeline-that-will-not',
+      stage: HOLE,
       type: 'explore',
       title: 'A timeline that will not fit on a page',
       body: `The numbers here get out of hand, so the panel counts zeros instead
@@ -628,6 +784,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'longer-and-then-much-longer',
+      stage: HOLE,
       type: 'question',
       title: 'Longer, and then much longer',
       kind: 'choice',
@@ -654,6 +811,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'from-city-sized-to-solar',
+      stage: HOLE,
       type: 'read',
       title: 'From city-sized to solar-system-sized',
       body: `One relationship, R<sub>s</sub> ∝ M, running across an enormous
@@ -683,6 +841,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'sorting-them-out',
+      stage: HOLE,
       type: 'question',
       title: 'Sorting them out',
       kind: 'choice',
@@ -707,6 +866,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'a-mystery-black-hole-size',
+      stage: HOLE,
       // Answered from the two rules found there: radius against mass, and
       // density against mass.
       requires: ['three-measurements', 'mass-divided-by-volume'],
@@ -737,6 +897,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'a-mystery-black-hole-temperature',
+      stage: HOLE,
       type: 'question',
       title: 'A mystery black hole: temperature and lifetime',
       kind: 'choice',
@@ -761,6 +922,7 @@ const BLACK_HOLES = {
     },
     {
       sid: 'it-has-a-name',
+      stage: HOLE,
       type: 'read',
       title: 'It has a name',
       body: `Black hole D is <strong>Sagittarius A*</strong>, and it is 26,000

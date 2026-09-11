@@ -79,7 +79,18 @@ import {
   neutron_stars,
   white_dwarfs,
   getSimulationTime,
+  conservationDrift,
+  getWorldGeneration,
 } from './physics.js';
+import { blackHoleFacts } from './blackHolePhysics.js';
+import {
+  habitableZoneBounds,
+  habitableZoneStatus,
+  relativeInsolation,
+  stellarPropertiesFor,
+} from './habitability.js';
+import { habitableZoneModelFromSettings } from './render.js';
+import { currentRadialVelocity, observedStar } from './radialVelocity.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
 import {
   formatDistance,
@@ -87,6 +98,7 @@ import {
   formatTime,
   formatMass,
   timeUnitSeconds,
+  SIM_UNITS_PER_AU,
 } from './units.js';
 import { getWidget, widgetDefaults } from './widgets.js';
 import {
@@ -109,6 +121,7 @@ import {
   currentTimeDays,
   clearLightCurve,
   transitAnalysis,
+  transitGeometry,
 } from './lightCurve.js';
 import { encodePayload, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
@@ -137,6 +150,41 @@ import {
 } from './answerFeedback.js';
 import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
+import {
+  SCALE,
+  applyStage,
+  centreOnSelected,
+  clearStage,
+  fitStage,
+  setStageScale,
+  stageScale,
+  becomeRemnant,
+  placeBinary,
+  restageHole,
+  restageStarPair,
+  stagedBarycentre,
+  pinSnapshot,
+  pinnedSnapshots,
+  remnantKindOf,
+  restageStar,
+  stageIntact,
+  stagedStars,
+  takeFit,
+} from './lessonStage.js';
+import {
+  bindRoles,
+  boundRoles,
+  roleBody,
+  enterLessonScope,
+  evidenceSnapshot,
+  leaveLessonScope,
+  modeDescription,
+  releaseModelOwnership,
+  resolveRole,
+  roleOf,
+  selectRole,
+  selectableBodies,
+} from './lessonScene.js';
 
 export { checkAnswer };
 
@@ -710,6 +758,190 @@ function probeContext() {
       if (lon < 0) lon += 360;
       return { separation: Math.hypot(dx, dy), longitude: lon };
     },
+    /**
+     * The body a step's `bind` gave this role, or null.
+     *
+     * The replacement for `find` below, and the difference is the whole point:
+     * a role was resolved once, against one world, by an exact matcher that
+     * refused to choose when more than one body answered to it. `find` is a
+     * case-insensitive substring search that returns whichever came first.
+     * Both are here because the eight steps that use `find` have not been
+     * migrated; new steps should bind.
+     */
+    role: name => resolveRole(name).body,
+    /** How a role stands: bound, stale, gone, or never bound. */
+    roleStatus: name => resolveRole(name).status,
+    /** Which role, if any, names a body. Null for anything unbound. */
+    roleOf,
+    /** Every role this step bound, in binding order. */
+    roles: () => boundRoles(),
+    /** Select a role's body, as though the reader had clicked it. */
+    selectRole,
+    /** Who is computing what, for a line under an instrument. */
+    mode: modeDescription,
+    /** Write a model's answer onto a staged star, sizing it as it goes. */
+    restageStar,
+    /**
+     * Replace a staged star with the remnant its track's prescription names.
+     *
+     * The reader's selection follows it, because a white dwarf is a different
+     * body class from a star and the card they have open must not close on
+     * them. A prescription of 'unfinished' leaves the star where it is:
+     * inventing a remnant for a model that stopped first is the one thing
+     * js/stellar/endpoints.js exists to refuse.
+     */
+    becomeRemnant,
+    /** Which remnant a staged role has become, if any. */
+    remnantKindOf,
+    /**
+     * Put the staged binary where a waveform model says it is.
+     *
+     * The separation and phase come from the timeline the plot is drawn from,
+     * so the picture on the canvas and the curve in the panel are one thing
+     * described twice rather than two things that happen to look alike.
+     */
+    placeBinary,
+    /**
+     * Where the staged pair's balance point is, and how far each star is from
+     * it - measured off the live bodies, not restated from the declaration.
+     *
+     * The ratio of the two arms is the inverse of the mass ratio, which is the
+     * one relationship "Weighing the Stars" is built on, so it is read rather
+     * than told.
+     */
+    barycentre: stagedBarycentre,
+    /**
+     * Rebuild the staged pair with different masses, same separation.
+     *
+     * A mass-ratio control has to restand the pair rather than edit a mass in
+     * place: a star whose mass changed mid-orbit is on a path that no longer
+     * closes, and the lesson would be showing a decaying spiral while calling
+     * it a circle.
+     */
+    restageStarPair,
+    /**
+     * Rebuild the staged black hole with a different mass.
+     *
+     * A restage rather than an edit for the same reason the star pair is: the
+     * orbiters' speeds were chosen for the old mass, and changing the central
+     * mass under them would leave every one of them on a path that no longer
+     * closes.
+     */
+    restageHole,
+    /**
+     * What a black hole of a given mass is really like, in SI.
+     *
+     * Kept separate from anything the canvas draws, and the reason is the one
+     * this lesson has to keep making: the dark disc on screen is a drawing at
+     * a scale chosen so the orbits fit in a window, and the Schwarzschild
+     * radius is a physical length in kilometres. Quoting the second while
+     * pointing at the first is the misconception the step exists to prevent,
+     * so the readout that uses this says which is which.
+     */
+    holeFacts: massSun => blackHoleFacts(massSun),
+    /**
+     * Where the observed star is in its orbit, and what the spectrograph is
+     * reading at that instant.
+     *
+     * The two halves of the same fact, which the lesson previously showed in
+     * two places that could not be compared: `phaseDeg` is where the star
+     * actually is around the barycentre, measured off the scene, and `velocity`
+     * is the line-of-sight component the instrument reports. `towards` is the
+     * sign, spelled out, because the whole difficulty of reading these curves
+     * is that a negative number means approaching.
+     *
+     * Null when the scenario pins its star: a pinned star has no reflex motion,
+     * and js/radialVelocity.js refuses to report a velocity for one rather than
+     * returning an artefact that looks like a measurement.
+     */
+    rvNow: () => {
+      const star = observedStar();
+      if (!star) return null;
+      const velocity = currentRadialVelocity();
+      const primary = star ? primaryOf(star) : null;
+      const el = primary ? orbitalElements(star, primary, G) : null;
+      const angle = Math.atan2(star.pos.y, star.pos.x);
+      return {
+        star,
+        name: star.name,
+        velocity,
+        held: velocity === null,
+        towards:
+          velocity === null
+            ? null
+            : velocity < 0
+              ? 'towards us'
+              : 'away from us',
+        phaseDeg: ((angle * 180) / Math.PI + 360) % 360,
+        period: el?.period ?? null,
+        observerAngleDeg: getObserverAngle(),
+      };
+    },
+    /**
+     * Where a planet sits against its own star's habitable zone, right now.
+     *
+     * Computed with habitableZoneBounds() and habitableZoneStatus() - the same
+     * two functions js/render.js draws the ring with and the hz-* instruments
+     * quote - and with the zone definition read from the same setting. The
+     * lesson and the picture cannot disagree about where the edges are,
+     * because there is one place that decides.
+     *
+     * `insolation` is in Earths, which is the unit the whole lesson works in.
+     * The status word is deliberately not a boolean: a planet just past an edge
+     * is a different kind of object from one ten times too close, and neither
+     * is a statement about whether anything lives there.
+     */
+    habitability: body => {
+      const planet = body || selected;
+      if (!planet) return null;
+      const star = primaryOf(planet);
+      if (!star) return null;
+      const props = stellarPropertiesFor(star);
+      if (!props) return null;
+      const model = habitableZoneModelFromSettings(SETTINGS);
+      const bounds = habitableZoneBounds(props, model);
+      const dx = planet.pos.x - star.pos.x;
+      const dy = planet.pos.y - star.pos.y;
+      const distanceAU = Math.hypot(dx, dy) / SIM_UNITS_PER_AU;
+      return {
+        planet,
+        star,
+        starName: star.name,
+        distanceAU,
+        insolation: relativeInsolation(props.luminositySolar, distanceAU),
+        bounds,
+        model,
+        ...habitableZoneStatus(distanceAU, bounds),
+      };
+    },
+    /**
+     * How far the whole world's conserved quantities have moved.
+     *
+     * The distinction "Orbital Energy" is built on and could not previously
+     * make: a total energy that changes because a burn added some is physics,
+     * and a total energy that changes because the integrator is approximating
+     * is not. The engine keeps a baseline from the moment the world was built
+     * and reports both, so a step can show the drift beside the change and let
+     * a reader see which one they are looking at.
+     *
+     * Null before a baseline exists, which is the honest answer during the
+     * frame a world is being rebuilt.
+     */
+    conservation: () => conservationDrift(),
+    /**
+     * Where a transiting body is against its star's disc, right now.
+     *
+     * The link between the dot on the canvas and the dip on the plot. Read from
+     * js/lightCurve.js, which is the module that decides it while computing the
+     * curve, so the label and the curve cannot disagree.
+     */
+    transitGeometry: body => transitGeometry(body || selected),
+    /** Pin a labelled copy of a staged star as it is right now. */
+    pinSnapshot,
+    /** Every pinned snapshot, oldest first. */
+    snapshots: pinnedSnapshots,
+    /** An immutable record of what was on screen, for the notebook. */
+    evidence: evidenceSnapshot,
     find: name =>
       allBodies().find(b =>
         String(b.name || '')
@@ -730,6 +962,23 @@ function probeContext() {
       } catch {
         return null;
       }
+    },
+    /**
+     * Whether a recorded run still describes the scene on the canvas.
+     *
+     * A sweep result stays on screen after the reader changes something, and
+     * nothing used to say that the two no longer match. The engine bumps its
+     * world generation on every rebuild, so comparing the run's stamp with the
+     * current one answers it exactly: `false` means the numbers are about an
+     * arrangement that is gone.
+     *
+     * `null` when there is nothing to judge - no run, or a run recorded before
+     * this stamp existed - because "we cannot tell" is not the same as "stale".
+     */
+    runMatchesScene: run => {
+      const stamped = run?.worldGeneration;
+      if (!Number.isFinite(stamped)) return null;
+      return stamped === getWorldGeneration();
     },
   };
 }
@@ -788,6 +1037,56 @@ function applySetup(setup) {
  * they are measuring. Placement is therefore off by default during a lesson,
  * and can be turned back on for the steps that ask for it.
  */
+/**
+ * Resolve this step's `bind` against the world that is on screen.
+ *
+ * Run on every step change rather than once per lesson, for two reasons. A
+ * step that carries a `setup` has just rebuilt the world, so every id from the
+ * previous step is meaningless - that is what the world generation in a
+ * binding records. And a step's roles are the step's: the one before it may
+ * have bound something else, or nothing.
+ *
+ * A role that cannot be resolved is a warning in the console and nothing else.
+ * It has to be visible to whoever is writing the lesson, and it must not stop
+ * the lesson running for whoever is taking it.
+ *
+ * @returns {void}
+ */
+function bindStepRoles() {
+  const step = currentStep();
+  // A stage declares the whole scene and binds its own roles, so it takes
+  // precedence: a step cannot both stand its own stars on the canvas and bind
+  // roles to somebody else's.
+  if (step?.stage) {
+    const { problems } = applyStage(step.stage);
+    // The fit itself is deferred: applyStage records that one was asked for
+    // and the panel's own tick performs it, once the panel and the instrument
+    // have been laid out and the application has finished setting up its
+    // camera. Fitting here instead measured panels that were not there yet and
+    // was then overwritten by the boot.
+
+    for (const [role, reason] of Object.entries(problems)) {
+      console.warn(
+        `Lesson "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
+      );
+    }
+    return;
+  }
+  clearStage();
+  if (!step?.bind) {
+    releaseModelOwnership();
+    return;
+  }
+  const { problems } = bindRoles(step.bind, {
+    modelOwned: step.prescribes || [],
+  });
+  for (const [role, reason] of Object.entries(problems)) {
+    console.warn(
+      `Lesson "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
+    );
+  }
+}
+
 function applyLocks() {
   if (!active) return;
   const lock = active.lock || {};
@@ -816,6 +1115,11 @@ function applyLocks() {
 
 /** Hand the simulation back to the user when a lesson closes. */
 function releaseLocks() {
+  // The explanation labels and the balance point belong to the lesson that
+  // asked for them.
+  SETTINGS.bh_explain_view = false;
+  state.barycentreOverlay.active = false;
+  state.barycentreOverlay.ids = [];
   setInspectorSuppressed(false);
   setAreaSweepSuppressed(false);
   if (lockedSettings) {
@@ -1908,7 +2212,16 @@ function syncToolPanel(step) {
   els.toolActions.querySelectorAll('[data-tool-action]').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
-        widget.act?.(btn.dataset.toolAction, toolValues, spec);
+        // A live widget's action gets the lesson context, the same way its
+        // frame and its readout do: a Capture button on an instrument whose
+        // subject is the main scene has to be able to read that scene at the
+        // instant of the click.
+        widget.act?.(
+          btn.dataset.toolAction,
+          toolValues,
+          spec,
+          widget.live ? probeContext() : undefined
+        );
       } catch (err) {
         console.warn('Widget action failed:', err);
       }
@@ -1940,7 +2253,15 @@ function startToolLoop(widget, toolSpec) {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
     try {
-      widget.step?.(toolValues, dt, toolSpec);
+      // A live widget's frame is handed the lesson context too, the way its
+      // draw and readout already are: an instrument whose controls drive the
+      // main scene has to be able to reach it from the frame that moved them.
+      widget.step?.(
+        toolValues,
+        dt,
+        toolSpec,
+        widget.live ? probeContext() : undefined
+      );
       paintTool({ quiet: true });
     } catch (err) {
       console.warn('Widget frame failed:', err);
@@ -2236,9 +2557,152 @@ function renderFooter() {
 
 let lastProbeHtml = '';
 let lastSweepId = null;
+let lastObjectsKey = '';
+
+/** Past this many, the object list is a count rather than a row of chips. */
+const OBJECT_LIST_MAX = 12;
+
+/**
+ * The keyboard's way to select the objects a step is about.
+ *
+ * Only for steps that bind roles, and deliberately so. A list of every body in
+ * a five-hundred-star cluster is not an accessibility feature, it is a wall;
+ * what a reader needs is the two or three objects this activity names, which
+ * is exactly what the bindings are. Selecting from here goes through the same
+ * call a click on the canvas goes through, so the canvas, this list, the
+ * inspector and any instrument reading ctx.selected all move together.
+ *
+ * @returns {void}
+ */
+function renderObjectList() {
+  if (!els.objects || !els.objectsWrap) return;
+  const step = currentStep();
+  const wanted = Boolean(step?.bind || step?.stage);
+  els.objectsWrap.hidden = !wanted;
+  if (els.stageTools) els.stageTools.hidden = !step?.stage;
+  if (!wanted) {
+    lastObjectsKey = '';
+    els.objects.replaceChildren();
+    return;
+  }
+  // A stage of three stars lists three chips. A population stage of a hundred
+  // and twenty would list a hundred and twenty, which is not an accessibility
+  // feature but a wall, so past a dozen the list becomes a count plus whatever
+  // is selected - and the canvas, which is where a population is read anyway.
+  const all = selectableBodies().filter(entry => entry.role);
+  const crowded = all.length > OBJECT_LIST_MAX;
+  const named = crowded ? all.filter(e => e.selected) : all;
+  const key = `${crowded ? all.length : 0}|${named
+    .map(e => `${e.id}:${e.role}:${e.selected ? 1 : 0}`)
+    .join('|')}`;
+  if (key === lastObjectsKey) return;
+  lastObjectsKey = key;
+  // Selecting from this list changes the list - the selected entry is marked -
+  // which rebuilds it, which throws away the focus a keyboard user was
+  // standing on. Remembering which entry had it and putting it back is what
+  // makes the list usable with a keyboard at all: press Enter and you are
+  // still on the thing you just selected, not at the top of the document.
+  const hadFocus = els.objects.contains(document.activeElement)
+    ? document.activeElement.dataset.objectId
+    : null;
+  els.objects.replaceChildren();
+  if (crowded) {
+    const note = document.createElement('p');
+    note.className = 'inv-probe-row';
+    note.textContent = t('inv.objects.many', {
+      count: all.length,
+      staged: stagedStars().length,
+    });
+    els.objects.append(note);
+  } else if (!named.length) {
+    const empty = document.createElement('p');
+    empty.className = 'inv-probe-row';
+    empty.textContent = t('inv.objects.empty');
+    els.objects.append(empty);
+    return;
+  }
+  for (const entry of named) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'inv-object';
+    // A pressed toggle rather than a listbox option: one tab stop each, no
+    // roving tabindex to get wrong, and a state a screen reader announces
+    // without the container having to manage anything.
+    button.setAttribute('aria-pressed', String(entry.selected));
+    button.dataset.objectId = String(entry.id);
+    const role = document.createElement('span');
+    role.className = 'inv-object-role';
+    role.textContent = entry.role;
+    const name = document.createElement('span');
+    name.className = 'inv-object-name';
+    name.textContent = entry.name;
+    button.append(role, name);
+    const choose = () => {
+      const body = selectableBodies().find(b => b.id === entry.id);
+      if (body) selectRole(body.role);
+    };
+    button.addEventListener('click', choose);
+    // Enter and Space by hand, and stopped from travelling any further.
+    // A button fires click on Enter by itself, but this one is inside a
+    // document that binds single keys as shortcuts, and the first handler to
+    // see the event decides: pressing Enter here selected nothing and did
+    // whatever the shortcut layer thought Enter meant.
+    button.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      event.stopPropagation();
+      choose();
+    });
+    els.objects.append(button);
+  }
+  if (hadFocus) {
+    els.objects
+      .querySelector(`[data-object-id="${CSS.escape(hadFocus)}"]`)
+      ?.focus();
+  }
+}
 
 function renderProbe() {
   const step = currentStep();
+  // A stage owns the whole scene, so if something else has replaced the scene
+  // the stage puts itself back. This happens on a cold load into a staged step:
+  // the application rebuilds its own world after the lesson has opened, and
+  // without this the reader is left looking at a scenario the step knows
+  // nothing about. Cheap: it rebuilds only when the stars have actually gone.
+  if (step?.stage && !stageIntact()) {
+    applyStage(step.stage, { force: true });
+    // The instrument is what places a model-driven stage - the binary's
+    // separation and phase come from the waveform, not from the declaration -
+    // so a rebuilt stage needs one repaint to be put where it belongs.
+    // Without it the two components sit on top of each other at the origin
+    // until the reader happens to touch a control.
+    paintTool({ quiet: true });
+  }
+  renderObjectList();
+  // A fit a stage asked for, taken as soon as there is something to measure.
+  takeFit();
+
+  // A step can turn on the renderer's own "Explain this view" labels, which
+  // name the dark region, the disk and the jets on the black hole itself. The
+  // lesson uses the existing overlay rather than drawing its own: the labels
+  // have to point at what the renderer actually drew, and a second set drawn
+  // by the panel would drift from it the moment either changed.
+  if (els.probe && active) {
+    SETTINGS.bh_explain_view = Boolean(step?.explainView);
+  }
+
+  // A step can ask for the balance point to be drawn on the main scene. The
+  // panel supplies only *which* bodies; js/render.js recomputes the point from
+  // them every frame, so what is drawn is where the pair actually is.
+  if (els.probe) {
+    const wantBary = Boolean(step?.showBarycentre);
+    state.barycentreOverlay.active = wantBary;
+    if (wantBary) {
+      state.barycentreOverlay.ids = (boundRoles() || [])
+        .map(r => roleBody(r)?.id)
+        .filter(id => Number.isFinite(id));
+    }
+  }
 
   // A step can ask for the equal-area wedges to follow whatever is selected,
   // so that clicking from planet to planet redraws them for each orbit.
@@ -2496,6 +2960,34 @@ function setupInForceAt(index) {
  * @param {Object} [opts]
  * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
  */
+/**
+ * Release any sound a lesson started.
+ *
+ * A waveform the lab is playing belongs to the step that started it. Move on,
+ * go back, close the lesson or rebuild the world underneath it and what is
+ * still coming out of the speakers is a measurement of something that is no
+ * longer on screen - which is worse than silence, because it sounds like an
+ * answer.
+ *
+ * Sent as an event rather than a call: js/gwAudio.js pulls in the whole
+ * waveform model, and importing it here would put that on every page load for
+ * the sake of a stop. The scope is the prefix js/gwWidgets.js owns, so this
+ * cannot silence something a reader started outside a lesson, and the single
+ * listener on the other side means no amount of stepping accumulates handlers.
+ * Stopping also un-ducks the ordinary sonification bus, because js/audio.js
+ * un-ducks when the signal ends however it ends.
+ *
+ * @returns {void}
+ */
+function releaseLessonAudio() {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('gravitasStopSignalAudio', {
+      detail: { scope: 'gw-lab:' },
+    })
+  );
+}
+
 function goToStep(index, { rebuild = false } = {}) {
   if (!active) return;
   stepIndex = Math.max(0, Math.min(active.steps.length - 1, index));
@@ -2514,6 +3006,11 @@ function goToStep(index, { rebuild = false } = {}) {
   const setup = setupInForceAt(stepIndex);
   if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
   else applyLocks();
+
+  // Before the new step draws anything, so a reader never hears the last
+  // step's signal over the new step's instructions.
+  releaseLessonAudio();
+  bindStepRoles();
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a
@@ -2643,6 +3140,18 @@ export async function openInvestigation(id, opts = {}) {
   // duration; this dismisses the one that may already be up.
   const infoBox = document.getElementById('scenarioInfoBox');
   if (infoBox) infoBox.classList.remove('showUI', 'show');
+  // What the lesson is about to borrow, saved once. Entering is idempotent, so
+  // the twenty step changes that follow cannot overwrite these with values the
+  // lesson itself set - which is what makes "close the lesson and you are back
+  // where you were" true rather than nearly true.
+  enterLessonScope({
+    selection: state.selectedObject
+      ? { id: state.selectedObject.object?.id ?? null, generation: null }
+      : null,
+    paused: state.paused,
+    zoom: state.zoom,
+    pan: state.pan ? { ...state.pan } : null,
+  });
   // rebuild: the simulation on screen belongs to whatever the student was doing
   // before, not to the step they are resuming at.
   goToStep(stepIndex, { rebuild: true });
@@ -2663,6 +3172,23 @@ export function closeInvestigation() {
   if (els.plotPanel) els.plotPanel.hidden = true;
   if (els.ellipsePanel) els.ellipsePanel.hidden = true;
   stopToolLoop();
+  releaseLessonAudio();
+  // Hand back what the lesson borrowed, and - the part that matters most -
+  // give every model-owned body back to the integrator. A body still flagged
+  // when the lesson closes is a body that never moves again.
+  //
+  // The camera is deliberately not restored. A reader who panned and zoomed
+  // during a lesson meant to, and putting the view back where it was an hour
+  // ago is the application overruling them; the scene's own contents have
+  // been rebuilt several times by then in any case. What comes back is the
+  // transport, which a step may have paused, and nothing else.
+  for (const [key, value] of leaveLessonScope()) {
+    if (key === 'paused') state.paused = Boolean(value);
+  }
+  clearStage();
+  if (els.objectsWrap) els.objectsWrap.hidden = true;
+  if (els.stageTools) els.stageTools.hidden = true;
+  lastObjectsKey = '';
   if (els.toolPanel) els.toolPanel.hidden = true;
   // A watch this lesson's activity armed goes with the lesson. Closing the
   // panel does not re-render a step, so this cannot be left to
@@ -3521,6 +4047,12 @@ export function initInvestigations() {
     body: document.getElementById('investigationBody'),
     probe: document.getElementById('investigationProbe'),
     probeWrap: document.getElementById('investigationProbeWrap'),
+    objects: document.getElementById('investigationObjects'),
+    objectsWrap: document.getElementById('investigationObjectsWrap'),
+    stageTools: document.getElementById('investigationStageTools'),
+    fitBtn: document.getElementById('investigationFit'),
+    followBtn: document.getElementById('investigationFollow'),
+    scaleBtn: document.getElementById('investigationScale'),
     prev: document.getElementById('investigationPrev'),
     next: document.getElementById('investigationNext'),
     close: document.getElementById('investigationClose'),
@@ -3579,6 +4111,27 @@ export function initInvestigations() {
   els.prev?.addEventListener('click', () => goToStep(stepIndex - 1));
   els.next?.addEventListener('click', next);
   els.close?.addEventListener('click', closeInvestigation);
+  // The stage's camera and scale. Both cameras act once, on the press: a view
+  // that re-framed itself would take the scene back every time a reader looked
+  // somewhere else, and the whole point of standing objects on the canvas is
+  // that a reader can go and look at them.
+  els.fitBtn?.addEventListener('click', () => {
+    fitStage();
+  });
+  els.followBtn?.addEventListener('click', () => {
+    if (!centreOnSelected()) toast(t('inv.stage.nothingSelected'));
+  });
+  els.scaleBtn?.addEventListener('click', () => {
+    const next = stageScale() === SCALE.TRUE ? SCALE.DISPLAY : SCALE.TRUE;
+    setStageScale(next);
+    const on = next === SCALE.TRUE;
+    els.scaleBtn.setAttribute('aria-pressed', String(on));
+    // At true scale the smallest stars fall below what the canvas can draw.
+    // That is the honest picture and it is why the list above exists, so the
+    // interface says it rather than leaving a reader hunting for a speck.
+    toast(t(on ? 'inv.stage.scale.true' : 'inv.stage.scale.display'));
+  });
+
   els.resetBtn?.addEventListener('click', resetProgress);
   els.ecc?.addEventListener('input', () => {
     paintEllipse(els.ecc.value);

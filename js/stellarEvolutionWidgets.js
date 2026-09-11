@@ -40,7 +40,10 @@ import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
 import { starColor, paintStarDisc } from './bodyVisuals.js';
-import { captureToNotebook } from './notebookBridge.js';
+// Through the seam, not the service: a widget definition is content, and the
+// authoring CLI reads these modules in a plain Node process with no DOM. See
+// js/widgetRuntime.js for why the direction matters.
+import { captureToNotebook } from './widgetRuntime.js';
 import { prefersReducedMotion } from './quality.js';
 import { mulberry32, normalizeSeed } from './rng.js';
 import {
@@ -68,6 +71,7 @@ import {
   trackStartsAt,
 } from './stellar/evolution.js';
 import { spectralType } from './stellar/state.js';
+import { applySelection } from './lesson/starState.js';
 
 const TRACK_LIST = () => trackIds();
 
@@ -168,6 +172,93 @@ function parkAt(state, spec) {
   }
   if (Number.isFinite(spec.at)) seek(state, spec.at);
 }
+
+// -----------------------------------------------------------------------------
+// The protagonist: one star on the main canvas, living its life
+// -----------------------------------------------------------------------------
+//
+// A step that carries `bind` names a staged star, and from then on that body
+// and the marker on the H-R diagram are the same object. Everything the reader
+// can read about it - the colour on the canvas, the radius, the inspector card
+// - comes from `starNow`, which is the same function that places the marker.
+// There is no second copy of the star's state and therefore nothing that can
+// disagree.
+//
+// Three things the playhead can be showing, and they are not the same thing:
+//
+//   the cloud     Before the track begins. The model has nothing to say here,
+//                 so nothing is written: the body holds the track's first
+//                 sample and the readout says the collapse is not modelled.
+//
+//   the track     The star. Temperature, radius, luminosity and current mass
+//                 are written every frame from the sample the marker is on.
+//
+//   the remnant   Not the star any more. What is left is a *prescription*, not
+//                 a track: js/stellar/endpoints.js says which kind and on what
+//                 authority, and for anything but a white dwarf it says a
+//                 range rather than a number. The body is replaced by one of
+//                 that kind, the reader's selection follows it across, and a
+//                 track whose model stopped first leaves the star where it is
+//                 rather than inventing what became of it.
+
+/** Which staged role the playback last wrote to, and at what stage. */
+let boundStage = null;
+
+/**
+ * Keep the protagonist and the playhead showing the same star.
+ *
+ * @param {object} state - The playback
+ * @param {?object} ctx - The lesson context, when the step gave the widget one
+ * @param {object} spec - The step's tool spec
+ * @returns {?object} The bound body, if there is one
+ */
+function syncProtagonist(state, ctx, spec = {}) {
+  const role = spec.bind;
+  if (!role || typeof ctx?.role !== 'function') return null;
+  const star = ctx.role(role);
+  if (!star) return null;
+  const where = stageAt(state);
+  const key = `${role}:${state.trackId}:${where.stage}`;
+
+  if (where.stage === STAGE.REMNANT) {
+    // The prescription, not the track. becomeRemnant carries the selection
+    // across and leaves an unfinished model's star alone.
+    if (boundStage !== key && typeof ctx.becomeRemnant === 'function') {
+      boundStage = key;
+      ctx.becomeRemnant(role, endpointFor(state.trackId));
+    }
+    return ctx.role(role);
+  }
+  boundStage = key;
+  const now = starNow(state);
+  if (!now) return star;
+  applySelection(star, {
+    source: 'model',
+    teffK: now.teffK,
+    luminositySun: now.luminositySun,
+    radiusSun: now.radiusSun,
+    massSun: now.massSun,
+    ageYr: ageAt(state),
+    phase: now.phase,
+  });
+  if (typeof ctx.restageStar === 'function') {
+    ctx.restageStar(role, {
+      source: 'model',
+      teffK: now.teffK,
+      luminositySun: now.luminositySun,
+      radiusSun: now.radiusSun,
+      massSun: now.massSun,
+      ageYr: ageAt(state),
+      phase: now.phase,
+    });
+  }
+  return star;
+}
+
+/** Forget which stage the protagonist was last written at. Tests only. */
+export const resetProtagonistForTests = () => {
+  boundStage = null;
+};
 
 /** The live playback, for tests. @returns {?object} state */
 export const activePlayback = () => play;
@@ -790,6 +881,9 @@ function drawRemnant(g, r, cx, cy, room, state, colors, f) {
 
 const STELLAR_EVOLUTION = {
   id: 'stellar-evolution',
+  // Given the lesson context, so a step that binds a star can have the body on
+  // the canvas be the same object as the marker on the diagram.
+  live: true,
   get title() {
     return t('stelE.title');
   },
@@ -984,8 +1078,9 @@ const STELLAR_EVOLUTION = {
     v.position = state.position;
   },
 
-  draw(canvas, v, _ctx, spec = {}) {
+  draw(canvas, v, ctx, spec = {}) {
     const state = syncFromValues(v, spec);
+    syncProtagonist(state, ctx, spec);
     const H = responsiveHeight(330, 250);
     const { ctx: g, w } = surface(canvas, H);
     const colors = palette();
@@ -1019,8 +1114,9 @@ const STELLAR_EVOLUTION = {
     drawTimeline(g, outer, state, colors);
   },
 
-  readout(v, _ctx, spec = {}) {
+  readout(v, ctx, spec = {}) {
     const state = syncFromValues(v, spec);
+    syncProtagonist(state, ctx, spec);
     const f = frameOf(state);
     const rows = [];
     const samples = trackSamples(state.trackId);

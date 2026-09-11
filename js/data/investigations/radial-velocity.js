@@ -30,6 +30,54 @@ const RV_LAB = {
 
 const RV_LAB_PAUSED = { ...RV_LAB, paused: true };
 
+/**
+ * The two bodies every live step is about.
+ *
+ * Bound by exact name rather than found by substring, so a step is talking
+ * about a body it can name and the engine says so when it cannot find one.
+ * These are the scenario's own bodies: HD 209458 is a real star and this is a
+ * model of it, which is why the catalogue steps later on are labelled as
+ * observations and this one is not.
+ */
+const SYSTEM = {
+  star: { name: 'HD 209458' },
+  planet: { name: 'HD 209458 b' },
+};
+
+/**
+ * What the spectrograph is reading, beside where the star actually is.
+ *
+ * The two halves of the same fact. Until now the lesson showed them in two
+ * places a student could not compare: the star moved on the canvas and a curve
+ * moved in a panel, and nothing said that the trough of the curve is the
+ * moment the star is coming towards you fastest.
+ */
+const rvRows = ctx => {
+  const now = ctx.rvNow();
+  if (!now) return [{ label: 'Spectrograph', value: 'no star to point it at' }];
+  if (now.held) {
+    return [
+      {
+        label: 'Spectrograph',
+        value:
+          'this scenario pins its star, so there is no reflex motion to report',
+      },
+    ];
+  }
+  return [
+    { label: 'Star', value: now.name },
+    { label: 'Where it is in its orbit', value: `${now.phaseDeg.toFixed(0)}°` },
+    {
+      label: 'Line-of-sight velocity',
+      value: `${now.velocity.toFixed(1)} m/s — ${now.towards}`,
+    },
+    {
+      label: 'We are looking from',
+      value: `${now.observerAngleDeg.toFixed(0)}°`,
+    },
+  ];
+};
+
 const RADIAL_VELOCITY = {
   id: 'radial-velocity',
   thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
@@ -58,6 +106,7 @@ const RADIAL_VELOCITY = {
     // --- Part 1: the planet found before it cast a shadow -------------------
     {
       sid: 'the-planet-you-already-measured',
+      bind: SYSTEM,
       type: 'read',
       title: 'The planet you already measured',
       setup: RV_LAB,
@@ -72,6 +121,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'how-does-an-invisible-planet',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'How does an invisible planet give itself away?',
@@ -92,6 +142,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'which-one-moves',
+      bind: SYSTEM,
       type: 'predict',
       title: 'Which one moves?',
       setup: RV_LAB_PAUSED,
@@ -113,6 +164,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'both-of-them-go-round',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Both of them go round',
       body: `This instrument draws the same idea with the star’s orbit magnified
@@ -132,6 +184,7 @@ const RADIAL_VELOCITY = {
     // --- Part 2: the star wobbles ------------------------------------------
     {
       sid: 'make-the-planet-heavier',
+      bind: SYSTEM,
       type: 'predict',
       title: 'Make the planet heavier',
       body: `Keep the orbit the same size and make the planet more massive.`,
@@ -145,6 +198,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'watch-it-grow',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Watch it grow',
       body: `Drag the planet-mass slider from an Earth up to a heavy Jupiter and
@@ -166,6 +220,7 @@ const RADIAL_VELOCITY = {
     // --- Part 3: measuring motion we cannot see -----------------------------
     {
       sid: 'light-carries-the-answer',
+      bind: SYSTEM,
       type: 'read',
       title: 'Light carries the answer',
       body: `Starlight is not a smooth spread of color. Running through it are
@@ -179,6 +234,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'which-way-is-it-going',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Which way is it going?',
@@ -198,23 +254,32 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'toward-away-toward-again',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Toward, away, toward again',
       body: `On the left, the star goes round its small orbit and an arrow shows
              how much of its motion is pointing at us. On the right, that quantity
              is plotted as the star goes round.
              \n\nWatch what happens at the two points where the star is moving
-             straight across your view.`,
+             straight across your view.
+             \n\nThe panel is a diagram of the idea. Underneath it is the same
+             quantity for the star actually on the canvas: where HD 209458 is in
+             its orbit right now, and what a spectrograph pointed at it would be
+             reading at this instant. Watch the two together, and notice that a
+             <em>negative</em> reading means the star is coming towards you.`,
+      allowInspector: true,
       tool: {
         id: 'rv-observer',
         values: { mp: 0.69, inc: 90 },
         title: 'The part we can measure',
       },
+      probe: rvRows,
     },
 
     // --- Part 4: build the curve --------------------------------------------
     {
       sid: 'open-the-real-instrument',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Open the real instrument',
       setup: RV_LAB,
@@ -223,11 +288,19 @@ const RADIAL_VELOCITY = {
              same way a spectrograph measures a real one, and builds the curve as
              the orbit proceeds.
              \n\nLet it run for at least two full cycles before moving on. One
-             orbit takes about thirteen seconds.`,
+             orbit takes about thirteen seconds.
+             \n\nSelect the star on the canvas if it is not already selected -
+             the instrument measures whichever star you have chosen, which is
+             what makes it an instrument rather than a display. The readout
+             below pairs the point the curve is at with where the star actually
+             is, so you can check one against the other.`,
+      allowInspector: true,
+      probe: rvRows,
       tip: 'The panel reports the velocity relative to the system’s own center of mass, so the curve sits around zero.',
     },
     {
       sid: 'reading-the-curve',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Reading the curve',
@@ -246,12 +319,26 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'measure-the-period',
+      bind: SYSTEM,
       type: 'measure',
       title: 'Measure the period',
       body: `The curve repeats. Find the time between two matching points, for
              example two successive peaks, and record it.
              \n\nThis is the orbital period of the planet, measured without ever
-             seeing the planet.`,
+             seeing the planet.
+             \n\nThere is a way to catch a peak exactly. The event watch below is
+             set to stop the simulation the moment the radial velocity reaches
+             its most positive value - press <strong>Arm</strong> and it will
+             pause there. Do it twice and the gap between the two stops is the
+             period, read off the clock rather than eyeballed off a graph.
+             \n\nWhile it is stopped, look at the canvas. Which way is the star
+             actually moving, and does the sign of the reading agree?`,
+      allowInspector: true,
+      // The turning point of the curve rather than a place in the orbit: where
+      // it falls depends on which way the observer is looking, which is the
+      // thing the step wants a student to notice.
+      pauseAt: { kind: 'rvMaximum', body: 'HD 209458', primary: 'HD 209458 b' },
+      probe: rvRows,
       fields: [
         {
           id: 'period',
@@ -263,6 +350,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'the-semi-amplitude-k',
+      bind: SYSTEM,
       type: 'read',
       title: 'The semi-amplitude, K',
       body: `The curve swings from a maximum down to a minimum and back.
@@ -274,6 +362,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'read-k-off-the-panel',
+      bind: SYSTEM,
       type: 'measure',
       title: 'Read K off the panel',
       setup: RV_LAB,
@@ -285,6 +374,7 @@ const RADIAL_VELOCITY = {
     // --- Part 5: what controls K --------------------------------------------
     {
       sid: 'what-would-make-k-bigger',
+      bind: SYSTEM,
       type: 'predict',
       title: 'What would make K bigger?',
       body: `Hold the star, the orbit and the viewing angle fixed, and change only
@@ -297,6 +387,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'one-thing-at-a-time',
+      bind: SYSTEM,
       type: 'explore',
       title: 'One thing at a time',
       body: `This instrument holds the star, the period and the viewing angle
@@ -314,6 +405,7 @@ const RADIAL_VELOCITY = {
     // --- Part 6: weigh the planet -------------------------------------------
     {
       sid: 'weigh-hd-209458-b',
+      bind: SYSTEM,
       // The K to match is the one read off the panel there.
       requires: ['read-k-off-the-panel'],
       type: 'question',
@@ -364,6 +456,7 @@ const RADIAL_VELOCITY = {
     // --- Part 7: the inclination problem ------------------------------------
     {
       sid: 'now-tilt-the-whole-system',
+      bind: SYSTEM,
       type: 'predict',
       title: 'Now tilt the whole system',
       body: `Leave the planet exactly as it is. Change only where we happen to be
@@ -383,13 +476,23 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'the-same-planet-four-viewing',
+      bind: SYSTEM,
       type: 'explore',
       title: 'The same planet, four viewing angles',
       body: `Work through the inclination presets. The bar labeled
              <strong>true mass</strong> never moves. The bar labeled
              <strong>RV says at least</strong> shrinks as the system tilts.
              \n\nAt 30 degrees the same planet appears to be half its real mass. At
-             5 degrees it nearly disappears.`,
+             5 degrees it nearly disappears.
+             \n\nThe canvas has moved too. The observer has been swung round to
+             90 degrees, which for this system means looking along the orbit
+             from a different side - one controlled change, nothing about the
+             star or the planet touched. Watch the live reading below and
+             compare it with what you had two screens ago.`,
+      // A supported change to the live observer, applied to the same system
+      // and the same instrument the earlier steps measured.
+      observerAngle: 90,
+      probe: rvRows,
       tool: {
         id: 'rv-inclination',
         values: { inc: 90, mp: 0.69 },
@@ -398,6 +501,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'm-sin-i',
+      bind: SYSTEM,
       type: 'read',
       title: 'M sin i',
       body: `Radial velocity on its own cannot separate a planet’s mass from the
@@ -409,6 +513,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'what-a-transit-adds',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'What a transit adds',
@@ -432,6 +537,7 @@ const RADIAL_VELOCITY = {
     // --- Part 8: a second kind of wobble ------------------------------------
     {
       sid: 'a-face-on-system',
+      bind: SYSTEM,
       type: 'predict',
       title: 'A face-on system',
       body: `Suppose a system sits almost exactly face-on to us. Its radial-velocity
@@ -450,6 +556,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'astrometry',
+      bind: SYSTEM,
       type: 'read',
       title: 'Astrometry',
       body: `Astrometry measures <em>where</em> a star is, very precisely, over and
@@ -461,6 +568,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'tilt-it-again-and-watch',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Tilt it again, and watch the other method',
       body: `Move the inclination slider from edge-on to face-on.
@@ -476,6 +584,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'two-methods-opposite-weaknesses',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Two methods, opposite weaknesses',
@@ -496,6 +605,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'all-three-at-once',
+      bind: SYSTEM,
       type: 'explore',
       title: 'All three at once',
       body: `This panel puts the three methods side by side for one system as you
@@ -512,6 +622,7 @@ const RADIAL_VELOCITY = {
     // --- Part 9: distance and orbit size ------------------------------------
     {
       sid: 'move-the-system-further-away',
+      bind: SYSTEM,
       type: 'predict',
       title: 'Move the system further away',
       body: `Take a system with a known stellar wobble and imagine it twice as far
@@ -530,6 +641,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'distance-and-orbit-size',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Distance, and orbit size',
       body: `Use the distance slider first: the reflex orbit in AU stays put while
@@ -551,6 +663,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'different-methods-different-planets',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Different methods, different planets',
@@ -575,6 +688,7 @@ const RADIAL_VELOCITY = {
     // --- Part 10: combine transit and RV ------------------------------------
     {
       sid: 'bring-the-transit-back',
+      bind: SYSTEM,
       type: 'read',
       title: 'Bring the transit back',
       body: `You now have two independent measurements of the same planet.
@@ -587,6 +701,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'characterize-the-planet',
+      bind: SYSTEM,
       type: 'explore',
       title: 'Characterize the planet',
       body: `The panel below takes each measurement in turn and shows what it buys.
@@ -608,6 +723,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'how-dense-is-it',
+      bind: SYSTEM,
       type: 'question',
       kind: 'numeric',
       title: 'How dense is it?',
@@ -652,6 +768,7 @@ const RADIAL_VELOCITY = {
     // --- Part 11: the habitability question ---------------------------------
     {
       sid: 'where-does-hd-209458-b',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Where does HD 209458 b sit?',
@@ -673,6 +790,7 @@ const RADIAL_VELOCITY = {
     // --- Part 12: the characterization challenge ----------------------------
     {
       sid: 'three-candidates',
+      bind: SYSTEM,
       type: 'read',
       title: 'Three candidates',
       body: `Here are three planets from a survey. For each you have a radius from
@@ -690,6 +808,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'which-is-the-strongest-candidate',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'Which is the strongest candidate?',
@@ -714,6 +833,7 @@ const RADIAL_VELOCITY = {
     },
     {
       sid: 'what-would-you-still-want',
+      bind: SYSTEM,
       type: 'question',
       kind: 'short',
       title: 'What would you still want to know?',
@@ -746,6 +866,7 @@ const RADIAL_VELOCITY = {
     // --- Synthesis ----------------------------------------------------------
     {
       sid: 'the-point-of-all-this',
+      bind: SYSTEM,
       type: 'question',
       kind: 'choice',
       title: 'The point of all this',

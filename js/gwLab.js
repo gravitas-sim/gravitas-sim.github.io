@@ -112,6 +112,41 @@ export function clampParams(p = {}) {
   };
 }
 
+/** Reference amplitudes, worked out once per preset. */
+const referenceCache = new Map();
+
+/**
+ * The strain that maps to full scale when a comparison is being listened to.
+ *
+ * A controlled comparison needs one reference that does **not** move when the
+ * thing being compared moves. The lab used to normalise every playback against
+ * the signal's own loudest moment, so doubling the distance halved the strain,
+ * halved the reference with it, and produced an identical sound: three
+ * distances, three plots differing by a factor of four, and one audio
+ * amplitude. The ratio the student was being asked to hear was the one
+ * quantity the normalisation removed.
+ *
+ * The reference is the preset's peak at its **own default parameters**, so it
+ * belongs to the preset and not to whatever the student has changed. Moving a
+ * control then changes loudness in exact proportion to strain.
+ *
+ * Headroom comes from the playback gain rather than from padding this number:
+ * at the default the signal renders at the gain itself, about 0.3 of full
+ * scale, so a configuration up to three times louder still fits. Beyond that
+ * js/gw/audioRender.js clamps and reports how many samples it clamped, which
+ * the readout surfaces rather than hiding.
+ *
+ * @param {string} presetId - Which preset
+ * @returns {number} A strain, or 0 for an unknown preset
+ */
+export function referenceStrainFor(presetId) {
+  if (referenceCache.has(presetId)) return referenceCache.get(presetId);
+  const preset = PRESETS.find(x => x.id === presetId);
+  const value = preset ? modelTimeline(clampParams(preset)).meta.peakStrain : 0;
+  referenceCache.set(presetId, value);
+  return value;
+}
+
 /**
  * The frequency at which a modelled window of a given length starts.
  *

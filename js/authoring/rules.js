@@ -194,6 +194,71 @@ function emptyProbeContext() {
     haloOn: () => false,
     frame: () => ({ mode: 'world', objectId: null }),
     seenFrom: () => null,
+    // Stable bindings, the replacement for `find` below. The stub answers the
+    // shape and not the world: an authoring check runs with no simulation, so
+    // every role is unbound, and a probe that copes with an unbound role here
+    // is a probe that copes with one whose body has merged at run time.
+    role: () => null,
+    roleStatus: () => 'unbound',
+    roleOf: () => null,
+    roles: () => [],
+    selectRole: () => false,
+    mode: () => ({ mode: 'nbody', model: null, roles: [] }),
+    // The scene actions. An authoring check runs with no simulation, so each
+    // answers the shape and does nothing: a probe that copes with a stage that
+    // was never built is a probe that copes with one whose star has become a
+    // black hole under it.
+    restageStar: () => false,
+    becomeRemnant: () => null,
+    placeBinary: () => false,
+    remnantKindOf: () => null,
+    barycentre: () => null,
+    restageStarPair: () => false,
+    restageHole: () => false,
+    // No star observed, which is the case with no simulation: a probe that
+    // assumes a spectrograph has something pointed at it is a probe that throws
+    // on the first frame of a cold load.
+    rvNow: () => null,
+    // No planet, no star, no zone: an authoring check runs with nothing in
+    // orbit, and a probe that assumes a habitable zone exists is a probe
+    // that throws before a reader ever sees the step.
+    habitability: () => null,
+    // No baseline with no world, which is the honest answer during a rebuild
+    // and the case a probe reading drift has to survive.
+    conservation: () => null,
+    // Nothing has transited with no world, so a probe that reads geometry
+    // before a frame has been computed gets the same answer it gets on the
+    // first frame of a real one.
+    transitGeometry: () => null,
+    // No run to judge, which is 'cannot tell' rather than 'stale'.
+    runMatchesScene: () => null,
+    // Real arithmetic even with no simulation: blackHoleFacts is a closed-form
+    // function of one number, so the stub can answer honestly rather than with
+    // a shape. A probe that divides by one of these is checked for real here.
+    holeFacts: () => ({
+      massInSuns: 1,
+      massKg: 1.989e30,
+      rsM: 2953.2,
+      rsKm: 2.9532,
+      density: 1.8e19,
+      temperature: 6.17e-8,
+      lifetimeYears: 6.6e67,
+      iscoM: 8859.6,
+    }),
+    pinSnapshot: () => null,
+    snapshots: () => [],
+    evidence: () => ({
+      role: null,
+      object: null,
+      binding: null,
+      owner: 'engine',
+      model: null,
+      parameters: {},
+      measurement: {},
+      scaleMode: null,
+      worldGeneration: 0,
+      simulationTime: 0,
+    }),
     find: () => undefined,
     experiment: () => null,
   };

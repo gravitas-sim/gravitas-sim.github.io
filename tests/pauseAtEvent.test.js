@@ -608,3 +608,42 @@ describe("the student's note", () => {
     expect(lastEvent()).toBeNull();
   });
 });
+
+// -----------------------------------------------------------------------------
+// The radial-velocity turning points
+// -----------------------------------------------------------------------------
+// The one pair of kinds that is not about the separation. Where they fall
+// depends on which way the observer is looking, which is exactly why a lesson
+// wants to stop there: the star's motion and the sign of the reading are two
+// different things and a student has to see them at the same instant.
+describe('stopping at the peak and trough of an RV curve', () => {
+  const state = { r: 10, rdot: 0.5, vlosDot: -2 };
+
+  test('the trough is a rising crossing and the peak a falling one', () => {
+    // The signal is d(v_los)/dt. It passes upward through zero at the most
+    // negative velocity, and downward through zero at the most positive.
+    expect(eventSignal(EVENT_KINDS.RV_MINIMUM, state).rising).toBe(true);
+    expect(eventSignal(EVENT_KINDS.RV_MAXIMUM, state).rising).toBe(false);
+    expect(eventSignal(EVENT_KINDS.RV_MINIMUM, state).value).toBe(-2);
+  });
+
+  test('they do not read the separation, so a watch needs no orbit', () => {
+    // Deliberate: r and rdot are absent, and the signal is still answered.
+    // A radial-velocity curve has turning points whatever the orbit is doing.
+    const noOrbit = { vlosDot: 3 };
+    expect(eventSignal(EVENT_KINDS.RV_MAXIMUM, noOrbit).value).toBe(3);
+  });
+
+  test('no line-of-sight rate means no signal rather than a wrong one', () => {
+    // A host that cannot say which way the observer is looking must not be
+    // able to arm these: firing on a signal that is not there would stop the
+    // simulation at a moment with no meaning.
+    expect(eventSignal(EVENT_KINDS.RV_MINIMUM, { r: 10, rdot: 0 })).toBeNull();
+    expect(eventSignal(EVENT_KINDS.RV_MAXIMUM, { vlosDot: NaN })).toBeNull();
+  });
+
+  test('the separation kinds are unaffected by the new branch', () => {
+    expect(eventSignal(EVENT_KINDS.PERIAPSIS, state).value).toBe(0.5);
+    expect(eventSignal(EVENT_KINDS.APOAPSIS, state).rising).toBe(false);
+  });
+});

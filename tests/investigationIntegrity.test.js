@@ -403,10 +403,55 @@ describe('scenario references', () => {
     expect(bad).toEqual([]);
   });
 
-  test('every lesson names a scenario at least once', () => {
+  test('every lesson builds a scene, by naming one or by staging one', () => {
+    // Two ways, and a lesson has to do one of them or it is teaching against
+    // whatever the reader happened to have open. Most name a scenario in a
+    // setup. A Universe of Stars stands its own stars on the canvas instead,
+    // through `stage`, which is a stronger statement about the scene rather
+    // than a weaker one: it declares every object on screen rather than
+    // inheriting a scenario built for something else.
     const bad = INVESTIGATIONS.filter(
-      inv => !inv.steps.some(st => st.setup?.scenario)
-    ).map(inv => `${inv.id} never names a scenario`);
+      inv => !inv.steps.some(st => st.setup?.scenario || st.stage)
+    ).map(inv => `${inv.id} never names a scenario and never stages a scene`);
+    expect(bad).toEqual([]);
+  });
+
+  test('a staged scene is never followed by a silently inherited one', () => {
+    // Half a conversion is worse than none: a reader who has been selecting
+    // objects on the canvas for six screens and then finds an unrelated
+    // scenario behind the seventh has been told something false about what
+    // the panel is showing.
+    //
+    // The rule is about *unannounced* changes, not about mixing. Applying a
+    // stage clears the world, so the step after one either stages something
+    // itself, deliberately leaves the sky empty - Listening to Spacetime does,
+    // on the two screens about published data, where an empty sky is more
+    // honest than a schematic source beside a measurement - or has to say
+    // which scenario it wants. What it may not do is inherit: the world it
+    // would inherit is the staged one, and its prose is about something else.
+    //
+    // This is why a scenario-based lesson may stage a single screen. The
+    // Goldilocks Question does: its habitable-zone scenarios are deliberately
+    // circular, so the one screen about a planet whose distance changes round
+    // its year stands up an ellipse of its own and says so on the screen.
+    const bad = [];
+    for (const inv of INVESTIGATIONS) {
+      inv.steps.forEach((step, i) => {
+        if (!step.stage) return;
+        const next = inv.steps[i + 1];
+        if (!next || next.stage || next.setup) return;
+        // The next step inherits. That is only safe if nothing later in the
+        // lesson needs a scenario the stage has just torn down.
+        const laterScenario = inv.steps
+          .slice(i + 1)
+          .some(st => st.setup?.scenario);
+        if (laterScenario) {
+          bad.push(
+            `${inv.id}: "${next.sid}" follows the staged "${step.sid}" without saying what is on the canvas`
+          );
+        }
+      });
+    }
     expect(bad).toEqual([]);
   });
 

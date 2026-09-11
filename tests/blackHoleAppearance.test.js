@@ -19,21 +19,23 @@
 
 import { describe, test, expect } from '@jest/globals';
 import {
-  DISK_OUTER_GRAVITATIONAL_RADII,
   ENVIRONMENT,
+  createAppearance,
+  hasDisk,
+  hasJets,
+} from '../js/blackHole/appearance.js';
+import {
+  DISK_OUTER_GRAVITATIONAL_RADII,
   ISCO_GRAVITATIONAL_RADII,
   advanceAzimuth,
-  createAppearance,
   diskPoint,
   dopplerWeight,
   emissivity,
-  hasDisk,
-  hasJets,
   jetBeaming,
   projection,
   relativeOrbitalSpeed,
   variation,
-} from '../js/blackHole/appearance.js';
+} from '../js/blackHole/geometry.js';
 import { DRAWN, annotations, drawBlackHole } from '../js/blackHole/render.js';
 import { schwarzschildRadiusM } from '../js/blackHolePhysics.js';
 import { SOLAR_MASS_KG } from '../js/constants.js';

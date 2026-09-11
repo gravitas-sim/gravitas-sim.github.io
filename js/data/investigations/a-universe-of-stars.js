@@ -35,12 +35,125 @@
 // never graded: step 3 asks what changed, not what shade it is.
 // =============================================================================
 
-/** A quiet backdrop. Nothing in this lesson is measured off the sandbox. */
-const STELLAR_SANDBOX = {
-  scenario: 'Stellar Nursery',
-  seed: 'a-universe-of-stars',
-  camera: { zoom: 1.1, pan: { x: 0, y: 0 } },
-  paused: true,
+// This lesson names no scenario anywhere, and that is the change.
+//
+// It used to open a Stellar Nursery, pause it, and say in a note that nothing
+// was measured off it - a backdrop. Every screen now stands the stars it is
+// about on the main canvas itself, through `stage`, so there is no scenario to
+// build and immediately discard, and no paused sandbox behind the panel
+// implying that something is being integrated. The stars are handed to the
+// stellar model, which owns them; the transport is not lying about a scene
+// that does not move, and the clock is left alone.
+
+/**
+ * A shelf of stars on the main canvas.
+ *
+ * They stand still and they are not orbiting one another: this is a display,
+ * and js/lessonStage.js hands each of them to the stellar model so that the
+ * integrator does not pretend otherwise. Spacing is in world units and does
+ * not depend on how big anything is drawn, so switching between true and
+ * compressed scale changes sizes and moves nothing.
+ */
+const shelf = (stars, extra = {}) => ({ spacing: 95, ...extra, stars });
+
+// The three the lesson opens and closes with. Anonymous at first: a positional
+// name says which one is which without saying what it is.
+const THREE = [
+  { role: 'one', name: 'Star 1', track: 'm020' },
+  { role: 'two', name: 'Star 2', track: 'm500' },
+  { role: 'three', name: 'Star 3', track: 'm100', ageYr: 1.129e10 },
+];
+
+// Two stars at nearly the same temperature and very different luminosities,
+// which is the pair the radius argument is built on.
+const SAME_TEMPERATURE = [
+  { role: 'dwarf', name: 'The smaller one', track: 'm050', at: 1 },
+  { role: 'giant', name: 'The brighter one', track: 'm100', ageYr: 1.129e10 },
+];
+
+// The eight bundled tracks, lightest first, in the middle of their main
+// sequences. The same eight the instrument offers, so selecting one on the
+// canvas and selecting one in the tool are the same act.
+const EIGHT = [
+  { role: 'm020', name: '0.2 M☉', track: 'm020', at: 'ms' },
+  { role: 'm050', name: '0.5 M☉', track: 'm050', at: 'ms' },
+  { role: 'm100', name: '1 M☉', track: 'm100', at: 'ms' },
+  { role: 'm200', name: '2 M☉', track: 'm200', at: 'ms' },
+  { role: 'm500', name: '5 M☉', track: 'm500', at: 'ms' },
+  { role: 'm1000', name: '10 M☉', track: 'm1000', at: 'ms' },
+  { role: 'm2000', name: '20 M☉', track: 'm2000', at: 'ms' },
+  { role: 'm4000', name: '40 M☉', track: 'm4000', at: 'ms' },
+];
+
+// One hypothetical star for the free-cursor screens: a point on the diagram
+// that is also a body on the canvas. `bind` on the tool is what joins them.
+const CURSOR = [{ role: 'cursor', name: 'Your star', teffK: 5772, lumSun: 1 }];
+
+// A red dwarf and a red giant: the same colour, two entirely different objects.
+const REDS = [
+  { role: 'dwarf', name: 'Red dwarf', track: 'm020' },
+  { role: 'giant', name: 'Red giant', track: 'm100', at: 0.206 },
+];
+
+// A supergiant, with the Sun beside it for scale.
+const SUPERGIANT = [
+  { role: 'sun', name: 'The Sun', track: 'm100' },
+  { role: 'supergiant', name: 'Supergiant', track: 'm2000', at: 1 },
+];
+
+// Hot and faint: the corner of the diagram nothing on the main sequence
+// reaches. A white dwarf is not on a MIST track, so it is staged as the
+// hypothetical point it is - which is also the honest thing to do, because
+// the lab has no evolutionary model for one.
+const WHITE_DWARF = [
+  { role: 'sun', name: 'The Sun', track: 'm100' },
+  { role: 'dwarf', name: 'Hot and faint', teffK: 25000, lumSun: 0.01 },
+];
+
+// One of each, for the classification screen.
+const FOUR_KINDS = [
+  { role: 'main', name: 'A', track: 'm100' },
+  { role: 'giant', name: 'B', track: 'm100', at: 0.206 },
+  { role: 'supergiant', name: 'C', track: 'm2000', at: 1 },
+  { role: 'wd', name: 'D', teffK: 25000, lumSun: 0.01 },
+];
+
+// The pair the lifetime argument compares: more fuel, and less time.
+const LIFETIMES = [
+  { role: 'light', name: '0.2 M☉', track: 'm020' },
+  { role: 'sun', name: '1 M☉', track: 'm100' },
+  { role: 'heavy', name: '20 M☉', track: 'm2000' },
+];
+
+/**
+ * The synthetic population, on the canvas.
+ *
+ * Four hundred stars are generated and counted; a bounded subsample stands on
+ * the canvas, taken at a constant stride so it is reproducible and unbiased
+ * with respect to anything the lesson asks. The readout says how many of how
+ * many, because a subsample presented as a population is exactly the mistake
+ * these three screens are about.
+ */
+const POPULATION = {
+  population: {
+    seed: 'stellar-population-1',
+    count: 400,
+    show: 120,
+    perRow: 15,
+  },
+  fit: true,
+};
+
+/** The same population, with the survey's threshold applied. */
+const POPULATION_BRIGHT = {
+  population: {
+    seed: 'stellar-population-1',
+    count: 400,
+    show: 120,
+    perRow: 15,
+    threshold: 1,
+  },
+  fit: true,
 };
 
 /** The lab, in the configuration a step wants it. */
@@ -54,7 +167,13 @@ const crowd = (extra = {}) => ({ id: 'stellar-population', ...extra });
 
 const A_UNIVERSE_OF_STARS = {
   id: 'a-universe-of-stars',
-  thumbnail: 'images/scenarios/stellar-nursery.webp',
+  // Its own card, not a borrowed one. The thumbnail used to be the Stellar
+  // Nursery's capture, which was honest while the lesson opened in that
+  // scenario; it does not open in any scenario now. tools/generate-lesson-
+  // cards.mjs draws this one from the lesson's own opening stage - the same
+  // three stars, the same tracks, the same compressed scale - so the card is a
+  // picture of the first screen because it is made out of the first screen.
+  thumbnail: 'images/investigations/a-universe-of-stars.webp',
   title: 'A Universe of Stars',
   subtitle: 'Size, colour and the H-R diagram, from eight modelled stars',
   duration: '70-90 min',
@@ -78,6 +197,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'three-stars-no-labels',
+      stage: shelf(THREE, { fit: true, anonymous: true }),
       type: 'predict',
       title: 'Three stars, no labels',
       body: `Three stars are on the stage, drawn on one common scale, so one
@@ -96,7 +216,6 @@ const A_UNIVERSE_OF_STARS = {
       answer: 0,
       because:
         'Only the size. The stage uses one scale for all three, so the largest really is the largest. The other two are traps. Brightness on screen is a display choice - the lab draws a star a hundred thousand times fainter than the Sun just as brightly, or you could not see it at all, and the caption under the picture says so. And mass does not follow size: when the numbers come on you will find that star 3, the biggest of the three, has about a fifth of star 2&rsquo;s mass, and star 2 puts out twelve times more light despite being a quarter of the size. Those four words - mass, radius, temperature, luminosity - are four different things, and separating them is what the next twenty-seven steps are for.',
-      setup: STELLAR_SANDBOX,
       tool: stage({
         anonymous: true,
         pace: 'phase',
@@ -112,6 +231,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'the-numbers-arrive',
+      stage: shelf(THREE),
       type: 'measure',
       title: 'Now the numbers',
       body: `Same three stars, labels on. Everything the picture drew is also
@@ -166,6 +286,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'temperature-makes-colour',
+      stage: shelf(CURSOR, { fit: true }),
       type: 'explore',
       title: 'What temperature does to colour',
       body: `Switch the lab to a chosen point — the mode button is under the
@@ -182,11 +303,17 @@ const A_UNIVERSE_OF_STARS = {
         'Watch the temperature in the list underneath as you move',
         'Read the caption under the star: the colour is the star&rsquo;s, the brightness is not',
       ],
-      tool: lab({ mode: 'free', regions: false, compare: false }),
+      tool: lab({
+        bind: 'cursor',
+        mode: 'free',
+        regions: false,
+        compare: false,
+      }),
       tip: 'Click or drag on the diagram, use the arrow keys, or type into the two sliders — all three do the same thing. Nothing in this lesson is graded on which shade you see.',
     },
     {
       sid: 'same-temperature-different-light',
+      stage: shelf(SAME_TEMPERATURE, { fit: true }),
       type: 'read',
       title: 'Two stars, one temperature',
       body: `Both stars on the stage have a surface near 4,300&nbsp;K. They are
@@ -211,6 +338,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'predict-which-is-bigger',
+      stage: shelf(SAME_TEMPERATURE),
       type: 'predict',
       title: 'Which is bigger, and by how much?',
       body: `Same two stars. Same surface temperature. One about three hundred
@@ -241,6 +369,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'measure-the-radius-ratio',
+      stage: shelf(SAME_TEMPERATURE),
       type: 'measure',
       title: 'Measure it',
       body: `Read both radii off the list and do the division yourself. The
@@ -301,6 +430,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'the-two-axes',
+      stage: shelf(CURSOR),
       type: 'measure',
       title: 'The diagram, and its backwards axis',
       body: `Everything from here on happens on one diagram: temperature along
@@ -341,11 +471,17 @@ const A_UNIVERSE_OF_STARS = {
             'That is the place. Now notice what the readout does not say: no mass, no age, no lifetime. A point on this diagram does not carry them. The next four steps are about what it does carry.',
         };
       },
-      tool: lab({ mode: 'free', regions: true, compare: false }),
+      tool: lab({
+        bind: 'cursor',
+        mode: 'free',
+        regions: true,
+        compare: false,
+      }),
       tip: 'Click or drag on the diagram, move it with the arrow keys, or type numbers into the sliders. The sliders are the same instrument.',
     },
     {
       sid: 'where-the-sun-sits',
+      stage: shelf(CURSOR),
       type: 'measure',
       title: 'Find the Sun',
       body: `The Sun&rsquo;s surface is at 5,772&nbsp;K and its luminosity is,
@@ -374,11 +510,18 @@ const A_UNIVERSE_OF_STARS = {
             'One solar radius, from a temperature and a luminosity alone. This is where the Sun is now. It has not always been here and will not stay.',
         };
       },
-      tool: lab({ mode: 'free', regions: true, capture: true, compare: false }),
+      tool: lab({
+        bind: 'cursor',
+        mode: 'free',
+        regions: true,
+        capture: true,
+        compare: false,
+      }),
       tip: 'The Sun is the reference for all three units here — R☉, L☉ and M☉. That is a convenience, not a claim that it is a typical star. Step 24 shows what typical looks like.',
     },
     {
       sid: 'straight-up-the-diagram',
+      stage: shelf(CURSOR),
       type: 'measure',
       title: 'Straight up, at one temperature',
       body: `From the Sun&rsquo;s position, move the cursor straight up —
@@ -410,11 +553,17 @@ const A_UNIVERSE_OF_STARS = {
             'A hundred solar radii, which is the square root of ten thousand. Four decades up the diagram at one temperature is two decades in radius, every time.',
         };
       },
-      tool: lab({ mode: 'free', regions: true, compare: false }),
+      tool: lab({
+        bind: 'cursor',
+        mode: 'free',
+        regions: true,
+        compare: false,
+      }),
       tip: 'Watch the size class in the readout change on the way up. It is a label attached to a region of the diagram, not a separate measurement.',
     },
     {
       sid: 'sideways-at-one-luminosity',
+      stage: shelf(CURSOR),
       type: 'question',
       title: 'Sideways, at one luminosity',
       kind: 'choice',
@@ -435,11 +584,17 @@ const A_UNIVERSE_OF_STARS = {
       answer: 2,
       because:
         'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square metre, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
-      tool: lab({ mode: 'free', regions: true, compare: false }),
+      tool: lab({
+        bind: 'cursor',
+        mode: 'free',
+        regions: true,
+        compare: false,
+      }),
       tip: 'Both moves - up the diagram and along it - are the same relation used in different directions. Nothing new is being introduced.',
     },
     {
       sid: 'lines-of-constant-radius',
+      stage: shelf(CURSOR),
       type: 'measure',
       title: 'Lines of one size',
       body: `Turn on <strong>Constant-radius lines</strong>. Each dashed line
@@ -493,6 +648,7 @@ const A_UNIVERSE_OF_STARS = {
         };
       },
       tool: lab({
+        bind: 'cursor',
         mode: 'free',
         regions: true,
         guides: true,
@@ -507,6 +663,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'switch-to-modelled-stars',
+      stage: shelf(EIGHT, { spacing: 78, fit: true }),
       type: 'explore',
       title: 'Stars that are actually modelled',
       body: `So far every point has been one you chose. Switch back to
@@ -529,6 +686,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'three-on-the-main-sequence',
+      stage: shelf(EIGHT, { spacing: 78 }),
       type: 'measure',
       title: 'Three main-sequence stars',
       body: `Three stars pinned, all in the middle of their main-sequence
@@ -574,6 +732,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'predict-mass-and-light',
+      stage: shelf(EIGHT, { spacing: 78 }),
       type: 'predict',
       title: 'How steeply?',
       body: `You have two points on the main sequence: 0.2 solar masses giving
@@ -596,6 +755,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'the-whole-sequence',
+      stage: shelf(EIGHT, { spacing: 78 }),
       type: 'measure',
       title: 'All eight, in one comparison',
       body: `Check the trend across the whole set rather than at its two ends.
@@ -644,6 +804,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'what-the-trend-covers',
+      stage: shelf(EIGHT, { spacing: 78 }),
       type: 'question',
       title: 'What the trend does and does not cover',
       kind: 'short',
@@ -667,6 +828,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'two-red-stars',
+      stage: shelf(REDS, { fit: true }),
       type: 'predict',
       title: 'Two red stars',
       body: `Both stars on the stage have a surface near 3,350&nbsp;K. Both are
@@ -681,7 +843,6 @@ const A_UNIVERSE_OF_STARS = {
       answer: 2,
       because:
         'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same colour and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the lesson that colour tells you about a surface and nothing about a size. The classification that separates them is not colour but luminosity: one is a red dwarf, the other a red giant.',
-      setup: STELLAR_SANDBOX,
       tool: stage({
         pace: 'phase',
         pins: [{ track: 'm020' }, { track: 'm100', at: 0.206 }],
@@ -691,6 +852,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'measure-the-two-reds',
+      stage: shelf(REDS),
       type: 'measure',
       title: 'Measure them, and their light',
       body: `Read both radii and both luminosities off the list, and work out
@@ -761,6 +923,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'a-supergiant',
+      stage: shelf(SUPERGIANT, { fit: true }),
       type: 'measure',
       title: 'And now a supergiant',
       body: `A third star joins them: a model that began with twenty solar
@@ -814,6 +977,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'hot-and-faint',
+      stage: shelf(WHITE_DWARF, { fit: true }),
       type: 'measure',
       title: 'Hot, and almost invisible',
       body: `Back to the lab, on the one-solar-mass track, with the age slider
@@ -864,6 +1028,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'classify-from-position',
+      stage: shelf(FOUR_KINDS, { fit: true }),
       type: 'question',
       title: 'Read the diagram',
       kind: 'choice',
@@ -891,6 +1056,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'predict-who-lives-longer',
+      stage: shelf(LIFETIMES, { fit: true }),
       type: 'predict',
       title: 'More fuel, longer life?',
       body: `A twenty solar-mass star has a hundred times as much material as a
@@ -909,12 +1075,12 @@ const A_UNIVERSE_OF_STARS = {
       answer: 2,
       because:
         'Shorter by more than a hundred thousand. This is the single most useful consequence of the steep mass-luminosity relation, and it is worth stating as a ratio: how long the fuel lasts is how much there is divided by how fast it goes. The fuel goes as the mass, and the rate goes as the luminosity, which goes as roughly the mass to the 3.5. So the lifetime goes as mass divided by mass-to-the-3.5, which is one over mass-to-the-2.5. A hundred times the mass is a hundred to the power two and a half - a hundred thousand - times shorter. The next step measures it.',
-      setup: STELLAR_SANDBOX,
       tool: lab({ mode: 'model', regions: true, compare: false }),
       tip: 'A car with a bigger tank does not necessarily go further. It depends what the engine does with it.',
     },
     {
       sid: 'measure-the-lifetimes',
+      stage: shelf(LIFETIMES),
       type: 'measure',
       title: 'How long each one lasts',
       body: `The readout gives the total main-sequence lifetime for whichever
@@ -970,6 +1136,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'a-population',
+      stage: POPULATION,
       type: 'measure',
       title: 'Four hundred stars',
       body: `A synthetic population: four hundred stars drawn from a published
@@ -1017,6 +1184,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'only-the-bright-ones',
+      stage: POPULATION_BRIGHT,
       type: 'measure',
       title: 'Now only the ones you could see',
       body: `Same four hundred stars — the same sample, not a new one. Switch
@@ -1061,6 +1229,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'what-a-survey-misses',
+      stage: POPULATION_BRIGHT,
       type: 'question',
       title: 'What a catalogue of bright stars is a catalogue of',
       kind: 'short',
@@ -1081,6 +1250,7 @@ const A_UNIVERSE_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'find-a-counterexample',
+      stage: shelf(EIGHT, { spacing: 78, fit: true }),
       type: 'measure',
       title: 'Break a rule',
       body: `Two statements that sound reasonable and are both false:
@@ -1145,6 +1315,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'the-argument',
+      stage: shelf(THREE, { fit: true }),
       type: 'question',
       title: 'Back to the three stars',
       kind: 'short',

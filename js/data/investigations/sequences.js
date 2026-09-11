@@ -193,6 +193,28 @@ export const SEQUENCES = [
       },
     ],
   },
+  {
+    // Two lessons rather than five, and the shortest sequence here, because
+    // the pair is the point: the advanced lesson assumes an answer to "what
+    // is the thing arriving" that it never gives, and the beginner one is
+    // that answer. `needs` is a recommendation the browser prints, not a
+    // lock - see the note above - so a reader who already knows what a
+    // gravitational wave is can open the second one directly.
+    id: 'gravitational-waves',
+    titleId: 'inv.seq.waves.title',
+    blurbId: 'inv.seq.waves.blurb',
+    lessons: [
+      {
+        id: 'what-is-a-gravitational-wave',
+        whyId: 'inv.seq.waves.what-is-a-gravitational-wave',
+      },
+      {
+        id: 'listening-to-spacetime',
+        whyId: 'inv.seq.waves.listening-to-spacetime',
+        needs: ['what-is-a-gravitational-wave'],
+      },
+    ],
+  },
 ];
 
 /**

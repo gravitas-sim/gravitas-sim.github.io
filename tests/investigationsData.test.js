@@ -27,6 +27,53 @@ const stubContext = () => ({
   selected: null,
   bodies: [],
   G: 1,
+  // No pair staged, which is the case a probe has to survive: this test runs
+  // with no simulation at all, and a probe that assumes a scene is a probe
+  // that throws on the first frame of a cold load.
+  barycentre: () => null,
+  restageStarPair: () => false,
+  restageHole: () => false,
+  // No star observed, which is the case with no simulation: a probe that
+  // assumes a spectrograph has something pointed at it is a probe that throws
+  // on the first frame of a cold load.
+  rvNow: () => null,
+  // No planet, no star, no zone: an authoring check runs with nothing in
+  // orbit, and a probe that assumes a habitable zone exists is a probe
+  // that throws before a reader ever sees the step.
+  habitability: () => null,
+  // No baseline with no world, which is the honest answer during a rebuild
+  // and the case a probe reading drift has to survive.
+  conservation: () => null,
+  // Nothing has transited with no world, so a probe that reads geometry
+  // before a frame has been computed gets the same answer it gets on the
+  // first frame of a real one.
+  transitGeometry: () => null,
+  // No run to judge, which is 'cannot tell' rather than 'stale'.
+  runMatchesScene: () => null,
+  // The bench has never been opened, which is the state every lesson step
+  // starts in and the one a probe reading a run has to survive.
+  experiment: () => null,
+  // The stable-binding accessors. Every role is unbound here, which is the
+  // case a probe has to survive: the lesson may be on a step whose stage has
+  // not been built yet, or whose star has merged out from under it.
+  role: () => null,
+  roleStatus: () => 'unbound',
+  roleOf: () => null,
+  roles: () => [],
+  selectRole: () => false,
+  mode: () => ({ mode: 'nbody', model: null, roles: [] }),
+  // Closed-form arithmetic on one number, so the stub answers honestly rather
+  // than with a shape: a probe that divides by one of these is really checked.
+  holeFacts: () => ({
+    massInSuns: 1,
+    massKg: 1.989e30,
+    rsM: 2953.2,
+    rsKm: 2.9532,
+    density: 1.8e19,
+    temperature: 6.17e-8,
+    lifetimeYears: 6.6e67,
+    iscoM: 8859.6,
+  }),
   elements: () => null,
   energy: () => null,
   distance: v => `${v} u`,
@@ -433,7 +480,12 @@ describe('every lesson carries what its card needs', () => {
 
   test.each(IDS)('%s names a committed thumbnail', id => {
     const { thumbnail } = getInvestigation(id);
-    expect(thumbnail).toMatch(/^images\/scenarios\/[a-z0-9-]+\.webp$/);
+    // Two homes. A lesson built on a scenario borrows that scenario's capture;
+    // a lesson that stages its own scene has a card drawn from its own opening
+    // stage by tools/generate-lesson-cards.mjs.
+    expect(thumbnail).toMatch(
+      /^images\/(scenarios|investigations)\/[a-z0-9-]+\.webp$/
+    );
     const file = repoFile(thumbnail);
     expect(existsSync(file)).toBe(true);
     // A blank or failed capture encodes to almost nothing.
@@ -452,6 +504,23 @@ describe('every lesson carries what its card needs', () => {
       const owners = [...used]
         .map(key => SCENARIO_INFO[key]?.thumbnail)
         .filter(Boolean);
+      // A card is a picture of the first screen, so what decides is what the
+      // lesson *opens* in. A lesson that stands up its own scene on screen one
+      // opens in no scenario at all, so there is no capture it could honestly
+      // borrow, and it must not borrow one anyway: that would advertise a
+      // system the lesson never shows.
+      //
+      // Staging a screen part way through does not change what the card is a
+      // picture of. The Goldilocks Question opens in, and spends most of
+      // itself in, the Habitable Zone Lab; it stages one ellipse on screen 27
+      // because that scenario is deliberately circular. Its card is honest,
+      // and forcing it to draw its own would make it a picture of screen 27.
+      if (inv.steps[0]?.stage) {
+        expect(inv.thumbnail).toBe(`images/investigations/${id}.webp`);
+        return;
+      }
+      // Anything that stages later still has to borrow from a scenario it
+      // really uses, which the check below enforces for every lesson.
       expect(owners).toContain(inv.thumbnail);
     }
   );

@@ -22,6 +22,7 @@ import { t } from './i18n/index.js';
 // lesson, a share link, an authoring preview or a test can import this file
 // directly and never reach the registry.
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { captureToNotebook } from './widgetRuntime.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -154,8 +155,89 @@ const activeMasses = (v, spec = {}) =>
       ? { m1: v.m1, m2: 0.000954, sep: spec.sep ?? 4 }
       : { m1: v.m1, m2: v.m2, sep: spec.sep ?? 4 };
 
+/**
+ * Drive the staged pair on the main scene from these sliders.
+ *
+ * Only when a step asks for it (`spec.scene`), and only when the masses have
+ * actually changed: restageStarPair refuses a rebuild that would restate what
+ * is already there, so a repaint cannot restart an orbit a student is timing.
+ *
+ * This is a restage rather than an edit, and the reason is physical. Changing
+ * a star's mass mid-orbit leaves both bodies on paths that no longer close, so
+ * the picture would be a slow spiral while the lesson called it a circle. A
+ * different pair of masses is a different binary.
+ *
+ * @param {object} v - The control values
+ * @param {object} ctx - The lesson context
+ * @param {object} spec - The step's tool spec
+ * @returns {boolean} Whether the scene was restaged
+ */
+function syncStarPair(v, ctx, spec = {}) {
+  if (!spec.scene || typeof ctx?.restageStarPair !== 'function') return false;
+  const m = activeMasses(v, spec);
+  return ctx.restageStarPair({ m1: m.m1, m2: m.m2 });
+}
+
+/**
+ * Send the pair on the main scene to the notebook.
+ *
+ * Everything numeric here is read off the live bodies at the instant of the
+ * click - the separation and the two arm lengths from `ctx.barycentre()`,
+ * which measures them rather than restating the declaration. The period is the
+ * student's stopwatch reading if they took one, and the model's own period if
+ * they did not; which of the two it is travels with the entry, because a
+ * period nobody timed is a prediction however right it happens to be.
+ *
+ * @param {object} v - Control values
+ * @param {object} ctx - The lesson context
+ * @param {object} spec - The step's tool spec
+ */
+function captureOrbit(v, ctx, spec = {}) {
+  const bary = typeof ctx?.barycentre === 'function' ? ctx.barycentre() : null;
+  if (!bary) return;
+  const AU = 100;
+  const arms = bary.arms.map(a => ({ name: a.name, rAU: a.r / AU }));
+  const separationAU = bary.separation / AU;
+  const timed =
+    bin.markedAt !== null && bin.stoppedAt !== null
+      ? bin.stoppedAt - bin.markedAt
+      : null;
+  const m = activeMasses(v, spec);
+  const f = binaryFacts(m.m1, m.m2, m.sep);
+  const periodYr = Number.isFinite(timed) && timed > 0 ? timed : f.period;
+  // Newton's form, in the units the lesson uses: a in AU, P in years, mass in
+  // solar masses. Computed here rather than taken from the declaration, so the
+  // entry records what the measurement implies and not what was asked for.
+  const totalMassSun = periodYr > 0 ? separationAU ** 3 / periodYr ** 2 : NaN;
+  const span = arms[0]?.rAU + arms[1]?.rAU;
+  const split =
+    span > 0 && Number.isFinite(totalMassSun)
+      ? {
+          m1: totalMassSun * (arms[1].rAU / span),
+          m2: totalMassSun * (arms[0].rAU / span),
+        }
+      : null;
+  captureToNotebook((capture, provenance) =>
+    capture.fromBinaryOrbit({
+      snapshot: {
+        separationAU,
+        arms,
+        periodYr,
+        timed: Number.isFinite(timed) && timed > 0,
+        totalMassSun,
+        split,
+      },
+      provenance,
+    })
+  ).catch(() => {});
+}
+
 const BINARY = {
   id: 'binary',
+  // Handed the lesson context, so a step that stages the pair on the main
+  // canvas can have these two sliders be the masses of the stars actually on
+  // screen rather than of a second pair drawn in the panel.
+  live: true,
   get title() {
     return t('binW.twoStarsOrbiting');
   },
@@ -190,48 +272,62 @@ const BINARY = {
     },
   ],
   // The stopwatch only appears on the step that asks a student to time a lap.
-  actions: (spec = {}) =>
-    spec.timer
+  actions: (spec = {}) => {
+    const capture = spec.capture
       ? [
           {
-            id: 'mark',
+            id: 'capture',
             get label() {
-              return t('binW.mark');
-            },
-          },
-          {
-            id: 'stop',
-            get label() {
-              return t('binW.stop');
-            },
-          },
-          {
-            id: 'run',
-            get label() {
-              return t('binW.runPause');
-            },
-          },
-          {
-            id: 'reset',
-            get label() {
-              return t('binW.reset');
+              return t('binW.capture');
             },
           },
         ]
-      : [
-          {
-            id: 'run',
-            get label() {
-              return t('binW.runPause');
+      : [];
+    return [
+      ...(spec.timer
+        ? [
+            {
+              id: 'mark',
+              get label() {
+                return t('binW.mark');
+              },
             },
-          },
-          {
-            id: 'reset',
-            get label() {
-              return t('binW.reset');
+            {
+              id: 'stop',
+              get label() {
+                return t('binW.stop');
+              },
             },
-          },
-        ],
+            {
+              id: 'run',
+              get label() {
+                return t('binW.runPause');
+              },
+            },
+            {
+              id: 'reset',
+              get label() {
+                return t('binW.reset');
+              },
+            },
+          ]
+        : [
+            {
+              id: 'run',
+              get label() {
+                return t('binW.runPause');
+              },
+            },
+            {
+              id: 'reset',
+              get label() {
+                return t('binW.reset');
+              },
+            },
+          ]),
+      ...capture,
+    ];
+  },
   facts(v, spec) {
     const m = activeMasses(v, spec);
     return binaryFacts(m.m1, m.m2, m.sep);
@@ -252,7 +348,11 @@ const BINARY = {
       markAngle: 0,
     };
   },
-  act(id, v, spec = {}) {
+  act(id, v, spec = {}, ctx = null) {
+    if (id === 'capture') {
+      captureOrbit(v, ctx, spec);
+      return;
+    }
     if (id === 'reset') this.reset(v, { autorun: true, spec });
     else if (id === 'run') bin.running = !bin.running;
     else if (id === 'mark') {
@@ -264,7 +364,8 @@ const BINARY = {
       bin.stoppedAt = bin.years;
     }
   },
-  step(v, dt, spec = {}) {
+  step(v, dt, spec = {}, ctx = null) {
+    syncStarPair(v, ctx, spec);
     if (bin.key !== this.key(v, spec)) this.reset(v, { spec });
     if (!bin.running) return;
     bin.years += dt * YEARS_PER_SECOND;

@@ -27,7 +27,7 @@ export default {
   steps: [
     {
       title: 'Doce noches',
-      body: 'Te han concedido doce noches en un espectrógrafo. No necesariamente doce noches seguidas: doce noches, para usarlas cuando quieras, repartidas por el tiempo que pidas.\n\nEl objetivo es la estrella en pantalla. En algún lugar a su alrededor, demasiado tenue para verse, puede haber o no un planeta. Tus doce medidas de la velocidad de la estrella son todas las pruebas que vas a tener.\n\nLa pregunta habitual es <em>¿hay un planeta?</em>. Esta lección plantea otra distinta, y es la que un observador tiene que responder primero: <strong>¿lo encontraría este calendario si lo hubiera?</strong>',
+      body: 'Te han concedido doce noches en un espectrógrafo. No necesariamente doce noches seguidas: doce noches, para usarlas cuando quieras, repartidas por el tiempo que pidas.\n\nEl objetivo es la estrella en pantalla. En algún lugar a su alrededor, demasiado tenue para verse, puede haber o no un planeta. Tus doce medidas de la velocidad de la estrella son todas las pruebas que vas a tener.\n\nLa pregunta habitual es <em>¿hay un planeta?</em>. Esta lección plantea otra distinta, y es la que un observador tiene que responder primero: <strong>¿lo encontraría este calendario si lo hubiera?</strong>\n\nEl objetivo es la estrella de la pantalla: haz clic en ella, o usa <strong>Objetos de esta actividad</strong> más abajo, para que el instrumento sepa a qué estrella te refieres.',
       tip: 'El tiempo en un telescopio grande se asigna por noches, con meses de antelación. El calendario se decide antes de que nadie sepa qué mostrarán los datos.',
     },
     {
@@ -46,7 +46,7 @@ export default {
     },
     {
       title: 'Calendario A: doce noches, una órbita',
-      body: 'Este instrumento planifica una campaña y te muestra con qué volvería a casa. Está puesto en el primer calendario: doce medidas, separadas unas ocho horas, que abarcan una sola órbita del planeta.\n\nLa curva discontinua es el planeta tal como lo conoce la simulación. Está dibujada para enseñar y <strong>no son datos</strong>: un sondeo real solo tiene los puntos y sus barras de error. El panel de la derecha pliega esas mismas medidas sobre un ciclo, que es donde el espaciado se hace visible.',
+      body: 'Este instrumento planifica una campaña y te muestra con qué volvería a casa. Está puesto en el primer calendario: doce medidas, separadas unas ocho horas, que abarcan una sola órbita del planeta.\n\nLa curva discontinua es el planeta tal como lo conoce la simulación. Está dibujada para enseñar y <strong>no son datos</strong>: un sondeo real solo tiene los puntos y sus barras de error. El panel de la derecha pliega esas mismas medidas sobre un ciclo, que es donde el espaciado se hace visible.\n\nUna «fase» es un lugar de la órbita en el que está la estrella, no una abstracción: la lectura de abajo da la fase en la que está la estrella ahora mismo, y el panel plegado usa ese mismo eje.',
       tool: {
         title: 'Planifica una campaña de observación',
         note: 'Usa los ajustes preestablecidos de abajo para cambiar entre los dos calendarios. La semilla del ruido cambia qué extracción aleatoria te toca, no lo bueno que es el calendario.',
@@ -96,7 +96,7 @@ export default {
     },
     {
       title: 'El mismo planeta, invisible',
-      body: 'Cambia al ajuste <strong>Calendario B: un ciclo de separación</strong>.\n\nEl panel izquierdo abarca ahora treinta y nueve días en lugar de tres y medio, y las doce medidas son casi una línea plana. El panel derecho enseña por qué: al plegarlas sobre el ciclo se amontonan en dos intervalos de diez.',
+      body: 'Cambia al ajuste <strong>Calendario B: un ciclo de separación</strong>.\n\nEl panel izquierdo abarca ahora treinta y nueve días en lugar de tres y medio, y las doce medidas son casi una línea plana. El panel derecho enseña por qué: al plegarlas sobre el ciclo se amontonan en dos intervalos de diez.\n\nSé exacto sobre qué ha cambiado y qué no. La misma estrella, el mismo planeta, la misma precisión del instrumento, las mismas doce noches, la misma tirada aleatoria. Difiere una sola cosa: cuánto se separan las noches entre sí. Así que cualquier cosa que concluyas comparando estas dos campañas es una conclusión sobre la <em>cadencia</em>, y sobre nada más.\n\nLa estrella del lienzo tampoco ha cambiado. Fíjate en dónde está cuando se habría tomado cada medida: una cadencia de una órbita significa pillarla casi en el mismo sitio de su órbita cada vez, y por eso doce medidas pueden no decirte casi nada.',
       tool: {
         title: 'Calendario B',
         note: 'Todo excepto la cadencia es idéntico al calendario A.',

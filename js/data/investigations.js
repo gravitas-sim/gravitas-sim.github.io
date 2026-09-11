@@ -66,6 +66,7 @@ import BINARY_PLANETS from './investigations/binary-star-planets.js';
 import GRAVITY_ASSIST from './investigations/gravity-assist.js';
 import HOHMANN_TRANSFER from './investigations/hohmann-transfer.js';
 import LAGRANGE_POINTS from './investigations/lagrange-points.js';
+import WHAT_IS_A_GRAVITATIONAL_WAVE from './investigations/what-is-a-gravitational-wave.js';
 import LISTENING_TO_SPACETIME from './investigations/listening-to-spacetime.js';
 import A_UNIVERSE_OF_STARS from './investigations/a-universe-of-stars.js';
 import LIVES_OF_STARS from './investigations/lives-of-stars.js';
@@ -104,6 +105,9 @@ export const INVESTIGATIONS = [
   GRAVITY_ASSIST,
   HOHMANN_TRANSFER,
   LAGRANGE_POINTS,
+  // The beginner half of the gravitational-wave pair, and it comes first:
+  // Listening to Spacetime assumes the question this one answers.
+  WHAT_IS_A_GRAVITATIONAL_WAVE,
   LISTENING_TO_SPACETIME,
   A_UNIVERSE_OF_STARS,
   LIVES_OF_STARS,
