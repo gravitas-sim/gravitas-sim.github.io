@@ -763,6 +763,10 @@ async function structuralCheck() {
 const args = process.argv.slice(2);
 const check = args.includes('--check');
 const offline = args.includes('--offline');
+// The same flag as tools/build-gw-data.mjs, for the same reason: structural
+// validity and "these are MIST's numbers" are different claims, and only the
+// second one needs the grid.
+const requireSources = args.includes('--require-sources');
 const haveCache = existsSync(path.join(CACHE, GRID.file));
 
 try {
@@ -773,15 +777,30 @@ try {
       for (const p of problems) console.error(`  ${p}`);
       process.exit(1);
     }
+    if (!haveCache && requireSources) {
+      console.error(
+        'Provenance NOT verified: the MIST grid is not cached.\n' +
+          `  ${GRID.file} is not in ${path.relative(REPO, CACHE)}, so\n` +
+          '  js/data/stellar/mistTracks.js could not be regenerated from\n' +
+          `  ${GRID.url} and compared. Structural validity says the module is\n` +
+          "  complete and self-consistent. It does not say the numbers are MIST's.\n" +
+          '  Run `npm run stellar:data` once to fetch the grid, then run this again.'
+      );
+      process.exit(1);
+    }
     if (!haveCache && offline) {
       console.log(
         'Stellar tracks are complete and internally consistent.\n' +
-          '  The 100 MB source grid is not cached, so they were not regenerated.\n' +
-          '  Run `npm run stellar:data` once to fetch it, then this compares byte for byte.'
+          '  PROVENANCE NOT VERIFIED: the 100 MB source grid is not cached, so the\n' +
+          '  tracks were not regenerated and compared byte for byte. This run checked\n' +
+          '  the structure of what is checked in, not where it came from.\n' +
+          '  Run `npm run stellar:data` once to fetch it, or\n' +
+          '  `npm run stellar:provenance` to make the missing grid a failure rather\n' +
+          '  than a caveat.'
       );
       process.exit(0);
     }
-    const next = await build({ offline });
+    const next = await build({ offline: offline && !requireSources });
     if ((await readFile(OUT, 'utf8')) !== next) {
       console.error(
         'js/data/stellar/mistTracks.js is not what tools/build-stellar-tracks.mjs would write.\n' +
@@ -789,7 +808,10 @@ try {
       );
       process.exit(1);
     }
-    console.log('Stellar tracks are current, and regenerate byte for byte.');
+    console.log(
+      'Stellar tracks are current, and regenerate byte for byte from ' +
+        `${GRID.url} - provenance verified.`
+    );
   } else {
     const next = await build({ offline });
     await mkdir(path.dirname(OUT), { recursive: true });

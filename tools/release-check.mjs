@@ -35,59 +35,155 @@ import { existsSync } from 'node:fs';
 
 import { validateCitationFiles } from './validate-citation.mjs';
 import { RELEASE, AUTHORS } from './project-metadata.mjs';
+import {
+  CHECKS,
+  GROUPS,
+  OUTCOMES,
+  summarise,
+  engineInstalled,
+  sourcesCached,
+} from './checks.mjs';
 
 const argv = process.argv.slice(2);
 const fast = argv.includes('--fast');
+// Provenance is in the full run when the sources are here, and reported
+// unavailable when they are not. --no-provenance is for a machine where the
+// 100 MB MIST grid is not worth fetching and the caveat is understood.
+const wantProvenance = !fast && !argv.includes('--no-provenance');
+const wantPlatform = !fast && !argv.includes('--no-platform');
 
 const BOLD = '\x1b[1m';
 const DIM = '\x1b[2m';
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const YELLOW = '\x1b[33m';
+const CYAN = '\x1b[36m';
 const OFF = '\x1b[0m';
 const paint = process.stdout.isTTY && !argv.includes('--no-color');
 const c = (code, text) => (paint ? `${code}${text}${OFF}` : text);
 
+// The vocabulary and the summary sentence live in tools/checks.mjs, where
+// tests/releaseGate.test.js can reach them without running the gate.
+const { PASS, FAIL, SKIP, UNAVAILABLE, RETRIED } = OUTCOMES;
+
+/** How each outcome prints, and whether it counts as the software being sound. */
+const OUTCOME = {
+  [PASS]: { badge: () => c(GREEN, ' ok '), green: true },
+  [FAIL]: { badge: () => c(RED, 'FAIL'), green: false },
+  [SKIP]: { badge: () => c(DIM, 'skip'), green: false },
+  [UNAVAILABLE]: { badge: () => c(YELLOW, 'n/a '), green: false },
+  // Passed, but only after a retry. Not a failure and not a pass: something
+  // here is not deterministic, and a release candidate should say so.
+  [RETRIED]: { badge: () => c(CYAN, 'FLKY'), green: false },
+};
+
+/** @type {Array<{id: string, label: string, status: string, note: string}>} */
+const results = [];
 const failures = [];
 const decisions = [];
 
 /**
- * Run a command, reporting pass or fail.
+ * Did a run pass only because something was attempted twice?
  *
- * @param {string} label - What it checks, in words
- * @param {string[]} command - argv
- * @param {object} [opts]
- * @param {boolean} [opts.slow] - Skipped under --fast
- * @returns {boolean} True when it passed or was skipped
+ * Playwright prints "N flaky" when a test failed and then passed on a retry.
+ * The gate asks for zero retries everywhere, so this should never fire - and
+ * if the config or a script ever quietly allows one, the summary says FLKY
+ * instead of ok rather than the difference going unnoticed.
+ *
+ * @param {string} output - Combined stdout and stderr
+ * @returns {?string} A description of the retries, or null
  */
-function step(label, command, { slow = false } = {}) {
-  if (slow && fast) {
-    process.stdout.write(
-      `  ${c(DIM, 'skip')}  ${label} ${c(DIM, '(--fast)')}\n`
-    );
-    return true;
+function retriedIn(output) {
+  const flaky = /^\s*(\d+)\s+flaky\b/m.exec(output);
+  if (flaky && Number(flaky[1]) > 0) return `${flaky[1]} flaky test(s)`;
+  const retry = /retry\s*#\s*(\d+)/i.exec(output);
+  if (retry) return 'at least one test was retried';
+  return null;
+}
+
+/**
+ * Record an outcome and print its line.
+ *
+ * @param {object} check - An entry from tools/checks.mjs
+ * @param {string} status - One of the five outcomes
+ * @param {string} [note] - Why, for anything that is not a plain pass
+ */
+function record(check, status, note = '') {
+  results.push({ id: check.id, label: check.label, status, note });
+  const suffix = note ? ` ${c(DIM, `(${note})`)}` : '';
+  process.stdout.write(
+    `  ${OUTCOME[status].badge()}  ${check.label}${suffix}\n`
+  );
+}
+
+/**
+ * Run one check.
+ *
+ * @param {object} check - An entry from tools/checks.mjs
+ * @returns {Promise<void>} When it has been recorded
+ */
+async function run(check) {
+  if (check.tier === 'slow' && fast) {
+    record(check, SKIP, 'minutes; --fast');
+    return;
   }
-  // The in-progress line is only worth drawing on a terminal that can erase
-  // it. Piped into a file or a CI log, \r leaves both halves on one line.
-  if (paint) process.stdout.write(`  ....  ${label}`);
+  if (check.tier === 'provenance') {
+    if (!wantProvenance) {
+      record(check, SKIP, fast ? '--fast' : '--no-provenance');
+      return;
+    }
+    if (check.sources && !sourcesCached(check.sources)) {
+      record(
+        check,
+        UNAVAILABLE,
+        `the pinned source is not cached; run the data builder once`
+      );
+      return;
+    }
+  }
+  if (check.tier === 'platform') {
+    if (!wantPlatform) {
+      record(check, SKIP, fast ? '--fast' : '--no-platform');
+      return;
+    }
+    if (check.engine && !(await engineInstalled(check.engine))) {
+      record(
+        check,
+        UNAVAILABLE,
+        `${check.engine} is not installed; npx playwright install ${check.engine}`
+      );
+      return;
+    }
+  }
+
+  if (paint) process.stdout.write(`  ....  ${check.label}`);
   const erase = paint ? '\r' : '';
   try {
-    execFileSync(command[0], command.slice(1), {
+    const out = execFileSync(check.command[0], check.command.slice(1), {
       stdio: ['ignore', 'pipe', 'pipe'],
       maxBuffer: 64 * 1024 * 1024,
-    });
-    process.stdout.write(`${erase}  ${c(GREEN, ' ok ')}  ${label}\n`);
-    return true;
+      env: { ...process.env, ...(check.env || {}) },
+    }).toString();
+    if (erase) process.stdout.write(erase);
+    const retried = retriedIn(out);
+    if (retried) {
+      record(check, RETRIED, retried);
+      failures.push(
+        `${check.label}\n          passed only on a retry: ${retried}`
+      );
+      return;
+    }
+    record(check, PASS);
   } catch (err) {
-    process.stdout.write(`${erase}  ${c(RED, 'FAIL')}  ${label}\n`);
+    if (erase) process.stdout.write(erase);
+    record(check, FAIL);
     const output = `${err.stdout || ''}${err.stderr || ''}`
       .trim()
       .split('\n')
-      .slice(-6)
+      .slice(-8)
       .map(l => `          ${l}`)
       .join('\n');
-    failures.push(`${label}\n${output}`);
-    return false;
+    failures.push(`${check.label}\n${output}`);
   }
 }
 
@@ -96,60 +192,15 @@ process.stdout.write(
   c(DIM, 'Nothing here creates a tag, a release or a DOI.\n\n')
 );
 
-// --- Is it correct? ----------------------------------------------------------
-process.stdout.write(`${c(BOLD, 'Correctness')}\n`);
-step('formatting', ['npm', 'run', 'format:check']);
-step('lint', ['npm', 'run', 'lint']);
-step('module architecture', ['npm', 'run', 'check:architecture']);
-step('investigations validate', ['npm', 'run', 'author:check']);
-// The build comes first, and the order matters. `npm run build` regenerates
-// sw-manifest.js, and tests/buildIntegrity.test.js asserts that the committed
-// manifest is what the generator would write today. Running the tests before
-// the build meant that any edit since the last build failed that test - a real
-// staleness, but reported as a unit-test failure, which sends you looking in
-// the wrong place entirely.
-step('production build', ['npm', 'run', 'build'], { slow: true });
-step('unit tests', ['npm', 'test'], { slow: true });
-step('physics validation', ['npm', 'run', 'validate:physics'], { slow: true });
-step('scenario stability', ['npm', 'run', 'validate:scenarios'], {
-  slow: true,
-});
-step('bundle budget', ['npm', 'run', 'budget:check'], { slow: true });
-// Two workers, no retries. Not a weaker run than CI's - a stricter one, and a
-// fairer one. `npm run e2e` leaves the worker count to Playwright, which takes
-// half the machine's cores; on a developer laptop that is six browsers, six
-// dev-server clients and six canvases competing for one GPU, and the specs
-// that lose that competition are the long physics ones (chaos, resonance,
-// lessonEventWatch) timing out on a wait that would have resolved. That is
-// contention this harness invented, not a defect in the software being
-// released, and a release gate that reports it as one is a gate people learn
-// to ignore. CI runs two workers for the same reason. Retries stay at zero
-// here, where CI allows one: a release candidate should pass first time.
-step('browser suite (sources)', ['npm', 'run', 'e2e:release'], { slow: true });
-step('browser suite (production build)', ['npm', 'run', 'e2e:dist'], {
-  slow: true,
-});
-
-// --- Is it current? ----------------------------------------------------------
-process.stdout.write(`\n${c(BOLD, 'Generated artifacts are current')}\n`);
-step('documentation facts, CITATION.cff, .zenodo.json', [
-  'npm',
-  'run',
-  'docs:check',
-]);
-step('vendored libraries and fonts', ['npm', 'run', 'vendor:check']);
-step('service-worker precache manifest', ['npm', 'run', 'sw:check']);
-step('scenario thumbnails', ['npm', 'run', 'thumbnails:check']);
-step("the user manual's generated tables", ['npm', 'run', 'manual:check']);
-// The scene catalogue and the record beside it are generated from the lesson
-// data, and the hand-written acceptance map is checked against them: a central
-// experiment whose object, control, evidence or test has moved fails here
-// rather than being discovered by a teacher.
-step('the lesson scene catalogue and acceptance map', [
-  'npm',
-  'run',
-  'audit:scene:check',
-]);
+for (const group of Object.keys(GROUPS)) {
+  const members = CHECKS.filter(
+    check => (check.group || 'correctness') === group
+  );
+  if (!members.length) continue;
+  process.stdout.write(`${c(BOLD, GROUPS[group])}\n`);
+  for (const check of members) await run(check);
+  process.stdout.write('\n');
+}
 
 // --- Is it consistent? -------------------------------------------------------
 process.stdout.write(`\n${c(BOLD, 'Release metadata')}\n`);
@@ -290,6 +341,35 @@ if (decisions.length) {
   }
 }
 
+// --- What this run actually established --------------------------------------
+// The tally first, then a sentence that can only say "everything" when the
+// tally has nothing in the other four columns. Both come from summarise() in
+// tools/checks.mjs, which is where the wording is tested.
+const summary = summarise(results);
+const byStatus = status => results.filter(r => r.status === status);
+
+process.stdout.write(`${c(BOLD, 'What ran')}\n`);
+process.stdout.write(
+  `  ${summary.counts[PASS]} passed` +
+    `   ${summary.counts[FAIL]} failed` +
+    `   ${summary.counts[SKIP]} skipped` +
+    `   ${summary.counts[UNAVAILABLE]} unavailable` +
+    `   ${summary.counts[RETRIED]} passed only on a retry\n`
+);
+for (const [name, status] of [
+  ['skipped', SKIP],
+  ['unavailable', UNAVAILABLE],
+  ['passed only on a retry', RETRIED],
+]) {
+  for (const r of byStatus(status)) {
+    process.stdout.write(
+      `  ${c(DIM, name.padEnd(22))} ${r.label}` +
+        `${r.note ? c(DIM, ` - ${r.note}`) : ''}\n`
+    );
+  }
+}
+process.stdout.write('\n');
+
 if (failures.length) {
   process.stdout.write(
     `${failures.length} check(s) failed. Nothing was tagged, released or minted.\n`
@@ -298,11 +378,18 @@ if (failures.length) {
 }
 
 process.stdout.write(
-  c(GREEN, 'Everything checkable passes.') +
-    (decisions.length
-      ? ` ${decisions.length} decision(s) above are yours to make.\n`
-      : '\n')
+  summary.green
+    ? c(GREEN, summary.headline) +
+        (decisions.length
+          ? ` ${decisions.length} decision(s) above are yours to make.\n`
+          : '\n')
+    : `${c(YELLOW, summary.headline)}\n`
 );
+if (!summary.complete) {
+  process.stdout.write(
+    c(DIM, 'Run `npm run release:check` with no flags for the whole gate.\n')
+  );
+}
 process.stdout.write(
   c(
     DIM,

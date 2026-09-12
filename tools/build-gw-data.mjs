@@ -631,6 +631,13 @@ const args = process.argv.slice(2);
 const check = args.includes('--check');
 const offline = args.includes('--offline');
 const verifySources = args.includes('--verify-sources');
+// Provenance mode. "This module is structurally sound" and "this module is the
+// file GWOSC published" are two different claims, and only the second needs the
+// sources. Without this flag, a --check --offline run on a machine with no
+// cache reports the first and says so. With it, the absence of the sources is
+// itself the failure: a release that cannot regenerate its data has not
+// verified its data.
+const requireSources = args.includes('--require-sources');
 const haveCache = SOURCES.every(s => existsSync(path.join(CACHE, s.file)));
 
 try {
@@ -641,15 +648,33 @@ try {
       for (const p of problems) console.error(`  ${p}`);
       process.exit(1);
     }
+    if (!haveCache && requireSources) {
+      console.error(
+        'Provenance NOT verified: the published traces are not cached.\n' +
+          `  ${SOURCES.map(s => s.file).join(', ')}\n` +
+          `  are not in ${path.relative(REPO, CACHE)}, so js/data/gw/gw150914.js could\n` +
+          `  not be regenerated from ${BASE} and compared. Structural validity says\n` +
+          '  the module is complete and self-consistent. It does not say it is the\n' +
+          '  published data.\n' +
+          `  Run \`npm run gw:data\` once to populate the cache, then run this again.`
+      );
+      process.exit(1);
+    }
     if (!haveCache && offline && !verifySources) {
       console.log(
         'GW150914 data is complete and internally consistent.\n' +
-          `  The sources are not cached, so it was not regenerated. Run \`npm run gw:data\`\n` +
-          '  once to populate .gw-cache from gwosc.org, then this check compares byte for byte.'
+          '  PROVENANCE NOT VERIFIED: the sources are not cached, so the module was\n' +
+          `  not regenerated from ${BASE} and compared byte for byte. This run\n` +
+          '  checked the structure of what is checked in, not where it came from.\n' +
+          `  Run \`npm run gw:data\` once to populate .gw-cache, or\n` +
+          `  \`npm run gw:provenance\` to make the missing sources a failure rather\n` +
+          '  than a caveat.'
       );
       process.exit(0);
     }
-    const next = await build({ offline: offline && !verifySources });
+    const next = await build({
+      offline: offline && !verifySources && !requireSources,
+    });
     const current = await readFile(OUT, 'utf8');
     if (current !== next) {
       console.error(
@@ -658,7 +683,10 @@ try {
       );
       process.exit(1);
     }
-    console.log('GW150914 data is current, and regenerates byte for byte.');
+    console.log(
+      'GW150914 data is current, and regenerates byte for byte from ' +
+        `${BASE} - provenance verified.`
+    );
   } else {
     const next = await build({ offline });
     await mkdir(path.dirname(OUT), { recursive: true });
