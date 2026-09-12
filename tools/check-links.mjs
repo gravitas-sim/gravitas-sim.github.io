@@ -25,7 +25,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, resolve, dirname, relative, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -105,6 +105,53 @@ const isExternal = value =>
   /^(https?:|mailto:|tel:|data:|blob:|javascript:|#|\/\/)/i.test(value) ||
   value === '';
 
+// --- Fragments the application routes on -------------------------------------
+// Some fragments are read by the application rather than scrolled to.
+// `/#investigation=lives-of-stars` opens a lesson - js/investigations.js
+// parses it - and there is no element carrying that id, so checking it against
+// the page's ids reports a broken link for a link that works. That is what
+// happened: two references in model/index.html turned CI red in two jobs at
+// once, and the local release gate does not run this checker, so it stayed red.
+//
+// They are not skipped. A fragment naming a lesson that does not exist is
+// exactly as broken as a missing anchor, and it fails more quietly: the page
+// opens, the lesson does not, and nothing says why. So a route is resolved
+// against the catalogue it names.
+const ROUTES = [
+  {
+    pattern: /^investigation=([\w-]+)$/,
+    what: 'investigation',
+    load: async () =>
+      (
+        await import(
+          pathToFileURL(join(REPO, 'js/data/investigations/manifest.js')).href
+        )
+      ).MANIFEST.map(entry => entry.id),
+  },
+];
+
+/**
+ * Check a fragment against the routes the application understands.
+ *
+ * @param {string} fragment - The fragment, without its leading '#'
+ * @returns {Promise<{routed: boolean, why: ?string}>} routed says whether this
+ *   is a route at all; why is null when it resolves
+ */
+async function checkRoute(fragment) {
+  for (const route of ROUTES) {
+    const match = route.pattern.exec(fragment);
+    if (!match) continue;
+    route.known ??= new Set(await route.load());
+    return {
+      routed: true,
+      why: route.known.has(match[1])
+        ? null
+        : `no ${route.what} with id "${match[1]}"`,
+    };
+  }
+  return { routed: false, why: null };
+}
+
 /**
  * Resolve a reference to a path on disk.
  * @param {string} root - The served root
@@ -159,7 +206,13 @@ async function main() {
           // A same-page fragment: check it against this page's own ids.
           const id = value.slice(1);
           checked++;
-          if (id && !pages.get(file).ids.has(id)) {
+          const route =
+            file === join(root, 'index.html')
+              ? await checkRoute(id)
+              : { routed: false, why: null };
+          if (route.routed) {
+            if (route.why) broken.push({ file, value, why: route.why });
+          } else if (id && !pages.get(file).ids.has(id)) {
             broken.push({ file, value, why: `no element with id "${id}"` });
           }
         } else {
@@ -196,7 +249,14 @@ async function main() {
       if (fragment && extname(onDisk) === '.html') {
         const page = pages.get(onDisk) ?? parse(await readFile(onDisk, 'utf8'));
         pages.set(onDisk, page);
-        if (!page.ids.has(fragment)) {
+        // Only the application's own front page routes on its fragment.
+        const route =
+          onDisk === join(root, 'index.html')
+            ? await checkRoute(fragment)
+            : { routed: false, why: null };
+        if (route.routed) {
+          if (route.why) broken.push({ file, value, why: route.why });
+        } else if (!page.ids.has(fragment)) {
           broken.push({
             file,
             value,
