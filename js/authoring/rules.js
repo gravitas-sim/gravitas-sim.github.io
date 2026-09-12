@@ -115,6 +115,8 @@ export const RULE_INDEX = {
   'answer/accepted': "The author's own answer is accepted by the grader",
   'answer/discriminates': 'The tolerance rejects something',
   'answer/options': 'An option list is long enough and has no repeats',
+  'answer/reveal':
+    'A held prediction names a later step in the same lesson to be marked at',
   'answer/rubric': 'A short answer carries a rubric',
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
@@ -203,6 +205,29 @@ function emptyProbeContext() {
     roleOf: () => null,
     roles: () => [],
     selectRole: () => false,
+    selectId: () => false,
+    // No stage was built, so the authoritative sample is empty and its
+    // signature is the empty one. A widget that reads the sample must cope
+    // with there being none: that is the same state it is in for the frame
+    // between a step opening and its stage going up.
+    stagedSample: () => [],
+    stageKey: () => '',
+    restagePopulation: () => false,
+    population: () => null,
+    // No canvas and no bodies in an authoring check, so the life-stage
+    // illustration has nowhere to go. A widget that publishes one must cope
+    // with being told no: that is the same answer it gets for the frame
+    // between a step opening and its stage going up.
+    showEvolutionScene: () => false,
+    clearEvolutionScene: () => {},
+    // No canvas, so no source to change and no crests to draw. A widget that
+    // switches the source must cope with being told no - the same answer it
+    // gets on the frame between a step opening and its stage going up.
+    setSourceMode: () => false,
+    pulseSource: () => false,
+    showWavefronts: () => false,
+    binaryScale: () => ({ unitsPerSchwarzschildRadius: 3.2 }),
+    restageBinary: () => false,
     mode: () => ({ mode: 'nbody', model: null, roles: [] }),
     // The scene actions. An authoring check runs with no simulation, so each
     // answers the shape and does nothing: a probe that copes with a stage that
@@ -598,6 +623,28 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
               }
             }
 
+            // A control's opening position belongs under `values`, which is
+            // what widgetDefaults() reads. A number at the top level of the
+            // spec under a control's own name lands somewhere nothing looks,
+            // and the control silently opens at its own default: three
+            // screens of A Universe of Stars said `view: 1` and every one of
+            // them opened on `view: 0`, relying on their prose to tell the
+            // reader to switch.
+            //
+            // A number, specifically. Some widgets take a spec field that
+            // shares a control's name and is not a position - the evolution
+            // playback's `track: 'm100'` names a track and the widget reads it
+            // and moves the control to match. That is deliberate and reads as
+            // a string, so it is left alone.
+            for (const key of Object.keys(step.tool)) {
+              if (key === 'values' || !controls.has(key)) continue;
+              if (typeof step.tool[key] !== 'number') continue;
+              E(
+                'ref/control',
+                `tool.${key} = ${step.tool[key]} names a control of ${w.id}, so it belongs under tool.values — where it is now, nothing reads it and the control opens at its own default`
+              );
+            }
+
             const wantsAction = ['record', 'run', 'reset', 'clear'].filter(a =>
               new RegExp(`\\b${a}\\b`, 'i').test(
                 [step.tool.note, ...(step.checklist || [])]
@@ -857,6 +904,32 @@ export function checkCatalogue(inputs, { skip = [] } = {}) {
           E(
             'content/prompt',
             'a graded choice gives no explanation afterwards'
+          );
+        }
+      }
+
+      // A prediction whose marking waits for the experiment has to name the
+      // step where the experiment happens, and that step has to come after it.
+      // Pointing backwards, or at nothing, would leave the reader's answer
+      // unmarked for the rest of the lesson with no way to find out.
+      if (step.reveal !== undefined) {
+        const revealAt = steps.findIndex(x => x.sid === step.reveal);
+        if (typeof step.reveal !== 'string' || !step.reveal) {
+          E('answer/reveal', 'reveal must be the sid of a later step');
+        } else if (revealAt < 0) {
+          E(
+            'answer/reveal',
+            `reveal names "${step.reveal}", which is not a step in this lesson`
+          );
+        } else if (revealAt <= i) {
+          E(
+            'answer/reveal',
+            `reveal names "${step.reveal}", which comes before this step`
+          );
+        } else if (!Array.isArray(step.options) || step.answer === undefined) {
+          E(
+            'answer/reveal',
+            'reveal holds the marking of a choice, so the step needs options and an answer'
           );
         }
       }

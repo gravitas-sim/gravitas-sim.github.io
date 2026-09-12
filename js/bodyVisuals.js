@@ -244,11 +244,20 @@ export const HIT_MIN_PX = Object.freeze({
  * @param {number} zoom - Pixels per world unit
  * @returns {number} World units
  */
-export function hitRadius(modelRadius, type, zoom) {
+export function hitRadius(modelRadius, type, zoom, drawnAt = null) {
   const z = Number(zoom) > 0 ? Number(zoom) : 1;
   const r = Number(modelRadius);
   const floor = (HIT_MIN_PX[type] ?? 10) / z;
-  return Number.isFinite(r) && r > floor ? r : floor;
+  const base = Number.isFinite(r) && r > floor ? r : floor;
+  // A body drawn *larger* than its model radius has to be clickable where it
+  // appears. That never happened while the drawing only ever shrank things,
+  // and it happens now: a lesson comparing stellar sizes sets a presentation
+  // radius, and a supergiant on a compressed shelf is drawn several times the
+  // radius its mass implies. Clicking the disc and selecting nothing is the
+  // failure this prevents; the model radius still sets the floor, so nothing
+  // that used to be clickable stopped being so.
+  const drawn = Number(drawnAt);
+  return Number.isFinite(drawn) && drawn > base ? drawn : base;
 }
 
 // --- Level of detail ---------------------------------------------------------

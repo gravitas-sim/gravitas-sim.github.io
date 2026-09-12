@@ -169,6 +169,7 @@ const DESIGN_THE_SCHEDULE = {
       sid: 'predict-the-comb',
       bind: TARGET,
       type: 'predict',
+      reveal: 'run-both-schedules',
       title: 'Before you observe',
       body: `Eight observations spread evenly across 24.673 days puts one every
              <strong>3.525 days</strong>.
@@ -367,6 +368,7 @@ const DESIGN_THE_SCHEDULE = {
       sid: 'predict-the-weather',
       bind: TARGET,
       type: 'predict',
+      reveal: 'lose-a-fortnight',
       title: 'Then it rains',
       body: `Real runs lose nights. Suppose the middle of your run is clouded
              out: everything between day 8 and day 16 is lost, and nobody
@@ -480,6 +482,23 @@ const DESIGN_THE_SCHEDULE = {
                 somebody else find out whether they got a different answer
                 because the star is different or because they looked at
                 different times.`,
+    },
+    {
+      sid: 'say-what-the-schedule-decided',
+      bind: TARGET,
+      // Both loops in this lesson close on a multiple choice, and the point
+      // of the lesson is a design decision, which is not a thing with four
+      // options. This is where the reader has to defend one.
+      requires: ['read-the-comparison'],
+      type: 'question',
+      kind: 'short',
+      title: 'Defend the schedule you would run',
+      body: `You have run two schedules on the same planet, lost a fortnight
+             out of the middle of one, and typed a set of dates of your own.`,
+      prompt:
+        'In two or three sentences, say which schedule you would actually run on a night-assignment committee\u2019s time, and what about the sampling — not the telescope — decides whether the period comes out.',
+      rubric:
+        'The answer that earns credit is about sampling rather than about aperture or exposure time: a run that samples at almost exactly the planet\u2019s period, or an integer fraction of it, revisits the same phase every night and constrains almost nothing, however good the photometry. Spreading observations over a long baseline with irregular spacing breaks the aliasing and pins the period. Losing the middle of a run costs less than losing the ends, because the baseline is what sets the precision. A strong answer names the trade explicitly: a longer baseline buys period precision, more nights per unit time buy the ability to tell aliases apart, and a committee gives you neither for free.',
     },
     {
       sid: 'what-you-decided',

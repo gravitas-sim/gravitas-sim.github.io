@@ -3922,6 +3922,51 @@
     background: color-mix(in srgb, var(--danger) 10%, transparent);
   }
 
+  /* A committed prediction that has not been marked yet. Deliberately not
+     coloured right or wrong: the point of holding it is that neither is known
+     until the experiment has run. */
+  .inv-option.is-held {
+    border-style: dashed;
+  }
+  .inv-held {
+    margin: var(--space-3) 0 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    border-left: 2px dashed var(--border-strong);
+  }
+
+  /* The verdict on a held prediction, shown on the step where the result
+     arrives rather than on the one the reader has already left. */
+  .inv-verdict {
+    margin: var(--space-3) 0 0;
+    padding: var(--space-3);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--border-strong);
+    background: var(--surface-2);
+  }
+  .inv-verdict.is-right {
+    border-left-color: var(--accent);
+  }
+  .inv-verdict.is-wrong {
+    border-left-color: var(--danger);
+  }
+  .inv-verdict-head {
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .inv-verdict-mark {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+  }
+  .inv-verdict .inv-because {
+    background: none;
+    padding: var(--space-2) 0 0;
+  }
+
   .inv-because {
     margin: var(--space-3) 0 0;
     padding: var(--space-3);
@@ -4779,6 +4824,48 @@
     top: -0.45em;
   }
 
+  /* --- Investigations: the plot as a table --------------------------------- */
+  /* The accessible equivalent of the scatter above it. Visible rather than
+     hidden from sight: a reader who cannot separate two plotted colours, or who
+     is reading a projected screen from the back of a room, needs the numbers as
+     much as a screen-reader user does, and a second copy nobody can see is a
+     copy nobody maintains. */
+  .inv-plot-table-wrap {
+    margin-top: var(--space-2);
+    overflow-x: auto;
+  }
+  .inv-plot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+  .inv-plot-table caption {
+    text-align: left;
+    padding-bottom: var(--space-1);
+    color: var(--text-muted, var(--text-secondary));
+  }
+  .inv-plot-table th,
+  .inv-plot-table td {
+    padding: 2px var(--space-2) 2px 0;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .inv-plot-table thead th {
+    border-bottom: 1px solid var(--border-subtle);
+    font-weight: var(--weight-semibold);
+    color: var(--text-primary);
+  }
+  .inv-plot-table tbody th {
+    text-align: left;
+    font-weight: var(--weight-regular, 400);
+  }
+  .inv-plot-table td {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+
   /* --- Investigations: the interactive instrument panel -------------------- */
   .inv-tool-readout {
     display: flex;
@@ -4787,6 +4874,12 @@
     margin-top: var(--space-3);
     padding-top: var(--space-3);
     border-top: 1px solid var(--border-subtle);
+    /* A <dl> now, so the browser's own margins have to go. */
+    margin-bottom: 0;
+  }
+  .inv-tool-row dt,
+  .inv-tool-row dd {
+    margin: 0;
   }
   .inv-tool-row {
     display: flex;
@@ -4895,19 +4988,42 @@
     max-height: calc((100vh - var(--space-3) - 88px) * 0.38 - var(--space-3));
   }
   @media (max-width: 900px) {
-    /* No room to stack two panels above a bottom sheet. The instrument keeps
-       the space and the plot scrolls with the lesson underneath it. */
+    /* Two panels above a bottom sheet, sharing the band between them in the
+       same 62/38 proportion as the desktop split. Each scrolls inside itself.
+
+       This used to say `position: static` on the plot, on the reasoning that
+       it would fall back into the flow under the lesson. It does not: it is a
+       sibling of the lesson panel rather than a child of it, so it landed at
+       the bottom of a body with `overflow: hidden` and could not be reached at
+       all - on a 1024-tall tablet its top edge was twelve pixels below the
+       window, and a student on a step with both an instrument and a plot could
+       not see the graph of their own readings, or the table of them beside it.
+       The comment on `.inv-plot-panel` above records the same mistake being
+       made and fixed for the unsplit case; this rule kept it. */
     body.investigation-split #investigationTool {
       max-height: calc(
-        100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
-          var(--space-2) * 3
+        (
+            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+              var(--space-2) * 3
+          ) *
+          0.62
       );
     }
     body.investigation-split #investigationPlot {
-      position: static;
-      max-height: none;
-      margin: var(--space-3) 0 0;
-      width: auto;
+      top: calc(
+        (
+            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+              var(--space-2) * 3
+          ) *
+          0.62 + var(--space-2) * 2
+      );
+      max-height: calc(
+        (
+            100vh - var(--transport-reserve, 76px) - min(38vh, 300px) -
+              var(--space-2) * 3
+          ) *
+          0.38
+      );
     }
   }
   @media (max-width: 1100px) {

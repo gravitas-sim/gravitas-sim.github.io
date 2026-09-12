@@ -335,8 +335,8 @@ export const EN_DEFERRED = {
   'exoW.depthMarker': 'depth',
   'exoW.depthOverNoise': 'depth / noise = {ratio}',
   'exoW.noise.photon': 'photon',
-  'exoW.noise.stellar': 'stellar',
-  'exoW.noise.instrument': 'instrument',
+  'exoW.noise.correlated': 'correlated',
+  'exoW.noise.floor': 'systematic floor',
   'exoW.noise.total': 'total',
   'exoW.preset.hotJupiterKepler': 'Hot Jupiter, Kepler',
   'exoW.preset.hotJupiterKepler.note':
@@ -756,9 +756,83 @@ export const EN_DEFERRED = {
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
+  // The object list's chips. A role is the lesson author's handle for a body.
+  // js/investigations.js derives a label from the key where it can - `starA`
+  // becomes "star A" - and drops the chip entirely where the label would only
+  // repeat the body's own name, which is why "EARTH Earth" is now just
+  // "Earth". These are the words the two languages disagree about.
+  'inv.role.star': 'star',
+  'inv.role.planet': 'planet',
+  'inv.role.earth': 'Earth',
+  'inv.role.sun': 'Sun',
+  'inv.role.mars': 'Mars',
+  'inv.role.spacecraft': 'spacecraft',
+  'inv.role.starA': 'star A',
+  'inv.role.starB': 'star B',
+  'inv.role.io': 'Io',
+  'inv.role.europa': 'Europa',
+  'inv.role.ganymede': 'Ganymede',
+  'inv.role.callisto': 'Callisto',
+  'inv.role.circular': 'circular orbiter',
+  'inv.role.eccentric': 'eccentric orbiter',
+  'inv.role.moon': 'Moon',
+  'inv.role.alpha': 'alpha',
+  'inv.role.beta': 'beta',
+  'inv.role.gamma': 'gamma',
+  'inv.role.station': 'station',
+  'inv.role.primary': 'primary',
+  'inv.role.secondary': 'secondary',
+  'inv.role.tracer': 'tracer',
+  'inv.role.e': 'planet e',
+  'inv.role.f': 'planet f',
+  'inv.role.g': 'planet g',
+  'inv.role.mercury': 'Mercury',
+  'inv.role.jupiter': 'Jupiter',
+  'inv.role.bulge': 'central bulge',
+  'inv.role.inner': 'inner',
+  'inv.role.middle': 'middle',
+  'inv.role.outer': 'outer',
+  'inv.role.venus': 'Venus',
+  'inv.role.ceres': 'Ceres',
+  'inv.role.neptune': 'Neptune',
+  'inv.role.saturn': 'Saturn',
+  'inv.role.dwarf': 'dwarf',
+  'inv.role.giant': 'giant',
+  'inv.role.cursor': 'cursor',
+  'inv.role.m020': '0.2 M☉',
+  'inv.role.m050': '0.5 M☉',
+  'inv.role.m100': '1 M☉',
+  'inv.role.m200': '2 M☉',
+  'inv.role.m500': '5 M☉',
+  'inv.role.m1000': '10 M☉',
+  'inv.role.m2000': '20 M☉',
+  'inv.role.m4000': '40 M☉',
+  'inv.role.a': 'A',
+  'inv.role.b': 'B',
+  'inv.role.visitor': 'visitor',
+  'inv.role.hole': 'black hole',
+  'inv.role.light': 'lighter',
+  'inv.role.heavy': 'heavier',
+  'inv.role.one': 'one',
+  'inv.role.two': 'two',
+  'inv.role.three': 'three',
+  'inv.role.supergiant': 'supergiant',
+  'inv.role.main': 'main sequence',
+  'inv.role.wd': 'white dwarf',
+  'inv.role.young': 'young',
+  'inv.role.old': 'old',
   'inv.answer.correct': 'Correct.',
   'inv.answer.recorded': 'Recorded.',
   'inv.answer.model': 'Model answer shown.',
+  'inv.plot.point': 'Point',
+  'inv.plot.tableCaption': '{title}: the plotted points as numbers',
+  'inv.plot.canvasLabel':
+    '{title}: a scatter plot of {n} points. The same points are in the table below.',
+  'inv.predict.held':
+    'Your answer is recorded. It stays unmarked until you reach “{title}”, so the experiment settles it rather than the answer key.',
+  'inv.predict.youSaid': 'You predicted: {choice}',
+  'inv.predict.right': 'That is what happened.',
+  'inv.predict.wrong': 'What happened instead: {answer}',
   'inv.announce.started': 'Investigation started: {title}',
   'inv.report.building': 'Building…',
   'inv.report.done': 'Lab report downloaded',
@@ -1941,6 +2015,11 @@ export const EN_DEFERRED = {
     'The same Neptune, measured eight times more precisely. Nothing about the planet or the schedule changed.',
   'exoW.daysAxis': 'Days',
   'exoW.phaseAxis': 'Phase',
+  'exoW.overlay.short': 'dashed: ideal signal',
+  'exoW.folded.short': 'folded on the period',
+  'exoW.row.whatYouAreLookingAt': 'The two panels',
+  'exoW.value.twoPanels':
+    'Left: your measurements against date, with the ideal signal dashed over them as a teaching overlay — that dashed line is not data. Right: the same measurements folded on the true period, which is what a search would produce only if it already knew the period.',
   'exoW.idealSignalOverlay': 'dashed: ideal signal (teaching overlay)',
   'exoW.foldedOnTheTruePeriod': 'folded on the true period',
   'exoW.measurementsTaken': 'Measurements',
@@ -2295,6 +2374,46 @@ export const EN_DEFERRED = {
   'gwW.control.m2': 'Second mass',
   'gwW.control.distance': 'Distance',
   'gwW.control.inclination': 'Viewing angle',
+  'gwW.row.components': 'What the two objects are',
+  'gwW.value.components.bh-bh':
+    'Drawn as two black holes. The model did not decide that: a point-mass inspiral has two masses in it and no material at all, and the same equations would give this waveform whatever the objects were made of. At these masses nothing else is known that could be this compact, which is an astrophysical inference and not a result of this calculation.',
+  'gwW.value.components.ns-ns':
+    'Drawn as two neutron stars. The model did not decide that — it has two masses in it and no material. Objects this light are inferred to be neutron stars because no black hole is known to form this light, which is astrophysics rather than anything this calculation produced. The waveform here also ignores tidal deformation, which is real for neutron stars and is how a real analysis tells them apart.',
+  'gwW.value.components.bh-ns':
+    'Drawn as a black hole and a neutron star, from the two masses. The model has no material in it and did not decide this; the identification is an astrophysical inference from the masses alone. A real mixed pair can also be disrupted before it merges, which this model does not represent.',
+  'gwW.value.components.ns-bh':
+    'Drawn as a neutron star and a black hole, from the two masses. The model has no material in it and did not decide this; the identification is an astrophysical inference from the masses alone. A real mixed pair can also be disrupted before it merges, which this model does not represent.',
+  'gwW.row.ringNow': 'The ring, right now',
+  'gwW.value.ringNow':
+    'h₊ = {plus}, h× = {cross}. Those are the two numbers the picture is drawn from — the fractional change in length along the two directions. Both are dimensionless.',
+  'gwW.row.arms': 'What an L would read',
+  'gwW.value.arms':
+    'Along the horizontal arm the length changes by a fraction {x}; along the vertical arm, {y}. The instrument measures the DIFFERENCE, {diff} — which on LIGO’s four-kilometre arms is {metres} metres. That is why the shape is an L: two lengths compared against each other, not one length measured absolutely.',
+  'gwW.row.polarization': 'Polarisation',
+  'gwW.value.polarization.linear':
+    'Linear. Only the plus polarisation is present, so the ring stretches one way, passes exactly through a circle, and squeezes the other way. This is the clean stretch-and-squeeze picture.',
+  'gwW.value.polarization.circular':
+    'Circular. Both polarisations are present and equal, a quarter cycle apart, so the ring is an ellipse of fixed shape that ROTATES. It never passes through a circle — not once. Looking face-on at a circular orbit is what does this.',
+  'gwW.value.polarization.elliptical':
+    'Elliptical: both polarisations are present but unequal. The ring wobbles between two ovals without ever quite becoming a circle. Only an edge-on view gives the clean stretch-and-squeeze.',
+  'gwW.control.source': 'What is emitting',
+  'gwW.source.static': 'one mass, sitting still',
+  'gwW.source.pulsing': 'a pulsing sphere',
+  'gwW.source.binary': 'a binary',
+  'gwW.control.amplify': 'Amplify the picture',
+  'gwW.row.amplify': 'Display amplification',
+  'gwW.value.amplify':
+    'The strain picture is drawn {n} times larger than life. Display only — nothing computed changes, and the real number is in the readout above.',
+  'gwW.row.emits': 'Does this radiate?',
+  'gwW.value.emits.static':
+    'No. A mass that is not moving has a gravitational field and emits no waves: nothing about the field is changing, so nothing travels.',
+  'gwW.value.emits.pulsing':
+    'No — and this is the one that surprises people. The field outside any spherically symmetric body depends on its total mass alone, so a sphere can pulse as hard as it likes and the outside cannot tell. That is Birkhoff’s theorem, and it is exact rather than an approximation. Motion is not the criterion.',
+  'gwW.value.emits.binary':
+    'Yes. Two lumps going round each other change the SHAPE of the mass distribution — its quadrupole — and a changing quadrupole is what radiates. The rings are a propagation illustration; the strain is what the model computes.',
+  'gwW.row.rings': 'The rings',
+  'gwW.value.rings':
+    'One crest per cycle of the wave, which is twice per orbit. Where each ring is comes from the model’s own emission history, so pausing holds them and seeking back shows the earlier pattern. Their speed across the screen is a display choice, not the speed of light to scale.',
   'gwW.control.cursor': 'Position in the signal',
   'gwW.preset.bbh': 'Two black holes',
   'gwW.preset.bbh.note':
@@ -2591,6 +2710,7 @@ export const EN_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'A real stellar disc. It rises, peaks at about 2.2 scale lengths, and then falls away. Still not flat.',
   'dmW.whatGalaxiesDo': 'What galaxies do',
+  'dmW.speedKms': 'speed (km/s)',
   'dmW.speedAt30Kpc': 'Speed at 30 kpc',
   'dmW.outerSlopeVR': 'Outer slope (v ∝ rⁿ)',
   'dmW.shapeOutThere': 'Shape out there',
@@ -2966,6 +3086,40 @@ export const EN_DEFERRED = {
   'stelE.row.mass': 'Mass',
   'stelE.value.mass': '{now} now, {born} at birth — {lost} lost to its wind',
   'stelE.row.spectral': 'Spectral type',
+  'summary.life.cloud':
+    'A lesson is showing this star before it formed: the canvas has a contracting cloud of gas with a brightening centre, and no star, because there is not one yet.',
+  'summary.life.star':
+    'A lesson is running this star through its life; the canvas shows the star at the model age given in the instrument readout.',
+  'summary.life.wind':
+    'A lesson is running this star through its life. Dashed shells around it stand for material it has shed — about {pct} per cent of the mass it was born with, so far.',
+  'summary.life.explosion':
+    'A lesson has run this star to the end. Expanding rings stand for an explosion the endpoint model expects, and what is left at the centre is a {kind}.',
+  'summary.life.remnant':
+    'A lesson has run this star to the end. What is left is a {kind}; there was no explosion in this model.',
+  'stelE.row.grid': 'The models behind this',
+  'stelE.value.grid':
+    'MIST v1.2: single stars, solar composition, no rotation, no companion. Every number here follows from those choices, and a star with a different composition or a companion does not follow this track.',
+  'stelE.row.notOnlyMass': 'Mass is not the whole story',
+  'stelE.value.notOnlyMass':
+    'On this grid the birth mass fixes the endpoint, because everything else was held constant. In the sky it does not: composition, rotation and above all a close companion can change what a star of a given mass leaves behind. This lesson varies one thing, which is what makes it readable and what makes it incomplete.',
+  'stelE.row.whatThisIs': 'What you are looking at',
+  'stelE.value.whatThisIs.sample':
+    'A stored row of the published model — numbers MIST computed and this application read in, not computed here.',
+  'stelE.value.whatThisIs.interpolation':
+    'Interpolated between two stored rows of the published model. The two rows are real output; the point between them is this application straight-lining across the gap.',
+  'stelE.value.whatThisIs.schematic':
+    'A schematic. There is no model behind this picture — the tracks begin at a star that already has a photosphere, so everything before that is an illustration and carries no temperature, luminosity or age.',
+  'stelE.value.whatThisIs.prescription':
+    'A published prescription, not a track. The model stopped before this point; what is shown is somebody’s stated rule for what a star of this mass leaves behind, and the rule is named below.',
+  'stelE.row.playhead': 'Playhead',
+  'stelE.value.playheadLinear':
+    '{pct} of the way through the track, and because the playhead is running proportionally that is also {pct} of the star’s life.',
+  'stelE.value.playheadNotLife':
+    '{pct} of the way along the playhead. That is NOT {pct} of the star’s life — this pacing stretches the short stages so you can reach them. Switch the playhead to “proportional” to see the real shares.',
+  'stelE.value.paceLinear':
+    'Proportional to age: equal travel per year, so the position is the fraction of the life. Everything after the main sequence is a sliver at the right-hand end, which is the honest picture and hopeless for landing on.',
+  'stelE.action.freeze': 'Freeze this moment',
+  'stelE.freeze.label': 'Then: {age}',
   'stelE.row.pace': 'The playhead',
   'stelE.value.paceTime':
     'Paced by time, logarithmically. How far it has travelled is how far through the life it is — so nearly all of it is the main sequence.',
@@ -2996,6 +3150,7 @@ export const EN_DEFERRED = {
     'Which one depends on the explosion model. Both are shown as possible because the sources are.',
   'stelE.remnant.unfinished.caption':
     'The track stops while the star is still fusing hydrogen. There is no endpoint to show.',
+  'stelE.row.cardIs': 'What this card is',
   'stelE.row.howKnown': 'How this is known',
   'stelE.value.fromTrack':
     'From the track itself: MIST followed this star all the way to a cooling white dwarf, so the mass and the position are model outputs and not a separate prescription.',
@@ -3133,24 +3288,27 @@ export const EN_DEFERRED = {
   'stelW.row.subPixel': 'The smallest',
   'stelW.row.withheld': 'The numbers',
   'stelW.compare.subPixel': 'smaller than a pixel here',
-  'stelW.compare.trueNote':
-    'One scale for every star. Something drawn as a marker is genuinely too small to see beside the others.',
-  'stelW.compare.fitNote':
-    'Each star enlarged to fill its box. Apparent sizes here are NOT comparable — the magnification is printed under each one.',
   'stelW.order.radiusSun': 'radius',
   'stelW.order.teffK': 'temperature',
   'stelW.order.luminositySun': 'luminosity',
   'stelW.order.massSun': 'mass',
   'stelW.size.true': 'true relative',
   'stelW.size.fit': 'fit each',
-  'stelW.size.true.long': 'True relative sizes, one common scale',
+  'stelW.size.true.long':
+    'True relative sizes on one common scale. A star drawn as a marker is genuinely too small to see beside the others.',
   'stelW.size.fit.long':
-    'Each star fitted to its own box; sizes not comparable',
+    'Each star enlarged to fill its own box. Sizes here are not comparable — the magnification is printed under each one.',
   'stelW.on': 'yes',
   'stelW.off': 'no',
   'stelW.row.orderedBy': 'Ordered by',
   'stelW.row.sizeMode': 'Sizes',
   'stelW.row.star': 'Star {n}',
+  'stelW.row.namedStar': '{n}. {name}',
+  'stelW.row.subset': 'On the card',
+  'stelW.value.subset': '{n} of the {of} stars on the canvas',
+  'stelW.control.focus': 'Which star',
+  'stelW.focus.none': 'none',
+  'stelW.focus.nth': 'the {n}th along',
   'stelW.value.star': '{teff}, {lum}, {radius}, {mass} — {ratio} the smallest',
   'stelW.value.unknownMass': 'mass unknown',
   'stelW.orbit.mercury': 'Mercury’s orbit',
@@ -3172,6 +3330,13 @@ export const EN_DEFERRED = {
   'stelW.pop.row.threshold': 'The bright subset',
   'stelW.pop.value.threshold':
     'Every star placed at {d} pc; keeping those above {f} in relative flux leaves {kept} of {total}.',
+  'stelW.pop.row.picked': 'The star you picked',
+  'stelW.pop.value.picked': 'Type {type}, {teff}, {lum}, {mass} — {cut}',
+  'stelW.pop.kept': 'above the cut',
+  'stelW.pop.cut': 'below the cut, so no survey would list it',
+  'stelW.pop.row.onCanvas': 'On the canvas',
+  'stelW.pop.value.onCanvas':
+    '{shown} stars, out of a bounded subsample of {subsample} taken from the {modelled} the tracks could model, out of {requested} drawn. Four different numbers: the canvas is not the sample and the sample is not the population.',
   'stelW.pop.row.type': 'Type {type}',
   'stelW.pop.value.type':
     '{all} in the sample ({allPct}%), {bright} in the bright subset ({brightPct}%)',
@@ -3228,6 +3393,14 @@ export const EN_DEFERRED = {
   'nb.stellar.age': 'Age',
   'nb.stellar.mainSequence': 'Total main-sequence lifetime',
   'nb.stellar.pinnedRadius': 'Pinned star {n}: radius',
+  'nb.stellar.pinnedNth': 'star {n}',
+  'nb.stellar.pinnedRadiusOf': '{name}: radius',
+  'nb.stellar.pinnedTeffOf': '{name}: temperature',
+  'nb.stellar.pinnedMassOf': '{name}: mass now',
+  'nb.stellar.limit.fromScene':
+    'The compared stars are {n} of the {of} standing on the canvas for this step, read from the scene rather than pinned by hand.',
+  'nb.stellar.limit.someHypothetical':
+    'Not every star here is a model. {names} ({n}) are points chosen on the diagram: their temperature and luminosity are chosen, their radius follows from those two, and they have no mass, no age and no lifetime.',
   'nb.stellar.pinnedTeff': 'Pinned star {n}: temperature',
   'nb.stellar.limit.model':
     'A model, not an observation: {grid}. No rotation, no binarity, no magnetic fields, and one composition.',

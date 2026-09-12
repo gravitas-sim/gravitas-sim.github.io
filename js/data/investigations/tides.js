@@ -167,6 +167,7 @@ const TIDES = {
       sid: 'is-the-pull-the-same',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'three-points-three-pulls',
       title: 'Is the pull the same everywhere?',
       body: `The Earth is not a point. It is a ball 12,742 km across, and the
              side facing the Moon is 12,742 km closer to the Moon than the side
@@ -254,6 +255,7 @@ const TIDES = {
       sid: 'so-why-two-bulges',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'take-the-centre-away',
       title: 'So why two bulges?',
       body: `Everything you have seen so far points one way: toward the Moon.
              The near side is pulled toward the Moon, the centre is pulled
@@ -378,6 +380,7 @@ const TIDES = {
       sid: 'bring-the-companion-closer',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'four-distances',
       title: 'Bring the companion closer',
       body: `You are about to be handed a distance slider, and a graph that
              records what you read off it. Before you touch either, commit.
@@ -560,6 +563,7 @@ const TIDES = {
       sid: 'now-change-the-companion',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'three-masses',
       title: 'Now change the companion',
       body: `Put the distance back where it started and change the other thing
              instead. Commit before you measure.
@@ -688,6 +692,7 @@ const TIDES = {
       sid: 'the-sun-against-the-moon',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'seven-real-tides-on-one',
       title: 'The Sun against the Moon',
       body: `Two bodies raise measurable tides on the Earth, and they are wildly
              mismatched.
@@ -790,6 +795,7 @@ const TIDES = {
       sid: 'what-holds-a-moon-together',
       bind: EARTH_MOON,
       type: 'predict',
+      reveal: 'stretch-against-grip',
       title: 'What holds a moon together?',
       body: `Everything so far has been about stretching. Nothing has broken.
              \n\nIf a tide pulls the two ends of a body in opposite directions,

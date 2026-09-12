@@ -15,7 +15,13 @@
 // =============================================================================
 
 import { withUnit } from './format.js';
-import { surface, palette, responsiveHeight, MONO } from './widgetCanvas.js';
+import {
+  surface,
+  palette,
+  responsiveHeight,
+  MONO,
+  TYPE,
+} from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 // This family's labels are in the deferred half of the catalogue; see the note
 // in js/widgets.js. Registered from the module that renders them, because a
@@ -636,7 +642,7 @@ const BINARY = {
         0.06
       );
       ctx.fillStyle = SKY_MUTED;
-      ctx.font = `9px ${MONO}`;
+      ctx.font = `${TYPE.MIN}px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       label(
@@ -1311,7 +1317,7 @@ const VISUAL_BINARY = {
       ctx.fill();
       ctx.globalAlpha = 1;
       if (p.y % 20 === 0) {
-        ctx.font = `9px ${MONO}`;
+        ctx.font = `${TYPE.MIN}px ${MONO}`;
         ctx.fillStyle = SKY_MUTED;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';

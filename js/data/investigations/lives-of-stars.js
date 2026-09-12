@@ -69,6 +69,41 @@ const evol = (extra = {}) => ({
 /** The lab's diagram, for the recap and the classification steps. */
 const lab = (extra = {}) => ({ id: 'stellar-lab', ...extra });
 
+/**
+ * Two stars standing side by side on the canvas, for a comparison.
+ *
+ * The comparison screens used to put their two stars on the panel's card and
+ * leave the canvas showing an unrelated protagonist, so the main scene had
+ * nothing to do with the question being asked. These stand the pair on the
+ * canvas and the card reads that sample - one declaration, both views.
+ *
+ * `basis` is the thing the comparison holds fixed, and the readout and the
+ * prose both say which: 'age' means both stars are the same number of years
+ * old, and 'fraction' means both are the same distance through their own
+ * lives. Those are entirely different comparisons and they are constantly
+ * mistaken for each other.
+ */
+const pair = (stars, extra = {}) => ({
+  spacing: 130,
+  fit: true,
+  ...extra,
+  stars,
+});
+
+/**
+ * The three the lesson opens and closes with, all on the main sequence.
+ *
+ * Same fraction of a life rather than same age - all three are half way
+ * through their main sequences, which is the only way to line up stars whose
+ * lives differ by six orders of magnitude. The prose says so, and the
+ * same-age comparison at step 23 is the deliberate contrast.
+ */
+const THREE_FUTURES = [
+  { role: 'light', name: '0.2 M☉', track: 'm020', at: 'ms' },
+  { role: 'sun', name: '1 M☉', track: 'm100', at: 'ms' },
+  { role: 'heavy', name: '20 M☉', track: 'm2000', at: 'ms' },
+];
+
 /** The comparison stage. */
 const stage = (extra = {}) => ({ id: 'stellar-compare', ...extra });
 
@@ -103,8 +138,9 @@ const LIVES_OF_STARS = {
     // -----------------------------------------------------------------------
     {
       sid: 'three-futures',
-      stage: protagonist('m100'),
+      stage: pair(THREE_FUTURES),
       type: 'predict',
+      reveal: 'the-black-hole',
       title: 'Three stars, three futures',
       body: `On the stage: a red dwarf of a fifth of a solar mass, a star like
              the Sun, and a star of twenty solar masses. All three are on their
@@ -124,7 +160,7 @@ const LIVES_OF_STARS = {
         'The heaviest one, by an enormous margin: its main sequence lasts 8.7 million years against the Sun&rsquo;s 9.9 billion and the red dwarf&rsquo;s 1.1 trillion. "Losing energy fastest" is the right reason - it is a hundred thousand times more luminous than the Sun, and light is fuel leaving. The answers about the other two are the two commonest wrong pictures and both get corrected later: the red dwarf does not burn out quickly, it barely changes at all, and the Sun does not explode.',
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100' }, { track: 'm2000' }],
+        pinStaged: true,
         hide: ['order'],
       }),
       tip: 'If you have done "A Universe of Stars" — the companion lesson, which teaches the diagram this one moves across — the stage will be familiar. If not, the next six steps recap everything from it that this lesson needs.',
@@ -157,6 +193,7 @@ const LIVES_OF_STARS = {
       sid: 'predict-protostar-power',
       stage: protagonist('m100'),
       type: 'predict',
+      reveal: 'contraction-luminosity',
       title: 'What is it running on?',
       body: `Press <strong>Next phase</strong> to reach the first point the
              model actually describes: a pre-main-sequence star. It has a
@@ -366,7 +403,23 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'compare-young-and-old',
-      stage: protagonist('m100'),
+      // Both stars on the canvas, not just on the card. They are the same
+      // model at two ages, which is the one comparison in this lesson that
+      // holds the star fixed and varies the time.
+      stage: pair([
+        {
+          role: 'young',
+          name: 'On arrival (0.46 Gyr)',
+          track: 'm100',
+          ageYr: 4.6e8,
+        },
+        {
+          role: 'old',
+          name: 'Leaving the main sequence (9.9 Gyr)',
+          track: 'm100',
+          ageYr: 9.9e9,
+        },
+      ]),
       type: 'measure',
       title: 'Then and now, side by side',
       body: `Two versions of the same star are on the comparison stage: the
@@ -397,19 +450,17 @@ const LIVES_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm100', ageYr: 4.6e8 },
-          { track: 'm100', ageYr: 9.9e9 },
-        ],
+        pinStaged: true,
         hide: ['order'],
         capture: true,
       }),
-      tip: 'Both are the same star. Nothing else in this lesson pins one model at two ages, and it is worth noticing that the comparison stage does not mind.',
+      tip: 'Both are the same star, and both are standing on the canvas — click either one to read it. Nothing else in this lesson puts one model on screen at two ages at once.',
     },
     {
       sid: 'predict-what-runs-out',
       stage: protagonist('m100'),
       type: 'predict',
+      reveal: 'the-interior',
       title: 'What exactly runs out?',
       body: `The main sequence ends. Something has been used up.
              \n\nThink about where fusion is happening before you answer. The
@@ -516,6 +567,7 @@ const LIVES_OF_STARS = {
       sid: 'predict-direction',
       stage: protagonist('m100'),
       type: 'predict',
+      reveal: 'measure-the-giant',
       title: 'Which way does it go?',
       body: `You have the numbers: cooler at the surface, far more luminous
              overall. Before looking at the trace, work out what that means for
@@ -581,23 +633,44 @@ const LIVES_OF_STARS = {
       sid: 'true-size-then-and-now',
       stage: protagonist('m100'),
       type: 'explore',
-      title: 'To scale',
-      body: `Switch the star panel between <strong>true size</strong> and
-             <strong>fit the box</strong> and move the playhead back and forth
-             across the main sequence and the giant branch.
-             \n\nIn true-size mode the whole life is drawn on one scale, set by
-             the largest this star ever gets. That is why it is a speck for
-             most of its life: it is a speck compared with what it becomes.`,
+      title: 'To scale, and beside itself',
+      body: `Park the playhead on the main sequence and press
+             <strong>Freeze this moment</strong>. A copy of the star as it is
+             right now stays on the canvas, labelled with the age it was taken
+             at, and stops there for good — nothing that follows will change
+             it.
+             \n\nNow run forward to the tip of the red-giant branch. The
+             frozen copy is still the size it was; the live star beside it is
+             not. Both are on the canvas, on one scale, at once.
+             \n\nThe star panel does the same thing in miniature. In
+             <strong>true size</strong> the whole life is drawn on one scale,
+             set by the largest this star ever gets — which is why it is a
+             speck for most of its life. It is a speck compared with what it
+             becomes.`,
       checklist: [
-        'Set the star panel to true size',
-        'Park on the main sequence and note that the star is barely a mark',
-        'Read the caption: it gives the fraction of the star&rsquo;s own peak radius',
-        'Move to the tip of the red-giant branch and watch the disc fill the panel',
-        'Switch to "fit the box" and move back to the main sequence',
-        'Read the caption again — it now says the size means nothing',
+        'Park on the main sequence and press "Freeze this moment"',
+        'Check the frozen copy&rsquo;s label — it carries the age it was taken at',
+        'Run the playhead to the tip of the red-giant branch',
+        'Compare the two on the canvas, and click each to read its card',
+        'Set the star panel to true size and watch the same contrast in the panel',
+        'Switch to "fit the box" and read the caption — it now says the size means nothing',
       ],
-      tool: evol({ track: 'm100', phase: 'red-giant-branch' }),
-      tip: 'Both pictures are honest and they answer different questions. The one that lies is a picture that changes scale without saying so.',
+      tool: evol({
+        track: 'm100',
+        phase: 'main-sequence',
+        // The frozen copy is the point of this screen, so the button is here
+        // and nowhere else: a snapshot left on a screen that was not asking
+        // for one is clutter, and js/investigations.js drops them all on the
+        // way out.
+        freeze: true,
+        // Parked, not running. "Freeze this moment" on a screen that is
+        // already moving freezes whichever moment the animation happened to
+        // have reached while the reader was reading the instructions - which
+        // is not a moment they chose, and the whole exercise is about
+        // choosing one.
+        autoplay: false,
+      }),
+      tip: 'The frozen copy is a record, not a second star. Nothing writes to it again — the playhead drives the role it was copied from, and the copy has its own.',
     },
     {
       sid: 'helium-and-the-loop',
@@ -678,6 +751,7 @@ const LIVES_OF_STARS = {
       sid: 'not-a-supernova',
       stage: protagonist('m100'),
       type: 'predict',
+      reveal: 'planetary-nebula',
       title: 'Is that an explosion?',
       body: `Half a star has just come off. That sounds violent.
              \n\nIt is not. Commit before reading on.`,
@@ -804,6 +878,7 @@ const LIVES_OF_STARS = {
       sid: 'predict-the-red-dwarf',
       stage: protagonist('m020'),
       type: 'predict',
+      reveal: 'the-same-age',
       title: 'The star that does none of this',
       body: `Switch to the 0.2 solar-mass model. It is on its main sequence,
              like the Sun.
@@ -825,7 +900,19 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-same-age',
-      stage: protagonist('m020'),
+      // The controlled comparison, on the canvas: two different stars, one
+      // age. Compare with `compare-young-and-old`, which holds the star fixed
+      // and varies the age, and with the fraction-of-life comparison the
+      // readout names underneath.
+      stage: pair([
+        {
+          role: 'dwarf',
+          name: '0.2 M☉ at 4.6 Gyr',
+          track: 'm020',
+          ageYr: 4.6e9,
+        },
+        { role: 'sun', name: '1 M☉ at 4.6 Gyr', track: 'm100', ageYr: 4.6e9 },
+      ]),
       type: 'measure',
       title: 'The same age, two stars',
       body: `A controlled comparison, and it is worth being clear which kind:
@@ -875,10 +962,7 @@ const LIVES_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm020', ageYr: 4.6e9 },
-          { track: 'm100', ageYr: 4.6e9 },
-        ],
+        pinStaged: true,
         hide: ['order'],
         capture: true,
       }),
@@ -888,6 +972,7 @@ const LIVES_OF_STARS = {
       sid: 'predict-massive-lifetime',
       stage: protagonist('m2000'),
       type: 'predict',
+      reveal: 'massive-versus-sun',
       title: 'Twenty solar masses',
       body: `Now the other end. Switch to the 20 solar-mass model and look at
              where it sits on the main sequence: about 43,000 solar
@@ -1001,6 +1086,7 @@ const LIVES_OF_STARS = {
       sid: 'predict-core-and-envelope',
       stage: protagonist('m1000'),
       type: 'predict',
+      reveal: 'the-neutron-star',
       title: 'Two different fates in one star',
       body: `The core is about to collapse. The outer layers — most of the
              star&rsquo;s mass — are a long way out and are not, yet, doing
@@ -1213,7 +1299,7 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-lifecycle-argument',
-      stage: protagonist('m100'),
+      stage: pair(THREE_FUTURES),
       type: 'question',
       title: 'Back to the three stars',
       kind: 'short',
@@ -1231,7 +1317,7 @@ const LIVES_OF_STARS = {
         'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the lesson states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defence engages with what was measured.',
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100' }, { track: 'm2000' }],
+        pinStaged: true,
         capture: true,
       }),
       tip: 'Your notebook has every measurement with the model it came from, the stage it was taken at, and — where an endpoint was quoted rather than computed — the paper it was quoted from.',

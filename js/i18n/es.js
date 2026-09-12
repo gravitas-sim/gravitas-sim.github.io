@@ -380,7 +380,7 @@ export const ES = {
 
   'tutorial.welcome.title': 'Bienvenido a Gravitas',
   'tutorial.welcome.body':
-    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Cada cuerpo en pantalla se integra en tiempo real a partir de la ley de gravitación de Newton: aquí nada va sobre raíles ni está animado de antemano. Si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad.',
+    'Un laboratorio de gravedad y un conjunto de instrumentos para medirla. Los cuerpos que colocas y los escenarios que cargas se integran en tiempo real a partir de la ley de gravitación de Newton: ahí nada va sobre raíles ni está animado de antemano, y si dos estrellas se fusionan es porque sus órbitas las juntaron de verdad. Unas pocas pantallas de las lecciones, en cambio, colocan un cuerpo donde dice un modelo publicado — por ejemplo una estrella recorriendo una traza evolutiva — y lo indican en la propia pantalla.',
   'tutorial.welcome.tip':
     'Esta visita tiene dieciséis pasos y dura unos tres minutos. Usa ← y → para avanzar, o Escape para salir en cualquier momento.',
 

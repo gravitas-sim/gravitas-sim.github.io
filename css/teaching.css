@@ -40,9 +40,14 @@
      decoration a screen reader cannot read and a printer renders as a smudge;
      the order is carried by the list being an <ol> and by the numbers, which
      are real text. */
+  /* Every auto-fit grid on this page uses minmax(min(Npx, 100%), 1fr) rather
+     than minmax(Npx, 1fr). A bare floor is a floor: on a 320px phone the
+     demonstration cards held their 330px track and pushed the document 26
+     pixels sideways. With min(..., 100%) the track gives way when there is not
+     room for it, and nothing changes at any width where there is. */
   .teach-cycle {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
     gap: var(--space-3);
     margin: var(--space-5) 0 var(--space-8);
     padding: 0;
@@ -120,7 +125,7 @@
   /* --- Instruments --------------------------------------------------------- */
   .teach-instruments {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: var(--space-4);
     margin: var(--space-5) 0 var(--space-8);
   }
@@ -134,7 +139,7 @@
   /* --- Demonstrations ------------------------------------------------------ */
   .teach-demos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
     gap: var(--space-4);
     margin: var(--space-5) 0 var(--space-6);
   }
@@ -222,7 +227,7 @@
   /* --- Course patterns ----------------------------------------------------- */
   .teach-patterns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: var(--space-4);
     margin: var(--space-5) 0 var(--space-8);
   }
@@ -293,7 +298,7 @@
   /* --- Access and evidence -------------------------------------------------- */
   .teach-access {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: var(--space-4);
     margin: var(--space-5) 0 var(--space-8);
   }
@@ -309,7 +314,7 @@
   }
   .teach-evidences {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: var(--space-4);
     margin: var(--space-5) 0 var(--space-6);
   }
@@ -432,7 +437,7 @@
   .teach-activity-formats {
     display: grid;
     gap: var(--space-4);
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     margin-bottom: var(--space-5);
   }
   /* The heading spans the grid rather than sitting in the first column. */
@@ -491,5 +496,81 @@
     .teach-activity-formats {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* --- Instructor quick-start, evaluation and feedback ---------------------- */
+  .teach-quickstart {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--space-4);
+    margin: var(--space-5) 0 var(--space-8);
+  }
+
+  .teach-evaluate-list {
+    margin: var(--space-5) 0 var(--space-8);
+    padding-left: var(--space-5);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .teach-evaluate-list h3 {
+    margin: 0 0 var(--space-1);
+    font-size: var(--text-md);
+  }
+  .teach-evaluate-list p {
+    margin: 0;
+  }
+
+  .teach-feedback-routes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--space-4);
+    margin: var(--space-5) 0;
+  }
+
+  /* The local notes form. Deliberately plain: it is a notepad, not a survey,
+     and anything that made it look like a submission form would be lying about
+     where the words go. */
+  .teach-feedback-form {
+    margin: var(--space-5) 0 var(--space-8);
+    padding: var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .teach-feedback-form form {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+  .teach-feedback-field {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .teach-feedback-field label {
+    font-weight: var(--weight-semibold);
+  }
+  .teach-feedback-input {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 2.5rem;
+    padding: var(--space-2);
+    font: inherit;
+    color: var(--text-primary);
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+  }
+  .teach-feedback-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .teach-feedback-status {
+    margin: var(--space-2) 0 0;
+    min-height: 1.2em;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
   }
 }

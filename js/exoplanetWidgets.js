@@ -32,7 +32,7 @@ import { gaussianAt, phaseCoverage, surveyStats } from './rvSurvey.js';
 import { HD209458, SUN_JUPITER } from './data/exoplanetSystems.js';
 import { formatNumber, withUnit } from './format.js';
 import { chartColors } from './observationChart.js';
-import { surface, responsiveHeight } from './widgetCanvas.js';
+import { surface, responsiveHeight, TYPE } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 // This family's labels are in the deferred half of the catalogue; see the note
 // in js/widgets.js. Registered from the module that renders them rather than
@@ -372,7 +372,11 @@ const rvObserver = {
     ctx.setLineDash([]);
     ctx.fillStyle = t.label;
     ctx.font = '10px system-ui, sans-serif';
-    ctx.fillText('to us', cx + orbR + 4, cy - 6);
+    // Over the near end of the dashed line rather than the far end. The far
+    // end is a few pixels from the plot's own rotated "RV (m/s)" title, and
+    // the two ran together at a legible size.
+    ctx.textAlign = 'left';
+    ctx.fillText('to us', cx + 8, cy - 6);
 
     // The instantaneous radial velocity, as an arrow along the line of sight.
     const rv = -Math.sin(phase) * c.K;
@@ -1039,7 +1043,7 @@ const methodComparison = {
       ctx.font = '11px system-ui, sans-serif';
       ctx.fillText(row.name, 8, y + 12);
       ctx.fillStyle = colors.tick;
-      ctx.font = '9px system-ui, sans-serif';
+      ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
       ctx.fillText(`→ ${row.gives}`, 8, y + 24);
 
       ctx.fillStyle = colors.grid;
@@ -1047,7 +1051,7 @@ const methodComparison = {
       ctx.fillStyle = row.frac > 0.02 ? colors.accent : colors.warm;
       ctx.fillRect(bx, y, Math.max(2, bw * row.frac), 15);
       ctx.fillStyle = colors.tick;
-      ctx.font = '9px system-ui, sans-serif';
+      ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
       ctx.fillText(row.text, bx + bw + 6, y + 12);
     });
   },
@@ -1253,7 +1257,7 @@ const planetCharacterization = {
         ctx.globalAlpha = 1;
       }
       ctx.fillStyle = t.tick;
-      ctx.font = '9px system-ui, sans-serif';
+      ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
       ctx.fillText(row[0].toUpperCase(), 10, y + 13);
       ctx.fillStyle = t.label;
       ctx.font = '10px system-ui, sans-serif';
@@ -1609,21 +1613,33 @@ const surveySchedule = {
     // English, and at 10px they ran into each other and read as one sentence.
     ctx.fillStyle = th.label;
     ctx.textAlign = 'center';
+    // Short enough to fit on one line at the shared minimum size, in both
+    // languages. It used to be a sentence per half, shrunk to seven pixels
+    // until it fitted - which solved the layout by making the label
+    // unreadable. The sentence is now a row in the readout, where it can be
+    // as long as it needs to be.
     const caption = (text, box) => {
-      for (let size = 10; size >= 7; size--) {
-        ctx.font = `${size}px system-ui, sans-serif`;
-        if (ctx.measureText(text).width <= box.w || size === 7) break;
-      }
-      ctx.fillText(text, box.x + box.w / 2, h - 8);
+      ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
+      ctx.fillText(text, box.x + box.w / 2, h - 6);
     };
-    caption(t('exoW.idealSignalOverlay'), left);
-    caption(t('exoW.foldedOnTheTruePeriod'), right);
+    caption(t('exoW.overlay.short'), left);
+    caption(t('exoW.folded.short'), right);
     ctx.textAlign = 'left';
   },
   readout(v) {
     const c = this.compute(v);
     const st = c.stats;
     const rows = [
+      {
+        // What the two halves of the picture are, in words. It used to be two
+        // captions squeezed onto the canvas at seven pixels.
+        get label() {
+          return t('exoW.row.whatYouAreLookingAt');
+        },
+        get value() {
+          return t('exoW.value.twoPanels');
+        },
+      },
       {
         get label() {
           return t('exoW.measurementsTaken');

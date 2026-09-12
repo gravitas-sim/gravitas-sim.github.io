@@ -128,6 +128,7 @@ const HOHMANN_TRANSFER = {
       sid: 'predict-point-at-it',
       bind: TRANSFER,
       type: 'predict',
+      reveal: 'measure-the-orbits',
       title: 'Point at it and push?',
       body: `The station is directly outward from the star, further out than you
              are. The obvious thing is to point away from the star and push.
@@ -383,6 +384,29 @@ const HOHMANN_TRANSFER = {
         'T = 1.75^1.5 = 2.315 years for the whole ellipse. Half of it is 1.157 years, or 423 days.',
     },
     {
+      sid: 'predict-do-nothing',
+      bind: TRANSFER,
+      type: 'predict',
+      reveal: 'read-the-arc',
+      title: 'What if you do nothing?',
+      body: `The first burn is made and the spacecraft is climbing. In about
+             fourteen months it reaches the top of the arc, at the station's
+             orbital radius, doing 14.2 km/s. The station at that radius is
+             doing 18.8 km/s.
+             \n\nSuppose you burn no further. Commit to an answer now: it stays
+             unmarked until you have coasted up there and read the orbit.`,
+      prompt: 'With no second burn, the spacecraft would…',
+      options: [
+        'stay at 2.5 AU, since it has arrived',
+        'fall back inward and return to 1 AU',
+        'drift slowly outward, since it is moving away from the star',
+        'follow the station round at 14.2 km/s',
+      ],
+      answer: 1,
+      because:
+        'The transfer ellipse is a closed orbit and the spacecraft is at its apoapsis, not at rest. Its periapsis is still at 1 AU, so it falls back and returns to exactly where it started, once every 2.3 years, for ever. Arriving somewhere and staying there are different achievements.',
+    },
+    {
       sid: 'watch-the-coast',
       bind: TRANSFER,
       // There is no transfer ellipse to coast along until that burn is made.
@@ -410,25 +434,57 @@ const HOHMANN_TRANSFER = {
         'Check the distance against the station’s orbit at 2.5 AU',
       ],
     },
+
     {
-      sid: 'predict-do-nothing',
+      sid: 'read-the-arc',
       bind: TRANSFER,
-      type: 'predict',
-      title: 'What if you do nothing?',
-      body: `The spacecraft is at the station's orbital radius, at the top of
-             its arc, doing 14.2 km/s. The station at that radius is doing
-             18.8 km/s.
-             \n\nSuppose you burn no further.`,
-      prompt: 'With no second burn, the spacecraft would…',
-      options: [
-        'stay at 2.5 AU, since it has arrived',
-        'fall back inward and return to 1 AU',
-        'drift slowly outward, since it is moving away from the star',
-        'follow the station round at 14.2 km/s',
+      // The claim under test is about the bottom of the arc, and the bottom
+      // of the arc is a number the inspector already prints. Writing it down
+      // is what turns "it falls back" from something the lesson asserts into
+      // something the reader has measured.
+      requires: ['watch-the-coast'],
+      type: 'measure',
+      title: 'Read the arc you are on',
+      body: `The run has stopped at the top of the arc. The readout below gives
+             the top and the bottom of the orbit the spacecraft is currently
+             on. Write both down.
+             \n\nThe bottom of the arc is the part that answers the question
+             you just committed to.`,
+      probe: transferRows,
+      allowInspector: true,
+      fields: [
+        { id: 'top', label: 'Top of the current arc', unit: 'AU' },
+        { id: 'bottom', label: 'Bottom of it', unit: 'AU' },
       ],
-      answer: 1,
-      because:
-        'The transfer ellipse is a closed orbit and the spacecraft is at its apoapsis, not at rest. Its periapsis is still at 1 AU, so it falls back and returns to exactly where it started, once every 2.3 years, for ever. Arriving somewhere and staying there are different achievements.',
+      validate: v => {
+        if (!Number.isFinite(v.top) || !Number.isFinite(v.bottom)) {
+          return {
+            level: 'warn',
+            message:
+              'Both numbers, in AU. The readout gives them as “top of its current arc” and “bottom of it”.',
+          };
+        }
+        if (Math.abs(v.top - 2.5) > 0.15) {
+          return {
+            level: 'error',
+            message:
+              'The top of the arc should be the station’s orbit, 2.5 AU, to within about 0.15. If the run has not reached the top yet, let it finish and read it again.',
+          };
+        }
+        if (Math.abs(v.bottom - 1) > 0.15) {
+          return {
+            level: 'error',
+            message:
+              'The bottom should still be 1 AU, to within about 0.15. Nothing has changed it since the first burn — check you are reading the bottom row and not the current distance.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'The bottom is still 1 AU — where you started. The transfer ellipse is a closed orbit and the spacecraft is at the far end of it, not at rest.',
+        };
+      },
+      tip: 'One burn buys you a visit. Staying is a second purchase.',
     },
 
     // --- Part 4: the second burn ------------------------------------------------
@@ -515,6 +571,24 @@ const HOHMANN_TRANSFER = {
       answer: 1,
       because:
         'Both burns added orbital energy, and a larger orbit has more energy. But most of that energy is potential: climbing from 1 AU to 2.5 AU costs a great deal of speed and buys height. The spacecraft ends up higher, richer in total energy, and slower. Going further out means going more slowly once you get there — and speeding up twice to manage it.',
+    },
+    {
+      sid: 'say-why-sideways',
+      bind: TRANSFER,
+      // The lesson is arithmetic from step 8 onward and closes on two
+      // multiple choices. Nothing asked the reader to say, in their own
+      // words, why the burn that works is the one nobody expects.
+      requires: ['read-the-arc'],
+      type: 'question',
+      kind: 'short',
+      title: 'Why the burn that works points sideways',
+      body: `You pushed straight outward and got nowhere useful. You pushed
+             along the direction of travel and the far side of the orbit rose
+             to meet the station.`,
+      prompt:
+        'In two or three sentences, explain why a burn along the direction of travel raises the opposite side of the orbit, and why arriving at the station\u2019s radius is not the same as staying there.',
+      rubric:
+        'A burn changes the orbit\u2019s energy most efficiently when it is along the velocity, because the work done is force times velocity; adding energy raises the semi-major axis, and since the burn point stays on the new orbit it becomes the low point, so the rise appears half an orbit later on the far side. Pushing radially rotates the orbit and changes its shape without adding much energy. Arriving is not staying because the transfer ellipse is a closed orbit: at the top of the arc the spacecraft is at apoapsis with its periapsis still at the starting radius \u2014 which is what you measured \u2014 so without the second burn it falls straight back. Credit for connecting the second burn to matching the station\u2019s circular speed rather than to \u201cstopping\u201d.',
     },
     {
       sid: 'when-this-is-true',

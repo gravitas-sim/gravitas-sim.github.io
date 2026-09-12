@@ -975,14 +975,18 @@ const BOUNDARIES_WIDGET = {
       ctx.setLineDash([]);
       ctx.font = `10px ${MONO}`;
       ctx.fillStyle = e.color;
-      ctx.textAlign = e.align;
       ctx.textBaseline = 'top';
-      halo(
-        ctx,
-        `${e.name}  ${fmtAU(e.au)} AU`,
-        e.align === 'right' ? x - 5 : x + 5,
-        edgeY + 4
-      );
+      // The outer edge sits near the right of the plot for a bright star, and
+      // "Maximum Greenhouse  1.67 AU" is 160 pixels wide: left-aligned there
+      // it ran eighty pixels off the canvas and was simply gone. Slid back
+      // inside rather than flipped to the other side of its line, because
+      // flipping put both edge labels on the same side of the plot and they
+      // then sat on top of each other - one bug traded for another.
+      const text = `${e.name}  ${fmtAU(e.au)} AU`;
+      const width = ctx.measureText(text).width;
+      ctx.textAlign = 'left';
+      const wanted = e.align === 'right' ? x - 5 - width : x + 5;
+      halo(ctx, text, Math.max(2, Math.min(wanted, w - 2 - width)), edgeY + 4);
     }
 
     // Distance scale

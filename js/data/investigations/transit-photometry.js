@@ -215,6 +215,7 @@ const TRANSITS = {
       sid: 'what-will-the-brightness-do',
       bind: TRANSIT_PAIR,
       type: 'predict',
+      reveal: 'your-first-transit',
       title: 'What will the brightness do?',
       body: `The planet is about to cross in front of the star from your point of
              view. In a moment you will open a photometer and watch. Commit to an
@@ -694,6 +695,7 @@ const TRANSITS = {
       sid: 'getting-the-period',
       bind: TRANSIT_PAIR,
       type: 'predict',
+      reveal: 'time-two-transits',
       title: 'Getting the period',
       body: `So far you have used a single dip. The light curve has more in it
              than that: the transits repeat.`,

@@ -856,6 +856,16 @@ export default {
                 hicieron Cohen y Hubbard en 1965 con Plutón.`,
     },
     {
+      title: 'Lo que muestra una libraci\u00f3n y no muestra una raz\u00f3n',
+      body: `Mediste razones de periodos cercanas a n\u00fameros enteros, y tambi\u00e9n
+             registraste \u00e1ngulos resonantes que oscilan en torno a un valor fijo
+             en vez de dar la vuelta entera.`,
+      prompt:
+        'En dos o tres frases, explica por qu\u00e9 una raz\u00f3n de periodos cercana a un entero no basta como prueba de resonancia, y qu\u00e9 a\u00f1ade la libraci\u00f3n del \u00e1ngulo resonante.',
+      rubric:
+        'Una raz\u00f3n cercana a un entero peque\u00f1o puede darse por casualidad, y con suficientes cuerpos y pares algunas lo estar\u00e1n; la raz\u00f3n es una coincidencia hasta que algo demuestra que se mantiene. Un \u00e1ngulo resonante que libra \u2014 oscila en torno a un valor fijo con amplitud acotada en vez de circular 360\u00b0 \u2014 muestra que la configuraci\u00f3n se mantiene activamente: las conjunciones siguen ocurriendo en el mismo sitio. El argumento de Laplace \u03c6_L = \u03bb_\u00cdo \u2212 3\u03bb_Europa + 2\u03bb_Gan\u00edmedes en torno a 180\u00b0 es algo que ningun par de periodos podr\u00eda mostrar por s\u00ed solo.',
+    },
+    {
       title: 'Adónde lleva esto',
       body: `La resonancia no es una curiosidad del borde del Sistema Solar. Es
              una de las principales cosas que decidieron el aspecto que tiene el

@@ -341,8 +341,8 @@ export const ES_DEFERRED = {
   'exoW.depthMarker': 'profundidad',
   'exoW.depthOverNoise': 'profundidad / ruido = {ratio}',
   'exoW.noise.photon': 'fotones',
-  'exoW.noise.stellar': 'estelar',
-  'exoW.noise.instrument': 'instrumento',
+  'exoW.noise.correlated': 'correlado',
+  'exoW.noise.floor': 'suelo sistemático',
   'exoW.noise.total': 'total',
   'exoW.preset.hotJupiterKepler': 'Júpiter caliente, Kepler',
   'exoW.preset.hotJupiterKepler.note':
@@ -764,9 +764,82 @@ export const ES_DEFERRED = {
   'inv.action.finish': 'Terminar',
   'inv.action.next': 'Siguiente',
   'inv.probe.unavailable': 'Lectura no disponible',
+  // The object list's chips. A role is the lesson author's handle for a body -
+  // `eccentric`, `starA`, `tracer` - and until these existed the chip showed
+  // the key itself, which in Spanish meant an English word beside a translated
+  // body name. A role with no entry here still falls back to its key.
+  'inv.role.star': 'estrella',
+  'inv.role.planet': 'planeta',
+  'inv.role.earth': 'Tierra',
+  'inv.role.sun': 'Sol',
+  'inv.role.mars': 'Marte',
+  'inv.role.spacecraft': 'nave',
+  'inv.role.starA': 'estrella A',
+  'inv.role.starB': 'estrella B',
+  'inv.role.io': 'Ío',
+  'inv.role.europa': 'Europa',
+  'inv.role.ganymede': 'Ganimedes',
+  'inv.role.callisto': 'Calisto',
+  'inv.role.circular': 'orbitador circular',
+  'inv.role.eccentric': 'orbitador excéntrico',
+  'inv.role.moon': 'Luna',
+  'inv.role.alpha': 'alfa',
+  'inv.role.beta': 'beta',
+  'inv.role.gamma': 'gamma',
+  'inv.role.station': 'estación',
+  'inv.role.primary': 'primaria',
+  'inv.role.secondary': 'secundaria',
+  'inv.role.tracer': 'trazador',
+  'inv.role.e': 'planeta e',
+  'inv.role.f': 'planeta f',
+  'inv.role.g': 'planeta g',
+  'inv.role.mercury': 'Mercurio',
+  'inv.role.jupiter': 'Júpiter',
+  'inv.role.bulge': 'bulbo',
+  'inv.role.inner': 'interior',
+  'inv.role.middle': 'medio',
+  'inv.role.outer': 'exterior',
+  'inv.role.venus': 'Venus',
+  'inv.role.ceres': 'Ceres',
+  'inv.role.neptune': 'Neptuno',
+  'inv.role.saturn': 'Saturno',
+  'inv.role.dwarf': 'enana',
+  'inv.role.giant': 'gigante',
+  'inv.role.cursor': 'cursor',
+  'inv.role.m020': '0,2 M☉',
+  'inv.role.m050': '0,5 M☉',
+  'inv.role.m100': '1 M☉',
+  'inv.role.m200': '2 M☉',
+  'inv.role.m500': '5 M☉',
+  'inv.role.m1000': '10 M☉',
+  'inv.role.m2000': '20 M☉',
+  'inv.role.m4000': '40 M☉',
+  'inv.role.a': 'A',
+  'inv.role.b': 'B',
+  'inv.role.visitor': 'visitante',
+  'inv.role.hole': 'agujero negro',
+  'inv.role.light': 'más ligera',
+  'inv.role.heavy': 'más pesada',
+  'inv.role.one': 'una',
+  'inv.role.two': 'dos',
+  'inv.role.three': 'tres',
+  'inv.role.supergiant': 'supergigante',
+  'inv.role.main': 'secuencia principal',
+  'inv.role.wd': 'enana blanca',
+  'inv.role.young': 'joven',
+  'inv.role.old': 'vieja',
   'inv.answer.correct': 'Correcto.',
   'inv.answer.recorded': 'Registrado.',
   'inv.answer.model': 'Respuesta modelo mostrada.',
+  'inv.plot.point': 'Punto',
+  'inv.plot.tableCaption': '{title}: los puntos representados, en números',
+  'inv.plot.canvasLabel':
+    '{title}: un diagrama de dispersión de {n} puntos. Los mismos puntos están en la tabla de abajo.',
+  'inv.predict.held':
+    'Tu respuesta queda registrada. No se corrige hasta que llegues a «{title}», para que la decida el experimento y no la clave de respuestas.',
+  'inv.predict.youSaid': 'Predijiste: {choice}',
+  'inv.predict.right': 'Eso es lo que ocurrió.',
+  'inv.predict.wrong': 'Lo que ocurrió en su lugar: {answer}',
   'inv.announce.started': 'Investigación iniciada: {title}',
   'inv.report.building': 'Generando…',
   'inv.report.done': 'Informe de laboratorio descargado',
@@ -1965,6 +2038,11 @@ export const ES_DEFERRED = {
     'El mismo Neptuno, medido ocho veces con más precisión. Nada cambió en el planeta ni en el calendario.',
   'exoW.daysAxis': 'Días',
   'exoW.phaseAxis': 'Fase',
+  'exoW.overlay.short': 'discontinua: señal ideal',
+  'exoW.folded.short': 'plegada con el periodo',
+  'exoW.row.whatYouAreLookingAt': 'Los dos paneles',
+  'exoW.value.twoPanels':
+    'Izquierda: tus medidas frente a la fecha, con la señal ideal superpuesta en discontinua como capa didáctica; esa línea no son datos. Derecha: las mismas medidas plegadas con el periodo verdadero, que es lo que una búsqueda produciría solo si ya conociera el periodo.',
   'exoW.idealSignalOverlay': 'discontinua: señal ideal (capa didáctica)',
   'exoW.foldedOnTheTruePeriod': 'plegada con el periodo verdadero',
   'exoW.measurementsTaken': 'Medidas',
@@ -2326,6 +2404,46 @@ export const ES_DEFERRED = {
   'gwW.control.m2': 'Segunda masa',
   'gwW.control.distance': 'Distancia',
   'gwW.control.inclination': 'Ángulo de visión',
+  'gwW.row.components': 'Qué son los dos objetos',
+  'gwW.value.components.bh-bh':
+    'Dibujados como dos agujeros negros. Eso no lo decidió el modelo: una espiral de masas puntuales contiene dos masas y ningún material, y las mismas ecuaciones darían esta forma de onda fueran de lo que fueran los objetos. Con estas masas no se conoce otra cosa que pueda ser así de compacta, lo cual es una inferencia astrofísica y no un resultado de este cálculo.',
+  'gwW.value.components.ns-ns':
+    'Dibujadas como dos estrellas de neutrones. Eso no lo decidió el modelo: contiene dos masas y ningún material. De objetos tan ligeros se infiere que son estrellas de neutrones porque no se conoce ningún agujero negro que se forme tan ligero, lo cual es astrofísica y no algo que produjera este cálculo. Esta forma de onda tampoco tiene en cuenta la deformación de marea, que es real en estrellas de neutrones y es como un análisis de verdad las distingue.',
+  'gwW.value.components.bh-ns':
+    'Dibujados como un agujero negro y una estrella de neutrones, a partir de las dos masas. El modelo no contiene material y no decidió esto; la identificación es una inferencia astrofísica basada solo en las masas. Un par mixto real también puede desmembrarse antes de fusionarse, y este modelo no representa eso.',
+  'gwW.value.components.ns-bh':
+    'Dibujados como una estrella de neutrones y un agujero negro, a partir de las dos masas. El modelo no contiene material y no decidió esto; la identificación es una inferencia astrofísica basada solo en las masas. Un par mixto real también puede desmembrarse antes de fusionarse, y este modelo no representa eso.',
+  'gwW.row.ringNow': 'El anillo, ahora mismo',
+  'gwW.value.ringNow':
+    'h₊ = {plus}, h× = {cross}. Son los dos números con los que se dibuja la imagen: el cambio relativo de longitud en las dos direcciones. Ambos son adimensionales.',
+  'gwW.row.arms': 'Qué leería una L',
+  'gwW.value.arms':
+    'A lo largo del brazo horizontal la longitud cambia en una fracción {x}; a lo largo del vertical, {y}. El instrumento mide la DIFERENCIA, {diff}, que en los brazos de cuatro kilómetros de LIGO son {metres} metros. Por eso la forma es una L: dos longitudes comparadas entre sí, no una longitud medida en términos absolutos.',
+  'gwW.row.polarization': 'Polarización',
+  'gwW.value.polarization.linear':
+    'Lineal. Solo está presente la polarización «más», así que el anillo se estira en una dirección, pasa exactamente por un círculo y se comprime en la otra. Esta es la imagen limpia de estiramiento y compresión.',
+  'gwW.value.polarization.circular':
+    'Circular. Las dos polarizaciones están presentes y son iguales, desfasadas un cuarto de ciclo, así que el anillo es una elipse de forma fija que GIRA. No pasa nunca por un círculo, ni una sola vez. Mirar de frente una órbita circular produce esto.',
+  'gwW.value.polarization.elliptical':
+    'Elíptica: las dos polarizaciones están presentes pero son desiguales. El anillo oscila entre dos óvalos sin llegar nunca a ser un círculo. Solo una vista de canto da el estiramiento y la compresión limpios.',
+  'gwW.control.source': 'Qué está emitiendo',
+  'gwW.source.static': 'una masa quieta',
+  'gwW.source.pulsing': 'una esfera que pulsa',
+  'gwW.source.binary': 'un sistema binario',
+  'gwW.control.amplify': 'Amplificar la imagen',
+  'gwW.row.amplify': 'Amplificación de la imagen',
+  'gwW.value.amplify':
+    'La imagen de la deformación está dibujada {n} veces más grande de lo real. Solo afecta a la representación: no cambia nada calculado, y el número real está en la lectura de arriba.',
+  'gwW.row.emits': '¿Esto radia?',
+  'gwW.value.emits.static':
+    'No. Una masa que no se mueve tiene campo gravitatorio y no emite ondas: nada del campo está cambiando, así que nada viaja.',
+  'gwW.value.emits.pulsing':
+    'No, y este es el caso que sorprende. El campo fuera de cualquier cuerpo con simetría esférica depende solo de su masa total, así que una esfera puede pulsar cuanto quiera y desde fuera no se nota. Es el teorema de Birkhoff, y es exacto, no una aproximación. El criterio no es el movimiento.',
+  'gwW.value.emits.binary':
+    'Sí. Dos masas que giran una alrededor de la otra cambian la FORMA de la distribución de masa —su cuadrupolo— y un cuadrupolo cambiante es lo que radia. Los anillos son una ilustración de la propagación; la deformación es lo que calcula el modelo.',
+  'gwW.row.rings': 'Los anillos',
+  'gwW.value.rings':
+    'Una cresta por cada ciclo de la onda, es decir dos por órbita. Dónde está cada anillo sale del propio historial de emisión del modelo, así que al pausar se quedan quietos y al retroceder se ve el patrón anterior. Su velocidad en pantalla es una decisión de representación, no la velocidad de la luz a escala.',
   'gwW.control.cursor': 'Posición en la señal',
   'gwW.preset.bbh': 'Dos agujeros negros',
   'gwW.preset.bbh.note':
@@ -2617,6 +2735,7 @@ export const ES_DEFERRED = {
   'dmW.aRealStellarDiscIt':
     'Un disco estelar real. Sube, alcanza un máximo hacia 2,2 longitudes de escala y después cae. Sigue sin ser plano.',
   'dmW.whatGalaxiesDo': 'Lo que hacen las galaxias',
+  'dmW.speedKms': 'velocidad (km/s)',
   'dmW.speedAt30Kpc': 'Velocidad a 30 kpc',
   'dmW.outerSlopeVR': 'Pendiente exterior (v ∝ rⁿ)',
   'dmW.shapeOutThere': 'Forma allí fuera',
@@ -3003,6 +3122,40 @@ export const ES_DEFERRED = {
   'stelE.value.mass':
     '{now} ahora, {born} al nacer: {lost} perdidas por su viento',
   'stelE.row.spectral': 'Tipo espectral',
+  'summary.life.cloud':
+    'Una lección muestra esta estrella antes de formarse: en el lienzo hay una nube de gas que se contrae con un centro que se ilumina, y ninguna estrella, porque todavía no la hay.',
+  'summary.life.star':
+    'Una lección recorre la vida de esta estrella; el lienzo la muestra a la edad del modelo que indica el panel de lectura.',
+  'summary.life.wind':
+    'Una lección recorre la vida de esta estrella. Las capas discontinuas a su alrededor representan material que ha expulsado: alrededor del {pct} por ciento de la masa con la que nació, hasta ahora.',
+  'summary.life.explosion':
+    'Una lección ha llevado esta estrella hasta el final. Los anillos en expansión representan una explosión que el modelo de desenlace prevé, y lo que queda en el centro es {kind}.',
+  'summary.life.remnant':
+    'Una lección ha llevado esta estrella hasta el final. Lo que queda es {kind}; en este modelo no hubo explosión.',
+  'stelE.row.grid': 'Los modelos detrás de esto',
+  'stelE.value.grid':
+    'MIST v1.2: estrellas individuales, composición solar, sin rotación, sin compañera. Todos los números de aquí se siguen de esas decisiones, y una estrella con otra composición o con compañera no sigue esta traza.',
+  'stelE.row.notOnlyMass': 'La masa no lo explica todo',
+  'stelE.value.notOnlyMass':
+    'En esta rejilla la masa inicial fija el desenlace, porque todo lo demás se mantuvo constante. En el cielo no es así: la composición, la rotación y sobre todo una compañera cercana pueden cambiar lo que deja una estrella de una masa dada. Esta lección varía una sola cosa, que es lo que la hace legible y lo que la hace incompleta.',
+  'stelE.row.whatThisIs': 'Qué estás viendo',
+  'stelE.value.whatThisIs.sample':
+    'Una fila guardada del modelo publicado: números que calculó MIST y que esta aplicación leyó, no calculados aquí.',
+  'stelE.value.whatThisIs.interpolation':
+    'Interpolado entre dos filas guardadas del modelo publicado. Las dos filas son salida real; el punto intermedio es esta aplicación trazando una recta entre ellas.',
+  'stelE.value.whatThisIs.schematic':
+    'Un esquema. No hay ningún modelo detrás de esta imagen: las trazas empiezan en una estrella que ya tiene fotosfera, así que todo lo anterior es una ilustración y no lleva temperatura, luminosidad ni edad.',
+  'stelE.value.whatThisIs.prescription':
+    'Una prescripción publicada, no una traza. El modelo se detuvo antes de este punto; lo que se muestra es la regla declarada por alguien sobre lo que deja una estrella de esta masa, y la regla se nombra más abajo.',
+  'stelE.row.playhead': 'Cursor de reproducción',
+  'stelE.value.playheadLinear':
+    '{pct} del recorrido de la traza y, como el cursor avanza de forma proporcional, también {pct} de la vida de la estrella.',
+  'stelE.value.playheadNotLife':
+    '{pct} del recorrido del cursor. Eso NO es el {pct} de la vida de la estrella: este ritmo estira las etapas cortas para que puedas alcanzarlas. Cambia el cursor a «proporcional» para ver las proporciones reales.',
+  'stelE.value.paceLinear':
+    'Proporcional a la edad: el mismo avance por año, así que la posición es la fracción de vida transcurrida. Todo lo posterior a la secuencia principal queda como una astilla en el extremo derecho, que es la imagen honesta y es inservible para posarse en ella.',
+  'stelE.action.freeze': 'Congelar este momento',
+  'stelE.freeze.label': 'Entonces: {age}',
   'stelE.row.pace': 'El cursor',
   'stelE.value.paceTime':
     'Marcado por el tiempo, de forma logarítmica. Lo que ha avanzado es lo que ha avanzado la vida, así que casi todo es la secuencia principal.',
@@ -3033,6 +3186,7 @@ export const ES_DEFERRED = {
     'Cuál de los dos depende del modelo de explosión. Se muestran ambos como posibles porque las fuentes lo hacen.',
   'stelE.remnant.unfinished.caption':
     'La traza se detiene mientras la estrella todavía fusiona hidrógeno. No hay final que mostrar.',
+  'stelE.row.cardIs': 'Qué es esta ficha',
   'stelE.row.howKnown': 'Cómo se sabe esto',
   'stelE.value.fromTrack':
     'De la propia traza: MIST siguió a esta estrella hasta una enana blanca en enfriamiento, así que la masa y la posición son resultados del modelo y no una receta aparte.',
@@ -3174,24 +3328,27 @@ export const ES_DEFERRED = {
   'stelW.row.subPixel': 'La más pequeña',
   'stelW.row.withheld': 'Los números',
   'stelW.compare.subPixel': 'más pequeña que un píxel aquí',
-  'stelW.compare.trueNote':
-    'Una sola escala para todas. Lo que aparece como marcador es de verdad demasiado pequeño para verse junto a las demás.',
-  'stelW.compare.fitNote':
-    'Cada estrella ampliada hasta llenar su recuadro. Los tamaños aparentes NO son comparables: la ampliación aparece bajo cada una.',
   'stelW.order.radiusSun': 'radio',
   'stelW.order.teffK': 'temperatura',
   'stelW.order.luminositySun': 'luminosidad',
   'stelW.order.massSun': 'masa',
   'stelW.size.true': 'relativos reales',
   'stelW.size.fit': 'ajustar cada uno',
-  'stelW.size.true.long': 'Tamaños relativos reales, una escala común',
+  'stelW.size.true.long':
+    'Tamaños relativos reales en una escala común. Una estrella dibujada como marcador es de verdad demasiado pequeña para verse junto a las otras.',
   'stelW.size.fit.long':
-    'Cada estrella ajustada a su recuadro; los tamaños no son comparables',
+    'Cada estrella ampliada para llenar su propia caja. Los tamaños aquí no son comparables: el aumento está impreso debajo de cada una.',
   'stelW.on': 'sí',
   'stelW.off': 'no',
   'stelW.row.orderedBy': 'Ordenado por',
   'stelW.row.sizeMode': 'Tamaños',
   'stelW.row.star': 'Estrella {n}',
+  'stelW.row.namedStar': '{n}. {name}',
+  'stelW.row.subset': 'En la ficha',
+  'stelW.value.subset': '{n} de las {of} estrellas del lienzo',
+  'stelW.control.focus': 'Qué estrella',
+  'stelW.focus.none': 'ninguna',
+  'stelW.focus.nth': 'la {n}.ª de la fila',
   'stelW.value.star': '{teff}, {lum}, {radius}, {mass}: {ratio} la más pequeña',
   'stelW.value.unknownMass': 'masa desconocida',
   'stelW.orbit.mercury': 'órbita de Mercurio',
@@ -3213,6 +3370,13 @@ export const ES_DEFERRED = {
   'stelW.pop.row.threshold': 'El subconjunto brillante',
   'stelW.pop.value.threshold':
     'Todas las estrellas puestas a {d} pc; quedarse con las que superan {f} de flujo relativo deja {kept} de {total}.',
+  'stelW.pop.row.picked': 'La estrella que elegiste',
+  'stelW.pop.value.picked': 'Tipo {type}, {teff}, {lum}, {mass}: {cut}',
+  'stelW.pop.kept': 'por encima del corte',
+  'stelW.pop.cut': 'por debajo del corte, así que ningún sondeo la incluiría',
+  'stelW.pop.row.onCanvas': 'En el lienzo',
+  'stelW.pop.value.onCanvas':
+    '{shown} estrellas, de una submuestra acotada de {subsample} tomada de las {modelled} que las trazas pudieron modelar, de {requested} extraídas. Cuatro números distintos: el lienzo no es la muestra y la muestra no es la población.',
   'stelW.pop.row.type': 'Tipo {type}',
   'stelW.pop.value.type':
     '{all} en la muestra ({allPct}%), {bright} en el subconjunto brillante ({brightPct}%)',
@@ -3270,6 +3434,14 @@ export const ES_DEFERRED = {
   'nb.stellar.age': 'Edad',
   'nb.stellar.mainSequence': 'Vida total en la secuencia principal',
   'nb.stellar.pinnedRadius': 'Estrella fijada {n}: radio',
+  'nb.stellar.pinnedNth': 'estrella {n}',
+  'nb.stellar.pinnedRadiusOf': '{name}: radio',
+  'nb.stellar.pinnedTeffOf': '{name}: temperatura',
+  'nb.stellar.pinnedMassOf': '{name}: masa actual',
+  'nb.stellar.limit.fromScene':
+    'Las estrellas comparadas son {n} de las {of} que están en el lienzo en este paso, leídas de la escena y no fijadas a mano.',
+  'nb.stellar.limit.someHypothetical':
+    'No todas las estrellas aquí son modelos. {names} ({n}) son puntos elegidos en el diagrama: su temperatura y su luminosidad son elegidas, su radio se deduce de ambas, y no tienen masa, ni edad, ni tiempo de vida.',
   'nb.stellar.pinnedTeff': 'Estrella fijada {n}: temperatura',
   'nb.stellar.limit.model':
     'Un modelo, no una observación: {grid}. Sin rotación, sin binaridad, sin campos magnéticos y con una sola composición.',

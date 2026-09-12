@@ -171,6 +171,7 @@ const BINARY_STAR_PLANETS = {
       sid: 'before-you-run-anything',
       bind: BINARY_CAST,
       type: 'predict',
+      reveal: 'run-the-default',
       title: 'Before you run anything',
       body: `The stars are 10 AU apart on average and come within 6 AU of each
              other at their closest. A planet going round Star A has to live
@@ -331,6 +332,7 @@ const BINARY_STAR_PLANETS = {
       sid: 'move-it-out',
       bind: BINARY_CAST,
       type: 'predict',
+      reveal: 'run-it-at-030',
       title: 'Move it out',
       body: `Now double the planet's starting radius, to 0.30 of the separation
              — 3 AU. That is still less than half the closest the two stars
@@ -504,6 +506,7 @@ const BINARY_STAR_PLANETS = {
       sid: 'predict-the-sweep',
       bind: BINARY_CAST,
       type: 'predict',
+      reveal: 'run-the-sweep',
       title: 'Five radii at once',
       body: `You have run two configurations by hand and read four numbers off
              the panel each time. Doing that for three more is not going to
@@ -908,6 +911,7 @@ This is the same test you did by hand at 0.25, applied to the
       sid: 'which-way-round',
       bind: BINARY_CAST,
       type: 'predict',
+      reveal: 'run-the-circumbinary',
       title: 'Which way round is the danger?',
       body: `For a planet around one star, the rule was "close in is safe, far
              out is dangerous". Think about what happens to a circumbinary

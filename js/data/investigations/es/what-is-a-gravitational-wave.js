@@ -15,6 +15,7 @@ export default {
   title: '¿Qué es una onda gravitacional?',
   subtitle:
     'Una primera mirada a qué se mueve, qué viaja y qué siente un detector',
+  series: 'Ondas gravitacionales',
   duration: '30-40 min',
   level: 'Principiante, sin conocimientos previos de física',
   summary:
@@ -55,6 +56,7 @@ export default {
       tip: 'La separación en pantalla se mide en radios de Schwarzschild de las dos masas juntas —una unidad honesta— y se irá encogiendo a lo largo de la lección. El tamaño de cada disco no es la medida de nada.',
     },
     {
+      stage: { gwSource: { name: 'La fuente' } },
       title: 'La gravedad ya está aquí',
       body: 'Una sola masa, quieta, ya curva el espacio a su alrededor. Esa curvatura es la razón de que las cosas caigan, y está ahí mire alguien o no.\n\nLa palabra importante es <em>quieta</em>. Nada de esa curvatura cambia. No viaja. No llega. No hay ninguna onda, porque no hay nada ondulando.',
       prompt:
@@ -68,6 +70,43 @@ export default {
       because:
         'Una atracción constante, y nada más. Esta es la distinción sobre la que gira toda la lección: un <em>campo</em> gravitacional es lo que ya hay alrededor de cualquier masa, y una <em>onda</em> gravitacional es un cambio en él que viaja. Una estrella quieta tiene lo primero y no produce nada de lo segundo. Qué hace falta para producir lo segundo es el tema del paso siguiente.',
       tip: 'Compáralo con una lámpara: la luz que ya hay en la habitación no es una emisión de radio. Las dos son electromagnéticas, y solo una es una señal que va a alguna parte.',
+    },
+    {
+      stage: { gwSource: { name: 'La fuente' } },
+      title: 'Ahora haz que se mueva',
+      body: `La misma masa, y ahora está haciendo algo. Pon <strong>Qué está
+             emitiendo</strong> en <em>una esfera que pulsa</em> y pulsa
+             <strong>Reproducir</strong>. Todo el cuerpo se hincha y se
+             encoge, una y otra vez, manteniéndose exactamente esférico todo
+             el tiempo.
+             \n\nEsto es muchísimo movimiento. Antes de mirar qué sale de
+             ahí, comprométete con lo que esperas.`,
+      prompt: 'Una estrella perfectamente esférica que pulsa. ¿Qué radia?',
+      options: [
+        'Nada: el campo fuera de una esfera depende solo de su masa, y esa no está cambiando',
+        'Ondas gravitacionales, porque se mueve y las masas en movimiento radian',
+        'Ondas gravitacionales, pero más débiles que las de un binario de la misma masa',
+        'Una onda constante cuya intensidad depende de la rapidez del pulso',
+      ],
+      because:
+        'Nada en absoluto, y esta es la pantalla que rompe la regla con la que llega casi todo el mundo. «Las masas en movimiento producen ondas gravitacionales» no es la regla. El campo fuera de <em>cualquier</em> cuerpo con simetría esférica depende de su masa total y de nada más: ni de su tamaño, ni de la rapidez con que ese tamaño cambia. Así que una esfera puede pulsar tan violentamente como quieras y el exterior no puede notarlo. Ese resultado es el teorema de Birkhoff, y en relatividad general es exacto, no una aproximación. Lo que tiene que cambiar no es la posición de la masa sino la <em>forma</em> de su distribución.',
+      tip: 'Observa el lienzo mientras pulsa. No sale nada, y eso es una afirmación sobre el modelo: dibuja una cresta por cada ciclo de un cuadrupolo cambiante, y aquí no tiene ninguna que dibujar.',
+    },
+    {
+      stage: { gwSource: { name: 'La fuente' } },
+      title: 'Cambia la forma, en vez del tamaño',
+      body: `Ahora pon <strong>Qué está emitiendo</strong> en <em>un sistema
+             binario</em>. La misma masa total, en el mismo sitio, pero ahora
+             la masa está en dos grumos que giran uno alrededor del otro, así
+             que la <em>forma</em> de la distribución cambia según giran.
+             \n\nEsa es la diferencia. Mira los anillos.`,
+      checklist: [
+        'Pon «Qué está emitiendo» en «un sistema binario»',
+        'Pulsa Reproducir y mira cómo salen anillos del par',
+        'Vuelve a ponerlo en «una esfera que pulsa»: dejan de salir anillos y los antiguos se alejan',
+        'Vuelve a ponerlo en «un sistema binario»',
+      ],
+      tip: 'Los anillos son una ilustración de la propagación, no el cálculo de una onda. Lo que sí es real en ellos es que sale una cresta por cada ciclo y sigue viajando; su velocidad en pantalla es una decisión de representación, y la lectura lo dice.',
     },
     {
       title: '¿Qué tiene que cambiar?',
@@ -175,6 +214,7 @@ export default {
       title: 'Mide un cambio de longitud',
       fields: [
         {
+          hint: '0,0001',
           label:
             'Práctica: una barra de 10 m que se estira 1 mm tiene una deformación de…',
         },
@@ -219,6 +259,8 @@ export default {
       tip: 'La energía no se va a ninguna parte. Sale como ondas gravitacionales, y un detector a cuatrocientos megapársecs recoge una parte minúscula de ella.',
     },
     {
+      rubric:
+        'Da crédito a una respuesta en la que la frecuencia sube a medida que los dos objetos se acercan y giran más deprisa, y que ligue esa subida a la órbita que se encoge en vez de tratarla como una propiedad que la señal simplemente tiene. Una buena respuesta puede añadir que además se hace más intensa hacia el final. No exijas la palabra «amplitud» ni ninguna mención a la pérdida de energía: eso era la pantalla anterior y esta trata de describir lo que se oye y se ve. No des crédito a «se acelera porque tira más fuerte» sin mencionar la separación. Vigila también el exceso: un chirrido ascendente dice que dos objetos compactos estaban espiralando juntos y no dice de qué estaban hechos, a lo que vuelve la pantalla 20.',
       title: 'El chirrido',
       body: 'Deja el cabezal cerca del <strong>principio</strong> y lee tres cosas en la lectura: la separación, la velocidad orbital y la frecuencia.\n\nAhora déjalo cerca del <strong>final</strong> y lee las mismas tres.\n\nSi tienes sonido, pulsa <strong>Escuchar</strong> y óyelo pasar entero. Si no, mira el marcador: los picos se apiñan exactamente igual.',
       prompt:
@@ -262,14 +304,47 @@ export default {
     },
     {
       title: 'Un observatorio mide una diferencia',
-      body: 'Ahora el instrumento. Un observatorio como LIGO es una <strong>L</strong>: dos brazos largos en ángulo recto, de cuatro kilómetros cada uno, con luz rebotando por los dos.\n\nYa sabes por qué esa forma. Una onda al pasar estira una dirección mientras comprime la perpendicular, así que alarga un brazo y acorta el otro, en el mismo momento. El instrumento no mide una longitud. Mide la <em>diferencia</em> entre dos longitudes, que es mucho más fácil de hacer bien.\n\nMueve el cabezal y mira el anillo de marcadores: las dos direcciones perpendiculares son los dos brazos.\n\nLuego pulsa <strong>Siguiente</strong> en el instrumento del panel para traer algo distinto. El 14 de septiembre de 2015 dos observatorios separados tres mil kilómetros registraron lo mismo con siete milisegundos de diferencia, y ese registro es lo que aparece. Ni un dibujo ni un cálculo: la deformación que midieron los instrumentos, tal como se publicó.\n\nNo se te pide analizarla. Míralas y fíjate en que tiene la forma que llevas veinte pasos aprendiendo a esperar: una oscilación que se acelera y crece. Ese es el sentido. El modelo que has estado usando es lo bastante simple para una primera lección, y lo de verdad se le parece.',
+      body: `Ahora el instrumento. Un observatorio como LIGO es una
+             <strong>L</strong>: dos brazos largos en ángulo recto, de cuatro
+             kilómetros cada uno, con luz rebotando por los dos.
+             \n\nYa sabes por qué esa forma. Una onda que pasa estira una
+             dirección mientras comprime la perpendicular, así que alarga un
+             brazo y acorta el otro en el mismo instante. El instrumento no
+             mide una longitud: mide la <em>diferencia</em> entre dos
+             longitudes, que es mucho más fácil de hacer bien.
+             \n\nLos dos brazos están dibujados sobre el anillo de marcadores
+             en el recuadro <strong>Anillo de marcadores</strong>. Mueve el
+             cursor <strong>Dónde en la señal</strong> y míralos: uno se alarga
+             mientras el otro se acorta. La lectura da los dos como números, y
+             da la diferencia, que es lo que el instrumento registra.`,
       checklist: [
-        'Pasa la onda por el anillo de marcadores y mira las dos direcciones perpendiculares cambiar de forma distinta',
+        'Mueve «Dónde en la señal» y mira cómo los dos brazos cambian en sentidos opuestos',
+        'Lee «Qué leería una L» y fíjate en que las dos fracciones tienen signos opuestos',
+        'Lee la diferencia, y la cifra en metros para cuatro kilómetros que va al lado',
         'Di por qué una L es la forma adecuada para el instrumento',
-        'Mira la traza publicada y encuentra dónde se acelera la oscilación',
-        'Fíjate en lo ruidosa que es al lado del modelo limpio, y di cuál de los tres tipos de imagen es cada una',
       ],
-      tip: 'Cuatro kilómetros cambiando una diezmilésima del ancho de un protón. Los datos publicados se filtran en banda y se blanquean antes de mostrarlos, y el panel lo dice: hasta una medida llega habiendo pasado por unas manos.',
+      tip: 'Cuatro kilómetros cambiando en una diezmilésima del ancho de un protón. El número de la lectura es el real; la imagen de al lado está amplificada, y dice cuánto.',
+    },
+    {
+      title: 'Lo que registraron dos observatorios',
+      body: `Este panel muestra otra cosa: no un modelo, sino un registro. El
+             14 de septiembre de 2015 dos observatorios separados por tres mil
+             kilómetros registraron lo mismo con siete milisegundos de
+             diferencia, y eso es lo que está dibujado.
+             \n\nNo se te pide que lo analices. Míralo y fíjate en que tiene
+             la forma que llevas veinte pantallas aprendiendo a esperar: una
+             oscilación que se acelera y crece. Ese es el asunto. El modelo que
+             has estado usando es lo bastante simple para una primera lección,
+             y la cosa real se le parece.
+             \n\nLos controles del propio panel te dejan desplazar en el
+             tiempo la traza de un detector e invertir su signo, que es lo que
+             hace falta para superponer las dos.`,
+      checklist: [
+        'Encuentra dónde se acelera la oscilación',
+        'Fíjate en lo ruidosa que es al lado del modelo limpio',
+        'Di cuál de los tres tipos de imagen era el modelo y cuál es esto',
+      ],
+      tip: 'La colaboración filtró estas trazas en la banda de 35 a 350 Hz y eliminó las líneas del instrumento antes de publicarlas, y el panel lo dice. Aquí no se les hace nada más: ni blanqueo, ni suavizado. Incluso una medida llega habiendo sido tratada, y ese tratamiento es parte de lo que estás viendo.',
     },
     {
       title: 'Diseña un experimento pequeño',
@@ -286,6 +361,8 @@ export default {
       tip: 'Si arrastrar un deslizador te resulta difícil, usa los botones de preajuste: ponen los controles en configuraciones con nombre, y comparar dos preajustes es un experimento perfectamente válido siempre que digas qué única cosa cambia.',
     },
     {
+      rubric:
+        'Una respuesta completa tiene la cadena: dos objetos en órbita son una distribución de masa desigual que no deja de cambiar; eso envía una perturbación hacia fuera a la velocidad de la luz; la perturbación estira y comprime distancias perpendicularmente a su avance; un instrumento en forma de L mide la diferencia entre dos brazos y así lo nota. Da crédito a una respuesta que tenga cuatro de esos cinco eslabones. Busca, y premia, cualquier mención a que el efecto es minúsculo o a la diferencia entre un dibujo y una medida: las dos son la mitad más difícil de esta lección. No exijas ningún vocabulario técnico: «la separación entre las cosas cambia» es una respuesta completa al tercer eslabón. Que revisen la pantalla 1 importa más que acertar: quien diga «dije que no, y me equivocaba porque solo estaba pensando en la luz» ha entendido la lección.',
       title: 'Cuenta la historia',
       body: 'Último paso. Júntalo todo con tus palabras.\n\nTienes un par de objetos girando uno alrededor del otro, algo que sale de ellos y viaja hacia fuera, y un instrumento muy lejos cuyos dos brazos cambian de longitud en cantidades distintas.\n\nVuelve un momento al paso 1. Te preguntaron si podríamos averiguar que dos objetos oscuros se mueven. Mira qué respondiste.',
       prompt:

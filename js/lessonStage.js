@@ -38,6 +38,7 @@ import { SCALE, displayRadius, fitCamera, rowLayout } from './lesson/stage.js';
 import {
   Asteroid,
   BlackHole,
+  accretion_disk_particles,
   getPhysicsSetting,
   EARTH_MASS_UNIT,
   Planet,
@@ -50,6 +51,7 @@ import {
   bumpWorldGeneration,
   comets,
   gas_giants,
+  gravity_ripples,
   neutron_stars,
   planets,
   resetPhysicsObjectCounter,
@@ -58,14 +60,9 @@ import {
 } from './physics.js';
 import { bindRoles, releaseModelOwnership, selectBody } from './lessonScene.js';
 import { barycentreOf, circularBinary } from './lesson/barycentre.js';
-import {
-  stateAtAge,
-  stateAtSample,
-  trackBounds,
-  trackIds,
-} from './stellar/tracks.js';
-import { hypotheticalAt } from './stellar/hr.js';
-import { PACE, midMainSequenceFraction, populationOf } from './stellarLab.js';
+import { trackBounds, trackIds } from './stellar/tracks.js';
+import { populationOf, resolveStarSpec } from './stellarLab.js';
+import { brightSubset } from './stellar/population.js';
 import { applySelection } from './lesson/starState.js';
 import { state } from './appState.js';
 
@@ -84,54 +81,20 @@ export { SCALE };
  * @param {object} spec - One entry from a stage's `stars`
  * @returns {?object} A selection, in the shape js/stellarLab.js produces
  */
+/**
+ * A lesson's star declaration, resolved.
+ *
+ * The arithmetic is js/stellarLab.js's `resolveStarSpec`, which is also what
+ * the comparison stage seeds its pins from - so a star standing on the canvas
+ * and the same star plotted on the H-R diagram are one resolution, not two
+ * that have to be kept in step by hand. They were not in step: see the note
+ * on `resolveStarSpec`.
+ *
+ * @param {object} spec - A star declaration from a lesson
+ * @returns {?object} The resolved star
+ */
 function resolveStar(spec) {
-  // A caller that already has the model's answer - the population stage does,
-  // because the survey computed every star's mass and age when it drew them -
-  // hands it straight over rather than having it estimated back.
-  if (spec.model) return spec.model;
-  if (Number.isFinite(spec.teffK) && Number.isFinite(spec.lumSun)) {
-    const h = hypotheticalAt(spec.teffK, spec.lumSun);
-    return { source: 'free', ...h };
-  }
-  if (!spec.track) return null;
-  const bounds = trackBounds(spec.track);
-  if (!bounds) return null;
-  // Three ways to say where on the track, matching what the comparison stage
-  // already accepts so that a staged star and a pinned one are the same star:
-  // an age in years, a fraction of the way through the samples, or nothing,
-  // which means part-way along.
-  // 'ms' is the middle of the main sequence, defined by the same function the
-  // comparison stage uses, so a staged star and a pinned one land in the same
-  // place. A bare fraction of the track's span is not the same thing and is
-  // not always on the main sequence at all - a forty-solar-mass track spends
-  // very little of its length there.
-  const s =
-    spec.at === 'ms'
-      ? stateAtSample(
-          spec.track,
-          midMainSequenceFraction(spec.track, PACE.PHASE)
-        )
-      : Number.isFinite(spec.at)
-        ? stateAtSample(spec.track, spec.at)
-        : stateAtAge(
-            spec.track,
-            Number.isFinite(spec.ageYr)
-              ? spec.ageYr
-              : bounds.startYr + (bounds.endYr - bounds.startYr) * 0.4
-          );
-  if (!s) return null;
-  return {
-    source: 'model',
-    trackId: spec.track,
-    teffK: s.teffK,
-    luminositySun: s.luminositySun,
-    radiusSun: s.radiusSun,
-    massSun: s.currentMassSun,
-    initialMassSun: s.initialMassSun,
-    ageYr: s.ageYr,
-    phase: s.phase,
-    mainSequenceYr: s.mainSequenceYr,
-  };
+  return resolveStarSpec(spec);
 }
 
 /** Everything the current stage put on the canvas, in declaration order. */
@@ -144,6 +107,10 @@ let lastPopulation = null;
 let lastDeclaration = null;
 /** The star-pair declaration in force, so a mass change can restate it. */
 let lastStarPair = null;
+/** The wave-source declaration in force, so a mode change can restate it. */
+let lastSource = null;
+/** The binary declaration in force, so a preset change can restate it. */
+let lastBinary = null;
 /** The hole declaration in force, so a mass change can restate it. */
 let lastHole = null;
 /** Labelled "then" copies a reader has pinned, in the order they took them. */
@@ -177,26 +144,104 @@ export const stagedStars = () => staged.slice();
  */
 export function stageIntact() {
   if (!staged.length) return true;
-  // Every list a stage can place into, not just `stars`. A binary stage puts
-  // its two components in bh_list or neutron_stars and a remnant transition
-  // moves a star into one of the three remnant lists, so looking only at
-  // `stars` answered "no" for those the moment they were staged - which made
-  // the panel's restore rebuild the world on every tick, and left the reader
-  // watching a randomly named black hole regenerate under the lesson.
-  const present = new Set([
-    ...stars,
-    ...bh_list,
-    ...neutron_stars,
-    ...white_dwarfs,
-  ]);
+  // Every collection, from the shared inventory. Checking a subset is how this
+  // went wrong twice: first `stars` alone, which made every binary stage
+  // report itself missing, then `stars` plus the compact-object lists, which
+  // did the same for the hole, equal-mass and system stages because their
+  // orbiters and planets live in `asteroids` and `planets`. A subset here is
+  // not a smaller check, it is a world rebuilt on every panel tick.
+  const present = new Set(bodyCollections().flat());
   return staged.every(entry => present.has(entry.star));
 }
 
+/**
+ * How much of the stage is still there.
+ *
+ * `stageIntact` answers a yes/no, and the panel needs one more distinction
+ * before it decides to rebuild: a scene that has been replaced wholesale -
+ * a scenario loaded, a world rebuilt under the lesson - is not the same event
+ * as a reader deleting one body or firing one into a star. The first is
+ * something to put back; the second is the reader experimenting, and undoing
+ * it would be the application overruling them.
+ *
+ * @returns {{present: number, total: number, allGone: boolean}} What survived
+ */
+export function stagePresence() {
+  const present = new Set(bodyCollections().flat());
+  const alive = staged.filter(entry => present.has(entry.star)).length;
+  return {
+    present: alive,
+    total: staged.length,
+    // Nothing left at all is the signature of a replacement: a reader removing
+    // bodies one at a time passes through states where some are still there,
+    // and this only fires at the end of that. It is the conservative reading -
+    // it never puts back a scene the reader was halfway through changing.
+    allGone: staged.length > 0 && alive === 0,
+  };
+}
+
 /** The declaration the stage was built from, for a rebuild. @returns {?object} */
+/**
+ * A cheap signature of what is on the stage.
+ *
+ * Changes exactly when the stage is rebuilt, so an instrument reading the
+ * staged sample can memoise against it instead of re-deriving its own copy on
+ * every probe tick.
+ *
+ * @returns {string} The current stage key
+ */
+export const stageKey = () => stagedKey;
+
 export const stagedDeclaration = () => lastDeclaration;
 
 /** Which scale the stage is drawn at. @returns {string} */
 export const stageScale = () => stagedScale;
+
+/**
+ * Every body collection a stage can put something into.
+ *
+ * One list, because three separate functions used to keep their own and each
+ * one was wrong in a different way. `stageIntact` looked only in `stars`, so a
+ * hole stage with four asteroid orbiters reported itself gone the instant it
+ * was built and the panel rebuilt the world four times a second forever;
+ * `clearStage` also looked only in `stars`, so closing a lesson left the
+ * orbiters, the planets and the remnants on the canvas; and `becomeRemnant`
+ * spliced the old body out of `stars` alone, so a white dwarf that had been a
+ * planet left a duplicate behind.
+ *
+ * A function returning the arrays rather than an array of arrays, because
+ * js/physics.js reassigns these on a world rebuild and a captured reference
+ * would describe a world that is gone.
+ *
+ * @returns {Array<Array<object>>} The live collections
+ */
+const bodyCollections = () => [
+  stars,
+  planets,
+  gas_giants,
+  asteroids,
+  comets,
+  bh_list,
+  neutron_stars,
+  white_dwarfs,
+];
+
+/**
+ * Take a body out of whichever collection holds it.
+ *
+ * @param {object} body - The body to remove
+ * @returns {boolean} Whether it was found
+ */
+function removeBody(body) {
+  for (const list of bodyCollections()) {
+    const i = list.indexOf(body);
+    if (i !== -1) {
+      list.splice(i, 1);
+      return true;
+    }
+  }
+  return false;
+}
 
 /** Forget the stage. Tests only. */
 export function resetStageForTests() {
@@ -208,7 +253,7 @@ export function resetStageForTests() {
   lastStarPair = null;
   lastHole = null;
   snapshots = [];
-  pendingFit = false;
+  requestFit(false);
   fitAttempts = 0;
   fitApplied = null;
 }
@@ -275,6 +320,21 @@ export function applyStage(stage, { force = false } = {}) {
     stagedKey = key;
     return { built: true, roles: out.roles, problems: {} };
   }
+  // A gravitational-wave source the reader can change the kind of. Three
+  // alternatives on one declaration - a static mass, a spherically pulsing
+  // one, and a binary - because the beginner lesson's argument is that only
+  // the third radiates and it cannot make that argument by asking a reader to
+  // imagine the other two while a binary sits on the canvas.
+  if (stage?.gwSource) {
+    const key = JSON.stringify(['gwSource', stage.gwSource]);
+    if (!force && key === stagedKey) {
+      return { built: false, roles: staged.map(x => x.role), problems: {} };
+    }
+    lastSource = stage.gwSource;
+    const out = applySourceStage(stage.gwSource);
+    stagedKey = key;
+    return { built: true, roles: out.roles, problems: {} };
+  }
   if (stage?.starPair) {
     const key = JSON.stringify(['starPair', stage.starPair]);
     if (!force && key === stagedKey) {
@@ -303,8 +363,11 @@ export function applyStage(stage, { force = false } = {}) {
     const out = applyPopulationStage(stage.population);
     stagedKey = key;
     lastDeclaration = stage;
-    lastPopulation = out;
-    pendingFit = Boolean(stage.fit);
+    lastPopulation = {
+      ...out,
+      shownIds: stagedStars().map(e => e.spec?.populationId ?? null),
+    };
+    requestFit(stage.fit);
     fitAttempts = 0;
     fitApplied = null;
     return { built: true, roles: [], problems: {}, population: out };
@@ -340,6 +403,18 @@ export function applyStage(stage, { force = false } = {}) {
       problems[spec.role] = `no model answers to ${JSON.stringify(spec)}`;
       return;
     }
+    // Two masses, and they are not the same claim. `massSun` is what the body
+    // has to weigh for the engine to have something to integrate; a
+    // hypothetical point supplies none, so it falls back to a solar mass and
+    // nothing is asserted by that. `massInSuns` is what the interface REPORTS
+    // - the inspector, the object list, the comparison card, a capture - and
+    // for a hypothetical point the answer is that nobody knows.
+    //
+    // Writing the fallback into the reported one is how a star the reader
+    // placed on the diagram at twenty-five thousand kelvin and a hundredth of
+    // a solar luminosity came to have a mass of exactly one solar mass in its
+    // card, on the screen whose whole subject is that a position on the
+    // diagram does not fix a mass.
     const massSun = Number.isFinite(model.massSun) ? model.massSun : 1;
     const star = new StarObject(places[i], { x: 0, y: 0 }, massSun);
     star.name = spec.name || spec.role;
@@ -350,8 +425,11 @@ export function applyStage(stage, { force = false } = {}) {
       ? model.initialMassSun
       : null;
     star.mass = massSun * SOLAR_MASS_UNIT;
-    star.massInSuns = massSun;
-    star.radius = displayRadius(model.radiusSun, scale);
+    if (Number.isFinite(model.massSun)) star.massInSuns = model.massSun;
+    // Presentation only: see setStageScale. The engine radius stays whatever
+    // StarObject computed from the mass, so a comparison shelf cannot change
+    // what its stars would do to each other.
+    star.stageRadius = displayRadius(model.radiusSun, scale);
     star.persistent = true;
     // A step that asks a reader to judge by eye gets no captions.
     star.anonymous = Boolean(stage.anonymous);
@@ -368,7 +446,7 @@ export function applyStage(stage, { force = false } = {}) {
   // The object lists have changed under the physics caches.
   bumpWorldGeneration();
 
-  pendingFit = Boolean(stage.fit);
+  requestFit(stage.fit);
   fitAttempts = 0;
   fitApplied = null;
   const roles = {};
@@ -422,10 +500,25 @@ function clearWorld() {
  * meaning the model ran out before the star did.
  */
 const REMNANT_LISTS = {
-  'white-dwarf': white_dwarfs,
-  'neutron-star': neutron_stars,
-  'black-hole': bh_list,
+  'white-dwarf': () => white_dwarfs,
+  'neutron-star': () => neutron_stars,
+  'black-hole': () => bh_list,
 };
+
+/**
+ * The live collection a remnant kind belongs in.
+ *
+ * A function per kind rather than the array itself, because js/physics.js
+ * reassigns these on some operations - the black-hole merge does
+ * `bh_list = bh_list.filter(...)` - and a reference captured when this module
+ * loaded then points at a detached copy. Pushing a white dwarf into one of
+ * those puts it nowhere: it is not drawn, not integrated and not selectable,
+ * and the star it replaced is already gone.
+ *
+ * @param {string} kind - From js/stellar/endpoints.js
+ * @returns {?Array<object>} The collection, or null for an unknown kind
+ */
+const remnantList = kind => REMNANT_LISTS[kind]?.() ?? null;
 
 /**
  * Turn a staged star into the remnant its track's prescription names.
@@ -457,7 +550,7 @@ export function becomeRemnant(role, endpoint) {
     entry.remnantKind = 'unfinished';
     return 'unfinished';
   }
-  const list = REMNANT_LISTS[endpoint.kind];
+  const list = remnantList(endpoint.kind);
   if (!list) return null;
 
   const old = entry.star;
@@ -485,10 +578,22 @@ export function becomeRemnant(role, endpoint) {
   body.anonymous = old.anonymous;
   list.push(body);
 
-  const i = stars.indexOf(old);
-  if (i !== -1) stars.splice(i, 1);
+  // Out of whichever collection actually held it. Splicing `stars` alone left
+  // a duplicate behind for anything that had already become a remnant once -
+  // a star that went to a neutron star and was then rewound and run forward
+  // again ended up on the canvas twice, both of them model-owned and one of
+  // them unreachable by role.
+  removeBody(old);
+  // The presentation size belongs to the star, not to what it turned into: a
+  // white dwarf drawn at a red giant's compressed radius is a lie about the
+  // one comparison this lesson exists to make.
+  if (Number.isFinite(old.stageRadius)) delete old.stageRadius;
   entry.star = body;
   entry.remnantKind = endpoint.kind;
+  // A remnant has no track radius, so nothing sizes it from the model. It
+  // keeps whatever its own class chose, and the scale switch skips it because
+  // physicalRadiusSun is null.
+  entry.physicalRadiusSun = null;
   bumpWorldGeneration();
   // Re-bind under the same role, in this world, and carry the selection over
   // so the reader's card does not close on them.
@@ -538,7 +643,10 @@ export function pinSnapshot(role, label, { dy = 110 } = {}) {
   copy.ageYr = source.ageYr;
   copy.stellarPhase = source.stellarPhase;
   copy.initialMassInSuns = source.initialMassInSuns;
-  copy.radius = displayRadius(source.radiusInSuns, stagedScale);
+  // Presentation only, like every other comparison size on a stage: a pinned
+  // copy is there to be looked at beside the original, and giving it a
+  // collision radius of nine would make it a hazard rather than a record.
+  copy.stageRadius = displayRadius(source.radiusInSuns, stagedScale);
   copy.model_owned = true;
   copy.persistent = true;
   stars.push(copy);
@@ -561,8 +669,18 @@ export function pinSnapshot(role, label, { dy = 110 } = {}) {
 export const pinnedSnapshots = () =>
   snapshots.map(s => ({ role: s.role, name: s.star.name, star: s.star }));
 
-/** Drop every pinned snapshot. */
+/**
+ * Drop every pinned snapshot.
+ *
+ * A no-op when there are none, and that matters more than it looks: bumping
+ * the world generation invalidates every binding in the step, and a caller
+ * that clears snapshots on each step change would otherwise leave the
+ * protagonist's own role stale on every screen that reuses its predecessor's
+ * stage - which applyStage then declines to rebuild, because the declaration
+ * has not changed.
+ */
 export function clearSnapshots() {
+  if (!snapshots.length) return;
   for (const pin of snapshots) {
     const i = stars.indexOf(pin.star);
     if (i !== -1) stars.splice(i, 1);
@@ -610,12 +728,168 @@ const COMPONENT_MARKER = 7;
  * @param {object} spec - {preset, m1, m2, kinds: ['bh'|'ns', 'bh'|'ns']}
  * @returns {{built: boolean, roles: Array<string>}} What happened
  */
+/**
+ * One compact object, alone, for the screens that ask what does NOT radiate.
+ *
+ * The beginner lesson argues that motion is not the criterion for emitting
+ * gravitational waves, and it cannot make that argument with a binary on
+ * screen. Two of its three demonstrations need a single body: one sitting
+ * still, and one pulsing in and out while staying exactly spherical. Both have
+ * a gravitational field and neither radiates, and a reader has to be able to
+ * select each of them and see the wave overlay stay empty.
+ *
+ * `pulsing` is a presentation state and nothing else. The body's drawn radius
+ * is driven from the model clock by `pulseSource` below; its mass, its engine
+ * radius and its position do not move, because a spherically symmetric change
+ * is exactly the thing that leaves the external field alone.
+ *
+ * @param {object} spec - {kind, massSun, name, pulsing, fit}
+ * @returns {{built: boolean, roles: object}} What was staged
+ */
+export function applySingleStage(spec = {}) {
+  const kind = spec.kind || 'bh';
+  const massSun = Number.isFinite(spec.massSun) ? spec.massSun : 36;
+  clearWorld();
+  stagedKey = JSON.stringify(['single', kind, massSun, Boolean(spec.pulsing)]);
+  lastDeclaration = { single: spec };
+  const body =
+    kind === 'ns'
+      ? new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, massSun)
+      : new BlackHole(
+          { x: 0, y: 0 },
+          massSun * SOLAR_MASS_UNIT,
+          { x: 0, y: 0 },
+          false
+        );
+  body.name = spec.name || 'The source';
+  body.massInSuns = massSun;
+  body.initialMassInSuns = massSun;
+  body.model_owned = true;
+  body.persistent = true;
+  body.radius = COMPONENT_MARKER;
+  body.stageRadius = COMPONENT_MARKER;
+  (kind === 'ns' ? neutron_stars : bh_list).push(body);
+  staged.push({
+    role: 'source',
+    star: body,
+    model: null,
+    spec: { name: body.name },
+    physicalRadiusSun: null,
+    pulsing: Boolean(spec.pulsing),
+  });
+  bumpWorldGeneration();
+  requestFit(spec.fit);
+  fitAttempts = 0;
+  fitApplied = null;
+  const bound = bindRoles(rolesOfStage(), { modelOwned: ['source'] });
+  return { built: true, roles: bound.bound };
+}
+
+/**
+ * Rebuild the staged binary with different components.
+ *
+ * What a preset change calls. The model's parameters are two masses and a
+ * distance; what the two objects ARE is a separate claim, and the canvas has
+ * to be able to follow it - a neutron-star preset that left two black holes
+ * standing was showing the reader the wrong thing while the panel described
+ * the right one.
+ *
+ * Only rebuilds when the components actually differ, because this throws the
+ * bodies away and a rebuild four times a second would flicker.
+ *
+ * @param {object} spec - {kinds, m1, m2, names}
+ * @returns {boolean} Whether the pair was rebuilt
+ */
+export function restageBinary(spec = {}) {
+  const want = JSON.stringify([spec.kinds, spec.m1, spec.m2]);
+  const have = JSON.stringify([
+    lastBinary?.kinds,
+    lastBinary?.m1,
+    lastBinary?.m2,
+  ]);
+  if (want === have) return false;
+  const next = { ...(lastBinary || {}), ...spec };
+  applyBinaryStage(next);
+  lastBinary = next;
+  return true;
+}
+
+/**
+ * Stand whichever of the three sources the current mode names.
+ *
+ * @param {object} spec - {mode, kinds, m1, m2, kind, massSun, fit}
+ * @returns {{built: boolean, roles: object}} What was staged
+ */
+export function applySourceStage(spec = {}) {
+  if (spec.mode === 'binary') {
+    return applyBinaryStage({
+      kinds: spec.kinds,
+      m1: spec.m1,
+      m2: spec.m2,
+      names: spec.names,
+      fit: spec.fit,
+    });
+  }
+  return applySingleStage({
+    kind: spec.kind ?? (spec.kinds?.[0] || 'bh'),
+    massSun: spec.massSun ?? (spec.m1 ?? 36) + (spec.m2 ?? 29),
+    name: spec.name,
+    pulsing: spec.mode === 'pulsing',
+    fit: spec.fit,
+  });
+}
+
+/**
+ * Change which source is on the canvas, keeping everything else.
+ *
+ * What the reader's own control calls. The parameters came from the step's
+ * declaration and do not change; only which of the three arrangements is
+ * standing there does.
+ *
+ * @param {string} mode - 'static', 'pulsing' or 'binary'
+ * @returns {boolean} Whether the source changed
+ */
+export function setSourceMode(mode) {
+  if (!lastSource || lastSource.mode === mode) return false;
+  const next = { ...lastSource, mode };
+  lastSource = next;
+  applySourceStage(next);
+  stagedKey = JSON.stringify(['gwSource', next]);
+  return true;
+}
+
+/** Which of the three is on the canvas. @returns {?string} */
+export const sourceMode = () => lastSource?.mode ?? null;
+
+/**
+ * Breathe the single source in and out.
+ *
+ * Presentation only, and that is the scientific point rather than a caveat:
+ * the drawn radius changes and nothing else does. A spherically symmetric
+ * body's external field depends on its mass and not on how big it is, so
+ * squeezing and releasing one radiates nothing - which is what the screen
+ * using this is for. Nothing here touches `radius`, which the engine collides
+ * and merges on.
+ *
+ * @param {number} fraction - Where in the pulse, 0 to 1
+ * @param {number} [depth] - How far the drawn radius swings, as a share
+ * @returns {boolean} Whether a source was driven
+ */
+export function pulseSource(fraction, depth = 0.45) {
+  const entry = staged.find(e => e.role === 'source');
+  if (!entry || !Number.isFinite(fraction)) return false;
+  const swing = Math.sin(fraction * Math.PI * 2);
+  entry.star.stageRadius = COMPONENT_MARKER * (1 + depth * swing);
+  return true;
+}
+
 export function applyBinaryStage(spec = {}) {
   const kinds = spec.kinds || ['bh', 'bh'];
   const masses = [spec.m1 ?? 36, spec.m2 ?? 29];
   clearWorld();
   stagedKey = JSON.stringify(['binary', kinds, masses]);
   lastDeclaration = { binary: spec };
+  lastBinary = spec;
   ['a', 'b'].forEach((role, i) => {
     const massSun = masses[i];
     const body =
@@ -628,6 +902,13 @@ export function applyBinaryStage(spec = {}) {
             false
           );
     body.name = spec.names?.[i] || (i === 0 ? 'Component 1' : 'Component 2');
+    // The mass the model is describing, in the units the interface reports.
+    // Without this the inspector and the object list had nothing to print for
+    // either component while the panel beside them was entirely about their
+    // masses - so a reader clicking a body to check what it weighed got a card
+    // with the answer missing.
+    body.massInSuns = massSun;
+    body.initialMassInSuns = massSun;
     body.model_owned = true;
     body.persistent = true;
     body.radius = COMPONENT_MARKER;
@@ -642,7 +923,7 @@ export function applyBinaryStage(spec = {}) {
     });
   });
   bumpWorldGeneration();
-  pendingFit = Boolean(spec.fit);
+  requestFit(spec.fit);
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['a', 'b'] });
@@ -718,7 +999,7 @@ export function applySystemStage(spec = {}) {
     });
   });
   bumpWorldGeneration();
-  pendingFit = Boolean(spec.fit);
+  requestFit(spec.fit);
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
@@ -784,7 +1065,7 @@ export function applyHoleStage(spec = {}) {
     });
   });
   bumpWorldGeneration();
-  pendingFit = Boolean(spec.fit);
+  requestFit(spec.fit);
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
@@ -900,7 +1181,7 @@ export function applyEqualMassStage(spec = {}) {
     }
   );
   bumpWorldGeneration();
-  pendingFit = Boolean(spec.fit);
+  requestFit(spec.fit);
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
@@ -976,7 +1257,7 @@ export function applyStarPairStage(spec = {}) {
     });
   });
   bumpWorldGeneration();
-  pendingFit = Boolean(spec.fit);
+  requestFit(spec.fit);
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
@@ -1054,7 +1335,11 @@ export function stagedBarycentre() {
  * @param {object} [opts] - {m1, m2}
  * @returns {boolean} Whether anything moved
  */
-export function placeBinary(separationRs, phase, { m1 = 1, m2 = 1 } = {}) {
+export function placeBinary(
+  separationRs,
+  phase,
+  { m1 = 1, m2 = 1, inclinationDeg = 0 } = {}
+) {
   const a = staged.find(e => e.role === 'a');
   const b = staged.find(e => e.role === 'b');
   if (!a || !b || !Number.isFinite(separationRs) || !Number.isFinite(phase)) {
@@ -1062,8 +1347,17 @@ export function placeBinary(separationRs, phase, { m1 = 1, m2 = 1 } = {}) {
   }
   const d = separationRs * UNITS_PER_RS;
   const total = m1 + m2 || 1;
+  // The orbit seen from where the observer is. Face-on it is a circle; edge-on
+  // it is a line; in between it is an ellipse squashed by cos(i). The
+  // inclination changes the waveform - it is what turns the polarisation from
+  // circular to linear - and until this was here it changed the plot and the
+  // ring while the picture of the orbit stayed resolutely face-on, so the one
+  // control whose effect is geometric was the one the geometry ignored.
+  const squash = Math.abs(
+    Math.cos(((Number(inclinationDeg) || 0) * Math.PI) / 180)
+  );
   const ux = Math.cos(phase);
-  const uy = Math.sin(phase);
+  const uy = Math.sin(phase) * squash;
   // Each component's distance from the centre of mass is the *other* one's
   // share of the total, which is why the lighter one swings furthest.
   a.star.pos.x = ux * d * (m2 / total);
@@ -1081,17 +1375,79 @@ export const BINARY_SCALE = Object.freeze({
 
 /** Take the stage down and give the bodies back. */
 export function clearStage() {
-  if (!staged.length) {
+  if (!staged.length && !snapshots.length) {
     stagedKey = '';
+    lastDeclaration = null;
+    lastStarPair = null;
+    lastHole = null;
+    lastPopulation = null;
     return;
   }
   releaseModelOwnership();
-  const ours = new Set(staged.map(s => s.star));
-  for (let i = stars.length - 1; i >= 0; i--) {
-    if (ours.has(stars[i])) stars.splice(i, 1);
+  // Everything the stage put on the canvas, out of whichever collection holds
+  // it. Removing from `stars` alone left a hole's four orbiters, a system's
+  // planets and every remnant behind, so a reader closing a lesson was handed
+  // a sandbox with somebody else's bodies in it.
+  //
+  // The pinned snapshots are staged bodies too - they are copies stood beside
+  // the original for a then-and-now comparison - and they were never in
+  // `staged`, so nothing removed them at all.
+  for (const entry of staged) {
+    entry.star.model_owned = false;
+    entry.star.persistent = false;
+    removeBody(entry.star);
   }
+  for (const snap of snapshots) {
+    if (!snap?.star) continue;
+    snap.star.model_owned = false;
+    snap.star.persistent = false;
+    removeBody(snap.star);
+  }
+  // The effects those bodies produced. A staged black hole grows an accretion
+  // disk and emits ripples, and a staged star that was pulled apart leaves
+  // debris: none of it is in a body collection, so removing the bodies left
+  // the reader's restored sandbox showing an accretion disk with no black hole
+  // at the middle of it.
+  //
+  // Disk particles are matched by their parent rather than cleared wholesale,
+  // because a hole the reader put there themselves may be accreting too and
+  // its disk is not the lesson's to remove.
+  const ours = new Set([
+    ...staged.map(e => e.star),
+    ...snapshots.map(sn => sn?.star).filter(Boolean),
+  ]);
+  for (let i = accretion_disk_particles.length - 1; i >= 0; i--) {
+    const parent = accretion_disk_particles[i]?.parentBlackHole;
+    // Ours, or orphaned. An orphan is a particle whose hole is no longer in
+    // the world at all - which happens whenever a stage is rebuilt, because
+    // the rebuild replaces the hole and nothing was clearing the disk that
+    // belonged to the old one. Either way it is drawn around nothing.
+    if (ours.has(parent) || (parent && !bh_list.includes(parent))) {
+      accretion_disk_particles.splice(i, 1);
+    }
+  }
+  for (const body of ours) {
+    if (Array.isArray(body.disk_particles)) body.disk_particles.length = 0;
+    // The trail is drawn from the body's own history, and a body that is
+    // about to be handed back to the integrator - a remnant that reverted,
+    // say - must not carry the path it took while the lesson owned it.
+    if (Array.isArray(body.trail)) body.trail.length = 0;
+  }
+  // Ripples are positional and short-lived, and every one on screen during a
+  // staged lesson was emitted by the stage.
+  gravity_ripples.length = 0;
+
   staged = [];
+  snapshots = [];
   stagedKey = '';
+  stagedScale = SCALE.DISPLAY;
+  lastDeclaration = null;
+  lastStarPair = null;
+  lastHole = null;
+  lastPopulation = null;
+  requestFit(false);
+  fitAttempts = 0;
+  fitApplied = null;
   bumpWorldGeneration();
 }
 
@@ -1107,8 +1463,61 @@ export function clearStage() {
 export function setStageScale(scale) {
   stagedScale = scale === SCALE.TRUE ? SCALE.TRUE : SCALE.DISPLAY;
   for (const entry of staged) {
-    entry.star.radius = displayRadius(entry.physicalRadiusSun, stagedScale);
+    // Only bodies the model gave a physical radius. A hole's orbiters, a
+    // binary's markers and a system's planets have none: they are on the
+    // canvas to be watched, not compared by size, and writing a stellar
+    // display radius onto them changed the Goldilocks planet from 4.8 to 9 -
+    // which is a collision radius, so it changed the physics too.
+    if (!Number.isFinite(entry.physicalRadiusSun)) continue;
+    // The presentation radius, not the engine radius. `radius` decides
+    // collisions, tidal disruption, the hit test and every measured orbital
+    // property, and a scale switch is a statement about the picture. When
+    // these were the same field, flicking between true and compressed scale
+    // silently changed what the bodies would do.
+    entry.star.stageRadius = displayRadius(
+      entry.physicalRadiusSun,
+      stagedScale
+    );
   }
+}
+
+/**
+ * Put a star back where a remnant is.
+ *
+ * The inverse of becomeRemnant, and it has to be an inverse rather than an
+ * approximation: the role, the name, the position and the reader's selection
+ * all carry over, because from the reader's point of view this is the same
+ * object being rewound rather than a new one appearing.
+ *
+ * @param {object} entry - The staged entry holding the remnant
+ * @returns {object} The star now standing in its place
+ */
+function revertToStar(entry) {
+  const old = entry.star;
+  const wasSelected = state.selectedObject?.object === old;
+  const massSun = Number.isFinite(old.massInSuns) ? old.massInSuns : 1;
+  const star = new StarObject(
+    { x: old.pos.x, y: old.pos.y },
+    { x: 0, y: 0 },
+    massSun
+  );
+  star.name = old.name;
+  star.mass = massSun * SOLAR_MASS_UNIT;
+  star.massInSuns = massSun;
+  star.persistent = true;
+  star.model_owned = true;
+  removeBody(old);
+  if (Number.isFinite(old.stageRadius)) delete old.stageRadius;
+  stars.push(star);
+  // The entry has to point at the new body before the roster is rebuilt:
+  // rolesOfStage() reads entry.star, so binding first would re-bind the role
+  // to the id of the remnant that has just been taken off the canvas.
+  entry.star = star;
+  entry.remnantKind = null;
+  bumpWorldGeneration();
+  bindRoles(rolesOfStage(), { modelOwned: staged.map(e => e.role) });
+  if (wasSelected) selectBody(star);
+  return star;
 }
 
 /**
@@ -1127,10 +1536,27 @@ export function setStageScale(scale) {
 export function restageStar(role, model) {
   const entry = staged.find(s => s.role === role);
   if (!entry || !model) return false;
+  // Rewinding past the endpoint. The body on the canvas is a WhiteDwarf, a
+  // NeutronStar or a BlackHole, and the model being written onto it is a point
+  // on a track - a star. Writing a temperature and a luminosity onto a white
+  // dwarf leaves a white dwarf labelled main-sequence: the card says one
+  // thing, the class says another, and the H-R point is plotted for a body
+  // that is not there. So the remnant is taken back off and a star put back.
+  if (entry.remnantKind && entry.remnantKind !== 'unfinished') {
+    revertToStar(entry);
+  }
   const changed = applySelection(entry.star, model);
   entry.model = model;
   entry.physicalRadiusSun = model.radiusSun;
-  entry.star.radius = displayRadius(model.radiusSun, stagedScale);
+  entry.star.stageRadius = displayRadius(model.radiusSun, stagedScale);
+  // The engine mass follows the modelled one, or the two disagree: the card
+  // would show the track's mass while gravity used the mass the star was
+  // built with. A free point supplies none, and then the engine mass is left
+  // alone rather than being invented - the body has to weigh something, and
+  // what it weighs is no longer a claim the lesson is making.
+  if (Number.isFinite(entry.star.massInSuns)) {
+    entry.star.mass = entry.star.massInSuns * SOLAR_MASS_UNIT;
+  }
   return changed;
 }
 
@@ -1156,7 +1582,8 @@ export function populationSample({
   seed = 'stellar-population-1',
   count = 400,
   show = 120,
-  threshold = null,
+  distancePc = 100,
+  thresholdFlux = null,
 } = {}) {
   // populationOf answers with the whole synthetic survey - the stars it drew,
   // and what it had to leave out and why - not a bare array. `stars` is the
@@ -1170,14 +1597,43 @@ export function populationSample({
   const all = survey?.stars || [];
   const total = all.length;
   const requested = survey?.requested ?? count;
-  const passing = Number.isFinite(threshold)
-    ? all.filter(s => s.luminositySun >= threshold)
-    : all;
-  const wanted = Math.min(show, passing.length);
-  const stride = wanted > 0 ? passing.length / wanted : 1;
-  const shown = [];
-  for (let i = 0; i < wanted; i++) shown.push(passing[Math.floor(i * stride)]);
-  return { shown, total, visible: passing.length, requested };
+
+  // The bounded canvas subsample, chosen ONCE from the whole modelled
+  // population and never from the selection. This is the fix for the thing
+  // that made the third loop unteachable: the stride used to be computed over
+  // the stars that passed the cut, so moving the threshold did not add or
+  // remove stars from a fixed shelf - it re-strided the whole shelf and put a
+  // different hundred and twenty stars on the canvas. A reader lowering the
+  // threshold to "bring the M dwarfs back" got a different sky.
+  const wanted = Math.min(show, all.length);
+  const stride = wanted > 0 ? all.length / wanted : 1;
+  const subsample = [];
+  for (let i = 0; i < wanted; i++) subsample.push(all[Math.floor(i * stride)]);
+
+  // One selection function, the same one the panel uses, over the same
+  // distance and the same definition of flux. It used to be an intrinsic
+  // luminosity cut here and a flux cut there; they agreed at the values the
+  // lesson shipped with and would have parted company the moment either moved.
+  const selected = Number.isFinite(thresholdFlux)
+    ? new Set(
+        brightSubset(survey, { distancePc, thresholdFlux }).stars.map(s => s.id)
+      )
+    : null;
+  const shown = selected
+    ? subsample.filter(s => selected.has(s.id))
+    : subsample;
+
+  return {
+    shown,
+    total,
+    requested,
+    /** How many of the whole modelled population pass the cut. */
+    visible: selected ? selected.size : total,
+    /** How many stand on the canvas before the cut is applied. */
+    subsample: subsample.length,
+    distancePc,
+    thresholdFlux: Number.isFinite(thresholdFlux) ? thresholdFlux : null,
+  };
 }
 
 /**
@@ -1187,7 +1643,8 @@ export function populationSample({
  * @returns {{shown: number, total: number, visible: number}} What was staged
  */
 export function applyPopulationStage(spec = {}) {
-  const { shown, total, visible, requested } = populationSample(spec);
+  const sample = populationSample(spec);
+  const { shown, total, visible, requested } = sample;
   const stage = {
     spacing: spec.spacing ?? 34,
     perRow: spec.perRow ?? 15,
@@ -1197,8 +1654,13 @@ export function applyPopulationStage(spec = {}) {
     // and the survey's own counts are in the instrument's readout.
     anonymous: true,
     stars: shown.map((s, i) => ({
-      role: `pop-${i}`,
+      // The star's own name, not its place in the row. A threshold that
+      // removes half the shelf used to renumber everything left on it, so
+      // "pop-7" was a different star before and after - and a selection, a
+      // binding or a capture made against it silently moved to a stranger.
+      role: `pop-${s.id ?? i}`,
       name: `Star ${s.index ?? i + 1}`,
+      populationId: s.id ?? null,
       // The survey's own answer, not a re-estimate: these stars have a mass
       // and an age because the model drew them with one.
       model: {
@@ -1213,10 +1675,63 @@ export function applyPopulationStage(spec = {}) {
       },
     })),
   };
+  // A population stage is built by handing applyStage a list of stars, which
+  // makes applyStage think a star shelf is what is on screen. Both of these
+  // put that right: the stage key so the caller's own memoisation still
+  // matches, and the declaration because a population is what has to be put
+  // back when the reader moves the brightness cut. Losing the declaration made
+  // the cut work exactly once and then stop, silently, with the panel still
+  // moving - which is the failure this whole pass is about, arriving from the
+  // other direction.
   const key = stagedKey;
+  const declared = lastDeclaration;
   applyStage(stage, { force: true });
   stagedKey = key;
-  return { shown: shown.length, total, visible, requested };
+  lastDeclaration = declared;
+  return {
+    ...sample,
+    shown: shown.length,
+    total,
+    visible,
+    requested,
+  };
+}
+
+/**
+ * Re-apply the population stage under a new brightness cut.
+ *
+ * The scene half of the threshold slider. The panel used to move alone: the
+ * stage baked its cut into the lesson's declaration, so a reader raising the
+ * threshold watched the diagram empty while the canvas behind it stood
+ * unchanged - and the step whose whole claim is "two views of one population"
+ * showed two populations.
+ *
+ * The subsample is fixed and the selection is a filter over it, so a cut that
+ * is lowered again brings back the same stars: same ids, same models, same
+ * order. Nothing is re-rolled, and the population underneath is never touched.
+ *
+ * @param {object} [opts]
+ * @param {?number} [opts.thresholdFlux] - The cut, or null for no cut
+ * @returns {boolean} Whether the stage was re-applied
+ */
+export function restagePopulation({ thresholdFlux = null } = {}) {
+  const decl = lastDeclaration?.population;
+  if (!decl) return false;
+  const want = Number.isFinite(thresholdFlux) ? thresholdFlux : null;
+  const now = lastPopulation?.thresholdFlux ?? null;
+  // A slider emits a value every few pixels and most of them select the same
+  // stars. Rebuilding on each one would churn the world for no visible
+  // change, so the guard is the selected set and not the number.
+  const next = populationSample({ ...decl, thresholdFlux: want });
+  const before = (lastPopulation?.shownIds ?? []).join(',');
+  const after = next.shown.map(x => x.id).join(',');
+  if (now === want && before === after) return false;
+  const out = applyPopulationStage({ ...decl, thresholdFlux: want });
+  lastPopulation = { ...out, shownIds: next.shown.map(x => x.id) };
+  requestFit(lastDeclaration.fit);
+  fitAttempts = 0;
+  fitApplied = null;
+  return true;
 }
 
 /**
@@ -1230,6 +1745,17 @@ export function applyPopulationStage(spec = {}) {
 export function takeFit() {
   if (!pendingFit || !staged.length) return false;
   if (typeof document === 'undefined') return false;
+  // The reader owns the camera the moment they touch it. Without this the
+  // retry below and a reader dragging the view fight each other for the first
+  // few seconds of a staged step: they pan somewhere to look at a star, the
+  // next tick decides the fit did not survive, and the view snaps back. The
+  // retry exists for an application that resets the camera during boot, not
+  // for a person who has decided to look somewhere else.
+  if (state.cameraTouchedAt) {
+    requestFit(false);
+    fitApplied = null;
+    return false;
+  }
   const panel = document.getElementById('investigationPanel');
   if (!panel || panel.hidden || !panel.getBoundingClientRect().width) {
     return false;
@@ -1239,7 +1765,7 @@ export function takeFit() {
   // first load that happens *after* the lesson has opened - so a single
   // attempt is applied and then silently undone, which is what it did.
   if (fitApplied && sameCamera(fitApplied)) {
-    pendingFit = false;
+    requestFit(false);
     fitApplied = null;
     return false;
   }
@@ -1248,7 +1774,7 @@ export function takeFit() {
   // stop, because a view that keeps snapping back is worse than one that never
   // moved.
   if (++fitAttempts > MAX_FIT_ATTEMPTS) {
-    pendingFit = false;
+    requestFit(false);
     fitApplied = null;
     return false;
   }
@@ -1277,11 +1803,23 @@ const sameCamera = was =>
   Math.abs(state.pan.x - was.pan.x) < 0.5 &&
   Math.abs(state.pan.y - was.pan.y) < 0.5;
 
-/** Ask for a fit on the next tick. */
-export const requestFit = () => {
-  pendingFit = true;
+/**
+ * Ask for a fit on the next tick, or cancel one.
+ *
+ * Two pieces of state have to move with `pendingFit` and one of them did not.
+ * `fitAttempts` is module-level, and the nine assignments this now replaces
+ * left it alone: once a step had spent its budget of retries, no later step in
+ * the lesson could frame itself. And `cameraTouchedAt` has to be forgotten at
+ * the start of each staged step, or the reader's first pan of a session would
+ * cancel every fit after it.
+ *
+ * @param {boolean} [on] - Whether a fit is wanted; defaults to yes
+ */
+export const requestFit = (on = true) => {
+  pendingFit = Boolean(on);
   fitAttempts = 0;
   fitApplied = null;
+  if (on) state.cameraTouchedAt = 0;
 };
 
 /**
@@ -1298,7 +1836,15 @@ function panelInset() {
   if (typeof document === 'undefined') return {};
   let left = 0;
   let right = 0;
-  for (const id of ['investigationPanel', 'investigationTool']) {
+  // The main control rail counts too. It floats over the canvas on the right
+  // exactly as the lesson panel does on the left, and leaving it out put the
+  // second star of a two-star shelf underneath it - on a step that asks the
+  // reader to click that star.
+  for (const id of [
+    'investigationPanel',
+    'investigationTool',
+    'mainControls',
+  ]) {
     const el = document.getElementById(id);
     if (!el || el.hidden) continue;
     const box = el.getBoundingClientRect();

@@ -160,6 +160,7 @@ const LAGRANGE_POINTS = {
       sid: 'predict-forbidden',
       bind: RESTRICTED,
       type: 'predict',
+      reveal: 'read-the-constant',
       title: 'Is anywhere off limits?',
       body: `The tracer has some energy. Some places would need more energy than
              it has to reach — not because something is in the way, but because
@@ -308,6 +309,7 @@ const LAGRANGE_POINTS = {
       sid: 'accessible-not-reachable',
       bind: RESTRICTED,
       type: 'predict',
+      reveal: 'watch-it-not-cross',
       title: 'The neck is open. Now what?',
       body: `The wall between the two stars has gone. The tracer is
              energetically permitted to be anywhere in the other star's region.
@@ -330,6 +332,7 @@ const LAGRANGE_POINTS = {
       sid: 'predict-same-region-same-path',
       bind: RESTRICTED,
       type: 'predict',
+      reveal: 'watch-it-not-cross',
       title: 'Same permission, same route?',
       setup: LAB,
       body: `Two tracers, from the same point, at the same speed in the rotating
@@ -418,6 +421,7 @@ const LAGRANGE_POINTS = {
       sid: 'predict-stability',
       bind: RESTRICTED,
       type: 'predict',
+      reveal: 'break-it',
       title: 'Which ones survive a nudge?',
       body: `L1, L2 and L3 sit on the line between the stars, at what are
              effectively saddle points of the effective potential. L4 and L5 sit
@@ -488,6 +492,24 @@ const LAGRANGE_POINTS = {
       answer: 1,
       because:
         'The whole construction rests on the frame rotating at a constant rate, which needs the two bodies to be at a constant separation. Make the orbit eccentric and the frame speeds up and slows down, the effective potential breathes, and C is no longer conserved. There are elliptic versions of this problem and they are considerably harder — which is why the panel refuses rather than approximating.',
+    },
+    {
+      sid: 'say-what-jacobi-cannot-tell-you',
+      bind: RESTRICTED,
+      // The lesson exists to keep three claims apart, and until this step it
+      // never asked anyone to state them. The multiple choice at the end asks
+      // which assumption breaks first, which is a different question.
+      requires: ['read-the-constant'],
+      type: 'question',
+      kind: 'short',
+      title: 'Permitted, reached, and stable',
+      body: `You read a Jacobi constant off the scene, opened the neck, watched
+             two tracers with the same accessible region take different routes,
+             and nudged tracers at the five points to see which stayed.`,
+      prompt:
+        'In two or three sentences, distinguish what the Jacobi constant tells you from what it does not, and say which of the five Lagrange points survive a nudge and under what condition.',
+      rubric:
+        'The Jacobi constant bounds where a tracer is energetically permitted to go: it draws the zero-velocity curves and says which regions are closed off. It does not say where the tracer will actually go \u2014 two tracers with the same constant, and so the same permitted region, can follow completely different paths \u2014 and it says nothing about stability. L1, L2 and L3 are unstable saddle points: a nudge grows. L4 and L5 are stable, but only when the mass ratio is extreme enough, roughly when the primary is more than about 25 times the secondary; below that they are unstable too, which is why the Trojans exist at Jupiter and not everywhere. Credit for keeping all three claims apart and for naming the mass-ratio condition rather than calling L4 and L5 stable without qualification.',
     },
     {
       sid: 'three-claims',

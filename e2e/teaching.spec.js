@@ -15,7 +15,12 @@
 import { test, expect } from './fixtures.js';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { MANIFEST as MANIFEST_ES } from '../js/data/investigations/manifest.es.js';
-import { DEMOS } from '../js/data/teaching.js';
+import {
+  DEMOS,
+  QUICKSTART,
+  EVALUATION,
+  FEEDBACK_FIELDS,
+} from '../js/data/teaching.js';
 import { DEMO_LINKS, SCENARIO_COUNT } from '../js/data/teachingGenerated.js';
 
 const totals = MANIFEST.reduce(
@@ -501,5 +506,311 @@ test.describe('narrow screens and print', () => {
       cycle: true,
     });
     await page.emulateMedia({ media: 'screen' });
+  });
+});
+
+// =============================================================================
+// The three short routes
+// -----------------------------------------------------------------------------
+// A route is an activity format: a lesson id and an ordered list of that
+// lesson's own step ids, opened as an ordinary assignment. There is no second
+// runner here and nothing on /teaching/ knows any physics.
+//
+// What is asserted is the part that was broken and that nothing noticed: a
+// launch link that loads the sandbox and opens nothing looks exactly like a
+// link that worked. It had two causes at once - the page percent-encoded the
+// separator the fragment parser needs literal, and js/share.js stripped the
+// fragment three hundred milliseconds in because its list of fragments to
+// leave alone was one entry short - and every Start button on the page was
+// dead the whole time.
+// =============================================================================
+
+/** The three short routes, by the ids the cards are built from. */
+const ROUTES = [
+  { activity: 'orbital-speed', lesson: 'keplers-laws' },
+  { activity: 'binary-planets', lesson: 'binary-star-planets' },
+  { activity: 'star-sizes', lesson: 'a-universe-of-stars' },
+];
+
+/** Open a route the way its Start button does, from cold. */
+async function openRoute(page, app, activity, format = 'route') {
+  await app.boot({
+    url: `/?activity=${activity}&format=${format}#activity=${activity}/${format}`,
+  });
+  await expect(page.locator('#investigationPanel')).toBeVisible();
+  await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+}
+
+test.describe('the short routes', () => {
+  test('each one has a card with a launch link the application will honour', async ({
+    page,
+  }) => {
+    await openTeaching(page);
+    const [{ activityInHash, parseActivityHash }] = await Promise.all([
+      import('../js/activities/activityBridge.js'),
+    ]);
+    for (const { activity } of ROUTES) {
+      const link = page.locator(
+        `#teachActivities a[href*="activity=${activity}&format=route"]`
+      );
+      await expect(link).toHaveCount(1);
+      const href = await link.getAttribute('href');
+      const hash = href.slice(href.indexOf('#'));
+      // Against the application's own parser, not a copy of its pattern.
+      expect(activityInHash.call(null, hash) || /^#activity=/.test(hash)).toBe(
+        true
+      );
+      expect(parseActivityHash(hash)).toEqual({
+        activity,
+        format: 'route',
+      });
+    }
+  });
+
+  for (const { activity, lesson } of ROUTES) {
+    test(`${activity}: a cold link opens it with its prerequisites`, async ({
+      page,
+      app,
+    }) => {
+      test.slow();
+      await openRoute(page, app, activity);
+
+      // The assignment is the route's steps plus whatever the resolver had to
+      // add - the setup a chosen step needs, or the run a later step refers
+      // back to. What must not happen is landing mid-route with the world
+      // unbuilt.
+      const state = await page.evaluate(async id => {
+        const reg = await import('/js/data/investigations/registry.js');
+        const loaded = await reg.loadInvestigation(id);
+        return { lessonSteps: loaded.steps.length };
+      }, lesson);
+      expect(state.lessonSteps).toBeGreaterThan(3);
+
+      // The counter says how many steps this route actually runs, and it is
+      // fewer than the whole investigation: a route is a cut of a lesson, not
+      // the lesson.
+      // textContent, not innerText: the counter is uppercased by CSS, so
+      // innerText hands back "STEP 1 OF 3" and a lowercase pattern misses it.
+      const counter = await page.evaluate(
+        () => document.querySelector('.inv-step-count')?.textContent ?? ''
+      );
+      const total = Number(counter.match(/of\s+(\d+)/i)?.[1] ?? 0);
+      expect(total).toBeGreaterThan(0);
+      expect(total).toBeLessThan(state.lessonSteps);
+
+      // And the fragment survives, so the link can be reloaded, bookmarked or
+      // pasted into an LMS. This is the half js/share.js used to strip.
+      expect(page.url()).toContain(`#activity=${activity}/route`);
+    });
+  }
+
+  test('closing a route gives the sandbox back', async ({ page, app }) => {
+    test.slow();
+    // What the reader had before: an ordinary sandbox, with a scenario of
+    // their own and a camera they had moved.
+    await app.boot({ url: '/' });
+    await app.loadScenario('Solar System');
+    await page.evaluate(async () => {
+      const { state } = await import('/js/appState.js');
+      state.zoom = 2.5;
+      state.pan = { x: 40, y: -25 };
+    });
+    const before = await page.evaluate(async () => {
+      const { state, current_scenario_name } = await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        zoom: state.zoom,
+        pan: { ...state.pan },
+      };
+    });
+
+    await page.evaluate(() => {
+      window.location.hash = 'activity=star-sizes/route';
+    });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await page.locator('#investigationClose').click();
+    await expect(page.locator('#investigationPanel')).toBeHidden();
+
+    const after = await page.evaluate(async () => {
+      const { state, current_scenario_name } = await import('/js/appState.js');
+      return {
+        scenario: current_scenario_name,
+        zoom: state.zoom,
+        pan: { ...state.pan },
+      };
+    });
+    expect(after.scenario).toBe(before.scenario);
+    expect(after.zoom).toBeCloseTo(before.zoom, 3);
+    expect(after.pan.x).toBeCloseTo(before.pan.x, 3);
+    expect(after.pan.y).toBeCloseTo(before.pan.y, 3);
+  });
+
+  test('the cards are complete in Spanish too', async ({ page }) => {
+    await openTeaching(page, { locale: 'es' });
+    for (const { activity } of ROUTES) {
+      // The format card, not the activity card that contains it: both are
+      // <article> and the link lives in the inner one.
+      const card = page.locator('#teachActivities .teach-activity-format', {
+        has: page.locator(`a[href*="activity=${activity}&format=route"]`),
+      });
+      await expect(card).toHaveCount(1);
+      const text = await card.innerText();
+      // Nothing on the card may be a raw message id, which is what an
+      // untranslated string looks like.
+      expect(text).not.toMatch(/teach\.activity\./);
+      expect(text.length).toBeGreaterThan(120);
+    }
+  });
+
+  test('the cards hold together on a small phone', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await openTeaching(page);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
+    for (const { activity } of ROUTES) {
+      const link = page
+        .locator(
+          `#teachActivities a[href*="activity=${activity}&format=route"]`
+        )
+        .first();
+      await link.scrollIntoViewIfNeeded();
+      await expect(link).toBeVisible();
+      const box = await link.boundingBox();
+      expect(box.height).toBeGreaterThanOrEqual(32);
+      expect(box.x + box.width).toBeLessThanOrEqual(321);
+    }
+  });
+});
+
+// =============================================================================
+// The instructor quick-start, the evaluation template and the feedback form
+// -----------------------------------------------------------------------------
+// Three sections that make claims about themselves, which is why they are
+// tested rather than eyeballed. The quick-start says what a class needs; the
+// evaluation template says, at length, that no study has been run; and the
+// feedback form says that what is typed into it never leaves the browser.
+//
+// The last of those is the one a test has to prove rather than repeat. A page
+// that asks a teacher about their class and then posts it somewhere would be a
+// serious breach of what this project says about itself, and "we did not write
+// a fetch" is not evidence. The assertion is on the network.
+// =============================================================================
+
+test.describe('the instructor quick-start', () => {
+  test('answers all six questions, with nothing left as a message id', async ({
+    page,
+  }) => {
+    await openTeaching(page);
+    const cards = page.locator('#teachQuickstart section');
+    await expect(cards).toHaveCount(QUICKSTART.length);
+    const text = await page.locator('#teachQuickstart').innerText();
+    expect(text).not.toMatch(/teach\.quickstart\./);
+    // Each card is an answer, not a heading with a promise under it.
+    for (let i = 0; i < QUICKSTART.length; i++) {
+      const body = await cards.nth(i).locator('p').first().innerText();
+      expect(body.length).toBeGreaterThan(80);
+    }
+  });
+
+  test('is honest that the durations have never been timed', async ({
+    page,
+  }) => {
+    await openTeaching(page);
+    const text = await page.locator('#teachQuickstart').innerText();
+    expect(text).toMatch(/estimate/i);
+    expect(text).not.toMatch(/proven|validated|measured learning/i);
+  });
+});
+
+test.describe('the evaluation template', () => {
+  test('is a template, and says no study has been run', async ({ page }) => {
+    await openTeaching(page);
+    await expect(page.locator('#teachEvaluate li')).toHaveCount(
+      EVALUATION.length
+    );
+    const intro = await page.locator('#evaluate + p').innerText();
+    // The claim this section exists to avoid making.
+    expect(intro).toMatch(/no study|ning[úu]n estudio/i);
+    const whole = await page.locator('#teachEvaluate').innerText();
+    expect(whole).not.toMatch(/teach\.evaluate\./);
+    // Institutional review is the item people skip, so it has to be there.
+    expect(whole).toMatch(/review board|institutional review|comit[ée]/i);
+  });
+});
+
+test.describe('the classroom feedback form', () => {
+  test('keeps what is typed in the browser and sends nothing', async ({
+    page,
+  }) => {
+    // Every request the page makes that does not go to the server this test
+    // is running against. The form asks a teacher about their class, so a
+    // request leaving here would be the one defect on this page that matters
+    // more than all the others - and "we did not write a fetch" is not
+    // evidence. A first draft of this returned early on exactly the URLs it
+    // was supposed to be catching, and would have passed while the notes were
+    // posted to anywhere at all.
+    const offsite = [];
+    page.on('request', request => {
+      const url = request.url();
+      if (/^https?:\/\/(127\.0\.0\.1|localhost)[:/]/.test(url)) return;
+      if (url.startsWith('data:') || url.startsWith('blob:')) return;
+      offsite.push(url);
+    });
+    await openTeaching(page);
+
+    await expect(page.locator('#teachFeedbackForm textarea')).toHaveCount(
+      FEEDBACK_FIELDS.length
+    );
+    // Nothing that identifies anybody is asked for.
+    const labels = await page
+      .locator('#teachFeedbackForm label')
+      .allInnerTexts();
+    expect(labels.join(' ')).not.toMatch(
+      /name|e-?mail|correo|nombre|institution|instituci/i
+    );
+
+    await page.fill('#teachFeedback-route', 'Two stars, one temperature');
+    await expect(page.locator('#teachFeedbackStatus')).not.toBeEmpty();
+
+    const stored = await page.evaluate(() =>
+      window.localStorage.getItem('gravitas_teaching_notes_v1')
+    );
+    expect(stored).toContain('Two stars');
+    expect(offsite, 'requests to anywhere but this origin').toEqual([]);
+  });
+
+  test('exports a file and clears itself', async ({ page }) => {
+    await openTeaching(page);
+    await page.fill(
+      '#teachFeedback-worked',
+      'The prediction being held worked.'
+    );
+
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator('#teachFeedbackExport').click(),
+    ]);
+    expect(download.suggestedFilename()).toMatch(
+      /^gravitas-classroom-notes-\d{4}-\d{2}-\d{2}\.md$/
+    );
+
+    await page.locator('#teachFeedbackClear').click();
+    await expect(page.locator('#teachFeedback-worked')).toHaveValue('');
+    const stored = await page.evaluate(() =>
+      window.localStorage.getItem('gravitas_teaching_notes_v1')
+    );
+    expect(stored).toBeNull();
+  });
+
+  test('says nothing to save when there is nothing', async ({ page }) => {
+    await openTeaching(page);
+    await page.locator('#teachFeedbackExport').click();
+    await expect(page.locator('#teachFeedbackStatus')).toContainText(
+      /nothing to save|todav[íi]a no hay/i
+    );
   });
 });

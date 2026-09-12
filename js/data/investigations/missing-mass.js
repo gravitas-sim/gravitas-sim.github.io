@@ -430,6 +430,7 @@ const DARK_MATTER = {
       sid: 'now-a-galaxy',
       bind: GALAXY_TRACERS,
       type: 'predict',
+      reveal: 'measure-the-expected-curve',
       title: 'Now a galaxy',
       setup: DM_EXPECTED,
       body: `A spiral galaxy is a disc of stars with a dense bulge in the

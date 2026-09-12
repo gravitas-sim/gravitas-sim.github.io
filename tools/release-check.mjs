@@ -141,6 +141,15 @@ step('vendored libraries and fonts', ['npm', 'run', 'vendor:check']);
 step('service-worker precache manifest', ['npm', 'run', 'sw:check']);
 step('scenario thumbnails', ['npm', 'run', 'thumbnails:check']);
 step("the user manual's generated tables", ['npm', 'run', 'manual:check']);
+// The scene catalogue and the record beside it are generated from the lesson
+// data, and the hand-written acceptance map is checked against them: a central
+// experiment whose object, control, evidence or test has moved fails here
+// rather than being discovered by a teacher.
+step('the lesson scene catalogue and acceptance map', [
+  'npm',
+  'run',
+  'audit:scene:check',
+]);
 
 // --- Is it consistent? -------------------------------------------------------
 process.stdout.write(`\n${c(BOLD, 'Release metadata')}\n`);

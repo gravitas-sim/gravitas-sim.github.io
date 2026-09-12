@@ -90,6 +90,20 @@ export default {
       tip: 'A 10,9 km/s la bala llega más allá de 350 radios terrestres, más lejos que la Luna, y aun así regresa. A 10,92 no da la vuelta jamás. Las dos parecen idénticas durante el primer tramo del vuelo, que es exactamente por lo que los astrónomos quieren un número y no una imagen.',
     },
     {
+      title: 'Anota la velocidad que encontraste',
+      body: `Antes de seguir, anota los dos números con los que acabas de
+             trabajar: la velocidad más alta que aún volvía y la más baja que
+             ya no.
+             \n\nDeberían quedar cerca. Cuánto depende de con qué cuidado
+             moviste el deslizador, y esa diferencia es la incertidumbre de tu
+             medida.`,
+      fields: [
+        { label: 'Velocidad más alta que aún volvía' },
+        { label: 'Velocidad más baja que se fue para siempre' },
+      ],
+      tip: 'Dos números y la diferencia entre ellos es una respuesta más honesta que un solo número. Nadie encuentra un umbral exacto; se encuentran las dos últimas velocidades a cada lado.',
+    },
+    {
       title: '¿Dónde está la línea?',
       body: 'Acabas de encontrarla a mano.',
       prompt:

@@ -34,22 +34,64 @@ import { ES_TEACHING } from '../js/i18n/es.teaching.js';
 const lessonFor = activity =>
   INVESTIGATIONS.find(l => l.id === activity.lesson);
 
-describe('the catalogue is one honest activity', () => {
-  test('exactly one, with three formats', () => {
-    // A card saying "coming soon" is worse than no card. When a second
-    // activity lands this number changes in the same commit that adds it.
-    expect(ACTIVITIES).toHaveLength(1);
-    expect(ACTIVITIES[0].formats.map(f => f.id)).toEqual([
-      'demonstration',
-      'guided',
-      'lab',
-    ]);
+describe('the catalogue is honest about what it offers', () => {
+  test('every activity has at least one format and no duplicate ids', () => {
+    // This used to pin the number at one, on the reasoning that a card saying
+    // "coming soon" is worse than no card. That reasoning is still right and
+    // the assertion was the wrong shape for it: a count has to be edited every
+    // time the catalogue grows, which makes it a chore rather than a check.
+    // What actually matters is that nothing here is a stub.
+    expect(ACTIVITIES.length).toBeGreaterThan(0);
+    const activityIds = new Set();
+    const assignmentIds = new Set();
+    for (const activity of ACTIVITIES) {
+      expect(activityIds.has(activity.id)).toBe(false);
+      activityIds.add(activity.id);
+      expect(activity.formats.length).toBeGreaterThan(0);
+      const formatIds = new Set();
+      for (const format of activity.formats) {
+        expect(formatIds.has(format.id)).toBe(false);
+        formatIds.add(format.id);
+        // Two formats sharing an assignment id would share one progress
+        // namespace and mark each other complete.
+        expect(assignmentIds.has(format.assignmentId)).toBe(false);
+        assignmentIds.add(format.assignmentId);
+      }
+    }
   });
 
-  test('it reuses a real investigation and a real scenario', () => {
+  test('the short routes are the three the showcase page offers', () => {
+    // Named rather than counted: /teaching/ promises three short routes and
+    // this is the list it promises them from.
+    const routes = ACTIVITIES.filter(a =>
+      a.formats.some(f => f.id === 'route')
+    ).map(a => a.id);
+    expect(routes.sort()).toEqual(
+      ['binary-planets', 'orbital-speed', 'star-sizes'].sort()
+    );
     for (const activity of ACTIVITIES) {
-      expect(lessonFor(activity)).toBeTruthy();
-      expect(Object.hasOwn(SCENARIO_INFO, activity.scenario)).toBe(true);
+      const route = activity.formats.find(f => f.id === 'route');
+      if (!route) continue;
+      // Three to five minutes is what the page says a route takes.
+      expect(route.minutes).toBeGreaterThanOrEqual(3);
+      expect(route.minutes).toBeLessThanOrEqual(5);
+    }
+  });
+
+  test('it reuses a real investigation, and a real scenario where it names one', () => {
+    for (const activity of ACTIVITIES) {
+      const lesson = lessonFor(activity);
+      expect(lesson).toBeTruthy();
+      if (activity.scenario === null) {
+        // Null is allowed only for a lesson that stands up its own scene, and
+        // the claim is checked rather than taken: a lesson that loads a
+        // scenario and says null would strand its reader in whatever world
+        // happened to be on screen.
+        expect(lesson.steps.every(s => s.stage)).toBe(true);
+        expect(lesson.steps.every(s => !s.setup?.scenario)).toBe(true);
+      } else {
+        expect(Object.hasOwn(SCENARIO_INFO, activity.scenario)).toBe(true);
+      }
     }
   });
 
@@ -112,12 +154,18 @@ describe('every format resolves to a coherent lesson', () => {
     // A format whose first step is a question about a screen nobody set up is
     // the failure this resolver exists to prevent. The setup arrives whether
     // or not the format asked for it.
+    //
+    // A stage counts. Two ways a lesson can have a world on the first screen:
+    // load a scenario, or stand the objects up itself. The stellar lessons do
+    // the second on every step and have no setup anywhere, and requiring one
+    // would have failed a format whose world is built more thoroughly than
+    // most.
     for (const { activity, format } of allFormats()) {
       const lesson = lessonFor(activity);
       const resolved = resolvedSteps(lesson, format);
       const byId = new Map(lesson.steps.map(s => [s.sid, s]));
       const first = byId.get(resolved.sids[0]);
-      expect(first.setup).toBeTruthy();
+      expect(Boolean(first.setup || first.stage)).toBe(true);
     }
   });
 
@@ -132,17 +180,22 @@ describe('every format resolves to a coherent lesson', () => {
     }
   });
 
-  test('the three formats get shorter in the order they are offered', () => {
-    const activity = ACTIVITIES[0];
-    const lesson = lessonFor(activity);
-    const lengths = activity.formats.map(
-      f => resolvedSteps(lesson, f).sids.length
-    );
-    expect(lengths[0]).toBeLessThan(lengths[1]);
-    expect(lengths[1]).toBeLessThan(lengths[2]);
-    const minutes = activity.formats.map(f => f.minutes);
-    expect(minutes[0]).toBeLessThan(minutes[1]);
-    expect(minutes[1]).toBeLessThan(minutes[2]);
+  test('an activity offers its formats shortest first', () => {
+    // A reader scanning a card should meet the five-minute option before the
+    // fifty-minute one. Strictly increasing in steps; non-decreasing in
+    // minutes, because a projected demonstration and a short route are the
+    // same length for different audiences.
+    for (const activity of ACTIVITIES) {
+      const lesson = lessonFor(activity);
+      const lengths = activity.formats.map(
+        f => resolvedSteps(lesson, f).sids.length
+      );
+      const minutes = activity.formats.map(f => f.minutes);
+      for (let i = 1; i < lengths.length; i++) {
+        expect(lengths[i - 1]).toBeLessThan(lengths[i]);
+        expect(minutes[i - 1]).toBeLessThanOrEqual(minutes[i]);
+      }
+    }
   });
 });
 
@@ -333,7 +386,8 @@ describe('lookups', () => {
 
   test('allFormats pairs every format with its activity', () => {
     const pairs = allFormats();
-    expect(pairs).toHaveLength(3);
+    const total = ACTIVITIES.reduce((n, a) => n + a.formats.length, 0);
+    expect(pairs).toHaveLength(total);
     for (const { activity, format } of pairs) {
       expect(activity.formats).toContain(format);
     }

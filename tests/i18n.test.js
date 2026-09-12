@@ -320,9 +320,29 @@ describe('the catalogue split', () => {
     // module that imports it, so a visitor who never opened a lesson was
     // downloading 133 of them in order to render none. The loader awaits this
     // catalogue before initInvestigations(), so the lookup cannot outrun it.
+    // summary.life.* is the one family here that a core module reads:
+    // js/canvasSummary.js runs on every frame for everybody. It is allowed
+    // because the branch that reads it is guarded on state.evolutionOverlay
+    // being active, and only a lesson makes it active - so the lookup cannot
+    // happen before the lesson engine, and therefore this catalogue, has
+    // loaded. The rest of summary.* stayed eager and is checked for below:
+    // those sentences describe an ordinary sandbox and are read on a first
+    // visit with no lesson anywhere near.
     const allowed =
-      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase)\./;
+      /^(lessonFn|binaryRun|binarySweep|assist|rvfit|rvsched|rv\.survey|exoW|resW|chaosW|energyW|hzW|binW|tideW|dmW|bhW|transitW|gwW|sound|reliability|bench|sweep|assign|burn|inv|cr3bp|nb|export|activity|welcome|welcomeCard|welcomeAudience|welcomeLink|tideP|stelW|stelE|stellar\.phase|summary\.life)\./;
     expect(Object.keys(EN_DEFERRED).filter(k => !allowed.test(k))).toEqual([]);
+
+    // The sandbox sentences the summary reads on a first visit stayed eager.
+    for (const id of [
+      'summary.scenario',
+      'summary.running',
+      'summary.paused',
+      'summary.noSelection',
+      'summary.readoutPointer',
+    ]) {
+      expect(Object.keys(EN)).toContain(id);
+      expect(Object.keys(EN_DEFERRED)).not.toContain(id);
+    }
 
     // The words the inspector prints on every star card stayed eager.
     for (const id of [

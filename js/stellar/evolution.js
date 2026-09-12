@@ -40,7 +40,30 @@ import { endpointFor } from './endpoints.js';
 import { clamp } from '../utils.js';
 
 /** How the playhead is paced. See the note above. */
-export const PACE = Object.freeze({ TIME: 'time', PHASE: 'phase' });
+/**
+ * Three ways the playhead can run, and they answer three different questions.
+ *
+ *   PHASE   equal travel per stored sample. Every stage of the life is
+ *           reachable, which is the only way to land on a phase that occupies
+ *           a millionth of the star's life. The playhead position means
+ *           nothing physical.
+ *   TIME    equal travel per decade of age. A compromise: the late stages are
+ *           still reachable and the early ones are no longer crushed, but the
+ *           position is logarithmic and still is not a fraction of a life.
+ *   LINEAR  equal travel per year. The playhead position IS the fraction of
+ *           the star's life that has passed, and everything after the main
+ *           sequence is a sliver at the right-hand end - which is the honest
+ *           picture and the reason the other two exist.
+ *
+ * The distinction matters enough to be in the readout on every screen: a
+ * playhead at the halfway mark means "half its life" under LINEAR and means
+ * nothing of the kind under the other two.
+ */
+export const PACE = Object.freeze({
+  TIME: 'time',
+  PHASE: 'phase',
+  LINEAR: 'linear',
+});
 
 /**
  * The conceptual stages, which are not the same list as the track's phases.
@@ -213,6 +236,10 @@ export function durationSummary(state) {
       let n = 0;
       for (let i = 0; i < t.count; i++) if (t.phase[i] === seg.key) n++;
       share = t.count > 1 ? n / t.count : 0;
+    } else if (state.pace === PACE.LINEAR) {
+      // Proportional, so a phase's share of the playhead is its share of the
+      // life exactly, and the exaggeration below comes out at one.
+      share = total > 0 ? seg.durationYr / total : 0;
     } else {
       const lo = Math.log10(Math.max(bounds.startYr, 1));
       const hi = Math.log10(bounds.endYr);
@@ -253,11 +280,34 @@ export function phaseMarks(state) {
   }));
 }
 
+/**
+ * Where an age sits along the whole playback, under the current pacing.
+ *
+ * The inverse of the pacing, exported because changing the pacing has to keep
+ * the star where it is and the caller would otherwise re-derive this. It was
+ * re-derived, in js/stellarEvolutionWidgets.js, with its own copy of the
+ * log-age arithmetic - and the two disagreed at the top of a track, where the
+ * log axis runs out of resolution, so switching the pacing near the end of a
+ * life nudged the star forward into the next phase.
+ *
+ * @param {object} state - Playback state
+ * @param {number} ageYr - An age on the track
+ * @returns {number} A playback position, 0 to 1
+ */
+export function positionForAge(state, ageYr) {
+  const s = shares(state.trackId);
+  return s.cloud + s.track * fractionForAgeUnder(state, ageYr);
+}
+
 /** Where an age sits along the track, under the current pacing. */
 function fractionForAgeUnder(state, ageYr) {
   const bounds = trackBounds(state.trackId);
   if (!bounds) return 0;
   if (state.pace === PACE.PHASE) return sampleAtAge(state.trackId, ageYr);
+  if (state.pace === PACE.LINEAR) {
+    const span = bounds.endYr - bounds.startYr;
+    return span > 0 ? clamp((ageYr - bounds.startYr) / span, 0, 1) : 0;
+  }
   const lo = Math.log10(Math.max(bounds.startYr, 1));
   const hi = Math.log10(bounds.endYr);
   return hi > lo
@@ -335,10 +385,20 @@ export function traceTo(state, maxPoints = 160) {
 /** A fraction along the track, as a fraction of the stored samples. */
 function positionOnTrack(state, trackFraction) {
   if (state.pace === PACE.PHASE) return trackFraction;
-  // Under time pacing the fraction is logarithmic in age, so it has to be
-  // turned into an age and then into a sample position.
   const bounds = trackBounds(state.trackId);
   if (!bounds) return trackFraction;
+  if (state.pace === PACE.LINEAR) {
+    // Proportional: the fraction IS the fraction of the star's life. This is
+    // the view in which a solar-mass star spends ninety per cent of the
+    // playhead on its main sequence and the whole red-giant branch is a few
+    // pixels, because that is what the model says happens.
+    return sampleAtAge(
+      state.trackId,
+      bounds.startYr + trackFraction * (bounds.endYr - bounds.startYr)
+    );
+  }
+  // Under time pacing the fraction is logarithmic in age, so it has to be
+  // turned into an age and then into a sample position.
   const lo = Math.log10(Math.max(bounds.startYr, 1));
   const hi = Math.log10(bounds.endYr);
   return sampleAtAge(state.trackId, 10 ** (lo + trackFraction * (hi - lo)));

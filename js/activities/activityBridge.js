@@ -25,11 +25,18 @@ import { t, getLocale, registerMessages } from '../i18n/index.js';
  * Make the activity prose available to the sandbox's catalogue.
  *
  * The titles and the format introductions live in the teaching page's own
- * message file, which the sandbox deliberately does not carry: it is 6KB of
- * instructor prose that a student loading the simulation has no use for. An
- * activity link is the one path that needs a few of those strings inside the
- * application, so they are registered here - on that path only, after the
- * import that already had to happen.
+ * message file, which the sandbox deliberately does not carry: it is instructor
+ * prose that a student loading the simulation has no use for. An activity link
+ * is the one path that needs a few of those strings inside the application, so
+ * they are registered here - on that path only, after the import that already
+ * had to happen.
+ *
+ * The *activities* catalogue rather than the whole showcase page's. This used
+ * to import ../i18n/en.teaching.js, which is the entire /teaching/ page: its
+ * cycle, its journey, its instrument descriptions, its demonstrations, its
+ * access notes and its evaluation template, in both languages, none of which
+ * the application can render. Fifty-seven kilobytes of a page the simulation
+ * never shows, in the deferred download, to put a title on an assignment.
  *
  * Without this the assignment header showed the message id.
  */
@@ -37,9 +44,9 @@ async function ensureActivityMessages() {
   const locale = getLocale();
   const module =
     locale === 'es'
-      ? await import('../i18n/es.teaching.js')
-      : await import('../i18n/en.teaching.js');
-  registerMessages(locale, module.ES_TEACHING || module.EN_TEACHING);
+      ? await import('../i18n/es.activities.js')
+      : await import('../i18n/en.activities.js');
+  registerMessages(locale, module.ES_ACTIVITIES || module.EN_ACTIVITIES);
 }
 
 /** Does the address bar name an activity? */

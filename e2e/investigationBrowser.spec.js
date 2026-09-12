@@ -12,6 +12,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { SEQUENCES } from '../js/data/investigations/sequences.js';
 
 /** Get to the browser, with the deferred strings loaded. */
 async function openBrowser(page, app) {
@@ -150,7 +151,10 @@ test.describe('the curated orders', () => {
     await openBrowser(page, app);
     const sequences = page.locator('#investigationSequences');
     await expect(sequences).toBeVisible();
-    await expect(page.locator('.inv-seq')).toHaveCount(3);
+    // Counted from js/data/investigations/sequences.js. This said three and
+    // the file has held four since the gravitational-wave order was added, so
+    // the assertion had been failing on a catalogue that was correct.
+    await expect(page.locator('.inv-seq')).toHaveCount(SEQUENCES.length);
 
     // A demonstration label is only ever on a lesson that really is short.
     const labels = await page.locator('.inv-seq-step').evaluateAll(steps =>

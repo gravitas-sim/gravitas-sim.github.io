@@ -41,6 +41,9 @@ import {
   JOURNEY,
   INSTRUMENTS,
   DEMOS,
+  QUICKSTART,
+  EVALUATION,
+  FEEDBACK_FIELDS,
   PATTERNS,
   EVIDENCE,
 } from './data/teaching.js';
@@ -517,9 +520,12 @@ function formatCard(activity, format, active) {
     className: 'ui-button is-primary teach-activity-launch',
     text: tr('teach.activities.launch'),
     attrs: {
-      href: `/${routeTo(activity.id, format.id)}#activity=${encodeURIComponent(
-        `${activity.id}/${format.id}`
-      )}`,
+      // The separator stays a literal slash. encodeURIComponent turned it into
+      // %2F, which js/activities/activityBridge.js does not match - so every
+      // launch button on this page loaded the sandbox and opened nothing, and
+      // looked exactly like a link that had worked. Both ids are [a-z0-9-] by
+      // tools/check-activities.mjs, so there is nothing else here to escape.
+      href: `/${routeTo(activity.id, format.id)}#activity=${activity.id}/${format.id}`,
       // Named in full for a screen reader, because "Start" three times in a
       // row is three identical links to anyone not reading the heading above
       // each one.
@@ -803,6 +809,213 @@ function renderLanguageSwitch() {
  * than reloaded, because reloading it would restart the simulation they were
  * halfway through and silently discard where it had got to.
  */
+// --- Instructor quick-start, evaluation and feedback ---------------------------
+
+/** The six answers an instructor wants before Tuesday. */
+function renderQuickstart() {
+  const host = $('teachQuickstart');
+  if (!host) return;
+  clear(host);
+  for (const item of QUICKSTART) {
+    const children = [
+      el('h3', { text: tr(`teach.quickstart.${item.id}.title`) }),
+      el('p', { text: tr(`teach.quickstart.${item.id}.text`) }),
+    ];
+    if (item.href) {
+      children.push(
+        el('a', {
+          className: 'teach-more',
+          text: tr('teach.instruments.more'),
+          attrs: { href: item.href },
+        })
+      );
+    }
+    host.append(el('section', { className: 'doc-feature', children }));
+  }
+}
+
+/**
+ * The evaluation template.
+ *
+ * Rendered as an ordered list because it is a sequence somebody would follow,
+ * and because the last item - clear it with your review board - is the one
+ * that has to come before any of the others are acted on.
+ */
+function renderEvaluation() {
+  const host = $('teachEvaluate');
+  if (!host) return;
+  clear(host);
+  const list = el('ol', { className: 'teach-evaluate-list' });
+  for (const id of EVALUATION) {
+    list.append(
+      el('li', {
+        children: [
+          el('h3', { text: tr(`teach.evaluate.${id}.title`) }),
+          el('p', { text: tr(`teach.evaluate.${id}.text`) }),
+        ],
+      })
+    );
+  }
+  host.append(list);
+}
+
+/** Where the repository is, for the two feedback routes. */
+const ISSUES_URL =
+  'https://github.com/gravitas-sim/gravitas-sim.github.io/issues';
+
+/** The two ways to say something, both through the existing issue tracker. */
+function renderFeedbackRoutes() {
+  const host = $('teachFeedbackRoutes');
+  if (!host) return;
+  clear(host);
+  for (const id of ['issue', 'contact']) {
+    host.append(
+      el('section', {
+        className: 'doc-feature',
+        children: [
+          el('h3', { text: tr(`teach.feedback.${id}.title`) }),
+          el('p', { text: tr(`teach.feedback.${id}.text`) }),
+          el('a', {
+            className: 'teach-more',
+            text: tr('teach.feedback.issue.link'),
+            attrs: { href: ISSUES_URL, target: '_blank', rel: 'noopener' },
+          }),
+        ],
+      })
+    );
+  }
+}
+
+/** Where the local notes live. One key, and the reader can empty it. */
+const FEEDBACK_KEY = 'gravitas_teaching_notes_v1';
+
+/** Read the notes, tolerating a browser that refuses storage. */
+function readNotes() {
+  try {
+    return JSON.parse(window.localStorage.getItem(FEEDBACK_KEY) || '{}') || {};
+  } catch {
+    return {};
+  }
+}
+
+/** Write them back, and say nothing if storage is unavailable. */
+function writeNotes(notes) {
+  try {
+    window.localStorage.setItem(FEEDBACK_KEY, JSON.stringify(notes));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * The classroom feedback form.
+ *
+ * Six prompts, no identity, no network. It exists because this application
+ * collects nothing - no analytics, no telemetry, no account - which is the
+ * right default and also means nobody finds out what happened in a classroom
+ * unless somebody writes it down and sends it. This is the writing-it-down
+ * half; the sending is the reader's, through whatever channel they choose.
+ *
+ * What is typed is kept under one localStorage key so that a half-written note
+ * survives a reload, and there is a button that empties it. Nothing here ever
+ * touches fetch.
+ */
+function renderFeedbackForm() {
+  const form = $('teachFeedbackForm');
+  const status = $('teachFeedbackStatus');
+  const exportBtn = $('teachFeedbackExport');
+  const clearBtn = $('teachFeedbackClear');
+  if (!form) return;
+  clear(form);
+
+  const notes = readNotes();
+  const say = message => {
+    if (status) status.textContent = message;
+  };
+
+  for (const id of FEEDBACK_FIELDS) {
+    const fieldId = `teachFeedback-${id}`;
+    const hint = tr(`teach.feedback.${id}.hint`);
+    const hintId = hint ? `${fieldId}-hint` : null;
+    const input = el('textarea', {
+      className: 'teach-feedback-input',
+      attrs: {
+        id: fieldId,
+        rows: id === 'route' || id === 'level' ? '1' : '2',
+        // Nothing here is sent, so nothing here is required.
+        ...(hintId ? { 'aria-describedby': hintId } : {}),
+      },
+    });
+    input.value = notes[id] || '';
+    input.addEventListener('input', () => {
+      const next = { ...readNotes(), [id]: input.value };
+      say(writeNotes(next) ? tr('teach.feedback.form.saved') : '');
+    });
+    const children = [
+      el('label', {
+        text: tr(`teach.feedback.${id}.label`),
+        attrs: { for: fieldId },
+      }),
+    ];
+    if (hint) {
+      children.push(
+        el('span', {
+          className: 'teach-fineprint',
+          text: hint,
+          attrs: { id: hintId },
+        })
+      );
+    }
+    children.push(input);
+    form.append(el('div', { className: 'teach-feedback-field', children }));
+  }
+
+  if (exportBtn) {
+    exportBtn.textContent = tr('teach.feedback.form.export');
+    exportBtn.onclick = () => {
+      const current = readNotes();
+      const lines = FEEDBACK_FIELDS.filter(id =>
+        String(current[id] || '').trim()
+      ).map(
+        id =>
+          `## ${tr(`teach.feedback.${id}.label`)}\n\n${current[id].trim()}\n`
+      );
+      if (!lines.length) {
+        say(tr('teach.feedback.form.empty'));
+        return;
+      }
+      const name = `gravitas-classroom-notes-${new Date().toISOString().slice(0, 10)}.md`;
+      const text = `# ${tr('teach.feedback.form.title')}\n\n${lines.join('\n')}`;
+      const url = URL.createObjectURL(
+        new Blob([text], { type: 'text/markdown' })
+      );
+      const link = el('a', { attrs: { href: url, download: name } });
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      say(tr('teach.feedback.form.exported', { name }));
+    };
+  }
+
+  if (clearBtn) {
+    clearBtn.textContent = tr('teach.feedback.form.clear');
+    clearBtn.onclick = () => {
+      try {
+        window.localStorage.removeItem(FEEDBACK_KEY);
+      } catch {
+        /* nothing was stored, so nothing needs removing */
+      }
+      for (const id of FEEDBACK_FIELDS) {
+        const input = document.getElementById(`teachFeedback-${id}`);
+        if (input) input.value = '';
+      }
+      say(tr('teach.feedback.form.cleared'));
+    };
+  }
+}
+
 function renderAll() {
   document.documentElement.setAttribute('lang', language());
   applyTranslations();
@@ -818,10 +1031,14 @@ function renderAll() {
   renderCycle();
   renderJourney();
   renderInstruments();
+  renderQuickstart();
   renderDemos();
   renderActivities();
   renderPatterns();
   renderEvidence();
+  renderEvaluation();
+  renderFeedbackRoutes();
+  renderFeedbackForm();
 }
 
 /** Wire the page up. */

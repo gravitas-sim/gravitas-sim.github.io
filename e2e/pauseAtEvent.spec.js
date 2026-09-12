@@ -11,8 +11,24 @@
 
 import { test, expect } from './fixtures.js';
 
+/**
+ * The one eccentric pair the crossing tests use.
+ *
+ * Named bodies from a catalogue scenario, rather than whatever the panel
+ * happens to preselect. This file used to ask for a scenario key that does not
+ * exist: `preset_scenario` accepted it, the builder fell back to a generated
+ * world, and the tests then armed against two random bodies. They passed for
+ * as long as that pair happened to sit away from periapsis, and stopped the
+ * day an unrelated change moved the seeded stream along.
+ */
+const ECCENTRIC = Object.freeze({
+  scenario: "Kepler's 2nd Law",
+  body: 'Eccentric Orbiter',
+  primary: 'Kepler Star',
+});
+
 /** Open the tool through the interface. */
-async function openTool(page, app, scenario = 'Comet Sungrazer') {
+async function openTool(page, app, scenario = ECCENTRIC.scenario) {
   await app.boot();
   await app.loadScenario(scenario);
   await app.waitForFrames(10);
@@ -25,6 +41,52 @@ async function openTool(page, app, scenario = 'Comet Sungrazer') {
 async function choosePair(page, bodyName, primaryName) {
   await page.locator('#pauseEventBody').selectOption({ label: bodyName });
   await page.locator('#pauseEventPrimary').selectOption({ label: primaryName });
+}
+
+/**
+ * Arm an inward crossing at a radius this orbit is certain to reach.
+ *
+ * The target is the middle of the orbit's own range, taken from the same
+ * elements the panel checks an arm request against and converted with the same
+ * units helper the field is typed in. A fraction of the present separation -
+ * what this used to do - is only inside the orbit when the body happens to be
+ * away from periapsis, and this one starts exactly on it.
+ *
+ * @param {import('@playwright/test').Page} page - The page under test
+ */
+async function armInwardCrossing(page) {
+  await choosePair(page, ECCENTRIC.body, ECCENTRIC.primary);
+  const targetAu = await page.evaluate(
+    async ([bodyName, primaryName]) => {
+      const p = await import('/js/physics.js');
+      const { orbitalElements } = await import('/js/orbital.js');
+      const { simToAu } = await import('/js/units.js');
+      const all = [
+        ...p.stars,
+        ...p.planets,
+        ...p.gas_giants,
+        ...p.asteroids,
+        ...p.comets,
+        ...p.bh_list,
+      ];
+      const find = name => all.find(b => b?.name === name) || null;
+      const el = orbitalElements(
+        find(bodyName),
+        find(primaryName),
+        p.getPhysicsSetting('gravitational_constant')
+      );
+      if (!el?.bound) return null;
+      return simToAu((el.periapsis + el.apoapsis) / 2);
+    },
+    [ECCENTRIC.body, ECCENTRIC.primary]
+  );
+
+  expect(
+    targetAu,
+    `${ECCENTRIC.body} is not on a bound orbit around ${ECCENTRIC.primary}`
+  ).toBeGreaterThan(0);
+  await page.locator('#pauseEventSeparation').fill(targetAu.toFixed(4));
+  await page.locator('#pauseEventArm').click();
 }
 
 /** What the watcher module thinks is going on. */
@@ -128,18 +190,9 @@ test.describe('stopping at an event', () => {
     page,
     app,
   }) => {
-    await openTool(page, app, 'Comet Sungrazer');
+    await openTool(page, app);
     await page.locator('#pauseEventKind').selectOption('separationInward');
-
-    // Aim at a radius the comet is currently outside, so an inward crossing is
-    // genuinely ahead of it. The panel pre-fills the present separation; take
-    // a little less.
-    const here = Number(
-      await page.locator('#pauseEventSeparation').inputValue()
-    );
-    expect(here).toBeGreaterThan(0);
-    await page.locator('#pauseEventSeparation').fill((here * 0.8).toFixed(4));
-    await page.locator('#pauseEventArm').click();
+    await armInwardCrossing(page);
     await expect(page.locator('#pauseEventStatus')).toContainText(/watching/i);
 
     await expect
@@ -159,13 +212,9 @@ test.describe('stopping at an event', () => {
   });
 
   test('the timeline gets a marker for the moment', async ({ page, app }) => {
-    await openTool(page, app, 'Comet Sungrazer');
+    await openTool(page, app);
     await page.locator('#pauseEventKind').selectOption('separationInward');
-    const here = Number(
-      await page.locator('#pauseEventSeparation').inputValue()
-    );
-    await page.locator('#pauseEventSeparation').fill((here * 0.8).toFixed(4));
-    await page.locator('#pauseEventArm').click();
+    await armInwardCrossing(page);
     await expect
       .poll(async () => (await watchState(page)).last, { timeout: 90_000 })
       .not.toBeNull();
@@ -181,13 +230,9 @@ test.describe('stopping at an event', () => {
     page,
     app,
   }) => {
-    await openTool(page, app, 'Comet Sungrazer');
+    await openTool(page, app);
     await page.locator('#pauseEventKind').selectOption('separationInward');
-    const here = Number(
-      await page.locator('#pauseEventSeparation').inputValue()
-    );
-    await page.locator('#pauseEventSeparation').fill((here * 0.8).toFixed(4));
-    await page.locator('#pauseEventArm').click();
+    await armInwardCrossing(page);
     await expect
       .poll(async () => (await watchState(page)).last, { timeout: 90_000 })
       .not.toBeNull();
@@ -202,7 +247,7 @@ test.describe('stopping at an event', () => {
       const tools = await import('/js/sandboxTools.js');
       const ev = await import('/js/pauseAtEvent.js');
       tools.setCaptureMode(true, {
-        caption: 'Comet Sungrazer',
+        caption: "Kepler's 2nd Law",
         note: ev.lastEvent()?.note || '',
       });
       const out = {
@@ -213,7 +258,7 @@ test.describe('stopping at an event', () => {
       return out;
     });
     expect(burned.note).toBe('Fastest point of the orbit');
-    expect(burned.caption).toBe('Comet Sungrazer');
+    expect(burned.caption).toBe("Kepler's 2nd Law");
   });
 });
 
@@ -301,13 +346,9 @@ test.describe('everything else still agrees afterwards', () => {
     page,
     app,
   }) => {
-    await openTool(page, app, 'Comet Sungrazer');
+    await openTool(page, app);
     await page.locator('#pauseEventKind').selectOption('separationInward');
-    const here = Number(
-      await page.locator('#pauseEventSeparation').inputValue()
-    );
-    await page.locator('#pauseEventSeparation').fill((here * 0.8).toFixed(4));
-    await page.locator('#pauseEventArm').click();
+    await armInwardCrossing(page);
     expect((await watchState(page)).armed).not.toBeNull();
 
     await app.loadScenario('Solar System');
@@ -325,13 +366,9 @@ test.describe('everything else still agrees afterwards', () => {
     page,
     app,
   }) => {
-    await openTool(page, app, 'Comet Sungrazer');
+    await openTool(page, app);
     await page.locator('#pauseEventKind').selectOption('separationInward');
-    const here = Number(
-      await page.locator('#pauseEventSeparation').inputValue()
-    );
-    await page.locator('#pauseEventSeparation').fill((here * 0.8).toFixed(4));
-    await page.locator('#pauseEventArm').click();
+    await armInwardCrossing(page);
     expect((await watchState(page)).armed).not.toBeNull();
 
     await page.locator('#pauseEventClose').click();

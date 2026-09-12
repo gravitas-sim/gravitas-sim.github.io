@@ -89,7 +89,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Stability as a third question, the surprise that L4 and L5 are stable at maxima, and the Trojans. This is the part students remember.',
       },
       {
-        steps: '17-19',
+        steps: '17-20',
         text: 'Break the assumptions deliberately and watch the overlay refuse, then the eccentric case, then the three claims restated side by side. Leave time for the last screen.',
       },
     ],
@@ -238,11 +238,11 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Applying the first burn and reading where the orbit changed. The preview should show apoapsis at 2.5 AU before they press Apply; a student whose preview disagrees has mistyped, and Undo restores the whole world.',
       },
       {
-        steps: '13-15',
+        steps: '13-16',
         text: 'The transfer time from Kepler\u2019s third law, the coast itself, and the prediction about doing nothing on arrival. The coast takes about 423 simulated days; use the speed control rather than waiting.',
       },
       {
-        steps: '16-20',
+        steps: '17-22',
         text: 'The second burn, circularising, the total cost, why both burns were accelerations, and what the whole answer depended on. The last screen is the one to leave time for.',
       },
     ],
@@ -316,8 +316,9 @@ export const INSTRUCTOR_CONTENT = {
       3: 'The preview shows periapsis falling, apoapsis rising, and the specific angular momentum unchanged to every digit shown. Students should set the field back to zero without applying; if somebody applies it, Undo restores the world exactly.',
       5: 'About 29.8 km/s for the spacecraft and 18.8 for the station. Anything an order of magnitude off is the unit toggle rather than the student.',
       11: 'The previewed apoapsis reads 250 simulation units, which is 2.5 AU, and the periapsis stays at 100. After applying, the trail visibly climbs away from the inner circle. A student whose apoapsis is wildly wrong has entered the km/s figure rather than the converted one.',
-      14: 'The coast takes about 423 simulated days and the speed falls from 35.6 km/s to 14.2 as the spacecraft climbs. At normal speed this is a long wait; the transport control is the intended route.',
-      17: 'The eccentricity in the preview falls to a few thousandths, and the periapsis and apoapsis both read about 250 simulation units. A residual eccentricity above about 0.05 means the burn was made away from apoapsis rather than at it.',
+      15: 'The coast takes about 423 simulated days and the speed falls from 35.6 km/s to 14.2 as the spacecraft climbs. At normal speed this is a long wait; the transport control is the intended route.',
+      16: 'The top of the arc reads about 250 simulation units, which is 2.5 AU, and the bottom still reads about 100, which is 1 AU. The bottom is the number that answers the previous screen: the first burn moved the far side of the orbit and left the near side exactly where it was, so with no second burn the spacecraft returns. A student whose bottom figure has changed has applied a burn somewhere other than at periapsis.',
+      18: 'The eccentricity in the preview falls to a few thousandths, and the periapsis and apoapsis both read about 250 simulation units. A residual eccentricity above about 0.05 means the burn was made away from apoapsis rather than at it.',
     },
     modelNotes: `Two-body motion about a single dominant mass, integrated with Velocity Verlet
       rather than the catalogue\u2019s default symplectic Euler, because the lesson checks a
@@ -928,7 +929,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The run as it actually arrives: a weather gap typed into the panel, which drops epochs and can break the control, and then a hand-typed list of times, which is also where students discover that unreadable entries are reported rather than dropped.',
       },
       {
-        steps: '12-14',
+        steps: '12-15',
         text: 'What a number has to be quoted with - the range searched, the schedule, the seed - and the closing statement that a schedule is not administration around a sampled measurement but the measurement itself.',
       },
     ],
@@ -1615,23 +1616,23 @@ export const INSTRUCTOR_CONTENT = {
     ],
     flow: [
       {
-        steps: '1–7',
+        steps: '1–8',
         text: 'The cannonball experiment. Students predict, fire at low and high speed, hunt for the dividing line, and identify what happens at it.',
       },
       {
-        steps: '8–12',
+        steps: '9–13',
         text: 'The reframing. Energy bars are introduced, the sign of the total is read, and students confirm it stays constant around a real orbit.',
       },
       {
-        steps: '13–14',
+        steps: '14–15',
         text: 'Escape speed, and the misconception that gravity stops.',
       },
       {
-        steps: '15–19',
+        steps: '16–20',
         text: 'What changes escape speed: mass, then starting distance. Ends with the three orbit shapes.',
       },
       {
-        steps: '20–23',
+        steps: '21–24',
         text: 'ʻOumuamua. Students check its energy themselves and decide in writing whether it will return.',
       },
     ],
@@ -1708,9 +1709,10 @@ export const INSTRUCTOR_CONTENT = {
     expectations: {
       3: 'A low launch speed gives a suborbital arc that returns to the surface. Total energy is clearly negative.',
       5: 'A high launch speed gives a path that leaves and does not return. Total energy is at or above zero.',
+      7: 'Two numbers with a gap between them, bracketing 10.9 km/s. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in hundredths will report 0.02. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the field check says so rather than marking the coarse one wrong. Anything centred outside 10.3 to 11.5 is a misread of which shot came back.',
       6: 'The dividing line is where the total energy bar reaches zero. Students should be able to bracket it within a small range of the slider.',
-      9: 'The kinetic and potential bars change continuously; the total does not. This is the observation the next question depends on.',
-      21: 'ʻOumuamua’s total energy is positive. The eccentricity is above 1 and the path is hyperbolic.',
+      10: 'The kinetic and potential bars change continuously; the total does not. This is the observation the next question depends on.',
+      22: 'ʻOumuamua’s total energy is positive. The eccentricity is above 1 and the path is hyperbolic.',
     },
   },
 
@@ -1781,7 +1783,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Splitting the total between the two stars using the balance point, and the reveal.',
       },
       {
-        steps: '31–35',
+        steps: '31–36',
         text: 'Sirius, measured from real observations, then a star with a planet, then one worked independently.',
       },
     ],
@@ -1963,7 +1965,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Evaporation lifetime on a bar chart that counts zeros rather than years.',
       },
       {
-        steps: '25–29',
+        steps: '25–30',
         text: 'Mass classes, a four-object lineup at clearly labeled separate scales, and the reveal that the mystery object is Sagittarius A*.',
       },
     ],
@@ -3389,7 +3391,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The Trojans in the rotating frame: an exact equilibrium, a real tadpole libration, an unstable equilibrium that departs, and a non-co-orbital body whose ratio is closer to 7:5 than Pluto’s is to 3:2. The distinction between an equilibrium and a stable equilibrium is the target here.',
       },
       {
-        steps: '32–33',
+        steps: '32–34',
         text: 'The four cases sorted two ways - by how good the ratio is, and by whether they are resonant - which give different orders. Then a referee-style question about a paper that overclaims, and the closing survey: Kirkwood gaps, plutinos, Io’s volcanism, and resonant chains as evidence for migration.',
       },
     ],
@@ -3555,7 +3557,7 @@ export const INSTRUCTOR_CONTENT = {
         steps: '1-6',
         title: 'Before there is a star',
         detail:
-          'The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 22 and 18 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the lesson, not a gap.',
+          'The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 22 and 18 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the lesson, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 23, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 23 as contradicting this one.',
       },
       {
         steps: '7-12',
@@ -3598,8 +3600,16 @@ export const INSTRUCTOR_CONTENT = {
         body: 'Every phase is reachable with one button, the age is both a slider and a number, and no screen requires an animation to run to completion. Reduced motion turns autoplay off and draws the cloud and the explosion at a fixed moment; everything stays reachable stepwise.',
       },
       {
-        heading: 'Two clocks, both labelled',
-        body: 'Time pacing is logarithmic in age and honest about duration. Phase pacing runs along the track’s stored samples so that brief stages are inspectable, and the readout says in as many words that it is not a clock.',
+        heading: 'Three clocks, and only one of them is a lifetime',
+        body: 'The playhead button cycles three pacings and the readout names which is in force every time. Phase pacing runs along the track’s stored samples so that brief stages are inspectable. Time pacing is logarithmic in age. Proportional pacing is the honest one: the position IS the fraction of the life, which puts eighty-six per cent of a solar-mass playhead on the main sequence and squeezes the whole thermally-pulsing AGB into a hundredth of a per cent. Show that one at least once. Under the other two the readout says, in as many words, that the position is not a fraction of a life - the phase pacing gives the thermally-pulsing AGB nearly half the playhead, an exaggeration of about three thousand eight hundred, and the panel prints that ratio.',
+      },
+      {
+        heading: 'The canvas shows the stage, not a stand-in for it',
+        body: 'The main scene carries the same model time the panel does. Before the track begins there is no star on the canvas at all - a contracting cloud with a brightening centre stands where it will be, because MIST’s tracks start at a body that already has a photosphere and drawing one earlier would be the falsest thing in the lesson. On the AGB, dashed shells stand for the mass the track records being shed. At a core-collapse endpoint, expanding rings stand for an explosion the endpoint model expects and the remnant is a mark rather than a disc. All of it is bounded and seeded: fourteen blobs, three shells, three rings, the same every run, and none of it is a body the engine integrates. The readout names which of the four kinds of thing is on screen - a stored model row, an interpolation between two, a schematic, or a published prescription - on every screen.',
+      },
+      {
+        heading: 'Freezing a moment, on screen 15',
+        body: 'One screen offers "Freeze this moment", which leaves a copy of the star as it is on the canvas, labelled with the age it was taken at, while the original goes on evolving beside it. The copy is model-owned and nothing writes to it again, so "then and now" is two objects a student can click rather than a number they have to remember. Copies are dropped when the step changes, so a class that freezes several will not carry them forward.',
       },
       {
         heading: 'Endpoints carry their sources',
@@ -3615,15 +3625,15 @@ export const INSTRUCTOR_CONTENT = {
       6: 'About 5,740 K and 0.80 solar luminosities at 457 million years - the zero-age main sequence.',
       7: 'About 5,850 K, 1.11 solar luminosities, 1.03 solar radii at 4.6 Gyr. Worth pointing out that the real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent without having been fitted.',
       8: 'From 0.80 to 2.28 solar luminosities over 9.9 billion years - nearly three times - with the surface temperature almost unchanged.',
-      9: 'Radii of about 0.90 and 1.56 solar. Hold on to these: three screens later the same star is 173.',
+      9: 'Radii of about 0.90 and 1.56 solar - a factor of 1.7 across ten billion years, and the smallest change in the lesson. Both versions are on the canvas at once, so a student can click either. Hold on to these: three screens later the same star is 173.',
       11: 'On the main sequence a filled core; on the red-giant branch a ring outside a core that is no longer the energy source. Expect at least one student to ask how big the shell really is, which is the question the "The interior" row answers: the model does not say.',
       12: 'From about 1.65 to about 173 solar radii, with the surface cooling from 5,590 K to about 3,070 K.',
       14: 'About 3,070 K, 2,390 solar luminosities, 173 solar radii, and 0.95 solar masses. The mass is the number to stop on: a giant is a stage, not a heavyweight.',
-      15: 'In true-size mode the main-sequence star is a mark and the giant fills the panel; in fitted mode both fill it and the caption says the sizes mean nothing.',
+      15: 'Two comparisons on one screen. On the canvas: freeze the star on the main sequence, run to the tip of the giant branch, and the frozen copy is about 0.9 solar radii beside a live star near 170 - a factor of two hundred, side by side, on one scale. Expect the class to freeze at different moments, which makes the discussion better; ask what the label says, because the age is on it and a copy without one is indistinguishable from a second star. In the panel: true-size mode makes the main-sequence star a mark and the giant fill the box, fitted mode fills it with both and the caption says the size means nothing.',
       17: 'From 1.00 to about 0.54 solar masses - nearly half the star leaves. Most of the loss is late on the asymptotic giant branch, so students who stop early will see too little.',
       20: 'About 47,600 K, 1.6 solar luminosities, 0.018 solar radii, 0.54 solar masses. Roughly twice the radius of the Earth.',
       21: 'About 9.88 Gyr, 1.42 Gyr and 1.35 Myr. The last is a ten-thousandth of the first and gets a third of the playhead.',
-      23: 'About 1.11 and 0.0048 solar luminosities, a ratio near 230.',
+      23: 'About 1.11 and 0.0048 solar luminosities, a ratio near 230. Both stars are on the canvas and both are 4.6 billion years old - the same AGE, not the same fraction of a life: the Sun-like star is half way through its main sequence and the red dwarf has done four thousandths of its. Contrast with screen 1, where all three are half way through their own, explicitly; a class that misses the difference reads this screen as contradicting that one.',
       25: 'About 1.11 against 43,000 solar luminosities, and 9.88 Gyr against 8.65 Myr.',
       26: 'The radius climbs past 1,000 solar radii while the mass falls from 20 towards 14. Six solar masses lost to a wind is more than most stars weigh in total.',
       29: 'A remnant of about 1.4 solar masses, from a track that stopped with 9.4. The wording of the "How this is known" row is the point of the screen, not the number.',
@@ -3811,28 +3821,28 @@ export const INSTRUCTOR_CONTENT = {
           'Screens 13 and 15 are the quantitative core. Screen 16 is a short written answer and the first place the lesson checks whether "main sequence" has landed as a stage rather than a category. If time is short, screen 15 can be demonstrated from the front rather than done individually.',
       },
       {
-        steps: '17-21',
+        steps: '17-22',
         title: 'Everything that is not on the main sequence',
         detail:
-          'The strongest fifteen minutes in the lesson. Screen 17 has two stars of identical colour differing by a factor of 426 in radius. Screen 20 needs the age slider paced by phase, which the step sets automatically; the tip invites students to switch it back and watch the whole post-main-sequence collapse into a sliver.',
+          'The strongest fifteen minutes in the lesson. Screen 17 has two stars of identical colour differing by a factor of 426 in radius. Screen 20 is a prediction and the one to hold the room on: a hot star that is faint has to be tiny, and the fourth option - "you cannot tell without the mass" - is the habit the whole lesson is trying to break. Take a show of hands before revealing it. Screen 21 needs the age slider paced by phase, which the step sets automatically; the tip invites students to switch it back and watch the whole post-main-sequence collapse into a sliver.',
       },
       {
-        steps: '22-23',
+        steps: '23-24',
         title: 'Why the big ones go first',
         detail:
           "Screen 22 is a prediction most students get wrong for a good reason, and the discussion is better if they commit first. Screen 23 carries the lesson's one genuinely unverifiable number and says so: no 0.2 solar-mass star has ever finished its main sequence anywhere.",
       },
       {
-        steps: '24-26',
+        steps: '25-28',
         title: 'A population, counted twice',
         detail:
-          'Both screens use one population and one histogram; only the cut changes. The written answer on screen 26 is the one worth collecting - see the rubric, and in particular the wrong answer it rejects.',
+          'One population, one histogram and one canvas across all three screens; only the cut changes, and it now moves the canvas as well as the plot. Screen 26 is the prediction and it is worth a show of hands - "almost none" is the answer nearly nobody offers before seeing it. The written answer on screen 28 is the one worth collecting; see the rubric, and in particular the wrong answer it rejects.',
       },
       {
-        steps: '27-28',
+        steps: '29-30',
         title: 'The challenge and the argument',
         detail:
-          'Screen 27 is open and accepts either counterexample; the validation recognises both and nudges a student whose two stars break neither rule. Screen 28 puts the step 1 prediction back on screen and is the summative piece.',
+          'Screen 29 is open and accepts either counterexample; the validation recognises both and nudges a student whose two stars break neither rule. Screen 30 puts the step 1 prediction back on screen and is the summative piece.',
       },
     ],
     features: [
@@ -3841,8 +3851,20 @@ export const INSTRUCTOR_CONTENT = {
         body: 'In "a modelled star" the readout carries a mass, an age, a phase and a lifetime, because a track supplies them. In "a point you chose" it carries a radius and explicitly nothing else. Students can move freely between them and the lab never quietly converts one into the other: adopting a nearby model is a separate, deliberate button.',
       },
       {
+        heading: 'One star, in four places at once',
+        body: 'A star this lesson stands on the canvas is the same object on the H-R diagram, in the accessible object list, on the comparison card and in a capture - one model state with one name, not four pictures that have to be kept in step. Clicking a star selects it everywhere; so does the "Which star" control, which is there so that a student working from the keyboard can say which star they mean without a pointer. Re-ordering the comparison changes the order and nothing else: the columns are labelled with the stars\' names rather than by position, so "the second one" and "the red giant" stop being the same phrase. Worth demonstrating once on the board, because students who have met a comparison that renumbers itself do not trust one that does not.',
+      },
+      {
         heading: 'Everything on the canvas is also in the list',
         body: 'Every measurement the lesson asks for can be read from the rows beneath the canvas, which is what makes the whole lesson completable without interpreting a picture. Colour is never graded, and the one screen about colour asks what changed rather than what shade it is.',
+      },
+      {
+        heading: 'The population screens show four numbers, not one',
+        body: 'Four hundred stars are drawn from the mass function; 351 of them sit on tracks the model can evaluate and are the ones placed; some number of those pass the brightness cut; and what stands on the canvas is a bounded sample of the placed ones. The readout names all four apart because conflating any two of them is the misconception the screens exist to break - "351 of 400 were modelled" is not "16 of 351 are bright", and neither is a statement about four hundred stars. Expect at least one student to report the canvas count as the population.',
+      },
+      {
+        heading: 'Moving the cut moves both views, and re-rolls nothing',
+        body: 'The threshold slider filters one generated population. Raise it and stars leave the canvas and the plot together; lower it and exactly those stars come back, in the same places, because the sample was never regenerated. That is worth doing slowly in front of the room: the claim "the same four hundred stars, not a new sample" is the whole basis of comparing the two counts, and a student who suspects the computer of drawing a new sample each time has no reason to believe the second count means anything.',
       },
       {
         heading: 'The age slider has two pacings',
@@ -3870,11 +3892,11 @@ export const INSTRUCTOR_CONTENT = {
       15: 'About 1.2, 726 and 58,550 solar luminosities, giving a slope near 3.6 between the ends.',
       18: 'Radii 0.24 and 101.6 solar, a ratio of 426; luminosities 0.0066 and 1,146 solar, a ratio of about 173,000. The square of 426 is 181,000 and the gap is the 40 K difference in temperature.',
       19: 'About 1,070 solar radii and a current mass near 14, from an initial 20. The mass loss is the number students skip past; it is worth stopping on.',
-      20: 'About 47,600 K, 1.6 solar luminosities and 0.018 solar radii - roughly twice the radius of the Earth, holding 0.54 solar masses.',
-      23: 'About 1,140,000, 9,880 and 8.7 million years for 0.2, 1 and 20 solar masses. Students often mis-key the trillion; the validation accepts billions and says so.',
-      24: '227 M, 93 K, 21 G out of 351 placed. Not one O and not one B: the sample drew a few and they had already left the main sequence.',
-      25: 'Sixteen stars kept, of which 8 F, 6 G, 2 A, and no K or M at all.',
-      27: 'Any pair where the hotter star is the fainter, or where the cooler star exceeds ten solar radii. The end of the 1 solar-mass track and the end of the 20 solar-mass track each supply one in a single click.',
+      21: 'About 47,600 K, 1.6 solar luminosities and 0.018 solar radii - roughly twice the radius of the Earth, holding 0.54 solar masses.',
+      24: 'About 1,140,000, 9,880 and 8.7 million years for 0.2, 1 and 20 solar masses. Students often mis-key the trillion; the validation accepts billions and says so.',
+      25: '227 M, 93 K, 21 G out of 351 placed. Not one O and not one B: the sample drew a few and they had already left the main sequence.',
+      27: 'Sixteen stars kept, of which 8 F, 6 G, 2 A, and no K or M at all.',
+      29: 'Any pair where the hotter star is the fainter, or where the cooler star exceeds ten solar radii. The end of the 1 solar-mass track and the end of the 20 solar-mass track each supply one in a single click.',
     },
     misconceptions: [
       {
@@ -4010,43 +4032,59 @@ export const INSTRUCTOR_CONTENT = {
     ],
     flow: [
       {
-        steps: '1-4',
+        steps: '1-6',
         title: 'What has to be happening',
         detail:
-          'Screen 1 is a prediction and is designed to be got wrong; do not resolve it early, and make sure it is written down, because screen 24 comes back to it. Screen 4 is the conceptual core of this quarter: the pulsating sphere emits nothing, and students who answer "B, because it is moving" have exposed the misconception the screen exists for. Spend a minute there.',
+          'Screen 1 is a prediction and is designed to be got wrong; do not resolve it early, and make sure it is written down, because screen 24 comes back to it. Screen 4 is the conceptual core of this quarter: the pulsating sphere emits nothing, and students who answer "B, because it is moving" have exposed the misconception the screen exists for. Spend a minute there. Screens 3 to 5 are the argument, and screen 4 is where it lands: an enormous amount of motion — a sphere swelling and shrinking — and nothing leaves it. Take a show of hands before revealing that one; "it is moving, so it radiates" is the answer most of a room gives, and it is the misconception the lesson exists to remove. The canvas shows each source in turn because the control puts it there.',
       },
       {
-        steps: '5-7',
+        steps: '7-9',
         title: 'The source and its rhythm',
         detail:
           'Screen 6 is the one to slow down on. Students reliably answer "a full orbit"; the half-orbit answer, and the reason for it - two identical objects swapped over look the same - is what makes the factor of two on screen 16 land rather than being a fact to memorise. Screen 7 introduces the ring overlay and says plainly that the speed is slowed and the rings are not matter.',
       },
       {
-        steps: '8-14',
+        steps: '10-16',
         title: 'What arrives',
         detail:
           'The physical heart of the lesson. Screen 11 is the one students most often need help with: the markers are not carried along, and the water-cork analogy is the one place a water analogy helps. Screen 12 is where the exaggeration is admitted, and it is worth pausing on the atom-across-an-astronomical-unit comparison. Screen 14 heads off "we heard the black holes" before anybody says it.',
       },
       {
-        steps: '15-19',
+        steps: '17-21',
         title: 'Shrinking orbits and the chirp',
         detail:
           'Screen 16 is the only counting exercise and it is worth the time: students count orbits on the canvas and peaks on the plot themselves and get two. Screen 17 draws the line between the energy argument and the sandbox\u2019s own illustrative damping, which matters because the rest of Gravitas uses the latter. Screen 19 establishes that the plot ends because the model was switched off, not because anything happened.',
       },
       {
-        steps: '20-22',
+        steps: '22-25',
         title: 'Other pairs, distance, and a measurement',
         detail:
           'Screen 21 is a clean controlled comparison - only the distance moves, and the frequency does not - and its validator checks the factor of two. Screen 22 is the payoff: the L-shape follows from the transverse stretch and squeeze the students have already watched, and the published trace is the first and only observation in the lesson.',
       },
       {
-        steps: '23-24',
+        steps: '26-27',
         title: 'Their own experiment, and the story',
         detail:
           'Screen 23 is deliberately open and deliberately small: one variable, two readings, and a statement of what was held fixed. Screen 24 is the assessment. Read the revisit of screen 1 as carefully as the explanation - a student who can say why their first answer was wrong has done the lesson.',
       },
     ],
     features: [
+      {
+        heading: 'The three sources are a control, not three sentences',
+        body: 'Screens 3 to 5 share one control — "What is emitting" — with three settings: one mass sitting still, a sphere pulsing in and out, and a binary. Each one restages the main canvas, so the thing being discussed is the thing on screen. Only the third emits, and the readout says why for each. This used to be three screens of prose with a binary orbiting behind all of them, including the one asking the reader to picture a single static mass.',
+      },
+      {
+        heading: 'The rings are propagation, not a field',
+        body: 'What the canvas draws is one crest per cycle of the wave, leaving the source and travelling outward, with where each crest sits computed from the model’s own emission history. So pausing holds the pattern, seeking back shows the earlier one, and restarting clears it. What it is NOT: a metric perturbation, a potential, a shell of matter, or a radiation pattern — the rings are circles and a real quadrupole does not radiate isotropically. The propagation speed on screen is a display choice and the readout says so.',
+      },
+      {
+        heading: 'Polarisation, and the circle that is not always there',
+        body: 'The stretch-and-squeeze screens select an EDGE-ON view, and that is a deliberate physical choice rather than a camera angle. Seen edge-on only one polarisation reaches the observer, so the ring stretches, passes exactly through a circle, and squeezes — the picture an introduction usually draws. Seen face-on the same binary is circularly polarised: the ellipse keeps its shape and rotates, and never becomes a circle at all. The readout names which case is on screen. If a student turns the inclination and asks why the circle has gone, that is the best question in the lesson.',
+      },
+      {
+        heading: 'The amplification factor is on screen',
+        body: 'A real strain of one part in 10²¹ is invisible at any honest scale, so every picture of one is amplified. The control says by how much and the readout prints the factor beside the real numbers. It changes the drawing only — the strain, the arm readings and the metres figure are all the unamplified values.',
+      },
       'The binary is on the main canvas and selectable throughout; the instrument beside the text is a second view of the same objects',
       'Controls are introduced one at a time - the mass and distance sliders do not appear until the screens that use them',
       'Every screen is completable with the sound off; Listen is offered three times and required never',
@@ -4079,19 +4117,21 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     expectations: {
+      5: 'Switching to the binary is the moment the rings start. Same total mass, same place, and the only difference is that the mass is now in two lumps whose arrangement changes as they turn. Encourage switching back and forth: the old rings keep travelling outward after the source stops emitting, which is worth noticing on its own.',
+      24: 'The two arms are drawn over the marker ring and the readout gives both as numbers with opposite signs, plus their difference and what that difference is in metres on four-kilometre arms. This screen is edge-on deliberately — see the note on polarisation below.',
       2: 'Two cards, giving 36 and 29 solar masses. Students often expect a photograph and are surprised there is none; that surprise is the screen working. Worth saying out loud that the separation on the canvas is to scale in Schwarzschild radii while the two discs are fixed-size markers - the picture is honest about the geometry and silent about the sizes.',
-      5: 'The arrangement changing rather than either object moving. Ask what is the same about the two paused moments - the same two objects, the same separation - and what differs, which is only the orientation of the pair.',
-      7: 'Rings more widely spaced further out, because they left when the orbit was slower. A student who says the wave is speeding up has it backwards and is worth catching here.',
-      8: 'The ring becoming an oval and turning over. Expect at least one student to think the ring is the orbit seen from above; the body text says it is not, and it is worth repeating.',
-      10: 'Two different numbers - whichever direction they recorded first, the other one half a cycle later. The value that matters is not which is which but that they differ; a pair of identical answers means the scrubber was moved a whole cycle rather than half, and the validator says so. Worth adding out loud: between the two stops there is an instant when the ring is a perfect circle and nothing is happening to it, which is not a gap in the wave but the moment it passes through zero.',
-      11: 'A marker that returns to where it started. If it does not, the student is watching the whole ring rather than one dot.',
-      12: 'Nothing measurable - this screen is a statement, not a task. The number to leave them with is one part in 10²¹, and the atom-across-an-astronomical-unit comparison is the one most students remember.',
-      13: 'A practice answer of 0.0001 and a real one around 10⁻²¹. The common error is reading "Strain now", which passes through zero twice a cycle; the validator rejects anything above 10⁻¹⁵ and says why.',
-      16: 'About two peaks per orbit, and the validator accepts 1.6 to 2.4 because it is a hand count. Students who get four have counted zero crossings rather than peaks.',
-      20: 'Two neutron stars of 1.4 solar masses each, and a signal that stays in band far longer than the black-hole pair. The limit to state: the model treats both objects as points and says nothing about composition or about what happens when neutron stars touch.',
-      21: 'Amplitude halving each time the distance doubles, and the frequency identical at all three. Only the distance moved, which is what makes it an experiment.',
-      22: 'A trace that is unmistakably noisier than anything else in the lesson, with a recognisable rise in it. Ask which of the three kinds of picture it is, and then ask the same about the ring overlay on the previous screen.',
-      23: 'One variable, two readings, and a ratio. The half students forget is saying what they held fixed; the validator prompts for it and it is worth insisting on.',
+      7: 'The arrangement changing rather than either object moving. Ask what is the same about the two paused moments - the same two objects, the same separation - and what differs, which is only the orientation of the pair.',
+      9: 'Rings more widely spaced further out, because they left when the orbit was slower. A student who says the wave is speeding up has it backwards and is worth catching here.',
+      10: 'The ring becoming an oval and turning over. Expect at least one student to think the ring is the orbit seen from above; the body text says it is not, and it is worth repeating.',
+      12: 'Two different numbers - whichever direction they recorded first, the other one half a cycle later. The value that matters is not which is which but that they differ; a pair of identical answers means the scrubber was moved a whole cycle rather than half, and the validator says so. Worth adding out loud: between the two stops there is an instant when the ring is a perfect circle and nothing is happening to it, which is not a gap in the wave but the moment it passes through zero.',
+      13: 'A marker that returns to where it started. If it does not, the student is watching the whole ring rather than one dot.',
+      14: 'Nothing measurable - this screen is a statement, not a task. The number to leave them with is one part in 10²¹, and the atom-across-an-astronomical-unit comparison is the one most students remember.',
+      15: 'A practice answer of 0.0001 and a real one around 10⁻²¹. The common error is reading "Strain now", which passes through zero twice a cycle; the validator rejects anything above 10⁻¹⁵ and says why.',
+      18: 'About two peaks per orbit, and the validator accepts 1.6 to 2.4 because it is a hand count. Students who get four have counted zero crossings rather than peaks.',
+      22: 'Two neutron stars of 1.4 solar masses each, and a signal that stays in band far longer than the black-hole pair. The limit to state: the model treats both objects as points and says nothing about composition or about what happens when neutron stars touch.',
+      23: 'Amplitude halving each time the distance doubles, and the frequency identical at all three. Only the distance moved, which is what makes it an experiment.',
+      25: 'A trace that is unmistakably noisier than anything else in the lesson, with a recognisable rise in it. Ask which of the three kinds of picture it is, and then ask the same about the ring overlay on the previous screen.',
+      26: 'One variable, two readings, and a ratio. The half students forget is saying what they held fixed; the validator prompts for it and it is worth insisting on.',
     },
     discussion: [
       'Screen 4, out loud and before the reveal: why does a pulsating sphere emit nothing when every part of it is accelerating? Push until somebody says "because it looks the same from out here".',
@@ -4223,6 +4263,18 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     features: [
+      {
+        heading: 'The canvas follows the preset, components and all',
+        body: 'Selecting "two neutron stars" changes the masses, the distance, the waveform, the separation on the canvas AND what the two objects are drawn as — two neutron stars rather than two black holes with light masses. That last part used to be missing, and it mattered: every number was right while the picture was of a different kind of object. The readout says in as many words that the point-mass model did not decide what they are. The same equations give the same waveform whatever the components are made of; identifying them is astrophysics, and for the neutron-star case the readout also names what the model leaves out — tidal deformation, which is how a real analysis tells them apart.',
+      },
+      {
+        heading: 'Inclination is geometry, and the picture shows it',
+        body: 'Turning the inclination from face-on to edge-on squashes the orbit on the canvas into a line, weakens the strain, and changes the polarisation from circular to linear. Those are one fact with three consequences, and the panel now shows all three at once. Worth pausing on: it is the clearest place in either lesson where a single parameter visibly reaches the picture, the plot and the ring together.',
+      },
+      {
+        heading: 'Pause means pause',
+        body: 'Moving any control used to restart the transport, so a student who paused on a feature and then nudged the playhead lost it immediately and concluded the pause button did not work. A control change now leaves the transport alone; only Play/pause and Replay change it.',
+      },
       {
         name: 'The gravitational-wave lab',
         text: 'Computes a leading-order quasi-circular inspiral in physical units from the two masses, the distance and the viewing angle. One timeline drives the schematic source, both plots, the audio and every capture, so nothing on screen can disagree with anything else. It reports the chirp mass, the frequency and separation at the playhead, the orbital velocity parameter with a plain-language verdict on how much the approximation has dropped, where the model stops and why, and both the true and effective distances.',

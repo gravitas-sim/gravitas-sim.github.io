@@ -27,8 +27,10 @@
 // time from the manifest and from validation/data.json. See js/data/teaching.js.
 // =============================================================================
 
+import { EN_ACTIVITIES } from './en.activities.js';
+
 export const EN_TEACHING = {
-  // --- Page furniture --------------------------------------------------------
+  ...EN_ACTIVITIES,
   'teach.title': 'Teaching with Gravitas',
   'teach.meta.description':
     'How Gravitas is used in an introductory astronomy course: guided investigations, an evidence notebook, controlled experiments, and six demonstrations you can run in the page.',
@@ -188,45 +190,6 @@ export const EN_TEACHING = {
   'teach.activities.objectives': 'By the end, students can',
   'teach.activities.estimate': 'Estimated, not yet timed with a class',
 
-  'teach.activity.duration': 'about {n} minutes',
-  'teach.activity.format.demonstration': 'Demonstration',
-  'teach.activity.format.guided': 'Guided activity',
-  'teach.activity.format.lab': 'Full lab',
-
-  'teach.activity.orbital-speed.title':
-    'Orbital motion: why do planets change speed?',
-  'teach.activity.orbital-speed.question':
-    'A planet on a fixed elliptical orbit speeds up and slows down, with nothing pushing it and no fuel burnt. What is being traded, and what is conserved?',
-  'teach.activity.orbital-speed.audience':
-    'Introductory astronomy or algebra-based physics. Works with a whole class projected, with pairs at machines, or as a lab period.',
-  'teach.activity.orbital-speed.prerequisites':
-    'Students should know that gravity pulls two masses together and weakens with distance. No calculus, no prior work on ellipses, and no angular momentum required — the activity builds it.',
-  'teach.activity.orbital-speed.objective.1':
-    'Predict where on an elliptical orbit a planet moves fastest, and say why',
-  'teach.activity.orbital-speed.objective.2':
-    'Measure speed and distance at closest and furthest approach and state the relationship between them',
-  'teach.activity.orbital-speed.objective.3':
-    'Explain the speed change in terms of a conserved quantity, and identify what gravity does and does not do to it',
-
-  'teach.activity.orbital-speed.demonstration.for': 'Projected, instructor-led',
-  'teach.activity.orbital-speed.demonstration.intro':
-    'A prediction, the motion, and the reason — in the time it takes to change topic. Ask the room to commit to an answer before anything moves; the equal-area slices at the end are the payoff.',
-  'teach.activity.orbital-speed.demonstration.closing':
-    'Close by asking the room what would have to be true for a planet to move at a constant speed. The answer — a circular orbit, where the distance never changes — is the one that shows they have the idea rather than the phrase.',
-
-  'teach.activity.orbital-speed.guided.for':
-    'One student or a pair, at a machine',
-  'teach.activity.orbital-speed.guided.intro':
-    'Shape the orbit yourself, commit to a prediction, then let the simulation stop at the two moments that settle it. The measurements attach to your notebook as you take them.',
-  'teach.activity.orbital-speed.guided.closing':
-    'For a transfer: set the eccentricity slider to 0.7 and predict the speed ratio before measuring it again. A rounder orbit should give a ratio nearer one — say why before you check.',
-
-  'teach.activity.orbital-speed.lab.for':
-    'A full period, individually or in pairs',
-  'teach.activity.orbital-speed.lab.intro':
-    'The whole argument, measured rather than asserted: where the star sits, how the shape is defined, two orbits compared under control, the speeds at both extremes, and where the reasoning stops working.',
-  'teach.activity.orbital-speed.lab.closing':
-    'The comparison is controlled because both orbiters go round the same star with the same semi-major axis, so eccentricity is the only thing that differs. The final step asks where that description fails — a pair of comparable masses, where neither body simply orbits the other.',
   'teach.demo.frameTitle': '{name}, running in Gravitas',
   'teach.demo.meta':
     'Full investigation: {duration} · {steps} steps · {graded} marked',
@@ -377,4 +340,89 @@ export const EN_TEACHING = {
   'teach.foot.instructors': 'Instructors',
   'teach.foot.source': 'Source',
   'teach.foot.licence': 'MIT licensed',
+
+  // --- Instructor quick-start -----------------------------------------------
+  'teach.section.quickstart': 'Quick start for instructors',
+  'teach.quickstart.intro':
+    'Six answers for somebody deciding whether to use this on Tuesday. Everything below is checkable from this page or the ones it links to.',
+  'teach.quickstart.prerequisites.title': 'What students need to know first',
+  'teach.quickstart.prerequisites.text':
+    'That gravity pulls two masses together and weakens with distance. Nothing else is assumed: no calculus anywhere, and each investigation states its own prerequisites on its card. Arithmetic is the only mathematics a short route needs.',
+  'teach.quickstart.timing.title': 'How long things take',
+  'teach.quickstart.timing.text':
+    'The short routes on this page are three to five minutes each. A classroom activity is five, twenty or fifty. A full investigation prints its own estimate, and every one of these numbers is an estimate reasoned from the steps rather than a figure timed with a class — none of them has been.',
+  'teach.quickstart.devices.title': 'What it runs on',
+  'teach.quickstart.devices.text':
+    'Any current browser. There is nothing to install, no account, and no server: the whole thing is static files. It is built to work on the kind of low-end school Chromebook that is several years old, at the low quality tier, and it keeps working with the network off once the tab has been opened.',
+  'teach.quickstart.accessibility.title': 'If a student cannot use the canvas',
+  'teach.quickstart.accessibility.text':
+    'Every instrument prints its numbers as text beside the picture, every plot is also a table, and the simulation itself has a written description that follows what is on screen. The whole activity is operable from the keyboard, and reduced motion and high contrast are honoured. What is not solved: a canvas cannot be explored by touch the way a tactile diagram can, and a student who needs that will need the numbers read to them.',
+  'teach.quickstart.evidence.title': 'What students hand in',
+  'teach.quickstart.evidence.text':
+    'Work is kept in the student\u2019s own browser and never leaves it on its own. They export it themselves — a lab report as a PDF, or the notebook as a file — and hand that in however you already collect work. Nothing is uploaded, and there is no account to create or roster to manage.',
+  'teach.quickstart.resources.title': 'What is there for you',
+  'teach.quickstart.resources.text':
+    'An instructor guide per investigation with expected observations, common misconceptions and discussion questions; an answer key; and an assignment builder that cuts a lesson down to the steps you want and produces a link.',
+
+  // --- A template for an evaluation nobody has run --------------------------
+  'teach.section.evaluate': 'If you want to evaluate it',
+  'teach.evaluate.intro':
+    'No study has been run on this software. There is no validated assessment, no measured learning gain, and nothing on this page should be read as one. What follows is a shape somebody could use to produce evidence, offered because the absence of it is easier to act on than to ignore.',
+  'teach.evaluate.objectives.title': 'Start from the objectives, not the tool',
+  'teach.evaluate.objectives.text':
+    'Each investigation states two or three observable objectives on its card, phrased as things a student does rather than things they appreciate. Decide which of those you actually care about before deciding what to measure; an evaluation of "engagement" answers a question nobody asked.',
+  'teach.evaluate.prepost.title': 'Pre and post, with a comparison',
+  'teach.evaluate.prepost.text':
+    'The same items before and after, with a comparison group doing whatever you would otherwise have done. A pre/post gain with no comparison measures the passage of time as much as the intervention, which is the single most common way results like these are overstated.',
+  'teach.evaluate.transfer.title': 'Ask a transfer question',
+  'teach.evaluate.transfer.text':
+    'A question about a system the activity never showed. Several investigations end with one — a different star, a comparable-mass pair, a survey that would have missed something — and those make reasonable models. A student who can answer only about the system they were shown has learnt the system.',
+  'teach.evaluate.usability.title': 'Watch, do not survey',
+  'teach.evaluate.usability.text':
+    'Sit behind three or four students and write down where they stop. Ten minutes of that is worth more than a hundred satisfaction ratings, and it is the only way to find the step whose instruction names a control that is off the bottom of their screen.',
+  'teach.evaluate.limits.title': 'Say what it cannot show',
+  'teach.evaluate.limits.text':
+    'The integrator is Newtonian and the model pages say where that stops. Some lesson screens place a body from a published model rather than integrating it, and say so on the screen. An evaluation that treats every picture as a simulation will draw a conclusion the software does not support.',
+  'teach.evaluate.review.title': 'Clear it first',
+  'teach.evaluate.review.text':
+    'Research on students, including classroom research by their own instructor, generally needs institutional review before any data is collected — and consent that is genuinely optional when the person asking also assigns the grade. Check with your board early; retrospective approval is usually not a thing.',
+
+  // --- Feedback --------------------------------------------------------------
+  'teach.section.feedback': 'Telling us what happened',
+  'teach.feedback.intro':
+    'This software collects nothing. There is no analytics, no telemetry, no account and no server to send anything to, which also means nobody here finds out when something does not work unless you say so.',
+  'teach.feedback.issue.title': 'Report something broken',
+  'teach.feedback.issue.text':
+    'Open an issue on the repository. A scenario name or a lesson link, what you expected and what happened is enough; a share link reproduces the exact state you were looking at.',
+  'teach.feedback.issue.link': 'Open an issue',
+  'teach.feedback.contact.title': 'Say something about teaching with it',
+  'teach.feedback.contact.text':
+    'The same place. An issue is a fine way to describe a class that went well or badly, and it is public, which is the point — the next instructor reads it too.',
+  'teach.feedback.form.title': 'Notes from a class you ran',
+  'teach.feedback.form.text':
+    'Optional, and entirely local. What you type here stays in this browser, is never sent anywhere, and asks for nothing that identifies you or a student. Export it when you are done and send it wherever you like, or clear it and it is gone.',
+  'teach.feedback.route.label': 'Which route or investigation',
+  'teach.feedback.route.hint': 'The name is enough',
+  'teach.feedback.level.label': 'Who it was for',
+  'teach.feedback.level.hint':
+    'Course level and rough class size — no institution, please',
+  'teach.feedback.worked.label': 'What worked',
+  'teach.feedback.worked.hint': 'The moment something landed',
+  'teach.feedback.confused.label': 'Where students got stuck',
+  'teach.feedback.confused.hint':
+    'The screen, the wording, or the control they could not find',
+  'teach.feedback.timing.label': 'How long it actually took',
+  'teach.feedback.timing.hint':
+    'Against the estimate on the card — the estimates have never been timed with a class',
+  'teach.feedback.wanted.label': 'What you wanted and could not do',
+  'teach.feedback.wanted.hint':
+    'A measurement, a control, a way to hand something in',
+  'teach.feedback.form.export': 'Save these notes as a file',
+  'teach.feedback.form.clear': 'Clear them',
+  'teach.feedback.form.saved': 'Kept in this browser. Nothing has been sent.',
+  'teach.feedback.form.cleared': 'Cleared.',
+  'teach.feedback.form.empty': 'Nothing to save yet.',
+  'teach.feedback.form.exported': 'Saved as {name}.',
+  'teach.feedback.form.privacy':
+    'No name, no email, no institution and no telemetry. Stored in this browser only, under one key you can clear above.',
 };

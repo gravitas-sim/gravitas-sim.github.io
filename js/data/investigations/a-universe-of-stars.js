@@ -53,14 +53,41 @@
  * integrator does not pretend otherwise. Spacing is in world units and does
  * not depend on how big anything is drawn, so switching between true and
  * compressed scale changes sizes and moves nothing.
+ *
+ * Fitted by default, and that is not cosmetic. A shelf exists to be looked at
+ * whole, and several of these steps now ask a reader to click a particular
+ * star on the canvas - so a star parked underneath the right-hand rail is a
+ * step that cannot be completed as written. fitStage() frames the shelf in
+ * the clear region between the lesson panel and the rail rather than in the
+ * whole window, which is why this works at 390px as well as at 1440.
  */
-const shelf = (stars, extra = {}) => ({ spacing: 95, ...extra, stars });
+const shelf = (stars, extra = {}) => ({
+  spacing: 95,
+  fit: true,
+  ...extra,
+  stars,
+});
+
+// Where every example on this page sits.
+// -----------------------------------------------------------------------------
+// Each of these is one star, declared once. The canvas resolves the
+// declaration and so does the comparison card - through the same function, and
+// from the same list, because a step that wants its stars compared says
+// `pinStaged` rather than repeating them.
+//
+// Every one of them says out loud where on its track it is. A bare `{track}`
+// is legal and means the middle of the main sequence, but leaving it bare
+// invited the drift this pass was written to fix: for most of a year the
+// canvas read a bare declaration as forty per cent of the way through the
+// star's *age* while the card read it as mid-main-sequence, so "Star 2" was a
+// 16,687 K star of 3.18 solar radii in the scene and a 16,596 K star of 3.26
+// on the diagram beside it.
 
 // The three the lesson opens and closes with. Anonymous at first: a positional
 // name says which one is which without saying what it is.
 const THREE = [
-  { role: 'one', name: 'Star 1', track: 'm020' },
-  { role: 'two', name: 'Star 2', track: 'm500' },
+  { role: 'one', name: 'Star 1', track: 'm020', at: 'ms' },
+  { role: 'two', name: 'Star 2', track: 'm500', at: 'ms' },
   { role: 'three', name: 'Star 3', track: 'm100', ageYr: 1.129e10 },
 ];
 
@@ -91,13 +118,17 @@ const CURSOR = [{ role: 'cursor', name: 'Your star', teffK: 5772, lumSun: 1 }];
 
 // A red dwarf and a red giant: the same colour, two entirely different objects.
 const REDS = [
-  { role: 'dwarf', name: 'Red dwarf', track: 'm020' },
+  { role: 'dwarf', name: 'Red dwarf', track: 'm020', at: 'ms' },
   { role: 'giant', name: 'Red giant', track: 'm100', at: 0.206 },
 ];
 
-// A supergiant, with the Sun beside it for scale.
+// A supergiant, with the Sun and a red giant beside it: the ladder the step's
+// prose describes. It used to stand two of these three and pin all three, so
+// the card showed a red giant that was not in the scene and the scene showed a
+// Sun that was not on the card.
 const SUPERGIANT = [
-  { role: 'sun', name: 'The Sun', track: 'm100' },
+  { role: 'sun', name: 'The Sun', track: 'm100', at: 'ms' },
+  { role: 'giant', name: 'Red giant', track: 'm100', at: 0.206 },
   { role: 'supergiant', name: 'Supergiant', track: 'm2000', at: 1 },
 ];
 
@@ -106,13 +137,13 @@ const SUPERGIANT = [
 // hypothetical point it is - which is also the honest thing to do, because
 // the lab has no evolutionary model for one.
 const WHITE_DWARF = [
-  { role: 'sun', name: 'The Sun', track: 'm100' },
+  { role: 'sun', name: 'The Sun', track: 'm100', at: 'ms' },
   { role: 'dwarf', name: 'Hot and faint', teffK: 25000, lumSun: 0.01 },
 ];
 
 // One of each, for the classification screen.
 const FOUR_KINDS = [
-  { role: 'main', name: 'A', track: 'm100' },
+  { role: 'main', name: 'A', track: 'm100', at: 'ms' },
   { role: 'giant', name: 'B', track: 'm100', at: 0.206 },
   { role: 'supergiant', name: 'C', track: 'm2000', at: 1 },
   { role: 'wd', name: 'D', teffK: 25000, lumSun: 0.01 },
@@ -120,38 +151,68 @@ const FOUR_KINDS = [
 
 // The pair the lifetime argument compares: more fuel, and less time.
 const LIFETIMES = [
-  { role: 'light', name: '0.2 M☉', track: 'm020' },
-  { role: 'sun', name: '1 M☉', track: 'm100' },
-  { role: 'heavy', name: '20 M☉', track: 'm2000' },
+  { role: 'light', name: '0.2 M☉', track: 'm020', at: 'ms' },
+  { role: 'sun', name: '1 M☉', track: 'm100', at: 'ms' },
+  { role: 'heavy', name: '20 M☉', track: 'm2000', at: 'ms' },
 ];
+
+/**
+ * Where the survey stands, and how faint a star it can still see.
+ *
+ * One distance and one cut, in one unit, shared by the panel and the scene.
+ * The slider's default is 10^-4, which is this number: a step that opens on a
+ * different cut from the one its slider reports is a step whose first reading
+ * is wrong.
+ */
+const SURVEY_DISTANCE_PC = 100;
+const SURVEY_THRESHOLD_FLUX = 1e-4;
 
 /**
  * The synthetic population, on the canvas.
  *
- * Four hundred stars are generated and counted; a bounded subsample stands on
- * the canvas, taken at a constant stride so it is reproducible and unbiased
- * with respect to anything the lesson asks. The readout says how many of how
- * many, because a subsample presented as a population is exactly the mistake
- * these three screens are about.
+ * Four hundred stars are generated; the ones the tracks could model stand on
+ * the canvas, laid out at a constant stride from the whole modelled set. The
+ * cap is above that set rather than below it on purpose. It used to be a
+ * hundred and twenty, and the survivors of the survey's cut were whichever of
+ * those hundred and twenty happened to be bright - two of the sixteen - so the
+ * canvas showed two stars while the readout beside it said sixteen, and the
+ * step that asks a reader to compare the two views gave them two views of
+ * different things.
+ *
+ * The readout still names all four numbers, because they are still four
+ * different things and a subsample presented as a population is precisely the
+ * mistake these screens are about; at these settings the canvas happens to
+ * hold the whole modelled set, and it says so rather than leaving it implied.
  */
 const POPULATION = {
   population: {
     seed: 'stellar-population-1',
     count: 400,
-    show: 120,
-    perRow: 15,
+    show: 400,
+    perRow: 21,
+    distancePc: SURVEY_DISTANCE_PC,
   },
   fit: true,
 };
 
-/** The same population, with the survey's threshold applied. */
+/**
+ * The same population, with the survey's cut applied.
+ *
+ * The same declaration, the same subsample, the same stars - the threshold is
+ * the only difference, and it is the threshold the panel's own slider writes.
+ * It used to be a separate number in a separate unit: the canvas filtered on
+ * intrinsic luminosity while the panel filtered on flux at a distance, and the
+ * two agreed only because 1e-4 of relative flux at a hundred parsecs happens
+ * to be one solar luminosity. Moving the slider moved one of them.
+ */
 const POPULATION_BRIGHT = {
   population: {
     seed: 'stellar-population-1',
     count: 400,
-    show: 120,
-    perRow: 15,
-    threshold: 1,
+    show: 400,
+    perRow: 21,
+    distancePc: SURVEY_DISTANCE_PC,
+    thresholdFlux: SURVEY_THRESHOLD_FLUX,
   },
   fit: true,
 };
@@ -162,7 +223,17 @@ const lab = (extra = {}) => ({ id: 'stellar-lab', ...extra });
 /** The comparison stage. */
 const stage = (extra = {}) => ({ id: 'stellar-compare', ...extra });
 
-/** The synthetic population. */
+/**
+ * The synthetic population.
+ *
+ * A control's opening position goes under `values`, which is the key
+ * widgetDefaults() reads. Writing `view: 1` at the top level of the spec put
+ * it somewhere nothing looks, so the three screens that open on the bright
+ * subset all opened on the whole population instead and relied on their own
+ * prose to tell the reader to switch. Harmless until the scene started
+ * following the control, at which point a step whose stage declares the cut
+ * had its control quietly undo it.
+ */
 const crowd = (extra = {}) => ({ id: 'stellar-population', ...extra });
 
 const A_UNIVERSE_OF_STARS = {
@@ -181,7 +252,7 @@ const A_UNIVERSE_OF_STARS = {
   tags: ['stars', 'observing'],
   lock: { placement: true, inspector: false, areaSweep: false },
   summary:
-    'Three stars, no labels, and a guess about which is biggest. Over twenty-eight steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+    'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
   objectives: [
     'Tell mass, radius, temperature, luminosity and apparent brightness apart',
     'Read a position on an H-R diagram, including why temperature runs backwards',
@@ -199,6 +270,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'three-stars-no-labels',
       stage: shelf(THREE, { fit: true, anonymous: true }),
       type: 'predict',
+      reveal: 'the-numbers-arrive',
       title: 'Three stars, no labels',
       body: `Three stars are on the stage, drawn on one common scale, so one
              that looks bigger <em>is</em> bigger. Their numbers are switched
@@ -215,15 +287,11 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 0,
       because:
-        'Only the size. The stage uses one scale for all three, so the largest really is the largest. The other two are traps. Brightness on screen is a display choice - the lab draws a star a hundred thousand times fainter than the Sun just as brightly, or you could not see it at all, and the caption under the picture says so. And mass does not follow size: when the numbers come on you will find that star 3, the biggest of the three, has about a fifth of star 2&rsquo;s mass, and star 2 puts out twelve times more light despite being a quarter of the size. Those four words - mass, radius, temperature, luminosity - are four different things, and separating them is what the next twenty-seven steps are for.',
+        'Only the size. The stage uses one scale for all three, so the largest really is the largest. The other two are traps. Brightness on screen is a display choice - the lab draws a star a hundred thousand times fainter than the Sun just as brightly, or you could not see it at all, and the caption under the picture says so. And mass does not follow size: when the numbers come on you will find that star 3, the biggest of the three, has about a fifth of star 2&rsquo;s mass, and star 2 puts out twelve times more light despite being a quarter of the size. Those four words - mass, radius, temperature, luminosity - are four different things, and separating them is what the next twenty-nine steps are for.',
       tool: stage({
         anonymous: true,
         pace: 'phase',
-        pins: [
-          { track: 'm020' },
-          { track: 'm500' },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         hide: ['order', 'sun'],
         note: 'Three modelled stars on one common scale. The numbers are switched off for this step on purpose.',
       }),
@@ -275,11 +343,7 @@ const A_UNIVERSE_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm020' },
-          { track: 'm500' },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         hide: ['order', 'sun'],
       }),
       tip: 'The list under the picture is the picture&rsquo;s own data. Every measurement in this lesson can be read from it without interpreting the image.',
@@ -328,10 +392,7 @@ const A_UNIVERSE_OF_STARS = {
              hundred times the light is to have far more square metres.`,
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm050', at: 1 },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         hide: ['order'],
       }),
       tip: 'Luminosity is the total light a star emits. Apparent brightness is how much of it reaches you, which also depends on distance. This step is about the first.',
@@ -340,6 +401,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'predict-which-is-bigger',
       stage: shelf(SAME_TEMPERATURE),
       type: 'predict',
+      reveal: 'measure-the-radius-ratio',
       title: 'Which is bigger, and by how much?',
       body: `Same two stars. Same surface temperature. One about three hundred
              times more luminous.
@@ -359,10 +421,7 @@ const A_UNIVERSE_OF_STARS = {
         'About seventeen, because area goes as the square of the radius and the square root of 300 is a little over 17. That is the whole of the relationship between the three quantities: the light a star puts out is its surface area times how hard each patch of that surface radiates, and at a fixed temperature the second factor is the same for both. Double the radius and you quadruple the light.',
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm050', at: 1 },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         hide: ['order'],
       }),
       tip: 'Radius, not diameter. Every size in this lesson is a radius, in units of the Sun&rsquo;s radius — 696,000 km.',
@@ -372,12 +431,22 @@ const A_UNIVERSE_OF_STARS = {
       stage: shelf(SAME_TEMPERATURE),
       type: 'measure',
       title: 'Measure it',
-      body: `Read both radii off the list and do the division yourself. The
-             stage reports the ratio on the second star&rsquo;s line, so you
-             can check your answer against it.
+      body: `Click each of the two stars in turn — on the canvas, or on the
+             comparison card, or with the <em>Which star</em> control if you
+             are working from the keyboard. Whichever you use, the same star
+             lights up in all three places, and its card opens.
+             \n\nRead both radii off the list and do the division yourself.
+             The stage reports the ratio on the second star&rsquo;s line, so
+             you can check your answer against it.
              \n\nThen press <strong>Save to notebook</strong>. The entry
-             records which models these were and what the lab computed, so the
-             comparison is evidence rather than a remembered number.`,
+             records which models these were, by name, and what the lab
+             computed, so the comparison is evidence rather than a remembered
+             number.`,
+      checklist: [
+        'Select the smaller star and read its radius',
+        'Select the brighter one and read its radius',
+        'Save the comparison to your notebook',
+      ],
       fields: [
         { id: 'small', label: 'Radius of the smaller', unit: 'R☉' },
         { id: 'large', label: 'Radius of the larger', unit: 'R☉' },
@@ -387,6 +456,13 @@ const A_UNIVERSE_OF_STARS = {
           unit: '×',
           compute: v => v.large / v.small,
           decimals: 1,
+        },
+        {
+          id: 'why',
+          kind: 'text',
+          label:
+            'In one sentence: these two are almost the same temperature, so why is one so much brighter?',
+          hint: 'What is the only thing left that can differ?',
         },
       ],
       validate: v => {
@@ -407,18 +483,23 @@ const A_UNIVERSE_OF_STARS = {
               'That is not the ratio the stage reports. Check that both radii came from these two stars.',
           };
         }
+        const said = String(v.why ?? '').trim();
+        if (said.length < 12) {
+          return {
+            level: 'warn',
+            message:
+              'The numbers are right — about 18.4 times. Now say why in a sentence, in the last box: that is the part you will need again in four screens&rsquo; time.',
+          };
+        }
         return {
           level: 'ok',
           message:
-            'About 18.4, and the square root of the luminosity ratio is 18.6. The small gap is because the two temperatures are close rather than identical — 4,272 K against 4,298 K.',
+            'About 18.4, and the square root of the luminosity ratio is 18.6. The small gap is because the two temperatures are close rather than identical — 4,272 K against 4,298 K. With temperature held still, area is the only thing left, and area goes as the square of the radius: that is the whole argument, and you have just measured it rather than been told it.',
         };
       },
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm050', at: 1 },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         hide: ['order'],
         capture: true,
       }),
@@ -725,7 +806,7 @@ const A_UNIVERSE_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100' }, { track: 'm2000' }],
+        pinStaged: ['m020', 'm100', 'm2000'],
         capture: true,
       }),
       tip: 'Order the stage by luminosity or by temperature as well as by radius — the three orderings put these stars in the same sequence, which will stop being true in step 17.',
@@ -734,6 +815,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'predict-mass-and-light',
       stage: shelf(EIGHT, { spacing: 78 }),
       type: 'predict',
+      reveal: 'the-whole-sequence',
       title: 'How steeply?',
       body: `You have two points on the main sequence: 0.2 solar masses giving
              about 0.0066 solar luminosities, and 20 solar masses giving about
@@ -749,7 +831,7 @@ const A_UNIVERSE_OF_STARS = {
         'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this lesson is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100' }, { track: 'm2000' }],
+        pinStaged: ['m020', 'm100', 'm2000'],
       }),
       tip: 'A hundred to the power 3.5 is ten to the power seven, which is ten million — near enough to nine million for a relationship this rough.',
     },
@@ -830,6 +912,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'two-red-stars',
       stage: shelf(REDS, { fit: true }),
       type: 'predict',
+      reveal: 'measure-the-two-reds',
       title: 'Two red stars',
       body: `Both stars on the stage have a surface near 3,350&nbsp;K. Both are
              red. Both are classified M.
@@ -845,7 +928,7 @@ const A_UNIVERSE_OF_STARS = {
         'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same colour and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the lesson that colour tells you about a surface and nothing about a size. The classification that separates them is not colour but luminosity: one is a red dwarf, the other a red giant.',
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100', at: 0.206 }],
+        pinStaged: true,
         hide: ['order'],
       }),
       tip: 'If the smaller one is drawn as a marker rather than a disc, that is not a rendering failure — the caption says so. At this scale it is genuinely smaller than a pixel.',
@@ -915,7 +998,7 @@ const A_UNIVERSE_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [{ track: 'm020' }, { track: 'm100', at: 0.206 }],
+        pinStaged: true,
         hide: ['order'],
         capture: true,
       }),
@@ -966,14 +1049,41 @@ const A_UNIVERSE_OF_STARS = {
       },
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm100' },
-          { track: 'm100', at: 0.206 },
-          { track: 'm2000', at: 1 },
-        ],
+        pinStaged: true,
         capture: true,
       }),
       tip: 'Switch the stage to "fit each star" and back. In that mode every star fills its own box and the magnification is printed under each one, because the apparent sizes are no longer comparable.',
+    },
+    {
+      sid: 'predict-hot-and-faint',
+      stage: shelf(WHITE_DWARF, { fit: true }),
+      type: 'predict',
+      reveal: 'hot-and-faint',
+      title: 'Hot, and hardly there',
+      body: `On the stage beside the Sun is a star at twenty-five thousand
+             kelvin — more than four times the Sun&rsquo;s surface temperature
+             — putting out a hundredth of the Sun&rsquo;s light.
+             \n\nYou now have everything you need to say how big it is
+             without being told. Each square metre of a surface at 25,000 K
+             radiates far more than a square metre at 5,772 K; this star still
+             manages to be a hundred times fainter overall.
+             \n\nCommit before you measure.`,
+      prompt: 'So how much surface can it have?',
+      options: [
+        'Far less than the Sun — a hot surface that faint has to be tiny',
+        'About the Sun&rsquo;s — temperature and brightness cancel out',
+        'Far more than the Sun — it is hot, so it must be large',
+        'There is no way to tell without knowing its mass',
+      ],
+      answer: 0,
+      because:
+        'Far less. Luminosity is area times what each unit of area emits, and what each unit of area emits climbs as the fourth power of temperature: at 25,000 K a square metre puts out roughly 350 times what a solar square metre does. To come out a hundred times fainter in total, the area has to be about thirty-five thousand times smaller — a radius around a two-hundredth of the Sun&rsquo;s. That is a body the size of the Earth. The last option is the one worth arguing with: mass is exactly what you do <em>not</em> need here, and reaching for it is the habit this lesson is trying to break.',
+      tool: stage({
+        pace: 'phase',
+        pinStaged: true,
+        hide: ['order'],
+      }),
+      tip: 'Two of the three — temperature and luminosity — fix the third. That is the one thing a position on this diagram really does determine.',
     },
     {
       sid: 'hot-and-faint',
@@ -1058,6 +1168,7 @@ const A_UNIVERSE_OF_STARS = {
       sid: 'predict-who-lives-longer',
       stage: shelf(LIFETIMES, { fit: true }),
       type: 'predict',
+      reveal: 'measure-the-lifetimes',
       title: 'More fuel, longer life?',
       body: `A twenty solar-mass star has a hundred times as much material as a
              0.2 solar-mass one. A hundred times the fuel.
@@ -1179,8 +1290,35 @@ const A_UNIVERSE_OF_STARS = {
             'Two hundred and twenty-seven M dwarfs out of 351 placed — nearly two thirds — and twenty-one stars like the Sun. Not one O star and not one B star survived to be placed: the sample drew a few, and they had already left the main sequence, so they were dropped rather than guessed at. The readout says how many.',
         };
       },
-      tool: crowd({ view: 0 }),
+      tool: crowd({ values: { view: 0 } }),
       tip: 'The readout lists every count as a number as well as drawing it, and says what the sample leaves out: no dust, no binaries, no composition but the Sun&rsquo;s.',
+    },
+    {
+      sid: 'predict-the-bright-subset',
+      stage: POPULATION,
+      type: 'predict',
+      reveal: 'only-the-bright-ones',
+      title: 'Before you cut it',
+      body: `Two thirds of this population are M&nbsp;dwarfs. In a moment you
+             will put every one of these stars at the same distance and keep
+             only the ones above a brightness cut — the crudest possible model
+             of what a survey actually catalogues.
+             \n\nThe stars on the canvas will not change. The cut only
+             decides which of them are still standing there afterwards.
+             \n\nPredict what the survivors look like.`,
+      prompt:
+        'Of the stars that pass the cut, roughly what fraction will be M dwarfs?',
+      options: [
+        'Almost none of them',
+        'About two thirds, as in the population',
+        'About a third — fewer, but still the commonest',
+        'All of them, because there are so many to begin with',
+      ],
+      answer: 0,
+      because:
+        'Almost none — in fact none at all. This is the answer people find hardest to believe before they see it, which is why you are being asked to commit to it first. A brightness cut selects on luminosity, and luminosity spans a far wider range than the numbers of stars do: an M dwarf puts out a thousandth of the Sun&rsquo;s light, so it drops out of the sample long before anything else does, however many of them there are. The next screen is the same population with the cut applied, and you can count.',
+      tool: crowd({ values: { view: 0 } }),
+      tip: 'Note what the readout calls things: four hundred drawn, fewer modelled, fewer again passing the cut, and a bounded sample of them standing on the canvas. They are four different numbers and the whole argument turns on not confusing them.',
     },
     {
       sid: 'only-the-bright-ones',
@@ -1224,7 +1362,7 @@ const A_UNIVERSE_OF_STARS = {
             'Sixteen stars left out of 351, and not one of them is an M dwarf — the type that was two thirds of the sample. Half of what is left is type F, which was two per cent of it.',
         };
       },
-      tool: crowd({ view: 1, capture: true }),
+      tool: crowd({ values: { view: 1 }, capture: true }),
       tip: 'The threshold slider moves the cut. Raise it and the survivors get rarer and hotter; lower it and the M dwarfs come back. The population underneath never changes.',
     },
     {
@@ -1241,7 +1379,7 @@ const A_UNIVERSE_OF_STARS = {
         'In two or three sentences: why can a list of the brightest stars in the sky give a badly wrong impression of what stars are usually like? Use a number from your two counts.',
       rubric:
         'Full credit needs the mechanism and a number. The mechanism: a brightness cut selects on luminosity, luminosity varies over a far wider range than the numbers of stars do, and so the rare luminous stars are enormously over-represented among the ones that pass the cut - two out of 351 A stars become an eighth of the bright list, while 227 M dwarfs become none of it. Any of those figures counts as the number. Credit an answer that gets the mechanism with a different correct figure. Do NOT credit "the bright ones are closer", which is a different selection effect and is not what this model does - every star here was placed at the same distance, and the instructor notes flag this as the most common wrong answer. Do not credit an answer that simply restates the counts without saying why the cut produces them.',
-      tool: crowd({ view: 1 }),
+      tool: crowd({ values: { view: 1 } }),
       tip: 'This is a selection effect: a conclusion about a sample that is really a fact about how the sample was chosen. It is not a small correction in astronomy, and it is not confined to astronomy.',
     },
 
@@ -1330,14 +1468,10 @@ const A_UNIVERSE_OF_STARS = {
       prompt:
         'Explain how mass, temperature, radius, luminosity and lifetime are related — and where those relationships stop holding. Refer to at least two of your own measurements, and say whether your step 1 answer still stands.',
       rubric:
-        'This is the summative question and should be marked on the connections rather than on coverage. Look for: temperature and luminosity together fix the radius, and the student can use that in either direction; along the main sequence mass largely fixes the other three, steeply, so that a hundredfold in mass is millions-fold in light; that steepness is why the heaviest stars live the shortest lives, fuel over burn rate; and every one of those statements is about the main sequence, with the giant and the white dwarf as the counterexamples the student measured. A strong answer says what a position on the diagram does NOT fix - a mass, an age - and cites the 426-fold radius difference between two stars of the same colour, or the white dwarf at 48,000 K putting out 1.6 solar luminosities. Credit an answer that revises the step 1 prediction and credit one that defends it, provided the defence engages with the measurements. Do NOT require the population material here; it is the subject of its own question at step 26.',
+        'This is the summative question and should be marked on the connections rather than on coverage. Look for: temperature and luminosity together fix the radius, and the student can use that in either direction; along the main sequence mass largely fixes the other three, steeply, so that a hundredfold in mass is millions-fold in light; that steepness is why the heaviest stars live the shortest lives, fuel over burn rate; and every one of those statements is about the main sequence, with the giant and the white dwarf as the counterexamples the student measured. A strong answer says what a position on the diagram does NOT fix - a mass, an age - and cites the 426-fold radius difference between two stars of the same colour, or the white dwarf at 48,000 K putting out 1.6 solar luminosities. Credit an answer that revises the step 1 prediction and credit one that defends it, provided the defence engages with the measurements. Do NOT require the population material here; it is the subject of its own question at step 28.',
       tool: stage({
         pace: 'phase',
-        pins: [
-          { track: 'm020' },
-          { track: 'm500' },
-          { track: 'm100', ageYr: 1.129e10 },
-        ],
+        pinStaged: true,
         capture: true,
       }),
       tip: 'Your notebook has the measurements in it, with the model each one came from. Open it in another tab if you want to quote a number exactly. If you want to see these stars change rather than compare them, "Lives of Stars" follows four of them from a collapsing cloud to what they leave behind.',

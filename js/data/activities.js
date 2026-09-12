@@ -123,6 +123,29 @@ export const ACTIVITIES = Object.freeze([
       }),
 
       Object.freeze({
+        // The short route offered on /teaching/. Four steps, one of each kind:
+        // a prediction that is held until the experiment settles it, the run
+        // that settles it, the measurement with its two armed events, and a
+        // written explanation. It is the smallest thing that is still the
+        // whole cycle rather than a demonstration of one.
+        id: 'route',
+        assignmentId: 'act-orbital-speed-route',
+        nameId: 'teach.activity.format.route',
+        forId: 'teach.activity.orbital-speed.route.for',
+        minutes: 5,
+        introId: 'teach.activity.orbital-speed.route.intro',
+        closingId: 'teach.activity.orbital-speed.route.closing',
+        context: 'individual',
+        steps: Object.freeze([
+          'where-does-it-move-fastest',
+          'watch-it-happen',
+          'fast-and-slow-in-numbers',
+          'why-the-speed-changes',
+        ]),
+        lecture: false,
+      }),
+
+      Object.freeze({
         id: 'guided',
         assignmentId: 'act-orbital-speed-guided',
         nameId: 'teach.activity.format.guided',
@@ -182,6 +205,107 @@ export const ACTIVITIES = Object.freeze([
           'fast-and-slow-in-numbers',
           'why-the-speed-changes',
           'where-kepler-s-version-breaks',
+        ]),
+        lecture: false,
+      }),
+    ]),
+  }),
+
+  Object.freeze({
+    id: 'binary-planets',
+    lesson: 'binary-star-planets',
+    scenario: 'Binary Planet Lab',
+
+    titleId: 'teach.activity.binary-planets.title',
+    questionId: 'teach.activity.binary-planets.question',
+    audienceId: 'teach.activity.binary-planets.audience',
+    prerequisitesId: 'teach.activity.binary-planets.prerequisites',
+    objectiveIds: Object.freeze([
+      'teach.activity.binary-planets.objective.1',
+      'teach.activity.binary-planets.objective.2',
+    ]),
+
+    physics: Object.freeze({
+      /** The planet is a test particle beside either star. */
+      testParticle: true,
+      /** Both runs are the same binary; only the planet's start moves. */
+      primary: 'Star A',
+      bodies: Object.freeze(['Star A', 'Star B', 'Planet']),
+      frame: 'relative-to-primary',
+      sweptArea: false,
+      /** The scenario is built from a named seed, so both arms replay. */
+      seeded: true,
+    }),
+
+    formats: Object.freeze([
+      Object.freeze({
+        // The controlled comparison, not the five-trial sweep. The sweep is
+        // the better evidence and it is in the lesson, but the instructor
+        // notes measure it at four to seven minutes of wall clock for five
+        // trials - which is the whole budget of a short route before anybody
+        // has read anything. Two runs of the same binary, about half a minute
+        // each, is the same argument at a size that fits.
+        id: 'route',
+        assignmentId: 'act-binary-planets-route',
+        nameId: 'teach.activity.format.route',
+        forId: 'teach.activity.binary-planets.route.for',
+        minutes: 5,
+        introId: 'teach.activity.binary-planets.route.intro',
+        closingId: 'teach.activity.binary-planets.route.closing',
+        context: 'individual',
+        steps: Object.freeze([
+          'move-it-out',
+          'run-it-at-030',
+          'when-did-it-leave',
+          'ejected-means-what',
+        ]),
+        lecture: false,
+      }),
+    ]),
+  }),
+
+  Object.freeze({
+    id: 'star-sizes',
+    lesson: 'a-universe-of-stars',
+    // Null on purpose. Every step of this lesson stands up its own stars and
+    // none of them names a scenario, so there is no world to land in and
+    // naming one would be an invention. tools/check-activities.mjs checks that
+    // claim against the lesson rather than taking it.
+    scenario: null,
+
+    titleId: 'teach.activity.star-sizes.title',
+    questionId: 'teach.activity.star-sizes.question',
+    audienceId: 'teach.activity.star-sizes.audience',
+    prerequisitesId: 'teach.activity.star-sizes.prerequisites',
+    objectiveIds: Object.freeze([
+      'teach.activity.star-sizes.objective.1',
+      'teach.activity.star-sizes.objective.2',
+    ]),
+
+    physics: Object.freeze({
+      testParticle: false,
+      primary: null,
+      bodies: Object.freeze(['dwarf', 'giant']),
+      frame: 'none',
+      sweptArea: false,
+      /** The numbers are read off imported MIST tracks, not integrated. */
+      modelled: true,
+    }),
+
+    formats: Object.freeze([
+      Object.freeze({
+        id: 'route',
+        assignmentId: 'act-star-sizes-route',
+        nameId: 'teach.activity.format.route',
+        forId: 'teach.activity.star-sizes.route.for',
+        minutes: 4,
+        introId: 'teach.activity.star-sizes.route.intro',
+        closingId: 'teach.activity.star-sizes.route.closing',
+        context: 'individual',
+        steps: Object.freeze([
+          'predict-which-is-bigger',
+          'measure-the-radius-ratio',
+          'sideways-at-one-luminosity',
         ]),
         lecture: false,
       }),

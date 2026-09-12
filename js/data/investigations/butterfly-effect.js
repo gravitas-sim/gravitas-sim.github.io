@@ -108,6 +108,7 @@ const BUTTERFLY_EFFECT = {
       sid: 'the-same-numbers-twice',
       bind: TRIPLE,
       type: 'predict',
+      reveal: 'the-reproducibility-control',
       title: 'The same numbers, twice',
       body: `Before anything else, the most basic question there is about a
              simulation.
@@ -262,6 +263,7 @@ const BUTTERFLY_EFFECT = {
       sid: 'nudge-one-star-in-a',
       bind: PAIR,
       type: 'predict',
+      reveal: 'measure-the-binary',
       title: 'Nudge one star in a binary',
       body: `Capture the start, record Run A, return to the start, apply the
              1,500 km nudge, and record Run B.`,
@@ -401,6 +403,7 @@ const BUTTERFLY_EFFECT = {
       sid: 'the-same-nudge-three-bodies',
       bind: TRIPLE,
       type: 'predict',
+      reveal: 'measure-the-triple',
       title: 'The same nudge, three bodies',
       body: `The same experiment as the binary: capture, Run A, return, nudge one
              star by 1,500 km, Run B. The triangle here is 0.87 AU on a side —
@@ -617,6 +620,7 @@ const BUTTERFLY_EFFECT = {
       // The prediction is about the divergence measured there.
       requires: ['write-down-what-you-measured'],
       type: 'predict',
+      reveal: 'the-numerical-control',
       title: 'Before you refine',
       body: `You are about to repeat the three-body comparison with the timestep
              cut and with a different integrator.`,

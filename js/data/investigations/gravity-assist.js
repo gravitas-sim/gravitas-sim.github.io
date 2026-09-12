@@ -201,6 +201,7 @@ const GRAVITY_ASSIST = {
       sid: 'which-side-gains',
       bind: ASSIST,
       type: 'predict',
+      reveal: 'fly-the-gaining-pass',
       title: 'Which side?',
       body: `The spacecraft can pass on either side of the planet: in front of
              it, in the direction the planet is heading, or behind it, in the

@@ -146,6 +146,7 @@ const DETECT_THIS_PLANET = {
       sid: 'what-decides-whether-you-find',
       bind: TARGET,
       type: 'predict',
+      reveal: 'schedule-a-twelve-nights-one',
       title: 'What decides whether you find it?',
       body: `Four things are obviously true of any observing run: how many
              measurements you take, how precise each one is, how long a stretch
@@ -287,6 +288,7 @@ const DETECT_THIS_PLANET = {
       sid: 'schedule-b-twelve-nights-thirty',
       bind: TARGET,
       type: 'predict',
+      reveal: 'the-same-planet-invisible',
       title: 'Schedule B: twelve nights, thirty-nine days',
       body: `Now the second plan. The same star, the same instrument, the same
              twelve measurements and the same 8 m/s precision - but taken 3.52
@@ -634,6 +636,7 @@ const DETECT_THIS_PLANET = {
       sid: 'the-same-planet-from-the-ground',
       bind: TARGET,
       type: 'predict',
+      reveal: 'the-floor',
       title: 'The same planet, from the ground',
       body: `Take that identical planet — same star, same 5,900 ppm depth, same
              four-hour transit — and observe it with a good small telescope from

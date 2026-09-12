@@ -168,6 +168,7 @@ const ENERGY = {
       sid: 'load-it-lightly',
       bind: ENERGY_BODIES,
       type: 'predict',
+      reveal: 'fire-it',
       title: 'Load it lightly',
       body: `The first shot leaves the mountaintop sideways at
              <strong>6 kilometers per second</strong>. That is fast: about
@@ -207,6 +208,7 @@ const ENERGY = {
       sid: 'load-it-heavily',
       bind: ENERGY_BODIES,
       type: 'predict',
+      reveal: 'fire-it-again',
       title: 'Load it heavily',
       body: `Now double the powder. This time the cannonball leaves at
              <strong>14 kilometers per second</strong>.`,
@@ -256,6 +258,65 @@ const ENERGY = {
         'Notice that the change is sudden: there is a definite dividing speed',
       ],
       tip: 'At 10.9 km/s the ball goes out past 350 Earth radii, further than the Moon, and still comes home. At 10.92 it never turns round at all. The two look identical for the first stretch of the flight, which is exactly why astronomers want a number rather than a picture.',
+    },
+    {
+      sid: 'write-down-the-dividing-speed',
+      bind: ENERGY_BODIES,
+      // The lesson's central experiment used to keep nothing at all: the
+      // reader found the dividing speed by hand and the number left with
+      // them. Recording it is what makes the multiple-choice step that
+      // follows a check on their own measurement rather than a quiz.
+      requires: ['find-the-dividing-line'],
+      type: 'measure',
+      title: 'Write down the speed you found',
+      body: `Before you move on, record the two numbers you just worked with:
+             the highest speed you found that still came back, and the lowest
+             that did not.
+             \n\nThey should be close together. How close depends on how
+             carefully you moved the slider, and that gap is the uncertainty on
+             your measurement.`,
+      tool: { id: 'launch', values: { v: 10.9 } },
+      fields: [
+        {
+          id: 'back',
+          label: 'Highest speed that still came back',
+          unit: 'km/s',
+        },
+        { id: 'gone', label: 'Lowest speed that left for good', unit: 'km/s' },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.back) || !Number.isFinite(v.gone)) {
+          return {
+            level: 'warn',
+            message:
+              'Both speeds, in km/s: the fastest shot you saw come back, and the slowest one that did not.',
+          };
+        }
+        if (v.gone <= v.back) {
+          return {
+            level: 'error',
+            message:
+              'The speed that left has to be the larger of the two. Check which number went in which box.',
+          };
+        }
+        const mid = (v.back + v.gone) / 2;
+        if (Math.abs(mid - 10.9) > 0.6) {
+          return {
+            level: 'error',
+            message:
+              'The dividing speed from this cannon is 10.9 km/s, and yours is more than 0.6 km/s away. Go back and step through the last stretch more slowly — just under the line the ball goes an absurd distance and still turns round.',
+          };
+        }
+        const gap = v.gone - v.back;
+        return {
+          level: 'ok',
+          message:
+            gap <= 0.1
+              ? `You have pinned it to ${gap.toFixed(2)} km/s. The accepted value from this height is 10.9 km/s.`
+              : `Your dividing speed is ${mid.toFixed(2)} km/s, give or take ${(gap / 2).toFixed(2)}. The accepted value from this height is 10.9 km/s — inside your gap, which is what a measurement with an honest uncertainty looks like.`,
+        };
+      },
+      tip: 'Two numbers and the gap between them is a more honest answer than one number on its own. Nobody finds a threshold exactly; they find the last speed on each side of it.',
     },
     {
       sid: 'where-is-the-line',
@@ -440,6 +501,7 @@ const ENERGY = {
       sid: 'somewhere-else-entirely',
       bind: ENERGY_BODIES,
       type: 'predict',
+      reveal: 'more-mass-harder-to-leave',
       title: 'Somewhere else entirely',
       body: `Everything so far has been about leaving Earth. Escape speed depends
              on what you are leaving.`,

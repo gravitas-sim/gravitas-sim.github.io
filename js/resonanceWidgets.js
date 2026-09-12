@@ -37,7 +37,13 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
 
-import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
+import {
+  surface,
+  responsiveHeight,
+  palette,
+  MONO,
+  TYPE,
+} from './widgetCanvas.js';
 import { recorder, partition } from './resonance/recorder.js';
 import {
   ANGLE_STATE,
@@ -414,7 +420,7 @@ const PERIODS = {
       );
     });
 
-    g.font = `9px ${MONO}`;
+    g.font = `${TYPE.MIN}px ${MONO}`;
     g.fillStyle = colors.muted;
     g.textAlign = 'left';
     g.textBaseline = 'bottom';
@@ -673,7 +679,10 @@ function wrappedPlot(g, box, m, colors) {
   const t1 = pts[pts.length - 1].t;
   const tSpan = t1 - t0 || 1;
   const px = s => x + 34 + ((s.t - t0) / tSpan) * (w - 40);
-  const py = phi => y + h - 14 - (phi / 360) * (h - 28);
+  // The top of the plot clears the frame's own title, which is drawn at
+  // box.y + 4 in legible type: without the inset the 360 tick sat on top of
+  // "angle, wrapped into 0-360" and neither could be read.
+  const py = phi => y + h - 14 - (phi / 360) * (h - 34);
 
   // The 180 line, because that is where two of the three arguments in the
   // lesson sit and a plot without it makes "about 180 degrees" a judgement.
@@ -684,7 +693,7 @@ function wrappedPlot(g, box, m, colors) {
     g.moveTo(x + 34, py(level));
     g.lineTo(x + w - 6, py(level));
     g.stroke();
-    g.font = `9px ${MONO}`;
+    g.font = `${TYPE.MIN}px ${MONO}`;
     g.fillStyle = colors.muted;
     g.textAlign = 'right';
     g.textBaseline = 'middle';
@@ -717,7 +726,7 @@ function unwrappedPlot(g, box, m, colors) {
   const vLo = lo - pad;
   const vHi = hi + pad;
   const px = i => x + 34 + ((m.samples[i].t - t0) / tSpan) * (w - 40);
-  const py = v => y + h - 14 - ((v - vLo) / (vHi - vLo)) * (h - 28);
+  const py = v => y + h - 14 - ((v - vLo) / (vHi - vLo)) * (h - 34);
 
   // The libration band: centre and amplitude, drawn over the data they were
   // fitted to, so the two numbers in the readout are never quoted without the
@@ -758,7 +767,7 @@ function unwrappedPlot(g, box, m, colors) {
     g.fill();
   }
 
-  g.font = `9px ${MONO}`;
+  g.font = `${TYPE.MIN}px ${MONO}`;
   g.fillStyle = colors.muted;
   g.textAlign = 'right';
   g.textBaseline = 'middle';

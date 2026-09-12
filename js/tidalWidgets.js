@@ -22,7 +22,7 @@
 // computes a tide or a Roche limit for itself.
 // =============================================================================
 
-import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
+import { surface, responsiveHeight, MONO, TYPE } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 // This family's labels are in the deferred half of the catalogue; see the note
 // in js/widgets.js. Registered from the module that renders them, because a
@@ -150,9 +150,16 @@ function world(ctx, cx, cy, r, color) {
   ctx.globalAlpha = 1;
 }
 
-/** Set a monospaced font at a size, and return it for chaining. */
+/**
+ * Set a monospaced font at a size, and return it for chaining.
+ *
+ * Clamped to the shared floor in js/widgetCanvas.js. Eight call sites in this
+ * file asked for nine pixels, which is about four and a half pixels of
+ * x-height - too small to take a tidal ratio off, which is the only reason
+ * any of these panels exist.
+ */
 function mono(ctx, size, color = MUTED) {
-  ctx.font = `${size}px ${MONO}`;
+  ctx.font = `${Math.max(TYPE.MIN, size)}px ${MONO}`;
   ctx.fillStyle = color;
 }
 

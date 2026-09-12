@@ -1949,10 +1949,19 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
     add(t('nb.stellar.mainSequence'), snapshot.mainSequenceYr, 'yr');
   }
 
-  // Every pinned star, so a ratio written in the prose can be checked.
+  // Every pinned star, so a ratio written in the prose can be checked. Named
+  // where the star has a name - a capture that says "Star 2" and a card that
+  // has since been re-ordered do not describe the same object, and the whole
+  // point of an entry is that it still means something later.
   snapshot.pinned.forEach((p, i) => {
-    add(t('nb.stellar.pinnedRadius', { n: i + 1 }), p.radiusSun, 'R☉');
-    add(t('nb.stellar.pinnedTeff', { n: i + 1 }), p.teffK, 'K');
+    const where = p.name
+      ? { name: p.name }
+      : { name: t('nb.stellar.pinnedNth', { n: i + 1 }) };
+    add(t('nb.stellar.pinnedRadiusOf', where), p.radiusSun, 'R☉');
+    add(t('nb.stellar.pinnedTeffOf', where), p.teffK, 'K');
+    if (Number.isFinite(p.massSun)) {
+      add(t('nb.stellar.pinnedMassOf', where), p.massSun, 'M☉');
+    }
   });
 
   const limitations = [];
@@ -1979,6 +1988,33 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
   }
   if (snapshot.pinned.length && snapshot.sizeMode === 'fit') {
     limitations.push(t('nb.stellar.limit.fitted'));
+  }
+  // Where the compared stars came from. A card seeded from the step's own
+  // scene is a different kind of evidence from one the reader pinned star by
+  // star, and the entry has to be able to say which.
+  if (snapshot.sampleFrom === 'scene') {
+    limitations.push(
+      t('nb.stellar.limit.fromScene', {
+        n: snapshot.pinned.length,
+        of: snapshot.sceneTotal ?? snapshot.pinned.length,
+      })
+    );
+  }
+  // A hypothetical among modelled stars, called out once. Its temperature and
+  // luminosity are the reader's; its mass, age and lifetime do not exist, and
+  // a table that listed the others' silently would read as a gap in the data
+  // rather than as a different kind of object.
+  const free = snapshot.pinned.filter(p => p.source !== 'model');
+  if (free.length) {
+    limitations.push(
+      t('nb.stellar.limit.someHypothetical', {
+        names: free
+          .map(p => p.name)
+          .filter(Boolean)
+          .join(', '),
+        n: free.length,
+      })
+    );
   }
   // A reading taken from the evolutionary playback carries two more things a
   // reader needs: which stage it was at, and - where the star has ended -

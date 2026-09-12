@@ -36,6 +36,7 @@ import {
   onObserverChange,
 } from './observerGeometry.js';
 import { chartColors } from './observationChart.js';
+import { TYPE } from './widgetCanvas.js';
 import { mountObserverControls } from './observerControls.js';
 import { chooseAngularUnit, maxOffsetOfPath } from './exoplanetObservables.js';
 import { formatNumber, withUnit } from './format.js';
@@ -369,7 +370,7 @@ function drawSkyPlot() {
   ctx.moveTo(10, h - 10);
   ctx.lineTo(10 + barAu * scale, h - 10);
   ctx.stroke();
-  ctx.font = '9px system-ui, sans-serif';
+  ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
   ctx.fillText(
     `${formatNumber(unit.value, { sig: 2 })} ${unit.unit}`,
     10,

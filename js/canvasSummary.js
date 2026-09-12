@@ -105,6 +105,33 @@ export function summaryText() {
       : t('summary.noSelection')
   );
 
+  // The stage of a star's life, where a lesson is drawing one. The canvas is
+  // showing a collapsing cloud, a wind, or the remains of an explosion, and
+  // none of that is a body in the object list - so for a reader who cannot
+  // see the canvas this sentence is the only place any of it appears. It is
+  // the text equivalent of the illustration, not a summary of it.
+  const life = state.evolutionOverlay;
+  if (life?.active && life.frame) {
+    const key =
+      life.frame.stage === 'cloud'
+        ? 'summary.life.cloud'
+        : life.frame.stage === 'remnant'
+          ? life.frame.endpoint?.supernova === 'expected'
+            ? 'summary.life.explosion'
+            : 'summary.life.remnant'
+          : life.lostFraction > 0.02
+            ? 'summary.life.wind'
+            : 'summary.life.star';
+    parts.push(
+      t(key, {
+        pct: Math.round((life.lostFraction || 0) * 100),
+        kind: life.frame.endpoint?.kind
+          ? t(`stelE.remnant.${life.frame.endpoint.kind}`)
+          : '',
+      })
+    );
+  }
+
   // Where the description stops and the interface takes over. A reader who
   // wants numbers should be told they exist and where.
   parts.push(t('summary.readoutPointer'));

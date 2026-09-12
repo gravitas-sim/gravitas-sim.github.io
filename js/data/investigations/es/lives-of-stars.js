@@ -13,6 +13,7 @@
 
 export default {
   title: 'Vidas de las estrellas',
+  duration: '80-100 min',
   subtitle: 'De las nubes a los restos cósmicos, por ocho trazas publicadas',
   level: 'Astronomía introductoria',
   summary:
@@ -28,6 +29,9 @@ export default {
   ],
   steps: [
     {
+      stage: {
+        stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
+      },
       title: 'Tres estrellas, tres futuros',
       body: 'En el escenario: una enana roja de una quinta parte de masa solar, una estrella como el Sol y una estrella de veinte masas solares. Las tres están ahora en su secuencia principal, fusionando hidrógeno en el núcleo.\n\nLas tres se detendrán. Comprométete con lo que crees que pasa y con cuál llega antes. No se espera que aciertes; el paso 34 te pide que vuelvas a mirar tu respuesta.',
       prompt: '¿Cuál de estas tres cambia más deprisa, y cómo termina?',
@@ -42,6 +46,7 @@ export default {
       tip: 'Si has hecho «Un universo de estrellas» este escenario te resultará familiar. Si no, los seis pasos siguientes repasan todo lo que esta lección necesita de aquella.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Antes de la estrella',
       body: 'Todas las estrellas de aquí empiezan en el mismo sitio: una nube de gas, fría y tenue y mucho mayor que nada de lo que llegarán a ser.\n\nLo que la hace colapsar es su propia gravedad. Nada la empuja; cada parte de ella tira de todas las demás, y en cuanto una región es lo bastante densa para que su propia gravedad venza a la presión que la sostiene, cae hacia dentro y sigue cayendo.\n\nEl panel lo muestra como una ilustración, y la lectura se niega a ponerle números. Lee por qué.',
       checklist: [
@@ -55,6 +60,7 @@ export default {
       tip: 'El diagrama está vacío a propósito. Una nube no tiene fotosfera, así que no tiene temperatura superficial ni luminosidad, y colocarla en algún punto de estos ejes sería inventarse las dos.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Con qué funciona?',
       body: 'Pulsa <strong>Fase siguiente</strong> para llegar al primer punto que el modelo describe de verdad: una estrella de la presecuencia principal. Ya tiene superficie, así que tiene un sitio en el diagrama.\n\nTambién es muy luminosa: la primera muestra del modelo la sitúa en cincuenta y seis veces la emisión del Sol, con una superficie a 4.100 K y un radio quince veces el solar. Pero todavía no hace lo que hace el Sol.\n\nAntes de mirar la lectura, comprométete.',
       prompt: 'Una estrella de la presecuencia principal brilla porque…',
@@ -69,6 +75,7 @@ export default {
       tip: 'La fila «Sobre esta fase» de la lectura tiene la versión completa, incluido lo que hace el deuterio antes de que arranque el hidrógeno.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Encogerse, y brillar mientras lo hace',
       body: 'Mueve el cursor por la etapa de presecuencia principal y observa el radio. Usa el deslizador de edad o las flechas del teclado: aquí nada exige esperar a una animación.\n\nAnota el radio cerca del principio de la etapa y cerca del final, y la edad en cada caso.',
       fields: [
@@ -79,6 +86,7 @@ export default {
       tip: 'Esta etapa dura unos 42 millones de años para una estrella de masa solar: una fracción de un uno por ciento de su vida, y la lectura lo dice en la fila «Esta fase».',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Hacia dónde por el diagrama?',
       body: 'Sigue el marcador por la etapa de presecuencia principal y mira adónde va en el diagrama. La línea gris tenue es la traza completa; la línea brillante es por donde ha pasado la estrella hasta ahora.\n\nRecuerda los ejes: más caliente a la izquierda, más luminoso hacia arriba.',
       prompt:
@@ -94,6 +102,7 @@ export default {
       tip: 'Una confusión frecuente que conviene zanjar ya: este diagrama no es un mapa de dónde están las estrellas en el espacio. Es una gráfica de dos propiedades. Dos estrellas juntas en él pueden no estar cerca en absoluto.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'La llegada',
       body: 'Pulsa <strong>Fase siguiente</strong>. La fase de la lectura cambia a <em>secuencia principal</em>: la fusión de hidrógeno en el núcleo ya es estable, y es lo que sostiene la estrella.\n\nEsta es la secuencia principal de edad cero, el comienzo de la parte larga. Anota dónde está la estrella.',
       fields: [
@@ -104,6 +113,7 @@ export default {
       tip: 'La fusión no empezó en este instante: empezó antes y fue creciendo. Lo que pasa aquí es que se convierte en lo que sostiene la estrella, que es lo que significa la secuencia principal.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'El Sol, hoy',
       body: 'Pon la edad en 4.600 millones de años, donde está el Sol ahora. Puedes escribir en el deslizador de edad o moverlo con las flechas.\n\nAnota las tres propiedades. Son los valores del modelo para una estrella de masa solar a esa edad, y son parecidos a los del Sol medido sin haber sido ajustados a él.',
       fields: [
@@ -114,6 +124,7 @@ export default {
       tip: 'Temperatura superficial, no temperatura del núcleo. El núcleo del Sol está a unos 15 millones de K; su superficie, a 5.772. Nada en esta lección dibuja nunca una temperatura de núcleo.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Diez mil millones de años, medidos',
       body: 'Ahora ve hasta el final de la secuencia principal: pulsa <strong>Fase siguiente</strong> o arrastra el cursor hasta justo antes de que cambie la fase.\n\nAnota dónde acaba y calcula cuánto se ha iluminado a lo largo de su vida en la secuencia principal. El punto de llegada lo mediste hace dos pasos.',
       fields: [
@@ -125,12 +136,19 @@ export default {
       tip: 'La fila «Se ha movido» de la lectura lleva la cuenta por ti según avanzas.',
     },
     {
+      stage: {
+        stars: [
+          { name: 'Al llegar (0,46 Gyr)' },
+          { name: 'Al dejar la secuencia principal (9,9 Gyr)' },
+        ],
+      },
       title: 'Entonces y ahora, lado a lado',
       body: 'En el escenario de comparación hay dos versiones de la misma estrella: el modelo de masa solar al llegar, y el mismo modelo al final de su secuencia principal.\n\nLee los dos radios y guarda la comparación en el cuaderno. Este es el cambio más pequeño de toda la lección y aun así es una estrella casi tres cuartas partes más grande.',
       fields: [{ label: 'Radio al llegar' }, { label: 'Radio al final' }],
       tip: 'Las dos son la misma estrella. Nada más en esta lección fija un modelo a dos edades, y merece la pena notar que al escenario de comparación no le importa.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Qué se agota exactamente?',
       body: 'La secuencia principal termina. Algo se ha consumido.\n\nPiensa dónde ocurre la fusión antes de responder. El Sol es hidrógeno en un 71 por ciento de su masa, y la fusión solo ocurre donde hace suficiente calor y suficiente densidad.',
       prompt:
@@ -146,6 +164,7 @@ export default {
       tip: 'Una estrella no tiene forma de remover hidrógeno fresco hasta su núcleo; una como el Sol, al menos. La de 0,2 masas solares del paso 22 sí, y por eso su vida es tan distinta.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Qué está ardiendo ahora',
       body: 'Activa el <strong>esquema del interior</strong> y avanza desde el final de la secuencia principal.\n\nTen cuidado con lo que es esta imagen. Las trazas incluidas son magnitudes de superficie: una temperatura, una luminosidad, una masa. No contienen ninguna estructura radial, así que los tamaños de las capas que ves están elegidos para verse y no significan nada. Lo que la imagen sí lleva es qué proceso libera la energía, y eso la fase de la traza sí lo determina.',
       checklist: [
@@ -159,6 +178,7 @@ export default {
       tip: 'El núcleo no ha dejado de importar: se contrae y se calienta, y eso es lo que pone la capa de alrededor lo bastante caliente para arder. Solo ha dejado de ser de donde sale la energía.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'El núcleo se encoge, la estrella se hincha',
       body: 'Las dos cosas que pasan a la vez son la parte más difícil de sostener en la cabeza de toda esta historia, y son opuestas: el núcleo se contrae y la envoltura se expande enormemente.\n\nSigue la rama de las gigantes rojas desde su inicio hasta su punta y anota la estrella en los dos extremos. Usa <strong>Fase siguiente</strong> para encontrar los límites.',
       fields: [
@@ -169,6 +189,7 @@ export default {
       tip: 'Su superficie está más fría porque está repartida sobre cien veces el radio, diez mil veces el área. Cada metro cuadrado radia menos, y hay tantos más que el total sube en un factor de mil.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Hacia dónde va?',
       body: 'Tienes los números: más fría en la superficie, mucho más luminosa en total. Antes de mirar la traza, deduce qué significa eso para el diagrama.\n\nMás caliente es a la izquierda. Más luminoso es hacia arriba.',
       prompt: 'Al dejar la secuencia principal, la estrella se mueve…',
@@ -183,6 +204,7 @@ export default {
       tip: 'Estás viendo al diagrama ganarse el sueldo. Dos números medibles, y el camino que trazan te dice que la estrella ha dejado de quemar hidrógeno en su núcleo.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'La gigante, medida',
       body: 'Sitúate en la punta de la rama de las gigantes rojas —lo más grande y lo más fría que llega a estar esta estrella en esta rama— y anota las tres propiedades juntas, más su masa.\n\nGuárdalo en el cuaderno: el paso 15 lo compara con lo que mediste en el paso 9.',
       fields: [
@@ -194,19 +216,21 @@ export default {
       tip: 'Dos mil cuatrocientas veces la emisión del Sol desde una superficie a la mitad de su temperatura. Solo el área puede hacer eso.',
     },
     {
-      title: 'A escala',
-      body: 'Cambia el panel de la estrella entre <strong>tamaño real</strong> y <strong>ajustar al recuadro</strong> y mueve el cursor adelante y atrás entre la secuencia principal y la rama de las gigantes.\n\nEn modo de tamaño real toda la vida se dibuja en una escala fijada por lo mayor que llega a ser la estrella. Por eso es un punto durante casi toda su vida: es un punto comparada con lo que llega a ser.',
+      stage: { stars: [{ name: 'La estrella' }] },
+      title: 'A escala, y junto a sí misma',
+      body: 'Sitúa el cursor en la secuencia principal y pulsa <strong>Congelar este momento</strong>. Una copia de la estrella tal como está ahora se queda en el lienzo, etiquetada con la edad a la que se tomó, y ahí se detiene para siempre: nada de lo que venga después la cambiará.\n\nAhora avanza hasta la punta de la rama de las gigantes rojas. La copia congelada sigue teniendo el tamaño que tenía; la estrella viva a su lado, no. Las dos están en el lienzo, a la misma escala, a la vez.\n\nEl panel de la estrella hace lo mismo en miniatura. En <strong>tamaño real</strong> toda la vida se dibuja a una sola escala, fijada por lo más grande que llega a ser esta estrella, y por eso es una mota durante casi toda su vida: es una mota comparada con lo que llega a ser.',
       checklist: [
-        'Pon el panel de la estrella en tamaño real',
-        'Sitúate en la secuencia principal y fíjate en que la estrella es apenas una marca',
-        'Lee el pie: da la fracción del radio máximo de la propia estrella',
-        'Ve a la punta de la rama de las gigantes y mira cómo el disco llena el panel',
-        'Cambia a «ajustar al recuadro» y vuelve a la secuencia principal',
-        'Vuelve a leer el pie: ahora dice que el tamaño no significa nada',
+        'Sitúate en la secuencia principal y pulsa «Congelar este momento»',
+        'Mira la etiqueta de la copia congelada: lleva la edad a la que se tomó',
+        'Lleva el cursor hasta la punta de la rama de las gigantes rojas',
+        'Compara las dos en el lienzo y pulsa cada una para leer su ficha',
+        'Pon el panel de la estrella en tamaño real y observa el mismo contraste en el panel',
+        'Cambia a «ajustar al recuadro» y lee el pie: ahora dice que el tamaño no significa nada',
       ],
-      tip: 'Las dos imágenes son honestas y responden a preguntas distintas. La que miente es una imagen que cambia de escala sin decirlo.',
+      tip: 'La copia congelada es un registro, no una segunda estrella. Nada vuelve a escribir en ella: el cursor gobierna el papel del que se copió, y la copia tiene el suyo propio.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'No se limita a seguir hinchándose',
       body: 'Pulsa <strong>Fase siguiente</strong> más allá de la punta. El helio se enciende en el núcleo, y después la estrella lo quema durante un tiempo.\n\nMira lo que hace el marcador. No sigue subiendo hacia la derecha.',
       prompt: 'Después de que se encienda el helio, la estrella del modelo…',
@@ -221,6 +245,7 @@ export default {
       tip: 'La propia etapa de encendido del helio dura menos de dos millones de años: la fila «Esta fase» de la lectura la sitúa en torno al 0,02 por ciento de la vida de la estrella.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Perdiéndose a sí misma',
       body: 'Avanza por la rama asintótica de las gigantes. La estrella se hincha otra vez, y esta vez pasa algo más: está expulsando sus capas exteriores.\n\nObserva la fila <strong>Masa</strong>. Anota lo que le queda al final de la etapa de pulsos térmicos y con lo que empezó.',
       fields: [
@@ -231,6 +256,7 @@ export default {
       tip: 'Las capas dibujadas alrededor de la estrella en el panel son ese material perdido, con semilla fija para que estén en el mismo sitio en cada ejecución. Son una ilustración de una cantidad que el modelo sí registra, no una simulación de un viento.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Eso es una explosión?',
       body: 'Acaba de desprenderse media estrella. Suena violento.\n\nNo lo es. Comprométete antes de seguir leyendo.',
       prompt:
@@ -246,11 +272,13 @@ export default {
       tip: 'Una supernova necesita un núcleo lo bastante masivo para colapsar. El del Sol acabará en torno a 0,54 masas solares, y la degeneración de los electrones sostiene eso indefinidamente.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Una nebulosa planetaria, que no está hecha de planetas',
       body: 'La envoltura se ha ido. Lo que queda en medio es el núcleo desnudo —muy caliente, porque era el interior de una estrella— y el gas de alrededor brilla porque ese núcleo lo ilumina.\n\nEl nombre es un accidente histórico. Observadores del siglo XVIII vieron discos pequeños, redondos y verdosos en sus telescopios, pensaron que parecían planetas, y el nombre se quedó. No hay planetas de por medio ni los hubo nunca.\n\nDos cosas que este modelo no te dice. Cuándo se hace visible la nebulosa no es el instante en que se fue la envoltura: el gas tiene que ser ionizado por la estrella central, cosa que ocurre según esa estrella se calienta a lo largo de miles de años. Y cuánto dura —unas decenas de miles de años antes de dispersarse— tampoco está en estas trazas. Se sigue a la estrella; al gas no.',
       tip: 'El núcleo desnudo cruza el diagrama casi en horizontal en esta etapa: su luminosidad apenas cambia mientras su temperatura superficial sube de unos 5.000 K a casi 100.000 K.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'La brasa',
       body: 'Ve hasta el final de la traza. Lo que queda es una enana blanca: el núcleo desnudo, que ya no fusiona nada, enfriándose.\n\nAnótalo. Y piensa en la última fila que estás a punto de leer: sigue emitiendo más luz que el Sol, y no hay fusión en ninguna parte de ella.',
       fields: [
@@ -261,6 +289,7 @@ export default {
       tip: 'Una enana blanca no es una estrella normal pequeña. Nada la sostiene contra la gravedad salvo la resistencia de sus propios electrones a que los aprieten más, y eso no se agota.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Cuánto duró de verdad cada parte',
       body: 'El cursor ha dedicado más o menos el mismo tiempo de pantalla a cada etapa. La estrella no.\n\nLa fila <strong>Esta fase</strong> de la lectura da la duración real de la etapa en la que estés y la porción de la reproducción que se lleva. Visita dos etapas y compara.',
       fields: [
@@ -271,6 +300,7 @@ export default {
       tip: 'Pulsa «Cambiar lo que marca el cursor» para pasar al ritmo del tiempo y mira cómo todo lo posterior a la secuencia principal se reduce al último tramo. Los dos relojes son honestos sobre cosas distintas.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'La estrella que no hace nada de esto',
       body: 'Cambia al modelo de 0,2 masas solares. Está en su secuencia principal, como el Sol.\n\nTambién han pasado 13.800 millones de años desde que empezó el Universo. Predice qué aspecto tiene esta estrella a la edad actual del Sol, y después a la edad del Universo.',
       prompt: 'Una estrella de 0,2 M☉, entre 4.600 y 13.800 millones de años…',
@@ -285,6 +315,9 @@ export default {
       tip: 'Pulsa «Fase siguiente» y fíjate en que no hay adónde ir: esta traza tiene una presecuencia principal y una secuencia principal, y ahí se acaba.',
     },
     {
+      stage: {
+        stars: [{ name: '0,2 M☉ a 4,6 Gyr' }, { name: '1 M☉ a 4,6 Gyr' }],
+      },
       title: 'La misma edad, dos estrellas',
       body: 'Una comparación controlada, y conviene tener claro de qué tipo: esta es <em>la misma edad</em>, no la misma fracción de una vida. Las dos estrellas tienen 4.600 millones de años. Una va por la mitad de su secuencia principal y la otra ha hecho cuatro milésimas de la suya.\n\nAnota las dos y la razón entre sus luminosidades.',
       fields: [
@@ -295,6 +328,7 @@ export default {
       tip: 'Comparar a la misma edad y comparar a la misma fracción de una vida son experimentos distintos y responden a preguntas distintas. El paso 33 te pide elegir uno a propósito.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Veinte masas solares',
       body: 'Ahora el otro extremo. Cambia al modelo de 20 masas solares y mira dónde está en la secuencia principal: unas 43.000 luminosidades solares, a 35.000 K.\n\nTiene veinte veces el combustible del Sol. Predice cuánto dura su secuencia principal.',
       prompt:
@@ -310,6 +344,7 @@ export default {
       tip: 'La lectura la da como 8,65 Myr en la fila «Esta fase» mientras estás en la secuencia principal.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Lo que eso cuesta',
       body: 'Pon los dos números uno al lado del otro: cuánta más luz, y cuánto menos tiempo.\n\nLee la luminosidad de la secuencia principal de cada estrella y la duración de la secuencia principal en la fila «Esta fase».',
       fields: [
@@ -321,6 +356,7 @@ export default {
       tip: 'Puedes guardar la traza tipo Sol con «Guardar esta traza para comparar» y luego cambiar de estrella: la línea discontinua se queda en el diagrama detrás de la nueva.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Una supergigante, y qué arde dentro',
       body: 'Sigue al modelo de 20 masas solares más allá de su secuencia principal con el esquema del interior activado. Se expande hasta más de mil radios solares —cinco veces el radio de la órbita de la Tierra— mientras pierde casi seis masas solares por su viento.\n\nEl esquema cambia cuando cambia la fuente de energía. Recuerda lo que es: una imagen de qué proceso está funcionando, no una estructura.',
       checklist: [
@@ -334,6 +370,9 @@ export default {
       tip: 'Seis masas solares perdidas por un viento: más que la masa entera de la mayoría de las estrellas. Las estrellas masivas devuelven casi todo lo que son al espacio antes de hacer nada dramático.',
     },
     {
+      rubric:
+        'Para la nota completa hace falta el vínculo entre la fusión y el sostén. Una estrella se sostiene por presión, y esa presión la mantiene la energía liberada en el núcleo; cuando se agotó el hidrógeno del núcleo, la estrella pudo contraerse, calentarse y empezar a quemar otra cosa, así que el sostén se restableció. El hierro es donde eso deja de funcionar, porque fusionar hierro absorbe energía en vez de liberarla: contraerse ya no compra una fuente de energía nueva, y no queda nada que detenga la contracción. Da crédito a una respuesta que llegue a «la fusión del hierro no libera energía, así que no hay una fuente nueva que restablezca la presión». NO des crédito a «la estrella se queda sin combustible», que es la respuesta para una enana blanca y aquí es falsa: un núcleo de hierro está rodeado de material sin quemar de sobra. No des crédito a una respuesta que trate el hierro simplemente como el último elemento que existe.',
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Por qué no puede seguir',
       body: 'Una estrella masiva quema hidrógeno hasta helio, helio hasta carbono y oxígeno y —más allá de donde se detienen estas trazas— carbono hasta cosas más pesadas, en capas, cada etapa más rápida que la anterior.\n\nLa secuencia termina en el hierro. Todo lo anterior al hierro libera energía al fusionarse; el hierro no. Fusionar hierro consume energía en vez de darla.\n\nLa estrella se ha estado sosteniendo contra su propia gravedad con la energía liberada en su núcleo.',
       prompt:
@@ -341,6 +380,7 @@ export default {
       tip: 'Estas trazas se detienen en el encendido del carbono, antes de que pase nada de eso. Todo lo que va del carbono en adelante se describe aquí con palabras y no está en el modelo: la lectura dice dónde se detuvo y con cuánta masa.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Dos destinos distintos en una estrella',
       body: 'El núcleo está a punto de colapsar. Las capas exteriores —casi toda la masa de la estrella— están muy lejos y todavía no hacen nada.\n\nPredice qué le pasa a cada una.',
       prompt: 'Cuando el núcleo colapsa, el núcleo y la envoltura…',
@@ -355,6 +395,7 @@ export default {
       tip: 'Esta es una predicción sobre la receta de final del modelo, no sobre la traza: la traza ya se ha detenido aquí, y la lectura lo dice.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Una estrella de neutrones, y cómo lo sabemos',
       body: 'Lleva el modelo de 10 masas solares hasta el final. La traza se detiene en el encendido del carbono con 9,4 masas solares restantes; lo que pasa después no está en ella.\n\nLa lectura te dice de dónde sale la respuesta en su lugar. Anota lo que dice y fíjate en lo cuidadosamente que está redactado.',
       fields: [
@@ -364,6 +405,7 @@ export default {
       tip: 'Los anillos que se expanden en el panel son una ilustración de un suceso, no un cálculo de él, y se mantienen fuera del diagrama a propósito: el brillo de una supernova es un transitorio que dura semanas y no es la luminosidad fotosférica de la estrella.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Qué pequeña, y por qué quizá nunca la veas',
       body: 'La enana blanca que mediste en el paso 20 tenía unas dos veces el radio de la Tierra y contenía 0,54 masas solares. Esta estrella de neutrones contiene unas 1,4 masas solares en unos veinte kilómetros de diámetro.\n\nSe dice a menudo que las estrellas de neutrones son púlsares. Piensa qué exige esa afirmación.',
       prompt: 'Una estrella de neutrones se observa como púlsar cuando…',
@@ -378,6 +420,7 @@ export default {
       tip: 'Veinte kilómetros para 1,4 masas solares son unos cien millones de toneladas en una cucharadita. No tiene fotosfera en el sentido habitual, y por eso no tiene sitio en el diagrama.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Y una que probablemente no explota',
       body: 'Cambia al modelo de 40 masas solares y llévalo hasta el final.\n\nLee con atención toda la sección del final. Contiene tres reconocimientos que el caso de la estrella de neutrones no necesitaba, y son el motivo de este paso.',
       fields: [
@@ -388,6 +431,7 @@ export default {
       tip: 'Mira el diagrama: la línea brillante se detiene donde se detiene el modelo y no la continúa nada. Un agujero negro no tiene fotosfera, así que no tiene temperatura ni luminosidad que dibujar, y ponerlo en log(0) o en un punto inventado sería mentir sobre lo que se sabe.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Qué es esta?',
       body: 'Cuatro descripciones. Sin nombres, sin masas.\n\n<strong>A.</strong> 3.300 K en la superficie, 1.100 luminosidades solares, 100 radios solares.\n\n<strong>B.</strong> 48.000 K, 1,6 luminosidades solares, 0,018 radios solares.\n\n<strong>C.</strong> 3.300 K, 0,007 luminosidades solares, 0,24 radios solares.\n\n<strong>D.</strong> 4.600 K, 0,5 luminosidades solares, 1,1 radios solares.\n\nPon cualquiera de ellas en el diagrama con el cursor libre y usa <strong>Usar el modelo más cercano</strong> para ver qué pasa cerca.',
       prompt: '¿Cuál de las cuatro es la más difícil de precisar?',
@@ -402,6 +446,7 @@ export default {
       tip: 'Por eso las regiones del diagrama están sombreadas en vez de delimitadas, y por eso el laboratorio enumera todos los modelos cercanos en vez de elegir uno. Una estrella no es gigante por cruzar una línea.',
     },
     {
+      stage: { stars: [{ name: 'La estrella' }] },
       title: 'Tu propia comparación',
       body: 'Elige dos de los ocho modelos y compáralos, pero elige a propósito <em>qué tipo</em> de comparación estás haciendo.\n\n<strong>La misma edad</strong> pregunta qué aspecto tienen ahora dos estrellas nacidas a la vez. <strong>La misma fracción de vida</strong> pregunta qué aspecto tienen dos estrellas en la misma etapa. Son preguntas distintas y dan respuestas distintas; el paso 23 era del primer tipo.\n\nPredice primero, mide después y guarda la comparación.',
       fields: [
@@ -413,6 +458,11 @@ export default {
       tip: 'Usa «Guardar esta traza para comparar» para dejar el camino de la primera estrella en el diagrama como línea discontinua mientras miras la segunda.',
     },
     {
+      rubric:
+        'Califica por las conexiones y por la limitación, no por la cobertura. Busca: la masa fija la luminosidad, y de forma muy pronunciada, y por tanto fija el tiempo de vida, porque la vida es combustible dividido por el ritmo de gasto; dejar la secuencia principal es agotar el hidrógeno del núcleo y no es el final de la estrella; lo que ocurre después depende de la masa, con una enana blanca para el caso solar, una estrella de neutrones para diez masas solares y un agujero negro para cuarenta; y la enana roja no hace nada de esto en ninguna escala de tiempo transcurrida hasta ahora. Una buena respuesta cita los 1,14 billones frente a 8,65 millones de años de vida, o el recorrido de 0,90 a 173 radios solares de una misma estrella.\n\nPara la limitación, acepta cualquiera de estas: las trazas son de estrellas individuales sin compañera, así que no hay transferencia de masa ni fusiones; se detienen antes del colapso del núcleo, así que todo remanente más allá de una enana blanca es una prescripción citada y no un resultado calculado; son de una sola composición y sin rotación; el desenlace a cuarenta masas solares es un rango que abarca un factor de tres; el tiempo de vida de 1,1 billones de años es inverificable en principio. NO aceptes «la animación no está a escala en el tiempo» por sí sola: eso es una propiedad de la presentación, que la lección declara repetidamente, y no de los modelos.\n\nDa crédito tanto a quien revise su predicción del paso 1 como a quien la defienda, siempre que la defensa se apoye en lo que midió.',
+      stage: {
+        stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
+      },
       title: 'De vuelta a las tres estrellas',
       body: 'En el paso 1 se te mostraron una enana roja, una estrella tipo Sol y una de veinte masas solares y se te preguntó cuál cambia más deprisa y cómo termina cada una. Tu respuesta está guardada y nada la ha sobrescrito.\n\nAhora has seguido a las tres, más un modelo de cuarenta masas solares que termina como agujero negro. Escribe el relato que darías ahora.\n\nUn requisito: nombra una limitación de los modelos sobre los que se apoya toda esta lección. Hay varias y las lecturas te las han ido contando.',
       prompt:

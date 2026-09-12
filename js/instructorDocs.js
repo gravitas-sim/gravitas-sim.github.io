@@ -99,6 +99,36 @@ export function instructorGuide(inv, { version = '' } = {}) {
     rows: c.flow.map(f => [f.steps, f.text]),
   });
 
+  // Generated from the lesson rather than written per lesson, because it is a
+  // fact about the step data and a hand-written copy would go stale the first
+  // time a prediction moved. Instructors need it: a student who picks an
+  // option and is told nothing has not hit a bug.
+  const held = inv.steps
+    .map((s, i) => ({ s, n: i + 1 }))
+    .filter(({ s }) => s.reveal);
+  if (held.length) {
+    doc.paragraph(
+      'Predictions in this investigation are recorded when they are made and ' +
+        'marked later, at the step where the result arrives. Until then the ' +
+        'panel says only that the answer is recorded and where it will be ' +
+        'settled. This is deliberate: a prediction marked on commit is settled ' +
+        'by the answer key rather than by the experiment.',
+      { size: 9.5, gap: 6, color: '0.35 0.35 0.42' }
+    );
+    doc.table({
+      columns: ['Prediction', 'Marked at'],
+      widths: [1, 1],
+      rows: held.map(({ s, n }) => {
+        const at = inv.steps.findIndex(x => x.sid === s.reveal);
+        return [
+          `Step ${n}: ${plainText(s.title)}`,
+          at < 0 ? '—' : `Step ${at + 1}: ${plainText(inv.steps[at].title)}`,
+        ];
+      }),
+      size: 9,
+    });
+  }
+
   section(doc, 6, 'Interactive features');
   doc.table({
     columns: ['Feature', 'Notes'],

@@ -24,7 +24,11 @@ import { getWorldSeed, formatSeed, parseSeed } from './rng.js';
 import { toast, announce } from './notify.js';
 import { trapFocus } from './focusTrap.js';
 import { embedSnippet } from './embed.js';
-import { assignmentInHash, lessonInHash } from './investigationsLoader.js';
+import {
+  activityInHash,
+  assignmentInHash,
+  lessonInHash,
+} from './investigationsLoader.js';
 import { t } from './i18n/index.js';
 
 /** Releases the focus trap; set while the dialog is open. */
@@ -129,6 +133,15 @@ function watchForDivergence() {
     // leaving a student unable to reload or bookmark the work they were set,
     // which is exactly the failure the test above exists to prevent.
     if (assignmentInHash()) return;
+    // And an activity fragment is neither of the two above. `#activity=id/format`
+    // is resolved into an assignment a moment later, and until it is, this was
+    // stripping it about three hundred milliseconds in - before the bridge had
+    // read it. Every Start button on /teaching/ therefore loaded the sandbox
+    // and opened nothing, which looks exactly like a link that worked. Third
+    // time this list has been one entry short; the predicates all live in
+    // js/investigationsLoader.js so that a fourth kind has somewhere obvious
+    // to be added.
+    if (activityInHash()) return;
     if (location.hash) {
       history.replaceState(null, '', location.pathname + location.search);
     }

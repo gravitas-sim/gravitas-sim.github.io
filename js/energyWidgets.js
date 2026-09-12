@@ -981,11 +981,11 @@ const ESCAPE_COMPARE = {
     ctx.textBaseline = 'top';
     ctx.fillText('escape speed', padL, 4);
     ctx.textAlign = 'right';
-    ctx.fillText(
-      `starting ${v.dist.toFixed(1)} radii out`,
-      w - padR,
-      22 + c.rows.length * rowH - 2
-    );
+    // Pinned to the foot of the canvas rather than placed under the last row:
+    // with five rows the computed position fell past the bottom edge and the
+    // line vanished, which is the worst way for a caption to fail.
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`starting ${v.dist.toFixed(1)} radii out`, w - padR, H - 4);
   },
 };
 

@@ -3126,8 +3126,24 @@
           ></button>
         </div>
       </header>
-      <canvas id="investigationPlotCanvas"></canvas>
+      <canvas
+        id="investigationPlotCanvas"
+        role="img"
+        aria-describedby="investigationPlotTableWrap"
+      ></canvas>
       <p id="investigationPlotNote" class="inv-plot-note"></p>
+      <!-- The plot as numbers. A scatter of points is a picture of a
+           relationship, and the position of a dot is not available to a reader
+           using a screen reader, or to one who cannot separate two colours.
+           Every point the canvas draws is in this table, in the order the
+           student recorded them. Kept in step by js/investigations.js. -->
+      <div
+        id="investigationPlotTableWrap"
+        class="inv-plot-table-wrap"
+        hidden=""
+      >
+        <table id="investigationPlotTable" class="inv-plot-table"></table>
+      </div>
     </aside>
 
     <!-- Investigations: the ellipse explorer, in its own panel -->
@@ -3174,9 +3190,18 @@
       <header class="inv-plot-panel-head">
         <span id="investigationToolTitle" class="inv-plot-title"></span>
       </header>
-      <canvas id="investigationToolCanvas"></canvas>
+      <canvas
+        id="investigationToolCanvas"
+        role="img"
+        aria-describedby="investigationToolReadout"
+      ></canvas>
       <p id="investigationToolNote" class="inv-plot-note"></p>
-      <div id="investigationToolReadout" class="inv-tool-readout"></div>
+      <!-- A description list rather than rows of divs: every number this
+           instrument computes is a labelled value, and a screen reader should
+           hear which label goes with which number rather than an undifferentiated
+           run of text. This is also the canvas's text equivalent, which is why
+           the canvas points at it. -->
+      <dl id="investigationToolReadout" class="inv-tool-readout"></dl>
       <div id="investigationToolControls" class="inv-tool-controls"></div>
       <div
         id="investigationToolActions"

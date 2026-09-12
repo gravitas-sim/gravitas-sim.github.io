@@ -229,6 +229,7 @@ const BLACK_HOLES = {
       sid: 'now-make-it-heavier',
       stage: HOLE,
       type: 'predict',
+      reveal: 'three-measurements',
       title: 'Now make it heavier',
       body: `You are about to be handed a mass slider. Before you touch it,
              commit to an answer.
@@ -371,6 +372,7 @@ const BLACK_HOLES = {
       sid: 'squeezing-and-getting-away',
       stage: HOLE,
       type: 'predict',
+      reveal: 'squeeze-the-sun',
       title: 'Squeezing, and getting away',
       body: `Change of subject, briefly. Why is there a horizon at all?
              \n\nThink about throwing a ball straight up. Throw it hard enough
@@ -512,6 +514,7 @@ const BLACK_HOLES = {
       sid: 'which-one-is-denser',
       stage: HOLE,
       type: 'predict',
+      reveal: 'mass-divided-by-volume',
       title: 'Which one is denser?',
       body: `Back to the mass slider, and to a question that catches out almost
              everybody.
@@ -630,6 +633,7 @@ const BLACK_HOLES = {
       sid: 'which-one-is-hotter',
       stage: HOLE,
       type: 'predict',
+      reveal: 'the-thermometer',
       title: 'Which one is hotter?',
       body: `A third property, and a third chance to be surprised.
              \n\nIn 1974 Stephen Hawking showed that black holes are not
@@ -736,6 +740,7 @@ const BLACK_HOLES = {
       sid: 'then-what-happens-to-it',
       stage: HOLE,
       type: 'predict',
+      reveal: 'a-timeline-that-will-not',
       title: 'Then what happens to it?',
       body: `Follow the logic. If a black hole radiates, then it is losing
              energy. Energy and mass are the same currency, so it is losing
@@ -919,6 +924,23 @@ const BLACK_HOLES = {
         title: 'Black hole D',
         note: 'Answer from the trends you found rather than from this panel.',
       },
+    },
+    {
+      sid: 'say-what-scales-with-what',
+      stage: HOLE,
+      // Five loops in this lesson, all of them closed by a multiple choice.
+      // The one thing a tick cannot show is whether the reader can hold four
+      // different scalings apart, which is the whole content of the lesson.
+      requires: ['three-measurements'],
+      type: 'question',
+      kind: 'short',
+      title: 'Four quantities, four different scalings',
+      body: `You have measured, or read off a model, how each of four
+             quantities changes when the mass of a black hole goes up.`,
+      prompt:
+        'In two or three sentences, say how radius, average density, Hawking temperature and evaporation time each change when the mass doubles, and explain why the density goes the way it does.',
+      rubric:
+        'Radius is proportional to mass, so it doubles. Density is mass over the volume inside the horizon, and the volume goes as r\u00b3 \u221d M\u00b3, so density goes as 1/M\u00b2 and falls to a quarter: bigger black holes are less dense, and a supermassive one can be thinner than water. Temperature goes as 1/M and halves. Evaporation time goes as M\u00b3 and becomes eight times longer. The density result is the one worth stating carefully, because the intuition that a black hole is dense comes from stellar-mass ones and does not survive the scaling.',
     },
     {
       sid: 'it-has-a-name',

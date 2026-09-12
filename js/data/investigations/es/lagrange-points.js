@@ -321,6 +321,17 @@ export default {
         'Toda la construcción se apoya en que el sistema gire a ritmo constante, lo que exige que los dos cuerpos estén a separación constante. Haz la órbita excéntrica y el sistema acelera y frena, el potencial efectivo respira y C deja de conservarse. Hay versiones elípticas de este problema y son bastante más difíciles, y por eso el panel se niega en lugar de aproximar.',
     },
     {
+      title: 'Permitido, alcanzado y estable',
+      body: `Leiste una constante de Jacobi en la escena, abriste el cuello,
+             viste dos trazadores con la misma regi\u00f3n accesible tomar rutas
+             distintas y empujaste trazadores en los cinco puntos para ver
+             cu\u00e1les se quedaban.`,
+      prompt:
+        'En dos o tres frases, distingue lo que te dice la constante de Jacobi de lo que no, y di cu\u00e1les de los cinco puntos de Lagrange sobreviven a un empuj\u00f3n y bajo qu\u00e9 condici\u00f3n.',
+      rubric:
+        'La constante de Jacobi acota d\u00f3nde le est\u00e1 energ\u00e9ticamente permitido ir a un trazador: dibuja las curvas de velocidad cero y dice qu\u00e9 regiones quedan cerradas. No dice ad\u00f3nde ir\u00e1 realmente \u2014 dos trazadores con la misma constante, y por tanto la misma regi\u00f3n permitida, pueden seguir caminos completamente distintos \u2014 y no dice nada sobre estabilidad. L1, L2 y L3 son puntos de silla inestables: un empuj\u00f3n crece. L4 y L5 son estables, pero solo cuando la raz\u00f3n de masas es lo bastante extrema, aproximadamente cuando el primario supera unas 25 veces al secundario.',
+    },
+    {
       title: 'Tres afirmaciones, bien separadas',
       body: `Lo que merece la pena llevarse es que son tres afirmaciones distintas
              y el diagrama solo hace la primera:

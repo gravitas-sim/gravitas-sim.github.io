@@ -1273,7 +1273,19 @@ export const currentMarkerFloorPx = () => markerFloorPx(liveBodyCount);
  * @returns {number} Radius to draw, never below a few screen pixels
  */
 const drawRadius = (obj, type) =>
-  drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
+  // `stageRadius` is a presentation override: a lesson comparing stellar sizes
+  // sets it to say how big to draw this body and nothing else. It is used
+  // *instead of* the model radius rather than as well as it, so the family
+  // display factor cannot compress a size the lesson has already chosen -
+  // two scalings fighting each other is how a true-scale comparison stopped
+  // being to scale. The engine radius is untouched, so collisions, tides and
+  // every measured orbital property are the same whichever scale is showing.
+  Number.isFinite(obj.stageRadius) && obj.stageRadius > 0
+    ? Math.max(
+        obj.stageRadius,
+        markerFloorPx(liveBodyCount) / ((state && state.zoom) || 1)
+      )
+    : drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
 
 /**
  * How much detail this body is worth, at its current size on screen.
@@ -5994,7 +6006,12 @@ const findObjectAtPosition = worldPos => {
   for (const bh of bh_list) {
     const dx = worldPos.x - bh.pos.x;
     const dy = worldPos.y - bh.pos.y;
-    const clickRadius = hitRadius(bh.radius, 'BlackHole', state.zoom);
+    const clickRadius = hitRadius(
+      bh.radius,
+      'BlackHole',
+      state.zoom,
+      bh.stageRadius
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: bh, type: 'BlackHole' };
     }
@@ -6017,7 +6034,12 @@ const findObjectAtPosition = worldPos => {
     if (!star.alive) continue;
     const dx = worldPos.x - star.pos.x;
     const dy = worldPos.y - star.pos.y;
-    const clickRadius = hitRadius(star.radius, 'Star', state.zoom);
+    const clickRadius = hitRadius(
+      star.radius,
+      'Star',
+      state.zoom,
+      star.stageRadius
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: star, type: 'Star' };
     }
@@ -6028,7 +6050,12 @@ const findObjectAtPosition = worldPos => {
     if (!ns.alive) continue;
     const dx = worldPos.x - ns.pos.x;
     const dy = worldPos.y - ns.pos.y;
-    const clickRadius = hitRadius(ns.radius, 'NeutronStar', state.zoom);
+    const clickRadius = hitRadius(
+      ns.radius,
+      'NeutronStar',
+      state.zoom,
+      ns.stageRadius
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: ns, type: 'NeutronStar' };
     }
@@ -6039,7 +6066,12 @@ const findObjectAtPosition = worldPos => {
     if (!wd.alive) continue;
     const dx = worldPos.x - wd.pos.x;
     const dy = worldPos.y - wd.pos.y;
-    const clickRadius = hitRadius(wd.radius, 'WhiteDwarf', state.zoom);
+    const clickRadius = hitRadius(
+      wd.radius,
+      'WhiteDwarf',
+      state.zoom,
+      wd.stageRadius
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: wd, type: 'WhiteDwarf' };
     }
@@ -6050,7 +6082,12 @@ const findObjectAtPosition = worldPos => {
     if (!gasGiant.alive) continue;
     const dx = worldPos.x - gasGiant.pos.x;
     const dy = worldPos.y - gasGiant.pos.y;
-    const clickRadius = hitRadius(gasGiant.radius, 'GasGiant', state.zoom);
+    const clickRadius = hitRadius(
+      gasGiant.radius,
+      'GasGiant',
+      state.zoom,
+      gasGiant.stageRadius
+    );
     if (dx * dx + dy * dy < clickRadius * clickRadius) {
       return { object: gasGiant, type: 'GasGiant' };
     }

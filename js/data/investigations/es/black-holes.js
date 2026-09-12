@@ -419,6 +419,15 @@ export default {
       },
     },
     {
+      title: 'Cuatro cantidades, cuatro escalados distintos',
+      body: `Has medido, o le\u00eddo de un modelo, c\u00f3mo cambia cada una de cuatro
+             cantidades cuando sube la masa de un agujero negro.`,
+      prompt:
+        'En dos o tres frases, di c\u00f3mo cambian el radio, la densidad media, la temperatura de Hawking y el tiempo de evaporaci\u00f3n cuando la masa se duplica, y explica por qu\u00e9 la densidad va en el sentido en que va.',
+      rubric:
+        'El radio es proporcional a la masa, as\u00ed que se duplica. La densidad es la masa entre el volumen dentro del horizonte, y el volumen va como r\u00b3 \u221d M\u00b3, as\u00ed que la densidad va como 1/M\u00b2 y baja a la cuarta parte: los agujeros negros grandes son menos densos, y uno supermasivo puede ser menos denso que el agua. La temperatura va como 1/M y se reduce a la mitad. El tiempo de evaporaci\u00f3n va como M\u00b3 y se hace ocho veces mayor.',
+    },
+    {
       title: 'Tiene nombre',
       body: 'El agujero negro D es <strong>Sagitario A*</strong>, y está a 26 000 años luz, en el centro de nuestra propia galaxia. Su masa, 4,3 millones de masas solares, se midió observando estrellas orbitándolo durante treinta años; ese trabajo ganó el Premio Nobel de Física en 2020. En 2022 el Telescopio del Horizonte de Sucesos publicó una imagen de él.\n\nTodo lo que predijiste sobre él es correcto. Su horizonte mide unos 12,7 millones de kilómetros de radio, una quinta parte del camino hasta Mercurio. Su densidad media a esa escala es de aproximadamente un millón de kilogramos por metro cúbico, unas doscientas mil millones de veces menor que la que sale para un agujero negro de diez masas solares. Su temperatura es de 1,4 × 10⁻¹⁴ grados sobre el cero absoluto. Tardará unos 10⁸⁷ años en evaporarse.\n\nAsí que hacer más masivo un agujero negro hace mucho más que hacerlo más grande.\n\n<strong>Más masa → un horizonte de sucesos mayor.</strong>\n\n<strong>Más masa → una densidad media menor a la escala del horizonte.</strong>\n\n<strong>Más masa → una temperatura de Hawking menor.</strong>\n\n<strong>Más masa → una vida muchísimo más larga.</strong>\n\nCambiaste una cosa, y respondieron cuatro propiedades completamente distintas. Eso es lo que significa decir que los agujeros negros siguen las mismas reglas en todo su rango, desde el resto de una sola estrella muerta hasta los gigantes de los centros de las galaxias.',
       tool: {

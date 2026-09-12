@@ -18,6 +18,10 @@
 import { test, expect } from './fixtures.js';
 
 const LESSON = 'what-is-a-gravitational-wave';
+
+/** How many screens each lesson has. Named once: they grow. */
+const STEPS = 27;
+const SEQUEL_STEPS = 24;
 const SEQUEL = 'listening-to-spacetime';
 
 /** Open a lesson through the interface, the way a student does. */
@@ -39,7 +43,7 @@ async function openLesson(page, app, id, { locale, booted = false } = {}) {
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();
 }
 
-// "Step 3 of 24" and "Paso 3 de 24" differ in the word between the numbers but
+// "Step 3 of 27" and "Paso 3 de 27" differ in the word between the numbers but
 // not in the numbers, so these read them positionally.
 const progressNumbers = async page => {
   const text = await page.locator('#investigationProgressText').innerText();
@@ -142,7 +146,7 @@ test.describe('the beginner lesson is reachable and complete', () => {
     const card = page.locator(`[data-investigation="${LESSON}"]`);
     await expect(card).toBeVisible();
     await expect(card).toContainText(/What Is a Gravitational Wave/i);
-    await expect(card).toContainText(/24/);
+    await expect(card).toContainText(new RegExp(String(STEPS)));
     // The level is the whole reason this lesson exists beside the other one.
     await expect(card).toContainText(/Beginner/i);
   });
@@ -164,10 +168,10 @@ test.describe('the beginner lesson is reachable and complete', () => {
     expect(a).not.toBe(b);
   });
 
-  test('it opens on step 1 of 24', async ({ page, app }) => {
+  test('it opens on step 1 of the lesson', async ({ page, app }) => {
     await openLesson(page, app, LESSON);
     expect(await stepNumber(page)).toBe(1);
-    expect(await stepTotal(page)).toBe(24);
+    expect(await stepTotal(page)).toBe(STEPS);
   });
 
   test('the whole lesson can be walked with the sound off', async ({
@@ -267,7 +271,7 @@ test.describe('the pair of lessons', () => {
     // Straight into the sequel with no progress recorded anywhere.
     await openLesson(page, app, SEQUEL);
     expect(await stepNumber(page)).toBe(1);
-    expect(await stepTotal(page)).toBe(24);
+    expect(await stepTotal(page)).toBe(SEQUEL_STEPS);
   });
 
   test('a reader can go from the end of this one into the start of that one', async ({
@@ -302,7 +306,7 @@ test.describe('in Spanish', () => {
       /Algo puede viajar sin brillar/i
     );
     const total = await stepTotal(page);
-    expect(total).toBe(24);
+    expect(total).toBe(STEPS);
     for (let n = 1; n < total; n++) await answerAndAdvance(page);
     expect(await stepNumber(page)).toBe(total);
   });

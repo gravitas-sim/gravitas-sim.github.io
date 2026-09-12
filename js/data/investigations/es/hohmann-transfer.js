@@ -222,6 +222,24 @@ export default {
         'T = 1,75^1,5 = 2,315 años para la elipse completa. La mitad son 1,157 años, o 423 días.',
     },
     {
+      title: '¿Y si no haces nada?',
+      body: `El primer impulso está hecho y la nave sube. En unos catorce
+             meses llegará a lo alto del arco, al radio orbital de la estación,
+             a 14,2 km/s. La estación, a ese radio, va a 18,8 km/s.
+             \n\nSupón que no haces ningún impulso más. Comprométete a una
+             respuesta ahora: queda sin corregir hasta que hayas subido hasta
+             allí y hayas leído la órbita.`,
+      prompt: 'Sin segundo impulso, la nave…',
+      options: [
+        'se quedaría a 2,5 UA, ya que ha llegado',
+        'caería de vuelta hacia dentro y volvería a 1 UA',
+        'se alejaría poco a poco, ya que se mueve alejándose de la estrella',
+        'seguiría a la estación a 14,2 km/s',
+      ],
+      because:
+        'La elipse de transferencia es una órbita cerrada y la nave está en su apoastro, no en reposo. Su periastro sigue a 1 UA, así que cae de vuelta y regresa exactamente a donde empezó, una vez cada 2,3 años, para siempre. Llegar a un sitio y quedarse en él son logros distintos.',
+    },
+    {
       title: 'La travesía',
       body: `Déjalo correr. La nave se aleja de la estrella, frenando todo el
              camino, y unos catorce meses después llega a lo alto del arco, a
@@ -237,19 +255,17 @@ export default {
       ],
     },
     {
-      title: '¿Y si no haces nada?',
-      body: `La nave está al radio orbital de la estación, en lo alto de su
-             arco, a 14,2 km/s. La estación, a ese radio, va a 18,8 km/s.
-             \n\nSupón que no haces ningún impulso más.`,
-      prompt: 'Sin segundo impulso, la nave…',
-      options: [
-        'se quedaría a 2,5 UA, ya que ha llegado',
-        'caería de vuelta hacia dentro y volvería a 1 UA',
-        'se alejaría poco a poco, ya que se mueve alejándose de la estrella',
-        'seguiría a la estación a 14,2 km/s',
+      title: 'Lee el arco en el que estás',
+      body: `La simulación se ha detenido en lo alto del arco. La lectura de
+             abajo da lo alto y lo bajo de la órbita en la que va la nave
+             ahora mismo. Anota los dos.
+             \n\nLo bajo del arco es la parte que responde a la pregunta a la
+             que acabas de comprometerte.`,
+      fields: [
+        { label: 'Lo alto del arco actual' },
+        { label: 'Lo bajo de él' },
       ],
-      because:
-        'La elipse de transferencia es una órbita cerrada y la nave está en su apoastro, no en reposo. Su periastro sigue a 1 UA, así que cae de vuelta y regresa exactamente a donde empezó, una vez cada 2,3 años, para siempre. Llegar a un sitio y quedarse en él son logros distintos.',
+      tip: 'Un impulso te compra una visita. Quedarte es una segunda compra.',
     },
     {
       title: 'El impulso que todo el mundo olvida',
@@ -297,6 +313,16 @@ export default {
       ],
       because:
         'Los dos impulsos añadieron energía orbital, y una órbita mayor tiene más energía. Pero casi toda esa energía es potencial: subir de 1 UA a 2,5 UA cuesta muchísima velocidad y compra altura. La nave acaba más arriba, con más energía total, y más despacio. Alejarse significa ir más despacio una vez allí, y acelerar dos veces para conseguirlo.',
+    },
+    {
+      title: 'Por qu\u00e9 el impulso que funciona apunta de lado',
+      body: `Empujaste hacia fuera en l\u00ednea recta y no llegaste a nada \u00fatil.
+             Empujaste en la direcci\u00f3n del movimiento y el lado opuesto de la
+             \u00f3rbita subi\u00f3 hasta la estaci\u00f3n.`,
+      prompt:
+        'En dos o tres frases, explica por qu\u00e9 un impulso en la direcci\u00f3n del movimiento eleva el lado opuesto de la \u00f3rbita, y por qu\u00e9 llegar al radio de la estaci\u00f3n no es lo mismo que quedarse all\u00ed.',
+      rubric:
+        'Un impulso cambia la energ\u00eda de la \u00f3rbita con la m\u00e1xima eficacia cuando va a lo largo de la velocidad, porque el trabajo es fuerza por velocidad; a\u00f1adir energ\u00eda eleva el semieje mayor, y como el punto del impulso sigue en la nueva \u00f3rbita se convierte en su punto bajo, as\u00ed que la subida aparece media \u00f3rbita despu\u00e9s en el lado opuesto. Llegar no es quedarse porque la elipse de transferencia es una \u00f3rbita cerrada: en lo alto del arco la nave est\u00e1 en el apoastro con su periastro todav\u00eda en el radio de partida \u2014 que es lo que mediste \u2014 as\u00ed que sin el segundo impulso cae de vuelta.',
     },
     {
       title: 'De qué dependía esta respuesta',

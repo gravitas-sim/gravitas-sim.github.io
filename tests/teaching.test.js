@@ -19,6 +19,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+  QUICKSTART,
+  EVALUATION,
+  FEEDBACK_FIELDS,
   CYCLE,
   JOURNEY,
   INSTRUMENTS,
@@ -163,6 +166,12 @@ describe('the page asks for messages that exist', () => {
       ...DEMOS.map(({ id }) => `teach.demo.${id}`),
       ...PATTERNS.map(({ id }) => `teach.pattern.${id}`),
       ...EVIDENCE.map(({ id }) => `teach.evidence.${id}`),
+      ...QUICKSTART.map(({ id }) => `teach.quickstart.${id}`),
+      ...EVALUATION.map(id => `teach.evaluate.${id}`),
+      ...FEEDBACK_FIELDS.map(id => `teach.feedback.${id}`),
+      // The two feedback routes, which are a fixed pair rather than a list.
+      'teach.feedback.issue',
+      'teach.feedback.contact',
     ]);
 
     const isUsed = id => {
@@ -214,14 +223,15 @@ describe('the page states nothing it is not entitled to state', () => {
         // fourth decimal place" - and the placeholders are filled at render
         // time. What is banned is a digit standing for a size of the catalogue.
         //
-        // An activity's closing carries the same kind of number: "set the
-        // eccentricity to 0.7" is an instruction about the physics, not a
-        // count of anything. Its *duration* is not exempt and does not need to
-        // be - it is teach.activity.duration with {n} substituted from the
-        // format's own `minutes`, so the number lives once, in the data.
+        // A format's own prose carries the same kind of number: "set the
+        // eccentricity to 0.7", "move it out to 0.30 separations" are
+        // instructions about the physics, not counts of anything. Its
+        // *duration* is not exempt and does not need to be - it is
+        // teach.activity.duration with {n} substituted from the format's own
+        // `minutes`, so the number lives once, in the data.
         /\b\d+\b/.test(text) &&
         !id.startsWith('teach.demo.') &&
-        !/^teach\.activity\..*\.closing$/.test(id)
+        !/^teach\.activity\..*\.(intro|closing)$/.test(id)
     );
     expect(numbers.map(([id]) => id)).toEqual([]);
   });
@@ -359,5 +369,45 @@ describe('the links out of the page go somewhere', () => {
     expect(readFileSync(path.join(REPO, 'sitemap.xml'), 'utf8')).toContain(
       '/teaching/'
     );
+  });
+});
+
+describe('the activity launch links', () => {
+  // The showcase page builds a launch href and js/activities/activityBridge.js
+  // decides whether the application will honour it. Nothing connected the two,
+  // and they disagreed: the page percent-encoded the separator and the bridge
+  // matches a literal slash, so every Start button on /teaching/ loaded the
+  // sandbox and opened nothing. That failure is invisible - the link works, the
+  // page loads, and the activity simply is not there.
+  //
+  // Asserted against the bridge's own predicate rather than against a copy of
+  // its regular expression, so the two cannot drift apart again.
+  test('every one is a fragment the application will open', async () => {
+    const { ACTIVITIES } = await import('../js/data/activities.js');
+    const { activityInHash, parseActivityHash } =
+      await import('../js/activities/activityBridge.js');
+    const { routeTo } = await import('../js/activities/activities.js');
+
+    for (const activity of ACTIVITIES) {
+      for (const format of activity.formats) {
+        const href = `/${routeTo(activity.id, format.id)}#activity=${activity.id}/${format.id}`;
+        const hash = href.slice(href.indexOf('#'));
+        expect(activityInHash(hash)).toBe(true);
+        expect(parseActivityHash(hash)).toEqual({
+          activity: activity.id,
+          format: format.id,
+        });
+      }
+    }
+  });
+
+  test('the ids are the shape the fragment can carry', async () => {
+    const { ACTIVITIES } = await import('../js/data/activities.js');
+    for (const activity of ACTIVITIES) {
+      expect(activity.id).toMatch(/^[a-z0-9-]+$/);
+      for (const format of activity.formats) {
+        expect(format.id).toMatch(/^[a-z0-9-]+$/);
+      }
+    }
   });
 });

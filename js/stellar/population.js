@@ -135,6 +135,15 @@ export function synthesisePopulation({
     }
     stars.push({
       index: stars.length,
+      /**
+       * A name for this star that outlives any view of it.
+       *
+       * The index is stable for a seed and a count, but it is a position in a
+       * list, and a threshold that filters the list makes positions mean
+       * different things. Everything that has to say "this star, again later"
+       * - a canvas role, a selection, a capture - says it with this.
+       */
+      id: `p${stars.length}`,
       massSun,
       ageYr,
       teffK: state.teffK,

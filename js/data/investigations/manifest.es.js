@@ -62,8 +62,8 @@ export const MANIFEST = [
     summary:
       'Lanza algo desde un planeta y descubre qué decide si vuelve a caer, gira para siempre o se marcha y no regresa jamás. Avanza desde el experimento hasta la idea que hay detrás: todo objeto cercano a una estrella lleva consigo una cantidad de energía, y el signo de ese único número resuelve la cuestión. Termina con un visitante interestelar real y decide por ti mismo si volverá.',
     thumbnail: 'images/scenarios/interstellar-visitor.webp',
-    stepCount: 23,
-    gradedCount: 9,
+    stepCount: 24,
+    gradedCount: 10,
     objectiveCount: 6,
   },
   {
@@ -76,8 +76,8 @@ export const MANIFEST = [
     summary:
       'Las leyes de Kepler terminan con la corrección de Newton, y para esto sirve esa corrección. Observa dos estrellas girando una alrededor de la otra, encuentra el punto de equilibrio que ambas rodean, y usa nada más que el tamaño y la duración de su órbita para deducir cuánto pesa cada una. Ningún telescopio ha puesto jamás una estrella en una balanza; así es como se hace de verdad.',
     thumbnail: 'images/investigations/weighing-stars.webp',
-    stepCount: 35,
-    gradedCount: 17,
+    stepCount: 36,
+    gradedCount: 18,
     objectiveCount: 6,
   },
   {
@@ -90,8 +90,8 @@ export const MANIFEST = [
     summary:
       'Cambia una sola cosa de un agujero negro, su masa, y observa cómo responden cuatro propiedades completamente distintas. Su horizonte de sucesos crece al mismo paso que la masa. Su densidad media baja. Se vuelve más frío. Vive muchísimo más. Dos de esas cuatro sorprenden a casi todo el mundo, y las predecirás antes de medirlas.',
     thumbnail: 'images/investigations/black-holes.webp',
-    stepCount: 29,
-    gradedCount: 17,
+    stepCount: 30,
+    gradedCount: 18,
     objectiveCount: 5,
   },
   {
@@ -175,8 +175,8 @@ export const MANIFEST = [
     summary:
       'Tres de las lunas de Júpiter se marcan el compás unas a otras, Plutón cruza la órbita de Neptuno y jamás se le ha acercado, y miles de asteroides se mantienen sesenta grados por delante de Júpiter sin moverse de ahí. Los tres casos son el mismo fenómeno, y ninguno queda explicado por lo que todo el mundo cita: la razón entre los periodos. Medirás esas razones, descubrirás que la más limpia de todo el sistema pertenece a una luna que no está en ninguna resonancia, y luego medirás la magnitud que sí resuelve la cuestión: un ángulo que o bien oscila o bien da la vuelta.',
     thumbnail: 'images/scenarios/galilean-resonance.webp',
-    stepCount: 33,
-    gradedCount: 16,
+    stepCount: 34,
+    gradedCount: 17,
     objectiveCount: 6,
   },
   {
@@ -205,8 +205,8 @@ export const MANIFEST = [
       'Tienes ocho noches y una estrella. Planifica tú mismo la campaña en el panel de Velocidad Radial, comprométete con una predicción y luego observa dos calendarios en paralelo sobre la misma estrella, con el mismo instrumento y el mismo ruido: uno recupera un Júpiter y el otro ni siquiera puede establecer que la velocidad cambie. Después rompe tu propio resultado — cambia la semilla, pierde quince días por mal tiempo y escribe una lista de fechas a mano — hasta que puedas decir qué debe acompañar a un periodo publicado para que otra persona pueda comprobarlo.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
-    stepCount: 14,
-    gradedCount: 7,
+    stepCount: 15,
+    gradedCount: 8,
     objectiveCount: 7,
   },
   {
@@ -246,8 +246,8 @@ export const MANIFEST = [
     summary:
       'Una nave a 1 UA, una estación a 2,5 UA y nada de combustible que desperdiciar. Calcula con lápiz los dos impulsos y la travesía entre ellos, y después vuela la maniobra a ver si el motor de física te da la razón. Te la da, con un error de una parte entre mil, y eso es lo que hace fiables las dos sorpresas que contiene: aceleras para alejarte, y al llegar tienes que acelerar otra vez o te caes de vuelta.',
     thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
-    stepCount: 20,
-    gradedCount: 12,
+    stepCount: 22,
+    gradedCount: 14,
     objectiveCount: 6,
   },
   {
@@ -260,8 +260,8 @@ export const MANIFEST = [
     summary:
       'Dos estrellas en órbita circular y una mota de polvo que siente a las dos. Hay un número que puedes calcular sobre la mota y que te dice dónde tiene prohibido estar, y a medida que la aceleras se abren muros de uno en uno, en un orden fijo. Encuentra los cinco lugares donde la mota podría quedarse quieta, averigua a cuáles puede llegar y descubre después por qué «puede llegar» son tres preguntas distintas con el mismo abrigo.',
     thumbnail: 'images/scenarios/lagrange-point-lab.webp',
-    stepCount: 19,
-    gradedCount: 8,
+    stepCount: 20,
+    gradedCount: 9,
     objectiveCount: 6,
   },
   {
@@ -274,9 +274,9 @@ export const MANIFEST = [
     summary:
       'Dos objetos giran uno alrededor del otro en pantalla y no emiten nada de luz. A lo largo de veinticuatro pasos cortos averiguas qué sale de ellos, qué le hace a todo lo que atraviesa y cómo podría notarlo un instrumento; y aprendes a distinguir los tres tipos de imagen: el dibujo, el cálculo y la medida. Sin ecuaciones, sin física previa, y se puede hacer con el sonido apagado.',
     thumbnail: 'images/investigations/what-is-a-gravitational-wave.webp',
-    series: 'Gravitational waves',
-    stepCount: 24,
-    gradedCount: 14,
+    series: 'Ondas gravitacionales',
+    stepCount: 27,
+    gradedCount: 15,
     objectiveCount: 6,
   },
   {
@@ -289,7 +289,7 @@ export const MANIFEST = [
     summary:
       'Llega un patrón sin etiqueta: una oscilación que se vuelve más rápida y más fuerte y luego se detiene. A lo largo de veinticuatro pasos averiguas qué podría producirla, mides las dos relaciones que la delatan, descubres qué preguntas puede responder el modelo y cuáles no, y terminas comparando tu respuesta con lo que dos detectores en Luisiana y Washington registraron de verdad en septiembre de 2015. Puedes hacerlo todo con el sonido apagado.',
     thumbnail: 'images/investigations/listening-to-spacetime.webp',
-    series: 'Gravitational waves',
+    series: 'Ondas gravitacionales',
     stepCount: 24,
     gradedCount: 15,
     objectiveCount: 8,
@@ -302,10 +302,10 @@ export const MANIFEST = [
     duration: '70-90 min',
     level: 'Astronomía introductoria',
     summary:
-      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de veintiocho pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
+      'Tres estrellas, sin etiquetas, y una conjetura sobre cuál es la mayor. A lo largo de treinta pasos separas las cuatro cosas que siempre se confunden entre sí —masa, radio, temperatura y luminosidad—, aprendes a leer el diagrama que las organiza, encuentras gigantes, supergigantes y enanas blancas en el lugar que ocupan realmente, averiguas por qué las estrellas más pesadas viven menos tiempo y terminas contando dos veces una población sintética para ver por qué las estrellas que puedes ver no son las estrellas que hay.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
-    stepCount: 28,
-    gradedCount: 25,
+    stepCount: 30,
+    gradedCount: 27,
     objectiveCount: 7,
   },
   {

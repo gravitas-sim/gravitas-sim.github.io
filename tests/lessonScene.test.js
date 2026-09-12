@@ -299,6 +299,8 @@ describe('a stellar model writing onto a star', () => {
     luminositySun: 1,
     radiusSun: 1,
     ageYr: 4.6e9,
+    massSun: 1,
+    initialMassSun: 1,
     phase: 'main-sequence',
   };
   const free = {
@@ -308,13 +310,16 @@ describe('a stellar model writing onto a star', () => {
     radiusSun: 0.33,
   };
 
-  test('a modelled point supplies an age and a phase', () => {
+  test('a modelled point supplies everything the track knows', () => {
     expect(fieldsFromSelection(modelled)).toEqual({
       temperature: 5772,
       luminosityInSuns: 1,
       radiusInSuns: 1,
       ageYr: 4.6e9,
+      massInSuns: 1,
+      initialMassInSuns: 1,
       stellarPhase: 'main-sequence',
+      modelSource: 'model',
     });
   });
 
@@ -327,9 +332,34 @@ describe('a stellar model writing onto a star', () => {
       temperature: 10000,
       luminosityInSuns: 1,
       radiusInSuns: 0.33,
+      // Said out loud rather than left to the absence of the others: a reader
+      // and a notebook entry both need to know this point is a place somebody
+      // clicked, not a star anybody modelled.
+      modelSource: 'free',
     });
-    expect('ageYr' in fields).toBe(false);
-    expect('stellarPhase' in fields).toBe(false);
+    for (const withheld of [
+      'ageYr',
+      'stellarPhase',
+      'massInSuns',
+      'initialMassInSuns',
+    ]) {
+      expect(withheld in fields).toBe(false);
+    }
+  });
+
+  test('a free point takes back a mass the star used to have', () => {
+    // The failure this prevents: dragging the cursor off a track left the
+    // star showing the track's mass beside a temperature from somewhere else,
+    // and nothing on the card said the two had stopped belonging together.
+    const star = {};
+    applySelection(star, modelled);
+    expect(star.massInSuns).toBe(1);
+    expect(star.modelSource).toBe('model');
+    applySelection(star, free);
+    expect(star.massInSuns).toBeNull();
+    expect(star.initialMassInSuns).toBeNull();
+    expect(star.modelSource).toBe('free');
+    expect(star.radiusInSuns).toBe(0.33);
   });
 
   test('moving from a modelled point to a free one takes the age back', () => {

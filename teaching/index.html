@@ -15,10 +15,7 @@
       property="og:description"
       content="Guided investigations, an evidence notebook, controlled experiments, and six demonstrations you can run in the page."
     />
-    <meta
-      property="og:url"
-      content="https://gravitas-sim.online/teaching/"
-    />
+    <meta property="og:url" content="https://gravitas-sim.online/teaching/" />
     <meta
       property="og:image"
       content="https://gravitas-sim.online/social-card.png"
@@ -63,7 +60,9 @@
         <a href="/teaching/" aria-current="page" data-i18n="teach.nav.teaching"
           >Teaching</a
         >
-        <a href="/instructors/" data-i18n="teach.nav.instructors">Instructors</a>
+        <a href="/instructors/" data-i18n="teach.nav.instructors"
+          >Instructors</a
+        >
       </nav>
       <div
         class="teach-lang"
@@ -104,7 +103,9 @@
       <nav class="doc-toc" aria-labelledby="tocHeading">
         <h2 id="tocHeading" data-i18n="teach.toc">On this page</h2>
         <ol>
-          <li><a href="#cycle" data-i18n="teach.section.cycle">The cycle</a></li>
+          <li>
+            <a href="#cycle" data-i18n="teach.section.cycle">The cycle</a>
+          </li>
           <li>
             <a href="#journey" data-i18n="teach.section.journey">The journey</a>
           </li>
@@ -118,13 +119,32 @@
               >Classroom activities</a
             >
           </li>
-          <li><a href="#demos" data-i18n="teach.section.demos">Demonstrations</a></li>
           <li>
-            <a href="#patterns" data-i18n="teach.section.patterns">In a course</a>
+            <a href="#quickstart" data-i18n="teach.section.quickstart"
+              >Quick start</a
+            >
+          </li>
+          <li>
+            <a href="#demos" data-i18n="teach.section.demos">Demonstrations</a>
+          </li>
+          <li>
+            <a href="#patterns" data-i18n="teach.section.patterns"
+              >In a course</a
+            >
           </li>
           <li><a href="#access" data-i18n="teach.section.access">Access</a></li>
           <li>
-            <a href="#evidence" data-i18n="teach.section.evidence">The physics</a>
+            <a href="#evidence" data-i18n="teach.section.evidence"
+              >The physics</a
+            >
+          </li>
+          <li>
+            <a href="#evaluate" data-i18n="teach.section.evaluate"
+              >Evaluating it</a
+            >
+          </li>
+          <li>
+            <a href="#feedback" data-i18n="teach.section.feedback">Feedback</a>
           </li>
         </ol>
       </nav>
@@ -171,6 +191,12 @@
           >Browse all investigations</a
         >
       </p>
+
+      <h2 id="quickstart" data-i18n="teach.section.quickstart">
+        Quick start for instructors
+      </h2>
+      <p data-i18n="teach.quickstart.intro"></p>
+      <div class="teach-quickstart" id="teachQuickstart"></div>
 
       <h2 id="demos" data-i18n="teach.section.demos">
         Six demonstrations you can run here
@@ -235,6 +261,53 @@
       <p data-i18n="teach.evidence.intro"></p>
       <p class="teach-checks" id="teachChecks"></p>
       <div class="teach-evidences" id="teachEvidence"></div>
+
+      <h2 id="evaluate" data-i18n="teach.section.evaluate">
+        If you want to evaluate it
+      </h2>
+      <p class="doc-note" data-i18n="teach.evaluate.intro"></p>
+      <div class="teach-evaluate" id="teachEvaluate"></div>
+
+      <h2 id="feedback" data-i18n="teach.section.feedback">
+        Telling us what happened
+      </h2>
+      <p data-i18n="teach.feedback.intro"></p>
+      <div class="teach-feedback-routes" id="teachFeedbackRoutes"></div>
+
+      <!-- Local, optional, and never sent anywhere. The form is built by
+           js/teachingPage.js from FEEDBACK_FIELDS so that the prompts, like
+           every other string on this page, are translated rather than typed
+           into the markup. -->
+      <section class="teach-feedback-form" aria-labelledby="feedbackFormTitle">
+        <h3 id="feedbackFormTitle" data-i18n="teach.feedback.form.title">
+          Notes from a class you ran
+        </h3>
+        <p data-i18n="teach.feedback.form.text"></p>
+        <form id="teachFeedbackForm" novalidate></form>
+        <div class="teach-feedback-actions">
+          <button
+            type="button"
+            class="ui-button is-primary"
+            id="teachFeedbackExport"
+          >
+            Save these notes as a file
+          </button>
+          <button
+            type="button"
+            class="ui-button is-quiet"
+            id="teachFeedbackClear"
+          >
+            Clear them
+          </button>
+        </div>
+        <p class="teach-fineprint" data-i18n="teach.feedback.form.privacy"></p>
+        <p
+          class="teach-feedback-status"
+          id="teachFeedbackStatus"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
     </main>
 
     <footer class="doc-foot">

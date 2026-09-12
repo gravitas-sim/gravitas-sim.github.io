@@ -59,6 +59,7 @@ import {
 import { scenarioShotHtml, wireThumbnailFallbacks } from './scenarioBrowser.js';
 import {
   applyShareState,
+  captureShareState,
   state,
   SETTINGS,
   setInspectorSuppressed,
@@ -152,6 +153,7 @@ import { trapFocus } from './focusTrap.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
+  BINARY_SCALE,
   applyStage,
   centreOnSelected,
   clearStage,
@@ -163,11 +165,18 @@ import {
   restageHole,
   restageStarPair,
   stagedBarycentre,
+  clearSnapshots,
   pinSnapshot,
   pinnedSnapshots,
+  pulseSource,
   remnantKindOf,
+  restageBinary,
+  restagePopulation,
   restageStar,
-  stageIntact,
+  setSourceMode,
+  stageKey,
+  stagePresence,
+  stagedPopulation,
   stagedStars,
   takeFit,
 } from './lessonStage.js';
@@ -175,6 +184,7 @@ import {
   bindRoles,
   boundRoles,
   roleBody,
+  selectBody,
   enterLessonScope,
   evidenceSnapshot,
   leaveLessonScope,
@@ -777,8 +787,114 @@ function probeContext() {
     roles: () => boundRoles(),
     /** Select a role's body, as though the reader had clicked it. */
     selectRole,
+    /**
+     * Select a body by id, as though the reader had clicked it.
+     *
+     * What an instrument needs when the thing it was clicked on is a star on
+     * a card rather than a role in a step: the card carries body ids, so it
+     * can say which star without knowing what the step called it.
+     */
+    selectId: id => {
+      const body = allBodies().find(b => b.id === id);
+      return body ? selectBody(body) : false;
+    },
     /** Who is computing what, for a line under an instrument. */
     mode: modeDescription,
+    /**
+     * The stars this step stood on the canvas, as values.
+     *
+     * The authoritative sample, and the reason there is only one: the H-R
+     * diagram, the comparison card and the object list all read this rather
+     * than resolving the step's declaration for themselves. A star is here
+     * once, with the model state the canvas is drawn from and the id of the
+     * body it is drawn as, so "the same star" is a fact rather than an
+     * agreement between two pieces of arithmetic.
+     *
+     * Values only. No PhysicsObject leaves through this: an instrument that
+     * could reach a body could move one.
+     */
+    stagedSample: () =>
+      stagedStars().map(entry => ({
+        role: entry.role,
+        name: entry.star?.name ?? entry.role,
+        bodyId: entry.star?.id ?? null,
+        model: entry.model,
+        anonymous: Boolean(entry.star?.anonymous),
+      })),
+    /** A cheap signature of the current stage, so a widget can memoise. */
+    stageKey: () => stageKey(),
+    /**
+     * Draw the stage of a star's life around a staged body.
+     *
+     * The main scene's half of the evolution playback. What is handed over is
+     * the model moment - which stage, how far through, and the endpoint
+     * prescription where there is one - and js/render.js turns that into a
+     * bounded, seeded illustration around that body. Nothing is integrated and
+     * nothing here has mass.
+     *
+     * Called every tick while the step is up, and cleared when the step
+     * changes or the lesson closes, so no illustration can outlive the screen
+     * that asked for it.
+     */
+    showEvolutionScene: (role, frame, opts = {}) => {
+      const body = roleBody(role);
+      if (!body || !frame) return false;
+      state.evolutionOverlay.active = true;
+      state.evolutionOverlay.bodyId = body.id;
+      state.evolutionOverlay.frame = frame;
+      state.evolutionOverlay.seed = opts.seed ?? 'lives';
+      state.evolutionOverlay.lostFraction = Number(opts.lostFraction) || 0;
+      state.evolutionOverlay.stillFrame = Boolean(opts.stillFrame);
+      return true;
+    },
+    /** Take it down. */
+    clearEvolutionScene,
+    /**
+     * Change which gravitational-wave source is on the canvas.
+     *
+     * The beginner lesson's central claim is that motion is not what makes a
+     * source radiate, and it needs a reader to be able to stand a static
+     * mass, a spherically pulsing one and a binary on the canvas in turn.
+     * This is what its source control calls.
+     */
+    setSourceMode,
+    /** Breathe the single source, from the model clock. */
+    pulseSource,
+    /** Rebuild the staged pair when its components change. */
+    restageBinary,
+    /**
+     * The units the staged binary is placed in.
+     *
+     * Handed over rather than imported, so an instrument can size an overlay
+     * against the pair without js/gwWidgets.js taking a dependency on the
+     * stage - and so there is one definition of the scale rather than a copy
+     * of the constant in the widget.
+     */
+    binaryScale: () => BINARY_SCALE,
+    /**
+     * Put the crests a source has emitted on the canvas.
+     *
+     * Handed the rings themselves, computed from the model's emission history
+     * by js/lesson/gwWavefronts.js, so the picture belongs to the playhead
+     * position rather than to a wall clock. Null takes the overlay down,
+     * which is what a source with no changing quadrupole gets.
+     */
+    showWavefronts: crests => {
+      const o = state.gwWaveOverlay;
+      if (!o) return false;
+      if (!crests?.length) {
+        o.active = false;
+        o.crests = [];
+        return false;
+      }
+      o.active = true;
+      o.crests = crests;
+      return true;
+    },
+    /** Re-apply the population stage under a new brightness cut. */
+    restagePopulation,
+    /** What the population stage last put up: counts, cut, and provenance. */
+    population: () => stagedPopulation(),
     /** Write a model's answer onto a staged star, sizing it as it goes. */
     restageStar,
     /**
@@ -1054,6 +1170,15 @@ function applySetup(setup) {
  */
 function bindStepRoles() {
   const step = currentStep();
+  // Whatever the last step was illustrating is not this step's business. The
+  // widget re-asserts it on its first tick if this step wants one, so the
+  // cost of clearing here is one frame and the cost of not clearing is a
+  // supernova drawn around a star that has just been restaged as the Sun.
+  clearEvolutionScene();
+  // Frozen copies belong to the screen that froze them, and two consecutive
+  // steps can share a stage - in which case applyStage does nothing and the
+  // copies would otherwise still be standing there under a different question.
+  clearSnapshots();
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
   // roles to somebody else's.
@@ -1113,6 +1238,34 @@ function applyLocks() {
   setAreaSweepSuppressed(lock.areaSweep === false);
 }
 
+/**
+ * Take down the life-stage illustration.
+ *
+ * Called on a step change as well as on close, because the overlay names a
+ * body and a moment and both belong to one screen. A cloud left drawn around
+ * a star the next step has restaged is the kind of leak that looks like a
+ * rendering bug rather than a lesson bug.
+ *
+ * @returns {void}
+ */
+function clearEvolutionScene() {
+  const o = state.evolutionOverlay;
+  if (!o) return;
+  o.active = false;
+  o.bodyId = null;
+  o.frame = null;
+  o.lostFraction = 0;
+  o.stillFrame = false;
+}
+
+/** Take the wave crests off the canvas. */
+function clearWavefronts() {
+  const o = state.gwWaveOverlay;
+  if (!o) return;
+  o.active = false;
+  o.crests = [];
+}
+
 /** Hand the simulation back to the user when a lesson closes. */
 function releaseLocks() {
   // The explanation labels and the balance point belong to the lesson that
@@ -1120,6 +1273,8 @@ function releaseLocks() {
   SETTINGS.bh_explain_view = false;
   state.barycentreOverlay.active = false;
   state.barycentreOverlay.ids = [];
+  clearEvolutionScene();
+  clearWavefronts();
   setInspectorSuppressed(false);
   setAreaSweepSuppressed(false);
   if (lockedSettings) {
@@ -1267,6 +1422,35 @@ const SHORT_ANSWER_MIN = 40;
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
 const currentStep = () => active?.steps[stepIndex] ?? null;
+
+/**
+ * The prediction, if any, that this step is where the answer arrives.
+ *
+ * A predict step names `reveal: '<sid>'` when its answer should wait for the
+ * experiment; this is the other end of that, and it is what makes the wait
+ * worth anything. Returns null when no earlier step points here, when the
+ * reader never committed to an answer, or when the prediction carries no
+ * answer key to mark against.
+ *
+ * @param {Object} step - The step being rendered
+ * @returns {?{chose: string, answer: string, right: boolean, because: string}}
+ */
+function predictionAnsweredHere(step) {
+  if (!active || !step?.sid) return null;
+  const from = active.steps.find(x => x.reveal === step.sid);
+  if (!from || !Array.isArray(from.options) || from.answer === undefined) {
+    return null;
+  }
+  const chosen = responses[stepKey(active.id, from.sid)];
+  if (chosen === undefined) return null;
+  const index = Number(chosen);
+  return {
+    chose: from.options[index] ?? String(chosen),
+    answer: from.options[from.answer] ?? '',
+    right: index === from.answer,
+    because: from.because || '',
+  };
+}
 
 // --- Measured values ----------------------------------------------------------
 
@@ -1543,6 +1727,54 @@ function logSlope(pts) {
  * curve and trivial to judge as a straight line, which is exactly the move
  * that turns four measurements into evidence for Kepler's third law.
  */
+/**
+ * The plot's points, as a table.
+ *
+ * The accessible equivalent of the scatter beside it, and the thing that makes
+ * "read your fourth point off the graph" answerable without the graph. Hidden
+ * when there is nothing plotted, because an empty table is worse than no
+ * table: it announces a structure with nothing in it.
+ *
+ * @param {Object} spec - The step's plot specification
+ * @param {Array<{x:number,y:number,label?:string}>} points - What is drawn
+ * @param {Object} opts - {transform, useLog} - which labels apply
+ */
+function renderPlotTable(spec, points, { transform, useLog } = {}) {
+  const wrap = els.plotTableWrap;
+  const table = els.plotTable;
+  if (!wrap || !table) return;
+  if (!points.length) {
+    wrap.hidden = true;
+    table.innerHTML = '';
+    return;
+  }
+  const xLabel = transform?.xLabel || spec.xLabel || 'x';
+  const yLabel = transform?.yLabel || spec.yLabel || 'y';
+  // Log axes plot the logarithm, and saying so is the difference between a
+  // table a reader can check against the picture and one that quietly
+  // disagrees with it.
+  const head = useLog
+    ? [t('inv.plot.point'), `log₁₀(${xLabel})`, `log₁₀(${yLabel})`]
+    : [t('inv.plot.point'), xLabel, yLabel];
+  const digits = n =>
+    Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && n !== 0)
+      ? n.toExponential(3)
+      : n.toFixed(3);
+  const body = points
+    .map(
+      (p, i) =>
+        `<tr><th scope="row">${escape(p.label || String(i + 1))}</th>` +
+        `<td>${escape(digits(p.x))}</td><td>${escape(digits(p.y))}</td></tr>`
+    )
+    .join('');
+  const html =
+    `<caption>${escape(t('inv.plot.tableCaption', { title: spec.title || '' }))}</caption>` +
+    `<thead><tr>${head.map(h => `<th scope="col">${prose(h)}</th>`).join('')}</tr></thead>` +
+    `<tbody>${body}</tbody>`;
+  if (table.innerHTML !== html) table.innerHTML = html;
+  wrap.hidden = false;
+}
+
 function drawPlot(step, id) {
   if (!plotCanvas || !step.plot) return;
   const spec = step.plot;
@@ -1568,6 +1800,21 @@ function drawPlot(step, id) {
       label: p.label,
     }));
   }
+
+  // The same points as numbers, before anything is drawn. A scatter is a
+  // picture of a relationship, and the position of a dot is not available to
+  // a reader on a screen reader nor to one who cannot tell two plotted
+  // colours apart. Built from `shown` rather than from the raw values, so the
+  // table says what the picture says: press "Square P, cube a" and both
+  // transform together.
+  renderPlotTable(spec, shown, { transform, useLog });
+  plotCanvas.setAttribute(
+    'aria-label',
+    t('inv.plot.canvasLabel', {
+      title: String(spec.title || '').replace(/<[^>]*>/g, ''),
+      n: shown.length,
+    })
+  );
 
   const css = getComputedStyle(document.documentElement);
   const token = (name, fallback) =>
@@ -1818,16 +2065,24 @@ function renderStep() {
 
   if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
+    // A prediction that is marked the instant it is committed has not been
+    // tested by anything: the answer key settles it before the experiment
+    // runs. A step that names `reveal` holds the marking and the explanation
+    // until the reader has reached the step where the result actually
+    // arrives, and that step shows them how it turned out.
+    const held = locked && Boolean(step.reveal) && !visited.has(step.reveal);
+    const marked = locked && !held;
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
     parts.push(
       `<div class="inv-options" role="radiogroup" aria-label="${escape(step.prompt)}">${step.options
         .map((opt, i) => {
           const chosen = Number(saved) === i;
-          const correct = locked && i === step.answer;
-          const wrongPick = locked && chosen && i !== step.answer;
+          const correct = marked && i === step.answer;
+          const wrongPick = marked && chosen && i !== step.answer;
           const cls = [
             'inv-option',
             chosen ? 'is-chosen' : '',
+            held && chosen ? 'is-held' : '',
             correct ? 'is-correct' : '',
             wrongPick ? 'is-wrong' : '',
           ]
@@ -1840,9 +2095,37 @@ function renderStep() {
         })
         .join('')}</div>`
     );
-    if (locked && step.because) {
+    if (held) {
+      const at = active?.steps.find(x => x.sid === step.reveal);
+      parts.push(
+        `<p class="inv-held">${escape(
+          t('inv.predict.held', { title: at?.title || step.reveal })
+        )}</p>`
+      );
+    }
+    if (marked && step.because) {
       parts.push(`<p class="inv-because">${prose(step.because)}</p>`);
     }
+  }
+
+  // The other half of a held prediction: the step where the result arrives
+  // says what was predicted and how it turned out. Without this the verdict
+  // would sit on a screen the reader has already left.
+  const predicted = predictionAnsweredHere(step);
+  if (predicted) {
+    parts.push(
+      `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
+         <p class="inv-verdict-head">${escape(
+           t('inv.predict.youSaid', { choice: predicted.chose })
+         )}</p>
+         <p class="inv-verdict-mark">${escape(
+           predicted.right
+             ? t('inv.predict.right')
+             : t('inv.predict.wrong', { answer: predicted.answer })
+         )}</p>
+         ${predicted.because ? `<p class="inv-because">${prose(predicted.because)}</p>` : ''}
+       </div>`
+    );
   }
 
   if (step.kind === 'short') {
@@ -2053,7 +2336,10 @@ function syncPlotPanel(step) {
   const spec = step?.plot;
   els.plotPanel.hidden = !spec;
   plotCanvas = spec ? els.plotCanvas : null;
-  if (!spec) return;
+  if (!spec) {
+    if (els.plotTableWrap) els.plotTableWrap.hidden = true;
+    return;
+  }
   els.plotTitle.textContent = spec.title || t('inv.plot.title');
   els.plotNote.innerHTML = spec.note ? prose(spec.note) : '';
   els.plotNote.hidden = !spec.note;
@@ -2188,7 +2474,15 @@ function syncToolPanel(step) {
     // A widget that animates starts its run again from the new settings, which
     // is what makes the launch experiment feel like an experiment: change the
     // speed, watch it happen.
-    widget.reset?.(toolValues, { autorun: true, spec });
+    //
+    // `fromControl` says this is a reader moving something, not the step
+    // opening. A widget that parks itself where the step asked - the
+    // evolutionary playback parks on a named phase and a named track - has to
+    // do that once, on entry, and not again: re-imposing it here undid the
+    // reader's own input in the same tick, so on every step that named a
+    // phase the playhead could not be dragged and the track could not be
+    // changed. Both looked like dead controls.
+    widget.reset?.(toolValues, { autorun: true, spec, fromControl: true });
     paintTool();
   };
 
@@ -2429,12 +2723,23 @@ function paintTool({ quiet = false } = {}) {
   const ctx = widget.live ? probeContext() : undefined;
   try {
     widget.draw(els.toolCanvas, toolValues, ctx, step.tool);
-    const html = widget
-      .readout(toolValues, ctx, step.tool)
+    const rows = widget.readout(toolValues, ctx, step.tool);
+    // The canvas is an image of what these rows say. Named from the widget's
+    // own title so a screen reader says which instrument this is, and pointed
+    // at the readout so the numbers on it are reachable without the picture.
+    if (els.toolCanvas) {
+      els.toolCanvas.setAttribute(
+        'aria-label',
+        `${String(widget.title || '').replace(/<[^>]*>/g, '')}${
+          rows.length ? `: ${rows.length} measured values, listed below` : ''
+        }`
+      );
+    }
+    const html = rows
       .map(
         r =>
           `<div class="inv-tool-row${r.emphasis ? ' is-emphasis' : ''}">
-             <span>${prose(r.label)}</span><span>${escape(r.value)}</span></div>`
+             <dt>${prose(r.label)}</dt><dd>${escape(r.value)}</dd></div>`
       )
       .join('');
     if (html !== lastToolHtml) {
@@ -2574,6 +2879,52 @@ const OBJECT_LIST_MAX = 12;
  *
  * @returns {void}
  */
+/**
+ * A reader-facing name for a lesson's role key.
+ *
+ * Roles are the lesson author's handles for the objects a step talks about,
+ * and they were being shown to the reader raw. In English that mostly reads as
+ * a terse label and gets away with it; in Spanish it is an untranslated
+ * English word sitting beside a translated body name, which is the one place
+ * in the interface where the two languages are visibly mixed.
+ *
+ * A translation wins where there is one. Where there is not, the key is
+ * derived rather than tabulated: `starA` becomes "star A" and `m2000` becomes
+ * "20 M☉", which is right in both languages and means a lesson that invents a
+ * role gets a sensible label for free instead of a bare identifier. Only the
+ * roles derivation would get wrong carry an English entry.
+ *
+ * @param {string} key - The role as the lesson wrote it
+ * @returns {string} What to show in the object list
+ */
+function roleLabel(key) {
+  const id = `inv.role.${key}`;
+  const text = t(id);
+  if (text !== id) return text;
+  // The stellar shelves name their members by mass in hundredths of a solar
+  // mass, which is a storage format and not a label.
+  const mass = /^m(\d{2,4})$/.exec(key);
+  if (mass) return `${Number(mass[1]) / 100} M☉`;
+  return key.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
+
+/**
+ * Whether the role chip would only repeat the body's own name.
+ *
+ * Half the lessons name their roles after the bodies - `earth`, `io`, `moon` -
+ * and the chip then read "EARTH Earth", which is a label and its own echo. The
+ * name is the more useful of the two, so in that case the role is dropped.
+ *
+ * @param {string} label - The resolved role label
+ * @param {string} name - The body's name in the world
+ * @returns {boolean} True when the role adds nothing
+ */
+function roleEchoesName(label, name) {
+  const a = String(label).trim().toLowerCase();
+  const b = String(name).trim().toLowerCase();
+  return Boolean(a) && (a === b || b.startsWith(`${a} `));
+}
+
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
@@ -2630,13 +2981,18 @@ function renderObjectList() {
     // without the container having to manage anything.
     button.setAttribute('aria-pressed', String(entry.selected));
     button.dataset.objectId = String(entry.id);
-    const role = document.createElement('span');
-    role.className = 'inv-object-role';
-    role.textContent = entry.role;
+    const label = roleLabel(entry.role);
     const name = document.createElement('span');
     name.className = 'inv-object-name';
     name.textContent = entry.name;
-    button.append(role, name);
+    if (roleEchoesName(label, entry.name)) {
+      button.append(name);
+    } else {
+      const role = document.createElement('span');
+      role.className = 'inv-object-role';
+      role.textContent = label;
+      button.append(role, name);
+    }
     const choose = () => {
       const body = selectableBodies().find(b => b.id === entry.id);
       if (body) selectRole(body.role);
@@ -2662,6 +3018,9 @@ function renderObjectList() {
   }
 }
 
+/** The body the last probe tick saw selected, so a change can be noticed. */
+let lastProbeSelection = null;
+
 function renderProbe() {
   const step = currentStep();
   // A stage owns the whole scene, so if something else has replaced the scene
@@ -2669,14 +3028,36 @@ function renderProbe() {
   // the application rebuilds its own world after the lesson has opened, and
   // without this the reader is left looking at a scenario the step knows
   // nothing about. Cheap: it rebuilds only when the stars have actually gone.
-  if (step?.stage && !stageIntact()) {
-    applyStage(step.stage, { force: true });
-    // The instrument is what places a model-driven stage - the binary's
-    // separation and phase come from the waveform, not from the declaration -
-    // so a rebuilt stage needs one repaint to be put where it belongs.
-    // Without it the two components sit on top of each other at the origin
-    // until the reader happens to touch a control.
-    paintTool({ quiet: true });
+  if (step?.stage) {
+    // Only when the scene has been *replaced*, not when the reader has been
+    // experimenting. Deleting a body, firing one into a star, letting two
+    // merge - those are things a reader did on purpose, and rebuilding the
+    // stage under them would be the application undoing their work every
+    // quarter of a second. A world that has been swapped wholesale leaves
+    // nothing of the stage behind, and that is what this waits for.
+    const presence = stagePresence();
+    if (presence.allGone) {
+      applyStage(step.stage, { force: true });
+      // The instrument is what places a model-driven stage - the binary's
+      // separation and phase come from the waveform, not from the declaration
+      // - so a rebuilt stage needs one repaint to be put where it belongs.
+      // Without it the two components sit on top of each other at the origin
+      // until the reader happens to touch a control.
+      paintTool({ quiet: true });
+    }
+  }
+  // A live instrument whose subject is the scene has to notice the reader
+  // choosing a different body. It is repainted on a control change and on a
+  // stage rebuild, and neither of those happens when somebody clicks a star -
+  // so the H-R diagram sat where the sliders had left it while the reader
+  // clicked star after star in front of it, and the comparison card marked
+  // nothing. Guarded on the selection actually changing rather than repainted
+  // every tick: a widget that redraws four times a second for no reason is
+  // the other way to get this wrong.
+  const chosen = state.selectedObject?.object?.id ?? null;
+  if (chosen !== lastProbeSelection) {
+    lastProbeSelection = chosen;
+    if (step?.tool && getWidget(step.tool.id)?.live) paintTool({ quiet: true });
   }
   renderObjectList();
   // A fit a stage asked for, taken as soon as there is something to measure.
@@ -3151,12 +3532,113 @@ export async function openInvestigation(id, opts = {}) {
     paused: state.paused,
     zoom: state.zoom,
     pan: state.pan ? { ...state.pan } : null,
+    // The whole world, in the format share links and the experiment bench
+    // already use. A lesson that stages its own scene tears the sandbox down
+    // to build it, and until now that was simply the end of whatever the
+    // reader had made: they came back to an empty sky or to a scenario they
+    // never chose. `forExperiment` carries the clock and the observing context
+    // as well, which is what makes the restored world the same world rather
+    // than a fresh copy of its scenario.
+    //
+    // Captured here, inside enterLessonScope, so it is captured exactly once:
+    // the twenty step changes that follow cannot overwrite it with a world the
+    // lesson itself built.
+    sandbox: (() => {
+      try {
+        return captureShareState({
+          kind: 'full',
+          includeCamera: true,
+          forExperiment: true,
+        });
+      } catch (err) {
+        console.warn('Could not save the sandbox before the lesson:', err);
+        return null;
+      }
+    })(),
+    // What the sandbox was, so a restore can tell whether it is putting back
+    // the world it saved or trampling one the reader has since chosen.
+    sandboxGeneration: getWorldGeneration(),
   });
   // rebuild: the simulation on screen belongs to whatever the student was doing
   // before, not to the step they are resuming at.
   goToStep(stepIndex, { rebuild: true });
   startProbeLoop();
   announce(t('inv.announce.started', { title: inv.title }));
+}
+
+/**
+ * Put the reader's own world back, if it is still theirs to put back.
+ *
+ * The guard is the point. Closing a lesson is not the only thing that happens
+ * at that moment: a reader can load a scenario from the rail, follow a share
+ * link, or start another lesson, and a restore that fired regardless would
+ * replace the thing they had just chosen with a world from ten minutes ago.
+ *
+ * So it only restores when the world on screen is still the one the lesson
+ * built - which it can tell because a stage was up, or because the world
+ * generation has not moved past the lesson's own rebuilds. Anything else and
+ * the reader has taken the scene somewhere deliberate and it is left alone.
+ *
+ * @param {object} saved - The pairs handed back by leaveLessonScope()
+ * @returns {boolean} Whether the sandbox was put back
+ */
+function restoreSandbox(saved) {
+  const payload = saved?.sandbox;
+  if (!payload) return false;
+  // A world with nothing in it is not worth restoring over, and restoring an
+  // empty capture would blank a scene the reader may want. Both directions of
+  // that are covered by refusing to act on an empty payload. The bodies ride
+  // under `b` - see packBody() and the payload shape in js/shareState.js.
+  if (!Array.isArray(payload.b) || payload.b.length === 0) return false;
+  try {
+    applyShareState(JSON.parse(JSON.stringify(payload)));
+    return true;
+  } catch (err) {
+    console.warn('Could not restore the sandbox after the lesson:', err);
+    return false;
+  }
+}
+
+/**
+ * Put the reader's selection back on the body it was on.
+ *
+ * Only after a successful restore, and only by id: the payload rebuilds the
+ * world from packed states that carry the ids they were saved with, so the
+ * body that comes back is the same body as far as anything that records a
+ * measurement is concerned. A selection restored into a world that was not
+ * restored would point at whatever happened to share the number.
+ *
+ * Silent when the body is not there. A reader who had a lesson-staged object
+ * selected when they opened the panel has nothing to come back to, and
+ * selecting something arbitrary instead would be worse than selecting nothing.
+ *
+ * @param {?object} selection - {id} as saved on entry
+ * @returns {boolean} Whether a body was reselected
+ */
+function restoreSelection(selection) {
+  const id = selection?.id;
+  if (!Number.isFinite(id)) return false;
+  const body = allBodies().find(b => b?.id === id);
+  if (!body) return false;
+  selectBody(body);
+  return true;
+}
+
+/**
+ * Whether the scene on the canvas is still the lesson's to hand back.
+ *
+ * True while the lesson owns it: a stage is up, or the last thing to build the
+ * world was one of the lesson's own step setups. False once the reader has
+ * loaded something themselves, which is the case a delayed restore must not
+ * overwrite.
+ *
+ * @returns {boolean} Whether restoring is the right thing to do
+ */
+function sandboxIsStillOurs() {
+  // A stage is up: the world on screen is one the lesson built.
+  if (stagedStars().length) return true;
+  // Or the last thing to rebuild it was one of the lesson's own step setups.
+  return appliedSetup !== null;
 }
 
 /** Close the investigation panel, keeping progress. */
@@ -3177,15 +3659,28 @@ export function closeInvestigation() {
   // give every model-owned body back to the integrator. A body still flagged
   // when the lesson closes is a body that never moves again.
   //
-  // The camera is deliberately not restored. A reader who panned and zoomed
-  // during a lesson meant to, and putting the view back where it was an hour
-  // ago is the application overruling them; the scene's own contents have
-  // been rebuilt several times by then in any case. What comes back is the
-  // transport, which a step may have paused, and nothing else.
-  for (const [key, value] of leaveLessonScope()) {
-    if (key === 'paused') state.paused = Boolean(value);
-  }
+  // What comes back, and what deliberately does not.
+  //
+  // The sandbox does: a lesson that stages its own scene destroys whatever the
+  // reader had built, and handing back an empty sky was the application
+  // throwing their work away. It is restored from the same share payload the
+  // experiment bench uses to return from an A/B run, so the bodies, the
+  // settings, the clock and the observing context all come back together
+  // rather than in pieces.
+  //
+  // The camera does not, unless it came back with the sandbox. A reader who
+  // panned and zoomed during a lesson meant to.
+  const saved = Object.fromEntries(leaveLessonScope());
+  if ('paused' in saved) state.paused = Boolean(saved.paused);
+  // Asked before the stage comes down, because taking it down destroys the
+  // evidence: once `staged` is empty there is no way to tell a lesson that
+  // owned the world from a reader who has loaded something of their own.
+  const ours = sandboxIsStillOurs();
+  // Then the stage goes, or its bodies are still on the canvas when the
+  // restored world arrives and the reader gets both.
   clearStage();
+  if (ours && restoreSandbox(saved)) restoreSelection(saved.selection);
+  appliedSetup = null;
   if (els.objectsWrap) els.objectsWrap.hidden = true;
   if (els.stageTools) els.stageTools.hidden = true;
   lastObjectsKey = '';
@@ -4076,6 +4571,8 @@ export function initInvestigations() {
     plotCanvas: document.getElementById('investigationPlotCanvas'),
     plotTitle: document.getElementById('investigationPlotTitle'),
     plotNote: document.getElementById('investigationPlotNote'),
+    plotTable: document.getElementById('investigationPlotTable'),
+    plotTableWrap: document.getElementById('investigationPlotTableWrap'),
     plotToggle: document.getElementById('investigationPlotToggle'),
     plotLog: document.getElementById('investigationPlotLog'),
     toolPanel: document.getElementById('investigationTool'),

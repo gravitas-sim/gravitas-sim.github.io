@@ -51,7 +51,230 @@ import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS } from './appState.js';
 import { barycentreOf } from './lesson/barycentre.js';
+import { extentOf, sceneFor } from './lesson/evolutionScene.js';
 import { updateCanvasSummary } from './canvasSummary.js';
+
+/**
+ * Draw the crests a wave source has emitted.
+ *
+ * Centred on the source's own screen position, so the pattern travels with it
+ * rather than with the camera. Bounded by construction: the crest list comes
+ * from js/lesson/gwWavefronts.js, which caps it, and each ring is one stroked
+ * circle.
+ *
+ * The low-quality tier gets fewer rings and no dashes. This is an
+ * illustration, and on a machine that is struggling the simulation matters
+ * more than the annotation over it.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The canvas
+ * @returns {void}
+ */
+function drawGwWavefronts(ctx) {
+  const overlay = state.gwWaveOverlay;
+  const crests = overlay.crests;
+  if (!crests?.length) return;
+  // The world origin, always. Both source stages put the system there: a
+  // single body sits at it and a binary's two components are placed
+  // symmetrically about it. The crests belong to the system rather than to
+  // either component, so centring them on one body would be wrong for the
+  // binary and indistinguishable for the other two.
+  const at = world_to_screen({ x: 0, y: 0 });
+  const lean = q('quality_tier') === 'low';
+  const shown = lean ? crests.slice(-4) : crests;
+
+  ctx.save();
+  ctx.lineWidth = lean ? 1 : 1.4;
+  if (!lean) ctx.setLineDash([]);
+  for (const crest of shown) {
+    const r = crest.r * state.zoom;
+    if (!(r > 1)) continue;
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(150, 214, 255, ${crest.alpha})`;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/**
+ * Whether the life-stage illustration is standing in for a body's own disc.
+ *
+ * True only for the one body the overlay names, and only at a stage that has
+ * no photosphere to draw. Everything else paints normally.
+ *
+ * @param {object} obj - A body
+ * @returns {boolean} Whether to skip its own painter
+ */
+function hiddenByEvolutionScene(obj) {
+  const overlay = state.evolutionOverlay;
+  if (!overlay?.active || obj.id !== overlay.bodyId || !overlay.frame) {
+    return false;
+  }
+  return sceneFor(overlay.frame, {
+    seed: overlay.seed,
+    stillFrame: Boolean(overlay.stillFrame),
+    lostFraction: overlay.lostFraction,
+  }).hideStar;
+}
+
+/**
+ * Draw the stage of a star's life around the protagonist.
+ *
+ * Reads state.evolutionOverlay, resolves the body it names, and paints the
+ * shapes js/lesson/evolutionScene.js describes at that body's screen position
+ * and drawn size. Nothing is written back: the overlay is a description of a
+ * model moment, and this turns it into pixels.
+ *
+ * Every branch is bounded. The cloud is a fixed fourteen blobs, the shells
+ * three, the ejecta three expanding fronts - none of it scales with anything a
+ * reader can turn up, and none of it is a body the engine knows about.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The canvas
+ * @returns {void}
+ */
+function drawEvolutionScene(ctx) {
+  const overlay = state.evolutionOverlay;
+  // The protagonist can be a star for most of its life and a white dwarf, a
+  // neutron star or a black hole at the end of it, so all four lists are
+  // searched rather than the one the step started in.
+  const body =
+    stars.find(b => b.id === overlay.bodyId) ||
+    white_dwarfs.find(b => b.id === overlay.bodyId) ||
+    neutron_stars.find(b => b.id === overlay.bodyId) ||
+    bh_list.find(b => b.id === overlay.bodyId);
+  if (!body || !overlay.frame) return;
+
+  const at = world_to_screen(body.pos);
+  const drawn = Math.max(
+    hitRadius(body.radius, body.obj_type, state.zoom, body.stageRadius),
+    1
+  );
+  // Two kinds of illustration, two ways of sizing them. A wind blows off the
+  // star's surface, so its shells are drawn against the star. A cloud and a
+  // blast wave are not: a cloud is vastly larger than the star it becomes and
+  // ejecta leave it behind at once, and both have no photosphere to measure
+  // against anyway. Sizing those from the body gave a smudge a few pixels
+  // across on the screen whose prose says "light-years".
+  //
+  // Screen pixels either way, and clamped at both ends: this is an annotation
+  // laid over the scene, and it has to stay legible when the reader zooms out
+  // and stay bounded when they zoom in.
+  const scene = sceneFor(overlay.frame, {
+    seed: overlay.seed,
+    stillFrame: Boolean(overlay.stillFrame),
+    lostFraction: overlay.lostFraction,
+  });
+  const viewSpan = Math.min(ctx.canvas.width, ctx.canvas.height);
+  const room =
+    scene.roomHint === 'scene'
+      ? Math.max(70, Math.min(viewSpan / 5, 220))
+      : Math.max(30, Math.min(drawn * 1.6, 240));
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+
+  // A collapsing cloud: no photosphere, so nothing here is a disc of star.
+  for (const blob of scene.blobs) {
+    ctx.beginPath();
+    ctx.ellipse(
+      at.x + blob.dx * room,
+      at.y + blob.dy * room,
+      blob.r * room,
+      blob.r * room * 0.85,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.fillStyle = `rgba(150, 170, 210, ${blob.alpha})`;
+    ctx.fill();
+  }
+  if (scene.glow) {
+    const g = ctx.createRadialGradient(
+      at.x,
+      at.y,
+      0,
+      at.x,
+      at.y,
+      Math.max(3, scene.glow.r * room * 3)
+    );
+    g.addColorStop(0, `rgba(255, 214, 150, ${scene.glow.alpha})`);
+    g.addColorStop(1, 'rgba(255, 214, 150, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, Math.max(3, scene.glow.r * room * 3), 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Material the track records the star having shed. Dashed, because these
+  // are a schematic of a wind and not resolved shells anybody observed.
+  if (scene.shells.length) {
+    ctx.setLineDash([3, 5]);
+    ctx.lineWidth = 1;
+    for (const shell of scene.shells) {
+      ctx.beginPath();
+      ctx.ellipse(
+        at.x,
+        at.y,
+        shell.rx * room,
+        shell.ry * room,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.strokeStyle = `rgba(196, 208, 232, ${shell.alpha})`;
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // Ejecta, where the endpoint prescription expects an explosion. Solid and
+  // brighter than the wind shells, because they are a different event.
+  for (const front of scene.fronts) {
+    ctx.beginPath();
+    ctx.ellipse(
+      at.x,
+      at.y,
+      front.rx * room,
+      front.ry * room,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.strokeStyle = `rgba(255, 196, 120, ${front.alpha})`;
+    ctx.lineWidth = front.width ?? 2;
+    ctx.stroke();
+  }
+  ctx.lineWidth = 1;
+
+  // A remnant with no photosphere. The body itself is one of the engine's own
+  // classes and is drawn by the ordinary painter; what this adds is the halo
+  // that makes a four-pixel object findable on a canvas.
+  if (scene.remnant?.drawn === 'mark') {
+    ctx.beginPath();
+    ctx.arc(at.x, at.y, Math.max(10, room * 0.3), 0, Math.PI * 2);
+    ctx.strokeStyle =
+      scene.remnant.kind === 'black-hole'
+        ? 'rgba(255, 196, 120, 0.55)'
+        : 'rgba(143, 168, 255, 0.45)';
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** How far the current illustration reaches, in screen pixels. For tests. */
+export function evolutionSceneExtent() {
+  const overlay = state.evolutionOverlay;
+  if (!overlay?.active || !overlay.frame) return 0;
+  return extentOf(
+    sceneFor(overlay.frame, {
+      seed: overlay.seed,
+      stillFrame: Boolean(overlay.stillFrame),
+      lostFraction: overlay.lostFraction,
+    })
+  );
+}
 import {
   getDragPreview,
   getOrbitPreview,
@@ -1083,7 +1306,15 @@ const drawScene = () => {
     ...neutron_stars,
     ...white_dwarfs,
   ].forEach(obj => {
-    if (obj.alive) obj.draw(ctx);
+    if (!obj.alive) return;
+    // A body the lesson is drawing as something else. "Lives of Stars" runs
+    // its protagonist back before the track begins, where there is no
+    // photosphere and therefore nothing to draw a stellar disc for; the
+    // illustration below paints a collapsing cloud in its place. Skipping the
+    // disc is the point rather than a nicety - a main-sequence star drawn
+    // under a cloud is the picture the reader is being asked to unlearn.
+    if (hiddenByEvolutionScene(obj)) return;
+    obj.draw(ctx);
   });
 
   // Draw habitable zones for stars that have the ring switched on.
@@ -1397,6 +1628,28 @@ const drawScene = () => {
 
   // The balance point, when a lesson step has asked for it.
   //
+  // The stage of a star's life, drawn around the protagonist of "Lives of
+  // Stars". Everything here is an illustration attached to one body, in that
+  // body's own screen position, so it travels with the star rather than with
+  // the camera: a supernova whose ejecta stayed put while the view panned
+  // would be a picture of the viewport rather than of the star.
+  //
+  // Bounded and seeded. The shapes come from js/lesson/evolutionScene.js,
+  // which is pure and returns a fixed handful of ellipses for any model time,
+  // so seeking back and forth reproduces the frame exactly and nothing here
+  // can grow into a particle system.
+  if (state.evolutionOverlay?.active) {
+    drawEvolutionScene(ctx);
+  }
+
+  // Crests leaving a gravitational-wave source. Rings rather than a field:
+  // this is a picture of something propagating outward at a finite speed and
+  // nothing more - not a metric perturbation, not a potential, and not a
+  // shell of matter. The lesson says so on every screen that shows it.
+  if (state.gwWaveOverlay?.active) {
+    drawGwWavefronts(ctx);
+  }
+
   // The overlay carries the ids of the bodies to average over and nothing
   // else: the point is recomputed from those bodies every frame rather than
   // written in by the lesson, because a student is being asked to watch it
@@ -2039,6 +2292,7 @@ function syncConservationHelp(wanted) {
     details?.remove();
     return;
   }
+  const fresh = !details;
   if (!details) {
     details = document.createElement('details');
     details.className = 'readout-conservation-help';
@@ -2049,7 +2303,8 @@ function syncConservationHelp(wanted) {
   }
   // Rebuilt only when the language changed, so the element itself survives.
   const wantKey = t('readout.conservation.what');
-  if (details.dataset.key !== wantKey) {
+  const rebuilt = details.dataset.key !== wantKey;
+  if (rebuilt) {
     details.dataset.key = wantKey;
     const summary = document.createElement('summary');
     summary.textContent = wantKey;
@@ -2064,7 +2319,14 @@ function syncConservationHelp(wanted) {
       details.append(p);
     }
   }
-  details.open = conservationHelpOpen;
+  // Only when this element did not exist a moment ago, or was just rebuilt for
+  // a language change. Assigning it on every sync raced the reader: `toggle`
+  // fires asynchronously after the browser has opened the <details>, so a
+  // frame landing between the keypress and the event read the old flag and
+  // shut it again. The element survives repaints - that is what the comment at
+  // the top of this function is about - so its own open state is the state,
+  // and the flag exists only to carry that state across a rebuild.
+  if (fresh || rebuilt) details.open = conservationHelpOpen;
 }
 
 /** Text into markup. Every value above is a number or a translated string. */

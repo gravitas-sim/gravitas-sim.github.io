@@ -152,6 +152,16 @@ export default {
         'Todo lo de la segunda lista puede cambiar el número mientras la estrella sigue siendo exactamente la misma, que es lo que ha estado demostrando toda esta lección. El CSV exportado lleva todo eso: tipo de calendario, suma de comprobación, épocas planificadas, huecos, la incertidumbre declarada y la semilla, en cada fila. Eso es lo que permite a otra persona averiguar si obtuvo una respuesta distinta porque la estrella es distinta o porque miró en otros momentos.',
     },
     {
+      title: 'Defiende el calendario que ejecutar\u00edas',
+      body: `Has ejecutado dos calendarios sobre el mismo planeta, has perdido
+             quince d\u00edas en mitad de uno y has escrito un conjunto de fechas
+             propio.`,
+      prompt:
+        'En dos o tres frases, di qu\u00e9 calendario ejecutar\u00edas de verdad con el tiempo de un comit\u00e9 de asignaci\u00f3n de noches, y qu\u00e9 aspecto del muestreo \u2014 no del telescopio \u2014 decide si sale el periodo.',
+      rubric:
+        'La respuesta que merece cr\u00e9dito habla del muestreo y no de la apertura ni del tiempo de exposici\u00f3n: una campa\u00f1a que muestrea casi exactamente al periodo del planeta, o a una fracci\u00f3n entera de \u00e9l, vuelve a la misma fase cada noche y restringe casi nada, por buena que sea la fotometr\u00eda. Repartir observaciones sobre una l\u00ednea de base larga y con espaciado irregular rompe el aliasing y fija el periodo. Perder el centro de una campa\u00f1a cuesta menos que perder los extremos, porque la l\u00ednea de base es lo que fija la precisi\u00f3n.',
+    },
+    {
       title: 'Lo que decidiste antes de mirar',
       body: 'Ocho noches, una estrella, un instrumento, un sorteo de ruido. El planeta estuvo ahí todo el tiempo y la física nunca cambió.\n\nLo que cambió fue la lista de instantes, y decidió el resultado. Un calendario no es la burocracia que rodea a un experimento; en una medida muestreada <em>es</em> el experimento, y sus propiedades — la cobertura de fase, la función ventana — se pueden calcular antes de apuntar ningún telescopio a ninguna parte.\n\nLo que no se puede calcular de antemano es qué calendario tendrá suerte esa noche. Por eso la forma honesta del resultado que has producido hoy no es "el muestreo irregular es mejor", sino "estos tiempos, en esta estrella, con esta semilla, en este rango, dieron este periodo" — con suficiente de la campaña anotado como para que otra persona pueda discrepar en condiciones.',
       tip: 'Todos los números que imprime la comparación, la advertencia incluida, van al archivo exportado y a una entrada del cuaderno guardada desde el espacio de análisis.',

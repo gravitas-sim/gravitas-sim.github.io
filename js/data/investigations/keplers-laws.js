@@ -125,6 +125,7 @@ const KEPLER = {
       sid: 'where-is-the-star',
       bind: KEPLER_PAIR,
       type: 'predict',
+      reveal: 'measure-the-two-orbits',
       title: 'Where is the star?',
       body: `An ellipse has a center and two foci. For a circle all three
              coincide; the more elongated the ellipse, the further the foci sit
@@ -334,6 +335,7 @@ const KEPLER = {
       sid: 'where-does-it-move-fastest',
       bind: KEPLER_PAIR,
       type: 'predict',
+      reveal: 'watch-it-happen',
       title: 'Where does it move fastest?',
       body: `Kepler's second law says a line drawn from the star to the planet
              sweeps out equal areas in equal times. Think about what that forces

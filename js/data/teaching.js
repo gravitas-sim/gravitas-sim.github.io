@@ -204,13 +204,69 @@ export const EVIDENCE = Object.freeze([
   },
 ]);
 
+/**
+ * The instructor quick-start, as six answers rather than a paragraph.
+ *
+ * An instructor deciding whether to use this on Tuesday has six questions and
+ * they are always the same six. Ids resolve to `.title` and `.text`; the
+ * `href` is where the full answer lives, where there is one.
+ */
+export const QUICKSTART = Object.freeze([
+  { id: 'prerequisites', href: null },
+  { id: 'timing', href: null },
+  { id: 'devices', href: '/model/' },
+  { id: 'accessibility', href: null },
+  { id: 'evidence', href: null },
+  { id: 'resources', href: '/instructors/' },
+]);
+
+/**
+ * A template for an evaluation nobody has run.
+ *
+ * The page is careful everywhere else not to claim what it has not measured,
+ * and this is the section where that care has to be loudest: there is no
+ * study, no validated instrument and no measured learning gain. What there is
+ * is a shape somebody could use to produce one, and the last item is the one
+ * people forget.
+ *
+ * Ids resolve to `.title` and `.text`.
+ */
+export const EVALUATION = Object.freeze([
+  'objectives',
+  'prepost',
+  'transfer',
+  'usability',
+  'limits',
+  'review',
+]);
+
+/**
+ * What a classroom feedback note is made of.
+ *
+ * Six prompts, and nothing that identifies anybody. The form on the page
+ * writes nothing to a network, asks for no name, no email and no institution,
+ * and keeps what is typed in the reader's own browser until they export it or
+ * clear it. Ids resolve to `.label` and `.hint`.
+ */
+export const FEEDBACK_FIELDS = Object.freeze([
+  'route',
+  'level',
+  'worked',
+  'confused',
+  'timing',
+  'wanted',
+]);
+
 /** Sections, in page order, for the table of contents. */
 export const SECTIONS = Object.freeze([
   'cycle',
   'journey',
   'instruments',
+  'quickstart',
   'demos',
   'patterns',
   'access',
   'evidence',
+  'evaluate',
+  'feedback',
 ]);

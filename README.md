@@ -24,7 +24,7 @@ concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
 **<!--fact:investigations-->22<!--/fact--> guided
-investigations**, <!--fact:investigationSteps-->618<!--/fact--> steps between
+investigations**, <!--fact:investigationSteps-->631<!--/fact--> steps between
 them:
 
 | Investigation                    | What a student does                                                                             |
@@ -178,7 +178,7 @@ through a prepared sequence of links.
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->3456<!--/fact--> strings, and
+of <!--fact:uiStrings-->3591<!--/fact--> strings, and
 all <!--fact:investigations-->22<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -471,7 +471,7 @@ part was built:
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
 | [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
-| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the twelve lessons, and what a 2019 Chromebook actually gets |
+| [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->22<!--/fact--> lessons, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
 Three documents are records of finished work rather than descriptions of the

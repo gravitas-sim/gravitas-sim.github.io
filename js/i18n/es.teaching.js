@@ -10,8 +10,10 @@
 // what the software does and may not say what it achieves.
 // =============================================================================
 
+import { ES_ACTIVITIES } from './es.activities.js';
+
 export const ES_TEACHING = {
-  // --- Page furniture --------------------------------------------------------
+  ...ES_ACTIVITIES,
   'teach.title': 'Enseñar con Gravitas',
   'teach.meta.description':
     'Cómo se usa Gravitas en un curso introductorio de astronomía: investigaciones guiadas, un cuaderno de evidencia, experimentos controlados y seis demostraciones que puede ejecutar en esta página.',
@@ -167,46 +169,6 @@ export const ES_TEACHING = {
   'teach.activities.objectives': 'Al terminar, el alumnado sabrá',
   'teach.activities.estimate': 'Estimación: aún no cronometrada con una clase',
 
-  'teach.activity.duration': 'unos {n} minutos',
-  'teach.activity.format.demonstration': 'Demostración',
-  'teach.activity.format.guided': 'Actividad guiada',
-  'teach.activity.format.lab': 'Práctica completa',
-
-  'teach.activity.orbital-speed.title':
-    'Movimiento orbital: ¿por qué cambian de velocidad los planetas?',
-  'teach.activity.orbital-speed.question':
-    'Un planeta en una órbita elíptica fija acelera y frena, sin que nada lo empuje y sin quemar combustible. ¿Qué se intercambia y qué se conserva?',
-  'teach.activity.orbital-speed.audience':
-    'Astronomía introductoria o física con álgebra. Sirve proyectada ante toda la clase, por parejas frente a un ordenador o como sesión de práctica.',
-  'teach.activity.orbital-speed.prerequisites':
-    'Basta con saber que la gravedad atrae dos masas y se debilita con la distancia. No hace falta cálculo, ni haber trabajado antes con elipses, ni conocer el momento angular: la actividad lo construye.',
-  'teach.activity.orbital-speed.objective.1':
-    'Predecir en qué punto de una órbita elíptica se mueve más rápido un planeta, y explicar por qué',
-  'teach.activity.orbital-speed.objective.2':
-    'Medir la velocidad y la distancia en el punto más cercano y en el más lejano, y enunciar la relación entre ambas',
-  'teach.activity.orbital-speed.objective.3':
-    'Explicar el cambio de velocidad mediante una magnitud conservada, e identificar qué le hace y qué no le hace la gravedad',
-
-  'teach.activity.orbital-speed.demonstration.for':
-    'Proyectada, dirigida por el profesorado',
-  'teach.activity.orbital-speed.demonstration.intro':
-    'Una predicción, el movimiento y la razón, en lo que se tarda en cambiar de tema. Pide a la clase que se moje antes de que nada se mueva; las porciones de área igual del final son la recompensa.',
-  'teach.activity.orbital-speed.demonstration.closing':
-    'Cierra preguntando qué tendría que pasar para que un planeta se moviera a velocidad constante. La respuesta —una órbita circular, donde la distancia nunca cambia— es la que demuestra que han entendido la idea y no solo la frase.',
-
-  'teach.activity.orbital-speed.guided.for':
-    'Una persona o una pareja, frente a un ordenador',
-  'teach.activity.orbital-speed.guided.intro':
-    'Dale forma tú a la órbita, comprométete con una predicción y deja que la simulación se detenga en los dos momentos que la resuelven. Las mediciones se adjuntan al cuaderno según las tomas.',
-  'teach.activity.orbital-speed.guided.closing':
-    'Para transferir lo aprendido: pon la excentricidad en 0,7 y predice la razón de velocidades antes de volver a medirla. Una órbita más redonda debería dar una razón más cercana a uno; explica por qué antes de comprobarlo.',
-
-  'teach.activity.orbital-speed.lab.for':
-    'Una sesión completa, individualmente o por parejas',
-  'teach.activity.orbital-speed.lab.intro':
-    'El argumento entero, medido en vez de afirmado: dónde está la estrella, cómo se define la forma, dos órbitas comparadas de forma controlada, las velocidades en ambos extremos y dónde deja de funcionar el razonamiento.',
-  'teach.activity.orbital-speed.lab.closing':
-    'La comparación es controlada porque ambos cuerpos giran alrededor de la misma estrella con el mismo semieje mayor, así que la excentricidad es lo único que cambia. El último paso pregunta dónde falla esa descripción: en un par de masas comparables, donde ninguno de los dos cuerpos orbita simplemente al otro.',
   'teach.demo.frameTitle': '{name}, ejecutándose en Gravitas',
   'teach.demo.meta':
     'Investigación completa: {duration} · {steps} pasos · {graded} calificados',
@@ -357,4 +319,91 @@ export const ES_TEACHING = {
   'teach.foot.instructors': 'Docentes',
   'teach.foot.source': 'Código fuente',
   'teach.foot.licence': 'Licencia MIT',
+
+  // --- Inicio rápido para docentes ------------------------------------------
+  'teach.section.quickstart': 'Inicio rápido para docentes',
+  'teach.quickstart.intro':
+    'Seis respuestas para quien decide si usar esto el martes. Todo lo de abajo se puede comprobar desde esta página o las que enlaza.',
+  'teach.quickstart.prerequisites.title': 'Qué necesitan saber antes',
+  'teach.quickstart.prerequisites.text':
+    'Que la gravedad atrae dos masas y se debilita con la distancia. Nada más: sin cálculo en ninguna parte, y cada investigación indica sus propios requisitos en su ficha. La aritmética es la única matemática que necesita una ruta corta.',
+  'teach.quickstart.timing.title': 'Cuánto se tarda',
+  'teach.quickstart.timing.text':
+    'Las rutas cortas de esta página duran de tres a cinco minutos cada una. Una actividad de aula, cinco, veinte o cincuenta. Cada investigación imprime su propia estimación, y todos esos números son estimaciones razonadas a partir de los pasos, no tiempos medidos con una clase: ninguno lo ha sido.',
+  'teach.quickstart.devices.title': 'Dónde funciona',
+  'teach.quickstart.devices.text':
+    'En cualquier navegador actual. No hay nada que instalar, ni cuenta, ni servidor: son archivos estáticos. Está pensado para funcionar en el tipo de Chromebook escolar modesto que ya tiene varios años, en el nivel de calidad bajo, y sigue funcionando sin red una vez abierta la pestaña.',
+  'teach.quickstart.accessibility.title': 'Si alguien no puede usar el lienzo',
+  'teach.quickstart.accessibility.text':
+    'Cada instrumento imprime sus números como texto junto a la imagen, cada gráfico es también una tabla, y la simulación tiene una descripción escrita que sigue lo que hay en pantalla. Toda la actividad se maneja con el teclado, y se respetan el movimiento reducido y el alto contraste. Lo que no está resuelto: un lienzo no se explora al tacto como un diagrama táctil, y quien lo necesite necesitará que alguien le lea los números.',
+  'teach.quickstart.evidence.title': 'Qué entrega el alumnado',
+  'teach.quickstart.evidence.text':
+    'El trabajo se guarda en el navegador del alumno y no sale de ahí por su cuenta. Lo exporta cada persona — un informe en PDF, o el cuaderno como archivo — y lo entrega como ya recojas tú el trabajo. No se sube nada, y no hay cuentas que crear ni listas que gestionar.',
+  'teach.quickstart.resources.title': 'Qué hay para ti',
+  'teach.quickstart.resources.text':
+    'Una guía docente por investigación con observaciones esperadas, ideas previas frecuentes y preguntas de discusión; una clave de respuestas; y un generador de tareas que recorta una lección a los pasos que quieras y produce un enlace.',
+
+  // --- Una plantilla para una evaluación que nadie ha hecho ------------------
+  'teach.section.evaluate': 'Si quieres evaluarlo',
+  'teach.evaluate.intro':
+    'No se ha hecho ningún estudio sobre este software. No hay instrumento validado, ni ganancia de aprendizaje medida, y nada de esta página debe leerse como tal. Lo que sigue es una forma que alguien podría usar para producir evidencia, ofrecida porque su ausencia es más fácil de abordar que de ignorar.',
+  'teach.evaluate.objectives.title':
+    'Empieza por los objetivos, no por la herramienta',
+  'teach.evaluate.objectives.text':
+    'Cada investigación indica dos o tres objetivos observables en su ficha, redactados como cosas que el alumnado hace y no como cosas que aprecia. Decide cuáles te importan de verdad antes de decidir qué medir; evaluar «la motivación» responde a una pregunta que nadie hizo.',
+  'teach.evaluate.prepost.title': 'Pre y post, con comparación',
+  'teach.evaluate.prepost.text':
+    'Los mismos ítems antes y después, con un grupo de comparación que haga lo que habrías hecho de todos modos. Una ganancia pre/post sin comparación mide el paso del tiempo tanto como la intervención, que es la forma más común de exagerar resultados como estos.',
+  'teach.evaluate.transfer.title': 'Haz una pregunta de transferencia',
+  'teach.evaluate.transfer.text':
+    'Una pregunta sobre un sistema que la actividad nunca mostró. Varias investigaciones terminan con una — otra estrella, un par de masas comparables, un sondeo que se habría perdido algo — y sirven de modelo. Quien solo sabe responder sobre el sistema que vio ha aprendido ese sistema.',
+  'teach.evaluate.usability.title': 'Observa, no encuestes',
+  'teach.evaluate.usability.text':
+    'Siéntate detrás de tres o cuatro estudiantes y anota dónde se paran. Diez minutos de eso valen más que cien valoraciones de satisfacción, y es la única forma de encontrar el paso cuya instrucción nombra un control que queda fuera de su pantalla.',
+  'teach.evaluate.limits.title': 'Di lo que no puede mostrar',
+  'teach.evaluate.limits.text':
+    'El integrador es newtoniano y las páginas del modelo dicen dónde deja de valer. Algunas pantallas colocan un cuerpo a partir de un modelo publicado en vez de integrarlo, y lo indican. Una evaluación que trate cada imagen como una simulación sacará una conclusión que el software no respalda.',
+  'teach.evaluate.review.title': 'Pide permiso primero',
+  'teach.evaluate.review.text':
+    'La investigación con estudiantes, incluida la que hace su propio docente en el aula, suele necesitar aprobación del comité de ética antes de recoger ningún dato, y un consentimiento que sea de verdad opcional cuando quien pide es quien pone la nota. Consúltalo pronto: la aprobación retroactiva no suele existir.',
+
+  // --- Comentarios -----------------------------------------------------------
+  'teach.section.feedback': 'Contarnos qué pasó',
+  'teach.feedback.intro':
+    'Este software no recoge nada. No hay analítica, ni telemetría, ni cuenta, ni servidor al que enviar nada, lo que también significa que aquí nadie se entera de que algo no funciona si no lo cuentas.',
+  'teach.feedback.issue.title': 'Informar de algo que falla',
+  'teach.feedback.issue.text':
+    'Abre una incidencia en el repositorio. Basta con el nombre de un escenario o el enlace de una lección, qué esperabas y qué pasó; un enlace compartido reproduce el estado exacto que estabas viendo.',
+  'teach.feedback.issue.link': 'Abrir una incidencia',
+  'teach.feedback.contact.title': 'Contar cómo fue enseñar con ello',
+  'teach.feedback.contact.text':
+    'En el mismo sitio. Una incidencia sirve perfectamente para describir una clase que fue bien o mal, y es pública, que es justamente la gracia: la siguiente persona que dé clase también la lee.',
+  'teach.feedback.form.title': 'Notas de una clase que diste',
+  'teach.feedback.form.text':
+    'Opcional y del todo local. Lo que escribas aquí se queda en este navegador, no se envía a ningún sitio y no pide nada que te identifique a ti ni a nadie. Expórtalo cuando termines y mándalo donde quieras, o bórralo y desaparece.',
+  'teach.feedback.route.label': 'Qué ruta o investigación',
+  'teach.feedback.route.hint': 'Con el nombre basta',
+  'teach.feedback.level.label': 'Para quién era',
+  'teach.feedback.level.hint':
+    'Nivel del curso y tamaño aproximado del grupo; sin institución, por favor',
+  'teach.feedback.worked.label': 'Qué funcionó',
+  'teach.feedback.worked.hint': 'El momento en que algo encajó',
+  'teach.feedback.confused.label': 'Dónde se atascaron',
+  'teach.feedback.confused.hint':
+    'La pantalla, la redacción o el control que no encontraban',
+  'teach.feedback.timing.label': 'Cuánto duró de verdad',
+  'teach.feedback.timing.hint':
+    'Frente a la estimación de la ficha: esas estimaciones nunca se han cronometrado con una clase',
+  'teach.feedback.wanted.label': 'Qué querías hacer y no pudiste',
+  'teach.feedback.wanted.hint':
+    'Una medida, un control, una forma de entregar algo',
+  'teach.feedback.form.export': 'Guardar estas notas como archivo',
+  'teach.feedback.form.clear': 'Borrarlas',
+  'teach.feedback.form.saved':
+    'Guardado en este navegador. No se ha enviado nada.',
+  'teach.feedback.form.cleared': 'Borrado.',
+  'teach.feedback.form.empty': 'Todavía no hay nada que guardar.',
+  'teach.feedback.form.exported': 'Guardado como {name}.',
+  'teach.feedback.form.privacy':
+    'Sin nombre, sin correo, sin institución y sin telemetría. Se guarda solo en este navegador, bajo una clave que puedes borrar arriba.',
 };

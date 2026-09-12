@@ -46,9 +46,24 @@ export const MAX_WINDOW_SECONDS = 8;
  * source-type switch that adds a feature, because the model does not have one
  * to add: a neutron-star preset is a mass choice and the interface says so.
  */
+/**
+ * The three pairs the lesson compares, with what each one is made of.
+ *
+ * `kinds` is here because the point-mass model does not know and cannot know.
+ * Two 1.4-solar-mass objects and two 36-solar-mass objects give the same
+ * *kind* of waveform from the same equations; what tells them apart is the
+ * mass, and what a 1.4-solar-mass compact object IS - a neutron star rather
+ * than a black hole - is an inference from astrophysics that the model plays
+ * no part in.
+ *
+ * So the canvas draws the kind the preset names, the readout says the model
+ * did not derive it, and the two claims stay apart. Before this the neutron
+ * star preset left two black holes standing on the canvas.
+ */
 export const PRESETS = Object.freeze([
   Object.freeze({
     id: 'bbh',
+    kinds: Object.freeze(['bh', 'bh']),
     m1: 36,
     m2: 29,
     distanceMpc: 410,
@@ -57,6 +72,7 @@ export const PRESETS = Object.freeze([
   }),
   Object.freeze({
     id: 'bns',
+    kinds: Object.freeze(['ns', 'ns']),
     m1: 1.4,
     m2: 1.4,
     distanceMpc: 40,
@@ -65,6 +81,7 @@ export const PRESETS = Object.freeze([
   }),
   Object.freeze({
     id: 'nsbh',
+    kinds: Object.freeze(['bh', 'ns']),
     m1: 10,
     m2: 1.4,
     distanceMpc: 200,

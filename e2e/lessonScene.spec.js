@@ -225,6 +225,9 @@ test.describe('a bound star', () => {
     await expect(page.locator('.inv-object .inv-object-role')).toHaveText(
       'cursor'
     );
+    // The chip shows a reader-facing label rather than the lesson's own key.
+    // `cursor` happens to be the same word in both; the shelf below is where
+    // that stops being true.
     // Screen 9 is the same free cursor; screen 12 is the eight modelled stars.
     await page.goto('/?author=a-universe-of-stars&step=12');
     await page.waitForFunction(() => window.splashScreenEnded === true, {
@@ -237,15 +240,20 @@ test.describe('a bound star', () => {
       .poll(async () =>
         page.evaluate(async () => {
           const { boundRoles } = await import('/js/lessonScene.js');
-          const chips = [...document.querySelectorAll('.inv-object-role')].map(
-            e => e.textContent
+          const chips = [...document.querySelectorAll('.inv-object')].map(e =>
+            e.innerText.trim()
           );
           return { roles: boundRoles().join(','), chips: chips.join(',') };
         })
       )
+      // The roles are still the lesson's keys - that is what the binding is
+      // made of - and the chips are what a reader sees. `m2000` is a storage
+      // format for twenty solar masses and was being shown to them as one;
+      // now the chip reads "20 M☉", and because that is also what the body is
+      // called, the label is dropped rather than printed twice.
       .toEqual({
         roles: 'm020,m050,m100,m200,m500,m1000,m2000,m4000',
-        chips: 'm020,m050,m100,m200,m500,m1000,m2000,m4000',
+        chips: '0.2 M☉,0.5 M☉,1 M☉,2 M☉,5 M☉,10 M☉,20 M☉,40 M☉',
       });
     expect(
       await page.evaluate(

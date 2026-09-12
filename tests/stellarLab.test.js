@@ -708,10 +708,15 @@ describe('pointing at the diagram', () => {
     }
   });
 
-  test('no other widget opts in, so nothing else changes', () => {
-    for (const other of STELLAR_WIDGETS.filter(x => x.id !== 'stellar-lab')) {
-      expect(other.pick).toBeUndefined();
-    }
+  test('exactly the two widgets that select a star opt in', () => {
+    // The lab, where a click moves the cursor, and the comparison card, where
+    // a click chooses one of the step's staged stars and selects it in the
+    // scene. The population panel does not: its stars are a sample, and
+    // picking one out of four hundred is not a thing the lesson asks for.
+    const pickable = STELLAR_WIDGETS.filter(
+      x => typeof x.pick === 'function'
+    ).map(x => x.id);
+    expect(pickable.sort()).toEqual(['stellar-compare', 'stellar-lab']);
   });
 
   test('a click in free mode moves the cursor there', () => {

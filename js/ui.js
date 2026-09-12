@@ -2132,6 +2132,17 @@ const handleExportChart = () => {
 // collapses the HUD readout, and that one is reachable.
 
 const startDrag = e => {
+  // The same guard startDragTouch has, and for a related reason. A press on
+  // one of the header's own buttons is not a drag, and treating it as one
+  // re-anchors the panel from its right/bottom edges to left/top on mousedown.
+  // Where those anchors differ - a narrow window, where the stylesheet lays
+  // the inspector out against the other edge - the panel moves a few pixels
+  // out from under the pointer, mouseup lands somewhere else, and the browser
+  // never synthesises a click at all. So Close, Pin and Delete did nothing on
+  // a narrow window while working perfectly on a wide one, which is why this
+  // outlived the touch fix.
+  if (e.target?.closest?.('button, a, input, select, textarea')) return;
+
   e.preventDefault();
 
   const objectInspector = document.getElementById('objectInspector');
@@ -6321,6 +6332,7 @@ window.addEventListener('mousemove', e => {
     const delta = canvasMovement(e);
     state.pan.x += delta.x;
     state.pan.y += delta.y;
+    state.cameraTouchedAt = Date.now();
   }
   if (state.adding_mass) {
     updateOrbitHelper(e.shiftKey);
@@ -6446,6 +6458,7 @@ window.addEventListener(
 
     // Update zoom
     state.zoom = newZoom;
+    state.cameraTouchedAt = Date.now();
 
     // Calculate where that world position should be on screen with the new zoom
     const newScreenPos = worldToScreen(worldPos, state, canvas);
@@ -7808,6 +7821,7 @@ canvas.addEventListener(
         const deltaY = currentPos.y - (state.lastTouchPos?.y || currentPos.y);
         state.pan.x += deltaX;
         state.pan.y += deltaY;
+        state.cameraTouchedAt = Date.now();
       }
 
       state.lastTouchPos = currentPos;
@@ -7859,6 +7873,7 @@ canvas.addEventListener(
 
         // Update zoom
         state.zoom = newZoom;
+        state.cameraTouchedAt = Date.now();
 
         // Calculate where the center point should be on screen with the new zoom
         const newScreenPos = worldToScreen(worldPos, state, canvas);

@@ -274,6 +274,97 @@ describe('lesson translations', () => {
     }
   });
 
+  test('a shadow cannot move a star, however hard it tries', async () => {
+    // The keys that say where a lesson's stars stand are strings, and so are
+    // the words beside them, so nothing in the shape of a shadow distinguishes
+    // "translate this" from "break this". STRUCTURAL is what distinguishes
+    // them, and mergeTranslation refuses those keys outright - a deliberate
+    // change, because the file's header had claimed this for a long time
+    // before it was true.
+    const base = {
+      id: 'x',
+      steps: [
+        {
+          sid: 'one',
+          title: 'Two stars',
+          stage: {
+            stars: [
+              { role: 'dwarf', name: 'Red dwarf', track: 'm020', at: 'ms' },
+            ],
+          },
+          tool: { id: 'stellar-compare', pace: 'phase', bind: 'cursor' },
+          fields: [{ id: 'r', label: 'Radius', unit: 'R☉' }],
+        },
+      ],
+    };
+    const hostile = {
+      id: 'y',
+      steps: [
+        {
+          sid: 'uno',
+          title: 'Dos estrellas',
+          stage: {
+            stars: [
+              {
+                role: 'enana',
+                name: 'Enana roja',
+                track: 'm2000',
+                at: 'sp',
+              },
+            ],
+          },
+          tool: { id: 'otra-cosa', pace: 'tiempo', bind: 'cursor-es' },
+          fields: [{ id: 'radio', label: 'Radio', unit: 'R sol' }],
+        },
+      ],
+    };
+    const out = mergeTranslation(base, hostile);
+    const star = out.steps[0].stage.stars[0];
+    // The words changed.
+    expect(out.steps[0].title).toBe('Dos estrellas');
+    expect(star.name).toBe('Enana roja');
+    expect(out.steps[0].fields[0].label).toBe('Radio');
+    // Nothing else did. Each of these would have been a silent break: a role
+    // no binding resolves, a star at the wrong point of the wrong track, an
+    // instrument that does not exist, a lost answer, a units bug.
+    expect(star.role).toBe('dwarf');
+    expect(star.track).toBe('m020');
+    expect(star.at).toBe('ms');
+    expect(out.steps[0].tool).toMatchObject({
+      id: 'stellar-compare',
+      pace: 'phase',
+      bind: 'cursor',
+    });
+    expect(out.steps[0].fields[0]).toMatchObject({ id: 'r', unit: 'R☉' });
+    expect(out.steps[0].sid).toBe('one');
+    expect(out.id).toBe('x');
+  });
+
+  test('a star that is named on screen is named in every language', async () => {
+    // Object names are read out on the canvas, in the accessible object list,
+    // on the comparison card and in a capture, so they are content and not
+    // machinery. This is the lesson that leans on them hardest.
+    const en = (
+      await import('../js/data/investigations/a-universe-of-stars.js')
+    ).default;
+    const es = (
+      await import('../js/data/investigations/es/a-universe-of-stars.js')
+    ).default;
+    const merged = mergeTranslation(en, es);
+    const named = merged.steps.flatMap(s =>
+      (s.stage?.stars ?? []).map(x => x.name)
+    );
+    expect(named.length).toBeGreaterThan(20);
+    expect(named.every(Boolean)).toBe(true);
+    // A handful that must have moved into Spanish, checked by name rather
+    // than by counting: a coverage percentage can be satisfied by nulls.
+    const all = named.join(' | ');
+    for (const word of ['Estrella 1', 'Enana roja', 'El Sol', 'Supergigante']) {
+      expect(all).toContain(word);
+    }
+    expect(all).not.toContain('Red dwarf');
+  });
+
   test('every function comes through by reference', async () => {
     // Probes, widget hooks and graders. mergeTranslation copies objects, so a
     // function that had been replaced by a copy would still work; one replaced

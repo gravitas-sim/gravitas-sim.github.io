@@ -42,6 +42,17 @@ export const MODELLED_FIELDS = Object.freeze([
   'radiusInSuns',
   'ageYr',
   'stellarPhase',
+  // The two masses. A track loses mass as it evolves and every track starts
+  // from a different one, so a star switched from a 1 M☉ track to a 5 M☉ one
+  // used to keep the first track's mass while showing the second's
+  // temperature - a body that no model anywhere describes.
+  'massInSuns',
+  'initialMassInSuns',
+  // Where the numbers came from: 'model' for a point on a track, 'free' for a
+  // place somebody clicked on the diagram. Carried on the body so the
+  // inspector, the notebook and the readout can all say the same thing about
+  // it without asking the panel that happened to set it.
+  'modelSource',
 ]);
 
 /** What a body currently shows, as a plain object. @returns {object} */
@@ -67,6 +78,24 @@ export function writeStarState(star, saved) {
  * @param {object} selection - From js/stellarLab.js selection()
  * @returns {object} Body fields to write, and only those the model knows
  */
+/**
+ * The source values that mean "a stellar model computed this".
+ *
+ * Three exist in the stellar code and they are not interchangeable words for
+ * the same thing to a reader, but they are to this function: `model` is what
+ * the lab hands out, `track` is what js/stellar/tracks.js stamps on a point it
+ * interpolated, and `hypothetical` is a place somebody clicked on the diagram.
+ *
+ * Only the last one is free. Checking for `model` alone - which this did -
+ * meant a raw track state was treated as a free point and quietly stripped of
+ * its mass, its age and its phase, while every number that survived still
+ * looked right.
+ *
+ * @param {string} source - From a selection
+ * @returns {boolean} Whether a model stands behind it
+ */
+const isModelled = source => source === 'model' || source === 'track';
+
 export function fieldsFromSelection(selection = {}) {
   const out = {};
   const put = (key, value) => {
@@ -75,12 +104,26 @@ export function fieldsFromSelection(selection = {}) {
   put('temperature', selection.teffK);
   put('luminosityInSuns', selection.luminositySun);
   put('radiusInSuns', selection.radiusSun);
-  // An age and a phase are a track's to give. `hypotheticalAt` does not
-  // produce them and must not appear to.
-  if (selection.source === 'model') {
+  // A mass, an age and a phase are a track's to give. `hypotheticalAt`
+  // produces none of them and must not appear to: a point on the diagram is
+  // two numbers and the radius they imply, and everything else about it is
+  // unknown rather than inherited from whatever the star used to be.
+  if (isModelled(selection.source)) {
     put('ageYr', selection.ageYr);
+    // A track calls the present-day mass `currentMassSun` and the one it
+    // started from `initialMassSun`; the population model calls the first
+    // `massSun`. Both are read, because a star switched between the two
+    // sources must not silently lose its mass at the boundary.
+    put(
+      'massInSuns',
+      Number.isFinite(selection.currentMassSun)
+        ? selection.currentMassSun
+        : selection.massSun
+    );
+    put('initialMassInSuns', selection.initialMassSun);
     if (selection.phase) out.stellarPhase = selection.phase;
   }
+  out.modelSource = isModelled(selection.source) ? 'model' : 'free';
   return out;
 }
 

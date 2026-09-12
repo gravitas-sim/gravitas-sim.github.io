@@ -16,7 +16,7 @@
 import { test, expect } from './fixtures.js';
 
 const LESSON = 'a-universe-of-stars';
-const STEPS = 28;
+const STEPS = 30;
 
 /** Open the lesson through the interface, the way a student does. */
 async function openLesson(page, app, { locale, narrow = false } = {}) {
@@ -155,10 +155,10 @@ test.describe('the lesson is reachable and complete', () => {
     const card = page.locator(`[data-investigation="${LESSON}"]`);
     await expect(card).toBeVisible();
     await expect(card).toContainText(/A Universe of Stars/i);
-    await expect(card).toContainText(/28/);
+    await expect(card).toContainText(new RegExp(String(STEPS)));
   });
 
-  test('it opens on step 1 of 28', async ({ page, app }) => {
+  test('it opens on step 1 of 30', async ({ page, app }) => {
     await openLesson(page, app);
     expect(await stepNumber(page)).toBe(1);
     expect(await stepTotal(page)).toBe(STEPS);

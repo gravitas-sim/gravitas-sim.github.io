@@ -27,7 +27,14 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
 
-import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
+import {
+  surface,
+  responsiveHeight,
+  palette,
+  MONO,
+  TYPE,
+  typeAt,
+} from './widgetCanvas.js';
 import { starColor, paintStarDisc } from './bodyVisuals.js';
 // Through the seam, not the service: a widget definition is content, and the
 // authoring CLI reads these modules in a plain Node process with no DOM. See
@@ -49,7 +56,6 @@ import {
   yForLuminosity,
 } from './stellar/hr.js';
 import {
-  sampleAtAge,
   stateAtSample,
   trackBounds,
   trackIds,
@@ -68,9 +74,10 @@ import {
   comparison,
   createLab,
   fractionForAge,
-  midMainSequenceFraction,
   pin,
+  pinModel,
   populationOf,
+  resolveStarSpec,
   selection,
   setCursor,
   setMode,
@@ -189,56 +196,160 @@ function ensureLab(spec = {}) {
   return lab;
 }
 
-/** Forget the page's lab. Tests only: a page has exactly one. */
+/**
+ * Forget the page's lab. Tests only: a page has exactly one.
+ *
+ * Everything module-scoped that hangs off the lab goes with it. A test that
+ * reset the lab but left the comparison's seed key behind would find the next
+ * step's stars silently not seeded, because the key would still match.
+ */
 export function resetLabForTests() {
   lab = null;
   stampedSpec = '';
+  stagedPinKey = '';
+  lastFocusValue = 0;
+  pulledFrom = null;
+  selectedPoint = null;
 }
 
 /**
  * Put the stars a step wants onto the comparison stage.
  *
- * A step that declares `pins` is setting up a comparison the student is about
- * to be asked about, so its list replaces whatever was there - it is the
- * step's stage, not the student's. Steps that want the student's own pins say
- * nothing and keep them, which is the ordinary case.
+ * A step that declares pins is setting up a comparison the student is about to
+ * be asked about, so its list replaces whatever was there - it is the step's
+ * stage, not the student's. Steps that want the student's own pins say nothing
+ * and keep them, which is the ordinary case.
+ *
+ * The stars themselves come from `resolveStarSpec`, the same function
+ * js/lessonStage.js resolves the canvas with, and each pin carries the
+ * declaration's role and name. Both of those are new and both matter: this
+ * used to drive the lab's own cursor to each star in turn and read the answer
+ * back, which gave a *different* answer from the canvas for any declaration
+ * that did not spell out an age, and gave the pin no identity beyond its
+ * position in the sorted list.
  *
  * @param {object} state - The lab
- * @param {Array<{track: string, age: number}>} pins - What to put on the stage
+ * @param {Array<object>} pins - Star declarations, or resolved staged stars
  */
 function seedPins(state, pins) {
   unpin(state, true);
-  const previous = {
-    trackId: state.trackId,
-    ageFraction: state.ageFraction,
-    mode: state.mode,
-  };
-  // A step's pins name tracks, so they are pinned as modelled stars whatever
-  // mode the student left the lab in. Pinning while the lab is on the free
-  // cursor pinned the cursor instead - once per entry, all identical.
-  if (state.mode !== MODE.MODEL) setMode(state, MODE.MODEL);
   for (const want of pins) {
-    state.trackId = want.track;
-    // Three ways to say where on the track, in order of how a lesson tends to
-    // mean it. An age in years is the one that survives a change of pacing,
-    // which is why it is what the lesson uses for anything off the main
-    // sequence; a bare track means the middle of its main sequence.
-    if (Number.isFinite(want.ageYr)) {
-      state.ageFraction =
-        state.pace === PACE.PHASE
-          ? sampleAtAge(want.track, want.ageYr)
-          : fractionForAge(want.track, want.ageYr);
-    } else if (Number.isFinite(want.at)) {
-      state.ageFraction = want.at;
-    } else {
-      state.ageFraction = midMainSequenceFraction(want.track, state.pace);
-    }
-    pin(state);
+    // A staged star arrives already resolved, with the identity the canvas
+    // gave it. A declaration is resolved here, and its identity is the
+    // declaration - so two steps that declare the same star pin the same
+    // pinId and a capture taken under one is recognisable under the other.
+    const model = want.model ?? resolveStarSpec(want);
+    if (!model) continue;
+    pinModel(state, model, {
+      pinId: want.pinId ?? want.role ?? identityOf(want),
+      name: want.name ?? null,
+      bodyId: want.bodyId ?? null,
+    });
   }
-  state.trackId = previous.trackId;
-  state.ageFraction = previous.ageFraction;
-  if (state.mode !== previous.mode) setMode(state, previous.mode);
 }
+
+/** What the comparison last seeded itself from, so a tick does not re-seed. */
+let stagedPinKey = '';
+
+/**
+ * Put the step's own staged stars on the comparison stage.
+ *
+ * `pinStaged` on a tool spec means "compare the stars that are standing on the
+ * canvas", and the sample it reads is the one js/lessonStage.js built - the
+ * same model states, the same names, the same body ids. Nothing is resolved
+ * twice, so the card cannot drift from the scene.
+ *
+ * A list of roles instead of `true` pins a subset, which the main-sequence
+ * shelf needs: eight stars stand on the canvas and only four will fit on the
+ * card. The subset is still the canvas stars, named, rather than a second
+ * declaration that happens to resemble them.
+ *
+ * @param {object} state - The lab
+ * @param {object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ * @returns {Array<object>} The sample the card is showing
+ */
+function syncStagedPins(state, ctx, spec = {}) {
+  if (!spec.pinStaged || typeof ctx?.stagedSample !== 'function') return [];
+  const sample = ctx.stagedSample().filter(e => e.model);
+  const wanted = Array.isArray(spec.pinStaged)
+    ? spec.pinStaged
+        .map(role => sample.find(e => e.role === role))
+        .filter(Boolean)
+    : sample;
+  const key = `${ctx.stageKey?.() ?? ''}|${wanted.map(e => `${e.role}:${e.bodyId}`).join(',')}`;
+  if (key !== stagedPinKey) {
+    stagedPinKey = key;
+    seedPins(state, wanted);
+    // A new step's controls start from their own defaults while this module's
+    // memory of where the focus control was sits at the old step's number.
+    // Left alone, the first paint of the new step reads that as the reader
+    // having just moved the control and selects a star nobody asked for.
+    lastFocusValue = 0;
+    state.focusPinId = null;
+  }
+  return wanted;
+}
+
+/** The `focus` value the last paint saw, so a deliberate move can be told. */
+let lastFocusValue = 0;
+
+/**
+ * Which pinned star the reader is looking at.
+ *
+ * Two ways in, and they have to agree without fighting. Selecting a star on
+ * the main canvas focuses its column here; moving the `focus` control selects
+ * that star on the canvas. Whichever the reader just did is the one that wins,
+ * which is why the control's previous position is remembered - without that,
+ * the canvas selection would win every paint and the control could never move
+ * off it.
+ *
+ * The control is the accessible half: a pointer is not the only way to say
+ * which star you mean. It is also what makes the focus survive a change of
+ * ordering, because what it sets is a pinId and not a position.
+ *
+ * @param {object} state - The lab
+ * @param {Array<object>} rows - The ordered comparison rows
+ * @param {object} v - The control values
+ * @param {object} ctx - The lesson context
+ * @returns {?string} The focused pinId
+ */
+function syncFocus(state, rows, v, ctx) {
+  const n = Math.round(v?.focus ?? 0);
+  if (n !== lastFocusValue) {
+    lastFocusValue = n;
+    const row = n > 0 ? rows[n - 1] : null;
+    state.focusPinId = row?.pinId ?? null;
+    // And the scene follows, so the star named on the card is the star whose
+    // inspector is open and whose row the object list has highlighted.
+    if (row?.bodyId !== null && row?.bodyId !== undefined) {
+      ctx?.selectId?.(row.bodyId);
+    }
+    return state.focusPinId;
+  }
+  const selectedId = ctx?.selected?.id ?? null;
+  if (selectedId !== null) {
+    const hit = rows.find(r => r.bodyId === selectedId);
+    if (hit) {
+      state.focusPinId = hit.pinId;
+      // Keep the control under the selection, so a reader who clicked a star
+      // and then reaches for the keyboard starts from where they are.
+      const at = rows.indexOf(hit) + 1;
+      if (v && at !== n) {
+        v.focus = at;
+        lastFocusValue = at;
+      }
+      return hit.pinId;
+    }
+  }
+  return state.focusPinId;
+}
+
+/** A declaration's own identity, for a pin that names no role. */
+const identityOf = spec =>
+  spec.track
+    ? `${spec.track}@${Number.isFinite(spec.ageYr) ? `${spec.ageYr}yr` : (spec.at ?? 'ms')}`
+    : `free@${spec.teffK}/${spec.lumSun}`;
 
 /** The live lab, for tests and for a bridge. @returns {?object} state */
 export const activeLab = () => lab;
@@ -283,7 +394,7 @@ function frame(g, r, colors, title) {
   g.lineWidth = 1;
   g.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
   if (title) {
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     g.fillStyle = colors.muted;
     g.textAlign = 'left';
     g.textBaseline = 'top';
@@ -305,9 +416,15 @@ const projector = plot => ({
  * is read from the background forwards and drawn in the same order.
  */
 function drawDiagram(g, r, state, colors, opts = {}) {
-  const padL = 40;
-  const padB = 22;
-  const padT = 16;
+  // The margins are sized from the type, not guessed. At nine pixels the old
+  // 40/22/16 worked; at a legible eleven the exponent labels ran into the
+  // rotated axis title on the left, the temperature ticks ran into the
+  // "hotter / cooler" hints below, and the topmost exponent ran into the
+  // panel's own heading. Eight pixels in each direction is what the extra two
+  // pixels of type costs, and the plot is still the largest thing on screen.
+  const padL = 48;
+  const padB = 30;
+  const padT = 24;
   const plot = {
     x: r.x + padL,
     y: r.y + padT,
@@ -351,7 +468,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
 
   // Constant-radius guides. Straight lines on these axes, which is the point.
   if (state.guides) {
-    g.font = `8px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     for (const radius of GUIDE_RADII) {
       const line = constantRadiusLine(radius);
       g.strokeStyle = colors.muted;
@@ -425,6 +542,31 @@ function drawDiagram(g, r, state, colors, opts = {}) {
     g.stroke();
   }
 
+  // The star the reader picked on the canvas, wherever the cursor happens to
+  // be. Drawn as a ring rather than a filled dot so that it reads as "this one"
+  // and not as a second selection: on a step in model mode the cursor may be
+  // somewhere else entirely, and both are true at once.
+  if (
+    opts.markSelected !== false &&
+    selectedPoint &&
+    Number.isFinite(selectedPoint.teffK) &&
+    Number.isFinite(selectedPoint.luminositySun)
+  ) {
+    g.save();
+    g.strokeStyle = colors.good;
+    g.lineWidth = 1.6;
+    g.beginPath();
+    g.arc(
+      P.x(selectedPoint.teffK),
+      P.y(selectedPoint.luminositySun),
+      7,
+      0,
+      Math.PI * 2
+    );
+    g.stroke();
+    g.restore();
+  }
+
   // Nearby alternatives, where the cursor is somewhere several models pass.
   if (opts.showNearby !== false && sel.nearby?.length) {
     g.strokeStyle = colors.good;
@@ -439,7 +581,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
 
   // Axes. Temperature runs the other way and the label says so.
   g.save();
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'center';
   g.textBaseline = 'top';
@@ -469,7 +611,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
     g.stroke();
     g.globalAlpha = 1;
     g.fillStyle = colors.muted;
-    g.fillText(`10${superscript(e)}`, plot.x - 4, y);
+    g.fillText(`10${superscript(e)}`, plot.x - 6, y);
   }
   g.textAlign = 'left';
   g.textBaseline = 'bottom';
@@ -477,7 +619,7 @@ function drawDiagram(g, r, state, colors, opts = {}) {
   g.textAlign = 'right';
   g.fillText(t('stelW.axis.cooler'), plot.x + plot.w, r.y + r.h - 1);
   g.save();
-  g.translate(r.x + 10, plot.y + plot.h / 2);
+  g.translate(r.x + 6, plot.y + plot.h / 2);
   g.rotate(-Math.PI / 2);
   g.textAlign = 'center';
   g.textBaseline = 'top';
@@ -565,34 +707,6 @@ let lastPlot = null;
  * @param {number} lineHeight - Baseline spacing
  * @returns {number} The height the caption occupied
  */
-/**
- * How tall the same caption would be, without drawing it.
- *
- * @param {CanvasRenderingContext2D} g - The context
- * @param {string} text - The caption
- * @param {number} maxWidth - The width to break to
- * @param {number} lineHeight - Baseline spacing
- * @param {string} font - The font to measure in
- * @returns {number} The height it would occupy
- */
-function measureWrapped(g, text, maxWidth, lineHeight, font) {
-  const previous = g.font;
-  g.font = font;
-  let lines = 1;
-  let line = '';
-  for (const word of String(text).split(/\s+/)) {
-    const next = line ? `${line} ${word}` : word;
-    if (line && g.measureText(next).width > maxWidth) {
-      lines++;
-      line = word;
-    } else {
-      line = next;
-    }
-  }
-  g.font = previous;
-  return lines * lineHeight;
-}
-
 function wrapText(g, text, x, top, maxWidth, lineHeight) {
   const words = String(text).split(/\s+/);
   const lines = [];
@@ -660,7 +774,7 @@ function drawPreview(g, r, state, colors) {
   // it takes is what is left over for the disc rather than the other way
   // round. This panel is narrow and the sentence is a sentence.
   g.save();
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   const lineHeight = 11;
   const words = t('stelW.preview.exposure').split(/\s+/);
   let lines = 1;
@@ -765,7 +879,15 @@ let pulledFrom = null;
  */
 function syncBoundStar(state, ctx, spec = {}) {
   const role = spec.bind;
-  if (!role || typeof ctx?.role !== 'function') return null;
+  if (!role) {
+    // No bound star, but the step may still have stars on the canvas - and
+    // selecting one of those has to move the diagram to it. "Clicking a star
+    // shows you where it is" is the one thing an H-R diagram beside a scene
+    // is for, and without this the diagram sat wherever the controls had left
+    // it while the reader clicked star after star in front of it.
+    return followSelectedStar(state, ctx, spec);
+  }
+  if (typeof ctx?.role !== 'function') return null;
   const star = ctx.role(role);
   if (!star) {
     pulledFrom = null;
@@ -791,15 +913,75 @@ function syncBoundStar(state, ctx, spec = {}) {
   }
   if (!selected) pulledFrom = null;
   // The model writes its answer onto the star, every frame and idempotently:
-  // applySelection touches nothing when the star already shows it.
-  applySelection(star, selection(state));
+  // nothing is touched when the star already shows it.
+  //
+  // Through the stage rather than straight onto the body, because the star's
+  // *drawn* size is a fourth number that has to be derived from the radius
+  // and the stage's current scale. Writing the fields directly left it alone:
+  // a reader dragging the cursor from the Sun to a thirty-thousand-kelvin,
+  // thousand-luminosity star watched the numbers change, watched the colour
+  // change, and watched a disc that stayed exactly the same size - on a
+  // screen whose entire subject is that temperature and luminosity fix a
+  // radius.
+  const model = selection(state);
+  if (typeof ctx?.restageStar === 'function') ctx.restageStar(role, model);
+  else applySelection(star, model);
   return star;
 }
 
-/** Forget which star the lab pulled from. Tests only. */
-export const resetBoundStarForTests = () => {
-  pulledFrom = null;
-};
+/**
+ * Move the diagram to whichever staged star the reader has selected.
+ *
+ * Read-only in the other direction from `syncBoundStar`: this never writes
+ * back onto the star, because the star's state came from the model and the
+ * reader is looking at it rather than editing it. It fires once per selection,
+ * so the controls stay usable afterwards - a reader who selects a star and
+ * then drags the age slider is exploring from where that star is, which is the
+ * useful behaviour and not a fight with the selection.
+ *
+ * @param {object} state - The lab
+ * @param {object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ * @returns {?object} The star followed, if any
+ */
+function followSelectedStar(state, ctx, spec = {}) {
+  if (spec.followSelection === false) return null;
+  const star = ctx?.selected;
+  if (!star) {
+    pulledFrom = null;
+    selectedPoint = null;
+    return null;
+  }
+  const point = pointForStar(star);
+  selectedPoint = point;
+  if (!point) return null;
+  const key = `sel:${star.id}`;
+  if (pulledFrom === key) return star;
+  pulledFrom = key;
+
+  // The cursor follows; the mode does not. A step puts the lab in one of its
+  // two modes because its instruction depends on which - "drag the age slider
+  // to the end of the track" is not an instruction you can follow with the
+  // free cursor, and there is no age slider in that mode to drag. Selecting a
+  // star used to switch modes underneath the reader, so clicking the
+  // hypothetical white dwarf standing beside the Sun took away the control
+  // the same screen had just told them to use.
+  //
+  // The selected star is marked on the diagram either way. Where it is is a
+  // fact about the star; where the cursor is is the reader's business.
+  if (state.mode === MODE.FREE) {
+    setCursor(state, point.teffK, point.luminositySun);
+    return star;
+  }
+  const track = nearestTrackByMass(point.initialMassSun, TRACK_MASSES);
+  if (track && Number.isFinite(point.ageYr)) {
+    adoptModel(state, { trackId: track, ageYr: point.ageYr });
+  }
+  // A star with no age is a point nobody modelled. In model mode there is
+  // nowhere honest to put the cursor for it, so the cursor stays where it is
+  // and the mark on the diagram is the whole answer.
+  return star;
+}
 
 const STELLAR_LAB = {
   id: 'stellar-lab',
@@ -1187,8 +1369,27 @@ const STELLAR_LAB = {
 };
 
 /** Send the selection and the comparison to the notebook. */
-function captureLab(state) {
+/**
+ * Write what the lab is showing into the notebook.
+ *
+ * Where the card was seeded from the step's own scene, the entry says so and
+ * says how much of the scene it covers: four stars off a shelf of eight is
+ * evidence about four stars, and an entry that did not carry the denominator
+ * would be read as evidence about the shelf.
+ *
+ * @param {object} state - The lab
+ * @param {object} [ctx] - The lesson context, where the widget has one
+ * @param {object} [spec] - The tool spec
+ */
+function captureLab(state, ctx, spec = {}) {
   const snap = snapshotOf(state);
+  if (spec.pinStaged) {
+    snap.sampleFrom = 'scene';
+    snap.sceneTotal =
+      typeof ctx?.stagedSample === 'function'
+        ? ctx.stagedSample().length
+        : snap.pinned.length;
+  }
   captureToNotebook((capture, provenance) =>
     capture.fromStellarObservation({ snapshot: snap, provenance })
   ).catch(() => {});
@@ -1207,6 +1408,10 @@ const STELLAR_COMPARE = {
     return t('stelW.compare.note');
   },
   animated: false,
+  // Given the lesson context, because the stars on this card are the stars on
+  // the canvas: the sample is read from the stage rather than resolved again,
+  // and a selection made in either place shows in both.
+  live: true,
   controls: [
     {
       id: 'order',
@@ -1247,6 +1452,25 @@ const STELLAR_COMPARE = {
       decimals: 0,
       format: v => t(v >= 0.5 ? 'stelW.on' : 'stelW.off'),
     },
+    {
+      // Which star, without a pointer. Zero is none, and the numbers count
+      // the columns left to right as they are currently ordered - so the
+      // reading is stable under a re-order even though the number is not,
+      // because what it sets is a pinId.
+      id: 'focus',
+      get label() {
+        return t('stelW.control.focus');
+      },
+      min: 0,
+      max: MAX_PINNED,
+      step: 1,
+      value: 0,
+      decimals: 0,
+      format: v =>
+        Math.round(v) === 0
+          ? t('stelW.focus.none')
+          : t('stelW.focus.nth', { n: Math.round(v) }),
+    },
   ],
   actions(spec = {}) {
     const list = [
@@ -1268,14 +1492,46 @@ const STELLAR_COMPARE = {
     return list;
   },
 
-  act(id, v, spec = {}) {
+  act(id, v, spec = {}, ctx) {
     const state = ensureLab(spec);
-    if (id === 'clear') unpin(state, true);
-    else if (id === 'capture') captureLab(state);
+    syncStagedPins(state, ctx, spec);
+    if (id === 'clear') {
+      // A step whose stage is the canvas has no "clear": emptying the card
+      // would leave it showing nothing while the stars it describes are still
+      // standing there, and the next tick would put them straight back.
+      if (spec.pinStaged) return;
+      unpin(state, true);
+    } else if (id === 'capture') captureLab(state, ctx, spec);
   },
 
-  draw(canvas, v, _ctx, spec = {}) {
+  /**
+   * Choose a star by clicking its column.
+   *
+   * The other half of the canvas selection: a reader who clicks the third disc
+   * on the card selects the third star in the scene, which then shows its
+   * inspector and its entry in the object list like any other body.
+   */
+  pick(v, at, spec = {}, ctx) {
     const state = ensureLab(spec);
+    const wanted = syncStagedPins(state, ctx, spec);
+    if (!wanted.length) return false;
+    const rows = comparison(state, ORDER_KEYS[Math.round(v.order ?? 0)]);
+    const withSun = v.sun >= 0.5 ? rows.length + 1 : rows.length;
+    if (!withSun) return false;
+    const i = Math.floor((at.x / Math.max(at.width, 1)) * withSun);
+    const row = rows[i];
+    // The Sun's reference disc is not one of the step's stars, so clicking it
+    // selects nothing rather than selecting whatever happens to be next door.
+    if (!row) return false;
+    v.focus = i + 1;
+    state.focusPinId = row.pinId;
+    if (row.bodyId !== null) ctx?.selectId?.(row.bodyId);
+    return true;
+  },
+
+  draw(canvas, v, ctx, spec = {}) {
+    const state = ensureLab(spec);
+    syncStagedPins(state, ctx, spec);
     state.sizeMode = v.size >= 0.5 ? SIZE_MODE.FIT : SIZE_MODE.TRUE;
     const H = responsiveHeight(280, 210);
     const { ctx: g, w } = surface(canvas, H);
@@ -1284,6 +1540,7 @@ const STELLAR_COMPARE = {
     frame(g, area, colors, t('stelW.panel.compare'));
 
     const rows = comparison(state, ORDER_KEYS[Math.round(v.order ?? 0)]);
+    const focusId = syncFocus(state, rows, v, ctx);
     const withSun =
       v.sun >= 0.5
         ? [
@@ -1312,22 +1569,15 @@ const STELLAR_COMPARE = {
       return;
     }
 
-    // The note at the foot is a sentence, and how many lines it takes depends
-    // on the width. Everything above it is laid out in what is left, so a
-    // narrow canvas shrinks the discs rather than printing the note over the
-    // labels.
-    const note = t(
-      state.sizeMode === SIZE_MODE.FIT
-        ? 'stelW.compare.fitNote'
-        : 'stelW.compare.trueNote'
-    );
-    const noteWidth = area.w - 10;
-    const noteLine = 11;
-    const noteH =
-      measureWrapped(g, note, noteWidth, noteLine, `9px ${MONO}`) + 4;
+    // The sentence that used to run along the foot of this canvas is now the
+    // "Sizes" row underneath it. Two reasons, and the second is the one that
+    // matters: at a legible size it wrapped to two lines and ran into the
+    // radius labels above it, and a caption is prose, which belongs in the
+    // readout where a screen reader and a text zoom can both reach it. What
+    // it cost the picture is given back to the discs.
     const labelH = 24;
     const slotW = area.w / withSun.length;
-    const boxH = Math.max(40, area.h - 20 - labelH - noteH);
+    const boxH = Math.max(40, area.h - 20 - labelH);
     const cy = area.y + 20 + boxH / 2;
     const labelTop = area.y + 20 + boxH + 2;
     const perPixel = trueScaleFor(withSun, Math.min(slotW - 14, boxH));
@@ -1343,23 +1593,48 @@ const STELLAR_COMPARE = {
       radiusPx = Math.min(radiusPx, Math.min(slotW / 2 - 6, boxH / 2 - 2));
       const drewDisc = drawStar(g, cx, cy, radiusPx, star.teffK, colors);
 
+      // The focused star, ringed. Drawn round the slot rather than round the
+      // disc, because in true-size mode a disc can be a fraction of a pixel
+      // and a ring round nothing marks nothing.
+      if (!star.isSun && star.pinId && star.pinId === focusId) {
+        g.save();
+        g.strokeStyle = colors.good;
+        g.lineWidth = 1.5;
+        g.globalAlpha = 0.9;
+        const pad = 4;
+        g.strokeRect(
+          cx - slotW / 2 + pad,
+          area.y + 20 - pad,
+          slotW - pad * 2,
+          boxH + labelH + pad
+        );
+        g.restore();
+      }
+
       g.save();
-      g.font = `9px ${MONO}`;
-      g.fillStyle = colors.muted;
+      g.font = typeAt(TYPE.TICK);
+      g.fillStyle =
+        !star.isSun && star.pinId === focusId ? colors.good : colors.muted;
       g.textAlign = 'center';
       g.textBaseline = 'top';
       // A step can ask for the stars to be unlabelled: the opening prediction
       // shows three of them and asks which is hottest before any number is on
       // screen to read it off.
+      //
+      // Otherwise the label is the star's *name* - the same name the object
+      // list and the inspector use. It used to be the radius, which read as a
+      // measurement and was in fact the only thing identifying the column, so
+      // re-ordering the card renamed every star on it.
       g.fillText(
         star.isSun
           ? t('stelW.compare.sun')
           : spec.anonymous
             ? t('stelW.compare.anonymous', { n: i + 1 })
-            : `${solar(star.radiusSun, 'R☉')}`,
+            : star.name || `${solar(star.radiusSun, 'R☉')}`,
         cx,
         labelTop
       );
+      g.fillStyle = colors.muted;
       if (state.sizeMode === SIZE_MODE.FIT) {
         // The magnification, per star, because in this mode each one has its
         // own and the picture means nothing without them.
@@ -1374,6 +1649,11 @@ const STELLAR_COMPARE = {
         // A slot is a quarter of a narrow canvas, so this has to be a mark
         // rather than a sentence. The sentence is in the readout.
         g.fillText(t('stelW.compare.subPixelShort'), cx, labelTop + 11);
+      } else if (!spec.anonymous) {
+        // The radius, on the second line, where it used to be the whole label.
+        // It is a measurement about the star and not a name for it, and the
+        // difference showed the moment two stars were re-ordered.
+        g.fillText(`${solar(star.radiusSun, 'R☉')}`, cx, labelTop + 11);
       }
       g.restore();
     });
@@ -1383,7 +1663,7 @@ const STELLAR_COMPARE = {
       const biggest = Math.max(...withSun.map(s => s.radiusSun || 0));
       const shown = ORBIT_REFERENCES.filter(o => o.radiusSun <= biggest * 1.4);
       g.save();
-      g.font = `8px ${MONO}`;
+      g.font = typeAt(TYPE.TICK);
       g.setLineDash([2, 3]);
       const placed = [];
       for (const orbit of shown) {
@@ -1417,19 +1697,14 @@ const STELLAR_COMPARE = {
       g.globalAlpha = 1;
       g.restore();
     }
-
-    g.save();
-    g.font = `9px ${MONO}`;
-    g.fillStyle = colors.muted;
-    g.textAlign = 'left';
-    wrapText(g, note, area.x + 5, area.y + area.h - noteH, noteWidth, noteLine);
-    g.restore();
   },
 
-  readout(v, _ctx, spec = {}) {
+  readout(v, ctx, spec = {}) {
     const state = ensureLab(spec);
+    syncStagedPins(state, ctx, spec);
     const key = ORDER_KEYS[Math.round(v.order ?? 0)];
     const rows = comparison(state, key);
+    const focusId = syncFocus(state, rows, v, ctx);
     if (!rows.length) {
       return [
         { label: t('stelW.compare.title'), value: t('stelW.compare.empty') },
@@ -1471,9 +1746,28 @@ const STELLAR_COMPARE = {
         value: t('stelW.compare.subPixel'),
       });
     }
+    if (spec.pinStaged) {
+      // Which of the stars on the canvas are on the card. Said out loud
+      // because the main-sequence shelf stands eight and compares four, and a
+      // card that quietly showed half of them would be read as all of them.
+      const total =
+        typeof ctx?.stagedSample === 'function' ? ctx.stagedSample().length : 0;
+      if (total > rows.length) {
+        out.push({
+          label: t('stelW.row.subset'),
+          value: t('stelW.value.subset', { n: rows.length, of: total }),
+        });
+      }
+    }
     rows.forEach((r, i) => {
       out.push({
-        label: t('stelW.row.star', { n: i + 1 }),
+        emphasis: r.pinId === focusId,
+        // The star's own name, so a row means the same star before and after
+        // a re-order. The position is still there, in front of it, because
+        // the card is ordered and the reader is being asked to read an order.
+        label: r.name
+          ? t('stelW.row.namedStar', { n: i + 1, name: r.name })
+          : t('stelW.row.star', { n: i + 1 }),
         value: t('stelW.value.star', {
           teff: kelvin(r.teffK),
           lum: solar(r.luminositySun, 'L☉'),
@@ -1493,6 +1787,99 @@ const STELLAR_COMPARE = {
 // The synthetic population
 // -----------------------------------------------------------------------------
 
+/** Where the star the reader selected sits on the diagram, if it has a place. */
+let selectedPoint = null;
+
+/** The population star the reader has selected on the canvas, by its own id. */
+let populationFocus = null;
+
+/**
+ * Which population star a scene selection names.
+ *
+ * The stage gives a population body the role `pop-<id>`, so the star's own
+ * identity comes back off the role rather than being matched by position or
+ * by comparing temperatures - both of which would pick the wrong one of four
+ * hundred stars sooner or later.
+ *
+ * @param {object} ctx - The lesson context
+ * @returns {?string} The population star's id
+ */
+function populationIdFor(ctx) {
+  const body = ctx?.selected;
+  if (!body || typeof ctx.roleOf !== 'function') return null;
+  const role = ctx.roleOf(body);
+  return typeof role === 'string' && role.startsWith('pop-')
+    ? role.slice(4)
+    : null;
+}
+
+/**
+ * Put the panel's cut and the scene's cut in step.
+ *
+ * One threshold, one distance, one definition of flux, read by both. The panel
+ * used to hold the cut in `state.thresholdFlux` while the canvas held its own
+ * copy in the lesson's stage declaration, and the two happened to agree at the
+ * values that shipped - a flux of 1e-4 at 100 pc is a luminosity of 1 solar,
+ * which is what the stage was filtering on. They would have parted company the
+ * moment either was moved, which is exactly what the step invites.
+ *
+ * @param {object} state - The lab
+ * @param {object} v - The control values
+ * @param {object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ */
+function syncPopulationScene(state, v, ctx, spec = {}) {
+  state.thresholdFlux = 10 ** (v.threshold ?? -4);
+  state.populationView = (v.view ?? 0) >= 0.5 ? 'bright' : 'all';
+  if (spec.followScene === false) return;
+  // Which of the four hundred the reader has clicked on the canvas, so the
+  // plot can mark it. Matched on the star's own id, which the stage carries
+  // through as the body's role - a population star keeps that id across a
+  // change of threshold, so the mark survives the cut moving.
+  populationFocus = populationIdFor(ctx);
+  // "All" is the population with no cut applied, so the scene shows the whole
+  // subsample; "bright" applies the same cut the plot is drawing.
+  ctx?.restagePopulation?.({
+    thresholdFlux:
+      state.populationView === 'bright' ? state.thresholdFlux : null,
+  });
+}
+
+/**
+ * Write the population reading into the notebook.
+ *
+ * Four numbers, not one, because they are four different things and the whole
+ * argument of these screens is the difference between them: how many stars
+ * were drawn, how many of those the tracks could model, how many pass the cut,
+ * and how many of the ones on the canvas are left standing.
+ *
+ * @param {object} state - The lab
+ * @param {object} v - The control values
+ * @param {object} ctx - The lesson context
+ */
+function capturePopulation(state, v, ctx) {
+  const snap = snapshotOf(state);
+  const survey = populationOf(state);
+  const bright = brightOf(state);
+  const scene = ctx?.population?.() ?? null;
+  snap.population = {
+    seed: survey.seed,
+    requested: survey.requested,
+    modelled: survey.stars.length,
+    excludedEvolved: survey.excludedEvolved,
+    excludedUnmodelled: survey.excludedUnmodelled,
+    distancePc: bright.distancePc,
+    thresholdFlux: bright.thresholdFlux,
+    selected: bright.kept,
+    view: state.populationView,
+    onCanvas: scene?.shown ?? null,
+    canvasSubsample: scene?.subsample ?? null,
+  };
+  captureToNotebook((capture, provenance) =>
+    capture.fromStellarObservation({ snapshot: snap, provenance })
+  ).catch(() => {});
+}
+
 const STELLAR_POPULATION = {
   id: 'stellar-population',
   get title() {
@@ -1502,6 +1889,10 @@ const STELLAR_POPULATION = {
     return t('stelW.pop.note');
   },
   animated: false,
+  // Given the lesson context, because the threshold moves the scene as well as
+  // the plot. Two views of one population is the entire claim of these three
+  // screens, and until this was here only one of the two views moved.
+  live: true,
   controls: [
     {
       id: 'view',
@@ -1541,16 +1932,15 @@ const STELLAR_POPULATION = {
       : [];
   },
 
-  act(id, v, spec = {}) {
+  act(id, v, spec = {}, ctx) {
     const state = ensureLab(spec);
-    state.thresholdFlux = 10 ** (v.threshold ?? -4);
-    state.populationView = v.view >= 0.5 ? 'bright' : 'all';
-    if (id === 'capture') captureLab(state);
+    syncPopulationScene(state, v, ctx, spec);
+    if (id === 'capture') capturePopulation(state, v, ctx);
   },
 
-  draw(canvas, v, _ctx, spec = {}) {
+  draw(canvas, v, ctx, spec = {}) {
     const state = ensureLab(spec);
-    state.thresholdFlux = 10 ** (v.threshold ?? -4);
+    syncPopulationScene(state, v, ctx, spec);
     const H = responsiveHeight(300, 230);
     const { ctx: g, w } = surface(canvas, H);
     const colors = palette();
@@ -1562,12 +1952,14 @@ const STELLAR_POPULATION = {
     const showingBright = (v.view ?? 0) >= 0.5;
 
     // The scatter, on the same axes as the lab's own diagram.
-    const padL = 40;
+    // Same margins as the main diagram, and for the same reason: the exponent
+    // labels and the panel heading both need room at a legible size.
+    const padL = 48;
     const plot = {
       x: top.x + padL,
-      y: top.y + 14,
+      y: top.y + 22,
       w: top.w - padL - 8,
-      h: top.h - 32,
+      h: top.h - 48,
     };
     frame(g, top, colors, t('stelW.panel.population'));
     const P = projector(plot);
@@ -1591,11 +1983,25 @@ const STELLAR_POPULATION = {
       );
       g.fill();
     }
+    // The star the reader picked out of the crowd. Drawn last so nothing
+    // covers it, and as a ring rather than a brighter dot: at this density a
+    // dot that is merely bigger is not findable.
+    const picked = populationFocus
+      ? population.stars.find(x => x.id === populationFocus)
+      : null;
+    if (picked && !(showingBright && !bright.stars.includes(picked))) {
+      g.globalAlpha = 1;
+      g.strokeStyle = colors.good;
+      g.lineWidth = 1.5;
+      g.beginPath();
+      g.arc(P.x(picked.teffK), P.y(picked.luminositySun), 5.5, 0, Math.PI * 2);
+      g.stroke();
+    }
     g.globalAlpha = 1;
     g.restore();
 
     g.save();
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     g.fillStyle = colors.muted;
     g.textAlign = 'center';
     g.textBaseline = 'top';
@@ -1609,7 +2015,7 @@ const STELLAR_POPULATION = {
     g.textAlign = 'right';
     g.textBaseline = 'middle';
     for (let e = -4; e <= 4; e += 2) {
-      g.fillText(`10${superscript(e)}`, plot.x - 4, P.y(10 ** e));
+      g.fillText(`10${superscript(e)}`, plot.x - 6, P.y(10 ** e));
     }
     g.restore();
 
@@ -1624,7 +2030,7 @@ const STELLAR_POPULATION = {
     const baseY = bottom.y + bottom.h - 14;
     const maxCount = Math.max(1, ...all.map(r => r.count));
     g.save();
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     all.forEach((row, i) => {
       const x = barsX + slot * i;
       const hAll = ((bottom.h - 34) * row.count) / maxCount;
@@ -1644,9 +2050,9 @@ const STELLAR_POPULATION = {
     g.restore();
   },
 
-  readout(v, _ctx, spec = {}) {
+  readout(v, ctx, spec = {}) {
     const state = ensureLab(spec);
-    state.thresholdFlux = 10 ** (v.threshold ?? -4);
+    syncPopulationScene(state, v, ctx, spec);
     const population = populationOf(state);
     const bright = brightOf(state);
     const all = countByType(population.stars);
@@ -1691,6 +2097,47 @@ const STELLAR_POPULATION = {
           bright: few[i].count,
           brightPct: (few[i].fraction * 100).toFixed(1),
         }),
+      });
+    }
+    // Four different populations, named apart. They are routinely conflated
+    // and the conflation is the misconception these screens exist to break:
+    // four hundred stars were drawn, fewer were modelled, fewer still pass the
+    // cut, and what stands on the canvas is a bounded sample of those. A
+    // reader who reads any one of those numbers as another has drawn the
+    // wrong conclusion from the right picture.
+    // The star the reader has picked, named and quantified. The plot rings it,
+    // and this is the same fact in the accessible column - which for a
+    // four-hundred-star scatter is the readable half.
+    const survey2 = populationOf(state);
+    const picked = populationFocus
+      ? survey2.stars.find(x => x.id === populationFocus)
+      : null;
+    if (picked) {
+      const kept =
+        fluxAt(picked.luminositySun, bright.distancePc) >= bright.thresholdFlux;
+      rows.push({
+        label: t('stelW.pop.row.picked'),
+        value: t('stelW.pop.value.picked', {
+          type: picked.spectralType,
+          teff: kelvin(picked.teffK),
+          lum: solar(picked.luminositySun, 'L☉'),
+          mass: solar(picked.massSun, 'M☉'),
+          cut: t(kept ? 'stelW.pop.kept' : 'stelW.pop.cut'),
+        }),
+        emphasis: true,
+      });
+    }
+    const scene = ctx?.population?.();
+    if (scene) {
+      rows.push({
+        label: t('stelW.pop.row.onCanvas'),
+        value: t('stelW.pop.value.onCanvas', {
+          shown: scene.shown,
+          subsample: scene.subsample,
+          modelled: population.stars.length,
+          requested: population.requested,
+        }),
+        emphasis: true,
       });
     }
     rows.push({

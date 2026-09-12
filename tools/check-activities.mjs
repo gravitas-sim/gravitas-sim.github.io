@@ -84,8 +84,29 @@ for (const activity of ACTIVITIES) {
     note(where, `names lesson "${activity.lesson}", which does not exist`);
     continue;
   }
-  if (!Object.hasOwn(SCENARIO_INFO, activity.scenario)) {
+  // A lesson that stands up its own scene has no scenario to land in, and
+  // making an author invent one would put a fiction in the data file. Null is
+  // allowed, and then checked: the lesson really must stage every step and
+  // name no setup anywhere. A lesson that does load a scenario and claims null
+  // is a mistake, and so is a scenario name that has since been renamed.
+  const stagesItsOwn =
+    lesson.steps.every(s => s.stage) &&
+    lesson.steps.every(s => !s.setup?.scenario);
+  if (activity.scenario === null) {
+    if (!stagesItsOwn) {
+      note(
+        where,
+        'has no scenario, but the lesson loads one - name the scenario it lands in'
+      );
+    }
+  } else if (!Object.hasOwn(SCENARIO_INFO, activity.scenario)) {
     note(where, `names scenario "${activity.scenario}", which does not exist`);
+  } else if (stagesItsOwn) {
+    note(
+      where,
+      `names scenario "${activity.scenario}", but every step of the lesson ` +
+        'stages its own scene and none of them loads it'
+    );
   }
 
   for (const id of messageIds(activity)) {

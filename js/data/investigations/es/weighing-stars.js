@@ -405,6 +405,15 @@ export default {
         'La más pesada. Junto con el paso anterior, esas son las dos mitades del método: el tamaño y la duración de la órbita te dan la masa total, y las distancias al punto de equilibrio te dicen cómo repartirla.',
     },
     {
+      title: 'Explica cómo funcionó el pesaje',
+      body: `Mediste dos longitudes de brazo y un periodo, y saliste con dos
+             masas. Nadie puso una estrella en una balanza.`,
+      prompt:
+        'En dos o tres frases, explica cómo la separación y el periodo te dieron la masa total, y cómo las dos longitudes de brazo repartieron después esa masa entre las estrellas. Nombra algo de este par que lo hizo más fácil que uno real.',
+      rubric:
+        'La tercera ley de Kepler en la forma de Newton, M_A + M_B = a\u00b3/P\u00b2 con a en UA y P en a\u00f1os, convierte el tama\u00f1o de la \u00f3rbita y el periodo en la masa total. El punto de equilibrio la reparte: la distancia de cada estrella al baricentro es inversamente proporcional a su masa, as\u00ed que M_A/M_B = r_B/r_A, y las dos relaciones juntas dan ambas masas. Lo que hizo f\u00e1cil este par: la \u00f3rbita se ve de frente, as\u00ed que la separaci\u00f3n medida es la verdadera; una binaria real est\u00e1 inclinada un \u00e1ngulo desconocido y la separaci\u00f3n que mides es una proyecci\u00f3n, por lo que el trabajo real necesita la inclinaci\u00f3n o una correcci\u00f3n estad\u00edstica.',
+    },
+    {
       title: 'Lo que ahora puedes decir',
       body: 'En palabras corrientes, sin memorizar nada:\n\n<strong>Cuando dos estrellas se orbitan mutuamente, ambas se mueven alrededor de un punto de equilibrio compartido. Cómo de grande es su órbita y cuánto tarda nos dicen su masa combinada. Lo lejos que está cada estrella del punto de equilibrio nos dice cómo se reparte esa masa entre ellas.</strong>\n\nPor eso importan tanto las estrellas binarias. Son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que el Sol es una estrella corriente, o que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, los números que hay detrás de esas afirmaciones se calibraron con pares de estrellas medidos exactamente como acabas de hacerlo tú.\n\nAlrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.',
       tip: 'Bessel encontró Sirio B al advertir un bamboleo, décadas antes de que nadie la viera. Medir lo que no puedes ver observando lo que le hace a algo que sí puedes ver es uno de los trucos más antiguos de esta materia y sigue siendo de los mejores.',

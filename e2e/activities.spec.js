@@ -10,6 +10,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { ACTIVITIES, allFormats } from '../js/data/activities.js';
 
 const TEACHING = '/teaching/';
 
@@ -153,8 +154,11 @@ test.describe('a link that names nothing real', () => {
     await page.waitForSelector('#teachActivities article');
     await expect(page.locator('#activityFallback')).toBeVisible();
     await expect(page.locator('#activityFallback')).toContainText('nope');
-    // And the real formats are all still offered.
-    await expect(page.locator('.teach-activity-format')).toHaveCount(3);
+    // And the real formats are all still offered. Counted from the catalogue:
+    // a literal here is the same defect the page itself was built to avoid.
+    await expect(page.locator('.teach-activity-format')).toHaveCount(
+      allFormats().length
+    );
   });
 
   test('an unknown activity on the page says so and lists what exists', async ({
@@ -163,7 +167,9 @@ test.describe('a link that names nothing real', () => {
     await page.goto(`${TEACHING}?activity=nope`);
     await page.waitForSelector('#teachActivities article');
     await expect(page.locator('#activityFallback')).toContainText('nope');
-    await expect(page.locator('.teach-activity')).toHaveCount(1);
+    await expect(page.locator('.teach-activity')).toHaveCount(
+      ACTIVITIES.length
+    );
   });
 });
 
@@ -220,14 +226,20 @@ test.describe('two formats are two different pieces of work', () => {
         import('/js/activities/activities.js'),
         import('/js/data/investigations/registry.js'),
       ]);
-      const activity = ACTIVITIES[0];
-      const lesson = await registry.loadInvestigation(activity.lesson);
-      return activity.formats.map(
-        f =>
-          logic.assignmentForFormat(lesson, activity, f, 't', '').assignment.i
-      );
+      const out = [];
+      for (const activity of ACTIVITIES) {
+        const lesson = await registry.loadInvestigation(activity.lesson);
+        for (const f of activity.formats) {
+          out.push(
+            logic.assignmentForFormat(lesson, activity, f, 't', '').assignment.i
+          );
+        }
+      }
+      return out;
     });
-    expect(new Set(ids).size).toBe(3);
+    // Every format in the catalogue, not just one activity's: two sharing an
+    // id would share one progress namespace and mark each other complete.
+    expect(new Set(ids).size).toBe(allFormats().length);
   });
 });
 
@@ -241,9 +253,15 @@ test.describe('the two doors', () => {
     const browse = page.locator('a[data-i18n="teach.activities.browse"]');
     await expect(browse).toHaveAttribute('href', /investigationBrowser/);
     // ...and to the investigation this activity is cut from.
-    await expect(
-      page.locator('a', { hasText: 'Open the full investigation' })
-    ).toHaveAttribute('href', /investigation=keplers-laws/);
+    // One per activity, each pointing at the lesson it is cut from.
+    const links = page.locator('a', { hasText: 'Open the full investigation' });
+    await expect(links).toHaveCount(ACTIVITIES.length);
+    for (const [i, activity] of ACTIVITIES.entries()) {
+      await expect(links.nth(i)).toHaveAttribute(
+        'href',
+        new RegExp(`investigation=${activity.lesson}`)
+      );
+    }
   });
 
   test('the investigation browser points at the activities', async ({
@@ -309,7 +327,7 @@ test.describe('both languages, and the keyboard', () => {
     await page.goto(`${TEACHING}#activities`);
     await page.waitForSelector('#teachActivities article');
     const launches = page.locator('.teach-activity-launch');
-    await expect(launches).toHaveCount(3);
+    await expect(launches).toHaveCount(allFormats().length);
 
     for (let i = 0; i < 3; i++) {
       const link = launches.nth(i);

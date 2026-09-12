@@ -315,9 +315,9 @@ npm run author:check -- --json            # for an editor
 **`author:walk`** is the part that cannot be done as data. The checker can see
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
-produced rows against a live world, or that Next moved. The walker opens all 12
-investigations in a browser and takes all 370 steps, sharded one lesson per
-test so contexts are reused and a failure names its lesson. It takes about two
+produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->22<!--/fact--> investigations in
+a browser and takes all <!--fact:investigationSteps-->631<!--/fact--> steps,
+sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 
 It earns its keep: it is what found a widget that had never drawn — its `draw`

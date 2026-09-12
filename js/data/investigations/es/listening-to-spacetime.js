@@ -13,6 +13,7 @@
 
 export default {
   title: 'Escuchar el espacio-tiempo',
+  series: 'Ondas gravitacionales',
   subtitle: 'Averigua qué produjo una señal y compárala luego con la cosa real',
   duration: '60-75 min',
   level: 'Astronomía introductoria',

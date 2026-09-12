@@ -65,6 +65,13 @@ export function mergeTranslation(base, overlay) {
       // which is what keeps a typo in a translation from becoming a property
       // the engine then reads.
       if (!Object.hasOwn(base, key)) continue;
+      // And never a key that is machinery. The file header has always said a
+      // shadow cannot reach the lesson's workings; this is what makes that
+      // true rather than a convention. A translated `role` or `track` is not a
+      // Spanish lesson, it is a lesson whose bindings resolve to nothing, and
+      // it would have failed silently - both sides are strings, so nothing
+      // downstream could tell.
+      if (STRUCTURAL.has(key)) continue;
       out[key] = mergeTranslation(base[key], overlay[key]);
     }
     return out;
@@ -132,6 +139,9 @@ export const STRUCTURAL = new Set([
   // student progress is keyed by, so a Spanish shadow supplying one would
   // orphan every answer the moment the language changed.
   'sid',
+  // The sid of the step where a held prediction is marked. A translated one
+  // would point at nothing, and the prediction would stay unmarked forever.
+  'reveal',
   'type',
   'kind',
   'scenario',
@@ -148,4 +158,40 @@ export const STRUCTURAL = new Set([
   'rows',
   'importGroups',
   'widget',
+  // Where a lesson's stars stand and what the instrument is doing with them.
+  // Every one of these is an identifier the lesson's own logic reads: `role`
+  // is what a binding resolves, `track` and `at` are where on a MIST track a
+  // star is, and `pace`, `mode` and `bind` configure the instrument. A shadow
+  // that translated any of them would not produce a Spanish lesson, it would
+  // produce a broken one - and until they were listed here they also inflated
+  // every coverage figure, because they counted as strings nobody had got
+  // round to translating. `name` is deliberately NOT here: a star's name is
+  // read out on the canvas, in the object list and on the comparison card, and
+  // it does need translating.
+  'role',
+  'track',
+  'at',
+  'pace',
+  'mode',
+  'bind',
+  // Which phase of a track a step parks the playback on. An identifier from
+  // js/stellar/evolution.js, not a word for a reader - translating it parks
+  // the playhead nowhere and the step opens on a cloud.
+  'phase',
+  // Which of a widget's views a step opens, which kinds of body a stage
+  // stands, which source mode it selects, and whether the audio control is
+  // offered. Identifiers every one - a translated 'view' opens no view and a
+  // translated 'bh' stages nothing.
+  'view',
+  'kinds',
+  'mode',
+  'listen',
+  // Which preset a step opens the instrument on, by id.
+  'preset',
+  'pinStaged',
+  'tags',
+  // Symbols, not words. K, R(sun), L(sun), M(sun) and the multiplication sign
+  // are the same in every language this ships in, and a translated one would
+  // be a units bug rather than a translation.
+  'unit',
 ]);

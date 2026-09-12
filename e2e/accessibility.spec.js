@@ -116,6 +116,43 @@ const SURFACES = [
     expect: '#investigationPanel',
   },
   {
+    // A measurement screen, which is a different surface from the first screen
+    // of a lesson: it brings an instrument canvas with its readout, a scatter
+    // plot with its table of points, and the response fields the reader types
+    // into. None of those were being swept, because the lesson above opens on
+    // a page of prose.
+    name: 'lesson measurement screen',
+    open: async ({ page, app }) => {
+      await app.boot({ url: '/?author=tides&step=10' });
+      await page.waitForSelector('#investigationToolCanvas', {
+        timeout: 20_000,
+      });
+      // Fill the fields so the plot has points and the table has rows.
+      await page.evaluate(() => {
+        const fields = [
+          ...document.querySelectorAll('#investigationBody input[data-field]'),
+        ];
+        const vals = [
+          '0.25',
+          '4.00',
+          '0.50',
+          '2.00',
+          '1.00',
+          '1.00',
+          '2.00',
+          '0.50',
+        ];
+        fields.forEach((f, i) => {
+          f.value = vals[i] ?? '1';
+          f.dispatchEvent(new Event('input', { bubbles: true }));
+          f.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+      });
+      await page.waitForTimeout(500);
+    },
+    expect: '#investigationPlotTable',
+  },
+  {
     name: 'share dialog',
     open: async ({ page, app }) => {
       await app.boot();

@@ -638,8 +638,14 @@ export const EN = {
   'tutorial.finish': 'Finish',
 
   'tutorial.welcome.title': 'Welcome to Gravitas',
+  // The old wording said "every body on screen is integrated". That stopped
+  // being true when lessons began standing objects on the canvas that a
+  // published model places rather than the integrator moves: a star walking an
+  // evolutionary track, an inspiralling pair placed from a waveform timeline.
+  // Those are labelled wherever they appear, and the claim here now says the
+  // same thing the instrument readouts do.
   'tutorial.welcome.body':
-    "A sandbox for gravity, and a set of instruments for measuring it. Every body on screen is integrated from Newton's law of gravitation in real time: nothing here is on rails, pre-animated or scripted. If two stars merge, it is because their orbits actually brought them together.",
+    "A sandbox for gravity, and a set of instruments for measuring it. The bodies you place and the scenarios you load are integrated from Newton's law of gravitation in real time — nothing there is on rails, pre-animated or scripted, and if two stars merge it is because their orbits actually brought them together. A few lesson screens instead place a body where a published model says it should be, such as a star moving along an evolutionary track; those say so on the screen that shows them.",
   'tutorial.welcome.tip':
     'This tour is sixteen steps and takes about three minutes. Use ← and → to move through it, or Escape to leave at any point.',
 

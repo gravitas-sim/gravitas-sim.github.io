@@ -108,29 +108,25 @@ test.describe('on a phone', () => {
     page,
     app,
   }) => {
-    // KNOWN FAILING, deliberately left running rather than skipped.
+    // This carried test.fail() for a long time: a tap on #inspectorClose
+    // produced a click whose target was BODY, so the inspector did not close,
+    // and the cause had resisted several attempts. It is fixed, and the marker
+    // is gone.
     //
-    // On an emulated phone a tap on #inspectorClose produces a click whose
-    // target is BODY rather than the button, so the inspector does not close.
-    // What has been established:
+    // There were two causes, found a long way apart. The first was the header's
+    // touchstart handler calling preventDefault() unconditionally, which
+    // cancelled the synthesised click outright and made every button in the
+    // inspector header dead to touch. Fixing that produced a click, which was
+    // then hit-tested somewhere else - and the second cause is why.
     //
-    //   - the button is settled, on screen, and document.elementFromPoint at its
-    //     own centre returns #inspectorClose
-    //   - the page is not scrolled and there is no visual-viewport offset
-    //   - a click dispatched directly at the element does close the inspector,
-    //     so the handler itself is wired correctly
-    //
-    // One contributing cause has already been fixed: the header's touchstart
-    // handler called preventDefault() unconditionally, which cancelled the
-    // synthesised click outright and made every button in the inspector header
-    // dead to touch. After that fix a click is produced - it is simply
-    // hit-tested somewhere else. The remaining cause is not yet identified.
-    //
-    // test.fail() means this runs and CI requires it to fail. If someone fixes
-    // the underlying problem this test starts passing and the run goes red,
-    // which is the point: the marker has to be removed deliberately rather than
-    // the fix going unnoticed.
-    test.fail();
+    // startDrag() also called preventDefault() unconditionally, and it
+    // re-anchors the panel from its right and bottom edges to left and top on
+    // mousedown. On a wide window those anchors agree and nothing moves. On a
+    // narrow one the stylesheet lays the inspector out against the other edge,
+    // so the panel shifted a few pixels out from under the pointer between
+    // mousedown and mouseup and the browser never synthesised a click at all.
+    // It now ignores a press that starts on a control. See startDrag() in
+    // js/ui.js.
 
     await app.boot();
     await app.loadScenario('Binary Pair');

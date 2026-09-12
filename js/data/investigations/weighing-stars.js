@@ -116,6 +116,7 @@ const WEIGHING = {
       sid: 'two-stars-side-by-side',
       stage: EQUAL_PAIR,
       type: 'predict',
+      reveal: 'watch-them',
       title: 'Two stars, side by side',
       body: `On screen are two stars of about the same size, close enough
              together that gravity holds them to each other. Pairs like this are
@@ -238,6 +239,7 @@ const WEIGHING = {
       sid: 'make-one-of-them-heavier',
       stage: EQUAL_PAIR,
       type: 'predict',
+      reveal: 'try-it',
       title: 'Make one of them heavier',
       body: `Now for the interesting part. In the next step you will be able to
              change how much Star A weighs, and you will make it a good deal
@@ -433,6 +435,7 @@ const WEIGHING = {
       sid: 'which-pair-is-quicker',
       stage: EQUAL_PAIR,
       type: 'predict',
+      reveal: 'run-them-together',
       title: 'Which pair is quicker?',
       body: `Next you will see two binary systems side by side. The two stars in
              each pair are exactly <strong>4 AU</strong> apart, in both systems.
@@ -1048,6 +1051,24 @@ const WEIGHING = {
       answer: 1,
       because:
         'The heavier one. Together with the previous step, that is both halves of the method: the size and timing of the orbit give you the total mass, and the distances from the balance point tell you how to split it.',
+    },
+    {
+      sid: 'say-how-the-weighing-worked',
+      // The lesson's central measurement is two distances and one time, and
+      // until this step nothing asked the reader to say why those three
+      // numbers are enough. A rubric is the only part of an activity that can
+      // tell the difference between a number copied off a panel and an
+      // argument.
+      requires: ['now-weigh-each-one'],
+      type: 'question',
+      kind: 'short',
+      title: 'Say how the weighing worked',
+      body: `You measured two arm lengths and one period, and came out with two
+             masses. Nobody put a star on a balance.`,
+      prompt:
+        'In two or three sentences, explain how the separation and the period gave you the total mass, and how the two arm lengths then split that total between the stars. Name one thing about this pair that made it easier than a real one.',
+      rubric:
+        'Kepler\u2019s third law in Newton\u2019s form, M_A + M_B = a\u00b3/P\u00b2 with a in AU and P in years, turns the orbit size and the period into the total mass. The balance point then divides it: each star\u2019s distance from the barycentre is inversely proportional to its mass, so M_A/M_B = r_B/r_A, and the two relations together give both masses. What made this pair easy: the orbit is seen face-on, so the measured separation is the true one; a real binary is tilted by an unknown angle and the separation you measure is a projection, which is why real work needs either the inclination or a statistical correction. Credit also for noticing the orbit is drawn with the barycentre marked, which is not something a telescope gives you.',
     },
     {
       sid: 'what-you-can-now-say',

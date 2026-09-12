@@ -62,8 +62,8 @@ export const MANIFEST = [
     summary:
       'Fire something off a planet and find out what decides whether it falls back, circles forever, or leaves and never returns. Work up from the experiment to the idea behind it: every object near a star carries an amount of energy, and the sign of that one number settles the question. Finish on a real interstellar visitor and decide for yourself whether it will be back.',
     thumbnail: 'images/scenarios/interstellar-visitor.webp',
-    stepCount: 23,
-    gradedCount: 9,
+    stepCount: 24,
+    gradedCount: 10,
     objectiveCount: 6,
   },
   {
@@ -75,8 +75,8 @@ export const MANIFEST = [
     summary:
       'Kepler’s laws end with Newton’s correction, and this is what that correction is for. Watch two stars circle each other, find the balance point they are both going round, and use nothing but the size and the timing of their orbit to work out how much each one weighs. No telescope has ever put a star on a scale; this is how it is actually done.',
     thumbnail: 'images/investigations/weighing-stars.webp',
-    stepCount: 35,
-    gradedCount: 17,
+    stepCount: 36,
+    gradedCount: 18,
     objectiveCount: 6,
   },
   {
@@ -88,8 +88,8 @@ export const MANIFEST = [
     summary:
       'Change one thing about a black hole, its mass, and watch four completely different properties respond. Its event horizon grows in step with the mass. Its average density falls. It gets colder. It lives dramatically longer. Two of those four surprise almost everybody, and you will predict them before you measure them.',
     thumbnail: 'images/investigations/black-holes.webp',
-    stepCount: 29,
-    gradedCount: 17,
+    stepCount: 30,
+    gradedCount: 18,
     objectiveCount: 5,
   },
   {
@@ -171,8 +171,8 @@ export const MANIFEST = [
     summary:
       'Three of Jupiter’s moons keep time with each other, Pluto crosses Neptune’s orbit and has never come near it, and thousands of asteroids sit sixty degrees ahead of Jupiter and stay there. All three are the same phenomenon, and none of them is explained by the thing everybody quotes: the ratio of the periods. You will measure the ratios, find that the tidiest one in the system belongs to a moon in no resonance at all, and then measure the quantity that actually settles it — an angle that either swings or goes round.',
     thumbnail: 'images/scenarios/galilean-resonance.webp',
-    stepCount: 33,
-    gradedCount: 16,
+    stepCount: 34,
+    gradedCount: 17,
     objectiveCount: 6,
   },
   {
@@ -201,8 +201,8 @@ export const MANIFEST = [
       'You have eight nights and one star. Plan the run yourself in the live Radial Velocity panel, commit to a prediction, then observe two schedules side by side against the same star with the same instrument and the same noise — and watch one of them recover a Jupiter while the other cannot establish that the velocity changes at all. Then break your own result: change the seed, lose a fortnight to weather, and type a list of dates by hand, until you can say what a reported period has to carry before anybody else can check it.',
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detecting exoplanets',
-    stepCount: 14,
-    gradedCount: 7,
+    stepCount: 15,
+    gradedCount: 8,
     objectiveCount: 7,
   },
   {
@@ -241,8 +241,8 @@ export const MANIFEST = [
     summary:
       'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the manoeuvre and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
     thumbnail: 'images/scenarios/orbital-transfer-lab.webp',
-    stepCount: 20,
-    gradedCount: 12,
+    stepCount: 22,
+    gradedCount: 14,
     objectiveCount: 6,
   },
   {
@@ -255,8 +255,8 @@ export const MANIFEST = [
     summary:
       'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
     thumbnail: 'images/scenarios/lagrange-point-lab.webp',
-    stepCount: 19,
-    gradedCount: 8,
+    stepCount: 20,
+    gradedCount: 9,
     objectiveCount: 6,
   },
   {
@@ -270,8 +270,8 @@ export const MANIFEST = [
       'Two objects circle each other on screen and emit no light at all. Over twenty-four short screens you work out what leaves them, what it does to anything it passes, and how an instrument could notice - and you learn to tell the three kinds of picture apart: the drawing, the calculation and the measurement. No equations, no prior physics, and it can be done with the sound off.',
     thumbnail: 'images/investigations/what-is-a-gravitational-wave.webp',
     series: 'Gravitational waves',
-    stepCount: 24,
-    gradedCount: 14,
+    stepCount: 27,
+    gradedCount: 15,
     objectiveCount: 6,
   },
   {
@@ -296,10 +296,10 @@ export const MANIFEST = [
     duration: '70-90 min',
     level: 'Introductory astronomy',
     summary:
-      'Three stars, no labels, and a guess about which is biggest. Over twenty-eight steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
+      'Three stars, no labels, and a guess about which is biggest. Over thirty steps you separate the four things that get confused with each other - mass, radius, temperature and luminosity - learn to read the diagram that organises them, meet giants and supergiants and white dwarfs where they actually sit on it, work out why the heaviest stars live the shortest lives, and finish by counting a synthetic population twice to see why the stars you can see are not the stars there are.',
     thumbnail: 'images/investigations/a-universe-of-stars.webp',
-    stepCount: 28,
-    gradedCount: 25,
+    stepCount: 30,
+    gradedCount: 27,
     objectiveCount: 7,
   },
   {

@@ -38,7 +38,13 @@
 
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
-import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
+import {
+  surface,
+  responsiveHeight,
+  palette,
+  TYPE,
+  typeAt,
+} from './widgetCanvas.js';
 import { starColor, paintStarDisc } from './bodyVisuals.js';
 // Through the seam, not the service: a widget definition is content, and the
 // authoring CLI reads these modules in a plain Node process with no DOM. See
@@ -62,18 +68,25 @@ import {
   durationSummary,
   frameOf,
   phaseMarks,
+  positionForAge,
   restart,
   seek,
   stageAt,
   stepPhase,
   traceTo,
-  trackEndsAt,
-  trackStartsAt,
 } from './stellar/evolution.js';
 import { spectralType } from './stellar/state.js';
 import { applySelection } from './lesson/starState.js';
+import { lostFractionOf } from './lesson/evolutionScene.js';
 
 const TRACK_LIST = () => trackIds();
+
+/** What the pace button moves to next. See PACE in js/stellar/evolution.js. */
+const NEXT_PACE = Object.freeze({
+  [PACE.PHASE]: PACE.TIME,
+  [PACE.TIME]: PACE.LINEAR,
+  [PACE.LINEAR]: PACE.PHASE,
+});
 
 // -----------------------------------------------------------------------------
 // Formatting
@@ -220,6 +233,13 @@ function syncProtagonist(state, ctx, spec = {}) {
   const where = stageAt(state);
   const key = `${role}:${state.trackId}:${where.stage}`;
 
+  // The main scene shows the same moment the panel does. One model time, two
+  // views: this hands over the frame and js/render.js draws it around the
+  // body. Before this existed the canvas showed an ordinary star while the
+  // panel beside it depicted a collapsing cloud, on the screen whose prose
+  // says "this is not a star yet".
+  paintScene(state, ctx, role, where);
+
   if (where.stage === STAGE.REMNANT) {
     // The prescription, not the track. becomeRemnant carries the selection
     // across and leaves an unfinished model's star alone.
@@ -231,7 +251,24 @@ function syncProtagonist(state, ctx, spec = {}) {
   }
   boundStage = key;
   const now = starNow(state);
-  if (!now) return star;
+  if (!now) {
+    // The cloud, and possibly a remnant still standing in for the star. That
+    // happens when the reader changes track at the end of a life: the
+    // playback restarts at the new track's cloud, and without this the canvas
+    // holds the previous track's white dwarf while the lesson says there is
+    // no star yet. Reverted to the new track's first sample, which is what
+    // the stage declared in the first place and which the cloud hides anyway.
+    if (
+      typeof ctx.remnantKindOf === 'function' &&
+      ctx.remnantKindOf(role) &&
+      typeof ctx.restageStar === 'function'
+    ) {
+      const first = firstSampleOf(state.trackId);
+      if (first) ctx.restageStar(role, first);
+      return ctx.role(role);
+    }
+    return star;
+  }
   applySelection(star, {
     source: 'model',
     teffK: now.teffK,
@@ -253,6 +290,131 @@ function syncProtagonist(state, ctx, spec = {}) {
     });
   }
   return star;
+}
+
+/**
+ * Hand the current model moment to the main scene.
+ *
+ * Everything the illustration needs and nothing else: which stage, how far
+ * through it, the endpoint prescription where there is one, and how much mass
+ * the track records the star having shed. The seed is the track id, so one
+ * star's cloud looks like itself on every run and two tracks do not produce
+ * identical pictures.
+ *
+ * @param {object} state - The playback
+ * @param {object} ctx - The lesson context
+ * @param {string} role - The protagonist's role
+ * @param {object} where - From stageAt()
+ * @returns {void}
+ */
+function paintScene(state, ctx, role, where) {
+  if (typeof ctx?.showEvolutionScene !== 'function') return;
+  const now = where.stage === STAGE.TRACK ? starNow(state) : null;
+  const initial = trackSamples(state.trackId)?.initialMassSun ?? null;
+  ctx.showEvolutionScene(
+    role,
+    {
+      stage: where.stage,
+      within: where.within,
+      trackFraction: where.trackFraction,
+      ageYr: ageAt(state),
+      endpoint:
+        where.stage === STAGE.REMNANT ? endpointFor(state.trackId) : null,
+    },
+    {
+      seed: state.trackId,
+      lostFraction: now ? lostFractionOf(initial, now.massSun) : 0,
+      // The reduced-motion setting parks the animation part-way rather than
+      // stopping it at nothing: a still frame of a cloud that has begun to
+      // contract still teaches what the stage is, and a frozen first frame
+      // does not.
+      stillFrame: prefersReducedMotion(),
+    }
+  );
+}
+
+/**
+ * Leave a copy of the star as it is now, standing beside it.
+ *
+ * The comparison the lesson cannot make any other way. Everything else on
+ * these screens is one star at one model time; this is that star at a moment
+ * the reader chose, kept on the canvas while the original goes on evolving,
+ * so "then and now" is two objects side by side rather than a number
+ * remembered from four screens ago.
+ *
+ * The copy is frozen by construction. js/lessonStage.js marks it model_owned,
+ * so the integrator will not move it, and nothing writes to it afterwards:
+ * restageStar addresses the protagonist's role and a snapshot has its own.
+ * Its name carries the age it was taken at, because a frozen star that does
+ * not say when it was frozen is indistinguishable from a second star.
+ *
+ * @param {object} state - The playback
+ * @param {?object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ * @returns {boolean} Whether a copy was left
+ */
+function freezeMoment(state, ctx, spec = {}) {
+  const role = spec.bind;
+  if (!role || typeof ctx?.pinSnapshot !== 'function') return false;
+  const where = stageAt(state);
+  // Nothing to freeze before the track begins: there is no star yet, and a
+  // copy of a cloud would be a copy of an illustration.
+  if (where.stage === STAGE.CLOUD) return false;
+  const age = ageAt(state);
+  const label = t('stelE.freeze.label', { age: years(age) });
+  return Boolean(ctx.pinSnapshot(role, label));
+}
+
+/**
+ * Which of the four kinds of thing the current frame is.
+ *
+ * @param {object} state - The playback
+ * @param {object} f - From frameOf()
+ * @returns {string} A key under stelE.value.whatThisIs
+ */
+function provenanceOf(state, f) {
+  if (f.stage === STAGE.CLOUD) return 'schematic';
+  if (f.stage === STAGE.REMNANT) {
+    // A white dwarf is the track's own last rows; everything else is a rule
+    // somebody published about what a star of this mass leaves behind.
+    return f.endpoint?.fromTrack ? 'sample' : 'prescription';
+  }
+  // On the track: a stored row where the playhead is sitting on one, and an
+  // interpolation between two everywhere else - which is most of the time.
+  const t2 = trackSamples(state.trackId);
+  if (!t2 || t2.count < 2) return 'sample';
+  const where = stageAt(state);
+  const exact =
+    Math.max(0, Math.min(1, positionAlong(state, where.trackFraction))) *
+    (t2.count - 1);
+  return Math.abs(exact - Math.round(exact)) < 1e-6
+    ? 'sample'
+    : 'interpolation';
+}
+
+/**
+ * The track's first stored row, as a model state.
+ *
+ * Used to put a star back where a remnant is standing and the playhead has
+ * gone back before the track begins. The values hardly matter - the cloud
+ * illustration covers the body - but the body class does: a WhiteDwarf inside
+ * a collapsing cloud is a scene nothing in the lesson describes.
+ *
+ * @param {string} trackId - Which track
+ * @returns {?object} A model state, or null
+ */
+function firstSampleOf(trackId) {
+  const t2 = trackSamples(trackId);
+  if (!t2 || !t2.count) return null;
+  return {
+    source: 'model',
+    teffK: t2.teffK[0],
+    luminositySun: t2.luminositySun[0],
+    radiusSun: t2.radiusSun[0],
+    massSun: t2.massSun[0],
+    ageYr: t2.ageYr[0],
+    phase: t2.phase[0],
+  };
 }
 
 /** Forget which stage the protagonist was last written at. Tests only. */
@@ -283,24 +445,12 @@ function setPace(state, pace) {
   const age = ageAt(state);
   state.pace = pace;
   if (where.stage === STAGE.TRACK && Number.isFinite(age)) {
-    const t = trackSamples(state.trackId);
-    let f = 0;
-    if (t) {
-      const bounds = trackBounds(state.trackId);
-      if (pace === PACE.PHASE) {
-        // Nearest sample by age.
-        let lo = 0;
-        while (lo < t.count - 1 && t.ageYr[lo + 1] <= age) lo++;
-        f = t.count > 1 ? lo / (t.count - 1) : 0;
-      } else {
-        const a = Math.log10(Math.max(bounds.startYr, 1));
-        const b = Math.log10(bounds.endYr);
-        f = b > a ? (Math.log10(Math.max(age, 1)) - a) / (b - a) : 0;
-      }
-    }
-    const start = trackStartsAt(state.trackId);
-    const span = trackEndsAt(state.trackId) - start;
-    seek(state, start + Math.max(0, Math.min(1, f)) * span);
+    // Through the module's own inverse, not a second copy of it. This used to
+    // recompute the log-age mapping here, and near the end of a track - where
+    // that axis has almost no resolution left - the two answers differed
+    // enough to move the star into the next phase every time the reader
+    // pressed the pacing button.
+    seek(state, positionForAge(state, age));
   }
   state.generation++;
 }
@@ -334,7 +484,7 @@ function frame(g, r, colors, title) {
   g.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
   g.globalAlpha = 1;
   if (title) {
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     g.fillStyle = colors.muted;
     g.textAlign = 'left';
     g.textBaseline = 'top';
@@ -376,7 +526,10 @@ function projector(plot) {
 
 /** The H-R diagram, with the path the star has taken. */
 function drawDiagram(g, r, state, colors, spec) {
-  const plot = { x: r.x + 34, y: r.y + 15, w: r.w - 42, h: r.h - 37 };
+  // Margins sized from the type. At eleven pixels the topmost exponent ran
+  // into the panel heading and the temperature ticks ran into the "hotter"
+  // hint underneath, both of which the nine-pixel version got away with.
+  const plot = { x: r.x + 42, y: r.y + 23, w: r.w - 50, h: r.h - 53 };
   const P = projector(plot);
   frame(g, r, colors, t('stelE.panel.diagram'));
 
@@ -478,7 +631,7 @@ function drawDiagram(g, r, state, colors, spec) {
 
   // Axes.
   g.save();
-  g.font = `8px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'center';
   g.textBaseline = 'top';
@@ -492,7 +645,7 @@ function drawDiagram(g, r, state, colors, spec) {
   for (let e = -4; e <= 6; e += 2) {
     const y = P.y(10 ** e);
     if (y < plot.y - 1 || y > plot.y + plot.h + 1) continue;
-    g.fillText(`1e${e}`, plot.x - 4, y);
+    g.fillText(`1e${e}`, plot.x - 6, y);
   }
   g.textAlign = 'left';
   g.textBaseline = 'bottom';
@@ -625,10 +778,19 @@ function drawStage(g, r, state, colors, spec) {
   caption(g, r, colors, text, captionHeight(g, text, r.w - 10));
 }
 
+/**
+ * Leading for the wrapped captions on this panel.
+ *
+ * It used to be a flat 9, which was already tight under nine-pixel type and
+ * became negative leading at eleven: the descenders of one line sat on the
+ * ascenders of the next. Derived from the type so it cannot drift again.
+ */
+const CAPTION_LINE = Math.round(TYPE.TICK * 1.35);
+
 /** How tall a caption will be in this panel, at the caption font. */
 function captionHeight(g, text, width) {
   const previous = g.font;
-  g.font = `8px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   let lines = 1;
   let line = '';
   for (const word of String(text).split(/\s+/)) {
@@ -641,16 +803,16 @@ function captionHeight(g, text, width) {
     }
   }
   g.font = previous;
-  return Math.min(lines, 5) * 9 + 3;
+  return Math.min(lines, 5) * CAPTION_LINE + 3;
 }
 
 /** A caption at the foot of a panel, wrapped, never clipped. */
 function caption(g, r, colors, text, height) {
   g.save();
-  g.font = `8px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'left';
-  wrapText(g, text, r.x + 5, r.y + r.h - height, r.w - 10, 9, 5);
+  wrapText(g, text, r.x + 5, r.y + r.h - height, r.w - 10, CAPTION_LINE, 5);
   g.restore();
 }
 
@@ -864,15 +1026,18 @@ function drawRemnant(g, r, cx, cy, room, state, colors, f) {
   g.restore();
 
   g.save();
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.text;
   g.textAlign = 'center';
   g.textBaseline = 'top';
   // Below the halo, not across it.
   g.fillText(t(`stelE.remnant.${kind}`), cx, cy + room * 0.55 + 10);
   g.restore();
-  const note = t(`stelE.remnant.${kind}.caption`);
-  caption(g, r, colors, note, captionHeight(g, note, r.w - 10));
+  // The two-sentence explanation that used to sit under this card is now the
+  // "What this card is" row in the readout. On a card three hundred pixels
+  // wide it wrapped to four lines of legible type, took a third of the
+  // picture, and was prose - which belongs where a screen reader, a text
+  // zoom and a copy-paste can all reach it.
 }
 
 // -----------------------------------------------------------------------------
@@ -1001,6 +1166,14 @@ const STELLAR_EVOLUTION = {
         return t('stelE.action.size');
       },
     });
+    if (spec.freeze) {
+      list.push({
+        id: 'freeze',
+        get label() {
+          return t('stelE.action.freeze');
+        },
+      });
+    }
     if (spec.compare !== false) {
       list.push({
         id: 'ghost',
@@ -1020,8 +1193,14 @@ const STELLAR_EVOLUTION = {
     return list;
   },
 
-  reset(v, { autorun = false, spec = {} } = {}) {
+  reset(v, { autorun = false, spec = {}, fromControl = false } = {}) {
     const state = ensurePlay(spec);
+    // A reader moving a control is not the step opening. Everything below
+    // puts the playback where the step asked for it, and doing that again
+    // when somebody drags the playhead or picks a different star undoes the
+    // drag in the same tick - which is what made both controls look dead on
+    // every step that names a phase or a track, and that is most of them.
+    if (fromControl) return;
     // A step that names a star wins over whatever the slider was carrying.
     // Without this the control's remembered value is read back a moment later
     // by syncFromValues, which switches the track away again and restarts the
@@ -1041,7 +1220,7 @@ const STELLAR_EVOLUTION = {
     );
   },
 
-  act(id, v, spec = {}) {
+  act(id, v, spec = {}, ctx) {
     const state = syncFromValues(v, spec);
     if (id === 'play') {
       state.playing = !state.playing;
@@ -1055,7 +1234,11 @@ const STELLAR_EVOLUTION = {
       stepPhase(state, id === 'next' ? 1 : -1);
       v.position = state.position;
     } else if (id === 'pace') {
-      setPace(state, state.pace === PACE.PHASE ? PACE.TIME : PACE.PHASE);
+      // Three ways round: every stage reachable, then log age, then
+      // proportional. The last one is the honest picture of how a life is
+      // spent and is useless for reaching anything, which is exactly why the
+      // reader is shown all three rather than one.
+      setPace(state, NEXT_PACE[state.pace] ?? PACE.TIME);
       v.position = state.position;
     } else if (id === 'interior') {
       spec.interior = !spec.interior;
@@ -1064,6 +1247,8 @@ const STELLAR_EVOLUTION = {
     } else if (id === 'ghost') {
       // Pin the track being watched, so the next one is drawn against it.
       ghostTrackId = ghostTrackId === state.trackId ? null : state.trackId;
+    } else if (id === 'freeze') {
+      freezeMoment(state, ctx, spec);
     } else if (id === 'capture') {
       capture(state);
     }
@@ -1127,6 +1312,41 @@ const STELLAR_EVOLUTION = {
       emphasis: true,
     });
 
+    // What kind of thing the reader is looking at, at this moment, in both
+    // views. Four different kinds appear in this lesson and they carry
+    // completely different weight:
+    //
+    //   a stored sample     a row of published model output
+    //   an interpolation    between two of those rows
+    //   a schematic         an illustration with no model behind it at all
+    //   a prescription      somebody's published rule for what is left
+    //
+    // Saying which is not a footnote here. The cloud and the explosion are
+    // the most vivid things on the screen and neither is computed; the
+    // numbers beside them are. A reader who cannot tell them apart has been
+    // taught that the whole picture is equally authoritative.
+    rows.push({
+      label: t('stelE.row.whatThisIs'),
+      value: t(`stelE.value.whatThisIs.${provenanceOf(state, f)}`),
+      emphasis: true,
+    });
+    // What the remnant card is, in words, where it used to be four wrapped
+    // lines across the bottom third of the card itself.
+    if (f.stage === STAGE.REMNANT && !f.endpoint?.plottable) {
+      rows.push({
+        label: t('stelE.row.cardIs'),
+        value: t(`stelE.remnant.${f.endpoint?.kind ?? 'unfinished'}.caption`),
+      });
+    }
+    // The grid these tracks came off, in one line. Introductory readers do not
+    // need the whole parameter list, but they do need to know that there is
+    // one and that it was fixed - otherwise "the model says" reads as "the
+    // Universe says".
+    rows.push({
+      label: t('stelE.row.grid'),
+      value: t('stelE.value.grid'),
+    });
+
     if (f.stage === STAGE.CLOUD) {
       rows.push({
         label: t('stelE.row.stage'),
@@ -1149,6 +1369,21 @@ const STELLAR_EVOLUTION = {
       label: t('stelE.row.age'),
       value: years(f.ageYr),
       emphasis: true,
+    });
+    // The playhead, named as a separate thing from the age above it. These
+    // two are constantly confused and the confusion is load-bearing: a
+    // playhead halfway along means "half its life is gone" under one pacing
+    // and nothing at all under the other two, and a reader who reads the
+    // wrong one concludes that the Sun spends half its existence as a red
+    // giant.
+    rows.push({
+      label: t('stelE.row.playhead'),
+      value: t(
+        state.pace === PACE.LINEAR
+          ? 'stelE.value.playheadLinear'
+          : 'stelE.value.playheadNotLife',
+        { pct: percent(f.trackFraction) }
+      ),
     });
     rows.push({
       label: t('stelE.row.phase'),
@@ -1204,7 +1439,9 @@ const STELLAR_EVOLUTION = {
       value: t(
         state.pace === PACE.PHASE
           ? 'stelE.value.pacePhase'
-          : 'stelE.value.paceTime'
+          : state.pace === PACE.LINEAR
+            ? 'stelE.value.paceLinear'
+            : 'stelE.value.paceTime'
       ),
     });
     // What this phase is, where the phase itself invites a wrong reading.
@@ -1307,6 +1544,13 @@ function remnantRows(state, f) {
           phase: t(`stellar.phase.${end.trackEndsAtPhase}`),
           mass: solar(end.massAtTrackEndSun, 'M☉'),
         }),
+  });
+  // Mass alone does not settle this, and a lesson that walks three masses to
+  // three different endpoints is exactly where a reader concludes that it
+  // does. Said once, at the endpoint, where the conclusion is being drawn.
+  rows.push({
+    label: t('stelE.row.notOnlyMass'),
+    value: t('stelE.value.notOnlyMass'),
   });
   if (Number.isFinite(end.remnantMassSun)) {
     rows.push({

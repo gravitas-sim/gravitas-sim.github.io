@@ -211,6 +211,7 @@ const GOLDILOCKS = {
     {
       sid: 'move-it-twice-as-far',
       type: 'predict',
+      reveal: 'three-distances',
       title: 'Move it twice as far out',
       body: `Now imagine picking the Earth up and putting it down at 2 AU,
              twice as far from the Sun as it is now. The Sun is unchanged. The
@@ -393,6 +394,7 @@ const GOLDILOCKS = {
     {
       sid: 'leave-the-planet-change-the',
       type: 'predict',
+      reveal: 'four-stars-one-planet',
       title: 'Leave the planet, change the star',
       body: `So far the star has been the Sun and only the planet has moved. Now
              turn it around.
@@ -753,6 +755,7 @@ const GOLDILOCKS = {
       sid: 'now-stretch-the-orbit',
       bind: SOLAR_WORLDS,
       type: 'predict',
+      reveal: 'run-an-eccentric-year',
       title: 'Now stretch the orbit',
       body: `In a moment you will be able to raise the eccentricity, which
              stretches the circle into an ellipse. The star stays at one focus,
@@ -870,6 +873,7 @@ const GOLDILOCKS = {
       // Wanderer.
       setup: HZ_TRAPPIST,
       type: 'predict',
+      reveal: 'all-seven-planets',
       title: 'A real system, forty light years away',
       body: `Time to point all of this at a real object.
              \n\nTRAPPIST-1 is a very small, very cool star: about nine percent

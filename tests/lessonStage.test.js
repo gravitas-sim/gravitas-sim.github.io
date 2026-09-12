@@ -38,8 +38,10 @@ import {
   populationSample,
   resetStageForTests,
   stageScale,
+  restageStar,
   restageStarPair,
   stageIntact,
+  stagePresence,
   stagedBarycentre,
   stagedStars,
   setStageScale,
@@ -51,7 +53,14 @@ import {
   setSelector,
 } from '../js/lessonScene.js';
 import {
+  BlackHole,
+  SOLAR_MASS_UNIT,
+  accretion_disk_particles,
+  asteroids,
   bh_list,
+  comets,
+  gas_giants,
+  getWorldGeneration,
   neutron_stars,
   planets,
   stars,
@@ -65,7 +74,26 @@ beforeEach(() => {
   resetStageForTests();
   resetLessonSceneForTests();
   clearStage();
-  stars.length = 0;
+  // Every collection, not just `stars`. Clearing one left planets, asteroids
+  // and remnants from the previous test in the world, so a test that staged a
+  // system and read `planets[0]` could be reading somebody else's planet - and
+  // the failure showed up as a physics discrepancy rather than as a dirty
+  // fixture, which is a bad hour.
+  for (const list of [
+    stars,
+    planets,
+    gas_giants,
+    asteroids,
+    comets,
+    bh_list,
+    neutron_stars,
+    white_dwarfs,
+  ]) {
+    list.length = 0;
+  }
+  // Effect buffers too: a disk particle outliving its hole across tests makes
+  // the next test's cleanup assertion about somebody else's leftovers.
+  accretion_disk_particles.length = 0;
 });
 
 describe('where the stars go', () => {
@@ -240,18 +268,52 @@ describe('standing modelled stars on the canvas', () => {
     expect(stars.map(s => s.id)).toEqual(ids);
   });
 
-  test('switching scale resizes and moves nothing', () => {
+  test('switching scale resizes the picture and moves nothing', () => {
     applyStage(THREE);
-    const before = stars.map(s => ({ x: s.pos.x, y: s.pos.y, r: s.radius }));
+    const before = stars.map(s => ({
+      x: s.pos.x,
+      y: s.pos.y,
+      r: s.radius,
+      drawn: s.stageRadius,
+    }));
     setStageScale(SCALE.TRUE);
     expect(stageScale()).toBe(SCALE.TRUE);
     expect(stars.map(s => ({ x: s.pos.x, y: s.pos.y }))).toEqual(
       before.map(b => ({ x: b.x, y: b.y }))
     );
     // The giant grows relative to the dwarf: that is what true scale means.
-    const ratioBefore = before[2].r / before[0].r;
-    const ratioAfter = stars[2].radius / stars[0].radius;
+    const ratioBefore = before[2].drawn / before[0].drawn;
+    const ratioAfter = stars[2].stageRadius / stars[0].stageRadius;
     expect(ratioAfter).toBeGreaterThan(ratioBefore * 5);
+  });
+
+  test('switching scale changes nothing the engine reads', () => {
+    // The repair this asserts: `radius` is a collision radius, a tidal
+    // radius and a hit target, and a scale switch is a statement about the
+    // picture. While the two were one field, flicking between compressed and
+    // true scale silently changed what the bodies would do to each other.
+    applyStage(THREE);
+    const physics = stars.map(s => ({
+      radius: s.radius,
+      mass: s.mass,
+      x: s.pos.x,
+      y: s.pos.y,
+      vx: s.vel.x,
+      vy: s.vel.y,
+    }));
+    setStageScale(SCALE.TRUE);
+    setStageScale(SCALE.DISPLAY);
+    setStageScale(SCALE.TRUE);
+    expect(
+      stars.map(s => ({
+        radius: s.radius,
+        mass: s.mass,
+        x: s.pos.x,
+        y: s.pos.y,
+        vx: s.vel.x,
+        vy: s.vel.y,
+      }))
+    ).toEqual(physics);
   });
 
   test('a hypothetical point brings no mass and no age with it', () => {
@@ -314,14 +376,21 @@ describe('a population on the canvas is a stated subsample', () => {
   });
 
   test('a threshold changes what is shown and what is counted, together', () => {
+    // The cut is a flux cut at a stated distance - the panel's own definition,
+    // shared - rather than the intrinsic luminosity cut this used to be. The
+    // two agreed at the values the lesson shipped with and nowhere else.
     const all = populationSample(SPEC);
-    const bright = populationSample({ ...SPEC, threshold: 1 });
+    const bright = populationSample({ ...SPEC, thresholdFlux: 1e-4 });
     expect(bright.visible).toBeLessThan(all.visible);
     expect(bright.shown.length).toBeLessThanOrEqual(bright.visible);
-    expect(bright.shown.every(s => s.luminositySun >= 1)).toBe(true);
+    expect(bright.shown.every(s => s.luminositySun / 100 ** 2 >= 1e-4)).toBe(
+      true
+    );
     // The total does not move: the survey drew the same stars either way, and
     // the threshold is about which of them a telescope would have seen.
     expect(bright.total).toBe(all.total);
+    // Nor does the shelf the cut acts on.
+    expect(bright.subsample).toBe(all.subsample);
   });
 
   test('staging one puts a bounded number of bodies on the canvas', () => {
@@ -337,10 +406,58 @@ describe('a population on the canvas is a stated subsample', () => {
 
   test('and the threshold takes bodies off it', () => {
     applyStage({ population: { ...SPEC, show: 60 } });
-    const before = stars.length;
-    applyStage({ population: { ...SPEC, show: 60, threshold: 1 } });
-    expect(stars.length).toBeLessThan(before);
-    expect(stars.length).toBeGreaterThan(0);
+    const before = stars.map(s => s.name);
+    applyStage({ population: { ...SPEC, show: 60, thresholdFlux: 1e-4 } });
+    const during = stars.map(s => s.name);
+    expect(during.length).toBeLessThan(before.length);
+    expect(during.length).toBeGreaterThan(0);
+    // Taken off, not replaced: every star still standing was standing before.
+    for (const name of during) expect(before).toContain(name);
+
+    // And putting the cut back where it was puts back exactly those stars,
+    // in that order - which is what makes "the population underneath never
+    // changes" a true sentence rather than a hopeful one.
+    applyStage({ population: { ...SPEC, show: 60 } });
+    expect(stars.map(s => s.name)).toEqual(before);
+  });
+});
+
+describe('what a hypothetical star may and may not claim', () => {
+  const HYPOTHETICAL = {
+    stars: [
+      { role: 'sun', name: 'The Sun', track: 'm100', at: 'ms' },
+      { role: 'wd', name: 'Hot and faint', teffK: 25000, lumSun: 0.01 },
+    ],
+  };
+
+  test('it weighs something for the engine and reports nothing to the reader', () => {
+    applyStage(HYPOTHETICAL, { force: true });
+    const [sun, wd] = stars;
+    // The modelled one carries the track's answers.
+    expect(sun.massInSuns).toBeCloseTo(1, 2);
+    expect(Number.isFinite(sun.ageYr)).toBe(true);
+
+    // The hypothetical one carries none of them - not a zero, not a guess,
+    // and not the solar mass the body was built with so that gravity would
+    // have a number to work on. That fallback used to be written straight
+    // into the reported mass, so a point somebody chose on the diagram had a
+    // mass of exactly one solar mass in its card.
+    expect(wd.massInSuns).toBeNull();
+    expect(wd.ageYr).toBeNull();
+    expect(wd.initialMassInSuns).toBeNull();
+    expect(wd.modelSource).toBe('free');
+    // But it does weigh something, or the integrator has nothing to do.
+    expect(wd.mass).toBeGreaterThan(0);
+    // And the two numbers it can honestly claim are the two it was given.
+    expect(wd.temperature).toBeCloseTo(25000, 6);
+    expect(wd.luminosityInSuns).toBeCloseTo(0.01, 9);
+  });
+
+  test('a lifetime is withheld too', () => {
+    applyStage(HYPOTHETICAL, { force: true });
+    const wd = stars[1];
+    expect(wd.mainSequenceYr ?? null).toBeNull();
+    expect(wd.stellarPhase ?? null).toBeNull();
   });
 });
 
@@ -637,5 +754,442 @@ describe('a system with an eccentric planet', () => {
       system: { planets: [{ name: 'Wanderer', aAU: 1.2, ecc: 0.4 }] },
     });
     for (const b of [...stars, ...planets]) expect(b.model_owned).toBe(false);
+  });
+});
+
+// -----------------------------------------------------------------------------
+// The repairs
+// -----------------------------------------------------------------------------
+// Five findings, each of which had the same root: a function that knew about
+// `stars` and not about the seven other collections a stage puts bodies into.
+// These assert the behaviour rather than the inventory, because an inventory
+// can be right and still be consulted by only one of the three callers.
+describe('a stage is recognised whatever it put on the canvas', () => {
+  // Every stage kind the module supports, with what it stands up. If a new
+  // kind is added and not listed here, the count assertion below fails rather
+  // than the new kind quietly going unchecked.
+  const DECLARATIONS = [
+    ['named stars', { stars: [{ role: 'a', track: 'm100', at: 0.4 }] }, 1],
+    ['a star pair', { starPair: { m1: 3, m2: 1, separation: 400 } }, 2],
+    [
+      'a model-owned binary',
+      { binary: { kinds: ['bh', 'bh'], m1: 36, m2: 29 } },
+      2,
+    ],
+    ['a black hole with orbiters', { hole: { massSun: 10 } }, 5],
+    ['an equal-mass comparison', { equalMass: { massSun: 8 } }, 4],
+    [
+      'a star with planets',
+      { system: { planets: [{ name: 'W', aAU: 1.2, ecc: 0.4 }] } },
+      2,
+    ],
+  ];
+
+  test.each(DECLARATIONS)(
+    '%s reports itself present the moment it is built',
+    (_name, declaration, expected) => {
+      applyStage(declaration);
+      const presence = stagePresence();
+      expect(presence.total).toBe(expected);
+      expect(presence.present).toBe(expected);
+      expect(presence.allGone).toBe(false);
+      // The bug this replaces: stageIntact() looked in `stars` alone, so a
+      // hole stage whose four orbiters are asteroids answered "gone" here and
+      // the panel rebuilt the world four times a second for as long as the
+      // lesson was open.
+      expect(stageIntact()).toBe(true);
+    }
+  );
+
+  test.each(DECLARATIONS)(
+    '%s keeps the same objects across repeated probe ticks',
+    (_name, declaration) => {
+      applyStage(declaration);
+      const ids = stagedStars().map(e => e.star.id);
+      const generation = getWorldGeneration();
+      // What renderProbe does, four times a second. Each tick asks whether the
+      // stage is still there and rebuilds if it is not; a tick that rebuilds
+      // gives every body a new id and resets every orbit to its start.
+      for (let tick = 0; tick < 8; tick++) {
+        expect(stagePresence().allGone).toBe(false);
+        for (let frame = 0; frame < 15; frame++) updatePhysics(1 / 60);
+      }
+      expect(stagedStars().map(e => e.star.id)).toEqual(ids);
+      expect(getWorldGeneration()).toBe(generation);
+    }
+  );
+
+  test('an orbiting stage actually advances instead of restarting', () => {
+    applyStage({ hole: { massSun: 10 } });
+    const orbiter = asteroids[0];
+    expect(orbiter).toBeTruthy();
+    const start = { x: orbiter.pos.x, y: orbiter.pos.y };
+    let travelled = 0;
+    let previous = { ...start };
+    for (let tick = 0; tick < 8; tick++) {
+      expect(stagePresence().allGone).toBe(false);
+      for (let frame = 0; frame < 15; frame++) updatePhysics(1 / 60);
+      travelled += Math.hypot(
+        orbiter.pos.x - previous.x,
+        orbiter.pos.y - previous.y
+      );
+      previous = { x: orbiter.pos.x, y: orbiter.pos.y };
+    }
+    // A stage rebuilt on every tick puts its orbiters back where they started,
+    // so the path length stays near zero and the body never gets anywhere.
+    expect(travelled).toBeGreaterThan(20);
+    expect(
+      Math.hypot(orbiter.pos.x - start.x, orbiter.pos.y - start.y)
+    ).toBeGreaterThan(1);
+  });
+
+  test('a reader removing one body is not a scene to rebuild', () => {
+    // The distinction the panel needs. Deleting a body, or letting two merge,
+    // is something the reader did on purpose; rebuilding under them would undo
+    // it every quarter of a second.
+    applyStage({ hole: { massSun: 10 } });
+    expect(stagePresence().total).toBe(5);
+    asteroids.splice(0, 1);
+    const presence = stagePresence();
+    expect(presence.present).toBe(4);
+    expect(presence.allGone).toBe(false);
+  });
+
+  test('a world replaced wholesale is', () => {
+    applyStage({ hole: { massSun: 10 } });
+    // What a scenario load looks like from here: nothing of the stage left.
+    bh_list.length = 0;
+    asteroids.length = 0;
+    const presence = stagePresence();
+    expect(presence.present).toBe(0);
+    expect(presence.allGone).toBe(true);
+  });
+});
+
+describe('taking a stage down leaves nothing behind', () => {
+  test.each([
+    ['a star pair', { starPair: { m1: 3, m2: 1, separation: 400 } }],
+    ['a black hole with orbiters', { hole: { massSun: 10 } }],
+    ['an equal-mass comparison', { equalMass: { massSun: 8 } }],
+    ['a star with planets', { system: { planets: [{ name: 'W', aAU: 1.2 }] } }],
+    [
+      'a model-owned binary',
+      { binary: { kinds: ['ns', 'ns'], m1: 1.4, m2: 1.4 } },
+    ],
+  ])('%s is removed from every collection it used', (_name, declaration) => {
+    applyStage(declaration);
+    expect(stagedStars().length).toBeGreaterThan(0);
+    clearStage();
+    // clearStage() used to splice `stars` alone, so a hole's four orbiters, a
+    // system's planets and every remnant stayed on the canvas and the reader
+    // was handed a sandbox with somebody else's bodies in it.
+    for (const list of [
+      stars,
+      planets,
+      gas_giants,
+      asteroids,
+      comets,
+      bh_list,
+      neutron_stars,
+      white_dwarfs,
+    ]) {
+      expect(list).toHaveLength(0);
+    }
+    expect(stagedStars()).toHaveLength(0);
+    expect(pinnedSnapshots()).toHaveLength(0);
+  });
+
+  test('pinned comparison copies go too', () => {
+    applyStage({
+      stars: [{ role: 'a', track: 'm100', at: 0.3 }],
+    });
+    pinSnapshot('a', 'then');
+    expect(pinnedSnapshots().length).toBe(1);
+    const total = stars.length;
+    expect(total).toBe(2);
+    clearStage();
+    // Snapshots were never in `staged`, so nothing removed them at all: a
+    // lesson that pinned three comparisons left three stars behind.
+    expect(stars).toHaveLength(0);
+    expect(pinnedSnapshots()).toHaveLength(0);
+  });
+
+  test('nothing is left flagged as model-owned', () => {
+    // A body still flagged when the integrator resumes is a body that never
+    // moves again, which is how a restored sandbox comes back frozen.
+    applyStage({ binary: { kinds: ['bh', 'bh'], m1: 36, m2: 29 } });
+    // A binary stage's components are black holes, so they are in bh_list
+    // rather than in stagedStars(), which reports the star shelf.
+    const bodies = bh_list.slice();
+    expect(bodies).toHaveLength(2);
+    expect(bodies.every(b => b.model_owned)).toBe(true);
+    clearStage();
+    expect(bodies.every(b => b.model_owned === false)).toBe(true);
+  });
+
+  test('entering and leaving repeatedly does not accumulate anything', () => {
+    for (let cycle = 0; cycle < 4; cycle++) {
+      applyStage({ hole: { massSun: 10 } });
+      expect(stagedStars()).toHaveLength(5);
+      clearStage();
+      expect(stagedStars()).toHaveLength(0);
+    }
+    for (const list of [stars, asteroids, bh_list, planets]) {
+      expect(list).toHaveLength(0);
+    }
+  });
+});
+
+describe('a remnant replaces its star rather than joining it', () => {
+  const TRACK = { stars: [{ role: 'sun', track: 'm100', at: 0.9 }] };
+  const WD = { kind: 'white-dwarf', remnantMassSun: 0.6 };
+  const NS = { kind: 'neutron-star', remnantMassSun: 1.4 };
+
+  test('the old body leaves whatever collection held it', () => {
+    applyStage(TRACK);
+    expect(stars).toHaveLength(1);
+    becomeRemnant('sun', WD);
+    expect(stars).toHaveLength(0);
+    expect(white_dwarfs).toHaveLength(1);
+    expect(stagedStars()).toHaveLength(1);
+  });
+
+  test('a second transition does not leave the first behind', () => {
+    // becomeRemnant() spliced `stars`, so a body that was already a white
+    // dwarf could not be found there and stayed on the canvas as a duplicate.
+    applyStage(TRACK);
+    becomeRemnant('sun', WD);
+    becomeRemnant('sun', NS);
+    expect(white_dwarfs).toHaveLength(0);
+    expect(neutron_stars).toHaveLength(1);
+    expect(stars).toHaveLength(0);
+    expect(stagedStars()).toHaveLength(1);
+  });
+
+  test('asking for the same remnant twice changes nothing', () => {
+    applyStage(TRACK);
+    becomeRemnant('sun', WD);
+    const body = stagedStars()[0].star;
+    const generation = getWorldGeneration();
+    expect(becomeRemnant('sun', WD)).toBe('white-dwarf');
+    expect(stagedStars()[0].star).toBe(body);
+    expect(white_dwarfs).toHaveLength(1);
+    expect(getWorldGeneration()).toBe(generation);
+  });
+
+  test('rewinding puts a star back, not a white dwarf wearing a star label', () => {
+    applyStage(TRACK);
+    becomeRemnant('sun', WD);
+    expect(white_dwarfs).toHaveLength(1);
+    expect(remnantKindOf('sun')).toBe('white-dwarf');
+
+    // Rewinding is a restage: the step hands back a point on the track.
+    restageStar('sun', {
+      source: 'model',
+      teffK: 5772,
+      luminositySun: 1,
+      radiusSun: 1,
+      massSun: 1,
+    });
+    expect(white_dwarfs).toHaveLength(0);
+    expect(stars).toHaveLength(1);
+    expect(stars[0].constructor.name).toBe('StarObject');
+    expect(remnantKindOf('sun')).toBeNull();
+    expect(stagedStars()[0].star).toBe(stars[0]);
+  });
+
+  test('going forward, back and forward again ends where it started', () => {
+    applyStage(TRACK);
+    const name = stagedStars()[0].star.name;
+    becomeRemnant('sun', WD);
+    restageStar('sun', {
+      source: 'model',
+      teffK: 5772,
+      luminositySun: 1,
+      radiusSun: 1,
+      massSun: 1,
+    });
+    becomeRemnant('sun', WD);
+    expect(white_dwarfs).toHaveLength(1);
+    expect(stars).toHaveLength(0);
+    expect(stagedStars()).toHaveLength(1);
+    // The role and the name survive the round trip, because from the reader's
+    // side this is one object being wound back and forth.
+    expect(stagedStars()[0].star.name).toBe(name);
+    expect(remnantKindOf('sun')).toBe('white-dwarf');
+  });
+});
+
+describe('visual scale is not physics', () => {
+  test('a stage with no modelled radius is not resized at all', () => {
+    // The Goldilocks case: setStageScale() wrote a stellar display radius onto
+    // a planet that has no physicalRadiusSun, taking it from 4.8 to 9 - and
+    // 9 is a collision radius.
+    applyStage({
+      system: { planets: [{ name: 'W', aAU: 1.2, ecc: 0.4, radius: 4.8 }] },
+    });
+    const planet = planets[0];
+    expect(planet.radius).toBeCloseTo(4.8, 9);
+    setStageScale(SCALE.TRUE);
+    expect(planet.radius).toBeCloseTo(4.8, 9);
+    setStageScale(SCALE.DISPLAY);
+    expect(planet.radius).toBeCloseTo(4.8, 9);
+    expect(planet.stageRadius).toBeUndefined();
+  });
+
+  test('a hole’s orbiters keep their own size through a scale switch', () => {
+    applyStage({ hole: { massSun: 10 } });
+    const sizes = asteroids.map(a => a.radius);
+    setStageScale(SCALE.TRUE);
+    expect(asteroids.map(a => a.radius)).toEqual(sizes);
+  });
+
+  test('the same orbit is measured whichever scale is showing', () => {
+    applyStage(
+      { system: { planets: [{ name: 'W', aAU: 1.2, ecc: 0.4 }] } },
+      { force: true }
+    );
+    // Looked up inside the run, not captured outside it: a rebuild replaces
+    // both bodies, and a closure over the old ones measures two objects the
+    // integrator is no longer moving.
+    const run = () => {
+      const sun = stars[0];
+      const planet = planets[0];
+      const seen = [];
+      for (let n = 0; n < 600; n++) {
+        updatePhysics(1 / 60);
+        if (n % 100 === 0) {
+          seen.push(
+            Math.hypot(planet.pos.x - sun.pos.x, planet.pos.y - sun.pos.y)
+          );
+        }
+      }
+      return seen;
+    };
+    const compressed = run();
+    // Rebuilt the same way for both runs, so the only difference between them
+    // is the scale switch.
+    applyStage(
+      { system: { planets: [{ name: 'W', aAU: 1.2, ecc: 0.4 }] } },
+      { force: true }
+    );
+    setStageScale(SCALE.TRUE);
+    const trueScale = run();
+    // Same trajectory to the last digit: the scale switch touched nothing the
+    // integrator reads.
+    trueScale.forEach((r, i) => expect(r).toBeCloseTo(compressed[i], 9));
+  });
+});
+
+// -----------------------------------------------------------------------------
+// The two scenes the findings named
+// -----------------------------------------------------------------------------
+// The declarations above are the module's own vocabulary. These are the exact
+// objects the two lessons ship, imported from the lesson files, so that a
+// change to either declaration is caught here rather than in a browser.
+describe('the scenes the repair was reported against', () => {
+  const REAL = [
+    ['black-holes, every step', 'black-holes'],
+    ['goldilocks, crossing-the-edges', 'goldilocks-question'],
+  ];
+
+  test.each(REAL)('%s survives repeated probe ticks', async (_name, id) => {
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    const inv = INVESTIGATIONS.find(i => i.id === id);
+    const declarations = inv.steps.map(s => s.stage).filter(Boolean);
+    expect(declarations.length).toBeGreaterThan(0);
+
+    for (const declaration of declarations) {
+      applyStage(declaration, { force: true });
+      const ids = stagedStars().map(e => e.star.id);
+      const generation = getWorldGeneration();
+      expect(ids.length).toBeGreaterThan(0);
+      // Eight ticks of what renderProbe does. Before the repair every one of
+      // these rebuilt: the black-hole stage puts its orbiters in `asteroids`
+      // and the Goldilocks ellipse puts its world in `planets`, and
+      // stageIntact() looked in neither.
+      for (let tick = 0; tick < 8; tick++) {
+        expect(stagePresence().allGone).toBe(false);
+        for (let frame = 0; frame < 10; frame++) updatePhysics(1 / 60);
+      }
+      expect(stagedStars().map(e => e.star.id)).toEqual(ids);
+      expect(getWorldGeneration()).toBe(generation);
+      clearStage();
+    }
+  });
+});
+
+describe('switching a star between tracks', () => {
+  const shelf = { stars: [{ role: 'sun', track: 'm100', at: 0.3 }] };
+
+  test('no duplicate is left behind and the mass follows the model', async () => {
+    const { stateAtSample } = await import('../js/stellar/tracks.js');
+    applyStage(shelf);
+    const before = stars[0];
+    const heavy = stateAtSample('m500', 0.3);
+    expect(heavy).toBeTruthy();
+
+    restageStar('sun', heavy);
+    // One star, the same object: a track switch is the same star being
+    // described differently, not a second one appearing.
+    expect(stars).toHaveLength(1);
+    expect(stars[0]).toBe(before);
+    expect(stagedStars()).toHaveLength(1);
+    // And the mass came with it. It used to keep the first track's mass while
+    // showing the second track's temperature - a star no model describes.
+    expect(stars[0].massInSuns).toBeCloseTo(heavy.currentMassSun, 6);
+    expect(stars[0].mass / SOLAR_MASS_UNIT).toBeCloseTo(
+      heavy.currentMassSun,
+      6
+    );
+    expect(stars[0].initialMassInSuns).toBeCloseTo(heavy.initialMassSun, 6);
+    expect(stars[0].modelSource).toBe('model');
+  });
+
+  test('a free point after a track takes the mass back', async () => {
+    const { stateAtSample } = await import('../js/stellar/tracks.js');
+    applyStage(shelf);
+    restageStar('sun', stateAtSample('m500', 0.3));
+    expect(stars[0].massInSuns).toBeGreaterThan(1);
+    restageStar('sun', {
+      source: 'free',
+      teffK: 9000,
+      luminositySun: 40,
+      radiusSun: 2.6,
+    });
+    expect(stars[0].massInSuns).toBeNull();
+    expect(stars[0].ageYr).toBeNull();
+    expect(stars[0].modelSource).toBe('free');
+    // The engine mass is left where it was rather than being invented: the
+    // body still has to weigh something, and it is no longer a claim.
+    expect(Number.isFinite(stars[0].mass)).toBe(true);
+  });
+});
+
+describe('a stage takes its effects with it', () => {
+  test('an accreting hole leaves no disk behind', () => {
+    applyStage({ hole: { massSun: 10 } });
+    const hole = bh_list[0];
+    // Whatever the disk system produced for it, plus one planted entry so the
+    // assertion is about the removal rather than about whether this scenario
+    // happens to accrete during a short test.
+    hole.disk_particles = hole.disk_particles || [];
+    hole.disk_particles.push({ alive: true });
+    accretion_disk_particles.push({ alive: true, parentBlackHole: hole });
+    const mine = accretion_disk_particles.length;
+    // Something else's disk, which is not the lesson's to remove.
+    const theirs = new BlackHole({ x: 900, y: 0 }, 1000, { x: 0, y: 0 }, false);
+    theirs.name = 'Reader hole';
+    bh_list.push(theirs);
+    const other = { alive: true, parentBlackHole: theirs };
+    accretion_disk_particles.push(other);
+
+    clearStage();
+    expect(hole.disk_particles).toHaveLength(0);
+    expect(accretion_disk_particles).toHaveLength(1);
+    expect(accretion_disk_particles[0]).toBe(other);
+    expect(bh_list).toContain(theirs);
+    expect(mine).toBeGreaterThan(0);
+    accretion_disk_particles.length = 0;
   });
 });

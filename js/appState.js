@@ -337,6 +337,19 @@ export const state = {
     enabled: true,
     preview: null, // { center:{x,y}, radius:number, points:[{x,y}], vel:{x,y} }
   },
+  /**
+   * When the reader last moved the camera themselves, as a frame-clock stamp.
+   *
+   * Written by the pan, wheel and pinch handlers in js/ui.js and read by the
+   * lesson stage, which spends the first few seconds of a staged step trying
+   * to frame the scene against an application that is still rebuilding its own
+   * world. Without this the two fight: the reader drags the view somewhere and
+   * the retry takes it straight back, which is the most irritating thing an
+   * interface of this kind can do.
+   *
+   * Zero means never.
+   */
+  cameraTouchedAt: 0,
   // New drag preview state
   isDragging: false,
   dragStart: { x: 0, y: 0 },
@@ -357,6 +370,46 @@ export const state = {
   // frame from the live bodies rather than stored, so it is a measurement of
   // where the pair actually is. `arms` carries each star's distance from it,
   // which is what the readout quotes.
+  /**
+   * The stage of a star's life, drawn around the protagonist.
+   *
+   * "Lives of Stars" tells a story on the main canvas, so the canvas has to be
+   * able to show a collapsing cloud, the material a star has shed and the
+   * remains of one - none of which is a body the engine could hold. What is
+   * kept here is the body to draw it around and the model time to draw it at;
+   * the shapes come from js/lesson/evolutionScene.js and the painting from
+   * js/render.js. Nothing here is integrated and nothing here has mass.
+   */
+  evolutionOverlay: {
+    active: false,
+    /** The protagonist. Resolved to a body by the renderer, every frame. */
+    bodyId: null,
+    /** From frameOf() in js/stellar/evolution.js: stage, within, endpoint. */
+    frame: null,
+    /** Seeds the illustration, so one track's cloud looks like itself. */
+    seed: 'lives',
+    /** Share of its initial mass the track says it has shed. */
+    lostFraction: 0,
+    /** Park the animation rather than run it. Set from the motion setting. */
+    stillFrame: false,
+  },
+  /**
+   * Crests leaving a gravitational-wave source, on the main canvas.
+   *
+   * Driven by the model's own emission history rather than by a clock, so
+   * pause, seek and restart all show the ring pattern that belongs to that
+   * model time. The geometry is js/lesson/gwWavefronts.js and the painting is
+   * js/render.js. Nothing here is a body, nothing here has mass, and a source
+   * with no changing quadrupole simply has no crests - which is the point of
+   * the screens that switch the source.
+   */
+  gwWaveOverlay: {
+    active: false,
+    /** Radii in world units, innermost first, from crestsFor(). */
+    crests: [],
+    /** Said on screen: the propagation speed here is a display choice. */
+    illustrative: true,
+  },
   barycentreOverlay: {
     active: false,
     // Which bodies to average over. The renderer resolves these each frame;

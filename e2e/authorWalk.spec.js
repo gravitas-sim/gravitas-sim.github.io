@@ -201,13 +201,36 @@ for (const inv of lessons) {
             // `is-correct` by js/investigations.js - so asserting the clicked
             // button carries it proves the application agrees with the lesson,
             // rather than proving this file can call checkAnswer.
+            //
+            // Unless the step holds its marking. A prediction that names
+            // `reveal` is deliberately left unmarked until the reader reaches
+            // the step where the result arrives, so here the assertion is the
+            // opposite one: nothing is marked right or wrong yet, and the
+            // panel says where it will be. e2e/predictionLoops.spec.js drives
+            // the other end.
             const marked = await page.evaluate(
               idx =>
                 document.querySelector(`.inv-option[data-option="${idx}"]`)
                   ?.className ?? null,
               step.answer
             );
-            if (marked !== null && !marked.includes('is-correct')) {
+            if (step.reveal) {
+              if (marked !== null && marked.includes('is-correct')) {
+                note(
+                  i,
+                  `option ${step.answer} was marked correct on a step that holds its marking until "${step.reveal}"`
+                );
+              }
+              const held = await page
+                .locator('#investigationBody .inv-held')
+                .count();
+              if (!held) {
+                note(
+                  i,
+                  `held prediction did not say where it will be marked ("${step.reveal}")`
+                );
+              }
+            } else if (marked !== null && !marked.includes('is-correct')) {
               note(
                 i,
                 `the panel did not mark option ${step.answer} correct (class "${marked}")`

@@ -173,6 +173,7 @@ const WHEN_ORBITS_LOCK = {
       sid: 'how-close-is-close',
       bind: GALILEANS,
       type: 'predict',
+      reveal: 'measure-the-four-periods',
       title: 'How close is close?',
       body: `Before measuring anything: Io and Europa are said to be in a 2:1
              resonance, which is to say Io goes round exactly twice for every
@@ -365,6 +366,7 @@ const WHEN_ORBITS_LOCK = {
       sid: 'where-do-the-line-ups',
       bind: GALILEANS,
       type: 'predict',
+      reveal: 'watch-the-line-ups',
       title: 'Where do the line-ups happen?',
       setup: {
         scenario: 'Galilean Resonance',
@@ -491,6 +493,7 @@ const WHEN_ORBITS_LOCK = {
       sid: 'the-laplace-argument',
       bind: GALILEANS,
       type: 'predict',
+      reveal: 'watch-the-laplace-argument',
       title: 'The Laplace argument',
       body: `For the three inner moons the right combination involves all three
              at once, and Laplace found it in 1805:
@@ -697,6 +700,7 @@ const WHEN_ORBITS_LOCK = {
       sid: 'one-percent',
       bind: GALILEANS,
       type: 'predict',
+      reveal: 'break-it',
       title: 'One percent',
       body: `Next you will run the same four moons with a single number changed:
              Europa starts one percent further out. Nothing else differs — same
@@ -1354,6 +1358,25 @@ const WHEN_ORBITS_LOCK = {
 
                 \n\nRun it longer. It is the only thing that settles it, and
                 it is what Cohen and Hubbard did in 1965 for Pluto.`,
+    },
+    {
+      sid: 'say-what-a-libration-shows',
+      bind: GALILEANS,
+      // Four recorded librations in this lesson and no step that asks what
+      // they mean. The distinction between a ratio that is close and an angle
+      // that is held is the entire argument, and it is the one thing a
+      // checklist of readings cannot demonstrate.
+      requires: ['record-the-laplace-libration'],
+      type: 'question',
+      kind: 'short',
+      title: 'What a libration shows that a ratio does not',
+      body: `You measured period ratios close to whole numbers, and you also
+             recorded resonant angles that swing back and forth about a fixed
+             value instead of running all the way round.`,
+      prompt:
+        'In two or three sentences, explain why a near-integer period ratio on its own is not evidence of a resonance, and what the libration of the resonant angle adds.',
+      rubric:
+        'A ratio close to a small whole number can happen by chance, and with enough bodies and enough pairs some will be close; the ratio is a coincidence until something shows it is maintained. A resonant angle that librates \u2014 swings about a fixed value with a bounded amplitude rather than circulating through 360\u00b0 \u2014 shows that the configuration is being actively held: the conjunctions keep happening at the same place, and the gravitational kicks that follow push back rather than accumulate. Credit for noting that a circulating angle means the ratio is a near-miss, and extra credit for the Laplace argument \u03c6_L = \u03bb_Io \u2212 3\u03bb_Europa + 2\u03bb_Ganymede holding near 180\u00b0, which no pair of periods on its own could show.',
     },
     {
       sid: 'where-this-goes',

@@ -114,6 +114,10 @@ export function createLab({
     regions,
     pace,
     pinned: [],
+    /** Mints an identity for a pin whose caller supplied none. */
+    pinSeq: 0,
+    /** The pin the reader has singled out, by pinId. Null means none. */
+    focusPinId: null,
     populationSeed,
     populationCount,
     population: null,
@@ -187,6 +191,83 @@ export function fractionForAge(trackId, ageYr) {
   const lo = Math.log10(Math.max(b.startYr, 1));
   const hi = Math.log10(b.endYr);
   return clamp((Math.log10(ageYr) - lo) / (hi - lo), 0, 1);
+}
+
+/**
+ * The one place a star declaration turns into a star.
+ *
+ * A lesson names an example twice - once for the canvas, once for the
+ * comparison stage - and until this existed each side worked out for itself
+ * what the declaration meant. They did not agree. A bare `{track: 'm500'}`
+ * was the middle of the main sequence to the panel and forty per cent of the
+ * way through the track's *age* to the canvas, which for a five-solar-mass
+ * star is a different star: 16,596 K and 3.26 R(sun) against 16,687 K and
+ * 3.18 R(sun). Both files carried a comment claiming the two were the same
+ * point. Neither was wrong about what it wanted; there were simply two
+ * answers, so now there is one function.
+ *
+ * Four ways to say where on a track, and one way to say "not on a track":
+ *
+ *   {track}                  the middle of the main sequence
+ *   {track, at: 'ms'}        the same thing, said out loud
+ *   {track, at: <fraction>}  a fraction of the way through the samples
+ *   {track, ageYr}           an age in years
+ *   {teffK, lumSun}          a hypothetical point, with no track behind it
+ *
+ * The last of those returns `source: 'hypothetical'` and no mass, age or
+ * lifetime,
+ * because a position on the diagram does not fix any of them. Everything
+ * downstream - the canvas labels, the comparison readout, the inspector, the
+ * notebook - keys off `source` rather than guessing.
+ *
+ * @param {object} spec - A star declaration from a lesson
+ * @returns {?object} The resolved star, or null if nothing answers to it
+ */
+export function resolveStarSpec(spec) {
+  if (!spec) return null;
+  // A caller that already has the model's answer - the population stage does,
+  // because the survey computed every star's mass and age when it drew them -
+  // hands it straight over rather than having it estimated back.
+  if (spec.model) return spec.model;
+  if (Number.isFinite(spec.teffK) && Number.isFinite(spec.lumSun)) {
+    // `hypothetical` is the word the rest of the system uses for a point
+    // nothing modelled - js/stellar/hr.js stamps it, js/lesson/starState.js
+    // reads it. This used to write 'free' in front of the spread and have it
+    // immediately overwritten, so the constant was decorative.
+    return hypotheticalAt(spec.teffK, spec.lumSun);
+  }
+  if (!spec.track || !trackBounds(spec.track)) return null;
+  const s = stateAtSample(spec.track, sampleForSpec(spec));
+  if (!s) return null;
+  return {
+    source: 'model',
+    trackId: spec.track,
+    teffK: s.teffK,
+    luminositySun: s.luminositySun,
+    radiusSun: s.radiusSun,
+    massSun: s.currentMassSun,
+    initialMassSun: s.initialMassSun,
+    ageYr: s.ageYr,
+    phase: s.phase,
+    mainSequenceYr: s.mainSequenceYr,
+  };
+}
+
+/**
+ * Where on the track a declaration points, as a sample fraction.
+ *
+ * Samples rather than years or slider travel: a sample is a row of the model
+ * output, so it is the one coordinate that does not move when the age slider
+ * is re-paced underneath it. `seedPins` uses this to put the lab's own cursor
+ * on the same row `resolveStarSpec` read.
+ *
+ * @param {object} spec - A star declaration naming a track
+ * @returns {number} A sample fraction, 0 to 1
+ */
+export function sampleForSpec(spec) {
+  if (Number.isFinite(spec?.ageYr)) return sampleAtAge(spec.track, spec.ageYr);
+  if (Number.isFinite(spec?.at)) return spec.at;
+  return midMainSequenceFraction(spec.track, PACE.PHASE);
 }
 
 /**
@@ -340,26 +421,62 @@ export function nearestTrackForCursor(state) {
 }
 
 /**
- * Pin the current selection for comparison.
+ * Pin a star for comparison.
+ *
+ * Identity is carried, not derived. It used to be a `key` built out of the
+ * temperature and the luminosity, which made two stars at the same point one
+ * star and made a star that moved a different star; and the comparison
+ * labelled its columns "Star 1..N" by sort position, so re-ordering the stage
+ * renamed everything on it. A pin now knows what it is - a role, a name, and
+ * where its body stands on the canvas - and re-ordering only re-orders.
+ *
  * @param {object} state - Lab state
+ * @param {object} [identity] - `{pinId, name, bodyId}` from the staged star
  * @returns {boolean} Whether it was added
  */
-export function pin(state) {
+export function pin(state, identity = null) {
+  return pinModel(state, selection(state), identity);
+}
+
+/**
+ * Pin a star the caller has already resolved.
+ *
+ * The half of `pin` that does not go through the lab's own cursor, so a
+ * lesson's staged stars can be pinned as the objects they are rather than by
+ * driving the controls to each one in turn and reading the answer back.
+ *
+ * @param {object} state - Lab state
+ * @param {object} model - A resolved star, from resolveStarSpec or selection
+ * @param {object} [identity] - `{pinId, name, bodyId}`
+ * @returns {boolean} Whether it was added
+ */
+export function pinModel(state, model, identity = null) {
   if (state.pinned.length >= MAX_PINNED) return false;
-  const s = selection(state);
-  if (!Number.isFinite(s.radiusSun)) return false;
+  const s = model;
+  if (!s || !Number.isFinite(s.radiusSun)) return false;
+  // Where a caller gives no identity - a reader pinning from the controls -
+  // one is minted, so every pin has one and nothing downstream has to cope
+  // with a row that does not.
+  const pinId =
+    identity?.pinId ??
+    `pin-${state.pinSeq++}:${s.source}:${s.trackId ?? 'free'}`;
   state.pinned.push({
-    key: `${s.source}:${s.trackId ?? ''}:${s.teffK.toFixed(2)}:${s.luminositySun.toExponential(4)}`,
+    pinId,
+    name: identity?.name ?? null,
+    bodyId: identity?.bodyId ?? null,
+    key: pinId,
     source: s.source,
     trackId: s.trackId ?? null,
     teffK: s.teffK,
     luminositySun: s.luminositySun,
     radiusSun: s.radiusSun,
     massSun: Number.isFinite(s.massSun) ? s.massSun : null,
+    initialMassSun: Number.isFinite(s.initialMassSun) ? s.initialMassSun : null,
     ageYr: Number.isFinite(s.ageYr) ? s.ageYr : null,
     phase: s.phase ?? null,
-    spectralType: s.spectralType,
-    luminosityClass: s.luminosityClass,
+    spectralType: s.spectralType ?? spectralType(s.teffK),
+    luminosityClass:
+      s.luminosityClass ?? luminosityClass(s.radiusSun, s.luminositySun),
   });
   state.generation++;
   return true;

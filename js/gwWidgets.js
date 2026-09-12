@@ -32,7 +32,13 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
 
-import { surface, responsiveHeight, palette, MONO } from './widgetCanvas.js';
+import {
+  surface,
+  responsiveHeight,
+  palette,
+  TYPE,
+  typeAt,
+} from './widgetCanvas.js';
 import { prefersReducedMotion, currentTier } from './quality.js';
 import {
   PRESETS,
@@ -61,6 +67,11 @@ import { similarity as overlapOf, sampleOnto } from './gw/match.js';
 // authoring CLI reads these modules in a plain Node process with no DOM. See
 // js/widgetRuntime.js for why the direction matters.
 import { captureToNotebook } from './widgetRuntime.js';
+import {
+  crestsFor,
+  emissionTimes,
+  illustrativeSpeed,
+} from './lesson/gwWavefronts.js';
 import {
   playSignal,
   stopSignal,
@@ -270,7 +281,7 @@ function frame(g, r, colors, title) {
   g.lineWidth = 1;
   g.strokeRect(r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1);
   if (title) {
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     g.fillStyle = colors.muted;
     g.textAlign = 'left';
     g.textBaseline = 'top';
@@ -380,7 +391,7 @@ function drawStrainFull(g, r, state, colors, opts = {}) {
   g.lineTo(cx, plot.y + plot.h);
   g.stroke();
 
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'right';
   g.textBaseline = 'middle';
@@ -481,7 +492,7 @@ function drawStrainLocal(g, r, state, colors) {
   g.stroke();
   g.globalAlpha = 1;
 
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'left';
   g.textBaseline = 'bottom';
@@ -509,7 +520,7 @@ function drawFrequency(g, r, state, colors) {
 
   g.save();
   // Decade and half-decade gridlines, labelled.
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.textAlign = 'right';
   g.textBaseline = 'middle';
   // Ticks generated for the range rather than taken from a fixed list: this
@@ -650,7 +661,7 @@ function drawSourceView(g, r, state, colors, opts = {}) {
     g.fill();
   }
 
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'left';
   g.textBaseline = 'top';
@@ -767,6 +778,37 @@ function drawWaveOverlay(g, geom, state, colors) {
  *
  * amplified by a stated factor, because the real one is a part in 10^21.
  */
+/**
+ * What the ring actually does, for this source's inclination.
+ *
+ * For a circular binary the two polarisations go as (1 + cos^2 i)/2 and cos i,
+ * ninety degrees apart in phase. Which means three quite different pictures,
+ * and only one of them is the one an introduction usually describes:
+ *
+ *   edge-on      cos i = 0, so h-cross vanishes. Linearly polarised: the ring
+ *                stretches, passes exactly through a circle, and squeezes.
+ *   face-on      the two are equal. Circularly polarised: the ellipse keeps
+ *                its shape and ROTATES. It is never a circle, ever.
+ *   in between   elliptically polarised, and it never quite closes either.
+ *
+ * The lesson used to promise "a moment when the ring is a perfect circle
+ * again" on a face-on source, where the combined distortion never drops below
+ * 99% of its peak. Now the introductory screens select an edge-on source, and
+ * this row says which of the three is on screen wherever it is not.
+ *
+ * @param {number} inclinationDeg - 0 face-on, 90 edge-on
+ * @returns {{kind: string, crossOverPlus: number}} What to say
+ */
+export function polarizationOf(inclinationDeg) {
+  const i = ((Number(inclinationDeg) || 0) * Math.PI) / 180;
+  const plus = (1 + Math.cos(i) ** 2) / 2;
+  const cross = Math.abs(Math.cos(i));
+  const ratio = plus > 0 ? cross / plus : 0;
+  const kind =
+    ratio < 0.05 ? 'linear' : ratio > 0.95 ? 'circular' : 'elliptical';
+  return { kind, crossOverPlus: ratio };
+}
+
 function drawRingInset(g, r, state, colors) {
   frame(g, r, colors, t('gwW.panel.ring'));
   const tl = state.timeline;
@@ -782,8 +824,10 @@ function drawRingInset(g, r, state, colors) {
   const peak = tl.meta.peakStrain || 1;
   // Normalised to the loudest moment of this signal and then exaggerated to
   // something visible. The factor is printed, so the picture is not mistaken
-  // for a measurement.
-  const k = 0.32;
+  // for a measurement. A real strain of 1e-21 moves a ring of markers by
+  // nothing a screen could show; every picture of one is amplified, and the
+  // only honest thing to do is put the number next to it.
+  const k = 0.32 * (state.ringGain ?? 1);
   const p = Number.isFinite(hp) ? (hp / peak) * k : 0;
   const c = Number.isFinite(hc) ? (hc / peak) * k : 0;
 
@@ -809,7 +853,30 @@ function drawRingInset(g, r, state, colors) {
     g.arc(cx + x, cy + y, 2, 0, Math.PI * 2);
     g.fill();
   }
-  g.font = `9px ${MONO}`;
+  // The instrument, over the markers it is made of. Two arms at right angles,
+  // which is the whole reason an observatory is an L: the wave lengthens one
+  // and shortens the other at the same moment, and a difference between two
+  // lengths is a far easier thing to measure well than either length.
+  //
+  // Drawn from the same two numbers as the ring, so the arms and the markers
+  // cannot disagree. The lengths are exaggerated by the same printed factor.
+  if (state.showArms !== false) {
+    const armX = rad * (1 + p / 2);
+    const armY = rad * (1 - p / 2);
+    g.strokeStyle = colors.warn;
+    g.globalAlpha = 0.9;
+    g.lineWidth = 2;
+    g.beginPath();
+    g.moveTo(cx, cy);
+    g.lineTo(cx + armX, cy);
+    g.moveTo(cx, cy);
+    g.lineTo(cx, cy - armY);
+    g.stroke();
+    g.lineWidth = 1;
+    g.globalAlpha = 1;
+  }
+
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colors.muted;
   g.textAlign = 'left';
   g.textBaseline = 'top';
@@ -966,16 +1033,181 @@ function stack(rect, weights, gap = 6) {
  * @param {object} spec - The step's tool spec
  * @returns {boolean} Whether the picture was driven
  */
-function syncBinary(state, ctx, spec = {}) {
+function syncBinary(state, ctx, spec = {}, mode = 'binary') {
   if (!spec.binary || typeof ctx?.placeBinary !== 'function') return false;
   const tl = state.timeline;
   if (!tl) return false;
   const t = state.cursorT;
+  if (mode !== 'binary') {
+    // A single source. Static stays where it is; the pulsing one breathes,
+    // driven by the same model clock so pause and seek hold it still.
+    if (mode === 'pulsing' && typeof ctx.pulseSource === 'function') {
+      const phase = tl.orbitalPhaseAtTime(t);
+      ctx.pulseSource(Number.isFinite(phase) ? (phase / Math.PI) % 1 : 0);
+    }
+    return true;
+  }
+  // What the two objects are, before where they are. A preset can change the
+  // pair from two black holes to two neutron stars, and until this was here
+  // the canvas kept the old pair while every number in the panel described the
+  // new one.
+  if (typeof ctx.restageBinary === 'function') {
+    ctx.restageBinary({
+      kinds: kindsFor(state, spec),
+      m1: state.params.m1,
+      m2: state.params.m2,
+      fit: true,
+    });
+  }
   return ctx.placeBinary(tl.separationRsAtTime(t), tl.orbitalPhaseAtTime(t), {
     m1: state.params.m1,
     m2: state.params.m2,
+    // The orbit as the observer sees it. Edge-on the circle collapses to a
+    // line, which is the same fact the polarisation row reports and the same
+    // reason the strain falls.
+    inclinationDeg: state.params.inclinationDeg,
   });
 }
+
+/**
+ * What the two components are, for the masses the lab is set to.
+ *
+ * From the preset the reader selected where one matches, and otherwise from a
+ * mass threshold that is stated rather than hidden: this is an illustration
+ * choice and not a model output. The point-mass inspiral does not know what
+ * its components are made of and never will - the same equations give the same
+ * waveform whatever they are - so the readout says the kind was assumed.
+ *
+ * @param {object} state - The lab
+ * @param {object} spec - The tool spec
+ * @returns {Array<string>} Two of 'bh' or 'ns'
+ */
+function kindsFor(state, spec = {}) {
+  if (Array.isArray(spec.kinds)) return spec.kinds;
+  const { m1, m2 } = state.params;
+  const exact = PRESETS.find(p => p.m1 === m1 && p.m2 === m2);
+  if (exact?.kinds) return [...exact.kinds];
+  // Above about two and a half solar masses no equation of state is known that
+  // supports a neutron star, so heavier is drawn as a hole. The threshold is a
+  // drawing choice; the readout says so.
+  const kind = m => (m > NS_MAX_SUN ? 'bh' : 'ns');
+  return [kind(m1), kind(m2)];
+}
+
+/** Where the illustration stops calling a compact object a neutron star. */
+const NS_MAX_SUN = 2.5;
+
+/**
+ * Which source the reader has selected, and put it on the canvas.
+ *
+ * The control is a number; this turns it into the scene. Only acts on a
+ * change, so the stage is not rebuilt four times a second, and only where the
+ * step offered the control at all.
+ *
+ * @param {object} v - The control values
+ * @param {?object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ * @returns {string} The active mode
+ */
+function syncSource(v, ctx, spec = {}) {
+  const wanted = spec.binary
+    ? SOURCE_MODES[Math.round(v.source ?? 2)] || 'binary'
+    : 'binary';
+  if (typeof ctx?.setSourceMode === 'function') ctx.setSourceMode(wanted);
+  return wanted;
+}
+
+/**
+ * Put the crests the model has emitted on the main canvas.
+ *
+ * From the model's own emission history, so the rings a reader sees at a given
+ * playhead position are the rings that belong to it: pausing holds them,
+ * seeking back shows the earlier pattern, restarting clears them. A source
+ * with no changing quadrupole emits none, which is the whole argument of the
+ * screens that switch the source.
+ *
+ * @param {object} state - The lab
+ * @param {?object} ctx - The lesson context
+ * @param {object} spec - The tool spec
+ * @param {string} mode - The active source
+ * @returns {void}
+ */
+function syncWavefronts(state, ctx, spec = {}, mode = 'binary') {
+  if (typeof ctx?.showWavefronts !== 'function') return;
+  if (spec.wavefronts === false || mode !== 'binary') {
+    ctx.showWavefronts(null);
+    return;
+  }
+  const tl = state.timeline;
+  if (!tl) {
+    ctx.showWavefronts(null);
+    return;
+  }
+  const key = `${state.signature ?? ''}`;
+  if (key !== wavefrontKey) {
+    wavefrontKey = key;
+    wavefrontTimes = emissionTimes(tl);
+    // How far the rings reach, in the same world units the two components are
+    // placed in. Taken from the pair's own starting separation rather than
+    // from a constant: a fixed reach drew rings twenty times the size of the
+    // binary, so the camera framed the source and the waves were a wall of
+    // arcs across the whole canvas with the pair a speck at the middle.
+    const startRs = tl.separationRsAtTime(tl.tStart);
+    const perRs = ctx.binaryScale?.()?.unitsPerSchwarzschildRadius ?? 3.2;
+    const span = Number.isFinite(startRs) ? startRs * perRs : 40;
+    wavefrontReach = Math.max(30, span * WAVE_REACH_IN_SEPARATIONS);
+    wavefrontSpeed = illustrativeSpeed(wavefrontTimes, wavefrontReach);
+  }
+  ctx.showWavefronts(
+    crestsFor(wavefrontTimes, state.cursorT, {
+      speed: wavefrontSpeed,
+      maxRadius: wavefrontReach,
+    })
+  );
+}
+
+/**
+ * How far the crests travel before leaving the picture, in starting
+ * separations of the pair that emitted them.
+ *
+ * A display choice, like the propagation speed beside it. Three is enough for
+ * a reader to see a ring leave, watch it go, and still have the source large
+ * enough to see the two components turning.
+ */
+const WAVE_REACH_IN_SEPARATIONS = 3;
+
+/** Memoised emission history, so the inverse is not solved every frame. */
+let wavefrontKey = '';
+let wavefrontTimes = [];
+let wavefrontSpeed = 1;
+let wavefrontReach = 40;
+
+/** Forget the memoised wavefronts. Tests only. */
+export const resetWavefrontsForTests = () => {
+  wavefrontKey = '';
+  wavefrontTimes = [];
+  wavefrontSpeed = 1;
+  wavefrontReach = 40;
+};
+
+/**
+ * The three sources the beginner lesson compares, in control order.
+ *
+ * The order is the argument: a mass that does nothing, a mass that moves a
+ * great deal and still radiates nothing, and a mass distribution whose shape
+ * changes. Sliding from one to the next is the lesson's central point made
+ * with a control rather than with a sentence.
+ */
+const SOURCE_MODES = Object.freeze(['static', 'pulsing', 'binary']);
+
+/**
+ * Display amplification for the strain picture.
+ *
+ * Powers of ten, because the quantity being amplified spans twenty of them.
+ * Nothing computed changes: this scales what is drawn and the readout prints
+ * the factor beside it.
+ */
+const AMPLIFY_STEPS = Object.freeze([1, 100, 10000, 1000000, 100000000]);
 
 const GW_LAB = {
   id: 'gw-lab',
@@ -1037,6 +1269,39 @@ const GW_LAB = {
       step: 5,
       value: 0,
       decimals: 0,
+    },
+    {
+      // Which of three sources is on the canvas. Not a display setting: the
+      // control restages the scene, so a screen asking "does this radiate?"
+      // has the thing it is asking about standing there. The beginner lesson
+      // used to ask a reader to imagine a single static mass while a binary
+      // orbited behind the question.
+      id: 'source',
+      get label() {
+        return t('gwW.control.source');
+      },
+      min: 0,
+      max: 2,
+      step: 1,
+      value: 2,
+      decimals: 0,
+      format: value => t(`gwW.source.${SOURCE_MODES[Math.round(value)]}`),
+    },
+    {
+      // Display only, and the readout prints the factor. A real strain of
+      // 1e-21 is invisible at any honest scale, so every picture of one is
+      // amplified; what matters is that the number is on screen rather than
+      // implied.
+      id: 'amplify',
+      get label() {
+        return t('gwW.control.amplify');
+      },
+      min: 0,
+      max: 4,
+      step: 1,
+      value: 2,
+      decimals: 0,
+      format: value => `×${AMPLIFY_STEPS[Math.round(value)].toLocaleString()}`,
     },
     {
       id: 'cursor',
@@ -1129,11 +1394,17 @@ const GW_LAB = {
     return list;
   },
 
-  reset(v, { autorun = true, spec = {} } = {}) {
+  reset(v, { autorun = true, spec = {}, fromControl = false } = {}) {
     const state = ensureLab(v, spec);
     // A cursor move is a seek, not a rebuild. Everything else already
     // rebuilt inside ensureLab().
     seekFraction(state, v.cursor ?? 0);
+    // A reader moving a control is not the step opening, and must not restart
+    // the transport. It used to: pausing and then dragging the playhead put
+    // the playback straight back into motion, so the frame a reader had
+    // stopped on was gone before they could read it, and the pause button
+    // appeared not to work whenever anything else was touched.
+    if (fromControl) return;
     // Never start moving on its own for a reader who has asked for less
     // motion. Every control still works, and the frequency plot, the readout
     // and the audio carry the same information without anything animating.
@@ -1205,7 +1476,12 @@ const GW_LAB = {
 
   draw(canvas, v, ctx, spec = {}) {
     const state = ensureLab(v, spec);
-    syncBinary(state, ctx, spec);
+    // Display only: this scales what the ring inset draws and nothing that is
+    // computed. The factor is printed in the readout beside it.
+    state.ringGain = AMPLIFY_STEPS[Math.round(v.amplify ?? 2)] / 10000;
+    const sourceMode = syncSource(v, ctx, spec);
+    syncBinary(state, ctx, spec, sourceMode);
+    syncWavefronts(state, ctx, spec, sourceMode);
     // A sound describes one configuration. If the configuration has moved -
     // another preset, another distance, another step - what is playing is
     // describing something that is no longer on screen, so it stops. Scoped by
@@ -1263,11 +1539,90 @@ const GW_LAB = {
 
   readout(v, ctx, spec = {}) {
     const state = ensureLab(v, spec);
-    syncBinary(state, ctx, spec);
+    state.ringGain = AMPLIFY_STEPS[Math.round(v.amplify ?? 2)] / 10000;
+    const sourceMode = syncSource(v, ctx, spec);
+    syncBinary(state, ctx, spec, sourceMode);
+    syncWavefronts(state, ctx, spec, sourceMode);
     const tl = state.timeline;
     const f = state.facts;
     const tNow = state.cursorT;
     const rows = [];
+
+    // Which source is standing on the canvas, and whether it radiates. First,
+    // because on the screens that offer the control this is the question, and
+    // because "moving masses emit gravitational waves" is the misconception
+    // the three settings exist to take apart.
+    if (spec.binary && !(spec.hide || []).includes('source')) {
+      rows.push({
+        label: t('gwW.row.emits'),
+        value: t(`gwW.value.emits.${sourceMode}`),
+        emphasis: true,
+      });
+      if (sourceMode === 'binary' && spec.wavefronts !== false) {
+        rows.push({ label: t('gwW.row.rings'), value: t('gwW.value.rings') });
+      }
+    }
+    if (!(spec.hide || []).includes('amplify')) {
+      rows.push({
+        label: t('gwW.row.amplify'),
+        value: t('gwW.value.amplify', {
+          n: AMPLIFY_STEPS[Math.round(v.amplify ?? 2)].toLocaleString(),
+        }),
+      });
+    }
+
+    // The ring, in numbers. A picture of a distortion is not a reading of one,
+    // and a reader working from the keyboard or a screen reader has no picture
+    // at all - so the two axes are here as strains, with the polarisation
+    // named, on every screen that shows the inset.
+    if (spec.view === 'source' || spec.view === 'both') {
+      const pol = polarizationOf(state.params.inclinationDeg);
+      const hp = tl?.plusAtTime(tNow);
+      const hc = tl?.crossAtTime(tNow);
+      if (Number.isFinite(hp) && Number.isFinite(hc)) {
+        rows.push({
+          label: t('gwW.row.ringNow'),
+          value: t('gwW.value.ringNow', {
+            plus: hp.toExponential(2),
+            cross: hc.toExponential(2),
+          }),
+        });
+      }
+      rows.push({
+        label: t('gwW.row.polarization'),
+        value: t(`gwW.value.polarization.${pol.kind}`),
+        emphasis: pol.kind !== 'linear',
+      });
+      // What the L would read. The arms are along the two axes the plus
+      // polarisation stretches and squeezes, so their fractional changes are
+      // +h/2 and -h/2 and what the instrument records is the difference
+      // between them - which is h itself, and is why the shape works.
+      if (Number.isFinite(hp)) {
+        rows.push({
+          label: t('gwW.row.arms'),
+          value: t('gwW.value.arms', {
+            x: (hp / 2).toExponential(2),
+            y: (-hp / 2).toExponential(2),
+            diff: hp.toExponential(2),
+            metres: (hp * 4000).toExponential(2),
+          }),
+        });
+      }
+    }
+
+    // What the two objects are drawn as, and that the model did not decide it.
+    // The same equations give the same waveform whatever the components are
+    // made of: a point-mass inspiral has two masses in it and no material.
+    // Drawing a neutron star is an illustration of an astrophysical inference,
+    // and a lesson that walks a reader from a black-hole pair to a
+    // neutron-star pair has to say which half changed.
+    if (spec.binary) {
+      const kinds = kindsFor(state, spec);
+      rows.push({
+        label: t('gwW.row.components'),
+        value: t(`gwW.value.components.${kinds.join('-')}`),
+      });
+    }
 
     rows.push({
       label: t('gwW.row.chirpMass'),
@@ -1515,7 +1870,7 @@ function drawRealTrace(g, r, tl, colors, opts) {
     }
   }
   g.stroke();
-  g.font = `9px ${MONO}`;
+  g.font = typeAt(TYPE.TICK);
   g.fillStyle = colour;
   g.textAlign = 'left';
   g.textBaseline = 'top';
@@ -1633,7 +1988,7 @@ const GW_REAL = {
     });
 
     g.save();
-    g.font = `9px ${MONO}`;
+    g.font = typeAt(TYPE.TICK);
     g.fillStyle = colors.muted;
     g.textAlign = 'right';
     g.textBaseline = 'bottom';

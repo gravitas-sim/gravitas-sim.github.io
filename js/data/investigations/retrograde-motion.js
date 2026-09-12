@@ -141,7 +141,12 @@ const RETROGRADE = {
           const b = ctx.find(name);
           rows.push({
             label: `${name}: speed`,
-            value: b ? ctx.speed(Math.hypot(b.vel.x, b.vel.y)) : '-',
+            // Named rather than dashed. A dash on this row used to be the only
+            // thing a reader saw when the scenario had not finished building,
+            // and it looks exactly like a broken lesson.
+            value: b
+              ? ctx.speed(Math.hypot(b.vel.x, b.vel.y))
+              : `${name} is not on the canvas yet`,
           });
         }
         rows.push({ label: 'Day', value: ctx.days().toFixed(0) });
@@ -255,7 +260,14 @@ const RETROGRADE = {
           const el = b ? ctx.elements(b) : null;
           rows.push({
             label: `${name}: period`,
-            value: el ? ctx.time(el.period) : '-',
+            // Two different absences, and they need different answers: no
+            // body at all means the world is still building, while a body
+            // with no closed orbit means there is no period to report.
+            value: el
+              ? ctx.time(el.period)
+              : b
+                ? 'no closed orbit to take a period from'
+                : `${name} is not on the canvas yet`,
           });
         }
         return rows;
@@ -324,6 +336,7 @@ const RETROGRADE = {
       sid: 'before-you-look',
       bind: INNER_PAIR,
       type: 'predict',
+      reveal: 'put-yourself-on-earth',
       title: 'Before you look',
       body: `You are about to change what the view is measured against. Right
              now every position on screen is given relative to the scenario's own
@@ -671,6 +684,7 @@ const RETROGRADE = {
       sid: 'and-what-about-the-sun',
       bind: INNER_PAIR,
       type: 'predict',
+      reveal: 'do-it-for-the-sun',
       title: 'And what about the Sun?',
       body: `Stay in Earth's frame. You have watched Mars, which loops. Now
              think about what the Sun does when it is measured against Earth.
@@ -721,6 +735,17 @@ const RETROGRADE = {
           rows.push({
             label: 'Sun: direction from Earth',
             value: `${seen.longitude.toFixed(1)}°`,
+          });
+        } else {
+          // Silently dropping the two rows left the panel looking finished
+          // and wrong. Saying which of the two bodies is missing is the
+          // difference between "you have not switched the frame yet" and
+          // "this lesson is broken".
+          rows.push({
+            label: 'Sun: as seen from Earth',
+            value: sun
+              ? 'waiting for Earth to be on the canvas'
+              : 'the Sun is not on the canvas yet',
           });
         }
         return rows;

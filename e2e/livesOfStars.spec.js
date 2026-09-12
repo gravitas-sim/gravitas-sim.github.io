@@ -14,6 +14,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'lives-of-stars';
 const STEPS = 34;
@@ -358,7 +359,13 @@ test.describe('the first stellar lesson still works', () => {
     await expect(card).toBeVisible();
     await card.click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
-    expect(await stepTotal(page)).toBe(28);
+    // From the manifest. A literal here goes stale the first time the lesson
+    // gains a screen, which is exactly what happened: this said 28 while the
+    // catalogue said 30, and the failure named a step count rather than
+    // anything about whether the lesson works.
+    expect(await stepTotal(page)).toBe(
+      MANIFEST.find(m => m.id === 'a-universe-of-stars').stepCount
+    );
     await page.locator('#investigationBody .inv-option').first().click();
     await page.locator('#investigationNext').click();
     await expect.poll(() => stepNumber(page), { timeout: 20_000 }).toBe(2);

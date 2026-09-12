@@ -144,6 +144,7 @@ const RADIAL_VELOCITY = {
       sid: 'which-one-moves',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'both-of-them-go-round',
       title: 'Which one moves?',
       setup: RV_LAB_PAUSED,
       body: `Before you run anything: the star here is about 1.15 times the mass
@@ -186,6 +187,7 @@ const RADIAL_VELOCITY = {
       sid: 'make-the-planet-heavier',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'watch-it-grow',
       title: 'Make the planet heavier',
       body: `Keep the orbit the same size and make the planet more massive.`,
       prompt:
@@ -376,6 +378,7 @@ const RADIAL_VELOCITY = {
       sid: 'what-would-make-k-bigger',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'one-thing-at-a-time',
       title: 'What would make K bigger?',
       body: `Hold the star, the orbit and the viewing angle fixed, and change only
              the planet.`,
@@ -458,6 +461,7 @@ const RADIAL_VELOCITY = {
       sid: 'now-tilt-the-whole-system',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'the-same-planet-four-viewing',
       title: 'Now tilt the whole system',
       body: `Leave the planet exactly as it is. Change only where we happen to be
              standing, so that instead of seeing the orbit edge-on we see it more
@@ -539,6 +543,7 @@ const RADIAL_VELOCITY = {
       sid: 'a-face-on-system',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'tilt-it-again-and-watch',
       title: 'A face-on system',
       body: `Suppose a system sits almost exactly face-on to us. Its radial-velocity
              signal is nearly nothing.`,
@@ -624,6 +629,7 @@ const RADIAL_VELOCITY = {
       sid: 'move-the-system-further-away',
       bind: SYSTEM,
       type: 'predict',
+      reveal: 'distance-and-orbit-size',
       title: 'Move the system further away',
       body: `Take a system with a known stellar wobble and imagine it twice as far
              from Earth.`,

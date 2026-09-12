@@ -47,6 +47,33 @@ const source = (kinds, m1, m2, extra = {}) => ({
   binary: { kinds, m1, m2, fit: true, ...extra },
 });
 
+/**
+ * The three sources the lesson compares, on one declaration.
+ *
+ * A stage the reader's own control can switch between, rather than three
+ * separate screens with three separate scenes. That matters because the three
+ * are an argument and not a list: a mass doing nothing, a mass doing a great
+ * deal and still radiating nothing, and a mass distribution whose *shape*
+ * changes. Sliding between them with the canvas in front of you is the point.
+ *
+ * The screens that used this argument before had `source(['bh','bh'], 36, 29)`
+ * on them - a binary - while the prose asked the reader to picture a single
+ * static mass. See js/lessonStage.js applySourceStage.
+ */
+const compare = (mode, extra = {}) => ({
+  gwSource: {
+    mode,
+    kinds: ['bh', 'bh'],
+    m1: 36,
+    m2: 29,
+    kind: 'bh',
+    massSun: 65,
+    name: 'The source',
+    fit: true,
+    ...extra,
+  },
+});
+
 /** The pair this lesson follows: the GW150914-like black holes. */
 const PAIR = source(['bh', 'bh'], 36, 29);
 /** Two neutron stars, for the comparison near the end. */
@@ -65,12 +92,24 @@ const lab = (extra = {}) => ({
   binary: true,
   presets: false,
   noiseControls: false,
-  hide: ['m1', 'm2', 'distance', 'inclination'],
+  // The source selector belongs to the three screens that compare sources and
+  // nowhere else: on a screen about the ring, switching to a static mass would
+  // empty the inset the instructions are pointing at. Those three name their
+  // own `hide` and so keep it.
+  hide: ['m1', 'm2', 'distance', 'inclination', 'source'],
   ...extra,
 });
 
 /** Everything hidden, including the playhead: a screen that only looks. */
-const ALL_HIDDEN = ['m1', 'm2', 'distance', 'inclination', 'cursor'];
+const ALL_HIDDEN = [
+  'm1',
+  'm2',
+  'distance',
+  'inclination',
+  'cursor',
+  'source',
+  'amplify',
+];
 
 const WHAT_IS_A_GRAVITATIONAL_WAVE = {
   id: 'what-is-a-gravitational-wave',
@@ -103,6 +142,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       sid: 'travel-without-shining',
       stage: PAIR,
       type: 'predict',
+      reveal: 'meet-the-two-objects',
       title: 'Something can travel without shining',
       body: `Two objects are on the canvas, circling each other. They are
              paused, and they give off no light: no glow, no colour, nothing a
@@ -149,16 +189,19 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
     },
     {
       sid: 'gravity-is-already-here',
-      stage: source(['bh', 'bh'], 36, 29, { fit: true }),
+      // The single static mass the prose is about, on the canvas. This step
+      // used to stand a binary here and ask the reader to imagine one.
+      stage: compare('static'),
       type: 'question',
       title: 'Gravity is already here',
       kind: 'choice',
-      body: `A single mass, sitting still, already curves the space around it.
-             That curvature is why things fall, and it is there whether anybody
-             is watching or not.
-             \n\nThe important word is <em>sitting still</em>. Nothing about
-             that curvature changes. It does not travel. It does not arrive.
-             There is no ripple, because there is nothing doing any rippling.`,
+      body: `On the canvas is one mass, sitting still. It already curves the
+             space around it — that curvature is why things fall, and it is
+             there whether anybody is watching or not.
+             \n\nThe important words are <em>sitting still</em>. Nothing
+             about that curvature changes. It does not travel. It does not
+             arrive. There is no ripple, because there is nothing doing any
+             rippling — and you can see that there is nothing leaving it.`,
       prompt:
         'A single mass that never moves. What reaches a distant observer from it?',
       options: [
@@ -170,13 +213,80 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       answer: 0,
       because:
         'A steady pull, and nothing else. This is the distinction the whole lesson turns on: a gravitational <em>field</em> is what is already there around any mass, and a gravitational <em>wave</em> is a change in it that travels. A star sitting still has the first and produces none of the second. What it takes to produce the second is the subject of the next screen.',
-      tool: lab({ view: 'source', autoplay: false, hide: ALL_HIDDEN }),
+      tool: lab({
+        view: 'source',
+        autoplay: false,
+        // The control opens where the stage stands. Without this the widget's
+        // own default wins on the first frame and restages the canvas away
+        // from what the step declared - the screen about a single static mass
+        // opened on a binary.
+        values: { source: 0 },
+        // The source control stays, because the next two screens ask the
+        // reader to move it and this is where they meet it.
+        hide: ['m1', 'm2', 'distance', 'inclination', 'cursor', 'amplify'],
+      }),
       tip: 'Compare it with a lamp: the light already in the room is not a radio broadcast. Both are electromagnetic, and only one of them is a signal going somewhere.',
+    },
+    {
+      sid: 'a-sphere-that-breathes',
+      stage: compare('pulsing'),
+      type: 'predict',
+      reveal: 'change-the-shape',
+      title: 'Now make it move',
+      body: `Same mass, and now it is doing something. Set <strong>What is
+             emitting</strong> to <em>a pulsing sphere</em> and press
+             <strong>Play</strong>. The whole thing swells and shrinks, over
+             and over, staying exactly spherical the whole time.
+             \n\nThis is an enormous amount of motion. Before you look at
+             what leaves it, commit to what you expect.`,
+      prompt:
+        'A perfectly spherical star, pulsing in and out. What does it radiate?',
+      options: [
+        'Nothing — the field outside a sphere depends only on its mass, and that is not changing',
+        'Gravitational waves, because it is moving and moving masses radiate',
+        'Gravitational waves, but weaker than a binary of the same mass',
+        'A steady wave whose strength depends on how fast it pulses',
+      ],
+      answer: 0,
+      because:
+        'Nothing at all, and this is the screen that breaks the rule most people arrive with. "Moving masses make gravitational waves" is not the rule. The field outside <em>any</em> spherically symmetric body depends on its total mass and nothing else — not on how big it is, not on how fast it is changing size. So a sphere can pulse as violently as you like and the outside world cannot tell. That result is Birkhoff&rsquo;s theorem, and it is exact in general relativity rather than an approximation. What has to change is not the position of the mass but the <em>shape</em> of its distribution.',
+      tool: lab({
+        view: 'source',
+        autoplay: true,
+        values: { source: 1 },
+        hide: ['m1', 'm2', 'distance', 'inclination', 'amplify'],
+      }),
+      tip: 'Watch the canvas as it pulses. Nothing leaves it — and that is a statement about the model, which draws a crest for every cycle of a changing quadrupole and has none to draw here.',
+    },
+    {
+      sid: 'change-the-shape',
+      stage: compare('binary'),
+      type: 'explore',
+      title: 'Change the shape instead',
+      body: `Now set <strong>What is emitting</strong> to <em>a binary</em>.
+             Same total mass, same place — but now the mass is in two lumps
+             going round each other, so the <em>shape</em> of the distribution
+             changes as they turn.
+             \n\nThat is the difference. Watch the rings.`,
+      checklist: [
+        'Set "What is emitting" to "a binary"',
+        'Press Play and watch rings leave the pair',
+        'Set it back to "a pulsing sphere" — the rings stop and the old ones travel away',
+        'Set it back to "a binary" again',
+      ],
+      tool: lab({
+        view: 'source',
+        autoplay: true,
+        values: { source: 2 },
+        hide: ['m1', 'm2', 'distance', 'inclination', 'amplify'],
+      }),
+      tip: 'The rings are an illustration of propagation, not a calculation of a wave. What is real about them is that a crest leaves for each cycle and keeps going; their speed on screen is a display choice, and the readout says so.',
     },
     {
       sid: 'what-has-to-change',
       stage: PAIR,
       type: 'predict',
+      reveal: 'watch-the-pair',
       title: 'What has to change?',
       body: `Three imaginary sources, all of them massive, all of them
              perfectly ordinary:
@@ -262,9 +372,12 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       body: `The rings now drawn around the pair are a <strong>schematic</strong>
              of the disturbance leaving it. Each ring marks where one crest of
              the wave would be.
-             \n\nPick one ring and follow it outwards as the playhead moves.
-             Notice that the rings further out are more widely spaced: they
-             left when the orbit was wider and slower.
+             \n\nPick one ring and follow it outwards. Let it run, or stop it
+             and step the <strong>Where in the signal</strong> playhead by
+             hand — the rings are drawn from where the model says each crest
+             is, so they go backwards too. Notice that the rings further out
+             are more widely spaced: they left when the orbit was wider and
+             slower.
              \n\nTwo things about the drawing, both deliberate. The real
              disturbance travels at the <strong>speed of light</strong> - the
              display slows it down enormously, or there would be nothing to
@@ -277,7 +390,15 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'Say why: they left earlier, when the orbit was slower',
         'Say what the rings are not: not matter, not light, and not to scale in speed',
       ],
-      tool: lab({ view: 'source', autoplay: true, hide: ALL_HIDDEN }),
+      tool: lab({
+        view: 'source',
+        autoplay: true,
+        // The playhead stays. The step tells a reader to pick one ring and
+        // follow it outward, and following something is much easier if you can
+        // stop it and step it - which also demonstrates that the pattern
+        // belongs to the model time rather than to the animation.
+        hide: ['m1', 'm2', 'distance', 'inclination', 'source', 'amplify'],
+      }),
       tip: 'Rings are the honest minimum here. A picture of the actual distortion of space at this scale would be a smooth field with no visible structure at all, because the effect is a part in 10²¹.',
     },
 
@@ -307,8 +428,13 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'question',
       title: 'Stretch one way',
       kind: 'choice',
-      body: `Pause, and move the playhead slowly until the ring of markers is
-             at its widest from <strong>left to right</strong>.
+      body: `The inset labelled <strong>Ring of markers</strong> shows what a
+             ring of freely floating markers does as the wave goes past. This
+             screen is looking at the binary <em>edge-on</em>, which is the
+             simplest case: one polarisation only.
+             \n\nPause, and move the <strong>Where in the signal</strong>
+             playhead slowly until the ring is at its widest from
+             <strong>left to right</strong>.
              \n\nNow look at the other direction.`,
       prompt:
         'At the moment the markers are furthest apart horizontally, what has happened vertically?',
@@ -321,7 +447,17 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       answer: 1,
       because:
         'Closer together. That is the characteristic thing a gravitational wave does, and it is why the ring becomes an oval rather than a bigger circle: it stretches along one direction and squeezes along the direction at right angles, both at once. Nothing has grown overall. And both of those directions are at right angles to the way the wave is travelling, which is why it is called a <em>transverse</em> wave.',
-      tool: lab({ view: 'both', autoplay: false }),
+      tool: lab({
+        view: 'both',
+        autoplay: false,
+        // Edge-on, and that is not a detail. Seen face-on this source is
+        // circularly polarised: the ring is an ellipse of fixed shape that
+        // rotates and never passes through a circle at all. Seen edge-on the
+        // cross polarisation vanishes and the ring does exactly what an
+        // introduction describes - stretch, circle, squeeze. The readout names
+        // which of the two is on screen.
+        values: { inclination: 90 },
+      }),
       tip: 'Move the playhead in small steps and watch the ring rather than the plot. The oval is easiest to see at its most extreme.',
     },
     {
@@ -361,10 +497,16 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         return {
           level: 'ok',
           message:
-            'They exchange. Stretch and squeeze swap over twice in every wave cycle, and in between there is a moment when the ring is a perfect circle again and nothing is happening to it at all.',
+            'They exchange. Stretch and squeeze swap over twice in every wave cycle, and in between there is a moment when the ring really is a circle again and nothing is happening to it at all.\n\nThat last part is true of this source because you are looking at it edge-on, which is a choice this screen has made for you: seen edge-on, only one of the two polarisations reaches you, and the ring stretches, passes through a circle, and squeezes. Turn the same binary face-on and it does something quite different — the oval keeps its shape and rotates instead, and never becomes a circle at all. The readout names which of the two you are looking at.',
         };
       },
-      tool: lab({ view: 'both', autoplay: false }),
+      tool: lab({
+        view: 'both',
+        autoplay: false,
+        // Linearly polarised, so the "perfect circle" the feedback below
+        // describes is a state this source really passes through.
+        values: { inclination: 90 },
+      }),
       tip: 'There is no need to be precise about half a cycle. Anywhere that the oval has clearly turned over will do.',
     },
     {
@@ -515,6 +657,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       sid: 'slower-pair-faster-pair',
       stage: PAIR,
       type: 'predict',
+      reveal: 'count-the-rhythm',
       title: 'A slower pair and a faster pair',
       body: `Two objects circling each other far apart go round slowly. The
              same two objects circling closer together go round faster - the
@@ -774,32 +917,56 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              <strong>L</strong>: two long arms at right angles, four kilometres
              each, with light bouncing along both.
              \n\nYou already know why that shape. A passing wave stretches one
-             direction while squeezing the direction at right angles - so it
+             direction while squeezing the direction at right angles — so it
              makes one arm longer and the other shorter, at the same moment.
              The instrument does not measure a length. It measures the
              <em>difference</em> between two lengths, which is a far easier
              thing to do well.
-             \n\nScrub the playhead and watch the marker ring: the two
-             perpendicular directions are the two arms.
-             \n\nThen press <strong>Next</strong> on the panel&rsquo;s own
-             instrument to bring up something different. On 14 September 2015
-             two observatories three thousand kilometres apart recorded the
-             same thing, seven milliseconds apart, and that recording is what
-             appears. Not a drawing and not a calculation: the strain the
-             instruments measured, as published.
+             \n\nThe two arms are drawn over the marker ring in the inset
+             labelled <strong>Ring of markers</strong>. Move the
+             <strong>Where in the signal</strong> playhead and watch them: one
+             lengthens as the other shortens. The readout gives both as
+             numbers, and gives the difference — which is what the instrument
+             actually records.`,
+      checklist: [
+        'Move "Where in the signal" and watch the two arms change in opposite directions',
+        'Read "What an L would read" and note the two fractions have opposite signs',
+        'Read the difference, and the four-kilometre figure in metres beside it',
+        'Say why an L is the right shape for the instrument',
+      ],
+      tool: lab({
+        view: 'both',
+        autoplay: false,
+        // Edge-on, so the arms do the clean opposite-signs thing the prose
+        // describes rather than rotating past each other.
+        values: { inclination: 90 },
+      }),
+      tip: 'Four kilometres changing by a ten-thousandth of the width of a proton. The number in the readout is the real one; the picture beside it is amplified, and says by how much.',
+    },
+    {
+      sid: 'what-two-observatories-recorded',
+      stage: PAIR,
+      type: 'read',
+      title: 'What two observatories actually recorded',
+      body: `This panel is showing something different: not a model, but a
+             recording. On 14 September 2015 two observatories three thousand
+             kilometres apart recorded the same thing, seven milliseconds
+             apart, and that is what is plotted.
              \n\nYou are not asked to analyse it. Look at it, and notice that
              it has the shape you have spent twenty screens learning to
-             expect - a wobble that speeds up and grows. That is the point. The
+             expect — a wobble that speeds up and grows. That is the point. The
              model you have been using is simple enough for a first lesson, and
-             the real thing looks like it.`,
+             the real thing looks like it.
+             \n\nThe panel&rsquo;s own controls let you shift one detector&rsquo;s
+             trace in time and flip its sign, which is what it takes to lay the
+             two on top of each other.`,
       checklist: [
-        'Scrub the wave past the marker ring and watch the two perpendicular directions change by different amounts',
-        'Say why an L is the right shape for the instrument',
-        'Look at the published trace and find where the wobble speeds up',
-        'Notice how noisy it is beside the clean model, and say which of the three kinds of picture each one is',
+        'Find where the wobble speeds up',
+        'Notice how noisy it is beside the clean model',
+        'Say which of the three kinds of picture the model was and which this is',
       ],
       tool: { id: 'gw-real' },
-      tip: 'Four kilometres changing by a ten-thousandth of the width of a proton. The published data is band-passed and whitened before it is shown, and the panel says so: even a measurement arrives having been handled.',
+      tip: 'The collaboration band-passed these traces to 35&ndash;350 Hz and notched the instrument lines before publishing them, and the panel says so. Nothing further is done to them here — no whitening, no smoothing. Even a measurement arrives having been handled, and the handling is part of what you are looking at.',
     },
     {
       sid: 'design-one-small-experiment',
