@@ -26,6 +26,8 @@
 //   settings   The settings object as it stands once the build returns,
 //              including the 'None' sentinel that applyPreset leaves behind.
 //   camera     Zoom and pan, which several scenarios set themselves.
+//   balance    Whether the world is built momentum-balanced - as an order of
+//              magnitude, not as digits. See the note on momentumResidual.
 //
 // The golden file is committed. Regenerate it deliberately, never to make a red
 // test green:
@@ -91,6 +93,45 @@ async function digestCatalogue(page) {
         ? Number(v.toPrecision(12))
         : String(v);
 
+    // How well the net momentum cancels, as an order of magnitude relative to
+    // the terms that went into it.
+    //
+    // Not as a number, because there is no number there. These worlds are built
+    // balanced, so the sum is catastrophic cancellation: Hungry Hungry Holes
+    // sums 1.9 million units of |m*v| down to 4e-11, a relative residual of
+    // 2e-17 - a tenth of a double's epsilon. Every digit of that is rounding,
+    // in whatever order the additions happened to land, and pinning twelve of
+    // them pins noise. It duly reproduced to the last digit on one machine and
+    // differed in the fifth on another, with every body row identical, which is
+    // how this was found.
+    //
+    // Nothing is lost by not pinning it. The bodies hash above already carries
+    // every mass and velocity to twelve significant digits, so a construction
+    // change that moved a body is caught there. What the balance adds is the
+    // claim this line is actually for - that the world is built with no net
+    // momentum - and a break in that shows up orders of magnitude away, not in
+    // the fifth digit.
+    // Below this there is nothing to report. Summing a few hundred terms
+    // accumulates rounding of order n * epsilon, which is about 1e-13 here, so
+    // the floor is a decade above that. It sits in the middle of an empty gap:
+    // across the whole catalogue the balanced worlds come out at 1e-13 and
+    // below, and the next one up is 1e-9, so no scenario is near enough to the
+    // edge for a last-bit difference to move it across.
+    const NOISE = 1e-11;
+    const balance = (x, y, scale) => {
+      if (!(scale > 0)) return 'nothing is moving';
+      const rel = Math.hypot(x, y) / scale;
+      if (!(rel > NOISE)) return 'cancels into rounding error';
+      // Rounded to the nearest decade, not up to the next one. Rounding up
+      // puts the bucket edges on the decades themselves, and four scenarios
+      // sit exactly on one: everything in them moves the same way, so the net
+      // momentum is the summed momentum and the ratio is exactly 1. A last-bit
+      // difference either side of that edge would relabel them. The half-decade
+      // edges this uses instead are empty - the closest any scenario comes is
+      // Jupiter Trojans, which would have to move nine per cent to cross one.
+      return `about 1e${Math.round(Math.log10(rel))} of the momentum summed`;
+    };
+
     const LISTS = [
       'bh_list',
       'stars',
@@ -135,6 +176,9 @@ async function digestCatalogue(page) {
       let totalMass = 0;
       let px = 0;
       let py = 0;
+      // The size of the terms being cancelled, so the residual below can be
+      // stated as a fraction of them rather than in absolute units.
+      let pscale = 0;
       for (const list of LISTS) {
         const arr = p[list] || [];
         arr.forEach((b, i) => {
@@ -144,6 +188,9 @@ async function digestCatalogue(page) {
           totalMass += b?.mass || 0;
           px += (b?.mass || 0) * (b?.vel?.x || 0);
           py += (b?.mass || 0) * (b?.vel?.y || 0);
+          pscale +=
+            Math.abs((b?.mass || 0) * (b?.vel?.x || 0)) +
+            Math.abs((b?.mass || 0) * (b?.vel?.y || 0));
         });
       }
 
@@ -165,7 +212,7 @@ async function digestCatalogue(page) {
         count: rows.length,
         byType,
         totalMass: num(totalMass),
-        momentum: { x: num(px), y: num(py) },
+        momentumResidual: balance(px, py, pscale),
         scenarioName: ui.current_scenario_name,
         presetSentinel: settings.preset_scenario,
         zoom: num(ui.state?.zoom),

@@ -10,10 +10,7 @@
       "Comet": 10
     },
     "totalMass": 1001.3412903,
-    "momentum": {
-      "x": 0.961936556294,
-      "y": -1.14053850008
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Solar System",
     "presetSentinel": "None",
     "zoom": 0.25,
@@ -37,10 +34,7 @@
       "Planet": 2
     },
     "totalMass": 1000.00332486,
-    "momentum": {
-      "x": -0.00899996501069,
-      "y": -0.00291974391872
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Retrograde Mars",
     "presetSentinel": "None",
     "zoom": 1.6,
@@ -63,10 +57,7 @@
       "Planet": 2
     },
     "totalMass": 0.0030404325384,
-    "momentum": {
-      "x": 0,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Earth-Moon System",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -89,10 +80,7 @@
       "Planet": 7
     },
     "totalMass": 89.819366501,
-    "momentum": {
-      "x": -0.0089853873241,
-      "y": 0.027786294572
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "TRAPPIST-1 System",
     "presetSentinel": "None",
     "zoom": 55,
@@ -115,10 +103,7 @@
       "StarObject": 3
     },
     "totalMass": 18000,
-    "momentum": {
-      "x": -2.91038304567e-11,
-      "y": -1.45519152284e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Three-Body Sensitivity Lab",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -142,10 +127,7 @@
       "Planet": 4
     },
     "totalMass": 0.954989618547,
-    "momentum": {
-      "x": 0,
-      "y": -1.23746219638e-21
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Galilean Resonance",
     "presetSentinel": "None",
     "zoom": 2.8,
@@ -169,10 +151,7 @@
       "Planet": 4
     },
     "totalMass": 0.954989618547,
-    "momentum": {
-      "x": 0,
-      "y": -6.51818322692e-21
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Broken Laplace Resonance",
     "presetSentinel": "None",
     "zoom": 2.8,
@@ -196,10 +175,7 @@
       "Planet": 3
     },
     "totalMass": 1000.05152763,
-    "momentum": {
-      "x": -8.47032947254e-22,
-      "y": 6.31632468768e-18
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Pluto and Neptune",
     "presetSentinel": "None",
     "zoom": 0.085,
@@ -224,10 +200,7 @@
       "GasGiant": 1
     },
     "totalMass": 1000.95479194,
-    "momentum": {
-      "x": -1.29185502926e-9,
-      "y": -4.03945765726e-11
-    },
+    "momentumResidual": "about 1e-9 of the momentum summed",
     "scenarioName": "Jupiter Trojans",
     "presetSentinel": "None",
     "zoom": 0.6,
@@ -250,10 +223,7 @@
       "StarObject": 2
     },
     "totalMass": 4000,
-    "momentum": {
-      "x": 0,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Binary Pair",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -276,10 +246,7 @@
       "Planet": 2
     },
     "totalMass": 1000.00300349,
-    "momentum": {
-      "x": -0.00949786517202,
-      "y": 2.0454e-9
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Interstellar Visitor",
     "presetSentinel": "None",
     "zoom": 1.1,
@@ -303,10 +270,7 @@
       "Planet": 1
     },
     "totalMass": 1148.65880641,
-    "momentum": {
-      "x": 10.2451694107,
-      "y": 6.27335696276e-16
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Transit Lab",
     "presetSentinel": "None",
     "zoom": 60,
@@ -328,10 +292,7 @@
       "StarObject": 91
     },
     "totalMass": 14700,
-    "momentum": {
-      "x": 1059.12917653,
-      "y": 391.000316751
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "Spiral Galaxy",
     "presetSentinel": "None",
     "zoom": 0.5,
@@ -354,10 +315,7 @@
       "StarObject": 91
     },
     "totalMass": 14700,
-    "momentum": {
-      "x": 2241.18896253,
-      "y": -130.909045247
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "Milky Way Rotation",
     "presetSentinel": "None",
     "zoom": 0.5,
@@ -380,10 +338,7 @@
       "Galaxy": 24
     },
     "totalMass": 96000,
-    "momentum": {
-      "x": 19619.2207851,
-      "y": -124763.954182
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "Coma Cluster",
     "presetSentinel": "None",
     "zoom": 0.16,
@@ -407,10 +362,7 @@
       "GasGiant": 1
     },
     "totalMass": 1148.65880641,
-    "momentum": {
-      "x": 0,
-      "y": 1.7763568394e-15
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Exoplanet Characterization Lab",
     "presetSentinel": "None",
     "zoom": 55,
@@ -433,10 +385,7 @@
       "Planet": 1
     },
     "totalMass": 2148.65880641,
-    "momentum": {
-      "x": 10.2451694107,
-      "y": -267.581763205
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Blended Binary",
     "presetSentinel": "None",
     "zoom": 60,
@@ -460,10 +409,7 @@
       "GasGiant": 1
     },
     "totalMass": 4.77396426552,
-    "momentum": {
-      "x": 1.43218783946,
-      "y": 0.00000168039865242
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Gravity Assist Lab",
     "presetSentinel": "None",
     "zoom": 0.14,
@@ -487,10 +433,7 @@
       "GasGiant": 1
     },
     "totalMass": 1004.77396427,
-    "momentum": {
-      "x": -0.00000456978919615,
-      "y": 6.76749973631
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Gravity Assist: Heliocentric",
     "presetSentinel": "None",
     "zoom": 0.9,
@@ -514,10 +457,7 @@
       "Planet": 1
     },
     "totalMass": 1030.00000103,
-    "momentum": {
-      "x": 0,
-      "y": 9.91692636812e-7
-    },
+    "momentumResidual": "about 1e-8 of the momentum summed",
     "scenarioName": "Lagrange Point Lab",
     "presetSentinel": "None",
     "zoom": 0.42,
@@ -541,10 +481,7 @@
       "Planet": 2
     },
     "totalMass": 1000.000011,
-    "momentum": {
-      "x": 0,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Orbital Transfer Lab",
     "presetSentinel": "None",
     "zoom": 0.55,
@@ -568,10 +505,7 @@
       "Planet": 1
     },
     "totalMass": 1500.00300349,
-    "momentum": {
-      "x": 0,
-      "y": 4.83467432755e-15
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Binary Planet Lab",
     "presetSentinel": "None",
     "zoom": 0.6,
@@ -595,10 +529,7 @@
       "Planet": 1
     },
     "totalMass": 1500.00300349,
-    "momentum": {
-      "x": 0,
-      "y": -6.90721351643e-14
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Circumbinary Planet Lab",
     "presetSentinel": "None",
     "zoom": 0.11,
@@ -622,10 +553,7 @@
       "Planet": 4
     },
     "totalMass": 10000.0375436,
-    "momentum": {
-      "x": 0.0695163663502,
-      "y": 0.0469293642476
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "Black Hole Lab",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -649,10 +577,7 @@
       "Planet": 4
     },
     "totalMass": 1000.01201396,
-    "momentum": {
-      "x": -0.0048456666424,
-      "y": 0.00172565649236
-    },
+    "momentumResidual": "about 1e-1 of the momentum summed",
     "scenarioName": "Habitable Zone Lab",
     "presetSentinel": "None",
     "zoom": 1.9,
@@ -676,10 +601,7 @@
       "Planet": 2
     },
     "totalMass": 1000.00390454,
-    "momentum": {
-      "x": -0.00492278291896,
-      "y": 0.00376279240171
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Kepler's 2nd Law",
     "presetSentinel": "None",
     "zoom": 0.9,
@@ -702,10 +624,7 @@
       "BlackHole": 2
     },
     "totalMass": 65000,
-    "momentum": {
-      "x": 0,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "GW150914",
     "presetSentinel": "None",
     "zoom": 1.7,
@@ -730,10 +649,7 @@
       "Asteroid": 30
     },
     "totalMass": 25002.5943274,
-    "momentum": {
-      "x": 1.25361638523e-15,
-      "y": 9.96690697995e-13
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Binary BH",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -759,10 +675,7 @@
       "Asteroid": 40
     },
     "totalMass": 45003.6037239,
-    "momentum": {
-      "x": -1.83835247667e-10,
-      "y": 2.26219585999e-10
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Triple BH System",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -788,10 +701,7 @@
       "Asteroid": 100
     },
     "totalMass": 80014.6471344,
-    "momentum": {
-      "x": 2.92864008123e-13,
-      "y": -1.95527867511e-13
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Supermassive BH",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -818,10 +728,7 @@
       "WhiteDwarf": 8
     },
     "totalMass": 9157.1022161,
-    "momentum": {
-      "x": -4.54747350886e-13,
-      "y": 9.09494701773e-13
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Star Cluster",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -846,10 +753,7 @@
       "Asteroid": 300
     },
     "totalMass": 1000.00016156,
-    "momentum": {
-      "x": -7.70180589159e-18,
-      "y": 8.57726738213e-19
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Kuiper Belt",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -877,10 +781,7 @@
       "WhiteDwarf": 20
     },
     "totalMass": 4033766.56823,
-    "momentum": {
-      "x": 2.98314262182e-10,
-      "y": 4.42014425062e-10
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Sagittarius A*",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -906,10 +807,7 @@
       "Asteroid": 20
     },
     "totalMass": 2010.58688799,
-    "momentum": {
-      "x": 3.15292569499e-15,
-      "y": -8.88040336389e-14
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Binary Star System",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -935,10 +833,7 @@
       "Asteroid": 40
     },
     "totalMass": 63024.6326601,
-    "momentum": {
-      "x": 2.86035582562e-13,
-      "y": -2.17016140958e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Slingshot",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -965,10 +860,7 @@
       "Asteroid": 80
     },
     "totalMass": 31026.9415694,
-    "momentum": {
-      "x": 599975.865192,
-      "y": -150000.558559
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Rogue Encounter",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -994,10 +886,7 @@
       "NeutronStar": 2
     },
     "totalMass": 2800000.68144,
-    "momentum": {
-      "x": -7.1054273576e-15,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Neutron Star Collision",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1022,10 +911,7 @@
       "NeutronStar": 1
     },
     "totalMass": 1540.78139326,
-    "momentum": {
-      "x": -3.46944695195e-18,
-      "y": 6.93889390391e-18
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Pulsar System",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1049,10 +935,7 @@
       "WhiteDwarf": 2
     },
     "totalMass": 1227.96006466,
-    "momentum": {
-      "x": -2.11758236814e-22,
-      "y": -1.81898940355e-12
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "White Dwarf Binary",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1080,10 +963,7 @@
       "WhiteDwarf": 8
     },
     "totalMass": 45062.8095306,
-    "momentum": {
-      "x": -7.58575424697e-11,
-      "y": -7.54880602472e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Stellar Graveyard",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1111,10 +991,7 @@
       "WhiteDwarf": 15
     },
     "totalMass": 4026820.76991,
-    "momentum": {
-      "x": 9.04520902623e-11,
-      "y": -1.09139364213e-9
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Galactic Center",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1140,10 +1017,7 @@
       "NeutronStar": 1
     },
     "totalMass": 1550.62869824,
-    "momentum": {
-      "x": -2.84217094304e-14,
-      "y": -7.1054273576e-15
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Supernova Remnant",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1171,10 +1045,7 @@
       "WhiteDwarf": 6
     },
     "totalMass": 41170.9010346,
-    "momentum": {
-      "x": -6.09361450188e-11,
-      "y": -7.95807864051e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Compact Object Zoo",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1200,10 +1071,7 @@
       "WhiteDwarf": 1
     },
     "totalMass": 2268.82515251,
-    "momentum": {
-      "x": 4.54747350886e-13,
-      "y": 0
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Millisecond Pulsar",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1227,10 +1095,7 @@
       "StarObject": 1
     },
     "totalMass": 2001000,
-    "momentum": {
-      "x": -82620.4760784,
-      "y": 71157.5096299
-    },
+    "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "Tidal Disruption Event",
     "presetSentinel": "None",
     "zoom": 0.7,
@@ -1257,10 +1122,7 @@
       "WhiteDwarf": 8
     },
     "totalMass": 409816.04787,
-    "momentum": {
-      "x": 8.0035533756e-11,
-      "y": 2.01907823794e-10
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Intermediate Mass BH",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1288,10 +1150,7 @@
       "WhiteDwarf": 25
     },
     "totalMass": 2246656.64036,
-    "momentum": {
-      "x": -1.01557873222e-9,
-      "y": -0.00000173866283149
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Galactic Collision",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1317,10 +1176,7 @@
       "Asteroid": 150
     },
     "totalMass": 13911.7155864,
-    "momentum": {
-      "x": 1.90663582084e-11,
-      "y": 1.76559967241e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Micro BH Swarm",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1347,10 +1203,7 @@
       "WhiteDwarf": 2
     },
     "totalMass": 3445.32248032,
-    "momentum": {
-      "x": -1.02318153949e-12,
-      "y": -2.27373675443e-13
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Exoplanet Lab",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1377,10 +1230,7 @@
       "Asteroid": 10
     },
     "totalMass": 1000000112220,
-    "momentum": {
-      "x": -7.15634084518e-8,
-      "y": -3.24764717619e-8
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Quasar Cannon",
     "presetSentinel": "None",
     "zoom": 0.05,
@@ -1407,10 +1257,7 @@
       "Asteroid": 10
     },
     "totalMass": 200355196.269,
-    "momentum": {
-      "x": 4.00917171727e-9,
-      "y": -0.0000718772667783
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "The Pinwheel Galaxy Core",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1437,10 +1284,7 @@
       "Asteroid": 10
     },
     "totalMass": 75012.5072509,
-    "momentum": {
-      "x": -9.45864049307e-12,
-      "y": -4.40187713584e-12
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Star Frisbee",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1464,10 +1308,7 @@
       "StarObject": 300
     },
     "totalMass": 530000,
-    "momentum": {
-      "x": -5.63886715099e-11,
-      "y": -7.73070496507e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Kessler Cascade",
     "presetSentinel": "None",
     "zoom": 0.5,
@@ -1494,10 +1335,7 @@
       "Asteroid": 10
     },
     "totalMass": 193954.802726,
-    "momentum": {
-      "x": -1.79905874354e-11,
-      "y": 2.67078770836e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Alien Dyson Swarm Collapse",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1524,10 +1362,7 @@
       "Asteroid": 10
     },
     "totalMass": 2000527357.33,
-    "momentum": {
-      "x": -1.373463321e-8,
-      "y": 0.0000100112315449
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Tidal Arm Tango",
     "presetSentinel": "None",
     "zoom": 0.3,
@@ -1554,10 +1389,7 @@
       "Asteroid": 10
     },
     "totalMass": 312223.164313,
-    "momentum": {
-      "x": 4.29302294564e-11,
-      "y": -5.13003646108e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Hungry Hungry Holes",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1584,10 +1416,7 @@
       "Asteroid": 10
     },
     "totalMass": 150459.489102,
-    "momentum": {
-      "x": 1.33344017184e-11,
-      "y": -2.60886694938e-13
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Slingshot Gauntlet",
     "presetSentinel": "None",
     "zoom": 1.5,
@@ -1614,10 +1443,7 @@
       "Asteroid": 10
     },
     "totalMass": 2101477.75109,
-    "momentum": {
-      "x": 1.51135251185e-10,
-      "y": -6.30989616575e-10
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Black Hole Billiards",
     "presetSentinel": "None",
     "zoom": 0.85,
@@ -1644,10 +1470,7 @@
       "Asteroid": 10
     },
     "totalMass": 193954.802726,
-    "momentum": {
-      "x": -5.65911358266e-12,
-      "y": -1.97717852268e-11
-    },
+    "momentumResidual": "cancels into rounding error",
     "scenarioName": "Stellar Nursery",
     "presetSentinel": "None",
     "zoom": 1.5,
