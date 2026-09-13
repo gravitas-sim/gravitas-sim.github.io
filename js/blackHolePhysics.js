@@ -98,6 +98,20 @@ export function blackHoleFacts(massInSuns) {
     (5120 * Math.PI * G_SI ** 2 * massKg ** 3) / (HBAR * C_SI ** 4);
   const lifetimeYears = lifetimeSeconds / SECONDS_PER_YEAR;
   // Innermost stable circular orbit sits at 3 R_s for a Schwarzschild hole.
+  //
+  // The period below is the Kepler expression, and that is not a Newtonian
+  // approximation standing in for a relativistic one. For circular geodesics in
+  // the Schwarzschild metric the coordinate angular velocity is exactly
+  // Omega^2 = GM/r^3, with r the Schwarzschild radial coordinate - the
+  // Keplerian form survives intact, which is a genuine and slightly surprising
+  // result rather than a simplification. So this is exact, and anyone reading
+  // it as a Newtonian formula misapplied to a relativistic orbit and "fixing"
+  // it would be introducing the error.
+  //
+  // What it is the period *for* matters: this is coordinate time, which is the
+  // period a distant observer measures. An observer riding the orbit measures
+  // less, because of the time dilation at that radius, and nothing here
+  // computes that.
   const iscoRadiusM = 3 * rsM;
   const iscoPeriodSeconds =
     2 * Math.PI * Math.sqrt(iscoRadiusM ** 3 / (G_SI * massKg));

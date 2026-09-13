@@ -282,8 +282,9 @@ export function applyStage(stage, { force = false } = {}) {
   // moves them. Confusing the two would either freeze a lesson about orbits or
   // let the integrator overwrite a lesson about a model.
   // One black hole, with test bodies in orbit around it. Engine-owned like the
-  // star pair: what the orbiters do outside the horizon is Newtonian gravity,
-  // which the integrator computes correctly and the lesson measures.
+  // star pair: what the orbiters do is Newtonian gravity, which the integrator
+  // computes correctly and the lesson measures. Not "outside the horizon" -
+  // the canvas has no horizon, only a drawn disc. See applyHoleStage.
   if (stage?.hole) {
     const key = JSON.stringify(['hole', stage.hole]);
     if (!force && key === stagedKey) {
@@ -1009,15 +1010,29 @@ export function applySystemStage(spec = {}) {
 /**
  * Stand one black hole on the canvas, with bodies in orbit around it.
  *
- * The orbit radii are given in Schwarzschild radii of the hole's own mass, so
- * they stay outside the horizon whatever mass a step asks for - a lesson that
- * put a test body inside the horizon would be drawing an orbit that cannot
- * exist. Three R_s is the innermost stable circular orbit for a Schwarzschild
- * hole, so nothing is placed closer than that.
+ * The orbit radii are multiples of the hole's *drawn* radius, and that is a
+ * statement about the picture and nothing else.
  *
- * Engine-owned. Outside the horizon the field is Newtonian to the accuracy
- * this sandbox works at, so the integrator is entitled to move these and the
- * lesson is entitled to measure what it does.
+ * This used to say they were Schwarzschild radii and that the floor below was
+ * the innermost stable circular orbit. Neither was true, and the pair of claims
+ * was the exact misconception the lesson that calls this spends a screen
+ * dismantling: the dark disc is drawn at whatever size lets four orbits fit in
+ * a window, a real horizon at these masses is many orders of magnitude smaller
+ * than that disc, and a multiple of the drawn radius is therefore not a
+ * multiple of anything physical. The floor is a floor on the drawing - it keeps
+ * the innermost orbiter visibly outside the disc at any mass - and calling it
+ * the ISCO gave a display constant a relativistic justification it does not
+ * have.
+ *
+ * Nothing here models the ISCO, and nothing needs to. The engine is Newtonian
+ * everywhere and has no horizon at all; where this lesson talks about the
+ * innermost stable circular orbit it reads the number off a closed-form panel,
+ * which is also where the Schwarzschild radius, the Hawking temperature and the
+ * evaporation lifetime come from. See js/blackHolePhysics.js.
+ *
+ * Engine-owned, and the thing being demonstrated is Newtonian: outside a
+ * spherical body the field depends on the mass and nothing else. The integrator
+ * is entitled to move these and the lesson is entitled to measure what it does.
  *
  * @param {object} spec - {massSun, orbits, fit}
  * @returns {{built: boolean, roles: Array<string>}} What was staged
@@ -1044,10 +1059,15 @@ export function applyHoleStage(spec = {}) {
     spec: { name: hole.name, massSun },
     physicalRadiusSun: null,
   });
-  // Radii in units of the *drawn* horizon, so an orbit is visibly outside the
-  // dark disc at any mass. ISCO is the physical floor and is enforced below.
+  // Radii in units of the drawn radius, so an orbit is visibly outside the dark
+  // disc at any mass. Not the horizon: the drawn radius is a display size, and
+  // the floor below is a floor on the picture rather than on the physics.
   const drawn = Math.max(hole.radius || 1, 1);
   (spec.orbits || [4.2, 6.4, 9.2, 12.6]).forEach((k, i) => {
+    // Three drawn radii is the closest anything is placed. A drawing bound, so
+    // the innermost orbiter reads as an orbit rather than as a rim on the
+    // disc - it is not the ISCO, which is three *Schwarzschild* radii and is
+    // not a length this canvas has.
     const r = Math.max(k * drawn, 3 * drawn);
     const body = new Asteroid(
       { x: r, y: 0 },

@@ -68,6 +68,7 @@ import {
   white_dwarfs,
 } from '../js/physics.js';
 import { endpointFor } from '../js/stellar/endpoints.js';
+import { schwarzschildRadiusM, SOLAR_MASS_KG } from '../js/blackHolePhysics.js';
 import { state } from '../js/appState.js';
 
 beforeEach(() => {
@@ -1191,5 +1192,78 @@ describe('a stage takes its effects with it', () => {
     expect(bh_list).toContain(theirs);
     expect(mine).toBeGreaterThan(0);
     accretion_disk_particles.length = 0;
+  });
+});
+
+// =============================================================================
+// The hole stage places orbits by the drawing, and says so
+// -----------------------------------------------------------------------------
+// applyHoleStage used to be documented as placing its orbiters "in Schwarzschild
+// radii of the hole's own mass", with the innermost bound described as the
+// innermost stable circular orbit. Both were false: the radii are multiples of
+// the hole's drawn radius, and the bound is a bound on the picture. The two
+// claims together were the exact misconception the lesson that calls this
+// spends a screen dismantling - it tells a reader that the dark disc "is drawn
+// at whatever size lets four orbits fit in a window, which is a choice about
+// the picture and carries no information".
+//
+// The behaviour was right and only the description was wrong, so this pins the
+// behaviour: an orbiter's distance is a multiple of the drawn radius, and it
+// is not a multiple of the Schwarzschild radius, which for these masses is
+// smaller by many orders of magnitude.
+describe('a black hole stage measures its orbits in drawn radii', () => {
+  /** The orbiters' distances from the hole, and the hole's drawn radius. */
+  function stageHole(massSun, orbits) {
+    clearStage();
+    applyStage({ hole: { massSun, orbits, fit: false } });
+    const hole = bh_list[0];
+    return {
+      hole,
+      drawn: hole.radius,
+      distances: asteroids.map(a => Math.hypot(a.pos.x, a.pos.y)),
+    };
+  }
+
+  test('each orbiter sits at its requested multiple of the drawn radius', () => {
+    const orbits = [4.2, 6.4, 9.2, 12.6];
+    const { drawn, distances } = stageHole(10, orbits);
+    expect(distances).toHaveLength(orbits.length);
+    distances.forEach((r, i) => {
+      expect(r / drawn).toBeCloseTo(orbits[i], 6);
+    });
+  });
+
+  test('the innermost bound is three drawn radii, and it is a drawing bound', () => {
+    // Asked for something closer than the floor allows.
+    const { drawn, distances } = stageHole(10, [0.5, 1, 2]);
+    for (const r of distances) {
+      expect(r / drawn).toBeCloseTo(3, 6);
+    }
+  });
+
+  // The claim that used to be in the docstring, checked and found false. A
+  // Schwarzschild radius for a ten-solar-mass hole is about thirty kilometres;
+  // the drawn radius is a canvas length chosen to make four orbits fit, and
+  // the two are not in any fixed ratio - changing the mass changes one of them
+  // on a completely different curve from the other.
+  test('the orbit radii are not multiples of the Schwarzschild radius', () => {
+    const light = stageHole(10, [4.2]);
+    const heavy = stageHole(1000, [4.2]);
+    const rsLight = schwarzschildRadiusM(10 * SOLAR_MASS_KG);
+    const rsHeavy = schwarzschildRadiusM(1000 * SOLAR_MASS_KG);
+    // In Schwarzschild radii the "same" orbit is a hundredfold different
+    // number, which is what makes the old docstring's units wrong.
+    const inRsLight = light.distances[0] / rsLight;
+    const inRsHeavy = heavy.distances[0] / rsHeavy;
+    expect(inRsLight / inRsHeavy).not.toBeCloseTo(1, 1);
+    // While in drawn radii it is 4.2 both times, which is the actual contract.
+    expect(light.distances[0] / light.drawn).toBeCloseTo(4.2, 6);
+    expect(heavy.distances[0] / heavy.drawn).toBeCloseTo(4.2, 6);
+  });
+
+  test('the orbiters are the engine, not a model', () => {
+    const { hole } = stageHole(10, [4.2, 6.4]);
+    expect(hole.model_owned).toBe(false);
+    for (const a of asteroids) expect(a.model_owned).not.toBe(true);
   });
 });

@@ -2050,13 +2050,19 @@ export const INSTRUCTOR_CONTENT = {
       horizon geometry but none of the trends taught here. See ${MODEL_PAGE} for the full statement.
 
       What is on the canvas, and what is not. The lesson stands up its own black hole with four
-      bodies in orbit, and those orbits are integrated: outside the horizon the field is
-      Newtonian to the accuracy this sandbox works at, so the engine is entitled to move them
-      and a student is entitled to measure what it does. Orbit radii are set in multiples of
-      the hole's own drawn horizon and never inside three of them, which is the innermost
-      stable circular orbit - an orbit drawn inside the horizon would be one that cannot
-      exist. Screen 13 replaces that arrangement with the controlled comparison: a star and a
-      hole of eight solar masses each, with a body on the same orbit around each.
+      bodies in orbit, and those orbits are integrated with the same Newtonian force law as
+      everything else on the canvas, so the engine is entitled to move them and a student is
+      entitled to measure what it does. What they demonstrate is the Newtonian statement the
+      lesson makes: outside a spherical body the field depends on the mass and nothing else.
+      Orbit radii are set in multiples of the hole's drawn radius, and never inside three of
+      them, which is a bound on the picture rather than on the physics - it keeps the
+      innermost orbiter reading as an orbit instead of as a rim on the dark disc. The drawn
+      radius is not the horizon and these are not Schwarzschild radii: screen 4 tells the
+      student in as many words that the disc is drawn at whatever size lets four orbits fit
+      in a window and carries no information, and the innermost stable circular orbit - three
+      Schwarzschild radii - is not a length this canvas has. Screen 13 replaces the
+      arrangement with the controlled comparison: a star and a hole of eight solar masses
+      each, with a body on the same orbit around each.
 
       Everything about Hawking radiation is a closed-form calculation in a panel, and screen
       19 says so to the student. The Newtonian sandbox knows nothing about quantum fields,

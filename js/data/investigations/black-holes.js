@@ -19,17 +19,26 @@
 // -----------------------------------------------------------------------------
 // A black hole with four things in orbit around it, staged by the lesson rather
 // than borrowed from a scenario, so a step can change its mass and have the
-// scene follow. The orbits are placed in multiples of the hole's own drawn
-// horizon and never inside three of them, which is the innermost stable
-// circular orbit: an orbit drawn inside the horizon would be an orbit that
-// cannot exist.
+// scene follow. The orbits are placed in multiples of the hole's *drawn*
+// radius, and never inside three of them - a bound on the picture, so the
+// innermost orbiter reads as an orbit rather than as a rim on the disc.
 //
-// Engine-owned. Outside the horizon the field is Newtonian to the accuracy this
-// sandbox works at, so the integrator is entitled to move these bodies and the
-// lesson is entitled to measure what it does. Everything the lesson says about
-// the *inside* - and everything it says about Hawking radiation - comes from
-// closed-form panels instead, because the sandbox cannot compute any of it and
-// a picture that implied otherwise would be the lesson's worst failure.
+// Not the horizon, and not the innermost stable circular orbit. This comment
+// used to say both, which contradicted the screen below that tells a reader in
+// as many words that the dark disc "is drawn at whatever size lets four orbits
+// fit in a window, which is a choice about the picture and carries no
+// information". A real horizon at ten solar masses is thirty kilometres and the
+// disc on screen is not drawn thirty kilometres wide, so a multiple of the
+// drawn radius is a multiple of nothing physical, and the ISCO - three
+// Schwarzschild radii - is not a length this canvas has.
+//
+// Engine-owned, and what the integrator demonstrates here is Newtonian:
+// outside a spherical body the field depends on the mass and nothing else,
+// which is why a black hole and a star of the same mass hold the same orbit.
+// Everything the lesson says about the horizon, the ISCO and Hawking radiation
+// comes from closed-form panels instead, because the sandbox cannot compute any
+// of it and a picture that implied otherwise would be the lesson's worst
+// failure.
 const HOLE = { hole: { massSun: 10, fit: true } };
 
 /**
