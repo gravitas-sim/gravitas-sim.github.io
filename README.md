@@ -212,7 +212,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->4864<!--/fact--> tests across <!--fact:jestSuites-->138<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5052<!--/fact--> tests across <!--fact:jestSuites-->144<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -229,9 +229,9 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->217<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->613<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->3840<!--/fact--> KB         | <!--fact:buildDeferredChunks-->136<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->830<!--/fact--> KB** |                                               |
+| JavaScript at start-up | <!--fact:buildStartupJs-->610<!--/fact--> KB           | <!--fact:buildStartupFiles-->50<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->3850<!--/fact--> KB         | <!--fact:buildDeferredChunks-->136<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->827<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -330,8 +330,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1061<!--/fact--> tests
-in <!--fact:e2eFiles-->76<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1106<!--/fact--> tests
+in <!--fact:e2eFiles-->79<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
