@@ -1139,6 +1139,13 @@ export const EN = {
   'shortcut.undo': 'Undo last placed object',
   'shortcut.inspect': 'Inspect an object',
   'shortcut.place': 'Place an object with velocity',
+  'shortcut.placeKeyboard': 'Aim a placement from the keyboard',
+  'place.keyboard.notArmed':
+    'Choose an object type first, from Add in the controls.',
+  'place.keyboard.started':
+    'Placing a {type}. Arrow keys aim it, Enter places it, Escape cancels. Hold Shift to aim faster or Alt to aim finely.',
+  'place.keyboard.placed': 'Placed a {type} at speed {speed}.',
+  'place.keyboard.cancelled': 'Placement cancelled. Nothing was added.',
   'shortcut.snap': 'Snap to a circular orbit',
   'shortcut.lecture': 'Lecture Mode (projection)',
   'shortcut.pauseAtEvent': 'Pause at event',

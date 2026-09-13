@@ -1116,6 +1116,13 @@ export const ES = {
   'shortcut.undo': 'Deshacer el último objeto colocado',
   'shortcut.inspect': 'Inspeccionar un objeto',
   'shortcut.place': 'Colocar un objeto con velocidad',
+  'shortcut.placeKeyboard': 'Apuntar una colocación con el teclado',
+  'place.keyboard.notArmed':
+    'Elige primero un tipo de objeto, en Añadir dentro de los controles.',
+  'place.keyboard.started':
+    'Colocando un {type}. Las flechas apuntan, Enter coloca, Escape cancela. Manten Shift para apuntar mas rapido o Alt para apuntar con precision.',
+  'place.keyboard.placed': 'Se coloco un {type} a velocidad {speed}.',
+  'place.keyboard.cancelled': 'Colocacion cancelada. No se anadio nada.',
   'shortcut.snap': 'Ajustar a una órbita circular',
   'shortcut.lecture': 'Modo presentación (proyección)',
   'shortcut.pauseAtEvent': 'Pausar en un evento',

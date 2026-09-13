@@ -114,7 +114,7 @@ import { t, hasMessage, onLocaleChange } from './i18n/index.js';
 import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { resetPotentialCache } from './vectorOverlay.js';
-import { toast } from './notify.js';
+import { toast, announce } from './notify.js';
 import {
   toggleTool,
   isToolActive,
@@ -6100,6 +6100,217 @@ const takeScreenshot = () => {
 // js/objectGlyphs.js; these once carried an emoji apiece, which the operating
 // system drew - eight different pictures on three platforms, eight different
 // widths, and a gemstone standing in for a white dwarf.
+// =============================================================================
+// Placing a body without a pointer
+// -----------------------------------------------------------------------------
+// All eight types could be placed by mouse and by touch, and none of them by
+// keyboard. Placement needs two things a click-and-drag gives at once - where
+// the body starts and how fast it is thrown - so there was nothing to hang a
+// single keystroke on, and the gesture simply had no keyboard equivalent. A
+// reader who cannot use a pointer could load a scenario and watch it, and could
+// not add anything to it.
+//
+// This drives the same state the drag does. `state.adding_mass`,
+// `state.add_start_world/screen` and `state.mouse` are what js/render.js reads
+// to draw the placement line, the start dot and the velocity arrow, so the
+// keyboard gets that preview for free and cannot drift from what a dragging
+// reader sees. Committing calls placeBody(), which is the same function the
+// other two paths call, with the same velocity scale as the mouse.
+// =============================================================================
+
+/** How far one arrow press moves the aim, in canvas pixels. */
+const AIM_STEP = 24;
+/** Shift for a bigger stride, Alt for a finer one. */
+const AIM_COARSE = 4;
+const AIM_FINE = 0.25;
+
+/** Null when the keyboard is not placing anything. */
+let keyboardAim = null;
+
+/** @returns {boolean} Whether a keyboard placement is in progress */
+export const keyboardPlacementActive = () => keyboardAim !== null;
+
+/**
+ * Start placing a body from the keyboard, aimed from the middle of the view.
+ *
+ * @returns {boolean} Whether it started
+ */
+export function beginKeyboardPlacement() {
+  if (!placementArmed()) {
+    announce(t('place.keyboard.notArmed'));
+    return false;
+  }
+  if (keyboardAim) return true;
+  const rect = canvas.getBoundingClientRect();
+  const at = { x: rect.width / 2, y: rect.height / 2 };
+  state.add_start_screen = { ...at };
+  state.add_start_world = screen_to_world(at);
+  state.mouse.x = at.x;
+  state.mouse.y = at.y;
+  state.adding_mass = true;
+  keyboardAim = { ...at };
+  announce(
+    t('place.keyboard.started', { type: typeName(SETTINGS.input_object_type) })
+  );
+  return true;
+}
+
+/** Stop without placing anything. */
+export function cancelKeyboardPlacement({ quiet = false } = {}) {
+  if (!keyboardAim) return false;
+  keyboardAim = null;
+  state.adding_mass = false;
+  state.orbit_helper.preview = null;
+  if (!quiet) announce(t('place.keyboard.cancelled'));
+  return true;
+}
+
+/**
+ * Commit what is aimed.
+ *
+ * The velocity is the same expression the mouse path uses - the aim offset in
+ * world units, times 1.5 - so a keyboard placement and a drag of the same
+ * length produce the same orbit.
+ *
+ * @returns {?object} The body, or null
+ */
+export function commitKeyboardPlacement() {
+  if (!keyboardAim) return null;
+  const end = screen_to_world({ x: state.mouse.x, y: state.mouse.y });
+  const vel = {
+    x: (end.x - state.add_start_world.x) * 1.5,
+    y: (end.y - state.add_start_world.y) * 1.5,
+  };
+  const at = { ...state.add_start_world };
+  keyboardAim = null;
+  state.adding_mass = false;
+  state.orbit_helper.preview = null;
+  const obj = placeBody(at, vel);
+  if (obj) {
+    announce(
+      t('place.keyboard.placed', {
+        type: typeName(SETTINGS.input_object_type),
+        speed: Math.hypot(vel.x, vel.y).toFixed(1),
+      })
+    );
+  }
+  return obj;
+}
+
+/**
+ * Move the aim, or the start point when nothing has been aimed yet.
+ *
+ * @param {number} dx - Horizontal, in steps
+ * @param {number} dy - Vertical, in steps
+ * @param {object} [opts] - {coarse, fine}
+ */
+function moveKeyboardAim(dx, dy, { coarse = false, fine = false } = {}) {
+  if (!keyboardAim) return;
+  const step = AIM_STEP * (coarse ? AIM_COARSE : fine ? AIM_FINE : 1);
+  const rect = canvas.getBoundingClientRect();
+  state.mouse.x = Math.max(0, Math.min(rect.width, state.mouse.x + dx * step));
+  state.mouse.y = Math.max(0, Math.min(rect.height, state.mouse.y + dy * step));
+}
+
+// Its own listener, in the capture phase and before the general shortcut
+// handler, because while a placement is being aimed the arrow keys belong to it
+// rather than to whatever else uses them.
+window.addEventListener(
+  'keydown',
+  e => {
+    if (!keyboardAim) return;
+    if (isTypingTarget(e.target)) return;
+    const arrows = {
+      ArrowLeft: [-1, 0],
+      ArrowRight: [1, 0],
+      ArrowUp: [0, -1],
+      ArrowDown: [0, 1],
+    };
+    if (arrows[e.key]) {
+      const [dx, dy] = arrows[e.key];
+      moveKeyboardAim(dx, dy, { coarse: e.shiftKey, fine: e.altKey });
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (e.key === 'Enter') {
+      commitKeyboardPlacement();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (e.key === 'Escape') {
+      cancelKeyboardPlacement();
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  },
+  true
+);
+
+/**
+ * Make one body of the armed type, at a place, with a velocity, and file it.
+ *
+ * The one place that knows how the eight types are built and which list each
+ * belongs in. It was written out twice - once on the mouse path and once on the
+ * touch path - and both copies carry a comment about the same bug: a
+ * hand-placed comet went into `asteroids` and behaved as a rock, because Comet
+ * extends Planet and the checks were in the wrong order. Two copies of a list
+ * like that is two chances to get the order wrong again, and there is now a
+ * third caller.
+ *
+ * The `instanceof` order below is load-bearing and is asserted in
+ * tests/bodyPlacement.test.js: Comet before Planet, and every branch an
+ * `else if`.
+ *
+ * @param {{x: number, y: number}} at - Where, in world coordinates
+ * @param {{x: number, y: number}} vel - Initial velocity, world units
+ * @param {string} [type] - One of the eight; defaults to what is armed
+ * @returns {?object} The body, already in its collection, or null
+ */
+export function placeBody(at, vel, type = SETTINGS.input_object_type) {
+  if (
+    !Number.isFinite(at?.x) ||
+    !Number.isFinite(at?.y) ||
+    !Number.isFinite(vel?.x) ||
+    !Number.isFinite(vel?.y)
+  ) {
+    console.warn('Invalid coordinates during object placement:', { at, vel });
+    return null;
+  }
+
+  let obj = null;
+  if (type === 'Planet') obj = new Planet(at, vel);
+  else if (type === 'Star') obj = new StarObject(at, vel);
+  else if (type === 'Asteroid') obj = new Asteroid(at, vel);
+  else if (type === 'GasGiant') obj = new GasGiant(at, vel);
+  else if (type === 'NeutronStar') obj = new NeutronStar(at, vel, null, null);
+  else if (type === 'WhiteDwarf') obj = new WhiteDwarf(at, vel);
+  else if (type === 'Comet') obj = new Comet(at, vel);
+  else if (type === 'BlackHole') {
+    obj = new BlackHole(at, generateRandomBlackHoleMass(), vel, true);
+  }
+  if (!obj) return null;
+
+  // NB: Comet is checked before Asteroid and Planet and lands in `comets`.
+  if (obj instanceof Comet) comets.push(obj);
+  else if (obj instanceof Planet) planets.push(obj);
+  else if (obj instanceof StarObject) stars.push(obj);
+  else if (obj instanceof Asteroid) asteroids.push(obj);
+  else if (obj instanceof GasGiant) gas_giants.push(obj);
+  else if (obj instanceof NeutronStar) neutron_stars.push(obj);
+  else if (obj instanceof WhiteDwarf) white_dwarfs.push(obj);
+  else if (obj instanceof BlackHole) bh_list.push(obj);
+
+  // Announced rather than called directly: controls.js already imports ui.js,
+  // and a direct call back would close an import cycle. The undo stack and the
+  // double-tap guard both listen.
+  window.dispatchEvent(
+    new CustomEvent('gravitasObjectPlaced', { detail: { object: obj } })
+  );
+  return obj;
+}
+
 const objectTypes = [
   { type: 'Star', label: 'objectType.stars' },
   { type: 'Planet', label: 'objectType.rockyPlanets' },
@@ -6421,43 +6632,8 @@ window.addEventListener('mouseup', e => {
         vel = computeCircularVelocity(state.add_start_world, prev.attractor);
       }
     }
-    const type = SETTINGS.input_object_type;
-    let new_obj;
-    if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
-    else if (type === 'Star')
-      new_obj = new StarObject(state.add_start_world, vel);
-    else if (type === 'Asteroid')
-      new_obj = new Asteroid(state.add_start_world, vel);
-    else if (type === 'GasGiant')
-      new_obj = new GasGiant(state.add_start_world, vel);
-    else if (type === 'NeutronStar')
-      new_obj = new NeutronStar(state.add_start_world, vel, null, null);
-    else if (type === 'WhiteDwarf')
-      new_obj = new WhiteDwarf(state.add_start_world, vel);
-    else if (type === 'Comet') new_obj = new Comet(state.add_start_world, vel);
-    else if (type === 'BlackHole') {
-      const randomMass = generateRandomBlackHoleMass();
-      new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
-    }
+    placeBody(state.add_start_world, vel);
 
-    // NB: Comet is checked before Asteroid and lands in `comets` - it used to
-    // be pushed into `asteroids`, so every hand-placed comet behaved as a rock.
-    if (new_obj instanceof Comet) comets.push(new_obj);
-    else if (new_obj instanceof Planet) planets.push(new_obj);
-    else if (new_obj instanceof StarObject) stars.push(new_obj);
-    else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
-    else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
-    else if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
-    else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
-    else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
-
-    // Announced rather than called directly: controls.js already imports ui.js,
-    // and a direct call back would close an import cycle.
-    if (new_obj) {
-      window.dispatchEvent(
-        new CustomEvent('gravitasObjectPlaced', { detail: { object: new_obj } })
-      );
-    }
     // Clear helper after placement
     state.orbit_helper.preview = null;
     // Clear holding flags
@@ -7971,44 +8147,7 @@ canvas.addEventListener(
           x: (add_end_world.x - state.add_start_world.x) * 3,
           y: (add_end_world.y - state.add_start_world.y) * 3,
         };
-        const type = SETTINGS.input_object_type;
-        let new_obj;
-        if (type === 'Planet') new_obj = new Planet(state.add_start_world, vel);
-        else if (type === 'Star')
-          new_obj = new StarObject(state.add_start_world, vel);
-        else if (type === 'Asteroid')
-          new_obj = new Asteroid(state.add_start_world, vel);
-        else if (type === 'GasGiant')
-          new_obj = new GasGiant(state.add_start_world, vel);
-        else if (type === 'NeutronStar')
-          new_obj = new NeutronStar(state.add_start_world, vel, null, null);
-        else if (type === 'WhiteDwarf')
-          new_obj = new WhiteDwarf(state.add_start_world, vel);
-        else if (type === 'Comet')
-          new_obj = new Comet(state.add_start_world, vel);
-        else if (type === 'BlackHole') {
-          const randomMass = generateRandomBlackHoleMass();
-          new_obj = new BlackHole(state.add_start_world, randomMass, vel, true);
-        }
-
-        // Comet first, and else-if throughout: this had the same defect as the
-        // mouse path, pushing hand-placed comets into `asteroids`.
-        if (new_obj instanceof Comet) comets.push(new_obj);
-        else if (new_obj instanceof Planet) planets.push(new_obj);
-        else if (new_obj instanceof StarObject) stars.push(new_obj);
-        else if (new_obj instanceof Asteroid) asteroids.push(new_obj);
-        else if (new_obj instanceof GasGiant) gas_giants.push(new_obj);
-        else if (new_obj instanceof NeutronStar) neutron_stars.push(new_obj);
-        else if (new_obj instanceof WhiteDwarf) white_dwarfs.push(new_obj);
-        else if (new_obj instanceof BlackHole) bh_list.push(new_obj);
-
-        if (new_obj) {
-          window.dispatchEvent(
-            new CustomEvent('gravitasObjectPlaced', {
-              detail: { object: new_obj },
-            })
-          );
-        }
+        placeBody(state.add_start_world, vel);
 
         state.adding_mass = false;
         state.isDragging = false;

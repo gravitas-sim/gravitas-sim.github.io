@@ -616,6 +616,23 @@ function setupShortcuts() {
     group: 'Editing',
     label: t('shortcut.snap'),
   });
+  // The keyboard equivalent of that drag. Every one of the eight types could be
+  // placed with a pointer or a finger and none of them from the keyboard: the
+  // gesture carries both a position and a throw, so there was nothing a single
+  // keystroke could do, and the affordance was simply missing. A is the aim; the
+  // arrows move it, Enter places, Escape cancels.
+  registerShortcut({
+    keys: 'A',
+    match: 'a',
+    group: 'Editing',
+    label: t('shortcut.placeKeyboard'),
+    run: () => {
+      import('./ui.js').then(m => {
+        if (m.keyboardPlacementActive()) m.commitKeyboardPlacement();
+        else m.beginKeyboardPlacement();
+      });
+    },
+  });
 
   registerShortcut({
     keys: 'V',
