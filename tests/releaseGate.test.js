@@ -130,6 +130,33 @@ describe('the check registry', () => {
       expect(['gw', 'stellar']).toContain(check.sources);
     }
   });
+
+  // `npm run build` rewrites sw-manifest.js. Any check that asks whether the
+  // committed manifest is current has to be asked before that happens, or the
+  // build has already made the answer yes. The gate passed 32 of 32 with a
+  // stale manifest committed, and only CI - whose lint job runs `npm test`
+  // against a clean checkout - could still see it.
+  //
+  // The gate runs group by group, so being early in the array is not enough:
+  // a check in a group that runs after correctness runs after the build no
+  // matter where it sits. Both conditions are asserted.
+  test('the manifest is checked before the build regenerates it', () => {
+    const order = CHECKS.map(c => c.id);
+    const groups = Object.keys(GROUPS);
+    const at = id => {
+      const check = CHECKS.find(c => c.id === id);
+      expect(check).toBeDefined();
+      return [groups.indexOf(check.group || 'correctness'), order.indexOf(id)];
+    };
+    const build = at('build');
+    for (const id of ['sw', 'unit']) {
+      const before = at(id);
+      // Same group and earlier in it, or an earlier group outright.
+      expect(
+        before[0] < build[0] || (before[0] === build[0] && before[1] < build[1])
+      ).toBe(true);
+    }
+  });
 });
 
 describe('drift between CI and the release gate', () => {

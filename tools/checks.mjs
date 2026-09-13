@@ -241,20 +241,6 @@ export const CHECKS = [
     ci: 'checks',
     group: 'correctness',
   },
-  // The build comes before the tests, and the order matters.
-  // `npm run build` regenerates sw-manifest.js, and tests/buildIntegrity.test.js
-  // asserts that the committed manifest is what the generator would write
-  // today. Running the tests first meant any edit since the last build failed
-  // that test - a real staleness, reported as a unit-test failure, which sends
-  // you looking in the wrong place entirely.
-  {
-    id: 'build',
-    label: 'production build',
-    command: ['npm', 'run', 'build'],
-    tier: 'slow',
-    ci: 'build',
-    group: 'correctness',
-  },
   {
     id: 'unit',
     label: 'unit tests',
@@ -278,6 +264,45 @@ export const CHECKS = [
     tier: 'slow',
     ci: null,
     why: 'minutes of integration; the browser shards cover the same worlds',
+    group: 'correctness',
+  },
+  // The manifest question comes before the build, and the order matters.
+  //
+  // `npm run build` regenerates sw-manifest.js as its third step. Asking
+  // afterwards whether the committed manifest is current is asking a question
+  // the build has already answered: the file on disk is one the generator just
+  // wrote, so it always matches and the check always passes. That vacuity is
+  // not theoretical - it shipped. The gate came back green on 32 of 32 with a
+  // stale committed manifest, and CI caught it only because its lint job runs
+  // `npm test` against a clean checkout with nothing built. A stale cache
+  // version is not cosmetic: the service worker keeps serving the old app to
+  // returning readers until the version changes.
+  //
+  // This used to be ordered the other way round, on the reasoning that a stale
+  // manifest surfacing as a buildIntegrity failure sends you looking in the
+  // wrong place. That reasoning was about the diagnostic, and the cure was
+  // worse than the complaint - it silenced the finding rather than explaining
+  // it. Running the dedicated check first is what fixes the diagnostic: it
+  // names the manifest, and tests/buildIntegrity.test.js is no longer the
+  // messenger.
+  //
+  // It sits under correctness rather than with the generated artifacts because
+  // that group runs after the build. The artifacts left in it are the ones the
+  // build does not rewrite.
+  {
+    id: 'sw',
+    label: 'service-worker precache manifest',
+    command: ['npm', 'run', 'sw:check'],
+    tier: 'quick',
+    ci: 'checks',
+    group: 'correctness',
+  },
+  {
+    id: 'build',
+    label: 'production build',
+    command: ['npm', 'run', 'build'],
+    tier: 'slow',
+    ci: 'build',
     group: 'correctness',
   },
   {
@@ -344,14 +369,6 @@ export const CHECKS = [
     id: 'vendor',
     label: 'vendored libraries and fonts',
     command: ['npm', 'run', 'vendor:check'],
-    tier: 'quick',
-    ci: 'checks',
-    group: 'generated',
-  },
-  {
-    id: 'sw',
-    label: 'service-worker precache manifest',
-    command: ['npm', 'run', 'sw:check'],
     tier: 'quick',
     ci: 'checks',
     group: 'generated',
