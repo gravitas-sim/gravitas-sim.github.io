@@ -1,0 +1,385 @@
+{
+ "total": 580168,
+ "modules": [
+  {
+   "module": "js/ui.js",
+   "bytes": 107924
+  },
+  {
+   "module": "js/i18n/en.js",
+   "bytes": 84440
+  },
+  {
+   "module": "js/physics.js",
+   "bytes": 73219
+  },
+  {
+   "module": "js/world/build.js",
+   "bytes": 34805
+  },
+  {
+   "module": "js/render.js",
+   "bytes": 29615
+  },
+  {
+   "module": "js/scenarios.js",
+   "bytes": 23474
+  },
+  {
+   "module": "js/radialVelocity.js",
+   "bytes": 15742
+  },
+  {
+   "module": "js/rotationCurve.js",
+   "bytes": 10086
+  },
+  {
+   "module": "js/controls.js",
+   "bytes": 9504
+  },
+  {
+   "module": "js/lightCurve.js",
+   "bytes": 9116
+  },
+  {
+   "module": "js/audio.js",
+   "bytes": 7265
+  },
+  {
+   "module": "js/data/scenarioInfo.js",
+   "bytes": 7085
+  },
+  {
+   "module": "js/sandboxTools.js",
+   "bytes": 6875
+  },
+  {
+   "module": "js/objectInspector.js",
+   "bytes": 6624
+  },
+  {
+   "module": "js/data/objectNames.js",
+   "bytes": 6197
+  },
+  {
+   "module": "js/pauseAtEventPanel.js",
+   "bytes": 6167
+  },
+  {
+   "module": "js/astrometry.js",
+   "bytes": 5732
+  },
+  {
+   "module": "js/resonance/systems.js",
+   "bytes": 5257
+  },
+  {
+   "module": "js/bodyVisuals.js",
+   "bytes": 4991
+  },
+  {
+   "module": "js/scenarioBrowser.js",
+   "bytes": 4986
+  },
+  {
+   "module": "js/share.js",
+   "bytes": 4373
+  },
+  {
+   "module": "js/vectorOverlay.js",
+   "bytes": 4289
+  },
+  {
+   "module": "js/main.js",
+   "bytes": 4275
+  },
+  {
+   "module": "js/shareState.js",
+   "bytes": 4099
+  },
+  {
+   "module": "js/tutorial.js",
+   "bytes": 4020
+  },
+  {
+   "module": "js/darkMatter.js",
+   "bytes": 4019
+  },
+  {
+   "module": "js/pauseAtEvent.js",
+   "bytes": 3847
+  },
+  {
+   "module": "js/energyChartNew.js",
+   "bytes": 3799
+  },
+  {
+   "module": "js/preview.js",
+   "bytes": 3666
+  },
+  {
+   "module": "js/appState.js",
+   "bytes": 3338
+  },
+  {
+   "module": "js/timeline.js",
+   "bytes": 3300
+  },
+  {
+   "module": "js/experiments/canonicalState.js",
+   "bytes": 3271
+  },
+  {
+   "module": "js/capture.js",
+   "bytes": 2756
+  },
+  {
+   "module": "js/habitability.js",
+   "bytes": 2549
+  },
+  {
+   "module": "js/exoplanetObservables.js",
+   "bytes": 2495
+  },
+  {
+   "module": "js/instruments.js",
+   "bytes": 2483
+  },
+  {
+   "module": "js/i18n/index.js",
+   "bytes": 2423
+  },
+  {
+   "module": "js/starfield.js",
+   "bytes": 2406
+  },
+  {
+   "module": "js/observerControls.js",
+   "bytes": 2385
+  },
+  {
+   "module": "js/blackHolePhysics.js",
+   "bytes": 2359
+  },
+  {
+   "module": "js/canvasSummary.js",
+   "bytes": 2267
+  },
+  {
+   "module": "js/objectGlyphs.js",
+   "bytes": 2249
+  },
+  {
+   "module": "js/utils.js",
+   "bytes": 2219
+  },
+  {
+   "module": "js/notebookBridge.js",
+   "bytes": 2096
+  },
+  {
+   "module": "js/referenceFrame.js",
+   "bytes": 2052
+  },
+  {
+   "module": "js/stellar/state.js",
+   "bytes": 2004
+  },
+  {
+   "module": "js/lesson/evolutionScene.js",
+   "bytes": 1978
+  },
+  {
+   "module": "js/shortcuts.js",
+   "bytes": 1801
+  },
+  {
+   "module": "js/experimentsBridge.js",
+   "bytes": 1758
+  },
+  {
+   "module": "js/mond.js",
+   "bytes": 1720
+  },
+  {
+   "module": "js/i18n/picker.js",
+   "bytes": 1530
+  },
+  {
+   "module": "js/observationLayout.js",
+   "bytes": 1495
+  },
+  {
+   "module": "js/units.js",
+   "bytes": 1423
+  },
+  {
+   "module": "js/gravityAssist.js",
+   "bytes": 1422
+  },
+  {
+   "module": "js/investigationsLoader.js",
+   "bytes": 1366
+  },
+  {
+   "module": "js/format.js",
+   "bytes": 1359
+  },
+  {
+   "module": "js/bottomDock.js",
+   "bytes": 1357
+  },
+  {
+   "module": "js/observingSession.js",
+   "bytes": 1310
+  },
+  {
+   "module": "js/quality.js",
+   "bytes": 1285
+  },
+  {
+   "module": "js/focusTrap.js",
+   "bytes": 1228
+  },
+  {
+   "module": "js/rng.js",
+   "bytes": 1135
+  },
+  {
+   "module": "js/orbital.js",
+   "bytes": 1086
+  },
+  {
+   "module": "js/binaryOrbits.js",
+   "bytes": 1071
+  },
+  {
+   "module": "js/widgetRuntime.js",
+   "bytes": 1037
+  },
+  {
+   "module": "js/theme.js",
+   "bytes": 1036
+  },
+  {
+   "module": "js/spatialHash.js",
+   "bytes": 1011
+  },
+  {
+   "module": "js/presentation.js",
+   "bytes": 1001
+  },
+  {
+   "module": "js/widgetCanvas.js",
+   "bytes": 973
+  },
+  {
+   "module": "js/gestures.js",
+   "bytes": 882
+  },
+  {
+   "module": "js/embed.js",
+   "bytes": 873
+  },
+  {
+   "module": "js/observerGeometry.js",
+   "bytes": 850
+  },
+  {
+   "module": "js/maneuverBridge.js",
+   "bytes": 724
+  },
+  {
+   "module": "js/scenarioPanelBridge.js",
+   "bytes": 717
+  },
+  {
+   "module": "js/data/exoplanetSystems.js",
+   "bytes": 669
+  },
+  {
+   "module": "js/lesson/barycentre.js",
+   "bytes": 636
+  },
+  {
+   "module": "js/view3dBridge.js",
+   "bytes": 610
+  },
+  {
+   "module": "js/observationChart.js",
+   "bytes": 601
+  },
+  {
+   "module": "js/data/trappist1.js",
+   "bytes": 593
+  },
+  {
+   "module": "js/blackHole/appearance.js",
+   "bytes": 499
+  },
+  {
+   "module": "js/notify.js",
+   "bytes": 480
+  },
+  {
+   "module": "js/welcomeGate.js",
+   "bytes": 470
+  },
+  {
+   "module": "js/i18n/deferredMessages.js",
+   "bytes": 470
+  },
+  {
+   "module": "js/palette.js",
+   "bytes": 432
+  },
+  {
+   "module": "js/i18n/dom.js",
+   "bytes": 413
+  },
+  {
+   "module": "js/data/scenarioTags.js",
+   "bytes": 331
+  },
+  {
+   "module": "js/stellar/geometry.js",
+   "bytes": 326
+  },
+  {
+   "module": "js/followCamera.js",
+   "bytes": 313
+  },
+  {
+   "module": "js/exportBridge.js",
+   "bytes": 311
+  },
+  {
+   "module": "js/chartjs.js",
+   "bytes": 304
+  },
+  {
+   "module": "js/constants.js",
+   "bytes": 234
+  },
+  {
+   "module": "js/timestep.js",
+   "bytes": 219
+  },
+  {
+   "module": "js/stellar/mainSequence.js",
+   "bytes": 200
+  },
+  {
+   "module": "js/overlays.js",
+   "bytes": 191
+  },
+  {
+   "module": "js/lessonLocale.js",
+   "bytes": 173
+  },
+  {
+   "module": "js/i18n/scenario.js",
+   "bytes": 122
+  }
+ ]
+}

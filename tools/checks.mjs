@@ -289,6 +289,15 @@ export const CHECKS = [
     group: 'correctness',
   },
   {
+    id: 'composition',
+    label: 'start-up bundle composition',
+    command: ['npm', 'run', 'budget:composition', '--', '--check'],
+    tier: 'slow',
+    ci: null,
+    why: 'needs an esbuild pass; the gate has one already',
+    group: 'correctness',
+  },
+  {
     id: 'links-dist',
     label: 'internal links and anchors (built site)',
     command: ['npm', 'run', 'validate:links:dist'],

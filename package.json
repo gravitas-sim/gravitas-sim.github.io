@@ -55,6 +55,7 @@
     "vendor": "node tools/vendor-deps.mjs",
     "vendor:check": "node tools/vendor-deps.mjs --check",
     "budget": "node tools/bundle-budget.mjs",
+    "budget:composition": "node tools/bundle-composition.mjs",
     "budget:check": "node tools/bundle-budget.mjs --check",
     "release:check": "node tools/release-check.mjs",
     "a11y": "playwright test e2e/accessibility.spec.js e2e/accessibilityManual.spec.js --project=chromium",
