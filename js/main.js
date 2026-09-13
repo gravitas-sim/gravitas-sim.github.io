@@ -62,7 +62,6 @@ import { resetFollowCamera } from './followCamera.js';
 import { initLocalePicker } from './i18n/picker.js';
 import { initBottomDock } from './bottomDock.js';
 import { initEmbedMode, initEmbedChrome } from './embed.js';
-import { initLecture } from './lecture.js';
 
 // Add global flag to track splash screen status
 window.isSplashActive = true;
@@ -410,7 +409,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // this line, at boot or on a language change.
     setRequestedLessonLocale(getLocale());
     onLocaleChange(setRequestedLessonLocale);
-    initLecture();
+    // Lecture Mode is not initialised here any more. js/lecture.js wires itself
+    // when it loads, and it loads on demand: the V shortcut in js/controls.js
+    // has always imported it that way, and the toolbar button now does too.
+    // Five kilobytes of sequence handling and spotlight drawing were in the
+    // start-up download for every visit, including the great majority that
+    // never present anything.
+    document.getElementById('lectureBtn')?.addEventListener(
+      'click',
+      async () => {
+        const lecture = await import('./lecture.js');
+        // initLecture() runs on load and attaches this button's own handler for
+        // every later press; this first press has to be passed on by hand, or
+        // the click that fetched the module would be the one that did nothing.
+        lecture.enterLecture();
+      },
+      { once: true }
+    );
     initEmbedChrome();
     // Not initInvestigations(): the lesson system is half the bundle and is
     // loaded the first time somebody asks for it. See investigationsLoader.js.

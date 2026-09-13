@@ -458,7 +458,16 @@ function onKeyDown(e) {
 // --- Wiring -------------------------------------------------------------------
 
 /** Wire Lecture Mode. Safe to call once, from init. */
+let wired = false;
+
 export function initLecture() {
+  // Idempotent, because there are now three ways in and any of them may be
+  // first: the toolbar button, the V shortcut in js/controls.js - which has
+  // always imported this module on demand - and a direct import from a test.
+  // Wiring twice would double every listener and register renderSequenceState
+  // with the locale twice.
+  if (wired) return;
+  wired = true;
   els = {
     bar: document.getElementById('lectureBar'),
     exit: document.getElementById('lectureExitBtn'),
@@ -502,3 +511,17 @@ export function initLecture() {
 
   renderSequenceState();
 }
+
+// The module wires itself when it loads, whoever loaded it.
+//
+// It used to be initialised from js/main.js on every visit, which put five
+// kilobytes of sequence handling, spotlight drawing and a sheet editor into the
+// start-up download for the great majority of visits that never present
+// anything. The V shortcut already imported this module on demand - so
+// deferring the rest meant `toggleLecture()` could put the application into
+// lecture mode with none of the bar's own controls wired, which is what the
+// presentation tests caught.
+//
+// Guarded on a document rather than on a flag: the authoring CLI reads this
+// file in a plain Node process, and there is nothing there to wire.
+if (typeof document !== 'undefined') initLecture();

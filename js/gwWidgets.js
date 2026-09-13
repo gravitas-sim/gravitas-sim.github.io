@@ -59,7 +59,9 @@ import {
   snapshotOf,
   audioPlanFor,
   referenceStrainFor,
+  restart,
 } from './gwLab.js';
+import { playFromCursor, aligned } from './gw/transport.js';
 import { TRACES, PROVENANCE, decodeTrace } from './data/gw/gw150914.js';
 import { sampledTimeline } from './gw/timeline.js';
 import { similarity as overlapOf, sampleOnto } from './gw/match.js';
@@ -73,6 +75,8 @@ import {
   illustrativeSpeed,
 } from './lesson/gwWavefronts.js';
 import {
+  ensureSignalAudio,
+  signalAudioAvailable,
   playSignal,
   stopSignal,
   signalIsPlaying as isPlaying,
@@ -1209,6 +1213,131 @@ const SOURCE_MODES = Object.freeze(['static', 'pulsing', 'binary']);
  */
 const AMPLIFY_STEPS = Object.freeze([1, 100, 10000, 1000000, 100000000]);
 
+/**
+ * Start the sound at the signal time the playhead is on.
+ *
+ * It used to start at the beginning of the signal whatever the playhead said,
+ * because renderAudio's t0 defaults to the timeline's start and nothing passed
+ * anything else. Pressing Listen two thirds of the way through a chirp played
+ * the chirp from the top, which is not what the screen was showing and not what
+ * the step had asked the reader to hear.
+ *
+ * The speed still comes from the whole timeline rather than from the remaining
+ * span - see js/gw/transport.js for why - so moving the playhead changes where
+ * the sound starts and how long it lasts, and not what it sounds like.
+ *
+ * @param {object} state - Lab state
+ * @param {object} spec - The step's spec
+ * @returns {{key: string, vars?: object}} The note to show under the controls
+ */
+/**
+ * The signal time the sound currently playing was rendered from, or null.
+ *
+ * Kept here rather than in js/gwAudio.js because it is the lab's business: the
+ * audio module plays a buffer and does not need to know what a playhead is.
+ */
+let audioOriginT = null;
+
+function startListening(state, spec = {}) {
+  // The engine is a deferred chunk and nothing else loads it for the lab, so on
+  // a cold visit the first press has to fetch it. Fetch, then start - and say
+  // "loading" meanwhile rather than the refusal that used to be the permanent
+  // answer here.
+  if (!signalAudioAvailable()) {
+    ensureSignalAudio().then(ready => {
+      if (!ready) {
+        setAudioNote({ key: 'gwW.audio.refused.unsupported' });
+        return;
+      }
+      // The reader may have moved on while the chunk was in flight; start from
+      // wherever the playhead is now rather than where it was when they asked.
+      setAudioNote(startListening(state, spec));
+    });
+    return { key: 'gwW.audio.loading' };
+  }
+  const plan = audioPlanFor(state.timeline);
+  let from = playFromCursor(state.timeline, state.cursorT, plan);
+  // Sitting on the end: there is nothing left to play, so Listen means listen
+  // again from the top, and the playhead goes with it rather than being left
+  // behind at the end of a signal that is audibly restarting.
+  if (from.atEnd) {
+    restart(state);
+    from = playFromCursor(state.timeline, state.cursorT, plan);
+  }
+  const result = playSignal(state.timeline, {
+    t0: from.t0,
+    mode: plan.mode,
+    speed: plan.speed,
+    shiftHz: plan.shiftHz,
+    // One reference for the whole comparison, and deliberately not this
+    // signal's own peak: normalising against that made every distance sound
+    // identical, which removed the very ratio the step asks the student to
+    // hear. Order of preference - what the step pins, then the preset's
+    // reference at its default parameters. Both are independent of the
+    // controls, so loudness now tracks strain.
+    normalise: comparisonListening(spec) ? 'fixed' : 'peak',
+    referenceStrain: audioReferenceFor(spec),
+    label: 'gw-lab',
+    // What this sound describes. The moment it stops being true - a different
+    // preset, a different distance, a different step, or the playhead moving
+    // somewhere else - the repaint notices and stops it.
+    owner: audioOwnerFor(state, spec),
+  });
+  audioOriginT = result.ok ? from.t0 : null;
+  return result.ok
+    ? { key: 'gwW.audio.playing', vars: audioVars(plan) }
+    : { key: `gwW.audio.refused.${result.reason}` };
+}
+
+/**
+ * Stop the sound and forget where it started.
+ *
+ * @returns {{key: string}} The note to show
+ */
+function stopListening() {
+  stopSignal();
+  audioOriginT = null;
+  return { key: 'gwW.audio.stopped' };
+}
+
+/**
+ * Whether the sound playing right now is this lab's.
+ *
+ * @param {object} state - Lab state
+ * @param {object} spec - The step's spec
+ * @returns {boolean} True when we own what is audible
+ */
+function listeningHere(state, spec) {
+  return isPlaying() && signalOwner() === audioOwnerFor(state, spec);
+}
+
+/**
+ * Move the sound to wherever the playhead now is, if a sound is playing.
+ *
+ * Called by everything that moves the playhead - a drag, a replay, the end of
+ * the span. Silent when nothing is playing, which is the common case, so a
+ * reader dragging the slider without having pressed Listen pays nothing.
+ *
+ * The tolerance guard matters: a slider fires on every pixel and several of
+ * those land on the same signal time, and re-rendering a buffer for a move
+ * smaller than the platform's own latency would be work nobody could hear.
+ *
+ * @param {object} state - Lab state
+ * @param {object} spec - The step's spec
+ * @returns {?object} A new audio note, or null if nothing changed
+ */
+function followPlayhead(state, spec = {}) {
+  if (!listeningHere(state, spec)) return null;
+  const plan = audioPlanFor(state.timeline);
+  if (
+    audioOriginT !== null &&
+    aligned(state.cursorT, audioOriginT, plan.speed)
+  ) {
+    return null;
+  }
+  return startListening(state, spec);
+}
+
 const GW_LAB = {
   id: 'gw-lab',
   // Given the lesson context, so a step that stages the binary can have the
@@ -1399,6 +1528,12 @@ const GW_LAB = {
     // A cursor move is a seek, not a rebuild. Everything else already
     // rebuilt inside ensureLab().
     seekFraction(state, v.cursor ?? 0);
+    // And the sound goes where the playhead went. Before this, dragging the
+    // playhead while listening left the sound running from wherever it had
+    // started, so the screen and the speaker were describing different moments
+    // of the same signal.
+    const moved = followPlayhead(state, spec);
+    if (moved) audioNote = moved;
     // A reader moving a control is not the step opening, and must not restart
     // the transport. It used to: pausing and then dragging the playhead put
     // the playback straight back into motion, so the frame a reader had
@@ -1419,10 +1554,21 @@ const GW_LAB = {
   act(id, v, spec = {}) {
     const state = ensureLab(v, spec);
     if (id === 'play') {
-      if (cursorFraction(state) >= 0.999) replay(state);
-      else state.playing = !state.playing;
+      if (cursorFraction(state) >= 0.999) {
+        replay(state);
+        audioNote = followPlayhead(state, spec) ?? audioNote;
+      } else {
+        state.playing = !state.playing;
+        // A paused picture over a running sound is two different moments at
+        // once. Pausing stops the sound; pressing Listen again starts it from
+        // wherever the reader stopped.
+        if (!state.playing && listeningHere(state, spec)) {
+          audioNote = stopListening();
+        }
+      }
     } else if (id === 'replay') {
       replay(state);
+      audioNote = followPlayhead(state, spec) ?? audioNote;
     } else if (id === 'noise') {
       state.noiseOn = !state.noiseOn;
     } else if (id === 'reroll') {
@@ -1435,31 +1581,9 @@ const GW_LAB = {
       captureLab(state, spec);
     } else if (id === 'listen') {
       if (isPlaying()) {
-        stopSignal();
-        audioNote = { key: 'gwW.audio.stopped' };
+        audioNote = stopListening();
       } else {
-        const plan = audioPlanFor(state.timeline);
-        const result = playSignal(state.timeline, {
-          mode: plan.mode,
-          speed: plan.speed,
-          shiftHz: plan.shiftHz,
-          // One reference for the whole comparison, and deliberately not
-          // this signal's own peak: normalising against that made every
-          // distance sound identical, which removed the very ratio the step
-          // asks the student to hear. Order of preference - what the step
-          // pins, then the preset's reference at its default parameters. Both
-          // are independent of the controls, so loudness now tracks strain.
-          normalise: comparisonListening(spec) ? 'fixed' : 'peak',
-          referenceStrain: audioReferenceFor(spec),
-          label: 'gw-lab',
-          // What this sound describes. The moment it stops being true - a
-          // different preset, a different distance, a different step - the
-          // repaint below notices and stops it.
-          owner: audioOwnerFor(state, spec),
-        });
-        audioNote = result.ok
-          ? { key: 'gwW.audio.playing', vars: audioVars(plan) }
-          : { key: `gwW.audio.refused.${result.reason}` };
+        audioNote = startListening(state, spec);
       }
     }
     v.cursor = cursorFraction(state);

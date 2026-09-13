@@ -741,6 +741,14 @@ export const EN_DEFERRED = {
   // runs. The dozen that stay in the base catalogue are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
+  // Moved out of the start-up catalogue: only js/lessonStage.js and the
+  // lesson engine read these, and both are deferred.
+  'inv.stage.scale.display':
+    'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
+  'inv.stage.scale.true':
+    'True scale: sizes are now in proportion, and the smallest stars are below what the canvas can draw. Select them from the list.',
+  'inv.stage.nothingSelected':
+    'Select a star first, on the canvas or from the list.',
   'inv.objects.many':
     '{count} objects on the canvas. Click one to select it; the list returns when a step names a few.',
   'inv.objects.empty': 'Nothing in this activity names an object.',
@@ -2545,6 +2553,7 @@ export const EN_DEFERRED = {
     'This is measurement data turned into sound. Gravitational waves are not sound and there is nothing for sound to travel through between here and the source.',
   'gwW.audio.playing': 'Playing the modelled signal — {low} to {high}.',
   'gwW.audio.stopped': 'Stopped.',
+  'gwW.audio.loading': 'Fetching the sound\u2026',
   'gwW.audio.refused.muted':
     'Sound is off. Turn it on with the speaker at the top of the screen, then press Listen again.',
   'gwW.audio.refused.unsupported':

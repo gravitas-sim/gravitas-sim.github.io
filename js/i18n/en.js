@@ -1398,12 +1398,6 @@ export const EN = {
   'inv.stage.fit': 'Fit comparison',
   'inv.stage.follow': 'Follow selected',
   'inv.stage.scale': 'True scale',
-  'inv.stage.scale.true':
-    'True scale: sizes are now in proportion, and the smallest stars are below what the canvas can draw. Select them from the list.',
-  'inv.stage.scale.display':
-    'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
-  'inv.stage.nothingSelected':
-    'Select a star first, on the canvas or from the list.',
   'inv.objects.title': 'Objects in this activity',
   'inv.objects.label': 'Objects in this activity: select one to inspect it',
   'objectType.stars': 'Add Stars',

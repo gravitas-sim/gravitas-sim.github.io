@@ -114,6 +114,44 @@ export function setSignalAudio(impl) {
 /** @returns {boolean} Whether signal audio is wired up at all */
 export const signalAudioAvailable = () => audio !== null;
 
+/** The in-flight load, so pressing Listen twice does not fetch twice. */
+let loading = null;
+
+/**
+ * Fetch the audio engine if it is not here yet.
+ *
+ * js/gwAudio.js installs itself into this seam when it loads, and until this
+ * existed nothing ever loaded it for the lab: js/ui.js imports it for the sound
+ * panel's Preview button and nothing else did, so the lab's Listen button
+ * returned `unsupported` on a cold visit and kept returning it. A reader who
+ * had never pressed Preview could not hear a signal at all.
+ *
+ * Deliberately a dynamic import rather than a static one. The chunk pulls in
+ * the whole waveform model, and this module is also read by the authoring CLI
+ * in a plain Node process with no audio device - where the import is never
+ * called, so nothing is fetched and `false` remains the correct answer.
+ *
+ * @returns {Promise<boolean>} Whether signal audio is available now
+ */
+export function ensureSignalAudio() {
+  if (audio) return Promise.resolve(true);
+  if (typeof window === 'undefined') return Promise.resolve(false);
+  if (!loading) {
+    loading = import('./gwAudio.js')
+      .then(() => audio !== null)
+      .catch(() => {
+        // A chunk that will not load is worth reporting once rather than
+        // silently behaving like a machine with no speakers.
+        console.error('gravitas: the signal-audio module failed to load');
+        return false;
+      })
+      .finally(() => {
+        loading = null;
+      });
+  }
+  return loading;
+}
+
 /**
  * Start the signal.
  *

@@ -1375,12 +1375,6 @@ export const ES = {
   'inv.stage.fit': 'Encuadrar la comparación',
   'inv.stage.follow': 'Ir a la seleccionada',
   'inv.stage.scale': 'Escala real',
-  'inv.stage.scale.true':
-    'Escala real: los tamaños ya están en proporción, y las estrellas más pequeñas quedan por debajo de lo que el lienzo puede dibujar. Selecciónalas en la lista.',
-  'inv.stage.scale.display':
-    'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
-  'inv.stage.nothingSelected':
-    'Selecciona antes una estrella, en el lienzo o en la lista.',
   'inv.objects.title': 'Objetos de esta actividad',
   'inv.objects.label':
     'Objetos de esta actividad: selecciona uno para inspeccionarlo',

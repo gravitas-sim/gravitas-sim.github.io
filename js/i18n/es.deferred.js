@@ -747,6 +747,14 @@ export const ES_DEFERRED = {
   // runs. The dozen that stay in the base catalogue are on static buttons in
   // index.html, translated by the boot sweep, plus the two the loader itself
   // says when a lesson fails before its chunk arrives.
+  // Moved out of the start-up catalogue: only js/lessonStage.js and the
+  // lesson engine read these, and both are deferred.
+  'inv.stage.scale.display':
+    'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
+  'inv.stage.scale.true':
+    'Escala real: los tamaños ya están en proporción, y las estrellas más pequeñas quedan por debajo de lo que el lienzo puede dibujar. Selecciónalas en la lista.',
+  'inv.stage.nothingSelected':
+    'Selecciona antes una estrella, en el lienzo o en la lista.',
   'inv.objects.many':
     '{count} objetos en el lienzo. Haz clic en uno para seleccionarlo; la lista vuelve cuando un paso nombra unos pocos.',
   'inv.objects.empty': 'Nada en esta actividad nombra un objeto.',
@@ -2577,6 +2585,7 @@ export const ES_DEFERRED = {
     'Esto son datos convertidos en sonido. Las ondas gravitacionales no son sonido, y entre la fuente y nosotros no hay nada por lo que el sonido pueda viajar.',
   'gwW.audio.playing': 'Reproduciendo la señal modelada: de {low} a {high}.',
   'gwW.audio.stopped': 'Detenido.',
+  'gwW.audio.loading': 'Obteniendo el sonido\u2026',
   'gwW.audio.refused.muted':
     'El sonido está apagado. Enciéndelo con el altavoz de la parte superior y vuelve a pulsar Escuchar.',
   'gwW.audio.refused.unsupported':
