@@ -64,7 +64,7 @@ const c = (code, text) => (paint ? `${code}${text}${OFF}` : text);
 
 // The vocabulary and the summary sentence live in tools/checks.mjs, where
 // tests/releaseGate.test.js can reach them without running the gate.
-const { PASS, FAIL, SKIP, UNAVAILABLE, RETRIED } = OUTCOMES;
+const { PASS, FAIL, SKIP, UNAVAILABLE, RETRIED, LAUNCH_FAILED } = OUTCOMES;
 
 /** How each outcome prints, and whether it counts as the software being sound. */
 const OUTCOME = {
@@ -75,6 +75,10 @@ const OUTCOME = {
   // Passed, but only after a retry. Not a failure and not a pass: something
   // here is not deterministic, and a release candidate should say so.
   [RETRIED]: { badge: () => c(CYAN, 'FLKY'), green: false },
+  // Not FAIL: the software said nothing. Reporting a browser that would not
+  // start as a product failure sends somebody looking for a bug that is not
+  // there, and reporting it as a pass is worse.
+  [LAUNCH_FAILED]: { badge: () => c(YELLOW, 'BOOT'), green: false },
 };
 
 /** @type {Array<{id: string, label: string, status: string, note: string}>} */
@@ -108,8 +112,14 @@ function retriedIn(output) {
  * @param {string} status - One of the five outcomes
  * @param {string} [note] - Why, for anything that is not a plain pass
  */
-function record(check, status, note = '') {
-  results.push({ id: check.id, label: check.label, status, note });
+function record(check, status, note = '', skippedTests = 0) {
+  results.push({
+    id: check.id,
+    label: check.label,
+    status,
+    note,
+    skippedTests,
+  });
   const suffix = note ? ` ${c(DIM, `(${note})`)}` : '';
   process.stdout.write(
     `  ${OUTCOME[status].badge()}  ${check.label}${suffix}\n`
@@ -176,14 +186,32 @@ async function run(check) {
     record(check, PASS);
   } catch (err) {
     if (erase) process.stdout.write(erase);
+    const output = `${err.stdout || ''}${err.stderr || ''}`;
+    // A browser that would not start is not a failing product.
+    if (
+      /browserType\.launch|Executable doesn't exist|Failed to launch|browser has been closed/i.test(
+        output
+      )
+    ) {
+      record(
+        check,
+        LAUNCH_FAILED,
+        'a browser would not start; nothing was tested either way'
+      );
+      failures.push(
+        `${check.label}\n          could not launch a browser. Run ` +
+          '`npx playwright install` and try again.'
+      );
+      return;
+    }
     record(check, FAIL);
-    const output = `${err.stdout || ''}${err.stderr || ''}`
+    const tail = output
       .trim()
       .split('\n')
       .slice(-8)
       .map(l => `          ${l}`)
       .join('\n');
-    failures.push(`${check.label}\n${output}`);
+    failures.push(`${check.label}\n${tail}`);
   }
 }
 
@@ -352,14 +380,24 @@ process.stdout.write(`${c(BOLD, 'What ran')}\n`);
 process.stdout.write(
   `  ${summary.counts[PASS]} passed` +
     `   ${summary.counts[FAIL]} failed` +
-    `   ${summary.counts[SKIP]} skipped` +
-    `   ${summary.counts[UNAVAILABLE]} unavailable` +
-    `   ${summary.counts[RETRIED]} passed only on a retry\n`
+    `   ${summary.counts[SKIP]} skipped\n` +
+    `  ${summary.counts[UNAVAILABLE]} capability unavailable` +
+    `   ${summary.counts[RETRIED]} passed only after retry` +
+    `   ${summary.counts[LAUNCH_FAILED]} unable to launch\n` +
+    (summary.innerSkipped
+      ? c(
+          YELLOW,
+          `  ${summary.innerSkipped} individual test(s) were skipped inside ` +
+            'checks that passed.\n  tools/check-test-policy.mjs lists which ' +
+            'skips are allowed, and why.\n'
+        )
+      : '')
 );
 for (const [name, status] of [
   ['skipped', SKIP],
   ['unavailable', UNAVAILABLE],
-  ['passed only on a retry', RETRIED],
+  ['passed only after retry', RETRIED],
+  ['unable to launch', LAUNCH_FAILED],
 ]) {
   for (const r of byStatus(status)) {
     process.stdout.write(

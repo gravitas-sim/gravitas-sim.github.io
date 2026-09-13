@@ -215,7 +215,10 @@ test.describe('a lesson gives the sandbox back', () => {
     expect(await census(page)).not.toContain('Reader Star');
   });
 
-  test('lesson progress survives the round trip @accepts:ce.black-holes', async ({ page, app }) => {
+  test('lesson progress survives the round trip @accepts:ce.black-holes', async ({
+    page,
+    app,
+  }) => {
     test.slow();
     await app.boot();
     await page.waitForFunction(() => window.splashScreenEnded === true);

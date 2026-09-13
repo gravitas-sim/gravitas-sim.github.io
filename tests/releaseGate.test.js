@@ -328,4 +328,64 @@ describe('the summary cannot overstate a run', () => {
     const s = summarise([]);
     expect(s.green).toBe(false);
   });
+
+  // A browser that would not start is neither a passing product nor a failing
+  // one. Calling it a failure sends somebody looking for a bug that is not
+  // there; calling it a pass is worse.
+  test('a browser that would not launch is its own outcome', () => {
+    const s = summarise([row(OUTCOMES.PASS), row(OUTCOMES.LAUNCH_FAILED)]);
+    expect(s.green).toBe(false);
+    expect(s.complete).toBe(false);
+    expect(s.counts[OUTCOMES.LAUNCH_FAILED]).toBe(1);
+    expect(s.headline).toMatch(/could not launch/);
+    expect(s.headline).not.toMatch(/failed/);
+  });
+
+  test('every outcome has a column in the tally', () => {
+    const s = summarise([row(OUTCOMES.PASS)]);
+    for (const key of Object.values(OUTCOMES)) {
+      expect({ key, counted: typeof s.counts[key] }).toEqual({
+        key,
+        counted: 'number',
+      });
+    }
+  });
+
+  // A suite can exit zero having declined to run part of itself, and the exit
+  // code cannot say so.
+  test('tests skipped inside a passing check are counted and reported', () => {
+    const s = summarise([
+      { status: OUTCOMES.PASS, label: 'browser suite', skippedTests: 4 },
+      { status: OUTCOMES.PASS, label: 'lint' },
+    ]);
+    // Still green - the checks all passed - but the number is carried so the
+    // report can say it rather than printing an unqualified "all passed".
+    expect(s.green).toBe(true);
+    expect(s.innerSkipped).toBe(4);
+  });
+});
+
+describe('the skip policy', () => {
+  test('allows only capability skips, each with a reason', async () => {
+    const { ALLOWED_SKIPS } = await import('../tools/check-test-policy.mjs');
+    expect(ALLOWED_SKIPS.length).toBeGreaterThan(0);
+    for (const entry of ALLOWED_SKIPS) {
+      expect(typeof entry.file).toBe('string');
+      expect(typeof entry.match).toBe('string');
+      // A capability is a property of the machine. "this build has no energy
+      // tab" is not one, and that is the distinction the list encodes.
+      expect(typeof entry.capability).toBe('string');
+      expect(entry.capability.length).toBeGreaterThan(2);
+      expect(entry.why.length).toBeGreaterThan(40);
+    }
+  });
+
+  test('the allowlist is small, and names only platform capabilities', async () => {
+    const { ALLOWED_SKIPS } = await import('../tools/check-test-policy.mjs');
+    expect(ALLOWED_SKIPS.length).toBeLessThanOrEqual(4);
+    expect(ALLOWED_SKIPS.map(a => a.capability).sort()).toEqual([
+      'MediaRecorder',
+      'WebGL',
+    ]);
+  });
 });

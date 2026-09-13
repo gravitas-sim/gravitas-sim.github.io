@@ -115,6 +115,7 @@ import { EN } from './i18n/en.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 import { resetPotentialCache } from './vectorOverlay.js';
 import { toast, announce } from './notify.js';
+import { registerShortcut } from './shortcuts.js';
 import {
   toggleTool,
   isToolActive,
@@ -6247,6 +6248,24 @@ window.addEventListener(
   },
   true
 );
+
+// The keyboard equivalent of a click-and-drag placement.
+//
+// Registered here rather than in js/controls.js, which is where the other
+// shortcuts live: controls.js is a feature module and this module is the
+// coordinator, so a shortcut there that reached for beginKeyboardPlacement()
+// would be an upward import - tools/check-architecture.mjs says so, and it is
+// right. The shortcut registry is the seam, and it points the other way.
+registerShortcut({
+  keys: 'A',
+  match: 'a',
+  group: 'Editing',
+  label: t('shortcut.placeKeyboard'),
+  run: () => {
+    if (keyboardPlacementActive()) commitKeyboardPlacement();
+    else beginKeyboardPlacement();
+  },
+});
 
 /**
  * Make one body of the armed type, at a place, with a velocity, and file it.

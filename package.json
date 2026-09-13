@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
     "test:watch": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",
+    "test:policy": "node tools/check-test-policy.mjs",
     "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage",
     "test:verbose": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose",
     "lint": "eslint js tools e2e build.js sw.js playwright.config.js eslint.config.js",

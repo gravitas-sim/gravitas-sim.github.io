@@ -63,9 +63,14 @@ test.describe('the object inspector', () => {
 
     const energyTab = page.locator('#inspectorTabEnergy');
     const detailsTab = page.locator('#inspectorTabDetails');
-    if (!(await energyTab.isVisible().catch(() => false))) {
-      test.skip(true, 'this build has no energy tab');
-    }
+    // Asserted, not skipped. The energy tab is part of the inspector, not a
+    // capability of the machine, so a build without one is a build with a
+    // missing feature - and "this build has no energy tab" was a way of
+    // passing whether or not it was there.
+    await expect(
+      energyTab,
+      'the inspector has an energy tab to switch to'
+    ).toBeVisible();
 
     await energyTab.click();
     await expect(page.locator('#energyTab')).toBeVisible();

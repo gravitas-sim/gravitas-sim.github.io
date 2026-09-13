@@ -224,15 +224,28 @@ test.describe('the shared observer geometry', () => {
     // is one click from full size. Worth defending, because the alternative
     // failure - a panel that collapses and can never be reopened - looks
     // identical until someone tries.
+    // Opened at a comfortable height and then squeezed, rather than opened
+    // into a short window: the panel toggles live in the rail, and at 520px of
+    // height the rail cannot be clicked at all, so a test that set the small
+    // viewport first spent fifteen seconds failing to open the panels it
+    // wanted to collapse.
+    //
+    // This used to run at whatever size the project happened to be at and skip
+    // when nothing collapsed - which meant it passed on any window big enough
+    // to avoid the situation it exists to check, including the default one.
     await openObservatory(page, app);
     await app.waitForFrames(10);
 
+    // js/observationLayout.js gives the stack window.innerHeight minus 160px of
+    // chrome, so this leaves 360px for three instrument panels and two gaps.
+    await page.setViewportSize({ width: 1000, height: 520 });
+    await app.waitForFrames(10);
+
     const collapsed = page.locator('.is-collapsed').first();
-    const anyCollapsed = (await page.locator('.is-collapsed').count()) > 0;
-    test.skip(
-      !anyCollapsed,
-      'this viewport fits all three panels, so none collapsed'
-    );
+    await expect(
+      collapsed,
+      'three observing panels in 360px of stack height collapse at least one'
+    ).toBeAttached();
 
     const id = await collapsed.evaluate(el => el.id);
     await collapsed.click();

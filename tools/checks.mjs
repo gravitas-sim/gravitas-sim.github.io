@@ -90,8 +90,14 @@ export const OUTCOMES = Object.freeze({
   PASS: 'pass',
   FAIL: 'fail',
   SKIP: 'skip',
+  // The machine cannot do this: no WebKit installed, no cached MIST grid.
+  // Distinct from SKIP, which is a choice the caller made.
   UNAVAILABLE: 'unavailable',
   RETRIED: 'retried',
+  // A browser that would not start. Distinct from FAIL, because the software
+  // under test said nothing - reporting it as a product failure sends somebody
+  // looking for a bug that is not there, and reporting it as a pass is worse.
+  LAUNCH_FAILED: 'launch-failed',
 });
 
 /** Only one of the five means the thing it checked is sound. */
@@ -115,7 +121,14 @@ export function summarise(results) {
   const total = results.length;
   const ran =
     counts[OUTCOMES.PASS] + counts[OUTCOMES.FAIL] + counts[OUTCOMES.RETRIED];
-  const notRun = counts[OUTCOMES.SKIP] + counts[OUTCOMES.UNAVAILABLE];
+  const notRun =
+    counts[OUTCOMES.SKIP] +
+    counts[OUTCOMES.UNAVAILABLE] +
+    counts[OUTCOMES.LAUNCH_FAILED];
+  // Tests skipped *inside* a check that otherwise passed. A browser suite that
+  // exits zero having skipped thirty tests is not the same as one that ran
+  // them, and the exit code cannot tell the difference.
+  const innerSkipped = results.reduce((n, r) => n + (r.skippedTests || 0), 0);
   const complete = total > 0 && notRun === 0;
   const green = complete && results.every(r => GREEN.has(r.status));
 
@@ -128,6 +141,10 @@ export function summarise(results) {
     headline =
       `${counts[OUTCOMES.RETRIED]} check(s) passed only on a retry, so this ` +
       'run did not establish that the release is sound.';
+  } else if (counts[OUTCOMES.LAUNCH_FAILED]) {
+    headline =
+      `${counts[OUTCOMES.LAUNCH_FAILED]} check(s) could not launch a browser, ` +
+      'so what they cover was not tested either way.';
   } else if (!complete) {
     headline =
       `${counts[OUTCOMES.PASS]} of ${total} checks passed. ${notRun} did not ` +
@@ -136,7 +153,12 @@ export function summarise(results) {
   } else {
     headline = `All ${total} checks passed.`;
   }
-  return { counts, green, complete, ran, notRun, headline };
+  // Green means every check ran and passed outright. Tests skipped inside a
+  // passing check do not make it red - they are the suite's own business, and
+  // the allowlist in tools/check-test-policy.mjs is what keeps them honest -
+  // but they are reported, because "everything passed" reads differently when
+  // thirty tests declined to run.
+  return { counts, green, complete, ran, notRun, innerSkipped, headline };
 }
 
 /**
@@ -200,6 +222,15 @@ export const CHECKS = [
     command: ['npm', 'run', 'validate:links'],
     tier: 'quick',
     ci: 'checks',
+    group: 'correctness',
+  },
+  {
+    id: 'test-policy',
+    label: 'browser-suite skip policy',
+    command: ['npm', 'run', 'test:policy'],
+    tier: 'quick',
+    ci: null,
+    why: 'added with the policy itself; runs in a fraction of a second',
     group: 'correctness',
   },
   {

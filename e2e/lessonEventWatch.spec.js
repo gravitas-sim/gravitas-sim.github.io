@@ -219,7 +219,14 @@ test.describe('arming it, twice', () => {
       select.dispatchEvent(new window.Event('change', { bubbles: true }));
       return option.textContent;
     });
-    test.skip(!picked, 'this system has no near-circular body to try');
+    // The scenario this step stages is fixed, so it either has the body the
+    // step's tip promises or the step is broken. Skipping here meant a staging
+    // regression - the near-circular body vanishing from the scene - would have
+    // silently removed the test that noticed.
+    expect(
+      picked,
+      'the staged system offers a near-circular body, as the step promises'
+    ).not.toBeNull();
 
     await page.locator('#pauseEventArm').click();
     const armed = (await toolState(page)).armed;
@@ -263,14 +270,36 @@ test.describe('leaving an armed activity', () => {
     app,
   }) => {
     await app.boot();
+    // A scenario with something to watch. This used to run in whatever the
+    // default world was and skip when nothing armed - and nothing ever did, so
+    // every assertion below this line had never run. Kepler's 2nd Law holds an
+    // Eccentric Orbiter on an e = 0.65 orbit, which is what a periapsis watch
+    // needs; a circular orbit is refused one, correctly.
+    await app.loadScenario("Kepler's 2nd Law");
+    await app.waitForFrames(5);
+
     // Arm something of their own first, from the tool, before any lesson.
     await app.openPanel('togglePauseAtEvent', 'pauseEventContainer');
+    await page
+      .locator('#pauseEventBody')
+      .selectOption({ label: 'Eccentric Orbiter' });
+    await page
+      .locator('#pauseEventPrimary')
+      .selectOption({ label: 'Kepler Star' });
+    await page.locator('#pauseEventKind').selectOption('periapsis');
     await page.locator('#pauseEventArm').click();
     const theirs = await page.evaluate(async () => {
       const e = await import('/js/pauseAtEvent.js');
       return e.armedEvent();
     });
-    test.skip(!theirs, 'nothing armable in the default scenario');
+    // Same: the default scenario is fixed, and the reader's own watch either
+    // armed or the tool is broken. A skip here would hide exactly the failure
+    // this test exists to catch, because the lesson's refusal is only
+    // meaningful when there is a foreign watch to refuse in favour of.
+    expect(
+      theirs,
+      'the reader could arm a watch of their own before the lesson'
+    ).not.toBeNull();
 
     // Now the lesson's integration is asked to arm. It must refuse rather
     // than silently taking over somebody else's watch.
