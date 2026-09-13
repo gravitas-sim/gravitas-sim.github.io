@@ -85,7 +85,7 @@ test.describe('what the sweep reports', () => {
     }
   });
 
-  test('it varies the radius and holds everything else', async ({
+  test('it varies the radius and holds everything else @accepts:ce.binary-star-planets', async ({
     page,
     app,
   }) => {

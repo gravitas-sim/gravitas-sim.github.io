@@ -115,7 +115,7 @@ async function cardReadyLocal(page, atLeast = 2) {
 }
 
 test.describe('the canvas and the comparison card show one sample', () => {
-  test('every star on the card is a star on the canvas, to the last digit', async ({
+  test('every star on the card is a star on the canvas, to the last digit @accepts:ce.a-universe-of-stars', async ({
     page,
     app,
   }) => {

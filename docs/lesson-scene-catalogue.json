@@ -34,7 +34,32 @@
    "buttons": [],
    "engineReads": [],
    "mutates": [],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/physics.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/physics.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/physics.js"
+    },
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/physics.js"
+    }
+   ]
   },
   "bh-blocks": {
    "live": false,
@@ -56,7 +81,14 @@
    "buttons": [],
    "engineReads": [],
    "mutates": [],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/stellarLab.js"
+    }
+   ]
   },
   "bh-escape": {
    "live": false,
@@ -114,7 +146,32 @@
    ],
    "engineReads": [],
    "mutates": [],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    }
+   ]
   },
   "bh-thermo": {
    "live": false,
@@ -144,7 +201,32 @@
    "mutates": [
     "restageStarPair"
    ],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    }
+   ]
   },
   "binary-compare": {
    "live": false,
@@ -335,7 +417,32 @@
     "setSourceMode",
     "showWavefronts"
    ],
-   "datasets": []
+   "datasets": [
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/widgetRuntime.js"
+    }
+   ]
   },
   "gw-real": {
    "live": false,
@@ -348,6 +455,12 @@
    "engineReads": [],
    "mutates": [],
    "datasets": [
+    {
+     "name": "MIST v1.2 evolutionary tracks",
+     "origin": "computed-grid",
+     "dataset": "js/data/stellar/mistTracks.js",
+     "via": "js/data/stellar/mistTracks.js"
+    },
     {
      "name": "GW150914 strain, as published",
      "origin": "observation",
@@ -692,6 +805,24 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/stellarLab.js"
+    },
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -727,6 +858,24 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/stellar/evolution.js"
+    },
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -761,6 +910,24 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/stellarLab.js"
+    },
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -786,6 +953,24 @@
      "origin": "computed-grid",
      "dataset": "js/data/stellar/mistTracks.js",
      "via": "js/stellarLab.js"
+    },
+    {
+     "name": "Published exoplanet system parameters",
+     "origin": "observation",
+     "dataset": "js/data/exoplanetSystems.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "TRAPPIST-1 system parameters",
+     "origin": "observation",
+     "dataset": "js/data/trappist1.js",
+     "via": "js/widgetRuntime.js"
+    },
+    {
+     "name": "GW150914 strain, as published",
+     "origin": "observation",
+     "dataset": "js/data/gw/gw150914.js",
+     "via": "js/widgetRuntime.js"
     }
    ]
   },
@@ -9278,7 +9463,8 @@
       "scene-declared",
       "student-changes-scene",
       "engine-measurement",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "open-a-body-inspector",
@@ -9423,7 +9609,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -10299,6 +10486,7 @@
       "student-changes-scene",
       "engine-measurement",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -10652,6 +10840,7 @@
       "scene-declared",
       "model-result",
       "panel-diagram",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -10872,7 +11061,8 @@
       "scene-declared",
       "student-changes-scene",
       "engine-measurement",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -11267,7 +11457,7 @@
     "student": 4,
     "engine": 7,
     "model": 7,
-    "data": 0,
+    "data": 5,
     "diagram": 4,
     "evidence": 5,
     "declaredButInert": 31,
@@ -11643,6 +11833,7 @@
       "engine-measurement",
       "model-result",
       "panel-diagram",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -11720,7 +11911,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -11791,7 +11983,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -12263,7 +12456,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "move-an-instrument-control",
@@ -12334,7 +12528,8 @@
      "kinds": [
       "scene-declared",
       "model-result",
-      "panel-diagram"
+      "panel-diagram",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -13478,7 +13673,7 @@
     "student": 0,
     "engine": 4,
     "model": 19,
-    "data": 0,
+    "data": 5,
     "diagram": 19,
     "evidence": 1,
     "declaredButInert": 30,
@@ -37714,7 +37909,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -37792,7 +37988,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -37864,7 +38061,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -37938,7 +38136,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -38013,7 +38212,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38089,7 +38289,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -38166,7 +38367,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38241,7 +38443,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -38317,7 +38520,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38392,7 +38596,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38466,7 +38671,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -38544,6 +38750,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -38624,7 +38831,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38699,7 +38907,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38774,6 +38983,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -38854,7 +39064,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -38928,7 +39139,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -39006,6 +39218,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -39086,7 +39299,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -39161,6 +39375,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -39239,7 +39454,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -39315,7 +39531,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -39391,6 +39608,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -39471,7 +39689,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -39622,6 +39841,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -39703,6 +39923,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -39887,7 +40108,7 @@
     "student": 26,
     "engine": 0,
     "model": 27,
-    "data": 1,
+    "data": 27,
     "diagram": 1,
     "evidence": 7,
     "declaredButInert": 1,
@@ -39927,7 +40148,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -40005,7 +40227,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -40079,7 +40302,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -40154,7 +40378,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -40231,7 +40456,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -40307,6 +40533,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -40387,6 +40614,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -40467,6 +40695,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -40547,7 +40776,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "answer-in-words",
@@ -40623,7 +40853,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -40700,7 +40931,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -40776,6 +41008,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -40856,6 +41089,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -40935,7 +41169,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "commit-a-prediction",
@@ -41013,6 +41248,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -41094,6 +41330,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -41173,7 +41410,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -41248,7 +41486,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "choose-an-option",
@@ -41324,7 +41563,8 @@
      "kinds": [
       "scene-declared",
       "student-changes-scene",
-      "model-result"
+      "model-result",
+      "imported-data"
      ],
      "actions": [
       "change-a-scene-object",
@@ -41400,6 +41640,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -41605,6 +41846,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -41683,6 +41925,7 @@
       "scene-declared",
       "student-changes-scene",
       "model-result",
+      "imported-data",
       "captured-evidence"
      ],
      "actions": [
@@ -41865,7 +42108,7 @@
     "student": 22,
     "engine": 0,
     "model": 24,
-    "data": 2,
+    "data": 24,
     "diagram": 2,
     "evidence": 10,
     "declaredButInert": 0,
@@ -47449,7 +47692,7 @@
   "student": 155,
   "engine": 161,
   "model": 223,
-  "data": 79,
+  "data": 137,
   "diagram": 104,
   "evidence": 104,
   "declaredButInert": 447,

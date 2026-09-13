@@ -79,7 +79,7 @@ test.describe('the object list names what a step means', () => {
     ['keplers-laws', ['Kepler Star', 'Circular Orbiter', 'Eccentric Orbiter']],
     ['retrograde-motion', ['Sun', 'Earth', 'Mars']],
   ]) {
-    test(`${id}: every intended body is listed and selectable`, async ({
+    test(`${id}: every intended body is listed and selectable @accepts:ce.${id}`, async ({
       page,
       app,
     }) => {
@@ -240,7 +240,7 @@ test.describe('an instrument and the scene describe the same thing', () => {
   // checks that the reading follows, which is what "connected" has to mean -
   // a probe that exists and never moves proves nothing.
 
-  test('transit-photometry: the phase readout tracks the planet across the disc', async ({
+  test('transit-photometry: the phase readout tracks the planet across the disc @accepts:ce.transit-photometry', async ({
     page,
     app,
   }) => {
@@ -341,7 +341,7 @@ test.describe('an instrument and the scene describe the same thing', () => {
     );
   });
 
-  test('gravity-assist: a rebuilt scene marks the previous run stale', async ({
+  test('gravity-assist: a rebuilt scene marks the previous run stale @accepts:ce.gravity-assist', async ({
     page,
     app,
   }) => {

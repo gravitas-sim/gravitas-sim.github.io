@@ -223,7 +223,10 @@ async function walkBackTo(page, wanted) {
 
 test.describe('a prediction is settled by the experiment, not by the answer key', () => {
   for (const loop of LOOPS) {
-    test(`${loop.id}: ${loop.family}`, async ({ page, app }) => {
+    test(`${loop.id}: ${loop.family} @accepts:ce.${loop.id}`, async ({
+      page,
+      app,
+    }) => {
       test.slow();
       await open(page, app, loop.id);
       const facts = await loopFacts(page, loop.id, loop.predict);

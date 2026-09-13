@@ -84,6 +84,7 @@
 // is the exact-match replacement.
 // =============================================================================
 
+import { execFileSync } from 'node:child_process';
 import { writeFile, readFile } from 'node:fs/promises';
 import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -1560,6 +1561,158 @@ function record(data, acceptance) {
 }
 
 /**
+ * Does the acceptance map's `test` actually accept anything?
+ *
+ * It used to be a file name, and a file name proves nothing. Four lessons
+ * pointed at e2e/investigations.spec.js and three at e2e/predictionLoops.spec.js,
+ * so "this lesson has a test" meant "some test exists in a file that also has
+ * tests for other lessons" - and one binding, gravity-assist, named a file that
+ * never mentioned the lesson at all.
+ *
+ * A binding is now an id and a tag. Each lesson declares a durable
+ * `centralExperimentId`, and one concrete test in the named file has to carry
+ * `@accepts:<that id>` in its title. That test must not be skipped, and it has
+ * to name the investigation it claims to accept, so a tag cannot be parked on
+ * a test that never opens the lesson.
+ *
+ * @param {object} acceptance - The parsed acceptance map
+ * @param {Array<object>} lessons - The generated catalogue
+ * @returns {Promise<Array<string>>} Problems
+ */
+async function checkAcceptanceBindings(acceptance, lessons) {
+  const problems = [];
+  const seen = new Map();
+  const fileCache = new Map();
+
+  // What Playwright would actually collect.
+  //
+  // Reading the file answers "is the tag there". It cannot answer "does the tag
+  // resolve", and three of the bindings are written into a generated title -
+  // `@accepts:ce.${id}` inside a loop - so a loop that stopped covering a
+  // lesson would leave the tag in the file and the lesson with nothing running.
+  // Listing costs a few seconds and is the only thing that settles it.
+  //
+  // Not spawnable from Jest, which is why this lives here: Playwright detects a
+  // Jest process and refuses, so a unit test asking the same question collects
+  // nothing and reports every binding as missing.
+  let collected = null;
+  try {
+    collected = execFileSync(
+      'npx',
+      ['playwright', 'test', '--list', '--project=chromium'],
+      {
+        cwd: ROOT,
+        encoding: 'utf8',
+        maxBuffer: 128 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }
+    );
+  } catch {
+    problems.push(
+      'could not list the browser suite, so no acceptance binding was ' +
+        'confirmed to resolve. Run `npx playwright test --list` to see why.'
+    );
+  }
+
+  /** A spec file's text, read once. */
+  const readSpec = async file => {
+    if (!fileCache.has(file)) {
+      fileCache.set(
+        file,
+        await readFile(resolve(ROOT, file), 'utf8').catch(() => null)
+      );
+    }
+    return fileCache.get(file);
+  };
+
+  for (const lesson of lessons) {
+    const entry = acceptance?.lessons?.[lesson.id];
+    if (!entry) continue;
+
+    const id = entry.centralExperimentId;
+    if (!id) {
+      problems.push(
+        `${lesson.id}: acceptance entry has no centralExperimentId, so its ` +
+          'central experiment is not bound to any test'
+      );
+      continue;
+    }
+    if (seen.has(id)) {
+      problems.push(
+        `${lesson.id}: centralExperimentId "${id}" is already used by ` +
+          `${seen.get(id)}; ids have to be unique or a tag is ambiguous`
+      );
+      continue;
+    }
+    seen.set(id, lesson.id);
+
+    const file = entry.test;
+    const src = await readSpec(file);
+    if (src === null) {
+      problems.push(`${lesson.id}: acceptance test "${file}" does not exist`);
+      continue;
+    }
+
+    const tag = `@accepts:${id}`;
+    // A tag written into a generated title - `@accepts:ce.${loop.id}` inside a
+    // template that loops over lesson ids - is a real binding and resolves to
+    // this id at run time, so it counts. The loop still has to name the lesson,
+    // which the check below insists on, so a template cannot claim a lesson it
+    // never runs.
+    const TEMPLATED = /@accepts:ce\.\$\{[^}]+\}/;
+    const templated = TEMPLATED.test(src);
+    if (!src.includes(tag) && !templated) {
+      problems.push(
+        `${lesson.id}: no test in ${file} is tagged ${tag}. A file name is ` +
+          'not a binding: tag the one test that runs this central experiment'
+      );
+      continue;
+    }
+
+    // The line the tag is on, so a skipped or exclusive test can be caught.
+    for (const line of src.split('\n')) {
+      if (!line.includes(tag) && !TEMPLATED.test(line)) continue;
+      if (/test\.skip\s*\(|test\.fixme\s*\(|it\.skip\s*\(/.test(line)) {
+        problems.push(
+          `${lesson.id}: the test tagged ${tag} is skipped, so nothing accepts ` +
+            'this central experiment'
+        );
+      }
+      if (/test\.only\s*\(|describe\.only\s*\(/.test(line)) {
+        problems.push(
+          `${lesson.id}: the test tagged ${tag} is marked .only, which would ` +
+            'silence every other test in the run'
+        );
+      }
+      if (/test\.fail\s*\(/.test(line)) {
+        problems.push(
+          `${lesson.id}: the test tagged ${tag} is an expected failure`
+        );
+      }
+    }
+
+    // And the tag has to resolve to a test Playwright will collect.
+    if (collected !== null && !collected.includes(tag)) {
+      problems.push(
+        `${lesson.id}: ${tag} is in ${file} but Playwright collects no test ` +
+          'carrying it, so nothing would run for this central experiment'
+      );
+    }
+
+    // And it has to be about this lesson. A tag on a test that never opens the
+    // investigation would be a binding to nothing.
+    if (!src.includes(lesson.id)) {
+      problems.push(
+        `${lesson.id}: ${file} carries ${tag} but never names "${lesson.id}", ` +
+          'so the test it tags does not identify the investigation it accepts'
+      );
+    }
+  }
+
+  return problems;
+}
+
+/**
  * Check the hand-written acceptance map against what was generated.
  *
  * The map is the human half and this is the machine half. A person writes
@@ -1596,6 +1749,7 @@ async function checkAcceptance(data) {
       continue;
     }
     for (const key of [
+      'centralExperimentId',
       'object',
       'control',
       'quantity',
@@ -1679,6 +1833,9 @@ async function checkAcceptance(data) {
         );
     }
   }
+  // And the part a file name cannot answer: is there a concrete, running test
+  // that says it accepts this lesson's central experiment?
+  problems.push(...(await checkAcceptanceBindings(map, data.lessons)));
   return problems;
 }
 

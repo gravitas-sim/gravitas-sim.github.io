@@ -68,7 +68,7 @@ test.describe('the synthetic observing run', () => {
     expect((await runState(page)).running).toBe(false);
   });
 
-  test('takes the measurements its schedule asks for and then stops', async ({
+  test('takes the measurements its schedule asks for and then stops @accepts:ce.detect-this-planet', async ({
     page,
     app,
   }) => {

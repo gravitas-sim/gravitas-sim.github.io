@@ -165,7 +165,7 @@ test.describe('one model time, two views', () => {
     }
   });
 
-  test('the star sheds mass on the canvas as the track records it', async ({
+  test('the star sheds mass on the canvas as the track records it @accepts:ce.lives-of-stars', async ({
     page,
     app,
   }) => {

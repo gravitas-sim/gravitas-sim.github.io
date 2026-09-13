@@ -142,7 +142,7 @@ test.describe('opening a lesson', () => {
     }
   });
 
-  test('a lesson sets up its own scenario and keeps the sim alive', async ({
+  test('a lesson sets up its own scenario and keeps the sim alive @accepts:ce.weighing-stars', async ({
     page,
     app,
   }) => {
@@ -155,7 +155,7 @@ test.describe('opening a lesson', () => {
 
 test.describe('advancing through representative step types', () => {
   test(
-    'walks the first several steps, meeting an instrument on the way',
+    'walks the first several steps, meeting an instrument on the way @accepts:ce.goldilocks-question',
     { tag: '@cross-browser' },
     async ({ page, app }) => {
       await openLesson(page, app);
@@ -274,7 +274,7 @@ test.describe('advancing through representative step types', () => {
     ).toHaveCount(1);
   });
 
-  test('a measure step accepts numbers and plots them back', async ({
+  test('a measure step accepts numbers and plots them back @accepts:ce.keplers-laws', async ({
     page,
     app,
   }) => {
@@ -342,7 +342,7 @@ test.describe('persistence', () => {
       .toBe(reached);
   });
 
-  test('answers are remembered, not just the step number', async ({
+  test('answers are remembered, not just the step number @accepts:ce.tides', async ({
     page,
     app,
   }) => {
@@ -382,7 +382,7 @@ test.describe('persistence', () => {
 });
 
 test.describe('the student report', () => {
-  test('the finish dialog opens and can produce a report', async ({
+  test('the finish dialog opens and can produce a report @accepts:ce.missing-mass', async ({
     page,
     app,
   }) => {

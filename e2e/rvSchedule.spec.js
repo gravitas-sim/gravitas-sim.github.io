@@ -476,7 +476,7 @@ test.describe('the lesson that uses it', () => {
     expect(scenario).toBe('Exoplanet Characterization Lab');
   });
 
-  test('the reading step cannot be taken without the prediction', async ({
+  test('the reading step cannot be taken without the prediction @accepts:ce.design-the-schedule', async ({
     page,
     app,
   }) => {

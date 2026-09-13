@@ -58,7 +58,7 @@ test.describe('what the box says back', () => {
     await expect(feedback(page)).toContainText(/nothing in the box/i);
   });
 
-  test('an equivalent unit is accepted, and the conversion is shown', async ({
+  test('an equivalent unit is accepted, and the conversion is shown @accepts:ce.radial-velocity', async ({
     page,
     app,
   }) => {

@@ -6,6 +6,7 @@
   "controlForms": "\"<widget-id>/<control-id>\" is checked against the registry. Anything else is prose, for an affordance that lives in the application's own panels rather than in a lesson widget.",
   "lessons": {
     "keplers-laws": {
+      "centralExperimentId": "ce.keplers-laws",
       "object": "eccentric",
       "control": "the canvas: click a body, then Run and the event watch",
       "quantity": "semi-major axis a and period P for four planets",
@@ -18,14 +19,20 @@
       ]
     },
     "retrograde-motion": {
+      "centralExperimentId": "ce.retrograde-motion",
       "object": "mars",
       "control": "the inspector: select Earth and switch on Reference frame",
       "quantity": "the dates and elongations of one retrograde loop",
       "evidence": "notebook-fields",
       "test": "e2e/lessonRecovery.spec.js",
-      "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"]
+      "loop": [
+        "before-you-look",
+        "catch-the-reversal",
+        "say-it-in-your-own"
+      ]
     },
     "transit-photometry": {
+      "centralExperimentId": "ce.transit-photometry",
       "object": "planet",
       "control": "depth-size/rp",
       "quantity": "transit depth, and the planet radius it implies",
@@ -38,6 +45,7 @@
       ]
     },
     "orbital-energy": {
+      "centralExperimentId": "ce.orbital-energy",
       "object": "visitor",
       "control": "launch/v",
       "quantity": "the dividing speed, as the last speed on each side of it",
@@ -51,6 +59,7 @@
       ]
     },
     "weighing-stars": {
+      "centralExperimentId": "ce.weighing-stars",
       "object": "a",
       "control": "balance/d1",
       "quantity": "two arm lengths and one period, giving both masses",
@@ -64,6 +73,7 @@
       ]
     },
     "black-holes": {
+      "centralExperimentId": "ce.black-holes",
       "object": "panel:bh-scaling",
       "control": "bh-scaling/mass",
       "quantity": "Schwarzschild radius against mass, captured at three masses",
@@ -76,6 +86,7 @@
       ]
     },
     "radial-velocity": {
+      "centralExperimentId": "ce.radial-velocity",
       "object": "star",
       "control": "rv-inclination/inc",
       "quantity": "the semi-amplitude K, and the minimum mass it gives",
@@ -88,6 +99,7 @@
       ]
     },
     "goldilocks-question": {
+      "centralExperimentId": "ce.goldilocks-question",
       "object": "earth",
       "control": "hz-insolation/distance",
       "quantity": "insolation at three distances, plotted",
@@ -101,6 +113,7 @@
       ]
     },
     "missing-mass": {
+      "centralExperimentId": "ce.missing-mass",
       "object": "outer",
       "control": "dm-fit/haloVFlat",
       "quantity": "orbital speed against radius, measured and then fitted",
@@ -113,6 +126,7 @@
       ]
     },
     "tides": {
+      "centralExperimentId": "ce.tides",
       "object": "moon",
       "control": "tide-strength/dist",
       "quantity": "tidal acceleration at four distances and three masses",
@@ -125,6 +139,7 @@
       ]
     },
     "butterfly-effect": {
+      "centralExperimentId": "ce.butterfly-effect",
       "object": "beta",
       "control": "the experiment bench: Set up and run both",
       "quantity": "separation between two runs, and its e-folding time",
@@ -138,6 +153,7 @@
       ]
     },
     "when-orbits-lock": {
+      "centralExperimentId": "ce.when-orbits-lock",
       "object": "europa",
       "control": "the sandbox: run, and the resonance panels read the scene",
       "quantity": "the Laplace argument, and the amplitude it librates through",
@@ -150,6 +166,7 @@
       ]
     },
     "detect-this-planet": {
+      "centralExperimentId": "ce.detect-this-planet",
       "object": "planet",
       "control": "survey-schedule/cadence",
       "quantity": "detection significance for two observing schedules",
@@ -162,6 +179,7 @@
       ]
     },
     "design-the-schedule": {
+      "centralExperimentId": "ce.design-the-schedule",
       "object": "planet",
       "control": "the schedule workspace: set the cadence and run both",
       "quantity": "the period recovered from each schedule, and its alias",
@@ -175,6 +193,7 @@
       ]
     },
     "binary-star-planets": {
+      "centralExperimentId": "ce.binary-star-planets",
       "object": "planet",
       "control": "the experiment bench: run the separation sweep",
       "quantity": "whether the planet survives twenty binary periods, against separation",
@@ -188,11 +207,12 @@
       ]
     },
     "gravity-assist": {
+      "centralExperimentId": "ce.gravity-assist",
       "object": "spacecraft",
       "control": "the inspector: read speed in two frames, before and after",
       "quantity": "speed relative to the planet and to the star, each side of the pass",
       "evidence": "notebook-fields",
-      "test": "e2e/gravityAssist.spec.js",
+      "test": "e2e/lessonRecovery.spec.js",
       "loop": [
         "which-side-gains",
         "fly-the-gaining-pass",
@@ -201,6 +221,7 @@
       ]
     },
     "hohmann-transfer": {
+      "centralExperimentId": "ce.hohmann-transfer",
       "object": "spacecraft",
       "control": "the manoeuvre planner: transverse burn, then Apply",
       "quantity": "the top and bottom of the arc after the first burn",
@@ -214,6 +235,7 @@
       ]
     },
     "lagrange-points": {
+      "centralExperimentId": "ce.lagrange-points",
       "object": "tracer",
       "control": "the sandbox: place a tracer and run it in the rotating frame",
       "quantity": "the Jacobi constant, and whether the neck is open",
@@ -226,14 +248,20 @@
       ]
     },
     "what-is-a-gravitational-wave": {
+      "centralExperimentId": "ce.what-is-a-gravitational-wave",
       "object": "bh",
       "control": "gw-lab/source",
       "quantity": "whether each of three sources emits, and the ring's change in length",
       "evidence": "notebook-fields",
       "test": "e2e/gwSources.spec.js",
-      "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"]
+      "loop": [
+        "a-sphere-that-breathes",
+        "change-the-shape",
+        "the-chirp"
+      ]
     },
     "listening-to-spacetime": {
+      "centralExperimentId": "ce.listening-to-spacetime",
       "object": "bh",
       "control": "gw-lab/m1",
       "quantity": "time in band, and peak strain, against mass and distance",
@@ -247,6 +275,7 @@
       ]
     },
     "a-universe-of-stars": {
+      "centralExperimentId": "ce.a-universe-of-stars",
       "object": "two",
       "control": "stellar-compare/focus",
       "quantity": "temperature, luminosity and the radius ratio they imply",
@@ -259,12 +288,17 @@
       ]
     },
     "lives-of-stars": {
+      "centralExperimentId": "ce.lives-of-stars",
       "object": "sun",
       "control": "stellar-evolution/position",
       "quantity": "radius and luminosity at a stated model age",
       "evidence": "instrument-capture",
       "test": "e2e/livesScene.spec.js",
-      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"]
+      "loop": [
+        "predict-direction",
+        "measure-the-giant",
+        "why-iron-stops-it"
+      ]
     }
   }
 }
