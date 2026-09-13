@@ -16,7 +16,8 @@
         "where-does-it-move-fastest",
         "fast-and-slow-in-numbers",
         "why-the-speed-changes"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "retrograde-motion": {
       "centralExperimentId": "ce.retrograde-motion",
@@ -29,7 +30,8 @@
         "before-you-look",
         "catch-the-reversal",
         "say-it-in-your-own"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "transit-photometry": {
       "centralExperimentId": "ce.transit-photometry",
@@ -42,7 +44,8 @@
         "what-will-the-brightness-do",
         "measure-the-dip",
         "what-the-method-misses"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "orbital-energy": {
       "centralExperimentId": "ce.orbital-energy",
@@ -56,7 +59,8 @@
         "find-the-dividing-line",
         "write-down-the-dividing-speed",
         "where-is-the-line"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "weighing-stars": {
       "centralExperimentId": "ce.weighing-stars",
@@ -70,7 +74,8 @@
         "measurement-one-how-big-is",
         "now-weigh-each-one",
         "say-how-the-weighing-worked"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "black-holes": {
       "centralExperimentId": "ce.black-holes",
@@ -83,7 +88,8 @@
         "now-make-it-heavier",
         "three-measurements",
         "say-what-scales-with-what"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "radial-velocity": {
       "centralExperimentId": "ce.radial-velocity",
@@ -96,7 +102,8 @@
         "now-tilt-the-whole-system",
         "read-k-off-the-panel",
         "what-would-you-still-want"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "goldilocks-question": {
       "centralExperimentId": "ce.goldilocks-question",
@@ -110,7 +117,8 @@
         "three-distances",
         "write-the-three-down",
         "what-the-graph-says"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "missing-mass": {
       "centralExperimentId": "ce.missing-mass",
@@ -123,7 +131,8 @@
         "now-a-galaxy",
         "measure-the-real-curve",
         "does-the-curve-decide"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "tides": {
       "centralExperimentId": "ce.tides",
@@ -136,7 +145,8 @@
         "bring-the-companion-closer",
         "four-distances",
         "say-it-in-your-own"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "butterfly-effect": {
       "centralExperimentId": "ce.butterfly-effect",
@@ -150,7 +160,8 @@
         "measure-the-triple",
         "write-down-what-you-measured",
         "how-long-does-a-prediction"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "when-orbits-lock": {
       "centralExperimentId": "ce.when-orbits-lock",
@@ -163,7 +174,8 @@
         "the-laplace-argument",
         "record-the-laplace-libration",
         "say-what-a-libration-shows"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "detect-this-planet": {
       "centralExperimentId": "ce.detect-this-planet",
@@ -176,7 +188,8 @@
         "schedule-b-twelve-nights-thirty",
         "write-down-what-schedule-b",
         "the-limits-of-finding-nothing"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "design-the-schedule": {
       "centralExperimentId": "ce.design-the-schedule",
@@ -190,7 +203,8 @@
         "run-both-schedules",
         "read-the-comparison",
         "say-what-the-schedule-decided"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "binary-star-planets": {
       "centralExperimentId": "ce.binary-star-planets",
@@ -204,7 +218,8 @@
         "run-the-sweep",
         "read-the-sweep",
         "what-the-sweep-shows"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "gravity-assist": {
       "centralExperimentId": "ce.gravity-assist",
@@ -218,7 +233,8 @@
         "fly-the-gaining-pass",
         "write-down-both-columns",
         "explain-the-sweep"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "hohmann-transfer": {
       "centralExperimentId": "ce.hohmann-transfer",
@@ -232,7 +248,8 @@
         "watch-the-coast",
         "read-the-arc",
         "say-why-sideways"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "lagrange-points": {
       "centralExperimentId": "ce.lagrange-points",
@@ -245,7 +262,8 @@
         "predict-forbidden",
         "read-the-constant",
         "say-what-jacobi-cannot-tell-you"
-      ]
+      ],
+      "evidenceFrom": "engine"
     },
     "what-is-a-gravitational-wave": {
       "centralExperimentId": "ce.what-is-a-gravitational-wave",
@@ -258,7 +276,8 @@
         "a-sphere-that-breathes",
         "change-the-shape",
         "the-chirp"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "listening-to-spacetime": {
       "centralExperimentId": "ce.listening-to-spacetime",
@@ -272,7 +291,8 @@
         "change-one-thing",
         "measure-time-in-band",
         "explain-the-chirp"
-      ]
+      ],
+      "evidenceFrom": "model"
     },
     "a-universe-of-stars": {
       "centralExperimentId": "ce.a-universe-of-stars",
@@ -285,7 +305,8 @@
         "predict-which-is-bigger",
         "measure-the-radius-ratio",
         "what-the-trend-covers"
-      ]
+      ],
+      "evidenceFrom": "data"
     },
     "lives-of-stars": {
       "centralExperimentId": "ce.lives-of-stars",
@@ -298,7 +319,8 @@
         "predict-direction",
         "measure-the-giant",
         "why-iron-stops-it"
-      ]
+      ],
+      "evidenceFrom": "data"
     }
   }
 }

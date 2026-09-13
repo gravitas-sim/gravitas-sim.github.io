@@ -22,6 +22,8 @@
 // =============================================================================
 
 import { formatNumber, tickLabel } from './format.js';
+import { evidenceFrom } from './data/investigations/provenance.js';
+import { isWrittenAnswer } from './investigations/writtenAnswer.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
@@ -2130,9 +2132,31 @@ function renderStep() {
 
   if (step.kind === 'short') {
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
+    // Where the number this step asks about came from. Four sources, and the
+    // difference is the thing this application is most often misread about: a
+    // Schwarzschild radius is a closed-form panel and a period is the
+    // integrator, and a reader who thinks the first was simulated has learned
+    // something false. Shown only on the step that asks for an interpretation,
+    // because that is where a reader is about to commit to what the evidence
+    // means. See js/data/investigations/provenance.js.
+    const from = active ? evidenceFrom(active.id) : null;
+    if (from) {
+      parts.push(
+        `<p class="inv-evidence-from">${escape(t(`inv.evidenceFrom.${from}`))}</p>`
+      );
+    }
     parts.push(
       `<textarea class="inv-answer" data-answer="${id}" rows="4"
-         placeholder="Write your answer here…">${escape(saved || '')}</textarea>`
+         aria-describedby="invAnswerNote"
+         placeholder="${escape(t('inv.answer.placeholder'))}">${escape(saved || '')}</textarea>`
+    );
+    // Shown only once something has been typed that is not an answer: an empty
+    // box on arrival is where every reader starts and does not need telling.
+    const empty =
+      String(saved || '').trim().length > 0 && !isWrittenAnswer(saved);
+    parts.push(
+      `<p class="inv-answer-note" id="invAnswerNote" role="status"
+          ${empty ? '' : 'hidden'}>${escape(t('inv.answer.saysNothing'))}</p>`
     );
     // A written answer no one ever sees an answer to is not an exercise, it is
     // a diary entry. The model answer is available, but only once the student
@@ -3152,6 +3176,15 @@ function bindStepInputs() {
         btn.disabled = !ready;
         const hint = els.body.querySelector('[data-reveal-hint]');
         if (hint) hint.hidden = ready;
+      }
+      // A box holding only whitespace or punctuation is not an answer, and
+      // saying so beside it is kinder than letting it reach a report as one.
+      const note = els.body.querySelector('#invAnswerNote');
+      if (note) {
+        // Raw length, not trimmed: a box of spaces is something the reader
+        // typed and is not an answer, while a box they have not touched needs
+        // no telling.
+        note.hidden = area.value.length === 0 || isWrittenAnswer(area.value);
       }
     });
   });

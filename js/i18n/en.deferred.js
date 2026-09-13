@@ -830,6 +830,16 @@ export const EN_DEFERRED = {
   'inv.role.young': 'young',
   'inv.role.old': 'old',
   'inv.answer.correct': 'Correct.',
+  'inv.evidenceFrom.engine':
+    'Your evidence here comes from the simulation engine: the numbers are measured off bodies it integrated.',
+  'inv.evidenceFrom.model':
+    'Your evidence here comes from a specialised model computed in a panel, not from the simulation engine.',
+  'inv.evidenceFrom.data':
+    'Your evidence here comes from published observations, reduced and shown as their authors released them.',
+  'inv.evidenceFrom.illustration':
+    'Your evidence here comes from a diagram drawn to explain a relationship, not from a measurement.',
+  'inv.answer.saysNothing':
+    'That looks empty. Write a sentence or two - what you measured, and how it compares with what you predicted.',
   'inv.answer.recorded': 'Recorded.',
   'inv.answer.model': 'Model answer shown.',
   'inv.plot.point': 'Point',

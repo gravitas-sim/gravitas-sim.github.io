@@ -137,9 +137,11 @@ describe('the service worker manifest is current', () => {
     const lessons = paths.filter(p =>
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
+    // provenance.js is generated infrastructure, not a lesson body - it is in
+    // this directory because the lesson engine imports it.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|registry|i18n|catalogue|browse|browseData|sequences)\.js$/.test(
+        !/\/(manifest|manifest\.es|registry|i18n|catalogue|browse|browseData|sequences|provenance)\.js$/.test(
           p
         )
     );

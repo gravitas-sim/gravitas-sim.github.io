@@ -837,6 +837,16 @@ export const ES_DEFERRED = {
   'inv.role.young': 'joven',
   'inv.role.old': 'vieja',
   'inv.answer.correct': 'Correcto.',
+  'inv.evidenceFrom.engine':
+    'Aqu\u00ed tu evidencia viene del motor de simulaci\u00f3n: los n\u00fameros se miden sobre cuerpos que integr\u00f3.',
+  'inv.evidenceFrom.model':
+    'Aqu\u00ed tu evidencia viene de un modelo especializado calculado en un panel, no del motor de simulaci\u00f3n.',
+  'inv.evidenceFrom.data':
+    'Aqu\u00ed tu evidencia viene de observaciones publicadas, reducidas y mostradas tal como las difundieron sus autores.',
+  'inv.evidenceFrom.illustration':
+    'Aqu\u00ed tu evidencia viene de un diagrama dibujado para explicar una relaci\u00f3n, no de una medici\u00f3n.',
+  'inv.answer.saysNothing':
+    'Eso parece vac\u00edo. Escribe una o dos frases: qu\u00e9 mediste y c\u00f3mo se compara con lo que predijiste.',
   'inv.answer.recorded': 'Registrado.',
   'inv.answer.model': 'Respuesta modelo mostrada.',
   'inv.plot.point': 'Punto',
