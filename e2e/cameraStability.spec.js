@@ -579,24 +579,55 @@ test('a merger leaves a world-frame reader alone', async ({
  * branch that runs is the one that makes a star - the family that until now
  * announced nothing at all.
  *
+ * Whatever is meant to be watching the pair is pointed at it here, in the same
+ * turn that creates it. The black-hole tests above can arm first and collide
+ * second because their pair is already in the scenario; these stars do not
+ * exist until this call makes them, and the merge lands within a couple of
+ * steps - sooner than a second round trip into the page. Arming from a later
+ * evaluate is a coin flip: half the time the inspector is asked to select a
+ * star the engine has already retired, which is how this arrived as a test
+ * that failed once in every two or three runs.
+ *
  * @param {import('@playwright/test').Page} page - The page
  * @param {{x: number, y: number}} at - Where to put them, in world units
- * @returns {Promise<?{watched: number, other: number}>} The two ids
+ * @param {'none'|'inspector'|'frame'} [arm] - What to point at the watched
+ *   star before any physics runs. 'inspector' goes through the same lookup the
+ *   canvas click handler uses; 'frame' sets an object reference frame.
+ * @returns {Promise<?{watched: number, other: number, armed: ?number}>} The two
+ *   ids, and what the arming actually ended up pointing at
  */
-const collideStars = (page, at) =>
-  page.evaluate(async where => {
-    const p = await import('/js/physics.js');
-    const ui = await import('/js/ui.js');
-    ui.SETTINGS.max_timestep = 0.002;
-    ui.SETTINGS.sim_speed = 0.2;
-    ui.SETTINGS.enable_star_merging = true;
-    p.updatePhysicsSettings(ui.SETTINGS);
-    const a = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
-    const b = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
-    b.pos.x = where.x + (a.radius + b.radius) * 0.4;
-    p.stars.push(a, b);
-    return { watched: a.id, other: b.id };
-  }, at);
+const collideStars = (page, at, arm = 'none') =>
+  page.evaluate(
+    async ({ where, arm: how }) => {
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      ui.SETTINGS.max_timestep = 0.002;
+      ui.SETTINGS.sim_speed = 0.2;
+      ui.SETTINGS.enable_star_merging = true;
+      p.updatePhysicsSettings(ui.SETTINGS);
+      const a = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
+      const b = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
+      b.pos.x = where.x + (a.radius + b.radius) * 0.4;
+      p.stars.push(a, b);
+
+      const out = { watched: a.id, other: b.id, armed: null };
+      if (how === 'inspector') {
+        // One argument, a world position - the same call the canvas click
+        // handler makes.
+        const hit = p.findObjectAtPosition({ x: a.pos.x, y: a.pos.y });
+        if (hit) {
+          ui.showObjectInspector(hit.object, hit.type);
+          out.armed = ui.state.selectedObject?.object?.id ?? null;
+        }
+      } else if (how === 'frame') {
+        const rf = await import('/js/referenceFrame.js');
+        rf.setFrame(rf.OBJECT, a.id);
+        out.armed = rf.frameState().objectId ?? null;
+      }
+      return out;
+    },
+    { where: at, arm }
+  );
 
 // The coverage hole this whole protocol was about. handle_star_merging is the
 // richest merger family in the engine - nine branches choosing between a star,
@@ -613,13 +644,12 @@ test('a star merger carries the reference frame onto the star it made', async ({
 
   await recordMerges(page);
 
-  const ids = await collideStars(page, { x: 900, y: -600 });
+  const ids = await collideStars(page, { x: 900, y: -600 }, 'frame');
   expect(ids).not.toBeNull();
-
-  await page.evaluate(async watched => {
-    const rf = await import('/js/referenceFrame.js');
-    rf.setFrame(rf.OBJECT, watched);
-  }, ids.watched);
+  // The premise, not a formality: the frame is on a progenitor before the
+  // merge, so what follows is about where the frame moved rather than about
+  // which round trip won.
+  expect(ids.armed).toBe(ids.watched);
 
   const merged = await firstMerge(page);
   expect(merged).not.toBeNull();
@@ -664,23 +694,11 @@ test('a merger moves the inspector onto the body it produced', async ({
 
   await recordMerges(page);
 
-  const ids = await collideStars(page, { x: -900, y: 500 });
+  const ids = await collideStars(page, { x: -900, y: 500 }, 'inspector');
   expect(ids).not.toBeNull();
-
-  // Select one of the two through the same path the canvas click handler uses.
-  const selected = await page.evaluate(async watched => {
-    const p = await import('/js/physics.js');
-    const ui = await import('/js/ui.js');
-    const star = p.stars.find(s => s.id === watched);
-    if (!star) return null;
-    // One argument, a world position - the same call the canvas click
-    // handler makes.
-    const hit = p.findObjectAtPosition({ x: star.pos.x, y: star.pos.y });
-    if (!hit) return null;
-    ui.showObjectInspector(hit.object, hit.type);
-    return ui.state.selectedObject?.object?.id ?? null;
-  }, ids.watched);
-  expect(selected).toBe(ids.watched);
+  // The premise, not a formality: the inspector is describing a progenitor
+  // before the merge, so what follows is about where the inspector moved.
+  expect(ids.armed).toBe(ids.watched);
 
   const merged = await firstMerge(page);
   expect(merged).not.toBeNull();
