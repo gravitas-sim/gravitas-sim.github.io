@@ -30,8 +30,11 @@ import { BINARY_WIDGETS } from './binaryWidgets.js';
 import { BLACK_HOLE_WIDGETS } from './blackHoleWidgets.js';
 import { HABITABILITY_WIDGETS } from './habitabilityWidgets.js';
 import { EXOPLANET_WIDGETS } from './exoplanetWidgets.js';
-import { TIDAL_WIDGETS } from './tidalWidgets.js';
-import { DARK_MATTER_WIDGETS } from './darkMatterWidgets.js';
+import { TIDAL_WIDGETS, messagesReady as tidalReady } from './tidalWidgets.js';
+import {
+  DARK_MATTER_WIDGETS,
+  messagesReady as darkMatterReady,
+} from './darkMatterWidgets.js';
 import { CHAOS_WIDGETS } from './chaosWidgets.js';
 import { RESONANCE_WIDGETS } from './resonanceWidgets.js';
 import { GW_WIDGETS } from './gwWidgets.js';
@@ -82,6 +85,29 @@ export const getWidget = id => WIDGETS.find(w => w.id === id) || null;
 
 /** @returns {Array} Every registered widget */
 export const allWidgets = () => [...WIDGETS];
+
+/**
+ * Wait until every widget in the registry can name itself.
+ *
+ * Two of them - the tidal panel and the dark-matter panel - keep their prose in
+ * the deferred catalogue, and a label read before that catalogue arrives comes
+ * back as its own message id. Both modules used to start the load and abandon
+ * it, so whether a caller saw "Moon on Earth" or "tideP.moonOnEarth" depended
+ * on how many microtasks had run since the import. `npm run audit:scene`
+ * printed eleven of those ids on every run.
+ *
+ * Awaited by anything that reads a widget's labels: the authoring preview, the
+ * scene audit, and the lesson engine when it opens a panel. Resolves to false
+ * rather than rejecting when the catalogue could not be fetched, so a caller
+ * can say so instead of choosing between a crash and silence -
+ * deferredMessagesFailure() carries the reason.
+ *
+ * @returns {Promise<boolean>} True when every widget's strings are usable
+ */
+export async function whenWidgetsReady() {
+  const results = await Promise.all([tidalReady, darkMatterReady]);
+  return results.every(Boolean);
+}
 
 /**
  * Starting values for a widget's controls, with a step's overrides applied.

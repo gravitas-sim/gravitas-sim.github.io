@@ -25,6 +25,19 @@ import { applyTranslations } from './dom.js';
 let loading = null;
 
 /**
+ * True once the strings are actually in the catalogues.
+ *
+ * Separate from `loading`, because they answer different questions and the
+ * exported check used to answer the wrong one: `loading !== null` is true the
+ * instant somebody asks, so a consumer testing readiness got `true` while the
+ * two chunks were still in the air and rendered a screenful of message ids.
+ */
+let registered_ = false;
+
+/** Why the last attempt failed, for a caller that wants to say so. */
+let lastFailure = null;
+
+/**
  * Add the deferred-panel strings to the catalogues, once.
  *
  * Both locales are registered rather than only the current one: the reader can
@@ -42,6 +55,8 @@ export function ensureDeferredMessages() {
     ]);
     registerMessages('en', en.EN_DEFERRED);
     registerMessages('es', es.ES_DEFERRED);
+    registered_ = true;
+    lastFailure = null;
 
     // Repaint. This used to do nothing, on the reasoning that every caller
     // registers before it renders - which is true of the panels' own
@@ -86,11 +101,43 @@ export function ensureDeferredMessages() {
     // Either way the application keeps working: affected strings render as
     // their ids, which is visible, reported, and not a blank screen.
     loading = null;
+    lastFailure = err;
     console.warn('[i18n] deferred messages did not load:', err);
     throw err;
   });
   return loading;
 }
 
-/** @returns {boolean} Whether the deferred strings are in memory */
-export const deferredMessagesReady = () => loading !== null;
+/** @returns {boolean} Whether the deferred strings are in the catalogues */
+export const deferredMessagesReady = () => registered_;
+
+/** @returns {?Error} Why the last attempt failed, or null */
+export const deferredMessagesFailure = () => lastFailure;
+
+/**
+ * The readiness boundary a consumer awaits before reading any deferred label.
+ *
+ * `ensureDeferredMessages()` rejects, which is right for a caller that wants to
+ * know. This one never rejects: it reports whether the strings arrived, so a
+ * renderer can decide what to draw instead of choosing between a crash and a
+ * `.catch(() => {})` that hides every failure including the ones worth seeing.
+ *
+ * @returns {Promise<boolean>} True when the deferred strings are usable
+ */
+export async function awaitDeferredMessages() {
+  if (registered_) return true;
+  try {
+    await ensureDeferredMessages();
+    return registered_;
+  } catch {
+    // Already reported once by ensureDeferredMessages, with the error.
+    return false;
+  }
+}
+
+/** Forget everything, so a test can exercise a failure and then a recovery. */
+export function resetDeferredMessagesForTests() {
+  loading = null;
+  registered_ = false;
+  lastFailure = null;
+}

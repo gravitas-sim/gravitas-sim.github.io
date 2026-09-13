@@ -89,7 +89,7 @@ import { writeFile, readFile } from 'node:fs/promises';
 import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { allWidgets } from '../js/widgets.js';
+import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CATALOGUE = resolve(ROOT, 'docs/lesson-scene-catalogue.json');
@@ -1837,6 +1837,17 @@ async function checkAcceptance(data) {
   // that says it accepts this lesson's central experiment?
   problems.push(...(await checkAcceptanceBindings(map, data.lessons)));
   return problems;
+}
+
+// Two panels keep their prose in the deferred catalogue, and this tool reads
+// their labels. Without waiting, every run printed eleven message ids where the
+// English and Spanish strings both exist.
+if (!(await whenWidgetsReady())) {
+  console.error(
+    'The deferred message catalogue did not load, so widget labels would be ' +
+      'reported as their own message ids. Refusing to audit against that.'
+  );
+  process.exit(1);
 }
 
 const data = await audit();

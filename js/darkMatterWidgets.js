@@ -67,9 +67,20 @@ import {
 // authoring preview or a test can import this file directly and never go
 // through the registry - and a readout that prints its own message ids because
 // of who called it is a bug in the widget, not in the caller.
-import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+// The strings this panel reads live in the deferred catalogue, and asking for
+// one before it arrives returns the message id. The load used to be started
+// here and abandoned - `ensureDeferredMessages().catch(() => {})` - which meant
+// two things at once: a synchronous label read in the same tick got a raw id,
+// and a genuine failure to fetch the catalogue was discarded without a word.
+//
+// Started here still, because the fetch should be in flight as early as
+// possible, but the promise is kept and the failure is not swallowed.
+// js/widgets.js exports whenWidgetsReady(), which is what a caller awaits
+// before reading a label from this file. See js/i18n/deferredMessages.js.
+import { awaitDeferredMessages } from './i18n/deferredMessages.js';
 
-ensureDeferredMessages().catch(() => {});
+/** The load, kept so js/widgets.js can await it. */
+export const messagesReady = awaitDeferredMessages();
 
 // The same fixed dark palette the black hole and tidal panels use, and for the
 // same reason: these are pictures of space and plots over it, and theme-coloured
@@ -1859,7 +1870,15 @@ const BUDGET = {
     },
   ],
   presets: BUDGET_LAYERS.map((l, i) => ({
-    label: l.label,
+    // A getter, not the value. BUDGET_LAYERS[i].label is itself a getter so its
+    // translation is fetched when something displays it; reading it here made
+    // it eager, and because this array is built at module scope the read
+    // happened during import, before the deferred catalogue could have arrived.
+    // It also froze the label in whatever language was active at import, so a
+    // reader who switched language kept the old words.
+    get label() {
+      return l.label;
+    },
     values: { layer: i },
     note: [
       'Dark energy is most of it, and it is not mass at all: it is a property of space that makes the expansion speed up. Set it aside and look at the matter.',

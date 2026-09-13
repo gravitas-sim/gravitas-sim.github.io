@@ -465,7 +465,20 @@ export const TIDAL_SYSTEMS = [
  */
 export function systemFacts(system) {
   const profile = tidalProfile(system.massKg, system.distanceM, system.radiusM);
-  return { ...system, profile, tidal: profile.approx };
+  // The descriptors, not the values. `{ ...system }` reads every getter, and
+  // `label` is a getter precisely so its translation is fetched when something
+  // displays it rather than when this module loads. Spreading it turned the
+  // lazy label into an eager one, and because js/tidalWidgets.js calls this at
+  // module scope the read happened during import - before the deferred
+  // catalogue could possibly have arrived. Every run of the scene audit
+  // printed the message ids of strings that exist in both languages.
+  const out = Object.defineProperties(
+    {},
+    Object.getOwnPropertyDescriptors(system)
+  );
+  out.profile = profile;
+  out.tidal = profile.approx;
+  return out;
 }
 
 /** Every system in TIDAL_SYSTEMS, with its tide worked out. */
