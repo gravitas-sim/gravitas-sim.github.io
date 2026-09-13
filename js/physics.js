@@ -685,6 +685,204 @@ const absorb_into_black_hole = (bh, body) => {
 };
 
 // =============================================================================
+// What happens when two bodies become one
+// -----------------------------------------------------------------------------
+// Three families of merger in this engine decide different things and then do
+// the same bookkeeping:
+//
+//   BH-BH                 always a black hole
+//   gas giant + gas giant a bigger gas giant, or a star above the ignition
+//                         threshold
+//   star / remnant        nine branches: star+star, WD+WD, NS+NS, the mixed
+//                         remnants, and star+BH, choosing between a star, a
+//                         white dwarf, a neutron star and a black hole
+//
+// The decision is physics and stays in its branch. The bookkeeping is not, and
+// it had been written out three times - twice with an event and once, in the
+// richest family of the three, without one. Every consumer of `gravitasMerge`
+// is a continuity handler: js/ui.js moves an object reference frame onto the
+// result and re-opens the inspector on it, because the product can be a
+// different kind of body from either progenitor. A star that merged while the
+// reader was following it emitted nothing, so there was nothing to move to and
+// the view fell back to the world origin - the exact failure
+// e2e/cameraStability.spec.js exists to catch, in the one path that never fired
+// the event it watches for.
+//
+// Where the boundary is, and why absorption is on the other side of it
+// -----------------------------------------------------------------------------
+// `absorb_into_black_hole` above is not a merger and is deliberately not routed
+// through this, and the line is about what is worth announcing rather than
+// about arithmetic.
+//
+// An announced merger is a state transition a reader could be watching: two
+// star-class bodies become one, it is rare, and something holding one of them
+// needs to be told what to hold instead. Absorption is the opposite on every
+// count. It is a planet, an asteroid or a comet falling into a hole that keeps
+// its own identity; it is not rare - Stellar Graveyard absorbs 98 per cent of
+// its mass within a few seconds - and announcing each one would flood a
+// thousand-entry event log and fire the audio layer's bass drop hundreds of
+// times in a row. Gas-giant accretion is the same shape and stays outside for
+// the same reason.
+//
+// The one case that sits on the line is a star, white dwarf or neutron star
+// falling into a black hole. It is handled inside handle_star_merging, it
+// emits a gravitational-wave ripple, and the hole survives as the result - so
+// it is announced, with the surviving hole as the result id, and the loop
+// above declines to retire a progenitor that is also the result. A reader
+// following the star then follows the hole its mass is now inside, which is
+// the honest continuation; the alternative is the view falling back to the
+// world origin.
+//
+// This does bookkeeping, not arithmetic. `mergedState` below is offered to the
+// branches whose product genuinely is the mass-weighted mean, and the branches
+// that compute something else - a merger that shed mass, a remnant whose radius
+// follows its own rule - keep computing it. Centralising the arithmetic as well
+// would be a physics change wearing a refactor's clothes.
+// =============================================================================
+
+/**
+ * The mass, position and velocity of a perfectly inelastic merger.
+ *
+ * Total mass, mass-weighted centre of mass, and the velocity that conserves
+ * linear momentum. Offered rather than imposed: see the note above.
+ *
+ * @param {object} a - One progenitor
+ * @param {object} b - The other
+ * @returns {{mass: number, pos: {x: number, y: number}, vel: {x: number, y: number}}} The product's state
+ */
+const mergedState = (a, b) => {
+  const m1 = Number.isFinite(a?.mass) ? a.mass : 0;
+  const m2 = Number.isFinite(b?.mass) ? b.mass : 0;
+  const mass = m1 + m2;
+  if (!(mass > 0)) {
+    return { mass: 0, pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 } };
+  }
+  return {
+    mass,
+    pos: {
+      x: (a.pos.x * m1 + b.pos.x * m2) / mass,
+      y: (a.pos.y * m1 + b.pos.y * m2) / mass,
+    },
+    vel: {
+      x: (a.vel.x * m1 + b.vel.x * m2) / mass,
+      y: (a.vel.y * m1 + b.vel.y * m2) / mass,
+    },
+  };
+};
+
+/**
+ * Whether these two may merge at all.
+ *
+ * A body a prescribed model owns is not the integrator's to evolve, and merging
+ * is evolution. A lesson that stands a binary on the canvas draws its
+ * components as fixed-size markers and moves them to the separation the
+ * waveform is plotted from, so they spend most of an inspiral inside each
+ * other's drawn radius - without this the engine merged them into one randomly
+ * named black hole a second after the lesson opened, on every step, in both
+ * gravitational-wave lessons.
+ *
+ * @param {object} a - One progenitor
+ * @param {object} b - The other
+ * @returns {boolean} True when the engine owns both
+ */
+const mergeAllowed = (a, b) => !a?.model_owned && !b?.model_owned;
+
+/**
+ * Retire two progenitors into one result, and say so exactly once.
+ *
+ * @param {object} a - The first progenitor
+ * @param {object} b - The second
+ * @param {?object} result - What replaced them; null when the pair annihilated
+ * @param {object} [opts] - Options
+ * @param {Function} [opts.remove] - Removes a progenitor from its collection.
+ *   The default marks it not alive, which is what `purgeDead` and the step's
+ *   own `filterAndClearEnergy` sweep act on; callers that splice their own list
+ *   pass their own and take responsibility for the history.
+ * @returns {?object} The event detail that was dispatched, or null
+ */
+const completeMerger = (a, b, result, { remove } = {}) => {
+  if (!a || !b) return null;
+
+  // Both are gone whatever happened, and their energy history goes with them.
+  // `purgeDead` clears history for anything it filters out, so the default
+  // path is covered; clearing here as well is idempotent and keeps a caller
+  // that splices from leaking.
+  for (const body of [a, b]) {
+    // One family of merger keeps one of its progenitors: a star falling into a
+    // black hole leaves the hole heavier and still itself, and the hole is the
+    // result. Retiring it here would kill the thing that survived.
+    if (body === result) continue;
+    body.alive = false;
+    if (typeof remove === 'function') remove(body);
+    clearObjectEnergyHistory(body.id);
+  }
+
+  const detail = {
+    type: 'merge',
+    // Wall-clock, kept because the audio layer's bass drop is a wall-clock
+    // effect and reads it. It is not the simulation's clock and never was.
+    time: performance.now(),
+    // The simulation's own clock, which is what a reader's timeline, a
+    // recording and an exported measurement are all indexed by. In sim units,
+    // measured from the moment the world was built.
+    simTime: getSimulationTime(),
+    simTimeUnits: 'sim',
+    primaryId: a.id,
+    secondaryId: b.id,
+    resultId: result ? result.id : null,
+    // Class names, which is what the merger branches decide on. `keepNames` in
+    // build.js is what makes them survive minification.
+    //
+    // `resultObjType` is separate and is not a synonym: a transformed body
+    // carries the obj_type of what it became and the class of what it was, and
+    // js/ui.js renders the inspector by obj_type. Both are here so that no
+    // consumer has to guess which one it wanted.
+    types: {
+      primary: a.constructor?.name ?? null,
+      secondary: b.constructor?.name ?? null,
+      result: result ? (result.constructor?.name ?? null) : null,
+      resultObjType: result ? (result.obj_type ?? null) : null,
+    },
+    masses: {
+      primary: Number.isFinite(a.mass) ? a.mass : null,
+      secondary: Number.isFinite(b.mass) ? b.mass : null,
+      // What the product actually came out at, which is not always the sum:
+      // a gas-giant pair that ignites, and the remnant branches that shed
+      // mass, both end lighter than m1 + m2.
+      result: result && Number.isFinite(result.mass) ? result.mass : null,
+      units: 'sim',
+    },
+    // Kept for the consumers that already read it.
+    mergedMass: result && Number.isFinite(result.mass) ? result.mass : null,
+    position: result ? { x: result.pos.x, y: result.pos.y } : null,
+    velocity: result ? { x: result.vel.x, y: result.vel.y } : null,
+    // Neither progenitor was model-owned or this would not have run, so the
+    // product is the integrator's. Carried explicitly because a consumer
+    // should not have to infer provenance from the absence of a refusal.
+    modelOwned: Boolean(result?.model_owned),
+    engineOwned: !result?.model_owned,
+  };
+
+  if (!simulation.eventLog) simulation.eventLog = [];
+  simulation.eventLog.push(detail);
+  if (simulation.eventLog.length > 1000) simulation.eventLog.shift();
+
+  try {
+    if (
+      typeof window !== 'undefined' &&
+      window.dispatchEvent &&
+      typeof window.CustomEvent === 'function'
+    ) {
+      window.dispatchEvent(new window.CustomEvent('gravitasMerge', { detail }));
+    }
+  } catch {
+    // no-op: event dispatch not supported in this environment
+  }
+
+  return detail;
+};
+
+// =============================================================================
 // Live conservation diagnostics
 // -----------------------------------------------------------------------------
 // Energy and angular momentum, against a baseline taken when the world was
@@ -2727,21 +2925,19 @@ const updatePhysics = dt => {
         // engine merged them into one randomly named black hole a second
         // after the lesson opened, on every step, in both gravitational-wave
         // lessons.
-        if (bh1.model_owned || bh2.model_owned) continue;
+        if (!mergeAllowed(bh1, bh2)) continue;
         const dx = bh1.pos.x - bh2.pos.x,
           dy = bh1.pos.y - bh2.pos.y;
         if (dx * dx + dy * dy < (bh1.radius + bh2.radius) ** 2) {
+          // Identical arithmetic to what was written out here: total mass,
+          // mass-weighted centre of mass, momentum-conserving velocity.
           const m1 = bh1.mass,
-            m2 = bh2.mass,
-            new_mass = m1 + m2;
-          const new_pos = {
-            x: (bh1.pos.x * m1 + bh2.pos.x * m2) / new_mass,
-            y: (bh1.pos.y * m1 + bh2.pos.y * m2) / new_mass,
-          };
-          const new_vel = {
-            x: (bh1.vel.x * m1 + bh2.vel.x * m2) / new_mass,
-            y: (bh1.vel.y * m1 + bh2.vel.y * m2) / new_mass,
-          };
+            m2 = bh2.mass;
+          const {
+            mass: new_mass,
+            pos: new_pos,
+            vel: new_vel,
+          } = mergedState(bh1, bh2);
 
           // Create new merged black hole
           const new_black_hole = new BlackHole(new_pos, new_mass, new_vel);
@@ -2812,43 +3008,17 @@ const updatePhysics = dt => {
             gw_strength: 1.0, // Full strength for BH-BH mergers
           });
 
-          // Emit clean merge event tag (BH-BH)
-          //
-          // `resultId` is the point of this payload for anything holding on to
-          // a progenitor. Without it a listener could tell that two black holes
-          // had gone but not what replaced them, so a reader watching from one
-          // of them - an object reference frame, or the inspector - had nothing
-          // to move to and fell back to the world origin, which reads as the
-          // view jumping at the exact moment the merger happens.
-          const evt = {
-            type: 'merge',
-            time: performance.now(),
-            primaryId: bh1.id,
-            secondaryId: bh2.id,
-            resultId: new_black_hole.id,
-            mergedMass: new_black_hole.mass,
-            position: { x: new_pos.x, y: new_pos.y },
-          };
-          if (!simulation.eventLog) simulation.eventLog = [];
-          simulation.eventLog.push(evt);
-          if (simulation.eventLog.length > 1000) simulation.eventLog.shift();
-          if (
-            typeof window !== 'undefined' &&
-            window.dispatchEvent &&
-            typeof window.CustomEvent === 'function'
-          ) {
-            window.dispatchEvent(
-              new window.CustomEvent('gravitasMerge', { detail: evt })
-            );
-          }
-
-          // Spliced out directly, so the filterAndClearEnergy pass below will
-          // never see them - release their history here.
-          clearObjectEnergyHistory(bh1.id);
-          clearObjectEnergyHistory(bh2.id);
+          // The result goes into its collection before the merger is
+          // announced, and that ordering is load-bearing. The dispatch is
+          // synchronous, and js/ui.js's handler looks the result up by id in
+          // order to re-open the inspector on it - so announcing first meant
+          // the lookup ran against a list the new hole was not in yet, found
+          // nothing, and left the inspector on a body that no longer existed.
+          // transferFrame survived that because it only needs the id.
           bh_list.splice(j, 1);
           bh_list.splice(i, 1);
           bh_list.push(new_black_hole);
+          completeMerger(bh1, bh2, new_black_hole);
           merged_this_step = true;
           break;
         }
@@ -6913,7 +7083,7 @@ const handle_star_merging = stars_list => {
         // Same rule as the black-hole loop above: what a prescribed model owns,
         // the integrator does not merge. The neutron-star pair a lesson stages
         // is the case this catches.
-        if (star1.model_owned || star2.model_owned) continue;
+        if (!mergeAllowed(star1, star2)) continue;
 
         const dx = star1.pos.x - star2.pos.x;
         const dy = star1.pos.y - star2.pos.y;
@@ -7021,7 +7191,12 @@ const handle_star_merging = stars_list => {
             if (other.constructor.name === 'NeutronStar')
               clearObjectEnergyHistory(other.id);
             neutron_stars = neutron_stars.filter(ns => ns !== other);
-            // No new black hole is created, and the existing one remains in bh_list
+            // No new black hole is created, and the existing one remains in
+            // bh_list - so it is the result. completeMerger declines to retire
+            // a progenitor that is also the result, and a reader following the
+            // star it consumed is moved onto the hole rather than back to the
+            // world origin.
+            completeMerger(other, bh, bh);
             merged_this_step = true;
             break;
           }
@@ -7227,6 +7402,15 @@ const handle_star_merging = stars_list => {
               stars.push(new_object);
             }
           }
+
+          // One call for all nine branches above. Each of them decided what
+          // forms - a star, a white dwarf, a neutron star or a black hole -
+          // and pushed it into its own collection; this is the bookkeeping
+          // every one of them shares, and until now none of them did. A star
+          // that merged while the reader was following it announced nothing,
+          // so js/ui.js had no result to move the frame and the inspector
+          // onto.
+          completeMerger(star1, star2, new_object);
 
           merged_this_step = true;
           break;
@@ -7726,26 +7910,25 @@ const handle_gas_giant_merging = () => {
         const gasGiant2 = gas_giants[j];
         if (!gasGiant2.alive) continue;
 
+        // The guard the BH-BH loop has had all along and this one did not.
+        // js/lessonStage.js stages gas giants and marks them model_owned, so
+        // without this a lesson that stands two of them on the canvas can have
+        // the engine merge them out from under it.
+        if (!mergeAllowed(gasGiant1, gasGiant2)) continue;
+
         const dx = gasGiant1.pos.x - gasGiant2.pos.x;
         const dy = gasGiant1.pos.y - gasGiant2.pos.y;
         const dist_sq = dx * dx + dy * dy;
         const min_dist = gasGiant1.radius + gasGiant2.radius;
 
         if (dist_sq < min_dist ** 2 && dist_sq > 1e-6) {
-          const m1 = gasGiant1.mass;
-          const m2 = gasGiant2.mass;
-          const new_mass = m1 + m2;
+          // Identical arithmetic to what was written out here.
+          const {
+            mass: new_mass,
+            pos: new_pos,
+            vel: new_vel,
+          } = mergedState(gasGiant1, gasGiant2);
           const new_mass_in_jupiters = new_mass / JUPITER_MASS_UNIT;
-
-          // Calculate center of mass position and velocity
-          const new_pos = {
-            x: (gasGiant1.pos.x * m1 + gasGiant2.pos.x * m2) / new_mass,
-            y: (gasGiant1.pos.y * m1 + gasGiant2.pos.y * m2) / new_mass,
-          };
-          const new_vel = {
-            x: (gasGiant1.vel.x * m1 + gasGiant2.vel.x * m2) / new_mass,
-            y: (gasGiant1.vel.y * m1 + gasGiant2.vel.y * m2) / new_mass,
-          };
 
           // Create merger particles
           for (let k = 0; k < 15; k++) {
@@ -7803,35 +7986,11 @@ const handle_gas_giant_merging = () => {
             gas_giants.push(new_object);
           }
 
-          // Emit clean merge event tag (gas giant merge -> possibly star formation)
-          try {
-            const evt = {
-              type: 'merge',
-              time: performance.now(),
-              primaryId: gasGiant1.id,
-              secondaryId: gasGiant2.id,
-              // A gas-giant merger can produce a star instead of a gas giant,
-              // so this is whatever was actually created rather than a
-              // type-specific id.
-              resultId: new_object ? new_object.id : null,
-              mergedMass: new_mass,
-              position: { x: new_pos.x, y: new_pos.y },
-            };
-            if (!simulation.eventLog) simulation.eventLog = [];
-            simulation.eventLog.push(evt);
-            if (simulation.eventLog.length > 1000) simulation.eventLog.shift();
-            if (
-              typeof window !== 'undefined' &&
-              window.dispatchEvent &&
-              typeof window.CustomEvent === 'function'
-            ) {
-              window.dispatchEvent(
-                new window.CustomEvent('gravitasMerge', { detail: evt })
-              );
-            }
-          } catch {
-            // no-op: event dispatch not supported in this environment
-          }
+          // Both progenitors are already out of the list and the result is
+          // already in its own - stars for an ignition, gas_giants otherwise -
+          // which is the order completeMerger needs: js/ui.js looks the result
+          // up by id while the dispatch is still on the stack.
+          completeMerger(gasGiant1, gasGiant2, new_object);
 
           merged_this_step = true;
           break;

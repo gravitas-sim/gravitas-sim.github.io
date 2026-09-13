@@ -1259,11 +1259,44 @@ if (typeof window !== 'undefined') {
       // different kind of body from either progenitor - two gas giants can
       // ignite into a star - and the inspector renders by type.
       if (product) {
-        showObjectInspector(product, product.obj_type);
+        showObjectInspector(product, inspectorTypeFor(product));
       }
     }
   });
 }
+
+/**
+ * The type string the inspector dispatches on, for a body.
+ *
+ * Not obj_type, which is what this used to pass. A StarObject's obj_type is
+ * "StarObject" and objectInfoFor's case is "Star", so a star merger re-selected
+ * the product and then logged "Unknown object type: StarObject" and rendered
+ * nothing. Every other caller of showObjectInspector gets its type from
+ * findObjectAtPosition, which is where this mapping otherwise lives; this is
+ * the one caller that has a body and no click to resolve it from.
+ *
+ * Keyed on the class rather than obj_type because the two are not
+ * interchangeable - a transformed body carries the obj_type of what it became
+ * and the class of what it was - and build.js keeps class names through
+ * minification for exactly this kind of comparison.
+ *
+ * @param {object} body - A physics body
+ * @returns {string} The inspector's type string
+ */
+const inspectorTypeFor = body => {
+  const byClass = {
+    BlackHole: 'BlackHole',
+    StarObject: 'Star',
+    NeutronStar: 'NeutronStar',
+    WhiteDwarf: 'WhiteDwarf',
+    Planet: 'Planet',
+    GasGiant: 'GasGiant',
+    Comet: 'Comet',
+    Asteroid: 'Asteroid',
+    Galaxy: 'Galaxy',
+  };
+  return byClass[body?.constructor?.name] || body?.obj_type || 'Planet';
+};
 
 /**
  * Show the object inspector modal with detailed information about a physics object

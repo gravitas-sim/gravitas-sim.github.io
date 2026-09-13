@@ -566,3 +566,128 @@ test('a merger leaves a world-frame reader alone', async ({
   });
   expect(frame).toEqual({ mode: 'world', objectId: null });
 });
+
+/**
+ * Stand two light stars on top of each other so they merge on the next steps.
+ *
+ * The same shape as collideBlackHoles, and for the same reason: the step is
+ * pinned small through the reader's own controls first, because two overlapping
+ * bodies at the natural frame advance are thrown apart by the unsoftened force
+ * before the merge check at the end of the step ever looks at them.
+ *
+ * One solar mass each, so the pair stays under the collapse threshold and the
+ * branch that runs is the one that makes a star - the family that until now
+ * announced nothing at all.
+ *
+ * @param {import('@playwright/test').Page} page - The page
+ * @param {{x: number, y: number}} at - Where to put them, in world units
+ * @returns {Promise<?{watched: number, other: number}>} The two ids
+ */
+const collideStars = (page, at) =>
+  page.evaluate(async where => {
+    const p = await import('/js/physics.js');
+    const ui = await import('/js/ui.js');
+    ui.SETTINGS.max_timestep = 0.002;
+    ui.SETTINGS.sim_speed = 0.2;
+    ui.SETTINGS.enable_star_merging = true;
+    p.updatePhysicsSettings(ui.SETTINGS);
+    const a = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
+    const b = new p.StarObject({ x: where.x, y: where.y }, { x: 0, y: 0 }, 1);
+    b.pos.x = where.x + (a.radius + b.radius) * 0.4;
+    p.stars.push(a, b);
+    return { watched: a.id, other: b.id };
+  }, at);
+
+// The coverage hole this whole protocol was about. handle_star_merging is the
+// richest merger family in the engine - nine branches choosing between a star,
+// a white dwarf, a neutron star and a black hole - and it emitted no
+// gravitasMerge at all, so a reader following a star that merged had nothing to
+// be moved onto and the view fell back to the world origin.
+test('a star merger carries the reference frame onto the star it made', async ({
+  page,
+  app,
+}, testInfo) => {
+  testInfo.setTimeout(90_000);
+  await app.boot();
+  await app.loadScenario('Solar System', 'merge-star-frame');
+
+  await recordMerges(page);
+
+  const ids = await collideStars(page, { x: 900, y: -600 });
+  expect(ids).not.toBeNull();
+
+  await page.evaluate(async watched => {
+    const rf = await import('/js/referenceFrame.js');
+    rf.setFrame(rf.OBJECT, watched);
+  }, ids.watched);
+
+  const merged = await firstMerge(page);
+  expect(merged).not.toBeNull();
+  expect(merged.resultId).not.toBeNull();
+  // The branch that ran made a star, and the payload says so.
+  expect(merged.types.result).toBe('StarObject');
+  expect(merged.simTimeUnits).toBe('sim');
+
+  const frame = await page.evaluate(async () => {
+    const rf = await import('/js/referenceFrame.js');
+    return rf.frameState();
+  });
+  expect(frame.mode).toBe('object');
+  expect(frame.objectId).toBe(merged.resultId);
+  expect([ids.watched, ids.other]).not.toContain(frame.objectId);
+
+  // And the thing the frame now points at is really there, so the camera has
+  // something to follow rather than a dead id resolving to the origin.
+  const alive = await page.evaluate(async id => {
+    const p = await import('/js/physics.js');
+    return [
+      ...p.stars,
+      ...p.bh_list,
+      ...p.neutron_stars,
+      ...p.white_dwarfs,
+    ].some(b => b.id === id);
+  }, merged.resultId);
+  expect(alive).toBe(true);
+});
+
+// The dispatch used to happen before the result was pushed into its collection.
+// js/ui.js's handler is synchronous and looks the result up by id in order to
+// re-open the inspector on it, so it found nothing and the inspector was left
+// describing a body that no longer existed.
+test('a merger moves the inspector onto the body it produced', async ({
+  page,
+  app,
+}, testInfo) => {
+  testInfo.setTimeout(90_000);
+  await app.boot();
+  await app.loadScenario('Solar System', 'merge-inspector');
+
+  await recordMerges(page);
+
+  const ids = await collideStars(page, { x: -900, y: 500 });
+  expect(ids).not.toBeNull();
+
+  // Select one of the two through the same path the canvas click handler uses.
+  const selected = await page.evaluate(async watched => {
+    const p = await import('/js/physics.js');
+    const ui = await import('/js/ui.js');
+    const star = p.stars.find(s => s.id === watched);
+    if (!star) return null;
+    // One argument, a world position - the same call the canvas click
+    // handler makes.
+    const hit = p.findObjectAtPosition({ x: star.pos.x, y: star.pos.y });
+    if (!hit) return null;
+    ui.showObjectInspector(hit.object, hit.type);
+    return ui.state.selectedObject?.object?.id ?? null;
+  }, ids.watched);
+  expect(selected).toBe(ids.watched);
+
+  const merged = await firstMerge(page);
+  expect(merged).not.toBeNull();
+
+  const after = await page.evaluate(async () => {
+    const ui = await import('/js/ui.js');
+    return ui.state.selectedObject?.object?.id ?? null;
+  });
+  expect(after).toBe(merged.resultId);
+});
