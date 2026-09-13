@@ -339,3 +339,131 @@ test.describe('the inspector says which numbers are which', () => {
     expect(after.inc).toBe(12);
   });
 });
+
+// =============================================================================
+// What a visual control may not touch, and what a cache may not grow into
+// -----------------------------------------------------------------------------
+// The disk, the jets and the inclination are a picture. The engine is Newtonian
+// and two-dimensional and has none of them, so a control that changed a mass, a
+// collision radius or a velocity would be a drawing choice reaching into the
+// physics - and the numbers a reader measures would depend on how the scene
+// happened to be styled.
+// =============================================================================
+
+/** Everything about a body that a picture must not be able to change. */
+const physicsOf = page =>
+  page.evaluate(async () => {
+    const p = await import('/js/physics.js');
+    const round = v => (Number.isFinite(v) ? Number(v.toPrecision(12)) : v);
+    return p.bh_list.map(b => ({
+      id: b.id,
+      mass: round(b.mass),
+      radius: round(b.radius),
+      x: round(b.pos.x),
+      y: round(b.pos.y),
+      vx: round(b.vel.x),
+      vy: round(b.vel.y),
+      modelOwned: Boolean(b.model_owned),
+      persistent: Boolean(b.persistent),
+    }));
+  });
+
+test.describe('a picture cannot reach into the physics', () => {
+  test('no appearance control changes a mass, a radius, a path or an owner', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(90_000);
+    await app.boot();
+    await app.loadScenario('Binary BH', 'bh-visual-isolation');
+    await app.setPaused(true);
+    await app.waitForFrames(2);
+
+    const before = await physicsOf(page);
+    expect(before.length).toBeGreaterThan(0);
+
+    // Every visual setting the reader has, moved together and one at a time.
+    await page.evaluate(async () => {
+      const ui = await import('/js/ui.js');
+      const physics = await import('/js/physics.js');
+      for (const [key, value] of [
+        ['bh_disk_inclination', 12],
+        ['bh_environment', 'jet'],
+        ['bh_explain_view', true],
+        ['show_accretion_disk', false],
+        ['bh_disk_inclination', 84],
+        ['bh_environment', 'quiescent'],
+        ['show_accretion_disk', true],
+        ['bh_explain_view', false],
+      ]) {
+        ui.SETTINGS[key] = value;
+        physics.updatePhysicsSettings(ui.SETTINGS);
+      }
+    });
+    await app.waitForFrames(5);
+
+    expect(await physicsOf(page)).toEqual(before);
+  });
+
+  test('and neither does the quality tier, which changes how much is drawn', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(90_000);
+    await app.boot();
+    await app.loadScenario('Sagittarius A*', 'bh-tier-isolation');
+    await app.setPaused(true);
+    await app.waitForFrames(2);
+    const before = await physicsOf(page);
+
+    for (const tier of ['low', 'full', 'low', 'full']) {
+      await page.evaluate(async t => {
+        const ui = await import('/js/ui.js');
+        ui.SETTINGS.quality_tier = t;
+      }, tier);
+      await app.waitForFrames(3);
+    }
+    expect(await physicsOf(page)).toEqual(before);
+  });
+});
+
+test.describe('the render cache is bounded', () => {
+  test('drawing every inclination at both tiers does not grow it without limit', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(120_000);
+    await app.boot();
+    await app.loadScenario('Binary BH', 'bh-cache');
+    await app.waitForFrames(5);
+
+    // Every inclination a reader can choose, at both tiers: far more distinct
+    // cache keys than the cache is allowed to hold.
+    const sizes = [];
+    for (const tier of ['full', 'low']) {
+      for (let deg = 0; deg <= 88; deg += 4) {
+        await page.evaluate(
+          async ([t, d]) => {
+            const ui = await import('/js/ui.js');
+            ui.SETTINGS.quality_tier = t;
+            ui.SETTINGS.bh_disk_inclination = d;
+          },
+          [tier, deg]
+        );
+        await app.waitForFrames(2);
+        sizes.push(
+          await page.evaluate(async () => {
+            const r = await import('/js/blackHole/render.js');
+            return r.cachedStopSets();
+          })
+        );
+      }
+    }
+    const largest = Math.max(...sizes);
+    expect(sizes.length).toBeGreaterThan(40);
+    // The module's own limit, not a number invented here: it says "at most
+    // eight sets of about twenty". A cache that grew with the number of
+    // distinct looks a reader tried would be a leak with a slow fuse.
+    expect(largest).toBeLessThanOrEqual(8);
+  });
+});
