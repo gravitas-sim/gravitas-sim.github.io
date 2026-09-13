@@ -29,7 +29,7 @@ export const EVIDENCE_FROM = Object.freeze({
   'orbital-energy': 'model',
   'radial-velocity': 'model',
   'retrograde-motion': 'engine',
-  'tides': 'model',
+  tides: 'model',
   'transit-photometry': 'engine',
   'weighing-stars': 'engine',
   'what-is-a-gravitational-wave': 'model',
