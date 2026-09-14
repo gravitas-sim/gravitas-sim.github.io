@@ -300,10 +300,22 @@ test.describe('both arms have one lifecycle', () => {
     const epochs = 12;
     await page.locator('#rvSurveyBaseline').fill(String(baselineDays));
     await page.locator('#rvSurveyCompareEnabled').check();
+    await expect(page.locator('#rvSurveyShapeBField')).toBeVisible();
     await page.locator('#rvSurveyShapeB').selectOption('irregular');
-    await page.locator('#rvSurveyEpochs').fill(String(epochs));
-    await page.locator('#rvSurveyEpochs').blur();
 
+    // Asserted, not typed. The field already holds this value - it is the
+    // default - and re-filling it was the flake: every edit rebuilds the panel
+    // asynchronously, and `fill` on a control that is being re-rendered under
+    // it times out with the field showing the very value being written. When
+    // that happened the second arm was never created either, so the poll sixty
+    // seconds later failed on an assertion about suspending while the real
+    // fault was a missing arm.
+    await expect(page.locator('#rvSurveyEpochs')).toHaveValue(String(epochs));
+
+    // The premise: there are two arms to say anything about.
+    await expect
+      .poll(async () => (await state(page)).comparing, { timeout: 60000 })
+      .toBe(true);
     await expect
       .poll(async () => (await state(page)).taken, { timeout: 60000 })
       .toBeGreaterThanOrEqual(2);
