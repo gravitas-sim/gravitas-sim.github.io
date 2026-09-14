@@ -420,28 +420,31 @@ test('the scenario comets nobody could see are on screen now', async ({
   const count = await cometCount(page);
   expect(count).toBeGreaterThan(0);
 
-  const drawn = await page.evaluate(async () => {
+  // Count the comets that actually paint: a body whose draw is never called
+  // cannot increment this.
+  //
+  // Counted over as many frames as it takes rather than over exactly two. The
+  // old version paused the loop and then waited for two requestAnimationFrame
+  // callbacks, which is a bet that a repaint falls inside that window - and on
+  // a machine running the rest of this suite beside it, it does not. The
+  // assertion is unchanged; what changed is that the wait is now for the thing
+  // being waited on.
+  await page.evaluate(async () => {
     const p = await import('/js/physics.js');
-    const ui = await import('/js/ui.js');
-    // Count the comets that actually paint: a body whose draw is never called
-    // cannot increment this.
-    let calls = 0;
+    window.__cometDraws = 0;
     for (const c of p.comets) {
       const original = c.draw.bind(c);
       c.draw = ctx => {
-        calls++;
+        window.__cometDraws++;
         return original(ctx);
       };
     }
-    ui.state.paused = true;
-    await new Promise(r =>
-      window.requestAnimationFrame(() =>
-        window.requestAnimationFrame(() => r())
-      )
-    );
-    return calls;
   });
-  expect(drawn).toBeGreaterThan(0);
+  await expect
+    .poll(() => page.evaluate(() => window.__cometDraws ?? 0), {
+      timeout: 20_000,
+    })
+    .toBeGreaterThan(0);
 });
 
 for (const tier of ['full', 'low']) {
