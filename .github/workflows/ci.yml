@@ -186,6 +186,15 @@ jobs:
       - name: Vendored libraries and fonts are current
         run: npm run vendor:check
 
+      # The instructor bundle is ciphertext, so a diff cannot say whether it is
+      # current: every build derives a new salt and IV and changes every byte.
+      # This compares a digest of the inputs against the record committed
+      # beside the bundle, which needs no passphrase and renders nothing - so a
+      # pull request that edits a lesson without rebuilding the materials fails
+      # here rather than shipping answer keys that disagree with the lessons.
+      - name: Instructor bundle was built from these sources
+        run: npm run instructors:check
+
       # CITATION.cff and .zenodo.json are generated from one source and must
       # stay valid and mutually consistent. Zenodo prefers .zenodo.json when
       # both are present, so a disagreement is not cosmetic: it decides what a

@@ -366,6 +366,15 @@ export const CHECKS = [
     group: 'generated',
   },
   {
+    id: 'instructors',
+    label: 'instructor bundle is built from these sources',
+    command: ['npm', 'run', 'instructors:check'],
+    tier: 'quick',
+    ci: 'checks',
+    why: 'hashes the inputs; needs no passphrase and renders nothing',
+    group: 'generated',
+  },
+  {
     id: 'vendor',
     label: 'vendored libraries and fonts',
     command: ['npm', 'run', 'vendor:check'],

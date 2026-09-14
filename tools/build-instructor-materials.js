@@ -34,9 +34,15 @@
 // script says so on every line of its output so that nobody publishes it.
 // =============================================================================
 
-import { webcrypto as crypto } from 'node:crypto';
+import { webcrypto as crypto, createHash } from 'node:crypto';
 import { TextEncoder } from 'node:util';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  readdirSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -57,6 +63,112 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'instructors');
 const OUT_FILE = join(OUT_DIR, 'materials.enc.json');
 const PLAIN_DIR = join(ROOT, '.instructor-build');
+const MANIFEST_FILE = join(OUT_DIR, 'materials.manifest.json');
+
+// -----------------------------------------------------------------------------
+// Freshness, without the passphrase
+// -----------------------------------------------------------------------------
+// The ciphertext cannot answer "is this current?". Every build derives a fresh
+// salt and IV, so two encryptions of identical material differ in every byte -
+// which means `git status` reports a change whenever this script runs, and that
+// change carries no information at all. A bundle has been committed for that
+// reason before now, in a commit about something else entirely.
+//
+// Nor can the answer come from re-encrypting and comparing: that needs the
+// passphrase, which CI does not have and must not have.
+//
+// So the record is a digest of the inputs, written beside the ciphertext and
+// public. Anyone - CI, a reviewer, the release gate - can hash the same files
+// and compare, with no secret and no decryption. Sources unchanged means the
+// bundle is current; sources changed means it is stale and must be rebuilt.
+//
+// Keyed on the inputs rather than on the rendered documents, because the
+// documents are not stable over time: `versionStamp()` prints the month into
+// every footer, so their bytes change on the first of each month with no change
+// to anything anybody wrote. A content digest would call the bundle stale
+// twelve times a year and be ignored by the second time.
+const SOURCE_FILES = [
+  'tools/build-instructor-materials.js',
+  'js/pdf.js',
+  'js/instructorDocs.js',
+  'js/activityDocs.js',
+  'js/answerKey.js',
+  'js/data/activities.js',
+  'js/data/investigations.js',
+  'js/i18n/en.teaching.js',
+];
+/** Every lesson module, which is where the answers themselves live. */
+const SOURCE_DIRS = ['js/data/investigations'];
+
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+
+/** Every input, as repository-relative paths, sorted. @returns {string[]} */
+function sourcePaths() {
+  const fromDirs = SOURCE_DIRS.flatMap(dir =>
+    readdirSync(join(ROOT, dir))
+      .filter(name => name.endsWith('.js'))
+      .map(name => `${dir}/${name}`)
+  );
+  return [...SOURCE_FILES, ...fromDirs].sort();
+}
+
+/**
+ * One digest over every input that decides what the materials say.
+ *
+ * The path is hashed with the bytes, so moving a lesson to a new file is a
+ * change even when its text is identical.
+ *
+ * @returns {{digest: string, files: number}} The digest and how many files it covers
+ */
+function sourceDigest() {
+  const paths = sourcePaths();
+  const lines = paths.map(rel => {
+    const full = join(ROOT, rel);
+    if (!existsSync(full)) {
+      console.error(`Instructor source is missing: ${rel}`);
+      process.exit(1);
+    }
+    return `${rel}:${sha256(readFileSync(full))}`;
+  });
+  return { digest: sha256(lines.join('\n')), files: paths.length };
+}
+
+/**
+ * Report whether the committed bundle was built from the sources on disk.
+ *
+ * Needs no passphrase and renders nothing, so the release gate can afford it.
+ *
+ * @returns {void} Exits non-zero when the bundle is stale
+ */
+function checkFreshness() {
+  const { digest, files } = sourceDigest();
+  if (!existsSync(MANIFEST_FILE)) {
+    console.error(
+      'No instructors/materials.manifest.json. Run `npm run build:instructors` ' +
+        'to build the bundle and write the record of what it was built from.'
+    );
+    process.exit(1);
+  }
+  const recorded = JSON.parse(readFileSync(MANIFEST_FILE, 'utf8'));
+  if (recorded.sourceDigest !== digest) {
+    console.error(
+      [
+        'The instructor bundle is stale.',
+        `  recorded: ${recorded.sourceDigest}`,
+        `  on disk:  ${digest}  (${files} source files)`,
+        '',
+        'Instructional content changed after the bundle was built. Rebuild it',
+        'with `npm run build:instructors` - which needs the real passphrase -',
+        'and commit the bundle and the manifest together.',
+      ].join('\n')
+    );
+    process.exit(1);
+  }
+  console.log(
+    `Instructor bundle is current: ${files} source files, digest ${digest.slice(0, 12)}, ` +
+      `bundle built ${recorded.generated}.`
+  );
+}
 
 /** PBKDF2 work factor. OWASP's floor for SHA-256; about a second on a phone. */
 const ITERATIONS = 600000;
@@ -157,6 +269,14 @@ const slug = title =>
     .replace(/^-|-$/g, '');
 
 async function main() {
+  // Asking whether the bundle is current needs neither the passphrase nor a
+  // single rendered page, so it happens before anything else and costs
+  // milliseconds. This is the mode the release gate runs.
+  if (process.argv.includes('--check')) {
+    checkFreshness();
+    return;
+  }
+
   // CI cannot be handed the real passphrase, so it asks for a build it is not
   // allowed to publish. Everything else about the run is identical.
   const unpublishable = process.argv.includes('--unpublishable');
@@ -293,6 +413,41 @@ async function main() {
       usedThrowaway ? { ...payload, unpublishable: true } : payload
     )
   );
+
+  // The record of what this bundle was built from, in the clear beside it.
+  //
+  // Not written by a throwaway build: CI rebuilds on every run and its
+  // ciphertext is undecryptable, so letting it stamp a manifest would file a
+  // freshness record for an artifact nobody can open.
+  if (!usedThrowaway) {
+    const { digest, files: sourceCount } = sourceDigest();
+    writeFileSync(
+      MANIFEST_FILE,
+      JSON.stringify(
+        {
+          version,
+          generated: manifest.generated,
+          documents: files.length,
+          sourceFiles: sourceCount,
+          sourceDigest: digest,
+          // A hash of the rendered set, for anyone holding the passphrase who
+          // wants to confirm the ciphertext matches this record. Not a
+          // freshness signal: it moves with the month, which is why the check
+          // above reads sourceDigest instead.
+          contentDigest: sha256(
+            files
+              .map(
+                f => `${f.id}|${f.kind}|${f.investigation}:${sha256(f.bytes)}`
+              )
+              .sort()
+              .join('|')
+          ),
+        },
+        null,
+        2
+      ) + '\n'
+    );
+  }
 
   const totalPdf = files.reduce((t, f) => t + f.size, 0);
   console.log(
