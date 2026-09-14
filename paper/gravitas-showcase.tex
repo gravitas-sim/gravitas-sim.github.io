@@ -29,7 +29,7 @@
 
 \begin{document}
 
-\title{\Gravitas: A Browser-Based Astrophysics Laboratory for Prediction,
+\title{Gravitas: A Browser-Based Astrophysics Laboratory for Prediction,
 Measurement, and Discovery}
 
 \author{Carl Ziegler}
@@ -223,11 +223,16 @@ between surviving and disrupted orbits. The gravitational-wave sequence asks
 students to distinguish what is physically calculated, what is an illustrative
 visualization, and what an observer measures.
 
-\begin{deluxetable*}{p{0.17\textwidth}p{0.31\textwidth}p{0.45\textwidth}}
-\tablecaption{Guided investigation catalogue\label{tab:investigations}}
-\tablehead{\colhead{Theme} & \colhead{Investigations} &
-\colhead{Representative student work}}
-\startdata
+\begin{table*}[t]
+\caption{Guided investigation catalogue}
+\label{tab:investigations}
+\centering
+\small
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{p{0.17\textwidth}p{0.31\textwidth}p{0.45\textwidth}}
+\hline\hline
+\textbf{Theme} & \textbf{Investigations} & \textbf{Representative student work}\\
+\hline
 Orbits and gravity &
 Kepler's Laws; Why Mars Goes Backwards; Bound, Unbound and Escape; Weighing the
 Stars; Tides &
@@ -258,11 +263,14 @@ A Universe of Stars; Lives of Stars; The Missing Mass &
 Separate mass, radius, temperature, and luminosity on the H--R diagram; follow
 published stellar tracks \citep{dotter2016,choi2016}; fit a rotation curve and
 compare luminous and dynamical mass.\\
-\enddata
-\tablecomments{Durations and prerequisites are supplied in the application. The
-catalogue can be filtered by concept, and individual investigations may be
-assigned through reproducible links.}
-\end{deluxetable*}
+\hline
+\end{tabular}
+\vspace{3pt}
+
+\parbox{0.95\textwidth}{\footnotesize\textit{Note.} Durations and prerequisites
+are supplied in the application. The catalogue can be filtered by concept, and
+individual investigations may be assigned through reproducible links.}
+\end{table*}
 
 \section{Tools That Turn Motion into Evidence}
 \label{sec:tools}
@@ -271,11 +279,16 @@ The tools in \Gravitas\ are selected for questions commonly asked in
 introductory astronomy. They are available in the sandbox and are also opened
 automatically when a guided step requires them.
 
-\begin{deluxetable*}{p{0.21\textwidth}p{0.34\textwidth}p{0.38\textwidth}}
-\tablecaption{Student tools and the reasoning they support\label{tab:tools}}
-\tablehead{\colhead{Tool} & \colhead{What the student records} &
-\colhead{Example question}}
-\startdata
+\begin{table*}[t]
+\caption{Student tools and the reasoning they support}
+\label{tab:tools}
+\centering
+\small
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{p{0.21\textwidth}p{0.34\textwidth}p{0.38\textwidth}}
+\hline\hline
+\textbf{Tool} & \textbf{What the student records} & \textbf{Example question}\\
+\hline
 Ruler, protractor, and scale bar &
 Distances in astronomical units or kilometres; angles between locations or
 vectors &
@@ -313,8 +326,9 @@ a galaxy require more gravitating mass than its light implies?\\
 Exports &
 Screenshots, clips, report PDF, state link, and unit-labelled CSV &
 Can another student or instructor reproduce the setup and inspect the evidence?\\
-\enddata
-\end{deluxetable*}
+\hline
+\end{tabular}
+\end{table*}
 
 Three observing panels are especially useful for connecting dynamics to
 astronomical inference. A transit light curve, a radial-velocity curve, and an
