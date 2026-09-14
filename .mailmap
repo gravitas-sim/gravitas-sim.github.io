@@ -15,10 +15,15 @@
 # `git log --use-mailmap` and anything built on them report the canonical
 # identity, and the objects are untouched.
 #
-# Not mapped, deliberately: "gravitas-sim <carlziegler+gravitas@gmail.com>",
-# thirteen commits authored through GitHub's web interface. The address looks
-# like the owner's, but "looks like" is not confirmation and inventing an
-# attribution is the one thing this file must not do. Add a line for it only if
-# the owner confirms.
+# "gravitas-sim <carlziegler+gravitas@gmail.com>" is the third: thirteen commits
+# authored through GitHub's web interface. It was left unmapped until the owner
+# confirmed it, because an address that looks like somebody's is not evidence
+# that it is, and inventing an attribution is the one thing this file must not
+# do. Confirmed, and mapped.
+#
+# The canonical address is the institutional one, which is what the citation
+# metadata carries. carlziegler+gravitas@gmail.com remains a usable project
+# contact address; it is simply not the one a paper should cite.
 Carl Ziegler <Carl.Ziegler@sfasu.edu> <carl@gravitas-sim.com>
 Carl Ziegler <Carl.Ziegler@sfasu.edu> Kristina Ziegler <carl@Carls-iMac.local>
+Carl Ziegler <Carl.Ziegler@sfasu.edu> gravitas-sim <carlziegler+gravitas@gmail.com>
