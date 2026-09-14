@@ -30,6 +30,7 @@
 // =============================================================================
 
 import { EN } from './en.js';
+import { mayBeDeferred } from './deferredNamespaces.js';
 
 const STORAGE_KEY = 'gravitas_locale';
 
@@ -280,6 +281,89 @@ const raw = (catalogue, id) =>
     : undefined;
 
 /**
+ * Ids that belong to a deferred namespace and are not in the catalogues yet.
+ *
+ * Held rather than reported. The start-up sweep translates index.html before
+ * any panel has been opened, so the forty-odd deferred data-i18n attributes in
+ * it are absent at that moment and present a second later - reporting them then
+ * is reporting the ordering, not a fault.
+ */
+const held = new Set();
+
+/** True once something has registered deferred strings, right or wrong. */
+let deferredSettled = false;
+
+/**
+ * Say that an id could not be resolved - now, or later, or not at all.
+ *
+ * Three cases, and they are not the same fault:
+ *
+ *   - an id in no deferred namespace is missing outright, and is reported now
+ *   - an id in a deferred namespace, before that catalogue has settled, is
+ *     held: it is probably on its way
+ *   - the same id after the catalogue has settled really is missing, and gets
+ *     the warning it has earned
+ *
+ * Nothing is silenced globally. Everything held is either resolved or reported.
+ *
+ * @param {string} id - The message id
+ */
+function reportMissing(id) {
+  if (missing.has(id)) return;
+  if (!deferredSettled && mayBeDeferred(id)) {
+    held.add(id);
+    return;
+  }
+  missing.add(id);
+  // Once per id per session. A string in a render loop would otherwise produce
+  // sixty warnings a second and hide every other message.
+  console.warn(`[i18n] no message for "${id}"`);
+}
+
+/**
+ * The deferred catalogues have arrived, or have failed to.
+ *
+ * Called by ./deferredMessages.js either way, because a load that failed
+ * answers the question just as well as one that succeeded: whatever is still
+ * unresolved now is genuinely unresolved, and a reader is looking at raw ids.
+ *
+ * @returns {Array<string>} The ids that turned out to be missing after all
+ */
+export function settleDeferredMessages() {
+  deferredSettled = true;
+  const stillMissing = [];
+  for (const id of held) {
+    if (resolves(id)) continue;
+    stillMissing.push(id);
+    missing.add(id);
+    console.warn(
+      `[i18n] no message for "${id}" (a deferred namespace, but not in the ` +
+        'deferred catalogue either)'
+    );
+  }
+  held.clear();
+  return stillMissing;
+}
+
+/** For tests: forget what has been reported and start listening again. */
+export function resetMissingForTests() {
+  missing.clear();
+  held.clear();
+  deferredSettled = false;
+}
+
+/** Whether an id resolves in the active locale or in English. */
+function resolves(id) {
+  let entry = raw(registered[current], id);
+  if (entry === undefined) entry = raw(CATALOGUES[current], id);
+  if (entry === undefined && current !== DEFAULT_LOCALE) {
+    entry = raw(registered[DEFAULT_LOCALE], id);
+    if (entry === undefined) entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
+  }
+  return entry !== undefined;
+}
+
+/**
  * Translate.
  *
  * @param {string} id - Message id
@@ -296,12 +380,7 @@ export function t(id, vars) {
     if (entry === undefined) entry = raw(CATALOGUES[DEFAULT_LOCALE], id);
   }
   if (entry === undefined) {
-    if (!missing.has(id)) {
-      missing.add(id);
-      // Once per id per session. A string in a render loop would otherwise
-      // produce sixty warnings a second and hide every other message.
-      console.warn(`[i18n] no message for "${id}"`);
-    }
+    reportMissing(id);
     return id;
   }
   const text =

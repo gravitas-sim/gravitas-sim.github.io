@@ -6,7 +6,7 @@
 // prose travels with the code that uses it.
 // =============================================================================
 
-import { registerMessages } from './index.js';
+import { registerMessages, settleDeferredMessages } from './index.js';
 import { applyTranslations } from './dom.js';
 
 /**
@@ -57,6 +57,11 @@ export function ensureDeferredMessages() {
     registerMessages('es', es.ES_DEFERRED);
     registered_ = true;
     lastFailure = null;
+    // Anything the start-up sweep asked for and did not get is now either
+    // resolved or genuinely missing, and ./index.js says which. Held warnings
+    // are released here rather than at a guessed interval, because this is the
+    // moment the answer becomes knowable.
+    settleDeferredMessages();
 
     // Repaint. This used to do nothing, on the reasoning that every caller
     // registers before it renders - which is true of the panels' own
@@ -102,6 +107,10 @@ export function ensureDeferredMessages() {
     // their ids, which is visible, reported, and not a blank screen.
     loading = null;
     lastFailure = err;
+    // A failure settles the question too: whatever was being held for these
+    // catalogues is not coming, the reader is looking at raw ids, and saying so
+    // is the whole point of not having silenced it.
+    settleDeferredMessages();
     console.warn('[i18n] deferred messages did not load:', err);
     throw err;
   });

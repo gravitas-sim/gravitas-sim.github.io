@@ -13,7 +13,6 @@ import {
   EARTH_MASSES_PER_JUPITER_MASS,
 } from './constants.js';
 import { formatNumber, withUnit } from './format.js';
-import { openDialog, closeDialog, isOpen } from './dialog.js';
 import { ENVIRONMENT, ENVIRONMENTS } from './blackHole/appearance.js';
 import {
   screen_to_world,
@@ -6849,12 +6848,28 @@ window.addEventListener('resize', () => {
  */
 const settingsPanel = () => document.getElementById('settingsPanel');
 
+/**
+ * The dialog machinery, fetched the first time a dialog is opened.
+ *
+ * Deferred because it is not start-up code: nothing needs it until somebody
+ * presses Settings, and the initial download is a budget that is only ever
+ * paid for by finding something to move out of it. The closed panel is closed
+ * from the first paint by the `hidden` and `inert` attributes in index.html,
+ * so nothing here is load-bearing before the first open.
+ */
+let dialogModule = null;
+const dialog = async () => (dialogModule ??= await import('./dialog.js'));
+
+/** Open, asked of the DOM rather than of a module that may not be here yet. */
+const settingsOpen = () => settingsPanel()?.hidden === false;
+
 /** What the world was doing before Settings paused it. */
 let pausedBeforeSettings = false;
 
-function openSettings() {
+async function openSettings() {
   const panel = settingsPanel();
-  if (!panel || isOpen(panel)) return;
+  if (!panel || settingsOpen()) return;
+  const { openDialog } = await dialog();
   // Rebuilt from SETTINGS every time, so nothing staged in a previous visit
   // and then abandoned can leak into this one.
   buildSettingsMenu();
@@ -6887,7 +6902,8 @@ function openSettings() {
  * @param {string} reason - 'cancel', 'escape' or 'chip'
  */
 function dismissSettings(reason) {
-  closeDialog(settingsPanel(), reason);
+  // Loaded by definition: the panel cannot be open without it.
+  dialogModule?.closeDialog(settingsPanel(), reason);
 }
 
 document.getElementById('settingsBtn').onclick = openSettings;
@@ -6967,7 +6983,7 @@ document.getElementById('settingsApply').onclick = () => {
     next.show_ambient_lighting !== SETTINGS.show_ambient_lighting;
 
   setSettings(next);
-  closeDialog(settingsPanel(), 'apply');
+  dialogModule?.closeDialog(settingsPanel(), 'apply');
 
   if (needsRebuild.length > 0) {
     initialize_simulation();
