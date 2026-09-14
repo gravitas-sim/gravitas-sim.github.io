@@ -261,6 +261,55 @@ function makeApp(page) {
       );
     },
 
+    /**
+     * Click something, and be sure the click was delivered.
+     *
+     * WebKit under a saturated machine delivers a whole press to an element -
+     * pointerdown, mousedown, pointerup and mouseup, all on the element, at one
+     * point, with its box unmoved and nothing calling preventDefault - and then
+     * never synthesises the `click`. The page hears the press and never hears
+     * the click, so there is no application state to wait for and no ordering
+     * to fix: the event simply does not exist. Measured at roughly one press in
+     * four with twelve cores busy, and it is not the interface reveal - waiting
+     * for the transport bar to finish fading in changes nothing.
+     *
+     * So the press is confirmed rather than assumed, by the element itself, and
+     * only a press that was never delivered is repeated. A click the
+     * application received and then ignored still fails, which is the point:
+     * this recovers lost input, never a lost assertion.
+     *
+     * @param {object} locator - What to press
+     * @param {object} [options] - `tries`, how many deliveries to attempt
+     */
+    async press(locator, { tries = 3 } = {}) {
+      for (let attempt = 1; attempt <= tries; attempt++) {
+        await locator.evaluate(el => {
+          el.__pressLanded = false;
+          el.addEventListener(
+            'click',
+            () => {
+              el.__pressLanded = true;
+            },
+            { once: true }
+          );
+        });
+        await locator.click();
+        // Two seconds, because a lost click is lost rather than late: the ones
+        // measured never arrived at all, eight seconds later.
+        const landed = await locator.evaluate(async el => {
+          for (let n = 0; n < 40 && !el.__pressLanded; n++) {
+            await new Promise(r => setTimeout(r, 50));
+          }
+          return el.__pressLanded === true;
+        });
+        if (landed) return;
+      }
+      throw new Error(
+        `A press was delivered ${tries} times and the browser never turned ` +
+          'any of them into a click. This is lost input, not a dead control.'
+      );
+    },
+
     /** The simulation's own frame counter. */
     frameCount() {
       return page.evaluate(async () => {

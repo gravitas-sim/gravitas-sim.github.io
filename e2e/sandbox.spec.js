@@ -217,7 +217,9 @@ test.describe('the transport controls', () => {
       const play = page.locator('#timelinePlay');
       await expect(play).toBeVisible();
 
-      await play.click();
+      // Pressed rather than clicked: see app.press. The assertion below is
+      // unchanged - a click the application receives and ignores still fails.
+      await app.press(play);
       await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(true);
 
       // Paused means paused: the frame counter must not move.
@@ -225,7 +227,7 @@ test.describe('the transport controls', () => {
       await page.waitForTimeout(600);
       expect(await app.frameCount()).toBe(at);
 
-      await play.click();
+      await app.press(play);
       await expect.poll(() => app.isPaused(), { timeout: 10_000 }).toBe(false);
       await app.waitForFrames(5);
     }
