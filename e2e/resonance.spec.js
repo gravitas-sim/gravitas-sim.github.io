@@ -386,7 +386,7 @@ test.describe('the instruments against a live world', () => {
     expect(rogue.state).toBe('circulation');
   });
 
-  test('the Galilean moons: ratios measured, and the argument confined @accepts:ce.when-orbits-lock', async ({
+  test('the Galilean moons: ratios measured, and the argument confined @covers:ce.when-orbits-lock', async ({
     page,
     app,
   }, testInfo) => {

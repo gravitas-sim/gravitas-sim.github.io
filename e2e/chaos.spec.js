@@ -215,7 +215,7 @@ test.describe('the chaos investigation', () => {
     expect(v.linearR2).toBeGreaterThan(0.9);
   });
 
-  test('the three-body pair diverges exponentially, and survives refinement @accepts:ce.butterfly-effect', async ({
+  test('the three-body pair diverges exponentially, and survives refinement @covers:ce.butterfly-effect', async ({
     page,
     app,
   }, testInfo) => {

@@ -312,7 +312,7 @@ test.describe('the ring, the arms and the amplifier', () => {
     expect(hx).toBeLessThan(1e-30);
   });
 
-  test('the L arms are reported as numbers with opposite signs @accepts:ce.what-is-a-gravitational-wave', async ({
+  test('the L arms are reported as numbers with opposite signs @covers:ce.what-is-a-gravitational-wave', async ({
     page,
     app,
   }) => {

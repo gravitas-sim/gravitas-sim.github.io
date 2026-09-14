@@ -163,7 +163,7 @@ test.describe('a preset changes the scene, not only the numbers', () => {
 });
 
 test.describe('distance is a fixed-reference comparison', () => {
-  test('twice as far is half the strain, against an unmoved scale @accepts:ce.listening-to-spacetime', async ({
+  test('twice as far is half the strain, against an unmoved scale @covers:ce.listening-to-spacetime', async ({
     page,
     app,
   }) => {

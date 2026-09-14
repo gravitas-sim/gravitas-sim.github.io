@@ -215,7 +215,7 @@ test.describe('a lesson gives the sandbox back', () => {
     expect(await census(page)).not.toContain('Reader Star');
   });
 
-  test('lesson progress survives the round trip @accepts:ce.black-holes', async ({
+  test('lesson progress survives the round trip @covers:ce.black-holes', async ({
     page,
     app,
   }) => {
