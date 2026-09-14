@@ -395,8 +395,18 @@ test.describe('placing something says so, without a dialog', () => {
     await expect(toast).toBeVisible();
     expect((await toast.innerText()).toLowerCase()).toContain('comet');
 
-    const announced = await page.locator('#srStatus').innerText();
-    expect(announced.toLowerCase()).toContain('comet');
+    // Polled, and read as textContent.
+    //
+    // This was the one assertion in the test that did not retry: a single
+    // sample of the live region taken 300ms after the click, which is a bet
+    // that the announcement has been written by then. Everything around it
+    // auto-retries, so the test passed alone and was the first thing to go
+    // beside a hundred and fifty others. textContent rather than innerText
+    // because #srStatus is visually hidden, and innerText answers a question
+    // about rendering that a live region does not depend on.
+    await expect
+      .poll(() => page.locator('#srStatus').textContent(), { timeout: 10_000 })
+      .toMatch(/comet/i);
   });
 });
 

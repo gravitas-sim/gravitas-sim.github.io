@@ -658,26 +658,43 @@ test('a star merger carries the reference frame onto the star it made', async ({
   expect(merged.types.result).toBe('StarObject');
   expect(merged.simTimeUnits).toBe('sim');
 
-  const frame = await page.evaluate(async () => {
+  // Freeze the world, then read everything at once.
+  //
+  // The simulation keeps running between round trips, so reading the frame in
+  // one evaluate and the body list in another asks two questions of two
+  // different worlds. If anything merged in that window the frame has already
+  // moved on to the later result, and the comparison against `merged` fails
+  // for a reason that has nothing to do with whether a merger carries the
+  // frame. The window is wall clock, which is why it widens under load.
+  const after = await page.evaluate(async () => {
+    const ui = await import('/js/ui.js');
+    ui.state.paused = true;
     const rf = await import('/js/referenceFrame.js');
-    return rf.frameState();
-  });
-  expect(frame.mode).toBe('object');
-  expect(frame.objectId).toBe(merged.resultId);
-  expect([ids.watched, ids.other]).not.toContain(frame.objectId);
-
-  // And the thing the frame now points at is really there, so the camera has
-  // something to follow rather than a dead id resolving to the origin.
-  const alive = await page.evaluate(async id => {
     const p = await import('/js/physics.js');
-    return [
-      ...p.stars,
-      ...p.bh_list,
-      ...p.neutron_stars,
-      ...p.white_dwarfs,
-    ].some(b => b.id === id);
-  }, merged.resultId);
-  expect(alive).toBe(true);
+    const events = window.__mergeEvents || [];
+    const last = events[events.length - 1] ?? null;
+    const frame = rf.frameState();
+    return {
+      frame,
+      last,
+      mergeCount: events.length,
+      alive: [
+        ...p.stars,
+        ...p.bh_list,
+        ...p.neutron_stars,
+        ...p.white_dwarfs,
+      ].some(b => b.id === frame.objectId),
+    };
+  });
+
+  expect(after.frame.mode).toBe('object');
+  // Whichever merger was the most recent, the frame is on the star it made -
+  // and with the world frozen, that is the same world the body list came from.
+  expect(after.frame.objectId).toBe(after.last.resultId);
+  expect([ids.watched, ids.other]).not.toContain(after.frame.objectId);
+  // And the thing the frame points at is really there, so the camera has
+  // something to follow rather than a dead id resolving to the origin.
+  expect(after.alive).toBe(true);
 });
 
 // The dispatch used to happen before the result was pushed into its collection.
@@ -703,9 +720,17 @@ test('a merger moves the inspector onto the body it produced', async ({
   const merged = await firstMerge(page);
   expect(merged).not.toBeNull();
 
+  // Frozen and read in one turn, for the same reason as the frame test above:
+  // the world does not stop while these round trips happen, and a later merger
+  // would move the inspector on to a later body.
   const after = await page.evaluate(async () => {
     const ui = await import('/js/ui.js');
-    return ui.state.selectedObject?.object?.id ?? null;
+    ui.state.paused = true;
+    const events = window.__mergeEvents || [];
+    return {
+      selected: ui.state.selectedObject?.object?.id ?? null,
+      last: events[events.length - 1] ?? null,
+    };
   });
-  expect(after).toBe(merged.resultId);
+  expect(after.selected).toBe(after.last.resultId);
 });
