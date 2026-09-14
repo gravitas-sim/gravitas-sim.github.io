@@ -225,6 +225,13 @@ let plotTransformed = false;
 let plotLog = false;
 let toolValues = {};
 let toolFrame = null;
+/**
+ * The action descriptors the current step's buttons were rendered from.
+ *
+ * Kept rather than rebuilt, because a label is a live getter: re-reading it
+ * costs nothing and says what the widget is doing now.
+ */
+let toolActionsShown = [];
 /** Cancels the current step's canvas listeners. @type {AbortController|null} */
 let toolPointer = null;
 let lastToolHtml = '';
@@ -2470,6 +2477,7 @@ function syncToolPanel(step) {
     )
     .join('');
   els.toolActions.hidden = !actions.length;
+  toolActionsShown = actions;
 
   // Presets can depend on the step, the same way actions already can. A step
   // that hides a control has to be able to hide the presets that would set it:
@@ -2595,6 +2603,7 @@ function startToolLoop(widget, toolSpec) {
 function stopToolLoop() {
   if (toolFrame !== null) cancelAnimationFrame(toolFrame);
   toolFrame = null;
+  toolActionsShown = [];
   toolPointer?.abort();
   toolPointer = null;
 }
@@ -2740,6 +2749,23 @@ function paintTool({ quiet = false } = {}) {
       input.value = String(value);
     }
     if (!quiet) responses[`${id}:tool:${c.id}`] = String(toolValues[c.id]);
+  }
+
+  // A toggle's label is a statement about the state it is in, so it has to be
+  // re-read rather than written once when the step opened. The playback's
+  // button said "Pause" for as long as the step lasted - including while the
+  // playback was stopped - and because the text is the button's accessible
+  // name, a screen reader was told the same wrong thing. The descriptors are
+  // the ones the buttons were rendered from and their labels are getters, so
+  // this reads the widget's current answer without rebuilding anything.
+  for (const action of toolActionsShown) {
+    const btn = els.toolActions?.querySelector(
+      `[data-tool-action="${CSS.escape(action.id)}"]`
+    );
+    const label = action.label;
+    if (btn && typeof label === 'string' && btn.textContent !== label) {
+      btn.textContent = label;
+    }
   }
 
   // Only widgets that ask for it are handed the simulation, so the rest stay
