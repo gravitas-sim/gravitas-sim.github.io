@@ -212,7 +212,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->5053<!--/fact--> tests across <!--fact:jestSuites-->144<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->5080<!--/fact--> tests across <!--fact:jestSuites-->145<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -330,8 +330,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->1106<!--/fact--> tests
-in <!--fact:e2eFiles-->79<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->1128<!--/fact--> tests
+in <!--fact:e2eFiles-->80<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

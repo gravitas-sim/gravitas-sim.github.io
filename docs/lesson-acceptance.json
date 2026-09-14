@@ -11,7 +11,7 @@
       "control": "the canvas: click a body, then Run and the event watch",
       "quantity": "semi-major axis a and period P for four planets",
       "evidence": "notebook-fields",
-      "test": "e2e/investigations.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "where-does-it-move-fastest",
         "fast-and-slow-in-numbers",
@@ -25,7 +25,7 @@
       "control": "the inspector: select Earth and switch on Reference frame",
       "quantity": "the dates and elongations of one retrograde loop",
       "evidence": "notebook-fields",
-      "test": "e2e/lessonRecovery.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "before-you-look",
         "catch-the-reversal",
@@ -39,7 +39,7 @@
       "control": "depth-size/rp",
       "quantity": "transit depth, and the planet radius it implies",
       "evidence": "notebook-fields",
-      "test": "e2e/lessonRecovery.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "what-will-the-brightness-do",
         "measure-the-dip",
@@ -53,7 +53,7 @@
       "control": "launch/v",
       "quantity": "the dividing speed, as the last speed on each side of it",
       "evidence": "notebook-fields",
-      "test": "e2e/predictionLoops.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "load-it-heavily",
         "find-the-dividing-line",
@@ -68,7 +68,7 @@
       "control": "balance/d1",
       "quantity": "two arm lengths and one period, giving both masses",
       "evidence": "notebook-fields",
-      "test": "e2e/investigations.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "which-pair-is-quicker",
         "measurement-one-how-big-is",
@@ -83,7 +83,7 @@
       "control": "bh-scaling/mass",
       "quantity": "Schwarzschild radius against mass, captured at three masses",
       "evidence": "instrument-capture",
-      "test": "e2e/lessonSandbox.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "now-make-it-heavier",
         "three-measurements",
@@ -97,7 +97,7 @@
       "control": "rv-inclination/inc",
       "quantity": "the semi-amplitude K, and the minimum mass it gives",
       "evidence": "notebook-fields",
-      "test": "e2e/answerEntry.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "now-tilt-the-whole-system",
         "read-k-off-the-panel",
@@ -111,7 +111,7 @@
       "control": "hz-insolation/distance",
       "quantity": "insolation at three distances, plotted",
       "evidence": "plot",
-      "test": "e2e/investigations.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "move-it-twice-as-far",
         "three-distances",
@@ -126,7 +126,7 @@
       "control": "dm-fit/haloVFlat",
       "quantity": "orbital speed against radius, measured and then fitted",
       "evidence": "plot",
-      "test": "e2e/investigations.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "now-a-galaxy",
         "measure-the-real-curve",
@@ -140,7 +140,7 @@
       "control": "tide-strength/dist",
       "quantity": "tidal acceleration at four distances and three masses",
       "evidence": "plot",
-      "test": "e2e/investigations.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "bring-the-companion-closer",
         "four-distances",
@@ -154,7 +154,7 @@
       "control": "the experiment bench: Set up and run both",
       "quantity": "separation between two runs, and its e-folding time",
       "evidence": "notebook-fields",
-      "test": "e2e/chaos.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "the-same-nudge-three-bodies",
         "measure-the-triple",
@@ -169,7 +169,7 @@
       "control": "the sandbox: run, and the resonance panels read the scene",
       "quantity": "the Laplace argument, and the amplitude it librates through",
       "evidence": "notebook-fields",
-      "test": "e2e/resonance.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "the-laplace-argument",
         "record-the-laplace-libration",
@@ -183,7 +183,7 @@
       "control": "survey-schedule/cadence",
       "quantity": "detection significance for two observing schedules",
       "evidence": "notebook-fields",
-      "test": "e2e/detectPlanet.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "schedule-b-twelve-nights-thirty",
         "write-down-what-schedule-b",
@@ -197,7 +197,7 @@
       "control": "the schedule workspace: set the cadence and run both",
       "quantity": "the period recovered from each schedule, and its alias",
       "evidence": "notebook-fields",
-      "test": "e2e/rvSchedule.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-the-comb",
         "run-both-schedules",
@@ -212,7 +212,7 @@
       "control": "the experiment bench: run the separation sweep",
       "quantity": "whether the planet survives twenty binary periods, against separation",
       "evidence": "notebook-fields",
-      "test": "e2e/binarySweep.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-the-sweep",
         "run-the-sweep",
@@ -227,7 +227,7 @@
       "control": "the inspector: read speed in two frames, before and after",
       "quantity": "speed relative to the planet and to the star, each side of the pass",
       "evidence": "notebook-fields",
-      "test": "e2e/lessonRecovery.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "which-side-gains",
         "fly-the-gaining-pass",
@@ -242,7 +242,7 @@
       "control": "the manoeuvre planner: transverse burn, then Apply",
       "quantity": "the top and bottom of the arc after the first burn",
       "evidence": "notebook-fields",
-      "test": "e2e/predictionLoops.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-do-nothing",
         "watch-the-coast",
@@ -257,7 +257,7 @@
       "control": "the sandbox: place a tracer and run it in the rotating frame",
       "quantity": "the Jacobi constant, and whether the neck is open",
       "evidence": "notebook-fields",
-      "test": "e2e/predictionLoops.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-forbidden",
         "read-the-constant",
@@ -271,7 +271,7 @@
       "control": "gw-lab/source",
       "quantity": "whether each of three sources emits, and the ring's change in length",
       "evidence": "notebook-fields",
-      "test": "e2e/gwSources.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "a-sphere-that-breathes",
         "change-the-shape",
@@ -285,7 +285,7 @@
       "control": "gw-lab/m1",
       "quantity": "time in band, and peak strain, against mass and distance",
       "evidence": "instrument-capture",
-      "test": "e2e/gwAdvancedSync.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-heavier",
         "change-one-thing",
@@ -300,7 +300,7 @@
       "control": "stellar-compare/focus",
       "quantity": "temperature, luminosity and the radius ratio they imply",
       "evidence": "instrument-capture",
-      "test": "e2e/stellarSharedSelection.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-which-is-bigger",
         "measure-the-radius-ratio",
@@ -314,7 +314,7 @@
       "control": "stellar-evolution/position",
       "quantity": "radius and luminosity at a stated model age",
       "evidence": "instrument-capture",
-      "test": "e2e/livesScene.spec.js",
+      "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "predict-direction",
         "measure-the-giant",

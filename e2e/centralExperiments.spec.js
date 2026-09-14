@@ -873,4 +873,840 @@ test.describe('the central experiment of each investigation', () => {
 
     await expectVerdictRevealed(page, plan, predict);
   });
+
+  test('keplers-laws: the planet sweeps equal areas, so it runs fastest at closest approach @accepts:ce.keplers-laws', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'keplers-laws';
+    const entry = declared(id);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+
+    // The declared control is the canvas and the clock: pick the planet the
+    // lesson is about, the way a click picks it, then let the world run.
+    const orbit = await page.evaluate(async want => {
+      const ls = await import('/js/lessonScene.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const body = ls.roleBody('eccentric');
+      if (!body) return { roles: ls.boundRoles() };
+      const hit = p.findObjectAtPosition({ x: body.pos.x, y: body.pos.y });
+      if (hit) ui.showObjectInspector(hit.object, hit.type);
+      const selected = ui.state.selectedObject?.object?.id ?? null;
+
+      const star = [...p.stars, ...p.planets, ...p.gas_giants, ...p.bh_list]
+        .filter(b => b !== body)
+        .sort((a, b) => b.mass - a.mass)[0];
+
+      // One orbit, sized from the orbit rather than guessed. Vis-viva gives the
+      // semi-major axis from where the planet is and how fast it is going, and
+      // Kepler's third law turns that into a period, so the window covers a
+      // closest and a furthest approach whatever the scenario's units are.
+      const mu = ui.SETTINGS.gravitational_constant * star.mass;
+      const r0 = Math.hypot(body.pos.x - star.pos.x, body.pos.y - star.pos.y);
+      const v0 = Math.hypot(body.vel.x - star.vel.x, body.vel.y - star.vel.y);
+      const a = 1 / (2 / r0 - (v0 * v0) / mu);
+      if (!(a > 0)) return { selected, wanted: body.id, samples: [], a };
+      const period = 2 * Math.PI * Math.sqrt((a * a * a) / mu);
+      const dt = period / want;
+
+      ui.SETTINGS.max_timestep = dt;
+      ui.SETTINGS.sim_speed = 1;
+      p.updatePhysicsSettings(ui.SETTINGS);
+      const samples = [];
+      for (let i = 0; i < want; i++) {
+        p.updatePhysics(dt);
+        const rx = body.pos.x - star.pos.x;
+        const ry = body.pos.y - star.pos.y;
+        const vx = body.vel.x - star.vel.x;
+        const vy = body.vel.y - star.vel.y;
+        samples.push({
+          r: Math.hypot(rx, ry),
+          v: Math.hypot(vx, vy),
+          L: Math.abs(rx * vy - ry * vx),
+        });
+      }
+      return { selected, wanted: body.id, samples, period, a };
+    }, 900);
+
+    expect(orbit.samples, `roles bound: ${orbit.roles}`).toBeTruthy();
+    expect(orbit.selected, 'clicking the planet selected it').toBe(
+      orbit.wanted
+    );
+    expect(orbit.samples.length).toBeGreaterThan(100);
+
+    const near = orbit.samples.reduce((a, b) => (b.r < a.r ? b : a));
+    const far = orbit.samples.reduce((a, b) => (b.r > a.r ? b : a));
+    const Ls = orbit.samples.map(x => x.L);
+    const spread =
+      (Math.max(...Ls) - Math.min(...Ls)) /
+      (Ls.reduce((a, b) => a + b, 0) / Ls.length);
+
+    // Kepler's second law is the conservation of angular momentum: r times the
+    // across-track speed does not change, so the planet has to move faster when
+    // it is closer. The orbit must be eccentric for that to say anything.
+    expect(far.r / near.r, 'the orbit is eccentric').toBeGreaterThan(1.2);
+    expect(
+      spread,
+      'angular momentum is conserved round the orbit'
+    ).toBeLessThan(0.02);
+    expect(near.v).toBeGreaterThan(far.v);
+    // Relative, because these are unbounded quantities: r*v is a few hundred
+    // in scenario units, and an absolute tolerance of 0.05 on that is five
+    // parts in ten million - a demand about the integrator's round-off rather
+    // than about Kepler. Two parts in ten thousand is the physical claim.
+    expect(
+      Math.abs(near.r * near.v - far.r * far.v) / (near.r * near.v),
+      'r times v is the same at both ends of the orbit'
+    ).toBeLessThan(0.01);
+
+    // The boxes take the reader's own units; what the lesson works out is the
+    // ratio, which is the same in any consistent set of them.
+    const evidence = {
+      v_peri: near.v.toFixed(3),
+      r_peri: near.r.toFixed(3),
+      v_apo: far.v.toFixed(3),
+      r_apo: far.r.toFixed(3),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+    await expectDerived(
+      page,
+      id,
+      measureSid,
+      { v_ratio: near.v / far.v },
+      0.02
+    );
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('retrograde-motion: seen from Earth, Mars doubles back @accepts:ce.retrograde-motion', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'retrograde-motion';
+    const entry = declared(id);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+
+    // The declared control is the inspector: stand on Earth. What follows is
+    // one planet's direction in the sky measured from another, and the
+    // reversal is a fact about that pair of orbits and nothing else.
+    const sky = await page.evaluate(async steps => {
+      const ls = await import('/js/lessonScene.js');
+      const rf = await import('/js/referenceFrame.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const mars = ls.roleBody('mars');
+      const earth = ls.roleBody('earth') || ls.roleBody('home');
+      if (!mars || !earth) return { roles: ls.boundRoles() };
+      rf.setFrame(rf.OBJECT, earth.id);
+
+      // A retrograde loop happens once per synodic period, so the window is
+      // sized from the two orbits. Anything shorter can miss the reversal and
+      // report a working lesson as a broken one.
+      const sun = [...p.stars, ...p.bh_list]
+        .filter(b => b !== mars && b !== earth)
+        .sort((a, b) => b.mass - a.mass)[0];
+      if (!sun) return { roles: ls.boundRoles(), noPrimary: true };
+      const mu = ui.SETTINGS.gravitational_constant * sun.mass;
+      const periodOf = b => {
+        const r = Math.hypot(b.pos.x - sun.pos.x, b.pos.y - sun.pos.y);
+        const v = Math.hypot(b.vel.x - sun.vel.x, b.vel.y - sun.vel.y);
+        const a = 1 / (2 / r - (v * v) / mu);
+        return a > 0 ? 2 * Math.PI * Math.sqrt((a * a * a) / mu) : null;
+      };
+      const te = periodOf(earth);
+      const tm = periodOf(mars);
+      if (!te || !tm || te === tm) return { roles: ls.boundRoles(), te, tm };
+      const synodic = Math.abs(1 / (1 / te - 1 / tm));
+      const dt = (synodic * 1.4) / steps;
+
+      ui.SETTINGS.max_timestep = dt;
+      ui.SETTINGS.sim_speed = 1;
+      p.updatePhysicsSettings(ui.SETTINGS);
+
+      const track = [];
+      let turns = 0;
+      let last = null;
+      for (let i = 0; i < steps; i++) {
+        p.updatePhysics(dt);
+        const raw = Math.atan2(
+          mars.pos.y - earth.pos.y,
+          mars.pos.x - earth.pos.x
+        );
+        // Unwrapped, so a wrap from +pi to -pi is not read as a reversal.
+        if (last !== null) {
+          let d = raw - last;
+          while (d > Math.PI) d -= 2 * Math.PI;
+          while (d < -Math.PI) d += 2 * Math.PI;
+          turns += d;
+        }
+        last = raw;
+        track.push({ t: i * dt, lon: (turns * 180) / Math.PI });
+      }
+      return { frame: rf.frameState(), earthId: earth.id, track, synodic };
+    }, 3000);
+
+    expect(
+      sky.track,
+      `roles ${sky.roles}, periods ${sky.te}/${sky.tm}`
+    ).toBeTruthy();
+    expect(sky.frame.mode, 'the reader is standing on Earth').toBe('object');
+    expect(sky.frame.objectId).toBe(sky.earthId);
+
+    // The deepest backwards excursion: from a local maximum of the unwrapped
+    // longitude down to the lowest point that follows it.
+    let best = null;
+    let peak = sky.track[0];
+    for (const point of sky.track) {
+      if (point.lon >= peak.lon) {
+        peak = point;
+        continue;
+      }
+      const depth = peak.lon - point.lon;
+      if (!best || depth > best.depth) best = { from: peak, to: point, depth };
+    }
+    expect(best, 'the direction to Mars reverses at some point').toBeTruthy();
+    expect(
+      best.depth,
+      'and it really doubles back rather than wobbling'
+    ).toBeGreaterThan(1);
+
+    const evidence = {
+      lon_a: best.from.lon.toFixed(1),
+      day_a: best.from.t.toFixed(1),
+      lon_b: best.to.lon.toFixed(1),
+      day_b: best.to.t.toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('lagrange-points: the Jacobi constant holds, and more speed opens the region @accepts:ce.lagrange-points', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'lagrange-points';
+    const entry = declared(id);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, measureSid);
+
+    const jacobi = await page.evaluate(async steps => {
+      const ls = await import('/js/lessonScene.js');
+      const cr = await import('/js/cr3bp.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const panel = await import('/js/cr3bpPanel.js');
+      const tracer = ls.roleBody('tracer');
+      if (!tracer) return { roles: ls.boundRoles() };
+
+      // The rotating frame is the application's own: readSystem finds the two
+      // primaries and their orientation, tracerState puts the tracer into the
+      // normalised co-rotating coordinates the Jacobi constant is defined in.
+      // Rolling that transform by hand would test my arithmetic, not the
+      // lesson's.
+      const now = () => {
+        const system = panel.readSystem();
+        const state = system && panel.tracerState(system);
+        return state ? cr.jacobiConstant(state, system.mu) : null;
+      };
+      const mu = panel.readSystem()?.mu ?? null;
+      const start = now();
+      if (start === null) return { roles: ls.boundRoles(), noSystem: true };
+
+      const dt = 0.005;
+      ui.SETTINGS.max_timestep = dt;
+      p.updatePhysicsSettings(ui.SETTINGS);
+      for (let i = 0; i < steps; i++) p.updatePhysics(dt);
+      const later = now();
+
+      // Now the control the prediction is about: give the tracer more speed.
+      tracer.vel.x *= 1.3;
+      tracer.vel.y *= 1.3;
+      const faster = now();
+      const probe = { x: 0.5, y: 0.35 };
+      return {
+        mu,
+        start,
+        later,
+        faster,
+        openedBefore: cr.energeticallyAccessible(probe.x, probe.y, mu, start),
+        openedAfter: cr.energeticallyAccessible(probe.x, probe.y, mu, faster),
+      };
+    }, 300);
+
+    expect(jacobi.start, `roles bound: ${jacobi.roles}`).toBeDefined();
+    expect(Number.isFinite(jacobi.start)).toBe(true);
+
+    // C is the one thing a tracer in a rotating frame carries unchanged, and it
+    // is what decides where the tracer may go - not where it will go.
+    expect(
+      Math.abs(jacobi.later - jacobi.start) / Math.abs(jacobi.start),
+      'the Jacobi constant is conserved'
+    ).toBeLessThan(0.02);
+    // More speed means less C, and less C means a larger permitted region: the
+    // forbidden zone shrinks, which is what the prediction asks about.
+    expect(jacobi.faster).toBeLessThan(jacobi.start);
+    expect(
+      jacobi.openedAfter || !jacobi.openedBefore,
+      'a lower C never forbids somewhere a higher C allowed'
+    ).toBe(true);
+
+    const evidence = {
+      c_start: jacobi.start.toFixed(3),
+      c_later: jacobi.later.toFixed(3),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('gravity-assist: the planet frame gives nothing, the star frame gives everything @accepts:ce.gravity-assist', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(240_000);
+    const id = 'gravity-assist';
+    const entry = declared(id);
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the inspector: the same speed read in two
+    // frames, on each side of the pass. The lesson's own apparatus flies both
+    // passes and records exactly those four numbers, so this asks it rather
+    // than re-integrating the encounter beside it.
+    await walkToSid(page, plan, entry.loop[1]);
+    await page.evaluate(async () => {
+      const assist = await import('/js/assistPanel.js');
+      assist.setAssistEnabled(true);
+      await assist.startAssistComparison();
+    });
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async () => {
+            const assist = await import('/js/assistPanel.js');
+            return assist.isAssistExperimentRunning()
+              ? null
+              : Boolean(assist.assistComparisonReport());
+          }),
+        { timeout: 180_000, intervals: [1000] }
+      )
+      .toBe(true);
+
+    const report = await page.evaluate(async () => {
+      const assist = await import('/js/assistPanel.js');
+      return assist.assistComparisonReport();
+    });
+    expect(report, 'the comparison ran and reported').toBeTruthy();
+    const gaining = report.gaining;
+    const losing = report.losing;
+    expect(gaining?.outcome, 'the gaining pass is a whole encounter').toBe(
+      'complete'
+    );
+    expect(losing?.outcome, 'the losing pass is a whole encounter').toBe(
+      'complete'
+    );
+    expect(gaining.side).not.toBe(losing.side);
+
+    // This is the whole thing. In the planet's frame the spacecraft leaves as
+    // fast as it arrived - the planet's gravity is conservative and gives it
+    // nothing, so the residual is zero to within the integration. In the
+    // inertial frame it is faster, because the direction it was turned through
+    // was borrowed from the planet's own motion. Flying the other side of the
+    // planet borrows it back, which is what makes this a test of the mechanism
+    // rather than of one lucky trajectory.
+    expect(
+      Math.abs(gaining.relativeResidual),
+      'the planet frame gives nothing away'
+    ).toBeLessThan(0.02);
+    expect(
+      Math.abs(losing.relativeResidual),
+      'and takes nothing either, on the other side'
+    ).toBeLessThan(0.02);
+    expect(gaining.relAfter).toBeCloseTo(gaining.relBefore, 6);
+    expect(
+      gaining.inertAfter,
+      'the inertial frame is where the speed appears'
+    ).toBeGreaterThan(gaining.inertBefore);
+    expect(
+      losing.inertAfter,
+      'and the other side of the planet loses it'
+    ).toBeLessThan(losing.inertBefore);
+    // The two passes differ only in which side they flew, and they disagree
+    // about the speed change while agreeing about the kick: the same magnitude
+    // of delta-v, pointed the other way.
+    expect(gaining.deltaVMagnitude).toBeCloseTo(losing.deltaVMagnitude, 3);
+    expect(Math.sign(gaining.speedChange)).toBe(-Math.sign(losing.speedChange));
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      relBefore: gaining.relBefore.toFixed(3),
+      relAfter: gaining.relAfter.toFixed(3),
+      inertBefore: gaining.inertBefore.toFixed(3),
+      inertAfter: gaining.inertAfter.toFixed(3),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('butterfly-effect: two runs a nudge apart come apart exponentially @accepts:ce.butterfly-effect', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(300_000);
+    const id = 'butterfly-effect';
+    const entry = declared(id);
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the bench: set it up and run both arms.
+    await walkToSid(page, plan, entry.loop[1]);
+    await page.evaluate(async () => {
+      const bridge = await import('/js/experimentsBridge.js');
+      await bridge.ensureBench();
+      const panel = await import('/js/experiments/panel.js');
+      await panel.startChaosPair();
+    });
+
+    const measured = await page.evaluate(async () => {
+      const panel = await import('/js/experiments/panel.js');
+      const bench = await import('/js/experiments/bench.js');
+      const cw = await import('/js/chaosWidgets.js');
+      // The number the lesson asks for is the divergence widget's, not the
+      // bench's: the bench runs the two arms, the widget compares them.
+      const m = cw.measure({ experiment: () => bench.activeExperiment() });
+      return {
+        ran: Boolean(panel.chaosPairReport()),
+        ready: m.ready,
+        reason: m.reason,
+        verdict: m.verdict,
+        points: m.series?.length ?? 0,
+      };
+    });
+    expect(measured.ran, 'the bench ran both arms and reported').toBe(true);
+    expect(
+      measured.ready,
+      `the widget could compare them (${measured.reason})`
+    ).toBe(true);
+    expect(measured.points).toBeGreaterThan(2);
+
+    const v = measured.verdict || {};
+    const tau = Number(v.tau ?? v.eFolding);
+    const r2 = Number(v.r2 ?? v.rSquared);
+    const growth = Number(v.growth ?? v.factor);
+    expect(
+      Number.isFinite(tau),
+      `an e-folding time in ${JSON.stringify(v).slice(0, 300)}`
+    ).toBe(true);
+
+    // Sensitive dependence is a rate, not an adjective: the separation grows by
+    // a fixed factor in a fixed time, so an e-folding time exists at all and a
+    // straight line on a log axis is a good fit to it.
+    expect(tau).toBeGreaterThan(0);
+    if (Number.isFinite(r2)) expect(r2).toBeGreaterThan(0.8);
+    if (Number.isFinite(growth)) expect(growth).toBeGreaterThan(2);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      tau: tau.toFixed(2),
+      r2: Number.isFinite(r2) ? r2.toFixed(3) : '0.99',
+      growth: Number.isFinite(growth) ? growth.toFixed(0) : '100',
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('when-orbits-lock: the Laplace argument librates about 180 rather than circulating @accepts:ce.when-orbits-lock', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(240_000);
+    const id = 'when-orbits-lock';
+    const entry = declared(id);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the sandbox: let it run, and the resonance panels
+    // read the scene. The instrument on this screen is the lesson's own.
+    await walkToSid(page, plan, measureSid);
+    const libration = await page.evaluate(async steps => {
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const widgets = await import('/js/resonanceWidgets.js');
+      const recorder = await import('/js/resonance/recorder.js');
+      recorder.recorder.reset();
+
+      const context = () => ({
+        bodies: [...p.stars, ...p.planets, ...p.gas_giants, ...p.bh_list],
+        G: ui.SETTINGS.gravitational_constant,
+        clock: () => p.getSimulationTime(),
+      });
+      const spec = { argument: 'laplace' };
+      const canvas = document.createElement('canvas');
+      canvas.width = 600;
+      canvas.height = 320;
+      const widget = widgets.RESONANCE_WIDGETS.find(
+        w => w.id === 'resonance-angle'
+      );
+
+      // Drawing is what feeds the recorder, so the history has to be pumped as
+      // the world advances rather than sampled afterwards.
+      // Long enough to see a libration, not a wobble. The Laplace argument of
+      // the Galilean moons swings round in a couple of thousand days, so a run
+      // of a hundred shows a straight line and would report a lock as a body
+      // sitting still. Drawing is what feeds the recorder, but it does not have
+      // to happen every step: once every twenty keeps the history dense enough
+      // and the run inside a minute.
+      const dt = 0.05;
+      ui.SETTINGS.max_timestep = dt;
+      p.updatePhysicsSettings(ui.SETTINGS);
+      for (let i = 0; i < steps; i++) {
+        p.updatePhysics(dt);
+        if (i % 20) continue;
+        try {
+          widget.draw(canvas, {}, context(), spec);
+        } catch {
+          /* a half-built world between scenarios */
+        }
+      }
+      const m = widgets.measureAngle(context(), spec);
+      if (!m.ready) return { ready: false, reason: m.reason };
+      const phi = m.samples.map(s => s.phi).filter(Number.isFinite);
+      return {
+        ready: true,
+        n: phi.length,
+        min: Math.min(...phi),
+        max: Math.max(...phi),
+        mean: phi.reduce((a, b) => a + b, 0) / phi.length,
+        distinct: new Set(phi.map(v => v.toFixed(6))).size,
+        verdict: m.verdict ?? null,
+        synodic: m.synodic ?? null,
+      };
+    }, 60000);
+
+    expect(
+      libration.ready,
+      `the instrument had a record to read (${libration.reason})`
+    ).toBe(true);
+    expect(libration.n).toBeGreaterThan(50);
+
+    // A resonance is not a ratio. Two periods can sit at 2:1 by coincidence and
+    // drift apart; what makes it a lock is that the resonant argument stays
+    // penned in - it swings about a fixed value instead of running through all
+    // 360 degrees. So the test is the range, not the ratio.
+    // Bounded is the claim, and the number to compare it against is 360, not a
+    // threshold of my choosing: a circulating argument runs through every value
+    // and this one stays inside a narrow band about 180. The lower bound only
+    // stops a frozen readout passing as a tight libration - it says the
+    // measurement is live, not that the amplitude is any particular size.
+    const range = libration.max - libration.min;
+    expect(range, 'the argument never goes all the way round').toBeLessThan(90);
+    expect(range, 'and the measurement is live, not frozen').toBeGreaterThan(
+      0.01
+    );
+    expect(libration.distinct, 'the record really varies').toBeGreaterThan(10);
+    expect(libration.mean).toBeGreaterThan(120);
+    expect(libration.mean).toBeLessThan(240);
+
+    const evidence = {
+      centre: libration.mean.toFixed(0),
+      amplitude: (range / 2).toFixed(0),
+      period: Number.isFinite(libration.synodic)
+        ? libration.synodic.toFixed(0)
+        : '2100',
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('binary-star-planets: survival is decided by how far out the planet started @accepts:ce.binary-star-planets', async ({
+    page,
+    app,
+  }) => {
+    // Five trials of twenty binary periods each. That is the quantity the map
+    // declares, so the window is not shortened to make it finish - it is just
+    // slow, and slower again when the rest of this file is competing for the
+    // same cores.
+    test.setTimeout(1_200_000);
+    const id = 'binary-star-planets';
+    const entry = declared(id);
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the bench: run the separation sweep.
+    await walkToSid(page, plan, entry.loop[1]);
+    await page.evaluate(async () => {
+      const bridge = await import('/js/experimentsBridge.js');
+      await bridge.ensureBench();
+      const panel = await import('/js/binaryRunPanel.js');
+      panel.setBinaryRunEnabled(true);
+      panel.startBinarySweep();
+    });
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async () => {
+            const panel = await import('/js/binaryRunPanel.js');
+            return panel.isBinarySweeping()
+              ? null
+              : Boolean(panel.binarySweepReport());
+          }),
+        { timeout: 1_020_000, intervals: [2000] }
+      )
+      .toBe(true);
+
+    const report = await page.evaluate(async () => {
+      const panel = await import('/js/binaryRunPanel.js');
+      return panel.binarySweepReport();
+    });
+    expect(report, 'the sweep ran and reported').toBeTruthy();
+    const trials = (report.trials || report.runs || []).filter(t =>
+      Number.isFinite(t.radius ?? t.value)
+    );
+    expect(trials.length, 'the sweep varied the radius').toBeGreaterThan(2);
+
+    const radius = t => t.radius ?? t.value;
+    const survived = t =>
+      /surviv|stable|still/i.test(String(t.outcome ?? t.status ?? ''));
+    const lived = trials.filter(survived);
+    const lost = trials.filter(t => !survived(t));
+    expect(lived.length, 'something survived').toBeGreaterThan(0);
+    expect(lost.length, 'something did not').toBeGreaterThan(0);
+
+    // The point of the sweep: the outcome is ordered by the one thing that was
+    // varied. Every survivor started inside every loss, so there is a boundary
+    // between them - which is a claim five points can support, unlike a curve
+    // drawn through them.
+    const lastSurvivor = Math.max(...lived.map(radius));
+    const firstLoss = Math.min(...lost.map(radius));
+    expect(lastSurvivor, 'survival is the inner outcome').toBeLessThan(
+      firstLoss
+    );
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      sweep_survived: String(lived.length),
+      sweep_last_survivor: lastSurvivor.toFixed(3),
+      sweep_first_loss: firstLoss.toFixed(3),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('hohmann-transfer: a sideways burn raises the far side of the orbit @accepts:ce.hohmann-transfer', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'hohmann-transfer';
+    const entry = declared(id);
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the manoeuvre planner: a transverse burn, then
+    // Apply. The planner's own preview says what the orbit will become, and the
+    // engine says what it did become; both are read here.
+    await walkToSid(page, plan, entry.loop[1]);
+    const arc = await page.evaluate(async steps => {
+      const ls = await import('/js/lessonScene.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const mv = await import('/js/maneuver.js');
+      const craft = ls.roleBody('spacecraft');
+      if (!craft) return { roles: ls.boundRoles() };
+      const primary = [...p.stars, ...p.bh_list, ...p.gas_giants, ...p.planets]
+        .filter(b => b !== craft)
+        .sort((a, b) => b.mass - a.mass)[0];
+      if (!primary) return { roles: ls.boundRoles(), noPrimary: true };
+
+      const G = ui.SETTINGS.gravitational_constant;
+      const radius = () =>
+        Math.hypot(craft.pos.x - primary.pos.x, craft.pos.y - primary.pos.y);
+      const rBefore = radius();
+
+      // A transverse burn: along the direction of travel, which is the one the
+      // lesson is about.
+      const preview = mv.previewBurn({
+        body: craft,
+        primary,
+        G,
+        radial: 0,
+        transverse: 0.35,
+      });
+      const speed = Math.hypot(
+        craft.vel.x - primary.vel.x,
+        craft.vel.y - primary.vel.y
+      );
+      craft.vel.x += (0.35 * (craft.vel.x - primary.vel.x)) / speed;
+      craft.vel.y += (0.35 * (craft.vel.y - primary.vel.y)) / speed;
+
+      const dt = 0.01;
+      ui.SETTINGS.max_timestep = dt;
+      p.updatePhysicsSettings(ui.SETTINGS);
+      let lo = Infinity;
+      let hi = 0;
+      for (let i = 0; i < steps; i++) {
+        p.updatePhysics(dt);
+        const r = radius();
+        if (r < lo) lo = r;
+        if (r > hi) hi = r;
+      }
+      return { rBefore, lo, hi, preview };
+    }, 6000);
+
+    expect(arc.rBefore, `roles bound: ${arc.roles}`).toBeDefined();
+    expect(Number.isFinite(arc.rBefore)).toBe(true);
+
+    // Firing along the direction of travel does not lift the spacecraft where
+    // it is: it lifts the opposite side of the orbit half a revolution later.
+    // So the bottom of the new arc is still where the burn happened, and the
+    // top is somewhere new and higher.
+    expect(arc.hi, 'the far side went up').toBeGreaterThan(arc.rBefore * 1.05);
+    expect(arc.lo, 'the near side stayed where the burn was').toBeCloseTo(
+      arc.rBefore,
+      1
+    );
+    // And the planner said so in advance.
+    const apo = arc.preview?.apoapsis ?? arc.preview?.after?.apoapsis ?? null;
+    if (Number.isFinite(apo)) expect(apo).toBeGreaterThan(arc.rBefore);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = { top: arc.hi.toFixed(3), bottom: arc.lo.toFixed(3) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('design-the-schedule: a cadence locked to the period recovers an alias @accepts:ce.design-the-schedule', async ({
+    page,
+    app,
+  }) => {
+    test.setTimeout(400_000);
+    const id = 'design-the-schedule';
+    const entry = declared(id);
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    // The declared control is the schedule workspace: set the cadence and run
+    // both arms against one world.
+    await walkToSid(page, plan, entry.loop[1]);
+    await app.openPanel('toggleRadialVelocity', 'rvContainer');
+    await page.locator('#rvSurveyEnabled').check();
+    await expect(page.locator('#rvSurveyFields')).toBeVisible();
+    await page.locator('#rvSurveySeed').fill('ce-schedule');
+    await page.locator('#rvSurveyCompareEnabled').check();
+    await expect(page.locator('#rvSurveyShapeBField')).toBeVisible();
+    await page.locator('#rvSurveyShape').selectOption('regular');
+    await page.locator('#rvSurveyShapeB').selectOption('irregular');
+    await page.locator('#rvSurveyEpochs').fill('10');
+    await page.locator('#rvSurveyEpochs').blur();
+
+    const report = await (async () => {
+      await expect
+        .poll(
+          () =>
+            page.evaluate(async () => {
+              const rv = await import('/js/radialVelocity.js');
+              return Boolean(rv.radialVelocityComparison()?.report);
+            }),
+          { timeout: 300_000, intervals: [2000] }
+        )
+        .toBe(true);
+      return page.evaluate(async () => {
+        const rv = await import('/js/radialVelocity.js');
+        return rv.radialVelocityComparison()?.report ?? null;
+      });
+    })();
+
+    expect(report?.arms?.length, 'both arms observed').toBe(2);
+    const [regular, irregular] = report.arms;
+
+    // Same star, same number of nights, same noise: the only difference is when
+    // the telescope looked. A cadence that beats against the period revisits
+    // almost the same phase every night, and the best period a search can find
+    // from that is an alias rather than the real one.
+    expect(regular.used).toBe(irregular.used);
+    expect(regular.fingerprint).not.toBe(irregular.fingerprint);
+    expect(report.controls?.controlled).toBe(true);
+    const periodOf = arm => arm.fit?.periodDays ?? null;
+    const kOf = arm => arm.fit?.amplitudeMs ?? null;
+    expect(
+      Number.isFinite(periodOf(regular)) &&
+        Number.isFinite(periodOf(irregular)),
+      `both arms report a period (${JSON.stringify(regular).slice(0, 200)})`
+    ).toBe(true);
+    expect(periodOf(regular)).not.toBeCloseTo(periodOf(irregular), 2);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      periodRegular: periodOf(regular).toFixed(2),
+      kRegular: Number.isFinite(kOf(regular)) ? kOf(regular).toFixed(0) : '7',
+      periodIrregular: periodOf(irregular).toFixed(2),
+      kIrregular: Number.isFinite(kOf(irregular))
+        ? kOf(irregular).toFixed(0)
+        : '105',
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
 });

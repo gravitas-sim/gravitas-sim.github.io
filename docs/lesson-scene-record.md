@@ -33,7 +33,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** where-is-the-star → measure-the-two-orbits → measure-the-two-orbits; where-does-it-move-fastest → watch-it-happen, fast-and-slow-in-numbers, measure-four-planets, work-the-law-out-step, the-same-laws-forty-light, weigh-trappist-1-yourself → watch-it-happen.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; wrong body: select another and import again, which overwrites.
 - **Scene rebuilds:** 3 step(s) on arrival (eight-minutes-of-arc, kepler-s-third-law, what-newton-added).
-- **Accepted central experiment** (reviewed 2026-09-11): object `eccentric`, control the canvas: click a body, then Run and the event watch, measures semi-major axis a and period P for four planets, evidence `notebook-fields`, covered by `e2e/investigations.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `eccentric`, control the canvas: click a body, then Run and the event watch, measures semi-major axis a and period P for four planets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Why Mars Goes Backwards (`retrograde-motion`)
 
@@ -47,7 +47,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** before-you-look → put-yourself-on-earth, catch-the-reversal, nearest-and-furthest → put-yourself-on-earth; and-what-about-the-sun → do-it-for-the-sun, how-long-does-a-loop → do-it-for-the-sun.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: guarded, but the fallback is not spelled out.
 - **Scene rebuilds:** 1 step(s) on arrival (the-wandering-stars).
-- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the dates and elongations of one retrograde loop, evidence `notebook-fields`, covered by `e2e/lessonRecovery.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the dates and elongations of one retrograde loop, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
@@ -61,7 +61,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** what-will-the-brightness-do → your-first-transit, try-it-on-some-real, measure-the-dip, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → your-first-transit; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look, now-measure-it, recover-the-real-planet → time-two-transits.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; wrong body: select another and import again, which overwrites; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at transit.
 - **Scene rebuilds:** 2 step(s) on arrival (a-firefly-beside-a-lighthouse, now-measure-it).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/lessonRecovery.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Bound, Unbound and Escape (`orbital-energy`)
 
@@ -75,7 +75,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** load-it-lightly → fire-it → fire-it; load-it-heavily → fire-it-again, find-the-dividing-line, write-down-the-dividing-speed, watch-the-total, around-a-real-orbit → fire-it-again; somewhere-else-entirely → more-mass-harder-to-leave, further-out-easier-to-leave, three-shapes-one-law, check-it-yourself → more-mass-harder-to-leave.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; null result: the probe names what is missing.
 - **Scene rebuilds:** 3 step(s) on arrival (how-hard-would-you-have, around-a-real-orbit, something-that-came-from-outside).
-- **Accepted central experiment** (reviewed 2026-09-11): object `visitor`, control launch/v, measures the dividing speed, as the last speed on each side of it, evidence `notebook-fields`, covered by `e2e/predictionLoops.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `visitor`, control launch/v, measures the dividing speed, as the last speed on each side of it, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Weighing the Stars (`weighing-stars`)
 
@@ -89,7 +89,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** two-stars-side-by-side → watch-them, what-are-they-going-round → watch-them; make-one-of-them-heavier → try-it, put-them-on-a-see → try-it; which-pair-is-quicker → run-them-together, a-practice-run, measurement-one-how-big-is, measurement-two-how-long-does, weigh-the-pair, back-to-the-balance-point, now-weigh-each-one, somebody-really-did-this, and-stars-are-not-the, one-on-your-own → run-them-together.
 - **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `a`, control balance/d1, measures two arm lengths and one period, giving both masses, evidence `notebook-fields`, covered by `e2e/investigations.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `a`, control balance/d1, measures two arm lengths and one period, giving both masses, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Black Holes by the Numbers (`black-holes`)
 
@@ -103,7 +103,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** now-make-it-heavier → three-measurements, what-did-doubling-do, read-the-graph → three-measurements; squeezing-and-getting-away → squeeze-the-sun, the-last-squeeze, the-right-answer-for-the → squeeze-the-sun; which-one-is-denser → mass-divided-by-volume, which-way-did-it-go, where-the-room-comes-from → mass-divided-by-volume; which-one-is-hotter → the-thermometer, colder-not-hotter → the-thermometer; then-what-happens-to-it → a-timeline-that-will-not, longer-and-then-much-longer, from-city-sized-to-solar, sorting-them-out, a-mystery-black-hole-size, a-mystery-black-hole-temperature, it-has-a-name → a-timeline-that-will-not.
 - **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:bh-scaling`, control bh-scaling/mass, measures Schwarzschild radius against mass, captured at three masses, evidence `instrument-capture`, covered by `e2e/lessonSandbox.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:bh-scaling`, control bh-scaling/mass, measures Schwarzschild radius against mass, captured at three masses, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
@@ -117,7 +117,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 4 step(s) on arrival (the-planet-you-already-measured, which-one-moves, open-the-real-instrument, read-k-off-the-panel).
-- **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/answerEntry.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Goldilocks Question (`goldilocks-question`)
 
@@ -131,7 +131,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** move-it-twice-as-far → three-distances, write-the-three-down, the-star-is-not-running → three-distances; leave-the-planet-change-the → four-stars-one-planet, so-where-would-a-planet, now-put-it-round-the, the-two-edges, two-definitions-of-the-same, the-wider-definition-on-the, a-year-on-a-circular → four-stars-one-planet; now-stretch-the-orbit → run-an-eccentric-year, crossing-the-edges, reading-the-fraction → run-an-eccentric-year; a-real-system-forty-light → all-seven-planets, watch-it-run, take-the-readings-yourself, three-planets-that-all-look → all-seven-planets.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; wrong body: the step binds the object by name, so there is none; null result: the probe names what is missing; wrong body: the object list names what the step staged; missed moment: an event watch stops the run at periapsis.
 - **Scene rebuilds:** 6 step(s) on arrival (what-does-earth-get-from, now-put-it-round-the, the-wider-definition-on-the, a-real-system-forty-light, all-seven-planets, watch-it-run).
-- **Accepted central experiment** (reviewed 2026-09-11): object `earth`, control hz-insolation/distance, measures insolation at three distances, plotted, evidence `plot`, covered by `e2e/investigations.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `earth`, control hz-insolation/distance, measures insolation at three distances, plotted, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Missing Mass (`missing-mass`)
 
@@ -145,7 +145,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** now-a-galaxy → measure-the-expected-curve, measure-the-real-curve, now-do-what-the-astronomers, try-it-with-stars-alone, record-your-best-stars-only, why-a-heavier-disc-cannot, now-add-the-halo, record-the-fit-that-works, how-much-of-it-is, what-the-halo-is-holding, take-the-halo-away-from, zwicky-s-arithmetic-and-the, measure-the-simulated-cluster, a-different-way-to-read, fit-it-both-ways, the-prediction-mond-makes, how-much-of-the-universe → measure-the-expected-curve.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; ambiguous result: nothing marks these, they are a record; reset: rebuilds the scenario, discarding the previous step's scene; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing.
 - **Scene rebuilds:** 5 step(s) on arrival (two-ways-to-weigh-a, now-a-galaxy, what-rubin-and-ford-found, take-the-halo-away-from, forty-years-earlier).
-- **Accepted central experiment** (reviewed 2026-09-11): object `outer`, control dm-fit/haloVFlat, measures orbital speed against radius, measured and then fitted, evidence `plot`, covered by `e2e/investigations.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `outer`, control dm-fit/haloVFlat, measures orbital speed against radius, measured and then fitted, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Tides (`tides`)
 
@@ -159,7 +159,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-centre-away, what-the-far-side-arrow → take-the-centre-away; bring-the-companion-closer → four-distances, how-steeply-does-it-fall → four-distances; now-change-the-companion → three-masses → three-masses; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip, where-the-balance-tips, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → stretch-against-grip.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 2 step(s) on arrival (twice-a-day-everywhere, the-extreme-case-running-live).
-- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal acceleration at four distances and three masses, evidence `plot`, covered by `e2e/investigations.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal acceleration at four distances and three masses, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Butterfly Effect in Space (`butterfly-effect`)
 
@@ -173,7 +173,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** the-same-numbers-twice → the-reproducibility-control → the-reproducibility-control; nudge-one-star-in-a → measure-the-binary → measure-the-binary; the-same-nudge-three-bodies → measure-the-triple, write-down-what-you-measured → measure-the-triple; before-you-refine → the-numerical-control, move-the-horizon → the-numerical-control.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 3 step(s) on arrival (a-word-that-has-been, a-control-before-the-interesting, back-to-the-triangle).
-- **Accepted central experiment** (reviewed 2026-09-11): object `beta`, control the experiment bench: Set up and run both, measures separation between two runs, and its e-folding time, evidence `notebook-fields`, covered by `e2e/chaos.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `beta`, control the experiment bench: Set up and run both, measures separation between two runs, and its e-folding time, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## When Orbits Lock (`when-orbits-lock`)
 
@@ -187,7 +187,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** how-close-is-close → measure-the-four-periods, write-down-the-ratios → measure-the-four-periods; where-do-the-line-ups → watch-the-line-ups → watch-the-line-ups; the-laplace-argument → watch-the-laplace-argument, record-the-laplace-libration → watch-the-laplace-argument; one-percent → break-it, the-awkward-case, measure-pluto-s-resonance, record-pluto-s-libration, where-the-line-ups-happen, the-rotating-frame, record-the-tadpole, one-last-ratio → break-it.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: the probe names what is missing.
 - **Scene rebuilds:** 9 step(s) on arrival (four-moons-and-a-suspicious, measure-the-four-periods, where-do-the-line-ups, break-it, the-awkward-case, the-orbit-that-crosses-and, measure-pluto-s-resonance, sixty-degrees-ahead, the-rotating-frame).
-- **Accepted central experiment** (reviewed 2026-09-11): object `europa`, control the sandbox: run, and the resonance panels read the scene, measures the Laplace argument, and the amplitude it librates through, evidence `notebook-fields`, covered by `e2e/resonance.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `europa`, control the sandbox: run, and the resonance panels read the scene, measures the Laplace argument, and the amplitude it librates through, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Can You Detect This Planet? (`detect-this-planet`)
 
@@ -201,7 +201,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** what-decides-whether-you-find → schedule-a-twelve-nights-one, write-down-what-schedule-a → schedule-a-twelve-nights-one; schedule-b-twelve-nights-thirty → the-same-planet-invisible, write-down-what-schedule-b, the-third-knob, the-noise-budget → the-same-planet-invisible; the-same-planet-from-the-ground → the-floor, read-two-budgets, the-edge-of-what-tess-can-do → the-floor.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 2 step(s) on arrival (twelve-nights, do-it-to-the-real).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control survey-schedule/cadence, measures detection significance for two observing schedules, evidence `notebook-fields`, covered by `e2e/detectPlanet.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control survey-schedule/cadence, measures detection significance for two observing schedules, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Design the Schedule (`design-the-schedule`)
 
@@ -215,7 +215,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** predict-the-comb → run-both-schedules, read-the-comparison, break-your-own-result → run-both-schedules; predict-the-weather → lose-a-fortnight, type-the-dates → lose-a-fortnight.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 6 step(s) on arrival (eight-nights, set-the-run-up, run-both-schedules, break-your-own-result, lose-a-fortnight, type-the-dates).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control the schedule workspace: set the cadence and run both, measures the period recovered from each schedule, and its alias, evidence `notebook-fields`, covered by `e2e/rvSchedule.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control the schedule workspace: set the cadence and run both, measures the period recovered from each schedule, and its alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Planets in Binary Stars (`binary-star-planets`)
 
@@ -229,7 +229,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** before-you-run-anything → run-the-default, what-the-quiet-run-did → run-the-default; move-it-out → run-it-at-030, when-did-it-leave → run-it-at-030; predict-the-sweep → run-the-sweep, read-the-sweep, resolve-the-edge, energy-drift-as-a-screen, the-case-that-matters, the-drift-was-tiny → run-the-sweep; which-way-round → run-the-circumbinary, no-encounter-at-all, sweep-the-circumbinary, where-the-fit-disagrees → run-the-circumbinary.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 11 step(s) on arrival (two-suns, run-the-default, run-it-at-030, run-the-sweep, resolve-the-edge, energy-drift-as-a-screen, the-case-that-matters, around-both, run-the-circumbinary, sweep-the-circumbinary, where-the-fit-disagrees).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control the experiment bench: run the separation sweep, measures whether the planet survives twenty binary periods, against separation, evidence `notebook-fields`, covered by `e2e/binarySweep.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control the experiment bench: run the separation sweep, measures whether the planet survives twenty binary periods, against separation, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Where Does a Gravity Assist Get Its Speed? (`gravity-assist`)
 
@@ -243,7 +243,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** which-side-gains → fly-the-gaining-pass, write-down-both-columns, the-other-side, read-the-comparison, who-paid, sweep-the-impact-parameter, read-the-sweep, fly-it-heliocentric → fly-the-gaining-pass.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 6 step(s) on arrival (voyager-left-faster, fly-the-gaining-pass, the-other-side, sweep-the-impact-parameter, now-with-a-sun, fly-it-heliocentric).
-- **Accepted central experiment** (reviewed 2026-09-11): object `spacecraft`, control the inspector: read speed in two frames, before and after, measures speed relative to the planet and to the star, each side of the pass, evidence `notebook-fields`, covered by `e2e/lessonRecovery.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `spacecraft`, control the inspector: read speed in two frames, before and after, measures speed relative to the planet and to the star, each side of the pass, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Getting There From Here (`hohmann-transfer`)
 
@@ -257,7 +257,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** predict-point-at-it → measure-the-orbits → measure-the-orbits; predict-do-nothing → watch-the-coast, read-the-arc → read-the-arc.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; missed moment: an event watch stops the run at apoapsis; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (the-problem).
-- **Accepted central experiment** (reviewed 2026-09-11): object `spacecraft`, control the manoeuvre planner: transverse burn, then Apply, measures the top and bottom of the arc after the first burn, evidence `notebook-fields`, covered by `e2e/predictionLoops.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `spacecraft`, control the manoeuvre planner: transverse burn, then Apply, measures the top and bottom of the arc after the first burn, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Where Can It Get To? (`lagrange-points`)
 
@@ -271,7 +271,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** predict-forbidden → read-the-constant, open-the-neck → read-the-constant; accessible-not-reachable → nothing measured → watch-it-not-cross; predict-same-region-same-path → watch-it-not-cross → watch-it-not-cross; predict-stability → break-it → break-it.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: the probe names what is missing.
 - **Scene rebuilds:** 3 step(s) on arrival (two-stars-and-a-speck, predict-same-region-same-path, watch-it-not-cross).
-- **Accepted central experiment** (reviewed 2026-09-11): object `tracer`, control the sandbox: place a tracer and run it in the rotating frame, measures the Jacobi constant, and whether the neck is open, evidence `notebook-fields`, covered by `e2e/predictionLoops.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `tracer`, control the sandbox: place a tracer and run it in the rotating frame, measures the Jacobi constant, and whether the neck is open, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What Is a Gravitational Wave? (`what-is-a-gravitational-wave`)
 
@@ -285,7 +285,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** travel-without-shining → meet-the-two-objects, gravity-is-already-here → meet-the-two-objects; a-sphere-that-breathes → change-the-shape → change-the-shape; what-has-to-change → watch-the-pair, the-pattern-repeats, follow-a-disturbance-outward, freely-floating-markers, stretch-one-way, now-swap, markers-not-carried-away, why-drawn-so-large, measure-a-change-in-length, can-space-carry-a-sound → watch-the-pair; slower-pair-faster-pair → count-the-rhythm, why-an-orbit-shrinks, the-chirp, where-the-calculation-stops, different-compact-pairs, the-same-source-farther-away, an-observatory-measures-a-difference, what-two-observatories-recorded, design-one-small-experiment, tell-the-story → count-the-rhythm.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `bh`, control gw-lab/source, measures whether each of three sources emits, and the ring's change in length, evidence `notebook-fields`, covered by `e2e/gwSources.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `bh`, control gw-lab/source, measures whether each of three sources emits, and the ring's change in length, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Listening to Spacetime (`listening-to-spacetime`)
 
@@ -299,7 +299,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** an-unlabelled-signal → three-things-called-a-wave, find-your-way-around → three-things-called-a-wave; predict-as-it-tightens → watch-the-waves, two-crests-per-orbit, frequency-early-and-late, stop-at-a-milestone, explain-the-chirp → watch-the-waves; predict-heavier → change-one-thing, measure-time-in-band, the-one-mass-that-matters → change-one-thing; predict-twice-as-far → test-distance, edge-on, three-sources, where-the-model-stops, add-the-noise, looks-like-is-not-enough, what-they-actually-recorded, model-against-measurement, your-own-experiment, what-the-signal-tells-you → test-distance.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `bh`, control gw-lab/m1, measures time in band, and peak strain, against mass and distance, evidence `instrument-capture`, covered by `e2e/gwAdvancedSync.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `bh`, control gw-lab/m1, measures time in band, and peak strain, against mass and distance, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## A Universe of Stars (`a-universe-of-stars`)
 
@@ -313,7 +313,7 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** three-stars-no-labels → the-numbers-arrive, temperature-makes-colour, same-temperature-different-light → the-numbers-arrive; predict-which-is-bigger → measure-the-radius-ratio, the-two-axes, where-the-sun-sits, straight-up-the-diagram, sideways-at-one-luminosity, lines-of-constant-radius, switch-to-modelled-stars, three-on-the-main-sequence → measure-the-radius-ratio; predict-mass-and-light → the-whole-sequence, what-the-trend-covers → the-whole-sequence; two-red-stars → measure-the-two-reds, a-supergiant → measure-the-two-reds; predict-hot-and-faint → hot-and-faint, classify-from-position → hot-and-faint; predict-who-lives-longer → measure-the-lifetimes, a-population → measure-the-lifetimes; predict-the-bright-subset → only-the-bright-ones, what-a-survey-misses, find-a-counterexample, the-argument → only-the-bright-ones.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `two`, control stellar-compare/focus, measures temperature, luminosity and the radius ratio they imply, evidence `instrument-capture`, covered by `e2e/stellarSharedSelection.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `two`, control stellar-compare/focus, measures temperature, luminosity and the radius ratio they imply, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Lives of Stars (`lives-of-stars`)
 
@@ -327,5 +327,5 @@ Of 81 prediction loops, 81 are returned to,
 - **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument → the-neutron-star.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/livesScene.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
