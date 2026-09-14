@@ -110,8 +110,6 @@ export const visited = async page =>
     )?.[0] ?? 0
   );
 
-const heading = page => page.locator('.inv-step-title').innerText();
-
 /**
  * Answer whatever would hold Next up on this screen.
  *
@@ -138,6 +136,18 @@ async function nudge(page) {
 }
 
 /**
+ * Where the reader is, as the panel itself counts it.
+ *
+ * "Step 8 of 29", one-based. Not the visited total: that only counts screens
+ * seen for the first time, so walking back through a lesson and forward again
+ * leaves it unchanged - which stalls a walk that waits for it to move.
+ */
+export const position = async page =>
+  Number(
+    (await page.locator('.inv-step-count').innerText()).match(/\d+/)?.[0] ?? 0
+  );
+
+/**
  * Walk to a step by sid, forwards or backwards.
  *
  * Not every declared loop runs in step order - radial-velocity reads K off the
@@ -147,26 +157,26 @@ async function nudge(page) {
  */
 export async function walkToSid(page, plan, sid) {
   const wanted = step(plan, sid);
-  for (let guard = 0; guard < 60; guard++) {
-    const now = (await heading(page)).trim();
-    if (now === wanted.title.trim()) return wanted;
-    const at = plan.findIndex(s => s.title.trim() === now);
-    // Only walk back when the reader is demonstrably past it. A heading the
-    // plan does not recognise gives -1, and forwards is the safe direction.
-    if (at > wanted.index) {
-      await page.locator('#investigationPrev').click({ timeout: 15_000 });
-      await page.waitForTimeout(120);
-      continue;
+  const target = wanted.index + 1;
+  for (let guard = 0; guard < 80; guard++) {
+    const at = await position(page);
+    if (at === target) {
+      await expect(page.locator('.inv-step-title')).toHaveText(
+        wanted.title.trim(),
+        { timeout: 10_000 }
+      );
+      return wanted;
     }
-    const before = await visited(page);
-    await nudge(page);
-    await page
-      .locator('#investigationNext')
-      .click({ timeout: 15_000 })
-      .catch(() => {});
-    await expect
-      .poll(() => visited(page), { timeout: 20_000 })
-      .toBeGreaterThan(before);
+    if (at > target) {
+      await page.locator('#investigationPrev').click({ timeout: 15_000 });
+    } else {
+      await nudge(page);
+      await page
+        .locator('#investigationNext')
+        .click({ timeout: 15_000 })
+        .catch(() => {});
+    }
+    await expect.poll(() => position(page), { timeout: 20_000 }).not.toBe(at);
   }
   throw new Error(`never reached the step "${sid}" (${wanted.title})`);
 }
@@ -209,9 +219,21 @@ export async function expectVerdictRevealed(page, plan, predict) {
 
 // --- the instrument ----------------------------------------------------------
 
-/** Every row the widget is reporting, label to value. */
-export const readout = page =>
-  page.evaluate(() =>
+/**
+ * Every row the widget is reporting, label to value.
+ *
+ * The panel has to be on screen. A step with no instrument of its own leaves
+ * the previous step's rows in the DOM with the panel hidden, and reading those
+ * is reading a measurement the reader is not being shown - which is how this
+ * helper quietly returned a stale rotation curve on a screen that has no
+ * instrument at all.
+ */
+export const readout = async page => {
+  await expect(
+    page.locator('#investigationTool'),
+    'this step is showing an instrument'
+  ).toBeVisible();
+  return page.evaluate(() =>
     Object.fromEntries(
       [...document.querySelectorAll('#investigationToolReadout .inv-tool-row')]
         .map(r => [
@@ -221,6 +243,7 @@ export const readout = page =>
         .filter(([k]) => k)
     )
   );
+};
 
 /**
  * Every number in a readout value, in order.

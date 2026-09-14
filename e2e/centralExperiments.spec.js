@@ -1,8 +1,9 @@
 // =============================================================================
 // The one experiment each investigation is built around, driven for real
 // -----------------------------------------------------------------------------
-// One test per investigation, and exactly one: `@accepts:ce.<id>` is reserved
-// for this file and tools/acceptance-bindings.mjs refuses a second claimant.
+// One test per investigation, and exactly one. The reserved acceptance tag -
+// the prefix tools/acceptance-bindings.mjs reads, written out in full in each
+// title below - belongs to this file, and a second claimant is refused.
 //
 // Why this file exists at all
 // -----------------------------------------------------------------------------
@@ -425,6 +426,450 @@ test.describe('the central experiment of each investigation', () => {
     };
     await recordFields(page, id, measureSid, evidence);
     await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('radial-velocity: tilting the system scales K by the sine of the inclination @accepts:ce.radial-velocity', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'radial-velocity';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // The tilt lives on the step the prediction names, which is the lesson's
+    // own arrangement: the answer arrives where the experiment is done.
+    await walkToSid(page, plan, predict.reveal);
+    const at = {};
+    let trueMass = 0;
+    for (const inc of [90, 60, 30]) {
+      const { before, after } = await setControl(page, control, inc);
+      if (inc !== 90) expect(after).not.toEqual(before);
+      at[inc] = {
+        k: reading(after, /K we would measure/i),
+        reported: reading(after, /mass RV alone reports/i),
+        sini: reading(after, /true mass times/i),
+      };
+      trueMass = reading(after, /true planet mass/i);
+    }
+
+    // Radial velocity sees only the component along the line of sight, so K
+    // carries a factor of sin i and the mass it gives is a minimum: the planet
+    // has not changed, and the number the method reports has.
+    for (const inc of [90, 60, 30]) {
+      const sini = Math.sin((inc * Math.PI) / 180);
+      expect(at[inc].sini).toBeCloseTo(sini, 2);
+      expect(at[inc].k / at[90].k).toBeCloseTo(sini, 2);
+      expect(at[inc].reported).toBeCloseTo(trueMass * sini, 2);
+      expect(at[inc].reported).toBeLessThanOrEqual(trueMass + 1e-9);
+    }
+    expect(at[30].k).toBeLessThan(at[90].k);
+
+    await expectVerdictRevealed(page, plan, predict);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = { k: at[90].k.toFixed(1) };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+  });
+
+  test('missing-mass: the flat curve needs mass that is not visible @accepts:ce.missing-mass', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'missing-mass';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    // The curve comes off the running world, which is what the map means by
+    // evidenceFrom "engine": ninety-odd stars orbiting a bulge, each with a
+    // radius and a speed the integrator is carrying. The measure step has no
+    // instrument of its own - the reader is looking at the galaxy.
+    await walkToSid(page, plan, measureSid);
+    const curve = await page.evaluate(async () => {
+      const ls = await import('/js/lessonScene.js');
+      const p = await import('/js/physics.js');
+      const bodies = [...p.stars, ...p.planets, ...p.bh_list];
+      if (bodies.length < 20) return null;
+      const centre = bodies.slice().sort((a, b) => b.mass - a.mass)[0];
+      const points = bodies
+        .filter(b => b !== centre)
+        .map(b => ({
+          r: Math.hypot(b.pos.x - centre.pos.x, b.pos.y - centre.pos.y),
+          v: Math.hypot(b.vel.x - centre.vel.x, b.vel.y - centre.vel.y),
+        }))
+        .filter(
+          pt => Number.isFinite(pt.r) && Number.isFinite(pt.v) && pt.r > 0
+        )
+        .sort((a, b) => a.r - b.r);
+      // Four radial bins, median speed in each: one star on an eccentric orbit
+      // is not a rotation curve.
+      const bins = [];
+      const per = Math.floor(points.length / 4);
+      for (let i = 0; i < 4; i++) {
+        const slice = points.slice(i * per, (i + 1) * per);
+        const vs = slice.map(pt => pt.v).sort((a, b) => a - b);
+        bins.push({
+          r: slice.reduce((a, pt) => a + pt.r, 0) / slice.length,
+          v: vs[Math.floor(vs.length / 2)],
+        });
+      }
+      return {
+        bins,
+        outer: ls.roleBody('outer') ? true : false,
+        n: points.length,
+      };
+    });
+    expect(curve, 'the galaxy is on the canvas to be measured').toBeTruthy();
+    expect(curve.outer, 'the lesson bound the outer star it talks about').toBe(
+      true
+    );
+    expect(curve.n).toBeGreaterThan(20);
+
+    const slope = powerLawExponent(
+      curve.bins.map(b => b.r),
+      curve.bins.map(b => b.v)
+    );
+    // Keplerian is -0.5: outside the mass, speed falls as one over the square
+    // root of the radius. This curve does not do that, and the gap between what
+    // Kepler predicts from the inner stars and what the outer ones are actually
+    // doing is the whole observation.
+    const inner = curve.bins[0];
+    const outer = curve.bins[curve.bins.length - 1];
+    const keplerian = inner.v * Math.sqrt(inner.r / outer.r);
+    const gap = outer.v / keplerian;
+    expect(slope, 'the curve is flat, not Keplerian').toBeGreaterThan(-0.25);
+    expect(Math.abs(slope)).toBeLessThan(0.25);
+    expect(
+      gap,
+      'the outer stars outrun the Keplerian prediction'
+    ).toBeGreaterThan(1.2);
+
+    const evidence = {
+      obs_slope: slope.toFixed(2),
+      obs_shape: 'flat',
+      obs_gap: gap.toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    await expectVerdictRevealed(page, plan, predict);
+
+    // Then the fit, with the declared control. Stars alone cannot come near;
+    // adding halo mass closes the gap, and too much overshoots - which is why
+    // the lesson calls this a fit and not a switch.
+    await walkToSid(page, plan, 'now-add-the-halo');
+    const miss = {};
+    for (const halo of [0, 100, 160]) {
+      const { before, after } = await setControl(page, control, halo);
+      if (halo !== 0) expect(after).not.toEqual(before);
+      miss[halo] = reading(after, /average miss/i);
+    }
+    expect(miss[0], 'stars alone are nowhere near').toBeGreaterThan(30);
+    expect(miss[100]).toBeLessThan(miss[0]);
+    expect(miss[160]).toBeLessThan(miss[100]);
+    expect(miss[160], 'a halo brings the model within the data').toBeLessThan(
+      10
+    );
+  });
+
+  test('what-is-a-gravitational-wave: only a changing quadrupole radiates @accepts:ce.what-is-a-gravitational-wave', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'what-is-a-gravitational-wave';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, exploreSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, exploreSid);
+    const verdicts = {};
+    const arms = {};
+    for (const source of [0, 1, 2]) {
+      const { before, after } = await setControl(page, control, source);
+      if (source !== 0) expect(after).not.toEqual(before);
+      verdicts[source] = row(after, /does this radiate/i).text;
+      arms[source] = row(after, /what an L would read/i).numbers;
+    }
+
+    // Motion is not the criterion. A static mass radiates nothing, and so does
+    // a sphere pulsing in and out - its mass distribution never changes SHAPE.
+    // Two lumps going round each other do, and that is the whole difference.
+    expect(verdicts[0]).toMatch(/^No/);
+    expect(verdicts[1]).toMatch(/^No/);
+    expect(verdicts[1]).toMatch(/spherically symmetric/i);
+    expect(verdicts[2]).toMatch(/^Yes/);
+    expect(verdicts[2]).toMatch(/quadrupole/i);
+
+    // And what a detector would see: the two arms change by equal and opposite
+    // fractions, which is why the instrument is an L.
+    const [horizontal, vertical] = arms[2];
+    expect(Math.sign(horizontal)).toBe(-Math.sign(vertical));
+    expect(Math.abs(horizontal)).toBeCloseTo(Math.abs(vertical), 24);
+    expect(Math.abs(horizontal)).toBeGreaterThan(0);
+
+    await expectVerdictRevealed(page, plan, predict);
+
+    // The ring's change in length is what the lesson asks to be written down.
+    const evidenceSid = 'measure-a-change-in-length';
+    await walkToSid(page, plan, evidenceSid);
+    const evidence = {
+      toy: '0.02',
+      real: Math.abs(horizontal).toExponential(2),
+    };
+    await recordFields(page, id, evidenceSid, evidence);
+    await expectEvidenceRetained(page, id, evidenceSid, evidence);
+  });
+
+  test('listening-to-spacetime: heavier pairs leave the band sooner @accepts:ce.listening-to-spacetime', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'listening-to-spacetime';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const exploreSid = entry.loop[1];
+    const measureSid = entry.loop[2];
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, entry.loop[0]);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, exploreSid);
+    const secondary = 29;
+    const band = {};
+    for (const m1 of [18, 36, 60]) {
+      const { before, after } = await setControl(page, control, m1);
+      if (m1 !== 18) expect(after).not.toEqual(before);
+      const modelled = row(after, /^modelled/i).text;
+      // Two shapes: "813 ms ... the whole inspiral from 20 Hz", and for a light
+      // pair whose window starts late, "... the whole thing from 20 Hz would be
+      // 1.49 s". Both name the same quantity; only one of them is in seconds.
+      const whole =
+        /would be\s+([\d.]+)\s*(ms|s)\b/.exec(modelled) ||
+        /^\s*([\d.]+)\s*(ms|s)\b/.exec(modelled);
+      expect(whole, `"${modelled}" names a time in band`).toBeTruthy();
+      band[m1] = {
+        seconds: Number(whole[1]) / (whole[2] === 'ms' ? 1000 : 1),
+        fIsco: reading(after, /where it stops/i),
+      };
+    }
+
+    // A heavier pair merges at a larger separation, so it stops at a lower
+    // frequency and spends less time climbing through the band. The innermost
+    // stable orbit's frequency goes as 1 over the total mass, which the three
+    // measurements pin to better than a percent.
+    const totals = [18, 36, 60].map(m => m + secondary);
+    const products = [18, 36, 60].map((m, i) => band[m].fIsco * totals[i]);
+    for (const p of products) expect(p / products[0]).toBeCloseTo(1, 1);
+    expect(band[60].fIsco).toBeLessThan(band[36].fIsco);
+    expect(band[36].fIsco).toBeLessThan(band[18].fIsco);
+    expect(band[60].seconds).toBeLessThan(band[36].seconds);
+    expect(band[36].seconds).toBeLessThan(band[18].seconds);
+
+    await walkToSid(page, plan, measureSid);
+    const evidence = {
+      t_light: band[18].seconds.toFixed(2),
+      f_light: band[18].fIsco.toFixed(1),
+      t_mid: band[36].seconds.toFixed(2),
+      f_mid: band[36].fIsco.toFixed(1),
+      t_heavy: band[60].seconds.toFixed(2),
+      f_heavy: band[60].fIsco.toFixed(1),
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    // The declared evidence is an instrument capture, and the other half of the
+    // declared quantity is strain against distance, which is the screen that
+    // offers one.
+    await walkToSid(page, plan, 'test-distance');
+    const before = await captures(page);
+    await toolAction(page, 'capture');
+    await keepCapture(page, {
+      claim: 'Time in band falls as the pair gets heavier.',
+      evidence: `f_ISCO went ${band[18].fIsco} -> ${band[60].fIsco} Hz.`,
+    });
+    await expect
+      .poll(async () => (await captures(page)).entries.length, {
+        timeout: 10_000,
+      })
+      .toBeGreaterThan(before.entries.length);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('a-universe-of-stars: at one temperature, brightness is size @accepts:ce.a-universe-of-stars', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'a-universe-of-stars';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, measureSid);
+    await page.waitForTimeout(400);
+
+    // The focus control picks which pinned star the card is about. It moves the
+    // instrument's own state rather than a number in the readout, so that is
+    // where it has to be checked.
+    const focused = () =>
+      page.evaluate(async () => {
+        const w = await import('/js/stellarWidgets.js');
+        return w.activeLab()?.focusPinId ?? null;
+      });
+    const first = await focused();
+    await setControl(page, control, 1);
+    const second = await focused();
+    await setControl(page, control, 2);
+    const third = await focused();
+    expect(
+      new Set([first, second, third].map(String)).size,
+      'the focus control actually moved the focus'
+    ).toBeGreaterThan(1);
+
+    const rows = await readout(page);
+    const small = row(rows, /the smaller one/i).numbers;
+    const big = row(rows, /the brighter one/i).numbers;
+    const [tSmall, lSmall, rSmall] = small;
+    const [tBig, lBig, rBig] = big;
+
+    // Same temperature, three hundred times the light. A star's luminosity is
+    // its area times what each square metre emits, and at equal temperature the
+    // second factor is equal - so all of the difference is size, and the radius
+    // ratio is the square root of the luminosity ratio.
+    expect(Math.abs(tBig - tSmall) / tSmall).toBeLessThan(0.05);
+    expect(rBig / rSmall).toBeCloseTo(Math.sqrt(lBig / lSmall), 0);
+    expect(rBig).toBeGreaterThan(rSmall);
+
+    const evidence = {
+      small: rSmall.toFixed(3),
+      large: rBig.toFixed(1),
+      why: 'Same temperature, so every square metre emits the same; the brighter one simply has far more of them.',
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+    await expectDerived(page, id, measureSid, { ratio: rBig / rSmall }, 0.05);
+
+    const before = await captures(page);
+    await toolAction(page, 'capture');
+    await keepCapture(page, {
+      claim: 'At the same temperature, luminosity is a statement about size.',
+      evidence: `${lBig} / ${lSmall} in light, ${rBig} / ${rSmall} in radius.`,
+    });
+    await expect
+      .poll(async () => (await captures(page)).entries.length, {
+        timeout: 10_000,
+      })
+      .toBeGreaterThan(before.entries.length);
+
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('lives-of-stars: leaving the main sequence makes it bigger, cooler and brighter @accepts:ce.lives-of-stars', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'lives-of-stars';
+    const entry = declared(id);
+    const { control } = controlOf(entry);
+    const [predictSid, measureSid] = entry.loop;
+
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    const predict = await walkToSid(page, plan, predictSid);
+    await commitPredictionHeld(page, predict);
+
+    await walkToSid(page, plan, measureSid);
+    await page.waitForTimeout(400);
+
+    // Walk the playhead along the published track and take the star's numbers
+    // at each stop, keeping the first main-sequence sample and the largest
+    // giant. Which position is which phase is the track's business, not this
+    // test's, so the phase is read rather than assumed.
+    const seen = [];
+    for (const position of [0.12, 0.16, 0.19, 0.21]) {
+      const { before, after } = await setControl(page, control, position);
+      if (position !== 0.12) expect(after).not.toEqual(before);
+      seen.push({
+        position,
+        phase: row(after, /^phase$/i).text,
+        teff: reading(after, /surface temperature/i),
+        lum: reading(after, /^luminosity$/i),
+        radius: reading(after, /^radius$/i),
+        mass: reading(after, /^mass$/i),
+      });
+    }
+    const ms = seen.find(s => /main sequence/i.test(s.phase));
+    const giant = seen.filter(s => /giant/i.test(s.phase)).pop();
+    expect(ms, 'the track passes through the main sequence').toBeTruthy();
+    expect(giant, 'the track reaches the giant branch').toBeTruthy();
+
+    // Up and to the right on the HR diagram: the envelope swells by a factor of
+    // tens while the surface cools, and the star is far brighter in spite of
+    // being cooler - which is only possible because it is so much larger.
+    expect(giant.radius / ms.radius).toBeGreaterThan(10);
+    expect(giant.teff).toBeLessThan(ms.teff);
+    expect(giant.lum / ms.lum).toBeGreaterThan(100);
+    expect(giant.mass).toBeLessThanOrEqual(ms.mass);
+
+    const evidence = {
+      teff: giant.teff,
+      lum: giant.lum,
+      radius: giant.radius,
+      mass: giant.mass,
+    };
+    await recordFields(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, evidence);
+
+    const before = await captures(page);
+    await toolAction(page, 'capture');
+    await keepCapture(page, {
+      claim:
+        'Leaving the main sequence, the star gets larger, cooler and brighter.',
+      evidence: `${ms.radius} R_sun at ${ms.teff} K became ${giant.radius} R_sun at ${giant.teff} K.`,
+    });
+    await expect
+      .poll(async () => (await captures(page)).entries.length, {
+        timeout: 10_000,
+      })
+      .toBeGreaterThan(before.entries.length);
 
     await expectVerdictRevealed(page, plan, predict);
   });
