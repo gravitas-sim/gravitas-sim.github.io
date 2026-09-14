@@ -15,10 +15,12 @@
 //
 // Three strategies, and the reason for each
 // -----------------------------------------------------------------------------
-//   navigations        network first, falling back to the cached shell. A
-//                      teacher who reloads on a working network must get the
-//                      current build; a teacher who reloads on a dead one must
-//                      still get the application.
+//   navigations        the shell this worker precached, always. Not network
+//                      first: a running worker that fetched the current
+//                      index.html would put a new shell in a cache full of old
+//                      modules, and the page assembled from those two belongs
+//                      to no revision at all. Freshness is the job of the
+//                      worker lifecycle below, not of individual navigations.
 //   precached assets   cache first. They are versioned by the cache name, so a
 //                      hit is known-current and there is no reason to ask the
 //                      network. This is what makes the offline case instant
@@ -31,9 +33,24 @@
 // -----------------------------------------------------------------------------
 // It does not call skipWaiting() on install. Replacing the running code while a
 // class is mid-lesson is exactly the kind of surprise this is supposed to
-// prevent - a new worker waits, and takes over on the next load. The page can
-// ask for an immediate swap by posting 'skip-waiting', and nothing in the
-// application does that unprompted.
+// prevent - a new worker waits, and takes over when the reader says so. The
+// page asks for the swap by posting 'skip-waiting', and nothing in the
+// application does that unprompted: js/offline.js only posts it after somebody
+// has pressed the update chip.
+//
+// How a new version actually reaches a reader
+// -----------------------------------------------------------------------------
+//   1. the browser revalidates sw.js and finds a new manifest hash
+//   2. the new worker installs, precaching a WHOLE new set under a new name
+//      - and refusing to activate at all if any core file is missing
+//   3. it waits. The old worker keeps serving its own coherent set.
+//   4. js/offline.js notices the waiting worker and shows an update chip
+//   5. the reader accepts; the page posts 'skip-waiting'
+//   6. controllerchange fires in every open tab, and each reloads once
+//
+// At no point is a file from one version served beside a file from another.
+// That is the property the cache name encodes and the one the old
+// network-first navigation quietly broke.
 //
 // It does not cache anything but same-origin GETs. No opaque responses, no
 // range requests, nothing partial.
@@ -44,6 +61,18 @@ importScripts('./sw-manifest.js');
 const VERSION = self.__GRAVITAS_CACHE_VERSION || 'gravitas-dev';
 const PRECACHE = self.__GRAVITAS_PRECACHE || [];
 const LOCALE_WARM = self.__GRAVITAS_LOCALE_WARM || {};
+
+// The shell, the modules, the stylesheets, the fonts and the libraries. If one
+// of these cannot be fetched the install fails and this version never
+// activates: a cache holding some of a build is the mixed revision the whole
+// arrangement exists to prevent.
+const CORE = self.__GRAVITAS_PRECACHE_CORE || PRECACHE;
+// Pictures. A missing one is reported and costs the reader a preview, not a
+// version.
+const OPTIONAL = self.__GRAVITAS_PRECACHE_OPTIONAL || [];
+
+/** The one document every navigation is answered with. */
+const SHELL = './index.html';
 
 /**
  * Add a list of URLs to the cache, tolerating individual failures.
@@ -89,15 +118,35 @@ self.addEventListener('install', event => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(VERSION);
-      const { added, failed } = await addAllTolerant(cache, PRECACHE);
-      if (failed.length) {
-        console.warn(
-          `[gravitas-sw] ${failed.length} of ${PRECACHE.length} precache entries failed:`,
-          failed.slice(0, 10)
+
+      // Core first, and its failures are fatal. Throwing here rejects the
+      // install: the browser discards this worker, the old one keeps
+      // controlling its clients, and the reader stays on a version that is
+      // whole. The alternative - activating with a module missing - is a page
+      // that half works and cannot be diagnosed from the outside.
+      const core = await addAllTolerant(cache, CORE);
+      if (core.failed.length) {
+        await caches.delete(VERSION);
+        throw new Error(
+          `[gravitas-sw] ${core.failed.length} of ${CORE.length} core files ` +
+            `could not be cached, so ${VERSION} will not activate: ` +
+            core.failed.slice(0, 5).join('; ')
         );
       }
+
+      // Pictures after, and their failures are reported and survived.
+      const extra = await addAllTolerant(cache, OPTIONAL);
+      if (extra.failed.length) {
+        console.warn(
+          `[gravitas-sw] ${extra.failed.length} of ${OPTIONAL.length} optional ` +
+            'files could not be cached; the version is still complete:',
+          extra.failed.slice(0, 10)
+        );
+      }
+
       console.info(
-        `[gravitas-sw] installed ${VERSION}: ${added}/${PRECACHE.length} files cached.`
+        `[gravitas-sw] installed ${VERSION}: ${core.added}/${CORE.length} core, ` +
+          `${extra.added}/${OPTIONAL.length} optional.`
       );
       // No skipWaiting. See the header.
     })()
@@ -180,21 +229,32 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   if (!handleable(request)) return;
 
-  // Navigations: network first, cached shell as the fallback.
+  // Navigations: the shell this worker precached, and nothing else.
+  //
+  // This used to be network first, and that is the bug. A worker fetching the
+  // current index.html and putting it in its own cache mixes two builds in one
+  // place: the shell is the new one, every precached module beside it is still
+  // the old one, and the page that assembles out of them belongs to no
+  // revision at all. The deployment marker read new while old modules ran.
+  //
+  // So a running worker never replaces its shell. The set in cache VERSION is
+  // exactly what VERSION's install put there, which is what makes the name -
+  // a hash of those contents - mean anything. A new build reaches the reader
+  // the only way it can do so coherently: a new worker precaches a whole new
+  // set under a new name, waits, and swaps when the reader accepts.
   if (request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         const cache = await caches.open(VERSION);
+        const shell =
+          (await cache.match(SHELL)) || (await cache.match('index.html'));
+        if (shell) return shell;
+        // No shell yet: a first visit whose install has not finished. Go to
+        // the network and do not write the answer - install owns this cache.
         try {
-          const fresh = await fetch(request);
-          return maybeCache(cache, request, fresh);
+          return await fetch(request);
         } catch {
-          return (
-            (await matchCached(cache, request)) ||
-            (await cache.match('./index.html')) ||
-            (await cache.match('index.html')) ||
-            Response.error()
-          );
+          return Response.error();
         }
       })()
     );
@@ -276,11 +336,22 @@ self.addEventListener('message', event => {
     (async () => {
       const cache = await caches.open(VERSION);
       const keys = await cache.keys();
+      const cached = new Set(keys.map(r => new URL(r.url).pathname));
+      const missing = CORE.filter(
+        url => !cached.has(new URL(url, self.location.href).pathname)
+      );
       port.postMessage({
         version: VERSION,
         precacheCount: PRECACHE.length,
+        coreCount: CORE.length,
+        optionalCount: OPTIONAL.length,
         precacheBytes: self.__GRAVITAS_PRECACHE_BYTES || 0,
         cachedCount: keys.length,
+        // Whether this worker is serving a whole version. It can only ever be
+        // true - install refuses otherwise - which is exactly why it is worth
+        // reporting: a false here means an assumption has broken.
+        coreComplete: missing.length === 0,
+        missingCore: missing.slice(0, 5),
       });
     })();
   }

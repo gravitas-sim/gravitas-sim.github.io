@@ -1420,4 +1420,13 @@ export const ES = {
   'stellar.class.dwarf': 'estrella de secuencia principal',
   'stellar.class.degenerate': 'remanente degenerado',
   'stellar.class.unknown': 'estrella',
+
+  // The service-worker update badge. Eager, because index.html carries the
+  // markup and an unresolved key there is a warning on every start-up.
+  'update.ready': 'Hay una versión nueva',
+  'update.apply': 'Recargar',
+  'update.apply.hint':
+    'Recarga para terminar de actualizar. Se conserva tu punto en la lección.',
+  'update.dismiss.label': 'Ahora no',
+  'update.dismiss.hint': 'Mantener la versión actual por ahora',
 };

@@ -636,6 +636,75 @@
     display: none;
   }
 
+  /* ==========================================================================
+     The update badge
+     --------------------------------------------------------------------------
+     Bottom left, out of the way of the top-centre recording indicator and of
+     every panel that opens from the right. A new version waiting is not urgent
+     - the version already running is complete and will stay that way - so this
+     is the quietest thing on screen that is still a control: no motion, no
+     colour that reads as an alert, and it never takes focus.
+
+     It is reachable by keyboard because it is real buttons in the document, and
+     it wraps rather than overflowing so a narrow phone still shows both
+     actions.
+     ======================================================================== */
+  .update-badge {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    z-index: 1100;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1, 6px);
+    max-width: min(24rem, calc(100vw - 24px));
+    padding: 6px 8px 6px 12px;
+    border-radius: 999px;
+    background: var(--surface-raised, rgba(16, 18, 26, 0.92));
+    border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.18));
+    color: var(--text-primary, #e8eaf2);
+    font-size: var(--text-2xs, 11px);
+    line-height: 1.5;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+  }
+
+  .update-badge[hidden] {
+    display: none;
+  }
+
+  .update-badge-apply,
+  .update-badge-dismiss {
+    font: inherit;
+    color: inherit;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.24));
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .update-badge-apply {
+    padding: 3px 10px;
+    background: var(--accent-soft, rgba(120, 170, 255, 0.16));
+  }
+
+  .update-badge-dismiss {
+    padding: 3px 8px;
+    line-height: 1;
+  }
+
+  .update-badge-apply:hover,
+  .update-badge-dismiss:hover {
+    border-color: var(--border-strong, rgba(255, 255, 255, 0.42));
+  }
+
+  .update-badge-apply:focus-visible,
+  .update-badge-dismiss:focus-visible {
+    outline: 2px solid var(--focus-ring, #7aa2ff);
+    outline-offset: 2px;
+  }
+
   .recording-dot {
     width: 8px;
     height: 8px;

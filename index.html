@@ -146,6 +146,48 @@
       <span id="recordingReadout" class="recording-readout">0:00</span>
     </div>
 
+    <!--
+      A new version is installed and waiting for permission to take over.
+
+      Deliberately a badge and not a dialog. The reader may be twenty minutes
+      into an investigation, and the one thing an update must not do is
+      interrupt that - so this waits in a corner, takes no focus, and the old
+      version keeps running until somebody presses Reload. Dismissing it does
+      not discard the update; the new worker is still there on the next visit.
+    -->
+    <div
+      id="updateBadge"
+      class="update-badge"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="update-badge-text" data-i18n="update.ready"
+        >A new version is ready</span
+      >
+      <button
+        type="button"
+        id="updateBadgeApply"
+        class="update-badge-apply"
+        data-i18n="update.apply"
+        title="Reload to finish updating. Your place in the lesson is kept."
+        data-i18n-title="update.apply.hint"
+      >
+        Reload
+      </button>
+      <button
+        type="button"
+        id="updateBadgeDismiss"
+        class="update-badge-dismiss"
+        aria-label="Not now"
+        data-i18n-aria-label="update.dismiss.label"
+        title="Keep the current version for now"
+        data-i18n-title="update.dismiss.hint"
+      >
+        &times;
+      </button>
+    </div>
+
     <!-- Screen-reader announcements for state the canvas cannot convey -->
     <p
       id="srStatus"
