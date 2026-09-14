@@ -48,17 +48,44 @@ export const RELEASE = {
   conceptDoi: null,
 };
 
-/** Authors, in citation order. */
+/**
+ * Authors, in citation order.
+ *
+ * One author, confirmed by the project owner. The ORCID and the departmental
+ * affiliation are the ones used in the author's published work, supplied
+ * rather than looked up - an ORCID that belongs to somebody else is worse than
+ * none, so nothing here is inferred from a name.
+ *
+ * Git history carries two further identities and neither is a second author.
+ * See .mailmap: "Kristina Ziegler" was this machine's name and an erroneous
+ * local Git identity, not a person.
+ */
 export const AUTHORS = [
   {
     familyNames: 'Ziegler',
     givenNames: 'Carl',
-    affiliation: 'Stephen F. Austin State University',
+    affiliation:
+      'Department of Physics, Engineering and Astronomy, Stephen F. Austin ' +
+      'State University, Nacogdoches, TX 75962, USA',
     email: 'Carl.Ziegler@sfasu.edu',
-    // A real ORCID or nothing. RELEASING.md flags this as a human decision.
-    orcid: null,
+    // Stored as the full URL: CITATION.cff wants it this way and the Zenodo
+    // generator strips the prefix, which is the direction that cannot lose
+    // information.
+    orcid: 'https://orcid.org/0000-0002-0619-7639',
   },
 ];
+
+/**
+ * How the work was funded, in the project's own words.
+ *
+ * Prose rather than a structured award, because there is no grant number or
+ * funder identifier to put in one and a structured field with an invented
+ * identifier in it is a false claim rather than a tidier one. If an award
+ * number is supplied later it belongs here alongside the sentence.
+ */
+export const ACKNOWLEDGEMENT =
+  'Gravitas began as a SURE project at Stephen F. Austin State University ' +
+  'and was funded by the SFA COSM.';
 
 export const TITLE =
   'Gravitas: an interactive astrophysics sandbox for teaching';

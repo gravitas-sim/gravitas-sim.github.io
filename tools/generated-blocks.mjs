@@ -21,6 +21,7 @@
 // =============================================================================
 
 import {
+  ACKNOWLEDGEMENT,
   AUTHORS,
   KEYWORDS,
   LICENSE,
@@ -85,7 +86,10 @@ export function citationCff(facts) {
     lines.push(`  - family-names: ${author.familyNames}`);
     lines.push(`    given-names: ${author.givenNames}`);
     if (author.affiliation) {
-      lines.push(`    affiliation: ${author.affiliation}`);
+      // Quoted: the affiliation is a full departmental address and carries
+      // commas, and a plain YAML scalar is a poor place to find out whether
+      // that parses the way it reads.
+      lines.push(`    affiliation: ${JSON.stringify(author.affiliation)}`);
     }
     if (author.email) lines.push(`    email: ${author.email}`);
     if (author.orcid) lines.push(`    orcid: ${JSON.stringify(author.orcid)}`);
@@ -166,6 +170,9 @@ export function zenodoJson(facts) {
       return creator;
     }),
     keywords: [...KEYWORDS],
+    // Zenodo's own field for exactly this. Prose rather than a structured
+    // grant, because there is no award number to put in one.
+    notes: ACKNOWLEDGEMENT,
     related_identifiers: [
       {
         identifier: URLS.site,

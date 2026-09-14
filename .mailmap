@@ -1,0 +1,24 @@
+# Who wrote this, when the commits disagree
+# -----------------------------------------------------------------------------
+# Git records whatever identity a machine was configured with at the time, and
+# this repository's history carries three. They are one person.
+#
+# "Kristina Ziegler <carl@Carls-iMac.local>" is not a second contributor and
+# never was: it is the name of the machine the commits were made on, picked up
+# as a local Git identity. Fifty-seven commits carry it. Confirmed by the
+# project owner.
+#
+# The commits themselves are left exactly as they are. Rewriting history to
+# tidy an identity would change every SHA after the first affected commit,
+# including ones already published, deployed and cited - a far worse outcome
+# than a mapping file. This is what .mailmap is for: `git shortlog -sne`,
+# `git log --use-mailmap` and anything built on them report the canonical
+# identity, and the objects are untouched.
+#
+# Not mapped, deliberately: "gravitas-sim <carlziegler+gravitas@gmail.com>",
+# thirteen commits authored through GitHub's web interface. The address looks
+# like the owner's, but "looks like" is not confirmation and inventing an
+# attribution is the one thing this file must not do. Add a line for it only if
+# the owner confirms.
+Carl Ziegler <Carl.Ziegler@sfasu.edu> <carl@gravitas-sim.com>
+Carl Ziegler <Carl.Ziegler@sfasu.edu> Kristina Ziegler <carl@Carls-iMac.local>

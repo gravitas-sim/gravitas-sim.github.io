@@ -513,6 +513,13 @@ GitHub sidebar.
 
 ---
 
+## Acknowledgement
+
+Gravitas began as a SURE project at Stephen F. Austin State University and was
+funded by the SFA COSM.
+
+---
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).

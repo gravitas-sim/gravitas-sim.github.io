@@ -10,8 +10,9 @@ type: software
 authors:
   - family-names: Ziegler
     given-names: Carl
-    affiliation: Stephen F. Austin State University
+    affiliation: "Department of Physics, Engineering and Astronomy, Stephen F. Austin State University, Nacogdoches, TX 75962, USA"
     email: Carl.Ziegler@sfasu.edu
+    orcid: "https://orcid.org/0000-0002-0619-7639"
 repository-code: "https://github.com/gravitas-sim/gravitas-sim.github.io"
 url: "https://gravitas-sim.online"
 abstract: >-

@@ -7,7 +7,8 @@
   "creators": [
     {
       "name": "Ziegler, Carl",
-      "affiliation": "Stephen F. Austin State University"
+      "affiliation": "Department of Physics, Engineering and Astronomy, Stephen F. Austin State University, Nacogdoches, TX 75962, USA",
+      "orcid": "0000-0002-0619-7639"
     }
   ],
   "keywords": [
@@ -20,6 +21,7 @@
     "interactive simulation",
     "open educational resources"
   ],
+  "notes": "Gravitas began as a SURE project at Stephen F. Austin State University and was funded by the SFA COSM.",
   "related_identifiers": [
     {
       "identifier": "https://gravitas-sim.online",
