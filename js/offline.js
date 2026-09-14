@@ -208,6 +208,14 @@ export async function initOffline() {
     registration = await navigator.serviceWorker.register('./sw.js', {
       scope: './',
     });
+    // A refusal does not always arrive as one. Playwright's `serviceWorkers:
+    // 'block'` resolves this call with nothing instead of rejecting it, and
+    // every line below reads the registration - so the browser console carried
+    // "undefined is not an object (evaluating 'registration.waiting')" on every
+    // page of every cross-browser run. Nothing registered is not a failure; it
+    // is the same "no offline support" the catch below reports, reached
+    // quietly.
+    if (!registration) return;
     status.registered = true;
 
     // Every controlled tab reloads when the worker changes, and only then.
