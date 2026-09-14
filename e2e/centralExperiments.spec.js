@@ -40,10 +40,12 @@ import {
   declared,
   expectDerived,
   expectEvidenceRetained,
+  expectStill,
   expectVerdictRevealed,
   keepCapture,
   lessonPlan,
   openInvestigation,
+  pausePlayback,
   powerLawExponent,
   reading,
   readout,
@@ -819,28 +821,74 @@ test.describe('the central experiment of each investigation', () => {
     await walkToSid(page, plan, measureSid);
     await page.waitForTimeout(400);
 
-    // Walk the playhead along the published track and take the star's numbers
-    // at each stop, keeping the first main-sequence sample and the largest
-    // giant. Which position is which phase is the track's business, not this
-    // test's, so the phase is read rather than assumed.
-    const seen = [];
-    for (const position of [0.12, 0.16, 0.19, 0.21]) {
-      const { before, after } = await setControl(page, control, position);
-      if (position !== 0.12) expect(after).not.toEqual(before);
-      seen.push({
-        position,
-        phase: row(after, /^phase$/i).text,
-        teff: reading(after, /surface temperature/i),
-        lum: reading(after, /^luminosity$/i),
-        radius: reading(after, /^radius$/i),
-        mass: reading(after, /^mass$/i),
-      });
-    }
-    const ms = seen.find(s => /main sequence/i.test(s.phase));
-    const giant = seen.filter(s => /giant/i.test(s.phase)).pop();
-    expect(ms, 'the track passes through the main sequence').toBeTruthy();
-    expect(giant, 'the track reaches the giant branch').toBeTruthy();
+    // The step opens the playback running - it asks for that, and the star
+    // lives its whole life in a few seconds without anybody touching it.
+    // Seeking while it runs is a race this test cannot win: whatever the
+    // playhead was set to has moved on by the time the readout is read, and
+    // under load it has moved several phases on. The reader's own Pause button
+    // is the way out, and afterwards the instrument has to sit still.
+    await pausePlayback(page);
+    await expectStill(page);
 
+    // Now walk the playhead - the declared control - and read the phase at
+    // each stop. Where the main sequence sits on this slider is the track's
+    // business: it depends on the pacing and on where the reduction placed its
+    // samples, which is at the moments the star changes fastest and therefore
+    // hardly anywhere on the main sequence. So the phase is read rather than
+    // assumed, and the sweep stops once it is past the giant branch.
+    const round = x => Number(x.toFixed(3));
+    const phaseIn = rows => {
+      const key = Object.keys(rows).find(k => /^phase$/i.test(k));
+      return key ? String(rows[key]) : '';
+    };
+    const seen = [];
+    for (let at = 0; at <= 1; at = round(at + 0.01)) {
+      const { after } = await setControl(page, control, at);
+      seen.push({ at, phase: phaseIn(after), rows: after });
+      if (
+        seen.some(s => /giant/i.test(s.phase)) &&
+        !/giant/i.test(phaseIn(after))
+      ) {
+        break;
+      }
+    }
+    // A coarse grid can step straight over a narrow band. If it did, look
+    // again between the last sample before the giant branch and the first one
+    // on it, at the slider's own step.
+    if (!seen.some(s => /main sequence/i.test(s.phase))) {
+      const first = seen.findIndex(s => /giant/i.test(s.phase));
+      const from = first > 0 ? seen[first - 1].at : 0;
+      const to = first > 0 ? seen[first].at : 0.1;
+      for (let at = round(from + 0.002); at < to; at = round(at + 0.002)) {
+        const { after } = await setControl(page, control, at);
+        seen.push({ at, phase: phaseIn(after), rows: after });
+      }
+    }
+
+    const numbers = s => ({
+      teff: reading(s.rows, /surface temperature/i),
+      lum: reading(s.rows, /^luminosity$/i),
+      radius: reading(s.rows, /^radius$/i),
+      mass: reading(s.rows, /^mass$/i),
+    });
+    const ms = seen.find(s => /main sequence/i.test(s.phase));
+    const giants = seen.filter(s => /giant/i.test(s.phase));
+    expect(ms, 'the track passes through the main sequence').toBeTruthy();
+    expect(giants.length, 'the track reaches the giant branch').toBeGreaterThan(
+      0
+    );
+    // The tip of the branch is the largest the star gets on it, which is what
+    // the step asks the reader to park at - not whichever giant sample came
+    // last.
+    const giant = giants.reduce((a, b) =>
+      numbers(b).radius > numbers(a).radius ? b : a
+    );
+    expect(
+      giant.at,
+      'the two samples came from different playhead positions'
+    ).not.toBe(ms.at);
+    Object.assign(ms, numbers(ms));
+    Object.assign(giant, numbers(giant));
     // Up and to the right on the HR diagram: the envelope swells by a factor of
     // tens while the surface cools, and the star is far brighter in spite of
     // being cooler - which is only possible because it is so much larger.

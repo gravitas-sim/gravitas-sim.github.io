@@ -352,6 +352,51 @@ export async function setControl(page, controlId, value) {
 }
 
 /**
+ * Stop a playback that is running, so that seeking means something.
+ *
+ * Several instruments open playing: the step asks for it, and the reader
+ * watches the thing happen before touching anything. While that is running,
+ * "set the control and read the number" is a race - the readout describes
+ * wherever the animation has got to, not where the control was put - and it is
+ * a race whose window is wall-clock, so it is won on an idle machine and lost
+ * on a busy one. The reader's own pause button is the way out. Its label is
+ * how the widget says which state it is in, so that is what is read.
+ *
+ * @param {object} page - The page
+ */
+export async function pausePlayback(page) {
+  const button = page.locator(
+    '#investigationToolActions [data-tool-action="play"]'
+  );
+  await expect(
+    button,
+    'the instrument offers the playback control'
+  ).toBeVisible();
+  if (/pause/i.test(await button.innerText())) await button.click();
+  await expect(button, 'the playback is stopped').toHaveText(/^\s*play\s*$/i);
+}
+
+/**
+ * The instrument is not moving on its own.
+ *
+ * Two reads a moment apart. A readout that has changed between them is a
+ * playback still running, and every measurement taken from it afterwards is
+ * describing a different moment from the one the control asked for. Half a
+ * second is long enough to catch it: these playheads cross a whole phase in
+ * less than that.
+ *
+ * @param {object} page - The page
+ * @param {number} [wait] - Milliseconds between the two reads
+ */
+export async function expectStill(page, wait = 500) {
+  const first = await readout(page);
+  await page.waitForTimeout(wait);
+  expect(
+    await readout(page),
+    'the instrument is not moving on its own'
+  ).toEqual(first);
+}
+/**
  * Press one of the instrument's own buttons.
  *
  * Recording a trial and capturing the table into the notebook are actions the
