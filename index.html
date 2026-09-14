@@ -3540,12 +3540,22 @@
       </div>
     </div>
 
+    <!--
+      Closed means closed.
+
+      `hidden` and `inert` are not decoration on top of the class: the class
+      only dims, moves and blurs the panel, which left six tabbable controls in
+      the tab order and the whole dialog in the accessibility tree while it was
+      invisible. js/dialog.js is the only thing that changes any of these.
+    -->
     <div
       id="settingsPanel"
       class="hidden"
       role="dialog"
       aria-modal="false"
       aria-labelledby="settingsPanelHeading"
+      hidden
+      inert
     >
       <div
         class="settings-header"

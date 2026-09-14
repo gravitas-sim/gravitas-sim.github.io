@@ -13,6 +13,7 @@ import {
   EARTH_MASSES_PER_JUPITER_MASS,
 } from './constants.js';
 import { formatNumber, withUnit } from './format.js';
+import { openDialog, closeDialog, isOpen } from './dialog.js';
 import { ENVIRONMENT, ENVIRONMENTS } from './blackHole/appearance.js';
 import {
   screen_to_world,
@@ -6838,11 +6839,58 @@ window.addEventListener('resize', () => {
   layoutPinnedCards();
 });
 
-document.getElementById('settingsBtn').onclick = () => {
+/**
+ * Settings is one dialog with one way in and one way out.
+ *
+ * Four places used to add or remove a class, and none of them touched focus,
+ * the tab order, or the accessibility tree. These functions are now the only
+ * ones that open or close it, which is what makes "closed means closed"
+ * something that can be true rather than something each caller remembers.
+ */
+const settingsPanel = () => document.getElementById('settingsPanel');
+
+/** What the world was doing before Settings paused it. */
+let pausedBeforeSettings = false;
+
+function openSettings() {
+  const panel = settingsPanel();
+  if (!panel || isOpen(panel)) return;
+  // Rebuilt from SETTINGS every time, so nothing staged in a previous visit
+  // and then abandoned can leak into this one.
   buildSettingsMenu();
-  document.getElementById('settingsPanel').classList.remove('hidden');
+  pausedBeforeSettings = state.paused;
   state.paused = true;
-};
+  openDialog(panel, {
+    trigger: document.getElementById('settingsBtn'),
+    // The close chip comes first in the markup, and landing on "close" is a
+    // poor welcome. The first real control is where a reader wants to be.
+    initialFocus:
+      '.settings-grid input, .settings-grid select, .settings-grid button',
+    // Every way out reports why, including Escape - which the dialog handles
+    // itself and this module would otherwise have to race a listener to see.
+    // Applying is the one exit that means "carry on"; the rest put the world
+    // back exactly as they found it.
+    onClose: reason => {
+      if (reason !== 'apply') state.paused = pausedBeforeSettings;
+    },
+  });
+}
+
+/**
+ * Close Settings without applying anything.
+ *
+ * The pause is put back as it was found rather than cleared. Opening Settings
+ * pauses the simulation; closing it used to unpause unconditionally, so a
+ * reader who had deliberately paused, opened Settings and pressed Cancel got a
+ * running world they never asked for.
+ *
+ * @param {string} reason - 'cancel', 'escape' or 'chip'
+ */
+function dismissSettings(reason) {
+  closeDialog(settingsPanel(), reason);
+}
+
+document.getElementById('settingsBtn').onclick = openSettings;
 // A feature module that needs the world rebuilt asks for it here rather than
 // reaching for initialize_simulation. js/ui.js is the coordinator: it may
 // import anything and nothing may import it, so a panel that wants a rebuild -
@@ -6919,7 +6967,7 @@ document.getElementById('settingsApply').onclick = () => {
     next.show_ambient_lighting !== SETTINGS.show_ambient_lighting;
 
   setSettings(next);
-  document.getElementById('settingsPanel').classList.add('hidden');
+  closeDialog(settingsPanel(), 'apply');
 
   if (needsRebuild.length > 0) {
     initialize_simulation();
@@ -6936,23 +6984,21 @@ document.getElementById('settingsApply').onclick = () => {
     );
   }
 
+  // Applying is a deliberate "carry on", so this one really does start the
+  // world - unlike the dismissals, which put the pause back as they found it.
   state.paused = false;
+  pausedBeforeSettings = false;
   updateSpeedDisplay();
 };
 document.getElementById('settingsReset').onclick = () => {
   localSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   buildSettingsMenu();
 };
-document.getElementById('settingsCancel').onclick = () => {
-  document.getElementById('settingsPanel').classList.add('hidden');
-  state.paused = false;
-};
+document.getElementById('settingsCancel').onclick = () =>
+  dismissSettings('cancel');
 const settingsCloseChip = document.getElementById('settingsCloseChip');
 if (settingsCloseChip)
-  settingsCloseChip.onclick = () => {
-    document.getElementById('settingsPanel').classList.add('hidden');
-    state.paused = false;
-  };
+  settingsCloseChip.onclick = () => dismissSettings('chip');
 
 // Demo mode functionality
 let demoModeInterval = null;

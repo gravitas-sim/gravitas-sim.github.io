@@ -919,11 +919,22 @@
     }
   }
 
+  /* The class is the animation: what the panel looks like on its way out. */
   #settingsPanel.hidden {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
     pointer-events: none;
     filter: blur(10px);
+  }
+
+  /* And this is being closed. The rule above leaves display: flex and
+     visibility: visible alone, so without this the panel is invisible and
+     still fully present: in the tab order, in the accessibility tree, and
+     announced as a dialog that is not on screen. js/dialog.js sets the
+     attribute once the closing transition has finished, so the panel animates
+     out rather than vanishing. */
+  #settingsPanel[hidden] {
+    display: none;
   }
 
   /* A panel heading, on the type scale, in tokens.
