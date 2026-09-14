@@ -1,0 +1,570 @@
+\documentclass[twocolumn]{aastex631}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\newcommand{\Gravitas}{\textsc{Gravitas}}
+\newcommand{\Version}{1.0.0}
+\newcommand{\ScenarioCount}{59}
+\newcommand{\InvestigationCount}{22}
+\newcommand{\InvestigationSteps}{631}
+\newcommand{\ReleaseDOI}{ZENODO-DOI-PLACEHOLDER}
+\newcommand{\ZenodoRecord}{ZENODO-RECORD-URL-PLACEHOLDER}
+\newcommand{\CodeSnapshot}{a4e6ab3a5ecb69290742c7197ed545737136182a}
+
+% This source intentionally compiles before the four final screenshots are
+% present. Add each PNG named below to paper/figures/ and the placeholder panel
+% will automatically be replaced by the image.
+\newcommand{\figureplaceholder}[2]{%
+  \begin{center}
+  \fbox{\begin{minipage}[c][#1][c]{0.92\linewidth}
+  \centering\small\textbf{Final screenshot to insert}\\[4pt]#2
+  \end{minipage}}
+  \end{center}
+}
+
+\shorttitle{Gravitas}
+\shortauthors{Ziegler}
+
+\begin{document}
+
+\title{\Gravitas: A Browser-Based Astrophysics Laboratory for Prediction,
+Measurement, and Discovery}
+
+\author[0000-0000-0000-0000]{Carl Ziegler}
+\affiliation{Department of Physics, Engineering and Astronomy, Stephen F. Austin
+State University, Nacogdoches, TX 75962, USA}
+\email{Carl.Ziegler@sfasu.edu}
+
+% Replace the ORCID placeholder above if an ORCID is desired in the arXiv copy.
+
+\begin{abstract}
+Astronomy students are often asked to reason about systems that cannot be
+handled in a laboratory, evolve over inaccessible timescales, or reveal
+themselves only through indirect measurements. \Gravitas\ is a free,
+browser-based astrophysics environment designed to turn those limitations into
+opportunities for experimentation. Its planned version \Version\ release
+combines a configurable gravitational sandbox with \ScenarioCount\ ready-to-run
+scenarios and \InvestigationCount\ guided investigations. Students can build and
+alter systems, change reference frames, measure distances, angles, periods,
+energies, forces, and orbital elements, and observe simulated systems through
+transit, radial-velocity, astrometric, rotation-curve, stellar-evolution, and
+gravitational-wave displays. Guided activities use a
+predict--test--measure--revise--explain cycle, retain the student's evidence, and
+export a report for submission. Instructor guides, answer keys, short classroom
+routes, lecture and embed modes, reproducible share links, Spanish localization,
+keyboard support, and offline operation lower the practical barrier to adopting
+the simulation in introductory astronomy and physics courses. This article
+describes the learning experiences available in \Gravitas, illustrates several
+ways it can be used from a brief demonstration to a full laboratory exercise,
+and states the scientific scope and limitations of the models. The aim is not to
+replace quantitative calculation or observation, but to give students a place
+where they can make a prediction, change one thing, measure what follows, and
+build an explanation from their own evidence.
+\end{abstract}
+
+\keywords{Astronomy education (2165) --- Astronomy software (1855) ---
+Computational methods (1965) --- Open source software (1866) ---
+Physics education --- Interactive learning environments}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Astronomy is unusually rich in phenomena that students can see but cannot
+directly manipulate. They cannot move a planet closer to its star, turn off a
+galaxy's dark matter, replay a close stellar encounter, or wait through a
+main-sequence lifetime. Even familiar ideas such as an elliptical orbit or a
+transit light curve require students to coordinate several representations at
+once: a moving physical system, a graph, a mathematical relationship, and the
+viewpoint of an observer.
+
+Interactive simulations can make such systems available for inquiry when the
+simulation is paired with purposeful prompts, measurements, and opportunities
+to explain the result \citep{finkelstein2005,wieman2008,rutten2012}. Active
+engagement is not created by animation alone; students need a question to
+answer and evidence with which to answer it \citep{hake1998,freeman2014}.
+\Gravitas\ was built around that distinction. It can be opened as a free-form
+sandbox, but it also contains a complete instructional layer that asks students
+to predict an outcome before running a system, measure the result with
+task-specific instruments, compare it with their prediction, and explain what
+changed.
+
+The intended audience is broad: instructors teaching introductory astronomy or
+physics, students exploring independently, and presenters who want a
+reproducible live demonstration. A visitor needs no account, installation, or
+specialized hardware. The simulation runs in a modern web browser at
+\url{https://gravitas-sim.online}; the source is openly available under the MIT
+License. A complete state can be encoded in a URL, allowing an instructor to
+distribute the same initial conditions to an entire class and allowing a student
+to return a modified system as part of an answer.
+
+This paper presents \Gravitas\ as a teaching environment rather than as a
+software architecture. Section~\ref{sec:experience} introduces the student
+experience. Sections~\ref{sec:investigations} and \ref{sec:tools} describe the
+guided investigations and measurement tools. Section~\ref{sec:examples} follows
+three representative learning experiences, while
+Section~\ref{sec:instructors} outlines practical classroom use.
+Section~\ref{sec:scope} states what the models can and cannot support. The paper
+describes the release candidate represented by source commit
+\texttt{\CodeSnapshot}; counts and screenshots should be refreshed from the
+tagged \Version\ release before submission.
+
+\section{From First Click to Experiment}
+\label{sec:experience}
+
+\Gravitas\ opens directly into an interactive system. The central canvas shows
+the evolving scene, while controls expose bodies, scenario settings, time,
+viewpoint, and measurement tools. A learner can start from the Solar System,
+TRAPPIST-1, a binary star, a spacecraft transfer, a galactic rotation curve, or
+a black-hole encounter, then change the masses, positions, velocities, and
+physical options that define the experiment. The current gallery contains
+\ScenarioCount\ systems spanning orbital motion, exoplanets, stars, galaxies,
+compact objects, and playful counterfactual cases. Concept tags let an
+instructor find a system that matches the topic of a particular class meeting.
+
+The interface is designed to move naturally between qualitative observation and
+quantitative evidence. Trails reveal orbital shape and motion. Velocity and
+acceleration arrows expose the changing geometry of force and motion. A
+selection inspector reports mass, radius, speed, orbital elements, and energy
+for an individual body. A ruler, protractor, stopwatch, plots, and event-aware
+measurements let students attach numbers to what they see. The elapsed
+simulation time and spatial scale remain visible, and exported screenshots
+carry the scenario name, clock, and scale so that an image remains interpretable
+after it leaves the application.
+
+\begin{figure*}
+\centering
+\IfFileExists{figures/overview.png}
+  {\includegraphics[width=0.96\textwidth]{figures/overview.png}}
+  {\figureplaceholder{2.35in}{A wide overview of the \Gravitas\ workspace using
+  the Kepler's Second Law scenario: simulation canvas, object controls,
+  selected-body inspector, ruler or stopwatch, scale bar, elapsed time, and
+  velocity/acceleration arrows visible at once.}}
+\caption{The \Gravitas\ workspace is both a visual sandbox and a measurement
+environment. The final image should show a scientifically legible scenario
+rather than a decorative collision: the orbit, clock, scale, vectors, and at
+least one measurement tool should all be visible.}
+\label{fig:overview}
+\end{figure*}
+
+A scenario is not a locked animation. Students can pause, step, rewind by
+restoring a captured state, or change the rate at which simulated time passes.
+They can follow a body with the camera or re-express the entire recorded scene
+in that body's reference frame. The latter distinction matters: changing to
+Earth's frame redraws the prior trails and causes Mars to trace the familiar
+retrograde loop, while the underlying heliocentric dynamics remain unchanged.
+The student therefore sees reference frame as a choice of description rather
+than a change in physical law.
+
+The same emphasis on reproducibility appears throughout the application.
+Shareable links preserve the initial configuration. Seeded scenarios reproduce
+the same controlled trial. An A/B experiment bench captures a state, records a
+baseline, restores the identical state, and then records a second run after one
+variable is changed. The resulting comparison names the changed parameter and
+can be exported with provenance. These features support a simple but important
+classroom habit: change one thing, preserve everything else, and decide whether
+the evidence supports the claimed cause.
+
+\section{Guided Investigations}
+\label{sec:investigations}
+
+The \InvestigationCount\ guided investigations contain
+\InvestigationSteps\ student-facing steps. They range from short,
+15--25 minute spaceflight activities to 80--100 minute stellar-evolution
+sequences. All are aimed primarily at introductory astronomy, with one
+gravitational-wave investigation explicitly requiring no prior physics.
+
+Each investigation follows a recurring learning cycle:
+
+\begin{enumerate}
+\item \textbf{Predict.} The learner commits to an expected outcome before the
+simulation reveals it. Predictions are recorded but are not graded for
+correctness.
+\item \textbf{Test.} A prepared scene loads with the controls and instruments
+needed for the question.
+\item \textbf{Measure.} The learner records values from the running model rather
+than copying numbers from explanatory text.
+\item \textbf{Revise.} The learner compares the result with the original
+prediction and, where appropriate, changes a variable or repeats a controlled
+run.
+\item \textbf{Explain.} A short response, calculation, graph, or comparison asks
+the learner to connect the evidence to the physical idea.
+\end{enumerate}
+
+This structure is intended to limit passive watching. The prediction gives the
+result something to challenge; the measurement makes the conclusion auditable;
+and the final explanation requires the student to say why the result occurred.
+Progress is stored locally, and the finished evidence notebook can be exported
+as a PDF for an existing learning-management system. No student account or
+external data service is required.
+
+\begin{figure}
+\centering
+\IfFileExists{figures/investigation-workflow.png}
+  {\includegraphics[width=\columnwidth]{figures/investigation-workflow.png}}
+  {\figureplaceholder{2.55in}{A vertically arranged composite from one
+  investigation showing (1) a prediction prompt, (2) an attached live
+  measurement, and (3) the evidence/report summary. Use one continuous example,
+  preferably Kepler's Laws or Finding Planets by Their Shadows.}}
+\caption{A guided investigation turns interaction into a record of reasoning.
+Students predict before the run, attach measurements from the live scene, and
+finish with an exportable evidence-based explanation.}
+\label{fig:workflow}
+\end{figure}
+
+Table~\ref{tab:investigations} summarizes the breadth of the catalogue. The
+investigations are not merely tours of features: each is organized around a
+claim that students can settle with a measurement. For example, the resonance
+activity first demonstrates that a near-integer period ratio is not sufficient
+evidence for resonance, then asks students to distinguish libration from
+circulation of the resonant angle. The binary-planet activity maps the boundary
+between surviving and disrupted orbits. The gravitational-wave sequence asks
+students to distinguish what is physically calculated, what is an illustrative
+visualization, and what an observer measures.
+
+\begin{deluxetable*}{p{0.17\textwidth}p{0.31\textwidth}p{0.45\textwidth}}
+\tablecaption{Guided investigation catalogue\label{tab:investigations}}
+\tablehead{\colhead{Theme} & \colhead{Investigations} &
+\colhead{Representative student work}}
+\startdata
+Orbits and gravity &
+Kepler's Laws; Why Mars Goes Backwards; Bound, Unbound and Escape; Weighing the
+Stars; Tides &
+Locate the focus of an ellipse; compare equal swept areas; transform reference
+frames; classify trajectories by energy; infer stellar mass from a binary
+orbit; measure differential gravity.\\
+Exoplanets and observing &
+Finding Planets by Their Shadows; Finding Planets by Their Tug; The Goldilocks
+Question; Can You Detect This Planet?; Design the Schedule; Planets in Binary
+Stars &
+Recover radius and period from a transit; infer mass from radial velocity;
+combine mass and radius; explore inclination and dilution; design observations;
+map stable regions around one or two stars.\\
+Orbital dynamics and spaceflight &
+The Butterfly Effect in Space; When Orbits Lock; Where Does a Gravity Assist Get
+Its Speed?; Getting There From Here; Where Can It Get To? &
+Measure divergence of nearby starts; test resonant angles; compare a flyby in
+two frames; calculate and fly a Hohmann transfer; use the Jacobi constant and
+zero-velocity regions.\\
+Compact objects and gravitational waves &
+Black Holes by the Numbers; What Is a Gravitational Wave?; Listening to
+Spacetime &
+Test how black-hole properties scale with mass; connect orbital motion to a
+travelling strain; measure a chirp and compare the model with GW150914
+\citep{abbott2016}.\\
+Stars, galaxies, and dark matter &
+A Universe of Stars; Lives of Stars; The Missing Mass &
+Separate mass, radius, temperature, and luminosity on the H--R diagram; follow
+published stellar tracks \citep{dotter2016,choi2016}; fit a rotation curve and
+compare luminous and dynamical mass.\\
+\enddata
+\tablecomments{Durations and prerequisites are supplied in the application. The
+catalogue can be filtered by concept, and individual investigations may be
+assigned through reproducible links.}
+\end{deluxetable*}
+
+\section{Tools That Turn Motion into Evidence}
+\label{sec:tools}
+
+The tools in \Gravitas\ are selected for questions commonly asked in
+introductory astronomy. They are available in the sandbox and are also opened
+automatically when a guided step requires them.
+
+\begin{deluxetable*}{p{0.21\textwidth}p{0.34\textwidth}p{0.38\textwidth}}
+\tablecaption{Student tools and the reasoning they support\label{tab:tools}}
+\tablehead{\colhead{Tool} & \colhead{What the student records} &
+\colhead{Example question}}
+\startdata
+Ruler, protractor, and scale bar &
+Distances in astronomical units or kilometres; angles between locations or
+vectors &
+Where is the focus? How far does a planet move in a fixed interval? What angle
+separates a Trojan asteroid from Jupiter?\\
+Simulation-time stopwatch &
+Elapsed time, including automatic latching at successive periapsis passages &
+How can a period be measured without relying on reaction time?\\
+Object inspector &
+Mass, radius, speed, orbital elements, and kinetic, potential, and total energy &
+Is the trajectory bound? Which body is the orbit actually referenced to?\\
+Velocity, acceleration, and source arrows &
+The selected body's velocity, total acceleration, and contribution from each
+gravitating source &
+Why is an orbit curved? Why are velocity and force not generally parallel?\\
+Reference-frame controls &
+The same positions and recorded trails relative to the barycenter or a selected
+body &
+Why does Mars reverse direction in an Earth-centered view?\\
+A/B experiment bench &
+Aligned baseline and comparison time series, changed parameter, CSV, and
+provenance metadata &
+Does changing the starting distance, rather than the random seed or timestep,
+cause the different outcome?\\
+Observing panels &
+Transit flux, radial velocity, astrometric displacement, viewing geometry, and
+sampled observations &
+Which properties of a planet can each method recover, and how does inclination
+change the evidence?\\
+Specialized plots &
+Swept area, rotation curve, resonant angle, stellar tracks, gravitational-wave
+strain, and conservation diagnostics &
+What observation distinguishes a resonance from a near-integer ratio? Why does
+a galaxy require more gravitating mass than its light implies?\\
+Exports &
+Screenshots, clips, report PDF, state link, and unit-labelled CSV &
+Can another student or instructor reproduce the setup and inspect the evidence?\\
+\enddata
+\end{deluxetable*}
+
+Three observing panels are especially useful for connecting dynamics to
+astronomical inference. A transit light curve, a radial-velocity curve, and an
+astrometric track are generated from the same evolving system and the same
+observer geometry. Moving the observer therefore changes all three consistently:
+a planet can cease to transit, the radial-velocity amplitude changes with
+inclination, and the astrometric line opens into an ellipse. Students encounter
+selection effects and degeneracies as outcomes of a controlled experiment,
+rather than only as warnings appended to a formula.
+
+\begin{figure*}
+\centering
+\IfFileExists{figures/exoplanet-observing.png}
+  {\includegraphics[width=0.96\textwidth]{figures/exoplanet-observing.png}}
+  {\figureplaceholder{2.40in}{The Exoplanet Characterization Lab with the shared
+  observer visible on the simulation canvas and the transit, radial-velocity,
+  and astrometry panels open. Include plotted data and axis labels; avoid
+  overlapping dialogs.}}
+\caption{One simulated planetary system viewed through three observational
+methods. Because the panels share the same observer, changing the viewing
+geometry immediately exposes which inferences are robust and which depend on
+inclination or alignment.}
+\label{fig:exoplanets}
+\end{figure*}
+
+The application also makes numerical reliability visible when it is relevant.
+Students may choose among three integrators and inspect changes in total energy
+and angular momentum. Dedicated investigations distinguish a physical
+sensitivity to initial conditions from ordinary phase drift or numerical error.
+The purpose is not to teach numerical analysis in every activity; it is to let
+students ask whether a surprising result survives an appropriate reliability
+check.
+
+\section{Three Paths Through the Simulation}
+\label{sec:examples}
+
+\subsection{Discovering Kepler's Laws}
+
+In the Kepler investigation, students begin with the geometry of an ellipse.
+They locate the star relative to the two foci, alter eccentricity, and compare
+circular and eccentric orbits. The simulation then displays equal-area sectors
+over equal time intervals while the student independently measures the fastest
+and slowest portions of the orbit. Finally, periods and semimajor axes from
+multiple systems are plotted to recover a slope of $3/2$ in log space.
+
+This sequence connects picture, measurement, and equation. The second law is not
+reduced to the statement that a planet moves faster when it is closer. The
+learner sees the swept area, times the motion, and relates the result to angular
+momentum. The third law is not supplied as an exponent to verify; it is the
+relationship that emerges from the student's graph. The same content can be
+used as a five-minute prediction and demonstration, a roughly twenty-minute
+guided activity, or a full laboratory investigation.
+
+\subsection{Becoming an Exoplanet Observer}
+
+The exoplanet sequence begins with the shadow of HD~209458~b, a landmark
+transiting system \citep{charbonneau2000}. Students measure a transit depth,
+infer a radius, examine limb darkening, determine a period, and explore how
+blended light from a companion star biases the result. The radial-velocity
+investigation then uses the star's reflex motion to estimate the planet's mass.
+Combining the two measurements produces a bulk density and a more physically
+meaningful description of the planet.
+
+Later investigations shift the question from parameter recovery to experimental
+design. Students receive a finite number of observing nights, choose a cadence,
+and compare schedules under the same signal and noise realization. They see how
+aliasing, weather losses, baseline, and sampling affect whether a planet is
+detected. The Goldilocks investigation then changes orbital distance, stellar
+luminosity, and eccentricity to examine incident flux and the limits of the
+phrase habitable zone, using established habitable-zone relations as the
+scientific context \citep{kopparapu2013}.
+
+Together, these activities reproduce the logic of observation: no single panel
+reveals everything, geometry matters, and the observing strategy can determine
+which conclusions are possible.
+
+\subsection{When the Visible Matter Is Not Enough}
+
+The Missing Mass investigation asks students to weigh systems twice. First they
+sum the matter that is visible; then they infer gravitating mass from orbital
+motion. These estimates agree in a Solar System-like case but diverge for a
+galaxy and a galaxy cluster. Students arrange visible mass, inspect the rotation
+curve it produces, and attempt to reproduce a measured flat curve. Adding an
+extended halo changes the force law used by the orbiting tracers and allows the
+curve to remain flat at large radius, connecting the experiment with modern
+rotation-curve data sets such as SPARC \citep{lelli2016}.
+
+This activity illustrates a broader goal of \Gravitas: students should
+experience why an inference was made. The conclusion that galaxies contain dark
+matter becomes the resolution of a failed mass model rather than a fact
+presented without its observational pressure.
+
+\section{Designed for Real Classrooms}
+\label{sec:instructors}
+
+An educational tool is only useful if it fits the time, equipment, and workflow
+available to an instructor. \Gravitas\ supports several levels of use:
+
+\begin{itemize}
+\item \textbf{Live demonstration.} Lecture mode enlarges text, selects a
+high-contrast daylight theme, supplies a spotlight pointer, and lets an
+instructor step through a prepared sequence with arrow keys.
+\item \textbf{Embedded figure.} A share link with embed mode produces a
+chrome-free interactive view suitable for a course page or learning-management
+system.
+\item \textbf{Short activity.} Curated routes extract a coherent
+prediction--experiment--explanation cycle from a longer investigation for use
+during a single class meeting.
+\item \textbf{Laboratory assignment.} A full investigation saves progress and
+produces a student report that can be submitted through the course's existing
+system.
+\item \textbf{Open exploration or project.} The sandbox, A/B bench, share links,
+and data export support questions designed by the learner or instructor.
+\end{itemize}
+
+For each guided investigation, the instructor collection includes learning
+objectives, expected observations, common wrong turns, and an answer key
+generated from the same lesson source used by students. An adopter's guide and
+curriculum map help place activities into an existing course. Public teaching
+pages explain the workflow and provide demonstration links before an instructor
+requests access to protected answer materials.
+
+\begin{figure*}
+\centering
+\IfFileExists{figures/breadth-and-classroom.png}
+  {\includegraphics[width=0.96\textwidth]{figures/breadth-and-classroom.png}}
+  {\figureplaceholder{2.35in}{A clean four-panel montage showing the scenario
+  gallery plus three contrasting learning environments: the Missing Mass
+  rotation-curve view, Listening to Spacetime or GW150914, and the stellar
+  H--R diagram. Use labels (a)--(d) and retain readable axes.}}
+\caption{\Gravitas\ extends beyond a conventional orbit sandbox. The final
+montage should communicate both the searchable breadth of the scenario gallery
+and representative activities in galactic dynamics, gravitational waves, and
+stellar astrophysics.}
+\label{fig:breadth}
+\end{figure*}
+
+Access considerations are treated as instructional infrastructure rather than
+optional polish. The interface and all investigations are available in English
+and Spanish. Keyboard navigation, screen-reader labels, reduced-motion
+behavior, multiple themes, and automated accessibility checks support a wider
+range of learners. The application can operate offline after its assets have
+been cached, including on lower-powered devices with a reduced visual-quality
+tier. Because all computation and progress storage occur locally, students are
+not required to create an account or send their work to a third-party service.
+
+These features also make assignments more resilient. A link can reproduce the
+starting state across a large class. A screenshot documents its own time and
+scale. A CSV names the units in its columns. A report gathers the student's
+predictions, measurements, graphs, and explanations. The goal is to reduce the
+amount of custom technical scaffolding an instructor must build before the
+physics can begin.
+
+\section{Scientific Scope, Transparency, and Validation}
+\label{sec:scope}
+
+\Gravitas\ is an educational model, not a professional research code. Its core
+dynamics are Newtonian and two-dimensional. Point-mass gravity is integrated in
+a plane; close encounters use softening; and some scenarios allow selected
+bodies to feel gravity without exerting it so that large tracer populations
+remain responsive. Collisions are represented as perfectly inelastic mergers.
+Relativistic quantities such as Schwarzschild radius may be evaluated
+analytically, but general-relativistic orbital dynamics are not solved.
+Gravitational-wave inspiral uses an educational prescription, and visual
+elements such as accretion disks, jets, and the optional rubber-sheet spacetime
+view are illustrative. Body sizes are compressed for visibility and must not be
+measured from their drawn diameters.
+
+These boundaries are stated prominently on the public model page. Features are
+labelled as simulated, analytic, approximated, illustrative, or not modeled.
+That vocabulary is also pedagogically useful: students can ask whether a
+particular conclusion follows from the evolving equations, a closed-form
+relationship, or a visual analogy. Instructors can decide whether the model is
+appropriate for the learning objective before assigning it.
+
+A public validation report tests orbital periods, Kepler relationships,
+conservation laws, convergence behavior, escape speed, exoplanet observables,
+habitable-zone quantities, rotation curves, black-hole scaling relations, and
+stored parameters for real systems against stated expectations or published
+sources. Scenario-stability checks audit the shipped catalogue, while browser
+tests exercise the student workflows. These checks cannot establish that the
+software is error-free, nor can they substitute for classroom evaluation. They
+do make the scientific claims, tolerances, known approximations, and failure
+conditions inspectable.
+
+Version \Version\ should therefore be evaluated along two separate dimensions.
+Scientific verification asks whether the model produces the quantity it claims
+to produce within an appropriate tolerance. Educational evaluation asks how
+students and instructors use the environment and whether the intended
+reasoning appears in their work. The first is included in the release process.
+Formal evidence for the second is future work. The teaching site provides a
+local feedback template so adopters can record course context, time on task,
+friction points, and observed student reasoning without transmitting student
+data.
+
+\section{Availability and Reuse}
+\label{sec:availability}
+
+The simulation is available at \url{https://gravitas-sim.online}. Source code,
+documentation, model limitations, validation materials, and issue tracking are
+available at
+\url{https://github.com/gravitas-sim/gravitas-sim.github.io}. The project is
+released under the MIT License.
+
+The archival record for version \Version\ will be deposited with Zenodo before
+the final manuscript is submitted:
+
+\begin{center}
+\textbf{DOI:} \texttt{\ReleaseDOI}\\
+\textbf{Zenodo record:} \texttt{\ZenodoRecord}
+\end{center}
+
+The placeholders above are intentionally explicit so they can be found and
+replaced after the GitHub release has been archived. The tagged release,
+Zenodo record, manuscript version, scenario and investigation counts, and final
+screenshots should all describe the same \Version\ state.
+
+Instructors may use the built-in investigations as written, assign selected
+steps, or create their own activities from shared scenarios and exported data.
+The repository welcomes reports from classroom use, translations, new
+scenarios, and proposed investigations. The most valuable feedback is concrete:
+what learners predicted, what they measured, where an interface choice
+interrupted the reasoning, and what explanation emerged after the experiment.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\Gravitas\ gives students a laboratory for systems that ordinary laboratories
+cannot hold. A planet can be moved, a viewpoint changed, a dark halo removed, a
+binary replayed from the same initial state, or an observing schedule redesigned
+within minutes. More importantly, the environment asks students to make those
+changes for a reason: to test a prediction and construct an explanation from
+measured evidence.
+
+For an instructor, the entry cost is deliberately low: open a link, choose a
+scenario or investigation, and use it as a projected demonstration, an embedded
+interactive figure, a short activity, or a complete lab. For a student, the
+invitation is equally direct: build a system, run it, measure it, and find out
+whether the universe in the model behaves as expected. \Gravitas\ is available
+now at \url{https://gravitas-sim.online}, and the versioned \Version\ archive
+will be citable at the DOI above when the release is minted.
+
+\acknowledgments
+
+The author welcomes feedback from instructors and students who use \Gravitas\
+in a course. Development and maintenance information will be added here before
+submission if institutional or funding acknowledgment is required.
+
+\software{\Gravitas\ \citep{gravitas_zenodo}}
+
+\bibliography{references}
+\bibliographystyle{aasjournal}
+
+\end{document}
