@@ -663,11 +663,44 @@ test.describe('a calculation brings the measurements it copies', () => {
     });
     // The first step of the subset is the measurement, not the calculation:
     // the student is given the table before being asked to copy from it.
-    const first = await page.evaluate(async () => {
+    //
+    // This read `inv.activeSteps()`, which is not exported from that module
+    // and never has been, so the value was always undefined - and the
+    // `if (first !== null)` guard around it turned every one of those reads
+    // into a pass. The test has therefore never once checked the thing it is
+    // named after. activeAssignmentBinding() is the accessor that exists: it
+    // is how the assignment's step list resolved against the lesson.
+    //
+    // Waited for, then asserted. The panel is visible before the subset is
+    // installed, so the wait is for the assignment to be in force - and after
+    // it, a missing assignment is a failure rather than a skipped assertion.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async () => {
+            const inv = await import('/js/investigations.js');
+            return inv.activeAssignmentBinding?.()?.steps?.length ?? 0;
+          }),
+        { timeout: 15_000 }
+      )
+      .toBeGreaterThan(0);
+
+    const subset = await page.evaluate(async () => {
       const inv = await import('/js/investigations.js');
-      return inv.activeSteps?.()?.[0]?.sid ?? null;
+      return inv.activeAssignmentBinding().steps.map(step => step.sid);
     });
-    if (first !== null) expect(first).toBe('measure-four-planets');
+    // The measurement comes before the calculation that copies from it. That
+    // is the ordering the dependency exists to produce, and it is what the
+    // subset has to preserve: a student asked to work the law out before they
+    // have the table has nothing to work it out from.
+    expect(subset).toEqual([
+      'kepler-s-third-law',
+      'measure-four-planets',
+      'work-the-law-out-step',
+    ]);
+    expect(subset.indexOf('measure-four-planets')).toBeLessThan(
+      subset.indexOf('work-the-law-out-step')
+    );
   });
 
   test('it holds in Spanish', async ({ page, app }) => {
