@@ -2400,13 +2400,24 @@ const dockInspector = panel => {
     return r.width > 0 && r.height > 0 ? r : null;
   };
 
+  // The rail is revealed a fifth of a second after the splash ends, and
+  // docking against a screen it has not reached yet is worse than not docking:
+  // the fallback in computeDockPosition puts the panel at the viewport edge,
+  // which is exactly where the rail then appears, and nothing moves it again
+  // until a resize. One run in eight of the layering test, and any reader
+  // quick enough to click a star on load. The stylesheet's own position
+  // already clears the rail, so a measurement that cannot be taken is left
+  // untaken.
+  const rail = visible('#mainControls');
+  if (!rail && document.getElementById('mainControls')) return;
+
   const { left, top, maxHeight } = computeDockPosition({
     viewportWidth: window.innerWidth,
     viewportHeight: window.innerHeight,
     panelWidth: panel.offsetWidth,
     panelHeight: panel.offsetHeight,
     hud: visible('#overlay'),
-    rail: visible('#mainControls'),
+    rail,
   });
 
   panel.style.left = `${left}px`;
