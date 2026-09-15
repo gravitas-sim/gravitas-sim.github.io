@@ -104,7 +104,7 @@ describe('the deploy job only runs behind the gate', () => {
     // Missing blobs fail the upload rather than being shrugged off, and the
     // step runs even when the tests failed - which is when it matters.
     expect(upload.with['if-no-files-found']).toBe('error');
-    expect(String(upload.if)).toContain('!canceled()');
+    expect(String(upload.if)).toContain('!cancelled()');
     // The step running the tests is capped below the job, so an overrunning
     // shard is killed with time left to upload what it has.
     const runStep = e2e.steps.find(st => (st.run || '').includes('--shard='));
@@ -116,7 +116,7 @@ describe('the deploy job only runs behind the gate', () => {
     expect(report.needs).toContain('e2e');
     // It runs whether the shards passed or not, because a report is most
     // wanted when they did not.
-    expect(String(report.if)).toContain('!canceled()');
+    expect(String(report.if)).toContain('!cancelled()');
     const run = report.steps.map(st => st.run || '').join('\n');
     expect(run).toMatch(/merge-reports --reporter html/);
     const download = report.steps.find(st =>
